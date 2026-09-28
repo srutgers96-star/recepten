@@ -13,6 +13,7 @@ import {
   now,
   remainingMs,
   requestNotifications,
+  resetTimer,
   startTimerEngine,
   stopTimer,
   timers,
@@ -56,6 +57,15 @@ export function TimerBar() {
             </button>
             <button type="button" class="timerbar-btn" aria-label={t('timer.plus')} onClick={() => void adjustTimer(tm.id, MINUTE_MS)}>
               +1
+            </button>
+            <button
+              type="button"
+              class="timerbar-btn"
+              aria-label={t('timer.reset', { d: formatRemaining(tm.durationMs) })}
+              title={t('timer.reset', { d: formatRemaining(tm.durationMs) })}
+              onClick={() => void resetTimer(tm.id)}
+            >
+              ↻
             </button>
             <button type="button" class="timerbar-btn x" aria-label={t('timer.stop')} onClick={() => void stopTimer(tm.id)}>
               ×

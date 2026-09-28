@@ -392,6 +392,32 @@ export async function adjustTimer(id: string, deltaMs: number): Promise<void> {
   }
 }
 
+/**
+ * ↻ in the bar: starts the timer again from the duration it was started with (the "10 min" from the
+ * step), whatever −1/+1 did in the meantime. Works on running and finished timers.
+ */
+export async function resetTimer(id: string): Promise<void> {
+  const t = timers.value.find((x) => x.id === id);
+  if (!t) return;
+  unlockAudio();
+  const n = Date.now();
+  const next: RunningTimer = { ...t, createdAt: n, endAt: n + t.durationMs };
+  if (fired.has(id)) {
+    fired.delete(id);
+    saveFired();
+    void closeNotification(id);
+  }
+  notifiedMinute.delete(id);
+  timers.value = timers.value.map((x) => (x.id === id ? next : x)).sort((a, b) => a.endAt - b.endAt);
+  now.value = n;
+  syncInterval();
+  try {
+    await putTimer(next);
+  } catch (e) {
+    console.warn('putTimer', e);
+  }
+}
+
 /** × in the bar: removes the timer (running or finished) and its notification. */
 export async function stopTimer(id: string): Promise<void> {
   timers.value = timers.value.filter((x) => x.id !== id);

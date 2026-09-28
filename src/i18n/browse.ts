@@ -96,6 +96,7 @@ export const browse: Dict = {
   'timer.minus': { nl: '1 minuut korter', en: '1 minute less' },
   'timer.plus': { nl: '1 minuut langer', en: '1 minute more' },
   'timer.stop': { nl: 'Timer stoppen', en: 'Stop timer' },
+  'timer.reset': { nl: 'Opnieuw vanaf {d}', en: 'Restart from {d}' },
   'timer.start': { nl: 'Start timer {d}', en: 'Start {d} timer' },
   'timer.running': { nl: 'Timer loopt', en: 'Timer running' },
   'timer.notif.left': { nl: 'nog {n} min', en: '{n} min left' },
