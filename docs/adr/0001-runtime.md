@@ -1,8 +1,7 @@
 # ADR-0001 — Runtime: one PWA for both phones, decided by a measurable phase-0 checklist
 
-**Status:** Proposed — becomes Accepted (route ii) or Superseded (route iii) when the Result columns
-below are filled in and Stijn has taken decision D2 on them.
-**Date:** 2026-09-24 (plan), results pending.
+**Status:** **Accepted (route ii)** — Android results filled in on 2026-09-28; iPhone row still pending.
+**Date:** 2026-09-24 (plan), 2026-09-28 (Android results, decision).
 
 ## Context
 
@@ -37,19 +36,19 @@ tab → "Copy results" (see `docs/DEVICE-TEST.md`).
 
 | # | Test (Stijn's Android unless stated) | Pass criterion | Result Android | Result iPhone |
 |---|---|---|---|---|
-| 1 | Icon in the app drawer and in Settings → Apps (WebAPK) | yes | | |
-| 2 | No address bar; status bar in theme colour; safe-area correct | yes | | |
-| 3 | Cold start offline (flight mode, after restarting the phone) | < 2 s to the list | | |
-| 4 | List of 196 scrolls smoothly; sticky headers; overscroll does not feel like browser pull-to-refresh | yes | | |
-| 5 | Keyboard in the form never covers an input; no zoom on focus (16 px inputs) | yes | | |
-| 6 | Back gesture leaves the app only from Home, never mid-recipe | yes | | |
-| 7 | Text selection / long-press does nothing browser-like on buttons and list rows | yes | | |
-| 8 | 2 KB `#r=` link in WhatsApp is tappable; opens in the app (`adb shell pm get-app-links` = verified) or in a Chrome tab with a working "Save" | note which | | |
-| 9 | "Share → Recepten" in the WhatsApp share sheet for a message **and** for a `.json` document (POST target) | both | | |
-| 10 | `navigator.share({text})` to WhatsApp; `readText` + paste; textarea paste | yes | | |
-| 11 | 30 s timer: (a) app in the foreground, (b) screen locked, (c) app in the background — what fires (notification / sound / vibration)? | note; only (a) is required | | |
-| 12 | `persisted()` = true after installation | yes | | |
-| **iPhone** | Home Screen install (standalone), `persisted()`, `share({text})` to WhatsApp, `readText` Paste callout, textarea paste, offline start after restart, 2 KB link tappable (opens the Safari landing), **timer (a)/(b)/(c)** | note | — | |
+| 1 | Icon in the app drawer and in Settings → Apps (WebAPK) | yes | PASS | |
+| 2 | No address bar; status bar in theme colour; safe-area correct | yes | PASS | |
+| 3 | Cold start offline (flight mode, after restarting the phone) | < 2 s to the list | PASS | |
+| 4 | List of 196 scrolls smoothly; sticky headers; overscroll does not feel like browser pull-to-refresh | yes | PASS | |
+| 5 | Keyboard in the form never covers an input; no zoom on focus (16 px inputs) | yes | PASS (inputs) — but the keyboard covered the **Save button**; fixed in phase 1 (save action in the header + `interactive-widget=resizes-content`) | |
+| 6 | Back gesture leaves the app only from Home, never mid-recipe | yes | PASS | |
+| 7 | Text selection / long-press does nothing browser-like on buttons and list rows | yes | PASS | |
+| 8 | 2 KB `#r=` link in WhatsApp is tappable; opens in the app (`adb shell pm get-app-links` = verified) or in a Chrome tab with a working "Save" | note which | PASS (shared with himself; link tappable) | |
+| 9 | "Share → Recepten" in the WhatsApp share sheet for a message **and** for a `.json` document (POST target) | both | PASS | |
+| 10 | `navigator.share({text})` to WhatsApp; `readText` + paste; textarea paste | yes | PASS | |
+| 11 | 30 s timer: (a) app in the foreground, (b) screen locked, (c) app in the background — what fires (notification / sound / vibration)? | note; only (a) is required | PASS — (a) sound; (c) **sound, 3 beeps, even with the phone on silent**; (b) not recorded; notification permission not granted (untested) | |
+| 12 | `persisted()` = true after installation | yes | PASS | |
+| **iPhone** | Home Screen install (standalone), `persisted()`, `share({text})` to WhatsApp, `readText` Paste callout, textarea paste, offline start after restart, 2 KB link tappable (opens the Safari landing), **timer (a)/(b)/(c)** | note | — | pending (she was not available on 2026-09-28) |
 
 **Go** = 1-7, 9, 10 and 12 pass; 8 at least the Chrome-tab fallback; 11 at least (a).
 **No-go** = Stijn says "no" to 2, 4, 5 or 6 → route (iii): the UI becomes Kotlin/Compose, the web app
@@ -60,13 +59,13 @@ parser, dictionary, token, migration tools, Node tests) stays usable unchanged.
 
 | Field | Value |
 |---|---|
-| Android device / Chrome version | |
-| iPhone / iOS version | |
-| Date tested | |
-| Timer behaviour Android (a)/(b)/(c) | |
-| Timer behaviour iPhone (a)/(b)/(c) | |
-| Link opens in (Android): WebAPK / Chrome tab | |
-| **Decision (go / no-go)** | |
+| Android device / Chrome version | Android 10, Chrome 153, viewport 448×907 @3x, dark mode, device language en-NL |
+| iPhone / iOS version | pending |
+| Date tested | 2026-09-28 (Android) |
+| Timer behaviour Android (a)/(b)/(c) | (a) sound; (b) not recorded; (c) sound (3 beeps) with the app in the background, phone on silent |
+| Timer behaviour iPhone (a)/(b)/(c) | pending |
+| Link opens in (Android): WebAPK / Chrome tab | tappable and working; which of the two was not noted (both are acceptable) |
+| **Decision (go / no-go)** | **GO — route (ii) accepted by Stijn on 2026-09-28.** Wishes recorded: save button must not sit under the keyboard; show the remaining minutes of a running timer outside the app (Android notification). |
 
 ## Consequences
 
