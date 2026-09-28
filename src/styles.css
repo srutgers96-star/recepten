@@ -1,0 +1,786 @@
+/* Rutgers' Recepten — design tokens from the cover painting, minimal app look.
+   Mobile first (360 px), 16 px inputs (no iOS zoom), 44 px targets, safe-area insets. */
+
+:root {
+  color-scheme: light dark;
+  --paper: #eaf3fb;
+  --card: #ffffff;
+  --ink: #1f2733;
+  --muted: #5b6775;
+  --cobalt: #2b4fa8;
+  --tomato: #d9402b;
+  --rosemary: #3d7a3a;
+  --orange: #d98a2e;
+  --line: rgba(31, 39, 51, 0.12);
+  --press: rgba(43, 79, 168, 0.1);
+  --on-cobalt: #ffffff;
+
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  --nav-h: 58px;
+  --header-h: 56px;
+  --radius: 14px;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0f1a2b;
+    --card: #17243a;
+    --ink: #e8eef6;
+    --muted: #9fb0c3;
+    --cobalt: #6f8fe0;
+    --tomato: #ef6a55;
+    --rosemary: #6fb06a;
+    --orange: #e9a852;
+    --line: rgba(232, 238, 246, 0.14);
+    --press: rgba(111, 143, 224, 0.16);
+    --on-cobalt: #0f1a2b;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  height: 100%;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.25;
+}
+
+p {
+  margin: 0 0 12px;
+}
+
+a {
+  color: var(--cobalt);
+}
+
+/* ---------- App shell ---------- */
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+.screen-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 max(16px, var(--sar)) 24px max(16px, var(--sal));
+}
+
+.screen.has-rail {
+  padding-right: max(30px, var(--sar));
+}
+
+/* List + A-Z rail share this box (below the header), so the rail can never cover header controls. */
+.list-area {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Enough room under a form so a focused field can always scroll above the keyboard. */
+.screen.form {
+  padding-bottom: calc(40vh + var(--sab));
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  flex: none;
+  padding-top: var(--sat);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.header-row {
+  min-height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 max(12px, var(--sar)) 0 max(12px, var(--sal));
+}
+
+.header-row h1 {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cobalt);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+}
+
+.header-sub {
+  padding: 0 max(16px, var(--sar)) 10px max(16px, var(--sal));
+}
+
+.icon-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--cobalt);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.icon-btn:active {
+  background: var(--press);
+}
+
+.lang-toggle {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  min-height: 44px;
+}
+
+.lang-toggle button {
+  min-width: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0 10px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.lang-toggle button.on {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+}
+
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: var(--orange);
+  color: #fff;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.badge-next {
+  background: var(--tomato);
+}
+
+.badge-green {
+  background: var(--rosemary);
+}
+
+/* ---------- Bottom nav ---------- */
+
+.nav {
+  flex: none;
+  display: flex;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  padding: 0 var(--sar) var(--sab) var(--sal);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.nav a {
+  flex: 1;
+  min-height: var(--nav-h);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  -webkit-touch-callout: none;
+}
+
+.nav a svg {
+  width: 24px;
+  height: 24px;
+}
+
+.nav a.on {
+  color: var(--cobalt);
+}
+
+.nav a:active {
+  background: var(--press);
+}
+
+/* ---------- Buttons, inputs ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  text-decoration: none;
+}
+
+.btn:active {
+  background: var(--press);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.btn-primary {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  border-color: transparent;
+}
+
+.btn-primary:active {
+  opacity: 0.85;
+  background: var(--cobalt);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* Visually lighter, but still a 44 px tap target (house rule). */
+.btn-small {
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-danger {
+  color: var(--tomato);
+}
+
+.field {
+  display: block;
+  margin: 0 0 16px;
+}
+
+.field > span {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.input,
+textarea.input,
+select.input {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  scroll-margin: 16px 0 160px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.45;
+}
+
+.input:focus {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 0;
+}
+
+.input::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.line-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.line-row .input {
+  flex: 1;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.check input {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--cobalt);
+}
+
+/* ---------- Cards, sections ---------- */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.card h2,
+.section h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.section {
+  margin: 24px 0;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.small {
+  font-size: 13px;
+}
+
+.ok {
+  color: var(--rosemary);
+}
+
+.warn {
+  color: var(--orange);
+}
+
+.bad {
+  color: var(--tomato);
+}
+
+.stack > * + * {
+  margin-top: 12px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.actions .btn {
+  flex: 1 1 auto;
+}
+
+.status {
+  min-height: 22px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+pre.report {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin: 12px 0;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.mono {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+/* ---------- Recipe list ---------- */
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.letter {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--paper);
+  color: var(--cobalt);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 12px 0 4px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.row:active {
+  background: var(--press);
+}
+
+.row .name {
+  flex: 1;
+  min-width: 0;
+}
+
+.row .chev {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.rail {
+  position: absolute;
+  right: var(--sar);
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.rail span {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1;
+  padding: 1.5px 0;
+  color: var(--cobalt);
+  font-weight: 700;
+}
+
+.rail.active {
+  background: var(--press);
+  border-radius: 999px;
+}
+
+.rail-bubble {
+  position: absolute;
+  right: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  font-size: 28px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.empty {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ---------- Recipe detail ---------- */
+
+.recipe-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 16px 0 8px;
+}
+
+.ingredients {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.ingredients li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.paras p {
+  margin: 0 0 14px;
+}
+
+/* ---------- Segmented multi-select ---------- */
+
+.seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.seg label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+.seg label.on {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  border-color: transparent;
+}
+
+.seg label.on.fail {
+  background: var(--tomato);
+  color: #fff;
+}
+
+.seg label.on.pass {
+  background: var(--rosemary);
+  color: #fff;
+}
+
+.seg input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.checkrow {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.checkrow .label {
+  margin-bottom: 8px;
+}
+
+.checkrow .expect {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.checkrow .input {
+  margin-top: 8px;
+}
+
+.facts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.facts li {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.facts li span:first-child {
+  color: var(--muted);
+  flex: none;
+}
+
+.facts li span:last-child {
+  text-align: right;
+  word-break: break-word;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.timer-display {
+  font-size: 48px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  padding: 8px 0;
+  color: var(--cobalt);
+}
+
+.timer-display.done {
+  color: var(--rosemary);
+}
+
+/* ---------- Install card, update bar ---------- */
+
+.installcard {
+  flex: none;
+  margin: 8px max(16px, var(--sar)) 8px max(16px, var(--sal));
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 1px solid var(--cobalt);
+  font-size: 14px;
+}
+
+.installcard h3 {
+  font-size: 15px;
+  margin-bottom: 6px;
+  color: var(--cobalt);
+}
+
+.installcard ol {
+  margin: 0 0 6px;
+  padding-left: 20px;
+}
+
+.installcard .btn {
+  margin-top: 6px;
+}
+
+.updatebar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px max(16px, var(--sar)) 0 max(16px, var(--sal));
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  font-weight: 600;
+}
+
+.updatebar span {
+  flex: 1;
+}
+
+.updatebar .btn {
+  background: var(--paper);
+  color: var(--cobalt);
+  border-color: transparent;
+}
+
+.probe {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}

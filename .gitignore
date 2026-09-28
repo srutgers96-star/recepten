@@ -1,0 +1,18 @@
+node_modules/
+dist/
+dist-next/
+dev-dist/
+.vite/
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+playwright-report/
+test-results/
+coverage/
+# never commit signing material
+*.keystore
+*.jks
+android-twa/*.keystore

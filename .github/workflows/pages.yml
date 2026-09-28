@@ -1,0 +1,86 @@
+# One workflow, one artifact (PLAN.md §4, ADR-0002).
+#
+# Every push to `main` OR `next` rebuilds BOTH branches and deploys the whole site in one go:
+#   main -> https://srutgers96-star.github.io/recepten/        (the app both phones use)
+#   next -> https://srutgers96-star.github.io/recepten/next/   (test channel: own db name, manifest id, icon)
+#
+# GitHub Pages replaces the entire site on every deploy, so two separate deploys would wipe each
+# other out. A broken `next` never blocks `main`: its checkout and build are continue-on-error.
+name: pages
+
+on:
+  push:
+    branches: [main, next]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Check out next (the branch may not exist yet)
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: next
+          path: next
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: main/package-lock.json
+
+      - name: Build main (base /recepten/)
+        working-directory: main
+        run: |
+          npm ci
+          npm run check
+          npm run validate:data
+          npm test
+          npm run build
+
+      - name: Build next into main/dist/next (base /recepten/next/) - allowed to fail
+        continue-on-error: true
+        run: |
+          if [ -f next/package.json ]; then
+            cd next
+            npm ci
+            npm run build:next
+            mkdir -p ../main/dist/next
+            cp -r dist-next/. ../main/dist/next/
+            echo "next channel built into main/dist/next"
+          else
+            echo "No next branch checked out; skipping the next channel."
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: main/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
