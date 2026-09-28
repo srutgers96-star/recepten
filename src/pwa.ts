@@ -14,10 +14,39 @@ export function registerServiceWorker() {
       updateReady.value = true;
     },
   });
+  // A worker that was downloaded during an earlier visit and is still waiting (the app was reopened
+  // before the user tapped "Vernieuwen") never triggers onNeedRefresh again — show the bar anyway.
+  void navigator.serviceWorker.getRegistration().then((reg) => {
+    if (reg?.waiting) updateReady.value = true;
+  });
 }
 
+/**
+ * Activate the waiting worker and reload. Belt and braces: the plugin's updateSW() messages the
+ * worker it tracks, but a worker installed by another tab/visit can be invisible to it, so we also
+ * message `registration.waiting` ourselves and reload on controllerchange (or after 3 s regardless —
+ * a fully closed and reopened app gets the new worker anyway).
+ */
 export async function reloadToNewVersion() {
-  if (applyUpdate) await applyUpdate(true);
+  let reloaded = false;
+  const reload = () => {
+    if (reloaded) return;
+    reloaded = true;
+    location.reload();
+  };
+  navigator.serviceWorker.addEventListener('controllerchange', reload, { once: true });
+  try {
+    if (applyUpdate) await applyUpdate(true);
+  } catch {
+    /* fall through to the manual path */
+  }
+  try {
+    const reg = await navigator.serviceWorker.getRegistration();
+    reg?.waiting?.postMessage({ type: 'SKIP_WAITING' });
+  } catch {
+    /* ignore */
+  }
+  setTimeout(reload, 3000);
 }
 
 /** Ask for durable storage on every launch (heuristically granted on installed apps). */
