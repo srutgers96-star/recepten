@@ -1,7 +1,7 @@
 // Hash router (~60 lines). Routes are '#/…'; share tokens ('#r=…', '#p=…', '#w=…', '#b=…') are
 // NEVER routes: when one shows up in the hash (at boot or later) it is moved into `pendingImport`
-// and the hash is replaced by '#/import' so a reload never re-imports and the token never sticks
-// in the URL bar.
+// and the hash is replaced by '#/inbox' (the import screen) so a reload never re-imports and the
+// token never sticks in the URL bar.
 //
 // History policy (test 6 in PLAN.md §3b — the Android back gesture must only leave the app from
 // Home): detail screens push, tab switches replace (except the first hop away from Home, which
@@ -20,6 +20,9 @@ interface NavState {
 }
 
 const TOKEN_RE = /^#([rpwb])=([A-Za-z0-9_-]+)/;
+
+/** Where a share token lands: the Inbox (phase 1). '/import' stays an alias (sw.ts, share/index.html). */
+export const IMPORT_ROUTE = '/inbox';
 
 export function parseHash(hash: string): Route {
   let h = hash.replace(/^#/, '');
@@ -46,7 +49,7 @@ function stateIdx(): number {
 function handleHash() {
   if (TOKEN_RE.test(location.hash)) {
     pendingImport.value = location.href;
-    history.replaceState({ idx: stateIdx() } satisfies NavState, '', location.pathname + location.search + '#/import');
+    history.replaceState({ idx: stateIdx() } satisfies NavState, '', location.pathname + location.search + '#' + IMPORT_ROUTE);
   }
   route.value = parseHash(location.hash);
 }

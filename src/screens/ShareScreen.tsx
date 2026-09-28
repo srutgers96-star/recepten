@@ -1,47 +1,80 @@
-// '#/share' — build the #r= token + WhatsApp message; navigator.share only inside the tap handler.
+// '#/share/:id' — the WhatsApp message with the #r= token for one recipe (buildShareMessage),
+// "Deel via WhatsApp" (navigator.share({text}) ONLY inside the tap handler, exactly one field;
+// wa.me fallback), "Kopieer", and "Deel als tekst": the readable recipe in NL / EN / both.
+// Sender name = the active profile.
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { Header } from '@/components/Header';
 import { appInfo } from '@/components/AppInfo';
+import { Header } from '@/components/Header';
+import { Segmented } from '@/components/Segmented';
+import { getRecipe } from '@/db/repo';
+import { pickText, type Lang, type Recipe } from '@/domain/model';
+import { buildReadableRecipe, buildShareMessageFor, countIngredientLines, recipeHasLang } from '@/domain/message';
+import { recipeToShareEnvelope } from '@/domain/recipe-io';
+import { buildShareUrl, encodeToken } from '@/domain/token';
 import { lang, t } from '@/i18n';
-import { route } from '@/router';
-import { getSetting, setSetting } from '@/db/db';
-import { longestBuiltinIndex, toSharedRecipe, useAllRecipes } from '@/db/recipes';
-import { buildShareUrl, encodeToken, type Envelope } from '@/domain/token';
-import { buildShareMessage } from '@/domain/message';
+import { activeProfile } from '@/profile';
+import { navigate } from '@/router';
 
-const PROFILE_KEY = 'profileName';
+type TextLangs = 'nl' | 'en' | 'both';
+const TEXT_LANGS: Record<TextLangs, Lang[]> = { nl: ['nl'], en: ['en'], both: ['nl', 'en'] };
 
-export function ShareScreen() {
-  const all = useAllRecipes();
-  const preselect = route.value.query.get('r');
-  const [selected, setSelected] = useState<string>(preselect ?? 'b' + longestBuiltinIndex);
-  const [bilingual, setBilingual] = useState(false);
-  // No default sender: either phone owner types their own name once (persisted in settings).
-  const [by, setBy] = useState('');
+/** Share plain text: the share sheet when there is one, else WhatsApp's web intent. */
+function shareText(text: string, setStatus: (s: string) => void) {
+  setStatus('');
+  if (typeof navigator.share === 'function') {
+    navigator.share({ text }).catch((e: unknown) => {
+      const name = (e as { name?: string })?.name;
+      if (name !== 'AbortError') setStatus(`${t('share.error')}: ${String(e)}`);
+    });
+  } else {
+    setStatus(t('share.noShareApi'));
+    location.href = 'https://wa.me/?text=' + encodeURIComponent(text);
+  }
+}
+
+function copyText(text: string, setStatus: (s: string) => void) {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => setStatus(t('share.copied')))
+    .catch((e: unknown) => setStatus(`${t('share.copyError')}: ${String(e)}`));
+}
+
+export function ShareScreen(props: { id: string }) {
+  const [recipe, setRecipe] = useState<Recipe | null | undefined>(undefined);
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState('');
+  const [textStatus, setTextStatus] = useState('');
+  const [textLangs, setTextLangs] = useState<TextLangs>('nl');
+  const by = activeProfile.value?.name ?? '';
+  const ui = lang.value;
 
   useEffect(() => {
-    getSetting<string>(PROFILE_KEY, '').then(setBy);
-  }, []);
+    let cancelled = false;
+    setRecipe(undefined);
+    setStatus('');
+    setTextStatus('');
+    getRecipe(props.id).then((r) => {
+      if (cancelled) return;
+      setRecipe(r ?? null);
+      if (r) {
+        // Default text language: the UI language when the recipe has it, else the other one.
+        const has = (l: Lang) => recipeHasLang(r, l);
+        setTextLangs(has(ui) ? ui : has('nl') ? 'nl' : 'en');
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [props.id]);
 
-  const recipe = useMemo(() => all.find((r) => r.id === selected), [all, selected]);
-  const sorted = useMemo(() => [...all].sort((a, b) => a.name.localeCompare(b.name, 'nl', { sensitivity: 'base' })), [all]);
-
+  // The token carries the full schema-2 recipe; recomputed when the sender name changes.
   useEffect(() => {
     if (!recipe) return;
     let cancelled = false;
     setToken(null);
     setError(null);
-    const env: Envelope = {
-      v: 2,
-      t: 'r',
-      at: new Date().toISOString(),
-      r: toSharedRecipe(recipe, bilingual),
-    };
-    if (by.trim()) env.by = by.trim();
-    encodeToken(env)
+    encodeToken(recipeToShareEnvelope(recipe, by))
       .then((tok) => {
         if (!cancelled) setToken(tok);
       })
@@ -51,112 +84,85 @@ export function ShareScreen() {
     return () => {
       cancelled = true;
     };
-  }, [recipe, bilingual, by]);
+  }, [recipe, by]);
 
   const url = token ? buildShareUrl(appInfo.appUrl, 'r', token) : '';
-  const hasName = by.trim().length > 0;
-  // The message (and the share/copy buttons) wait for a sender name: "van …" is never guessed.
-  const message =
-    recipe && token && hasName
-      ? buildShareMessage({
-          nameNl: recipe.name,
-          nameEn: bilingual ? (recipe.nameEn ?? recipe.name) : recipe.nameEn,
-          servings: recipe.servings ?? 4,
-          ingredientCount: recipe.ingredients.length,
-          by: by.trim(),
-          url,
-          lang: lang.value,
-        })
-      : '';
+  const message = recipe && url ? buildShareMessageFor(recipe, { by, url, lang: ui }) : '';
+  const readable = useMemo(() => (recipe && url ? buildReadableRecipe(recipe, TEXT_LANGS[textLangs], url) : ''), [recipe, url, textLangs]);
 
-  function share() {
-    if (!message) return;
-    setStatus('');
-    if (typeof navigator.share === 'function') {
-      navigator.share({ text: message }).catch((e: unknown) => {
-        const name = (e as { name?: string })?.name;
-        if (name !== 'AbortError') setStatus(`${t('share.error')}: ${String(e)}`);
-      });
-    } else {
-      setStatus(t('share.noShareApi'));
-      location.href = 'https://wa.me/?text=' + encodeURIComponent(message);
-    }
-  }
+  const langOptions = useMemo(() => {
+    if (!recipe) return [];
+    const nl = recipeHasLang(recipe, 'nl');
+    const en = recipeHasLang(recipe, 'en');
+    const opts: Array<{ value: TextLangs; label: string }> = [];
+    if (nl) opts.push({ value: 'nl', label: t('edit.lang.nl') });
+    if (en) opts.push({ value: 'en', label: t('edit.lang.en') });
+    if (nl && en) opts.push({ value: 'both', label: t('edit.lang.both') });
+    return opts;
+  }, [recipe, ui]);
 
-  function copy() {
-    if (!message) return;
-    navigator.clipboard
-      .writeText(message)
-      .then(() => setStatus(t('share.copied')))
-      .catch((e: unknown) => setStatus(`${t('share.copyError')}: ${String(e)}`));
-  }
+  const name = recipe ? pickText(recipe.name, ui) : '';
 
   return (
     <>
-      <Header title={t('share.title')} />
-      <div class="screen form">
-        <label class="field">
-          <span>{t('share.recipe')}</span>
-          <select class="input" value={selected} onChange={(e) => setSelected((e.currentTarget as HTMLSelectElement).value)}>
-            {sorted.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.name}
-                {r.own ? ' *' : ''}
-              </option>
-            ))}
-          </select>
-        </label>
+      <Header title={t('share.title')} back backLabel={t('common.back')} />
+      <div class="screen share">
+        {recipe === null && (
+          <>
+            <div class="empty">{t('share.notFound')}</div>
+            <button type="button" class="btn btn-block" onClick={() => navigate('/recipes', { replace: true })}>
+              {t('nav.recipes')}
+            </button>
+          </>
+        )}
+        {recipe === undefined && <div class="empty">{t('common.loading')}</div>}
+        {recipe && (
+          <>
+            <h2 class="share-name">{name}</h2>
+            <p class="muted">
+              {t('inbox.ingredients', { n: countIngredientLines(recipe) })}
+              {by ? ` · ${t('common.from', { name: by })}` : ''}
+            </p>
+            {!by && <p class="warn small">{t('share.noProfile')}</p>}
+            <p class="muted small">{t('share.intro')}</p>
 
-        <label class="field">
-          <span>{t('share.from')}</span>
-          <input
-            class="input"
-            type="text"
-            value={by}
-            placeholder={t('share.fromPlaceholder')}
-            autocomplete="off"
-            enterKeyHint="done"
-            onInput={(e) => setBy((e.currentTarget as HTMLInputElement).value)}
-            onChange={(e) => void setSetting(PROFILE_KEY, (e.currentTarget as HTMLInputElement).value.trim())}
-          />
-          {!hasName && <span class="bad small">{t('share.nameRequired')}</span>}
-        </label>
+            <pre class="report share-preview">{message || error || t('share.encoding')}</pre>
+            <div class="actions">
+              <button type="button" class="btn btn-primary btn-block" disabled={!message} onClick={() => shareText(message, setStatus)}>
+                {t('share.whatsapp')}
+              </button>
+              <button type="button" class="btn" disabled={!message} onClick={() => copyText(message, setStatus)}>
+                {t('share.copy')}
+              </button>
+            </div>
+            <div class="status" role="status">
+              {status || (message ? t('share.length', { n: message.length }) : '')}
+            </div>
 
-        <label class="check">
-          <input type="checkbox" checked={bilingual} onChange={(e) => setBilingual((e.currentTarget as HTMLInputElement).checked)} />
-          <span>{t('share.bilingual')}</span>
-        </label>
-
-        <div class="card">
-          <ul class="facts">
-            <li>
-              <span>{t('share.tokenLength')}</span>
-              <span>{token ? `${token.length} ${t('share.chars')}` : error ?? t('share.encoding')}</span>
-            </li>
-            <li>
-              <span>{t('share.urlLength')}</span>
-              <span>{url ? `${url.length} ${t('share.chars')}` : '…'}</span>
-            </li>
-            <li>
-              <span>{t('share.message')}</span>
-              <span>{message ? `${message.length} ${t('share.chars')}` : hasName ? '…' : t('share.nameRequired')}</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="actions">
-          <button type="button" class="btn btn-primary btn-block" disabled={!message} onClick={share}>
-            {t('share.whatsapp')}
-          </button>
-          <button type="button" class="btn btn-block" disabled={!message} onClick={copy}>
-            {t('share.copy')}
-          </button>
-        </div>
-        <div class="status" role="status">
-          {status}
-        </div>
-
-        {message && <pre class="report">{message}</pre>}
+            <section class="section share-text">
+              <h2>{t('share.asText')}</h2>
+              <p class="muted small">{t('share.asTextHint')}</p>
+              {langOptions.length > 1 && (
+                <div class="share-lang">
+                  <span class="muted small">{t('share.textLang')}</span>
+                  <Segmented name="share-text-lang" options={langOptions} selected={[textLangs]} onChange={(next) => next[0] && setTextLangs(next[0])} />
+                </div>
+              )}
+              <pre class="report share-preview share-readable">{readable || t('share.encoding')}</pre>
+              <div class="actions">
+                <button type="button" class="btn btn-primary btn-block" disabled={!readable} onClick={() => shareText(readable, setTextStatus)}>
+                  {t('share.asText')}
+                </button>
+                <button type="button" class="btn" disabled={!readable} onClick={() => copyText(readable, setTextStatus)}>
+                  {t('share.copyText')}
+                </button>
+              </div>
+              <div class="status" role="status">
+                {textStatus || (readable ? t('share.length', { n: readable.length }) : '')}
+              </div>
+            </section>
+          </>
+        )}
       </div>
     </>
   );

@@ -48,6 +48,7 @@ tab → "Copy results" (see `docs/DEVICE-TEST.md`).
 | 10 | `navigator.share({text})` to WhatsApp; `readText` + paste; textarea paste | yes | PASS | |
 | 11 | 30 s timer: (a) app in the foreground, (b) screen locked, (c) app in the background — what fires (notification / sound / vibration)? | note; only (a) is required | PASS — (a) sound; (c) **sound, 3 beeps, even with the phone on silent**; (b) not recorded; notification permission not granted (untested) | |
 | 12 | `persisted()` = true after installation | yes | PASS | |
+| 13 | **Phase 1, 10-minute timer in the background** (DEVICE-TEST.md row 13): the per-minute "N min left" notification and the done beep/notification come from the page's own interval, not from the service worker. Chrome on Android may freeze a hidden WebAPK after ~5 minutes (intensive throttling), in which case the silent updates stop and the beep/notification arrive on resume. Does the countdown keep going and does the timer fire on time after 10 min? | note | **open** (30 s proven on 2026-09-28; 10 min not yet tested) | Until proven, the UI only promises updates "while the app is open" (`timer.askBody`). |
 | **iPhone** | Home Screen install (standalone), `persisted()`, `share({text})` to WhatsApp, `readText` Paste callout, textarea paste, offline start after restart, 2 KB link tappable (opens the Safari landing), **timer (a)/(b)/(c)** | note | — | pending (she was not available on 2026-09-28) |
 
 **Go** = 1-7, 9, 10 and 12 pass; 8 at least the Chrome-tab fallback; 11 at least (a).

@@ -13,7 +13,7 @@ const SHARE_PATH = BASE + 'share/';
 const SHARE_INBOX = BASE + 'share/inbox';
 
 // Web Share Target (Android Chrome): WhatsApp hands us a message (title/text/url) or a document
-// as a POST multipart form. We stash it in a cache entry and redirect to the import route, which
+// as a POST multipart form. We stash it in a cache entry and redirect to the inbox route, which
 // reads and deletes it. iOS never calls this (no share target on iOS) — that is by design.
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
@@ -33,7 +33,7 @@ self.addEventListener('fetch', (event) => {
       };
       const cache = await caches.open('share-inbox');
       await cache.put(SHARE_INBOX, new Response(JSON.stringify(payload), { headers: { 'content-type': 'application/json' } }));
-      return Response.redirect(BASE + '#/import?from=share', 303);
+      return Response.redirect(BASE + '#/inbox?from=share', 303);
     })(),
   );
 });
@@ -51,4 +51,32 @@ registerRoute(new NavigationRoute(createHandlerBoundToURL(BASE + 'index.html'), 
 // Update flow: the page shows "Nieuwe versie — vernieuwen"; only then do we skipWaiting.
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
+});
+
+// Timer notifications (src/timers.ts): a tap focuses an open window of the app — and asks it to
+// open the cook screen the timer belongs to (`data.path`, e.g. '/cook/b:lasagne') — or opens a
+// new window at BASE when none is open. The page listens for the NAVIGATE message in the timer engine.
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const data = event.notification.data as { path?: string } | null;
+  const path = data && typeof data.path === 'string' && data.path.startsWith('/') ? data.path : null;
+  event.waitUntil(
+    (async () => {
+      const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      // Only windows of this channel: the main worker must not focus a /next/ window.
+      const prefix = self.location.origin + BASE;
+      const isNextChannel = /\/next\/$/.test(BASE);
+      const mine = wins.find((c) => c.url.startsWith(prefix) && (isNextChannel || !c.url.startsWith(prefix + 'next/')));
+      if (mine) {
+        try {
+          await mine.focus();
+        } catch {
+          /* focus may be refused without a user gesture on some platforms */
+        }
+        if (path) mine.postMessage({ type: 'NAVIGATE', path });
+        return;
+      }
+      await self.clients.openWindow(BASE + (path ? '#' + path : ''));
+    })(),
+  );
 });

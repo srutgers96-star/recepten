@@ -44,14 +44,21 @@ src/main.tsx        start({openImportFromHash}) → renders <App/> and registers
 src/app.tsx         root component + hash router ('#/…')
 src/landing.ts      tiny Safari viewer for share tokens: no Dexie, no router, NEVER writes storage
 src/pwa.ts          registerServiceWorker, updateReady signal, reloadToNewVersion, requestPersistentStorage, isStandalone
-src/sw.ts           precache + share_target POST handler (cache 'share-inbox') + SKIP_WAITING message
-src/i18n.ts         lang signal 'nl'|'en' and t(key); every UI string exists in both languages
+src/sw.ts           precache + share_target POST handler (cache 'share-inbox', redirects to #/inbox) +
+                    SKIP_WAITING message + notificationclick (timer notifications focus/open the app)
+src/i18n/           lang signal 'nl'|'en' and t(key); dictionaries per owner (common, browse, edit,
+                    settings) merged in index.ts; every UI string exists in both languages
+src/styles/         base.css (tokens, shell, nav, buttons, inputs, cards, dark mode, safe-area) plus
+                    browse.css, edit.css, settings.css; main.tsx imports all four
+src/profile.ts      profiles + activeProfile signals; src/timers.ts app-level cooking-timer engine;
+src/theme.ts        system/light/dark; src/inbox-badge.ts unseen count for the Inbox tab; src/celebrate.ts
 src/domain/         FRAMEWORK-FREE (no preact, no dexie; runs in Node): model, parser, units, dictionary,
                     render, scale, aggregate, merge, token, message, steps, timers, search, planner
-src/db/             Dexie schema, numbered migrations, one repository module; dbName derived from BASE_URL
-src/screens/        home · all · recipe · cook · edit · week · shopping · import · inbox · settings ·
-                    storage · curator · book · devicecheck …
-src/components/     design tokens from the cover palette, dark mode, safe-area
+src/db/             Dexie schema, numbered migrations, one repository module (repo.ts, the ONLY module
+                    the UI talks to for data); dbName derived from BASE_URL
+src/screens/        home · recipes · recipe · cook · edit · share · inbox · more · profiles · storage ·
+                    story · onboarding · check … (week · shopping · curator · book come later)
+src/components/     header, nav, rows, step view, timer bar, line editor, confetti, install card …
 data/               SOURCE OF TRUTH: recipes.json (schema 2, bilingual), ingredients/units/categories/…, i18n/
 data/source/        recipes-recepten2.json: the 196 originals from Recepten2 (read-only, never edited by hand)
 public/             icons/, cover.webp, share/index.html (share_target fallback), .nojekyll
@@ -95,7 +102,7 @@ Also: hash routes are `#/…`; share tokens are `#r=`, `#p=`, `#w=`, `#b=` and a
 - TypeScript strict; Preact function components + hooks + signals; plain CSS with design tokens.
 - Mobile first: 16 px minimum font-size on inputs (prevents iOS zoom), 44 px tap targets, safe-area
   insets via `env()`, everything works at 360 px width.
-- All UI text goes through `src/i18n.ts` (NL + EN). Code comments in English.
+- All UI text goes through `src/i18n/` (NL + EN, every key in both). Code comments in English.
 - Never reload for an update on your own; the user taps "Nieuwe versie — vernieuwen".
 - Touch only the files your task owns; other agents may work in parallel on other files.
 

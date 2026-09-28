@@ -1,0 +1,884 @@
+/* Browse & cook screens (home, A-Z list, detail, cook mode, timer bar). Owned by the browse agent.
+   Tokens and shared classes (.btn, .input, .row, .card, .screen, .letter, .empty, .badge, .muted,
+   .section, .actions, .list, .icon-btn) come from src/styles/base.css. Mobile first: 360 px,
+   44 px targets, no text selection on controls. */
+
+/* ---------- Home ---------- */
+
+.home-greeting {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 18px 0 12px;
+}
+
+.surprise {
+  margin: 0 0 8px;
+}
+
+.surprise-name {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px; /* it is a button: 44 px target */
+  margin: 4px 0 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cobalt);
+  font: inherit;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.surprise-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.surprise-actions .btn {
+  flex: 1;
+}
+
+.home-section {
+  margin: 8px 0 4px;
+}
+
+.home-section h2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  margin: 16px 0 8px;
+}
+
+.home-section h2 a {
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Horizontal chip strip (favourites) and wrapping chip set ("Bij dit gerecht"). */
+.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 calc(-1 * max(16px, var(--sar))) 0 calc(-1 * max(16px, var(--sal)));
+  padding: 2px max(16px, var(--sar)) 8px max(16px, var(--sal));
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chips.wrap {
+  flex-wrap: wrap;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+}
+
+.chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  max-width: 260px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.chip:active {
+  background: var(--press);
+}
+
+.cooked-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.cooked-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.cooked-row:active {
+  background: var(--press);
+}
+
+.cooked-row .name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cooked-row .meta {
+  flex: none;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: right;
+}
+
+.link-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.link-card:active {
+  background: var(--press);
+}
+
+.link-card-icon {
+  font-size: 26px;
+  flex: none;
+}
+
+.link-card-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.link-card .chev {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.teaser {
+  color: var(--muted);
+  font-size: 14px;
+  border-style: dashed;
+  background: transparent;
+}
+
+/* ---------- A-Z list ---------- */
+
+/* List + rail share this box (below the header), so the rail can never cover header controls. */
+.az-area {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen.has-az {
+  padding-right: max(30px, var(--sar));
+}
+
+.list-count {
+  padding-top: 8px;
+}
+
+.az-rail {
+  position: absolute;
+  right: var(--sar);
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.az-rail span {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1;
+  padding: 1.5px 0;
+  color: var(--cobalt);
+  font-weight: 700;
+}
+
+.az-rail.active {
+  background: var(--press);
+  border-radius: 999px;
+}
+
+.az-bubble {
+  position: absolute;
+  right: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  font-size: 28px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.row-sub {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.row-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.star {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.star.on {
+  color: var(--orange);
+}
+
+/* ---------- Detail ---------- */
+
+.detail-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 16px 0 6px;
+}
+
+.detail-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.fav-btn {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.fav-btn.on {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+.fav-btn:active {
+  background: var(--press);
+}
+
+.fav-btn:disabled {
+  opacity: 0.4;
+}
+
+.detail-meta {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 14px;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+
+.detail-actions .btn {
+  flex: 1;
+  min-height: 50px;
+  font-size: 17px;
+}
+
+.detail-actions .btn-primary {
+  flex: 2;
+}
+
+/* Tickable ingredient rows (tick state lives in memory only). */
+.ing {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ing-header {
+  padding: 14px 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cobalt);
+}
+
+.ing-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.ing-row:active {
+  background: var(--press);
+}
+
+.ing-row .box {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  border: 2px solid var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.ing-row .txt {
+  flex: 1;
+  min-width: 0;
+}
+
+.ing-row.on .box {
+  background: var(--rosemary);
+  border-color: var(--rosemary);
+  opacity: 1;
+}
+
+.ing-row.on .txt {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.ing.big .ing-row {
+  min-height: 48px;
+  font-size: 17px;
+}
+
+/* Numbered steps with timer chips. */
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.step-num {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.step-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.step-text {
+  margin: 0 0 8px;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.chips-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.timer-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--cobalt);
+  background: transparent;
+  color: var(--cobalt);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.timer-chip:active {
+  background: var(--press);
+}
+
+.timer-chip.on {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+}
+
+textarea.input.notes {
+  min-height: 88px;
+}
+
+.notes-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.saved-flag {
+  flex: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rosemary);
+}
+
+.detail-manage {
+  padding-bottom: 8px;
+}
+
+.copy-hint {
+  margin: 8px 0 0;
+}
+
+.confirm {
+  padding: 14px 16px;
+  border: 1px solid var(--tomato);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.confirm p {
+  margin: 0 0 8px;
+}
+
+.confirm .actions {
+  margin: 0;
+}
+
+/* ---------- Timer bar ---------- */
+
+.timerbar {
+  flex: none;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  padding: 2px max(12px, var(--sar)) 2px max(12px, var(--sal));
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.timerbar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 48px;
+}
+
+.timerbar-row + .timerbar-row {
+  border-top: 1px solid var(--line);
+}
+
+.timerbar-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.timerbar-time {
+  flex: none;
+  min-width: 62px;
+  text-align: right;
+  font-size: 20px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--cobalt);
+}
+
+.timerbar-row.done .timerbar-time {
+  color: var(--tomato);
+  animation: timerbar-pulse 1s ease-in-out infinite;
+}
+
+@keyframes timerbar-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.timerbar-btn {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.timerbar-btn:active {
+  background: var(--press);
+}
+
+.timerbar-btn.x {
+  color: var(--tomato);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.timerbar-ask {
+  padding: 10px 0 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.timerbar-ask-text {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.timerbar-ask-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.timerbar-ask-actions .btn {
+  flex: 1;
+}
+
+/* ---------- Cook mode ---------- */
+
+.cook {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.cook-progress {
+  flex: none;
+  padding: 10px max(16px, var(--sar)) 0 max(16px, var(--sal));
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.dots i {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--muted);
+  opacity: 0.3;
+  transition: width 0.2s ease, opacity 0.2s ease;
+}
+
+.dots i.past {
+  background: var(--cobalt);
+  opacity: 0.5;
+}
+
+.dots i.on {
+  width: 22px;
+  background: var(--cobalt);
+  opacity: 1;
+}
+
+/* The card track: the current step card, plus the previous/next card peeking at the edges. */
+.cook-track {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin: 10px 0 8px;
+  touch-action: pan-y;
+  overflow: hidden;
+}
+
+.cook-ghost {
+  position: absolute;
+  top: 16px;
+  bottom: 24px;
+  width: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  opacity: 0.8;
+}
+
+.cook-ghost.prev {
+  left: max(2px, var(--sal));
+  border-left: 0;
+  border-radius: 0 10px 10px 0;
+}
+
+.cook-ghost.next {
+  right: max(2px, var(--sar));
+  border-right: 0;
+  border-radius: 10px 0 0 10px;
+}
+
+.cook-card {
+  position: absolute;
+  inset: 0 max(18px, var(--sar)) 12px max(18px, var(--sal));
+  display: flex;
+  flex-direction: column;
+  padding: 20px 18px 24px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  /* Stacked-card depth cue: two card edges under this one plus a soft shadow. */
+  box-shadow:
+    0 5px 0 -2px var(--card),
+    0 5px 0 -1px var(--line),
+    0 10px 0 -5px var(--card),
+    0 10px 0 -4px var(--line),
+    0 14px 30px rgba(0, 0, 0, 0.12);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  will-change: transform;
+}
+
+.cook-card.enter-next {
+  animation: cook-in-next 0.22s ease-out;
+}
+
+.cook-card.enter-prev {
+  animation: cook-in-prev 0.22s ease-out;
+}
+
+@keyframes cook-in-next {
+  from {
+    transform: translateX(48px);
+    opacity: 0.3;
+  }
+}
+
+@keyframes cook-in-prev {
+  from {
+    transform: translateX(-48px);
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cook-card.enter-next,
+  .cook-card.enter-prev {
+    animation: none;
+  }
+  .timerbar-row.done .timerbar-time {
+    animation: none;
+  }
+}
+
+.cook-kicker {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cobalt);
+  margin-bottom: 10px;
+}
+
+/* Big type in cook mode (spec: 20-22 px). */
+.cook-text {
+  font-size: 21px;
+  line-height: 1.5;
+  margin: 0 0 18px;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.step-big .timer-chip {
+  min-height: 48px;
+  padding: 0 18px;
+  font-size: 16px;
+}
+
+.cook-foot {
+  margin: 16px 0 0;
+}
+
+.cook-done h2 {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 4px 0 6px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+  margin: 4px 0 14px;
+}
+
+.stars button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  opacity: 0.4;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.stars button.on {
+  color: var(--orange);
+  opacity: 1;
+}
+
+.stars button:active {
+  background: var(--press);
+}
+
+.cook-log {
+  min-height: 56px;
+  font-size: 18px;
+  margin-top: 8px;
+}
+
+.cook-nav {
+  flex: none;
+  display: flex;
+  gap: 10px;
+  padding: 0 max(16px, var(--sar)) 10px max(16px, var(--sal));
+}
+
+.cook-nav .btn {
+  flex: 1;
+  min-height: 56px;
+  font-size: 17px;
+}
+
+.cook-nav .btn-primary {
+  flex: 1.4;
+}

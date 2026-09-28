@@ -6,7 +6,10 @@
 //   https://srutgers96-star.github.io/recepten/#r=eJx9kU1v2zAMhu_5FYQv...
 //
 // Both names on line 1 (a readable bubble for either phone), the URL alone on the last line so
-// WhatsApp renders one tappable link. Framework-free.
+// WhatsApp renders one tappable link. Plus "Deel als tekst": the readable recipe (title, servings,
+// lines, numbered steps, serving tip) in NL, EN or both, for people without the app — link last.
+// Framework-free.
+import { hasLang, pickText, type Lang, type Recipe, type Text } from './model.ts';
 
 export interface ShareMessageInput {
   nameNl: string;
@@ -55,4 +58,124 @@ function titleNames(nameNl: string, nameEn?: string): string[] {
   if (!nl) return [en || '?'];
   if (!en || en.toLowerCase() === nl.toLowerCase()) return [nl];
   return [nl, en];
+}
+
+// --- Schema-2 recipe -> share message -----------------------------------------------------------
+
+export interface RecipeShareOptions {
+  /** Sender name (the active profile); omitted from the message when empty. */
+  by?: string;
+  url: string;
+  lang: Lang;
+}
+
+/** Ingredient lines that are real lines (group headers such as "Dressing:" do not count). */
+export function countIngredientLines(r: Recipe): number {
+  return r.lines.filter((l) => l.kind !== 'header').length;
+}
+
+/** The buildShareMessage input for a schema-2 recipe. */
+export function shareMessageInput(r: Recipe, o: RecipeShareOptions): ShareMessageInput {
+  const input: ShareMessageInput = {
+    nameNl: r.name.nl ?? '',
+    servings: r.servings,
+    ingredientCount: countIngredientLines(r),
+    by: o.by ?? '',
+    url: o.url,
+    lang: o.lang,
+  };
+  if (r.name.en) input.nameEn = r.name.en;
+  return input;
+}
+
+export function buildShareMessageFor(r: Recipe, o: RecipeShareOptions): string {
+  return buildShareMessage(shareMessageInput(r, o));
+}
+
+// --- "Deel als tekst": the readable recipe ------------------------------------------------------
+
+const LABELS: Record<Lang, { ingredients: string; method: string; tip: string; servings: (n: number) => string }> = {
+  nl: {
+    ingredients: 'Ingrediënten:',
+    method: 'Bereiding:',
+    tip: 'Serveertip:',
+    servings: (n) => `${n} pers.`,
+  },
+  en: {
+    ingredients: 'Ingredients:',
+    method: 'Method:',
+    tip: 'Serving tip:',
+    servings: (n) => `${n} ${n === 1 ? 'serving' : 'servings'}`,
+  },
+};
+
+const OPEN_LINE_READABLE: Record<Lang, string> = {
+  nl: `Open in ${APP_NAME.nl} (of tik voor een voorproefje):`,
+  en: `Open in ${APP_NAME.en} (or tap to preview):`,
+};
+
+/** True when any human-readable field of the recipe has text in that language. */
+export function recipeHasLang(r: Recipe, lang: Lang): boolean {
+  return (
+    hasLang(r.name, lang) ||
+    r.lines.some((l) => hasLang(l.raw, lang)) ||
+    r.steps.some((s) => hasLang(s.text, lang))
+  );
+}
+
+/** Steps are one paragraph each in the message: inner line breaks become spaces. */
+function oneParagraph(s: string): string {
+  return s.replace(/\s*\n+\s*/g, ' ').trim();
+}
+
+function readableBlock(r: Recipe, lang: Lang): string {
+  const L = LABELS[lang];
+  const out: string[] = [];
+  out.push('🍲 ' + (pickText(r.name, lang) || '?'));
+  if (r.servings > 0) out.push(L.servings(r.servings));
+  const description = pickText(r.description, lang);
+  if (description) out.push(oneParagraph(description));
+
+  if (r.lines.length) {
+    out.push('', L.ingredients);
+    for (const line of r.lines) {
+      const text = pickText(line.raw, lang);
+      if (!text) continue;
+      out.push(line.kind === 'header' ? text : '- ' + text);
+    }
+  }
+
+  if (r.steps.length) {
+    out.push('', L.method);
+    let n = 0;
+    for (const step of r.steps) {
+      const text = pickText(step.text, lang);
+      if (!text) continue;
+      n++;
+      out.push(`${n}. ${oneParagraph(text)}`);
+    }
+  }
+
+  const tip = pickText(r.servingTip, lang);
+  if (tip) out.push('', `${L.tip} ${oneParagraph(tip)}`);
+  return out.join('\n');
+}
+
+/**
+ * The readable recipe for people without the app: title, servings, lines (group headers kept as
+ * they are), numbered steps and the serving tip, one block per language (NL first), and the link
+ * alone on the last line when given. A requested language without any text is skipped, unless
+ * that would leave nothing (then the first language is rendered with fallbacks).
+ */
+export function buildReadableRecipe(recipe: Recipe, langs: Lang[], url?: string): string {
+  // Canonical order NL then EN, whatever order was asked for.
+  const wanted: Lang[] = (['nl', 'en'] as Lang[]).filter((l) => langs.includes(l));
+  if (!wanted.length) wanted.push('nl');
+  const available = wanted.filter((l) => recipeHasLang(recipe, l));
+  const use: Lang[] = available.length ? available : [wanted[0] as Lang];
+
+  const parts = [use.map((l) => readableBlock(recipe, l)).join('\n\n')];
+  const link = (url ?? '').trim();
+  if (link) parts.push(OPEN_LINE_READABLE[use[0] as Lang] + '\n' + link);
+  return parts.join('\n\n');
 }

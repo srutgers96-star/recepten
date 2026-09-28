@@ -263,7 +263,7 @@ export function CheckScreen() {
 
   return (
     <>
-      <Header title={t('check.title')} />
+      <Header title={t('check.title')} back backLabel={t('common.back')} />
       <div class="screen form">
         <div class="probe" ref={probe} />
         <p class="muted" style="padding-top:12px">
@@ -371,7 +371,7 @@ export function CheckScreen() {
             {status}
           </div>
           <details>
-            <summary class="muted small">report.txt</summary>
+            <summary class="muted small">{t('check.report')}</summary>
             <pre class="report">{buildReport()}</pre>
           </details>
           <div class="actions">

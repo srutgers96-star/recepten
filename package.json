@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:data": "node --experimental-strip-types tools/validate-data.ts",
+    "migrate": "node --experimental-strip-types tools/migrate-from-recepten2.ts",
     "measure-parse": "node --experimental-strip-types tools/measure-parse.ts",
     "icons": "python tools/make-icons.py"
   },

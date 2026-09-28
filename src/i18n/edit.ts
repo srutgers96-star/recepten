@@ -1,0 +1,132 @@
+// Strings of the edit screens: editor (add/edit), share, inbox/import. Owned by the edit agent.
+// Every key needs both nl and en. Keys are merged in ./index.ts (later dictionaries win), so the
+// `share.*` keys below override the phase-0 ones in common.ts where they are redefined.
+// Placeholders of per-language fields are looked up with tIn(fieldLang, key), not in the UI language.
+import type { Dict } from './index';
+
+export const edit: Dict = {
+  // --- Editor (/add, /edit/:id) ---
+  'edit.titleNew': { nl: 'Nieuw recept', en: 'New recipe' },
+  'edit.titleEdit': { nl: 'Bewerk recept', en: 'Edit recipe' },
+  'edit.lang': { nl: 'Taal van het recept', en: 'Recipe language' },
+  'edit.lang.nl': { nl: 'NL', en: 'NL' },
+  'edit.lang.en': { nl: 'EN', en: 'EN' },
+  'edit.lang.both': { nl: 'beide', en: 'both' },
+  'edit.name': { nl: 'Naam', en: 'Name' },
+  'edit.namePlaceholder': { nl: 'bv. Pasta pesto', en: 'e.g. Pesto pasta' },
+  'edit.servings': { nl: 'Personen', en: 'Servings' },
+  'edit.fewer': { nl: 'Minder personen', en: 'Fewer servings' },
+  'edit.more': { nl: 'Meer personen', en: 'More servings' },
+  'edit.ingredients': { nl: 'Ingrediënten', en: 'Ingredients' },
+  'edit.linePlaceholder': { nl: 'bv. 400 g aardappelen', en: 'e.g. 400 g potatoes' },
+  'edit.lineHint': {
+    nl: 'Een regel die eindigt op ":" wordt een kopje, bv. "Dressing:".',
+    en: 'A line ending in ":" becomes a header, e.g. "Dressing:".',
+  },
+  'edit.addLine': { nl: '+ regel', en: '+ line' },
+  'edit.removeLine': { nl: 'Verwijder regel', en: 'Remove line' },
+  'edit.steps': { nl: 'Bereiding', en: 'Method' },
+  'edit.stepPlaceholder': { nl: 'bv. Kook de aardappelen in 20 minuten gaar.', en: 'e.g. Boil the potatoes for 20 minutes.' },
+  'edit.addStep': { nl: '+ stap', en: '+ step' },
+  'edit.removeStep': { nl: 'Verwijder stap', en: 'Remove step' },
+  'edit.pasteMethod': { nl: 'Plak hele bereiding', en: 'Paste whole method' },
+  'edit.pasteHint': {
+    nl: 'Plak de hele bereiding in één keer; lege regels worden stapgrenzen, lange alinea’s worden gesplitst.',
+    en: 'Paste the whole method at once; blank lines become step boundaries, long paragraphs are split.',
+  },
+  'edit.pasteLang': { nl: 'Taal van de tekst', en: 'Language of the text' },
+  'edit.split': { nl: 'Splits in stappen', en: 'Split into steps' },
+  'edit.splitNone': { nl: 'Geen tekst om te splitsen.', en: 'No text to split.' },
+  'edit.splitDone': { nl: '{n} stappen toegevoegd', en: '{n} steps added' },
+  'edit.save': { nl: 'Bewaar', en: 'Save' },
+  'edit.saving': { nl: 'Bewaren…', en: 'Saving…' },
+  'edit.invalidHint': {
+    nl: 'Nodig: een naam, minstens 1 ingrediënt en 1 stap.',
+    en: 'Needed: a name, at least 1 ingredient and 1 step.',
+  },
+  'edit.saveError': { nl: 'Bewaren mislukt', en: 'Saving failed' },
+  'edit.delete': { nl: 'Verwijder recept', en: 'Delete recipe' },
+  'edit.confirmDelete': {
+    nl: 'Dit recept verwijderen? Dit kan niet ongedaan worden gemaakt.',
+    en: 'Delete this recipe? This cannot be undone.',
+  },
+  'edit.notFound': { nl: 'Recept niet gevonden', en: 'Recipe not found' },
+  'edit.builtin': {
+    nl: 'Een klassieker kun je niet bewerken. Maak een eigen kopie en pas die aan.',
+    en: 'A classic cannot be edited. Make your own copy and change that.',
+  },
+  'edit.makeCopy': { nl: 'Maak eigen kopie', en: 'Make my own copy' },
+
+  // --- Share (/share/:id) ---
+  'share.title': { nl: 'Delen', en: 'Share' },
+  'share.notFound': { nl: 'Recept niet gevonden', en: 'Recipe not found' },
+  'share.intro': {
+    nl: 'Bericht met receptcode voor WhatsApp. De ontvanger tikt op de link of plakt het bericht in de Inbox van de app.',
+    en: 'Message with the recipe code for WhatsApp. The recipient taps the link or pastes the message into the Inbox of the app.',
+  },
+  'share.noProfile': {
+    nl: 'Kies eerst een profiel onder Meer, dan staat je naam in het bericht.',
+    en: 'Choose a profile under More first, so your name is in the message.',
+  },
+  'share.message': { nl: 'Bericht', en: 'Message' },
+  'share.length': { nl: '{n} tekens', en: '{n} characters' },
+  'share.whatsapp': { nl: 'Deel via WhatsApp', en: 'Share via WhatsApp' },
+  'share.copy': { nl: 'Kopieer', en: 'Copy' },
+  'share.copied': { nl: 'Gekopieerd', en: 'Copied' },
+  'share.encoding': { nl: 'Bezig met coderen…', en: 'Encoding…' },
+  'share.error': { nl: 'Delen mislukt', en: 'Sharing failed' },
+  'share.copyError': { nl: 'Kopiëren mislukt', en: 'Copy failed' },
+  'share.noShareApi': { nl: 'Geen deelmenu — WhatsApp wordt direct geopend', en: 'No share sheet — opening WhatsApp directly' },
+  'share.asText': { nl: 'Deel als tekst', en: 'Share as text' },
+  'share.asTextHint': {
+    nl: 'Leesbaar recept voor mensen zonder de app; de link staat onderaan.',
+    en: 'Readable recipe for people without the app; the link comes last.',
+  },
+  'share.textLang': { nl: 'Taal', en: 'Language' },
+  'share.copyText': { nl: 'Kopieer tekst', en: 'Copy text' },
+
+  // --- Inbox (/inbox): import + received ---
+  'inbox.title': { nl: 'Inbox', en: 'Inbox' },
+  'inbox.hint': {
+    nl: 'Plak hier een WhatsApp-bericht, een link of een receptbestand.',
+    en: 'Paste a WhatsApp message, a link or a recipe file here.',
+  },
+  'inbox.paste': { nl: 'Plak van klembord', en: 'Paste from clipboard' },
+  'inbox.pasteHint': {
+    nl: 'iPhone: tik op "Plak" als dat verschijnt, of houd het tekstvak ingedrukt → Plak.',
+    en: 'iPhone: tap "Paste" when it appears, or long-press the text box → Paste.',
+  },
+  'inbox.file': { nl: 'Kies bestand', en: 'Choose file' },
+  'inbox.clear': { nl: 'Wis', en: 'Clear' },
+  'inbox.noToken': { nl: 'Geen recept gevonden in deze tekst.', en: 'No recipe found in this text.' },
+  'inbox.invalid': { nl: 'Ongeldige receptcode.', en: 'Invalid recipe code.' },
+  'inbox.unsupported': { nl: 'Update de app eerst (nieuwere versie van de code).', en: 'Update the app first (newer code version).' },
+  'inbox.unsupportedType': { nl: 'Dit type wordt nog niet ondersteund:', en: 'This type is not supported yet:' },
+  'inbox.backup': {
+    nl: 'Dit is een back-up. Herstel die via Meer → Opslag & back-up.',
+    en: 'This is a backup. Restore it via More → Storage & backup.',
+  },
+  'inbox.preview': { nl: 'Voorproefje', en: 'Preview' },
+  'inbox.at': { nl: 'gedeeld op', en: 'shared on' },
+  'inbox.ingredients': { nl: '{n} ingrediënten', en: '{n} ingredients' },
+  'inbox.steps': { nl: '{n} stappen', en: '{n} steps' },
+  'inbox.new': { nl: 'Nieuw', en: 'New' },
+  'inbox.exists': { nl: 'Al aanwezig', en: 'Already present' },
+  'inbox.existsHint': { nl: 'Dit recept staat al in je lijst.', en: 'This recipe is already in your list.' },
+  'inbox.updated': { nl: 'Bijgewerkt', en: 'Updated' },
+  'inbox.updatedHint': {
+    nl: 'Een nieuwere versie van een recept dat je al hebt; bewaren vervangt de oude.',
+    en: 'A newer version of a recipe you already have; saving replaces the old one.',
+  },
+  'inbox.save': { nl: 'Bewaar', en: 'Save' },
+  'inbox.saved': { nl: 'Bewaard', en: 'Saved' },
+  'inbox.skipped': { nl: 'Niet bewaard (al aanwezig)', en: 'Not saved (already present)' },
+  'inbox.saveError': { nl: 'Bewaren mislukt', en: 'Saving failed' },
+  'inbox.open': { nl: 'Open', en: 'Open' },
+  'inbox.fromShare': { nl: 'Ontvangen via het deelmenu', en: 'Received via the share sheet' },
+  'inbox.pasteFailed': { nl: 'Plakken mislukt — plak in het tekstvak.', en: 'Paste failed — paste into the text box instead.' },
+  'inbox.fileFailed': { nl: 'Bestand kon niet worden gelezen.', en: 'Could not read the file.' },
+  'inbox.received': { nl: 'Ontvangen recepten', en: 'Received recipes' },
+  'inbox.empty': { nl: 'Nog niets ontvangen. Gedeelde recepten verschijnen hier.', en: 'Nothing received yet. Shared recipes appear here.' },
+  'inbox.unseen': { nl: 'nieuw', en: 'new' },
+};

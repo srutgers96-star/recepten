@@ -54,6 +54,7 @@ kort wat er gebeurde.
 | 10 | Tik op **Deel via WhatsApp** (moet WhatsApp openen met tekst). Kopieer een bericht in WhatsApp, terug in de app: **Plak van klembord** (*iPhone:* tik op de "Plak"-ballon). Plak ook een keer met lang drukken in het grote tekstvak. | Alle drie werken. |
 | 11 | Start de **timer van 30 s** drie keer: (a) app open laten; (b) scherm vergrendelen; (c) naar een andere app gaan. Schrijf per keer op: melding? geluid? trilling? niets? | Alleen (a) hoeft te werken. De rest is informatie, geen fout. |
 | 12 | Kijk op de Check-pagina onder *Automatisch gemeten* naar de regel **storage.persisted()**. | ja (na installatie). |
+| 13 | **Lange timer op de achtergrond (fase 1):** open een recept, start een timer van 10 minuten (of tik in de timerbalk een paar keer op **+1**), zet meldingen aan als daarom wordt gevraagd, en ga dan naar een andere app (of vergrendel het scherm) tot de tijd om is. Kijk tussendoor één keer naar je meldingen. | De melding met "nog N min" telt af terwijl de app dicht is, en na 10 min hoor je de piepjes / komt de melding "Timer klaar". Stopt het aftellen na een paar minuten, of komen het geluid en de melding pas als je de app weer opent? Noteer het: dan bevriest Android de app en moet je voor lange timers óók de timer van je telefoon zetten. |
 
 ### Stap 4 — kopieer en verstuur
 
@@ -115,6 +116,7 @@ a few words about what happened.
 | 10 | Tap **Share via WhatsApp** (should open WhatsApp with text). Copy a message in WhatsApp, back in the app: **Paste from clipboard** (*iPhone:* tap the "Paste" bubble). Also paste once by long-pressing in the big text box. | All three work. |
 | 11 | Start the **30-second timer** three times: (a) keep the app open; (b) lock the screen; (c) switch to another app. Each time write down: notification? sound? vibration? nothing? | Only (a) has to work. The rest is information, not a failure. |
 | 12 | On the Check page, under *Detected automatically*, look at the row **storage.persisted()**. | yes (after installation). |
+| 13 | **Long timer in the background (phase 1):** open a recipe, start a 10-minute timer (or tap **+1** a few times in the timer bar), allow notifications if asked, then switch to another app (or lock the screen) until the time is up. Glance at your notifications once in between. | The "N min left" notification counts down while the app is away, and after 10 min you hear the beeps / get the "Timer done" notification. If the countdown stops after a few minutes, or the sound and notification only arrive when you reopen the app, write that down: the phone freezes the app, and for long timers you should also set your phone's own timer. |
 
 ### Step 4 — copy and send
 

@@ -1,8 +1,7 @@
 // tools/validate-data.ts — data guard for CI and for the local dev loop.
 //
-// Today it validates the schema-1 source corpus (data/source/recipes-recepten2.json). The schema-2
-// validation of data/recipes.json (PLAN.md §5 "Guards in CI") is prepared as a stub below and will
-// be switched on once the migration writes that file.
+// Validates the schema-1 source corpus (data/source/recipes-recepten2.json) and the generated
+// schema-2 file data/recipes.json (tools/migrate-from-recepten2.ts, docs/phase-1-spec.md §2).
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
 // Exit:  1 when any error was found, 0 otherwise. Warnings never fail the run.
@@ -99,29 +98,155 @@ export function validateSource(data: unknown): ValidationResult {
 }
 
 // ---------------------------------------------------------------------------
-// Schema 2: data/recipes.json  (PLAN.md §5) — TODO, enable once the migration writes this file.
+// Schema 2: data/recipes.json  (docs/phase-1-spec.md §2, written by tools/migrate-from-recepten2.ts)
 // ---------------------------------------------------------------------------
 //
-// TODO(schema-2) rules from PLAN.md §5 "Guards in CI":
-//   - `id` unique across recipes (built-in ids "b:<slug>", user ids "u:<8 random chars>").
-//   - `name.nl` AND `name.en` present and non-empty.
-//   - `category` is one of data/categories.json.
-//   - every `lines[].ing` is a known id in data/ingredients.json (or null = free text);
-//     every `lines[].unit` is a known id in data/units.json (or null).
-//   - `steps[]`: equal step count per language — every step has both `nl` and `en`
-//     (step 3 NL = step 3 EN), no empty step text.
-//   - no empty `raw` on any line (`raw.nl` or `raw.en` must be a non-empty string).
-//   - `schema` === 2; `rev` is a positive integer; `origin.kind` in builtin | user | received.
-// Also planned: check that parser.golden.json still covers every unique raw line.
+// Phase-1 rules (errors): file is { schema: 2, dataVersion, generatedAt, recipes[] }; every recipe
+// has schema 2, a unique id, a positive integer rev, origin.kind in builtin | user | received,
+// non-empty name.nl, servings > 0, lines with a non-empty raw.nl or raw.en, at least one step with
+// non-empty text, and goesWith ids that exist. Warnings: a builtin without the 'b:' id prefix,
+// timers with a max below min, duplicate names.
+//
+// Later phases add: name.en present, category in data/categories.json, lines[].ing/unit known in
+// the dictionaries, equal step counts per language, and the parser golden fixture coverage.
 
-/** Placeholder until data/recipes.json exists; returns a single warning so the gap stays visible. */
+const ORIGIN_KINDS: ReadonlySet<string> = new Set(['builtin', 'user', 'received']);
+const TIMER_UNITS: ReadonlySet<string> = new Set(['sec', 'min', 'hour']);
+
+function hasText(value: unknown, field: 'nl' | 'en'): boolean {
+  return isRecord(value) && typeof value[field] === 'string' && (value[field] as string).trim() !== '';
+}
+
+/** Validate the schema-2 recipes file. Pure: takes the parsed JSON, returns errors/warnings. */
 export function validateSchema2(data: unknown): ValidationResult {
-  void data;
-  return {
-    errors: [],
-    warnings: ['schema-2 validation (data/recipes.json) is not implemented yet — see TODO in tools/validate-data.ts.'],
-    stats: { recipes: 0, lines: 0 },
-  };
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  let lines = 0;
+
+  if (!isRecord(data)) {
+    errors.push('Top level must be an object { schema, dataVersion, generatedAt, recipes }.');
+    return { errors, warnings, stats: { recipes: 0, lines } };
+  }
+  if (data['schema'] !== 2) errors.push('"schema" must be 2.');
+  const dataVersion = data['dataVersion'];
+  if (typeof dataVersion !== 'number' || !Number.isInteger(dataVersion) || dataVersion < 1) {
+    errors.push('"dataVersion" must be a positive integer.');
+  }
+  if (typeof data['generatedAt'] !== 'string' || Number.isNaN(new Date(data['generatedAt'] as string).getTime())) {
+    errors.push('"generatedAt" must be an ISO timestamp.');
+  }
+  const recipes = data['recipes'];
+  if (!Array.isArray(recipes)) {
+    errors.push('"recipes" must be an array.');
+    return { errors, warnings, stats: { recipes: 0, lines } };
+  }
+
+  const ids = new Map<string, number>();
+  const names = new Map<string, number>();
+  recipes.forEach((recipe: unknown, index: number) => {
+    const where = `recipe #${index}`;
+    if (!isRecord(recipe)) {
+      errors.push(`${where}: not an object.`);
+      return;
+    }
+    const id = recipe['id'];
+    const label = typeof id === 'string' && id !== '' ? `"${id}"` : where;
+
+    if (recipe['schema'] !== 2) errors.push(`${label}: "schema" must be 2.`);
+
+    if (typeof id !== 'string' || id.trim() === '') {
+      errors.push(`${where}: "id" must be a non-empty string.`);
+    } else {
+      const first = ids.get(id);
+      if (first !== undefined) errors.push(`${label}: duplicate id (also recipe #${first}).`);
+      else ids.set(id, index);
+    }
+
+    const rev = recipe['rev'];
+    if (typeof rev !== 'number' || !Number.isInteger(rev) || rev < 1) errors.push(`${label}: "rev" must be a positive integer.`);
+
+    for (const field of ['createdAt', 'updatedAt']) {
+      const v = recipe[field];
+      if (typeof v !== 'string' || Number.isNaN(new Date(v).getTime())) errors.push(`${label}: "${field}" must be an ISO timestamp.`);
+    }
+
+    const origin = recipe['origin'];
+    if (!isRecord(origin) || typeof origin['kind'] !== 'string' || !ORIGIN_KINDS.has(origin['kind'])) {
+      errors.push(`${label}: "origin.kind" must be builtin | user | received.`);
+    } else if (origin['kind'] === 'builtin' && typeof id === 'string' && !id.startsWith('b:')) {
+      warnings.push(`${label}: builtin recipe without the "b:" id prefix.`);
+    }
+
+    const name = recipe['name'];
+    if (!hasText(name, 'nl')) {
+      errors.push(`${label}: "name.nl" must be a non-empty string.`);
+    } else {
+      const key = ((name as Record<string, unknown>)['nl'] as string).trim().toLowerCase();
+      const first = names.get(key);
+      if (first !== undefined) warnings.push(`${label}: duplicate name.nl (also recipe #${first}).`);
+      else names.set(key, index);
+    }
+
+    const servings = recipe['servings'];
+    if (typeof servings !== 'number' || !(servings > 0)) errors.push(`${label}: "servings" must be > 0.`);
+
+    for (const field of ['tags', 'goesWith', 'aliases']) {
+      const v = recipe[field];
+      if (!Array.isArray(v) || v.some((s) => typeof s !== 'string')) errors.push(`${label}: "${field}" must be an array of strings.`);
+    }
+
+    const recipeLines = recipe['lines'];
+    if (!Array.isArray(recipeLines)) {
+      errors.push(`${label}: "lines" must be an array.`);
+    } else {
+      if (recipeLines.length === 0) warnings.push(`${label}: "lines" is empty.`);
+      recipeLines.forEach((line: unknown, i: number) => {
+        lines++;
+        if (!isRecord(line) || !(hasText(line['raw'], 'nl') || hasText(line['raw'], 'en'))) {
+          errors.push(`${label}: lines[${i}] has no non-empty raw.nl or raw.en.`);
+          return;
+        }
+        const kind = line['kind'];
+        if (kind !== undefined && kind !== 'line' && kind !== 'header') errors.push(`${label}: lines[${i}].kind must be line | header.`);
+      });
+    }
+
+    const steps = recipe['steps'];
+    if (!Array.isArray(steps) || steps.length === 0) {
+      errors.push(`${label}: "steps" must contain at least one step.`);
+    } else {
+      steps.forEach((step: unknown, i: number) => {
+        if (!isRecord(step) || !(hasText(step['text'], 'nl') || hasText(step['text'], 'en'))) {
+          errors.push(`${label}: steps[${i}] has no non-empty text.nl or text.en.`);
+          return;
+        }
+        const timers = step['timers'];
+        if (timers === undefined) return;
+        if (!Array.isArray(timers)) {
+          errors.push(`${label}: steps[${i}].timers must be an array.`);
+          return;
+        }
+        timers.forEach((t: unknown, j: number) => {
+          if (!isRecord(t) || typeof t['min'] !== 'number' || !(t['min'] > 0) || typeof t['unit'] !== 'string' || !TIMER_UNITS.has(t['unit'])) {
+            errors.push(`${label}: steps[${i}].timers[${j}] must have min > 0 and unit sec | min | hour.`);
+          } else if (typeof t['max'] === 'number' && t['max'] < (t['min'] as number)) {
+            warnings.push(`${label}: steps[${i}].timers[${j}] has max < min.`);
+          }
+        });
+      });
+    }
+  });
+
+  // goesWith ids must exist (second pass, all ids known).
+  recipes.forEach((recipe: unknown) => {
+    if (!isRecord(recipe) || !Array.isArray(recipe['goesWith'])) return;
+    const label = typeof recipe['id'] === 'string' ? `"${recipe['id']}"` : 'recipe';
+    for (const ref of recipe['goesWith']) {
+      if (typeof ref === 'string' && !ids.has(ref)) errors.push(`${label}: goesWith id ${JSON.stringify(ref)} does not exist.`);
+    }
+  });
+
+  return { errors, warnings, stats: { recipes: recipes.length, lines } };
 }
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,216 @@
+/* Rutgers' Recepten — editor, share and inbox screens (owned by the edit agent).
+   Shared tokens and classes (.btn, .input, .card, .row, .badge, .seg, --cobalt …) live in base.css.
+   Mobile first: 16 px inputs, 44 px targets, works at 360 px. */
+
+/* ---------- Editor: sticky sub-header with language + Bewaar ---------- */
+
+.edit-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.edit-bar .seg {
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+.edit-bar .seg label {
+  padding: 0 12px;
+}
+
+.edit-bar .btn {
+  flex: none;
+  min-width: 96px;
+}
+
+/* ---------- Editor: fields ---------- */
+
+.edit-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.edit-name .input {
+  flex: 1;
+}
+
+.edit-hint {
+  margin-top: 8px;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepper-input {
+  width: 72px;
+  flex: none;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Square 44 px icon button (✕, −, +). */
+.btn-icon {
+  flex: none;
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.edit-paste-toggle {
+  margin-top: 10px;
+}
+
+.edit-paste {
+  margin-top: 10px;
+}
+
+.edit-paste textarea.input {
+  min-height: 160px;
+}
+
+.edit-paste-lang,
+.share-lang {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.edit-paste-lang > span,
+.share-lang > span {
+  flex: none;
+}
+
+/* ---------- Line editor (ingredient lines, steps) ---------- */
+
+.le-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.le-fields {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.le-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.le-field .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.le-tag {
+  flex: none;
+  width: 26px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.le-num {
+  flex: none;
+  min-width: 24px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  color: var(--cobalt);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.le-multi textarea.input {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.le-add {
+  margin-top: 2px;
+}
+
+/* ---------- Share ---------- */
+
+.share-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 16px 0 4px;
+}
+
+.share-preview {
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.share-text h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* ---------- Inbox ---------- */
+
+.inbox-hint {
+  padding-top: 12px;
+}
+
+.inbox-name {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 4px 0 2px;
+}
+
+.inbox-note {
+  align-self: center;
+  flex: 1;
+}
+
+.inbox-received h2 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.inbox-row .name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inbox-row-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inbox-row .badge {
+  flex: none;
+}

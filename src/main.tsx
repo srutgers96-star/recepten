@@ -1,5 +1,8 @@
 import { render } from 'preact';
-import './styles.css';
+import './styles/base.css';
+import './styles/browse.css';
+import './styles/edit.css';
+import './styles/settings.css';
 import { App } from './app';
 import { registerServiceWorker } from './pwa';
 
