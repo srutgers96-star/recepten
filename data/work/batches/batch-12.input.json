@@ -1,0 +1,1604 @@
+{
+  "batch": 12,
+  "recipes": [
+    {
+      "id": "b:pasta-met-tonijn",
+      "name": {
+        "nl": "Pasta met tonijn"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "400 g penne",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "penne",
+            "qual": [],
+            "prep": null,
+            "name": "penne"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "600 ml melk",
+          "parsed": {
+            "qty": {
+              "min": 600
+            },
+            "unit": "ml",
+            "ing": "melk",
+            "qual": [],
+            "prep": null,
+            "name": "melk"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "3 el bloem",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "bloem",
+            "qual": [],
+            "prep": null,
+            "name": "bloem"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "snufje cayennepeper",
+          "parsed": {
+            "qty": null,
+            "unit": "snuf",
+            "ing": "cayennepeper",
+            "qual": [],
+            "prep": null,
+            "name": "cayennepeper"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "50 g geraspte belegen kaas",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte",
+              "belegen"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 tl dijonmosterd",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "dijonmosterd",
+            "qual": [],
+            "prep": null,
+            "name": "dijonmosterd"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 tl worcestersaus",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "worcestersaus",
+            "qual": [],
+            "prep": null,
+            "name": "worcestersaus"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "125 g mais uit blik",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "g",
+            "ing": "mais",
+            "qual": [],
+            "prep": null,
+            "name": "mais uit blik"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "125 g diepvriesdoperwten",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "g",
+            "ing": "doperwt",
+            "qual": [],
+            "prep": null,
+            "name": "diepvriesdoperwten"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "400 g tonijn op water",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "tonijn-in-water",
+            "qual": [],
+            "prep": null,
+            "name": "tonijn op water"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Kook de penne volgens de verpakking. Doe de melk, 3 el olijfolie, bloem en cayennepeper in een middelgrote pan en klop dit tot een glad mengsel."
+        },
+        {
+          "nl": "Breng het langzaam aan de kook en blijf kloppen met een garde zodat het indikt. Voeg de kaas, mosterd, worcestersaus, mais, doperwten, tonijn en peper en zout toe."
+        },
+        {
+          "nl": "Kook de saus 5 minuten, schep de pasta erdoor en serveer."
+        }
+      ]
+    },
+    {
+      "id": "b:pasta-met-zalm-en-rucola",
+      "name": {
+        "nl": "Pasta met zalm en rucola"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "400 g rode zalm",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "zalm",
+            "qual": [
+              "rode"
+            ],
+            "prep": null,
+            "name": "zalm"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "400 g fusilli",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "fusilli",
+            "qual": [],
+            "prep": null,
+            "name": "fusilli"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "2 kleine courgettes [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "courgette",
+            "qual": [
+              "kleine"
+            ],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "courgettes"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "6 lente-uitjes [ringen]",
+          "parsed": {
+            "qty": {
+              "min": 6
+            },
+            "unit": null,
+            "ing": "bosui",
+            "qual": [],
+            "prep": {
+              "nl": "ringen"
+            },
+            "name": "lente-uitjes"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "30 g roomboter",
+          "parsed": {
+            "qty": {
+              "min": 30
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "roomboter"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "100 g roomkaas met kruiden",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "roomkaas-met-kruiden",
+            "qual": [],
+            "prep": null,
+            "name": "roomkaas met kruiden"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "200 g crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "rasp van 1 citroen",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "citroen",
+            "qual": [],
+            "prep": null,
+            "name": "citroen"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "150 g rucola",
+          "parsed": {
+            "qty": {
+              "min": 150
+            },
+            "unit": "g",
+            "ing": "rucola",
+            "qual": [],
+            "prep": null,
+            "name": "rucola"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "1 handje verse basilicum",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "hand",
+            "ing": "basilicum",
+            "qual": [
+              "verse"
+            ],
+            "prep": null,
+            "name": "basilicum"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "100 g Parmezaanse kaas",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "parmezaanse-kaas",
+            "qual": [],
+            "prep": null,
+            "name": "Parmezaanse kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Giet de zalm af, verwijder vel en graten en verdeel het visvlees in stukjes. Kook de pasta in ruim water met zout al dente."
+        },
+        {
+          "nl": "Smoor intussen de courgettes en lente-ui 5 à 6 minuten op laag vuur in de boter. Roer roomkaas, crème fraîche en citroenrasp erdoor en zo veel water als nodig voor een dunne saus."
+        },
+        {
+          "nl": "Maak op smaak met zout en peper en schep de zalm erdoor. Giet de pasta af, meng met rucola en basilicum en schep voorzichtig de saus door de pasta."
+        },
+        {
+          "nl": "Verdeel de pasta over de borden en geef de kaas erbij."
+        }
+      ]
+    },
+    {
+      "id": "b:peersalade-met-rucola-en-blauwe-kaas",
+      "name": {
+        "nl": "Peersalade met rucola en blauwe kaas"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "60 g walnoten [grof gehakt]",
+          "parsed": {
+            "qty": {
+              "min": 60
+            },
+            "unit": "g",
+            "ing": "walnoot",
+            "qual": [],
+            "prep": {
+              "nl": "grof gehakt"
+            },
+            "name": "walnoten"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "90 g zachte blauwe kaas [stukken]",
+          "parsed": {
+            "qty": {
+              "min": 90
+            },
+            "unit": "g",
+            "ing": "blauwe-kaas",
+            "qual": [
+              "zachte"
+            ],
+            "prep": {
+              "nl": "stukken"
+            },
+            "name": "blauwe kaas"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 komkommer [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "komkommer",
+            "qual": [],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "komkommer"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "2 peren [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "peer",
+            "qual": [],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "peren"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "50 g rucola",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "rucola",
+            "qual": [],
+            "prep": null,
+            "name": "rucola"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 el olijfolie",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1 el balsamicoazijn",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "balsamicoazijn",
+            "qual": [],
+            "prep": null,
+            "name": "balsamicoazijn"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "grove peper",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "peper",
+            "qual": [
+              "grove"
+            ],
+            "prep": null,
+            "name": "peper"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Gooi alle ingrediënten bij elkaar. Giet de dressing eroverheen."
+        }
+      ]
+    },
+    {
+      "id": "b:penne-all-arrabbiata",
+      "name": {
+        "nl": "Penne all’ arrabbiata"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "400 g penne",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "penne",
+            "qual": [],
+            "prep": null,
+            "name": "penne"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "75 g reuzel",
+          "parsed": {
+            "qty": {
+              "min": 75
+            },
+            "unit": "g",
+            "ing": "reuzel",
+            "qual": [],
+            "prep": null,
+            "name": "reuzel"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "2-3 verse rode pepers [fijngesneden zonder zaadjes]",
+          "parsed": {
+            "qty": {
+              "min": 2,
+              "max": 3
+            },
+            "unit": null,
+            "ing": "rode-peper",
+            "qual": [
+              "verse"
+            ],
+            "prep": {
+              "nl": "fijngesneden zonder zaadjes"
+            },
+            "name": "rode pepers"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "2 el olijfolie",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 grote ui [fijngesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [
+              "grote"
+            ],
+            "prep": {
+              "nl": "fijngesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 teentje knoflook [fijngesneden]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "fijngesneden"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "500 g zeer rijpe vleestomaten [fijngesneden]",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "vleestomaat",
+            "qual": [],
+            "prep": {
+              "nl": "fijngesneden"
+            },
+            "name": "zeer rijpe vleestomaten"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1,25 dl water",
+          "parsed": {
+            "qty": {
+              "min": 1.25
+            },
+            "unit": "dl",
+            "ing": "water",
+            "qual": [],
+            "prep": null,
+            "name": "water"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "2 el verse peterselie [fijngehakt]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "peterselie",
+            "qual": [
+              "verse"
+            ],
+            "prep": {
+              "nl": "fijngehakt"
+            },
+            "name": "peterselie"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "Parmezaanse kaas [vers geraspt] (garnering)",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "parmezaanse-kaas",
+            "qual": [],
+            "prep": {
+              "nl": "vers geraspt"
+            },
+            "name": "Parmezaanse kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Snijd de reuzel in kleine blokjes. Verhit de olie in een braadpan en bak reuzel, pepers, knoflook en ui al roerende 8 minuten op matig vuur."
+        },
+        {
+          "nl": "Voeg water, gesneden tomaten, zout en versgemalen zwarte peper toe en laat afgedekt ca. 40 minuten koken totdat er een gebonden saus ontstaat."
+        },
+        {
+          "nl": "Kook de penne in ruim water met een scheutje olie tot beetgaar, laat uitlekken. Voeg peterselie toe aan de saus, schep de saus door de pasta en bestrooi met Parmezaanse kaas."
+        }
+      ]
+    },
+    {
+      "id": "b:penne-siciliana",
+      "name": {
+        "nl": "Penne Siciliana"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "400 g penne",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "penne",
+            "qual": [],
+            "prep": null,
+            "name": "penne"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "60 ml olijfolie",
+          "parsed": {
+            "qty": {
+              "min": 60
+            },
+            "unit": "ml",
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "½ tl gedroogde oregano",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "tl",
+            "ing": "oregano",
+            "qual": [
+              "gedroogde"
+            ],
+            "prep": null,
+            "name": "oregano"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "¼ tl rode peper [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 0.25
+            },
+            "unit": "tl",
+            "ing": "rode-peper",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "rode peper"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "2 teentjes knoflook [geperst]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "geperst"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "2 blikken (800 g) tomaten in stukjes [uitgelekt]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "blik",
+            "ing": "tomatenblokjes",
+            "qual": [],
+            "prep": {
+              "nl": "uitgelekt"
+            },
+            "name": "tomaten in stukjes"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "½ tl bruine suiker",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "tl",
+            "ing": "suiker",
+            "qual": [
+              "bruine"
+            ],
+            "prep": null,
+            "name": "suiker"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "4 ansjovisfilets [uitgelekt en fijngesneden]",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": null,
+            "ing": "ansjovis",
+            "qual": [],
+            "prep": {
+              "nl": "uitgelekt en fijngesneden"
+            },
+            "name": "ansjovisfilets"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 el kappertjes [uitgelekt en fijngehakt]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "kappertjes",
+            "qual": [],
+            "prep": {
+              "nl": "uitgelekt en fijngehakt"
+            },
+            "name": "kappertjes"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "60 g ontpitte zwarte olijven",
+          "parsed": {
+            "qty": {
+              "min": 60
+            },
+            "unit": "g",
+            "ing": "olijf",
+            "qual": [
+              "ontpitte",
+              "zwarte"
+            ],
+            "prep": null,
+            "name": "olijven"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "150 g salami [dikke halve plakken]",
+          "parsed": {
+            "qty": {
+              "min": 150
+            },
+            "unit": "g",
+            "ing": "salami",
+            "qual": [],
+            "prep": {
+              "nl": "dikke halve plakken"
+            },
+            "name": "salami"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "25 g gerapte Parmezaanse kaas",
+          "parsed": {
+            "qty": {
+              "min": 25
+            },
+            "unit": "g",
+            "ing": "parmezaanse-kaas",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "Parmezaanse kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Kook de penne in ruim kokend water volgens de aanwijzingen op de verpakking. Verhit intussen de olie in een grote braadpan en fruit de oregano, pepersnippers en knoflook 10-15 seconden tot geurig."
+        },
+        {
+          "nl": "Voeg de tomaten en bruine suiker toe en breng op smaak met zout en versgemalen zwarte peper. Laat 5-10 minuten zachtjes koken tot de saus indikt."
+        },
+        {
+          "nl": "Voeg ansjovis, kappertjes, olijven, salami en Parmezaanse kaas toe. Giet de penne af en meng door de saus. Garneer met geschaafde Parmezaanse kaas."
+        }
+      ]
+    },
+    {
+      "id": "b:pittige-gehaktballen-met-pindasaus",
+      "name": {
+        "nl": "Pittige gehaktballen met pindasaus"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "500 g rundergehakt",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "rundergehakt",
+            "qual": [],
+            "prep": null,
+            "name": "rundergehakt"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 ei",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "ei"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "4 el paneermeel",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "el",
+            "ing": "paneermeel",
+            "qual": [],
+            "prep": null,
+            "name": "paneermeel"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "4 el ketjap",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "el",
+            "ing": "ketjap-manis",
+            "qual": [],
+            "prep": null,
+            "name": "ketjap"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "3-4 tl sambal oelek",
+          "parsed": {
+            "qty": {
+              "min": 3,
+              "max": 4
+            },
+            "unit": "tl",
+            "ing": "sambal-oelek",
+            "qual": [],
+            "prep": null,
+            "name": "sambal oelek"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "3 el olijfolie of 30 g boter",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 ui [fijngesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "fijngesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "2 dl kokosmelk",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "dl",
+            "ing": "kokosmelk",
+            "qual": [],
+            "prep": null,
+            "name": "kokosmelk"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "2-3 el pindakaas",
+          "parsed": {
+            "qty": {
+              "min": 2,
+              "max": 3
+            },
+            "unit": "el",
+            "ing": "pindakaas",
+            "qual": [],
+            "prep": null,
+            "name": "pindakaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Meng in een kom het gehakt met het ei, paneermeel, de helft van de ketjap en sambal, zout en peper naar smaak."
+        },
+        {
+          "nl": "Draai er balletjes van zo groot als een pingpongbal."
+        },
+        {
+          "nl": "Verhit de olie of boter in een braadpan en bak de gehaktballetjes op matig hoog vuur in 10 minuten rondom bruin en gaar. Keer ze regelmatig.\nBak de ui 2 minuten mee."
+        },
+        {
+          "nl": "Voeg de kokosmelk toe en breng het geheel aan de kook."
+        },
+        {
+          "nl": "Roer er zoveel pindakaas door dat een mooi gebonden saus ontstaat."
+        },
+        {
+          "nl": "Voeg ketjap, sambal en zout en peper naar smaak toe en warm de saus nog even zachtjes door.\nLekker met rijst en sperziebonen."
+        }
+      ]
+    },
+    {
+      "id": "b:plaattaart-met-pompoen-en-zongedroogde-tomaten",
+      "name": {
+        "nl": "Plaattaart met pompoen en zongedroogde tomaten"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "10 plakjes bladerdeeg",
+          "parsed": {
+            "qty": {
+              "min": 10
+            },
+            "unit": "plak",
+            "ing": "bladerdeeg",
+            "qual": [],
+            "prep": null,
+            "name": "bladerdeeg"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 grote (fles)pompoen [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "pompoen",
+            "qual": [
+              "grote"
+            ],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "pompoen"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "balsamicoazijn",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "balsamicoazijn",
+            "qual": [],
+            "prep": null,
+            "name": "balsamicoazijn"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "chili-olie (of zonnebloemolie en chilivlokken)",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "chili-olie",
+            "qual": [],
+            "prep": null,
+            "name": "chili-olie"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "4 el crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "el",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "3 tl uienchutney",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "tl",
+            "ing": "uienchutney",
+            "qual": [],
+            "prep": null,
+            "name": "uienchutney"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "200 g spinazie",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "spinazie",
+            "qual": [],
+            "prep": null,
+            "name": "spinazie"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "100 g walnoten [grof gehakt]",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "walnoot",
+            "qual": [],
+            "prep": {
+              "nl": "grof gehakt"
+            },
+            "name": "walnoten"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "5 zongedroogde tomaten [reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 5
+            },
+            "unit": null,
+            "ing": "zongedroogde-tomaat",
+            "qual": [],
+            "prep": {
+              "nl": "reepjes"
+            },
+            "name": "zongedroogde tomaten"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "125 g geitenkaas [verkruimeld]",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "g",
+            "ing": "geitenkaas",
+            "qual": [],
+            "prep": {
+              "nl": "verkruimeld"
+            },
+            "name": "geitenkaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Rooster de pompoen in de oven met balsamicoazijn, chili-olie en wat zout, ca. 15 minuten op 200 °C."
+        },
+        {
+          "nl": "Leg de plakjes bladerdeeg op een grote bakplaat, druk ze aan elkaar met een vork en prik er gaatjes in zodat het plat blijft. Smeer de crème fraîche uit over het bladerdeeg en verdeel er wat uienchutney overheen. Verdeel de spinazie in een enkele laag over de plaat. Verdeel de pompoen, walnoten, zongedroogde tomaten en geitenkaas over de plaat."
+        },
+        {
+          "nl": "Bak de plaattaart ca. 20 minuten op 175 °C."
+        }
+      ]
+    },
+    {
+      "id": "b:polenta-voor-ratatouille",
+      "name": {
+        "nl": "Polenta (voor ratatouille)"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "120 g zelfrijzend bakmeel",
+          "parsed": {
+            "qty": {
+              "min": 120
+            },
+            "unit": "g",
+            "ing": "zelfrijzend-bakmeel",
+            "qual": [],
+            "prep": null,
+            "name": "zelfrijzend bakmeel"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "120 g polenta",
+          "parsed": {
+            "qty": {
+              "min": 120
+            },
+            "unit": "g",
+            "ing": "polenta",
+            "qual": [],
+            "prep": null,
+            "name": "polenta"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "160 ml melk",
+          "parsed": {
+            "qty": {
+              "min": 160
+            },
+            "unit": "ml",
+            "ing": "melk",
+            "qual": [],
+            "prep": null,
+            "name": "melk"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 ei",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "ei"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "50 g geraspte cheddar",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "cheddar",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "cheddar"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Meng bloem, polenta en kaas in een kom. Meng melk, boter en ei en roer dit door de polenta. Schep het geheel in een ingevette ovenschaal en bak het 25 minuten in de oven op 180 °C."
+        }
+      ]
+    },
+    {
+      "id": "b:portugese-visschotel",
+      "name": {
+        "nl": "Portugese visschotel"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "2 uien [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "uien"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 teentje knoflook [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "20 g boter",
+          "parsed": {
+            "qty": {
+              "min": 20
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 mp saffraanpoeder",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "mp",
+            "ing": "saffraan",
+            "qual": [],
+            "prep": null,
+            "name": "saffraanpoeder"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 blik gepelde tomaten",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "blik",
+            "ing": "tomaten-uit-blik",
+            "qual": [],
+            "prep": null,
+            "name": "gepelde tomaten"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "400 g kabeljauwfilet",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "kabeljauwfilet",
+            "qual": [],
+            "prep": null,
+            "name": "kabeljauwfilet"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "150 g belegen kaas in kleine blokjes",
+          "parsed": {
+            "qty": {
+              "min": 150
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "belegen"
+            ],
+            "prep": null,
+            "name": "kaas in kleine blokjes"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "3 el paneermeel",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "paneermeel",
+            "qual": [],
+            "prep": null,
+            "name": "paneermeel"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 citroen [dunne schijfjes] (garnering)",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "citroen",
+            "qual": [],
+            "prep": {
+              "nl": "dunne schijfjes"
+            },
+            "name": "citroen"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "8 groene olijven (garnering)",
+          "parsed": {
+            "qty": {
+              "min": 8
+            },
+            "unit": null,
+            "ing": "olijf",
+            "qual": [
+              "groene"
+            ],
+            "prep": null,
+            "name": "olijven"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Verwarm de oven voor op 175 °C. Verhit boter in een koekenpan en fruit de ui en de knoflook met de saffraan ca. 2 minuten. Neem de pan van het vuur."
+        },
+        {
+          "nl": "Schenk het vocht van de tomaten in een beboterde ovenschaal en roer de helft van het gefruite uimengsel erdoor. Leg de visfilet erop en bestrooi met zout en peper."
+        },
+        {
+          "nl": "Snijd de tomaten in kleine stukjes. Meng de blokjes kaas, de stukjes tomaat, de rest van het uimengsel, het paneermeel, zout en peper naar smaak door elkaar. Verdeel het mengsel over de vis."
+        },
+        {
+          "nl": "Laat de vis op een rooster in het midden van de voorverwarmde oven gaar worden in ca. 25 minuten. Het visvlees is dan wit."
+        },
+        {
+          "nl": "Garneer de schotel met citroen en desgewenst met enkele olijven."
+        },
+        {
+          "nl": "Serveer met rijst of gebakken aardappelen en doperwtjes."
+        }
+      ]
+    },
+    {
+      "id": "b:quiche-lorraine",
+      "name": {
+        "nl": "Quiche Lorraine"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 1,
+          "raw": "200 g bloem",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "bloem",
+            "qual": [],
+            "prep": null,
+            "name": "bloem"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "100 g koude boter",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [
+              "koude"
+            ],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "10 g boter",
+          "parsed": {
+            "qty": {
+              "min": 10
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "150 g spekblokjes",
+          "parsed": {
+            "qty": {
+              "min": 150
+            },
+            "unit": "g",
+            "ing": "spekblokjes",
+            "qual": [],
+            "prep": null,
+            "name": "spekblokjes"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "4 eieren",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "eieren"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "3 dl slagroom",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "dl",
+            "ing": "slagroom",
+            "qual": [],
+            "prep": null,
+            "name": "slagroom"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "2 el paneermeel",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "paneermeel",
+            "qual": [],
+            "prep": null,
+            "name": "paneermeel"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "100 g geraspte kaas",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Maak het deeg. Zeef de bloem met een snufje zout boven een kom. Voeg de koude boter toe en snijd die (met twee messen of de foodprocessor) door de bloem in heel kleine stukjes. Voeg 3-4 eetlepels ijskoud water toe en kneed het deeg snel tot een samenhangende bal. Laat het deeg minstens 30 minuten afgedekt in de koelkast rusten."
+        },
+        {
+          "nl": "Maak intussen de vulling. Verhit de boter in een koekenpan en bak de spekblokjes zachtjes knapperig. Schep de spekjes uit de pan en laat ze uitlekken op keukenpapier. Verwarm de oven voor op 200 °C. Klop de eieren los met de slagroom en het spekvet. Voeg naar smaak zout (niet te veel, vanwege het zoute spek) en peper toe."
+        },
+        {
+          "nl": "Rol het deeg uit tot een ronde lap en bekleed hiermee een taartvorm. Prik met een vork enkele gaatjes in de deegbodem. Bestrooi de bodem met het paneermeel, verdeel de uitgebakken spekjes en de geraspte kaas erover en schenk het eimengsel erop."
+        },
+        {
+          "nl": "Bak de taart op een rooster in het midden van de voorverwarmde oven gaar en goudbruin in ca. 45 minuten. Neem de taart uit de oven, laat hem iets afkoelen en snijd hem vervolgens in punten. Serveer de taart warm of koud met een salade."
+        }
+      ]
+    }
+  ]
+}

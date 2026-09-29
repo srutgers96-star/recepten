@@ -1,0 +1,294 @@
+{
+  "batch": 8,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:kip-met-bloemkool-en-kaneel",
+      "name": { "en": "Chicken with cauliflower and cinnamon" },
+      "description": {
+        "nl": "Kippenvleugels en bloemkool, gemarineerd in rode wijn en een uur in de oven met kaneel.",
+        "en": "Chicken wings and cauliflower, marinated in red wine and baked for an hour with cinnamon."
+      },
+      "category": "vlees",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 210 },
+      "steps": [
+        { "en": "Wash the chicken wings and pat them dry, tuck the tips in. Place in a deep ovenproof dish. Mix the wine and tomato purée, pour over the vegetables and chicken, cover with cling film. Leave to marinate in the fridge for 2 hours, turning now and then. Preheat the oven to 210 °C. Stir the stock, cinnamon, oil, salt and pepper together well and pour over the chicken and vegetables." },
+        { "en": "Bake uncovered for 1 hour, turning now and then. Put the chicken and cauliflower on a serving dish, reduce the cooking liquid to a sauce and pour it over the chicken and cauliflower." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "8 kippenvleugeltjes (750 g)", "ing": "kippenvleugel", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "750 g bloemkool [roosjes]", "ing": "bloemkool", "qual": [], "prep": { "en": "florets" }, "confidence": 0.95 },
+        { "i": 2, "raw": "80 ml droge rode wijn", "ing": "wijn", "qual": ["droge", "rode"], "confidence": 0.95 },
+        { "i": 3, "raw": "1 el tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "180 ml vette kippenbouillon (pot)", "ing": "kippenbouillon", "qual": ["vette"], "confidence": 0.9 },
+        { "i": 5, "raw": "½ tl gemalen kaneel", "ing": "kaneel", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "80 ml olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "zout en peper", "ing": "zout-en-peper", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:kip-met-romige-rodepestosaus",
+      "name": { "en": "Chicken in creamy red pesto sauce" },
+      "description": {
+        "nl": "Kipblokjes en champignons in een romige saus van rode pesto en crème fraîche, met fusilli.",
+        "en": "Diced chicken and mushrooms in a creamy red pesto and crème fraîche sauce, with fusilli."
+      },
+      "category": "pasta",
+      "tags": ["snel"],
+      "time": { "active": 20, "total": 30 },
+      "steps": [
+        { "en": "Heat olive oil in a frying pan and fry the onion for 5 minutes until translucent. Add the diced chicken and fry for 2 minutes until white all over." },
+        { "en": "Add the pesto and stock and bring to the boil. Add the mushrooms, put the lid on the pan and simmer the chicken for 15 minutes until cooked through." },
+        { "en": "Turn up the heat and let the sauce reduce to two-thirds. Stir in the crème fraîche and heat through without boiling. Add salt and pepper to taste." },
+        { "en": "Cook the pasta and serve with Parmesan." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 kleine rode ui [dunne ringen]", "ing": "ui", "qual": ["kleine", "rode"], "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 1, "raw": "3 kipfilets [blokjes]", "ing": "kipfilet", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "6 el rode pesto", "ing": "pesto", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 3, "raw": "125 ml kippenbouillon (blokje)", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "125 g champignons [plakjes]", "ing": "champignon", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 5, "raw": "400 g fusilli", "ing": "fusilli", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "125 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:kip-met-sesamzaad",
+      "name": { "en": "Chicken with sesame seeds" },
+      "description": {
+        "nl": "Opgerolde kipfilet gevuld met groene asperge en prei, met een korstje van sesamzaad.",
+        "en": "Rolled chicken breast filled with green asparagus and leek, in a sesame seed crust."
+      },
+      "category": "vlees",
+      "tags": [],
+      "time": { "active": 25, "total": 100 },
+      "steps": [
+        { "en": "Cut the chicken breast lengthways and open it out, flatten it a little. Top with the asparagus and leek. Roll up in cling film and leave to firm up in the fridge for 1 hour to overnight. Dip the chicken in the beaten egg, then in the sesame seeds for a crust. Fry gently in a pan for about 15 minutes until cooked through." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g kipfilet", "ing": "kipfilet", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "600 g groene asperges [dunne reepjes zo lang als de kipfilet]", "ing": "asperge", "qual": ["groene"], "prep": { "en": "thin strips as long as the chicken breast" }, "confidence": 0.95 },
+        { "i": 2, "raw": "2 preien [dunne reepjes zo lang als de kipfilet]", "ing": "prei", "qual": [], "prep": { "en": "thin strips as long as the chicken breast" }, "confidence": 0.95 },
+        { "i": 3, "raw": "2 eieren [losgeklopt]", "ing": "ei", "qual": [], "prep": { "en": "beaten" }, "confidence": 0.95 },
+        { "i": 4, "raw": "60 g sesamzaad", "ing": "sesamzaad", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:kip-rijstsalade-met-kerrie-en-kokos",
+      "name": { "en": "Chicken and rice salad with curry and coconut" },
+      "description": {
+        "nl": "Koude rijstsalade met kip, kerrie, kokos en rozijnen, afgemaakt met een mayonaisedressing en blokjes kaas.",
+        "en": "Cold rice salad with chicken, curry, coconut and raisins, finished with a mayonnaise dressing and diced cheese."
+      },
+      "category": "salade",
+      "tags": ["zomer"],
+      "time": { "active": 25, "total": 75 },
+      "steps": [
+        { "en": "Heat the oil in a casserole and stir-fry the pieces of chicken and the diced onion for about 3 minutes. Then stir in the curry powder, coconut, raisins and rice and stir-fry until all the grains glisten with oil." },
+        { "en": "Stir the apple juice, 400 ml water and the crumbled stock cube into the rice mixture. Bring the liquid to the boil and let the rice cook gently, covered, over a low heat for about 30 minutes until tender and dry. Leave the rice mixture to cool." },
+        { "en": "Meanwhile clean the spring onions and cut them into thin rings. Stir the vinegar and mayonnaise together into a dressing." },
+        { "en": "Stir the dressing, spring onion rings and diced cheese through the cooled rice and season the salad with salt and pepper. Nice with a green salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g kipfilet [stukjes]", "ing": "kipfilet", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 1, "raw": "1 grote ui [gesnipperd]", "ing": "ui", "qual": ["grote"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "4 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "3 el kerrie", "ing": "kerrie", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "4 el geraspte kokos", "ing": "kokos", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "4 el rozijnen", "ing": "rozijn", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "200 ml appelsap", "ing": "appelsap", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "1 kippenbouillon (blokje)", "ing": "kippenbouillonblokje", "qual": [], "confidence": 0.9 },
+        { "i": 9, "raw": "4 lente-uitjes", "ing": "bosui", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "1 el witte wijnazijn", "ing": "wijnazijn", "qual": ["witte"], "confidence": 0.95 },
+        { "i": 11, "raw": "2 el mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "100 g kaas [kleine blokjes]", "ing": "kaas", "qual": [], "prep": { "en": "small dice" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:kipfilet-met-peultjes-en-kerriesaus",
+      "name": { "en": "Chicken breast with mangetout and curry sauce" },
+      "description": {
+        "nl": "Ovenschotel van dunne plakjes kipfilet op peultjes, onder een kerriesaus met sinaasappel en gemberroomkaas.",
+        "en": "Oven dish of thinly sliced chicken breast on mangetout, under a curry sauce with orange and ginger cream cheese."
+      },
+      "category": "oven",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 45 },
+      "steps": [
+        { "en": "Top and tail the mangetout. Blanch them for 2 minutes in plenty of boiling water with salt and sugar. Drain in a colander and spread over the ovenproof dish." },
+        { "en": "Heat the butter in a frying pan and gently fry the onion for about 5 minutes. Stir in the curry powder and add the stock and orange juice. Bring the sauce to the boil, crumble the cream cheese into it and let it melt, stirring. Thicken the sauce with the instant thickener and add salt and pepper to taste." },
+        { "en": "Arrange the slices of chicken breast over the mangetout, overlapping like roof tiles. Spoon the sauce over the chicken and mangetout and sprinkle the grated cheese on top." },
+        { "en": "Bake for about 20 minutes in an oven at 200 °C." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g peultjes", "ing": "peultjes", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 el kerriepoeder", "ing": "kerrie", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "150 ml kippenbouillon", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "100 ml sinaasappelsap [vers geperst]", "ing": "sinaasappelsap", "qual": [], "prep": { "en": "freshly squeezed" }, "confidence": 0.95 },
+        { "i": 6, "raw": "100 g verse roomkaas met gember", "ing": "roomkaas-met-gember", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 7, "raw": "1 el allesbinder", "ing": "allesbinder", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "4 kipfilets [dunne plakjes]", "ing": "kipfilet", "qual": [], "prep": { "en": "thinly sliced" }, "confidence": 0.95 },
+        { "i": 9, "raw": "75 g geraspte jong belegen kaas", "ing": "kaas", "qual": ["geraspte", "jonge", "belegen"], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:kipfilet-met-tonijnsaus",
+      "name": { "en": "Chicken breast with tuna sauce" },
+      "description": {
+        "nl": "Gepocheerde kipfilet in plakjes met een frisse saus van tonijn, yoghurt en dragon, à la vitello tonnato.",
+        "en": "Sliced poached chicken breast with a fresh tuna, yoghurt and tarragon sauce, in the style of vitello tonnato."
+      },
+      "category": "vlees",
+      "tags": ["snel", "zomer"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Poach the chicken breasts in the chicken stock for about 7 minutes until (just) cooked through." },
+        { "en": "Blend the tuna with its oil, the yoghurt, the tarragon, 2 gherkins, pepper and salt with a stick blender." },
+        { "en": "Take the chicken breasts out of the pan, let them drain and cut them diagonally into thin slices. Arrange them on a platter and spoon the sauce over. Garnish the platter with the olives and gherkin batons." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 ml kippenbouillon (blokje)", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "300 g kipfilet", "ing": "kipfilet", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "3 augurken [1 in staafjes]", "ing": "augurk", "qual": [], "prep": { "en": "1 cut into batons" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 blikje tonijn in olie", "ing": "tonijn-in-olie", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "150 ml yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1 tl dragon", "ing": "dragon", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "12 zwarte olijven", "ing": "olijf", "qual": ["zwarte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:kipkarbonades-in-witte-wijn",
+      "name": { "en": "Chicken chops in white wine" },
+      "description": {
+        "nl": "Kipkarbonades, aangebraden en in de oven gestoofd in een saus van witte wijn, spek en crème fraîche.",
+        "en": "Chicken chops, browned and then oven-braised in a white wine, bacon and crème fraîche sauce."
+      },
+      "category": "vlees",
+      "tags": ["oven"],
+      "time": { "active": 30, "total": 80 },
+      "steps": [
+        { "en": "Rub the chicken chops with the chicken seasoning, turn them in the flour and shake off the excess. Heat the butter in a large frying pan and quickly brown the chicken chops all over. Take the chicken chops out of the pan and put them in an ovenproof dish." },
+        { "en": "Fry the onions and bacon lardons in the remaining butter until golden brown. Stir in the thyme and garlic. Add the wine and crème fraîche and bring to the boil, stirring." },
+        { "en": "Let the sauce reduce slightly for about 3 minutes, add salt and pepper to taste and then pour it over the chicken chops." },
+        { "en": "Put the bay leaf and the celery sprigs on top and cover the dish with a piece of aluminium foil." },
+        { "en": "Bake the chicken chops for 45 minutes at 200 °C. Thin the sauce with a little white wine if you like, remove the bay leaf and the celery sprigs and sprinkle the finely chopped celery leaf over the top." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 uien [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "8 kleine kipkarbonades", "ing": "kipkarbonade", "qual": ["kleine"], "confidence": 0.95 },
+        { "i": 2, "raw": "2 tl kipkruiden", "ing": "kipkruiden", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "100 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "50 g spekblokjes", "ing": "spekblokjes", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "2 teentjes knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 7, "raw": "¼ tl tijm", "ing": "tijm", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "250 ml droge witte wijn", "ing": "wijn", "qual": ["droge", "witte"], "confidence": 0.95 },
+        { "i": 9, "raw": "125 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "1 laurierblaadje", "ing": "laurierblad", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "3 takjes selderij", "ing": "selderij", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "1 el selderij [fijngehakt]", "ing": "selderij", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:kipkerrie-met-rijst",
+      "name": { "en": "Chicken curry with rice" },
+      "description": {
+        "nl": "Reepjes kip in een romige kerriesaus met witte wijn, tomaat en mango-chutney, door de rijst geschept.",
+        "en": "Strips of chicken in a creamy curry sauce with white wine, tomato and mango chutney, stirred through the rice."
+      },
+      "category": "rijst",
+      "tags": [],
+      "time": { "active": 30, "total": 35 },
+      "steps": [
+        { "en": "Cook the rice in salted water until tender and dry." },
+        { "en": "Cut the chicken breast into strips. Heat the oil in a casserole and stir-fry the chicken strips until browned all over. Add the diced onion, the curry powder, ginger and pepper to taste and stir-fry for about 2 minutes more until the onion is translucent. Pour in the wine and stock and let the chicken strips simmer gently, covered, for about 5 minutes." },
+        { "en": "Meanwhile skin the tomatoes and remove the seeds. Cut the flesh into small pieces. Chop the larger pieces of mango chutney small. Stir the crème fraîche into the chicken and onion mixture and let the liquid reduce a little without the lid. Then stir in the pieces of tomato and the mango chutney and season with salt and cayenne pepper." },
+        { "en": "Stir the rice and the coriander or parsley through the chicken curry and heat the whole thing through thoroughly." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 uien [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "400 g kipfilet", "ing": "kipfilet", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "5 el zonnebloemolie", "ing": "zonnebloemolie", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "3 el kerrie", "ing": "kerrie", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "2 tl gemberpoeder", "ing": "gemberpoeder", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "125 ml droge witte wijn", "ing": "wijn", "qual": ["droge", "witte"], "confidence": 0.95 },
+        { "i": 7, "raw": "125 ml kippenbouillon", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "2 vleestomaten", "ing": "vleestomaat", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "3 el mango-chutney", "ing": "mango-chutney", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "200 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "cayennepeper", "ing": "cayennepeper", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "2 el koriander of peterselie [gesnipperd]", "ing": "koriander", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:kipsalade-met-bleekselderij",
+      "name": { "en": "Chicken salad with celery" },
+      "description": {
+        "nl": "Frisse salade van gare kip, bleekselderij en lente-ui met een yoghurt-mayonaisedressing, dragon en pecannoten.",
+        "en": "Fresh salad of cooked chicken, celery and spring onion with a yoghurt and mayonnaise dressing, tarragon and pecans."
+      },
+      "category": "salade",
+      "tags": ["snel", "zomer"],
+      "time": { "active": 20, "total": 20 },
+      "servingTip": { "en": "Starter for 4, main course for 2." },
+      "steps": [
+        { "en": "Finely chop the white part and a little of the green of the spring onions. Cut the chicken into small dice. Mix the celery, spring onions and chicken together in a bowl." },
+        { "en": "Stir the mayonnaise and yoghurt together well. Whisk in the mustard, salt and pepper to taste and the tarragon vinegar. Add half the nuts and all the herbs. Pour the dressing over the salad and scatter the rest of the nuts on top." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "3 stengels bleekselderij [dunne boogjes]", "ing": "bleekselderij", "qual": [], "prep": { "en": "thin crescents" }, "confidence": 0.95 },
+        { "i": 1, "raw": "1 bosje lente-uitjes", "ing": "bosui", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "300 g gare kipfilet", "ing": "kipfilet", "qual": ["gare"], "confidence": 0.95 },
+        { "i": 3, "raw": "50 ml mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "100 ml yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1 tl mosterd", "ing": "mosterd", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "2 tl dragonazijn", "ing": "dragonazijn", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "50 g pecannoten [gehakt]", "ing": "pecannoot", "qual": [], "prep": { "en": "chopped" }, "confidence": 0.95 },
+        { "i": 8, "raw": "1 el dragon [fijngehakt]", "ing": "dragon", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 9, "raw": "1 el bieslook [fijngehakt]", "ing": "bieslook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:klassieke-lasagne",
+      "name": { "en": "Classic lasagne" },
+      "description": {
+        "nl": "Lasagne met een langzaam gepruttelde gehaktsaus, zelfgemaakte bechamel en Parmezaanse kaas; ook lekker met vegetarisch gehakt.",
+        "en": "Lasagne with a slow-simmered meat sauce, homemade béchamel and Parmesan; also good with vegetarian mince."
+      },
+      "category": "pasta",
+      "tags": ["oven", "vega-optie", "kids"],
+      "time": { "active": 45, "total": 120 },
+      "steps": [
+        { "en": "Heat the oil in the casserole. Soften the onion, carrot and celery over a medium heat, stirring. Turn up the heat and fry the mince, breaking it up with a fork. (Do not brown vegetarian mince; just let it simmer along gently for a moment.) Add the tomato purée, wine, parsley, pepper and salt." },
+        { "en": "Bring to the boil and simmer over a low heat, without a lid, for 45 minutes." },
+        { "en": "For the béchamel sauce, gently melt the butter in a medium pan. Add the flour and cook for 2 minutes, stirring. Add the milk a splash at a time and keep stirring. If lumps threaten to form, beat the lot vigorously with a whisk." },
+        { "en": "Preheat the oven to 180 °C. Grease an ovenproof dish well. Put a thin layer of meat sauce on the bottom, then a layer of béchamel and then a layer of lasagne sheets. Fill the dish with layers and finish with a layer of béchamel sauce. Sprinkle with Parmesan. Bake for about 45 minutes until golden brown. Wait 15 minutes before cutting." },
+        { "en": "Tip: the lasagne tastes better if you assemble it a day ahead. Keep it unbaked in the fridge." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "30 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 grote ui [fijngesnipperd]", "ing": "ui", "qual": ["grote"], "prep": { "en": "very finely diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 grote wortel [fijngehakt]", "ing": "wortel", "qual": ["grote"], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 4, "raw": "5 stengels bleekselderij [fijngehakt]", "ing": "bleekselderij", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 5, "raw": "500 g rundergehakt of vegetarisch gehakt", "ing": "rundergehakt", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "2½ dl tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.9 },
+        { "i": 7, "raw": "2½ dl rode wijn", "ing": "wijn", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 8, "raw": "2 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 9, "raw": "375 g lasagnebladen", "ing": "lasagnebladen", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "60 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "40 g bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 13, "raw": "500 ml melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 14, "raw": "½ tl nootmuskaat", "ing": "nootmuskaat", "qual": [], "confidence": 0.95 },
+        { "i": 15, "raw": "100 g geraspte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    }
+  ]
+}

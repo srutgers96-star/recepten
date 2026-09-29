@@ -21,9 +21,10 @@ Binding for all agents. Contracts marked **CONTRACT** cross ownership boundaries
 - `qualifiers.json`: `{ id, nl: string[], en: string, kind: 'colour'|'size'|'state'|'variety'|'fat'|'other', variant: boolean }`
   — `variant: true` means the qualifier makes a different shopping item (rode ui ≠ ui; kruimige ≠
   vastkokende aardappelen); `false` = a note (grote, kleine, middelgrote, verse, rijpe).
-- `prep-phrases.json`: `{ nl: string, en: string }` plus templates with `{n}`: `"blokjes van {n} cm"` →
+- `prep-phrases.json`: `{ nl: string, en: string, enSliced?: string }` plus templates with `{n}`: `"blokjes van {n} cm"` →
   `"{n} cm dice"`, `"stukken van {n} cm"` → `"{n} cm pieces"`, `"reepjes van {n} cm"` → `"{n} cm strips"`.
   ~120 entries covering every bracket note in the corpus (measure them: all `[…]` texts, deduplicated).
+  `enSliced` is used for ingredients with `cut: 'slice'` ("fijngesneden": finely chopped herbs, finely sliced onion).
 - `categories.json`: `{ id, nl, en, order }`: soep, salade, hartige-taart, pasta, rijst, vlees, vis,
   stamppot, oven, wok-noedels, overig.
 - `aisles.json`: `{ id, nl, en, order }` — one standard supermarket order for everyone, including aisles
@@ -32,7 +33,9 @@ Binding for all agents. Contracts marked **CONTRACT** cross ownership boundaries
   bakken (bloem/suiker), diepvries, dranken, snacks-zoet, huishoudelijk, drogisterij, overig.
 - `ingredients.json` (the dictionary, ~400-450 entries): `{ id, nl: { one, many? }, en: { one, many? },
   aliases?: { nl?: string[], en?: string[] }, aisle, defaultUnit: 'stuk'|<unit id>|null, buyUnit?: string,
-  gramsPer?: Record<string, number>, staple: boolean, veg: boolean, perishable?: boolean, gloss?: { en: string } }`.
+  gramsPer?: Record<string, number>, staple: boolean, veg: boolean, perishable?: boolean, gloss?: { en: string },
+  cut?: 'slice'|'chop', unitNames?: Record<unitId, { nl?: {one, many?}, en?: {one, many?} }> }` (`unitNames`: how a unit
+  of this product is called, foelie `{ stuk: { en: { one: 'blade' } } }` → "1 blade mace").
   Id rules: slug of the Dutch singular base noun (`ui`, `knoflook`, `rode-peper`, `zure-room`,
   `zout-en-peper`); a **different product** is a different id (rode peper ≠ zwarte peper; kruimige
   aardappelen and vastkokende aardappelen are ONE id `aardappel` with qualifier variants; `rode ui` is
@@ -113,9 +116,10 @@ export interface Line {
   intentional (regenerate + commit).
 - `npm run migrate` keeps producing `data/recipes.json` deterministically from the source PLUS the
   committed enrichment: `data/llm/*.json` are the LLM results; migration = parse(raw) ⊕ llm enrichment.
-  Order of truth: raw line (quantities, unit) → parser → LLM `ing`/`prep.en` only where the parser
-  returned null or the LLM had higher confidence and the human-reviewed override (`data/review/*.json`,
-  later) wins over both.
+  Order of truth: raw line (quantities, unit) → parser → LLM `ing`/`prep.en`/`note.en` only where the
+  parser returned null or the LLM had higher confidence → the human-reviewed override
+  (`data/review/lines.json`, `tools/apply-review.ts`: per line `ing`, `qual`, `note`, `prep`, `optional`;
+  never quantities) wins over both.
 
 ### Batch file schema (`data/llm/batch-NN.json`) — CONTRACT
 
@@ -128,7 +132,8 @@ export interface Line {
     "steps": [ { "en": "…" }, … ],                  // exactly as many as steps[] in recipes.json, same order
     "servingTip": { "en": "…" },                    // only if the recipe has one
     "lines": [                                      // one per non-header line, same order
-      { "i": 0, "ing": "zalmfilet", "qual": [], "prep": { "en": "…" }, "confidence": 0.95 },
+      { "i": 0, "ing": "zalmfilet", "qual": [], "prep": { "en": "…" }, "note": { "en": "…" }, "confidence": 0.95 },
+                                                    // note.en: English for the parser's Dutch (…) note the dictionary could not translate
       { "i": 3, "ing": "NEW", "new": { "id": "gestoomde-makreel", "nl": {"one": "gestoomde makreel"}, "en": {"one": "smoked mackerel"}, "aisle": "vlees-vis", "defaultUnit": "g", "staple": false, "veg": false } }
     ] } ] }
 ```

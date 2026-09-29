@@ -1,0 +1,1938 @@
+{
+  "batch": 10,
+  "recipes": [
+    {
+      "id": "b:macaroni-met-spinazie-en-kabeljauw",
+      "name": {
+        "nl": "Macaroni met spinazie en kabeljauw"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "500 g kabeljauwfilet",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "kabeljauwfilet",
+            "qual": [],
+            "prep": null,
+            "name": "kabeljauwfilet"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "2 el citroensap",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "citroensap",
+            "qual": [],
+            "prep": null,
+            "name": "citroensap"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "20 g boter",
+          "parsed": {
+            "qty": {
+              "min": 20
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 dl witte wijn",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "dl",
+            "ing": "wijn",
+            "qual": [
+              "witte"
+            ],
+            "prep": null,
+            "name": "wijn"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "400 g fusilli of andere pasta",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "fusilli",
+            "qual": [],
+            "prep": null,
+            "name": "fusilli"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "450 g diepvriesspinazie (ontdooid)",
+          "parsed": {
+            "qty": {
+              "min": 450
+            },
+            "unit": "g",
+            "ing": "diepvriesspinazie",
+            "qual": [],
+            "prep": null,
+            "name": "diepvriesspinazie"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "250 ml slagroom",
+          "parsed": {
+            "qty": {
+              "min": 250
+            },
+            "unit": "ml",
+            "ing": "slagroom",
+            "qual": [],
+            "prep": null,
+            "name": "slagroom"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "Nootmuskaat",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "nootmuskaat",
+            "qual": [],
+            "prep": null,
+            "name": "Nootmuskaat"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 el maïzena",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "maizena",
+            "qual": [],
+            "prep": null,
+            "name": "maïzena"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "50 gram geraspte kaas",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "partjes citroen (garnering)",
+          "parsed": {
+            "qty": null,
+            "unit": "partje",
+            "ing": "citroen",
+            "qual": [],
+            "prep": null,
+            "name": "citroen"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Verwarm de oven voor op 200°C. Besprenkel de vis met het citroensap en bestrooi met zout en peper. Beboter een ovenschaal, leg de vis erin en verdeel de rest van de boter in klontjes over de vis. Schenk de wijn erbij. Dek de schaal af met een stuk aluminiumfolie. Laat de vis in het midden van de oven in ongeveer 15 minuten gaar worden."
+        },
+        {
+          "nl": "Kook ondertussen de macaroni beetgaar. Druk zoveel mogelijk vocht uit de spinazie en verwarm hem samen met 4 el slagroom door."
+        },
+        {
+          "nl": "Voeg naar smaak zout, peper en wat nootmuskaat toe. Laat de macaroni goed uitlekken en schep de pasta in een ovenschaal."
+        },
+        {
+          "nl": "Roer er 4 el slagroom door en verdeel de spinazie erover. Neem de vis uit de oven en leg deze op de spinazie."
+        },
+        {
+          "nl": "Schenk het stoofvocht van de vis in een steelpan en breng aan de kook. Roer de maïzena door de rest van de slagroom en schenk het al roerende bij het stoofvocht. Schenk de saus over de vis en de spinazie in de ovenschaal en strooi de geraspte kaas erover."
+        },
+        {
+          "nl": "Zet de schotel onder een voorverwarmde gril en laat het gerecht in ca. 5 minuten een goudbruin kleurtje krijgen. Garneer met de citroen."
+        }
+      ]
+    },
+    {
+      "id": "b:macaroni-met-tonijn-en-pesto",
+      "name": {
+        "nl": "Macaroni met tonijn en pesto"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "400 g macaroni",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "macaroni",
+            "qual": [],
+            "prep": null,
+            "name": "macaroni"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "4 blikjes tonijn op water",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "blik",
+            "ing": "tonijn-in-water",
+            "qual": [],
+            "prep": null,
+            "name": "tonijn op water"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "4 el rode pesto",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "el",
+            "ing": "pesto",
+            "qual": [
+              "rode"
+            ],
+            "prep": null,
+            "name": "pesto"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "2 el kappertjes",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "kappertjes",
+            "qual": [],
+            "prep": null,
+            "name": "kappertjes"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Kook de macaroni in ruim water met zout gaar. Laat de tonijn uitlekken en verdeel de vis in stukjes."
+        },
+        {
+          "nl": "Meng de tonijn, de pesto en de kappertjes goed door de uitgelekte macaroni en warm het geheel goed door."
+        }
+      ]
+    },
+    {
+      "id": "b:macaroni-tonijnschotel",
+      "name": {
+        "nl": "Macaroni-tonijnschotel"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "350 g macaroni",
+          "parsed": {
+            "qty": {
+              "min": 350
+            },
+            "unit": "g",
+            "ing": "macaroni",
+            "qual": [],
+            "prep": null,
+            "name": "macaroni"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "2 blikjes tonijn",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "blik",
+            "ing": "tonijn",
+            "qual": [],
+            "prep": null,
+            "name": "tonijn"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "3 vleestomaten [ontveld in plakken]",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": null,
+            "ing": "vleestomaat",
+            "qual": [],
+            "prep": {
+              "nl": "ontveld in plakken"
+            },
+            "name": "vleestomaten"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "2 kleine courgettes [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "courgette",
+            "qual": [
+              "kleine"
+            ],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "courgettes"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "50 g boter",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "125 ml crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "ml",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1 el kappertjes",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "kappertjes",
+            "qual": [],
+            "prep": null,
+            "name": "kappertjes"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 tl Italiaanse kruiden",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "italiaanse-kruiden",
+            "qual": [],
+            "prep": null,
+            "name": "Italiaanse kruiden"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "2 el paneermeel",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "paneermeel",
+            "qual": [],
+            "prep": null,
+            "name": "paneermeel"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "50 g geraspte belegen kaas",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte",
+              "belegen"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Kook de macaroni volgens de gebruiksaanwijzing. Giet intussen de tonijn af en verdeel in kleine stukjes. Verhit de helft van de boter in een koekenpan en bak de ui en courgette al roerende 5 minuten."
+        },
+        {
+          "nl": "Laat de macaroni in een vergiet goed uitlekken. Meng de macaroni met het ui-courgettemengsel, de crème fraîche, de tonijn en de kappertjes."
+        },
+        {
+          "nl": "Voeg peper en zout naar smaak toe. Verdeel laagjesgewijs de macaroni en de plakken tomaat, bestrooi met wat kruidenmix en eindig met een laagje macaroni."
+        },
+        {
+          "nl": "Roer de paneermeel en kaas door elkaar en strooi over de ovenschotel. Verdeel de rest van de boter over de ovenschotel.\nBak in 30 minuten op 200 °C lichtbruin."
+        }
+      ]
+    },
+    {
+      "id": "b:mais-gehakt-salami-met-gebakken-aardappeltjes",
+      "name": {
+        "nl": "Mais-gehakt-salami met gebakken aardappeltjes"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "300 g gehakt",
+          "parsed": {
+            "qty": {
+              "min": 300
+            },
+            "unit": "g",
+            "ing": "gehakt",
+            "qual": [],
+            "prep": null,
+            "name": "gehakt"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "kaneel",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "kaneel",
+            "qual": [],
+            "prep": null,
+            "name": "kaneel"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "100 g salami [kwartjes]",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "salami",
+            "qual": [],
+            "prep": {
+              "nl": "kwartjes"
+            },
+            "name": "salami"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 blik mais",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "blik",
+            "ing": "mais",
+            "qual": [],
+            "prep": null,
+            "name": "mais"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "3 tomaten",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": null,
+            "ing": "tomaat",
+            "qual": [],
+            "prep": null,
+            "name": "tomaten"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "50 g gerapte kaas",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "oregano",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "oregano",
+            "qual": [],
+            "prep": null,
+            "name": "oregano"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "aardappelen",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "aardappel",
+            "qual": [],
+            "prep": null,
+            "name": "aardappelen"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Bak de ui en het gehakt in een pan totdat het gehakt rul en grijs is. Kruid het gehakt met zout, peper en kaneel. Meng het gehakt met de mais.\nSnijdt de tomaten in plakjes."
+        },
+        {
+          "nl": "Doe het gehakt-mais-mengsel in een ovenschaal. Dek het mengsel af met de plakjes salami. Leg hierop de tomaten, bestrooi met oregano en met geraspte kaas. Bak de schotel in de oven op 200 °C gedurende 15 tot 20 minuten tot de tomaten gaar zijn."
+        },
+        {
+          "nl": "Maak parallel hieraan een pan met gebakken aardappelen."
+        }
+      ]
+    },
+    {
+      "id": "b:maispannenkoekjes-met-pinda-s",
+      "name": {
+        "nl": "Maispannenkoekjes met pinda’s"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "1 blik mais",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "blik",
+            "ing": "mais",
+            "qual": [],
+            "prep": null,
+            "name": "mais"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 kop geroosterde pinda’s",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "kop",
+            "ing": "pinda",
+            "qual": [
+              "geroosterde"
+            ],
+            "prep": null,
+            "name": "pinda’s"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "3 lente-uitjes",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": null,
+            "ing": "bosui",
+            "qual": [],
+            "prep": null,
+            "name": "lente-uitjes"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "2 tl verse gember [geraspt]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "tl",
+            "ing": "gember",
+            "qual": [
+              "verse"
+            ],
+            "prep": {
+              "nl": "geraspt"
+            },
+            "name": "gember"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 teentje knoflook [geperst]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "geperst"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 tl djinten (gemalen komijn)",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "komijn",
+            "qual": [],
+            "prep": null,
+            "name": "djinten"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 ei [losgeklopt]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": {
+              "nl": "losgeklopt"
+            },
+            "name": "ei"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "2 el rijstmeel (bloem kan ook)",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "rijstmeel",
+            "qual": [],
+            "prep": null,
+            "name": "rijstmeel"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1,25 dl arachideolie",
+          "parsed": {
+            "qty": {
+              "min": 1.25
+            },
+            "unit": "dl",
+            "ing": "arachideolie",
+            "qual": [],
+            "prep": null,
+            "name": "arachideolie"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "De mais, met de pinda’s, lente-uitjes, gember, knoflook en djinten pureren in de blender of keukenmachine. In een kom doen. Ei en rijstmeel toevoegen en flink roeren."
+        },
+        {
+          "nl": "Olie verhitten. Het mengsel met eetlepels tegelijk in de pan doen en iets pletten. Op halfhoog vuur beide kanten van de koekjes goudbruin bakken. Op keukenpapier laten uitlekken."
+        }
+      ]
+    },
+    {
+      "id": "b:makreelsalade",
+      "name": {
+        "nl": "Makreelsalade"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "250 g gestoomde makreel [zonder vel en graten, kleine stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 250
+            },
+            "unit": "g",
+            "ing": "makreel",
+            "qual": [
+              "gestoomde"
+            ],
+            "prep": {
+              "nl": "zonder vel en graten, kleine stukjes"
+            },
+            "name": "makreel"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 rode appel [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "appel",
+            "qual": [
+              "rode"
+            ],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "appel"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 groene appel [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "appel",
+            "qual": [
+              "groene"
+            ],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "appel"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 el citroensap",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "citroensap",
+            "qual": [],
+            "prep": null,
+            "name": "citroensap"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 rode ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [
+              "rode"
+            ],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "6 kleine augurken [5 in plakjes, 1 in reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 6
+            },
+            "unit": null,
+            "ing": "augurk",
+            "qual": [
+              "kleine"
+            ],
+            "prep": {
+              "nl": "5 in plakjes, 1 in reepjes"
+            },
+            "name": "augurken"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "100 ml yoghurt",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "ml",
+            "ing": "yoghurt",
+            "qual": [],
+            "prep": null,
+            "name": "yoghurt"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "2 el augurkennat",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "augurkennat",
+            "qual": [],
+            "prep": null,
+            "name": "augurkennat"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 theelepel mosterd",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "mosterd",
+            "qual": [],
+            "prep": null,
+            "name": "mosterd"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "1 tl karwijzaadjes",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "karwijzaad",
+            "qual": [],
+            "prep": null,
+            "name": "karwijzaadjes"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "½ rode paprika [reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "rode"
+            ],
+            "prep": {
+              "nl": "reepjes"
+            },
+            "name": "paprika"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "enkele blaadjes sla",
+          "parsed": {
+            "qty": null,
+            "unit": "blad",
+            "ing": "sla",
+            "qual": [
+              "enkele"
+            ],
+            "prep": null,
+            "name": "sla"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Sprenkel citroensap over de appelblokjes. Meng de makreel, de appel, de ui en de augurkenplakjes in een kom voorzichtig door elkaar."
+        },
+        {
+          "nl": "Maak een sausje door de yoghurt met het nat van de augurken, de mosterd en het karwijzaad door elkaar te mengen. Voeg naar smaak zout en peper toe."
+        },
+        {
+          "nl": "Leg de gewassen slablaadjes op een schaal en verdeel het vismengsel erover. Schenk vlak voor het gebruik de saus erover en garneer met de reepjes paprika en augurk."
+        }
+      ]
+    },
+    {
+      "id": "b:mexicaanse-bonenschotel",
+      "name": {
+        "nl": "Mexicaanse bonenschotel"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "1 rode paprika [stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "rode"
+            ],
+            "prep": {
+              "nl": "stukjes"
+            },
+            "name": "paprika"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "2 uien [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "uien"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1,6 kg bruine bonen uit blik (of kidneybonen)",
+          "parsed": {
+            "qty": {
+              "min": 1.6
+            },
+            "unit": "kg",
+            "ing": "bruine-boon",
+            "qual": [],
+            "prep": null,
+            "name": "bruine bonen uit blik"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "5 el ketchup",
+          "parsed": {
+            "qty": {
+              "min": 5
+            },
+            "unit": "el",
+            "ing": "ketchup",
+            "qual": [],
+            "prep": null,
+            "name": "ketchup"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "300 g mais uit blik",
+          "parsed": {
+            "qty": {
+              "min": 300
+            },
+            "unit": "g",
+            "ing": "mais",
+            "qual": [],
+            "prep": null,
+            "name": "mais uit blik"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "125 ml zure room",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "ml",
+            "ing": "zure-room",
+            "qual": [],
+            "prep": null,
+            "name": "zure room"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "125 g geraspte oude kaas",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte",
+              "oude"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "75 g tortilla chips",
+          "parsed": {
+            "qty": {
+              "min": 75
+            },
+            "unit": "g",
+            "ing": "tortilla-chips",
+            "qual": [],
+            "prep": null,
+            "name": "tortilla chips"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 zakje taco-kruidenmix",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "zakje",
+            "ing": "taco-kruidenmix",
+            "qual": [],
+            "prep": null,
+            "name": "taco-kruidenmix"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Verhit boter in een koekenpan en fruit de uien en de paprika ca 5 minuten. Laat intussen in een vergiet de bonen uitlekken. Meng de bonen en het ui-paprikamengsel samen met 4 el ketchup door elkaar."
+        },
+        {
+          "nl": "Schep de helft van het bonenmengsel in een grote ovenschaal. Giet de mais af en schep hem door de bonen in de schaal. Schep de rest van het bonenmengsel erop."
+        },
+        {
+          "nl": "Roer de zure room, de rest van de ketchup, de helft van de geraspte kaas en de kruidenmix door elkaar. Verkruimel de helft van de chips grof en roer ze door het zure roommengsel."
+        },
+        {
+          "nl": "Verdeel het mengsel over de bonen, leg de rest van de chips erop en bestrooi met de rest van de geraspte kaas.\nBak 30 minuten op 200 °C."
+        }
+      ]
+    },
+    {
+      "id": "b:mexicaanse-ovenschotel-met-zoete-aardappel",
+      "name": {
+        "nl": "Mexicaanse ovenschotel met zoete aardappel"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "200 g kipfilet [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "kipfilet",
+            "qual": [],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "kipfilet"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 el cajunkruiden",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "cajunkruiden",
+            "qual": [],
+            "prep": null,
+            "name": "cajunkruiden"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "200 g zoete aardappel [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "zoete-aardappel",
+            "qual": [],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "zoete aardappel"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 rode paprika [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "rode"
+            ],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "paprika"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "½ courgette [plakjes]",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": null,
+            "ing": "courgette",
+            "qual": [],
+            "prep": {
+              "nl": "plakjes"
+            },
+            "name": "courgette"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 klein blik mais",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "blik",
+            "ing": "mais",
+            "qual": [
+              "kleine"
+            ],
+            "prep": null,
+            "name": "mais"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 klein blik zwarte bonen",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "blik",
+            "ing": "zwarte-boon",
+            "qual": [
+              "kleine"
+            ],
+            "prep": null,
+            "name": "zwarte bonen"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "2 el olijfolie",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 tl paprikapoeder",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "paprikapoeder",
+            "qual": [],
+            "prep": null,
+            "name": "paprikapoeder"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "½ tl komijnpoeder",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "tl",
+            "ing": "komijn",
+            "qual": [],
+            "prep": null,
+            "name": "komijnpoeder"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "¼ tl cayennepeper",
+          "parsed": {
+            "qty": {
+              "min": 0.25
+            },
+            "unit": "tl",
+            "ing": "cayennepeper",
+            "qual": [],
+            "prep": null,
+            "name": "cayennepeper"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "50 g geraspte cheddar",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "cheddar",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "cheddar"
+          }
+        },
+        {
+          "i": 12,
+          "raw": "1 bosui [ringen]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "bosui",
+            "qual": [],
+            "prep": {
+              "nl": "ringen"
+            },
+            "name": "bosui"
+          }
+        },
+        {
+          "i": 13,
+          "raw": "1 avocado [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "avocado",
+            "qual": [],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "avocado"
+          }
+        },
+        {
+          "i": 14,
+          "raw": "2 handjes gemengde sla",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "hand",
+            "ing": "sla",
+            "qual": [
+              "gemengde"
+            ],
+            "prep": null,
+            "name": "sla"
+          }
+        },
+        {
+          "i": 15,
+          "raw": "125 g crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "g",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 16,
+          "raw": "peterselie",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "peterselie",
+            "qual": [],
+            "prep": null,
+            "name": "peterselie"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Vet een ovenschaal in. Kruid de kipblokjes met wat cajunkruiden en doe ze met alle groenten in de ovenschaal."
+        },
+        {
+          "nl": "Voeg de olijfolie en specerijen toe en schep het geheel goed om. Strooi de geraspte cheddar over het gerecht.\nBak 20 minuten op 200 °C."
+        },
+        {
+          "nl": "Verdeel de bosui, avocado en sla over de warme ingrediënten. Schep de crème fraîche over het gerecht, bestrooi het geheel met peterselie en serveer direct."
+        }
+      ]
+    },
+    {
+      "id": "b:miesalade-met-rundvlees",
+      "name": {
+        "nl": "Miesalade met rundvlees"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "500 g biefstuk",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "biefstuk",
+            "qual": [],
+            "prep": null,
+            "name": "biefstuk"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 el arachideolie",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "arachideolie",
+            "qual": [],
+            "prep": null,
+            "name": "arachideolie"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "2 el oestersaus",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "oestersaus",
+            "qual": [],
+            "prep": null,
+            "name": "oestersaus"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "2 tl milde kerrie",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "tl",
+            "ing": "kerrie",
+            "qual": [
+              "milde"
+            ],
+            "prep": null,
+            "name": "kerrie"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 el bruine suiker",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "suiker",
+            "qual": [
+              "bruine"
+            ],
+            "prep": null,
+            "name": "suiker"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "½ komkommer [dunne plakjes]",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": null,
+            "ing": "komkommer",
+            "qual": [],
+            "prep": {
+              "nl": "dunne plakjes"
+            },
+            "name": "komkommer"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 rode ui [ringen]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [
+              "rode"
+            ],
+            "prep": {
+              "nl": "ringen"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1 rode paprika [dunne reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "rode"
+            ],
+            "prep": {
+              "nl": "dunne reepjes"
+            },
+            "name": "paprika"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 rood pepertje [gesnipperd zonder zaadjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "rode-peper",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd zonder zaadjes"
+            },
+            "name": "rode pepertje"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "15 g verse munt [gehakt]",
+          "parsed": {
+            "qty": {
+              "min": 15
+            },
+            "unit": "g",
+            "ing": "munt",
+            "qual": [
+              "verse"
+            ],
+            "prep": {
+              "nl": "gehakt"
+            },
+            "name": "munt"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "50 g ongezouten pinda’s/cashewnoten [gehakt]",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "cashewnoot",
+            "qual": [],
+            "prep": {
+              "nl": "gehakt"
+            },
+            "name": "ongezouten pinda’s/cashewnoten"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "500 g Hokkien mie",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "hokkien-mie",
+            "qual": [],
+            "prep": null,
+            "name": "Hokkien mie"
+          }
+        },
+        {
+          "i": 13,
+          "raw": "125 ml rijstazijn",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "ml",
+            "ing": "rijstazijn",
+            "qual": [],
+            "prep": null,
+            "name": "rijstazijn"
+          }
+        },
+        {
+          "i": 14,
+          "raw": "2 el vissaus",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "vissaus",
+            "qual": [],
+            "prep": null,
+            "name": "vissaus"
+          }
+        },
+        {
+          "i": 15,
+          "raw": "60 g basterdsuiker",
+          "parsed": {
+            "qty": {
+              "min": 60
+            },
+            "unit": "g",
+            "ing": "basterdsuiker",
+            "qual": [],
+            "prep": null,
+            "name": "basterdsuiker"
+          }
+        },
+        {
+          "i": 16,
+          "raw": "2 tl verse gember [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "tl",
+            "ing": "gember",
+            "qual": [
+              "verse"
+            ],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "gember"
+          }
+        },
+        {
+          "i": 17,
+          "raw": "1 rood pepertje [gesnipperd zonder zaadjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "rode-peper",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd zonder zaadjes"
+            },
+            "name": "rode pepertje"
+          }
+        },
+        {
+          "i": 18,
+          "raw": "1 el verse korianderblaadjes [gehakt]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "koriander",
+            "qual": [
+              "verse"
+            ],
+            "prep": {
+              "nl": "gehakt"
+            },
+            "name": "korianderblaadjes"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Meng olie, oestersaus, kerriepoeder en bruine suiker in een kom. Verhit een ingevette koekenpan op middelhoog vuur en braad het vlees 6-8 minuten aan. Draai het vlees af en toe om en giet er de helft van de saus over. Haal het uit de pan."
+        },
+        {
+          "nl": "Meng voor de dressing alle ingrediënten in een kleine kom."
+        },
+        {
+          "nl": "Doe komkommer, ui, paprika en peper, munt en noten in een grote kom. Snijd het vlees in dunne plakjes, doe ze in de kom. Voeg de dressing toe en roer alles goed door."
+        },
+        {
+          "nl": "Doe de mie in de pan en roerbak hem 1-2 minuten op hoog vuur. Voeg de resterende saus toe en bak de mie al roerend gaar. Verdeel hem over de borden en leg er de salade op. Serveer meteen."
+        }
+      ]
+    },
+    {
+      "id": "b:moussaka",
+      "name": {
+        "nl": "Moussaka"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "2 aardappelen [plakken]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "aardappel",
+            "qual": [],
+            "prep": {
+              "nl": "plakken"
+            },
+            "name": "aardappelen"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "2 uien [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "uien"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 teentje knoflook [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 grote aubergine [plakjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "aubergine",
+            "qual": [
+              "grote"
+            ],
+            "prep": {
+              "nl": "plakjes"
+            },
+            "name": "aubergine"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "3 tomaten [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": null,
+            "ing": "tomaat",
+            "qual": [],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "tomaten"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "500 g rundergehakt",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "rundergehakt",
+            "qual": [],
+            "prep": null,
+            "name": "rundergehakt"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "4 el rode wijn",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "el",
+            "ing": "wijn",
+            "qual": [
+              "rode"
+            ],
+            "prep": null,
+            "name": "wijn"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "½ tl kaneel",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "tl",
+            "ing": "kaneel",
+            "qual": [],
+            "prep": null,
+            "name": "kaneel"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "½ tl oregano",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "tl",
+            "ing": "oregano",
+            "qual": [],
+            "prep": null,
+            "name": "oregano"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "30 g boter",
+          "parsed": {
+            "qty": {
+              "min": 30
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "35 g bloem",
+          "parsed": {
+            "qty": {
+              "min": 35
+            },
+            "unit": "g",
+            "ing": "bloem",
+            "qual": [],
+            "prep": null,
+            "name": "bloem"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "3 dl melk",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "dl",
+            "ing": "melk",
+            "qual": [],
+            "prep": null,
+            "name": "melk"
+          }
+        },
+        {
+          "i": 12,
+          "raw": "150 g geraspte belegen kaas",
+          "parsed": {
+            "qty": {
+              "min": 150
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte",
+              "belegen"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        },
+        {
+          "i": 13,
+          "raw": "3 eieren",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "eieren"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Aardappelen ca. 10 min koken. Bak de aubergine bruin in olie. Verdeel de aubergine en de aardappel over de bodem van een ovenschaal."
+        },
+        {
+          "nl": "Fruit de ui en de knoflook in de rest van de olie. Voeg het gehakt toe en bak het rul en grijs. Roer de tomaat, wijn, kaneel, oregano, zout en peper door. Laat het zonder deksel ca. 30 minuten pruttelen tot het vocht verdampt is. Maak een gebonden kaas-bechamelsaus met de boter, bloem, melk en kaas. Voeg naar smaak zout en peper toe."
+        },
+        {
+          "nl": "Klop 1 ei los en giet het over de aardappelen en aubergine. Verdeel het gehaktmengsel erover en strijk het glad. Klop de andere twee eieren los en roer ze door de afgekoelde kaassaus. Verdeel de saus over het gehaktmengsel en bestrooi met de rest van de geraspte kaas.\nBak gaar in 30 minuten op 200 °C."
+        }
+      ]
+    }
+  ]
+}

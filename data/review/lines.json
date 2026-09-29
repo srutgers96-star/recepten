@@ -1,0 +1,27 @@
+{
+  "reviewed": "2026-09-29",
+  "lines": [
+    {
+      "id": "b:pasta-met-zalm-en-rucola",
+      "i": 0,
+      "raw": "400 g rode zalm",
+      "ing": "zalm-uit-blik",
+      "qual": ["rode"],
+      "why": "The steps drain the salmon and remove skin and bones: tinned red salmon, not fresh fish (parser: zalm, fresh fish aisle)."
+    },
+    {
+      "id": "b:tagliatelle-met-kalkoenfilet-en-appelsaus",
+      "i": 6,
+      "raw": "2 zoetzure appels (goudrenetten) [geschild; stukjes]",
+      "note": { "nl": "goudrenetten", "en": "Bramley or another cooking apple" },
+      "why": "The parser drops '(goudrenetten)' as a synonym of appel; for a British cook the variety hint is the useful part."
+    },
+    {
+      "id": "b:sambal-goreng-spruitjes",
+      "i": 4,
+      "raw": "1 duan salam (Indonesisch laurierblad)",
+      "note": { "nl": "Indonesisch laurierblad", "en": "Indonesian bay leaf" },
+      "why": "Synonym note the parser drops; kept as a gloss because the product is unfamiliar in both countries."
+    }
+  ]
+}

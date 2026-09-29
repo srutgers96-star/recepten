@@ -1,0 +1,1793 @@
+{
+  "batch": 16,
+  "recipes": [
+    {
+      "id": "b:sambal-goreng-spruitjes",
+      "name": {
+        "nl": "Sambal goreng spruitjes"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "500 g spruitjes [grote gehalveerd]",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "spruitje",
+            "qual": [],
+            "prep": {
+              "nl": "grote gehalveerd"
+            },
+            "name": "spruitjes"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 teen knoflook [geperst]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "geperst"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 schijfje laos",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "schijf",
+            "ing": "laos",
+            "qual": [],
+            "prep": null,
+            "name": "laos"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 duan salam (Indonesisch laurierblad)",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "duan-salam",
+            "qual": [],
+            "prep": null,
+            "name": "duan salam"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 mespunt trassi",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "mp",
+            "ing": "trassi",
+            "qual": [],
+            "prep": null,
+            "name": "trassi"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "½ el sambal oelek",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "el",
+            "ing": "sambal-oelek",
+            "qual": [],
+            "prep": null,
+            "name": "sambal oelek"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1 kleine tomaat [in kwarten]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "tomaat",
+            "qual": [
+              "kleine"
+            ],
+            "prep": {
+              "nl": "in kwarten"
+            },
+            "name": "tomaat"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "¾ runderbouillonblokje",
+          "parsed": {
+            "qty": {
+              "min": 0.75
+            },
+            "unit": null,
+            "ing": "runderbouillonblokje",
+            "qual": [],
+            "prep": null,
+            "name": "runderbouillonblokje"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "1 scheut ketjap manis",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "scheut",
+            "ing": "ketjap-manis",
+            "qual": [],
+            "prep": null,
+            "name": "ketjap manis"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "250 ml kokosmelk",
+          "parsed": {
+            "qty": {
+              "min": 250
+            },
+            "unit": "ml",
+            "ing": "kokosmelk",
+            "qual": [],
+            "prep": null,
+            "name": "kokosmelk"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "½ glas water",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "glas",
+            "ing": "water",
+            "qual": [],
+            "prep": null,
+            "name": "water"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Pel en snijd de ui en knoflook fijn. Verhit een scheutje zonnebloemolie in een pan. Meng het ui, knoflook, laos, daun salam, trassi en sambal oelek in de pan. Roer dit goed door."
+        },
+        {
+          "nl": "Meng de spruitjes in de pan. Voeg de tomaat, bouillonblokje, ketjap, kokosmelk en water toe aan het mengsel in de pan. Roer het geheel goed door. Laat het in ca. 10-15 minuten gaar koken."
+        }
+      ]
+    },
+    {
+      "id": "b:schelvis-in-ratatouillesaus",
+      "name": {
+        "nl": "Schelvis in ratatouillesaus"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "1 kleine ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [
+              "kleine"
+            ],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "100 g shiitake [reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "shiitake",
+            "qual": [],
+            "prep": {
+              "nl": "reepjes"
+            },
+            "name": "shiitake"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "250 g schelvisfilet (of kabeljauw) [stukken van 2-3 cm]",
+          "parsed": {
+            "qty": {
+              "min": 250
+            },
+            "unit": "g",
+            "ing": "schelvisfilet",
+            "qual": [],
+            "prep": {
+              "nl": "stukken van 2-3 cm"
+            },
+            "name": "schelvisfilet"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "100 ml droge witte wijn",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "ml",
+            "ing": "wijn",
+            "qual": [
+              "droge",
+              "witte"
+            ],
+            "prep": null,
+            "name": "wijn"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "125 ml crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "ml",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 aubergine [stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "aubergine",
+            "qual": [],
+            "prep": {
+              "nl": "stukjes"
+            },
+            "name": "aubergine"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 courgette [stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "courgette",
+            "qual": [],
+            "prep": {
+              "nl": "stukjes"
+            },
+            "name": "courgette"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1 tomaat [stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "tomaat",
+            "qual": [],
+            "prep": {
+              "nl": "stukjes"
+            },
+            "name": "tomaat"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 paprika rood [stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [],
+            "prep": {
+              "nl": "stukjes"
+            },
+            "name": "paprika rood"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "1 teentje knoflook [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "1 blikje tomatenpuree",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "blik",
+            "ing": "tomatenpuree",
+            "qual": [],
+            "prep": null,
+            "name": "tomatenpuree"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "1 tl Provençaalse kruiden",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "provencaalse-kruiden",
+            "qual": [],
+            "prep": null,
+            "name": "Provençaalse kruiden"
+          }
+        },
+        {
+          "i": 12,
+          "raw": "1 takje tijm",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "takje",
+            "ing": "tijm",
+            "qual": [],
+            "prep": null,
+            "name": "tijm"
+          }
+        },
+        {
+          "i": 13,
+          "raw": "1 tl kruidenbouillonpoeder",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "kruidenbouillonpoeder",
+            "qual": [],
+            "prep": null,
+            "name": "kruidenbouillonpoeder"
+          }
+        },
+        {
+          "i": 14,
+          "raw": "100 g geraspte kaas",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Maak ratatouille door de aubergine, tomaat, paprika, knoflook, tomatenpuree en de kruiden lichtjes aan te bakken en daarna met een beetje water en bouillonpoeder erbij in ongeveer 15 minuten gaar te laten koken."
+        },
+        {
+          "nl": "Bak de ui en de shiitake met een klontje boter ongeveer 5 minuten. Voeg de wijn, de crème fraîche en de vis toe en breng het geheel aan de kook. Laat het 5 minuten pruttelen. Voeg naar smaak zout en peper toe."
+        },
+        {
+          "nl": "Schep het vismengsel in een ovenschaal en verdeel de ratatouille erover. Strooi de geraspte kaas over de ratatouille. Bak de schotel in de oven gedurende ongeveer 25 minuten op 200 °C. Serveer met rijst."
+        }
+      ]
+    },
+    {
+      "id": "b:snelle-kipsalade",
+      "name": {
+        "nl": "Snelle kipsalade"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "200 g fusilli",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "fusilli",
+            "qual": [],
+            "prep": null,
+            "name": "fusilli"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "75 g eikenbladsla melange",
+          "parsed": {
+            "qty": {
+              "min": 75
+            },
+            "unit": "g",
+            "ing": "slamelange",
+            "qual": [],
+            "prep": null,
+            "name": "eikenbladsla melange"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "500 g gemarineerde kipfilet",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "kipfilet",
+            "qual": [
+              "gemarineerde"
+            ],
+            "prep": null,
+            "name": "kipfilet"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 avocado [dunne plakken]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "avocado",
+            "qual": [],
+            "prep": {
+              "nl": "dunne plakken"
+            },
+            "name": "avocado"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "2 stengels bleekselderij [boogjes]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "stengel",
+            "ing": "bleekselderij",
+            "qual": [],
+            "prep": {
+              "nl": "boogjes"
+            },
+            "name": "bleekselderij"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "60 ml mayonaise",
+          "parsed": {
+            "qty": {
+              "min": 60
+            },
+            "unit": "ml",
+            "ing": "mayonaise",
+            "qual": [],
+            "prep": null,
+            "name": "mayonaise"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "60 ml karnemelk",
+          "parsed": {
+            "qty": {
+              "min": 60
+            },
+            "unit": "ml",
+            "ing": "karnemelk",
+            "qual": [],
+            "prep": null,
+            "name": "karnemelk"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "2 tl dragonazijn",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "tl",
+            "ing": "dragonazijn",
+            "qual": [],
+            "prep": null,
+            "name": "dragonazijn"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "60 g pecannoten",
+          "parsed": {
+            "qty": {
+              "min": 60
+            },
+            "unit": "g",
+            "ing": "pecannoot",
+            "qual": [],
+            "prep": null,
+            "name": "pecannoten"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Kook de pasta volgens de verpakking. Grill de kip 6 minuten en snijd deze in reepjes. Meng de pasta, kip, sla en bleekselderij in een grote kom."
+        },
+        {
+          "nl": "Maak een dressing van de mayonaise, karnemelk en dragonazijn en besprenkel de salade hiermee. Garneer met de noten en avocado."
+        }
+      ]
+    },
+    {
+      "id": "b:spaanse-gehaktballetjes-in-sherrysaus",
+      "name": {
+        "nl": "Spaanse gehaktballetjes in sherrysaus"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "500 g half-om-half gehakt",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "gehakt",
+            "qual": [
+              "half-om-half"
+            ],
+            "prep": null,
+            "name": "gehakt"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "½ kop witbroodkruim",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "kop",
+            "ing": "witbroodkruim",
+            "qual": [],
+            "prep": null,
+            "name": "witbroodkruim"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "¼ kop peterselie [gehakt]",
+          "parsed": {
+            "qty": {
+              "min": 0.25
+            },
+            "unit": "kop",
+            "ing": "peterselie",
+            "qual": [],
+            "prep": {
+              "nl": "gehakt"
+            },
+            "name": "peterselie"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "2 tenen knoflook [geperst]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "geperst"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "2+1 tl mild paprikapoeder",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "tl",
+            "ing": "paprikapoeder",
+            "qual": [
+              "milde"
+            ],
+            "prep": null,
+            "name": "paprikapoeder"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "2 el olijfolie",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "30 g boter",
+          "parsed": {
+            "qty": {
+              "min": 30
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1 middelgrote ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [
+              "middelgrote"
+            ],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 el bloem",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "bloem",
+            "qual": [],
+            "prep": null,
+            "name": "bloem"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "1¼ dl sherry",
+          "parsed": {
+            "qty": {
+              "min": 1.25
+            },
+            "unit": "dl",
+            "ing": "sherry",
+            "qual": [],
+            "prep": null,
+            "name": "sherry"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "2½ dl kippenbouillon",
+          "parsed": {
+            "qty": {
+              "min": 2.5
+            },
+            "unit": "dl",
+            "ing": "kippenbouillon",
+            "qual": [],
+            "prep": null,
+            "name": "kippenbouillon"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "10 kleine nieuwe aardappelen",
+          "parsed": {
+            "qty": {
+              "min": 10
+            },
+            "unit": null,
+            "ing": "aardappel",
+            "qual": [
+              "kleine",
+              "nieuwe"
+            ],
+            "prep": null,
+            "name": "aardappelen"
+          }
+        },
+        {
+          "i": 12,
+          "raw": "¼ kop peterselie [gehakt] (garnering)",
+          "parsed": {
+            "qty": {
+              "min": 0.25
+            },
+            "unit": "kop",
+            "ing": "peterselie",
+            "qual": [],
+            "prep": {
+              "nl": "gehakt"
+            },
+            "name": "peterselie"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Vermeng gehakt, broodkruim, peterselie, knoflook en 2 tl paprikapoeder. Draai met natte handen gehaktballetjes ter grootte van een walnoot."
+        },
+        {
+          "nl": "Verhit olie en boter in een middelgrote pan. Gehaktballetjes hierin 3 tot 4 minuten op matig vuur goed bruin bakken. Haal de balletjes uit de pan en laat uitlekken op keukenpapier."
+        },
+        {
+          "nl": "Doe ui, 1 tl paprikapoeder en bloem in de pan en bak dit mengsel al roerend 2 minuten. Voeg geleidelijk de sherry en de bouillon toe en roer tot de saus glad is. Laat de saus op matig vuur koken tot deze indikt."
+        },
+        {
+          "nl": "Doe de gehaktballetjes met de aardappelen terug in de pan. Afdekken en 20 minuten op laag vuur koken. Serveer bestrooid met peterselie."
+        }
+      ]
+    },
+    {
+      "id": "b:spaanse-groenten",
+      "name": {
+        "nl": "Spaanse groenten"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "2 el olijfolie",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 grote rode ui [reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [
+              "grote",
+              "rode"
+            ],
+            "prep": {
+              "nl": "reepjes"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "2 grote rode paprika’s [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "grote",
+              "rode"
+            ],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "paprika’s"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 groene paprika [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "groene"
+            ],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "paprika"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "4 grote, rijpe tomaten [ontveld; blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": null,
+            "ing": "tomaat",
+            "qual": [
+              "grote",
+              "rijpe"
+            ],
+            "prep": {
+              "nl": "ontveld; blokjes"
+            },
+            "name": "tomaten"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "2 tl bruine suiker",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "tl",
+            "ing": "suiker",
+            "qual": [
+              "bruine"
+            ],
+            "prep": null,
+            "name": "suiker"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Verhit olie in een middelgrote pan. Ui toevoegen en op laag vuur glazig fruiten. Voeg paprikablokjes toe en bak al roerend 5 minuten op matig vuur."
+        },
+        {
+          "nl": "Roer tomaten en bruine suiker erdoor. Vuur laag zetten, afdekken en 6 tot 8 minuten koken tot de groenten gaar zijn."
+        }
+      ]
+    },
+    {
+      "id": "b:spaanse-rosti-met-spinazie",
+      "name": {
+        "nl": "Spaanse rösti met spinazie"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "1½ kg aardappels [plakjes]",
+          "parsed": {
+            "qty": {
+              "min": 1.5
+            },
+            "unit": "kg",
+            "ing": "aardappel",
+            "qual": [],
+            "prep": {
+              "nl": "plakjes"
+            },
+            "name": "aardappels"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "2 teentjes knoflook",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": null,
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "150 g plakjes ontbijtspek [reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 150
+            },
+            "unit": "g",
+            "ing": "ontbijtspek",
+            "qual": [],
+            "prep": {
+              "nl": "reepjes"
+            },
+            "name": "plakjes ontbijtspek"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 ui [ringen]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "ringen"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "5 eieren",
+          "parsed": {
+            "qty": {
+              "min": 5
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "eieren"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 Spaans pepertje [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "spaanse-peper",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "Spaans pepertje"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 kg verse spinazie",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "kg",
+            "ing": "spinazie",
+            "qual": [
+              "verse"
+            ],
+            "prep": null,
+            "name": "spinazie"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "60 g Parmezaanse kaas",
+          "parsed": {
+            "qty": {
+              "min": 60
+            },
+            "unit": "g",
+            "ing": "parmezaanse-kaas",
+            "qual": [],
+            "prep": null,
+            "name": "Parmezaanse kaas"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "100 ml crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "ml",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Bak de knoflookteentjes heel in een pan met olijfolie. Voeg het spek toe en na 5 minuten de aardappels. Laat rustig 10 minuten bakken en voeg dan de uienringen en het Spaans pepertje toe."
+        },
+        {
+          "nl": "Laat het nog 5 minuten bakken en doe dan de geklopte eieren erbij en verspreid voorzichtig zodat een pannenkoek ontstaat. Keer de pannenkoek om en bak nog 5 minuten."
+        },
+        {
+          "nl": "Spinazie: laat de spinazie slinken en voeg de Parmezaanse kaas en de crème fraîche toe."
+        }
+      ]
+    },
+    {
+      "id": "b:spaghetti-al-pomodoro-e-olive",
+      "name": {
+        "nl": "Spaghetti al pomodoro e olive"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "400 g spaghetti",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "spaghetti",
+            "qual": [],
+            "prep": null,
+            "name": "spaghetti"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 kg tomaten",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "kg",
+            "ing": "tomaat",
+            "qual": [],
+            "prep": null,
+            "name": "tomaten"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "3 teentjes knoflook [stiftjes]",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "stiftjes"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "olie",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "olie",
+            "qual": [],
+            "prep": null,
+            "name": "olie"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 el gedroogde oregano",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "oregano",
+            "qual": [
+              "gedroogde"
+            ],
+            "prep": null,
+            "name": "oregano"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 el tomatenpuree",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "tomatenpuree",
+            "qual": [],
+            "prep": null,
+            "name": "tomatenpuree"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 mp cayennepeper",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "mp",
+            "ing": "cayennepeper",
+            "qual": [],
+            "prep": null,
+            "name": "cayennepeper"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "2 el kappertjes",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "kappertjes",
+            "qual": [],
+            "prep": null,
+            "name": "kappertjes"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "15 zwarte olijven zonder pit [gehalveerd]",
+          "parsed": {
+            "qty": {
+              "min": 15
+            },
+            "unit": null,
+            "ing": "olijf",
+            "qual": [
+              "zwarte"
+            ],
+            "prep": {
+              "nl": "gehalveerd"
+            },
+            "name": "olijven zonder pit"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "geraspte Parmezaanse kaas",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "parmezaanse-kaas",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "Parmezaanse kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Ontvel de tomaten en verwijder de pitjes. Snijd ze in stukken."
+        },
+        {
+          "nl": "Bak in een pan de knoflook in de helft van de olie heel lichtbruin. Doe er de tomaten, oregano, tomatenpuree en cayennepeper bij. Voeg zout en peper naar smaak toe en laat alles ca. 20 minuten koken tot het vocht verdampt is. Voeg de kappertjes en de olijven toe. Maak alles goed warm."
+        },
+        {
+          "nl": "Schenk dit direct van het vuur over de spaghetti die van tevoren in 8 minuten beetgaar gekookt is."
+        }
+      ]
+    },
+    {
+      "id": "b:spaghetti-bolognese",
+      "name": {
+        "nl": "Spaghetti Bolognese"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "7 g peterselie [fijngehakt]",
+          "parsed": {
+            "qty": {
+              "min": 7
+            },
+            "unit": "g",
+            "ing": "peterselie",
+            "qual": [],
+            "prep": {
+              "nl": "fijngehakt"
+            },
+            "name": "peterselie"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "2 el olijfolie",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "2 teentjes knoflook [geperst]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "geperst"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 grote ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [
+              "grote"
+            ],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "2 grote wortels [gehakt]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "wortel",
+            "qual": [
+              "grote"
+            ],
+            "prep": {
+              "nl": "gehakt"
+            },
+            "name": "wortels"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "5 selderijstengels [gehakt]",
+          "parsed": {
+            "qty": {
+              "min": 5
+            },
+            "unit": null,
+            "ing": "bleekselderij",
+            "qual": [],
+            "prep": {
+              "nl": "gehakt"
+            },
+            "name": "selderijstengels"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "350 g rundergehakt (of vegetarisch gehakt)",
+          "parsed": {
+            "qty": {
+              "min": 350
+            },
+            "unit": "g",
+            "ing": "rundergehakt",
+            "qual": [],
+            "prep": null,
+            "name": "rundergehakt"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "5 dl runderbouillon",
+          "parsed": {
+            "qty": {
+              "min": 5
+            },
+            "unit": "dl",
+            "ing": "runderbouillon",
+            "qual": [],
+            "prep": null,
+            "name": "runderbouillon"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "3,75 dl rode wijn",
+          "parsed": {
+            "qty": {
+              "min": 3.75
+            },
+            "unit": "dl",
+            "ing": "wijn",
+            "qual": [
+              "rode"
+            ],
+            "prep": null,
+            "name": "wijn"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "850 g gepelde tomaten uit blik",
+          "parsed": {
+            "qty": {
+              "min": 850
+            },
+            "unit": "g",
+            "ing": "tomaten-uit-blik",
+            "qual": [
+              "gepelde"
+            ],
+            "prep": null,
+            "name": "tomaten uit blik"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "500 g spaghetti",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "spaghetti",
+            "qual": [],
+            "prep": null,
+            "name": "spaghetti"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "2 el geraspte Parmezaanse kaas",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "parmezaanse-kaas",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "Parmezaanse kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Verhit de olie in een grote pan. Voeg knoflook, ui, wortel en selderij toe. Bak de groenten al roerende zacht in ca. 5 minuten. Draai het vuur hoger en bak het gehakt met een vork rul tot het mooi bruin is. Vegetarisch gehakt niet aanbakken."
+        },
+        {
+          "nl": "Voeg bouillon, wijn, onafgegoten tomaten en peterselie toe. Breng het mengsel aan de kook en laat het zonder deksel 1½ uur zachtjes koken.\nOp smaak brengen met peper en zout."
+        },
+        {
+          "nl": "Kook tijdens de laatste 10 minuten de pasta beetgaar in een grote pan met ruim kokend water. Goed afgieten en op warme borden scheppen. Saus over de pasta gieten en bestrooien met Parmezaanse kaas.\nEvt. met de staafmixer door de saus."
+        }
+      ]
+    },
+    {
+      "id": "b:spaghetti-con-peperoni-e-pomodori",
+      "name": {
+        "nl": "Spaghetti con peperoni e pomodori"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "6 teentjes knoflook [3 fijngesneden]",
+          "parsed": {
+            "qty": {
+              "min": 6
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "3 fijngesneden"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "4 gegrilde rode of gele paprika’s (uit een pot)",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "gegrilde",
+              "rode"
+            ],
+            "prep": null,
+            "name": "paprika’s"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 kg rijpe tomaten [ontveld en in stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "kg",
+            "ing": "tomaat",
+            "qual": [
+              "rijpe"
+            ],
+            "prep": {
+              "nl": "ontveld en in stukjes"
+            },
+            "name": "tomaten"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "400 g spaghetti",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "spaghetti",
+            "qual": [],
+            "prep": null,
+            "name": "spaghetti"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "olijfolie",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "6 ansjovisjes [kleine stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 6
+            },
+            "unit": null,
+            "ing": "ansjovis",
+            "qual": [],
+            "prep": {
+              "nl": "kleine stukjes"
+            },
+            "name": "ansjovisjes"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "2 gedroogde verkruimelde pepers of chilivlokken",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "rode-peper",
+            "qual": [
+              "gedroogde",
+              "verkruimelde"
+            ],
+            "prep": null,
+            "name": "pepers"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "50 g kappertjes",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "kappertjes",
+            "qual": [],
+            "prep": null,
+            "name": "kappertjes"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "3 el rode wijn azijn",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "wijnazijn",
+            "qual": [
+              "rode"
+            ],
+            "prep": null,
+            "name": "wijn azijn"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "broodkruim van 3 boterhammen",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "broodkruim",
+            "qual": [],
+            "prep": null,
+            "name": "broodkruim van 3 boterhammen"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "3 el peterselie [fijngehakt]",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "peterselie",
+            "qual": [],
+            "prep": {
+              "nl": "fijngehakt"
+            },
+            "name": "peterselie"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Verwarm de olijfolie in een koekenpan en bak daarin de gehakte knoflook zachtjes aan. Voeg de ansjovisjes, chili en tomaten toe. Laat 30 minuten zachtjes pruttelen."
+        },
+        {
+          "nl": "Voeg de kappertjes, de gegrilde paprika’s en de rode wijn azijn toe.\nKook ondertussen de spaghetti beetgaar."
+        },
+        {
+          "nl": "Verwarm 100 ml olijfolie in een koekenpan. Bak hierin de hele knoflooktenen aan en laat even op laag vuur sudderen. Verwijder de knoflooktenen uit de olie en voeg de broodkruimels toe. Bak 2 tot 3 minuten knapperig. Laat de kruimels uitlekken op keukenpapier."
+        },
+        {
+          "nl": "Giet de spaghetti af, roer deze met de peterselie door de saus en serveer gegarneerd met de broodkruimels."
+        }
+      ]
+    },
+    {
+      "id": "b:spaghetti-mediterranei",
+      "name": {
+        "nl": "Spaghetti Mediterranei"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "400 g spaghetti",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "spaghetti",
+            "qual": [],
+            "prep": null,
+            "name": "spaghetti"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "750 g tomaten (eventueel uit blik)",
+          "parsed": {
+            "qty": {
+              "min": 750
+            },
+            "unit": "g",
+            "ing": "tomaat",
+            "qual": [],
+            "prep": null,
+            "name": "tomaten"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "3 teentjes knoflook [stiftjes]",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "stiftjes"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "2+1 el olijfolie",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "olijfolie",
+            "qual": [],
+            "prep": null,
+            "name": "olijfolie"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 takje tijm",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "takje",
+            "ing": "tijm",
+            "qual": [],
+            "prep": null,
+            "name": "tijm"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 el tomatenpuree",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "tomatenpuree",
+            "qual": [],
+            "prep": null,
+            "name": "tomatenpuree"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "200 g tonijn op olie",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "tonijn-in-olie",
+            "qual": [],
+            "prep": null,
+            "name": "tonijn op olie"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Ontvel de tomaten en verwijder de pitjes. Snijd ze in grove stukken."
+        },
+        {
+          "nl": "Snijd de knoflook in stiftjes en bak deze in een pan in 2 el olijfolie goudbruin. Doe er dan direct de tomaten, tijm en tomatenpuree bij, roer alles door elkaar en voeg zout en peper naar smaak toe. Laat de saus 15-20 minuten koken tot het vocht van de tomaten is verdampt."
+        },
+        {
+          "nl": "Kook intussen de spaghetti in ruim water met zout gaar."
+        },
+        {
+          "nl": "Maak de tonijn klein en doe hem met olie en al bij de tomatensaus. Warm de saus nog enkele minuten door."
+        },
+        {
+          "nl": "Giet de spaghetti af, meng ze door de tonijnsaus en voeg de basilicum en de derde el olijfolie eraan toe. Serveer warm of koud."
+        }
+      ]
+    }
+  ]
+}

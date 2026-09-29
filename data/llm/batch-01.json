@@ -1,0 +1,259 @@
+{
+  "batch": 1,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:aardappel-broccoli-gratin",
+      "name": { "en": "Potato and broccoli gratin" },
+      "description": {
+        "nl": "Aardappelschijfjes en broccoli onder een laagje ei, zure room en oude kaas uit de oven.",
+        "en": "Sliced potato and broccoli baked under a layer of egg, soured cream and mature cheese."
+      },
+      "category": "oven",
+      "tags": ["vegetarisch", "oven"],
+      "time": { "active": 20, "total": 50 },
+      "steps": [
+        { "en": "Boil the potatoes for about 5 minutes until almost tender. Drain the potatoes in a colander and let them drip dry. Boil the broccoli for about 3 minutes until almost tender and leave to drain in a sieve." },
+        { "en": "Grease the ovenproof dish with butter, arrange the potato slices overlapping like roof tiles around the edge of the dish and put the broccoli in the middle." },
+        { "en": "Beat the eggs with the soured cream and grated cheese. Season to taste with salt and pepper and pour the mixture over the potatoes and broccoli." },
+        { "en": "Bake for about 30 minutes at 200 °C until golden brown and cooked through." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "aardappel", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 1, "ing": "broccoli", "qual": [], "prep": { "en": "florets" }, "confidence": 0.95 },
+        { "i": 2, "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 3, "ing": "zure-room", "qual": [], "confidence": 0.95 },
+        { "i": 4, "ing": "kaas", "qual": ["geraspte", "oude"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:aardappel-camembert-spek-schotel",
+      "name": { "en": "Potato, Camembert and bacon bake" },
+      "description": {
+        "nl": "Gebakken aardappelschijfjes met spek, tijm en rode ui, onder de gril met een hele camembert erover.",
+        "en": "Fried potato slices with bacon, thyme and red onion, finished under the grill with a whole Camembert on top."
+      },
+      "category": "oven",
+      "tags": ["snel", "oven"],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Fry the garlic, then add the potatoes, bacon strips and thyme. Once everything is cooked, stir in the finely diced red onion. Then tip everything into an ovenproof dish or tart tin. Cut the whole Camembert into small pieces over the top. A few minutes under the grill until the cheese starts to bubble. Nice with a crisp salad." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "aardappel", "qual": [], "confidence": 0.95 },
+        { "i": 1, "ing": "spekreepjes", "qual": [], "confidence": 0.95 },
+        { "i": 2, "ing": "tijm", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 3, "ing": "ui", "qual": ["rode"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 4, "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 5, "ing": "camembert", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:aardappelpuree-bij-kabeljauw-met-notencrumble",
+      "name": { "en": "Mashed potato (for cod with nut crumble)" },
+      "description": {
+        "nl": "Gladde aardappelpuree met melk en boter, het bijgerecht bij de kabeljauw met notencrumble.",
+        "en": "Smooth mashed potato with milk and butter, the side dish for the cod with nut crumble."
+      },
+      "category": "overig",
+      "tags": ["vegetarisch", "snel"],
+      "time": { "active": 10, "total": 20 },
+      "steps": [
+        { "en": "Boil the potatoes for 15 minutes until tender. Drain and add the milk and butter. Mash to a smooth purée and season with salt and pepper." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "aardappel", "qual": ["kruimige"], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 1, "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 2, "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 3, "ing": "zout-en-peper", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:aardappelsalade",
+      "name": { "en": "Potato salad" },
+      "description": {
+        "nl": "Aardappelsalade met yoghurt-mayonaise, bleekselderij, ei en krokante bacon.",
+        "en": "Potato salad with a yoghurt and mayonnaise dressing, celery, egg and crispy bacon."
+      },
+      "category": "salade",
+      "tags": ["vega-optie", "zomer"],
+      "time": { "active": 30, "total": 60 },
+      "steps": [
+        { "en": "Boil the potatoes until just tender and leave to cool. Put the potatoes, onion and celery in a large bowl. Stir the yoghurt and mayonnaise together and fold through the potatoes. Fry the bacon and cut into thin strips. Spoon the salad onto a platter, garnish with the egg and bacon and sprinkle with paprika. Serve at room temperature." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "aardappel", "qual": ["kruimige"], "prep": { "en": "2 cm dice" }, "confidence": 0.95 },
+        { "i": 1, "ing": "bosui", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 2, "ing": "ui", "qual": ["middelgrote"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 3, "ing": "bleekselderij", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 0.95 },
+        { "i": 4, "ing": "mayonaise", "qual": [], "confidence": 0.95 },
+        { "i": 5, "ing": "yoghurt", "qual": [], "confidence": 0.95 },
+        { "i": 6, "ing": "ei", "qual": ["hardgekookte"], "prep": { "en": "quartered" }, "confidence": 0.95 },
+        { "i": 7, "ing": "bacon", "qual": [], "confidence": 0.95 },
+        { "i": 8, "ing": "paprikapoeder", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:aardappeltortillataart-met-tonijn",
+      "name": { "en": "Potato tortilla pie with tuna" },
+      "description": {
+        "nl": "Spaanse tortilla als taart uit de oven: aardappel, ui en knoflook met tonijn, kappertjes en saffraan-ei.",
+        "en": "A Spanish tortilla baked as a pie: potato, onion and garlic with tuna, capers and saffron egg."
+      },
+      "category": "hartige-taart",
+      "tags": ["oven", "wereld"],
+      "time": { "active": 30, "total": 60 },
+      "steps": [
+        { "en": "Heat oil in a deep frying pan, add the potato, onion and garlic and fry covered for 10 minutes until just tender. Stir the mixture regularly and season with salt. Meanwhile soak the saffron in 2 tbsp hot water." },
+        { "en": "Drain the tuna and mix it in a bowl with the capers, herbs and pepper. Grease a tart tin and spread half of the potato mixture over the base." },
+        { "en": "Spread the tuna over it, then spoon the rest of the potato mixture on top. In a bowl beat the eggs with the saffron and its soaking water, then stir in half of the cheese, the chilli powder, salt and pepper. Pour the egg mixture over the potato and sprinkle the rest of the cheese on top." },
+        { "en": "Bake the tortilla in the middle of the oven for 25-30 minutes at 200 °C." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "aardappel", "qual": [], "prep": { "en": "thin slices" }, "confidence": 0.95 },
+        { "i": 1, "ing": "ui", "qual": ["grote"], "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 2, "ing": "knoflook", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 3, "ing": "saffraan", "qual": [], "confidence": 0.95 },
+        { "i": 4, "ing": "tonijn-in-olie", "qual": [], "confidence": 0.95 },
+        { "i": 5, "ing": "kappertjes", "qual": [], "confidence": 0.95 },
+        { "i": 6, "ing": "italiaanse-kruiden", "qual": [], "confidence": 0.95 },
+        { "i": 7, "ing": "peterselie", "qual": [], "confidence": 0.95 },
+        { "i": 8, "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 9, "ing": "kaas", "qual": ["jonge", "belegen"], "confidence": 0.85 },
+        { "i": 10, "ing": "chilipoeder", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:afwasmachinezalm",
+      "name": { "en": "Dishwasher salmon" },
+      "description": {
+        "nl": "Zalmfilet in pakketjes aluminiumfolie gegaard in de afwasmachine, met een frisse koriandersaus.",
+        "en": "Salmon fillets cooked in foil parcels in the dishwasher, with a fresh coriander sauce."
+      },
+      "category": "vis",
+      "tags": ["feest"],
+      "time": { "active": 30, "total": 120 },
+      "steps": [
+        { "en": "Tear off two pieces of aluminium foil of 60 to 70 cm and fold them double for extra strength. Brush one side with olive oil and lay two pieces of salmon fillet side by side on each double sheet. Sprinkle the fillets with 4 tbsp lime juice, salt and black pepper. Fold the parcels tightly shut and pinch the edges once more for good measure." },
+        { "en": "Press gently on them: if air escapes easily, wrap again. Put the parcels on the top rack of the dishwasher and run the full programme." },
+        { "en": "Meanwhile make the coriander sauce:\nMelt the butter in a saucepan, add the leek, red chilli, shallot and garlic and fry gently for 5 minutes." },
+        { "en": "Turn up the heat and add the chicken stock. Let it reduce by half in about a quarter of an hour, then let it cool a little." },
+        { "en": "Put the chicken stock mixture together with the coriander, 3 tbsp lime juice, a pinch of salt, plenty of black pepper and the crème fraîche in the food processor and blend to a smooth sauce." },
+        { "en": "Season with extra pepper and salt and put in the fridge." },
+        { "en": "Take the salmon out of the dishwasher and put it on plates. Spoon a generous amount of sauce over each portion and serve." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "zalmfilet", "qual": [], "confidence": 0.95 },
+        { "i": 1, "ing": "limoensap", "qual": [], "confidence": 0.95 },
+        { "i": 2, "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 3, "ing": "prei", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 0.95 },
+        { "i": 4, "ing": "rode-peper", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.85 },
+        { "i": 5, "ing": "sjalot", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 6, "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 7, "ing": "kippenfond", "qual": [], "confidence": 0.95 },
+        { "i": 8, "ing": "koriander", "qual": [], "prep": { "en": "stems removed" }, "confidence": 0.95 },
+        { "i": 9, "ing": "creme-fraiche", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:andijviestamp-met-danish-blue",
+      "name": { "en": "Endive mash with Danish blue" },
+      "description": {
+        "nl": "Hollandse stamppot van rauwe andijvie met Danish blue en spekjes, met rookworst of braadworst erbij.",
+        "en": "Dutch stamppot of raw endive with Danish blue and bacon strips, served with smoked or frying sausage."
+      },
+      "category": "stamppot",
+      "tags": ["winter"],
+      "time": { "active": 20, "total": 30 },
+      "steps": [
+        { "en": "Boil the potatoes for 20 minutes until tender, drain and keep some of the cooking water. Meanwhile fry the bacon strips." },
+        { "en": "Mash the potatoes to a smooth purée and make it creamy with cooking water and Danish blue to taste (and butter, milk and mayonnaise if you like). Stir the raw endive through it." },
+        { "en": "Meanwhile fry the frying sausage and/or heat up the smoked sausage." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "aardappel", "qual": [], "confidence": 0.95 },
+        { "i": 1, "ing": "danish-blue", "qual": [], "confidence": 0.95 },
+        { "i": 2, "ing": "andijvie", "qual": [], "prep": { "en": "shredded" }, "confidence": 0.95 },
+        { "i": 3, "ing": "spekreepjes", "qual": [], "confidence": 0.95 },
+        { "i": 4, "ing": "rookworst", "qual": [], "confidence": 0.85 }
+      ]
+    },
+    {
+      "id": "b:avocadosalade-met-pecannoten",
+      "name": { "en": "Avocado salad with pecans" },
+      "description": {
+        "nl": "Frisse salade van rijpe avocado, zongedroogde tomaat en koriander met een limoen-mosterddressing en pecannoten.",
+        "en": "Fresh salad of ripe avocado, sun-dried tomato and coriander with a lime and mustard dressing and pecans."
+      },
+      "category": "salade",
+      "tags": ["vegetarisch", "snel", "zomer"],
+      "time": { "active": 20, "total": 20 },
+      "steps": [
+        { "en": "Pat the tomatoes dry and cut into very fine strips. Halve the strips. Break the pecans into coarse pieces. Pick the coriander leaves off the stalks." },
+        { "en": "In a bowl whisk the lime juice, mustard and oil into a dressing. Grind chilli over it to taste. Season the dressing with salt." },
+        { "en": "Halve the avocados and remove the stone. Score the skin lengthways down the middle and peel it off. Break the avocado halves into coarse pieces. Fold the avocado pieces, tomato strips and coriander leaves through the dressing. Divide the salad over four plates, scatter the pecans over and grind a little chilli on top. Serve with toasted pitta breads." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "zongedroogde-tomaat", "qual": [], "confidence": 0.95 },
+        { "i": 1, "ing": "pecannoot", "qual": ["ongezouten"], "confidence": 0.95 },
+        { "i": 2, "ing": "koriander", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 3, "ing": "limoen", "qual": [], "confidence": 0.95 },
+        { "i": 4, "ing": "mosterd", "qual": ["grove"], "confidence": 0.95 },
+        { "i": 5, "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 6, "ing": "chilivlokken", "qual": [], "confidence": 0.85 },
+        { "i": 7, "ing": "avocado", "qual": ["rijpe"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:bavette-met-gerookte-pancetta",
+      "name": { "en": "Bavette with smoked pancetta" },
+      "description": {
+        "nl": "Pasta met krokante pancetta, gekaramelliseerde rode ui, peterselie en Parmezaan.",
+        "en": "Pasta with crispy pancetta, caramelised red onion, parsley and Parmesan."
+      },
+      "category": "pasta",
+      "tags": ["snel"],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Fry the pancetta until crisp and leave to drain. Fry the onions in the pancetta fat, sprinkle the sugar over after 5 minutes, fry until caramelised and then add the parsley." },
+        { "en": "Cook the pasta al dente, drain and save a little of the cooking water. Put the pasta in the pan with the onions. Add the pancetta, cheese, olive oil and 2-3 tbsp cooking water and stir through gently." },
+        { "en": "Serve with a little freshly ground pepper." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "pancetta", "qual": ["dunne"], "confidence": 0.95 },
+        { "i": 1, "ing": "ui", "qual": ["rode"], "prep": { "en": "thinly sliced" }, "confidence": 0.95 },
+        { "i": 2, "ing": "suiker", "qual": [], "confidence": 0.95 },
+        { "i": 3, "ing": "peterselie", "qual": [], "prep": { "en": "chopped" }, "confidence": 0.95 },
+        { "i": 4, "ing": "bavette", "qual": [], "confidence": 0.95 },
+        { "i": 5, "ing": "parmezaanse-kaas", "qual": [], "confidence": 0.95 },
+        { "i": 6, "ing": "olijfolie", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:bloemkoolschotel-uit-de-oven",
+      "name": { "en": "Cauliflower bake" },
+      "description": {
+        "nl": "Ovenschotel met bloemkool, gekruid rundergehakt met champignons en een laag aardappelpuree en kaas.",
+        "en": "Oven bake of cauliflower, curried beef mince with mushrooms and a topping of mashed potato and cheese."
+      },
+      "category": "oven",
+      "tags": ["vega-optie", "oven", "kids", "winter"],
+      "time": { "active": 25, "total": 45 },
+      "steps": [
+        { "en": "Preheat the oven to 200 ℃. Fry the mince until crumbly with pepper and salt. Add the sliced mushrooms, salt and curry powder." },
+        { "en": "Boil the cauliflower florets for 8 minutes until almost tender. Make the mashed potato according to the instructions on the packet." },
+        { "en": "In an ovenproof dish put first the cauliflower, then the mince and mushroom mixture and the mashed potato on top. Sprinkle the cheese over the dish. Bake in the oven until the cheese has melted." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "rundergehakt", "qual": [], "confidence": 0.95 },
+        { "i": 1, "ing": "champignon", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 2, "ing": "kerrie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "ing": "bloemkool", "qual": [], "prep": { "en": "florets" }, "confidence": 0.95 },
+        { "i": 4, "ing": "aardappelpuree", "qual": ["instant"], "confidence": 0.95 },
+        { "i": 5, "ing": "peterselie", "qual": [], "confidence": 0.95 },
+        { "i": 6, "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    }
+  ]
+}

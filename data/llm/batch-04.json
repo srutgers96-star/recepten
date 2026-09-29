@@ -1,0 +1,304 @@
+{
+  "batch": 4,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:fusilli-con-polpettine",
+      "name": { "en": "Fusilli con polpettine" },
+      "description": {
+        "nl": "Pasta met kleine gehaktballetjes in een tomatensaus met rode wijn en basilicum.",
+        "en": "Pasta with little meatballs in a tomato sauce with red wine and basil."
+      },
+      "category": "pasta",
+      "tags": ["kids"],
+      "time": { "active": 40, "total": 55 },
+      "steps": [
+        { "en": "Blitz the bread to crumbs in a food processor. In a bowl, mix the mince, breadcrumbs, Parmesan, onion, parsley, egg, garlic, lemon zest, lemon juice, pepper and salt. Shape small balls from 1 tbsp of the mixture each and roll them in the seasoned flour." },
+        { "en": "Heat oil in a pan and fry the meatballs in batches until golden brown. Take them out of the pan and set aside." },
+        { "en": "Mix the tomato purée, stock, wine, basil, garlic, pepper and salt in the pan and bring to the boil. Turn down the heat, add the meatballs and simmer for 10–15 minutes." },
+        { "en": "Meanwhile, cook the fusilli until done. Drain and serve with the meatballs and shaved Parmesan." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "3 sneden witbrood", "ing": "witbrood", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 ui [fijn gesneden]", "ing": "ui", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 2, "raw": "500 g gehakt", "ing": "gehakt", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "25 g geraspte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 4, "raw": "2 el peterselie [gehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "chopped" }, "confidence": 0.95 },
+        { "i": 5, "raw": "1 ei [losgeklopt]", "ing": "ei", "qual": [], "prep": { "en": "beaten" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 7, "raw": "rasp van 1/2 citroen", "ing": "citroen", "qual": [], "confidence": 0.9 },
+        { "i": 8, "raw": "sap van 1/2 citroen", "ing": "citroen", "qual": [], "confidence": 0.9 },
+        { "i": 9, "raw": "30 g bloem [gekruid]", "ing": "bloem", "qual": [], "prep": { "en": "seasoned" }, "confidence": 0.95 },
+        { "i": 10, "raw": "500 g fusilli", "ing": "fusilli", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "geschaafde Parmezaanse kaas (garnering)", "ing": "parmezaanse-kaas", "qual": ["geschaafde"], "confidence": 0.95 },
+        { "i": 12, "raw": "425 g tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.7 },
+        { "i": 13, "raw": "125 ml runderbouillon", "ing": "runderbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 14, "raw": "125 ml rode wijn", "ing": "wijn", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 15, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 16, "raw": "2 el basilicum [gehakt]", "ing": "basilicum", "qual": [], "prep": { "en": "chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:fusilli-met-chorizo",
+      "name": { "en": "Fusilli with chorizo" },
+      "description": {
+        "nl": "Pastasaus van verkruimelde chorizo, rode wijn en tomaat, afgemaakt met een scheut room.",
+        "en": "A pasta sauce of crumbled chorizo, red wine and tomato, finished with a splash of cream."
+      },
+      "category": "pasta",
+      "tags": [],
+      "time": { "active": 25, "total": 35 },
+      "steps": [
+        { "en": "Fry the chorizo in a frying pan until lightly browned. Take the chorizo out of the pan and fry the onion, bay leaf and rosemary until the onion is soft." },
+        { "en": "Add the red wine and cook for 2 minutes while scraping up the browned bits. Add the tomatoes, tomato purée, chilli flakes and salt. Bring to the boil and let the sauce simmer." },
+        { "en": "Meanwhile, cook the fusilli. Stir the cream into the sauce and serve with Parmesan." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "225 g pittige chorizo [verkruimeld]", "ing": "chorizo", "qual": ["pittige"], "prep": { "en": "crumbled" }, "confidence": 0.95 },
+        { "i": 1, "raw": "1 middelgrote rode ui [gesnipperd]", "ing": "ui", "qual": ["middelgrote", "rode"], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 laurierblad", "ing": "laurierblad", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 el verse rozemarijn [fijngehakt]", "ing": "rozemarijn", "qual": ["verse"], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 4, "raw": "300 ml rode wijn", "ing": "wijn", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 5, "raw": "600 g stukjes tomaat uit blik", "ing": "tomatenblokjes", "qual": [], "confidence": 0.9 },
+        { "i": 6, "raw": "1 el tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 tl chilivlokken", "ing": "chilivlokken", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "400 g fusilli", "ing": "fusilli", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "4 el slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "2 el Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:fusilli-met-marsala-en-kip",
+      "name": { "en": "Fusilli with Marsala and chicken" },
+      "description": {
+        "nl": "Romige pasta met kipreepjes, doperwten en een scheut marsala, afgemaakt met verse tuinkruiden.",
+        "en": "Creamy pasta with chicken strips, peas and a splash of Marsala, finished with fresh garden herbs."
+      },
+      "category": "pasta",
+      "tags": ["snel"],
+      "time": { "active": 20, "total": 20 },
+      "steps": [
+        { "en": "Cook the peas until done and drain. Soften the onion in olive oil and fry the chicken strips with it for 2 minutes. Add the cream and Marsala and simmer gently for 4 minutes until the sauce thickens slightly. Season with salt and pepper." },
+        { "en": "Cook the fusilli until done and drain. Toss the sauce and herbs through the pasta. Serve with grated cheese." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g fusilli", "ing": "fusilli", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 ui", "ing": "ui", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "300 g kipfilet [reepjes]", "ing": "kipfilet", "qual": [], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 3, "raw": "250 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "2 el marsalawijn", "ing": "marsala", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "200 g doperwtjes", "ing": "doperwt", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 el verse peterselie", "ing": "peterselie", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 7, "raw": "1 el verse bieslook", "ing": "bieslook", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 8, "raw": "1/2 el kervel", "ing": "kervel", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "50 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gado-gado",
+      "name": { "en": "Gado-gado" },
+      "description": {
+        "nl": "Indonesische groenteschotel met tofu, tempé, ei en pindasaus, met kroepoek en gebakken uitjes erbij.",
+        "en": "Indonesian vegetable platter with tofu, tempeh, egg and peanut sauce, served with prawn crackers and crispy fried onions."
+      },
+      "category": "salade",
+      "tags": ["vega-optie", "wereld"],
+      "time": { "active": 40, "total": 40 },
+      "steps": [
+        { "en": "Blanch all the vegetables.\nSeason the tofu and tempeh with soy sauce and garlic and fry them until golden brown. Put everything in a large dish." },
+        { "en": "Make the gado-gado sauce according to the packet instructions and pour it over the vegetables. Serve with prawn crackers and crispy fried onions." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 hardgekookte eieren [in achten]", "ing": "ei", "qual": ["hardgekookte"], "prep": { "en": "cut into eighths" }, "confidence": 0.95 },
+        { "i": 1, "raw": "200 g spitskool [fijngesneden]", "ing": "spitskool", "qual": [], "prep": { "en": "finely shredded" }, "confidence": 0.95 },
+        { "i": 2, "raw": "100 g taugé", "ing": "tauge", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 wortel [blokjes]", "ing": "wortel", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "300 g sperziebonen", "ing": "sperzieboon", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1/2 bloemkool [roosjes]", "ing": "bloemkool", "qual": [], "prep": { "en": "florets" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 aardappel [blokjes]", "ing": "aardappel", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 7, "raw": "1/2 komkommer [blokjes]", "ing": "komkommer", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 8, "raw": "200 g tofu [blokjes]", "ing": "tofu", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 9, "raw": "200 g tempé [blokjes]", "ing": "tempe", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 10, "raw": "sojasaus", "ing": "sojasaus", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "1 teen knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 12, "raw": "gado-gado-saus (volgens verpakking)", "ing": "gado-gado-saus", "qual": [], "confidence": 0.95 },
+        { "i": 13, "raw": "1 potje gebakken uitjes", "ing": "gebakken-uitjes", "qual": [], "confidence": 0.95 },
+        { "i": 14, "raw": "kroepoek", "ing": "kroepoek", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gebakken-kipfilet-met-chorizo-in-romige-mosterdsaus",
+      "name": { "en": "Pan-fried chicken breast with chorizo in a creamy mustard sauce" },
+      "description": {
+        "nl": "Kipfilet met chorizo in een romige saus van crème fraîche en grove mosterd; lekker met spinazie en krieltjes.",
+        "en": "Chicken breast with chorizo in a creamy sauce of crème fraîche and wholegrain mustard; lovely with spinach and baby potatoes."
+      },
+      "category": "vlees",
+      "tags": ["snel"],
+      "time": { "active": 20, "total": 20 },
+      "steps": [
+        { "en": "Heat the butter in a frying pan and brown the chicken breasts all over in about 3 minutes. Sprinkle them with salt and pepper. Add the shallot and the chorizo and fry for 2 minutes more. Then take the chicken breasts out of the pan." },
+        { "en": "Mix the crème fraîche, mustard and mayonnaise in a bowl and pour the mixture into the pan. Bring to the boil, stirring. Return the chicken breasts to the pan and let them cook through gently, uncovered, for about 6 more minutes." },
+        { "en": "Garnish with chives. Lovely with spinach and fried baby potatoes." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 sjalotjes [gesnipperd]", "ing": "sjalot", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 1, "raw": "100 g chorizo [blokjes]", "ing": "chorizo", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "125 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "2 el grove mosterd", "ing": "mosterd", "qual": ["grove"], "confidence": 0.95 },
+        { "i": 4, "raw": "2 el mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "25 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "4 enkele kipfilets", "ing": "kipfilet", "qual": [], "confidence": 0.9 },
+        { "i": 7, "raw": "2 el bieslook [gesnipperd]", "ing": "bieslook", "qual": [], "prep": { "en": "finely snipped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gebakken-rijst-met-pikante-chinese-kool",
+      "name": { "en": "Fried rice with spicy Chinese cabbage" },
+      "description": {
+        "nl": "Rijst met rul gebakken gehakt en ketjap, met een frisse pikante Chinese kool met zure room en koriander ernaast.",
+        "en": "Rice with crumbly fried mince and kecap, served with a fresh, spicy Chinese cabbage with soured cream and coriander."
+      },
+      "category": "rijst",
+      "tags": ["wereld"],
+      "time": { "active": 30, "total": 35 },
+      "steps": [
+        { "en": "Cook the rice in salted water until done.\nClean the Chinese cabbage and cut it into narrow strips. Boil the cabbage strips for about 2 minutes in plenty of salted boiling water. Drain in a colander, rinse under cold water and leave to drain well." },
+        { "en": "Heat the oil in a casserole and soften the onion, garlic and the strips of 1 chilli. Add the mince and fry until crumbly and no longer pink. Sprinkle over the paprika and the crumbled stock cube and stir in the kecap. Stir the cooked rice through the mince mixture." },
+        { "en": "In a bowl, mix the soured cream with the remaining chilli strips and the coriander and stir the mixture through the drained cabbage." },
+        { "en": "Serve the rice and mince mixture with the spicy Chinese cabbage." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 2, "raw": "2 teentjes knoflook [gesnipperd]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 rood Spaans pepertje [reepjes]", "ing": "spaanse-peper", "qual": ["rode"], "prep": { "en": "strips" }, "confidence": 0.85 },
+        { "i": 4, "raw": "2 el zonnebloemolie", "ing": "zonnebloemolie", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "400 g rundergehakt", "ing": "rundergehakt", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 el paprikapoeder", "ing": "paprikapoeder", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1/2 kippenbouillonblokje", "ing": "kippenbouillonblokje", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "2 el ketjap asin", "ing": "ketjap-asin", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "1 kleine Chinese kool [in smalle repen]", "ing": "chinese-kool", "qual": ["kleine"], "prep": { "en": "in narrow strips" }, "confidence": 0.95 },
+        { "i": 10, "raw": "1 rood Spaans pepertje [reepjes, extra voor de kool]", "ing": "spaanse-peper", "qual": ["rode"], "prep": { "en": "strips, extra for the cabbage" }, "confidence": 0.85 },
+        { "i": 11, "raw": "2–3 el koriander [gesnipperd]", "ing": "koriander", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 12, "raw": "125 ml zure room", "ing": "zure-room", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gegratineerde-bloemkool-met-ham",
+      "name": { "en": "Cauliflower and ham gratin" },
+      "description": {
+        "nl": "Bloemkool, ham en doperwten in een kaassaus met karwijzaad en dille, gegratineerd onder een korstje van broodkruim en oude kaas.",
+        "en": "Cauliflower, ham and peas in a cheese sauce with caraway and dill, baked under a crust of breadcrumbs and mature cheese."
+      },
+      "category": "oven",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 60 },
+      "steps": [
+        { "en": "Boil the cauliflower for about 5 minutes, drain and leave to drain. Mix the cauliflower, ham and peas in an ovenproof dish." },
+        { "en": "Melt 30 g of the butter in a saucepan, stir in the flour and caraway seeds and let it bubble for 2 minutes, stirring. Add the milk a splash at a time and let the sauce simmer gently for about 3 minutes." },
+        { "en": "Stir in the grated young cheese and the dill and let the cheese melt. Add pepper and salt to taste and mix the sauce through the vegetables and ham in the dish." },
+        { "en": "Mix the breadcrumbs with the mature cheese and scatter over the dish. Dot the rest of the butter in small knobs over the crumbs." },
+        { "en": "Bake the dish for 30 minutes at 225 °C until golden brown." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 kleine bloemkool [kleine roosjes]", "ing": "bloemkool", "qual": ["kleine"], "prep": { "en": "small florets" }, "confidence": 0.95 },
+        { "i": 1, "raw": "300 g dikke plakken gekookte ham [blokjes]", "ing": "ham", "qual": ["dikke"], "prep": { "en": "diced" }, "confidence": 0.8 },
+        { "i": 2, "raw": "100 g diepvriesdoperwten", "ing": "doperwt", "qual": ["diepvries"], "confidence": 0.9 },
+        { "i": 3, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "30 g bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1 tl karwijzaadjes", "ing": "karwijzaad", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "500 ml melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "50 g geraspte jonge kaas", "ing": "kaas", "qual": ["geraspte", "jonge"], "confidence": 0.95 },
+        { "i": 8, "raw": "2 el dille [fijngeknipt]", "ing": "dille", "qual": [], "prep": { "en": "finely snipped" }, "confidence": 0.95 },
+        { "i": 9, "raw": "40 g broodkruim", "ing": "broodkruim", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "3 el geraspte oude kaas", "ing": "kaas", "qual": ["geraspte", "oude"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gehakt-met-spinazie-onder-bladerdeeg",
+      "name": { "en": "Mince and spinach pie under puff pastry" },
+      "description": {
+        "nl": "Rul gebakken gehakt met spinazie, ei en Parmezaanse kaas, afgedekt met bladerdeeg en goudbruin uit de oven.",
+        "en": "Crumbly fried mince with spinach, egg and Parmesan, topped with puff pastry and baked until golden brown."
+      },
+      "category": "oven",
+      "tags": ["oven"],
+      "time": { "active": 30, "total": 150 },
+      "steps": [
+        { "en": "Leave the spinach to thaw in a sieve for about 1½ hours and squeeze out the liquid well. In a bowl, beat 2 of the eggs with salt, pepper, basil and Parmesan." },
+        { "en": "Heat the butter in a frying pan and fry the leek gently for about 2 minutes. Add the mince and fry until crumbly and browned. Leave to cool slightly. Mix in the spinach and the egg mixture and season with salt and pepper." },
+        { "en": "Stack the puff pastry sheets on top of each other and roll out into a sheet slightly larger than the greased ovenproof dish. Spoon the mince and spinach mixture into the dish. Brush the rim with beaten egg, lay the pastry on top and press it down firmly. Cut a small round in the middle to let the steam out and brush the pastry with beaten egg. Decorate with the leftover pastry if you like." },
+        { "en": "Bake the dish for 35 minutes at 225 °C until golden brown and cooked through." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "750 g diepvries spinazie", "ing": "diepvriesspinazie", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "3 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 tl basilicum", "ing": "basilicum", "qual": [], "confidence": 0.9 },
+        { "i": 3, "raw": "40 g Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 kleine prei [kleine stukjes]", "ing": "prei", "qual": ["kleine"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 5, "raw": "30 g boter of margarine", "ing": "boter", "qual": [], "confidence": 0.9 },
+        { "i": 6, "raw": "500 g rundergehakt", "ing": "rundergehakt", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "4 plakjes bladerdeeg", "ing": "bladerdeeg", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gehakt-rijstschotel-met-dadels",
+      "name": { "en": "Baked mince and rice with dates" },
+      "description": {
+        "nl": "Ovenschotel van rijst en rundergehakt met dadels, rozijnen, kaneel en kruidnagel, gebonden met belegen kaas en bouillon.",
+        "en": "Oven-baked rice and beef mince with dates, raisins, cinnamon and cloves, bound with mature cheese and stock."
+      },
+      "category": "rijst",
+      "tags": ["oven"],
+      "time": { "active": 20, "total": 70 },
+      "steps": [
+        { "en": "Rinse the raisins in a sieve and leave to drain. Heat the butter in a frying pan and fry the leek for about 3 minutes. Add the mince and fry, breaking it up with a fork, then take the pan off the heat. Rinse the rice and drain well." },
+        { "en": "Mix the rice and the mince and leek mixture in a large, deep ovenproof dish. Stir in the dates and raisins. Add salt, pepper and cayenne pepper to taste. Push the cinnamon stick and the cloves into the mixture. Stir in the grated cheese and pour in the stock. Cover the dish with aluminium foil." },
+        { "en": "Put the dish in the oven at 175 °C and bake for about 45 minutes until the rice is done. If the rice is still too wet, leave the dish in the oven without the foil for about 5 more minutes to dry out." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "150 g verse dadels [kleine reepjes]", "ing": "dadel", "qual": ["verse"], "prep": { "en": "small strips" }, "confidence": 0.95 },
+        { "i": 1, "raw": "50 g rozijnen", "ing": "rozijn", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "2 preien [smalle ringen]", "ing": "prei", "qual": [], "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 3, "raw": "25 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "400 g rundergehakt", "ing": "rundergehakt", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "350 g rijst", "ing": "rijst", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 mp cayennepeper", "ing": "cayennepeper", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 kaneelstokje", "ing": "kaneelstokje", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "2 kruidnagels", "ing": "kruidnagel", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "50 g geraspte belegen kaas", "ing": "kaas", "qual": ["geraspte", "belegen"], "confidence": 0.95 },
+        { "i": 10, "raw": "800 ml bouillon", "ing": "bouillon", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gehakt-salami-ovenschotel",
+      "name": { "en": "Mince and salami bake" },
+      "description": {
+        "nl": "Ovenschotel van aardappelschijfjes met gehakt, pikante salami en oregano, onder cheddar en room.",
+        "en": "Layered potato bake with mince, spicy salami and oregano, topped with Cheddar and cream."
+      },
+      "category": "oven",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 60 },
+      "steps": [
+        { "en": "Peel the potatoes and cut into 3 mm slices. Boil them in water for about 3 minutes and drain. Rinse under cold water and leave to drain." },
+        { "en": "Preheat the oven to 180 °C. Heat the oil and butter in a pan and stir-fry the leek for 2 minutes over a medium heat. Add the mince and salami and fry over a high heat until the meat browns and the liquid has evaporated. Stir in the oregano and take off the heat." },
+        { "en": "Lay half of the potato slices on the bottom of a greased ovenproof dish. Spread the mince mixture over them. Lay the rest of the potatoes on top. Sprinkle with the cheese and pour over the cream. Bake the dish for 30 minutes." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "30 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "2 preien [ringen]", "ing": "prei", "qual": [], "prep": { "en": "rings" }, "confidence": 0.95 },
+        { "i": 3, "raw": "400 g half-om-half gehakt", "ing": "gehakt", "qual": ["half-om-half"], "confidence": 0.95 },
+        { "i": 4, "raw": "125 g pikante salami", "ing": "salami", "qual": ["pikante"], "confidence": 0.95 },
+        { "i": 5, "raw": "1 el oregano", "ing": "oregano", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 kg nieuwe aardappelen", "ing": "aardappel", "qual": ["nieuwe"], "confidence": 0.95 },
+        { "i": 7, "raw": "1/2 kop cheddar", "ing": "cheddar", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "3 dl room", "ing": "room", "qual": [], "confidence": 0.95 }
+      ]
+    }
+  ]
+}

@@ -25,11 +25,62 @@ export interface Origin {
   basedOn?: string | null;
 }
 
-/** One ingredient line. Phase 1 keeps it raw; phase 2 adds qty/unit/ing/prep next to `raw`. */
+/** A parsed quantity: "2-3" -> {min: 2, max: 3}; "ca. 400" -> {min: 400, approx: true}. */
+export interface Qty {
+  min: number;
+  max?: number;
+  approx?: boolean;
+}
+
+/**
+ * The part of an ingredient a line asks for: "sap van ½ limoen" -> 'sap', "het wit van 1 prei" ->
+ * 'wit', "het geel van 2 eieren" -> 'geel', "blaadjes van 2 takjes tijm" -> 'blaadjes'.
+ * 'rasp-en-sap' covers "rasp en sap van 1 citroen" (both zest and juice) so no information is lost.
+ */
+export type LinePart = 'sap' | 'rasp' | 'rasp-en-sap' | 'wit' | 'geel' | 'blaadjes';
+
+/**
+ * One ingredient line (docs/phase-2-spec.md §2). `raw` is the source of truth and is never removed
+ * (CLAUDE.md invariant 2); everything else is derived by `parseLine` (src/domain/parser.ts) or set
+ * by the translation pass / a user correction, and re-parsing re-reads `raw`.
+ */
 export interface Line {
+  /** The original line, never removed. */
   raw: Text;
   /** 'header' for group headers such as "Dressing:"; default 'line'. */
   kind?: 'line' | 'header';
+  /** Parsed quantity; null = the line has no quantity ("zout en peper"). */
+  qty?: Qty | null;
+  /** units.json id; null = counted pieces (the ingredient's defaultUnit) or no unit at all. */
+  unit?: string | null;
+  /** ingredients.json id; null = free text, not resolved in the dictionary. */
+  ing?: string | null;
+  /**
+   * The name part of the line as written (quantity, unit, qualifiers, part, prep and parentheses
+   * stripped; original casing kept): what the dictionary could not resolve when `ing` is null, and
+   * what "Koppel ingrediënt" / the dictionary agents work from. Also filled when `ing` resolved.
+   */
+  name?: string;
+  /** qualifiers.json ids in the order they were written ("rode", "grote", "verse"). */
+  qual?: string[];
+  /** "sap van ½ limoen" -> 'sap'. See LinePart. */
+  part?: LinePart | null;
+  /** From [brackets]: "fijngehakt" -> {nl: "fijngehakt", en: "finely chopped"} (prep-phrases.json). */
+  prep?: Text | null;
+  /** From (parentheses) that are not alternatives or pack sizes: "(ontdooid)", "(blokje)". */
+  note?: Text | null;
+  /** "(400 g)", "van 150 g" -> "400 g" / "150 g". Never scaled. */
+  packSize?: string | null;
+  /** Alternatives: "(of kabeljauw)" -> alt: [{ing: 'kabeljauw'}], altMode 'or'; "en/of" -> 'and-or'. */
+  alt?: Line[];
+  altMode?: 'or' | 'and-or';
+  /** "naar smaak", "(garnering)", "evt.", "optioneel". */
+  optional?: boolean;
+  role?: 'main' | 'garnish';
+  /** 0-1: how much of the line was resolved; the UI shows a hint below 0.6. */
+  confidence?: number;
+  /** Unknown keys are preserved on round-trip (PLAN.md §5). */
+  [k: string]: unknown;
 }
 
 /** A duration as found in the step text ("25-30 minuten" -> {min: 25, max: 30, unit: 'min'}). */

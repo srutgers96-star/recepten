@@ -1,0 +1,279 @@
+{
+  "batch": 11,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:mulligatawny",
+      "name": { "en": "Mulligatawny" },
+      "description": {
+        "nl": "Kruidige Anglo-Indiase kippensoep met appel, room en een vleugje citroen, geserveerd met rijst en chutney.",
+        "en": "Spiced Anglo-Indian chicken soup with apple, cream and a squeeze of lemon, served with rice and chutney."
+      },
+      "category": "soep",
+      "tags": ["wereld", "winter"],
+      "time": { "active": 30, "total": 90 },
+      "steps": [
+        { "en": "Trim the chicken of excess fat and sinew. Mix the flour, curry powder, turmeric and ginger; rub this over the chicken." },
+        { "en": "Heat the butter in a large pan and brown the chicken lightly on all sides. Tie the cloves and peppercorns in a small muslin bag and add it to the chicken together with the diced apple and the stock. Bring to the boil and simmer over a low heat for 1 hour." },
+        { "en": "Take the chicken out of the pan and discard the spice bag. Skin the chicken and chop the meat finely. Skim the fat off the soup. Return the chicken meat to the pan. Stir in the lemon juice and cream and warm the soup through gently. Serve with boiled rice and chutney in separate bowls." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 kg kippenpoten", "ing": "kippenbout", "qual": [], "confidence": 0.9 },
+        { "i": 1, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "2 tl kerriepoeder", "ing": "kerrie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 tl kurkuma", "ing": "kurkuma", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "½ tl gemberpoeder", "ing": "gemberpoeder", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "60 g boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "6 hele kruidnagels", "ing": "kruidnagel", "qual": ["hele"], "confidence": 1 },
+        { "i": 7, "raw": "12 zwarte peperkorrels", "ing": "peperkorrel", "qual": ["zwarte"], "confidence": 1 },
+        { "i": 8, "raw": "1 grote appel [geschild in blokjes]", "ing": "appel", "qual": ["grote"], "prep": { "en": "peeled and diced" }, "confidence": 1 },
+        { "i": 9, "raw": "1½ ltr kippenbouillon (pot)", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "2 el citroensap", "ing": "citroensap", "qual": [], "confidence": 1 },
+        { "i": 11, "raw": "125 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:naanbrood-voor-bij-dahl",
+      "name": { "en": "Naan bread (to go with dahl)" },
+      "description": {
+        "nl": "Snelle naan van zelfrijzend bakmeel en yoghurt met geroosterde zaadjes, gegrild en bestreken met knoflook-peterselieolie.",
+        "en": "Quick naan made with self-raising flour and yoghurt, flecked with toasted seeds, griddled and brushed with garlic and parsley oil."
+      },
+      "category": "overig",
+      "tags": ["vegetarisch", "wereld", "snel"],
+      "time": { "active": 30, "total": 30 },
+      "steps": [
+        { "en": "Toast the cumin seeds, mustard seeds and fennel seeds in a frying pan with a tiny bit of olive oil for about 1 minute. Mix the self-raising flour with the yoghurt and a little salt to taste into an elastic dough. Knead the toasted spices through it and divide the dough into 10 pieces." },
+        { "en": "Heat a griddle pan. Roll out the 10 pieces of dough with a rolling pin to about ½ cm thick." },
+        { "en": "Blitz the clove of garlic and a handful of parsley into the olive oil with a stick blender. Brush the mixture onto the dough and griddle the naan for 2 minutes until golden brown on both sides." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g zelfrijzend bakmeel", "ing": "zelfrijzend-bakmeel", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "400 g Griekse yoghurt", "ing": "griekse-yoghurt", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "1 tl komijnzaad", "ing": "komijnzaad", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "1 tl mosterdzaad", "ing": "mosterdzaad", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "200 ml olijfolie", "ing": "olijfolie", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "1 teentje knoflook", "ing": "knoflook", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "1 handje peterselie", "ing": "peterselie", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:nasi-sate-met-kip-en-shiitake",
+      "name": { "en": "Nasi saté with chicken and shiitake" },
+      "description": {
+        "nl": "Snelle Indonesische rijstschotel met kip, shiitake en pindasaté-boemboe, lekker met kroepoek en atjar.",
+        "en": "Quick Indonesian-style rice dish with chicken, shiitake and peanut satay spice paste, nice with prawn crackers and atjar."
+      },
+      "category": "rijst",
+      "tags": ["wereld", "wok", "snel"],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Cook the rice as per the packet instructions. Heat oil in a wok or deep frying pan and fry the onion until translucent. Add the chicken and fry quickly until cooked through. Then stir-fry the bamboo shoots and the shiitake with it. Add 200 ml water and the spice paste. Add the rice to the vegetable mixture, mix well and heat everything through briefly." },
+        { "en": "Nice with prawn crackers, cold atjar and seroendeng." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "400 g kipfilet", "ing": "kipfilet", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 3, "raw": "100 g shiitake", "ing": "shiitake", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "1 pakje boemboe pinda-saté", "ing": "boemboe-pinda-sate", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "Optioneel: kroepoek, atjar en seroendeng", "ing": "kroepoek-atjar-en-seroendeng", "qual": [], "confidence": 0.85 }
+      ]
+    },
+    {
+      "id": "b:noodles",
+      "name": { "en": "Noodles" },
+      "description": {
+        "nl": "Snelle wok met eiermie, kip, shiitake, gember en Spaanse peper, afgemaakt met oestersaus en verse koriander.",
+        "en": "Quick stir-fry of egg noodles, chicken, shiitake, ginger and chilli, finished with oyster sauce and fresh coriander."
+      },
+      "category": "wok-noedels",
+      "tags": ["wok", "snel", "wereld"],
+      "time": { "active": 25, "total": 25 },
+      "steps": [
+        { "en": "Pour boiling water over the noodles and leave to stand for two minutes." },
+        { "en": "Put a little sesame oil and olive oil in a hot wok. Add the chicken breast, shallot, garlic, ginger and chilli and stir well. Then add the shiitake too." },
+        { "en": "Meanwhile drain the noodles and add them to the wok, stirring well. Add the oyster sauce to taste and finish the dish with the spring onion." },
+        { "en": "Dress the plates with some roughly chopped fresh coriander." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "250 g eiermie", "ing": "eiermie", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "400 g kipfilet [fijngesneden]", "ing": "kipfilet", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 1 },
+        { "i": 2, "raw": "2 tl gember [fijngesneden]", "ing": "gember", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 3, "raw": "1 Spaans pepertje [fijngesneden]", "ing": "spaanse-peper", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 1 },
+        { "i": 4, "raw": "1 teentje knoflook [fijngesneden]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 5, "raw": "1 sjalotje [gesnipperd]", "ing": "sjalot", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 6, "raw": "200 g shiitake [grove stukken]", "ing": "shiitake", "qual": [], "prep": { "en": "rough chunks" }, "confidence": 1 },
+        { "i": 7, "raw": "1 lente-uitje [fijngesneden]", "ing": "bosui", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 1 },
+        { "i": 8, "raw": "1 bosje koriander", "ing": "koriander", "qual": [], "confidence": 1 },
+        { "i": 9, "raw": "1 el oestersaus", "ing": "oestersaus", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:noorse-visschotel",
+      "name": { "en": "Norwegian fish bake" },
+      "description": {
+        "nl": "Kabeljauw uit de oven onder een laag gesmoorde groenten en een romige mosterd-yoghurtsaus, met een knapperig korstje van paneermeel.",
+        "en": "Oven-baked cod under a layer of softened vegetables and a creamy mustard and yoghurt sauce, with a crisp breadcrumb topping."
+      },
+      "category": "vis",
+      "tags": ["oven"],
+      "time": { "active": 30, "total": 60 },
+      "steps": [
+        { "en": "Heat 25 g butter in a frying pan and soften the onion and spring onions for about 1 minute. Add the pepper and the mushrooms and sweat for another 3 minutes or so." },
+        { "en": "Rinse the fish and pat it dry. Sprinkle the fish with salt, pepper, paprika and flour. Butter a large ovenproof dish and spoon half the vegetables into it. Lay the fish on top and spread the rest of the vegetables over it." },
+        { "en": "Melt the butter in a saucepan and stir in the flour. Add the milk a splash at a time, stirring all the while. Sprinkle in the stock powder and keep stirring until you have a smooth, thickened sauce." },
+        { "en": "Take the pan off the heat and stir in the mustard and the yoghurt. Season to taste with salt and pepper and pour the sauce over the vegetables and the fish." },
+        { "en": "Sprinkle the breadcrumbs over the top and dot with a few knobs of butter." },
+        { "en": "Put the dish in the middle of a preheated oven (175 °C) and bake for about 25 minutes until golden brown and cooked through." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 1, "raw": "2 lente-uitjes [fijngesneden]", "ing": "bosui", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 1 },
+        { "i": 2, "raw": "1 groene paprika [stukjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "small pieces" }, "confidence": 1 },
+        { "i": 3, "raw": "250 g champignons [plakjes]", "ing": "champignon", "qual": [], "prep": { "en": "sliced" }, "confidence": 1 },
+        { "i": 4, "raw": "60 g boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "600 g kabeljauwfilet", "ing": "kabeljauwfilet", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "milde paprikapoeder", "ing": "paprikapoeder", "qual": ["milde"], "confidence": 1 },
+        { "i": 7, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 8, "raw": "3 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 1 },
+        { "i": 10, "raw": "15 g boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 11, "raw": "1 el bloem", "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 12, "raw": "2 dl melk", "ing": "melk", "qual": [], "confidence": 1 },
+        { "i": 13, "raw": "2 tl bouillonpoeder", "ing": "bouillonpoeder", "qual": [], "confidence": 0.95 },
+        { "i": 14, "raw": "1 el mosterd", "ing": "mosterd", "qual": [], "confidence": 1 },
+        { "i": 15, "raw": "2 dl yoghurt (op kamertemperatuur)", "ing": "yoghurt", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:ossobuco-met-gremolata",
+      "name": { "en": "Ossobuco with gremolata" },
+      "description": {
+        "nl": "Langzaam gestoofde kalfsschenkel in wijn en tomaat, geserveerd met een frisse gremolata van knoflook, citroenrasp en peterselie.",
+        "en": "Veal shank slowly braised in wine and tomato, served with a fresh gremolata of garlic, lemon zest and parsley."
+      },
+      "category": "vlees",
+      "tags": ["winter", "feest"],
+      "time": { "active": 40, "total": 150 },
+      "steps": [
+        { "en": "Season the veal shanks with salt and pepper and turn them in the flour. Brown the meat on both sides in oil in a casserole. Take the meat out of the pan and set it aside." },
+        { "en": "Sweat the onions, garlic, carrots and celery until soft. Add the thyme, bay leaf and lemon zest and deglaze the vegetables now and then with the wine." },
+        { "en": "Skin and deseed the tomatoes and add the tomatoes and tomato purée to the other vegetables. Add the meat to the vegetables and let the dish simmer for another 1½ hours." },
+        { "en": "Gremolata: combine the garlic, lemon zest and parsley and scatter over the ossobuco." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 schijven kalfsschenkel", "ing": "kalfsschenkel", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "4 el bloem", "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "2 uien [fijngehakt]", "ing": "ui", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 3, "raw": "1 teentje knoflook [fijngehakt]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 4, "raw": "2 wortels [fijngehakt]", "ing": "wortel", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 5, "raw": "1 stengel bleekselderij [fijngehakt]", "ing": "bleekselderij", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 6, "raw": "verse tijm", "ing": "tijm", "qual": ["verse"], "confidence": 1 },
+        { "i": 7, "raw": "1 laurierblad", "ing": "laurierblad", "qual": [], "confidence": 1 },
+        { "i": 8, "raw": "stuk citroenschil", "ing": "citroenschil", "qual": [], "confidence": 0.9 },
+        { "i": 9, "raw": "droge witte/rode wijn", "ing": "wijn", "qual": ["droge"], "confidence": 0.85 },
+        { "i": 10, "raw": "3 tomaten", "ing": "tomaat", "qual": [], "confidence": 1 },
+        { "i": 11, "raw": "1 el tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 1 },
+        { "i": 13, "raw": "4 teentjes knoflook [fijngehakt]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 14, "raw": "rasp van 1 citroen", "ing": "citroen", "qual": [], "confidence": 1 },
+        { "i": 15, "raw": "2 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:pappardelle-met-gorgonzola",
+      "name": { "en": "Pappardelle with gorgonzola" },
+      "description": {
+        "nl": "Brede lintpasta met geslonken spinazie, geroosterde walnoten en smeltende gorgonzola; in 20 minuten op tafel.",
+        "en": "Wide ribbon pasta with wilted spinach, toasted walnuts and melting gorgonzola; on the table in 20 minutes."
+      },
+      "category": "pasta",
+      "tags": ["vegetarisch", "snel"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Briefly toast the walnuts in a dry frying pan, then chop them roughly. Cook the pappardelle as per the packet. Soften the onion, add the spinach and let it wilt. Stir the gorgonzola, walnuts and the spinach mixture through the pasta. Season with pepper and salt." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g pappardelle", "ing": "pappardelle", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 2, "raw": "600 g spinazie", "ing": "spinazie", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "100 g walnoten [grof gehakt]", "ing": "walnoot", "qual": [], "prep": { "en": "roughly chopped" }, "confidence": 1 },
+        { "i": 4, "raw": "100 g gorgonzola [stukjes]", "ing": "gorgonzola", "qual": [], "prep": { "en": "small pieces" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:pasta-alpujarra",
+      "name": { "en": "Pasta Alpujarra" },
+      "description": {
+        "nl": "Penne met uitgebakken chorizo, prei, winterpeen en tomatensaus, geserveerd met geraspte kaas.",
+        "en": "Penne with crisped chorizo, leek, carrot and tomato sauce, served with grated cheese."
+      },
+      "category": "pasta",
+      "tags": ["snel", "kids"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Cook the penne as per the packet instructions. Fry the chorizo until it releases its fat. Add the leek, garlic and carrot. Fry them briefly with the chorizo. Then add the tomato sauce and heat everything through well. Serve with grated cheese." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g penne", "ing": "penne", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "4 preien [ringen]", "ing": "prei", "qual": [], "prep": { "en": "rings" }, "confidence": 1 },
+        { "i": 2, "raw": "2 teentjes knoflook [gesnipperd]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 3, "raw": "1 winterpeen [kleine reepjes]", "ing": "winterpeen", "qual": [], "prep": { "en": "small strips" }, "confidence": 1 },
+        { "i": 4, "raw": "250 ml tomatensaus", "ing": "tomatensaus", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "1 chorizoworst [blokjes]", "ing": "chorizo", "qual": [], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 6, "raw": "geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:pasta-met-gerookte-zalm-venkel-en-olijven",
+      "name": { "en": "Pasta with smoked salmon, fennel and olives" },
+      "description": {
+        "nl": "Tagliatelle met kort gebakken venkel, crème fraîche, groene olijven en reepjes gerookte zalm; klaar in 20 minuten.",
+        "en": "Tagliatelle with quickly fried fennel, crème fraîche, green olives and strips of smoked salmon; ready in 20 minutes."
+      },
+      "category": "pasta",
+      "tags": ["snel"],
+      "time": { "active": 20, "total": 20 },
+      "steps": [
+        { "en": "Cook the pasta as per the packet instructions. Heat 1 tbsp olive oil and fry the fennel for about 2 minutes, tossing it as you go. Add the crème fraîche and the olives and let the sauce heat right through. Stir the smoked salmon through the sauce. Season with salt and pepper. Toss the sauce through the drained pasta." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g tagliatelle", "ing": "tagliatelle", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "1 grote venkel [stukken]", "ing": "venkel", "qual": ["grote"], "prep": { "en": "pieces" }, "confidence": 1 },
+        { "i": 2, "raw": "200 g crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "3 el groene olijven", "ing": "olijf", "qual": ["groene"], "confidence": 1 },
+        { "i": 4, "raw": "400 g gerookte zalmfilet [korte reepjes]", "ing": "zalmfilet", "qual": ["gerookte"], "prep": { "en": "short strips" }, "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:pasta-met-lamsgehakt-en-groente",
+      "name": { "en": "Pasta with lamb mince and vegetables" },
+      "description": {
+        "nl": "Stevige pastasaus van lamsgehakt met champignons, paprika, tuinbonen en tomaat, afgemaakt met feta en verse basilicum.",
+        "en": "Hearty lamb mince sauce with mushrooms, pepper, broad beans and tomato, finished with feta and fresh basil."
+      },
+      "category": "pasta",
+      "tags": [],
+      "time": { "active": 30, "total": 40 },
+      "steps": [
+        { "en": "Heat the oil in a pan and stir-fry the onion and garlic for about 2 minutes over a medium heat. Add the mince and stir-fry until it browns and the liquid has evaporated." },
+        { "en": "Add the mushrooms, pepper, broad beans, tomatoes with their juice and tomato purée. Bring the mixture to the boil and let it simmer until the vegetables are tender." },
+        { "en": "Stir now and then. Cook the pasta until just tender in a large pan of water with a splash of oil. Serve with the cheese and the basil as a garnish." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 el olie", "ing": "olie", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "1 grote ui [in achten]", "ing": "ui", "qual": ["grote"], "prep": { "en": "cut into eighths" }, "confidence": 1 },
+        { "i": 2, "raw": "2 teentjes knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 1 },
+        { "i": 3, "raw": "500 g lamsgehakt", "ing": "lamsgehakt", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "125 g kleine gehalveerde champignonhoedjes", "ing": "champignon", "qual": ["kleine"], "confidence": 0.85 },
+        { "i": 5, "raw": "1 kleine rode paprika [stukjes]", "ing": "paprika", "qual": ["kleine", "rode"], "prep": { "en": "small pieces" }, "confidence": 1 },
+        { "i": 6, "raw": "1 kop tuinbonen", "ing": "tuinboon", "qual": [], "confidence": 1 },
+        { "i": 7, "raw": "1 blik tomaten (440 g)", "ing": "tomaten-uit-blik", "qual": [], "confidence": 0.9 },
+        { "i": 8, "raw": "2 el tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 1 },
+        { "i": 9, "raw": "500 g pasta", "ing": "pasta", "qual": [], "confidence": 1 },
+        { "i": 10, "raw": "125 g feta [verkruimeld]", "ing": "feta", "qual": [], "prep": { "en": "crumbled" }, "confidence": 1 },
+        { "i": 11, "raw": "2 el verse basilicum", "ing": "basilicum", "qual": ["verse"], "confidence": 1 }
+      ]
+    }
+  ]
+}

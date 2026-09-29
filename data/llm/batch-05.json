@@ -1,0 +1,288 @@
+{
+  "batch": 5,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:gehaktballetjes-in-dille-yoghurt-saus",
+      "name": { "en": "Meatballs in dill and yoghurt sauce" },
+      "description": {
+        "nl": "Zachte gehaktballetjes in een frisse, gebonden saus van yoghurt en dille.",
+        "en": "Tender meatballs in a fresh, creamy dill and yoghurt sauce."
+      },
+      "category": "vlees",
+      "tags": ["kids"],
+      "time": { "active": 25, "total": 35 },
+      "steps": [
+        { "en": "Soften the onion in 15 g of butter for about 2 minutes. Put the mince in a bowl and add the egg, breadcrumbs, salt, pepper, nutmeg, the softened onion and 1 tbsp of dill. Knead well and roll into balls the size of a walnut." },
+        { "en": "Heat the rest of the butter in a pan and brown the meatballs all over. Pour in the stock and let the meatballs simmer gently for about 10 minutes until cooked through." },
+        { "en": "Stir the cornflour into the yoghurt until smooth and pour it over the meatballs, stirring all the time. Keep stirring until you have a smooth, thickened sauce. Season with salt and pepper to taste and sprinkle the rest of the dill over the top." },
+        { "en": "Serve with boiled rice, for example." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 ui [fijn gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "500 g gehakt", "ing": "gehakt", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 ei", "ing": "ei", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "3 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "1/2 tl nootmuskaat", "ing": "nootmuskaat", "qual": [], "confidence": 0.98 },
+        { "i": 6, "raw": "3 el dille [fijngehakt]", "ing": "dille", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 7, "raw": "2 dl vleesbouillon (blokje)", "ing": "runderbouillon", "qual": [], "confidence": 0.85 },
+        { "i": 8, "raw": "2 1/2 el maïzena", "ing": "maizena", "qual": [], "confidence": 0.98 },
+        { "i": 9, "raw": "1/4 ltr yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:gehakttaart",
+      "name": { "en": "Pan-fried meatloaf" },
+      "description": {
+        "nl": "Een platte gehakttaart uit de koekenpan met spek, tijm en bieslook.",
+        "en": "A flat meatloaf cooked in the frying pan, with bacon, thyme and chives."
+      },
+      "category": "vlees",
+      "tags": ["kids"],
+      "time": { "active": 15, "total": 35 },
+      "steps": [
+        { "en": "Cut the crusts off the bread and crumble the rest. Put the onion in a bowl with the mince, bacon, breadcrumbs, thyme, garlic, chives, salt and pepper and knead well." },
+        { "en": "Heat butter in a frying pan, spread the mince mixture out evenly and press it down. Fry gently for about 20 minutes, turning it over halfway with the help of a lid." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 sneetjes witbrood", "ing": "witbrood", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "500 g half-om-half gehakt", "ing": "gehakt", "qual": ["half-om-half"], "confidence": 0.95 },
+        { "i": 3, "raw": "75 g spekreepjes", "ing": "spekreepjes", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "1 tl tijm", "ing": "tijm", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.98 },
+        { "i": 6, "raw": "15 sprietjes bieslook [fijngeknipt]", "ing": "bieslook", "qual": [], "prep": { "en": "finely snipped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gemarineerde-kipfilet-met-cashewnoten",
+      "name": { "en": "Marinated chicken breast with cashew nuts" },
+      "description": {
+        "nl": "Kipfilet die een dag marineert in yoghurt met specerijen, geserveerd in een romige saus van cashewnoten.",
+        "en": "Chicken breasts marinated for a day in spiced yoghurt, served in a creamy cashew nut sauce."
+      },
+      "category": "vlees",
+      "tags": ["wereld"],
+      "time": { "active": 30, "total": 1470 },
+      "steps": [
+        { "en": "Rinse the chicken breasts, pat dry and lay them side by side in a dish." },
+        { "en": "Marinade: stir together the yoghurt, ginger, ground coriander, ground cloves and black pepper. Pour over the chicken breasts, cover with cling film and leave to marinate for at least 24 hours, turning at least once." },
+        { "en": "Sauce: in a food processor, blend the onion, half the cashew nuts, the chilli powder, turmeric and ¾ litre of water to a purée." },
+        { "en": "Brown the chicken breasts in the butter. Add the marinade, the sauce and salt and bring to the boil. Let the chicken simmer gently for about 10 minutes until cooked through." },
+        { "en": "Put the chicken breasts in a dish and pour the sauce over them. Garnish with the rest of the cashew nuts and the parsley." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 enkele kipfilets", "ing": "kipfilet", "qual": [], "confidence": 0.9 },
+        { "i": 1, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "200 ml yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "1/2 el gember [vers geraspt]", "ing": "gember", "qual": [], "prep": { "en": "freshly grated" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 tl ketoembar (gemalen koriander)", "ing": "ketoembar", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "1 mp kruidnagelpoeder", "ing": "kruidnagelpoeder", "qual": [], "confidence": 0.98 },
+        { "i": 6, "raw": "2 tl grof gemalen zwarte peper", "ing": "zwarte-peper", "qual": ["grove", "gemalen"], "confidence": 0.9 },
+        { "i": 7, "raw": "1 ui [grote stukken]", "ing": "ui", "qual": [], "prep": { "en": "large pieces" }, "confidence": 0.95 },
+        { "i": 8, "raw": "50 g cashewnoten", "ing": "cashewnoot", "qual": [], "confidence": 0.98 },
+        { "i": 9, "raw": "1/2 tl chilipoeder", "ing": "chilipoeder", "qual": [], "confidence": 0.98 },
+        { "i": 10, "raw": "1 tl kurkuma", "ing": "kurkuma", "qual": [], "confidence": 0.98 },
+        { "i": 11, "raw": "1 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gemarineerde-speklapjes-met-mie",
+      "name": { "en": "Marinated pork belly slices with noodles" },
+      "description": {
+        "nl": "Speklapjes die een dag marineren in bier en sojasaus, gepaneerd en gebakken, met roergebakken groenten en mie.",
+        "en": "Pork belly slices marinated for a day in beer and soy sauce, breaded and fried, with stir-fried vegetables and egg noodles."
+      },
+      "category": "wok-noedels",
+      "tags": ["wok", "wereld"],
+      "time": { "active": 40, "total": 1480 },
+      "steps": [
+        { "en": "Stir together the beer, soy sauce, pepper, bay leaf, garlic powder and ginger syrup and put the pork belly slices in it. Cover and leave to marinate in the fridge for 24 hours, turning regularly." },
+        { "en": "Take the pork belly slices out of the marinade and pat dry. Beat the egg in a deep plate, spread the flour on a flat plate and the breadcrumbs on another. Coat the slices first in the flour, then in the egg and finally in the breadcrumbs." },
+        { "en": "Heat oil in a frying pan and fry the pork belly slices for about 10 minutes until golden brown on both sides and cooked through." },
+        { "en": "Meanwhile, stir-fry the cabbage and pepper. Rinse the beansprouts briefly with boiling water and add them. Season the vegetables with soy sauce." },
+        { "en": "Prepare the egg noodles by soaking them briefly in boiling water and serve with the pork belly slices and vegetables." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 flesje bruin bier", "ing": "bier", "qual": ["bruine"], "confidence": 0.9 },
+        { "i": 1, "raw": "1 dl sojasaus", "ing": "sojasaus", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "1 laurierblaadje", "ing": "laurierblad", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "1 tl knoflookpoeder", "ing": "knoflookpoeder", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "2 el gembersiroop", "ing": "gembersiroop", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "4 magere speklapjes van ca. 100 g", "ing": "speklap", "qual": ["magere"], "confidence": 0.95 },
+        { "i": 6, "raw": "1 ei", "ing": "ei", "qual": [], "confidence": 0.98 },
+        { "i": 7, "raw": "4 el bloem", "ing": "bloem", "qual": [], "confidence": 0.98 },
+        { "i": 8, "raw": "5 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 0.98 },
+        { "i": 9, "raw": "1 Chinese kool [reepjes]", "ing": "chinese-kool", "qual": [], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 10, "raw": "1 groene paprika [reepjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 11, "raw": "1 bakje taugé", "ing": "tauge", "qual": [], "confidence": 0.98 },
+        { "i": 12, "raw": "1 dl sojasaus", "ing": "sojasaus", "qual": [], "confidence": 0.98 },
+        { "i": 13, "raw": "400 g eiermie", "ing": "eiermie", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:gerookte-zalmtaart",
+      "name": { "en": "Smoked salmon tart" },
+      "description": {
+        "nl": "Hartige taart van zelfgemaakt deeg met gerookte zalm, crème fraîche en bieslook.",
+        "en": "A savoury tart on homemade pastry with smoked salmon, crème fraîche and chives."
+      },
+      "category": "hartige-taart",
+      "tags": ["oven"],
+      "time": { "active": 30, "total": 175 },
+      "steps": [
+        { "en": "Sift the flour with a pinch of salt into a bowl. Add the butter and cut it into small pieces. Add about 3 tbsp of ice-cold water and quickly knead into a ball. Leave to rest in the fridge for 1 hour." },
+        { "en": "Roll out the pastry and line a buttered shallow tart tin. Prick holes in the base and leave to rest in the fridge for 30 minutes." },
+        { "en": "Line the pastry with baking paper and fill with baking beans. Bake the base for 10 minutes at 200 °C, remove the paper and beans and bake for about 5 minutes more." },
+        { "en": "Cut the salmon into strips. Beat the eggs with the crème fraîche, stir in the chives and season with salt and pepper to taste. Spread about 4 tbsp of the cream mixture over the pre-baked base, lay the salmon on top and spread the rest of the mixture over it. Smooth the top." },
+        { "en": "Bake the tart for 40 minutes at 175 °C until set and lightly browned." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "200 g bloem", "ing": "bloem", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "100 g boter", "ing": "boter", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "100 g gerookte zalm", "ing": "zalm", "qual": ["gerookte"], "confidence": 0.95 },
+        { "i": 3, "raw": "3 eieren", "ing": "ei", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "250 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "2 el bieslook [fijngehakt]", "ing": "bieslook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gesmoorde-kip-met-tomaat-en-kokos",
+      "name": { "en": "Braised chicken with tomato and coconut" },
+      "description": {
+        "nl": "Kippenbouten gestoofd in een milde currysaus van kokosmelk en tomaat met zoete aardappel.",
+        "en": "Chicken legs braised in a mild coconut and tomato curry sauce with sweet potato."
+      },
+      "category": "vlees",
+      "tags": ["wereld"],
+      "time": { "active": 25, "total": 70 },
+      "steps": [
+        { "en": "Remove the skin from the chicken legs and cut them in half at the joint so you have 4 thighs and 4 drumsticks." },
+        { "en": "Heat the oil in a casserole and gently fry the onion, garlic and sweet potato for about 5 minutes, stirring now and then. Stir in the curry paste and fry for 1 minute more." },
+        { "en": "Add the coconut milk and the tomatoes with their juice and bring to the boil, stirring. Put the chicken pieces in and make sure they are covered with sauce as much as possible." },
+        { "en": "Cover and let the chicken simmer gently for about 40 minutes until cooked through, turning now and then. Season with salt, pepper and coriander. Garnish with lime. Nice with rice and mangetout." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 uien [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "2 teentjes knoflook [gesnipperd]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 2, "raw": "400 g zoete aardappelen [blokjes]", "ing": "zoete-aardappel", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "4 kippenbouten", "ing": "kippenbout", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "3 el olie", "ing": "olie", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "2 el milde currypasta", "ing": "currypasta", "qual": ["milde"], "confidence": 0.95 },
+        { "i": 6, "raw": "4 dl kokosmelk", "ing": "kokosmelk", "qual": [], "confidence": 0.98 },
+        { "i": 7, "raw": "1 blik (400 g) tomatenblokjes", "ing": "tomatenblokjes", "qual": [], "confidence": 0.98 },
+        { "i": 8, "raw": "4 el koriander [gesnipperd]", "ing": "koriander", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.9 },
+        { "i": 9, "raw": "Partjes limoen of citroen (garnering)", "ing": "limoen", "qual": [], "confidence": 0.85 }
+      ]
+    },
+    {
+      "id": "b:gevuld-stokbrood",
+      "name": { "en": "Stuffed baguettes" },
+      "description": {
+        "nl": "Afbakstokbrood gevuld met gekruid gehakt, paprika, tomaat, kaas en bacon, uit de oven.",
+        "en": "Part-baked baguettes stuffed with seasoned mince, pepper, tomato, cheese and bacon, baked in the oven."
+      },
+      "category": "oven",
+      "tags": ["oven", "kids"],
+      "time": { "active": 15, "total": 35 },
+      "steps": [
+        { "en": "Cut a triangular wedge lengthways out of each baguette. Season the mince with salt, pepper and nutmeg. Divide the mince into four equal portions and fill the baguettes with it. Lay the pepper strips, tomato slices, cheese and bacon on top of the filled baguettes." },
+        { "en": "Bake the baguettes for about 20 minutes in a preheated oven at 200 °C." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 afbakstokbroden", "ing": "afbakstokbrood", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "400 g gehakt", "ing": "gehakt", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 rode paprika [reepjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 3, "raw": "100 g bacon", "ing": "bacon", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "100 g kaas [plakjes]", "ing": "kaas", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 5, "raw": "1 tomaat [plakjes]", "ing": "tomaat", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:gevulde-courgette-met-groente-en-kwark",
+      "name": { "en": "Stuffed courgettes with vegetables and quark" },
+      "description": {
+        "nl": "Uitgeholde courgettes gevuld met paprika, tomaat, kwark en kaas, goudbruin uit de oven.",
+        "en": "Hollowed-out courgettes filled with pepper, tomato, quark and cheese, baked until golden."
+      },
+      "category": "oven",
+      "tags": ["vegetarisch", "oven"],
+      "time": { "active": 35, "total": 90 },
+      "steps": [
+        { "en": "Sprinkle the cut surfaces of the courgettes with salt and leave for 30 minutes. Boil the courgettes for about 10 minutes until soft and pat them thoroughly dry. Carefully hollow out the courgettes and cut the flesh into small pieces." },
+        { "en": "Heat butter in a frying pan and fry the onion and pepper for about 10 minutes. Add the tomato and courgette flesh and fry for another 2 minutes. Season with salt, pepper, marjoram and garlic powder. Take off the heat." },
+        { "en": "Beat the egg with the quark and stir it through the vegetable mixture. Put the hollowed-out courgettes in a shallow ovenproof dish and spoon the filling into them. Sprinkle the cheese over the top.\nBake at 175 °C for about 25 minutes until golden brown." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 courgettes [gehalveerd]", "ing": "courgette", "qual": [], "prep": { "en": "halved" }, "confidence": 0.98 },
+        { "i": 1, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 gele paprika [kleine stukjes]", "ing": "paprika", "qual": ["gele"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 vleestomaat [stukjes, zonder vocht en zaadjes]", "ing": "vleestomaat", "qual": [], "prep": { "en": "small pieces, juice and seeds removed" }, "confidence": 0.95 },
+        { "i": 4, "raw": "½ tl majoraan", "ing": "majoraan", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "½ tl knoflookpoeder", "ing": "knoflookpoeder", "qual": [], "confidence": 0.98 },
+        { "i": 6, "raw": "1 ei", "ing": "ei", "qual": [], "confidence": 0.98 },
+        { "i": 7, "raw": "6 el magere kwark", "ing": "kwark", "qual": ["magere"], "confidence": 0.9 },
+        { "i": 8, "raw": "75 g geraspte belegen kaas", "ing": "kaas", "qual": ["geraspte", "belegen"], "confidence": 0.95 },
+        { "i": 9, "raw": "boter om in te bakken", "ing": "boter", "qual": [], "confidence": 0.9 },
+        { "i": 10, "raw": "zout en peper naar smaak", "ing": "zout-en-peper", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:gevulde-kip-met-bleekselderij-en-kerriesaus",
+      "name": { "en": "Stuffed chicken with celery and curry sauce" },
+      "description": {
+        "nl": "Hele kip gevuld met bleekselderij, appel, cashewnoten en spek, uit de oven met een kerriesaus.",
+        "en": "A whole chicken stuffed with celery, apple, cashew nuts and bacon, roasted and served with a curry sauce."
+      },
+      "category": "vlees",
+      "tags": ["oven", "feest"],
+      "time": { "active": 30, "total": 110 },
+      "steps": [
+        { "en": "Rinse the chicken inside and out and pat dry. Sprinkle with salt and pepper. Heat butter in a frying pan and gently fry the bacon lardons until the fat runs, then lift them out." },
+        { "en": "Add the chicken stock, scrape up the browned bits and pour into an ovenproof dish. Mix the celery, apple, cashew nuts and lardons and stuff the cavity of the chicken." },
+        { "en": "Stir half the curry powder into the kecap manis and brush the chicken with it. Cover with aluminium foil and roast for 1 hour at 200 °C. Remove the foil, pour the cooking juices into a saucepan, put the chicken back and let it brown lightly for 10 minutes." },
+        { "en": "Stir the crème fraîche and the rest of the curry powder into the cooking juices, bring to the boil and let it reduce for 5 minutes. Thicken the sauce with instant thickener if you like and serve separately with the chicken." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 braadkip (ca. 1,2 kg)", "ing": "braadkip", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "15 g boter", "ing": "boter", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "50 g spekblokjes", "ing": "spekblokjes", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "150 ml kippenbouillon (blokje)", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "3 stengels bleekselderij [smalle boogjes]", "ing": "bleekselderij", "qual": [], "prep": { "en": "thin crescents" }, "confidence": 0.95 },
+        { "i": 5, "raw": "1 appel [geschild, stukjes]", "ing": "appel", "qual": [], "prep": { "en": "peeled, cut into small pieces" }, "confidence": 0.95 },
+        { "i": 6, "raw": "25 g cashewnoten [grof gehakt]", "ing": "cashewnoot", "qual": [], "prep": { "en": "roughly chopped" }, "confidence": 0.95 },
+        { "i": 7, "raw": "1 el kerriepoeder", "ing": "kerrie", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "2 el ketjap manis", "ing": "ketjap-manis", "qual": [], "confidence": 0.98 },
+        { "i": 9, "raw": "125 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.98 },
+        { "i": 10, "raw": "1 el allesbinder", "ing": "allesbinder", "qual": [], "confidence": 0.98 },
+        { "i": 11, "raw": "zout en peper", "ing": "zout-en-peper", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:gnocchi-met-spinazie-en-walnoten",
+      "name": { "en": "Gnocchi with spinach and walnuts" },
+      "description": {
+        "nl": "Snelle gnocchi met gebakken walnoten, knoflook, verse spinazie en Parmezaanse kaas.",
+        "en": "Quick gnocchi with toasted walnuts, garlic, fresh spinach and Parmesan."
+      },
+      "category": "pasta",
+      "tags": ["vegetarisch", "snel"],
+      "time": { "active": 15, "total": 15 },
+      "steps": [
+        { "en": "Cook the gnocchi for 2 minutes, drain and keep some of the cooking water. Heat oil and butter in a large frying pan and fry the walnut pieces for 2 minutes. Add the garlic and fry for another 2 minutes." },
+        { "en": "Add the gnocchi, a little of the cooking water and the spinach. Heat, stirring, until the spinach wilts. Season with salt and pepper and sprinkle with Parmesan." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g gnocchi", "ing": "gnocchi", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "4 el walnoot [stukjes]", "ing": "walnoot", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 2, "raw": "2 teentjes knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.98 },
+        { "i": 3, "raw": "300 g verse spinazie", "ing": "spinazie", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 4, "raw": "Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "olie en boter om in te bakken", "ing": "olie-en-boter-om-in-te-bakken", "qual": [], "confidence": 0.98 },
+        { "i": 6, "raw": "zout en peper naar smaak", "ing": "zout-en-peper", "qual": [], "confidence": 0.98 }
+      ]
+    }
+  ]
+}

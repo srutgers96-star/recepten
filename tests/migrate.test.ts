@@ -1,18 +1,23 @@
-// The Recepten2 -> schema-2 migration, run in-process on the real source file.
+// The Recepten2 -> schema-2 migration, run in-process on the real source file, the real dictionary
+// and the committed LLM batches (data/llm/*.json, when present).
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { normalizeRecipe, recipeFingerprint } from '../src/domain/recipe-io';
-import { DATA_VERSION, findMainDish, migrate, type RecipesFile } from '../tools/migrate-from-recepten2.ts';
-import { validateSchema2 } from '../tools/validate-data.ts';
+import { DATA_VERSION, findMainDish, loadMigrationInputs, migrate, migrationStats, type RecipesFile } from '../tools/migrate-from-recepten2.ts';
+import { refsFromData, validateSchema2 } from '../tools/validate-data.ts';
 
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const SOURCE: unknown = JSON.parse(readFileSync(new URL('../data/source/recipes-recepten2.json', import.meta.url), 'utf8'));
 const GENERATED_AT = '2026-09-28T12:00:00.000Z';
-const file: RecipesFile = migrate(SOURCE, GENERATED_AT);
+const inputs = loadMigrationInputs(ROOT);
+const file: RecipesFile = migrate(SOURCE, GENERATED_AT, inputs);
 
 describe('migrate', () => {
   it('produces 196 recipes with unique builtin ids, sorted by name', () => {
     expect(file.schema).toBe(2);
     expect(file.dataVersion).toBe(DATA_VERSION);
+    expect(DATA_VERSION).toBe(2);
     expect(file.generatedAt).toBe(GENERATED_AT);
     expect(file.recipes).toHaveLength(196);
     const ids = new Set(file.recipes.map((r) => r.id));
@@ -34,7 +39,44 @@ describe('migrate', () => {
     }
     const headers = file.recipes.flatMap((r) => r.lines.filter((l) => l.kind === 'header'));
     expect(headers.length).toBeGreaterThan(0);
-    for (const h of headers) expect(h.raw.nl).toMatch(/:$/);
+    for (const h of headers) {
+      expect(h.raw.nl).toMatch(/:$/);
+      expect(h.ing).toBeUndefined();
+    }
+  });
+
+  it('parses every non-header line into a structured Line next to its raw text', () => {
+    for (const r of file.recipes) {
+      for (const l of r.lines) {
+        if (l.kind === 'header') continue;
+        expect(l.kind).toBe('line');
+        expect(l).toHaveProperty('qty');
+        expect(l).toHaveProperty('unit');
+        expect(l).toHaveProperty('ing');
+        expect(typeof l.name).toBe('string');
+        expect(l.confidence).toBeGreaterThanOrEqual(0);
+        expect(l.confidence).toBeLessThanOrEqual(1);
+        if (l.qty) expect(l.qty.min).toBeGreaterThan(0);
+        if (l.ing) expect(inputs.dict.get(l.ing)).toBeDefined();
+        if (l.unit) expect(inputs.dict.unit(l.unit)).toBeDefined();
+      }
+    }
+    const s = migrationStats(file);
+    expect(s.lines + s.headers).toBe(1900);
+    expect(s.resolved / s.lines).toBeGreaterThan(0.95);
+  });
+
+  it('parses the worked example of PLAN.md §5 with the real dictionary', () => {
+    const gratin = file.recipes.find((r) => r.id === 'b:aardappel-broccoli-gratin')!;
+    expect(gratin.lines[0]).toMatchObject({
+      raw: { nl: '400 g aardappelen [plakjes]' },
+      kind: 'line',
+      qty: { min: 400 },
+      unit: 'g',
+      ing: 'aardappel',
+      prep: { nl: 'plakjes', en: 'sliced' },
+    });
+    expect(gratin.lines[2]).toMatchObject({ qty: { min: 2 }, unit: null, ing: 'ei' });
   });
 
   it('keeps the second instructions paragraph of the Rendang (the stray "" key)', () => {
@@ -59,11 +101,11 @@ describe('migrate', () => {
   });
 
   it('is deterministic', () => {
-    expect(JSON.stringify(migrate(SOURCE, GENERATED_AT))).toBe(JSON.stringify(file));
+    expect(JSON.stringify(migrate(SOURCE, GENERATED_AT, inputs))).toBe(JSON.stringify(file));
   });
 
-  it('passes the schema-2 validator and normalizes to itself', () => {
-    const result = validateSchema2(JSON.parse(JSON.stringify(file)));
+  it('passes the schema-2 validator (with dictionary references) and normalizes to itself', () => {
+    const result = validateSchema2(JSON.parse(JSON.stringify(file)), refsFromData(inputs.dict.toData()));
     expect(result.errors).toEqual([]);
     expect(result.stats.recipes).toBe(196);
     for (const r of file.recipes.slice(0, 20)) {
@@ -73,7 +115,7 @@ describe('migrate', () => {
     }
   });
 
-  it('matches the committed data/recipes.json (run `npm run migrate` after changing the tools)', () => {
+  it('matches the committed data/recipes.json (run `npm run migrate` after changing the tools, the dictionary or a batch)', () => {
     const committed = JSON.parse(readFileSync(new URL('../data/recipes.json', import.meta.url), 'utf8')) as RecipesFile;
     expect(committed.dataVersion).toBe(file.dataVersion);
     expect(committed.recipes).toEqual(file.recipes);

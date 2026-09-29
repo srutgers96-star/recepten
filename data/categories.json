@@ -1,0 +1,13 @@
+[
+  { "id": "hartige-taart", "nl": "Hartige taart", "en": "Savoury pie", "order": 3 },
+  { "id": "oven", "nl": "Oven", "en": "Oven", "order": 9 },
+  { "id": "overig", "nl": "Overig", "en": "Other", "order": 11 },
+  { "id": "pasta", "nl": "Pasta", "en": "Pasta", "order": 4 },
+  { "id": "rijst", "nl": "Rijst", "en": "Rice", "order": 5 },
+  { "id": "salade", "nl": "Salade", "en": "Salad", "order": 2 },
+  { "id": "soep", "nl": "Soep", "en": "Soup", "order": 1 },
+  { "id": "stamppot", "nl": "Stamppot", "en": "Stamppot (Dutch mash)", "order": 8 },
+  { "id": "vis", "nl": "Vis", "en": "Fish", "order": 7 },
+  { "id": "vlees", "nl": "Vlees", "en": "Meat", "order": 6 },
+  { "id": "wok-noedels", "nl": "Wok & noedels", "en": "Wok & noodles", "order": 10 }
+]

@@ -1,0 +1,265 @@
+{
+  "batch": 19,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:tortellini-met-champignon-roomsaus",
+      "name": { "en": "Tortellini with mushroom cream sauce" },
+      "description": {
+        "nl": "Tortellini in een romige saus van champignons, knoflook, citroenrasp en Parmezaanse kaas.",
+        "en": "Tortellini in a creamy sauce of mushrooms, garlic, lemon zest and Parmesan."
+      },
+      "category": "pasta",
+      "tags": ["vegetarisch", "snel"],
+      "time": { "active": 15, "total": 20 },
+      "steps": [
+        { "en": "Cook the tortellini until done.\nMelt the butter in a medium pan and fry the mushrooms over a medium heat. Add the garlic, cream, lemon zest, freshly ground pepper and nutmeg. Cook for another 1 to 2 minutes over a low heat, stirring. Add the Parmesan and simmer gently for another 3 minutes." },
+        { "en": "Divide the tortellini between warm plates and gently stir the sauce through. Serve straight away." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "185 g kleine champignons [dunne plakjes]", "ing": "champignon", "qual": ["kleine"], "prep": { "en": "thinly sliced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "rasp van 1 kleine citroen", "ing": "citroen", "qual": ["kleine"], "confidence": 0.95 },
+        { "i": 2, "raw": "60 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 4, "raw": "3 dl room", "ing": "room", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "snufje nootmuskaat", "ing": "nootmuskaat", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "3 el geraspte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 7, "raw": "500 g tortellini", "ing": "tortellini", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:uientaart-met-kaas",
+      "name": { "en": "Onion tart with cheese" },
+      "description": {
+        "nl": "Hartige bladerdeegtaart met gebakken uienringen, tomaat, champignons en veel belegen kaas in een mosterd-eimengsel.",
+        "en": "Savoury puff-pastry tart with fried onion rings, tomato, mushrooms and plenty of mature cheese in a mustard and egg filling."
+      },
+      "category": "hartige-taart",
+      "tags": ["vegetarisch", "oven"],
+      "time": { "active": 30, "total": 85 },
+      "steps": [
+        { "en": "Lay out the puff pastry and let it thaw. Preheat the oven to 200 °C." },
+        { "en": "Skin the tomatoes and cut them into slices. Slice the mushrooms and sprinkle them with lemon juice." },
+        { "en": "Heat the oil in a frying pan and gently fry the onion rings for about 5 minutes. Take the onions out of the pan and fry the mushrooms for about 5 minutes in the same pan." },
+        { "en": "In a bowl, beat together the eggs, mustard, milk, nutmeg, salt and pepper." },
+        { "en": "Stack the sheets of puff pastry on top of each other and roll them out into a round on a floured worktop with a rolling pin. Line a greased tart tin with it and sprinkle with breadcrumbs. Scatter half of the grated cheese over the base, then the onion, tomato and mushrooms on top." },
+        { "en": "Pour the egg mixture over it and sprinkle the rest of the cheese on top. Bake the tart for 35 minutes." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "250 g belegen geraspte kaas", "ing": "kaas", "qual": ["belegen", "geraspte"], "confidence": 0.95 },
+        { "i": 1, "raw": "4 tomaten", "ing": "tomaat", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "3 grote uien [dunne ringen]", "ing": "ui", "qual": ["grote"], "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 3, "raw": "100 g champignons", "ing": "champignon", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "2 el citroensap", "ing": "citroensap", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "3 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "3 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "3 el grove Zaanse mosterd", "ing": "zaanse-mosterd", "qual": ["grove"], "confidence": 0.95 },
+        { "i": 8, "raw": "1 dl melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "nootmuskaat", "ing": "nootmuskaat", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "4 plakjes bladerdeeg", "ing": "bladerdeeg", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "2 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:varkenshaasje-met-kaastortellini",
+      "name": { "en": "Pork fillet with cheese tortellini" },
+      "description": {
+        "nl": "Gekruide plakjes varkenshaas met kaastortellini en een romige saus van melk, roomkaas en bakgember.",
+        "en": "Spiced slices of pork fillet with cheese tortellini and a creamy sauce of milk, cream cheese and candied ginger."
+      },
+      "category": "vlees",
+      "tags": ["snel"],
+      "time": { "active": 25, "total": 25 },
+      "steps": [
+        { "en": "Cook the tortellini until al dente.\nMeanwhile, cut the meat into slices of about 2 cm and rub them with the ground ginger, garlic powder, ground coriander, salt and pepper." },
+        { "en": "Heat the butter and brown the meat on both sides (for pink, about 2 minutes on each side). Take the meat out of the pan and keep it warm." },
+        { "en": "Pour the cooking butter out of the pan, all but 1 tbsp. Pour the milk into the pan and crumble the cream cheese over it. Let the cheese melt, stirring. Stir in the finely chopped candied ginger and season the sauce with salt and pepper." },
+        { "en": "Drain the tortellini well. Divide the pasta between the plates. Put the meat next to it and pour the sauce over the meat. Sprinkle with the chives." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g kaastortellini", "ing": "kaastortellini", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "400 g varkenshaas", "ing": "varkenshaas", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "½ tl gemberpoeder", "ing": "gemberpoeder", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "½ tl knoflookpoeder", "ing": "knoflookpoeder", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "½ tl ketoembar (gemalen koriander)", "ing": "ketoembar", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "75 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "2 dl melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "100 g verse roomkaas (Mon Chou of variant erop)", "ing": "roomkaas", "qual": ["verse"], "note": { "en": "Mon Chou or a similar full-fat cream cheese" }, "confidence": 0.95 },
+        { "i": 8, "raw": "1 el bakgember (gekonfijte gember)", "ing": "bakgember", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "1 el bieslook [fijngeknipt]", "ing": "bieslook", "qual": [], "prep": { "en": "finely snipped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:vegetarische-ramen",
+      "name": { "en": "Vegetarian ramen" },
+      "description": {
+        "nl": "Noedelsoep met krokant gebakken tofu, broccoli, paksoi, gekookt ei en taugé in groentebouillon.",
+        "en": "Noodle soup with crispy fried tofu, broccoli, pak choi, boiled egg and beansprouts in vegetable stock."
+      },
+      "category": "wok-noedels",
+      "tags": ["vegetarisch", "wereld", "wok"],
+      "time": { "active": 30, "total": 90 },
+      "steps": [
+        { "en": "Put a clean tea towel on a plate. Place the tofu on it and fold the edges of the towel over it. Put a heavy pan on top so that as much liquid as possible is pressed out. Leave for 1 hour." },
+        { "en": "Bring the water with the vegetable stock powder to the boil and cook the noodles in it for 4 minutes until done. Ladle out some of the stock and divide it between large bowls. Keep the rest of the stock warm with the lid on the pan.\nBlanch the broccoli until just tender." },
+        { "en": "Cut the tofu into 1 cm cubes. Heat a splash of oil in a wok and stir-fry the tofu over a high heat for 6 minutes until golden brown. Add the garlic and the turmeric to the tofu and deglaze with the soy sauce." },
+        { "en": "Boil the eggs to your liking. Cut the tomatoes into wedges, remove the seeds and then dice the tomatoes." },
+        { "en": "Fry the pak choi with the ginger for about 2 minutes over a high heat. Spoon the pak choi and the broccoli onto the noodles in the bowls and pour the rest of the stock over them." },
+        { "en": "Top with the tofu and crispy fried onions, spring onion, tomato, beansprouts, the celery leaf and the boiled egg." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "375 g tofu", "ing": "tofu", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "300 g ramen noedels", "ing": "ramen-noedels", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "2 el groentebouillon-poeder", "ing": "groentebouillonpoeder", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 broccoli [roosjes]", "ing": "broccoli", "qual": [], "prep": { "en": "florets" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 teentjes knoflook [fijngesneden]", "ing": "knoflook", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 0.95 },
+        { "i": 5, "raw": "1 tl kurkuma", "ing": "kurkuma", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "2 el sojasaus", "ing": "sojasaus", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "3 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "2 tomaten", "ing": "tomaat", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "1 paksoi [stukken]", "ing": "paksoi", "qual": [], "prep": { "en": "pieces" }, "confidence": 0.95 },
+        { "i": 10, "raw": "15 g gember [geraspt]", "ing": "gember", "qual": [], "prep": { "en": "grated" }, "confidence": 0.95 },
+        { "i": 11, "raw": "125 g taugé", "ing": "tauge", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "1 bos lente-uitjes [ringetjes]", "ing": "bosui", "qual": [], "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 13, "raw": "2 el gebakken uitjes", "ing": "gebakken-uitjes", "qual": [], "confidence": 0.95 },
+        { "i": 14, "raw": "1 bosjes selderij [fijn gesneden]", "ing": "selderij", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:vis-rijstschotel",
+      "name": { "en": "Fish and rice bake" },
+      "description": {
+        "nl": "Ovenschotel van gele rijst met schelvis in tomatensaus, doperwten en groene olijven, onder een korstje van yoghurt, ei en kaas.",
+        "en": "Baked dish of yellow rice with haddock in tomato sauce, peas and green olives, under a crust of yoghurt, egg and cheese."
+      },
+      "category": "vis",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 60 },
+      "steps": [
+        { "en": "Gently fry the onion, pepper and garlic for 4 minutes in a casserole pan." },
+        { "en": "Add the tomatoes with their juice and mash them a little. Stir in the fish and peas and let it reduce for 7 minutes without a lid. Stir half of the olives through the fish mixture. Season with pepper and salt to taste." },
+        { "en": "Spoon half of the rice into the ovenproof dish, spread the fish mixture over it and cover with the rest of the rice. Beat the egg, stir in the yoghurt and pour the mixture over the rice. Mix the breadcrumbs and cheese together and sprinkle over the dish." },
+        { "en": "Bake at 200 °C for 30 minutes until light brown. Garnish with the rest of the olives." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "½ tl kurkuma", "ing": "kurkuma", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 groene paprika [stukjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 teentjes knoflook [fijngehakt]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 5, "raw": "400 g schelvisfilet [stukken van 2 cm]", "ing": "schelvisfilet", "qual": [], "prep": { "en": "2 cm pieces" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 blik gepelde tomaten", "ing": "tomaten-uit-blik", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "200 g diepvries doperwten", "ing": "doperwt", "qual": ["diepvries"], "confidence": 0.95 },
+        { "i": 8, "raw": "20 pitloze groene olijven [gehalveerd]", "ing": "olijf", "qual": ["pitloze", "groene"], "prep": { "en": "halved" }, "confidence": 0.95 },
+        { "i": 9, "raw": "1 ei", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "100 ml yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "1 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "25 g geraspte belegen kaas", "ing": "kaas", "qual": ["geraspte", "belegen"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:visje-bij-de-thee",
+      "name": { "en": "Teatime tuna mash" },
+      "description": {
+        "nl": "Gestampte aardappelen met tonijn, peterselie, knoflook en mayonaise: in 25 minuten op tafel.",
+        "en": "Mashed potatoes with tuna, parsley, garlic and mayonnaise, on the table in 25 minutes."
+      },
+      "category": "stamppot",
+      "tags": ["snel", "kids"],
+      "time": { "active": 10, "total": 25 },
+      "steps": [
+        { "en": "Boil the potatoes for 20 minutes.\nMash the tuna, parsley, garlic and mayonnaise through them." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1½ kg aardappelen", "ing": "aardappel", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 blikjes tonijn", "ing": "tonijn", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "5 g verse peterselie [fijngehakt]", "ing": "peterselie", "qual": ["verse"], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 4, "raw": "mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:volkorenmacaroni-met-tahoe",
+      "name": { "en": "Wholemeal macaroni with tofu" },
+      "description": {
+        "nl": "Volkorenmacaroni met in ketjap gebakken tahoe, prei, wortel, een romige kruidenkaassaus en geroosterde hazelnoten.",
+        "en": "Wholemeal macaroni with kecap-fried tofu, leek, carrot, a creamy herb-cheese sauce and toasted hazelnuts."
+      },
+      "category": "pasta",
+      "tags": ["vegetarisch", "snel"],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Cut the tofu into small cubes and sprinkle the kecap manis over it." },
+        { "en": "Roughly chop the hazelnuts and toast them in a dry frying pan until golden brown. Cook the macaroni in plenty of boiling salted water until al dente." },
+        { "en": "Meanwhile, heat half of the oil in a non-stick frying pan and quickly fry the tofu with the kecap manis until brown all over. Take the tofu out of the pan. Put the rest of the oil in the pan and fry the leek and the carrot for about 3 minutes, stirring. Take the vegetables out of the pan. Heat the crème fraîche in the same pan and stir in the grated cheese." },
+        { "en": "Drain the macaroni well in a colander. Spoon the macaroni into a dish and mix in the cheese sauce, the tofu and the vegetables, one after the other. Season with salt and pepper to taste and sprinkle the toasted hazelnuts over the top." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "100 g tahoe", "ing": "tofu", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "3 el ketjap manis", "ing": "ketjap-manis", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "50 g blanke hazelnoten", "ing": "hazelnoot", "qual": ["blanke"], "confidence": 0.95 },
+        { "i": 3, "raw": "150 g volkoren macaroni", "ing": "macaroni", "qual": ["volkoren"], "confidence": 0.95 },
+        { "i": 4, "raw": "3 el zonnebloemolie", "ing": "zonnebloemolie", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "150 g prei [halve ringen]", "ing": "prei", "qual": [], "prep": { "en": "half rings" }, "confidence": 0.95 },
+        { "i": 6, "raw": "150 g wortel [geraspt]", "ing": "wortel", "qual": [], "prep": { "en": "grated" }, "confidence": 0.95 },
+        { "i": 7, "raw": "1 bekertje crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "75 g geraspte kruidenkaas", "ing": "kruidenkaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:warme-pastasalade",
+      "name": { "en": "Warm pasta salad" },
+      "description": {
+        "nl": "Warme farfalle met zongedroogde tomaat, bosui, rucola en komkommer in een dressing van olijfolie, wijnazijn en dijonmosterd.",
+        "en": "Warm farfalle with sun-dried tomato, spring onion, rocket and cucumber in an olive oil, wine vinegar and Dijon mustard dressing."
+      },
+      "category": "salade",
+      "tags": ["vegetarisch", "snel", "zomer"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "For the dressing, mix the olive oil, sugar, vinegar and mustard in a bowl. Season with salt and pepper and add the basil." },
+        { "en": "Bring a large pan of lightly salted water to the boil. Add the pasta, bring back to the boil and cook the pasta for 8-10 minutes, or until al dente. Drain the pasta and tip it into a bowl. Add the dressing and stir well." },
+        { "en": "Add the sun-dried tomatoes, spring onions, rocket and cucumber. Season with salt and pepper and mix well. Sprinkle with the Parmesan and serve warm." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "225 g farfalle (of een andere pastasoort)", "ing": "farfalle", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "6 stukken zongedroogde tomaten in olie [fijngesneden]", "ing": "zongedroogde-tomaat", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "4 bosuitjes [fijngesneden]", "ing": "bosui", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "50 g rucola [in stukjes gescheurd]", "ing": "rucola", "qual": [], "prep": { "en": "torn into small pieces" }, "confidence": 0.95 },
+        { "i": 4, "raw": "½ komkommer [zaadjes verwijderd; blokjes]", "ing": "komkommer", "qual": [], "prep": { "en": "seeds removed; diced" }, "confidence": 0.95 },
+        { "i": 5, "raw": "2 el versgeraspte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["versgeraspte"], "confidence": 0.95 },
+        { "i": 7, "raw": "4 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "½ tl fijne kristalsuiker", "ing": "suiker", "qual": ["fijne"], "confidence": 0.9 },
+        { "i": 9, "raw": "1 el witte wijnazijn", "ing": "wijnazijn", "qual": ["witte"], "confidence": 0.95 },
+        { "i": 10, "raw": "1 tl dijonmosterd", "ing": "dijonmosterd", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "4 blaadjes basilicum [fijngesneden]", "ing": "basilicum", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:witlof-met-kaas-en-vissticks",
+      "name": { "en": "Chicory with cheese and fish fingers" },
+      "description": {
+        "nl": "Witlof in ham, gegratineerd met kaas, met gekookte aardappelen en gebakken vissticks.",
+        "en": "Ham-wrapped chicory gratinated with cheese, served with boiled potatoes and fried fish fingers."
+      },
+      "category": "oven",
+      "tags": ["oven", "kids"],
+      "time": { "active": 25, "total": 40 },
+      "steps": [
+        { "en": "Peel the potatoes and boil until done.\nMeanwhile, halve the chicory and cut out the bitter core. Boil the chicory in salted water for about 5 minutes. Meanwhile, preheat the oven to 200 °C." },
+        { "en": "Drain the chicory in a colander and let it cool a little. Wrap each chicory half in a slice of ham and lay them side by side in an ovenproof dish." },
+        { "en": "Sprinkle the grated cheese over it and put the dish in the oven until the cheese has melted and is lightly browned." },
+        { "en": "Meanwhile, fry the fish fingers in a frying pan with plenty of butter until cooked through." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g witlof", "ing": "witlof", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "150 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 2, "raw": "100 g achterham in plakken", "ing": "ham", "qual": [], "confidence": 0.9 },
+        { "i": 3, "raw": "20 vissticks", "ing": "visstick", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "aardappelen", "ing": "aardappel", "qual": [], "confidence": 0.95 }
+      ]
+    }
+  ]
+}

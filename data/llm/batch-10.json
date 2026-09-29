@@ -1,0 +1,305 @@
+{
+  "batch": 10,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:macaroni-met-spinazie-en-kabeljauw",
+      "name": { "en": "Macaroni with spinach and cod" },
+      "description": {
+        "nl": "Ovenschotel van pasta, romige spinazie en in witte wijn gegaarde kabeljauw onder een korstje kaas.",
+        "en": "Pasta bake with creamy spinach and cod poached in white wine under a cheese crust."
+      },
+      "category": "pasta",
+      "tags": ["oven"],
+      "time": { "active": 30, "total": 45 },
+      "steps": [
+        { "en": "Preheat the oven to 200°C. Sprinkle the fish with the lemon juice and season with salt and pepper. Butter an ovenproof dish, put the fish in it and dot the rest of the butter over the fish in small knobs. Pour in the wine. Cover the dish with a sheet of aluminium foil. Cook the fish in the middle of the oven for about 15 minutes until done." },
+        { "en": "Meanwhile cook the macaroni until al dente. Squeeze as much liquid as possible out of the spinach and heat it through with 4 tbsp of the cream." },
+        { "en": "Season to taste with salt, pepper and a little nutmeg. Drain the macaroni well and spoon the pasta into an ovenproof dish." },
+        { "en": "Stir in 4 tbsp of the cream and spread the spinach over it. Take the fish out of the oven and lay it on the spinach." },
+        { "en": "Pour the cooking liquid from the fish into a saucepan and bring to the boil. Stir the cornflour into the rest of the cream and pour it into the cooking liquid, stirring all the time. Pour the sauce over the fish and spinach in the dish and sprinkle the grated cheese on top." },
+        { "en": "Put the dish under a preheated grill for about 5 minutes until golden brown. Garnish with the lemon." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "kabeljauwfilet", "qual": [], "confidence": 1 },
+        { "i": 1, "ing": "citroensap", "qual": [], "confidence": 1 },
+        { "i": 2, "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 3, "ing": "wijn", "qual": ["witte"], "confidence": 1 },
+        { "i": 4, "ing": "fusilli", "qual": [], "confidence": 0.9 },
+        { "i": 5, "ing": "diepvriesspinazie", "qual": [], "confidence": 1 },
+        { "i": 6, "ing": "slagroom", "qual": [], "confidence": 1 },
+        { "i": 7, "ing": "nootmuskaat", "qual": [], "confidence": 1 },
+        { "i": 8, "ing": "maizena", "qual": [], "confidence": 1 },
+        { "i": 9, "ing": "kaas", "qual": ["geraspte"], "confidence": 1 },
+        { "i": 10, "ing": "citroen", "qual": [], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:macaroni-met-tonijn-en-pesto",
+      "name": { "en": "Macaroni with tuna and pesto" },
+      "description": {
+        "nl": "Snelle pasta met tonijn uit blik, rode pesto en kappertjes.",
+        "en": "Quick pasta with tinned tuna, red pesto and capers."
+      },
+      "category": "pasta",
+      "tags": ["snel"],
+      "time": { "active": 15, "total": 20 },
+      "steps": [
+        { "en": "Cook the macaroni in plenty of salted water until done. Drain the tuna and break the fish into pieces." },
+        { "en": "Mix the tuna, pesto and capers well through the drained macaroni and heat everything through thoroughly." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "macaroni", "qual": [], "confidence": 1 },
+        { "i": 1, "ing": "tonijn-in-water", "qual": [], "confidence": 1 },
+        { "i": 2, "ing": "pesto", "qual": ["rode"], "confidence": 1 },
+        { "i": 3, "ing": "kappertjes", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:macaroni-tonijnschotel",
+      "name": { "en": "Macaroni and tuna bake" },
+      "description": {
+        "nl": "Ovenschotel van macaroni, tonijn, courgette en tomaat onder een knapperig laagje kaas en paneermeel.",
+        "en": "Macaroni bake with tuna, courgette and tomato under a crisp topping of cheese and breadcrumbs."
+      },
+      "category": "pasta",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 60 },
+      "steps": [
+        { "en": "Cook the macaroni according to the packet instructions. Meanwhile drain the tuna and break it into small pieces. Heat half of the butter in a frying pan and fry the onion and courgette for 5 minutes, stirring." },
+        { "en": "Drain the macaroni well in a colander. Mix the macaroni with the onion and courgette mixture, the crème fraîche, the tuna and the capers." },
+        { "en": "Season to taste with salt and pepper. Layer the macaroni and the tomato slices, sprinkle with a little of the herb mix and finish with a layer of macaroni." },
+        { "en": "Mix the breadcrumbs and cheese together and sprinkle over the bake. Dot the rest of the butter over the top.\nBake for 30 minutes at 200 °C until lightly browned." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "macaroni", "qual": [], "confidence": 1 },
+        { "i": 1, "ing": "tonijn", "qual": [], "confidence": 1 },
+        { "i": 2, "ing": "vleestomaat", "qual": [], "prep": { "en": "skinned and sliced" }, "confidence": 1 },
+        { "i": 3, "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 4, "ing": "courgette", "qual": ["kleine"], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 5, "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 6, "ing": "creme-fraiche", "qual": [], "confidence": 1 },
+        { "i": 7, "ing": "kappertjes", "qual": [], "confidence": 1 },
+        { "i": 8, "ing": "italiaanse-kruiden", "qual": [], "confidence": 1 },
+        { "i": 9, "ing": "paneermeel", "qual": [], "confidence": 1 },
+        { "i": 10, "ing": "kaas", "qual": ["geraspte", "belegen"], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:mais-gehakt-salami-met-gebakken-aardappeltjes",
+      "name": { "en": "Sweetcorn, mince and salami bake with fried potatoes" },
+      "description": {
+        "nl": "Ovenschotel van gekruid gehakt met mais, salami, tomaat en kaas, met gebakken aardappeltjes erbij.",
+        "en": "Bake of seasoned mince with sweetcorn, salami, tomato and cheese, served with fried potatoes."
+      },
+      "category": "oven",
+      "tags": ["oven", "kids"],
+      "time": { "active": 25, "total": 45 },
+      "steps": [
+        { "en": "Fry the onion and the mince in a pan until the mince is crumbly and no longer pink. Season the mince with salt, pepper and cinnamon. Mix the mince with the sweetcorn.\nSlice the tomatoes." },
+        { "en": "Put the mince and sweetcorn mixture in an ovenproof dish. Cover the mixture with the slices of salami. Lay the tomatoes on top and sprinkle with oregano and grated cheese. Bake the dish in the oven at 200 °C for 15 to 20 minutes until the tomatoes are cooked." },
+        { "en": "Meanwhile make a pan of fried potatoes." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "gehakt", "qual": [], "confidence": 1 },
+        { "i": 1, "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 2, "ing": "kaneel", "qual": [], "confidence": 1 },
+        { "i": 3, "ing": "salami", "qual": [], "prep": { "en": "small quarters" }, "confidence": 1 },
+        { "i": 4, "ing": "mais", "qual": [], "confidence": 1 },
+        { "i": 5, "ing": "tomaat", "qual": [], "confidence": 1 },
+        { "i": 6, "ing": "kaas", "qual": ["geraspte"], "confidence": 1 },
+        { "i": 7, "ing": "oregano", "qual": [], "confidence": 1 },
+        { "i": 8, "ing": "aardappel", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:maispannenkoekjes-met-pinda-s",
+      "name": { "en": "Sweetcorn fritters with peanuts" },
+      "description": {
+        "nl": "Kleine hartige koekjes van gepureerde mais, pinda's, gember en komijn, krokant gebakken.",
+        "en": "Small savoury fritters of blended sweetcorn, peanuts, ginger and cumin, fried until crisp."
+      },
+      "category": "overig",
+      "tags": ["vegetarisch", "wereld", "snel"],
+      "time": { "active": 25, "total": 25 },
+      "steps": [
+        { "en": "Blend the sweetcorn with the peanuts, spring onions, ginger, garlic and cumin in a blender or food processor. Tip into a bowl. Add the egg and rice flour and stir well." },
+        { "en": "Heat the oil. Drop tablespoons of the mixture into the pan and flatten them slightly. Fry the fritters over a medium heat until golden brown on both sides. Drain on kitchen paper." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "mais", "qual": [], "confidence": 1 },
+        { "i": 1, "ing": "pinda", "qual": ["geroosterde"], "confidence": 1 },
+        { "i": 2, "ing": "bosui", "qual": [], "confidence": 1 },
+        { "i": 3, "ing": "gember", "qual": ["verse"], "prep": { "en": "grated" }, "confidence": 1 },
+        { "i": 4, "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 1 },
+        { "i": 5, "ing": "komijn", "qual": [], "confidence": 0.95 },
+        { "i": 6, "ing": "ei", "qual": [], "prep": { "en": "beaten" }, "confidence": 1 },
+        { "i": 7, "ing": "rijstmeel", "qual": [], "confidence": 0.95 },
+        { "i": 8, "ing": "arachideolie", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:makreelsalade",
+      "name": { "en": "Mackerel salad" },
+      "description": {
+        "nl": "Frisse salade van gestoomde makreel, appel, augurk en rode ui met een yoghurt-mosterddressing.",
+        "en": "Fresh salad of steamed mackerel, apple, gherkin and red onion with a yoghurt and mustard dressing."
+      },
+      "category": "salade",
+      "tags": ["snel", "zomer"],
+      "time": { "active": 20, "total": 20 },
+      "steps": [
+        { "en": "Sprinkle the lemon juice over the apple cubes. Gently mix the mackerel, apple, onion and gherkin slices together in a bowl." },
+        { "en": "Make a dressing by mixing the yoghurt with the gherkin liquid, the mustard and the caraway seeds. Season to taste with salt and pepper." },
+        { "en": "Arrange the washed lettuce leaves on a serving dish and spread the fish mixture over them. Just before serving, pour the dressing over and garnish with the strips of pepper and gherkin." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "makreel", "qual": ["gestoomde"], "prep": { "en": "skin and bones removed, small pieces" }, "confidence": 1 },
+        { "i": 1, "ing": "appel", "qual": ["rode"], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 2, "ing": "appel", "qual": ["groene"], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 3, "ing": "citroensap", "qual": [], "confidence": 1 },
+        { "i": 4, "ing": "ui", "qual": ["rode"], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 5, "ing": "augurk", "qual": ["kleine"], "prep": { "en": "5 sliced, 1 in strips" }, "confidence": 1 },
+        { "i": 6, "ing": "yoghurt", "qual": [], "confidence": 1 },
+        { "i": 7, "ing": "augurkennat", "qual": [], "confidence": 1 },
+        { "i": 8, "ing": "mosterd", "qual": [], "confidence": 1 },
+        { "i": 9, "ing": "karwijzaad", "qual": [], "confidence": 1 },
+        { "i": 10, "ing": "paprika", "qual": ["rode"], "prep": { "en": "strips" }, "confidence": 1 },
+        { "i": 11, "ing": "sla", "qual": ["enkele"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:mexicaanse-bonenschotel",
+      "name": { "en": "Mexican bean bake" },
+      "description": {
+        "nl": "Vegetarische ovenschotel van bruine bonen, mais en paprika onder een laag zure room, kaas en tortillachips.",
+        "en": "Vegetarian bake of brown beans, sweetcorn and pepper under a topping of soured cream, cheese and tortilla chips."
+      },
+      "category": "oven",
+      "tags": ["vegetarisch", "oven", "wereld"],
+      "time": { "active": 20, "total": 55 },
+      "steps": [
+        { "en": "Heat some butter in a frying pan and soften the onions and the pepper for about 5 minutes. Meanwhile drain the beans in a colander. Mix the beans and the onion and pepper mixture together with 4 tbsp of the ketchup." },
+        { "en": "Spoon half of the bean mixture into a large ovenproof dish. Drain the sweetcorn and stir it through the beans in the dish. Spoon the rest of the bean mixture on top." },
+        { "en": "Mix the soured cream, the rest of the ketchup, half of the grated cheese and the seasoning mix together. Coarsely crumble half of the tortilla chips and stir them into the soured cream mixture." },
+        { "en": "Spread the mixture over the beans, put the rest of the tortilla chips on top and sprinkle with the rest of the grated cheese.\nBake for 30 minutes at 200 °C." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "paprika", "qual": ["rode"], "prep": { "en": "small pieces" }, "confidence": 1 },
+        { "i": 1, "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 2, "ing": "bruine-boon", "qual": [], "confidence": 0.95 },
+        { "i": 3, "ing": "ketchup", "qual": [], "confidence": 1 },
+        { "i": 4, "ing": "mais", "qual": [], "confidence": 1 },
+        { "i": 5, "ing": "zure-room", "qual": [], "confidence": 1 },
+        { "i": 6, "ing": "kaas", "qual": ["geraspte", "oude"], "confidence": 1 },
+        { "i": 7, "ing": "tortilla-chips", "qual": [], "confidence": 1 },
+        { "i": 8, "ing": "taco-kruidenmix", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:mexicaanse-ovenschotel-met-zoete-aardappel",
+      "name": { "en": "Mexican sweet potato bake" },
+      "description": {
+        "nl": "Ovenschotel van cajunkip, zoete aardappel, bonen en mais, afgemaakt met avocado, sla en crème fraîche.",
+        "en": "Bake of Cajun chicken, sweet potato, beans and sweetcorn, finished with avocado, salad leaves and crème fraîche."
+      },
+      "category": "oven",
+      "tags": ["oven", "wereld", "vega-optie"],
+      "time": { "active": 25, "total": 50 },
+      "steps": [
+        { "en": "Grease an ovenproof dish. Season the chicken cubes with a little of the Cajun seasoning and put them in the dish with all the vegetables." },
+        { "en": "Add the olive oil and the spices and toss everything well. Sprinkle the grated Cheddar over the dish.\nBake for 20 minutes at 200 °C." },
+        { "en": "Scatter the spring onion, avocado and salad leaves over the hot ingredients. Spoon the crème fraîche over the dish, sprinkle with parsley and serve straight away." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "kipfilet", "qual": [], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 1, "ing": "cajunkruiden", "qual": [], "confidence": 1 },
+        { "i": 2, "ing": "zoete-aardappel", "qual": [], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 3, "ing": "paprika", "qual": ["rode"], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 4, "ing": "courgette", "qual": [], "prep": { "en": "sliced" }, "confidence": 1 },
+        { "i": 5, "ing": "mais", "qual": [], "confidence": 0.9 },
+        { "i": 6, "ing": "zwarte-boon", "qual": [], "confidence": 0.9 },
+        { "i": 7, "ing": "olijfolie", "qual": [], "confidence": 1 },
+        { "i": 8, "ing": "paprikapoeder", "qual": [], "confidence": 1 },
+        { "i": 9, "ing": "komijn", "qual": [], "confidence": 1 },
+        { "i": 10, "ing": "cayennepeper", "qual": [], "confidence": 1 },
+        { "i": 11, "ing": "cheddar", "qual": ["geraspte"], "confidence": 1 },
+        { "i": 12, "ing": "bosui", "qual": [], "prep": { "en": "rings" }, "confidence": 1 },
+        { "i": 13, "ing": "avocado", "qual": [], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 14, "ing": "sla", "qual": ["gemengde"], "confidence": 0.85 },
+        { "i": 15, "ing": "creme-fraiche", "qual": [], "confidence": 1 },
+        { "i": 16, "ing": "peterselie", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:miesalade-met-rundvlees",
+      "name": { "en": "Noodle salad with beef" },
+      "description": {
+        "nl": "Aziatische salade van gebakken biefstuk, knapperige groenten en munt op roergebakken Hokkien-mie met een zoetzure dressing.",
+        "en": "Asian salad of seared steak, crunchy vegetables and mint on stir-fried Hokkien noodles with a sweet and sour dressing."
+      },
+      "category": "wok-noedels",
+      "tags": ["wok", "wereld", "zomer"],
+      "time": { "active": 35, "total": 35 },
+      "steps": [
+        { "en": "Mix the oil, oyster sauce, curry powder and brown sugar in a bowl. Heat a greased frying pan over a medium-high heat and sear the meat for 6-8 minutes. Turn the meat now and then and pour half of the sauce over it. Take it out of the pan." },
+        { "en": "For the dressing, mix all the ingredients in a small bowl." },
+        { "en": "Put the cucumber, onion, pepper and chilli, mint and nuts in a large bowl. Slice the meat thinly and add it to the bowl. Add the dressing and toss everything well." },
+        { "en": "Put the noodles in the pan and stir-fry them for 1-2 minutes over a high heat. Add the remaining sauce and stir-fry the noodles until done. Divide them between the plates and put the salad on top. Serve immediately." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "biefstuk", "qual": [], "confidence": 1 },
+        { "i": 1, "ing": "arachideolie", "qual": [], "confidence": 1 },
+        { "i": 2, "ing": "oestersaus", "qual": [], "confidence": 1 },
+        { "i": 3, "ing": "kerrie", "qual": ["milde"], "confidence": 1 },
+        { "i": 4, "ing": "suiker", "qual": ["bruine"], "confidence": 1 },
+        { "i": 5, "ing": "komkommer", "qual": [], "prep": { "en": "thinly sliced" }, "confidence": 1 },
+        { "i": 6, "ing": "ui", "qual": ["rode"], "prep": { "en": "rings" }, "confidence": 1 },
+        { "i": 7, "ing": "paprika", "qual": ["rode"], "prep": { "en": "thin strips" }, "confidence": 1 },
+        { "i": 8, "ing": "rode-peper", "qual": [], "prep": { "en": "deseeded and finely diced" }, "confidence": 1 },
+        { "i": 9, "ing": "munt", "qual": ["verse"], "prep": { "en": "chopped" }, "confidence": 1 },
+        { "i": 10, "ing": "pinda", "qual": ["ongezouten"], "prep": { "en": "chopped" }, "confidence": 0.7 },
+        { "i": 11, "ing": "hokkien-mie", "qual": [], "confidence": 1 },
+        { "i": 13, "ing": "rijstazijn", "qual": [], "confidence": 1 },
+        { "i": 14, "ing": "vissaus", "qual": [], "confidence": 1 },
+        { "i": 15, "ing": "basterdsuiker", "qual": [], "confidence": 1 },
+        { "i": 16, "ing": "gember", "qual": ["verse"], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 17, "ing": "rode-peper", "qual": [], "prep": { "en": "deseeded and finely diced" }, "confidence": 1 },
+        { "i": 18, "ing": "koriander", "qual": ["verse"], "prep": { "en": "chopped" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:moussaka",
+      "name": { "en": "Moussaka" },
+      "description": {
+        "nl": "Griekse ovenschotel van aubergine, aardappel en gekruid rundergehakt onder een kaas-bechamelsaus.",
+        "en": "Greek bake of aubergine, potato and spiced beef mince under a cheesy béchamel sauce."
+      },
+      "category": "oven",
+      "tags": ["oven", "wereld", "winter"],
+      "time": { "active": 45, "total": 90 },
+      "steps": [
+        { "en": "Boil the potatoes for about 10 minutes. Fry the aubergine in oil until brown. Spread the aubergine and the potato over the bottom of an ovenproof dish." },
+        { "en": "Soften the onion and the garlic in the rest of the oil. Add the mince and fry until crumbly and no longer pink. Stir in the tomato, wine, cinnamon, oregano, salt and pepper. Simmer uncovered for about 30 minutes until the liquid has evaporated. Make a thick cheese béchamel sauce with the butter, flour, milk and cheese. Season to taste with salt and pepper." },
+        { "en": "Beat 1 egg and pour it over the potatoes and aubergine. Spread the mince mixture over it and smooth the top. Beat the other two eggs and stir them into the cooled cheese sauce. Spread the sauce over the mince mixture and sprinkle with the rest of the grated cheese.\nBake for 30 minutes at 200 °C until done." }
+      ],
+      "lines": [
+        { "i": 0, "ing": "aardappel", "qual": [], "prep": { "en": "slices" }, "confidence": 1 },
+        { "i": 1, "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 2, "ing": "knoflook", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 3, "ing": "aubergine", "qual": ["grote"], "prep": { "en": "sliced" }, "confidence": 1 },
+        { "i": 4, "ing": "tomaat", "qual": [], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 5, "ing": "rundergehakt", "qual": [], "confidence": 1 },
+        { "i": 6, "ing": "wijn", "qual": ["rode"], "confidence": 1 },
+        { "i": 7, "ing": "kaneel", "qual": [], "confidence": 1 },
+        { "i": 8, "ing": "oregano", "qual": [], "confidence": 1 },
+        { "i": 9, "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 10, "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 11, "ing": "melk", "qual": [], "confidence": 1 },
+        { "i": 12, "ing": "kaas", "qual": ["geraspte", "belegen"], "confidence": 1 },
+        { "i": 13, "ing": "ei", "qual": [], "confidence": 1 }
+      ]
+    }
+  ]
+}

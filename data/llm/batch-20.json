@@ -1,0 +1,271 @@
+{
+  "batch": 20,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:witlofschotel-uit-de-oven",
+      "name": { "en": "Chicory bake with ham and cheese" },
+      "description": {
+        "nl": "Gekookte witlof gewikkeld in achterham, onder een kaassaus gegratineerd in de oven.",
+        "en": "Boiled chicory wrapped in ham, baked under a cheese sauce until golden."
+      },
+      "category": "oven",
+      "tags": ["oven", "winter"],
+      "time": { "active": 25, "total": 55 },
+      "steps": [
+        { "en": "Halve the chicory and cut out the bitter core. Boil the chicory for about 5 minutes in salted water. Drain the chicory in a colander and let it cool a little. Wrap each chicory half in a slice of ham and lay them side by side in an ovenproof dish." },
+        { "en": "Cheese sauce: melt 30 g butter in a small saucepan, add 30 g flour, then add the milk a splash at a time, bringing it to the boil after each splash, until you have a smooth sauce." },
+        { "en": "Then add 150 g of the cheese, with white pepper and salt to taste. Pour the sauce over the wrapped chicory in the dish and sprinkle the rest of the grated cheese and, if you like, some breadcrumbs over the top." },
+        { "en": "Put the dish in the oven at 200 °C for 20 to 30 minutes, until the cheese has melted and is lightly browned." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g witlof", "ing": "witlof", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "200 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 2, "raw": "200 g achterham in plakken", "ing": "ham", "qual": [], "confidence": 0.9 },
+        { "i": 3, "raw": "30 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "30 g bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "300 ml melk", "ing": "melk", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:wokken",
+      "name": { "en": "Stir-fry" },
+      "description": {
+        "nl": "Snelle wok van wokvlees en wokgroente met eiermie, met de ketjap op tafel.",
+        "en": "Quick stir-fry of meat and vegetables with egg noodles, with the kecap manis on the table."
+      },
+      "category": "wok-noedels",
+      "tags": ["wok", "snel", "kids"],
+      "time": { "active": 15, "total": 15 },
+      "steps": [
+        { "en": "Heat oil in the wok. Brown the meat all over. Add the stir-fry vegetables. Stir-fry briefly over a high heat until just cooked." },
+        { "en": "Prepare the egg noodles as per the packet. Serve straight away. Put the kecap manis on the table so everyone can add it to taste." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g wokvlees", "ing": "wokvlees", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "500 g wokgroente", "ing": "wokgroente", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "500 g eiermie", "ing": "eiermie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "Ketjap manis", "ing": "ketjap-manis", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:wortel-met-salami-en-rozijnen",
+      "name": { "en": "Carrots with salami and raisins" },
+      "description": {
+        "nl": "Wortelreepjes gebakken met knapperige salami, komijn, kaneel, rozijnen en pijnboompitten.",
+        "en": "Carrot strips fried with crispy salami, cumin, cinnamon, raisins and pine nuts."
+      },
+      "category": "overig",
+      "tags": ["snel"],
+      "time": { "active": 20, "total": 20 },
+      "steps": [
+        { "en": "Heat the oil in a large pan and fry the salami over a medium heat for 2 minutes until crisp. Drain on kitchen paper. Pour off any remaining oil from the pan." },
+        { "en": "Heat the butter in the pan and add the salami, carrots, spring onions, cumin seeds and cinnamon. Fry over a low heat for 4 minutes until the carrots are just tender." },
+        { "en": "Add the raisins and fry for another 3 minutes. Add the pine nuts and mix everything well." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "10 plakjes pittige salami [reepjes]", "ing": "salami", "qual": ["pittige"], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 2, "raw": "15 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "6 middelgrote wortels [kleine reepjes]", "ing": "wortel", "qual": ["middelgrote"], "prep": { "en": "small strips" }, "confidence": 0.95 },
+        { "i": 4, "raw": "4 lente-uitjes [ringetjes]", "ing": "bosui", "qual": [], "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 5, "raw": "½ tl komijnzaadjes", "ing": "komijnzaad", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "½ tl kaneelpoeder", "ing": "kaneel", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "½ kop rozijnen", "ing": "rozijn", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "½ kop pijnboompitten", "ing": "pijnboompit", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:zalm-en-croute-in-bladerdeeg",
+      "name": { "en": "Salmon en croûte (in puff pastry)" },
+      "description": {
+        "nl": "Zalmfilet met een boter van spinazie, citroenolijven en bieslook, ingepakt in bladerdeeg en goudbruin gebakken.",
+        "en": "Salmon fillet topped with a spinach, lemon-olive and chive butter, wrapped in puff pastry and baked until golden."
+      },
+      "category": "vis",
+      "tags": ["oven", "feest"],
+      "time": { "active": 20, "total": 45 },
+      "steps": [
+        { "en": "Preheat the oven to 200 °C. Put the spinach, olives and chives in the food processor and blitz coarsely. Mix with the butter in a small bowl and season with freshly ground pepper and salt if needed." },
+        { "en": "Unroll the puff pastry and cut it in half widthways. Lay one half on a baking tray lined with baking paper. Place the salmon in the middle of the pastry and spread the top of the salmon generously with the herb and olive butter." },
+        { "en": "Brush the pastry around the salmon with a little egg. Cover the salmon with the other half of the pastry. Make sure the edges of the pastry meet and press them down firmly." },
+        { "en": "Score small slits in the top of the pastry with a knife. Brush the pastry with the rest of the egg. Bake the salmon in the oven for about 25 minutes until golden brown and cooked through." },
+        { "en": "Lovely with baby potatoes in their skins and broccoli." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "80 g (baby-)spinazie", "ing": "spinazie", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 el groene olijven gevuld met citroen", "ing": "olijven-gevuld-met-citroen", "qual": ["groene"], "confidence": 0.9 },
+        { "i": 2, "raw": "15 g bieslook", "ing": "bieslook", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "270 g vers bladerdeeg (rol)", "ing": "bladerdeeg", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 5, "raw": "650 g zalmfilet", "ing": "zalmfilet", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 losgeklopt ei", "ing": "ei", "qual": ["losgeklopte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:zalm-teriyaki-met-pindaboontjes-en-noedels",
+      "name": { "en": "Teriyaki salmon with peanut green beans and noodles" },
+      "description": {
+        "nl": "Gegrilde zalm op goudbruine noedels en sperziebonen met pinda's, overgoten met zelfgemaakte teriyakisaus.",
+        "en": "Grilled salmon on golden noodles and green beans with peanuts, drizzled with a home-made teriyaki sauce."
+      },
+      "category": "vis",
+      "tags": ["wereld"],
+      "time": { "active": 35, "total": 40 },
+      "steps": [
+        { "en": "Cook the green beans and noodles until al dente and rinse with cold water." },
+        { "en": "For the teriyaki sauce, mix the sake, white wine, soy sauce and ginger syrup and heat it slowly over a low heat." },
+        { "en": "Rub the salmon fillets with a little sesame oil and grill them for 5 minutes." },
+        { "en": "Put the butter in the pan and fry the onion and the garlic in it. Add the green beans, peanuts and ginger. Season with salt and pepper and let it cook for about 3 minutes." },
+        { "en": "Stir-fry the noodles in a little olive oil for a minute until golden brown. Add the sesame seeds to the teriyaki sauce and thicken it with the cornflour mixed with water." },
+        { "en": "Put the peanut green beans on a plate. Place the noodles on top and the grilled salmon on top of that. Drizzle the teriyaki sauce over it." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g noedels", "ing": "noedels", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "600 g sperzieboontjes", "ing": "sperzieboon", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "200 ml sake", "ing": "sake", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "200 ml witte wijn", "ing": "wijn", "qual": ["witte"], "confidence": 0.95 },
+        { "i": 4, "raw": "100 ml sojasaus", "ing": "sojasaus", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "scheutje gembersiroop", "ing": "gembersiroop", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 tl sesamolie", "ing": "sesamolie", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "4 zalmfilets van 150 g", "ing": "zalmfilet", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "100 g ongezouten pinda’s [fijngehakt]", "ing": "pinda", "qual": ["ongezouten"], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 9, "raw": "2 el roomboter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "½ ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 11, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 12, "raw": "1 duimpje verse gember [fijngesneden]", "ing": "gember", "qual": ["verse"], "prep": { "en": "finely sliced" }, "confidence": 0.95 },
+        { "i": 13, "raw": "1 el sesamzaadjes [gebrand]", "ing": "sesamzaad", "qual": [], "prep": { "en": "toasted" }, "confidence": 0.95 },
+        { "i": 14, "raw": "1 el Maizena", "ing": "maizena", "qual": [], "confidence": 0.95 },
+        { "i": 15, "raw": "1 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:zalmovenschotel-met-mais",
+      "name": { "en": "Salmon and sweetcorn bake" },
+      "description": {
+        "nl": "Ovenschotel van rijst, zalm uit blik, mais, paprika en blokjes meikaas, gebonden met ei en slagroom.",
+        "en": "Bake of rice, tinned salmon, sweetcorn, pepper and cubes of young cheese, bound with egg and cream."
+      },
+      "category": "vis",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 80 },
+      "steps": [
+        { "en": "Cook the rice as per the packet instructions. Heat butter in a frying pan and gently fry the onion in it for about 3 minutes. Add the pepper and the chilli and fry for another 4 minutes." },
+        { "en": "Drain the salmon, remove any bones and skin and break it into pieces. Drain the sweetcorn. Mix the rice, the onion mixture, the salmon, sweetcorn, parsley and cheese cubes together." },
+        { "en": "Beat the eggs with the cream, add salt and pepper to taste and stir into the rice mixture. Spread the mixture in an ovenproof dish and cover with aluminium foil." },
+        { "en": "Bake the dish at 175 °C for 40 minutes, remove the foil and bake for another 10 minutes. Garnish with slices of lime and parsley." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "75 g rijst", "ing": "rijst", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 groene paprika [stukjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 groen Spaans pepertje [smalle reepjes]", "ing": "spaanse-peper", "qual": ["groene"], "prep": { "en": "thin strips" }, "confidence": 0.9 },
+        { "i": 4, "raw": "400 g zalm uit blik", "ing": "zalm-uit-blik", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "350 g mais uit blik", "ing": "mais", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "150 g witte meikaas [hele kleine blokjes]", "ing": "meikaas", "qual": ["witte"], "prep": { "en": "very small dice" }, "confidence": 0.9 },
+        { "i": 7, "raw": "2 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 8, "raw": "2 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "4 el slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "1 limoen of citroen (garnering)", "ing": "limoen", "qual": [], "confidence": 0.9 },
+        { "i": 11, "raw": "Enkele toefjes peterselie (garnering)", "ing": "peterselie", "qual": ["enkele"], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:zoete-aardappel-spinazietaart",
+      "name": { "en": "Sweet potato and spinach tart" },
+      "description": {
+        "nl": "Hartige taart zonder deeg van zoete aardappel, spinazie, rode ui en vadouvan, afgemaakt met walnoten, geitenkaas en tomaat.",
+        "en": "Pastry-free savoury tart of sweet potato, spinach, red onion and vadouvan, topped with walnuts, goat's cheese and tomato."
+      },
+      "category": "hartige-taart",
+      "tags": ["vegetarisch", "oven"],
+      "time": { "active": 25, "total": 60 },
+      "steps": [
+        { "en": "Preheat the oven to 200 °C. Boil the sweet potato for about 7 minutes until tender." },
+        { "en": "Gently fry the onion in a pan with a little oil. Add the spinach and let it wilt. Spoon everything into a bowl." },
+        { "en": "Stir the crème fraîche, the vadouvan and a little salt through the spinach. Drain the sweet potato, let it dry off and add it to the bowl too." },
+        { "en": "Beat the eggs in a separate bowl, then fold them through the mixture. Line a tart tin with a sheet of baking paper and tip the whole mixture in. Crumble the walnuts and the goat's cheese over the tart. Lay the tomato slices on top and finish with the grated cheese. Bake the tart in the oven for 30 minutes until cooked through." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "600 g zoete aardappelen [blokjes]", "ing": "zoete-aardappel", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "3 rode uien [halve ringen]", "ing": "ui", "qual": ["rode"], "prep": { "en": "half rings" }, "confidence": 0.95 },
+        { "i": 2, "raw": "600 g spinazie", "ing": "spinazie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "300 g crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1½ tl vadouvan", "ing": "vadouvan", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "6 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "3 trostomaten [plakjes]", "ing": "trostomaat", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 7, "raw": "75 g walnoten", "ing": "walnoot", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "100 g zachte geitenkaas", "ing": "geitenkaas", "qual": ["zachte"], "confidence": 0.95 },
+        { "i": 9, "raw": "75 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:zuid-afrikaanse-gehaktschotel",
+      "name": { "en": "South African mince bake" },
+      "description": {
+        "nl": "Zuid-Afrikaanse bobotie: pittig gehakt met appel, abrikozen en amandelen onder een laagje ei met kurkuma, uit de oven.",
+        "en": "South African bobotie: spiced mince with apple, apricots and almonds under a turmeric egg topping, baked in the oven."
+      },
+      "category": "oven",
+      "tags": ["oven", "wereld"],
+      "time": { "active": 30, "total": 80 },
+      "steps": [
+        { "en": "Break the bread into pieces and soak it in the milk." },
+        { "en": "Heat the oil in a casserole and gently fry the diced onion and garlic for about 3 minutes. Add the mince and stir-fry until crumbly and no longer pink. Stir in the spices and salt to taste and stir-fry for another minute. Then stir in the flour, the apricots, the almonds, the tomato purée, the grated apples and the vinegar." },
+        { "en": "Squeeze out the bread and stir it through the mince mixture. Season the mixture generously with salt and cayenne pepper and spoon it into a shallow ovenproof dish; smooth the top." },
+        { "en": "Beat the eggs with the cream and the turmeric. Pour the mixture over the mince and sprinkle 50 g of the cheese over the top." },
+        { "en": "Bake the dish at 175 °C for about 45 minutes until golden brown and cooked through. Sprinkle the rest of the cheese over it and serve with a tomato salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 sneetjes oud wit brood", "ing": "witbrood", "qual": ["oude"], "confidence": 0.9 },
+        { "i": 1, "raw": "2 dl melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 grote ui [gesnipperd]", "ing": "ui", "qual": ["grote"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "2 teentjes knoflook [gesnipperd]", "ing": "knoflook", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 appels [geschild; grof geraspt]", "ing": "appel", "qual": [], "prep": { "en": "peeled; coarsely grated" }, "confidence": 0.95 },
+        { "i": 5, "raw": "4 gedroogde abrikozen [kleine stukjes]", "ing": "abrikoos", "qual": ["gedroogde"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 6, "raw": "400 g gehakt", "ing": "gehakt", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 el chilipoeder", "ing": "chilipoeder", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "1 tl cayennepeper", "ing": "cayennepeper", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "50 g geschaafde amandelen", "ing": "amandel", "qual": ["geschaafde"], "confidence": 0.95 },
+        { "i": 11, "raw": "1 blikje tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "1 el balsamico azijn", "ing": "balsamicoazijn", "qual": [], "confidence": 0.95 },
+        { "i": 13, "raw": "125 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 14, "raw": "1 tl kurkuma", "ing": "kurkuma", "qual": [], "confidence": 0.95 },
+        { "i": 15, "raw": "100 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:zuurkoolovenschotel-met-pastrami",
+      "name": { "en": "Sauerkraut bake with pastrami" },
+      "description": {
+        "nl": "Zuurkool onder een laag pastrami, mosterdjus en smeuïge aardappelpuree, gegratineerd met belegen kaas.",
+        "en": "Sauerkraut under a layer of pastrami, mustard gravy and creamy mashed potato, topped with mature cheese and baked until golden."
+      },
+      "category": "oven",
+      "tags": ["oven", "winter"],
+      "time": { "active": 35, "total": 70 },
+      "steps": [
+        { "en": "Boil the potatoes in a pan with a little salted water for 15 to 20 minutes until tender." },
+        { "en": "Heat 20 g butter in a frying pan and fry the slices of pastrami in batches, turning once, until lightly browned. Put them on a plate. Fry the bacon strips in the same fat until crisp and brown. Stir in the mustard, stock and cream and let it simmer gently for 3 minutes until you have a lightly thickened gravy." },
+        { "en": "Drain the sauerkraut and spread it over the bottom of a greased ovenproof dish, teasing the strands apart with a fork." },
+        { "en": "Spoon the gravy over it and arrange the pastrami over the sauerkraut. Drain the potatoes and mash them. Stir in 20 g butter and enough milk to make a creamy mash." },
+        { "en": "Add salt and pepper to taste. Spread the mash over the sauerkraut and pastrami. Sprinkle the cheese over the top." },
+        { "en": "Bake the sauerkraut dish at 200 °C for 25 to 30 minutes until golden brown and cooked through." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1½ kg aardappelen [stukken] (of instant puree)", "ing": "aardappel", "qual": [], "prep": { "en": "pieces" }, "confidence": 0.95 },
+        { "i": 1, "raw": "40 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "300 g pastrami (of rookvlees)", "ing": "pastrami", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "50 g magere spekreepjes", "ing": "spekreepjes", "qual": ["magere"], "confidence": 0.95 },
+        { "i": 4, "raw": "2 el mosterd", "ing": "mosterd", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "2 dl vleesbouillon (blokje)", "ing": "runderbouillon", "qual": [], "confidence": 0.85 },
+        { "i": 6, "raw": "3 el slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "750 g zuurkool", "ing": "zuurkool", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "150 ml melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "50 g geraspte belegen kaas", "ing": "kaas", "qual": ["geraspte", "belegen"], "confidence": 0.95 }
+      ]
+    }
+  ]
+}

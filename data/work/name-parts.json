@@ -1,0 +1,6633 @@
+{
+  "source": "data/source/recipes-recepten2.json",
+  "lines": 1900,
+  "uniqueLines": 1377,
+  "parts": [
+    {
+      "name": "knoflook",
+      "key": "knoflook",
+      "count": 72,
+      "qual": [],
+      "units": [
+        "teen"
+      ],
+      "examples": [
+        "1 teentje knoflook [geperst]",
+        "4 teentjes knoflook [plakjes]",
+        "2 teentjes knoflook [geperst]"
+      ]
+    },
+    {
+      "name": "boter",
+      "key": "boter",
+      "count": 64,
+      "qual": [
+        "koude"
+      ],
+      "units": [
+        "el",
+        "g",
+        "klont"
+      ],
+      "examples": [
+        "1 el boter",
+        "50 g boter",
+        "Klontje boter"
+      ]
+    },
+    {
+      "name": "ui",
+      "key": "ui",
+      "count": 64,
+      "qual": [
+        "grote",
+        "kleine",
+        "middelgrote",
+        "rode",
+        "witte",
+        "zoete"
+      ],
+      "units": [],
+      "examples": [
+        "1 rode ui [gesnipperd]",
+        "1 middelgrote ui [gesnipperd]",
+        "1 grote ui [dunne ringen]"
+      ]
+    },
+    {
+      "name": "kaas",
+      "key": "kaas",
+      "count": 46,
+      "qual": [
+        "belegen",
+        "geraspte",
+        "jonge",
+        "oude"
+      ],
+      "units": [
+        "el",
+        "g",
+        "kop"
+      ],
+      "examples": [
+        "50 g geraspte oude kaas",
+        "100 g jong belegen kaas",
+        "100 g geraspte kaas"
+      ]
+    },
+    {
+      "name": "peterselie",
+      "key": "peterselie",
+      "count": 41,
+      "qual": [
+        "enkele",
+        "fijngehakte",
+        "gladde",
+        "platte",
+        "verse"
+      ],
+      "units": [
+        "bos",
+        "el",
+        "g",
+        "hand",
+        "kop",
+        "takje",
+        "tl",
+        "toefje"
+      ],
+      "examples": [
+        "2 el peterselie",
+        "6 takjes peterselie",
+        "1 el verse peterselie [fijngehakt]"
+      ]
+    },
+    {
+      "name": "bloem",
+      "key": "bloem",
+      "count": 38,
+      "qual": [],
+      "units": [
+        "el",
+        "g"
+      ],
+      "examples": [
+        "2 el bloem",
+        "250 g bloem",
+        "125 g bloem"
+      ]
+    },
+    {
+      "name": "crème fraîche",
+      "key": "creme fraiche",
+      "count": 34,
+      "qual": [],
+      "units": [
+        "bakje",
+        "beker",
+        "el",
+        "g",
+        "l",
+        "ml"
+      ],
+      "examples": [
+        "1 bakje crème fraîche",
+        "1 bekertje crème fraîche",
+        "200 g crème fraîche"
+      ]
+    },
+    {
+      "name": "paprika",
+      "key": "paprika",
+      "count": 33,
+      "qual": [
+        "gele",
+        "groene",
+        "kleine",
+        "rode"
+      ],
+      "units": [],
+      "examples": [
+        "1 groene paprika [dunne reepjes]",
+        "1 groene paprika [reepjes]",
+        "1 rode paprika [reepjes]"
+      ]
+    },
+    {
+      "name": "eieren",
+      "key": "eieren",
+      "count": 30,
+      "qual": [
+        "hardgekookte"
+      ],
+      "units": [],
+      "examples": [
+        "2 eieren",
+        "3 hardgekookte eieren [in vieren]",
+        "5 eieren"
+      ]
+    },
+    {
+      "name": "olijfolie",
+      "key": "olijfolie",
+      "count": 30,
+      "qual": [],
+      "units": [
+        "el",
+        "ml",
+        "scheut"
+      ],
+      "examples": [
+        "2 el olijfolie",
+        "1 scheutje olijfolie",
+        "200 ml olijfolie"
+      ]
+    },
+    {
+      "name": "tomaten",
+      "key": "tomaten",
+      "count": 25,
+      "qual": [
+        "flinke",
+        "gepelde",
+        "gezeefde",
+        "grote",
+        "rijpe",
+        "zongedroogde"
+      ],
+      "units": [
+        "blik",
+        "dl",
+        "g",
+        "kg",
+        "pak"
+      ],
+      "examples": [
+        "130 g zongedroogde tomaten [reepjes]",
+        "8 tomaten [blokjes]",
+        "500 g tomaten"
+      ]
+    },
+    {
+      "name": "melk",
+      "key": "melk",
+      "count": 24,
+      "qual": [],
+      "units": [
+        "dl",
+        "l",
+        "ml",
+        "scheut"
+      ],
+      "examples": [
+        "200 ml melk",
+        "250 ml melk",
+        "500 ml melk"
+      ]
+    },
+    {
+      "name": "uien",
+      "key": "uien",
+      "count": 23,
+      "qual": [
+        "grote",
+        "kleine",
+        "rode"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "3 rode uien [dunne plakjes]",
+        "2 uien [gesnipperd]",
+        "2 uien"
+      ]
+    },
+    {
+      "name": "aardappelen",
+      "key": "aardappelen",
+      "count": 21,
+      "qual": [
+        "kleine",
+        "kruimige",
+        "middelgrote",
+        "nieuwe",
+        "zoete"
+      ],
+      "units": [
+        "g",
+        "kg"
+      ],
+      "examples": [
+        "400 g aardappelen [plakjes]",
+        "1 kg kruimige aardappelen [blokjes van 2 cm]",
+        "1 kg aardappelen [schijfjes]"
+      ]
+    },
+    {
+      "name": "Parmezaanse kaas",
+      "key": "parmezaanse kaas",
+      "count": 21,
+      "qual": [
+        "geraspte",
+        "geschaafde",
+        "versgeraspte"
+      ],
+      "units": [
+        "el",
+        "g"
+      ],
+      "examples": [
+        "4 el Parmezaanse kaas",
+        "geraspte Parmezaanse kaas",
+        "25 g geraspte Parmezaanse kaas"
+      ]
+    },
+    {
+      "name": "slagroom",
+      "key": "slagroom",
+      "count": 21,
+      "qual": [],
+      "units": [
+        "dl",
+        "el",
+        "ml"
+      ],
+      "examples": [
+        "4 el slagroom",
+        "100 ml slagroom",
+        "250 ml slagroom"
+      ]
+    },
+    {
+      "name": "wijn",
+      "key": "wijn",
+      "count": 21,
+      "qual": [
+        "droge",
+        "rode",
+        "witte"
+      ],
+      "units": [
+        "dl",
+        "el",
+        "ml"
+      ],
+      "examples": [
+        "125 ml rode wijn",
+        "300 ml rode wijn",
+        "1,25 dl droge witte wijn"
+      ]
+    },
+    {
+      "name": "kipfilet",
+      "key": "kipfilet",
+      "count": 18,
+      "qual": [
+        "gare",
+        "gemarineerde",
+        "gerookte"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g kipfilet [blokjes]",
+        "500 g kipfilet [stukjes]",
+        "300 g kipfilet [reepjes]"
+      ]
+    },
+    {
+      "name": "paneermeel",
+      "key": "paneermeel",
+      "count": 18,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el paneermeel",
+        "4 el paneermeel",
+        "3 el paneermeel"
+      ]
+    },
+    {
+      "name": "kippenbouillon",
+      "key": "kippenbouillon",
+      "count": 17,
+      "qual": [
+        "vette"
+      ],
+      "units": [
+        "dl",
+        "l",
+        "ml"
+      ],
+      "examples": [
+        "½ ltr kippenbouillon",
+        "2 dl kippenbouillon",
+        "150 ml kippenbouillon (blokje)"
+      ]
+    },
+    {
+      "name": "olie",
+      "key": "olie",
+      "count": 17,
+      "qual": [
+        "plantaardige"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "4 el olie",
+        "3 el olie",
+        "1 el olie"
+      ]
+    },
+    {
+      "name": "yoghurt",
+      "key": "yoghurt",
+      "count": 16,
+      "qual": [],
+      "units": [
+        "dl",
+        "el",
+        "l",
+        "ml"
+      ],
+      "examples": [
+        "4 el yoghurt",
+        "150 ml yoghurt",
+        "200 ml yoghurt"
+      ]
+    },
+    {
+      "name": "ei",
+      "key": "ei",
+      "count": 15,
+      "qual": [
+        "losgeklopte"
+      ],
+      "units": [],
+      "examples": [
+        "1 ei",
+        "1 ei [losgeklopt]",
+        "1 losgeklopt ei"
+      ]
+    },
+    {
+      "name": "tomatenpuree",
+      "key": "tomatenpuree",
+      "count": 15,
+      "qual": [],
+      "units": [
+        "blik",
+        "dl",
+        "el",
+        "g"
+      ],
+      "examples": [
+        "1 el tomatenpuree",
+        "425 g tomatenpuree",
+        "4 el tomatenpuree"
+      ]
+    },
+    {
+      "name": "bieslook",
+      "key": "bieslook",
+      "count": 14,
+      "qual": [
+        "fijngeknipte",
+        "verse"
+      ],
+      "units": [
+        "el",
+        "g",
+        "sprietje"
+      ],
+      "examples": [
+        "10 sprietjes bieslook [fijngeknipt]",
+        "10 sprietjes bieslook [fijngehakt]",
+        "1 el verse bieslook"
+      ]
+    },
+    {
+      "name": "champignons",
+      "key": "champignons",
+      "count": 14,
+      "qual": [
+        "kleine"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g champignons [plakjes]",
+        "225 g champignons",
+        "125 g champignons"
+      ]
+    },
+    {
+      "name": "rijst",
+      "key": "rijst",
+      "count": 14,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g rijst",
+        "350 g rijst",
+        "75 g rijst"
+      ]
+    },
+    {
+      "name": "citroen",
+      "key": "citroen",
+      "count": 13,
+      "qual": [
+        "kleine"
+      ],
+      "units": [
+        "partje"
+      ],
+      "examples": [
+        "rasp van 1/2 citroen",
+        "sap van 1/2 citroen",
+        "Partjes limoen of citroen (garnering)"
+      ]
+    },
+    {
+      "name": "gember",
+      "key": "gember",
+      "count": 13,
+      "qual": [
+        "verse",
+        "versgeraspte"
+      ],
+      "units": [
+        "cm",
+        "duimpje",
+        "el",
+        "g",
+        "tl"
+      ],
+      "examples": [
+        "2 tl versgeraspte gember",
+        "30 g gember [geraspt]",
+        "1/2 el gember [vers geraspt]"
+      ]
+    },
+    {
+      "name": "mayonaise",
+      "key": "mayonaise",
+      "count": 13,
+      "qual": [],
+      "units": [
+        "el",
+        "ml"
+      ],
+      "examples": [
+        "60 ml mayonaise",
+        "1 el mayonaise",
+        "1 1/2 el mayonaise"
+      ]
+    },
+    {
+      "name": "gehakt",
+      "key": "gehakt",
+      "count": 12,
+      "qual": [
+        "half-om-half",
+        "vegetarische"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g gehakt",
+        "400 g half-om-half gehakt",
+        "500 g half-om-half gehakt"
+      ]
+    },
+    {
+      "name": "paprikapoeder",
+      "key": "paprikapoeder",
+      "count": 12,
+      "qual": [
+        "gerookte",
+        "milde"
+      ],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 el paprikapoeder",
+        "½ el paprikapoeder",
+        "2 el paprikapoeder"
+      ]
+    },
+    {
+      "name": "spekblokjes",
+      "key": "spekblokjes",
+      "count": 12,
+      "qual": [
+        "gerookte"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "50 g spekblokjes",
+        "200 g spekblokjes",
+        "125 g spekblokjes"
+      ]
+    },
+    {
+      "name": "zout en peper",
+      "key": "zout en peper",
+      "count": 12,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "zout en peper naar smaak",
+        "zout en peper"
+      ]
+    },
+    {
+      "name": "basilicum",
+      "key": "basilicum",
+      "count": 11,
+      "qual": [
+        "gesnipperde",
+        "verse"
+      ],
+      "units": [
+        "blad",
+        "el",
+        "g",
+        "hand",
+        "takje",
+        "tl"
+      ],
+      "examples": [
+        "1 el basilicum [fijngehakt]",
+        "2 el basilicum [gehakt]",
+        "1 tl basilicum"
+      ]
+    },
+    {
+      "name": "preien",
+      "key": "preien",
+      "count": 11,
+      "qual": [
+        "dikke",
+        "dunne"
+      ],
+      "units": [],
+      "examples": [
+        "3 preien [ringen]",
+        "2 preien [smalle ringen]",
+        "2 preien [ringen]"
+      ]
+    },
+    {
+      "name": "room",
+      "key": "room",
+      "count": 11,
+      "qual": [
+        "zure"
+      ],
+      "units": [
+        "dl",
+        "g",
+        "ml"
+      ],
+      "examples": [
+        "125 ml zure room",
+        "3 dl room",
+        "205 g zure room"
+      ]
+    },
+    {
+      "name": "rundergehakt",
+      "key": "rundergehakt",
+      "count": 11,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g rundergehakt",
+        "500 g rundergehakt",
+        "600 g rundergehakt"
+      ]
+    },
+    {
+      "name": "spinazie",
+      "key": "spinazie",
+      "count": 11,
+      "qual": [
+        "diepvries",
+        "verse"
+      ],
+      "units": [
+        "g",
+        "kg"
+      ],
+      "examples": [
+        "750 g diepvries spinazie",
+        "300 g verse spinazie",
+        "100 g verse spinazie [grofgesneden]"
+      ]
+    },
+    {
+      "name": "bleekselderij",
+      "key": "bleekselderij",
+      "count": 10,
+      "qual": [],
+      "units": [
+        "stengel"
+      ],
+      "examples": [
+        "1 stengel bleekselderij [fijngesneden]",
+        "1 stengel bleekselderij [fijngehakt]",
+        "4 stengels bleekselderij [boogjes]"
+      ]
+    },
+    {
+      "name": "cashewnoten",
+      "key": "cashewnoten",
+      "count": 10,
+      "qual": [
+        "gezouten",
+        "lichtgezouten"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g gezouten cashewnoten [grof gehakt]",
+        "100 g cashewnoten",
+        "50 g cashewnoten"
+      ]
+    },
+    {
+      "name": "courgettes",
+      "key": "courgettes",
+      "count": 10,
+      "qual": [
+        "kleine"
+      ],
+      "units": [],
+      "examples": [
+        "2 courgettes [grof geraspt]",
+        "2 kleine courgettes [plakjes van 1/2 cm]",
+        "2 courgettes [gehalveerd]"
+      ]
+    },
+    {
+      "name": "lente-uitjes",
+      "key": "lente-uitjes",
+      "count": 10,
+      "qual": [],
+      "units": [
+        "bos"
+      ],
+      "examples": [
+        "4 lente-uitjes",
+        "1 bosje lente-uitjes",
+        "3 lente-uitjes"
+      ]
+    },
+    {
+      "name": "nootmuskaat",
+      "key": "nootmuskaat",
+      "count": 10,
+      "qual": [],
+      "units": [
+        "snuf",
+        "tl"
+      ],
+      "examples": [
+        "1/2 tl nootmuskaat",
+        "snufje nootmuskaat",
+        "½ tl nootmuskaat"
+      ]
+    },
+    {
+      "name": "tijm",
+      "key": "tijm",
+      "count": 10,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "el",
+        "takje",
+        "tl"
+      ],
+      "examples": [
+        "5 takjes verse tijm",
+        "1 tl tijm",
+        "¼ tl tijm"
+      ]
+    },
+    {
+      "name": "zonnebloemolie",
+      "key": "zonnebloemolie",
+      "count": 10,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el zonnebloemolie",
+        "1 el zonnebloemolie",
+        "5 el zonnebloemolie"
+      ]
+    },
+    {
+      "name": "citroensap",
+      "key": "citroensap",
+      "count": 9,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 el citroensap",
+        "½ el citroensap",
+        "2 tl citroensap"
+      ]
+    },
+    {
+      "name": "koriander",
+      "key": "koriander",
+      "count": 9,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "bos",
+        "el"
+      ],
+      "examples": [
+        "1 bos koriander [zonder steeltjes]",
+        "verse koriander",
+        "1 bosje koriander"
+      ]
+    },
+    {
+      "name": "cayennepeper",
+      "key": "cayennepeper",
+      "count": 8,
+      "qual": [],
+      "units": [
+        "mp",
+        "snuf",
+        "tl"
+      ],
+      "examples": [
+        "1 mp cayennepeper",
+        "1 tl cayennepeper",
+        "cayennepeper"
+      ]
+    },
+    {
+      "name": "kappertjes",
+      "key": "kappertjes",
+      "count": 8,
+      "qual": [],
+      "units": [
+        "el",
+        "g"
+      ],
+      "examples": [
+        "2 el kappertjes",
+        "60 g kappertjes",
+        "1 el kappertjes"
+      ]
+    },
+    {
+      "name": "mosterd",
+      "key": "mosterd",
+      "count": 8,
+      "qual": [
+        "grove"
+      ],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 el grove mosterd",
+        "2 tl mosterd",
+        "2 el grove mosterd"
+      ]
+    },
+    {
+      "name": "oregano",
+      "key": "oregano",
+      "count": 8,
+      "qual": [
+        "gedroogde"
+      ],
+      "units": [
+        "el",
+        "mp",
+        "tl"
+      ],
+      "examples": [
+        "1 el oregano",
+        "½ tl oregano",
+        "oregano"
+      ]
+    },
+    {
+      "name": "prei",
+      "key": "prei",
+      "count": 8,
+      "qual": [
+        "dunne",
+        "grote",
+        "kleine"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "het wit van 1 prei [fijngesneden]",
+        "225 g prei [ringen]",
+        "1 kleine prei [kleine stukjes]"
+      ]
+    },
+    {
+      "name": "bladerdeeg",
+      "key": "bladerdeeg",
+      "count": 7,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "blad",
+        "g",
+        "pak",
+        "plak"
+      ],
+      "examples": [
+        "4 plakjes bladerdeeg",
+        "10 plakjes bladerdeeg",
+        "1 pak bladerdeeg"
+      ]
+    },
+    {
+      "name": "broccoli",
+      "key": "broccoli",
+      "count": 7,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g broccoli [roosjes]",
+        "300 g broccoli [kleine stukjes]",
+        "225 g broccoli [in stukjes]"
+      ]
+    },
+    {
+      "name": "fusilli",
+      "key": "fusilli",
+      "count": 7,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g fusilli",
+        "400 g fusilli",
+        "400 g fusilli of andere pasta"
+      ]
+    },
+    {
+      "name": "kerriepoeder",
+      "key": "kerriepoeder",
+      "count": 7,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "½ tl kerriepoeder",
+        "2 tl kerriepoeder",
+        "1 el kerriepoeder"
+      ]
+    },
+    {
+      "name": "ketjap manis",
+      "key": "ketjap manis",
+      "count": 7,
+      "qual": [],
+      "units": [
+        "el",
+        "ml",
+        "scheut"
+      ],
+      "examples": [
+        "2 el ketjap manis",
+        "1 el ketjap manis",
+        "80 ml ketjap manis"
+      ]
+    },
+    {
+      "name": "kipfilets",
+      "key": "kipfilets",
+      "count": 7,
+      "qual": [
+        "enkele"
+      ],
+      "units": [],
+      "examples": [
+        "4 enkele kipfilets",
+        "4 kipfilets",
+        "3 kipfilets [blokjes]"
+      ]
+    },
+    {
+      "name": "kurkuma",
+      "key": "kurkuma",
+      "count": 7,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "2 tl kurkuma",
+        "1 tl kurkuma",
+        "½ tl kurkuma"
+      ]
+    },
+    {
+      "name": "olijven",
+      "key": "olijven",
+      "count": 7,
+      "qual": [
+        "groene",
+        "ontpitte",
+        "pitloze",
+        "zwarte"
+      ],
+      "units": [
+        "el",
+        "g"
+      ],
+      "examples": [
+        "8 zwarte olijven",
+        "12 zwarte olijven",
+        "3 el groene olijven"
+      ]
+    },
+    {
+      "name": "peper",
+      "key": "peper",
+      "count": 7,
+      "qual": [
+        "gemalen",
+        "grove",
+        "hete",
+        "rode",
+        "zwarte"
+      ],
+      "units": [
+        "mp",
+        "tl"
+      ],
+      "examples": [
+        "1 mp rode hete peper [gesnipperd]",
+        "2 tl grof gemalen zwarte peper",
+        "½ rode peper [dunne plakjes]"
+      ]
+    },
+    {
+      "name": "rucola",
+      "key": "rucola",
+      "count": 7,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "80 g rucola",
+        "75 g rucola [grofgesneden]",
+        "50 g rucola"
+      ]
+    },
+    {
+      "name": "sjalotjes",
+      "key": "sjalotjes",
+      "count": 7,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "3 sjalotjes [gesnipperd]",
+        "3 sjalotjes [ringen]",
+        "2 sjalotjes [gesnipperd]"
+      ]
+    },
+    {
+      "name": "spaghetti",
+      "key": "spaghetti",
+      "count": 7,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g spaghetti",
+        "500 g spaghetti"
+      ]
+    },
+    {
+      "name": "tagliatelle",
+      "key": "tagliatelle",
+      "count": 7,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g tagliatelle",
+        "500 g tagliatelle"
+      ]
+    },
+    {
+      "name": "water",
+      "key": "water",
+      "count": 7,
+      "qual": [],
+      "units": [
+        "dl",
+        "glas",
+        "l",
+        "ml"
+      ],
+      "examples": [
+        "1 ltr water",
+        "300 ml water",
+        "2½ ltr water"
+      ]
+    },
+    {
+      "name": "aardappels",
+      "key": "aardappels",
+      "count": 6,
+      "qual": [
+        "kruimige",
+        "vastkokende"
+      ],
+      "units": [
+        "g",
+        "kg"
+      ],
+      "examples": [
+        "1 kg kruimige aardappels [geschild in blokjes]",
+        "800 g aardappels",
+        "500 g kruimige aardappels [blokjes]"
+      ]
+    },
+    {
+      "name": "aubergine",
+      "key": "aubergine",
+      "count": 6,
+      "qual": [
+        "grote",
+        "kleine"
+      ],
+      "units": [],
+      "examples": [
+        "¼ aubergine [plakjes van 1 cm]",
+        "1 kleine aubergine [blokjes van 2 cm]",
+        "1 grote aubergine [plakjes]"
+      ]
+    },
+    {
+      "name": "kokosmelk",
+      "key": "kokosmelk",
+      "count": 6,
+      "qual": [],
+      "units": [
+        "dl",
+        "ml"
+      ],
+      "examples": [
+        "250 ml kokosmelk",
+        "300 ml kokosmelk",
+        "4 dl kokosmelk"
+      ]
+    },
+    {
+      "name": "komkommer",
+      "key": "komkommer",
+      "count": 6,
+      "qual": [
+        "grote"
+      ],
+      "units": [],
+      "examples": [
+        "1 komkommer",
+        "1/2 komkommer [blokjes]",
+        "1 grote komkommer [halve plakken]"
+      ]
+    },
+    {
+      "name": "sojasaus",
+      "key": "sojasaus",
+      "count": 6,
+      "qual": [],
+      "units": [
+        "dl",
+        "el",
+        "ml"
+      ],
+      "examples": [
+        "sojasaus",
+        "1 dl sojasaus",
+        "2 el sojasaus"
+      ]
+    },
+    {
+      "name": "walnoten",
+      "key": "walnoten",
+      "count": 6,
+      "qual": [
+        "gepelde"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g gepelde walnoten [fijngehakt]",
+        "100 g walnoten [grof gehakt]",
+        "60 g walnoten [grof gehakt]"
+      ]
+    },
+    {
+      "name": "bacon",
+      "key": "bacon",
+      "count": 5,
+      "qual": [],
+      "units": [
+        "g",
+        "plak"
+      ],
+      "examples": [
+        "200 g bacon",
+        "150 g dunne plakjes pancetta (of bacon)",
+        "100 g bacon"
+      ]
+    },
+    {
+      "name": "balsamicoazijn",
+      "key": "balsamicoazijn",
+      "count": 5,
+      "qual": [],
+      "units": [
+        "el",
+        "ml"
+      ],
+      "examples": [
+        "1 el balsamicoazijn",
+        "50 ml balsamicoazijn",
+        "balsamicoazijn"
+      ]
+    },
+    {
+      "name": "courgette",
+      "key": "courgette",
+      "count": 5,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 courgette [stukjes]",
+        "½ courgette [plakjes]",
+        "1 courgette [blokken van ca. 3 cm]"
+      ]
+    },
+    {
+      "name": "dijonmosterd",
+      "key": "dijonmosterd",
+      "count": 5,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 el dijonmosterd",
+        "1 tl dijonmosterd",
+        "2 tl dijonmosterd"
+      ]
+    },
+    {
+      "name": "dille",
+      "key": "dille",
+      "count": 5,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el verse dille [fijngehakt]",
+        "2 el dille [fijngeknipt]",
+        "3 el dille [fijngehakt]"
+      ]
+    },
+    {
+      "name": "dragon",
+      "key": "dragon",
+      "count": 5,
+      "qual": [
+        "gedroogde",
+        "verse"
+      ],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 el gedroogde dragon",
+        "1½ tl gedroogde dragon",
+        "verse dragon (garnering)"
+      ]
+    },
+    {
+      "name": "honing",
+      "key": "honing",
+      "count": 5,
+      "qual": [],
+      "units": [
+        "el",
+        "ml",
+        "tl"
+      ],
+      "examples": [
+        "3 el honing",
+        "1 tl honing",
+        "honing"
+      ]
+    },
+    {
+      "name": "kerrie",
+      "key": "kerrie",
+      "count": 5,
+      "qual": [
+        "milde"
+      ],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "3 el kerrie",
+        "1 el kerrie",
+        "2 tl milde kerrie"
+      ]
+    },
+    {
+      "name": "ketoembar",
+      "key": "ketoembar",
+      "count": 5,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 tl ketoembar (gemalen koriander)",
+        "2 tl ketoembar (koriander)",
+        "1 el ketoembar (gemalen koriander)"
+      ]
+    },
+    {
+      "name": "mais",
+      "key": "mais",
+      "count": 5,
+      "qual": [
+        "kleine"
+      ],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "1 blik mais",
+        "1 klein blik mais",
+        "1 blik mais, afgegoten"
+      ]
+    },
+    {
+      "name": "maïzena",
+      "key": "maizena",
+      "count": 5,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 1/2 el maïzena",
+        "Maizena",
+        "1 el maïzena"
+      ]
+    },
+    {
+      "name": "roomkaas",
+      "key": "roomkaas",
+      "count": 5,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g verse roomkaas",
+        "200 g verse roomkaas (Mon Chou of een variant)",
+        "200 g roomkaas"
+      ]
+    },
+    {
+      "name": "rozijnen",
+      "key": "rozijnen",
+      "count": 5,
+      "qual": [],
+      "units": [
+        "el",
+        "g",
+        "kop"
+      ],
+      "examples": [
+        "50 g rozijnen",
+        "4 el rozijnen",
+        "1 el rozijnen"
+      ]
+    },
+    {
+      "name": "Spaans pepertje",
+      "key": "spaans pepertje",
+      "count": 5,
+      "qual": [
+        "groene",
+        "rode"
+      ],
+      "units": [],
+      "examples": [
+        "1 rood Spaans pepertje [reepjes]",
+        "1 rood Spaans pepertje [reepjes, extra voor de kool]",
+        "1 Spaans pepertje [fijngesneden]"
+      ]
+    },
+    {
+      "name": "spekreepjes",
+      "key": "spekreepjes",
+      "count": 5,
+      "qual": [
+        "magere"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g spekreepjes",
+        "75 g spekreepjes",
+        "50 g magere spekreepjes"
+      ]
+    },
+    {
+      "name": "suiker",
+      "key": "suiker",
+      "count": 5,
+      "qual": [
+        "bruine"
+      ],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "2 el suiker",
+        "1 el bruine suiker",
+        "½ tl bruine suiker"
+      ]
+    },
+    {
+      "name": "tomaat",
+      "key": "tomaat",
+      "count": 5,
+      "qual": [
+        "kleine"
+      ],
+      "units": [],
+      "examples": [
+        "1 tomaat [plakjes]",
+        "1 tomaat [stukjes, zonder vocht en pitjes]",
+        "1 kleine tomaat [in kwarten]"
+      ]
+    },
+    {
+      "name": "vleesbouillon",
+      "key": "vleesbouillon",
+      "count": 5,
+      "qual": [],
+      "units": [
+        "dl",
+        "ml"
+      ],
+      "examples": [
+        "500 ml vleesbouillon",
+        "2 dl vleesbouillon (blokje)",
+        "100 ml vleesbouillon (blokje)"
+      ]
+    },
+    {
+      "name": "wijnazijn",
+      "key": "wijnazijn",
+      "count": 5,
+      "qual": [
+        "rode",
+        "witte"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el rode wijnazijn",
+        "1 el witte wijnazijn",
+        "2 el witte wijnazijn"
+      ]
+    },
+    {
+      "name": "wortel",
+      "key": "wortel",
+      "count": 5,
+      "qual": [
+        "grote"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "1 wortel [fijngehakt]",
+        "1 wortel [blokjes]",
+        "1 wortel [dunne reepjes]"
+      ]
+    },
+    {
+      "name": "appel",
+      "key": "appel",
+      "count": 4,
+      "qual": [
+        "groene",
+        "grote",
+        "rode"
+      ],
+      "units": [],
+      "examples": [
+        "1 appel [geschild, stukjes]",
+        "1 rode appel [blokjes]",
+        "1 groene appel [blokjes]"
+      ]
+    },
+    {
+      "name": "arachideolie",
+      "key": "arachideolie",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "dl",
+        "el"
+      ],
+      "examples": [
+        "2 el arachideolie",
+        "1,25 dl arachideolie",
+        "1 el arachideolie"
+      ]
+    },
+    {
+      "name": "bloemkool",
+      "key": "bloemkool",
+      "count": 4,
+      "qual": [
+        "kleine"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "1 bloemkool [roosjes]",
+        "1/2 bloemkool [roosjes]",
+        "1 kleine bloemkool [kleine roosjes]"
+      ]
+    },
+    {
+      "name": "cheddar",
+      "key": "cheddar",
+      "count": 4,
+      "qual": [
+        "geraspte"
+      ],
+      "units": [
+        "g",
+        "kop",
+        "plak"
+      ],
+      "examples": [
+        "1/2 kop cheddar",
+        "4 plakjes cheddar",
+        "50 g geraspte cheddar"
+      ]
+    },
+    {
+      "name": "chorizo",
+      "key": "chorizo",
+      "count": 4,
+      "qual": [
+        "pittige"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g chorizo [blokjes]",
+        "225 g pittige chorizo [verkruimeld]",
+        "100 g chorizo [blokjes]"
+      ]
+    },
+    {
+      "name": "Italiaanse kruiden",
+      "key": "italiaanse kruiden",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "2 el Italiaanse kruiden",
+        "1 tl Italiaanse kruiden",
+        "1 el Italiaanse kruiden"
+      ]
+    },
+    {
+      "name": "kabeljauwfilet",
+      "key": "kabeljauwfilet",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g kabeljauwfilet",
+        "600 g kabeljauwfilet",
+        "400 g kabeljauwfilet"
+      ]
+    },
+    {
+      "name": "kaneel",
+      "key": "kaneel",
+      "count": 4,
+      "qual": [
+        "gemalen"
+      ],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "½ tl gemalen kaneel",
+        "kaneel",
+        "½ tl kaneel"
+      ]
+    },
+    {
+      "name": "kwark",
+      "key": "kwark",
+      "count": 4,
+      "qual": [
+        "magere"
+      ],
+      "units": [
+        "el",
+        "g"
+      ],
+      "examples": [
+        "225 g kwark",
+        "6 el magere kwark",
+        "225 g magere kwark"
+      ]
+    },
+    {
+      "name": "limoen",
+      "key": "limoen",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "partje"
+      ],
+      "examples": [
+        "sap van ½ limoen",
+        "sap van 1 limoen",
+        "Partjes limoen of citroen (garnering)"
+      ]
+    },
+    {
+      "name": "penne",
+      "key": "penne",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g penne"
+      ]
+    },
+    {
+      "name": "pesto",
+      "key": "pesto",
+      "count": 4,
+      "qual": [
+        "groene",
+        "rode"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "6 el rode pesto",
+        "1½ el groene pesto",
+        "4 el rode pesto"
+      ]
+    },
+    {
+      "name": "Provençaalse kruiden",
+      "key": "provencaalse kruiden",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 tl Provençaalse kruiden",
+        "2 el Provençaalse kruiden"
+      ]
+    },
+    {
+      "name": "Rookworst",
+      "key": "rookworst",
+      "count": 4,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "Rookworst en/of braadworst",
+        "1 rookworst"
+      ]
+    },
+    {
+      "name": "rozemarijn",
+      "key": "rozemarijn",
+      "count": 4,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "el",
+        "takje",
+        "tl"
+      ],
+      "examples": [
+        "1 el verse rozemarijn [fijngehakt]",
+        "6 takjes rozemarijn",
+        "2 tl rozemarijn"
+      ]
+    },
+    {
+      "name": "runderbouillon",
+      "key": "runderbouillon",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "dl",
+        "l",
+        "ml"
+      ],
+      "examples": [
+        "125 ml runderbouillon",
+        "500 ml runderbouillon",
+        "½ ltr runderbouillon"
+      ]
+    },
+    {
+      "name": "salami",
+      "key": "salami",
+      "count": 4,
+      "qual": [
+        "pikante",
+        "pittige"
+      ],
+      "units": [
+        "g",
+        "plak"
+      ],
+      "examples": [
+        "125 g pikante salami",
+        "100 g salami [kwartjes]",
+        "150 g salami [dikke halve plakken]"
+      ]
+    },
+    {
+      "name": "selderij",
+      "key": "selderij",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "bos",
+        "el",
+        "takje"
+      ],
+      "examples": [
+        "10 takjes selderij [fijngehakt]",
+        "3 takjes selderij",
+        "1 el selderij [fijngehakt]"
+      ]
+    },
+    {
+      "name": "shiitake",
+      "key": "shiitake",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g shiitake",
+        "200 g shiitake [grove stukken]",
+        "200 g shiitake [gehalveerd]"
+      ]
+    },
+    {
+      "name": "tofu",
+      "key": "tofu",
+      "count": 4,
+      "qual": [
+        "stevige"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g tofu [blokjes]",
+        "250 g tofu [blokjes van 1½ cm]",
+        "600 g stevige tofu [blokjes]"
+      ]
+    },
+    {
+      "name": "tonijn",
+      "key": "tonijn",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "3 blikjes tonijn",
+        "2 blikjes tonijn"
+      ]
+    },
+    {
+      "name": "vleestomaat",
+      "key": "vleestomaat",
+      "count": 4,
+      "qual": [
+        "grote"
+      ],
+      "units": [],
+      "examples": [
+        "1 vleestomaat [stukjes, zonder vocht en zaadjes]",
+        "1 grote vleestomaat [blokjes]",
+        "1 vleestomaat [stukjes]"
+      ]
+    },
+    {
+      "name": "winterpeen",
+      "key": "winterpeen",
+      "count": 4,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g winterpeen [kwartjes van ½ cm dik]",
+        "400 g winterpeen [stukjes]",
+        "1 winterpeen [kleine reepjes]"
+      ]
+    },
+    {
+      "name": "zalm",
+      "key": "zalm",
+      "count": 4,
+      "qual": [
+        "gerookte",
+        "rode"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g gerookte zalm",
+        "125 g gerookte zalm [dunne reepjes]",
+        "400 g rode zalm"
+      ]
+    },
+    {
+      "name": "zalmfilet",
+      "key": "zalmfilet",
+      "count": 4,
+      "qual": [
+        "gerookte"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g gerookte zalmfilet",
+        "400 g gerookte zalmfilet [korte reepjes]",
+        "200 g gerookte zalmfilet [gesnipperd]"
+      ]
+    },
+    {
+      "name": "aardappel",
+      "key": "aardappel",
+      "count": 3,
+      "qual": [
+        "zoete"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "1 aardappel [blokjes]",
+        "200 g zoete aardappel [blokjes]"
+      ]
+    },
+    {
+      "name": "achterham in plakken",
+      "key": "achterham in plakken",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g achterham in plakken",
+        "100 g achterham in plakken",
+        "200 g achterham in plakken"
+      ]
+    },
+    {
+      "name": "allesbinder",
+      "key": "allesbinder",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el allesbinder",
+        "1 el allesbinder"
+      ]
+    },
+    {
+      "name": "appels",
+      "key": "appels",
+      "count": 3,
+      "qual": [
+        "zoetzure"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "800 g zoetzure appels [geschild in stukken]",
+        "2 zoetzure appels (goudrenetten) [geschild; stukjes]",
+        "2 appels [geschild; grof geraspt]"
+      ]
+    },
+    {
+      "name": "augurken",
+      "key": "augurken",
+      "count": 3,
+      "qual": [
+        "kleine"
+      ],
+      "units": [],
+      "examples": [
+        "5 augurken [stokjes]",
+        "3 augurken [1 in staafjes]",
+        "6 kleine augurken [5 in plakjes, 1 in reepjes]"
+      ]
+    },
+    {
+      "name": "boerenkool",
+      "key": "boerenkool",
+      "count": 3,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "450 g boerenkool [gesneden]",
+        "250 g verse boerenkool",
+        "500 g boerenkool [gesneden]"
+      ]
+    },
+    {
+      "name": "bosui",
+      "key": "bosui",
+      "count": 3,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 bosui",
+        "1 bosui [ringen]",
+        "1 bosui [ringetjes]"
+      ]
+    },
+    {
+      "name": "braadworst",
+      "key": "braadworst",
+      "count": 3,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "Rookworst en/of braadworst"
+      ]
+    },
+    {
+      "name": "chilipoeder",
+      "key": "chilipoeder",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "chilipoeder",
+        "1/2 tl chilipoeder",
+        "1 el chilipoeder"
+      ]
+    },
+    {
+      "name": "Chinese kool",
+      "key": "chinese kool",
+      "count": 3,
+      "qual": [
+        "kleine"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "1 kleine Chinese kool [in smalle repen]",
+        "1 Chinese kool [reepjes]",
+        "200 g Chinese kool [reepjes]"
+      ]
+    },
+    {
+      "name": "Danish blue",
+      "key": "danish blue",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g Danish blue",
+        "150 g Danish Blue [verkruimeld]",
+        "150 g Danish blue"
+      ]
+    },
+    {
+      "name": "diepvriesdoperwten",
+      "key": "diepvriesdoperwten",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g diepvriesdoperwten",
+        "200 g diepvriesdoperwten",
+        "125 g diepvriesdoperwten"
+      ]
+    },
+    {
+      "name": "djinten",
+      "key": "djinten",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 tl djinten (gemalen komijn)",
+        "1 tl djinten (komijn)",
+        "1 el djinten (gemalen komijn)"
+      ]
+    },
+    {
+      "name": "doperwten",
+      "key": "doperwten",
+      "count": 3,
+      "qual": [
+        "diepvries"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g diepvries doperwten",
+        "400 g doperwten",
+        "200 g diepvries doperwten"
+      ]
+    },
+    {
+      "name": "eiermie",
+      "key": "eiermie",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g eiermie",
+        "250 g eiermie",
+        "500 g eiermie"
+      ]
+    },
+    {
+      "name": "farfalle",
+      "key": "farfalle",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g farfalle",
+        "400 g farfalle",
+        "225 g farfalle (of een andere pastasoort)"
+      ]
+    },
+    {
+      "name": "feta",
+      "key": "feta",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "60 g feta [blokjes van 1 cm]",
+        "200 g feta [blokjes]",
+        "125 g feta [verkruimeld]"
+      ]
+    },
+    {
+      "name": "gemberpoeder",
+      "key": "gemberpoeder",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "2 tl gemberpoeder",
+        "½ tl gemberpoeder"
+      ]
+    },
+    {
+      "name": "Goudse kaas",
+      "key": "goudse kaas",
+      "count": 3,
+      "qual": [
+        "belegen",
+        "geraspte",
+        "jonge",
+        "oude"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g geraspte jong belegen Goudse kaas",
+        "300 g gerapte oude Goudse kaas",
+        "100 g gerapte oude Goudse kaas"
+      ]
+    },
+    {
+      "name": "kalkoenfilet",
+      "key": "kalkoenfilet",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g kalkoenfilet",
+        "500 g kalkoenfilet [blokjes van 2 cm]",
+        "350 g kalkoenfilet [smalle reepjes]"
+      ]
+    },
+    {
+      "name": "karwijzaadjes",
+      "key": "karwijzaadjes",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "1 tl karwijzaadjes",
+        "½ tl karwijzaadjes"
+      ]
+    },
+    {
+      "name": "knoflookpoeder",
+      "key": "knoflookpoeder",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "1 tl knoflookpoeder",
+        "½ tl knoflookpoeder"
+      ]
+    },
+    {
+      "name": "kruidnagels",
+      "key": "kruidnagels",
+      "count": 3,
+      "qual": [
+        "hele"
+      ],
+      "units": [],
+      "examples": [
+        "2 kruidnagels",
+        "6 hele kruidnagels",
+        "3 hele kruidnagels"
+      ]
+    },
+    {
+      "name": "laurierblaadje",
+      "key": "laurierblaadje",
+      "count": 3,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 laurierblaadje"
+      ]
+    },
+    {
+      "name": "laurierblaadjes",
+      "key": "laurierblaadjes",
+      "count": 3,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "2 laurierblaadjes"
+      ]
+    },
+    {
+      "name": "laurierblad",
+      "key": "laurierblad",
+      "count": 3,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 laurierblad"
+      ]
+    },
+    {
+      "name": "linguine",
+      "key": "linguine",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "320 g bavette (of linguine)",
+        "350 g linguine"
+      ]
+    },
+    {
+      "name": "macaroni",
+      "key": "macaroni",
+      "count": 3,
+      "qual": [
+        "volkoren"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g macaroni",
+        "350 g macaroni",
+        "150 g volkoren macaroni"
+      ]
+    },
+    {
+      "name": "mais uit blik",
+      "key": "mais uit blik",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g mais uit blik",
+        "125 g mais uit blik",
+        "350 g mais uit blik"
+      ]
+    },
+    {
+      "name": "majoraan",
+      "key": "majoraan",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "½ tl majoraan",
+        "1 tl majoraan",
+        "1 el majoraan"
+      ]
+    },
+    {
+      "name": "oestersaus",
+      "key": "oestersaus",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "el",
+        "ml"
+      ],
+      "examples": [
+        "2 el oestersaus",
+        "1 el oestersaus",
+        "150 ml oestersaus"
+      ]
+    },
+    {
+      "name": "olijven zonder pit",
+      "key": "olijven zonder pit",
+      "count": 3,
+      "qual": [
+        "groene",
+        "zwarte"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "20 zwarte olijven zonder pit [kleine stukjes]",
+        "15 zwarte olijven zonder pit [gehalveerd]",
+        "100 g groene olijven zonder pit [kleine stukjes]"
+      ]
+    },
+    {
+      "name": "ontbijtspek",
+      "key": "ontbijtspek",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g",
+        "plak"
+      ],
+      "examples": [
+        "100 g ontbijtspek [blokjes]",
+        "150 g ontbijtspek [blokjes]",
+        "8 plakken ontbijtspek"
+      ]
+    },
+    {
+      "name": "paprika’s",
+      "key": "paprika's",
+      "count": 3,
+      "qual": [
+        "gegrilde",
+        "gele",
+        "grote",
+        "rode"
+      ],
+      "units": [],
+      "examples": [
+        "2 grote rode paprika’s [blokjes]",
+        "4 gegrilde rode of gele paprika’s (uit een pot)"
+      ]
+    },
+    {
+      "name": "pecannoten",
+      "key": "pecannoten",
+      "count": 3,
+      "qual": [
+        "ongezouten"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "60 g ongezouten pecannoten",
+        "50 g pecannoten [gehakt]",
+        "60 g pecannoten"
+      ]
+    },
+    {
+      "name": "pepers",
+      "key": "pepers",
+      "count": 3,
+      "qual": [
+        "gedroogde",
+        "kleine",
+        "rode",
+        "verkruimelde",
+        "verse"
+      ],
+      "units": [],
+      "examples": [
+        "2-3 verse rode pepers [fijngesneden zonder zaadjes]",
+        "4 kleine rode pepers",
+        "2 gedroogde verkruimelde pepers of chilivlokken"
+      ]
+    },
+    {
+      "name": "peultjes",
+      "key": "peultjes",
+      "count": 3,
+      "qual": [
+        "diepvries"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g peultjes",
+        "300 g diepvries peultjes"
+      ]
+    },
+    {
+      "name": "sambal oelek",
+      "key": "sambal oelek",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "3-4 tl sambal oelek",
+        "1 tl sambal badjak of sambal oelek",
+        "½ el sambal oelek"
+      ]
+    },
+    {
+      "name": "sesamolie",
+      "key": "sesamolie",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "2 tl sesamolie",
+        "1 el sesamolie",
+        "1 tl sesamolie"
+      ]
+    },
+    {
+      "name": "sjalotje",
+      "key": "sjalotje",
+      "count": 3,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 sjalotje [gesnipperd]"
+      ]
+    },
+    {
+      "name": "sla",
+      "key": "sla",
+      "count": 3,
+      "qual": [
+        "enkele",
+        "gemengde"
+      ],
+      "units": [
+        "blad",
+        "g",
+        "hand"
+      ],
+      "examples": [
+        "200 g gemengde sla",
+        "enkele blaadjes sla",
+        "2 handjes gemengde sla"
+      ]
+    },
+    {
+      "name": "sperziebonen",
+      "key": "sperziebonen",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "125 g sperziebonen [stukjes van 5 cm]",
+        "300 g sperziebonen",
+        "250 g sperziebonen [doormidden]"
+      ]
+    },
+    {
+      "name": "sukadelapjes",
+      "key": "sukadelapjes",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "g",
+        "kg"
+      ],
+      "examples": [
+        "1 kg sukadelapjes",
+        "500 g sukadelapjes [blokjes]",
+        "500 g sukadelapjes"
+      ]
+    },
+    {
+      "name": "taugé",
+      "key": "tauge",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "bakje",
+        "g"
+      ],
+      "examples": [
+        "100 g taugé",
+        "1 bakje taugé",
+        "125 g taugé"
+      ]
+    },
+    {
+      "name": "tomatensaus",
+      "key": "tomatensaus",
+      "count": 3,
+      "qual": [],
+      "units": [
+        "l",
+        "ml"
+      ],
+      "examples": [
+        "500 g rode pastasaus of tomatensaus",
+        "250 ml tomatensaus",
+        "¼ ltr tomatensaus (tomato frito)"
+      ]
+    },
+    {
+      "name": "trostomaten",
+      "key": "trostomaten",
+      "count": 3,
+      "qual": [
+        "kleine"
+      ],
+      "units": [],
+      "examples": [
+        "4 trostomaten",
+        "3 kleine trostomaten",
+        "3 trostomaten [plakjes]"
+      ]
+    },
+    {
+      "name": "wortels",
+      "key": "wortels",
+      "count": 3,
+      "qual": [
+        "grote",
+        "middelgrote"
+      ],
+      "units": [],
+      "examples": [
+        "2 wortels [fijngehakt]",
+        "2 grote wortels [gehakt]",
+        "6 middelgrote wortels [kleine reepjes]"
+      ]
+    },
+    {
+      "name": "amandelen",
+      "key": "amandelen",
+      "count": 2,
+      "qual": [
+        "geschaafde"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "50 g geschaafde amandelen"
+      ]
+    },
+    {
+      "name": "andijvie",
+      "key": "andijvie",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g",
+        "struik"
+      ],
+      "examples": [
+        "500 g andijvie [gesneden]",
+        "1 struik andijvie [repen van ca. 3 cm]"
+      ]
+    },
+    {
+      "name": "asperges",
+      "key": "asperges",
+      "count": 2,
+      "qual": [
+        "groene"
+      ],
+      "units": [
+        "bos",
+        "g"
+      ],
+      "examples": [
+        "1 bosje asperges [stukjes van 5 cm]",
+        "600 g groene asperges [dunne reepjes zo lang als de kipfilet]"
+      ]
+    },
+    {
+      "name": "avocado",
+      "key": "avocado",
+      "count": 2,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 avocado [blokjes]",
+        "1 avocado [dunne plakken]"
+      ]
+    },
+    {
+      "name": "bakmeel",
+      "key": "bakmeel",
+      "count": 2,
+      "qual": [
+        "zelfrijzend"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g zelfrijzend bakmeel",
+        "120 g zelfrijzend bakmeel"
+      ]
+    },
+    {
+      "name": "bosuitjes",
+      "key": "bosuitjes",
+      "count": 2,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "2 bosuitjes [ringetjes]",
+        "4 bosuitjes [fijngesneden]"
+      ]
+    },
+    {
+      "name": "bouillonpoeder",
+      "key": "bouillonpoeder",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "2 tl bouillonpoeder",
+        "2 el bouillonpoeder"
+      ]
+    },
+    {
+      "name": "brood",
+      "key": "brood",
+      "count": 2,
+      "qual": [
+        "oude",
+        "witte"
+      ],
+      "units": [
+        "snee"
+      ],
+      "examples": [
+        "1 sneetje brood",
+        "2 sneetjes oud wit brood"
+      ]
+    },
+    {
+      "name": "broodkruim",
+      "key": "broodkruim",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el",
+        "g"
+      ],
+      "examples": [
+        "40 g broodkruim",
+        "3 el broodkruim"
+      ]
+    },
+    {
+      "name": "camembert",
+      "key": "camembert",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g camembert",
+        "225 gram camembert [kleine stukjes]"
+      ]
+    },
+    {
+      "name": "chilivlokken",
+      "key": "chilivlokken",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "1 tl chilivlokken",
+        "2 gedroogde verkruimelde pepers of chilivlokken"
+      ]
+    },
+    {
+      "name": "citroenschil",
+      "key": "citroenschil",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "stuk",
+        "tl"
+      ],
+      "examples": [
+        "1 tl citroenschil [geraspt]",
+        "stuk citroenschil"
+      ]
+    },
+    {
+      "name": "couscous",
+      "key": "couscous",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g",
+        "pak"
+      ],
+      "examples": [
+        "400 g couscous",
+        "1 pak couscous"
+      ]
+    },
+    {
+      "name": "currypasta",
+      "key": "currypasta",
+      "count": 2,
+      "qual": [
+        "groene",
+        "milde"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el milde currypasta",
+        "1 el groene currypasta"
+      ]
+    },
+    {
+      "name": "diepvriesspinazie",
+      "key": "diepvriesspinazie",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "900 g diepvriesspinazie",
+        "450 g diepvriesspinazie (ontdooid)"
+      ]
+    },
+    {
+      "name": "dragonazijn",
+      "key": "dragonazijn",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "2 tl dragonazijn"
+      ]
+    },
+    {
+      "name": "drumsticks",
+      "key": "drumsticks",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "kg"
+      ],
+      "examples": [
+        "8-12 drumsticks",
+        "2 kg drumsticks"
+      ]
+    },
+    {
+      "name": "eidooier",
+      "key": "eidooier",
+      "count": 2,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 eidooier"
+      ]
+    },
+    {
+      "name": "foelie",
+      "key": "foelie",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "stuk"
+      ],
+      "examples": [
+        "1 stukje foelie",
+        "1 stuk foelie"
+      ]
+    },
+    {
+      "name": "gehaktkruiden",
+      "key": "gehaktkruiden",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "zakje"
+      ],
+      "examples": [
+        "1 zakje gehaktkruiden"
+      ]
+    },
+    {
+      "name": "geitenkaas",
+      "key": "geitenkaas",
+      "count": 2,
+      "qual": [
+        "zachte"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "125 g geitenkaas [verkruimeld]",
+        "100 g zachte geitenkaas"
+      ]
+    },
+    {
+      "name": "gembersiroop",
+      "key": "gembersiroop",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el",
+        "scheut"
+      ],
+      "examples": [
+        "2 el gembersiroop",
+        "scheutje gembersiroop"
+      ]
+    },
+    {
+      "name": "ham",
+      "key": "ham",
+      "count": 2,
+      "qual": [
+        "gekookte"
+      ],
+      "units": [
+        "plak"
+      ],
+      "examples": [
+        "10 plakjes gekookte ham",
+        "4 plakken ham"
+      ]
+    },
+    {
+      "name": "hamblokjes",
+      "key": "hamblokjes",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g hamblokjes"
+      ]
+    },
+    {
+      "name": "Japanse sojasaus",
+      "key": "japanse sojasaus",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el Japanse sojasaus",
+        "1 el Japanse sojasaus"
+      ]
+    },
+    {
+      "name": "kaneelstokje",
+      "key": "kaneelstokje",
+      "count": 2,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 kaneelstokje"
+      ]
+    },
+    {
+      "name": "kerstomaatjes",
+      "key": "kerstomaatjes",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g kerstomaatjes",
+        "24 kerstomaatjes [in vieren]"
+      ]
+    },
+    {
+      "name": "ketchup",
+      "key": "ketchup",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el ketchup",
+        "5 el ketchup"
+      ]
+    },
+    {
+      "name": "kidneybonen",
+      "key": "kidneybonen",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "1,6 kg bruine bonen uit blik (of kidneybonen)",
+        "1 blik kidneybonen, afgegoten"
+      ]
+    },
+    {
+      "name": "kip",
+      "key": "kip",
+      "count": 2,
+      "qual": [
+        "gegrilde",
+        "gerookte"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "½ gegrilde kip of 350 g gegrilde kipdijfilet",
+        "225 g gerookte kip [blokjes]"
+      ]
+    },
+    {
+      "name": "kippenbouillonblokje",
+      "key": "kippenbouillonblokje",
+      "count": 2,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1/2 kippenbouillonblokje",
+        "½ kippenbouillonblokje"
+      ]
+    },
+    {
+      "name": "komijnzaad",
+      "key": "komijnzaad",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "2 tl komijnzaad",
+        "1 tl komijnzaad"
+      ]
+    },
+    {
+      "name": "kool",
+      "key": "kool",
+      "count": 2,
+      "qual": [
+        "rode",
+        "witte"
+      ],
+      "units": [
+        "g",
+        "pot"
+      ],
+      "examples": [
+        "1 pot rode kool",
+        "300 g witte kool"
+      ]
+    },
+    {
+      "name": "korianderblaadjes",
+      "key": "korianderblaadjes",
+      "count": 2,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "el",
+        "g"
+      ],
+      "examples": [
+        "25 g verse korianderblaadjes [gehakt]",
+        "1 el verse korianderblaadjes [gehakt]"
+      ]
+    },
+    {
+      "name": "kristalsuiker",
+      "key": "kristalsuiker",
+      "count": 2,
+      "qual": [
+        "fijne"
+      ],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 el kristalsuiker",
+        "½ tl fijne kristalsuiker"
+      ]
+    },
+    {
+      "name": "kruidnagel",
+      "key": "kruidnagel",
+      "count": 2,
+      "qual": [
+        "gemalen"
+      ],
+      "units": [
+        "snuf",
+        "tl"
+      ],
+      "examples": [
+        "1 snuf gemalen kruidnagel",
+        "½ tl gemalen kruidnagel"
+      ]
+    },
+    {
+      "name": "lamsbout",
+      "key": "lamsbout",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g",
+        "kg"
+      ],
+      "examples": [
+        "2 kg lamsbout [ontbeend]",
+        "250 g lamsbout [smalle reepjes]"
+      ]
+    },
+    {
+      "name": "laos",
+      "key": "laos",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "schijf",
+        "tl"
+      ],
+      "examples": [
+        "2 tl laos",
+        "1 schijfje laos"
+      ]
+    },
+    {
+      "name": "lasagnevellen",
+      "key": "lasagnevellen",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "12 lasagnevellen",
+        "250 g lasagnevellen"
+      ]
+    },
+    {
+      "name": "margarine",
+      "key": "margarine",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "125 g margarine",
+        "30 g boter of margarine"
+      ]
+    },
+    {
+      "name": "mosterdzaad",
+      "key": "mosterdzaad",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "2 tl mosterdzaad",
+        "1 tl mosterdzaad"
+      ]
+    },
+    {
+      "name": "olijfolie extra vierge",
+      "key": "olijfolie extra vierge",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "6 el olijfolie extra vierge",
+        "4 el olijfolie extra vierge"
+      ]
+    },
+    {
+      "name": "paksoi",
+      "key": "paksoi",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g paksoi [repen]",
+        "1 paksoi [stukken]"
+      ]
+    },
+    {
+      "name": "pasta",
+      "key": "pasta",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g pasta (macaroni of penne)",
+        "500 g pasta"
+      ]
+    },
+    {
+      "name": "pepertje",
+      "key": "pepertje",
+      "count": 2,
+      "qual": [
+        "rode"
+      ],
+      "units": [],
+      "examples": [
+        "1 rood pepertje [gesnipperd zonder zaadjes]"
+      ]
+    },
+    {
+      "name": "pijnboompitten",
+      "key": "pijnboompitten",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g",
+        "kop"
+      ],
+      "examples": [
+        "50 g pijnboompitten",
+        "½ kop pijnboompitten"
+      ]
+    },
+    {
+      "name": "pinda’s",
+      "key": "pinda's",
+      "count": 2,
+      "qual": [
+        "geroosterde",
+        "ongezouten"
+      ],
+      "units": [
+        "g",
+        "kop"
+      ],
+      "examples": [
+        "1 kop geroosterde pinda’s",
+        "100 g ongezouten pinda’s [fijngehakt]"
+      ]
+    },
+    {
+      "name": "pindakaas",
+      "key": "pindakaas",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el",
+        "g"
+      ],
+      "examples": [
+        "2-3 el pindakaas",
+        "90 g pindakaas"
+      ]
+    },
+    {
+      "name": "plakjes ontbijtspek",
+      "key": "plakjes ontbijtspek",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "125 g plakjes ontbijtspek [luciferdunne reepjes]",
+        "150 g plakjes ontbijtspek [reepjes]"
+      ]
+    },
+    {
+      "name": "Rigatoni",
+      "key": "rigatoni",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g Rigatoni (pasta)",
+        "400 g Rigatoni (pasta)"
+      ]
+    },
+    {
+      "name": "risottorijst",
+      "key": "risottorijst",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g risottorijst",
+        "350 g risottorijst"
+      ]
+    },
+    {
+      "name": "roomboter",
+      "key": "roomboter",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el",
+        "g"
+      ],
+      "examples": [
+        "30 g roomboter",
+        "2 el roomboter"
+      ]
+    },
+    {
+      "name": "rosbief",
+      "key": "rosbief",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g rosbief [smalle reepjes]",
+        "500 g rosbief [reepjes van 1 cm]"
+      ]
+    },
+    {
+      "name": "santen",
+      "key": "santen",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "dl",
+        "l"
+      ],
+      "examples": [
+        "2½ dl santen",
+        "1 ltr santen"
+      ]
+    },
+    {
+      "name": "schelvisfilet",
+      "key": "schelvisfilet",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g schelvisfilet (of kabeljauw) [stukken van 2-3 cm]",
+        "400 g schelvisfilet [stukken van 2 cm]"
+      ]
+    },
+    {
+      "name": "sesamzaad",
+      "key": "sesamzaad",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "60 g sesamzaad",
+        "sesamzaad"
+      ]
+    },
+    {
+      "name": "sesamzaadjes",
+      "key": "sesamzaadjes",
+      "count": 2,
+      "qual": [
+        "geroosterde"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el geroosterde sesamzaadjes",
+        "1 el sesamzaadjes [gebrand]"
+      ]
+    },
+    {
+      "name": "sherry",
+      "key": "sherry",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "dl",
+        "el"
+      ],
+      "examples": [
+        "1 el sherry",
+        "1¼ dl sherry"
+      ]
+    },
+    {
+      "name": "Spaanse peper",
+      "key": "spaanse peper",
+      "count": 2,
+      "qual": [
+        "groene"
+      ],
+      "units": [],
+      "examples": [
+        "1 Spaanse peper",
+        "1 groene Spaanse peper [smalle reepjes]"
+      ]
+    },
+    {
+      "name": "speklapjes",
+      "key": "speklapjes",
+      "count": 2,
+      "qual": [
+        "magere"
+      ],
+      "units": [],
+      "examples": [
+        "4 magere speklapjes van ca. 100 g",
+        "4 speklapjes"
+      ]
+    },
+    {
+      "name": "spruitjes",
+      "key": "spruitjes",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g spruitjes [grote gehalveerd]"
+      ]
+    },
+    {
+      "name": "tomaten in olie",
+      "key": "tomaten in olie",
+      "count": 2,
+      "qual": [
+        "gedroogde",
+        "zongedroogde"
+      ],
+      "units": [
+        "stuk"
+      ],
+      "examples": [
+        "16 gedroogde tomaten in olie [reepjes]",
+        "6 stukken zongedroogde tomaten in olie [fijngesneden]"
+      ]
+    },
+    {
+      "name": "tomaten op olie",
+      "key": "tomaten op olie",
+      "count": 2,
+      "qual": [
+        "gedroogde"
+      ],
+      "units": [],
+      "examples": [
+        "6 gedroogde tomaten op olie",
+        "6 gedroogde tomaten op olie [kleine stukjes]"
+      ]
+    },
+    {
+      "name": "tonijn op olie",
+      "key": "tonijn op olie",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g tonijn op olie",
+        "200 g tonijn op olie"
+      ]
+    },
+    {
+      "name": "tonijn op water",
+      "key": "tonijn op water",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "blik",
+        "g"
+      ],
+      "examples": [
+        "4 blikjes tonijn op water",
+        "400 g tonijn op water"
+      ]
+    },
+    {
+      "name": "tortellini",
+      "key": "tortellini",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g tortellini"
+      ]
+    },
+    {
+      "name": "trassi",
+      "key": "trassi",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "mp",
+        "tl"
+      ],
+      "examples": [
+        "½ tl trassi (garnalenpasta)",
+        "1 mespunt trassi"
+      ]
+    },
+    {
+      "name": "uitjes",
+      "key": "uitjes",
+      "count": 2,
+      "qual": [
+        "gebakken"
+      ],
+      "units": [
+        "el",
+        "pot"
+      ],
+      "examples": [
+        "1 potje gebakken uitjes",
+        "2 el gebakken uitjes"
+      ]
+    },
+    {
+      "name": "vissaus",
+      "key": "vissaus",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el vissaus",
+        "2 el vissaus"
+      ]
+    },
+    {
+      "name": "vleestomaten",
+      "key": "vleestomaten",
+      "count": 2,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "2 vleestomaten",
+        "3 vleestomaten [ontveld in plakken]"
+      ]
+    },
+    {
+      "name": "witbrood",
+      "key": "witbrood",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "snee"
+      ],
+      "examples": [
+        "3 sneden witbrood",
+        "4 sneetjes witbrood"
+      ]
+    },
+    {
+      "name": "witlof",
+      "key": "witlof",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g witlof"
+      ]
+    },
+    {
+      "name": "zalmfilets",
+      "key": "zalmfilets",
+      "count": 2,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 zalmfilets van 150 g"
+      ]
+    },
+    {
+      "name": "zout",
+      "key": "zout",
+      "count": 2,
+      "qual": [],
+      "units": [
+        "el",
+        "tl"
+      ],
+      "examples": [
+        "1 el zout",
+        "1/2 tl zout"
+      ]
+    },
+    {
+      "name": "+ 40 g boter",
+      "key": "+ 40 g boter",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "30 g + 40 g boter"
+      ]
+    },
+    {
+      "name": "5 spices",
+      "key": "5 spices",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el 5 spices"
+      ]
+    },
+    {
+      "name": "aardappelblokjes",
+      "key": "aardappelblokjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g aardappelblokjes"
+      ]
+    },
+    {
+      "name": "aardappelgnocchi",
+      "key": "aardappelgnocchi",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g aardappelgnocchi"
+      ]
+    },
+    {
+      "name": "aardappelpuree",
+      "key": "aardappelpuree",
+      "count": 1,
+      "qual": [
+        "instant"
+      ],
+      "units": [
+        "zakje"
+      ],
+      "examples": [
+        "1 zakje instant aardappelpuree"
+      ]
+    },
+    {
+      "name": "aardappelschijfjes",
+      "key": "aardappelschijfjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "800 g aardappelschijfjes"
+      ]
+    },
+    {
+      "name": "abrikoos",
+      "key": "abrikoos",
+      "count": 1,
+      "qual": [
+        "gedroogde"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g gedroogde abrikoos [reepjes]"
+      ]
+    },
+    {
+      "name": "abrikozen",
+      "key": "abrikozen",
+      "count": 1,
+      "qual": [
+        "gedroogde"
+      ],
+      "units": [],
+      "examples": [
+        "4 gedroogde abrikozen [kleine stukjes]"
+      ]
+    },
+    {
+      "name": "achterham",
+      "key": "achterham",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "plak"
+      ],
+      "examples": [
+        "12 plakjes achterham"
+      ]
+    },
+    {
+      "name": "afbakstokbroden",
+      "key": "afbakstokbroden",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 afbakstokbroden"
+      ]
+    },
+    {
+      "name": "amandelschilfers",
+      "key": "amandelschilfers",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "50 g amandelschilfers"
+      ]
+    },
+    {
+      "name": "andere pasta",
+      "key": "andere pasta",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "400 g fusilli of andere pasta"
+      ]
+    },
+    {
+      "name": "andere pastasoort",
+      "key": "andere pastasoort",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "225 g farfalle (of een andere pastasoort)"
+      ]
+    },
+    {
+      "name": "ansjovisfilets",
+      "key": "ansjovisfilets",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 ansjovisfilets [uitgelekt en fijngesneden]"
+      ]
+    },
+    {
+      "name": "ansjovisjes",
+      "key": "ansjovisjes",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "6 ansjovisjes [kleine stukjes]"
+      ]
+    },
+    {
+      "name": "appelmoes",
+      "key": "appelmoes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "pot"
+      ],
+      "examples": [
+        "1 potje appelmoes"
+      ]
+    },
+    {
+      "name": "appelsap",
+      "key": "appelsap",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "200 ml appelsap"
+      ]
+    },
+    {
+      "name": "arborio- of risottorijst",
+      "key": "arborio- of risottorijst",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g arborio- of risottorijst"
+      ]
+    },
+    {
+      "name": "aubergines",
+      "key": "aubergines",
+      "count": 1,
+      "qual": [
+        "middelgrote"
+      ],
+      "units": [],
+      "examples": [
+        "2 middelgrote aubergines [kleine blokjes]"
+      ]
+    },
+    {
+      "name": "augurk",
+      "key": "augurk",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 augurk [blokjes]"
+      ]
+    },
+    {
+      "name": "augurkennat",
+      "key": "augurkennat",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el augurkennat"
+      ]
+    },
+    {
+      "name": "avocado’s",
+      "key": "avocado's",
+      "count": 1,
+      "qual": [
+        "rijpe"
+      ],
+      "units": [],
+      "examples": [
+        "2 rijpe avocado’s"
+      ]
+    },
+    {
+      "name": "azijn",
+      "key": "azijn",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "100 ml azijn"
+      ]
+    },
+    {
+      "name": "bakgember",
+      "key": "bakgember",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el bakgember (gekonfijte gember)"
+      ]
+    },
+    {
+      "name": "balsamico azijn",
+      "key": "balsamico azijn",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el balsamico azijn"
+      ]
+    },
+    {
+      "name": "balti kooksaus",
+      "key": "balti kooksaus",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "Blikje balti kooksaus (285 g)"
+      ]
+    },
+    {
+      "name": "basterdsuiker",
+      "key": "basterdsuiker",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "60 g basterdsuiker"
+      ]
+    },
+    {
+      "name": "bavette",
+      "key": "bavette",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "320 g bavette (of linguine)"
+      ]
+    },
+    {
+      "name": "biefstuk",
+      "key": "biefstuk",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g biefstuk"
+      ]
+    },
+    {
+      "name": "bier",
+      "key": "bier",
+      "count": 1,
+      "qual": [
+        "bruine"
+      ],
+      "units": [
+        "fles"
+      ],
+      "examples": [
+        "1 flesje bruin bier"
+      ]
+    },
+    {
+      "name": "bladpeterselie",
+      "key": "bladpeterselie",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "takje"
+      ],
+      "examples": [
+        "1 takje bladpeterselie [gehakt]"
+      ]
+    },
+    {
+      "name": "blauwe kaas",
+      "key": "blauwe kaas",
+      "count": 1,
+      "qual": [
+        "zachte"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "90 g zachte blauwe kaas [stukken]"
+      ]
+    },
+    {
+      "name": "blokjes ontbijtspek",
+      "key": "blokjes ontbijtspek",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g blokjes ontbijtspek"
+      ]
+    },
+    {
+      "name": "boemboe pinda-saté",
+      "key": "boemboe pinda-sate",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "pak"
+      ],
+      "examples": [
+        "1 pakje boemboe pinda-saté"
+      ]
+    },
+    {
+      "name": "bommen",
+      "key": "bommen",
+      "count": 1,
+      "qual": [
+        "zure"
+      ],
+      "units": [],
+      "examples": [
+        "1 of 2 zure bommen"
+      ]
+    },
+    {
+      "name": "bonen",
+      "key": "bonen",
+      "count": 1,
+      "qual": [
+        "kleine",
+        "zwarte"
+      ],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "1 klein blik zwarte bonen"
+      ]
+    },
+    {
+      "name": "bonen uit blik",
+      "key": "bonen uit blik",
+      "count": 1,
+      "qual": [
+        "bruine"
+      ],
+      "units": [
+        "kg"
+      ],
+      "examples": [
+        "1,6 kg bruine bonen uit blik (of kidneybonen)"
+      ]
+    },
+    {
+      "name": "boter om in te bakken",
+      "key": "boter om in te bakken",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "boter om in te bakken"
+      ]
+    },
+    {
+      "name": "botersla",
+      "key": "botersla",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g botersla"
+      ]
+    },
+    {
+      "name": "bouillon",
+      "key": "bouillon",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "800 ml bouillon"
+      ]
+    },
+    {
+      "name": "braadkip",
+      "key": "braadkip",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 braadkip (ca. 1,2 kg)"
+      ]
+    },
+    {
+      "name": "broccoliroosjes",
+      "key": "broccoliroosjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "900 g broccoliroosjes (diepvries)"
+      ]
+    },
+    {
+      "name": "broodkruim van 3 boterhammen",
+      "key": "broodkruim van 3 boterhammen",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "broodkruim van 3 boterhammen"
+      ]
+    },
+    {
+      "name": "buikspek aan een stuk",
+      "key": "buikspek aan een stuk",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "kg"
+      ],
+      "examples": [
+        "1 kg buikspek aan een stuk"
+      ]
+    },
+    {
+      "name": "burgerbroodjes",
+      "key": "burgerbroodjes",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 burgerbroodjes"
+      ]
+    },
+    {
+      "name": "cajunkruiden",
+      "key": "cajunkruiden",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el cajunkruiden"
+      ]
+    },
+    {
+      "name": "cannelloni",
+      "key": "cannelloni",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g cannelloni"
+      ]
+    },
+    {
+      "name": "cherrytomaten",
+      "key": "cherrytomaten",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g cherrytomaten [gehalveerd]"
+      ]
+    },
+    {
+      "name": "chili-olie",
+      "key": "chili-olie",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "chili-olie (of zonnebloemolie en chilivlokken)"
+      ]
+    },
+    {
+      "name": "chilipeper uit molentje",
+      "key": "chilipeper uit molentje",
+      "count": 1,
+      "qual": [
+        "gedroogde"
+      ],
+      "units": [],
+      "examples": [
+        "gedroogde chilipeper uit molentje"
+      ]
+    },
+    {
+      "name": "chilisaus",
+      "key": "chilisaus",
+      "count": 1,
+      "qual": [
+        "zoete"
+      ],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "60 ml zoet chilisaus"
+      ]
+    },
+    {
+      "name": "chiu chow chili-olie",
+      "key": "chiu chow chili-olie",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el chiu chow chili-olie"
+      ]
+    },
+    {
+      "name": "chorizoworst",
+      "key": "chorizoworst",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 chorizoworst [blokjes]"
+      ]
+    },
+    {
+      "name": "citroengras",
+      "key": "citroengras",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "stengel"
+      ],
+      "examples": [
+        "1 stengel citroengras"
+      ]
+    },
+    {
+      "name": "dadels",
+      "key": "dadels",
+      "count": 1,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g verse dadels [kleine reepjes]"
+      ]
+    },
+    {
+      "name": "diepvriesbladerdeeg",
+      "key": "diepvriesbladerdeeg",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "plak"
+      ],
+      "examples": [
+        "2 plakjes diepvriesbladerdeeg (ontdooid)"
+      ]
+    },
+    {
+      "name": "diepvriesdoperwtjes",
+      "key": "diepvriesdoperwtjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g diepvriesdoperwtjes"
+      ]
+    },
+    {
+      "name": "doperwtjes",
+      "key": "doperwtjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g doperwtjes"
+      ]
+    },
+    {
+      "name": "duan salam",
+      "key": "duan salam",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 duan salam (Indonesisch laurierblad)"
+      ]
+    },
+    {
+      "name": "eekhoorntjesbrood",
+      "key": "eekhoorntjesbrood",
+      "count": 1,
+      "qual": [
+        "gedroogde"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "50 g gedroogd eekhoorntjesbrood"
+      ]
+    },
+    {
+      "name": "eidooiers",
+      "key": "eidooiers",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 eidooiers"
+      ]
+    },
+    {
+      "name": "eikenbladsla",
+      "key": "eikenbladsla",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "120 g eikenbladsla"
+      ]
+    },
+    {
+      "name": "eikenbladsla melange",
+      "key": "eikenbladsla melange",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "75 g eikenbladsla melange"
+      ]
+    },
+    {
+      "name": "flatbread",
+      "key": "flatbread",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "flatbread"
+      ]
+    },
+    {
+      "name": "Franse tuinkruiden",
+      "key": "franse tuinkruiden",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el Franse tuinkruiden"
+      ]
+    },
+    {
+      "name": "gado-gado-saus",
+      "key": "gado-gado-saus",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "gado-gado-saus (volgens verpakking)"
+      ]
+    },
+    {
+      "name": "garam masala",
+      "key": "garam masala",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el garam masala of 2 tl kerrie"
+      ]
+    },
+    {
+      "name": "garnalen",
+      "key": "garnalen",
+      "count": 1,
+      "qual": [
+        "gepelde"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g gepelde garnalen"
+      ]
+    },
+    {
+      "name": "geelwortel/koenjit",
+      "key": "geelwortel/koenjit",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "1 tl geelwortel/koenjit"
+      ]
+    },
+    {
+      "name": "gehalveerde champignonhoedjes",
+      "key": "gehalveerde champignonhoedjes",
+      "count": 1,
+      "qual": [
+        "kleine"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "125 g kleine gehalveerde champignonhoedjes"
+      ]
+    },
+    {
+      "name": "geitenkaas in plakjes",
+      "key": "geitenkaas in plakjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g geitenkaas in plakjes [verkruimeld]"
+      ]
+    },
+    {
+      "name": "gembersap",
+      "key": "gembersap",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "80 ml gembersap"
+      ]
+    },
+    {
+      "name": "gnocchi",
+      "key": "gnocchi",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g gnocchi"
+      ]
+    },
+    {
+      "name": "gorgonzola",
+      "key": "gorgonzola",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g gorgonzola [stukjes]"
+      ]
+    },
+    {
+      "name": "Griekse yoghurt",
+      "key": "griekse yoghurt",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g Griekse yoghurt"
+      ]
+    },
+    {
+      "name": "groentebouillon",
+      "key": "groentebouillon",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "blokje"
+      ],
+      "examples": [
+        "2 blokjes groentebouillon"
+      ]
+    },
+    {
+      "name": "groentebouillon-poeder",
+      "key": "groentebouillon-poeder",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el groentebouillon-poeder"
+      ]
+    },
+    {
+      "name": "gruyère kaas",
+      "key": "gruyere kaas",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g gruyère kaas"
+      ]
+    },
+    {
+      "name": "hacheevlees",
+      "key": "hacheevlees",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g hacheevlees"
+      ]
+    },
+    {
+      "name": "ham in plakjes",
+      "key": "ham in plakjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g ham in plakjes"
+      ]
+    },
+    {
+      "name": "hamschijven",
+      "key": "hamschijven",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "750 g hamschijven"
+      ]
+    },
+    {
+      "name": "haricots verts",
+      "key": "haricots verts",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g haricots verts"
+      ]
+    },
+    {
+      "name": "hazelnoten",
+      "key": "hazelnoten",
+      "count": 1,
+      "qual": [
+        "blanke"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "50 g blanke hazelnoten"
+      ]
+    },
+    {
+      "name": "Hokkien mie",
+      "key": "hokkien mie",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g Hokkien mie"
+      ]
+    },
+    {
+      "name": "Hokkien-mie",
+      "key": "hokkien-mie",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g Hokkien-mie"
+      ]
+    },
+    {
+      "name": "ijsbergsla",
+      "key": "ijsbergsla",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "krop"
+      ],
+      "examples": [
+        "½ krop ijsbergsla [kleine stukjes]"
+      ]
+    },
+    {
+      "name": "jeneverbessen",
+      "key": "jeneverbessen",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 jeneverbessen"
+      ]
+    },
+    {
+      "name": "kaas in kleine blokjes",
+      "key": "kaas in kleine blokjes",
+      "count": 1,
+      "qual": [
+        "belegen"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g belegen kaas in kleine blokjes"
+      ]
+    },
+    {
+      "name": "kaastortellini",
+      "key": "kaastortellini",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g kaastortellini"
+      ]
+    },
+    {
+      "name": "kabeljauw",
+      "key": "kabeljauw",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "250 g schelvisfilet (of kabeljauw) [stukken van 2-3 cm]"
+      ]
+    },
+    {
+      "name": "kabeljauwfilets",
+      "key": "kabeljauwfilets",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 kabeljauwfilets van 200 g"
+      ]
+    },
+    {
+      "name": "kalamata olijven zonder pit",
+      "key": "kalamata olijven zonder pit",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "pot"
+      ],
+      "examples": [
+        "1 potje kalamata olijven zonder pit"
+      ]
+    },
+    {
+      "name": "kalfsfilets",
+      "key": "kalfsfilets",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g kalfsfilets [reepjes]"
+      ]
+    },
+    {
+      "name": "kalfsschenkel",
+      "key": "kalfsschenkel",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "schijf"
+      ],
+      "examples": [
+        "4 schijven kalfsschenkel"
+      ]
+    },
+    {
+      "name": "kalkoen",
+      "key": "kalkoen",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "500 g kipfilet (of kalkoen) [blokjes van 2-3 cm]"
+      ]
+    },
+    {
+      "name": "kalkoen- of kipfilet",
+      "key": "kalkoen- of kipfilet",
+      "count": 1,
+      "qual": [
+        "gare"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g gare kalkoen- of kipfilet [reepjes]"
+      ]
+    },
+    {
+      "name": "kaneelpoeder",
+      "key": "kaneelpoeder",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "½ tl kaneelpoeder"
+      ]
+    },
+    {
+      "name": "kapucijners",
+      "key": "kapucijners",
+      "count": 1,
+      "qual": [
+        "jonge"
+      ],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "1 blik jonge kapucijners"
+      ]
+    },
+    {
+      "name": "karnemelk",
+      "key": "karnemelk",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "60 ml karnemelk"
+      ]
+    },
+    {
+      "name": "kastanjechampignons",
+      "key": "kastanjechampignons",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g kastanjechampignons [gehalveerd]"
+      ]
+    },
+    {
+      "name": "kerstomaat",
+      "key": "kerstomaat",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g kerstomaat"
+      ]
+    },
+    {
+      "name": "kervel",
+      "key": "kervel",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1/2 el kervel"
+      ]
+    },
+    {
+      "name": "ketjap",
+      "key": "ketjap",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "4 el ketjap"
+      ]
+    },
+    {
+      "name": "ketjap asin",
+      "key": "ketjap asin",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el ketjap asin"
+      ]
+    },
+    {
+      "name": "kipdijfilet",
+      "key": "kipdijfilet",
+      "count": 1,
+      "qual": [
+        "gegrilde"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "½ gegrilde kip of 350 g gegrilde kipdijfilet"
+      ]
+    },
+    {
+      "name": "kipkarbonades",
+      "key": "kipkarbonades",
+      "count": 1,
+      "qual": [
+        "kleine"
+      ],
+      "units": [],
+      "examples": [
+        "8 kleine kipkarbonades"
+      ]
+    },
+    {
+      "name": "kipkruiden",
+      "key": "kipkruiden",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "2 tl kipkruiden"
+      ]
+    },
+    {
+      "name": "kippen- of kalfsgehakt",
+      "key": "kippen- of kalfsgehakt",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "600 g kippen- of kalfsgehakt"
+      ]
+    },
+    {
+      "name": "kippenbouten",
+      "key": "kippenbouten",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 kippenbouten"
+      ]
+    },
+    {
+      "name": "kippenfond",
+      "key": "kippenfond",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "400 ml kippenfond"
+      ]
+    },
+    {
+      "name": "kippenpoten",
+      "key": "kippenpoten",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "kg"
+      ],
+      "examples": [
+        "1 kg kippenpoten"
+      ]
+    },
+    {
+      "name": "kippenvleugeltjes",
+      "key": "kippenvleugeltjes",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "8 kippenvleugeltjes (750 g)"
+      ]
+    },
+    {
+      "name": "knoflookteentjes",
+      "key": "knoflookteentjes",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "2 knoflookteentjes [gesnipperd]"
+      ]
+    },
+    {
+      "name": "kokos",
+      "key": "kokos",
+      "count": 1,
+      "qual": [
+        "geraspte"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "4 el geraspte kokos"
+      ]
+    },
+    {
+      "name": "komijn",
+      "key": "komijn",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "1 tl komijn"
+      ]
+    },
+    {
+      "name": "komijnpoeder",
+      "key": "komijnpoeder",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "½ tl komijnpoeder"
+      ]
+    },
+    {
+      "name": "komijnzaadjes",
+      "key": "komijnzaadjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "½ tl komijnzaadjes"
+      ]
+    },
+    {
+      "name": "kookroom",
+      "key": "kookroom",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "150 ml kookroom"
+      ]
+    },
+    {
+      "name": "koolraap",
+      "key": "koolraap",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "800 g koolraap [blokjes]"
+      ]
+    },
+    {
+      "name": "krieltjes",
+      "key": "krieltjes",
+      "count": 1,
+      "qual": [
+        "nieuwe"
+      ],
+      "units": [
+        "kg"
+      ],
+      "examples": [
+        "1 kg nieuw krieltjes [gehalveerd]"
+      ]
+    },
+    {
+      "name": "krieltjes in de schil",
+      "key": "krieltjes in de schil",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g krieltjes in de schil"
+      ]
+    },
+    {
+      "name": "kroepoek",
+      "key": "kroepoek",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "kroepoek"
+      ]
+    },
+    {
+      "name": "kroepoek, atjar en seroendeng",
+      "key": "kroepoek, atjar en seroendeng",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "Optioneel: kroepoek, atjar en seroendeng"
+      ]
+    },
+    {
+      "name": "kruidenboter",
+      "key": "kruidenboter",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g kruidenboter"
+      ]
+    },
+    {
+      "name": "kruidenbouillon",
+      "key": "kruidenbouillon",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 kruidenbouillon (blokje)"
+      ]
+    },
+    {
+      "name": "kruidenbouillonpoeder",
+      "key": "kruidenbouillonpoeder",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "1 tl kruidenbouillonpoeder"
+      ]
+    },
+    {
+      "name": "kruidenkaas",
+      "key": "kruidenkaas",
+      "count": 1,
+      "qual": [
+        "geraspte"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "75 g geraspte kruidenkaas"
+      ]
+    },
+    {
+      "name": "kruidnagelpoeder",
+      "key": "kruidnagelpoeder",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "mp"
+      ],
+      "examples": [
+        "1 mp kruidnagelpoeder"
+      ]
+    },
+    {
+      "name": "lamsfond",
+      "key": "lamsfond",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "400 ml lamsfond"
+      ]
+    },
+    {
+      "name": "lamsgehakt",
+      "key": "lamsgehakt",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g lamsgehakt"
+      ]
+    },
+    {
+      "name": "lasagnebladen",
+      "key": "lasagnebladen",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "375 g lasagnebladen"
+      ]
+    },
+    {
+      "name": "lente-ui",
+      "key": "lente-ui",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "bos"
+      ],
+      "examples": [
+        "1 bosje lente-ui [ringetjes]"
+      ]
+    },
+    {
+      "name": "lente-uien",
+      "key": "lente-uien",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 lente-uien [gesnipperd]"
+      ]
+    },
+    {
+      "name": "lente-uitje",
+      "key": "lente-uitje",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 lente-uitje [fijngesneden]"
+      ]
+    },
+    {
+      "name": "limoensap",
+      "key": "limoensap",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "7 el limoensap"
+      ]
+    },
+    {
+      "name": "linzen",
+      "key": "linzen",
+      "count": 1,
+      "qual": [
+        "rode"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g rode linzen"
+      ]
+    },
+    {
+      "name": "lollo rosso sla",
+      "key": "lollo rosso sla",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "krop"
+      ],
+      "examples": [
+        "1 krop lollo rosso sla"
+      ]
+    },
+    {
+      "name": "macadamianoten",
+      "key": "macadamianoten",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "7 macadamianoten"
+      ]
+    },
+    {
+      "name": "makreel",
+      "key": "makreel",
+      "count": 1,
+      "qual": [
+        "gestoomde"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g gestoomde makreel [zonder vel en graten, kleine stukjes]"
+      ]
+    },
+    {
+      "name": "mango-chutney",
+      "key": "mango-chutney",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "3 el mango-chutney"
+      ]
+    },
+    {
+      "name": "marsalawijn",
+      "key": "marsalawijn",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el marsalawijn"
+      ]
+    },
+    {
+      "name": "masala",
+      "key": "masala",
+      "count": 1,
+      "qual": [
+        "gele"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el gele masala"
+      ]
+    },
+    {
+      "name": "meikaas",
+      "key": "meikaas",
+      "count": 1,
+      "qual": [
+        "witte"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g witte meikaas [hele kleine blokjes]"
+      ]
+    },
+    {
+      "name": "meloenen",
+      "key": "meloenen",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 of 2 meloenen, Galia, honing, suiker of Cantaloupe [stukjes]"
+      ]
+    },
+    {
+      "name": "Mon Chou",
+      "key": "mon chou",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g Mon Chou"
+      ]
+    },
+    {
+      "name": "munt",
+      "key": "munt",
+      "count": 1,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "15 g verse munt [gehakt]"
+      ]
+    },
+    {
+      "name": "noedels",
+      "key": "noedels",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g noedels"
+      ]
+    },
+    {
+      "name": "noten",
+      "key": "noten",
+      "count": 1,
+      "qual": [
+        "gemengde"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g gemengde noten"
+      ]
+    },
+    {
+      "name": "notenmix",
+      "key": "notenmix",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "80 g notenmix"
+      ]
+    },
+    {
+      "name": "oesterzwammen",
+      "key": "oesterzwammen",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g oesterzwammen [reepjes]"
+      ]
+    },
+    {
+      "name": "olie en boter om in te bakken",
+      "key": "olie en boter om in te bakken",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "olie en boter om in te bakken"
+      ]
+    },
+    {
+      "name": "olijven gevuld met citroen",
+      "key": "olijven gevuld met citroen",
+      "count": 1,
+      "qual": [
+        "groene"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el groene olijven gevuld met citroen"
+      ]
+    },
+    {
+      "name": "ontbijtkoek",
+      "key": "ontbijtkoek",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "plak"
+      ],
+      "examples": [
+        "2 plakjes ontbijtkoek [blokjes]"
+      ]
+    },
+    {
+      "name": "pappardelle",
+      "key": "pappardelle",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g pappardelle"
+      ]
+    },
+    {
+      "name": "paprika rood",
+      "key": "paprika rood",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "1 paprika rood [stukjes]"
+      ]
+    },
+    {
+      "name": "pastasaus",
+      "key": "pastasaus",
+      "count": 1,
+      "qual": [
+        "rode"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g rode pastasaus of tomatensaus"
+      ]
+    },
+    {
+      "name": "pastinaken",
+      "key": "pastinaken",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "2 pastinaken [stukken van 2 cm]"
+      ]
+    },
+    {
+      "name": "pastrami",
+      "key": "pastrami",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g pastrami (of rookvlees)"
+      ]
+    },
+    {
+      "name": "peperkorrels",
+      "key": "peperkorrels",
+      "count": 1,
+      "qual": [
+        "zwarte"
+      ],
+      "units": [],
+      "examples": [
+        "12 zwarte peperkorrels"
+      ]
+    },
+    {
+      "name": "peren",
+      "key": "peren",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "2 peren [blokjes]"
+      ]
+    },
+    {
+      "name": "pestosaus",
+      "key": "pestosaus",
+      "count": 1,
+      "qual": [
+        "groene"
+      ],
+      "units": [
+        "pot"
+      ],
+      "examples": [
+        "1 pot groene pestosaus"
+      ]
+    },
+    {
+      "name": "piccalilly",
+      "key": "piccalilly",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "pot"
+      ],
+      "examples": [
+        "½ pot piccalilly"
+      ]
+    },
+    {
+      "name": "pijnboompitjes",
+      "key": "pijnboompitjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "50 g pijnboompitjes"
+      ]
+    },
+    {
+      "name": "pimentkorrels",
+      "key": "pimentkorrels",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "6 pimentkorrels"
+      ]
+    },
+    {
+      "name": "pimentpoeder",
+      "key": "pimentpoeder",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "snuf"
+      ],
+      "examples": [
+        "1 snuf pimentpoeder"
+      ]
+    },
+    {
+      "name": "pinda’s/cashewnoten",
+      "key": "pinda's/cashewnoten",
+      "count": 1,
+      "qual": [
+        "ongezouten"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "50 g ongezouten pinda’s/cashewnoten [gehakt]"
+      ]
+    },
+    {
+      "name": "plakjes achterham",
+      "key": "plakjes achterham",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g plakjes achterham"
+      ]
+    },
+    {
+      "name": "plakjes gekookte ham",
+      "key": "plakjes gekookte ham",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g plakjes gekookte ham [reepjes]"
+      ]
+    },
+    {
+      "name": "plakjes pancetta",
+      "key": "plakjes pancetta",
+      "count": 1,
+      "qual": [
+        "dunne"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g dunne plakjes pancetta (of bacon)"
+      ]
+    },
+    {
+      "name": "plakken gekookte ham",
+      "key": "plakken gekookte ham",
+      "count": 1,
+      "qual": [
+        "dikke"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g dikke plakken gekookte ham [blokjes]"
+      ]
+    },
+    {
+      "name": "polenta",
+      "key": "polenta",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "120 g polenta"
+      ]
+    },
+    {
+      "name": "pompoen",
+      "key": "pompoen",
+      "count": 1,
+      "qual": [
+        "grote"
+      ],
+      "units": [],
+      "examples": [
+        "1 grote (fles)pompoen [blokjes]"
+      ]
+    },
+    {
+      "name": "puree",
+      "key": "puree",
+      "count": 1,
+      "qual": [
+        "instant"
+      ],
+      "units": [],
+      "examples": [
+        "1½ kg aardappelen [stukken] (of instant puree)"
+      ]
+    },
+    {
+      "name": "radijsjes",
+      "key": "radijsjes",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "2 radijsjes [plakken]"
+      ]
+    },
+    {
+      "name": "ramen noedels",
+      "key": "ramen noedels",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g ramen noedels"
+      ]
+    },
+    {
+      "name": "reuzel",
+      "key": "reuzel",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "75 g reuzel"
+      ]
+    },
+    {
+      "name": "rijstazijn",
+      "key": "rijstazijn",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "125 ml rijstazijn"
+      ]
+    },
+    {
+      "name": "rijstmeel",
+      "key": "rijstmeel",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el rijstmeel (bloem kan ook)"
+      ]
+    },
+    {
+      "name": "rookkaas",
+      "key": "rookkaas",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g rookkaas [kleine blokjes]"
+      ]
+    },
+    {
+      "name": "rookvlees",
+      "key": "rookvlees",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "300 g pastrami (of rookvlees)"
+      ]
+    },
+    {
+      "name": "rookworsten",
+      "key": "rookworsten",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "2 rookworsten"
+      ]
+    },
+    {
+      "name": "roomkaas met gember",
+      "key": "roomkaas met gember",
+      "count": 1,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g verse roomkaas met gember"
+      ]
+    },
+    {
+      "name": "roomkaas met kruiden",
+      "key": "roomkaas met kruiden",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g roomkaas met kruiden"
+      ]
+    },
+    {
+      "name": "runderbouillonblokje",
+      "key": "runderbouillonblokje",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "¾ runderbouillonblokje"
+      ]
+    },
+    {
+      "name": "runderbouillonblokjes",
+      "key": "runderbouillonblokjes",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "2 runderbouillonblokjes"
+      ]
+    },
+    {
+      "name": "runderlappen",
+      "key": "runderlappen",
+      "count": 1,
+      "qual": [
+        "doorregen"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "750 g doorregen runderlappen"
+      ]
+    },
+    {
+      "name": "runderpoelet",
+      "key": "runderpoelet",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g runderpoelet"
+      ]
+    },
+    {
+      "name": "runderpoulet",
+      "key": "runderpoulet",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g runderpoulet"
+      ]
+    },
+    {
+      "name": "runderreepjes",
+      "key": "runderreepjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g runderreepjes"
+      ]
+    },
+    {
+      "name": "runderschenkel",
+      "key": "runderschenkel",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g runderschenkel"
+      ]
+    },
+    {
+      "name": "saffraan",
+      "key": "saffraan",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "envelopje"
+      ],
+      "examples": [
+        "1 envelopje saffraan"
+      ]
+    },
+    {
+      "name": "saffraandraadjes",
+      "key": "saffraandraadjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "zakje"
+      ],
+      "examples": [
+        "1 zakje saffraandraadjes"
+      ]
+    },
+    {
+      "name": "saffraanpoeder",
+      "key": "saffraanpoeder",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "mp"
+      ],
+      "examples": [
+        "1 mp saffraanpoeder"
+      ]
+    },
+    {
+      "name": "sake",
+      "key": "sake",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "200 ml sake"
+      ]
+    },
+    {
+      "name": "salie",
+      "key": "salie",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "1 el salie [fijngesneden]"
+      ]
+    },
+    {
+      "name": "sambal badjak",
+      "key": "sambal badjak",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "1 tl sambal badjak of sambal oelek"
+      ]
+    },
+    {
+      "name": "savooienkool",
+      "key": "savooienkool",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g savooienkool [repen]"
+      ]
+    },
+    {
+      "name": "schelpjes macaroni",
+      "key": "schelpjes macaroni",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g schelpjes macaroni"
+      ]
+    },
+    {
+      "name": "schelpjesmacaroni",
+      "key": "schelpjesmacaroni",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "350 g schelpjesmacaroni"
+      ]
+    },
+    {
+      "name": "selderijstengels",
+      "key": "selderijstengels",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "5 selderijstengels [gehakt]"
+      ]
+    },
+    {
+      "name": "shoarmakruiden",
+      "key": "shoarmakruiden",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el shoarmakruiden"
+      ]
+    },
+    {
+      "name": "sinaasappelsap",
+      "key": "sinaasappelsap",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "100 ml sinaasappelsap [vers geperst]"
+      ]
+    },
+    {
+      "name": "sjalotten",
+      "key": "sjalotten",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "4 sjalotten [dunne partjes]"
+      ]
+    },
+    {
+      "name": "slabladeren",
+      "key": "slabladeren",
+      "count": 1,
+      "qual": [
+        "mooie"
+      ],
+      "units": [],
+      "examples": [
+        "4 mooie slabladeren"
+      ]
+    },
+    {
+      "name": "snacktomaten",
+      "key": "snacktomaten",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g snacktomaten [grove blokjes]"
+      ]
+    },
+    {
+      "name": "soepgroenten",
+      "key": "soepgroenten",
+      "count": 1,
+      "qual": [
+        "grove"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "250 g grove soepgroenten"
+      ]
+    },
+    {
+      "name": "sperzieboontjes",
+      "key": "sperzieboontjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "600 g sperzieboontjes"
+      ]
+    },
+    {
+      "name": "spitskool",
+      "key": "spitskool",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g spitskool [fijngesneden]"
+      ]
+    },
+    {
+      "name": "spliterwten",
+      "key": "spliterwten",
+      "count": 1,
+      "qual": [
+        "groene"
+      ],
+      "units": [
+        "kop"
+      ],
+      "examples": [
+        "2 koppen groene spliterwten"
+      ]
+    },
+    {
+      "name": "spruiten",
+      "key": "spruiten",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "350 g spruiten [gehalveerd]"
+      ]
+    },
+    {
+      "name": "stokbrood",
+      "key": "stokbrood",
+      "count": 1,
+      "qual": [
+        "dunne"
+      ],
+      "units": [
+        "snee"
+      ],
+      "examples": [
+        "8 dunne sneetjes stokbrood"
+      ]
+    },
+    {
+      "name": "stukjes tomaat uit blik",
+      "key": "stukjes tomaat uit blik",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "600 g stukjes tomaat uit blik"
+      ]
+    },
+    {
+      "name": "suikererwten",
+      "key": "suikererwten",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "150 g suikererwten"
+      ]
+    },
+    {
+      "name": "Tabasco",
+      "key": "tabasco",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "Tabasco"
+      ]
+    },
+    {
+      "name": "taco-kruidenmix",
+      "key": "taco-kruidenmix",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "zakje"
+      ],
+      "examples": [
+        "1 zakje taco-kruidenmix"
+      ]
+    },
+    {
+      "name": "taco’s",
+      "key": "taco's",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "24 taco’s"
+      ]
+    },
+    {
+      "name": "tacosaus",
+      "key": "tacosaus",
+      "count": 1,
+      "qual": [
+        "milde"
+      ],
+      "units": [
+        "pot"
+      ],
+      "examples": [
+        "1 potje milde tacosaus"
+      ]
+    },
+    {
+      "name": "tahoe",
+      "key": "tahoe",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "100 g tahoe"
+      ]
+    },
+    {
+      "name": "tempé",
+      "key": "tempe",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "200 g tempé [blokjes]"
+      ]
+    },
+    {
+      "name": "tijmblaadjes",
+      "key": "tijmblaadjes",
+      "count": 1,
+      "qual": [
+        "verse"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "½ el verse tijmblaadjes"
+      ]
+    },
+    {
+      "name": "tomaten in stukjes",
+      "key": "tomaten in stukjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "2 blikken (800 g) tomaten in stukjes [uitgelekt]"
+      ]
+    },
+    {
+      "name": "tomaten uit blik",
+      "key": "tomaten uit blik",
+      "count": 1,
+      "qual": [
+        "gepelde"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "850 g gepelde tomaten uit blik"
+      ]
+    },
+    {
+      "name": "tomatenblokjes",
+      "key": "tomatenblokjes",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "1 blik (400 g) tomatenblokjes"
+      ]
+    },
+    {
+      "name": "tomatensaus au naturel",
+      "key": "tomatensaus au naturel",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "ml"
+      ],
+      "examples": [
+        "250 ml tomatensaus au naturel"
+      ]
+    },
+    {
+      "name": "tomatensoep",
+      "key": "tomatensoep",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "pak"
+      ],
+      "examples": [
+        "1 pakje tomatensoep"
+      ]
+    },
+    {
+      "name": "tonijn in olie",
+      "key": "tonijn in olie",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "1 blikje tonijn in olie"
+      ]
+    },
+    {
+      "name": "tonijn uit blik",
+      "key": "tonijn uit blik",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g tonijn uit blik"
+      ]
+    },
+    {
+      "name": "tonijnfilet",
+      "key": "tonijnfilet",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "300 g tonijnfilet"
+      ]
+    },
+    {
+      "name": "tonijnmoot in water",
+      "key": "tonijnmoot in water",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "blik"
+      ],
+      "examples": [
+        "1 blikje tonijnmoot in water"
+      ]
+    },
+    {
+      "name": "tortilla chips",
+      "key": "tortilla chips",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "75 g tortilla chips"
+      ]
+    },
+    {
+      "name": "tuinbonen",
+      "key": "tuinbonen",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "kop"
+      ],
+      "examples": [
+        "1 kop tuinbonen"
+      ]
+    },
+    {
+      "name": "uienchutney",
+      "key": "uienchutney",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "3 tl uienchutney"
+      ]
+    },
+    {
+      "name": "vadouvan",
+      "key": "vadouvan",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "1½ tl vadouvan"
+      ]
+    },
+    {
+      "name": "varkenshaas",
+      "key": "varkenshaas",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g varkenshaas"
+      ]
+    },
+    {
+      "name": "varkensrollade",
+      "key": "varkensrollade",
+      "count": 1,
+      "qual": [
+        "doorregen"
+      ],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "750 g doorregen varkensrollade"
+      ]
+    },
+    {
+      "name": "venkel",
+      "key": "venkel",
+      "count": 1,
+      "qual": [
+        "grote"
+      ],
+      "units": [],
+      "examples": [
+        "1 grote venkel [stukken]"
+      ]
+    },
+    {
+      "name": "vissticks",
+      "key": "vissticks",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "20 vissticks"
+      ]
+    },
+    {
+      "name": "Vlees",
+      "key": "vlees",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "Vlees naar keuze (bv. Slavinken)"
+      ]
+    },
+    {
+      "name": "volkorenbrood sesam",
+      "key": "volkorenbrood sesam",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "½ volkorenbrood sesam"
+      ]
+    },
+    {
+      "name": "walnoot",
+      "key": "walnoot",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "4 el walnoot [stukjes]"
+      ]
+    },
+    {
+      "name": "wijn azijn",
+      "key": "wijn azijn",
+      "count": 1,
+      "qual": [
+        "rode"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "3 el rode wijn azijn"
+      ]
+    },
+    {
+      "name": "winterwortel",
+      "key": "winterwortel",
+      "count": 1,
+      "qual": [
+        "grote"
+      ],
+      "units": [],
+      "examples": [
+        "1 grote winterwortel [stukken van 2 cm]"
+      ]
+    },
+    {
+      "name": "witbroodkruim",
+      "key": "witbroodkruim",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "kop"
+      ],
+      "examples": [
+        "½ kop witbroodkruim"
+      ]
+    },
+    {
+      "name": "witte/rode wijn",
+      "key": "witte/rode wijn",
+      "count": 1,
+      "qual": [
+        "droge"
+      ],
+      "units": [],
+      "examples": [
+        "droge witte/rode wijn"
+      ]
+    },
+    {
+      "name": "wodka",
+      "key": "wodka",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "2 el wodka"
+      ]
+    },
+    {
+      "name": "wokgroente",
+      "key": "wokgroente",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g wokgroente"
+      ]
+    },
+    {
+      "name": "wokvlees",
+      "key": "wokvlees",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g wokvlees"
+      ]
+    },
+    {
+      "name": "worcestersaus",
+      "key": "worcestersaus",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "tl"
+      ],
+      "examples": [
+        "1 tl worcestersaus"
+      ]
+    },
+    {
+      "name": "Worcestershire saus",
+      "key": "worcestershire saus",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "Worcestershire saus"
+      ]
+    },
+    {
+      "name": "Zaanse mosterd",
+      "key": "zaanse mosterd",
+      "count": 1,
+      "qual": [
+        "grove"
+      ],
+      "units": [
+        "el"
+      ],
+      "examples": [
+        "3 el grove Zaanse mosterd"
+      ]
+    },
+    {
+      "name": "zalm uit blik",
+      "key": "zalm uit blik",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "400 g zalm uit blik"
+      ]
+    },
+    {
+      "name": "zalmsnippers",
+      "key": "zalmsnippers",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "225 g zalmsnippers (gerookt)"
+      ]
+    },
+    {
+      "name": "zeer rijpe vleestomaten",
+      "key": "zeer rijpe vleestomaten",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "500 g zeer rijpe vleestomaten [fijngesneden]"
+      ]
+    },
+    {
+      "name": "zonnebloemolie en chilivlokken",
+      "key": "zonnebloemolie en chilivlokken",
+      "count": 1,
+      "qual": [],
+      "units": [],
+      "examples": [
+        "chili-olie (of zonnebloemolie en chilivlokken)"
+      ]
+    },
+    {
+      "name": "zuurkool",
+      "key": "zuurkool",
+      "count": 1,
+      "qual": [],
+      "units": [
+        "g"
+      ],
+      "examples": [
+        "750 g zuurkool"
+      ]
+    }
+  ]
+}

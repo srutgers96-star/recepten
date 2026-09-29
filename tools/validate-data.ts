@@ -1,7 +1,10 @@
 // tools/validate-data.ts — data guard for CI and for the local dev loop.
 //
-// Validates the schema-1 source corpus (data/source/recipes-recepten2.json) and the generated
-// schema-2 file data/recipes.json (tools/migrate-from-recepten2.ts, docs/phase-1-spec.md §2).
+// Validates the schema-1 source corpus (data/source/recipes-recepten2.json), the dictionary files
+// (data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json, docs/phase-2-spec.md §1)
+// and the generated schema-2 file data/recipes.json (tools/migrate-from-recepten2.ts, §2 + §4:
+// dictionary references, `name.en` and every `steps[].text.en` when `text.en` is set, categories,
+// tags, units and qualifiers).
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
 // Exit:  1 when any error was found, 0 otherwise. Warnings never fail the run.
@@ -12,6 +15,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import process from 'node:process';
+import { normalizeKey, type DictionaryData } from '../src/domain/dictionary.ts';
+import { readDictionaryData } from './build-dictionary-seed.ts';
 
 export interface ValidationResult {
   /** Human-readable problems that must fail CI. */
@@ -19,13 +24,48 @@ export interface ValidationResult {
   /** Human-readable oddities worth a look but not a failure. */
   warnings: string[];
   /** Counts for the summary line. */
-  stats: { recipes: number; lines: number };
+  stats: { recipes: number; lines: number; resolved?: number; translated?: number };
+}
+
+/** The tag vocabulary of docs/phase-2-spec.md §1 (`recipes.json` → `tags`). */
+export const RECIPE_TAGS: readonly string[] = ['vegetarisch', 'vega-optie', 'snel', 'oven', 'wok', 'kids', 'wereld', 'feest', 'zomer', 'winter'];
+
+/** `Line.part` values (src/domain/model.ts `LinePart`). */
+export const LINE_PARTS: readonly string[] = ['sap', 'rasp', 'rasp-en-sap', 'wit', 'geel', 'blaadjes'];
+
+const UNIT_GROUPS: ReadonlySet<string> = new Set(['mass', 'volume', 'count', 'package', 'pinch', 'length']);
+const QUALIFIER_KINDS: ReadonlySet<string> = new Set(['colour', 'size', 'state', 'variety', 'fat', 'other']);
+const ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** The id sets a schema-2 file is validated against (built from the dictionary files). */
+export interface DictionaryRefs {
+  ingredients: ReadonlySet<string>;
+  units: ReadonlySet<string>;
+  qualifiers: ReadonlySet<string>;
+  categories: ReadonlySet<string>;
+  aisles: ReadonlySet<string>;
+  tags: ReadonlySet<string>;
+}
+
+export function refsFromData(data: DictionaryData): DictionaryRefs {
+  return {
+    ingredients: new Set(data.ingredients.map((i) => i.id)),
+    units: new Set(data.units.map((u) => u.id)),
+    qualifiers: new Set(data.qualifiers.map((q) => q.id)),
+    categories: new Set(data.categories.map((c) => c.id)),
+    aisles: new Set(data.aisles.map((a) => a.id)),
+    tags: new Set(RECIPE_TAGS),
+  };
 }
 
 const SOURCE_KEYS: ReadonlySet<string> = new Set(['name', 'ingredients', 'instructions']);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((s) => typeof s === 'string');
 }
 
 // ---------------------------------------------------------------------------
@@ -107,21 +147,100 @@ export function validateSource(data: unknown): ValidationResult {
 // non-empty text, and goesWith ids that exist. Warnings: a builtin without the 'b:' id prefix,
 // timers with a max below min, duplicate names.
 //
-// Later phases add: name.en present, category in data/categories.json, lines[].ing/unit known in
-// the dictionaries, equal step counts per language, and the parser golden fixture coverage.
+// Phase-2 rules (docs/phase-2-spec.md §2 + §4), errors: the structured line fields have the right
+// shape (qty {min, max?, approx?} | null, unit/ing/qual ids, part, prep/note texts, packSize, alt[]
+// lines, altMode, optional, role, confidence 0-1); with `refs` every unit, ingredient (also in
+// alt[]), qualifier and category id exists and tags are a subset of RECIPE_TAGS; when `text.en` is
+// 'llm' or 'human' the recipe has `name.en` and every step has `text.en` (equal step counts per
+// language). Warnings: unresolved lines (ing null) as one count, a Dutch servingTip without English.
 
 const ORIGIN_KINDS: ReadonlySet<string> = new Set(['builtin', 'user', 'received']);
 const TIMER_UNITS: ReadonlySet<string> = new Set(['sec', 'min', 'hour']);
+const TEXT_SOURCES: ReadonlySet<string> = new Set(['llm', 'human', 'none']);
 
 function hasText(value: unknown, field: 'nl' | 'en'): boolean {
   return isRecord(value) && typeof value[field] === 'string' && (value[field] as string).trim() !== '';
 }
 
-/** Validate the schema-2 recipes file. Pure: takes the parsed JSON, returns errors/warnings. */
-export function validateSchema2(data: unknown): ValidationResult {
+/** A Text-like object: {nl?, en?} with string values. */
+function isTextLike(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  for (const k of ['nl', 'en']) if (value[k] !== undefined && typeof value[k] !== 'string') return false;
+  return true;
+}
+
+/** Structured-line checks for one line (and, recursively, its alternatives). */
+function checkLineStructure(line: Record<string, unknown>, where: string, refs: DictionaryRefs | undefined, errors: string[], depth: number): void {
+  const qty = line['qty'];
+  if (qty !== undefined && qty !== null) {
+    if (!isRecord(qty) || typeof qty['min'] !== 'number' || !Number.isFinite(qty['min']) || (qty['min'] as number) <= 0) {
+      errors.push(`${where}.qty must be null or { min > 0, max?, approx? }.`);
+    } else {
+      if (qty['max'] !== undefined && (typeof qty['max'] !== 'number' || (qty['max'] as number) < (qty['min'] as number))) errors.push(`${where}.qty.max must be a number >= min.`);
+      if (qty['approx'] !== undefined && typeof qty['approx'] !== 'boolean') errors.push(`${where}.qty.approx must be a boolean.`);
+    }
+  }
+  for (const field of ['unit', 'ing'] as const) {
+    const v = line[field];
+    if (v === undefined || v === null) continue;
+    if (typeof v !== 'string' || v === '') {
+      errors.push(`${where}.${field} must be null or an id string.`);
+    } else if (refs && !refs[field === 'unit' ? 'units' : 'ingredients'].has(v)) {
+      errors.push(`${where}.${field} ${JSON.stringify(v)} is not a known ${field === 'unit' ? 'unit' : 'ingredient'} id.`);
+    }
+  }
+  const qual = line['qual'];
+  if (qual !== undefined) {
+    if (!isStringArray(qual)) errors.push(`${where}.qual must be an array of qualifier ids.`);
+    else if (refs) for (const q of qual) if (!refs.qualifiers.has(q)) errors.push(`${where}.qual ${JSON.stringify(q)} is not a known qualifier id.`);
+  }
+  const name = line['name'];
+  if (name !== undefined && typeof name !== 'string') errors.push(`${where}.name must be a string.`);
+  const part = line['part'];
+  if (part !== undefined && part !== null && (typeof part !== 'string' || !LINE_PARTS.includes(part))) errors.push(`${where}.part must be one of ${LINE_PARTS.join(' | ')}.`);
+  for (const field of ['prep', 'note']) {
+    const v = line[field];
+    if (v !== undefined && v !== null && !isTextLike(v)) errors.push(`${where}.${field} must be null or { nl?, en? }.`);
+  }
+  const packSize = line['packSize'];
+  if (packSize !== undefined && packSize !== null && typeof packSize !== 'string') errors.push(`${where}.packSize must be null or a string.`);
+  const alt = line['alt'];
+  if (alt !== undefined) {
+    if (!Array.isArray(alt)) {
+      errors.push(`${where}.alt must be an array of lines.`);
+    } else if (depth > 2) {
+      errors.push(`${where}.alt nests too deep.`);
+    } else {
+      alt.forEach((a: unknown, j: number) => {
+        const w = `${where}.alt[${j}]`;
+        if (!isRecord(a) || !(hasText(a['raw'], 'nl') || hasText(a['raw'], 'en'))) {
+          errors.push(`${w} has no non-empty raw.nl or raw.en.`);
+          return;
+        }
+        checkLineStructure(a, w, refs, errors, depth + 1);
+      });
+      const mode = line['altMode'];
+      if (mode !== undefined && mode !== 'or' && mode !== 'and-or') errors.push(`${where}.altMode must be or | and-or.`);
+    }
+  }
+  if (line['optional'] !== undefined && typeof line['optional'] !== 'boolean') errors.push(`${where}.optional must be a boolean.`);
+  const role = line['role'];
+  if (role !== undefined && role !== 'main' && role !== 'garnish') errors.push(`${where}.role must be main | garnish.`);
+  const confidence = line['confidence'];
+  if (confidence !== undefined && (typeof confidence !== 'number' || !(confidence >= 0 && confidence <= 1))) errors.push(`${where}.confidence must be a number between 0 and 1.`);
+}
+
+/**
+ * Validate the schema-2 recipes file. Pure: takes the parsed JSON, returns errors/warnings.
+ * With `refs` (see `refsFromData`) every dictionary reference is checked as well.
+ */
+export function validateSchema2(data: unknown, refs?: DictionaryRefs): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
   let lines = 0;
+  let resolved = 0;
+  let translated = 0;
+  let unresolved = 0;
 
   if (!isRecord(data)) {
     errors.push('Top level must be an object { schema, dataVersion, generatedAt, recipes }.');
@@ -194,6 +313,45 @@ export function validateSchema2(data: unknown): ValidationResult {
       const v = recipe[field];
       if (!Array.isArray(v) || v.some((s) => typeof s !== 'string')) errors.push(`${label}: "${field}" must be an array of strings.`);
     }
+    if (isStringArray(recipe['tags'])) {
+      for (const t of recipe['tags']) if (!RECIPE_TAGS.includes(t)) errors.push(`${label}: tag ${JSON.stringify(t)} is not one of ${RECIPE_TAGS.join(', ')}.`);
+    }
+
+    // Phase-2 recipe-level fields.
+    const category = recipe['category'];
+    if (category !== undefined && category !== null) {
+      if (typeof category !== 'string' || category === '') errors.push(`${label}: "category" must be null or a category id.`);
+      else if (refs && !refs.categories.has(category)) errors.push(`${label}: category ${JSON.stringify(category)} does not exist.`);
+    }
+    const time = recipe['time'];
+    if (time !== undefined && time !== null) {
+      if (!isRecord(time)) errors.push(`${label}: "time" must be null or { active?, total? }.`);
+      else {
+        for (const k of ['active', 'total']) {
+          const v = time[k];
+          if (v !== undefined && (typeof v !== 'number' || !Number.isFinite(v) || v < 0)) errors.push(`${label}: time.${k} must be a non-negative number of minutes.`);
+        }
+        if (typeof time['active'] === 'number' && typeof time['total'] === 'number' && time['total'] < time['active']) warnings.push(`${label}: time.total < time.active.`);
+      }
+    }
+    for (const field of ['description', 'servingTip']) {
+      const v = recipe[field];
+      if (v !== undefined && v !== null && !isTextLike(v)) errors.push(`${label}: "${field}" must be null or { nl?, en? }.`);
+    }
+    const textMeta = recipe['text'];
+    let hasEnglish = false;
+    if (textMeta !== undefined && textMeta !== null) {
+      if (!isRecord(textMeta) || (textMeta['en'] !== undefined && (typeof textMeta['en'] !== 'string' || !TEXT_SOURCES.has(textMeta['en'])))) {
+        errors.push(`${label}: "text" must be null or { en?: llm | human | none, reviewedBy? }.`);
+      } else {
+        hasEnglish = textMeta['en'] === 'llm' || textMeta['en'] === 'human';
+      }
+    }
+    if (hasEnglish) {
+      translated++;
+      if (!hasText(name, 'en')) errors.push(`${label}: text.en is set but "name.en" is missing.`);
+      if (hasText(recipe['servingTip'], 'nl') && !hasText(recipe['servingTip'], 'en')) warnings.push(`${label}: text.en is set but servingTip.en is missing.`);
+    }
 
     const recipeLines = recipe['lines'];
     if (!Array.isArray(recipeLines)) {
@@ -208,6 +366,10 @@ export function validateSchema2(data: unknown): ValidationResult {
         }
         const kind = line['kind'];
         if (kind !== undefined && kind !== 'line' && kind !== 'header') errors.push(`${label}: lines[${i}].kind must be line | header.`);
+        if (kind === 'header') return;
+        checkLineStructure(line, `${label}: lines[${i}]`, refs, errors, 0);
+        if (typeof line['ing'] === 'string') resolved++;
+        else if (line['ing'] === null) unresolved++;
       });
     }
 
@@ -220,6 +382,7 @@ export function validateSchema2(data: unknown): ValidationResult {
           errors.push(`${label}: steps[${i}] has no non-empty text.nl or text.en.`);
           return;
         }
+        if (hasEnglish && !hasText(step['text'], 'en')) errors.push(`${label}: text.en is set but steps[${i}].text.en is missing (step counts must match per language).`);
         const timers = step['timers'];
         if (timers === undefined) return;
         if (!Array.isArray(timers)) {
@@ -246,7 +409,160 @@ export function validateSchema2(data: unknown): ValidationResult {
     }
   });
 
-  return { errors, warnings, stats: { recipes: recipes.length, lines } };
+  if (unresolved > 0) warnings.push(`${unresolved} ingredient line(s) are unresolved (ing null); see docs/measure-resolution.md.`);
+
+  return { errors, warnings, stats: { recipes: recipes.length, lines, resolved, translated } };
+}
+
+// ---------------------------------------------------------------------------
+// Dictionary: data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json (spec §1)
+// ---------------------------------------------------------------------------
+//
+// Errors: unique slug ids per file, required names, unit groups / qualifier kinds known, `{n}`
+// balanced in prep templates, ingredient aisle / defaultUnit / buyUnit / gramsPer keys known,
+// staple/veg booleans, a Dutch name or alias claimed by two ingredients (the parser could only
+// pick one). Warnings: an English name claimed twice (English input is best effort).
+
+function checkIds(items: unknown, file: string, errors: string[]): Record<string, unknown>[] {
+  if (!Array.isArray(items)) {
+    errors.push(`${file}: must be an array.`);
+    return [];
+  }
+  const seen = new Set<string>();
+  const out: Record<string, unknown>[] = [];
+  items.forEach((item: unknown, i: number) => {
+    if (!isRecord(item)) {
+      errors.push(`${file}[${i}]: not an object.`);
+      return;
+    }
+    const id = item['id'];
+    if (typeof id !== 'string' || !ID_RE.test(id)) errors.push(`${file}[${i}]: "id" must be a slug (a-z, 0-9, dashes), got ${JSON.stringify(id)}.`);
+    else if (seen.has(id)) errors.push(`${file}: duplicate id ${JSON.stringify(id)}.`);
+    else seen.add(id);
+    out.push(item);
+  });
+  return out;
+}
+
+function hasName(v: unknown): boolean {
+  return isRecord(v) && typeof v['one'] === 'string' && (v['one'] as string).trim() !== '';
+}
+
+/** Validate the six dictionary files together. Pure: takes the loaded data, returns errors/warnings. */
+export function validateDictionary(data: DictionaryData): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  const units = checkIds(data.units, 'units.json', errors);
+  const unitIds = new Set(units.map((u) => u['id'] as string));
+  for (const u of units) {
+    const label = `units.json ${JSON.stringify(u['id'])}`;
+    if (typeof u['group'] !== 'string' || !UNIT_GROUPS.has(u['group'])) errors.push(`${label}: "group" must be mass | volume | count | package | pinch | length.`);
+    if (!hasName(u['nl'])) errors.push(`${label}: "nl.one" is required.`);
+    if (!hasName(u['en'])) errors.push(`${label}: "en.one" is required.`);
+    if (u['group'] === 'mass' && typeof u['g'] !== 'number') warnings.push(`${label}: mass unit without "g".`);
+    if (u['group'] === 'volume' && typeof u['ml'] !== 'number') warnings.push(`${label}: volume unit without "ml".`);
+    const en = u['en'];
+    if (isRecord(en) && typeof en['render'] === 'string' && !unitIds.has(en['render'])) errors.push(`${label}: en.render ${JSON.stringify(en['render'])} is not a unit id.`);
+  }
+
+  const qualifiers = checkIds(data.qualifiers, 'qualifiers.json', errors);
+  for (const q of qualifiers) {
+    const label = `qualifiers.json ${JSON.stringify(q['id'])}`;
+    if (!isStringArray(q['nl']) || q['nl'].length === 0) errors.push(`${label}: "nl" must be a non-empty array of forms.`);
+    if (typeof q['en'] !== 'string' || q['en'].trim() === '') errors.push(`${label}: "en" must be a non-empty string.`);
+    if (typeof q['kind'] !== 'string' || !QUALIFIER_KINDS.has(q['kind'])) errors.push(`${label}: "kind" must be colour | size | state | variety | fat | other.`);
+    if (typeof q['variant'] !== 'boolean') errors.push(`${label}: "variant" must be a boolean.`);
+  }
+
+  if (!Array.isArray(data.prepPhrases)) errors.push('prep-phrases.json: must be an array.');
+  else {
+    const seenPrep = new Set<string>();
+    data.prepPhrases.forEach((p: unknown, i: number) => {
+      if (!isRecord(p) || typeof p['nl'] !== 'string' || typeof p['en'] !== 'string' || p['nl'].trim() === '' || p['en'].trim() === '') {
+        errors.push(`prep-phrases.json[${i}]: must be { nl, en } with non-empty strings.`);
+        return;
+      }
+      const slots = (s: string) => s.split('{n}').length - 1;
+      if (slots(p['nl']) !== slots(p['en'])) errors.push(`prep-phrases.json ${JSON.stringify(p['nl'])}: "{n}" count differs between nl and en.`);
+      if (p['enSliced'] !== undefined && (typeof p['enSliced'] !== 'string' || p['enSliced'].trim() === '' || p['nl'].includes('{n}'))) {
+        errors.push(`prep-phrases.json ${JSON.stringify(p['nl'])}: "enSliced" must be a non-empty string on a phrase without "{n}".`);
+      }
+      const key = normalizeKey(p['nl']);
+      if (seenPrep.has(key)) warnings.push(`prep-phrases.json: duplicate nl phrase ${JSON.stringify(p['nl'])}.`);
+      seenPrep.add(key);
+    });
+  }
+
+  for (const [file, items] of [['aisles.json', data.aisles], ['categories.json', data.categories]] as const) {
+    for (const item of checkIds(items, file, errors)) {
+      const label = `${file} ${JSON.stringify(item['id'])}`;
+      for (const k of ['nl', 'en']) if (typeof item[k] !== 'string' || (item[k] as string).trim() === '') errors.push(`${label}: "${k}" must be a non-empty string.`);
+      if (typeof item['order'] !== 'number') errors.push(`${label}: "order" must be a number.`);
+    }
+  }
+  const aisleIds = new Set((Array.isArray(data.aisles) ? data.aisles : []).map((a) => a.id));
+
+  const ingredients = checkIds(data.ingredients, 'ingredients.json', errors);
+  const nlKeys = new Map<string, string>();
+  const enKeys = new Map<string, string>();
+  const unitOrPiece = (v: unknown) => typeof v === 'string' && (v === 'stuk' || unitIds.has(v));
+  for (const ing of ingredients) {
+    const id = String(ing['id']);
+    const label = `ingredients.json ${JSON.stringify(id)}`;
+    if (!hasName(ing['nl'])) errors.push(`${label}: "nl.one" is required.`);
+    if (!hasName(ing['en'])) errors.push(`${label}: "en.one" is required.`);
+    if (typeof ing['aisle'] !== 'string' || !aisleIds.has(ing['aisle'])) errors.push(`${label}: aisle ${JSON.stringify(ing['aisle'])} does not exist.`);
+    if (ing['defaultUnit'] !== null && !unitOrPiece(ing['defaultUnit'])) errors.push(`${label}: defaultUnit must be null, "stuk" or a unit id.`);
+    if (ing['buyUnit'] !== undefined && !unitOrPiece(ing['buyUnit'])) errors.push(`${label}: buyUnit must be "stuk" or a unit id.`);
+    const gramsPer = ing['gramsPer'];
+    if (gramsPer !== undefined) {
+      if (!isRecord(gramsPer)) errors.push(`${label}: gramsPer must be an object.`);
+      else for (const [k, v] of Object.entries(gramsPer)) if (!unitOrPiece(k) || typeof v !== 'number' || !(v > 0)) errors.push(`${label}: gramsPer.${k} must map a unit id (or "stuk") to a positive number.`);
+    }
+    for (const k of ['staple', 'veg']) if (typeof ing[k] !== 'boolean') errors.push(`${label}: "${k}" must be a boolean.`);
+    if (ing['perishable'] !== undefined && typeof ing['perishable'] !== 'boolean') errors.push(`${label}: "perishable" must be a boolean.`);
+    const gloss = ing['gloss'];
+    if (gloss !== undefined && (!isRecord(gloss) || typeof gloss['en'] !== 'string')) errors.push(`${label}: "gloss" must be { en }.`);
+    if (ing['cut'] !== undefined && ing['cut'] !== 'slice' && ing['cut'] !== 'chop') errors.push(`${label}: "cut" must be slice | chop.`);
+    const unitNames = ing['unitNames'];
+    if (unitNames !== undefined) {
+      if (!isRecord(unitNames)) errors.push(`${label}: "unitNames" must be an object keyed by unit id.`);
+      else {
+        for (const [u, names] of Object.entries(unitNames)) {
+          if (!unitOrPiece(u)) errors.push(`${label}: unitNames.${u} is not a unit id.`);
+          if (!isRecord(names) || !['nl', 'en'].some((l) => hasName(names[l])) || ['nl', 'en'].some((l) => names[l] !== undefined && !hasName(names[l]))) {
+            errors.push(`${label}: unitNames.${u} must be { nl?: { one, many? }, en?: { one, many? } }.`);
+          }
+        }
+      }
+    }
+    const aliases = ing['aliases'];
+    if (aliases !== undefined && (!isRecord(aliases) || (aliases['nl'] !== undefined && !isStringArray(aliases['nl'])) || (aliases['en'] !== undefined && !isStringArray(aliases['en'])))) {
+      errors.push(`${label}: "aliases" must be { nl?: string[], en?: string[] }.`);
+    }
+    const names = (lang: 'nl' | 'en'): string[] => {
+      const n = ing[lang];
+      const out: string[] = [];
+      if (isRecord(n)) for (const k of ['one', 'many']) if (typeof n[k] === 'string') out.push(n[k] as string);
+      if (isRecord(aliases) && isStringArray(aliases[lang])) out.push(...aliases[lang]);
+      return out;
+    };
+    for (const n of names('nl')) {
+      const key = normalizeKey(n);
+      const owner = nlKeys.get(key);
+      if (owner !== undefined && owner !== id) errors.push(`${label}: Dutch name ${JSON.stringify(n)} is also claimed by ${JSON.stringify(owner)}.`);
+      else nlKeys.set(key, id);
+    }
+    for (const n of names('en')) {
+      const key = normalizeKey(n);
+      const owner = enKeys.get(key);
+      if (owner !== undefined && owner !== id) warnings.push(`${label}: English name ${JSON.stringify(n)} is also claimed by ${JSON.stringify(owner)}.`);
+      else enKeys.set(key, id);
+    }
+  }
+
+  return { errors, warnings, stats: { recipes: 0, lines: ingredients.length } };
 }
 
 // ---------------------------------------------------------------------------
@@ -257,14 +573,11 @@ function readJson(path: string): unknown {
   return JSON.parse(readFileSync(path, 'utf8')) as unknown;
 }
 
-function print(title: string, result: ValidationResult): void {
+function print(title: string, result: ValidationResult, summary: string): void {
   for (const w of result.warnings) console.log(`  warn:  ${w}`);
   for (const e of result.errors) console.log(`  ERROR: ${e}`);
   const status = result.errors.length === 0 ? 'OK' : 'FAIL';
-  console.log(
-    `${title}: ${status} — ${result.stats.recipes} recipes, ${result.stats.lines} ingredient lines, ` +
-      `${result.errors.length} error(s), ${result.warnings.length} warning(s)`,
-  );
+  console.log(`${title}: ${status} — ${summary}, ${result.errors.length} error(s), ${result.warnings.length} warning(s)`);
 }
 
 function main(): void {
@@ -273,14 +586,24 @@ function main(): void {
 
   const sourceRel = 'data/source/recipes-recepten2.json';
   const source = validateSource(readJson(join(root, sourceRel)));
-  print(sourceRel, source);
+  print(sourceRel, source, `${source.stats.recipes} recipes, ${source.stats.lines} ingredient lines`);
   if (source.errors.length > 0) failed = true;
+
+  const dictData = readDictionaryData(root);
+  const dictionary = validateDictionary(dictData);
+  print(
+    'data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json',
+    dictionary,
+    `${dictData.units.length} units, ${dictData.qualifiers.length} qualifiers, ${dictData.prepPhrases.length} prep phrases, ${dictData.ingredients.length} ingredients`,
+  );
+  if (dictionary.errors.length > 0) failed = true;
 
   const schema2Rel = 'data/recipes.json';
   const schema2Path = join(root, schema2Rel);
   if (existsSync(schema2Path)) {
-    const schema2 = validateSchema2(readJson(schema2Path));
-    print(schema2Rel, schema2);
+    const schema2 = validateSchema2(readJson(schema2Path), refsFromData(dictData));
+    const s = schema2.stats;
+    print(schema2Rel, schema2, `${s.recipes} recipes (${s.translated ?? 0} with English), ${s.lines} ingredient lines (${s.resolved ?? 0} resolved)`);
     if (schema2.errors.length > 0) failed = true;
   } else {
     console.log(`${schema2Rel}: not present yet (schema-2 checks skipped).`);

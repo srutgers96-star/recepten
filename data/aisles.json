@@ -1,0 +1,19 @@
+[
+  { "id": "bakken", "nl": "Bakken (bloem & suiker)", "en": "Baking (flour & sugar)", "order": 11 },
+  { "id": "blik-pot", "nl": "Blik & pot", "en": "Tins & jars", "order": 7 },
+  { "id": "brood-ontbijt", "nl": "Brood & ontbijt", "en": "Bread & breakfast", "order": 2 },
+  { "id": "diepvries", "nl": "Diepvries", "en": "Frozen", "order": 12 },
+  { "id": "dranken", "nl": "Dranken", "en": "Drinks", "order": 13 },
+  { "id": "drogisterij", "nl": "Drogisterij", "en": "Pharmacy & toiletries", "order": 16 },
+  { "id": "droog", "nl": "Pasta, rijst & granen", "en": "Pasta, rice & grains", "order": 6 },
+  { "id": "groente-fruit", "nl": "Groente & fruit", "en": "Fruit & vegetables", "order": 1 },
+  { "id": "huishoudelijk", "nl": "Huishoudelijk", "en": "Household", "order": 15 },
+  { "id": "kaas", "nl": "Kaas", "en": "Cheese", "order": 5 },
+  { "id": "kruiden-specerijen", "nl": "Kruiden & specerijen", "en": "Herbs & spices", "order": 8 },
+  { "id": "overig", "nl": "Overig", "en": "Other", "order": 17 },
+  { "id": "sauzen-olie-azijn", "nl": "Sauzen, olie & azijn", "en": "Sauces, oil & vinegar", "order": 9 },
+  { "id": "snacks-zoet", "nl": "Snacks & zoet", "en": "Snacks & sweets", "order": 14 },
+  { "id": "vlees-vis", "nl": "Vlees & vis", "en": "Meat & fish", "order": 3 },
+  { "id": "wereld", "nl": "Wereldkeuken", "en": "World foods", "order": 10 },
+  { "id": "zuivel-eieren", "nl": "Zuivel & eieren", "en": "Dairy & eggs", "order": 4 }
+]

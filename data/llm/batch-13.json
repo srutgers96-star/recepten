@@ -1,0 +1,286 @@
+{
+  "batch": 13,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:quiche-met-kip",
+      "name": { "en": "Chicken quiche" },
+      "description": {
+        "nl": "Hartige taart met gerookte kip, prei en room, met een frisse rucolasalade erbij.",
+        "en": "Savoury tart with smoked chicken, leek and cream, served with a fresh rocket salad."
+      },
+      "category": "hartige-taart",
+      "tags": ["oven"],
+      "time": { "active": 30, "total": 75 },
+      "steps": [
+        { "en": "Preheat the oven to 200 °C. Grease a springform tin with butter and line it with the pastry; prick a few holes in the base with a fork." },
+        { "en": "Cook the leek in water with a little salt for about 5 minutes, then drain and leave to cool. Stir the chicken through the leek and spread it over the pastry base." },
+        { "en": "Beat the eggs, add the cream, the herbs and the grated cheese and mix together. Pour this mixture over the vegetables and scatter the pepper over the dish. Bake the quiche for about 40 minutes until cooked through and golden brown." },
+        { "en": "Make a dressing with the olive oil, lemon juice and some salt and pepper. Arrange the rocket on the plates and drizzle with a little balsamic." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 pak bladerdeeg", "ing": "bladerdeeg", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "225 g gerookte kip [blokjes]", "ing": "kip", "qual": ["gerookte"], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "400 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "4 el verse peterselie", "ing": "peterselie", "qual": ["verse"], "confidence": 0.97 },
+        { "i": 4, "raw": "500 g prei [reepjes]", "ing": "prei", "qual": [], "prep": { "en": "strips" }, "confidence": 0.98 },
+        { "i": 5, "raw": "1 rode paprika [stukjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "small pieces" }, "confidence": 0.98 },
+        { "i": 6, "raw": "4 eieren", "ing": "ei", "qual": [], "confidence": 0.99 },
+        { "i": 7, "raw": "4 el verse bieslook", "ing": "bieslook", "qual": ["verse"], "confidence": 0.97 },
+        { "i": 8, "raw": "100 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.97 },
+        { "i": 9, "raw": "citroensap", "ing": "citroensap", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "rucola", "ing": "rucola", "qual": [], "confidence": 0.98 },
+        { "i": 12, "raw": "balsamicoazijn", "ing": "balsamicoazijn", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:ratatouille",
+      "name": { "en": "Ratatouille" },
+      "description": {
+        "nl": "Zuid-Franse groentestoof van aubergine, courgette, paprika en tomaat, lekker met gebakken polenta.",
+        "en": "Southern French vegetable stew of aubergine, courgette, pepper and tomato, lovely with fried polenta."
+      },
+      "category": "overig",
+      "tags": ["vegetarisch", "snel", "zomer"],
+      "time": { "active": 15, "total": 30 },
+      "steps": [
+        { "en": "Heat a little oil in a casserole and gently fry the onion and the finely sliced garlic. Add the aubergine, courgette, tomato purée, tomatoes, oregano, sugar and 200 ml water, cover and simmer for a quarter of an hour." },
+        { "en": "Serve the ratatouille with wedges of warm fried polenta (see separate recipe)." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 aubergine [halve plakken]", "ing": "aubergine", "qual": [], "prep": { "en": "half slices" }, "confidence": 0.98 },
+        { "i": 1, "raw": "2 courgettes [halve plakken]", "ing": "courgette", "qual": [], "prep": { "en": "half slices" }, "confidence": 0.98 },
+        { "i": 2, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.98 },
+        { "i": 3, "raw": "2 teentjes knoflook [fijngesneden]", "ing": "knoflook", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 0.98 },
+        { "i": 4, "raw": "3 tomaten", "ing": "tomaat", "qual": [], "confidence": 0.99 },
+        { "i": 5, "raw": "1 groene paprika [reepjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "strips" }, "confidence": 0.98 },
+        { "i": 6, "raw": "1 blikje tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.98 },
+        { "i": 7, "raw": "1 el oregano", "ing": "oregano", "qual": [], "confidence": 0.98 },
+        { "i": 8, "raw": "2 tl suiker", "ing": "suiker", "qual": [], "confidence": 0.99 }
+      ]
+    },
+    {
+      "id": "b:rendang-met-zelfgemaakt-boemboe",
+      "name": { "en": "Rendang with homemade spice paste" },
+      "description": {
+        "nl": "Indonesische stoofschotel van rundvlees, langzaam gegaard in santen met een zelfgemaakte boemboe.",
+        "en": "Indonesian slow-cooked beef in coconut cream with a homemade spice paste (bumbu)."
+      },
+      "category": "vlees",
+      "tags": ["wereld", "winter"],
+      "time": { "active": 30, "total": 120 },
+      "steps": [
+        { "en": "Spice paste (bumbu): Roughly chop the onions, garlic and ginger and put them in a food processor. Add the macadamia nuts and pulse briefly." },
+        { "en": "Add the spices – galangal, coriander, cinnamon, cumin, cloves – and the red chillies. Blend to a paste; you can leave it very fine or a little coarser, as you like." },
+        { "en": "Then add the oil and the kecap manis and blend well once more. Use the spice paste straight away or keep it in a well-sealed jar in the fridge." },
+        { "en": "Rendang: Trim the fat and sinew from the meat and cut it into 3 cm cubes. Put the meat, the spice paste and the coconut cream in a pan and bring to the boil. Simmer uncovered over a low heat for an hour. Then cook gently over a very low heat for another 30 minutes until the meat is tender, stirring regularly." }
+      ],
+      "lines": [
+        { "i": 1, "raw": "1 kg sukadelapjes", "ing": "sukadelap", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "1 ltr santen", "ing": "santen", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "2 uien [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.98 },
+        { "i": 5, "raw": "4 teentjes knoflook [fijngehakt]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.98 },
+        { "i": 6, "raw": "4 kleine rode pepers", "ing": "rode-peper", "qual": ["kleine"], "confidence": 0.95 },
+        { "i": 7, "raw": "2 tl ketoembar (koriander)", "ing": "ketoembar", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "1 tl kurkuma", "ing": "kurkuma", "qual": [], "confidence": 0.98 },
+        { "i": 9, "raw": "1 stengel citroengras", "ing": "citroengras", "qual": [], "confidence": 0.98 },
+        { "i": 10, "raw": "7 macadamianoten", "ing": "macadamianoot", "qual": [], "confidence": 0.98 },
+        { "i": 11, "raw": "3 cm gember", "ing": "gember", "qual": [], "confidence": 0.98 },
+        { "i": 12, "raw": "2 tl laos", "ing": "laos", "qual": [], "confidence": 0.95 },
+        { "i": 13, "raw": "½ tl kaneel", "ing": "kaneel", "qual": [], "confidence": 0.98 },
+        { "i": 14, "raw": "1 tl djinten (komijn)", "ing": "komijn", "qual": [], "confidence": 0.95 },
+        { "i": 15, "raw": "1 snuf gemalen kruidnagel", "ing": "kruidnagelpoeder", "qual": [], "confidence": 0.95 },
+        { "i": 16, "raw": "1 el zonnebloemolie", "ing": "zonnebloemolie", "qual": [], "confidence": 0.98 },
+        { "i": 17, "raw": "1 el ketjap manis", "ing": "ketjap-manis", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:rigatoni-con-melanzane-peperoni-e-pomodori",
+      "name": { "en": "Rigatoni con melanzane, peperoni e pomodori" },
+      "description": {
+        "nl": "Italiaanse pasta met gestoofde aubergine, paprika, tomaat, olijven en basilicum; warm of als salade.",
+        "en": "Italian pasta with stewed aubergine, pepper, tomato, olives and basil; serve hot or cooled as a salad."
+      },
+      "category": "pasta",
+      "tags": ["vegetarisch", "zomer"],
+      "time": { "active": 30, "total": 45 },
+      "steps": [
+        { "en": "Fry the aubergine in a frying pan over a medium heat in 2 tbsp olive oil, shaking the pan now and then. Add the pepper and the garlic. Season with salt and pepper. Put the lid on the pan and let everything stew for about 20 minutes until the vegetables are soft." },
+        { "en": "Meanwhile skin the tomatoes, remove the seeds, cut them into large pieces and fry them for 15 minutes in a tbsp of olive oil with the thyme and some pepper. Add the olives and basil." },
+        { "en": "Cook the rigatoni in plenty of salted water for 15 minutes until done. Drain. Put the pasta with the aubergines and the tomatoes in a dish. Mix everything together. Serve piping hot with grated Parmesan if you like, or cooled as a salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g Rigatoni (pasta)", "ing": "rigatoni", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "2 middelgrote aubergines [kleine blokjes]", "ing": "aubergine", "qual": ["middelgrote"], "prep": { "en": "small dice" }, "confidence": 0.98 },
+        { "i": 2, "raw": "1 rode of gele paprika [reepjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "strips" }, "confidence": 0.85 },
+        { "i": 3, "raw": "2 teentjes knoflook [stiftjes]", "ing": "knoflook", "qual": [], "prep": { "en": "slivers" }, "confidence": 0.98 },
+        { "i": 4, "raw": "6 flinke tomaten", "ing": "tomaat", "qual": ["flinke"], "confidence": 0.98 },
+        { "i": 5, "raw": "1 takje tijm", "ing": "tijm", "qual": [], "confidence": 0.98 },
+        { "i": 6, "raw": "12 zwarte olijven", "ing": "olijf", "qual": ["zwarte"], "confidence": 0.98 },
+        { "i": 7, "raw": "12 blaadjes verse basilicum", "ing": "basilicum", "qual": ["verse"], "confidence": 0.98 },
+        { "i": 8, "raw": "gerapte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:rigatoni-met-tonijncarbonara",
+      "name": { "en": "Rigatoni with tuna carbonara" },
+      "description": {
+        "nl": "Romige pasta met gemarineerde verse tonijn, ei, citroenrasp en bieslook.",
+        "en": "Creamy pasta with marinated fresh tuna, egg, lemon zest and chives."
+      },
+      "category": "pasta",
+      "tags": [],
+      "time": { "active": 30, "total": 90 },
+      "steps": [
+        { "en": "Put the tuna in a bowl with a splash of olive oil and two thirds of the chives. Cover with cling film and marinate in the fridge for 1 hour." },
+        { "en": "Heat a dry non-stick frying pan, add the tuna and fry for 5-6 minutes over a medium-high heat until the pieces are lightly browned on the outside. Set aside. Fry the onion rings until soft and set these aside too." },
+        { "en": "Cook the pasta in a large pan of boiling salted water until al dente, following the packet instructions, and drain well." },
+        { "en": "Meanwhile beat the whole eggs and the egg yolks in a bowl with the lemon zest and plenty of pepper. As soon as the pasta is drained, pour the egg mixture into a frying pan. Add the pasta and the tuna and heat everything over a very low heat until the sauce is creamy." },
+        { "en": "Serve the pasta very hot, garnished with the rest of the chives, the red onion and a little pepper." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g Rigatoni (pasta)", "ing": "rigatoni", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "300 g tonijnfilet", "ing": "tonijnfilet", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "12 sprietjes bieslook [fijngehakt]", "ing": "bieslook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.98 },
+        { "i": 3, "raw": "4 eieren", "ing": "ei", "qual": [], "confidence": 0.99 },
+        { "i": 4, "raw": "4 eidooiers", "ing": "eidooier", "qual": [], "confidence": 0.99 },
+        { "i": 5, "raw": "rasp van ½ citroen", "ing": "citroen", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 rode ui [dunne ringen]", "ing": "ui", "qual": ["rode"], "prep": { "en": "thin rings" }, "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:rijst-met-kapucijners-en-spek",
+      "name": { "en": "Rice with marrowfat peas and bacon" },
+      "description": {
+        "nl": "Hollandse klassieker: rijst met kapucijners, uitgebakken spek en piccalilly.",
+        "en": "Dutch classic: rice with marrowfat peas (kapucijners), crispy bacon and piccalilli."
+      },
+      "category": "rijst",
+      "tags": ["snel", "winter"],
+      "time": { "active": 15, "total": 25 },
+      "steps": [
+        { "en": "Cook the rice with salt. Heat the marrowfat peas. Fry the bacon lardons until crisp and cook the meat. Serve with piccalilli." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 0.99 },
+        { "i": 1, "raw": "1 blik jonge kapucijners", "ing": "kapucijners", "qual": ["jonge"], "confidence": 0.95 },
+        { "i": 2, "raw": "150 g spekblokjes", "ing": "spekblokjes", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "½ pot piccalilly", "ing": "piccalilly", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "Vlees naar keuze (bv. Slavinken)", "ing": "vlees", "qual": [], "note": { "en": "of your choice; e.g. slavinken, Dutch minced-meat rolls wrapped in bacon" }, "confidence": 0.8 }
+      ]
+    },
+    {
+      "id": "b:rijst-met-kip-en-mango",
+      "name": { "en": "Rice with chicken and mango" },
+      "description": {
+        "nl": "Romige risottorijst met kruidige reepjes kip, zoete mango en cashewnoten.",
+        "en": "Creamy risotto rice topped with spiced chicken strips, sweet mango and cashew nuts."
+      },
+      "category": "rijst",
+      "tags": [],
+      "time": { "active": 35, "total": 40 },
+      "steps": [
+        { "en": "Heat the butter in a saucepan and gently fry the diced onion until translucent. Add the rice and stir-fry for about 3 minutes until every grain glistens with butter. Pour a splash of stock onto the rice and stir until the stock has been absorbed by the rice. Carry on like this until the rice is cooked." },
+        { "en": "Hand responsibility for the rice to someone else while you make the chicken with mango yourself, or turn it into a multitasking challenge." },
+        { "en": "Meanwhile cut the chicken breast into thin strips and sprinkle them with the ground coriander and cumin. Peel the mango and cut it into cubes." },
+        { "en": "Heat the oil in a casserole and stir-fry the strips until light brown all over. Season with salt and pepper and add the mango pieces. Simmer the chicken strips gently for about 5 minutes until cooked." },
+        { "en": "Stir the nuts through the chicken mixture and fry them along briefly." },
+        { "en": "Stir the cheese and the coriander through the cooked rice and put the mixture in a dish. Spoon the chicken mixture over the rice." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 grote ui [gesnipperd]", "ing": "ui", "qual": ["grote"], "prep": { "en": "finely diced" }, "confidence": 0.98 },
+        { "i": 1, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.99 },
+        { "i": 2, "raw": "300 g risottorijst", "ing": "risottorijst", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "ca. ½ ltr kippenbouillon (blokje)", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "400 g kipfilet", "ing": "kipfilet", "qual": [], "confidence": 0.99 },
+        { "i": 5, "raw": "1 el ketoembar (gemalen koriander)", "ing": "ketoembar", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 el djinten (gemalen komijn)", "ing": "komijn", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 el zonnebloemolie", "ing": "zonnebloemolie", "qual": [], "confidence": 0.98 },
+        { "i": 8, "raw": "100 g cashewnoten", "ing": "cashewnoot", "qual": [], "confidence": 0.98 },
+        { "i": 9, "raw": "100 g gerapte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 10, "raw": "2 el koriander [gesnipperd]", "ing": "koriander", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:rijst-ratatouille-met-ham-en-mon-chou",
+      "name": { "en": "Rice ratatouille with ham and Mon Chou" },
+      "description": {
+        "nl": "Eenpansgerecht van rijst met mediterrane groenten, hamblokjes en Mon Chou.",
+        "en": "One-pan rice with Mediterranean vegetables, diced ham and Mon Chou cream cheese."
+      },
+      "category": "rijst",
+      "tags": [],
+      "time": { "active": 20, "total": 40 },
+      "steps": [
+        { "en": "Heat the oil in a casserole and fry the pepper pieces, the onion and the chopped garlic for about 3 minutes. Add the aubergine and courgette chunks and stir-fry the vegetables for another 3 minutes or so." },
+        { "en": "Add the passata, the crumbled stock cube, the herbs and pepper to taste and bring to the boil." },
+        { "en": "Stir the rice and 400 ml water through the vegetable mixture, cover and let the rice cook for about 20 minutes. Check now and then that there is still enough water for the rice to cook through." },
+        { "en": "If not, add a little extra (boiling) water." },
+        { "en": "Meanwhile cut the Mon Chou into small pieces. Stir the diced ham, the Mon Chou pieces and the parsley through the rice ratatouille and serve straight away." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 groene paprika [stukjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "small pieces" }, "confidence": 0.98 },
+        { "i": 1, "raw": "1 rode paprika [stukjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "small pieces" }, "confidence": 0.98 },
+        { "i": 2, "raw": "1 aubergine [blokken van ca. 3 cm]", "ing": "aubergine", "qual": [], "prep": { "en": "roughly 3 cm chunks" }, "confidence": 0.98 },
+        { "i": 3, "raw": "1 courgette [blokken van ca. 3 cm]", "ing": "courgette", "qual": [], "prep": { "en": "roughly 3 cm chunks" }, "confidence": 0.98 },
+        { "i": 4, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.98 },
+        { "i": 5, "raw": "2 knoflookteentjes [gesnipperd]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 6, "raw": "5 el zonnebloemolie", "ing": "zonnebloemolie", "qual": [], "confidence": 0.98 },
+        { "i": 7, "raw": "1 pak (500 g) gezeefde tomaten", "ing": "tomatensaus", "qual": [], "confidence": 0.9 },
+        { "i": 8, "raw": "1 kippenbouillon (blokje)", "ing": "kippenbouillon", "qual": [], "confidence": 0.9 },
+        { "i": 9, "raw": "2 el Provençaalse kruiden", "ing": "provencaalse-kruiden", "qual": [], "confidence": 0.98 },
+        { "i": 10, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 0.99 },
+        { "i": 11, "raw": "100 g Mon Chou", "ing": "mon-chou", "qual": [], "confidence": 0.98 },
+        { "i": 12, "raw": "200 g hamblokjes", "ing": "hamblokjes", "qual": [], "confidence": 0.98 },
+        { "i": 13, "raw": "2 el peterselie [gesnipperd]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:rijst-tonijn-prei-prut",
+      "name": { "en": "Rice, tuna and leek mush" },
+      "description": {
+        "nl": "Snelle eenpansprut van rijst, prei, tonijn, mais en crème fraîche.",
+        "en": "Quick one-pan mush of rice, leek, tuna, sweetcorn and crème fraîche."
+      },
+      "category": "rijst",
+      "tags": ["snel", "kids"],
+      "time": { "active": 15, "total": 25 },
+      "steps": [
+        { "en": "Start by cooking the rice. Fry the leek for 3 minutes. Add the remaining ingredients. Let it simmer for another 5 minutes and season with salt and pepper." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "350 g rijst", "ing": "rijst", "qual": [], "confidence": 0.99 },
+        { "i": 1, "raw": "2 preien [halve ringen]", "ing": "prei", "qual": [], "prep": { "en": "half rings" }, "confidence": 0.98 },
+        { "i": 2, "raw": "1 blik mais", "ing": "mais", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "1 beker crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "1 el kappertjes", "ing": "kappertjes", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "3 blikjes tonijn", "ing": "tonijn", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:risotto-met-bacon-en-lente-ui",
+      "name": { "en": "Risotto with bacon and spring onion" },
+      "description": {
+        "nl": "Simpele risotto met krokante bacon, peultjes en lente-ui.",
+        "en": "Simple risotto with crispy bacon, mangetout and spring onion."
+      },
+      "category": "rijst",
+      "tags": ["snel"],
+      "time": { "active": 20, "total": 30 },
+      "steps": [
+        { "en": "Prepare the risotto following the instructions on the packet." },
+        { "en": "Meanwhile heat a knob of butter in a frying pan and fry the bacon strips until crisp. Lift the bacon out of the pan onto kitchen paper. Gently fry the onion and spring onion with the rosemary for 2 minutes in the butter left in the pan. Add the mangetout to the onion and fry for another 3 minutes." },
+        { "en": "Take the risotto off the heat. Stir the mangetout and onion through the risotto. Put the lid on the pan and let the risotto stand for another 5 minutes to finish cooking." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "350 g risottorijst", "ing": "risottorijst", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "200 g bacon [reepjes]", "ing": "bacon", "qual": [], "prep": { "en": "strips" }, "confidence": 0.98 },
+        { "i": 2, "raw": "2 kleine uien [gesnipperd]", "ing": "ui", "qual": ["kleine"], "prep": { "en": "finely diced" }, "confidence": 0.98 },
+        { "i": 3, "raw": "2 tl rozemarijn", "ing": "rozemarijn", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "300 g peultjes", "ing": "peultjes", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "4 lente-uitjes [ringetjes]", "ing": "bosui", "qual": [], "prep": { "en": "thin rings" }, "confidence": 0.95 }
+      ]
+    }
+  ]
+}

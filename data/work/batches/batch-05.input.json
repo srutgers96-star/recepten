@@ -1,0 +1,1621 @@
+{
+  "batch": 5,
+  "recipes": [
+    {
+      "id": "b:gehaktballetjes-in-dille-yoghurt-saus",
+      "name": {
+        "nl": "Gehaktballetjes in dille-yoghurt saus"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "1 ui [fijn gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "fijn gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "50 g boter",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "500 g gehakt",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "gehakt",
+            "qual": [],
+            "prep": null,
+            "name": "gehakt"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 ei",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "ei"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "3 el paneermeel",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "paneermeel",
+            "qual": [],
+            "prep": null,
+            "name": "paneermeel"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1/2 tl nootmuskaat",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "tl",
+            "ing": "nootmuskaat",
+            "qual": [],
+            "prep": null,
+            "name": "nootmuskaat"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "3 el dille [fijngehakt]",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "dille",
+            "qual": [],
+            "prep": {
+              "nl": "fijngehakt"
+            },
+            "name": "dille"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "2 dl vleesbouillon (blokje)",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "dl",
+            "ing": "runderbouillon",
+            "qual": [],
+            "prep": null,
+            "name": "vleesbouillon"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "2 1/2 el maïzena",
+          "parsed": {
+            "qty": {
+              "min": 2.5
+            },
+            "unit": "el",
+            "ing": "maizena",
+            "qual": [],
+            "prep": null,
+            "name": "maïzena"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "1/4 ltr yoghurt",
+          "parsed": {
+            "qty": {
+              "min": 0.25
+            },
+            "unit": "l",
+            "ing": "yoghurt",
+            "qual": [],
+            "prep": null,
+            "name": "yoghurt"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Fruit de ui ca. 2 minuten in 15 g boter. Doe het gehakt in een kom en voeg het ei, paneermeel, zout, peper, nootmuskaat, de gefruite ui en 1 eetlepel dille toe. Kneed goed door elkaar en draai er balletjes van ter grootte van een walnoot."
+        },
+        {
+          "nl": "Verhit de rest van de boter in een pan en bak de gehaktballetjes rondom bruin. Schenk de bouillon erbij en laat de balletjes ca. 10 minuten zachtjes gaar worden."
+        },
+        {
+          "nl": "Roer de maïzena met de yoghurt glad en schenk dit al roerende bij de gehaktballetjes. Blijf roeren tot een gladde, gebonden saus ontstaat. Voeg zout en peper naar smaak toe en strooi de rest van de dille erover."
+        },
+        {
+          "nl": "Serveer bijvoorbeeld met gekookte rijst."
+        }
+      ]
+    },
+    {
+      "id": "b:gehakttaart",
+      "name": {
+        "nl": "Gehakttaart"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "4 sneetjes witbrood",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "snee",
+            "ing": "witbrood",
+            "qual": [],
+            "prep": null,
+            "name": "witbrood"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "500 g half-om-half gehakt",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "gehakt",
+            "qual": [
+              "half-om-half"
+            ],
+            "prep": null,
+            "name": "gehakt"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "75 g spekreepjes",
+          "parsed": {
+            "qty": {
+              "min": 75
+            },
+            "unit": "g",
+            "ing": "spekreepjes",
+            "qual": [],
+            "prep": null,
+            "name": "spekreepjes"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 tl tijm",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "tijm",
+            "qual": [],
+            "prep": null,
+            "name": "tijm"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 teentje knoflook [geperst]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "geperst"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "15 sprietjes bieslook [fijngeknipt]",
+          "parsed": {
+            "qty": {
+              "min": 15
+            },
+            "unit": "sprietje",
+            "ing": "bieslook",
+            "qual": [],
+            "prep": {
+              "nl": "fijngeknipt"
+            },
+            "name": "bieslook"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Snijd de korstjes van het brood en verkruimel de rest. Doe de ui in een kom met gehakt, spek, broodkruim, tijm, knoflook, bieslook, zout en peper en kneed goed door."
+        },
+        {
+          "nl": "Verhit boter in een koekenpan en verdeel het gehaktmengsel gelijkmatig, druk aan. Bak ca. 20 minuten zachtjes, halverwege omkeren met een deksel."
+        }
+      ]
+    },
+    {
+      "id": "b:gemarineerde-kipfilet-met-cashewnoten",
+      "name": {
+        "nl": "Gemarineerde kipfilet met cashewnoten"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "4 enkele kipfilets",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": null,
+            "ing": "kipfilet",
+            "qual": [
+              "enkele"
+            ],
+            "prep": null,
+            "name": "kipfilets"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "50 g boter",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "200 ml yoghurt",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "ml",
+            "ing": "yoghurt",
+            "qual": [],
+            "prep": null,
+            "name": "yoghurt"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1/2 el gember [vers geraspt]",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "el",
+            "ing": "gember",
+            "qual": [],
+            "prep": {
+              "nl": "vers geraspt"
+            },
+            "name": "gember"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 tl ketoembar (gemalen koriander)",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "ketoembar",
+            "qual": [],
+            "prep": null,
+            "name": "ketoembar"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 mp kruidnagelpoeder",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "mp",
+            "ing": "kruidnagelpoeder",
+            "qual": [],
+            "prep": null,
+            "name": "kruidnagelpoeder"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "2 tl grof gemalen zwarte peper",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "tl",
+            "ing": "zwarte-peper",
+            "qual": [
+              "grove",
+              "gemalen"
+            ],
+            "prep": null,
+            "name": "zwarte peper"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1 ui [grote stukken]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "grote stukken"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "50 g cashewnoten",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "cashewnoot",
+            "qual": [],
+            "prep": null,
+            "name": "cashewnoten"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "1/2 tl chilipoeder",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "tl",
+            "ing": "chilipoeder",
+            "qual": [],
+            "prep": null,
+            "name": "chilipoeder"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "1 tl kurkuma",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "kurkuma",
+            "qual": [],
+            "prep": null,
+            "name": "kurkuma"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "1 el peterselie [fijngehakt]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "peterselie",
+            "qual": [],
+            "prep": {
+              "nl": "fijngehakt"
+            },
+            "name": "peterselie"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Spoel de kipfilets af, dep droog en leg ze naast elkaar in een schaal."
+        },
+        {
+          "nl": "Marinade: Roer de yoghurt, gember, ketoembar, kruidnagelpoeder en zwarte peper door elkaar. Schenk over de kipfilets, dek af met plasticfolie en laat minimaal 24 uur marineren, draai minstens 1 keer om."
+        },
+        {
+          "nl": "Saus: Pureer in een foodprocessor de ui, de helft van de cashewnoten, chilipoeder, kurkuma en ¾ liter water."
+        },
+        {
+          "nl": "Bak de kipfilets aan in de boter. Voeg de marinade, de saus en zout toe en breng aan de kook. Laat de kip in ca. 10 minuten zachtjes gaar worden."
+        },
+        {
+          "nl": "Leg de kipfilets in een schaal en schenk de saus erover. Garneer met de rest van de cashewnoten en de peterselie."
+        }
+      ]
+    },
+    {
+      "id": "b:gemarineerde-speklapjes-met-mie",
+      "name": {
+        "nl": "Gemarineerde speklapjes met mie"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "1 flesje bruin bier",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "fles",
+            "ing": "bier",
+            "qual": [
+              "bruine"
+            ],
+            "prep": null,
+            "name": "bier"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 dl sojasaus",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "dl",
+            "ing": "sojasaus",
+            "qual": [],
+            "prep": null,
+            "name": "sojasaus"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 laurierblaadje",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "laurierblad",
+            "qual": [],
+            "prep": null,
+            "name": "laurierblaadje"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 tl knoflookpoeder",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "knoflookpoeder",
+            "qual": [],
+            "prep": null,
+            "name": "knoflookpoeder"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "2 el gembersiroop",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "gembersiroop",
+            "qual": [],
+            "prep": null,
+            "name": "gembersiroop"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "4 magere speklapjes van ca. 100 g",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": null,
+            "ing": "speklap",
+            "qual": [
+              "magere"
+            ],
+            "prep": null,
+            "name": "speklapjes"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 ei",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "ei"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "4 el bloem",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "el",
+            "ing": "bloem",
+            "qual": [],
+            "prep": null,
+            "name": "bloem"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "5 el paneermeel",
+          "parsed": {
+            "qty": {
+              "min": 5
+            },
+            "unit": "el",
+            "ing": "paneermeel",
+            "qual": [],
+            "prep": null,
+            "name": "paneermeel"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "1 Chinese kool [reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "chinese-kool",
+            "qual": [],
+            "prep": {
+              "nl": "reepjes"
+            },
+            "name": "Chinese kool"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "1 groene paprika [reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "groene"
+            ],
+            "prep": {
+              "nl": "reepjes"
+            },
+            "name": "paprika"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "1 bakje taugé",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "bakje",
+            "ing": "tauge",
+            "qual": [],
+            "prep": null,
+            "name": "taugé"
+          }
+        },
+        {
+          "i": 12,
+          "raw": "1 dl sojasaus",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "dl",
+            "ing": "sojasaus",
+            "qual": [],
+            "prep": null,
+            "name": "sojasaus"
+          }
+        },
+        {
+          "i": 13,
+          "raw": "400 g eiermie",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "eiermie",
+            "qual": [],
+            "prep": null,
+            "name": "eiermie"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Roer het bier, sojasaus, peper, laurierblaadje, knoflookpoeder en gembersiroop door elkaar en leg de speklapjes erin. Dek af en laat 24 uur marineren in de koelkast, draai regelmatig om."
+        },
+        {
+          "nl": "Neem de speklapjes uit de marinade en dep droog. Klop het ei los in een diep bord, strooi de bloem op een plat bord en het paneermeel op een ander. Wentel de speklapjes eerst door de bloem, dan door het ei en tenslotte door het paneermeel."
+        },
+        {
+          "nl": "Verhit olie in een koekenpan en bak de speklapjes ca. 10 minuten aan beide kanten goudbruin en gaar."
+        },
+        {
+          "nl": "Roerbak ondertussen de kool en paprika. Spoel de taugé kort af met kokend water en voeg toe. Breng de groenten op smaak met sojasaus."
+        },
+        {
+          "nl": "Maak de eiermie klaar door kort te wellen in kokend water en serveer met de speklapjes en groenten."
+        }
+      ]
+    },
+    {
+      "id": "b:gerookte-zalmtaart",
+      "name": {
+        "nl": "Gerookte zalmtaart"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "200 g bloem",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "bloem",
+            "qual": [],
+            "prep": null,
+            "name": "bloem"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "100 g boter",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "100 g gerookte zalm",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "zalm",
+            "qual": [
+              "gerookte"
+            ],
+            "prep": null,
+            "name": "zalm"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "3 eieren",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "eieren"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "250 ml crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 250
+            },
+            "unit": "ml",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "2 el bieslook [fijngehakt]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "bieslook",
+            "qual": [],
+            "prep": {
+              "nl": "fijngehakt"
+            },
+            "name": "bieslook"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Zeef de bloem met een snufje zout boven een kom. Voeg de boter toe en snijd in kleine stukjes. Voeg ca. 3 el ijskoud water toe en kneed snel tot een bal. Laat 1 uur in de koelkast rusten."
+        },
+        {
+          "nl": "Rol het deeg uit en bekleed een beboterde lage taartvorm. Prik gaatjes in de bodem en laat 30 minuten in de koelkast rusten."
+        },
+        {
+          "nl": "Bekleed het deeg met bakpapier en verdeel een blinde vulling. Bak de bodem 10 minuten op 200 °C, verwijder bakpapier en vulling en bak nog ca. 5 minuten."
+        },
+        {
+          "nl": "Snijd de zalm in reepjes. Klop de eieren los met crème fraîche, roer de bieslook erdoor en voeg zout en peper naar smaak toe. Verdeel ca. 4 el van het roommengsel over de voorgebakken bodem, leg de zalm erop en verdeel de rest van het mengsel. Strijk de bovenkant glad."
+        },
+        {
+          "nl": "Bak de taart 40 minuten op 175 °C tot gaar en lichtbruin."
+        }
+      ]
+    },
+    {
+      "id": "b:gesmoorde-kip-met-tomaat-en-kokos",
+      "name": {
+        "nl": "Gesmoorde kip met tomaat en kokos"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "2 uien [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "uien"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "2 teentjes knoflook [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "400 g zoete aardappelen [blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "zoete-aardappel",
+            "qual": [],
+            "prep": {
+              "nl": "blokjes"
+            },
+            "name": "zoete aardappelen"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "4 kippenbouten",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": null,
+            "ing": "kippenbout",
+            "qual": [],
+            "prep": null,
+            "name": "kippenbouten"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "3 el olie",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "olie",
+            "qual": [],
+            "prep": null,
+            "name": "olie"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "2 el milde currypasta",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "currypasta",
+            "qual": [
+              "milde"
+            ],
+            "prep": null,
+            "name": "currypasta"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "4 dl kokosmelk",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "dl",
+            "ing": "kokosmelk",
+            "qual": [],
+            "prep": null,
+            "name": "kokosmelk"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1 blik (400 g) tomatenblokjes",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "blik",
+            "ing": "tomatenblokjes",
+            "qual": [],
+            "prep": null,
+            "name": "tomatenblokjes"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "4 el koriander [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "el",
+            "ing": "koriander",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "koriander"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "Partjes limoen of citroen (garnering)",
+          "parsed": {
+            "qty": null,
+            "unit": "partje",
+            "ing": "limoen",
+            "qual": [],
+            "prep": null,
+            "name": "limoen"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Verwijder het vel van de kippenbouten en snijd ze op het gewricht doormidden zodat er 4 dijen en 4 drumsticks zijn."
+        },
+        {
+          "nl": "Verhit de olie in een braadpan en bak ui, knoflook en aardappel zachtjes ca. 5 minuten, af en toe roeren. Roer de currypasta erdoor en bak 1 minuut mee."
+        },
+        {
+          "nl": "Voeg kokosmelk en tomaten met vocht toe en breng al roerende aan de kook. Leg de kipdelen erin en zorg dat ze zoveel mogelijk met saus bedekt zijn."
+        },
+        {
+          "nl": "Laat de kip afgedekt ca. 40 minuten zachtjes gaar worden, keer af en toe. Breng op smaak met zout, peper en koriander. Garneer met limoen. Lekker met rijst en peultjes."
+        }
+      ]
+    },
+    {
+      "id": "b:gevuld-stokbrood",
+      "name": {
+        "nl": "Gevuld stokbrood"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "4 afbakstokbroden",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": null,
+            "ing": "afbakstokbrood",
+            "qual": [],
+            "prep": null,
+            "name": "afbakstokbroden"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "400 g gehakt",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "gehakt",
+            "qual": [],
+            "prep": null,
+            "name": "gehakt"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 rode paprika [reepjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "rode"
+            ],
+            "prep": {
+              "nl": "reepjes"
+            },
+            "name": "paprika"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "100 g bacon",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "bacon",
+            "qual": [],
+            "prep": null,
+            "name": "bacon"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "100 g kaas [plakjes]",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [],
+            "prep": {
+              "nl": "plakjes"
+            },
+            "name": "kaas"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 tomaat [plakjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "tomaat",
+            "qual": [],
+            "prep": {
+              "nl": "plakjes"
+            },
+            "name": "tomaat"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Snijd over de lengte een driehoek uit elk stokbrood. Kruid het gehakt met zout, peper en nootmuskaat. Verdeel het gehakt in vier gelijke delen en vul de stokbroden ermee. Leg paprikareepjes, tomatenplakjes, kaas en bacon op de gevulde stokbroden."
+        },
+        {
+          "nl": "Bak de stokbroden ca. 20 minuten in een voorverwarmde oven op 200 °C."
+        }
+      ]
+    },
+    {
+      "id": "b:gevulde-courgette-met-groente-en-kwark",
+      "name": {
+        "nl": "Gevulde courgette met groente en kwark"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "2 courgettes [gehalveerd]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "courgette",
+            "qual": [],
+            "prep": {
+              "nl": "gehalveerd"
+            },
+            "name": "courgettes"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 gele paprika [kleine stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "paprika",
+            "qual": [
+              "gele"
+            ],
+            "prep": {
+              "nl": "kleine stukjes"
+            },
+            "name": "paprika"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 vleestomaat [stukjes, zonder vocht en zaadjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "vleestomaat",
+            "qual": [],
+            "prep": {
+              "nl": "stukjes, zonder vocht en zaadjes"
+            },
+            "name": "vleestomaat"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "½ tl majoraan",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "tl",
+            "ing": "majoraan",
+            "qual": [],
+            "prep": null,
+            "name": "majoraan"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "½ tl knoflookpoeder",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": "tl",
+            "ing": "knoflookpoeder",
+            "qual": [],
+            "prep": null,
+            "name": "knoflookpoeder"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 ei",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "ei"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "6 el magere kwark",
+          "parsed": {
+            "qty": {
+              "min": 6
+            },
+            "unit": "el",
+            "ing": "kwark",
+            "qual": [
+              "magere"
+            ],
+            "prep": null,
+            "name": "kwark"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "75 g geraspte belegen kaas",
+          "parsed": {
+            "qty": {
+              "min": 75
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte",
+              "belegen"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "boter om in te bakken",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter om in te bakken"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "zout en peper naar smaak",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "zout-en-peper",
+            "qual": [],
+            "prep": null,
+            "name": "zout en peper"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Bestrooi de snijvlakken van de courgettes met zout en laat 30 minuten intrekken. Kook de courgettes ca. 10 minuten tot ze zacht zijn en dep ze goed droog. Hol de courgettes voorzichtig uit en snijd het vruchtvlees in kleine stukjes."
+        },
+        {
+          "nl": "Verhit boter in een koekenpan en bak ui en paprika ca. 10 minuten. Voeg tomaat en courgette toe en bak nog 2 minuten. Breng op smaak met zout, peper, majoraan en knoflookpoeder. Neem van het vuur."
+        },
+        {
+          "nl": "Klop het ei los met de kwark en roer dit door het groentemengsel. Leg de uitgeholde courgettes in een lage ovenschotel en schep de vulling erin. Strooi de kaas erover.\nBak op 175 °C ca. 25 minuten goudbruin."
+        }
+      ]
+    },
+    {
+      "id": "b:gevulde-kip-met-bleekselderij-en-kerriesaus",
+      "name": {
+        "nl": "Gevulde kip met bleekselderij en kerriesaus"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "1 braadkip (ca. 1,2 kg)",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "braadkip",
+            "qual": [],
+            "prep": null,
+            "name": "braadkip"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "15 g boter",
+          "parsed": {
+            "qty": {
+              "min": 15
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "50 g spekblokjes",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "spekblokjes",
+            "qual": [],
+            "prep": null,
+            "name": "spekblokjes"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "150 ml kippenbouillon (blokje)",
+          "parsed": {
+            "qty": {
+              "min": 150
+            },
+            "unit": "ml",
+            "ing": "kippenbouillon",
+            "qual": [],
+            "prep": null,
+            "name": "kippenbouillon"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "3 stengels bleekselderij [smalle boogjes]",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "stengel",
+            "ing": "bleekselderij",
+            "qual": [],
+            "prep": {
+              "nl": "smalle boogjes"
+            },
+            "name": "bleekselderij"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 appel [geschild, stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "appel",
+            "qual": [],
+            "prep": {
+              "nl": "geschild, stukjes"
+            },
+            "name": "appel"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "25 g cashewnoten [grof gehakt]",
+          "parsed": {
+            "qty": {
+              "min": 25
+            },
+            "unit": "g",
+            "ing": "cashewnoot",
+            "qual": [],
+            "prep": {
+              "nl": "grof gehakt"
+            },
+            "name": "cashewnoten"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "1 el kerriepoeder",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "kerrie",
+            "qual": [],
+            "prep": null,
+            "name": "kerriepoeder"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "2 el ketjap manis",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "ketjap-manis",
+            "qual": [],
+            "prep": null,
+            "name": "ketjap manis"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "125 ml crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "ml",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "1 el allesbinder",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "allesbinder",
+            "qual": [],
+            "prep": null,
+            "name": "allesbinder"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "zout en peper",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "zout-en-peper",
+            "qual": [],
+            "prep": null,
+            "name": "zout en peper"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Spoel de kip van binnen en buiten en dep droog. Bestrooi met zout en peper. Verhit boter in een koekenpan en bak spekblokjes zachtjes uit, schep ze eruit."
+        },
+        {
+          "nl": "Voeg kippenbouillon toe, roer aanbaksels los en schenk in een ovenschaal. Meng bleekselderij, appel, cashewnoten en spekblokjes en vul de buikholte van de kip."
+        },
+        {
+          "nl": "Roer helft van het kerriepoeder met ketjap door elkaar en bestrijk de kip. Dek af met aluminiumfolie en bak 1 uur op 200 °C. Verwijder folie, schenk stoofvocht in een steelpan, zet kip terug en laat 10 minuten lichtbruin worden."
+        },
+        {
+          "nl": "Roer crème fraîche en rest van kerriepoeder door het stoofvocht, breng aan de kook en laat 5 minuten inkoken. Bind saus met allesbinder indien gewenst en serveer apart bij de kip."
+        }
+      ]
+    },
+    {
+      "id": "b:gnocchi-met-spinazie-en-walnoten",
+      "name": {
+        "nl": "Gnocchi met spinazie en walnoten"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "500 g gnocchi",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "gnocchi",
+            "qual": [],
+            "prep": null,
+            "name": "gnocchi"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "4 el walnoot [stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "el",
+            "ing": "walnoot",
+            "qual": [],
+            "prep": {
+              "nl": "stukjes"
+            },
+            "name": "walnoot"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "2 teentjes knoflook [geperst]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "geperst"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "300 g verse spinazie",
+          "parsed": {
+            "qty": {
+              "min": 300
+            },
+            "unit": "g",
+            "ing": "spinazie",
+            "qual": [
+              "verse"
+            ],
+            "prep": null,
+            "name": "spinazie"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "Parmezaanse kaas",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "parmezaanse-kaas",
+            "qual": [],
+            "prep": null,
+            "name": "Parmezaanse kaas"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "olie en boter om in te bakken",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "olie-en-boter-om-in-te-bakken",
+            "qual": [],
+            "prep": null,
+            "name": "olie en boter om in te bakken"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "zout en peper naar smaak",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "zout-en-peper",
+            "qual": [],
+            "prep": null,
+            "name": "zout en peper"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Kook de gnocchi 2 minuten, giet af en bewaar wat kookvocht. Verhit olie en boter in een grote koekenpan en bak de walnootstukjes 2 minuten. Voeg knoflook toe en bak nog 2 minuten."
+        },
+        {
+          "nl": "Voeg gnocchi, wat kookwater en spinazie toe. Verhit al roerend tot de spinazie slinkt. Breng op smaak met zout en peper en strooi er Parmezaanse kaas over."
+        }
+      ]
+    }
+  ]
+}

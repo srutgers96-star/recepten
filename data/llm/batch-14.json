@@ -1,0 +1,277 @@
+{
+  "batch": 14,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:rode-kool-met-hachee",
+      "name": { "en": "Red cabbage with hachee" },
+      "description": {
+        "nl": "Klassieke Hollandse hachee van rundvlees en ui, met rode kool uit pot, appelmoes en gekookte aardappelen.",
+        "en": "Classic Dutch beef and onion stew (hachee) with red cabbage, apple sauce and boiled potatoes."
+      },
+      "category": "vlees",
+      "tags": ["winter"],
+      "time": { "active": 25, "total": 90 },
+      "steps": [
+        { "en": "Toss the cubes of stewing beef in the flour. Brown the meat all over in butter and add the onion. Fry briefly, add the spices and a shallow layer of water and simmer gently for about an hour." },
+        { "en": "Peel the potatoes and boil them in salted water until tender. Heat the red cabbage." },
+        { "en": "Serve the potatoes, red cabbage and hachee with the apple sauce." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g hacheevlees", "ing": "hacheevlees", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 pot rode kool", "ing": "kool", "qual": ["rode"], "confidence": 0.9 },
+        { "i": 2, "raw": "1 potje appelmoes", "ing": "appelmoes", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "3 uien [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "2 laurierblaadjes", "ing": "laurierblad", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "3 hele kruidnagels", "ing": "kruidnagel", "qual": ["hele"], "confidence": 0.95 },
+        { "i": 7, "raw": "aardappelen", "ing": "aardappel", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:roerbakschotel-met-tofu-pindasaus-en-mie",
+      "name": { "en": "Tofu stir-fry with peanut sauce and noodles" },
+      "description": {
+        "nl": "Gemarineerde tofu, groenten en Hokkien-mie uit de wok, afgemaakt met een snelle pindasaus van pindakaas en ketjap.",
+        "en": "Marinated tofu, vegetables and Hokkien noodles from the wok, finished with a quick peanut sauce made from peanut butter and kecap manis."
+      },
+      "category": "wok-noedels",
+      "tags": ["vegetarisch", "wok", "wereld", "snel"],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Put the tofu, ginger, garlic and half the kecap manis in a bowl. In another bowl, stir together the peanut butter, 125 ml water and the rest of the kecap manis." },
+        { "en": "Heat the oil in a large wok or frying pan. Drain the tofu, keeping the marinade. Fry the pieces of tofu in the hot oil until brown and take them out of the wok." },
+        { "en": "Put the noodles in a large heatproof bowl. Pour boiling water over them and leave for 2 minutes. Drain the noodles and gently separate them." },
+        { "en": "Stir-fry the vegetables in the wok until just tender. Add the tofu, the remaining marinade and the noodles. Stir in the peanut sauce and heat everything through." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "250 g tofu [blokjes van 1½ cm]", "ing": "tofu", "qual": [], "prep": { "en": "1½ cm dice" }, "confidence": 0.95 },
+        { "i": 1, "raw": "2 teentjes knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 tl verse gember [geraspt]", "ing": "gember", "qual": ["verse"], "prep": { "en": "grated" }, "confidence": 0.95 },
+        { "i": 3, "raw": "80 ml ketjap manis", "ing": "ketjap-manis", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "90 g pindakaas", "ing": "pindakaas", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "2 el plantaardige olie", "ing": "olie", "qual": ["plantaardige"], "confidence": 0.85 },
+        { "i": 6, "raw": "500 g Hokkien-mie", "ing": "hokkien-mie", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 8, "raw": "1 rode paprika [stukjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 9, "raw": "125 g broccoli [kleine roosjes]", "ing": "broccoli", "qual": [], "prep": { "en": "small florets" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:roerei-met-courgette",
+      "name": { "en": "Scrambled eggs with courgette" },
+      "description": {
+        "nl": "Stevig roerei met bacon, courgette, paprika en tomaat, lekker op geroosterd brood.",
+        "en": "A hearty scramble of eggs with bacon, courgette, pepper and tomato, good on toast."
+      },
+      "category": "overig",
+      "tags": ["snel", "vega-optie", "zomer"],
+      "time": { "active": 20, "total": 20 },
+      "steps": [
+        { "en": "Heat the oil in a large pan. Add the onion and bacon. Fry until the onion is golden brown and the bacon crispy. Add the courgette and pepper and fry for 3 minutes. Add the tomatoes and fry gently for another 4-5 minutes." },
+        { "en": "Put the eggs and pepper in a mixing bowl and beat until well combined. Pour the eggs over the courgette mixture and cook, stirring now and then, until the eggs have set. Serve straight away with buttered toast." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 grote ui [gesnipperd]", "ing": "ui", "qual": ["grote"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "4 plakken bacon [stukjes]", "ing": "bacon", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 2, "raw": "3 kleine courgettes [plakjes]", "ing": "courgette", "qual": ["kleine"], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 kleine groene paprika [blokjes]", "ing": "paprika", "qual": ["kleine", "groene"], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 grote rijpe tomaten [ontveld en in stukjes]", "ing": "tomaat", "qual": ["grote", "rijpe"], "prep": { "en": "skinned and cut into small pieces" }, "confidence": 0.95 },
+        { "i": 5, "raw": "6 eieren", "ing": "ei", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:roergebakken-andijvie-met-cashewnoten",
+      "name": { "en": "Stir-fried endive with cashew nuts" },
+      "description": {
+        "nl": "Snel roergebakken andijvie met knoflook, gember, sojasaus en sambal, met knapperige cashewnoten erdoor.",
+        "en": "Quickly stir-fried endive with garlic, ginger, soy sauce and sambal, with crunchy cashew nuts stirred through."
+      },
+      "category": "overig",
+      "tags": ["vegetarisch", "wok", "snel"],
+      "time": { "active": 15, "total": 15 },
+      "steps": [
+        { "en": "Heat the oil in a wok and briefly fry the garlic and ginger. Add the onion wedges and fry for about 2 minutes over a medium-high heat." },
+        { "en": "Stir in the endive and stir-fry over a high heat until it wilts. Season the endive with the soy sauce and sambal and stir in the cashew nuts. Nice with boiled potatoes or rice and pork loin steaks." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 struik andijvie [repen van ca. 3 cm]", "ing": "andijvie", "qual": [], "prep": { "en": "roughly 3 cm strips" }, "confidence": 0.95 },
+        { "i": 1, "raw": "3 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 teen knoflook [fijngehakt]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 3, "raw": "2 cm verse gember [fijngehakt]", "ing": "gember", "qual": ["verse"], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 rode ui [dunne partjes]", "ing": "ui", "qual": ["rode"], "prep": { "en": "thin wedges" }, "confidence": 0.95 },
+        { "i": 5, "raw": "1 el Japanse sojasaus", "ing": "japanse-sojasaus", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 tl sambal badjak of sambal oelek", "ing": "sambal-badjak", "qual": [], "confidence": 0.9 },
+        { "i": 7, "raw": "25 g lichtgezouten cashewnoten", "ing": "cashewnoot", "qual": ["lichtgezouten"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:roergebakken-kalkoen-met-peultjes-en-rijst",
+      "name": { "en": "Stir-fried turkey with mangetout and rice" },
+      "description": {
+        "nl": "Gele kruidenrijst met reepjes kalkoen, paprika en peultjes uit de wok, afgemaakt met blokjes rookkaas.",
+        "en": "Spiced yellow rice with strips of turkey, pepper and mangetout from the wok, finished with cubes of smoked cheese."
+      },
+      "category": "rijst",
+      "tags": ["wok", "snel"],
+      "time": { "active": 20, "total": 30 },
+      "steps": [
+        { "en": "Cook the rice until tender and dry in salted water with the bay leaves, mace and turmeric." },
+        { "en": "Heat the oil in a wok (or casserole) and stir-fry the turkey strips until browned all over; sprinkle with salt, pepper and the coriander. Add the pieces of pepper and the mangetout and stir-fry for about 1 more minute. Cover and let the turkey and vegetables cook gently over a low heat for about 4 minutes." },
+        { "en": "Remove the bay leaves and mace from the cooked rice and stir the rice into the turkey and vegetable mixture. Stir in the cubes of cheese and serve straight away." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 laurierblaadjes", "ing": "laurierblad", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 stuk foelie", "ing": "foelie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 tl geelwortel/koenjit", "ing": "kurkuma", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 rode paprika [stukjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 5, "raw": "350 g kalkoenfilet [smalle reepjes]", "ing": "kalkoenfilet", "qual": [], "prep": { "en": "thin strips" }, "confidence": 0.95 },
+        { "i": 6, "raw": "2 el zonnebloemolie", "ing": "zonnebloemolie", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "2 tl ketoembar", "ing": "ketoembar", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "300 g diepvries peultjes", "ing": "peultjes", "qual": ["diepvries"], "confidence": 0.95 },
+        { "i": 9, "raw": "200 g rookkaas [kleine blokjes]", "ing": "rookkaas", "qual": [], "prep": { "en": "small dice" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:roergebakken-kip-met-tomaat-en-olijven",
+      "name": { "en": "Stir-fried chicken with tomato and olives" },
+      "description": {
+        "nl": "Blokjes kip in een romige saus van rode pesto met gedroogde tomaat, kerstomaatjes, olijven en basilicum.",
+        "en": "Diced chicken in a creamy red pesto sauce with sun-dried tomatoes, cherry tomatoes, olives and basil."
+      },
+      "category": "vlees",
+      "tags": ["wok", "snel"],
+      "time": { "active": 25, "total": 25 },
+      "steps": [
+        { "en": "Heat the butter and oil in a wok or sauté pan and stir-fry the pieces of chicken until lightly browned all over. Sprinkle with salt, pepper and the herbs." },
+        { "en": "Add the onion and garlic and fry for about 1 minute. Stir in the sun-dried tomatoes, the pesto and the cream. Bring to the boil and let it simmer gently for about 3 minutes." },
+        { "en": "Add the cherry tomatoes and warm them through briefly. Stir in the olives and season the dish with salt and pepper. Sprinkle the basil over just before serving. Nice with pasta and broccoli or a salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 uien [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "2 teentjes knoflook [gesnipperd]", "ing": "knoflook", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "20 zwarte olijven zonder pit [kleine stukjes]", "ing": "olijf", "qual": ["zwarte"], "prep": { "en": "small pieces" }, "confidence": 0.9 },
+        { "i": 3, "raw": "6 gedroogde tomaten op olie [kleine stukjes]", "ing": "zongedroogde-tomaat", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.9 },
+        { "i": 4, "raw": "24 kerstomaatjes [in vieren]", "ing": "kerstomaat", "qual": [], "prep": { "en": "quartered" }, "confidence": 0.95 },
+        { "i": 5, "raw": "300 g kipfilet [blokjes]", "ing": "kipfilet", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 6, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "2 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "2 el Provençaalse kruiden", "ing": "provencaalse-kruiden", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "6 el rode pesto", "ing": "pesto", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 10, "raw": "250 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "4 el gesnipperde basilicum", "ing": "basilicum", "qual": ["gesnipperde"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:roergebakken-rijst-met-prei-en-cashewnoten",
+      "name": { "en": "Stir-fried rice with leek and cashew nuts" },
+      "description": {
+        "nl": "Roergebakken rijst met prei, garam masala en gebakken cashewnoten, afgemaakt met geraspte kaas.",
+        "en": "Stir-fried rice with leek, garam masala and fried cashew nuts, finished with grated cheese."
+      },
+      "category": "rijst",
+      "tags": ["vegetarisch", "wok", "snel"],
+      "time": { "active": 20, "total": 30 },
+      "steps": [
+        { "en": "Cook the rice until tender and dry in salted water." },
+        { "en": "Heat 1 tbsp of the oil in a pan and fry the cashew nuts until lightly browned all over. Drain them on kitchen paper." },
+        { "en": "Heat 2 tbsp oil in the same pan and stir-fry the leek with the garam masala or curry powder for about 3 minutes. Add the rice and stir-fry over a high heat until the rice is piping hot. Season the dish with salt and pepper and stir in the cashew nuts." },
+        { "en": "Sprinkle the cheese over just before serving." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "4 dunne preien of 2 dikke preien [smalle ringen]", "ing": "prei", "qual": ["dunne"], "prep": { "en": "thin rings" }, "confidence": 0.9 },
+        { "i": 2, "raw": "3 el zonnebloemolie", "ing": "zonnebloemolie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "150 g cashewnoten", "ing": "cashewnoot", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "2 el garam masala of 2 tl kerrie", "ing": "garam-masala", "qual": [], "confidence": 0.9 },
+        { "i": 5, "raw": "200 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:roergebakken-rijst-met-spekjes-en-groenten",
+      "name": { "en": "Stir-fried rice with bacon and vegetables" },
+      "description": {
+        "nl": "Roergebakken rijst met krokante spekjes, ui, paprika, champignons en tomaat, met oude kaas erover.",
+        "en": "Stir-fried rice with crispy bacon, onion, pepper, mushrooms and tomato, with mature cheese on top."
+      },
+      "category": "rijst",
+      "tags": ["wok", "snel", "vega-optie"],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Cook the rice until tender and dry in salted water." },
+        { "en": "Drain the tomatoes (keep the juice) and cut them into small pieces." },
+        { "en": "Heat ½ tbsp of the oil in a wok or casserole and gently fry the bacon cubes until crispy." },
+        { "en": "Add the rest of the oil and stir-fry the diced onion, the pieces of pepper and the sliced mushrooms for about 3 minutes. Add the rice and the pieces of tomato and stir-fry over a high heat until the rice is piping hot. Season the dish with salt and pepper." },
+        { "en": "Add a little of the tomato juice if you like, to make it a bit more moist. Sprinkle the cheese over just before serving." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 uien [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 groene paprika [stukjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 3, "raw": "200 g champignons [plakjes]", "ing": "champignon", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 blikken gepelde tomaten", "ing": "tomaten-uit-blik", "qual": [], "confidence": 0.9 },
+        { "i": 5, "raw": "1½ el zonnebloemolie", "ing": "zonnebloemolie", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "150 g ontbijtspek [blokjes]", "ing": "ontbijtspek", "qual": [], "prep": { "en": "diced" }, "confidence": 0.9 },
+        { "i": 7, "raw": "300 g gerapte oude Goudse kaas", "ing": "kaas", "qual": ["geraspte", "oude"], "confidence": 0.85 }
+      ]
+    },
+    {
+      "id": "b:roergebakken-tofu-met-paksoi",
+      "name": { "en": "Stir-fried tofu with pak choi" },
+      "description": {
+        "nl": "Gemarineerde tofu en paksoi uit de wok met rode ui, knoflook, ketjap en zoete chilisaus.",
+        "en": "Marinated tofu and pak choi from the wok with red onion, garlic, kecap manis and sweet chilli sauce."
+      },
+      "category": "wok-noedels",
+      "tags": ["vegetarisch", "wok", "wereld", "snel"],
+      "time": { "active": 20, "total": 30 },
+      "steps": [
+        { "en": "Put the tofu and ginger in a bowl. Pour the soy sauce over and leave to marinate for 10 minutes. Drain." },
+        { "en": "Heat a wok and coat the inside with half the oil by swirling the wok around. Stir-fry the onion for about 3 minutes until soft. Add the tofu cubes and garlic and stir-fry for another 3 minutes or until golden brown. Take them out of the wok and keep them warm." },
+        { "en": "Heat the wok again and stir-fry the pak choi in the remaining oil for 2 minutes or until wilted. Return the tofu mixture to the wok. Stir in the sesame oil, kecap manis and chilli sauce. Sprinkle the sesame seeds over and serve with rice noodles." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "600 g stevige tofu [blokjes]", "ing": "tofu", "qual": ["stevige"], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "1 el verse gember [fijngehakt]", "ing": "gember", "qual": ["verse"], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 2, "raw": "2 el sojasaus", "ing": "sojasaus", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "2 el arachideolie", "ing": "arachideolie", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 rode ui [ringen]", "ing": "ui", "qual": ["rode"], "prep": { "en": "rings" }, "confidence": 0.95 },
+        { "i": 5, "raw": "4 tenen knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 6, "raw": "500 g paksoi [repen]", "ing": "paksoi", "qual": [], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 7, "raw": "2 tl sesamolie", "ing": "sesamolie", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "2 el ketjap manis", "ing": "ketjap-manis", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "60 ml zoet chilisaus", "ing": "chilisaus", "qual": ["zoete"], "confidence": 0.95 },
+        { "i": 10, "raw": "1 el geroosterde sesamzaadjes", "ing": "sesamzaad", "qual": ["geroosterde"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:rollade-met-groenten-uit-de-oven",
+      "name": { "en": "Rolled pork joint with oven-roasted vegetables" },
+      "description": {
+        "nl": "Varkensrollade met knoflookolie uit de oven, met winterwortel, pastinaak, broccoli en krieltjes gegaard in het braadvet.",
+        "en": "Oven-roasted rolled pork joint rubbed with garlic oil, with carrot, parsnip, broccoli and baby potatoes cooked in the roasting juices."
+      },
+      "category": "oven",
+      "tags": ["oven", "feest", "winter"],
+      "time": { "active": 20, "total": 90 },
+      "steps": [
+        { "en": "Let the meat come to room temperature." },
+        { "en": "Stir the garlic into the olive oil and rub the joint all over with it." },
+        { "en": "Put the joint fat side up in a roasting tin and slide it into the middle of the oven. Switch the oven on to 200 °C and roast the joint for about 70 minutes until nicely browned and cooked through, turning it regularly and brushing it with the garlic oil each time." },
+        { "en": "After about 35 minutes, toss the vegetables and baby potatoes in the roasting juices around the joint and sprinkle them with sea salt and pepper. Pour the rest of the garlic oil over and tuck the rosemary in between. Turn the vegetables and potatoes now and then too. Nice with a crisp salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "750 g doorregen varkensrollade", "ing": "varkensrollade", "qual": ["doorregen"], "confidence": 0.9 },
+        { "i": 1, "raw": "1 teen knoflook [uitgeperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 2, "raw": "4 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 grote winterwortel [stukken van 2 cm]", "ing": "winterpeen", "qual": ["grote"], "prep": { "en": "2 cm pieces" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 pastinaken [stukken van 2 cm]", "ing": "pastinaak", "qual": [], "prep": { "en": "2 cm pieces" }, "confidence": 0.95 },
+        { "i": 5, "raw": "250 g broccoli [roosjes]", "ing": "broccoli", "qual": [], "prep": { "en": "florets" }, "confidence": 0.95 },
+        { "i": 6, "raw": "500 g krieltjes in de schil", "ing": "krieltjes", "qual": [], "confidence": 0.9 },
+        { "i": 7, "raw": "2 takjes rozemarijn [in stukjes geknipt]", "ing": "rozemarijn", "qual": [], "prep": { "en": "snipped into small pieces" }, "confidence": 0.95 }
+      ]
+    }
+  ]
+}

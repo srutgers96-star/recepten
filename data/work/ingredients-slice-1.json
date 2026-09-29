@@ -1,0 +1,2567 @@
+[
+  {
+    "id": "aardappel",
+    "nl": {
+      "one": "aardappel",
+      "many": "aardappelen"
+    },
+    "en": {
+      "one": "potato",
+      "many": "potatoes"
+    },
+    "aliases": {
+      "nl": [
+        "aardappels",
+        "aardappelblokjes",
+        "aardappelschijfjes",
+        "pieper",
+        "piepers"
+      ],
+      "en": [
+        "spud",
+        "spuds"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "buyUnit": "kg",
+    "gramsPer": {
+      "stuk": 150
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "aardappelgnocchi",
+    "nl": {
+      "one": "aardappelgnocchi"
+    },
+    "en": {
+      "one": "potato gnocchi"
+    },
+    "aliases": {
+      "nl": [
+        "aardappel gnocchi"
+      ]
+    },
+    "aisle": "droog",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "aardappelpuree",
+    "nl": {
+      "one": "aardappelpuree"
+    },
+    "en": {
+      "one": "mashed potato"
+    },
+    "aliases": {
+      "nl": [
+        "puree",
+        "aardappelpuree uit een zakje"
+      ],
+      "en": [
+        "mash",
+        "instant mash",
+        "instant mashed potato"
+      ]
+    },
+    "aisle": "droog",
+    "defaultUnit": "zakje",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "abrikoos",
+    "nl": {
+      "one": "abrikoos",
+      "many": "abrikozen"
+    },
+    "en": {
+      "one": "apricot",
+      "many": "apricots"
+    },
+    "aliases": {
+      "nl": [
+        "abrikoosjes"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 40
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "achterham",
+    "nl": {
+      "one": "achterham"
+    },
+    "en": {
+      "one": "cooked ham"
+    },
+    "aliases": {
+      "nl": [
+        "achterham in plakken",
+        "achterham in plakjes",
+        "plakjes achterham"
+      ],
+      "en": [
+        "ham slices",
+        "sliced ham"
+      ]
+    },
+    "aisle": "vlees-vis",
+    "defaultUnit": "plak",
+    "gramsPer": {
+      "plak": 15
+    },
+    "staple": false,
+    "veg": false,
+    "perishable": true
+  },
+  {
+    "id": "afbakstokbrood",
+    "nl": {
+      "one": "afbakstokbrood",
+      "many": "afbakstokbroden"
+    },
+    "en": {
+      "one": "part-baked baguette",
+      "many": "part-baked baguettes"
+    },
+    "aliases": {
+      "nl": [
+        "afbakbaguette",
+        "afbakbaguettes",
+        "afbakbroodje",
+        "afbakbroodjes"
+      ],
+      "en": [
+        "bake-at-home baguette",
+        "bake-at-home baguettes"
+      ]
+    },
+    "aisle": "brood-ontbijt",
+    "defaultUnit": "stuk",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "allesbinder",
+    "nl": {
+      "one": "allesbinder"
+    },
+    "en": {
+      "one": "instant thickener"
+    },
+    "aliases": {
+      "en": [
+        "sauce thickener",
+        "instant sauce thickener"
+      ]
+    },
+    "aisle": "bakken",
+    "defaultUnit": "el",
+    "staple": true,
+    "veg": true,
+    "gloss": {
+      "en": "allesbinder — Dutch instant sauce thickener; cornflour slaked in water does the same job"
+    }
+  },
+  {
+    "id": "amandel",
+    "nl": {
+      "one": "amandel",
+      "many": "amandelen"
+    },
+    "en": {
+      "one": "almond",
+      "many": "almonds"
+    },
+    "aliases": {
+      "nl": [
+        "amandelschilfers",
+        "amandelschaafsel",
+        "geschaafde amandelen"
+      ],
+      "en": [
+        "flaked almonds",
+        "almond flakes"
+      ]
+    },
+    "aisle": "bakken",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "andijvie",
+    "nl": {
+      "one": "andijvie"
+    },
+    "en": {
+      "one": "endive"
+    },
+    "aliases": {
+      "nl": [
+        "gesneden andijvie"
+      ],
+      "en": [
+        "curly endive",
+        "escarole",
+        "frisée"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "g",
+    "buyUnit": "struik",
+    "gramsPer": {
+      "struik": 500
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "ansjovis",
+    "nl": {
+      "one": "ansjovis",
+      "many": "ansjovissen"
+    },
+    "en": {
+      "one": "anchovy",
+      "many": "anchovies"
+    },
+    "aliases": {
+      "nl": [
+        "ansjovisfilet",
+        "ansjovisfilets",
+        "ansjovisjes"
+      ],
+      "en": [
+        "anchovy fillet",
+        "anchovy fillets"
+      ]
+    },
+    "aisle": "blik-pot",
+    "defaultUnit": "stuk",
+    "staple": false,
+    "veg": false
+  },
+  {
+    "id": "appel",
+    "nl": {
+      "one": "appel",
+      "many": "appels"
+    },
+    "en": {
+      "one": "apple",
+      "many": "apples"
+    },
+    "aliases": {
+      "nl": [
+        "appelen",
+        "appeltje",
+        "appeltjes",
+        "goudrenet",
+        "goudrenetten"
+      ],
+      "en": [
+        "cooking apple",
+        "cooking apples",
+        "Bramley"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 150
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "appelmoes",
+    "nl": {
+      "one": "appelmoes"
+    },
+    "en": {
+      "one": "apple sauce"
+    },
+    "aliases": {
+      "nl": [
+        "appelcompote"
+      ],
+      "en": [
+        "applesauce",
+        "apple purée"
+      ]
+    },
+    "aisle": "blik-pot",
+    "defaultUnit": "pot",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "appelsap",
+    "nl": {
+      "one": "appelsap"
+    },
+    "en": {
+      "one": "apple juice"
+    },
+    "aisle": "dranken",
+    "defaultUnit": "ml",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "arachideolie",
+    "nl": {
+      "one": "arachideolie"
+    },
+    "en": {
+      "one": "groundnut oil"
+    },
+    "aliases": {
+      "nl": [
+        "pindaolie",
+        "arachide olie"
+      ],
+      "en": [
+        "peanut oil"
+      ]
+    },
+    "aisle": "sauzen-olie-azijn",
+    "defaultUnit": "el",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "asperge",
+    "nl": {
+      "one": "asperge",
+      "many": "asperges"
+    },
+    "en": {
+      "one": "asparagus",
+      "many": "asparagus"
+    },
+    "aliases": {
+      "nl": [
+        "aspergetip",
+        "aspergetips"
+      ],
+      "en": [
+        "asparagus spears",
+        "asparagus tips"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "g",
+    "buyUnit": "bos",
+    "gramsPer": {
+      "bos": 500,
+      "stuk": 25
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "aubergine",
+    "nl": {
+      "one": "aubergine",
+      "many": "aubergines"
+    },
+    "en": {
+      "one": "aubergine",
+      "many": "aubergines"
+    },
+    "aliases": {
+      "en": [
+        "eggplant",
+        "eggplants"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 300
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "augurk",
+    "nl": {
+      "one": "augurk",
+      "many": "augurken"
+    },
+    "en": {
+      "one": "gherkin",
+      "many": "gherkins"
+    },
+    "aliases": {
+      "nl": [
+        "augurkje",
+        "augurkjes"
+      ],
+      "en": [
+        "pickled gherkins",
+        "cornichons",
+        "pickles"
+      ]
+    },
+    "aisle": "blik-pot",
+    "defaultUnit": "stuk",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "augurkennat",
+    "nl": {
+      "one": "augurkennat"
+    },
+    "en": {
+      "one": "gherkin pickling liquid"
+    },
+    "aliases": {
+      "nl": [
+        "augurkenvocht",
+        "augurkensap"
+      ],
+      "en": [
+        "pickle juice",
+        "gherkin brine",
+        "gherkin vinegar"
+      ]
+    },
+    "aisle": "blik-pot",
+    "defaultUnit": "el",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "avocado",
+    "nl": {
+      "one": "avocado",
+      "many": "avocado's"
+    },
+    "en": {
+      "one": "avocado",
+      "many": "avocados"
+    },
+    "aliases": {
+      "nl": [
+        "avocados",
+        "avocadoos"
+      ],
+      "en": [
+        "avocadoes"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 200
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "azijn",
+    "nl": {
+      "one": "azijn"
+    },
+    "en": {
+      "one": "vinegar"
+    },
+    "aliases": {
+      "nl": [
+        "natuurazijn",
+        "gewone azijn"
+      ],
+      "en": [
+        "white vinegar",
+        "distilled vinegar"
+      ]
+    },
+    "aisle": "sauzen-olie-azijn",
+    "defaultUnit": "el",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "bacon",
+    "nl": {
+      "one": "bacon"
+    },
+    "en": {
+      "one": "bacon"
+    },
+    "aliases": {
+      "nl": [
+        "baconreepjes",
+        "plakjes bacon"
+      ],
+      "en": [
+        "streaky bacon",
+        "bacon rashers"
+      ]
+    },
+    "aisle": "vlees-vis",
+    "defaultUnit": "g",
+    "gramsPer": {
+      "plak": 20
+    },
+    "staple": false,
+    "veg": false,
+    "perishable": true
+  },
+  {
+    "id": "bakgember",
+    "nl": {
+      "one": "bakgember"
+    },
+    "en": {
+      "one": "candied ginger"
+    },
+    "aliases": {
+      "nl": [
+        "gekonfijte gember",
+        "gember in siroop"
+      ],
+      "en": [
+        "crystallised ginger",
+        "stem ginger"
+      ]
+    },
+    "aisle": "bakken",
+    "defaultUnit": "el",
+    "staple": false,
+    "veg": true,
+    "gloss": {
+      "en": "bakgember — candied (crystallised) ginger sold for baking"
+    }
+  },
+  {
+    "id": "balsamicoazijn",
+    "nl": {
+      "one": "balsamicoazijn"
+    },
+    "en": {
+      "one": "balsamic vinegar"
+    },
+    "aliases": {
+      "nl": [
+        "balsamico azijn",
+        "balsamico",
+        "balsamico-azijn",
+        "aceto balsamico"
+      ],
+      "en": [
+        "balsamic",
+        "aceto balsamico"
+      ]
+    },
+    "aisle": "sauzen-olie-azijn",
+    "defaultUnit": "el",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "balti-kooksaus",
+    "nl": {
+      "one": "balti kooksaus"
+    },
+    "en": {
+      "one": "balti cooking sauce"
+    },
+    "aliases": {
+      "nl": [
+        "balti saus",
+        "baltisaus",
+        "balti-saus"
+      ],
+      "en": [
+        "balti sauce",
+        "balti paste"
+      ]
+    },
+    "aisle": "wereld",
+    "defaultUnit": "pot",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "basilicum",
+    "nl": {
+      "one": "basilicum"
+    },
+    "en": {
+      "one": "basil"
+    },
+    "aliases": {
+      "nl": [
+        "basilicumblaadjes",
+        "basilicumblad",
+        "basilicum blaadjes"
+      ],
+      "en": [
+        "basil leaves",
+        "fresh basil"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "el",
+    "buyUnit": "bos",
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "basterdsuiker",
+    "nl": {
+      "one": "basterdsuiker"
+    },
+    "en": {
+      "one": "soft brown sugar"
+    },
+    "aliases": {
+      "nl": [
+        "witte basterdsuiker",
+        "lichte basterdsuiker",
+        "donkere basterdsuiker",
+        "bruine basterdsuiker"
+      ],
+      "en": [
+        "light brown sugar",
+        "soft sugar",
+        "caster sugar"
+      ]
+    },
+    "aisle": "bakken",
+    "defaultUnit": "g",
+    "staple": true,
+    "veg": true,
+    "gloss": {
+      "en": "basterdsuiker — Dutch fine moist sugar; light soft brown sugar is the closest match"
+    }
+  },
+  {
+    "id": "bavette",
+    "nl": {
+      "one": "bavette"
+    },
+    "en": {
+      "one": "bavette"
+    },
+    "aliases": {
+      "nl": [
+        "bavette pasta"
+      ],
+      "en": [
+        "bavette pasta",
+        "bavettine"
+      ]
+    },
+    "aisle": "droog",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true,
+    "gloss": {
+      "en": "bavette — flat pasta between linguine and tagliatelle; linguine works"
+    }
+  },
+  {
+    "id": "biefstuk",
+    "nl": {
+      "one": "biefstuk",
+      "many": "biefstukken"
+    },
+    "en": {
+      "one": "steak",
+      "many": "steaks"
+    },
+    "aliases": {
+      "nl": [
+        "biefstukje",
+        "biefstukjes",
+        "runderbiefstuk"
+      ],
+      "en": [
+        "beef steak",
+        "rump steak",
+        "sirloin steak"
+      ]
+    },
+    "aisle": "vlees-vis",
+    "defaultUnit": "g",
+    "gramsPer": {
+      "stuk": 150
+    },
+    "staple": false,
+    "veg": false,
+    "perishable": true
+  },
+  {
+    "id": "bier",
+    "nl": {
+      "one": "bier"
+    },
+    "en": {
+      "one": "beer"
+    },
+    "aliases": {
+      "nl": [
+        "biertje",
+        "pils"
+      ],
+      "en": [
+        "ale",
+        "lager"
+      ]
+    },
+    "aisle": "dranken",
+    "defaultUnit": "fles",
+    "gramsPer": {
+      "fles": 300
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "bieslook",
+    "nl": {
+      "one": "bieslook"
+    },
+    "en": {
+      "one": "chives"
+    },
+    "aliases": {
+      "nl": [
+        "bieslookjes"
+      ],
+      "en": [
+        "chive",
+        "fresh chives"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "el",
+    "buyUnit": "bos",
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "bladerdeeg",
+    "nl": {
+      "one": "bladerdeeg"
+    },
+    "en": {
+      "one": "puff pastry"
+    },
+    "aliases": {
+      "nl": [
+        "diepvriesbladerdeeg",
+        "roomboterbladerdeeg",
+        "bladerdeegplakjes",
+        "plakjes bladerdeeg",
+        "bladerdeegrol"
+      ],
+      "en": [
+        "puff pastry sheets",
+        "ready-rolled puff pastry",
+        "frozen puff pastry"
+      ]
+    },
+    "aisle": "diepvries",
+    "defaultUnit": "plak",
+    "gramsPer": {
+      "plak": 45,
+      "pak": 450
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "bladpeterselie",
+    "nl": {
+      "one": "bladpeterselie"
+    },
+    "en": {
+      "one": "flat-leaf parsley"
+    },
+    "aliases": {
+      "nl": [
+        "platte peterselie",
+        "gladde peterselie",
+        "Italiaanse peterselie"
+      ],
+      "en": [
+        "flat leaf parsley",
+        "Italian parsley"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "el",
+    "buyUnit": "bos",
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "blauwe-kaas",
+    "nl": {
+      "one": "blauwe kaas"
+    },
+    "en": {
+      "one": "blue cheese"
+    },
+    "aliases": {
+      "nl": [
+        "blauwschimmelkaas",
+        "blauwader kaas",
+        "blue cheese"
+      ],
+      "en": [
+        "blue-veined cheese",
+        "blue stilton"
+      ]
+    },
+    "aisle": "kaas",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "bleekselderij",
+    "nl": {
+      "one": "bleekselderij"
+    },
+    "en": {
+      "one": "celery"
+    },
+    "aliases": {
+      "nl": [
+        "stengelselderij",
+        "bleekselderie",
+        "selderijstengel",
+        "selderijstengels"
+      ],
+      "en": [
+        "celery sticks",
+        "celery stalks",
+        "celery stick",
+        "celery stalk"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stengel",
+    "buyUnit": "struik",
+    "gramsPer": {
+      "stengel": 50,
+      "struik": 500
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "bloem",
+    "nl": {
+      "one": "bloem"
+    },
+    "en": {
+      "one": "plain flour"
+    },
+    "aliases": {
+      "nl": [
+        "tarwebloem",
+        "patentbloem",
+        "witte bloem"
+      ],
+      "en": [
+        "flour",
+        "all-purpose flour",
+        "white flour"
+      ]
+    },
+    "aisle": "bakken",
+    "defaultUnit": "g",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "bloemkool",
+    "nl": {
+      "one": "bloemkool"
+    },
+    "en": {
+      "one": "cauliflower"
+    },
+    "aliases": {
+      "nl": [
+        "bloemkoolroosjes"
+      ],
+      "en": [
+        "cauliflower florets"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 800
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "boemboe-pinda-sate",
+    "nl": {
+      "one": "boemboe pinda-saté"
+    },
+    "en": {
+      "one": "satay spice paste"
+    },
+    "aliases": {
+      "nl": [
+        "boemboe pindasaté",
+        "boemboe saté",
+        "boemboe pinda saté",
+        "boemboe"
+      ],
+      "en": [
+        "satay seasoning paste",
+        "boemboe satay",
+        "satay boemboe"
+      ]
+    },
+    "aisle": "wereld",
+    "defaultUnit": "pak",
+    "staple": false,
+    "veg": true,
+    "gloss": {
+      "en": "boemboe — Indonesian spice paste (Conimex-style sachet), here the peanut-satay one"
+    }
+  },
+  {
+    "id": "boerenkool",
+    "nl": {
+      "one": "boerenkool"
+    },
+    "en": {
+      "one": "kale"
+    },
+    "aliases": {
+      "nl": [
+        "gesneden boerenkool"
+      ],
+      "en": [
+        "curly kale",
+        "chopped kale"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "g",
+    "buyUnit": "zak",
+    "gramsPer": {
+      "zak": 300
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "boon",
+    "nl": {
+      "one": "boon",
+      "many": "bonen"
+    },
+    "en": {
+      "one": "bean",
+      "many": "beans"
+    },
+    "aliases": {
+      "nl": [
+        "bonen uit blik",
+        "boontjes"
+      ],
+      "en": [
+        "tinned beans",
+        "mixed beans"
+      ]
+    },
+    "aisle": "blik-pot",
+    "defaultUnit": "blik",
+    "gramsPer": {
+      "blik": 400
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "bosui",
+    "nl": {
+      "one": "bosui",
+      "many": "bosuien"
+    },
+    "en": {
+      "one": "spring onion",
+      "many": "spring onions"
+    },
+    "aliases": {
+      "nl": [
+        "bosuitje",
+        "bosuitjes",
+        "lente-ui",
+        "lente-uien",
+        "lenteui",
+        "lente-uitje",
+        "lente-uitjes",
+        "lente ui"
+      ],
+      "en": [
+        "scallion",
+        "scallions",
+        "green onion",
+        "green onions",
+        "salad onion",
+        "salad onions"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "buyUnit": "bos",
+    "gramsPer": {
+      "stuk": 15,
+      "bos": 100
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "boter",
+    "nl": {
+      "one": "boter"
+    },
+    "en": {
+      "one": "butter"
+    },
+    "aliases": {
+      "nl": [
+        "roomboter",
+        "boter om in te bakken",
+        "klontje boter",
+        "ongezouten boter",
+        "gezouten boter"
+      ],
+      "en": [
+        "unsalted butter",
+        "salted butter",
+        "knob of butter"
+      ]
+    },
+    "aisle": "zuivel-eieren",
+    "defaultUnit": "g",
+    "gramsPer": {
+      "el": 15,
+      "klont": 20,
+      "pak": 250
+    },
+    "staple": true,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "botersla",
+    "nl": {
+      "one": "botersla"
+    },
+    "en": {
+      "one": "butterhead lettuce"
+    },
+    "aliases": {
+      "nl": [
+        "kropsla"
+      ],
+      "en": [
+        "butter lettuce",
+        "round lettuce"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "g",
+    "buyUnit": "krop",
+    "gramsPer": {
+      "krop": 250
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "bouillon",
+    "nl": {
+      "one": "bouillon"
+    },
+    "en": {
+      "one": "stock"
+    },
+    "aliases": {
+      "nl": [
+        "bouillonwater"
+      ],
+      "en": [
+        "broth"
+      ]
+    },
+    "aisle": "kruiden-specerijen",
+    "defaultUnit": "ml",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "bouillonpoeder",
+    "nl": {
+      "one": "bouillonpoeder"
+    },
+    "en": {
+      "one": "stock powder"
+    },
+    "aliases": {
+      "nl": [
+        "bouillon poeder"
+      ],
+      "en": [
+        "bouillon powder",
+        "stock granules"
+      ]
+    },
+    "aisle": "kruiden-specerijen",
+    "defaultUnit": "tl",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "braadkip",
+    "nl": {
+      "one": "braadkip",
+      "many": "braadkippen"
+    },
+    "en": {
+      "one": "whole chicken",
+      "many": "whole chickens"
+    },
+    "aliases": {
+      "nl": [
+        "hele kip",
+        "kip heel",
+        "soepkip"
+      ],
+      "en": [
+        "roasting chicken",
+        "roasting chickens",
+        "roaster chicken"
+      ]
+    },
+    "aisle": "vlees-vis",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 1200
+    },
+    "staple": false,
+    "veg": false,
+    "perishable": true
+  },
+  {
+    "id": "braadworst",
+    "nl": {
+      "one": "braadworst",
+      "many": "braadworsten"
+    },
+    "en": {
+      "one": "frying sausage",
+      "many": "frying sausages"
+    },
+    "aliases": {
+      "nl": [
+        "verse worst",
+        "braadworstje",
+        "braadworstjes"
+      ],
+      "en": [
+        "pork sausage",
+        "pork sausages",
+        "sausage",
+        "sausages"
+      ]
+    },
+    "aisle": "vlees-vis",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 100
+    },
+    "staple": false,
+    "veg": false,
+    "perishable": true
+  },
+  {
+    "id": "broccoli",
+    "nl": {
+      "one": "broccoli"
+    },
+    "en": {
+      "one": "broccoli"
+    },
+    "aliases": {
+      "nl": [
+        "broccoliroosjes",
+        "broccoli roosjes"
+      ],
+      "en": [
+        "broccoli florets",
+        "tenderstem broccoli"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "g",
+    "buyUnit": "stuk",
+    "gramsPer": {
+      "stuk": 400
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "brood",
+    "nl": {
+      "one": "brood"
+    },
+    "en": {
+      "one": "bread"
+    },
+    "aliases": {
+      "nl": [
+        "boterham",
+        "boterhammen",
+        "sneetje brood",
+        "sneetjes brood",
+        "witbrood",
+        "bruinbrood"
+      ],
+      "en": [
+        "sliced bread",
+        "loaf",
+        "white bread",
+        "brown bread"
+      ]
+    },
+    "aisle": "brood-ontbijt",
+    "defaultUnit": "snee",
+    "gramsPer": {
+      "snee": 35
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "broodkruim",
+    "nl": {
+      "one": "broodkruim"
+    },
+    "en": {
+      "one": "breadcrumbs"
+    },
+    "aliases": {
+      "nl": [
+        "broodkruimels",
+        "broodkruim van 3 boterhammen",
+        "vers broodkruim"
+      ],
+      "en": [
+        "bread crumbs",
+        "fresh breadcrumbs"
+      ]
+    },
+    "aisle": "brood-ontbijt",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "bruine-boon",
+    "nl": {
+      "one": "bruine boon",
+      "many": "bruine bonen"
+    },
+    "en": {
+      "one": "brown bean",
+      "many": "brown beans"
+    },
+    "aliases": {
+      "nl": [
+        "bruine bonen uit blik",
+        "bruine bonen in blik"
+      ],
+      "en": [
+        "Dutch brown beans",
+        "borlotti beans",
+        "pinto beans"
+      ]
+    },
+    "aisle": "blik-pot",
+    "defaultUnit": "blik",
+    "gramsPer": {
+      "blik": 400
+    },
+    "staple": false,
+    "veg": true,
+    "gloss": {
+      "en": "bruine bonen — Dutch brown beans; borlotti or pinto beans are the closest"
+    }
+  },
+  {
+    "id": "buikspek",
+    "nl": {
+      "one": "buikspek"
+    },
+    "en": {
+      "one": "pork belly"
+    },
+    "aliases": {
+      "nl": [
+        "buikspek aan een stuk",
+        "varkensbuik",
+        "speklap",
+        "speklappen"
+      ],
+      "en": [
+        "belly pork",
+        "pork belly slices",
+        "belly of pork"
+      ]
+    },
+    "aisle": "vlees-vis",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": false,
+    "perishable": true
+  },
+  {
+    "id": "burgerbroodje",
+    "nl": {
+      "one": "burgerbroodje",
+      "many": "burgerbroodjes"
+    },
+    "en": {
+      "one": "burger bun",
+      "many": "burger buns"
+    },
+    "aliases": {
+      "nl": [
+        "hamburgerbroodje",
+        "hamburgerbroodjes",
+        "hamburgerbol",
+        "hamburgerbollen"
+      ],
+      "en": [
+        "bap",
+        "baps",
+        "brioche bun",
+        "brioche buns",
+        "hamburger bun",
+        "hamburger buns"
+      ]
+    },
+    "aisle": "brood-ontbijt",
+    "defaultUnit": "stuk",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "cajunkruiden",
+    "nl": {
+      "one": "cajunkruiden"
+    },
+    "en": {
+      "one": "Cajun seasoning"
+    },
+    "aliases": {
+      "nl": [
+        "cajun kruiden",
+        "cajunkruidenmix"
+      ],
+      "en": [
+        "Cajun spice mix",
+        "Cajun spice",
+        "Cajun spices"
+      ]
+    },
+    "aisle": "kruiden-specerijen",
+    "defaultUnit": "el",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "camembert",
+    "nl": {
+      "one": "camembert"
+    },
+    "en": {
+      "one": "Camembert"
+    },
+    "aliases": {
+      "en": [
+        "camembert cheese"
+      ]
+    },
+    "aisle": "kaas",
+    "defaultUnit": "g",
+    "gramsPer": {
+      "stuk": 250
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "cannelloni",
+    "nl": {
+      "one": "cannelloni"
+    },
+    "en": {
+      "one": "cannelloni"
+    },
+    "aliases": {
+      "en": [
+        "cannelloni tubes"
+      ]
+    },
+    "aisle": "droog",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "cashewnoot",
+    "nl": {
+      "one": "cashewnoot",
+      "many": "cashewnoten"
+    },
+    "en": {
+      "one": "cashew nut",
+      "many": "cashew nuts"
+    },
+    "aliases": {
+      "nl": [
+        "cashew",
+        "cashews",
+        "cashewnootjes"
+      ],
+      "en": [
+        "cashew",
+        "cashews"
+      ]
+    },
+    "aisle": "snacks-zoet",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "cayennepeper",
+    "nl": {
+      "one": "cayennepeper"
+    },
+    "en": {
+      "one": "cayenne pepper"
+    },
+    "aliases": {
+      "nl": [
+        "cayenne",
+        "cayenne peper"
+      ],
+      "en": [
+        "cayenne"
+      ]
+    },
+    "aisle": "kruiden-specerijen",
+    "defaultUnit": "mp",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "champignon",
+    "nl": {
+      "one": "champignon",
+      "many": "champignons"
+    },
+    "en": {
+      "one": "mushroom",
+      "many": "mushrooms"
+    },
+    "aliases": {
+      "nl": [
+        "champignonnetjes",
+        "champignonhoedjes"
+      ],
+      "en": [
+        "button mushrooms",
+        "white mushrooms",
+        "closed cup mushrooms",
+        "chestnut mushrooms"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "g",
+    "buyUnit": "bakje",
+    "gramsPer": {
+      "bakje": 250,
+      "stuk": 20
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "cheddar",
+    "nl": {
+      "one": "cheddar"
+    },
+    "en": {
+      "one": "Cheddar"
+    },
+    "aliases": {
+      "nl": [
+        "cheddarkaas",
+        "cheddar kaas"
+      ],
+      "en": [
+        "cheddar cheese",
+        "mature cheddar"
+      ]
+    },
+    "aisle": "kaas",
+    "defaultUnit": "g",
+    "gramsPer": {
+      "plak": 20
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "cherrytomaat",
+    "nl": {
+      "one": "cherrytomaat",
+      "many": "cherrytomaten"
+    },
+    "en": {
+      "one": "cherry tomato",
+      "many": "cherry tomatoes"
+    },
+    "aliases": {
+      "nl": [
+        "cherrytomaatje",
+        "cherrytomaatjes",
+        "cherry tomaten",
+        "cherry tomaatjes"
+      ],
+      "en": [
+        "cherry toms",
+        "baby plum tomatoes"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "g",
+    "buyUnit": "bakje",
+    "gramsPer": {
+      "stuk": 15,
+      "bakje": 250
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "chili-olie",
+    "nl": {
+      "one": "chili-olie"
+    },
+    "en": {
+      "one": "chilli oil"
+    },
+    "aliases": {
+      "nl": [
+        "chiliolie",
+        "chili olie",
+        "chilli-olie",
+        "chiu chow chili-olie",
+        "chiu chow chiliolie",
+        "pepertjesolie"
+      ],
+      "en": [
+        "chili oil",
+        "chiu chow chilli oil",
+        "crispy chilli oil",
+        "chilli crisp"
+      ]
+    },
+    "aisle": "wereld",
+    "defaultUnit": "el",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "chilipoeder",
+    "nl": {
+      "one": "chilipoeder"
+    },
+    "en": {
+      "one": "chilli powder"
+    },
+    "aliases": {
+      "nl": [
+        "chili poeder",
+        "chillipoeder",
+        "chilipepperpoeder"
+      ],
+      "en": [
+        "chili powder"
+      ]
+    },
+    "aisle": "kruiden-specerijen",
+    "defaultUnit": "tl",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "chilisaus",
+    "nl": {
+      "one": "chilisaus"
+    },
+    "en": {
+      "one": "chilli sauce"
+    },
+    "aliases": {
+      "nl": [
+        "chili saus",
+        "chillisaus",
+        "sweet chilisaus",
+        "sweet chili saus"
+      ],
+      "en": [
+        "chili sauce",
+        "sweet chilli sauce",
+        "sweet chili sauce"
+      ]
+    },
+    "aisle": "wereld",
+    "defaultUnit": "el",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "chilivlokken",
+    "nl": {
+      "one": "chilivlokken"
+    },
+    "en": {
+      "one": "chilli flakes"
+    },
+    "aliases": {
+      "nl": [
+        "chili vlokken",
+        "chillivlokken",
+        "gedroogde chilivlokken",
+        "chilipeper uit molentje",
+        "gedroogde chilipeper uit molentje",
+        "chilipepervlokken"
+      ],
+      "en": [
+        "chili flakes",
+        "dried chilli flakes",
+        "crushed chillies",
+        "red pepper flakes"
+      ]
+    },
+    "aisle": "kruiden-specerijen",
+    "defaultUnit": "tl",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "chinese-kool",
+    "nl": {
+      "one": "Chinese kool"
+    },
+    "en": {
+      "one": "Chinese cabbage"
+    },
+    "aliases": {
+      "nl": [
+        "chinese kool",
+        "paksoi"
+      ],
+      "en": [
+        "Chinese leaf",
+        "napa cabbage",
+        "Chinese leaves"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 800
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "chorizo",
+    "nl": {
+      "one": "chorizo"
+    },
+    "en": {
+      "one": "chorizo"
+    },
+    "aliases": {
+      "nl": [
+        "chorizoworst",
+        "chorizo worst",
+        "chorizoworstje"
+      ],
+      "en": [
+        "chorizo sausage",
+        "cooking chorizo"
+      ]
+    },
+    "aisle": "vlees-vis",
+    "defaultUnit": "g",
+    "gramsPer": {
+      "stuk": 225
+    },
+    "staple": false,
+    "veg": false,
+    "perishable": true
+  },
+  {
+    "id": "citroen",
+    "nl": {
+      "one": "citroen",
+      "many": "citroenen"
+    },
+    "en": {
+      "one": "lemon",
+      "many": "lemons"
+    },
+    "aliases": {
+      "nl": [
+        "citroentje",
+        "citroentjes"
+      ],
+      "en": [
+        "unwaxed lemon",
+        "unwaxed lemons"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 100
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "citroengras",
+    "nl": {
+      "one": "citroengras"
+    },
+    "en": {
+      "one": "lemongrass"
+    },
+    "aliases": {
+      "nl": [
+        "sereh",
+        "citroengrasstengel"
+      ],
+      "en": [
+        "lemon grass",
+        "lemongrass stalk",
+        "lemongrass stalks"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stengel",
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "citroensap",
+    "nl": {
+      "one": "citroensap"
+    },
+    "en": {
+      "one": "lemon juice"
+    },
+    "aliases": {
+      "nl": [
+        "citroen sap",
+        "vers citroensap",
+        "sap van citroen"
+      ],
+      "en": [
+        "juice of a lemon",
+        "fresh lemon juice"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "el",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "citroenschil",
+    "nl": {
+      "one": "citroenschil"
+    },
+    "en": {
+      "one": "lemon zest"
+    },
+    "aliases": {
+      "nl": [
+        "citroenrasp",
+        "geraspte citroenschil",
+        "citroenzeste",
+        "rasp van citroen"
+      ],
+      "en": [
+        "lemon peel",
+        "lemon rind",
+        "grated lemon zest"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "tl",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "courgette",
+    "nl": {
+      "one": "courgette",
+      "many": "courgettes"
+    },
+    "en": {
+      "one": "courgette",
+      "many": "courgettes"
+    },
+    "aliases": {
+      "nl": [
+        "courgettes"
+      ],
+      "en": [
+        "zucchini",
+        "zucchinis"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 250
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "couscous",
+    "nl": {
+      "one": "couscous"
+    },
+    "en": {
+      "one": "couscous"
+    },
+    "aliases": {
+      "nl": [
+        "koeskoes"
+      ]
+    },
+    "aisle": "droog",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "creme-fraiche",
+    "nl": {
+      "one": "crème fraîche"
+    },
+    "en": {
+      "one": "crème fraîche"
+    },
+    "aliases": {
+      "nl": [
+        "creme fraiche",
+        "crème fraiche",
+        "creme fraîche"
+      ],
+      "en": [
+        "creme fraiche"
+      ]
+    },
+    "aisle": "zuivel-eieren",
+    "defaultUnit": "ml",
+    "buyUnit": "beker",
+    "gramsPer": {
+      "bakje": 200,
+      "beker": 200,
+      "el": 15
+    },
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "currypasta",
+    "nl": {
+      "one": "currypasta"
+    },
+    "en": {
+      "one": "curry paste"
+    },
+    "aliases": {
+      "nl": [
+        "curry pasta",
+        "kerriepasta"
+      ],
+      "en": [
+        "Thai curry paste"
+      ]
+    },
+    "aisle": "wereld",
+    "defaultUnit": "el",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "dadel",
+    "nl": {
+      "one": "dadel",
+      "many": "dadels"
+    },
+    "en": {
+      "one": "date",
+      "many": "dates"
+    },
+    "aliases": {
+      "nl": [
+        "medjool dadels",
+        "medjouldadels"
+      ],
+      "en": [
+        "medjool dates",
+        "pitted dates"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "g",
+    "gramsPer": {
+      "stuk": 20
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "danish-blue",
+    "nl": {
+      "one": "Danish blue"
+    },
+    "en": {
+      "one": "Danish blue"
+    },
+    "aliases": {
+      "nl": [
+        "danish blue",
+        "Danish Blue",
+        "danablu",
+        "Deense blauwe kaas"
+      ],
+      "en": [
+        "Danish blue cheese",
+        "danablu"
+      ]
+    },
+    "aisle": "kaas",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "diepvriesspinazie",
+    "nl": {
+      "one": "diepvriesspinazie"
+    },
+    "en": {
+      "one": "frozen spinach"
+    },
+    "aliases": {
+      "nl": [
+        "diepvries spinazie",
+        "bevroren spinazie",
+        "spinazie uit de diepvries"
+      ],
+      "en": [
+        "frozen leaf spinach",
+        "frozen chopped spinach"
+      ]
+    },
+    "aisle": "diepvries",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "dijonmosterd",
+    "nl": {
+      "one": "dijonmosterd"
+    },
+    "en": {
+      "one": "Dijon mustard"
+    },
+    "aliases": {
+      "nl": [
+        "dijon mosterd",
+        "Dijon mosterd",
+        "dijon",
+        "Franse mosterd"
+      ],
+      "en": [
+        "dijon",
+        "French mustard"
+      ]
+    },
+    "aisle": "sauzen-olie-azijn",
+    "defaultUnit": "tl",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "dille",
+    "nl": {
+      "one": "dille"
+    },
+    "en": {
+      "one": "dill"
+    },
+    "aliases": {
+      "nl": [
+        "dilletakjes",
+        "dilletopjes"
+      ],
+      "en": [
+        "fresh dill",
+        "dill fronds"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "el",
+    "buyUnit": "bos",
+    "staple": false,
+    "veg": true,
+    "perishable": true
+  },
+  {
+    "id": "djinten",
+    "nl": {
+      "one": "djinten"
+    },
+    "en": {
+      "one": "ground cumin"
+    },
+    "aliases": {
+      "nl": [
+        "djintan",
+        "jinten"
+      ],
+      "en": [
+        "cumin powder"
+      ]
+    },
+    "aisle": "kruiden-specerijen",
+    "defaultUnit": "tl",
+    "staple": true,
+    "veg": true,
+    "gloss": {
+      "en": "djinten — Indonesian (toko) name for ground cumin"
+    }
+  },
+  {
+    "id": "doperwt",
+    "nl": {
+      "one": "doperwt",
+      "many": "doperwten"
+    },
+    "en": {
+      "one": "pea",
+      "many": "peas"
+    },
+    "aliases": {
+      "nl": [
+        "doperwtjes",
+        "erwtjes",
+        "diepvriesdoperwten",
+        "diepvriesdoperwtjes",
+        "diepvries doperwten",
+        "diepvrieserwten",
+        "tuinerwten"
+      ],
+      "en": [
+        "garden peas",
+        "petits pois",
+        "frozen peas",
+        "green peas"
+      ]
+    },
+    "aisle": "diepvries",
+    "defaultUnit": "g",
+    "gramsPer": {
+      "zak": 450
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "dragon",
+    "nl": {
+      "one": "dragon"
+    },
+    "en": {
+      "one": "tarragon"
+    },
+    "aliases": {
+      "nl": [
+        "dragonblaadjes",
+        "estragon"
+      ],
+      "en": [
+        "fresh tarragon",
+        "dried tarragon",
+        "estragon"
+      ]
+    },
+    "aisle": "kruiden-specerijen",
+    "defaultUnit": "el",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "dragonazijn",
+    "nl": {
+      "one": "dragonazijn"
+    },
+    "en": {
+      "one": "tarragon vinegar"
+    },
+    "aliases": {
+      "nl": [
+        "dragon azijn",
+        "estragonazijn"
+      ]
+    },
+    "aisle": "sauzen-olie-azijn",
+    "defaultUnit": "tl",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "drumstick",
+    "nl": {
+      "one": "drumstick",
+      "many": "drumsticks"
+    },
+    "en": {
+      "one": "chicken drumstick",
+      "many": "chicken drumsticks"
+    },
+    "aliases": {
+      "nl": [
+        "kippendrumstick",
+        "kippendrumsticks",
+        "kipdrumstick",
+        "kipdrumsticks",
+        "kippenboutje",
+        "kippenboutjes"
+      ],
+      "en": [
+        "drumstick",
+        "drumsticks"
+      ]
+    },
+    "aisle": "vlees-vis",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 120
+    },
+    "staple": false,
+    "veg": false,
+    "perishable": true
+  },
+  {
+    "id": "duan-salam",
+    "nl": {
+      "one": "duan salam"
+    },
+    "en": {
+      "one": "salam leaf"
+    },
+    "aliases": {
+      "nl": [
+        "daun salam",
+        "salamblad",
+        "salambladeren",
+        "Indonesisch laurierblad"
+      ],
+      "en": [
+        "daun salam",
+        "Indonesian bay leaf",
+        "salam leaves"
+      ]
+    },
+    "aisle": "wereld",
+    "defaultUnit": "blad",
+    "staple": false,
+    "veg": true,
+    "gloss": {
+      "en": "daun salam — Indonesian bay leaf (from the toko); an ordinary bay leaf is the usual stand-in"
+    }
+  },
+  {
+    "id": "eekhoorntjesbrood",
+    "nl": {
+      "one": "eekhoorntjesbrood"
+    },
+    "en": {
+      "one": "porcini"
+    },
+    "aliases": {
+      "nl": [
+        "gedroogd eekhoorntjesbrood",
+        "funghi porcini",
+        "cèpes",
+        "cepes"
+      ],
+      "en": [
+        "porcini mushrooms",
+        "dried porcini",
+        "ceps",
+        "cep"
+      ]
+    },
+    "aisle": "droog",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "ei",
+    "nl": {
+      "one": "ei",
+      "many": "eieren"
+    },
+    "en": {
+      "one": "egg",
+      "many": "eggs"
+    },
+    "aliases": {
+      "nl": [
+        "eitje",
+        "eitjes",
+        "kippenei",
+        "kippeneieren"
+      ],
+      "en": [
+        "free-range egg",
+        "free-range eggs",
+        "large egg",
+        "large eggs"
+      ]
+    },
+    "aisle": "zuivel-eieren",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 60
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "eidooier",
+    "nl": {
+      "one": "eidooier",
+      "many": "eidooiers"
+    },
+    "en": {
+      "one": "egg yolk",
+      "many": "egg yolks"
+    },
+    "aliases": {
+      "nl": [
+        "eigeel",
+        "dooier",
+        "dooiers",
+        "eierdooier",
+        "eierdooiers"
+      ],
+      "en": [
+        "yolk",
+        "yolks"
+      ]
+    },
+    "aisle": "zuivel-eieren",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 18
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "ontbijtspekblokjes",
+    "nl": {
+      "one": "ontbijtspekblokjes"
+    },
+    "en": {
+      "one": "bacon lardons"
+    },
+    "aliases": {
+      "nl": [
+        "blokjes ontbijtspek",
+        "ontbijtspek in blokjes",
+        "ontbijtspek blokjes"
+      ],
+      "en": [
+        "lardons",
+        "diced bacon",
+        "bacon cubes"
+      ]
+    },
+    "aisle": "vlees-vis",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": false,
+    "perishable": true
+  },
+  {
+    "id": "pasta",
+    "nl": {
+      "one": "pasta"
+    },
+    "en": {
+      "one": "pasta"
+    },
+    "aliases": {
+      "nl": [
+        "andere pasta",
+        "andere pastasoort",
+        "pastasoort",
+        "pasta naar keuze"
+      ],
+      "en": [
+        "pasta of your choice",
+        "other pasta"
+      ]
+    },
+    "aisle": "droog",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "risottorijst",
+    "nl": {
+      "one": "risottorijst"
+    },
+    "en": {
+      "one": "risotto rice"
+    },
+    "aliases": {
+      "nl": [
+        "arborio- of risottorijst",
+        "arboriorijst",
+        "arborio rijst",
+        "arborio",
+        "carnaroli"
+      ],
+      "en": [
+        "arborio rice",
+        "arborio",
+        "carnaroli rice"
+      ]
+    },
+    "aisle": "droog",
+    "defaultUnit": "g",
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "vijfkruidenpoeder",
+    "nl": {
+      "one": "vijfkruidenpoeder"
+    },
+    "en": {
+      "one": "Chinese five-spice"
+    },
+    "aliases": {
+      "nl": [
+        "5 spices",
+        "5-spice",
+        "five spice",
+        "vijfkruiden",
+        "vijf kruiden poeder",
+        "Chinees vijfkruidenpoeder",
+        "vijfkruidenmix"
+      ],
+      "en": [
+        "five spice",
+        "five-spice powder",
+        "5 spice",
+        "Chinese five spice",
+        "five spice powder"
+      ]
+    },
+    "aisle": "kruiden-specerijen",
+    "defaultUnit": "tl",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "zelfrijzend-bakmeel",
+    "nl": {
+      "one": "zelfrijzend bakmeel"
+    },
+    "en": {
+      "one": "self-raising flour"
+    },
+    "aliases": {
+      "nl": [
+        "bakmeel",
+        "zelfrijzende bakmeel",
+        "zelfrijzende bloem",
+        "zelfrijzend bloem"
+      ],
+      "en": [
+        "self raising flour",
+        "self-rising flour"
+      ]
+    },
+    "aisle": "bakken",
+    "defaultUnit": "g",
+    "staple": true,
+    "veg": true
+  },
+  {
+    "id": "zoete-aardappel",
+    "nl": {
+      "one": "zoete aardappel",
+      "many": "zoete aardappelen"
+    },
+    "en": {
+      "one": "sweet potato",
+      "many": "sweet potatoes"
+    },
+    "aliases": {
+      "nl": [
+        "zoete aardappels",
+        "bataat",
+        "bataten"
+      ],
+      "en": [
+        "sweet potatos"
+      ]
+    },
+    "aisle": "groente-fruit",
+    "defaultUnit": "stuk",
+    "gramsPer": {
+      "stuk": 250
+    },
+    "staple": false,
+    "veg": true
+  },
+  {
+    "id": "zure-bom",
+    "nl": {
+      "one": "zure bom",
+      "many": "zure bommen"
+    },
+    "en": {
+      "one": "large pickled cucumber",
+      "many": "large pickled cucumbers"
+    },
+    "aliases": {
+      "nl": [
+        "bom",
+        "bommen",
+        "zure bommetjes"
+      ],
+      "en": [
+        "pickled cucumber",
+        "pickled cucumbers"
+      ]
+    },
+    "aisle": "blik-pot",
+    "defaultUnit": "stuk",
+    "staple": false,
+    "veg": true,
+    "gloss": {
+      "en": "zure bom — a whole large pickled cucumber (Dutch deli jar)"
+    }
+  },
+  {
+    "id": "zwarte-boon",
+    "nl": {
+      "one": "zwarte boon",
+      "many": "zwarte bonen"
+    },
+    "en": {
+      "one": "black bean",
+      "many": "black beans"
+    },
+    "aliases": {
+      "nl": [
+        "zwarte bonen uit blik",
+        "zwarte bonen in blik"
+      ],
+      "en": [
+        "tinned black beans",
+        "black turtle beans"
+      ]
+    },
+    "aisle": "blik-pot",
+    "defaultUnit": "blik",
+    "gramsPer": {
+      "blik": 400
+    },
+    "staple": false,
+    "veg": true
+  }
+]

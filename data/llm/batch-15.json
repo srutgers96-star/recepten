@@ -1,0 +1,283 @@
+{
+  "batch": 15,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:romige-kippensoep",
+      "name": { "en": "Creamy chicken soup" },
+      "description": {
+        "nl": "Snelle, romige kippensoep op basis van een roux, met bleekselderij en verse peterselie.",
+        "en": "A quick, creamy chicken soup built on a roux, with celery and fresh parsley."
+      },
+      "category": "soep",
+      "tags": ["snel", "kids"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Melt the butter in a large pan and add the flour. Cook the mixture over a low heat for 2 min., stirring, until it is light brown. Add the stock a little at a time, stirring the mixture smooth again in between. Keep stirring over a low heat until the mixture boils and starts to thicken." },
+        { "en": "Add the milk, chicken, cream and celery. Simmer over a low heat for 5 min. until the chicken is cooked through. Add salt to taste." },
+        { "en": "Serve the soup garnished with parsley." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "60 g boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "4 el bloem", "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "500 ml kippenbouillon (pot)", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "250 ml melk", "ing": "melk", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "1 kipfilet [fijngesneden]", "ing": "kipfilet", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 1 },
+        { "i": 5, "raw": "250 ml room", "ing": "room", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 stengel bleekselderij [fijngehakt]", "ing": "bleekselderij", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 7, "raw": "1/3 kop verse peterselie [fijngehakt]", "ing": "peterselie", "qual": ["verse"], "prep": { "en": "finely chopped" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:romige-vissaus-met-spekjes-en-rijst",
+      "name": { "en": "Creamy fish and bacon sauce with rice" },
+      "description": {
+        "nl": "Stukjes kabeljauw en krokante spekjes in een saus van crème fraîche, opgediend in een rand van rijst.",
+        "en": "Pieces of cod and crispy bacon in a crème fraîche sauce, served in a ring of rice."
+      },
+      "category": "vis",
+      "tags": [],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Cook the rice in salted water until tender and dry." },
+        { "en": "Heat 30 g of butter in a non-stick frying pan and fry the bacon until crisp. Scoop it out of the pan. Fry the pieces of fish and the spring onion rings in the remaining fat for about 3 minutes." },
+        { "en": "Stir in the crème fraîche and the herbs. Bring the sauce to the boil, stir the bacon back in and season the sauce with salt and pepper. Thin it with a splash of white wine if you like." },
+        { "en": "Stir the rest of the butter through the cooked rice. Grease a ring mould with butter and spoon the rice into it. Press the rice down firmly and turn the rice ring out onto a round flat dish. Spoon the fish sauce into the middle of the rice ring. Nice with a (cucumber) salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rijst", "ing": "rijst", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "400 g kabeljauwfilet [stukjes van 2 cm]", "ing": "kabeljauwfilet", "qual": [], "prep": { "en": "2 cm pieces" }, "confidence": 1 },
+        { "i": 2, "raw": "125 g plakjes ontbijtspek [luciferdunne reepjes]", "ing": "ontbijtspek", "qual": [], "prep": { "en": "matchstick strips" }, "confidence": 0.95 },
+        { "i": 3, "raw": "2 lente-uitjes [ringetjes]", "ing": "bosui", "qual": [], "prep": { "en": "thin rings" }, "confidence": 1 },
+        { "i": 4, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "¼ ltr crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "1 tl tijm", "ing": "tijm", "qual": [], "confidence": 1 },
+        { "i": 7, "raw": "2 el peterselie [gesnipperd]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 8, "raw": "¾ dl droge witte wijn", "ing": "wijn", "qual": ["droge", "witte"], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:roomkaastaart-met-ham-en-broccoli",
+      "name": { "en": "Cream cheese tart with ham and broccoli" },
+      "description": {
+        "nl": "Hartige taart van bladerdeeg, gevuld met lagen ham, broccoli en roomkaas onder een eiermengsel.",
+        "en": "Savoury puff-pastry tart layered with ham, broccoli and cream cheese under a set egg mixture."
+      },
+      "category": "hartige-taart",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 75 },
+      "steps": [
+        { "en": "Spread out the puff pastry sheets and leave them to thaw. Preheat the oven to 200 °C. Boil the broccoli for 5 minutes until tender, then drain well." },
+        { "en": "Grease a tart tin. Stack the pastry sheets on top of each other and, on a floured worktop, roll them out with a rolling pin into one large round sheet. Line the tart tin with the pastry." },
+        { "en": "Sprinkle the base with breadcrumbs. Lay half of the ham on the base. Spread half of the broccoli over it. Cover with half of the cream cheese. Grind some pepper over it. Lay the rest of the ham and the broccoli on top. Cover with the rest of the cream cheese. Grind some pepper over it." },
+        { "en": "In a bowl, beat the eggs with the cream, stock powder, fines herbes and pepper. Pour the mixture over the tart and bake the tart for about 40 minutes until set." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "6 plakjes bladerdeeg", "ing": "bladerdeeg", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "500 g broccoli [kleine roosjes en stronk in dunne plakjes]", "ing": "broccoli", "qual": [], "prep": { "en": "small florets, stalk thinly sliced" }, "confidence": 1 },
+        { "i": 2, "raw": "200 g roomkaas", "ing": "roomkaas", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "150 g achterham in plakken", "ing": "ham", "qual": [], "confidence": 0.9 },
+        { "i": 6, "raw": "3 eieren", "ing": "ei", "qual": [], "confidence": 1 },
+        { "i": 7, "raw": "125 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 1 },
+        { "i": 8, "raw": "2 el bouillonpoeder", "ing": "bouillonpoeder", "qual": [], "confidence": 1 },
+        { "i": 9, "raw": "1 el Franse tuinkruiden", "ing": "franse-tuinkruiden", "qual": [], "confidence": 1 },
+        { "i": 10, "raw": "2 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:rucola-spinazie-pesto-bij-kabeljauw-met-notencrumble",
+      "name": { "en": "Rocket and spinach pesto (for cod with nut crumble)" },
+      "description": {
+        "nl": "Frisse groene pesto van rucola, spinazie en peterselie met citroen en honing, als saus bij kabeljauw.",
+        "en": "Fresh green pesto of rocket, spinach and parsley with lemon and honey, as a sauce for cod."
+      },
+      "category": "overig",
+      "tags": ["snel", "vegetarisch"],
+      "time": { "active": 10, "total": 10 },
+      "steps": [
+        { "en": "Put the rocket, spinach and parsley in a bowl. Add the olive oil, lemon zest and lemon juice and blend with a stick blender to a smooth sauce. Season with salt, pepper and honey." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "75 g rucola [grofgesneden]", "ing": "rucola", "qual": [], "prep": { "en": "roughly chopped" }, "confidence": 1 },
+        { "i": 1, "raw": "100 g verse spinazie [grofgesneden]", "ing": "spinazie", "qual": ["verse"], "prep": { "en": "roughly chopped" }, "confidence": 1 },
+        { "i": 2, "raw": "10 g peterselie [grofgesneden]", "ing": "peterselie", "qual": [], "prep": { "en": "roughly chopped" }, "confidence": 1 },
+        { "i": 3, "raw": "rasp en sap van 1 citroen", "ing": "citroen", "qual": [], "confidence": 0.9 },
+        { "i": 4, "raw": "100 ml olijfolie", "ing": "olijfolie", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "1 tl honing", "ing": "honing", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "zout en peper", "ing": "zout-en-peper", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:runderlapjes-met-tomaat",
+      "name": { "en": "Braising steak with tomato" },
+      "description": {
+        "nl": "Doorregen runderlappen, urenlang zacht gestoofd met rode ui, tomaat en rode wijn, gebonden met ontbijtkoek.",
+        "en": "Marbled braising steak slowly stewed with red onion, tomato and red wine, thickened with ontbijtkoek (Dutch spiced cake)."
+      },
+      "category": "vlees",
+      "tags": ["winter"],
+      "time": { "active": 25, "total": 200 },
+      "steps": [
+        { "en": "Let the meat come to room temperature. Skin the tomatoes, remove the seeds and cut the flesh into strips. Rub the meat with salt and pepper. Heat the butter in a casserole and brown the meat over a high heat for about 5 minutes." },
+        { "en": "Add the onion wedges and garlic and fry for about 2 minutes. Briefly fry the tomato strips and thyme as well. Pour the wine and stock in along the side of the pan. Cover and stew the meat over a very low heat (put a heat diffuser under the pan straight away) for 2 ½ to 3 hours until tender." },
+        { "en": "Stir the ontbijtkoek cubes into the cooking liquid. Heat the beef through uncovered for a few more minutes until the liquid has thickened. Add salt and pepper to taste if needed. Nice with mashed potato or pasta and green beans." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "750 g doorregen runderlappen", "ing": "runderlap", "qual": ["doorregen"], "confidence": 0.95 },
+        { "i": 1, "raw": "2 rode uien [dunne partjes]", "ing": "ui", "qual": ["rode"], "prep": { "en": "thin wedges" }, "confidence": 1 },
+        { "i": 2, "raw": "3 kleine trostomaten", "ing": "trostomaat", "qual": ["kleine"], "confidence": 1 },
+        { "i": 3, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "1 teen knoflook [plakjes]", "ing": "knoflook", "qual": [], "prep": { "en": "sliced" }, "confidence": 1 },
+        { "i": 5, "raw": "½ el verse tijmblaadjes", "ing": "tijm", "qual": ["verse"], "confidence": 0.9 },
+        { "i": 6, "raw": "1 dl rode wijn", "ing": "wijn", "qual": ["rode"], "confidence": 1 },
+        { "i": 7, "raw": "2 dl vleesbouillon", "ing": "runderbouillon", "qual": [], "confidence": 0.85 },
+        { "i": 8, "raw": "2 plakjes ontbijtkoek [blokjes]", "ing": "ontbijtkoek", "qual": [], "prep": { "en": "cubed" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:runderstoofpot-met-paddenstoelen",
+      "name": { "en": "Beef stew with mushrooms" },
+      "description": {
+        "nl": "Stoofpot van sukadelapjes met sjalotjes, jeneverbes en rode wijn, afgemaakt met gebakken kastanjechampignons en shiitake.",
+        "en": "Braising-steak stew with shallots, juniper and red wine, finished with fried chestnut and shiitake mushrooms."
+      },
+      "category": "vlees",
+      "tags": ["winter"],
+      "time": { "active": 35, "total": 100 },
+      "steps": [
+        { "en": "Toss the meat in the flour. Brown the meat in 50 g of the butter. Add the shallots, bay leaf, juniper berries, cloves and garlic." },
+        { "en": "Fry for another 4 minutes, stirring. Add the tomato and fry for 3 minutes more. Pour in the red wine and add stock until the meat is just covered." },
+        { "en": "Bring everything to just below the boil (do not let it boil), cover the pan and leave to stew for 1 hour." },
+        { "en": "Fry the mushrooms in the rest of the butter until most of the liquid has evaporated. Add them to the meat together with their juices. Season with salt and pepper." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g sukadelapjes [blokjes]", "ing": "sukadelap", "qual": [], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 1, "raw": "8 sjalotjes [kwarten]", "ing": "sjalot", "qual": [], "prep": { "en": "quartered" }, "confidence": 1 },
+        { "i": 2, "raw": "1 vleestomaat [stukjes]", "ing": "vleestomaat", "qual": [], "prep": { "en": "small pieces" }, "confidence": 1 },
+        { "i": 3, "raw": "250 g kastanjechampignons [gehalveerd]", "ing": "kastanjechampignon", "qual": [], "prep": { "en": "halved" }, "confidence": 1 },
+        { "i": 4, "raw": "200 g shiitake [gehalveerd]", "ing": "shiitake", "qual": [], "prep": { "en": "halved" }, "confidence": 1 },
+        { "i": 5, "raw": "1 laurierblaadje", "ing": "laurierblad", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "4 jeneverbessen", "ing": "jeneverbes", "qual": [], "confidence": 1 },
+        { "i": 7, "raw": "½ tl gemalen kruidnagel", "ing": "kruidnagelpoeder", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "1 teen knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 1 },
+        { "i": 9, "raw": "1 dl rode wijn", "ing": "wijn", "qual": ["rode"], "confidence": 1 },
+        { "i": 10, "raw": "½ ltr runderbouillon", "ing": "runderbouillon", "qual": [], "confidence": 1 },
+        { "i": 11, "raw": "1-2 el bloem", "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 12, "raw": "75 g boter", "ing": "boter", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:rundvlees-met-uien",
+      "name": { "en": "Beef with onions" },
+      "description": {
+        "nl": "Stoofschotel in de stijl van de Griekse stifado: rundvlees met hele kleine uitjes, kaneel, piment en rode wijn.",
+        "en": "Stew in the style of Greek stifado: beef with whole small onions, cinnamon, allspice and red wine."
+      },
+      "category": "vlees",
+      "tags": ["wereld", "winter"],
+      "time": { "active": 40, "total": 120 },
+      "steps": [
+        { "en": "Peel the onions but do not cut them. Heat the oil in a large heavy-based pan. Fry the onions over a medium heat, stirring, until golden brown, take them out of the pan and leave to drain on kitchen paper." },
+        { "en": "Trim the fat and sinews from the meat and cut it into 3 cm cubes. Put all the meat in the pan and brown it over a high heat for 10 minutes, stirring, until all the liquid has evaporated. Add the garlic, wine, spices, bay leaf, vinegar, tomato purée, 300 ml water and salt to the pan. Cover and simmer over a low heat for 1 hour. Stir now and then." },
+        { "en": "Add the onions and stir through. Cook covered for another 15 minutes. Remove the cinnamon stick, allspice berries and bay leaf before serving. Serve with rice, bread or potatoes and stewed vegetables." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g sukadelapjes", "ing": "sukadelap", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "500 g kleine uien", "ing": "ui", "qual": ["kleine"], "confidence": 1 },
+        { "i": 2, "raw": "60 ml olijfolie", "ing": "olijfolie", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "3 tenen knoflook", "ing": "knoflook", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "1 dl rode wijn", "ing": "wijn", "qual": ["rode"], "confidence": 1 },
+        { "i": 5, "raw": "1 kaneelstokje", "ing": "kaneelstokje", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "6 pimentkorrels", "ing": "piment", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 laurierblad", "ing": "laurierblad", "qual": [], "confidence": 1 },
+        { "i": 8, "raw": "1 el rode wijnazijn", "ing": "wijnazijn", "qual": ["rode"], "confidence": 1 },
+        { "i": 9, "raw": "2 el tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:safraan-risotto-met-garnalen",
+      "name": { "en": "Saffron risotto with prawns" },
+      "description": {
+        "nl": "Romige risotto met saffraan en witte wijn, afgemaakt met garnalen, oude kaas en dille.",
+        "en": "Creamy risotto with saffron and white wine, finished with prawns, mature cheese and dill."
+      },
+      "category": "rijst",
+      "tags": ["feest"],
+      "time": { "active": 40, "total": 45 },
+      "steps": [
+        { "en": "Bring the stock to the boil and keep it just below boiling over a low heat." },
+        { "en": "Heat 50 g of butter and gently fry the shallot until translucent. Add the rice and stir until all the grains glisten with butter. Add the wine and a splash of hot stock and let the rice simmer gently over a medium-high heat, stirring, until the liquid has been absorbed." },
+        { "en": "Then stir another splash of hot stock and the saffron threads into the rice. Let the rice simmer gently, stirring regularly, until the liquid has been absorbed. Carry on like this until the rice is cooked, about 25 minutes, and the stock has been absorbed. The risotto should be moist." },
+        { "en": "Stir the cream into the risotto and briefly bring it back to the boil. Stir the prawns through the risotto and let them heat through quickly. Take the pan off the heat and stir the cheese and dill into the risotto. Season with salt and pepper and serve straight away. Nice with broccoli." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 sjalotje [gesnipperd]", "ing": "sjalot", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 1, "raw": "¾ ltr kippenbouillon", "ing": "kippenbouillon", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "100 g boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "300 g arborio- of risottorijst", "ing": "risottorijst", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 dl droge witte wijn", "ing": "wijn", "qual": ["droge", "witte"], "confidence": 1 },
+        { "i": 5, "raw": "1 zakje saffraandraadjes", "ing": "saffraan", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "1 dl slagroom", "ing": "slagroom", "qual": [], "confidence": 1 },
+        { "i": 7, "raw": "300 g gepelde garnalen", "ing": "garnaal", "qual": ["gepelde"], "confidence": 1 },
+        { "i": 8, "raw": "100 g gerapte oude Goudse kaas", "ing": "kaas", "qual": ["geraspte", "oude"], "confidence": 0.85 },
+        { "i": 9, "raw": "2 el dille [gesnipperd]", "ing": "dille", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:salade-nicoise",
+      "name": { "en": "Salade Niçoise" },
+      "description": {
+        "nl": "Klassieke Franse maaltijdsalade met aardappel, ei, haricots verts, tomaat, olijven en tonijn in een mosterddressing.",
+        "en": "Classic French main-course salad with potato, egg, green beans, tomato, olives and tuna in a mustard dressing."
+      },
+      "category": "salade",
+      "tags": ["zomer"],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Boil the potatoes for 12 minutes until just tender. Meanwhile hard-boil the eggs for 8 minutes. Plunge them into cold water and peel them. Drain the potatoes and put them in a bowl." },
+        { "en": "Whisk the mustard, oil and vinegar with pepper and a little salt if you like into a dressing. Toss half of it with the still-warm potatoes." },
+        { "en": "Bring a pan of water to the boil and cook the green beans for 3 minutes. Drain and rinse under cold water (blanching)." },
+        { "en": "Add the green beans, tomatoes, olives and lettuce to the potatoes and toss. Cut the eggs into wedges and break the tuna into pieces. Arrange on the salad. Drizzle with the rest of the dressing." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "600 g vastkokende aardappels [blokjes van 2 cm]", "ing": "aardappel", "qual": ["vastkokende"], "prep": { "en": "2 cm dice" }, "confidence": 1 },
+        { "i": 1, "raw": "3 eieren", "ing": "ei", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "2 tl dijonmosterd", "ing": "dijonmosterd", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "4 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "2 el witte wijnazijn", "ing": "wijnazijn", "qual": ["witte"], "confidence": 1 },
+        { "i": 5, "raw": "150 g haricots verts", "ing": "haricots-verts", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "250 g cherrytomaten [gehalveerd]", "ing": "kerstomaat", "qual": [], "prep": { "en": "halved" }, "confidence": 1 },
+        { "i": 7, "raw": "1 potje kalamata olijven zonder pit", "ing": "kalamata-olijf", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "100 g botersla", "ing": "botersla", "qual": [], "confidence": 1 },
+        { "i": 9, "raw": "1 blikje tonijnmoot in water", "ing": "tonijn-in-water", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:salade-prinsejagt-meloensalade",
+      "name": { "en": "Salade Prinsejagt - melon salad" },
+      "description": {
+        "nl": "Zomerse salade van gerookte kip, meloen, uitgebakken spek en pijnboompitten met een dressing van mayonaise, yoghurt en honing.",
+        "en": "Summery salad of smoked chicken, melon, crispy bacon and pine nuts with a mayonnaise, yoghurt and honey dressing."
+      },
+      "category": "salade",
+      "tags": ["snel", "zomer"],
+      "time": { "active": 15, "total": 15 },
+      "steps": [
+        { "en": "Fry the bacon strips until crisp. Put all the salad ingredients in a bowl." },
+        { "en": "Mix the dressing ingredients together and pour over the salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g gerookte kipfilet [stukjes]", "ing": "kipfilet", "qual": ["gerookte"], "prep": { "en": "small pieces" }, "confidence": 1 },
+        { "i": 1, "raw": "1 of 2 meloenen, Galia, honing, suiker of Cantaloupe [stukjes]", "ing": "meloen", "qual": [], "prep": { "en": "small pieces" }, "note": { "en": "Galia, honeydew, sugar or cantaloupe melon" }, "confidence": 0.95 },
+        { "i": 2, "raw": "100 g spekreepjes", "ing": "spekreepjes", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "50 g pijnboompitjes", "ing": "pijnboompit", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "mayonaise", "ing": "mayonaise", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "yoghurt", "ing": "yoghurt", "qual": [], "confidence": 1 },
+        { "i": 7, "raw": "honing", "ing": "honing", "qual": [], "confidence": 1 }
+      ]
+    }
+  ]
+}

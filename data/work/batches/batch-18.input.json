@@ -1,0 +1,1202 @@
+{
+  "batch": 18,
+  "recipes": [
+    {
+      "id": "b:tagliatelle-alle-noci",
+      "name": {
+        "nl": "Tagliatelle alle noci"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "400 g tagliatelle",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "tagliatelle",
+            "qual": [],
+            "prep": null,
+            "name": "tagliatelle"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "150 g gepelde walnoten [fijngehakt]",
+          "parsed": {
+            "qty": {
+              "min": 150
+            },
+            "unit": "g",
+            "ing": "walnoot",
+            "qual": [
+              "gepelde"
+            ],
+            "prep": {
+              "nl": "fijngehakt"
+            },
+            "name": "walnoten"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "2 teentjes knoflook [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "2 el paneermeel",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "paneermeel",
+            "qual": [],
+            "prep": null,
+            "name": "paneermeel"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "nootmuskaat",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "nootmuskaat",
+            "qual": [],
+            "prep": null,
+            "name": "nootmuskaat"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 bekertje crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "beker",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Bak de knoflook in een pan in olie lichtbruin. Voeg daaraan de noten, het paneermeel, 1 dl water, wat zout en peper en de nootmuskaat toe. Roer de crème fraîche erdoor. Laat alles door en door warm worden zonder te koken."
+        },
+        {
+          "nl": "Kook ondertussen de tagliatelle al dente. Schenk de saus over de tagliatelle. Alles omscheppen en heet opdienen."
+        }
+      ]
+    },
+    {
+      "id": "b:tagliatelle-carbonara",
+      "name": {
+        "nl": "Tagliatelle Carbonara"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "8 plakken ontbijtspek",
+          "parsed": {
+            "qty": {
+              "min": 8
+            },
+            "unit": "plak",
+            "ing": "ontbijtspek",
+            "qual": [],
+            "prep": null,
+            "name": "ontbijtspek"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "boter",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 teentje knoflook [plakjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "teen",
+            "ing": "knoflook",
+            "qual": [],
+            "prep": {
+              "nl": "plakjes"
+            },
+            "name": "knoflook"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "200 ml slagroom",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "ml",
+            "ing": "slagroom",
+            "qual": [],
+            "prep": null,
+            "name": "slagroom"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 ei",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "ei"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 eidooier",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "eidooier",
+            "qual": [],
+            "prep": null,
+            "name": "eidooier"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "125 g geraspte kaas",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "500 g tagliatelle",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "tagliatelle",
+            "qual": [],
+            "prep": null,
+            "name": "tagliatelle"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "Peterselie [fijngesneden]",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "peterselie",
+            "qual": [],
+            "prep": {
+              "nl": "fijngesneden"
+            },
+            "name": "Peterselie"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Bak het spek krokant in boter. Fruit op het laatst de knoflook even mee. Giet het spekvet af, bewaar 1 el en verwijder de knoflook."
+        },
+        {
+          "nl": "Laat het spek uitlekken op keukenpapier en breek het in kleine stukjes. Giet de room bij de overgebleven spekvet."
+        },
+        {
+          "nl": "Klop het ei en de dooier los en voeg de helft van de geraspte kaas toe."
+        },
+        {
+          "nl": "Kook de pasta beetgaar in water met een beetje zout. Giet de pasta af."
+        },
+        {
+          "nl": "Roer de room met het eimengsel, de rest van de kaas en de peterselie door de warme pasta. Voeg zo nodig zout en peper toe."
+        }
+      ]
+    },
+    {
+      "id": "b:tagliatelle-met-gehakt-olijven-balletjes",
+      "name": {
+        "nl": "Tagliatelle met gehakt-olijven balletjes"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "1 kleine ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [
+              "kleine"
+            ],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "100 g groene olijven zonder pit [kleine stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "olijf",
+            "qual": [
+              "groene"
+            ],
+            "prep": {
+              "nl": "kleine stukjes"
+            },
+            "name": "olijven zonder pit"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "500 g rundergehakt",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "rundergehakt",
+            "qual": [],
+            "prep": null,
+            "name": "rundergehakt"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 ei",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ei",
+            "qual": [],
+            "prep": null,
+            "name": "ei"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "3 el paneermeel",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "paneermeel",
+            "qual": [],
+            "prep": null,
+            "name": "paneermeel"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 zakje gehaktkruiden",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "zakje",
+            "ing": "gehaktkruiden",
+            "qual": [],
+            "prep": null,
+            "name": "gehaktkruiden"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "75 g boter",
+          "parsed": {
+            "qty": {
+              "min": 75
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "¼ ltr tomatensaus (tomato frito)",
+          "parsed": {
+            "qty": {
+              "min": 0.25
+            },
+            "unit": "l",
+            "ing": "tomatensaus",
+            "qual": [],
+            "prep": null,
+            "name": "tomatensaus"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "400 g tagliatelle",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "tagliatelle",
+            "qual": [],
+            "prep": null,
+            "name": "tagliatelle"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "100 g kwark",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "kwark",
+            "qual": [],
+            "prep": null,
+            "name": "kwark"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Meng het gehakt, de ui, de olijf, het ei, het paneermeel en de gehaktkruiden goed door elkaar. Draai er 24 balletjes van."
+        },
+        {
+          "nl": "Verhit de boter in een braadpan en bak de gehaktballetjes rondom bruin. Schenk vervolgens de tomatensaus erbij, breng de saus aan de kook en laat de gehaktballetjes in ca. 15 minuten zachtjes gaar worden."
+        },
+        {
+          "nl": "Kook intussen de tagliatelle in ruim kokend water met zout beetgaar. Laat de tagliatelle goed uitlekken."
+        },
+        {
+          "nl": "Roer de kwark door de tomatensaus en breng de saus op smaak met zout en peper."
+        }
+      ]
+    },
+    {
+      "id": "b:tagliatelle-met-kalkoenfilet-en-appelsaus",
+      "name": {
+        "nl": "Tagliatelle met kalkoenfilet en appelsaus"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "500 g kipfilet (of kalkoen) [blokjes van 2-3 cm]",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "kipfilet",
+            "qual": [],
+            "prep": {
+              "nl": "blokjes van 2-3 cm"
+            },
+            "name": "kipfilet"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "2 el bloem",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "bloem",
+            "qual": [],
+            "prep": null,
+            "name": "bloem"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "1 tl kerriepoeder",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "tl",
+            "ing": "kerrie",
+            "qual": [],
+            "prep": null,
+            "name": "kerriepoeder"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 dl droge witte wijn",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "dl",
+            "ing": "wijn",
+            "qual": [
+              "droge",
+              "witte"
+            ],
+            "prep": null,
+            "name": "wijn"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "1 dl kippenbouillon",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "dl",
+            "ing": "kippenbouillon",
+            "qual": [],
+            "prep": null,
+            "name": "kippenbouillon"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "2 zoetzure appels (goudrenetten) [geschild; stukjes]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "appel",
+            "qual": [
+              "zoetzure"
+            ],
+            "prep": {
+              "nl": "geschild; stukjes"
+            },
+            "name": "appels"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "400 g tagliatelle",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "tagliatelle",
+            "qual": [],
+            "prep": null,
+            "name": "tagliatelle"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "125 ml slagroom",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "ml",
+            "ing": "slagroom",
+            "qual": [],
+            "prep": null,
+            "name": "slagroom"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Meng de bloem, ½ tl zout, peper en kerriepoeder door elkaar en wentel het vlees erdoor."
+        },
+        {
+          "nl": "Bak het vlees in boter bruin en bak de ui 3 minuten mee. Schenk de wijn en de bouillon erbij en breng aan de kook."
+        },
+        {
+          "nl": "Roer de appel door het vlees en laat het geheel zachtjes stoven."
+        },
+        {
+          "nl": "Kook intussen de tagliatelle in ruim water met zout beetgaar. Laat de tagliatelle goed uitlekken in een vergiet. Roer de slagroom door de pasta."
+        }
+      ]
+    },
+    {
+      "id": "b:tagliatelle-met-rosbiefreepjes",
+      "name": {
+        "nl": "Tagliatelle met rosbiefreepjes"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "500 g rosbief [reepjes van 1 cm]",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "rosbief",
+            "qual": [],
+            "prep": {
+              "nl": "reepjes van 1 cm"
+            },
+            "name": "rosbief"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "2 sjalotjes [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": null,
+            "ing": "sjalot",
+            "qual": [],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "sjalotjes"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "2 stengels bleekselderij [smalle boogjes]",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "stengel",
+            "ing": "bleekselderij",
+            "qual": [],
+            "prep": {
+              "nl": "smalle boogjes"
+            },
+            "name": "bleekselderij"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "50 g boter",
+          "parsed": {
+            "qty": {
+              "min": 50
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "1 el bloem",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "bloem",
+            "qual": [],
+            "prep": null,
+            "name": "bloem"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "2 tl paprikapoeder",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "tl",
+            "ing": "paprikapoeder",
+            "qual": [],
+            "prep": null,
+            "name": "paprikapoeder"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "4 dl gezeefde tomaten (uit een pak)",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": "dl",
+            "ing": "tomatensaus",
+            "qual": [],
+            "prep": null,
+            "name": "gezeefde tomaten"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "400 g tagliatelle",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "tagliatelle",
+            "qual": [],
+            "prep": null,
+            "name": "tagliatelle"
+          }
+        },
+        {
+          "i": 8,
+          "raw": "1 bekertje crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "beker",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 9,
+          "raw": "2 el fijngehakte peterselie",
+          "parsed": {
+            "qty": {
+              "min": 2
+            },
+            "unit": "el",
+            "ing": "peterselie",
+            "qual": [
+              "fijngehakte"
+            ],
+            "prep": null,
+            "name": "peterselie"
+          }
+        },
+        {
+          "i": 10,
+          "raw": "1 el fijngeknipte bieslook",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "bieslook",
+            "qual": [
+              "fijngeknipte"
+            ],
+            "prep": null,
+            "name": "bieslook"
+          }
+        },
+        {
+          "i": 11,
+          "raw": "75 g gerapte kaas",
+          "parsed": {
+            "qty": {
+              "min": 75
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Bestrooi de rosbief met peper. Verhit de boter in een braadpan en bak de reepjes rosbief in gedeelten snel rondom bruin. Haal het vlees uit de pan en houd het apart."
+        },
+        {
+          "nl": "Fruit in het achtergebleven vet de sjalot en de bleekselderij ca. 5 minuten en roer er vervolgens de bloem en de paprikapoeder door. Schenk al roerende scheutje voor scheutje de gezeefde tomaten erdoor. Breng de saus aan de kook en laat het ca. 15 minuten zachtjes koken."
+        },
+        {
+          "nl": "Kook intussen de pasta beetgaar. Roer de crème fraîche en de fijngehakte kruiden door de tomatensaus en breng hem op smaak met zout en peper. Roer de reepjes rosbief met het uitgelopen sap erdoor en laat het vlees op laag vuur warm worden."
+        },
+        {
+          "nl": "Laat de pasta goed uitlekken. Serveer met de saus en de geraspte kaas."
+        }
+      ]
+    },
+    {
+      "id": "b:tagliatelle-met-zalm-en-pesto",
+      "name": {
+        "nl": "Tagliatelle met zalm en pesto"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "400 g tagliatelle",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "tagliatelle",
+            "qual": [],
+            "prep": null,
+            "name": "tagliatelle"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "200 g gerookte zalmfilet [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "zalmfilet",
+            "qual": [
+              "gerookte"
+            ],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "zalmfilet"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "1 pot groene pestosaus",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "pot",
+            "ing": "pesto",
+            "qual": [
+              "groene"
+            ],
+            "prep": null,
+            "name": "pestosaus"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "200 g crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Kook de tagliatelle.\nVerwarm de pesto en de crème fraîche in een pan. Schep de zalm samen met de tagliatelle door het pestomengsel."
+        }
+      ]
+    },
+    {
+      "id": "b:tomatensalsa-bij-kabeljauw-met-notencrumble",
+      "name": {
+        "nl": "Tomatensalsa (bij kabeljauw met notencrumble)"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "200 g snacktomaten [grove blokjes]",
+          "parsed": {
+            "qty": {
+              "min": 200
+            },
+            "unit": "g",
+            "ing": "kerstomaat",
+            "qual": [],
+            "prep": {
+              "nl": "grove blokjes"
+            },
+            "name": "snacktomaten"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 rode ui [gesnipperd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "ui",
+            "qual": [
+              "rode"
+            ],
+            "prep": {
+              "nl": "gesnipperd"
+            },
+            "name": "ui"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "zout en peper",
+          "parsed": {
+            "qty": null,
+            "unit": null,
+            "ing": "zout-en-peper",
+            "qual": [],
+            "prep": null,
+            "name": "zout en peper"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Doe de tomaten en ui in een kom en breng op smaak met zout en peper."
+        }
+      ]
+    },
+    {
+      "id": "b:tonijn-met-nieuwe-aardappeltjes",
+      "name": {
+        "nl": "Tonijn met nieuwe aardappeltjes"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "1 kg nieuw krieltjes [gehalveerd]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "kg",
+            "ing": "krieltjes",
+            "qual": [
+              "nieuwe"
+            ],
+            "prep": {
+              "nl": "gehalveerd"
+            },
+            "name": "krieltjes"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "1 vleestomaat [in stukjes; zonder vel, vocht en zaadjes]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": null,
+            "ing": "vleestomaat",
+            "qual": [],
+            "prep": {
+              "nl": "in stukjes; zonder vel, vocht en zaadjes"
+            },
+            "name": "vleestomaat"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "4 lente-uitjes [smalle ringen]",
+          "parsed": {
+            "qty": {
+              "min": 4
+            },
+            "unit": null,
+            "ing": "bosui",
+            "qual": [],
+            "prep": {
+              "nl": "smalle ringen"
+            },
+            "name": "lente-uitjes"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "400 g tonijn uit blik",
+          "parsed": {
+            "qty": {
+              "min": 400
+            },
+            "unit": "g",
+            "ing": "tonijn",
+            "qual": [],
+            "prep": null,
+            "name": "tonijn uit blik"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "100 ml droge witte wijn",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "ml",
+            "ing": "wijn",
+            "qual": [
+              "droge",
+              "witte"
+            ],
+            "prep": null,
+            "name": "wijn"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "125 ml crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 125
+            },
+            "unit": "ml",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "1 el dille [fijngehakt]",
+          "parsed": {
+            "qty": {
+              "min": 1
+            },
+            "unit": "el",
+            "ing": "dille",
+            "qual": [],
+            "prep": {
+              "nl": "fijngehakt"
+            },
+            "name": "dille"
+          }
+        },
+        {
+          "i": 7,
+          "raw": "100 g geraspte jonge kaas",
+          "parsed": {
+            "qty": {
+              "min": 100
+            },
+            "unit": "g",
+            "ing": "kaas",
+            "qual": [
+              "geraspte",
+              "jonge"
+            ],
+            "prep": null,
+            "name": "kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Kook de aardappelen in 10 minuten bijna gaar, giet af en laat uitlekken. Laat de tonijn in een zeef uitlekken en verdeel in stukjes."
+        },
+        {
+          "nl": "Vet een ovenschaal in met wat boter. Meng de aardappeltjes, de tomaat, de lente-uitjes en de tonijn door elkaar en schep in de ovenschaal. Roer de wijn, de crème fraîche en de dille door elkaar. Schenk de saus over het aardappelmengsel en strooi de geraspte kaas erover.\nBak op 175 °C voor 20 minuten."
+        }
+      ]
+    },
+    {
+      "id": "b:tortellini-al-gratin",
+      "name": {
+        "nl": "Tortellini al gratin"
+      },
+      "servings": 4,
+      "lines": [
+        {
+          "i": 0,
+          "raw": "500 g tortellini",
+          "parsed": {
+            "qty": {
+              "min": 500
+            },
+            "unit": "g",
+            "ing": "tortellini",
+            "qual": [],
+            "prep": null,
+            "name": "tortellini"
+          }
+        },
+        {
+          "i": 1,
+          "raw": "250 g champignons [plakjes]",
+          "parsed": {
+            "qty": {
+              "min": 250
+            },
+            "unit": "g",
+            "ing": "champignon",
+            "qual": [],
+            "prep": {
+              "nl": "plakjes"
+            },
+            "name": "champignons"
+          }
+        },
+        {
+          "i": 2,
+          "raw": "75 g boter",
+          "parsed": {
+            "qty": {
+              "min": 75
+            },
+            "unit": "g",
+            "ing": "boter",
+            "qual": [],
+            "prep": null,
+            "name": "boter"
+          }
+        },
+        {
+          "i": 3,
+          "raw": "sap van ½ citroen",
+          "parsed": {
+            "qty": {
+              "min": 0.5
+            },
+            "unit": null,
+            "ing": "citroen",
+            "qual": [],
+            "prep": null,
+            "name": "citroen"
+          }
+        },
+        {
+          "i": 4,
+          "raw": "250 ml tomatensaus au naturel",
+          "parsed": {
+            "qty": {
+              "min": 250
+            },
+            "unit": "ml",
+            "ing": "tomatensaus",
+            "qual": [],
+            "prep": null,
+            "name": "tomatensaus au naturel"
+          }
+        },
+        {
+          "i": 5,
+          "raw": "3 el crème fraîche",
+          "parsed": {
+            "qty": {
+              "min": 3
+            },
+            "unit": "el",
+            "ing": "creme-fraiche",
+            "qual": [],
+            "prep": null,
+            "name": "crème fraîche"
+          }
+        },
+        {
+          "i": 6,
+          "raw": "75 g Parmezaanse kaas",
+          "parsed": {
+            "qty": {
+              "min": 75
+            },
+            "unit": "g",
+            "ing": "parmezaanse-kaas",
+            "qual": [],
+            "prep": null,
+            "name": "Parmezaanse kaas"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "nl": "Kook de tortellini in 16 minuten beetgaar."
+        },
+        {
+          "nl": "Bak de champignons in een koekenpan in de helft van de boter bruin. Breng op smaak met zout en peper en voeg het citroensap toe."
+        },
+        {
+          "nl": "Verwarm in een andere pan de tomatensaus met de crème fraîche. Vet een ovenschaal in en doe er de helft van de goed uitgelekte tortellini in. Verdeel daarover de helft van de champignons en leg daarop de helft van de tomatensaus. Herhaal dit. Strooi de Parmezaanse kaas erover en leg er klontjes boter op."
+        },
+        {
+          "nl": "Gratineer dit gerecht 15 minuten in een hete oven op 200 °C."
+        }
+      ]
+    }
+  ]
+}

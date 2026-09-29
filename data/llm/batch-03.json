@@ -1,0 +1,290 @@
+{
+  "batch": 3,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:couscous-met-runderreepjes",
+      "name": { "en": "Couscous with beef strips" },
+      "description": {
+        "nl": "Snelle couscous met gebakken runderreepjes, sjalot, groene paprika en cashewnoten.",
+        "en": "Quick couscous with fried beef strips, shallot, green pepper and cashew nuts."
+      },
+      "category": "rijst",
+      "tags": ["snel"],
+      "time": { "active": 15, "total": 20 },
+      "steps": [
+        { "en": "Heat the olive oil in a frying pan and fry the beef strips for about 4 minutes until golden brown and cooked through. Add the shallots and pepper and fry for about 5 minutes more over a medium-high heat until the pepper is just tender." },
+        { "en": "Meanwhile, put the couscous in a bowl. Pour 425 ml of boiling water over the couscous and leave it to swell for about 5 minutes. Give the couscous a good stir." },
+        { "en": "Season the beef strips with salt and pepper. Add the couscous and the cashew nuts to the beef strips with the pepper and shallots and stir through once." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 pak couscous", "ing": "couscous", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 scheutje olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "250 g runderreepjes", "ing": "runderreepjes", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "3 sjalotjes [ringen]", "ing": "sjalot", "qual": [], "prep": { "en": "rings" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 groene paprika [dunne reepjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "thin strips" }, "confidence": 0.95 },
+        { "i": 5, "raw": "50 g cashewnoten", "ing": "cashewnoot", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:curry-met-groenten-en-kip",
+      "name": { "en": "Chicken and vegetable curry" },
+      "description": {
+        "nl": "Milde kipcurry met sperziebonen, asperges en doperwten in balti-saus en kokosmelk, lekker met rijst.",
+        "en": "A mild chicken curry with green beans, asparagus and peas in balti sauce and coconut milk, served with rice."
+      },
+      "category": "vlees",
+      "tags": ["wereld", "wok"],
+      "time": { "active": 20, "total": 30 },
+      "steps": [
+        { "en": "Heat half the oil in a large wok or frying pan. Stir-fry the ginger, garlic and onion for 2 minutes until soft. Set them aside." },
+        { "en": "Heat the remaining oil in the same pan. Stir-fry the chicken for 2 minutes until lightly browned. Add the onion mixture and the vegetables. Stir in the sauce and 3 tablespoons of water. Cover the pan and leave everything to simmer for 10 minutes." },
+        { "en": "Stir in the coconut milk and half the coriander and heat through for another 2 minutes (do not let it boil). Garnish the curry with the remaining coriander and serve it with rice." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "3 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 tl versgeraspte gember", "ing": "gember", "qual": ["versgeraspte"], "confidence": 0.95 },
+        { "i": 2, "raw": "1 teen knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 ui [dunne plakjes]", "ing": "ui", "qual": [], "prep": { "en": "thinly sliced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "500 g kipfilet [stukjes]", "ing": "kipfilet", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 5, "raw": "125 g sperziebonen [stukjes van 5 cm]", "ing": "sperzieboon", "qual": [], "prep": { "en": "5 cm pieces" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 bosje asperges [stukjes van 5 cm]", "ing": "asperge", "qual": [], "prep": { "en": "5 cm pieces" }, "confidence": 0.95 },
+        { "i": 7, "raw": "150 g diepvriesdoperwtjes", "ing": "doperwt", "qual": ["diepvries"], "confidence": 0.9 },
+        { "i": 8, "raw": "Blikje balti kooksaus (285 g)", "ing": "balti-kooksaus", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "250 ml kokosmelk", "ing": "kokosmelk", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "25 g verse korianderblaadjes [gehakt]", "ing": "koriander", "qual": ["verse"], "prep": { "en": "chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:dahl-van-rode-linzen-boerenkool",
+      "name": { "en": "Red lentil and kale dahl" },
+      "description": {
+        "nl": "Vegetarische dahl van rode linzen en boerenkool met kokosmelk, gember en verse koriander.",
+        "en": "A vegetarian dahl of red lentils and kale with coconut milk, ginger and fresh coriander."
+      },
+      "category": "overig",
+      "tags": ["vegetarisch", "wereld"],
+      "time": { "active": 20, "total": 40 },
+      "steps": [
+        { "en": "Rinse the lentils and the kale. Heat a splash of oil in a deep pan. Fry the cumin seeds, mustard seeds, turmeric and masala in it for about 30 seconds." },
+        { "en": "Then add the onion, garlic and ginger and fry them too. Add the lentils and kale to the pan and stir everything together." },
+        { "en": "Deglaze with the coconut milk and the water. Add the tomatoes and vegetable stock to the pan. Leave everything to stew for 20 minutes, with chilli to taste." },
+        { "en": "Finish the dahl with lime juice and a few coriander leaves." },
+        { "en": "Serve the dahl with naan bread (see separate recipe)." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "300 g rode linzen", "ing": "linze", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 1, "raw": "250 g verse boerenkool", "ing": "boerenkool", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 2, "raw": "8 tomaten [blokjes]", "ing": "tomaat", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "300 ml kokosmelk", "ing": "kokosmelk", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "300 ml water", "ing": "water", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "2 tl kurkuma", "ing": "kurkuma", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "2 tl komijnzaad", "ing": "komijnzaad", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "2 tl mosterdzaad", "ing": "mosterdzaad", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "2 blokjes groentebouillon", "ing": "groentebouillon", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "2 el gele masala", "ing": "masala", "qual": ["gele"], "confidence": 0.85 },
+        { "i": 11, "raw": "30 g gember [geraspt]", "ing": "gember", "qual": [], "prep": { "en": "grated" }, "confidence": 0.95 },
+        { "i": 12, "raw": "2 teentjes knoflook [fijngehakt]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 13, "raw": "sap van 1 limoen", "ing": "limoen", "qual": [], "confidence": 0.95 },
+        { "i": 14, "raw": "1 bosje koriander", "ing": "koriander", "qual": [], "confidence": 0.95 },
+        { "i": 15, "raw": "1 Spaanse peper", "ing": "spaanse-peper", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:drumsticks-in-kruidige-roomsaus",
+      "name": { "en": "Drumsticks in a spiced cream sauce" },
+      "description": {
+        "nl": "Kippendrumsticks met shoarmakruiden, gestoofd in een romige saus van bouillon, crème fraîche en tomaat.",
+        "en": "Chicken drumsticks with shawarma seasoning, braised in a creamy sauce of stock, crème fraîche and tomato."
+      },
+      "category": "vlees",
+      "tags": [],
+      "time": { "active": 25, "total": 55 },
+      "steps": [
+        { "en": "Remove the skin from the drumsticks and coat the drumsticks in the shawarma seasoning. Heat the butter with the oil in a casserole and brown the drumsticks all over." },
+        { "en": "Add the onion and the garlic and fry them, together with the remaining shawarma seasoning, for about 5 minutes. Stir in the stock and the crème fraîche and bring it all to the boil, stirring. Cover and leave the drumsticks to simmer gently for about 20 minutes." },
+        { "en": "Meanwhile, skin the tomatoes, halve them, remove the juice and the seeds and cut the flesh into small pieces. Add the tomato and let it all simmer for about 10 minutes more. Season the dish with salt, pepper and lemon juice and sprinkle the parsley over it. Nice with rice and a salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "8-12 drumsticks", "ing": "drumstick", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 el shoarmakruiden", "ing": "shoarmakruiden", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "2 uien [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "3 teentjes knoflook [gesnipperd]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 4, "raw": "4 trostomaten", "ing": "trostomaat", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "25 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "2 dl kippenbouillon", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "125 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "1 el citroensap", "ing": "citroensap", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "2 el peterselie [gesnipperd]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:erwtensoep",
+      "name": { "en": "Dutch pea soup" },
+      "description": {
+        "nl": "Klassieke dikke erwtensoep met hamschijven, prei en wortel, urenlang zachtjes gesudderd.",
+        "en": "Classic thick Dutch pea soup with gammon, leek and carrot, simmered gently for hours."
+      },
+      "category": "soep",
+      "tags": ["winter"],
+      "time": { "active": 20, "total": 300 },
+      "steps": [
+        { "en": "Soak the split peas for a few hours. Put the gammon steaks, drained peas, water, celery, carrot and onion in a pan. Bring to the boil, cover and simmer for 2 hours. Add the leek and potato and cook for another 30 minutes." },
+        { "en": "Remove the gammon steaks, chop the meat finely and return it to the pan. Discard the bones." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 koppen groene spliterwten", "ing": "spliterwt", "qual": ["groene"], "confidence": 0.95 },
+        { "i": 1, "raw": "750 g hamschijven", "ing": "hamschijf", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "2½ ltr water", "ing": "water", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 stengel bleekselderij [fijngehakt]", "ing": "bleekselderij", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 wortel [fijngehakt]", "ing": "wortel", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 5, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 6, "raw": "3 preien [ringen]", "ing": "prei", "qual": [], "prep": { "en": "rings" }, "confidence": 0.95 },
+        { "i": 7, "raw": "1 aardappel [blokjes]", "ing": "aardappel", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:farfalle-alla-boscaiola",
+      "name": { "en": "Farfalle alla boscaiola" },
+      "description": {
+        "nl": "Vegetarische pasta met gedroogd eekhoorntjesbrood, champignons, tomaat en verse kruiden.",
+        "en": "Vegetarian pasta with dried porcini, mushrooms, tomato and fresh herbs."
+      },
+      "category": "pasta",
+      "tags": ["vegetarisch"],
+      "time": { "active": 30, "total": 60 },
+      "steps": [
+        { "en": "Soak the porcini in lukewarm water for 30 minutes and then rinse them. Leave to drain. Skin the tomatoes, remove the seeds and cut them into small pieces." },
+        { "en": "Fry the onion and the mushrooms in the oil in a frying pan until brown. Let this fry for 5 minutes. Then add the porcini, the tomatoes and the garlic. Season with salt and pepper. Simmer gently for 20 minutes until the liquid has evaporated, stirring now and then." },
+        { "en": "Meanwhile, cook the farfalle for 11 minutes until al dente and drain. Toss the mushroom sauce with the butter, parsley and basil through the pasta. Serve with Parmesan." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g farfalle", "ing": "farfalle", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "50 g gedroogd eekhoorntjesbrood", "ing": "eekhoorntjesbrood", "qual": ["gedroogde"], "confidence": 0.95 },
+        { "i": 2, "raw": "500 g tomaten", "ing": "tomaat", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "250 g champignons [plakjes]", "ing": "champignon", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 5, "raw": "2 teentjes knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 6, "raw": "2 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "1 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 9, "raw": "1 el basilicum [fijngehakt]", "ing": "basilicum", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 10, "raw": "geraspte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:farfalle-met-zalm-en-broccoli",
+      "name": { "en": "Farfalle with salmon and broccoli" },
+      "description": {
+        "nl": "Romige pasta met gerookte zalmsnippers, broccoli, prei en verse dille, in 25 minuten op tafel.",
+        "en": "Creamy pasta with smoked salmon trimmings, broccoli, leek and fresh dill, on the table in 25 minutes."
+      },
+      "category": "pasta",
+      "tags": ["snel"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Blanch the broccoli for 2 minutes. Lift the broccoli out and then cook the farfalle in the same water. After 5 minutes add the broccoli back in and cook for another 5 minutes." },
+        { "en": "Fry the leek rings in butter for 4 minutes until soft." },
+        { "en": "Drain the pasta and broccoli. Stir in the leek and the crème fraîche and heat through without boiling. Take off the heat and mix in the salmon and dill. Season with salt and pepper." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "225 g broccoli [in stukjes]", "ing": "broccoli", "qual": [], "prep": { "en": "in small pieces" }, "confidence": 0.95 },
+        { "i": 1, "raw": "400 g farfalle", "ing": "farfalle", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "225 g prei [ringen]", "ing": "prei", "qual": [], "prep": { "en": "rings" }, "confidence": 0.95 },
+        { "i": 3, "raw": "125 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "225 g zalmsnippers (gerookt)", "ing": "zalmsnippers", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "2 el verse dille [fijngehakt]", "ing": "dille", "qual": ["verse"], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:flensjestaart-met-ham",
+      "name": { "en": "Pancake stack with ham" },
+      "description": {
+        "nl": "Hartige taart van gestapelde flensjes met ham en een kruidige roomkaasvulling, gegratineerd onder de grill.",
+        "en": "A savoury stack of thin pancakes layered with ham and a herby cream cheese filling, finished under the grill."
+      },
+      "category": "hartige-taart",
+      "tags": ["oven"],
+      "time": { "active": 45, "total": 120 },
+      "steps": [
+        { "en": "Sift the flour with the salt into a bowl. Break the eggs into it and add the milk, stirring, until you have a smooth batter. Melt 100 g of butter and stir it into the batter. Leave the batter to rest for at least 1 hour." },
+        { "en": "In a bowl, mix the parsley, chives, garlic, cream cheese and crème fraîche. Season with salt and pepper." },
+        { "en": "Heat the rest of the butter in a frying pan. Make 10 thin pancakes by letting a little batter spread out in the pan; cook until the top is dry, turn over and cook until golden brown. (After the first pancake no extra butter is needed.)" },
+        { "en": "Preheat the grill to its highest setting. Lay a pancake on an ovenproof dish, top it with 2 slices of ham, lay a second pancake on top and spread over some of the herb and cream cheese mixture. Repeat until there are 5 layers, finishing with the cream cheese mixture." },
+        { "en": "Sprinkle the grated cheese over the top and grill the pancake stack for about 5 minutes until the cheese is golden brown." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "125 g bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1/2 tl zout", "ing": "zout", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "3 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "250 ml melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "125 g margarine", "ing": "margarine", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "10 plakjes gekookte ham", "ing": "ham", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "6 takjes peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 7, "raw": "10 sprietjes bieslook [fijngehakt]", "ing": "bieslook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 8, "raw": "1/2 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 9, "raw": "100 g verse roomkaas", "ing": "roomkaas", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 10, "raw": "200 g crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "50 g geraspte oude kaas", "ing": "kaas", "qual": ["geraspte", "oude"], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:franse-macaroni-met-romige-yoghurtsaus",
+      "name": { "en": "French macaroni with creamy yoghurt sauce" },
+      "description": {
+        "nl": "Schelpjesmacaroni met courgette, oesterzwammen en ham in een romige saus van slagroom en yoghurt.",
+        "en": "Pasta shells with courgette, oyster mushrooms and ham in a creamy sauce of cream and yoghurt."
+      },
+      "category": "pasta",
+      "tags": [],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Cook the pasta shells in plenty of salted water until al dente." },
+        { "en": "Heat the butter in a casserole and fry the courgettes and oyster mushrooms for about 5 minutes. Add the ham, parsley, herbes de Provence, salt and pepper and fry for 1 minute. Add the garlic and cream, bring to the boil, stirring, and let it simmer for 30 seconds." },
+        { "en": "Take the pan off the heat, let it cool slightly and then stir in the yoghurt. Put the pan back on a low heat and warm through, stirring, without letting the mixture boil." },
+        { "en": "Drain the pasta and toss it through the sauce. Serve with the grated cheese on the side." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "350 g schelpjesmacaroni", "ing": "schelpjesmacaroni", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 kleine courgettes [plakjes van 1/2 cm]", "ing": "courgette", "qual": ["kleine"], "prep": { "en": "½ cm slices" }, "confidence": 0.95 },
+        { "i": 2, "raw": "150 g oesterzwammen [reepjes]", "ing": "oesterzwam", "qual": [], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 3, "raw": "35 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "100 g plakjes gekookte ham [reepjes]", "ing": "ham", "qual": [], "prep": { "en": "strips" }, "confidence": 0.9 },
+        { "i": 5, "raw": "1 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 tl Provençaalse kruiden", "ing": "provencaalse-kruiden", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 8, "raw": "100 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "200 ml yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "100 g geraspte belegen kaas", "ing": "kaas", "qual": ["geraspte", "belegen"], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:frisse-tonijnsalade",
+      "name": { "en": "Refreshing tuna salad" },
+      "description": {
+        "nl": "Frisse salade van tonijn uit blik met ei, kappertjes, komkommer en een dressing van yoghurt en mayonaise.",
+        "en": "A refreshing salad of tinned tuna with egg, capers, cucumber and a yoghurt and mayonnaise dressing."
+      },
+      "category": "salade",
+      "tags": ["snel", "zomer"],
+      "time": { "active": 15, "total": 20 },
+      "steps": [
+        { "en": "Hard-boil the eggs and cut them into slices. Drain the tuna and flake it with a fork. Cut the cucumber into wedges and the spring onion into rings." },
+        { "en": "Mix all the ingredients together and drizzle the yoghurt and mayonnaise dressing over the top." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "3 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "60 g kappertjes", "ing": "kappertjes", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "3 blikjes tonijn", "ing": "tonijn", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 komkommer", "ing": "komkommer", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 bosui", "ing": "bosui", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "120 g eikenbladsla", "ing": "eikenbladsla", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "3 el yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 1/2 el mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.95 }
+      ]
+    }
+  ]
+}

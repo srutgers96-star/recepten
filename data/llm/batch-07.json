@@ -1,0 +1,293 @@
+{
+  "batch": 7,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:hutspot",
+      "name": { "en": "Hutspot (carrot and onion mash)" },
+      "description": {
+        "nl": "Klassieke Hollandse stamppot van aardappelen, winterpeen en ui met spekjes en rookworst.",
+        "en": "The classic Dutch mash of potatoes, carrot and onion with lardons and smoked sausage."
+      },
+      "category": "stamppot",
+      "tags": ["winter"],
+      "time": { "active": 20, "total": 40 },
+      "steps": [
+        { "en": "Boil the potatoes, onions and carrot together in one pan until tender. Lay the smoked sausage on top so it cooks through as well." },
+        { "en": "Meanwhile, fry the bacon lardons and the frying sausage." },
+        { "en": "Mash the cooked potatoes, carrot and onions with the milk, pepper, salt and mayonnaise. Stir in the crispy lardons along with their fat." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 kg aardappelen", "ing": "aardappel", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "400 g winterpeen [stukjes]", "ing": "winterpeen", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 2, "raw": "4 grote uien [halve ringen]", "ing": "ui", "qual": ["grote"], "prep": { "en": "half rings" }, "confidence": 0.95 },
+        { "i": 3, "raw": "200 g spekblokjes", "ing": "spekblokjes", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "Rookworst en/of braadworst", "ing": "rookworst", "qual": [], "confidence": 0.9 },
+        { "i": 5, "raw": "100 ml melk", "ing": "melk", "qual": [], "confidence": 0.98 },
+        { "i": 6, "raw": "1 el mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:italiaans-gehaktbrood-met-yoghurtsaus",
+      "name": { "en": "Italian meatloaf with yoghurt sauce" },
+      "description": {
+        "nl": "Sappig gehaktbrood uit de oven met een romige champignon-yoghurtsaus met augurk en bieslook.",
+        "en": "Juicy oven-baked meatloaf with a creamy mushroom and yoghurt sauce with gherkin and chives."
+      },
+      "category": "vlees",
+      "tags": ["oven"],
+      "time": { "active": 30, "total": 75 },
+      "steps": [
+        { "en": "Put the mince, breadcrumbs, egg, onion, garlic, parsley, pepper and salt in a bowl. Knead everything together well, shape it into a 'loaf' and place it in an ovenproof dish." },
+        { "en": "Melt 30 g butter and pour it over the meatloaf for a nice brown crust. Bake the meatloaf in the oven at 200 ℃ for about 45 minutes until cooked through." },
+        { "en": "Heat 40 g butter in a frying pan and fry the mushrooms for 3 minutes. Stir in the flour and pour in the stock a splash at a time, stirring all the while. Bring to the boil, still stirring." },
+        { "en": "In a small bowl, mix the yoghurt, cream and egg yolk. Take the mushroom mixture off the heat and stir in the yoghurt mixture. Put it back on a very low heat and keep stirring until the yoghurt is warm (do not let it boil). Add the gherkin and chives." },
+        { "en": "Cut the meatloaf into thick slices, arrange on a platter and spoon the sauce around it." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.98 },
+        { "i": 1, "raw": "500 g rundergehakt", "ing": "rundergehakt", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "3 el broodkruim", "ing": "broodkruim", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 ei", "ing": "ei", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.98 },
+        { "i": 5, "raw": "4 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.98 },
+        { "i": 6, "raw": "30 g + 40 g boter", "ing": "boter", "qual": [], "confidence": 0.9 },
+        { "i": 7, "raw": "200 g champignons [plakjes]", "ing": "champignon", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.98 },
+        { "i": 8, "raw": "1 el bloem", "ing": "bloem", "qual": [], "confidence": 0.98 },
+        { "i": 9, "raw": "100 ml vleesbouillon (blokje)", "ing": "runderbouillon", "qual": [], "confidence": 0.8 },
+        { "i": 10, "raw": "150 ml yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.98 },
+        { "i": 11, "raw": "2 el slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "1 eidooier", "ing": "eidooier", "qual": [], "confidence": 0.98 },
+        { "i": 13, "raw": "1 augurk [blokjes]", "ing": "augurk", "qual": [], "prep": { "en": "diced" }, "confidence": 0.98 },
+        { "i": 14, "raw": "3 el bieslook [fijngehakt]", "ing": "bieslook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:kaastaart",
+      "name": { "en": "Cheese tart" },
+      "description": {
+        "nl": "Hartige taart van zelfgemaakt deeg met een vulling van roomkaas en oude kaas.",
+        "en": "Savoury tart with homemade pastry and a filling of cream cheese and mature Dutch cheese."
+      },
+      "category": "hartige-taart",
+      "tags": ["vegetarisch", "oven"],
+      "time": { "active": 30, "total": 110 },
+      "steps": [
+        { "en": "Make the pastry: sift the flour with salt into a bowl, add the butter and cut it into the flour in small pieces using two knives. Add 3-4 tbsp ice-cold water and quickly knead into a ball that holds together. Cover and leave to rest in the fridge for 30 minutes." },
+        { "en": "Preheat the oven to 200 °C. Roll out the pastry and line a buttered tart tin. Prick holes in the base with a fork. Line with baking paper and add baking beans. Bake for 15 minutes. Remove the baking beans and paper and leave to cool slightly. Turn the oven down to 180 °C." },
+        { "en": "Make the filling: beat the cream cheese, grated cheese, eggs, milk, cornflour, salt and pepper into a thick mixture. Spoon into the tart tin and bake for 30-40 minutes until set and golden brown." },
+        { "en": "Leave to cool slightly and remove from the tin. Serve lukewarm or cold." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "250 g bloem", "ing": "bloem", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "150 g koude boter", "ing": "boter", "qual": ["koude"], "confidence": 0.98 },
+        { "i": 2, "raw": "200 g verse roomkaas (Mon Chou of een variant)", "ing": "roomkaas", "qual": ["verse"], "note": { "en": "Mon Chou or a similar full-fat cream cheese" }, "confidence": 0.95 },
+        { "i": 3, "raw": "200 g geraspte oude kaas", "ing": "kaas", "qual": ["geraspte", "oude"], "confidence": 0.95 },
+        { "i": 4, "raw": "4 eieren", "ing": "ei", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "150 ml melk", "ing": "melk", "qual": [], "confidence": 0.98 },
+        { "i": 6, "raw": "1 el maïzena", "ing": "maizena", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:kabeljauw-met-notencrumble",
+      "name": { "en": "Cod with nut crumble" },
+      "description": {
+        "nl": "Kabeljauwfilet uit de oven onder een knapperige crumble van gemengde noten.",
+        "en": "Oven-baked cod fillet under a crunchy crumble of mixed nuts."
+      },
+      "category": "vis",
+      "tags": ["oven", "snel"],
+      "time": { "active": 15, "total": 30 },
+      "steps": [
+        { "en": "Preheat the oven to 180 ℃. Pat the cod fillets dry with kitchen paper. Blitz the nuts, bread and egg in a food processor into a coarse crumble. Grease an ovenproof dish with olive oil and lay the cod fillets in it. Spread the nut crumble over the fillets, season with salt and pepper and bake in the oven for 15 minutes." },
+        { "en": "Serve with mashed potato, tomato salsa and rocket and spinach pesto (see separate recipes)." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 kabeljauwfilets van 200 g", "ing": "kabeljauwfilet", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "1 ei", "ing": "ei", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "100 g gemengde noten", "ing": "noot", "qual": ["gemengde"], "confidence": 0.95 },
+        { "i": 3, "raw": "1 sneetje brood", "ing": "brood", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "zout en peper", "ing": "zout-en-peper", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:kalfsvlees-met-spinazie",
+      "name": { "en": "Veal with spinach" },
+      "description": {
+        "nl": "Snelle pan met kalfsreepjes, prei, champignons en spinazie in een saus van zure room, met geroosterde cashewnoten.",
+        "en": "A quick pan of veal strips, leek, mushrooms and spinach in a soured cream sauce, topped with toasted cashews."
+      },
+      "category": "vlees",
+      "tags": ["snel"],
+      "time": { "active": 25, "total": 25 },
+      "steps": [
+        { "en": "Heat the butter in a frying pan and gently fry the leek for 1 minute. Toss the veal strips in the paprika and add them to the pan." },
+        { "en": "Turn up the heat and brown the meat for 1-2 minutes. Add the mushrooms, garlic, nutmeg, tomato purée and wine and let it cook for 1 minute." },
+        { "en": "Add the spinach and let it wilt, stirring. Stir in the soured cream, season with salt and pepper and serve on a bed of noodles or steamed rice. Scatter the cashew nuts over the top." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 el boter", "ing": "boter", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "1 grote prei [dunne plakjes]", "ing": "prei", "qual": ["grote"], "prep": { "en": "thinly sliced" }, "confidence": 0.98 },
+        { "i": 2, "raw": "500 g kalfsfilets [reepjes]", "ing": "kalfsfilet", "qual": [], "prep": { "en": "strips" }, "confidence": 0.98 },
+        { "i": 3, "raw": "2 el milde paprikapoeder", "ing": "paprikapoeder", "qual": ["milde"], "confidence": 0.95 },
+        { "i": 4, "raw": "200 g champignons [plakjes]", "ing": "champignon", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.98 },
+        { "i": 5, "raw": "1 teen knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.98 },
+        { "i": 6, "raw": "snufje nootmuskaat", "ing": "nootmuskaat", "qual": [], "confidence": 0.98 },
+        { "i": 7, "raw": "3 el tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.98 },
+        { "i": 8, "raw": "1,25 dl droge witte wijn", "ing": "wijn", "qual": ["droge", "witte"], "confidence": 0.95 },
+        { "i": 9, "raw": "100 g verse spinazie", "ing": "spinazie", "qual": ["verse"], "confidence": 0.98 },
+        { "i": 10, "raw": "205 g zure room", "ing": "zure-room", "qual": [], "confidence": 0.98 },
+        { "i": 11, "raw": "115 g cashewnoten [geroosterd en gehakt]", "ing": "cashewnoot", "qual": [], "prep": { "en": "toasted and chopped" }, "confidence": 0.98 },
+        { "i": 12, "raw": "zout en peper", "ing": "zout-en-peper", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:kalkoen-sperziebooncocktail-met-yoghurtsaus",
+      "name": { "en": "Turkey and green bean cocktail with yoghurt sauce" },
+      "description": {
+        "nl": "Fris voorgerecht van sperziebonen en gare kalkoen in een yoghurt-mayonaisesaus, geserveerd in glazen coupes.",
+        "en": "A fresh starter of green beans and cooked turkey in a yoghurt and mayonnaise sauce, served in glass coupes."
+      },
+      "category": "salade",
+      "tags": ["zomer"],
+      "time": { "active": 20, "total": 40 },
+      "steps": [
+        { "en": "Cook the green beans in a little salted water for about 15 minutes until just tender. Drain and leave to cool. Stir the yoghurt and mayonnaise together." },
+        { "en": "Add the onion, parsley, lemon juice, salt and pepper. Line 4 glass coupes with lettuce leaves. Mix the green beans and turkey together and divide between the coupes. Pour the sauce over and garnish with the tomato." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "250 g sperziebonen [doormidden]", "ing": "sperzieboon", "qual": [], "prep": { "en": "halved" }, "confidence": 0.98 },
+        { "i": 1, "raw": "150 ml yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "3 el mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.98 },
+        { "i": 4, "raw": "3 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.98 },
+        { "i": 5, "raw": "½ el citroensap", "ing": "citroensap", "qual": [], "confidence": 0.98 },
+        { "i": 6, "raw": "4 mooie slabladeren", "ing": "sla", "qual": ["mooie"], "confidence": 0.9 },
+        { "i": 7, "raw": "300 g gare kalkoen- of kipfilet [reepjes]", "ing": "kalkoenfilet", "qual": ["gare"], "prep": { "en": "strips" }, "confidence": 0.9 },
+        { "i": 8, "raw": "1 tomaat [stukjes, zonder vocht en pitjes]", "ing": "tomaat", "qual": [], "prep": { "en": "small pieces, juice and seeds removed" }, "confidence": 0.95 },
+        { "i": 9, "raw": "zout en peper", "ing": "zout-en-peper", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:kalkoenpie",
+      "name": { "en": "Turkey pie" },
+      "description": {
+        "nl": "Kalkoenblokjes in een romige saus met spek, bleekselderij en kaas onder een deksel van bladerdeeg.",
+        "en": "Diced turkey in a creamy sauce with bacon, celery and cheese under a puff pastry lid."
+      },
+      "category": "hartige-taart",
+      "tags": ["oven"],
+      "time": { "active": 30, "total": 75 },
+      "steps": [
+        { "en": "Preheat the oven to 200 °C. Toss the turkey cubes in the flour. Heat the butter in a casserole, brown the turkey cubes all over and spoon into a round ovenproof dish." },
+        { "en": "Fry the onion and bacon in the remaining butter for about 4 minutes. Add the celery and fry briefly. Stir in the cream, water and stock cube and bring to the boil. Thicken with the instant thickener and take off the heat." },
+        { "en": "Stir the grated cheese into the sauce and spoon it over the turkey. Stack the puff pastry sheets and roll out into a sheet slightly larger than the dish. Cut a small round out of the centre, brush the edges with egg white, cover with the pastry and press to seal." },
+        { "en": "Brush with egg yolk and bake for 40 minutes until golden brown and cooked through." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g kalkoenfilet [blokjes van 2 cm]", "ing": "kalkoenfilet", "qual": [], "prep": { "en": "2 cm dice" }, "confidence": 0.98 },
+        { "i": 1, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.98 },
+        { "i": 3, "raw": "4 stengels bleekselderij [boogjes]", "ing": "bleekselderij", "qual": [], "prep": { "en": "crescents" }, "confidence": 0.98 },
+        { "i": 4, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "100 g ontbijtspek [blokjes]", "ing": "ontbijtspek", "qual": [], "prep": { "en": "diced" }, "confidence": 0.98 },
+        { "i": 6, "raw": "125 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "½ kippenbouillonblokje", "ing": "kippenbouillonblokje", "qual": [], "confidence": 0.98 },
+        { "i": 8, "raw": "2 el allesbinder", "ing": "allesbinder", "qual": [], "confidence": 0.98 },
+        { "i": 9, "raw": "100 g geraspte jong belegen Goudse kaas", "ing": "kaas", "qual": ["geraspte", "jonge", "belegen"], "confidence": 0.85 },
+        { "i": 10, "raw": "2 plakjes diepvriesbladerdeeg (ontdooid)", "ing": "bladerdeeg", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "1 ei", "ing": "ei", "qual": [], "confidence": 0.98 },
+        { "i": 12, "raw": "zout en peper", "ing": "zout-en-peper", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:kip-courgette-salade-met-pesto",
+      "name": { "en": "Chicken and courgette salad with pesto" },
+      "description": {
+        "nl": "Zomerse salade van courgettestaafjes en plakjes kipfilet met een yoghurt-pestosaus en geroosterde amandelen.",
+        "en": "A summery salad of courgette batons and sliced chicken breast with a yoghurt and pesto sauce and toasted almonds."
+      },
+      "category": "salade",
+      "tags": ["zomer"],
+      "time": { "active": 30, "total": 45 },
+      "steps": [
+        { "en": "Rub the chicken breasts with salt. Heat the butter and fry the chicken breasts for about 8 minutes until browned all over and cooked through. Take them out of the pan and leave to cool." },
+        { "en": "Wash the courgettes and cut them first into slices about 1 cm thick and then into strips about 1 cm wide. Bring plenty of salted water to the boil and cook the courgette in it for about 2 minutes. Drain in a colander and cool under cold running water. Make sure the courgette batons drain really well." },
+        { "en": "Toast the flaked almonds in a dry frying pan until golden brown." },
+        { "en": "Stir the yoghurt, mayonnaise and pesto together well. Season to taste with salt and pepper." },
+        { "en": "Divide the courgette batons between four plates. Cut the chicken breasts into thin slices and arrange them on the courgette. Spoon the sauce over and garnish with the toasted almonds. Finish each plate with a sprig of basil." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 kipfilets (400 g)", "ing": "kipfilet", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "2 courgettes", "ing": "courgette", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "50 g geschaafde amandelen", "ing": "amandel", "qual": ["geschaafde"], "confidence": 0.95 },
+        { "i": 4, "raw": "150 ml yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.98 },
+        { "i": 5, "raw": "4 el mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.98 },
+        { "i": 6, "raw": "1½ el groene pesto", "ing": "pesto", "qual": ["groene"], "confidence": 0.95 },
+        { "i": 7, "raw": "1 takje basilicum", "ing": "basilicum", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:kip-ham-en-gedroogde-tomaten-salade",
+      "name": { "en": "Chicken, ham and sun-dried tomato salad" },
+      "description": {
+        "nl": "Maaltijdsalade met gemarineerde kip, krokante ham, gedroogde tomaten en pijnboompitten in een balsamicodressing.",
+        "en": "A main-course salad of marinated chicken, crispy ham, sun-dried tomatoes and pine nuts with a balsamic dressing."
+      },
+      "category": "salade",
+      "tags": ["zomer"],
+      "time": { "active": 25, "total": 50 },
+      "steps": [
+        { "en": "Marinate the chicken breasts for 20 minutes in a mixture of the oil, lemon juice and garlic." },
+        { "en": "Grill the chicken or put it on the barbecue for 10 minutes, then cut diagonally into thin strips." },
+        { "en": "Fry the ham slices in a dry pan and break into pieces." },
+        { "en": "Put all the dressing ingredients in a jar and shake well." },
+        { "en": "Divide the salad leaves between four plates and top with the chicken, tomatoes, pine nuts, basil and ham.\nDrizzle with the dressing." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 kipfilets", "ing": "kipfilet", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "1 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "2 tl citroensap", "ing": "citroensap", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "1 teen knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.98 },
+        { "i": 4, "raw": "4 plakken ham", "ing": "ham", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "200 g gemengde sla", "ing": "sla", "qual": ["gemengde"], "confidence": 0.85 },
+        { "i": 6, "raw": "16 gedroogde tomaten in olie [reepjes]", "ing": "zongedroogde-tomaat", "qual": [], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 7, "raw": "50 g pijnboompitten", "ing": "pijnboompit", "qual": [], "confidence": 0.98 },
+        { "i": 8, "raw": "15 g verse basilicum", "ing": "basilicum", "qual": ["verse"], "confidence": 0.98 },
+        { "i": 10, "raw": "3 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.98 },
+        { "i": 11, "raw": "1 el balsamicoazijn", "ing": "balsamicoazijn", "qual": [], "confidence": 0.98 },
+        { "i": 12, "raw": "1 tl dijonmosterd", "ing": "dijonmosterd", "qual": [], "confidence": 0.98 },
+        { "i": 13, "raw": "1 tl honing", "ing": "honing", "qual": [], "confidence": 0.98 }
+      ]
+    },
+    {
+      "id": "b:kip-in-dragon-roomsaus",
+      "name": { "en": "Chicken in tarragon cream sauce" },
+      "description": {
+        "nl": "Kipfilet gestoofd in een romige saus van prei, witte wijn en dragon.",
+        "en": "Chicken breasts braised in a creamy sauce of leek, white wine and tarragon."
+      },
+      "category": "vlees",
+      "tags": [],
+      "time": { "active": 25, "total": 45 },
+      "steps": [
+        { "en": "Toss the chicken breasts in the flour mixed with pepper. Heat the butter in a pan, sear the chicken breasts for 3 minutes per side and take them out of the pan. Fry the leek in the pan and sprinkle with the remaining flour. Add the wine and stock and bring to the boil, stirring." },
+        { "en": "Add the tarragon and simmer for 10 minutes without a lid. Return the chicken breasts to the pan and cook for 10-15 minutes until done. Add the cream and serve with sprigs of fresh tarragon." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 kipfilets", "ing": "kipfilet", "qual": [], "confidence": 0.98 },
+        { "i": 1, "raw": "50 g bloem", "ing": "bloem", "qual": [], "confidence": 0.98 },
+        { "i": 2, "raw": "zwarte peper", "ing": "zwarte-peper", "qual": [], "confidence": 0.98 },
+        { "i": 3, "raw": "60 g boter", "ing": "boter", "qual": [], "confidence": 0.98 },
+        { "i": 4, "raw": "2 preien [ringen]", "ing": "prei", "qual": [], "prep": { "en": "rings" }, "confidence": 0.98 },
+        { "i": 5, "raw": "250 ml droge witte wijn", "ing": "wijn", "qual": ["droge", "witte"], "confidence": 0.95 },
+        { "i": 6, "raw": "250 ml kippenbouillon (blokje)", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1½ tl gedroogde dragon", "ing": "dragon", "qual": ["gedroogde"], "confidence": 0.98 },
+        { "i": 8, "raw": "60 ml room", "ing": "room", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "verse dragon (garnering)", "ing": "dragon", "qual": ["verse"], "confidence": 0.98 }
+      ]
+    }
+  ]
+}

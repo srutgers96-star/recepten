@@ -1,0 +1,292 @@
+{
+  "batch": 16,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:sambal-goreng-spruitjes",
+      "name": { "en": "Sambal goreng Brussels sprouts" },
+      "description": {
+        "nl": "Spruitjes op Indische wijze, gestoofd in kokosmelk met sambal, laos en ketjap.",
+        "en": "Brussels sprouts Indonesian-style, simmered in coconut milk with sambal, galangal and kecap manis."
+      },
+      "category": "overig",
+      "tags": ["wereld", "snel"],
+      "time": { "active": 15, "total": 25 },
+      "steps": [
+        { "en": "Peel and finely chop the onion and garlic. Heat a splash of sunflower oil in a pan. Mix the onion, garlic, galangal, daun salam, shrimp paste and sambal oelek together in the pan. Stir well." },
+        { "en": "Stir the sprouts into the pan. Add the tomato, stock cube, kecap manis, coconut milk and water to the mixture in the pan. Stir everything well. Cook for about 10-15 minutes until tender." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g spruitjes [grote gehalveerd]", "ing": "spruitje", "qual": [], "prep": { "en": "large ones halved" }, "confidence": 0.95 },
+        { "i": 1, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 teen knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 schijfje laos", "ing": "laos", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 duan salam (Indonesisch laurierblad)", "ing": "duan-salam", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1 mespunt trassi", "ing": "trassi", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "½ el sambal oelek", "ing": "sambal-oelek", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 kleine tomaat [in kwarten]", "ing": "tomaat", "qual": ["kleine"], "prep": { "en": "quartered" }, "confidence": 0.95 },
+        { "i": 8, "raw": "¾ runderbouillonblokje", "ing": "runderbouillonblokje", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "1 scheut ketjap manis", "ing": "ketjap-manis", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "250 ml kokosmelk", "ing": "kokosmelk", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "½ glas water", "ing": "water", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:schelvis-in-ratatouillesaus",
+      "name": { "en": "Haddock in ratatouille sauce" },
+      "description": {
+        "nl": "Schelvis in een romige wijnsaus met shiitake, uit de oven onder een laag ratatouille en kaas.",
+        "en": "Haddock in a creamy wine sauce with shiitake, baked under a layer of ratatouille and cheese."
+      },
+      "category": "vis",
+      "tags": ["oven"],
+      "time": { "active": 30, "total": 55 },
+      "steps": [
+        { "en": "Make the ratatouille: lightly fry the aubergine, tomato, pepper, garlic, tomato purée and the herbs, then add a little water and the stock powder and simmer for about 15 minutes until tender." },
+        { "en": "Fry the onion and the shiitake in a knob of butter for about 5 minutes. Add the wine, the crème fraîche and the fish and bring to the boil. Simmer for 5 minutes. Season with salt and pepper to taste." },
+        { "en": "Spoon the fish mixture into an ovenproof dish and spread the ratatouille over it. Sprinkle the grated cheese over the ratatouille. Bake in the oven for about 25 minutes at 200 °C. Serve with rice." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 kleine ui [gesnipperd]", "ing": "ui", "qual": ["kleine"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "100 g shiitake [reepjes]", "ing": "shiitake", "qual": [], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 2, "raw": "250 g schelvisfilet (of kabeljauw) [stukken van 2-3 cm]", "ing": "schelvisfilet", "qual": [], "prep": { "en": "2-3 cm pieces" }, "confidence": 0.95 },
+        { "i": 3, "raw": "100 ml droge witte wijn", "ing": "wijn", "qual": ["droge", "witte"], "confidence": 0.95 },
+        { "i": 4, "raw": "125 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1 aubergine [stukjes]", "ing": "aubergine", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 courgette [stukjes]", "ing": "courgette", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 7, "raw": "1 tomaat [stukjes]", "ing": "tomaat", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 8, "raw": "1 paprika rood [stukjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "small pieces" }, "confidence": 0.9 },
+        { "i": 9, "raw": "1 teentje knoflook [gesnipperd]", "ing": "knoflook", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 10, "raw": "1 blikje tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "1 tl Provençaalse kruiden", "ing": "provencaalse-kruiden", "qual": [], "confidence": 0.95 },
+        { "i": 12, "raw": "1 takje tijm", "ing": "tijm", "qual": [], "confidence": 0.95 },
+        { "i": 13, "raw": "1 tl kruidenbouillonpoeder", "ing": "kruidenbouillonpoeder", "qual": [], "confidence": 0.95 },
+        { "i": 14, "raw": "100 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:snelle-kipsalade",
+      "name": { "en": "Quick chicken salad" },
+      "description": {
+        "nl": "Pastasalade met gegrilde kip, avocado, bleekselderij en pecannoten in een dressing van karnemelk en dragonazijn.",
+        "en": "Pasta salad with grilled chicken, avocado, celery and pecans in a buttermilk and tarragon vinegar dressing."
+      },
+      "category": "salade",
+      "tags": ["snel", "zomer"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Cook the pasta as per the packet. Grill the chicken for 6 minutes and cut it into strips. Mix the pasta, chicken, salad leaves and celery in a large bowl." },
+        { "en": "Make a dressing from the mayonnaise, buttermilk and tarragon vinegar and drizzle it over the salad. Garnish with the nuts and avocado." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "200 g fusilli", "ing": "fusilli", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "75 g eikenbladsla melange", "ing": "slamelange", "qual": [], "confidence": 0.7 },
+        { "i": 2, "raw": "500 g gemarineerde kipfilet", "ing": "kipfilet", "qual": ["gemarineerde"], "confidence": 0.95 },
+        { "i": 3, "raw": "1 avocado [dunne plakken]", "ing": "avocado", "qual": [], "prep": { "en": "thin slices" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 stengels bleekselderij [boogjes]", "ing": "bleekselderij", "qual": [], "prep": { "en": "crescents" }, "confidence": 0.95 },
+        { "i": 5, "raw": "60 ml mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "60 ml karnemelk", "ing": "karnemelk", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "2 tl dragonazijn", "ing": "dragonazijn", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "60 g pecannoten", "ing": "pecannoot", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spaanse-gehaktballetjes-in-sherrysaus",
+      "name": { "en": "Spanish meatballs in sherry sauce" },
+      "description": {
+        "nl": "Kleine gehaktballetjes met paprikapoeder en knoflook, gestoofd met nieuwe aardappeltjes in een saus van sherry en kippenbouillon.",
+        "en": "Small paprika and garlic meatballs, braised with new potatoes in a sherry and chicken stock sauce."
+      },
+      "category": "vlees",
+      "tags": ["wereld"],
+      "time": { "active": 30, "total": 50 },
+      "steps": [
+        { "en": "Mix the mince, breadcrumbs, parsley, garlic and 2 tsp paprika. With wet hands, roll the mixture into walnut-sized meatballs." },
+        { "en": "Heat the oil and butter in a medium pan. Brown the meatballs well in it for 3 to 4 minutes over a medium heat. Take the meatballs out of the pan and drain on kitchen paper." },
+        { "en": "Add the onion, 1 tsp paprika and the flour to the pan and fry the mixture for 2 minutes, stirring. Gradually add the sherry and the stock and stir until the sauce is smooth. Let the sauce cook over a medium heat until it thickens." },
+        { "en": "Return the meatballs to the pan together with the potatoes. Cover and cook over a low heat for 20 minutes. Serve sprinkled with parsley." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g half-om-half gehakt", "ing": "gehakt", "qual": ["half-om-half"], "confidence": 0.95 },
+        { "i": 1, "raw": "½ kop witbroodkruim", "ing": "witbroodkruim", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "¼ kop peterselie [gehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "chopped" }, "confidence": 0.95 },
+        { "i": 3, "raw": "2 tenen knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2+1 tl mild paprikapoeder", "ing": "paprikapoeder", "qual": ["milde"], "confidence": 0.95 },
+        { "i": 5, "raw": "2 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "30 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 middelgrote ui [gesnipperd]", "ing": "ui", "qual": ["middelgrote"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 8, "raw": "1 el bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "1¼ dl sherry", "ing": "sherry", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "2½ dl kippenbouillon", "ing": "kippenbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "10 kleine nieuwe aardappelen", "ing": "aardappel", "qual": ["kleine", "nieuwe"], "confidence": 0.95 },
+        { "i": 12, "raw": "¼ kop peterselie [gehakt] (garnering)", "ing": "peterselie", "qual": [], "prep": { "en": "chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spaanse-groenten",
+      "name": { "en": "Spanish vegetables" },
+      "description": {
+        "nl": "Snel gestoofde groenten van rode ui, paprika en tomaat met een vleugje bruine suiker.",
+        "en": "Quickly stewed red onion, peppers and tomatoes with a touch of brown sugar."
+      },
+      "category": "overig",
+      "tags": ["vegetarisch", "snel", "zomer", "wereld"],
+      "time": { "active": 15, "total": 25 },
+      "steps": [
+        { "en": "Heat the oil in a medium pan. Add the onion and fry gently over a low heat until translucent. Add the diced peppers and fry for 5 minutes over a medium heat, stirring." },
+        { "en": "Stir in the tomatoes and brown sugar. Turn the heat down, cover and cook for 6 to 8 minutes until the vegetables are tender." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 grote rode ui [reepjes]", "ing": "ui", "qual": ["grote", "rode"], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 2, "raw": "2 grote rode paprika’s [blokjes]", "ing": "paprika", "qual": ["grote", "rode"], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 groene paprika [blokjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "4 grote, rijpe tomaten [ontveld; blokjes]", "ing": "tomaat", "qual": ["grote", "rijpe"], "prep": { "en": "skinned; diced" }, "confidence": 0.95 },
+        { "i": 5, "raw": "2 tl bruine suiker", "ing": "suiker", "qual": ["bruine"], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:spaanse-rosti-met-spinazie",
+      "name": { "en": "Spanish rösti with spinach" },
+      "description": {
+        "nl": "Een dikke aardappelpannenkoek met spek, ui en ei, geserveerd met romige spinazie met Parmezaanse kaas.",
+        "en": "A thick potato pancake with bacon, onion and egg, served with creamy Parmesan spinach."
+      },
+      "category": "overig",
+      "tags": ["wereld", "vega-optie"],
+      "time": { "active": 35, "total": 40 },
+      "steps": [
+        { "en": "Fry the whole garlic cloves in a pan with olive oil. Add the bacon and, after 5 minutes, the potatoes. Fry gently for 10 minutes, then add the onion rings and the chilli." },
+        { "en": "Fry for another 5 minutes, then add the beaten eggs and spread them gently so that a pancake forms. Turn the pancake over and fry for another 5 minutes." },
+        { "en": "Spinach: wilt the spinach and add the Parmesan and the crème fraîche." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1½ kg aardappels [plakjes]", "ing": "aardappel", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "2 teentjes knoflook", "ing": "knoflook", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "150 g plakjes ontbijtspek [reepjes]", "ing": "ontbijtspek", "qual": [], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 ui [ringen]", "ing": "ui", "qual": [], "prep": { "en": "rings" }, "confidence": 0.95 },
+        { "i": 4, "raw": "5 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1 Spaans pepertje [gesnipperd]", "ing": "spaanse-peper", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 kg verse spinazie", "ing": "spinazie", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 7, "raw": "60 g Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "100 ml crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spaghetti-al-pomodoro-e-olive",
+      "name": { "en": "Spaghetti al pomodoro e olive" },
+      "description": {
+        "nl": "Spaghetti met een snelle saus van verse tomaten, knoflook, kappertjes en zwarte olijven.",
+        "en": "Spaghetti with a quick sauce of fresh tomatoes, garlic, capers and black olives."
+      },
+      "category": "pasta",
+      "tags": ["vegetarisch"],
+      "time": { "active": 20, "total": 35 },
+      "steps": [
+        { "en": "Skin the tomatoes and remove the seeds. Cut them into pieces." },
+        { "en": "Fry the garlic in half of the oil in a pan until very lightly browned. Add the tomatoes, oregano, tomato purée and cayenne pepper. Season with salt and pepper to taste and cook for about 20 minutes until the liquid has evaporated. Add the capers and the olives. Heat everything through." },
+        { "en": "Pour this straight from the heat over the spaghetti, cooked al dente beforehand for 8 minutes." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g spaghetti", "ing": "spaghetti", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 kg tomaten", "ing": "tomaat", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "3 teentjes knoflook [stiftjes]", "ing": "knoflook", "qual": [], "prep": { "en": "slivers" }, "confidence": 0.95 },
+        { "i": 3, "raw": "olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 el gedroogde oregano", "ing": "oregano", "qual": ["gedroogde"], "confidence": 0.95 },
+        { "i": 5, "raw": "1 el tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 mp cayennepeper", "ing": "cayennepeper", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "2 el kappertjes", "ing": "kappertjes", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "15 zwarte olijven zonder pit [gehalveerd]", "ing": "olijf", "qual": ["zwarte", "ontpitte"], "prep": { "en": "halved" }, "confidence": 0.9 },
+        { "i": 9, "raw": "geraspte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spaghetti-bolognese",
+      "name": { "en": "Spaghetti Bolognese" },
+      "description": {
+        "nl": "De klassieker: een langzaam gestoofde saus van rundergehakt, groenten, rode wijn en tomaten over spaghetti.",
+        "en": "The classic: a slow-simmered sauce of beef mince, vegetables, red wine and tomatoes over spaghetti."
+      },
+      "category": "pasta",
+      "tags": ["vega-optie", "kids"],
+      "time": { "active": 30, "total": 125 },
+      "steps": [
+        { "en": "Heat the oil in a large pan. Add the garlic, onion, carrot and celery. Fry the vegetables gently for about 5 minutes, stirring, until soft. Turn up the heat and fry the mince, breaking it up with a fork, until nicely browned. Don't brown vegetarian mince." },
+        { "en": "Add the stock, wine, undrained tomatoes and parsley. Bring the mixture to the boil and simmer gently without a lid for 1½ hours.\nSeason with pepper and salt." },
+        { "en": "During the last 10 minutes, cook the pasta al dente in a large pan of plenty of boiling water. Drain well and spoon onto warm plates. Pour the sauce over the pasta and sprinkle with Parmesan.\nIf you like, blend the sauce briefly with a stick blender." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "7 g peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 1, "raw": "2 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "2 teentjes knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 grote ui [gesnipperd]", "ing": "ui", "qual": ["grote"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 grote wortels [gehakt]", "ing": "wortel", "qual": ["grote"], "prep": { "en": "chopped" }, "confidence": 0.95 },
+        { "i": 5, "raw": "5 selderijstengels [gehakt]", "ing": "bleekselderij", "qual": [], "prep": { "en": "chopped" }, "confidence": 0.9 },
+        { "i": 6, "raw": "350 g rundergehakt (of vegetarisch gehakt)", "ing": "rundergehakt", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "5 dl runderbouillon", "ing": "runderbouillon", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "3,75 dl rode wijn", "ing": "wijn", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 9, "raw": "850 g gepelde tomaten uit blik", "ing": "tomaten-uit-blik", "qual": ["gepelde"], "confidence": 0.95 },
+        { "i": 10, "raw": "500 g spaghetti", "ing": "spaghetti", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "2 el geraspte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spaghetti-con-peperoni-e-pomodori",
+      "name": { "en": "Spaghetti con peperoni e pomodori" },
+      "description": {
+        "nl": "Spaghetti in een pittige saus van tomaat, ansjovis en gegrilde paprika, afgemaakt met krokante knoflookkruimels.",
+        "en": "Spaghetti in a punchy tomato, anchovy and grilled pepper sauce, finished with crispy garlic breadcrumbs."
+      },
+      "category": "pasta",
+      "tags": [],
+      "time": { "active": 30, "total": 50 },
+      "steps": [
+        { "en": "Heat the olive oil in a frying pan and gently fry the chopped garlic in it. Add the anchovies, chilli and tomatoes. Simmer gently for 30 minutes." },
+        { "en": "Add the capers, the grilled peppers and the red wine vinegar.\nMeanwhile, cook the spaghetti al dente." },
+        { "en": "Heat 100 ml olive oil in a frying pan. Fry the whole garlic cloves in it and let them sizzle briefly over a low heat. Remove the garlic cloves from the oil and add the breadcrumbs. Fry for 2 to 3 minutes until crispy. Drain the crumbs on kitchen paper." },
+        { "en": "Drain the spaghetti, stir it through the sauce with the parsley and serve garnished with the breadcrumbs." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "6 teentjes knoflook [3 fijngesneden]", "ing": "knoflook", "qual": [], "prep": { "en": "3 finely sliced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "4 gegrilde rode of gele paprika’s (uit een pot)", "ing": "paprika", "qual": ["gegrilde"], "confidence": 0.8 },
+        { "i": 2, "raw": "1 kg rijpe tomaten [ontveld en in stukjes]", "ing": "tomaat", "qual": ["rijpe"], "prep": { "en": "skinned and cut into small pieces" }, "confidence": 0.95 },
+        { "i": 3, "raw": "400 g spaghetti", "ing": "spaghetti", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "6 ansjovisjes [kleine stukjes]", "ing": "ansjovis", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 6, "raw": "2 gedroogde verkruimelde pepers of chilivlokken", "ing": "rode-peper", "qual": ["gedroogde", "verkruimelde"], "confidence": 0.7 },
+        { "i": 7, "raw": "50 g kappertjes", "ing": "kappertjes", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "3 el rode wijn azijn", "ing": "wijnazijn", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 9, "raw": "broodkruim van 3 boterhammen", "ing": "broodkruim", "qual": [], "confidence": 0.8 },
+        { "i": 10, "raw": "3 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spaghetti-mediterranei",
+      "name": { "en": "Spaghetti Mediterranei" },
+      "description": {
+        "nl": "Spaghetti met een tomatensaus van knoflook en tijm waar tonijn uit blik doorheen gaat; lekker warm én koud.",
+        "en": "Spaghetti with a garlic and thyme tomato sauce with tinned tuna stirred through; good warm or cold."
+      },
+      "category": "pasta",
+      "tags": ["zomer"],
+      "time": { "active": 20, "total": 35 },
+      "steps": [
+        { "en": "Skin the tomatoes and remove the seeds. Cut them into rough chunks." },
+        { "en": "Cut the garlic into slivers and fry it in a pan in 2 tbsp olive oil until golden brown. Immediately add the tomatoes, thyme and tomato purée, stir everything together and season with salt and pepper to taste. Cook the sauce for 15-20 minutes until the liquid from the tomatoes has evaporated." },
+        { "en": "Meanwhile, cook the spaghetti in plenty of salted water until done." },
+        { "en": "Break up the tuna and add it, oil and all, to the tomato sauce. Heat the sauce through for a few more minutes." },
+        { "en": "Drain the spaghetti, toss it through the tuna sauce and add the basil and the third tbsp of olive oil. Serve warm or cold." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g spaghetti", "ing": "spaghetti", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "750 g tomaten (eventueel uit blik)", "ing": "tomaat", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "3 teentjes knoflook [stiftjes]", "ing": "knoflook", "qual": [], "prep": { "en": "slivers" }, "confidence": 0.95 },
+        { "i": 3, "raw": "2+1 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 takje tijm", "ing": "tijm", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1 el tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "200 g tonijn op olie", "ing": "tonijn-in-olie", "qual": [], "confidence": 0.95 }
+      ]
+    }
+  ]
+}

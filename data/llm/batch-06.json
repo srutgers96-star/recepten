@@ -1,0 +1,303 @@
+{
+  "batch": 6,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:goulash-maaltijdsoep",
+      "name": { "en": "Hearty goulash soup" },
+      "description": {
+        "nl": "Stevige Hongaarse maaltijdsoep met runderschenkel, paprika en karwij, geserveerd met geroosterd stokbrood en crème fraîche.",
+        "en": "A hearty Hungarian-style meal-in-a-bowl soup of beef shin, peppers and caraway, served with toasted baguette and crème fraîche."
+      },
+      "category": "soep",
+      "tags": ["winter", "wereld"],
+      "time": { "active": 35, "total": 170 },
+      "steps": [
+        { "en": "Heat the oil in a heavy-based pan and brown the shin all over. Take it out of the pan. Brown the diced beef all over in the fat left behind. Add the garlic, onion and peppers and fry for about 5 minutes. Stir in the flour, paprika and cayenne pepper. Stirring all the time, pour in the passata and 1 litre of water a splash at a time." },
+        { "en": "Bring the soup to the boil, stirring, and return the shin to the pan. Add the stock cubes and all the herbs and spices and leave the soup to simmer gently for about 2 hours." },
+        { "en": "Take the shin out of the soup, cut the meat off the bone into small pieces and return it to the soup." },
+        { "en": "Toast the baguette slices. Mix the crème fraîche and grated cheese together and serve with the baguette alongside the soup." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 grote ui [gesnipperd]", "ing": "ui", "qual": ["grote"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "1 groene paprika [kleine stukjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 rode paprika [kleine stukjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 3, "raw": "3 el olie", "ing": "olie", "confidence": 0.95 },
+        { "i": 4, "raw": "500 g runderschenkel", "ing": "runderschenkel", "confidence": 0.95 },
+        { "i": 5, "raw": "300 g runderpoulet", "ing": "runderpoulet", "confidence": 0.95 },
+        { "i": 6, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 7, "raw": "2 el bloem", "ing": "bloem", "confidence": 0.95 },
+        { "i": 8, "raw": "2 el paprikapoeder", "ing": "paprikapoeder", "confidence": 0.95 },
+        { "i": 9, "raw": "1 tl cayennepeper", "ing": "cayennepeper", "confidence": 0.95 },
+        { "i": 10, "raw": "1 pak (500 g) gezeefde tomaten", "ing": "tomatensaus", "confidence": 0.9 },
+        { "i": 11, "raw": "2 runderbouillonblokjes", "ing": "runderbouillonblokje", "confidence": 0.95 },
+        { "i": 12, "raw": "1 tl majoraan", "ing": "majoraan", "confidence": 0.95 },
+        { "i": 13, "raw": "2 laurierblaadjes", "ing": "laurierblad", "confidence": 0.95 },
+        { "i": 14, "raw": "1 stukje foelie", "ing": "foelie", "confidence": 0.95 },
+        { "i": 15, "raw": "½ tl karwijzaadjes", "ing": "karwijzaad", "confidence": 0.95 },
+        { "i": 16, "raw": "8 dunne sneetjes stokbrood", "ing": "stokbrood", "qual": ["dunne"], "confidence": 0.95 },
+        { "i": 17, "raw": "125 ml crème fraîche", "ing": "creme-fraiche", "confidence": 0.95 },
+        { "i": 18, "raw": "100 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:griekse-salade",
+      "name": { "en": "Greek salad" },
+      "description": {
+        "nl": "Frisse salade van lollo rosso, komkommer, tomaat, olijven en feta met een dressing van olijfolie en oregano.",
+        "en": "A fresh salad of lollo rosso, cucumber, tomato, olives and feta with an olive oil and oregano dressing."
+      },
+      "category": "salade",
+      "tags": ["vegetarisch", "snel", "zomer"],
+      "time": { "active": 15, "total": 15 },
+      "steps": [
+        { "en": "Wash the lettuce leaves thoroughly, drain well and tear into bite-sized pieces. Arrange the lettuce on a platter. Scatter the sliced vegetables, olives and feta over the lettuce." },
+        { "en": "Put the olive oil, red wine vinegar, oregano, salt and pepper in a jar with a screw-top lid and shake well. Pour over the salad just before serving." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 krop lollo rosso sla", "ing": "lollo-rosso", "confidence": 0.95 },
+        { "i": 1, "raw": "1 grote komkommer [halve plakken]", "ing": "komkommer", "qual": ["grote"], "prep": { "en": "half slices" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 grote vleestomaat [blokjes]", "ing": "vleestomaat", "qual": ["grote"], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "2 radijsjes [plakken]", "ing": "radijs", "prep": { "en": "slices" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 kleine ui [ringen]", "ing": "ui", "qual": ["kleine"], "prep": { "en": "rings" }, "confidence": 0.95 },
+        { "i": 5, "raw": "8 zwarte olijven", "ing": "olijf", "qual": ["zwarte"], "confidence": 0.95 },
+        { "i": 6, "raw": "60 g feta [blokjes van 1 cm]", "ing": "feta", "prep": { "en": "1 cm dice" }, "confidence": 0.95 },
+        { "i": 7, "raw": "2 el olijfolie", "ing": "olijfolie", "confidence": 0.95 },
+        { "i": 8, "raw": "1 el rode wijnazijn", "ing": "wijnazijn", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 9, "raw": "½ tl oregano", "ing": "oregano", "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:groene-kalkoencurry",
+      "name": { "en": "Green turkey curry" },
+      "description": {
+        "nl": "Snelle Thaise curry uit de wok met kalkoenreepjes, prei, kokosmelk en doperwten.",
+        "en": "A quick Thai-style wok curry of turkey strips, leek, coconut milk and peas."
+      },
+      "category": "wok-noedels",
+      "tags": ["snel", "wok", "wereld"],
+      "time": { "active": 20, "total": 20 },
+      "steps": [
+        { "en": "Cut the turkey breast into thin strips. Heat the oil in a wok and stir-fry the turkey strips until lightly browned all over." },
+        { "en": "Add the curry paste, leeks and chilli and stir-fry for about 2 minutes more. Add the coconut milk and bring to the boil." },
+        { "en": "Stir in the peas and fish sauce and let it simmer gently for about 3 minutes more. Scatter the coriander over the dish. Lovely with rice vermicelli or noodles and a cucumber salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 dunne preien [halve ringen]", "ing": "prei", "qual": ["dunne"], "prep": { "en": "half rings" }, "confidence": 0.95 },
+        { "i": 1, "raw": "1 groene Spaanse peper [smalle reepjes]", "ing": "spaanse-peper", "qual": ["groene"], "prep": { "en": "thin strips" }, "confidence": 0.95 },
+        { "i": 2, "raw": "200 g kalkoenfilet", "ing": "kalkoenfilet", "confidence": 0.95 },
+        { "i": 3, "raw": "1 el zonnebloemolie", "ing": "zonnebloemolie", "confidence": 0.95 },
+        { "i": 4, "raw": "1 el groene currypasta", "ing": "currypasta", "qual": ["groene"], "confidence": 0.95 },
+        { "i": 5, "raw": "2 dl kokosmelk", "ing": "kokosmelk", "confidence": 0.95 },
+        { "i": 6, "raw": "150 g diepvries doperwten", "ing": "doperwt", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 el vissaus", "ing": "vissaus", "confidence": 0.95 },
+        { "i": 8, "raw": "2 el koriander [gesnipperd]", "ing": "koriander", "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:groentecurry",
+      "name": { "en": "Vegetable curry" },
+      "description": {
+        "nl": "Indonesisch getinte groentecurry van aardappel, aubergine, suikererwten en Chinese kool in santen.",
+        "en": "An Indonesian-style vegetable curry of potato, aubergine, sugar snap peas and Chinese cabbage in coconut cream."
+      },
+      "category": "overig",
+      "tags": ["vega-optie", "wereld"],
+      "time": { "active": 25, "total": 40 },
+      "steps": [
+        { "en": "Heat the oil and add the onion. Stir-fry for 2 minutes." },
+        { "en": "Add the garlic, ginger and curry powder and stir-fry for 2 minutes more." },
+        { "en": "Add the lemon zest and juice, shrimp paste, water and coconut cream and bring the mixture to the boil. Add the potatoes and aubergine and simmer over a low heat for 15 minutes." },
+        { "en": "Add the sugar snap peas, Chinese cabbage and carrot for the last 5 minutes of the cooking time and let them cook gently with the rest." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 middelgrote aardappelen [blokjes van 1 cm]", "ing": "aardappel", "qual": ["middelgrote"], "prep": { "en": "1 cm dice" }, "confidence": 0.95 },
+        { "i": 1, "raw": "1 kleine aubergine [blokjes van 2 cm]", "ing": "aubergine", "qual": ["kleine"], "prep": { "en": "2 cm dice" }, "confidence": 0.95 },
+        { "i": 2, "raw": "150 g suikererwten", "ing": "suikererwt", "confidence": 0.95 },
+        { "i": 3, "raw": "200 g Chinese kool [reepjes]", "ing": "chinese-kool", "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 wortel [dunne reepjes]", "ing": "wortel", "prep": { "en": "thin strips" }, "confidence": 0.95 },
+        { "i": 5, "raw": "1 ui [8 stukken]", "ing": "ui", "prep": { "en": "cut into 8 pieces" }, "confidence": 0.95 },
+        { "i": 6, "raw": "2 el arachideolie", "ing": "arachideolie", "confidence": 0.95 },
+        { "i": 7, "raw": "2 teentjes knoflook [geperst]", "ing": "knoflook", "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 8, "raw": "2 tl verse gember [geraspt]", "ing": "gember", "qual": ["verse"], "prep": { "en": "grated" }, "confidence": 0.95 },
+        { "i": 9, "raw": "2 tl kerriepoeder", "ing": "kerrie", "confidence": 0.95 },
+        { "i": 10, "raw": "1 tl citroenschil [geraspt]", "ing": "citroenschil", "prep": { "en": "grated" }, "confidence": 0.95 },
+        { "i": 11, "raw": "1 el citroensap", "ing": "citroensap", "confidence": 0.95 },
+        { "i": 12, "raw": "½ tl trassi (garnalenpasta)", "ing": "trassi", "confidence": 0.95 },
+        { "i": 13, "raw": "2½ dl water", "ing": "water", "confidence": 0.95 },
+        { "i": 14, "raw": "2½ dl santen", "ing": "santen", "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:ham-prei-rolletjes",
+      "name": { "en": "Ham and leek rolls" },
+      "description": {
+        "nl": "Stukken prei in ham gerold en in de oven gegratineerd onder een kaassaus.",
+        "en": "Pieces of leek wrapped in ham and baked in the oven under a cheese sauce."
+      },
+      "category": "oven",
+      "tags": ["oven", "kids"],
+      "time": { "active": 25, "total": 50 },
+      "steps": [
+        { "en": "Remove the tough outer leaves from the leeks and cut the white and light green part into 3 pieces of about 8 cm. Boil the leeks for about 10 minutes until just tender and drain." },
+        { "en": "Melt the butter in a small saucepan, stir in the flour and let it bubble for 1 minute. Add the milk little by little, stirring all the time, and let it cook for 2 minutes. Add 100 g of the cheese and let it melt. Season with salt and pepper." },
+        { "en": "Wrap the pieces of leek in the slices of ham and lay the rolls in an ovenproof dish. Pour the sauce over and sprinkle the rest of the cheese on top. Bake at 200 °C for about 20 minutes until golden brown." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 preien", "ing": "prei", "confidence": 0.95 },
+        { "i": 1, "raw": "25 g boter", "ing": "boter", "confidence": 0.95 },
+        { "i": 2, "raw": "25 g bloem", "ing": "bloem", "confidence": 0.95 },
+        { "i": 3, "raw": "300 ml melk", "ing": "melk", "confidence": 0.95 },
+        { "i": 4, "raw": "125 g geraspte belegen kaas", "ing": "kaas", "qual": ["geraspte", "belegen"], "confidence": 0.95 },
+        { "i": 5, "raw": "12 plakjes achterham", "ing": "ham", "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:hamburgers-voor-op-de-bbq",
+      "name": { "en": "Burgers for the barbecue" },
+      "description": {
+        "nl": "Zelfgemaakte rundvleesburgers met cheddar, gegrilde tomaat en rode ui, om zelf samen te stellen van de barbecue.",
+        "en": "Home-made beef burgers with Cheddar, grilled tomato and red onion, to build your own straight off the barbecue."
+      },
+      "category": "vlees",
+      "tags": ["zomer", "feest", "kids"],
+      "time": { "active": 35, "total": 70 },
+      "steps": [
+        { "en": "Put the meat in the fridge for 30 minutes. In a bowl, briefly mix the meat by hand with the onion, pepper, mustard, ketchup, allspice, a few drops of Tabasco and salt and pepper until evenly combined. Shape into four thick burgers and press them together firmly." },
+        { "en": "Grill the whole tomatoes and onion rings on the barbecue. Push the vegetables to the side when they are three-quarters done and wipe the grill clean where the meat will go." },
+        { "en": "Grill the burgers for 5-6 minutes per side, turning regularly. Put the Cheddar on the burgers when they are almost done and, if you like, cover with a large bowl to let the cheese melt." },
+        { "en": "Grill the buns and cut the pickled cucumbers and tomatoes into thick slices. Serve everything so that everyone can build their own burger." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "600 g rundergehakt", "ing": "rundergehakt", "confidence": 0.95 },
+        { "i": 1, "raw": "1 witte ui [gesnipperd]", "ing": "ui", "qual": ["witte"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "½ rode paprika [hele kleine blokjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "very small dice" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 el dijonmosterd", "ing": "dijonmosterd", "confidence": 0.95 },
+        { "i": 4, "raw": "1 el ketchup", "ing": "ketchup", "confidence": 0.95 },
+        { "i": 5, "raw": "1 snuf pimentpoeder", "ing": "piment", "confidence": 0.9 },
+        { "i": 6, "raw": "Tabasco", "ing": "tabasco", "confidence": 0.95 },
+        { "i": 7, "raw": "4 plakjes cheddar", "ing": "cheddar", "confidence": 0.95 },
+        { "i": 8, "raw": "4 burgerbroodjes", "ing": "burgerbroodje", "confidence": 0.95 },
+        { "i": 9, "raw": "1 of 2 zure bommen", "ing": "zure-bom", "confidence": 0.95 },
+        { "i": 10, "raw": "2 tomaten", "ing": "tomaat", "confidence": 0.95 },
+        { "i": 11, "raw": "1 rode ui [dikke ringen]", "ing": "ui", "qual": ["rode"], "prep": { "en": "thick rings" }, "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:hete-bliksem-met-speklapjes-en-mosterdsaus",
+      "name": { "en": "Hete bliksem with pork belly and mustard sauce" },
+      "description": {
+        "nl": "Stamppot van aardappel en zoetzure appel met gebakken speklapjes en een romige mosterdsaus.",
+        "en": "Dutch mash of potato and sweet-and-sour apple (hete bliksem) with fried pork belly slices and a creamy mustard sauce."
+      },
+      "category": "stamppot",
+      "tags": ["winter"],
+      "time": { "active": 30, "total": 40 },
+      "steps": [
+        { "en": "Cook the potatoes, apples and shallots in a pan with a little water and salt for about 20 minutes until tender." },
+        { "en": "Pat the pork belly slices dry, sprinkle with salt and pepper and brush thinly with mustard and olive oil. Fry for 8-10 minutes until brown, turning regularly." },
+        { "en": "Warm the cream with the rest of the mustard into a sauce and season to taste." },
+        { "en": "Drain the potatoes and apples, but keep the cooking liquid. Mash and stir in 2 tbsp olive oil and enough cooking liquid to make it creamy. Stir in the spring onions and season with salt and pepper." },
+        { "en": "Serve the pork belly slices and mustard sauce separately alongside." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "800 g zoetzure appels [geschild in stukken]", "ing": "appel", "qual": ["zoetzure"], "prep": { "en": "peeled and cut into pieces" }, "confidence": 0.95 },
+        { "i": 1, "raw": "1 kg aardappelen [geschild in stukken]", "ing": "aardappel", "prep": { "en": "peeled and cut into pieces" }, "confidence": 0.95 },
+        { "i": 2, "raw": "4 speklapjes", "ing": "speklap", "confidence": 0.95 },
+        { "i": 3, "raw": "4 sjalotten [dunne partjes]", "ing": "sjalot", "prep": { "en": "thin wedges" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 el mosterd", "ing": "mosterd", "confidence": 0.95 },
+        { "i": 5, "raw": "4 el olijfolie", "ing": "olijfolie", "confidence": 0.95 },
+        { "i": 6, "raw": "2 bosuitjes [ringetjes]", "ing": "bosui", "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 7, "raw": "200 ml slagroom", "ing": "slagroom", "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:hongaarse-goulash",
+      "name": { "en": "Hungarian goulash" },
+      "description": {
+        "nl": "Klassieke goulash van runderpoulet en spek met drie kleuren paprika en veel paprikapoeder, urenlang gesudderd.",
+        "en": "Classic goulash of diced beef and bacon with three colours of pepper and plenty of paprika, simmered for hours."
+      },
+      "category": "vlees",
+      "tags": ["winter", "wereld"],
+      "time": { "active": 30, "total": 180 },
+      "steps": [
+        { "en": "Fry the bacon lardons until the fat runs. Brown the meat in it with salt and pepper, stirring all the time." },
+        { "en": "Add the onions and the paprika and crush the garlic over the pan. Fry for 5 minutes. Add the tomatoes and fry briefly. Add the tomato purée and water, bring to the boil and add the bay leaf and marjoram. Simmer over a low heat with the lid on for 2 hours." },
+        { "en": "Add the peppers and simmer for about 30 minutes more. Thicken with cornflour mixed with water if needed." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 groene paprika", "ing": "paprika", "qual": ["groene"], "confidence": 0.95 },
+        { "i": 1, "raw": "1 gele paprika", "ing": "paprika", "qual": ["gele"], "confidence": 0.95 },
+        { "i": 2, "raw": "1 rode paprika", "ing": "paprika", "qual": ["rode"], "confidence": 0.95 },
+        { "i": 3, "raw": "2 tomaten", "ing": "tomaat", "confidence": 0.95 },
+        { "i": 4, "raw": "2 uien", "ing": "ui", "confidence": 0.95 },
+        { "i": 5, "raw": "1 teentje knoflook", "ing": "knoflook", "confidence": 0.95 },
+        { "i": 6, "raw": "4 el tomatenpuree", "ing": "tomatenpuree", "confidence": 0.95 },
+        { "i": 7, "raw": "500 g runderpoelet", "ing": "runderpoulet", "confidence": 0.95 },
+        { "i": 8, "raw": "125 g spekblokjes", "ing": "spekblokjes", "confidence": 0.95 },
+        { "i": 9, "raw": "200 g crème fraîche", "ing": "creme-fraiche", "confidence": 0.95 },
+        { "i": 10, "raw": "1 el majoraan", "ing": "majoraan", "confidence": 0.95 },
+        { "i": 11, "raw": "1 el paprikapoeder", "ing": "paprikapoeder", "confidence": 0.95 },
+        { "i": 12, "raw": "500 ml runderbouillon", "ing": "runderbouillon", "confidence": 0.95 },
+        { "i": 13, "raw": "Maizena", "ing": "maizena", "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:huevos-a-la-flamenca",
+      "name": { "en": "Huevos a la Flamenca" },
+      "description": {
+        "nl": "Spaanse ovenschotel van eieren, gegaard in een saus van chorizo, kerstomaatjes en doperwten.",
+        "en": "Spanish baked eggs, cooked in a sauce of chorizo, cherry tomatoes and peas."
+      },
+      "category": "oven",
+      "tags": ["oven", "wereld"],
+      "time": { "active": 25, "total": 40 },
+      "steps": [
+        { "en": "Preheat the oven to 165 °C. Fry the chorizo in olive oil in an ovenproof pan. Scoop some of it out and set aside." },
+        { "en": "Add the onion and garlic to the rest of the chorizo and fry gently. Add the paprika and cherry tomatoes and let them stew until the tomatoes release their juice. Add the peas and stew for 8 minutes. Season with salt and pepper. Stir 2/3 of the parsley into the sauce." },
+        { "en": "Make 8 hollows in the sauce and break an egg into each one. Turn up the heat until the egg whites start to set. Put the pan in the oven and cook until the whites are fully set but the yolks are still soft. Bake the flatbread at the same time." },
+        { "en": "Take out of the oven and garnish with the crispy chorizo, the rest of the parsley and a few drops of olive oil. Serve with flatbread." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "8 eieren", "ing": "ei", "confidence": 0.95 },
+        { "i": 1, "raw": "200 g chorizo [dunne plakjes]", "ing": "chorizo", "prep": { "en": "thinly sliced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 zoete ui [gesnipperd]", "ing": "ui", "qual": ["zoete"], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "2 teentjes knoflook [gesnipperd]", "ing": "knoflook", "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 el gerookt paprikapoeder", "ing": "paprikapoeder", "qual": ["gerookte"], "confidence": 0.95 },
+        { "i": 5, "raw": "400 g doperwten", "ing": "doperwt", "confidence": 0.95 },
+        { "i": 6, "raw": "400 g kerstomaatjes", "ing": "kerstomaat", "confidence": 0.95 },
+        { "i": 7, "raw": "platte peterselie [grof gesneden]", "ing": "peterselie", "qual": ["platte"], "prep": { "en": "roughly chopped" }, "confidence": 0.95 },
+        { "i": 8, "raw": "flatbread", "ing": "flatbread", "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:husselpot",
+      "name": { "en": "Husselpot" },
+      "description": {
+        "nl": "Ouderwetse husselpot: aardappel en winterpeen grof gestampt met uitgebakken spek, gesmoorde ui en verse kruiden.",
+        "en": "Old-fashioned Dutch hash of potato and carrot, roughly mashed with crispy bacon, slow-cooked onions and fresh herbs."
+      },
+      "category": "stamppot",
+      "tags": ["winter"],
+      "time": { "active": 30, "total": 45 },
+      "steps": [
+        { "en": "Fry the bacon lardons in butter over a medium heat until brown and crispy. Take the lardons out of the pan and fry the onions in the fat left behind. Add the garlic and red chilli and fry along. Cover and leave to cook gently over a low heat for 15 minutes." },
+        { "en": "Peel the carrots and potatoes. Boil the potatoes in plenty of salted water. After 10 minutes add the carrots and boil for 5 minutes more. Drain and put the pan back over a low heat." },
+        { "en": "Mash a few times with a potato masher and stir through. Add the lardons and onions. Stir in the celery leaf and parsley, cover and shake gently. Season with salt and pepper if needed." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "250 g spekblokjes", "ing": "spekblokjes", "confidence": 0.95 },
+        { "i": 1, "raw": "Boter", "ing": "boter", "confidence": 0.95 },
+        { "i": 2, "raw": "600 g uien [halve ringen]", "ing": "ui", "prep": { "en": "half rings" }, "confidence": 0.95 },
+        { "i": 3, "raw": "2 teentjes knoflook [dunne plakjes]", "ing": "knoflook", "prep": { "en": "thinly sliced" }, "confidence": 0.95 },
+        { "i": 4, "raw": "½ rode peper [dunne plakjes]", "ing": "rode-peper", "prep": { "en": "thinly sliced" }, "confidence": 0.95 },
+        { "i": 5, "raw": "500 g winterpeen [kwartjes van ½ cm dik]", "ing": "winterpeen", "prep": { "en": "½ cm thick quarters" }, "confidence": 0.95 },
+        { "i": 6, "raw": "800 g aardappels", "ing": "aardappel", "confidence": 0.95 },
+        { "i": 7, "raw": "10 takjes selderij [fijngehakt]", "ing": "selderij", "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 8, "raw": "10 takjes peterselie [fijngehakt]", "ing": "peterselie", "prep": { "en": "finely chopped" }, "confidence": 0.95 }
+      ]
+    }
+  ]
+}

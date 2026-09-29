@@ -1,0 +1,273 @@
+{
+  "batch": 2,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:boerenkool",
+      "name": { "en": "Kale and potato mash" },
+      "description": {
+        "nl": "De Hollandse klassieker: stamppot van aardappel en boerenkool met spekjes en rookworst.",
+        "en": "The Dutch classic boerenkool: mashed potato and kale with bacon lardons and smoked sausage."
+      },
+      "category": "stamppot",
+      "tags": ["winter"],
+      "time": { "active": 15, "total": 30 },
+      "steps": [
+        { "en": "Boil the potatoes and the kale for about 20 minutes until tender (potatoes at the bottom). Drain and mash, adding mayonnaise until creamy. Season with pepper and salt." },
+        { "en": "Fry the bacon lardons. Meanwhile fry the sausage and/or heat the smoked sausage." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 kg aardappelen", "ing": "aardappel", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "450 g boerenkool [gesneden]", "ing": "boerenkool", "qual": [], "prep": { "en": "chopped" }, "confidence": 1 },
+        { "i": 2, "raw": "50 g spekblokjes", "ing": "spekblokjes", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "1 el mayonaise", "ing": "mayonaise", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "Rookworst en/of braadworst", "ing": "rookworst", "qual": [], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:boerenomelet",
+      "name": { "en": "Farmer's omelette" },
+      "description": {
+        "nl": "Stevige omelet met spek, aardappel en soepgroenten, geserveerd met geroosterd brood.",
+        "en": "Hearty omelette with bacon, potato and soup vegetables, served with toasted bread."
+      },
+      "category": "overig",
+      "tags": ["kids"],
+      "time": { "active": 20, "total": 40 },
+      "steps": [
+        { "en": "Heat ¼ of the garlic and herb butter in a large non-stick frying pan. Fry the bacon for about 5 minutes until crisp. Add the potato and fry, stirring, for about 5 minutes. Add the soup vegetables and fry for about 3 minutes more." },
+        { "en": "Beat the eggs with the milk in a bowl. Season with pepper and salt. Pour the egg mixture over the potato and vegetable mixture. Let the egg set over a medium heat for about 15 minutes. Meanwhile toast the bread." },
+        { "en": "Serve the omelette with the toasted bread, the rest of the garlic and herb butter and the mushrooms." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "100 g kruidenboter", "ing": "kruidenboter", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "200 g spekblokjes", "ing": "spekblokjes", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "6 eieren", "ing": "ei", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "200 ml melk", "ing": "melk", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "400 g aardappelblokjes", "ing": "aardappel", "qual": [], "confidence": 0.9 },
+        { "i": 5, "raw": "250 g grove soepgroenten", "ing": "soepgroenten", "qual": ["grove"], "confidence": 0.9 },
+        { "i": 6, "raw": "½ volkorenbrood sesam", "ing": "volkorenbrood", "qual": [], "confidence": 0.85 },
+        { "i": 7, "raw": "225 g champignons", "ing": "champignon", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:boeuf-stroganoff",
+      "name": { "en": "Boeuf Stroganoff" },
+      "description": {
+        "nl": "Reepjes rundvlees in een romige saus met paprika, wodka, augurk en yoghurt.",
+        "en": "Strips of beef in a creamy sauce with paprika, vodka, gherkin and yoghurt."
+      },
+      "category": "vlees",
+      "tags": ["wereld"],
+      "time": { "active": 30, "total": 35 },
+      "steps": [
+        { "en": "Sprinkle the meat with salt and pepper, paprika and flour. Brown the meat all over. Take it out of the pan and keep it warm." },
+        { "en": "Soften the shallots in the butter left in the pan and stir in 1 tbsp flour. Stir in the vodka, tomato purée and the stock and let it thicken, stirring all the time." },
+        { "en": "Stir about 2 tbsp of the hot sauce into the yoghurt, take the pan off the heat and stir the yoghurt into the hot sauce. Add the gherkins and put the pan back on a low heat." },
+        { "en": "Let the yoghurt warm through, stirring. Add salt and pepper to taste and sprinkle with parsley." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g rosbief [smalle reepjes]", "ing": "rosbief", "qual": [], "prep": { "en": "thin strips" }, "confidence": 0.85 },
+        { "i": 1, "raw": "½ el paprikapoeder", "ing": "paprikapoeder", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "2 el bloem", "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "3 sjalotjes [gesnipperd]", "ing": "sjalot", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 4, "raw": "5 augurken [stokjes]", "ing": "augurk", "qual": [], "prep": { "en": "cut into sticks" }, "confidence": 1 },
+        { "i": 5, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "2 el wodka", "ing": "wodka", "qual": [], "confidence": 1 },
+        { "i": 7, "raw": "1 el tomatenpuree", "ing": "tomatenpuree", "qual": [], "confidence": 1 },
+        { "i": 8, "raw": "500 ml vleesbouillon", "ing": "runderbouillon", "qual": [], "confidence": 0.85 },
+        { "i": 9, "raw": "150 ml yoghurt", "ing": "yoghurt", "qual": [], "confidence": 1 },
+        { "i": 10, "raw": "1 el verse peterselie [fijngehakt]", "ing": "peterselie", "qual": ["verse"], "prep": { "en": "finely chopped" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:broccoli-camembert-notentaart",
+      "name": { "en": "Broccoli, Camembert and nut tart" },
+      "description": {
+        "nl": "Hartige taart op een kwarkdeegbodem met broccoli, camembert en gezouten cashewnoten.",
+        "en": "Savoury tart on a quark pastry base with broccoli, Camembert and salted cashew nuts."
+      },
+      "category": "hartige-taart",
+      "tags": ["vegetarisch", "oven"],
+      "time": { "active": 30, "total": 90 },
+      "steps": [
+        { "en": "Grease a tart tin with 1 tbsp oil. In a bowl, stir the quark loose with the rest of the oil. Sift the flour and ½ tsp salt over it and stir in. With cool hands, quickly knead into a smooth dough. Press the dough firmly into the tart tin. Sprinkle the base with breadcrumbs. Cover and keep in the fridge until needed." },
+        { "en": "Boil the broccoli for about 5 minutes. Rinse under cold running water and leave to drain in a colander." },
+        { "en": "In a small bowl, beat the eggs with salt, pepper, cream and chives." },
+        { "en": "Preheat the oven to 200 °C. Arrange the broccoli on the tart base, spread the pieces of Camembert over it, scatter over the cashew nuts and pour over the cream mixture. Bake the tart for about 40 minutes until cooked and golden brown." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 el olie", "ing": "olie", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "225 g kwark", "ing": "kwark", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "250 g bloem", "ing": "bloem", "qual": [], "confidence": 1 },
+        { "i": 3, "raw": "1 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "300 g broccoli [kleine stukjes]", "ing": "broccoli", "qual": [], "prep": { "en": "small pieces" }, "confidence": 1 },
+        { "i": 5, "raw": "2 eieren", "ing": "ei", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "4 el slagroom", "ing": "slagroom", "qual": [], "confidence": 1 },
+        { "i": 7, "raw": "10 sprietjes bieslook [fijngeknipt]", "ing": "bieslook", "qual": [], "prep": { "en": "finely snipped" }, "confidence": 1 },
+        { "i": 8, "raw": "100 g gezouten cashewnoten [grof gehakt]", "ing": "cashewnoot", "qual": ["gezouten"], "prep": { "en": "roughly chopped" }, "confidence": 1 },
+        { "i": 9, "raw": "225 gram camembert [kleine stukjes]", "ing": "camembert", "qual": [], "prep": { "en": "small pieces" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:broccolistamppot-met-noten-en-geitenkaas",
+      "name": { "en": "Broccoli mash with nuts and goat's cheese" },
+      "description": {
+        "nl": "Grove stamppot van aardappel en broccoli met geroosterde noten, zongedroogde tomaat en geitenkaas.",
+        "en": "Chunky potato and broccoli mash with toasted nuts, sun-dried tomato and goat's cheese."
+      },
+      "category": "stamppot",
+      "tags": ["vegetarisch", "winter"],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Boil the potatoes in a large pan for 15 minutes until tender, adding the frozen broccoli for the last 4 minutes. Drain, saving a cup of the cooking water." },
+        { "en": "Toast the nuts in a dry frying pan over a medium-high heat for 3 minutes until golden brown, then chop them roughly." },
+        { "en": "Add ½ cup of the cooking water, the spring onion and the tarragon to the potatoes and broccoli and mash to a coarse purée." },
+        { "en": "Add the tomatoes with the oil from their tub and half of the goat's cheese to the mash and stir through. Add more cooking water if it is too dry. Season with pepper and salt and top with the rest of the goat's cheese and the nuts." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 kg kruimige aardappels [geschild in blokjes]", "ing": "aardappel", "qual": ["kruimige"], "prep": { "en": "peeled and diced" }, "confidence": 1 },
+        { "i": 1, "raw": "900 g broccoliroosjes (diepvries)", "ing": "broccoli", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 bosje lente-ui [ringetjes]", "ing": "bosui", "qual": [], "prep": { "en": "thin rings" }, "confidence": 1 },
+        { "i": 3, "raw": "200 g geitenkaas in plakjes [verkruimeld]", "ing": "geitenkaas", "qual": [], "prep": { "en": "crumbled" }, "confidence": 1 },
+        { "i": 4, "raw": "80 g notenmix", "ing": "noot", "qual": [], "confidence": 0.85 },
+        { "i": 5, "raw": "1 el gedroogde dragon", "ing": "dragon", "qual": ["gedroogde"], "confidence": 1 },
+        { "i": 6, "raw": "130 g zongedroogde tomaten [reepjes]", "ing": "zongedroogde-tomaat", "qual": [], "prep": { "en": "strips" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:buikspek-met-5-spices",
+      "name": { "en": "Five-spice pork belly" },
+      "description": {
+        "nl": "Buikspek dat 24 uur marineert in vijfkruidenpoeder, honing en sojasaus en daarna 6 uur langzaam gaart in de oven.",
+        "en": "Pork belly marinated for 24 hours in five-spice, honey and soy sauce, then slow-cooked in the oven for 6 hours."
+      },
+      "category": "vlees",
+      "tags": ["oven", "wereld", "feest"],
+      "time": { "active": 20, "total": 1820 },
+      "steps": [
+        { "en": "Bring the water to the boil. Lay the meat on a board in the sink and pour the boiling water over the fat side of the pork belly." },
+        { "en": "Score the fat side of the pork belly every ½ cm (down to the meat). Mix the oil, five-spice, salt and honey together. Rub it into the meat side of the pork belly." },
+        { "en": "Put the meat fat side up in an ovenproof dish and drizzle with the soy sauce and the rest of the honey. Cover the dish with cling film and leave to marinate in the fridge for 24 hours." },
+        { "en": "Preheat the oven to 100℃. Cook the pork belly, uncovered, in the oven for 6 hours. Cover with aluminium foil if the meat gets too dark. Take the meat out of the oven, cut into thin slices and serve." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 ltr water", "ing": "water", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "1 kg buikspek aan een stuk", "ing": "buikspek", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "1 el chiu chow chili-olie", "ing": "chili-olie", "qual": [], "confidence": 0.9 },
+        { "i": 3, "raw": "1 el 5 spices", "ing": "vijfkruidenpoeder", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "1 el zout", "ing": "zout", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "3 el honing", "ing": "honing", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "2 el Japanse sojasaus", "ing": "japanse-sojasaus", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:cannelloni-met-gehakt-salie-en-walnoten",
+      "name": { "en": "Cannelloni with mince, sage and walnuts" },
+      "description": {
+        "nl": "Cannelloni gevuld met gehakt, salie en walnoten, gebakken in een romige bouillonsaus.",
+        "en": "Cannelloni stuffed with mince, sage and walnuts, baked in a creamy stock sauce."
+      },
+      "category": "pasta",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 60 },
+      "steps": [
+        { "en": "Mix the mince with the onion, egg, breadcrumbs, sage, mince seasoning and half of the walnuts. Knead the mixture well and use it to fill the cannelloni. Lay the cannelloni in a buttered ovenproof dish. Preheat the oven to 200 °C." },
+        { "en": "Stir the stock into the crème fraîche a splash at a time and add the rest of the walnuts, salt and pepper. Pour the sauce over the cannelloni. Cover the dish with aluminium foil." },
+        { "en": "Bake the cannelloni in the middle of the oven for about 30 minutes. Garnish the cannelloni with the parsley." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 ui [fijn gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 1, "raw": "200 g gepelde walnoten [fijngehakt]", "ing": "walnoot", "qual": ["gepelde"], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 2, "raw": "600 g kippen- of kalfsgehakt", "ing": "kipgehakt", "qual": [], "confidence": 0.85 },
+        { "i": 3, "raw": "1 ei", "ing": "ei", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "4 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "1 el salie [fijngesneden]", "ing": "salie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 },
+        { "i": 6, "raw": "1 zakje gehaktkruiden", "ing": "gehaktkruiden", "qual": [], "confidence": 1 },
+        { "i": 7, "raw": "250 g cannelloni", "ing": "cannelloni", "qual": [], "confidence": 1 },
+        { "i": 8, "raw": "½ ltr kippenbouillon", "ing": "kippenbouillon", "qual": [], "confidence": 1 },
+        { "i": 9, "raw": "1 bekertje crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 1 },
+        { "i": 10, "raw": "1 el peterselie [fijngehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:chorizo-met-tomatengnocchi",
+      "name": { "en": "Chorizo with tomato gnocchi" },
+      "description": {
+        "nl": "Snelle pastasaus met chorizo, aubergine en champignons over aardappelgnocchi.",
+        "en": "Quick pasta sauce with chorizo, aubergine and mushrooms over potato gnocchi."
+      },
+      "category": "pasta",
+      "tags": ["snel"],
+      "time": { "active": 25, "total": 30 },
+      "steps": [
+        { "en": "Soften the garlic, onion and aubergine in the oil over a medium-high heat for 5 to 10 minutes. Add the chorizo and the mushrooms. Fry everything, stirring, for about 3 minutes." },
+        { "en": "Add the pasta sauce and 250 ml water. Bring the sauce to the boil. Turn the heat down and let it simmer gently for another 5 minutes. Stir in the parsley." },
+        { "en": "Meanwhile cook the gnocchi as per the packet. Drain and put them in a bowl. Add the sauce, stir well and serve straight away." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 1 },
+        { "i": 2, "raw": "1 rode ui [dikke plakken]", "ing": "ui", "qual": ["rode"], "prep": { "en": "thick slices" }, "confidence": 1 },
+        { "i": 3, "raw": "¼ aubergine [plakjes van 1 cm]", "ing": "aubergine", "qual": [], "prep": { "en": "1 cm slices" }, "confidence": 1 },
+        { "i": 4, "raw": "200 g chorizo [blokjes]", "ing": "chorizo", "qual": [], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 5, "raw": "125 g champignons", "ing": "champignon", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "500 g rode pastasaus of tomatensaus", "ing": "pastasaus", "qual": ["rode"], "confidence": 0.8 },
+        { "i": 7, "raw": "30 g peterselie [gehakt]", "ing": "peterselie", "qual": [], "prep": { "en": "chopped" }, "confidence": 1 },
+        { "i": 8, "raw": "500 g aardappelgnocchi", "ing": "gnocchi", "qual": [], "confidence": 1 }
+      ]
+    },
+    {
+      "id": "b:courgettestamppot-met-zalm",
+      "name": { "en": "Courgette mash with salmon" },
+      "description": {
+        "nl": "Zomerse stamppot met geraspte courgette, rucola en gerookte zalm, met geroosterde kerstomaatjes.",
+        "en": "Summery mash with grated courgette, rocket and smoked salmon, with roasted cherry tomatoes."
+      },
+      "category": "stamppot",
+      "tags": ["zomer"],
+      "time": { "active": 20, "total": 35 },
+      "steps": [
+        { "en": "Preheat the oven to 200 °C. Bring a pan of lightly salted water to the boil. Boil the potatoes for about 20 minutes until tender." },
+        { "en": "Spread the tomatoes over the baking tray. Drizzle with olive oil and sprinkle with pepper and salt. Roast the tomatoes for about 15 minutes." },
+        { "en": "Drain the potatoes and let them steam dry. Add a knob of butter and mash. Add the courgette, rocket and mustard. Flake the salmon over the top. Season with pepper and stir everything well. Add a splash of oil if you like." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 kg aardappelen", "ing": "aardappel", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "300 g kerstomaat", "ing": "kerstomaat", "qual": [], "confidence": 1 },
+        { "i": 2, "raw": "2 courgettes [grof geraspt]", "ing": "courgette", "qual": [], "prep": { "en": "coarsely grated" }, "confidence": 1 },
+        { "i": 3, "raw": "80 g rucola", "ing": "rucola", "qual": [], "confidence": 1 },
+        { "i": 4, "raw": "Klontje boter", "ing": "boter", "qual": [], "confidence": 1 },
+        { "i": 5, "raw": "2 tl mosterd", "ing": "mosterd", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "500 g gerookte zalmfilet", "ing": "zalmfilet", "qual": ["gerookte"], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:couscous-met-kip-en-courgette",
+      "name": { "en": "Couscous with chicken and courgette" },
+      "description": {
+        "nl": "Snelle couscous met gebakken kip, courgette, crème fraîche, cashewnoten en gedroogde abrikoos.",
+        "en": "Quick couscous with fried chicken, courgette, crème fraîche, cashew nuts and dried apricot."
+      },
+      "category": "rijst",
+      "tags": ["snel", "wereld"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Heat the olive oil in a frying pan and fry the chicken in it for about 5 minutes until golden brown and cooked through." },
+        { "en": "Add the shallots to the chicken and soften them for about 2 minutes. Add the courgette and fry for 5-7 minutes until just tender." },
+        { "en": "Meanwhile put the couscous in a bowl. Pour the amount of boiling water stated on the packet over the couscous and leave to swell for about 5 minutes." },
+        { "en": "Season the chicken mixture with salt and pepper. Add the crème fraîche and the cashew nuts and stir everything together well. Spoon the chicken mixture over the fluffed-up couscous and garnish with the strips of apricot." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g couscous", "ing": "couscous", "qual": [], "confidence": 1 },
+        { "i": 1, "raw": "400 g kipfilet [blokjes]", "ing": "kipfilet", "qual": [], "prep": { "en": "diced" }, "confidence": 1 },
+        { "i": 2, "raw": "3 sjalotjes [gesnipperd]", "ing": "sjalot", "qual": [], "prep": { "en": "finely diced" }, "confidence": 1 },
+        { "i": 3, "raw": "1 courgette [stukjes]", "ing": "courgette", "qual": [], "prep": { "en": "small pieces" }, "confidence": 1 },
+        { "i": 4, "raw": "150 g gedroogde abrikoos [reepjes]", "ing": "abrikoos", "qual": ["gedroogde"], "prep": { "en": "strips" }, "confidence": 1 },
+        { "i": 5, "raw": "200 g crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 1 },
+        { "i": 6, "raw": "100 g cashewnoten", "ing": "cashewnoot", "qual": [], "confidence": 1 }
+      ]
+    }
+  ]
+}

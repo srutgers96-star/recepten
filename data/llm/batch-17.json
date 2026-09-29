@@ -1,0 +1,263 @@
+{
+  "batch": 17,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:spaghetti-met-gerookte-kip-en-champignons",
+      "name": { "en": "Spaghetti with smoked chicken and mushrooms" },
+      "description": {
+        "nl": "Snelle romige spaghetti met reepjes gerookte kip, champignons en een vleugje kerrie.",
+        "en": "Quick creamy spaghetti with strips of smoked chicken, mushrooms and a touch of curry powder."
+      },
+      "category": "pasta",
+      "tags": ["snel", "kids"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Cook the spaghetti as per the instructions on the packet." },
+        { "en": "Heat the oil in a frying pan and stir-fry the mushrooms for about 3 minutes. Stir in the curry powder and fry briefly." },
+        { "en": "Add the chicken strips and the cream and bring to the boil. Let the sauce heat right through and season with salt and pepper." },
+        { "en": "Drain the spaghetti well in a sieve. Stir the sauce through it and garnish with chives. Good with a tomato salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g spaghetti", "ing": "spaghetti", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "400 g gerookte kipfilet [smalle reepjes]", "ing": "kipfilet", "qual": ["gerookte"], "prep": { "en": "thin strips" }, "confidence": 0.95 },
+        { "i": 2, "raw": "400 g champignons [plakjes]", "ing": "champignon", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 el kerriepoeder", "ing": "kerrie", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "200 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "4 el bieslook", "ing": "bieslook", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "zout en peper", "ing": "zout-en-peper", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spaghetti-met-spekjes-en-noten",
+      "name": { "en": "Spaghetti with bacon and nuts" },
+      "description": {
+        "nl": "Spaghetti met knapperig uitgebakken spekjes, cashewnoten en prei in een saus van yoghurt, ei en geraspte kaas.",
+        "en": "Spaghetti with crispy bacon, cashew nuts and leek in a sauce of yoghurt, egg and grated cheese."
+      },
+      "category": "pasta",
+      "tags": ["snel"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Cook the spaghetti al dente.\nHeat the oil in the pan and fry the bacon until crispy. Fry the nuts with the bacon for about 1 minute. Fry the leek with it for about 2 minutes." },
+        { "en": "Beat the eggs and mix in the yoghurt, a pinch of cayenne pepper, the grated cheese and a little salt." },
+        { "en": "Drain the spaghetti well in the colander and spoon it into a warmed dish. Mix in the leek, the bacon and nuts and the yoghurt sauce. Sprinkle the parsley over it and serve straight away." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g spaghetti", "ing": "spaghetti", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 dunne prei [smalle ringen]", "ing": "prei", "qual": ["dunne"], "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "150 g blokjes ontbijtspek", "ing": "spekblokjes", "qual": [], "confidence": 0.9 },
+        { "i": 4, "raw": "150 g cashewnoten [grof gehakt]", "ing": "cashewnoot", "qual": [], "prep": { "en": "roughly chopped" }, "confidence": 0.95 },
+        { "i": 5, "raw": "2 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 dl yoghurt", "ing": "yoghurt", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "cayennepeper", "ing": "cayennepeper", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "200 g gerapte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 9, "raw": "1 el fijngehakte peterselie", "ing": "peterselie", "qual": ["fijngehakte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spaghettischotel-uit-de-oven",
+      "name": { "en": "Spaghetti bake" },
+      "description": {
+        "nl": "Ovenschotel van spaghetti met gehakt, paprika en champignons in een saus van tomatensoep, onder een laag gesmolten kaas.",
+        "en": "Spaghetti baked with mince, peppers and mushrooms in a tomato soup sauce, under a layer of melted cheese."
+      },
+      "category": "pasta",
+      "tags": ["oven", "kids"],
+      "time": { "active": 25, "total": 50 },
+      "steps": [
+        { "en": "Cook the spaghetti. Fry the mince until crumbly, add the onion and garlic and fry with it. Fry the peppers with it for 5 min. Briefly fry the mushrooms with it. Add the oregano, parsley and half a packet of tomato soup and stir. Add a cup of water. Put everything in an ovenproof dish." },
+        { "en": "Cheese on top and bake for 20 min at 180 °C." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g spaghetti", "ing": "spaghetti", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 groene paprika [reepjes]", "ing": "paprika", "qual": ["groene"], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 rode paprika [reepjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 3, "raw": "250 g champignons [stukjes]", "ing": "champignon", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 pakje tomatensoep", "ing": "tomatensoep", "qual": [], "confidence": 0.9 },
+        { "i": 5, "raw": "1 ui [gesnipperd]", "ing": "ui", "qual": [], "prep": { "en": "finely diced" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 7, "raw": "400 g gehakt", "ing": "gehakt", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "1 mp oregano", "ing": "oregano", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "125 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 10, "raw": "1 tl peterselie", "ing": "peterselie", "qual": [], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:spinaziequiche-met-zalm",
+      "name": { "en": "Spinach and smoked salmon quiche" },
+      "description": {
+        "nl": "Quiche van bladerdeeg met verse spinazie, gerookte zalm en een romige vulling van ei, room en roomkaas.",
+        "en": "Puff pastry quiche with fresh spinach, smoked salmon and a creamy filling of egg, cream and cream cheese."
+      },
+      "category": "hartige-taart",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 90 },
+      "steps": [
+        { "en": "Preheat the oven to 200 ℃. Wilt the spinach in boiling water, then pat it thoroughly dry. Grease the springform tin and line it with the puff pastry. Prick holes in the pastry with a fork and sprinkle the base with flour or breadcrumbs." },
+        { "en": "Mix the eggs with the cream and the cream cheese. Stir in the salmon and spinach and season with salt and pepper. Pour the mixture into the tin." },
+        { "en": "Bake for 30 minutes at 200 ℃, then turn the oven down to 160 ℃ and bake for another 30 minutes." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "500 g verse spinazie", "ing": "spinazie", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 1, "raw": "250 g gerookte zalm [reepjes]", "ing": "zalm", "qual": ["gerookte"], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 2, "raw": "7 blaadjes bladerdeeg", "ing": "bladerdeeg", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 el bloem of paneermeel", "ing": "bloem", "qual": [], "confidence": 0.85 },
+        { "i": 4, "raw": "3 eieren [losgeklopt]", "ing": "ei", "qual": [], "prep": { "en": "beaten" }, "confidence": 0.95 },
+        { "i": 5, "raw": "300 ml room", "ing": "room", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "400 g roomkaas", "ing": "roomkaas", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spinazietaart-met-eieren-en-danish-blue",
+      "name": { "en": "Spinach tart with eggs and Danish blue" },
+      "description": {
+        "nl": "Hartige taart op een bodem van kwarkdeeg met halve eieren en spinazie in een bechamelsaus met Danish blue.",
+        "en": "Savoury tart on a quark pastry base with halved eggs and spinach in a Danish blue béchamel sauce."
+      },
+      "category": "hartige-taart",
+      "tags": ["vegetarisch", "oven"],
+      "time": { "active": 45, "total": 90 },
+      "steps": [
+        { "en": "In a bowl, stir the quark with 4 tablespoons of oil until loose. Sift the flour and a tsp of salt over it and stir in. Knead quickly with a cool hand into a smooth dough. Grease the springform tin with oil. Press the dough into the tin. Sprinkle the base with breadcrumbs. Keep in the fridge until needed." },
+        { "en": "Boil the eggs for 8 minutes until almost hard. Rinse under cold running water and leave to cool. Clean and wash the spinach. Put it in a pan with the water still clinging to it. Wilt the spinach over a medium heat for about 5 minutes, turning it over now and then. Simmer gently for another 2 minutes or so. Tip into a colander and press the liquid out well with a spoon. Roughly chop the spinach." },
+        { "en": "Make a béchamel sauce in a saucepan. Melt the butter gently in a medium pan. Add the flour and heat for 2 minutes, stirring. Add the wine and milk a splash at a time, stirring all the while. Crumble the Danish blue into the sauce. Add the basil and pepper. Peel and halve the eggs." },
+        { "en": "Arrange the egg halves over the pastry base. In a bowl, mix the spinach and béchamel sauce well. Spoon over the eggs and smooth the top." },
+        { "en": "Bake at 200 °C for about 40 minutes until golden brown." }
+      ],
+      "lines": [
+        { "i": 1, "raw": "225 g magere kwark", "ing": "kwark", "qual": ["magere"], "confidence": 0.95 },
+        { "i": 2, "raw": "4 el olie", "ing": "olie", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "225 g bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "3 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "4 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1½ kg spinazie", "ing": "spinazie", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "30 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "20 g bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 10, "raw": "200 ml melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "50 ml witte wijn", "ing": "wijn", "qual": ["witte"], "confidence": 0.95 },
+        { "i": 12, "raw": "150 g Danish blue", "ing": "danish-blue", "qual": [], "confidence": 0.95 },
+        { "i": 13, "raw": "2 tl basilicum", "ing": "basilicum", "qual": [], "confidence": 0.85 }
+      ]
+    },
+    {
+      "id": "b:spruitjespuree",
+      "name": { "en": "Brussels sprout mash" },
+      "description": {
+        "nl": "Stamppot van kruimige aardappelen met spruitjes, krokante spekjes en geroosterd amandelschaafsel, geserveerd met rookworst.",
+        "en": "Mash of floury potatoes with Brussels sprouts, crispy bacon and toasted flaked almonds, served with smoked sausage."
+      },
+      "category": "stamppot",
+      "tags": ["winter"],
+      "time": { "active": 30, "total": 40 },
+      "steps": [
+        { "en": "Half cover the potatoes with water, add a little salt, put the lid on the pan and bring to the boil. Cook them for 20 minutes until tender and drain." },
+        { "en": "Meanwhile, heat the cream, milk and butter in a saucepan until the milk boils. Mash the potatoes and stir in the hot milk mixture. Season the mash with salt, pepper and nutmeg." },
+        { "en": "Bring 3 litres of water and 1 tbsp salt to the boil in a large pan. Add the sprouts as soon as the water boils and cook them for 10 minutes until just tender. Drain the sprouts and stir them through the mash." },
+        { "en": "Fry the bacon in a frying pan until crispy and stir it through the mash." },
+        { "en": "Heat the flaked almonds in a dry frying pan until they turn light brown. Sprinkle the almonds over the mash and serve with the smoked sausage." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1 kg kruimige aardappels [geschild]", "ing": "aardappel", "qual": ["kruimige"], "prep": { "en": "peeled" }, "confidence": 0.95 },
+        { "i": 1, "raw": "100 ml room", "ing": "room", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "100 ml melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "100 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 tl nootmuskaat", "ing": "nootmuskaat", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "500 g spruitjes [grote gehalveerd]", "ing": "spruitje", "qual": [], "prep": { "en": "large ones halved" }, "confidence": 0.95 },
+        { "i": 6, "raw": "200 g gerookte spekblokjes", "ing": "spekblokjes", "qual": ["gerookte"], "confidence": 0.95 },
+        { "i": 7, "raw": "50 g amandelschilfers", "ing": "amandel", "qual": [], "confidence": 0.8 },
+        { "i": 8, "raw": "2 rookworsten", "ing": "rookworst", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:spruitjestortilla",
+      "name": { "en": "Brussels sprout tortilla" },
+      "description": {
+        "nl": "Spaanse tortilla uit de oven met spruitjes, gefruite ui, oude kaas en tijm.",
+        "en": "Oven-baked Spanish tortilla with Brussels sprouts, fried onion, mature cheese and thyme."
+      },
+      "category": "oven",
+      "tags": ["vegetarisch", "oven", "winter"],
+      "time": { "active": 20, "total": 45 },
+      "steps": [
+        { "en": "Preheat the oven to 170 ℃. Boil the sprouts for 2 minutes and rinse under cold water. Mix the eggs, cream and mature cheese in a large bowl. Whisk until smooth and season with salt and pepper." },
+        { "en": "Fry the onions gently in the olive oil for 5 minutes. Strip the leaves from the sprigs of thyme. Line a round ovenproof dish with baking paper. Spread the onions over the base and spoon the egg mixture into the dish. Scatter the halved sprouts over the dish and bake the tortilla for 20 minutes." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 uien [ringen]", "ing": "ui", "qual": [], "prep": { "en": "rings" }, "confidence": 0.95 },
+        { "i": 1, "raw": "350 g spruiten [gehalveerd]", "ing": "spruitje", "qual": [], "prep": { "en": "halved" }, "confidence": 0.95 },
+        { "i": 2, "raw": "5 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "150 ml kookroom", "ing": "kookroom", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "200 g geraspte oude kaas", "ing": "kaas", "qual": ["geraspte", "oude"], "confidence": 0.95 },
+        { "i": 5, "raw": "2 takjes tijm", "ing": "tijm", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "2 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:sticky-chicken",
+      "name": { "en": "Sticky chicken" },
+      "description": {
+        "nl": "Kippenpoten uit de oven in een plakkerige marinade van oestersaus, honing, gember en knoflook, met een frisse koolsalade erbij.",
+        "en": "Oven-baked chicken drumsticks in a sticky marinade of oyster sauce, honey, ginger and garlic, with a fresh coleslaw on the side."
+      },
+      "category": "vlees",
+      "tags": ["oven", "wereld", "kids"],
+      "time": { "active": 30, "total": 60 },
+      "steps": [
+        { "en": "Mix all the ingredients (except the sesame seeds and the spring onion) through the chicken drumsticks. Put them in an ovenproof dish and place in an oven at 170 °C. Turn the drumsticks every 15 minutes. Leave them in the oven for 15 minutes. Garnish the chicken with the spring onion and the sesame seeds." },
+        { "en": "Coleslaw: Slice the cabbage very finely and add the vinegar and a little salt straight away. Massage it in well so the cabbage can start to soften. Add the carrot to the cabbage. Now mix the rest of the ingredients through the salad and chill. You get the best result if you make the salad a day in advance." },
+        { "en": "Good with fried potatoes with their skins on, seasoned with paprika, curry powder, chilli powder, salt, pepper and onion powder." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 kg drumsticks", "ing": "drumstick", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "150 ml oestersaus", "ing": "oestersaus", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "80 ml gembersap", "ing": "gembersap", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "2 tenen knoflook [stiftjes]", "ing": "knoflook", "qual": [], "prep": { "en": "slivers" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 tl paprikapoeder", "ing": "paprikapoeder", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1 tl komijn", "ing": "komijn", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "100 ml honing", "ing": "honing", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "1 el sesamolie", "ing": "sesamolie", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "sesamzaad", "ing": "sesamzaad", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "1 bosui [ringetjes]", "ing": "bosui", "qual": [], "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 11, "raw": "300 g witte kool", "ing": "kool", "qual": ["witte"], "confidence": 0.95 },
+        { "i": 12, "raw": "1 winterpeen [geraspt]", "ing": "winterpeen", "qual": [], "prep": { "en": "grated" }, "confidence": 0.95 },
+        { "i": 13, "raw": "100 g rozijnen", "ing": "rozijn", "qual": [], "confidence": 0.95 },
+        { "i": 14, "raw": "100 ml azijn", "ing": "azijn", "qual": [], "confidence": 0.95 },
+        { "i": 15, "raw": "200 ml mayonaise", "ing": "mayonaise", "qual": [], "confidence": 0.95 },
+        { "i": 16, "raw": "½ bos peterselie", "ing": "peterselie", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:taco-schotel",
+      "name": { "en": "Taco platter" },
+      "description": {
+        "nl": "Zelf taco's vullen aan tafel: gehakt, kidneybonen, mais, sla, tomaat, kaas en crème fraîche in bakjes.",
+        "en": "Build-your-own tacos at the table: mince, kidney beans, sweetcorn, lettuce, tomato, cheese and crème fraîche in little bowls."
+      },
+      "category": "overig",
+      "tags": ["wereld", "kids", "snel"],
+      "time": { "active": 20, "total": 25 },
+      "steps": [
+        { "en": "Fry the mince with the onion and warm the taco shells in the oven." },
+        { "en": "Put all the ingredients in nice little bowls. You can warm the kidney beans and the sweetcorn a little in the microwave if you like." },
+        { "en": "Let everyone build their own taco." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "24 taco’s", "ing": "taco", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "1 rode paprika [stukjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 2, "raw": "1 beker crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "300 g gehakt", "ing": "gehakt", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 ui [fijngehakt]", "ing": "ui", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 5, "raw": "1 blik mais, afgegoten", "ing": "mais", "qual": [], "prep": { "en": "drained" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 blik kidneybonen, afgegoten", "ing": "kidneybonen", "qual": [], "prep": { "en": "drained" }, "confidence": 0.95 },
+        { "i": 7, "raw": "1 tomaat [stukjes]", "ing": "tomaat", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 8, "raw": "½ krop ijsbergsla [kleine stukjes]", "ing": "ijsbergsla", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 9, "raw": "1 kop geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 10, "raw": "1 potje milde tacosaus", "ing": "tacosaus", "qual": ["milde"], "confidence": 0.95 }
+      ]
+    }
+  ]
+}

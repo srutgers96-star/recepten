@@ -1,0 +1,277 @@
+{
+  "batch": 9,
+  "model": "claude (session)",
+  "at": "2026-09-29",
+  "recipes": [
+    {
+      "id": "b:koolraapstamppot-met-gekarameliseerde-rode-uien-en-feta",
+      "name": { "en": "Swede mash with caramelised red onions and feta" },
+      "description": {
+        "nl": "Stamppot van koolraap en aardappel met zoetzure gekarameliseerde rode uien en blokjes feta.",
+        "en": "Swede and potato mash with sweet-and-sour caramelised red onions and cubes of feta."
+      },
+      "category": "stamppot",
+      "tags": ["vegetarisch", "winter"],
+      "time": { "active": 25, "total": 45 },
+      "steps": [
+        { "en": "Soften the onions in a little oil in a large frying pan. Add the sugar, balsamic vinegar, water, thyme, 1 tsp salt and plenty of pepper. Leave to simmer over a low heat for 30 minutes with the lid on." },
+        { "en": "Meanwhile, cook the potatoes and the swede in two separate pans for 20 minutes until tender. Mash the potatoes with a splash of hot milk and the butter or crème fraîche. Gently fold the onions, swede and feta through the mashed potato." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "800 g koolraap [blokjes]", "ing": "koolraap", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 1, "raw": "800 g aardappelen [stukjes]", "ing": "aardappel", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 2, "raw": "500 g rode uien [brede halve ringen]", "ing": "ui", "qual": ["rode"], "prep": { "en": "wide half rings" }, "confidence": 0.95 },
+        { "i": 3, "raw": "50 ml balsamicoazijn", "ing": "balsamicoazijn", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "250 ml water", "ing": "water", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "2 el suiker", "ing": "suiker", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "1 el verse tijm", "ing": "tijm", "qual": ["verse"], "confidence": 0.95 },
+        { "i": 7, "raw": "200 g feta [blokjes]", "ing": "feta", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 8, "raw": "scheut melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "klontje boter (of 1 el crème fraîche)", "ing": "boter", "qual": [], "confidence": 0.9 }
+      ]
+    },
+    {
+      "id": "b:koolstamppot-met-prei-en-kaas",
+      "name": { "en": "Kale mash with leek and cheese" },
+      "description": {
+        "nl": "Boerenkoolstamppot met prei, blokjes kaas en rookworst, met een kuiltje gesmolten boter of spekjes.",
+        "en": "Kale mash with leek, cubes of cheese and smoked sausage, with a well of melted butter or bacon lardons."
+      },
+      "category": "stamppot",
+      "tags": ["winter", "vega-optie"],
+      "time": { "active": 20, "total": 35 },
+      "steps": [
+        { "en": "Cook the potatoes together with the kale in a shallow layer of water (about 3 cm) with a little salt for about 25 minutes, until tender." },
+        { "en": "Bring the milk to the boil and cook the leek in it until just tender, about 5 minutes." },
+        { "en": "Drain the potatoes and the kale and mash them together. Stir in the hot milk and add the cubes of cheese. Mix everything together and add salt and pepper to taste." },
+        { "en": "Make a well in the mash and pour in the melted butter. The butter can be swapped for bacon lardons if you like." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "1½ kg aardappelen", "ing": "aardappel", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "500 g boerenkool [gesneden]", "ing": "boerenkool", "qual": [], "prep": { "en": "shredded" }, "confidence": 0.95 },
+        { "i": 2, "raw": "250 g prei [smalle ringen]", "ing": "prei", "qual": [], "prep": { "en": "thin rings" }, "confidence": 0.95 },
+        { "i": 3, "raw": "200 ml melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "300 g kaas [kleine blokjes]", "ing": "kaas", "qual": [], "prep": { "en": "small cubes" }, "confidence": 0.95 },
+        { "i": 5, "raw": "100 g boter of 100 g spekblokjes", "ing": "boter", "qual": [], "confidence": 0.85 },
+        { "i": 6, "raw": "1 rookworst", "ing": "rookworst", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:lamsbout-met-rozemarijn",
+      "name": { "en": "Leg of lamb with rosemary" },
+      "description": {
+        "nl": "Ontbeende lamsbout gespekt met knoflook en rozemarijn, langzaam gebraden met sjalotjes en een saus van het braadvocht.",
+        "en": "Boned leg of lamb studded with garlic and rosemary, slowly roasted with shallots and a sauce made from the roasting juices."
+      },
+      "category": "vlees",
+      "tags": ["oven", "feest"],
+      "time": { "active": 25, "total": 125 },
+      "steps": [
+        { "en": "Preheat the oven to 240 °C.\nMake 12 shallow cuts in the leg of lamb and push slices of garlic and little sprigs of rosemary into them. Put the lamb in a roasting tin and brush with olive oil. Place in the middle of the oven and roast for about 10 minutes. Turn the oven down to 200 °C." },
+        { "en": "Arrange the shallots around the lamb and roast for about 30 minutes more. Brush the lamb regularly with olive oil in the meantime. Heat the stock and pour it into the roasting tin. Roast the lamb for about 1 hour more, basting regularly with the roasting juices." },
+        { "en": "Take the lamb out of the roasting tin and leave to rest in aluminium foil for about 10 minutes. Scoop the shallots out of the roasting juices. Strain the juices and skim off the fat. Stir knobs of butter into the juices and season the sauce with salt and pepper." },
+        { "en": "Serve the lamb cut into slices, with the sauce, the roasted shallots and roast potatoes." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "2 kg lamsbout [ontbeend]", "ing": "lamsbout", "qual": [], "prep": { "en": "boned" }, "confidence": 0.95 },
+        { "i": 1, "raw": "5 teentjes knoflook [plakjes]", "ing": "knoflook", "qual": [], "prep": { "en": "sliced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "6 takjes rozemarijn", "ing": "rozemarijn", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "8 sjalotjes", "ing": "sjalot", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "400 ml lamsfond", "ing": "lamsfond", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "4 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:lamsvlees-in-reepjes",
+      "name": { "en": "Strips of lamb with savoy cabbage" },
+      "description": {
+        "nl": "Reepjes lamsbout met spek en savooiekool, gestoofd in room met sherry en rozijnen.",
+        "en": "Strips of lamb with bacon and savoy cabbage, braised in cream with sherry and raisins."
+      },
+      "category": "vlees",
+      "tags": ["wok", "snel"],
+      "time": { "active": 15, "total": 30 },
+      "steps": [
+        { "en": "Fry the bacon lardons in a wok until crisp, add 2 tbsp butter, brown the meat in it and season with salt." },
+        { "en": "Add the rest of the butter and briefly fry the savoy cabbage with the meat. Add the cream, sherry and raisins. Braise for 15 minutes." },
+        { "en": "Finish with salt, pepper and Worcestershire sauce." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "250 g lamsbout [smalle reepjes]", "ing": "lamsbout", "qual": [], "prep": { "en": "thin strips" }, "confidence": 0.95 },
+        { "i": 1, "raw": "50 g spekblokjes", "ing": "spekblokjes", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "250 g savooienkool [repen]", "ing": "savooienkool", "qual": [], "prep": { "en": "strips" }, "confidence": 0.95 },
+        { "i": 3, "raw": "100 ml slagroom", "ing": "slagroom", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 el sherry", "ing": "sherry", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "1 el rozijnen", "ing": "rozijn", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "Worcestershire saus", "ing": "worcestersaus", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:lasagne-met-courgette-en-kaassaus",
+      "name": { "en": "Courgette lasagne with cheese sauce" },
+      "description": {
+        "nl": "Vegetarische lasagne met courgetteblokjes, hardgekookt ei en een kerrie-kaassaus, afgedekt met kaas en paneermeel.",
+        "en": "Vegetarian lasagne with diced courgette, hard-boiled egg and a curried cheese sauce, topped with cheese and breadcrumbs."
+      },
+      "category": "pasta",
+      "tags": ["vegetarisch", "oven"],
+      "time": { "active": 35, "total": 80 },
+      "steps": [
+        { "en": "Hard-boil the eggs for 10 minutes and cool them under cold running water. Peel the eggs and cut them into small pieces. Preheat the oven to 200 °C." },
+        { "en": "Melt the butter in a frying pan and fry the diced courgette gently for about 5 minutes until soft. Stir in the herbs and the crushed garlic and season with salt and pepper." },
+        { "en": "Make the cheese sauce by melting the butter, adding the curry powder and the flour and, after letting it bubble briefly, adding the milk a splash at a time while stirring well. Stir in the crumbled stock cube and 100 g grated cheese. Season the sauce with pepper and salt." },
+        { "en": "Line a buttered ovenproof dish with 3 lasagne sheets. Spread ¼ of the cheese sauce, 1/3 of the courgette and 1/3 of the egg pieces over them. Repeat this twice and cover with the cheese sauce. Mix the breadcrumbs and the rest of the cheese together and scatter this over the sauce. Bake the lasagne for 30 to 45 minutes until done." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "4 eieren", "ing": "ei", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 courgettes [blokjes]", "ing": "courgette", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "1 tl Italiaanse kruiden", "ing": "italiaanse-kruiden", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 6, "raw": "75 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "60 g bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "¾ liter melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "1 kruidenbouillon (blokje)", "ing": "kruidenbouillon", "qual": [], "confidence": 0.8 },
+        { "i": 10, "raw": "1 el kerrie", "ing": "kerrie", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "100 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 12, "raw": "12 lasagnevellen", "ing": "lasagnebladen", "qual": [], "confidence": 0.95 },
+        { "i": 13, "raw": "100 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 },
+        { "i": 14, "raw": "2 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:lasagne-met-ham-en-spinazie",
+      "name": { "en": "Ham and spinach lasagne" },
+      "description": {
+        "nl": "Ovenlasagne met laagjes spinazie, achterham en een romige gruyèresaus met nootmuskaat.",
+        "en": "Baked lasagne with layers of spinach, ham and a creamy Gruyère sauce with nutmeg."
+      },
+      "category": "pasta",
+      "tags": ["oven"],
+      "time": { "active": 20, "total": 55 },
+      "steps": [
+        { "en": "Preheat the oven to 180 °C. Thaw the spinach. Make a roux: melt the butter in a small pan, stir in the flour and cook it briefly, then add the milk little by little and stir well." },
+        { "en": "Add 100 g of the cheese. Season with pepper, salt and nutmeg. Fill an ovenproof dish with layers of lasagne, spinach, ham and sauce. Bake in the oven for 30 minutes at 200 °C." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "900 g diepvriesspinazie", "ing": "diepvriesspinazie", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "50 g bloem", "ing": "bloem", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "600 ml melk", "ing": "melk", "qual": [], "confidence": 0.95 },
+        { "i": 4, "raw": "150 g gruyère kaas", "ing": "gruyere", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "½ tl nootmuskaat", "ing": "nootmuskaat", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "250 g lasagnevellen", "ing": "lasagnebladen", "qual": [], "confidence": 0.95 },
+        { "i": 7, "raw": "250 g plakjes achterham", "ing": "ham", "qual": [], "confidence": 0.85 }
+      ]
+    },
+    {
+      "id": "b:linguine-met-gerookte-zalm-en-rucola",
+      "name": { "en": "Linguine with smoked salmon and rocket" },
+      "description": {
+        "nl": "Snelle pasta met knoflook, reepjes gerookte zalm en rucola, geserveerd met een partje citroen.",
+        "en": "Quick pasta with garlic, strips of smoked salmon and rocket, served with a wedge of lemon."
+      },
+      "category": "pasta",
+      "tags": ["snel", "zomer"],
+      "time": { "active": 15, "total": 15 },
+      "steps": [
+        { "en": "Cook the linguine in a large pan of boiling water according to the packet instructions." },
+        { "en": "Just before the end of the cooking time, heat the oil in a frying pan. Add the garlic and fry it over a low heat for 1 minute, stirring. Do not let the garlic brown. Add the salmon and rocket. Season with salt and pepper and fry everything for 1 minute, stirring. Take the pan off the heat." },
+        { "en": "Drain the pasta and tip it onto a warmed serving dish. Add the salmon mixture, fold it gently through the pasta, garnish with the lemon and serve." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "350 g linguine", "ing": "linguine", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 teen knoflook [fijngesneden]", "ing": "knoflook", "qual": [], "prep": { "en": "finely sliced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "125 g gerookte zalm [dunne reepjes]", "ing": "zalm", "qual": ["gerookte"], "prep": { "en": "thin strips" }, "confidence": 0.95 },
+        { "i": 4, "raw": "50 g rucola", "ing": "rucola", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "½ citroen (garnering)", "ing": "citroen", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:linguine-met-kip",
+      "name": { "en": "Linguine with chicken" },
+      "description": {
+        "nl": "Linguine in een roomsaus met doperwten, gegrilde kip, ham en peterselie, bestrooid met Parmezaanse kaas.",
+        "en": "Linguine in a cream sauce with peas, grilled chicken, ham and parsley, sprinkled with Parmesan."
+      },
+      "category": "pasta",
+      "tags": ["snel", "kids"],
+      "time": { "active": 25, "total": 25 },
+      "steps": [
+        { "en": "Cook the linguine in a large pan of boiling water according to the packet instructions." },
+        { "en": "Meanwhile, bring the cream to the boil in a large frying pan. Turn the heat down, add the peas, garlic and nutmeg and let them simmer gently for 3 minutes. Season with freshly ground black pepper and salt." },
+        { "en": "Remove the skin and bones from the chicken and cut the meat into small pieces. Cut the ham into long, thin strips. Add the chicken pieces, ham and chopped parsley to the cream and bring everything to the boil." },
+        { "en": "Turn the heat down low and let the sauce thicken slightly. Drain the linguine and stir the sauce through it. Sprinkle with the Parmesan and serve with a green salad." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "350 g linguine", "ing": "linguine", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "3 dl room", "ing": "room", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "200 g diepvriesdoperwten", "ing": "doperwt", "qual": ["diepvries"], "confidence": 0.9 },
+        { "i": 3, "raw": "1 teentje knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 4, "raw": "snufje nootmuskaat", "ing": "nootmuskaat", "qual": [], "confidence": 0.95 },
+        { "i": 5, "raw": "½ gegrilde kip of 350 g gegrilde kipdijfilet", "ing": "kip", "qual": ["gegrilde"], "confidence": 0.85 },
+        { "i": 6, "raw": "200 g ham in plakjes", "ing": "ham", "qual": [], "confidence": 0.9 },
+        { "i": 7, "raw": "15 g gladde peterselie [fijngehakt]", "ing": "peterselie", "qual": ["gladde"], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 8, "raw": "Geraspte Parmezaanse kaas", "ing": "parmezaanse-kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:macaroni-ham-kaas",
+      "name": { "en": "Macaroni with ham and cheese" },
+      "description": {
+        "nl": "Ovenpasta met roergebakken groenten, hamblokjes, Danish Blue en crème fraîche, gegratineerd met kaas en paneermeel.",
+        "en": "Baked pasta with stir-fried vegetables, diced ham, Danish blue and crème fraîche, gratinated with cheese and breadcrumbs."
+      },
+      "category": "pasta",
+      "tags": ["oven"],
+      "time": { "active": 25, "total": 40 },
+      "steps": [
+        { "en": "Preheat the oven to 200 °C. Cook the pasta until al dente in a pan of plenty of boiling salted water. Heat 2 tbsp olive oil in a wok and gently soften the onion and the garlic." },
+        { "en": "Stir in the pepper, chilli, courgette and Italian herbs and stir-fry the vegetables for about 4 minutes until just tender. Drain the pasta and toss it through the stir-fried vegetables." },
+        { "en": "Stir in the diced ham, Danish blue and crème fraîche as well. Season the pasta with salt and pepper." },
+        { "en": "Spoon the pasta into an ovenproof dish. Sprinkle the grated cheese and the breadcrumbs over it. Drizzle a little more olive oil over the top. Bake the macaroni in the oven for 10 to 15 minutes until nicely browned." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g pasta (macaroni of penne)", "ing": "pasta", "qual": [], "note": { "en": "macaroni or penne" }, "confidence": 0.9 },
+        { "i": 1, "raw": "3 el olijfolie", "ing": "olijfolie", "qual": [], "confidence": 0.95 },
+        { "i": 2, "raw": "1 grote ui [grof gesnipperd]", "ing": "ui", "qual": ["grote"], "prep": { "en": "roughly diced" }, "confidence": 0.95 },
+        { "i": 3, "raw": "1 teen knoflook [fijngehakt]", "ing": "knoflook", "qual": [], "prep": { "en": "finely chopped" }, "confidence": 0.95 },
+        { "i": 4, "raw": "1 rode paprika [blokjes]", "ing": "paprika", "qual": ["rode"], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 5, "raw": "1 rode peper [zonder zaadjes in reepjes]", "ing": "rode-peper", "qual": [], "prep": { "en": "deseeded, in strips" }, "confidence": 0.95 },
+        { "i": 6, "raw": "1 courgette [stukjes]", "ing": "courgette", "qual": [], "prep": { "en": "small pieces" }, "confidence": 0.95 },
+        { "i": 7, "raw": "1 el Italiaanse kruiden", "ing": "italiaanse-kruiden", "qual": [], "confidence": 0.95 },
+        { "i": 8, "raw": "200 g hamblokjes", "ing": "hamblokjes", "qual": [], "confidence": 0.95 },
+        { "i": 9, "raw": "150 g Danish Blue [verkruimeld]", "ing": "danish-blue", "qual": [], "prep": { "en": "crumbled" }, "confidence": 0.95 },
+        { "i": 10, "raw": "4 el crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 11, "raw": "100 g geraspte belegen kaas", "ing": "kaas", "qual": ["geraspte", "belegen"], "confidence": 0.95 },
+        { "i": 12, "raw": "2 el paneermeel", "ing": "paneermeel", "qual": [], "confidence": 0.95 }
+      ]
+    },
+    {
+      "id": "b:macaroni-met-courgette",
+      "name": { "en": "Macaroni with courgette" },
+      "description": {
+        "nl": "Schelpjesmacaroni met een romige courgettesaus van crème fraîche, knoflook en peterselie, bestrooid met geraspte kaas.",
+        "en": "Pasta shells in a creamy courgette sauce of crème fraîche, garlic and parsley, topped with grated cheese."
+      },
+      "category": "pasta",
+      "tags": ["vegetarisch", "snel", "kids"],
+      "time": { "active": 20, "total": 20 },
+      "steps": [
+        { "en": "Cook the pasta until al dente. Heat the butter and stir in the courgette and garlic. Stir in the herbes de Provence and the parsley and stew the courgettes for about 3 minutes until tender." },
+        { "en": "Lift half of the courgette out of the pan with a slotted spoon and purée the other half together with the cooking liquid and the crème fraîche in a food processor or with a stick blender. Season the sauce with salt and pepper." },
+        { "en": "Drain the pasta well and stir in the courgette sauce and the courgette pieces. Sprinkle the grated cheese over the top." }
+      ],
+      "lines": [
+        { "i": 0, "raw": "400 g schelpjes macaroni", "ing": "schelpjesmacaroni", "qual": [], "confidence": 0.95 },
+        { "i": 1, "raw": "2 courgettes [blokjes]", "ing": "courgette", "qual": [], "prep": { "en": "diced" }, "confidence": 0.95 },
+        { "i": 2, "raw": "50 g boter", "ing": "boter", "qual": [], "confidence": 0.95 },
+        { "i": 3, "raw": "2 teentjes knoflook [geperst]", "ing": "knoflook", "qual": [], "prep": { "en": "crushed" }, "confidence": 0.95 },
+        { "i": 4, "raw": "2 tl fijngehakte peterselie", "ing": "peterselie", "qual": ["fijngehakte"], "confidence": 0.95 },
+        { "i": 5, "raw": "1½ bekertje crème fraîche", "ing": "creme-fraiche", "qual": [], "confidence": 0.95 },
+        { "i": 6, "raw": "200 g geraspte kaas", "ing": "kaas", "qual": ["geraspte"], "confidence": 0.95 }
+      ]
+    }
+  ]
+}
