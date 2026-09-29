@@ -12,11 +12,14 @@ import {
   type Recipe,
   type RunningTimer,
 } from '@/domain/model';
-import { normalizeRecipe, recipeFingerprint } from '@/domain/recipe-io';
+import { normalizeRecipe } from '@/domain/recipe-io';
 import { applyLineOverrides, applyOverride, RECIPE_PATCH_KEYS, type LineOverride, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
 import type { Ingredient } from '@/domain/dictionary';
+import { ingredientsData } from '@/domain/data';
+import { legacyChoices, planImport, resolveImport, type ImportChoices, type ImportPlan, type LocalState } from '@/domain/merge';
+import type { ParsedShare } from '@/domain/share';
 import { db, getSetting, setSetting } from './db';
-import type { BackupBundle, ImportSnapshot, Setting } from './model';
+import type { BackupBundle, ImportBefore, ImportSnapshot, ImportWrote, Setting } from './model';
 
 export { getSetting, setSetting };
 
@@ -369,58 +372,260 @@ export interface ImportResult {
   added: string[];
   updated: string[];
   skipped: string[];
+  /** Ids of the copies a "both" choice made. */
+  copies: string[];
+  /** Number of dictionary entries added. */
+  ingredients: number;
+  /** Row id of the `imports` snapshot (undefined when nothing was written). */
+  importId?: number;
+}
+
+/** Setting 'inbox.seenIds' (src/inbox-badge.ts): received ids not in it count as unseen. */
+const INBOX_SEEN_KEY = 'inbox.seenIds';
+
+let builtinIngredientIds: ReadonlySet<string> | undefined;
+
+/** Everything `planImport` (src/domain/merge.ts) compares an incoming share against. */
+export async function localStateForImport(): Promise<LocalState> {
+  const [recipes, overrides, userIngredients] = await Promise.all([allRecipes(), db.overrides.toArray(), db.userIngredients.toArray()]);
+  if (!builtinIngredientIds) builtinIngredientIds = new Set(ingredientsData.map((i) => i.id));
+  return { recipes, overrides, userIngredients, builtinIngredientIds };
 }
 
 /**
- * Imports recipes by id: unknown id -> added (origin received, from `from.name`); known user
- * recipe with the same fingerprint -> skipped; known with another fingerprint -> updated (rev
- * bumped, previous version kept in the `imports` snapshot); builtin ids are always skipped.
- * An empty sender name is stored as null (the UI then shows "ontvangen" without a name).
+ * Writes an import plan with the user's choices (src/domain/merge.ts `resolveImport`) in ONE
+ * transaction: recipes, overrides, line overrides and user ingredients. Received recipes get
+ * `sync` (set by the resolver), the replaced rows go into an `imports` snapshot with their
+ * `before` state so `undoLastImport` restores exactly, and the written received ids are removed
+ * from 'inbox.seenIds' so the Inbox badge counts them. Items without a choice get the default
+ * (new/update applied, the rest skipped). The caller refreshes the dictionary afterwards
+ * (`reloadDictionary`) when `ingredients > 0`.
  */
-export async function importRecipes(recipes: Recipe[], from: { name: string }): Promise<ImportResult> {
+export async function applyImportPlan(plan: ImportPlan, choices: ImportChoices, from: { name: string }): Promise<ImportResult> {
   const now = nowIso();
-  const sender = (from.name ?? '').trim() || null;
-  const result: ImportResult = { added: [], updated: [], skipped: [] };
-  const previous: Recipe[] = [];
-  await db.transaction('rw', db.userRecipes, db.builtins, db.imports, async () => {
-    for (const incoming of recipes) {
-      const r = normalizeRecipe(incoming);
-      if (!r) continue;
-      if (isBuiltinId(r.id) && (await db.builtins.get(r.id))) {
-        result.skipped.push(r.id);
-        continue;
-      }
-      const existing = await db.userRecipes.get(r.id);
-      if (existing) {
-        if (recipeFingerprint(existing) === recipeFingerprint(r)) {
-          result.skipped.push(r.id);
-          continue;
-        }
-        previous.push(existing);
-        await db.userRecipes.put({
-          ...r,
-          rev: existing.rev + 1,
-          createdAt: existing.createdAt,
-          updatedAt: now,
-          origin: { ...existing.origin, receivedFrom: sender ?? existing.origin.receivedFrom ?? null, receivedAt: now },
-        });
-        result.updated.push(r.id);
-      } else {
-        await db.userRecipes.put({
-          ...r,
-          rev: 1,
-          updatedAt: now,
-          origin: { ...r.origin, kind: 'received', receivedFrom: sender, receivedAt: now },
-        });
-        result.added.push(r.id);
-      }
+  const sender = (from.name ?? '').trim() || plan.by || '';
+  const effective: ImportPlan = { ...plan };
+  if (sender) effective.by = sender;
+  else delete effective.by;
+  const w = resolveImport(effective, choices, { now });
+  const result: ImportResult = { added: w.added, updated: w.updated, skipped: w.skipped, copies: w.copies, ingredients: w.userIngredients.length };
+  const nothing = !w.recipes.length && !w.overrides.length && !w.lineOverrides.length && !w.userIngredients.length;
+  if (nothing) return result;
+
+  await db.transaction('rw', [db.userRecipes, db.overrides, db.lineOverrides, db.userIngredients, db.imports, db.settings], async () => {
+    const before: ImportBefore = { recipes: [], overrides: [], lineOverrides: [], userIngredients: [] };
+    const wrote: ImportWrote = { recipes: [], overrides: [], lineOverrides: [], userIngredients: [] };
+
+    for (const r of w.recipes) {
+      const cur = await db.userRecipes.get(r.id);
+      if (cur) before.recipes.push(cur);
+      wrote.recipes.push(r.id);
     }
-    if (result.added.length || result.updated.length) {
-      const snapshot: ImportSnapshot = { at: now, from: sender ?? '', ...result, previous };
-      await db.imports.add(snapshot);
+    for (const o of w.overrides) {
+      const cur = await db.overrides.get(o.baseId);
+      if (cur) before.overrides.push(cur);
+      wrote.overrides.push(o.baseId);
     }
+    const lineKeys = new Map<string, [string, number]>();
+    for (const id of w.clearLineOverridesFor) {
+      for (const o of await db.lineOverrides.where('recipeId').equals(id).toArray()) lineKeys.set(`${o.recipeId}|${o.index}`, [o.recipeId, o.index]);
+    }
+    for (const o of w.lineOverrides) lineKeys.set(`${o.recipeId}|${o.index}`, [o.recipeId, o.index]);
+    for (const k of lineKeys.values()) {
+      const cur = await db.lineOverrides.get(k);
+      if (cur) before.lineOverrides.push(cur);
+      wrote.lineOverrides.push(k);
+    }
+    for (const e of w.userIngredients) {
+      const cur = await db.userIngredients.get(e.id);
+      if (cur) before.userIngredients.push(cur);
+      wrote.userIngredients.push(e.id);
+    }
+
+    if (w.recipes.length) await db.userRecipes.bulkPut(w.recipes);
+    if (w.overrides.length) await db.overrides.bulkPut(w.overrides);
+    for (const id of w.clearLineOverridesFor) await db.lineOverrides.where('recipeId').equals(id).delete();
+    if (w.lineOverrides.length) await db.lineOverrides.bulkPut(w.lineOverrides);
+    if (w.userIngredients.length) await db.userIngredients.bulkPut(w.userIngredients);
+
+    // Unseen for the Inbox badge: a re-received (updated) recipe shows up again.
+    const received = w.recipes.filter((r) => r.origin.kind === 'received').map((r) => r.id);
+    if (received.length) {
+      const seen = stringArray((await db.settings.get(INBOX_SEEN_KEY))?.value);
+      const drop = new Set(received);
+      const kept = seen.filter((id) => !drop.has(id));
+      if (kept.length !== seen.length) await db.settings.put({ key: INBOX_SEEN_KEY, value: kept });
+    }
+
+    const snapshot: ImportSnapshot = {
+      at: now,
+      from: sender,
+      added: w.added,
+      updated: w.updated,
+      skipped: w.skipped,
+      copies: w.copies,
+      previous: before.recipes,
+      before,
+      wrote,
+    };
+    result.importId = (await db.imports.add(snapshot)) as number;
   });
   return result;
+}
+
+/**
+ * Restores the state before the most recent import that has a `before` snapshot and was not
+ * undone yet: added rows are deleted, replaced rows put back. Returns false when there is
+ * nothing to undo. The caller refreshes the dictionary afterwards.
+ */
+export async function undoLastImport(): Promise<boolean> {
+  const rows = await db.imports.orderBy('at').reverse().toArray();
+  const latest = rows.find((s) => !s.undone && s.before && s.wrote);
+  if (!latest || latest.id === undefined) return false;
+  const before = latest.before as ImportBefore;
+  const wrote = latest.wrote as ImportWrote;
+  await db.transaction('rw', [db.userRecipes, db.overrides, db.lineOverrides, db.userIngredients, db.imports], async () => {
+    if (wrote.recipes.length) await db.userRecipes.bulkDelete(wrote.recipes);
+    if (before.recipes.length) await db.userRecipes.bulkPut(before.recipes);
+    if (wrote.overrides.length) await db.overrides.bulkDelete(wrote.overrides);
+    if (before.overrides.length) await db.overrides.bulkPut(before.overrides);
+    if (wrote.lineOverrides.length) await db.lineOverrides.bulkDelete(wrote.lineOverrides);
+    if (before.lineOverrides.length) await db.lineOverrides.bulkPut(before.lineOverrides);
+    if (wrote.userIngredients.length) await db.userIngredients.bulkDelete(wrote.userIngredients);
+    if (before.userIngredients.length) await db.userIngredients.bulkPut(before.userIngredients);
+    await db.imports.update(latest.id as number, { undone: true });
+  });
+  return true;
+}
+
+/** The import history, newest first (default the last 10). Only the newest not-undone one can be undone. */
+export async function listImports(limit = 10): Promise<ImportSnapshot[]> {
+  return db.imports.orderBy('at').reverse().limit(limit).toArray();
+}
+
+/**
+ * Phase-1 entry point, kept for old callers: imports recipes by id with the phase-1 decisions
+ * (conflicts take theirs, look-alikes are added) through planImport / applyImportPlan.
+ */
+export async function importRecipes(recipes: Recipe[], from: { name: string }): Promise<ImportResult> {
+  const list = recipes.map(normalizeRecipe).filter((r): r is Recipe => r !== null);
+  const share: ParsedShare = { kind: 'bundle', dict: { ing: [] }, recipes: list, patches: [] };
+  const sender = (from.name ?? '').trim();
+  if (sender) share.by = sender;
+  const plan = planImport(share, await localStateForImport());
+  return applyImportPlan(plan, legacyChoices(plan), from);
+}
+
+// --- Delta share ("Stuur nieuwe naar <naam>", docs/phase-3-spec.md §3) ---------------------------
+
+export const LAST_SENT_TO_KEY = 'share.lastSentTo';
+
+export interface DeltaSince {
+  recipes: Recipe[];
+  patches: RecipeOverride[];
+  userIngredients: Ingredient[];
+  /** Line overrides of the patched classics (fold into the patch envelopes). */
+  lineOverrides: LineOverride[];
+  /** Effective names of the patched classics by baseId (for the patch envelopes / headers). */
+  names: Record<string, { nl?: string; en?: string }>;
+}
+
+/** True when a received recipe was edited after it arrived (own recipes always count). */
+function editedSinceReceipt(r: Recipe): boolean {
+  if (r.origin.kind !== 'received') return true;
+  if (r.sync && typeof r.sync.receivedRev === 'number') return r.rev !== r.sync.receivedRev;
+  const receivedAt = r.origin.receivedAt ?? r.createdAt;
+  return (r.updatedAt ?? '') > (receivedAt ?? '');
+}
+
+/**
+ * What changed since `sinceIso` (null = everything): own recipes and received ones edited after
+ * receipt with `updatedAt > since`, overrides with `updatedAt > since`, and the user ingredients
+ * those reference plus the ones saved since.
+ */
+export async function collectDeltaSince(sinceIso: string | null): Promise<DeltaSince> {
+  const since = sinceIso ?? '';
+  const [users, overrides, ingredients, builtins] = await Promise.all([db.userRecipes.toArray(), db.overrides.toArray(), db.userIngredients.toArray(), db.builtins.toArray()]);
+  const recipes = users.filter((r) => (r.updatedAt ?? '') > since && editedSinceReceipt(r)).sort((a, b) => (a.updatedAt ?? '').localeCompare(b.updatedAt ?? ''));
+  const patches = overrides.filter((o) => (o.updatedAt ?? '') > since).sort((a, b) => a.updatedAt.localeCompare(b.updatedAt));
+  const lineOverrides: LineOverride[] = [];
+  const names: DeltaSince['names'] = {};
+  const baseById = new Map(builtins.map((b) => [b.id, b]));
+  for (const o of patches) {
+    lineOverrides.push(...(await listLineOverrides(o.baseId)));
+    const base = baseById.get(o.baseId);
+    if (base) names[o.baseId] = applyOverride(base, o).name;
+  }
+  const wanted = new Set<string>();
+  const visit = (lines: readonly Recipe['lines'][number][] | undefined) => {
+    for (const l of lines ?? []) {
+      if (typeof l.ing === 'string' && l.ing) wanted.add(l.ing);
+      if (Array.isArray(l.alt)) visit(l.alt);
+    }
+  };
+  for (const r of recipes) visit(r.lines);
+  for (const o of patches) if (Array.isArray(o.patch.lines)) visit(o.patch.lines);
+  for (const o of lineOverrides) if (typeof o.ing === 'string' && o.ing) wanted.add(o.ing);
+  const userIngredients = ingredients.filter((e) => wanted.has(e.id) || (e.updatedAt ?? '') > since).sort((a, b) => a.id.localeCompare(b.id));
+  return { recipes, patches, userIngredients, lineOverrides, names };
+}
+
+/** Setting 'share.lastSentTo': { [partner name]: ISO of the last successful share }. */
+export async function getLastSentTo(): Promise<Record<string, string>> {
+  const raw = await getSetting<unknown>(LAST_SENT_TO_KEY, {});
+  const out: Record<string, string> = {};
+  if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+    for (const [k, v] of Object.entries(raw as Record<string, unknown>)) if (typeof v === 'string' && k.trim()) out[k] = v;
+  }
+  return out;
+}
+
+export async function markSentTo(name: string, atIso: string = nowIso()): Promise<void> {
+  const key = name.trim();
+  if (!key) return;
+  const current = await getLastSentTo();
+  current[key] = atIso;
+  await setSetting(LAST_SENT_TO_KEY, current);
+}
+
+// --- Backup health (docs/phase-3-spec.md §4 Storage / Home) --------------------------------------
+
+export const LAST_BACKUP_KEY = 'backup.lastAt';
+const BACKUP_OVERDUE_MS = 30 * 24 * 60 * 60 * 1000;
+
+export interface BackupHealth {
+  lastBackupAt: string | null;
+  /** Rows (recipes, overrides, line overrides, ingredients, notes, favourites, cook-log entries) changed since the last backup. */
+  unbackedChanges: number;
+  /** Changes exist and the last backup is older than 30 days (or there never was one). */
+  overdue: boolean;
+}
+
+export async function backupHealth(): Promise<BackupHealth> {
+  const raw = await getSetting<unknown>(LAST_BACKUP_KEY, null);
+  const lastBackupAt = typeof raw === 'string' && raw.trim() ? raw : null;
+  const since = lastBackupAt ?? '';
+  const [recipes, overrides, lineOverrides, ingredients, notes, favorites, cookLog] = await Promise.all([
+    db.userRecipes.toArray(),
+    db.overrides.toArray(),
+    db.lineOverrides.toArray(),
+    db.userIngredients.toArray(),
+    db.notes.toArray(),
+    db.favorites.toArray(),
+    db.cookLog.toArray(),
+  ]);
+  let n = 0;
+  for (const r of recipes) if ((r.updatedAt ?? '') > since) n++;
+  for (const o of overrides) if ((o.updatedAt ?? '') > since) n++;
+  for (const o of lineOverrides) if ((o.updatedAt ?? '') > since) n++;
+  // User ingredients saved before phase 3 have no updatedAt: they count only when there was never a backup.
+  for (const e of ingredients) if ((e.updatedAt ?? '') > since || !lastBackupAt) n++;
+  for (const x of notes) if ((x.updatedAt ?? '') > since) n++;
+  for (const f of favorites) if ((f.at ?? '') > since) n++;
+  for (const c of cookLog) if ((c.at ?? '') > since) n++;
+  const lastMs = lastBackupAt ? new Date(lastBackupAt).getTime() : NaN;
+  const old = Number.isNaN(lastMs) || Date.now() - lastMs > BACKUP_OVERDUE_MS;
+  return { lastBackupAt, unbackedChanges: n, overdue: n > 0 && old };
 }
 
 export async function exportBundle(): Promise<BackupBundle> {

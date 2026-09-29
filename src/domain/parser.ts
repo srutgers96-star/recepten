@@ -711,13 +711,37 @@ export function parseLine(raw: string, dict: Dictionary, lang: Lang): Line {
 }
 
 /**
+ * Score of a parse for picking the better language: a resolved ingredient counts most, then a
+ * recognised unit and quantity, then the parser's own confidence.
+ */
+function parseScore(line: Line): number {
+  if (line.kind === 'header') return 0;
+  return (line.ing ? 3 : 0) + (line.unit ? 1 : 0) + (line.qty ? 1 : 0) + (line.confidence ?? 0);
+}
+
+/**
+ * Parse a line whose language is not certain: the editor's NL/EN mode says where the text is
+ * stored, not what language the cook typed ("1 eetlepel olijfolie" in the EN column is still
+ * Dutch). Both grammars are tried and the better parse wins; ties go to `preferred`. The raw text
+ * always stays in the `preferred` slot so the editor's columns keep their meaning.
+ */
+export function parseLineAuto(raw: string, dict: Dictionary, preferred: Lang): Line {
+  const first = parseLine(raw, dict, preferred);
+  if (first.kind === 'header' || !collapse(raw ?? '')) return first;
+  const other: Lang = preferred === 'nl' ? 'en' : 'nl';
+  const second = parseLine(raw, dict, other);
+  if (parseScore(second) > parseScore(first)) return { ...second, raw: first.raw };
+  return first;
+}
+
+/**
  * Re-parse an existing line from its `raw` (invariant 2), keeping user corrections: an `ing` and
  * `qual` that were set by hand survive when the parser cannot resolve the line itself.
  */
 export function reparseLine(line: Line, dict: Dictionary, lang: Lang): Line {
   const source = line.raw[lang] ?? line.raw[lang === 'nl' ? 'en' : 'nl'] ?? '';
   const sourceLang: Lang = line.raw[lang] ? lang : lang === 'nl' ? 'en' : 'nl';
-  const parsed = parseLine(source, dict, sourceLang);
+  const parsed = parseLineAuto(source, dict, sourceLang);
   const out: Line = { ...line, ...parsed, raw: line.raw };
   if (parsed.kind === 'header') return out;
   if (!parsed.ing && line.ing && dict.get(line.ing)) {

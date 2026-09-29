@@ -19,6 +19,14 @@ import {
   type Envelope,
 } from '../src/domain/token';
 import { normalizeSource, slugId, initialOf, foldDiacritics, type SourceRecipe } from '../src/domain/recipe-source';
+import {
+  FROZEN_ENVELOPE_B,
+  FROZEN_ENVELOPE_P,
+  FROZEN_TOKEN_B,
+  FROZEN_TOKEN_B_FFLATE,
+  FROZEN_TOKEN_P,
+  FROZEN_TOKEN_P_FFLATE,
+} from './fixtures/frozen-share-tokens';
 
 const SOURCE = fileURLToPath(new URL('../data/source/recipes-recepten2.json', import.meta.url));
 const recipes = normalizeSource(JSON.parse(readFileSync(SOURCE, 'utf8')));
@@ -105,6 +113,13 @@ describe('token codec', () => {
       it('decodes the frozen v2 tokens (native- and fflate-produced)', async () => {
         expect(await decodeToken(FROZEN_TOKEN_V2, { engine })).toEqual(FROZEN_ENVELOPE_V2);
         expect(await decodeToken(FROZEN_TOKEN_V2_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_V2);
+      });
+
+      it('decodes the frozen phase-3 #p= and #b= tokens (native- and fflate-produced)', async () => {
+        expect(await decodeToken(FROZEN_TOKEN_P, { engine })).toEqual(FROZEN_ENVELOPE_P);
+        expect(await decodeToken(FROZEN_TOKEN_P_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_P);
+        expect(await decodeToken(FROZEN_TOKEN_B, { engine })).toEqual(FROZEN_ENVELOPE_B);
+        expect(await decodeToken(FROZEN_TOKEN_B_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_B);
       });
     });
   }

@@ -26,6 +26,22 @@ export interface Setting {
   value: unknown;
 }
 
+/** The rows an import replaced, as they were before it (phase 3 undo). Absent rows were added. */
+export interface ImportBefore {
+  recipes: Recipe[];
+  overrides: RecipeOverride[];
+  lineOverrides: LineOverride[];
+  userIngredients: Ingredient[];
+}
+
+/** The keys an import wrote (put or, for `clearedLineOverrides`, deleted), so undo knows what to remove. */
+export interface ImportWrote {
+  recipes: string[];
+  overrides: string[];
+  lineOverrides: Array<[string, number]>;
+  userIngredients: string[];
+}
+
 /** One row of the `imports` table: what an import changed, with the previous versions for undo. */
 export interface ImportSnapshot {
   id?: number;
@@ -34,8 +50,15 @@ export interface ImportSnapshot {
   added: string[];
   updated: string[];
   skipped: string[];
+  /** Ids of the copies a "both" choice made (phase 3). */
+  copies?: string[];
   /** The recipes as they were before this import overwrote them (only the updated ones). */
   previous: Recipe[];
+  /** Phase 3: everything the import replaced, for an exact undo. Absent in phase-1 snapshots. */
+  before?: ImportBefore;
+  wrote?: ImportWrote;
+  /** True once "Maak deze import ongedaan" restored it. */
+  undone?: boolean;
 }
 
 /** The backup file (Meer → Opslag & back-up). Envelope key `t: 'b'` like the share tokens. */

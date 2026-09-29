@@ -118,8 +118,24 @@ export interface Recipe {
   goesWith: string[];
   aliases: string[];
   text?: { en?: 'llm' | 'human' | 'none'; reviewedBy?: string } | null;
+  /**
+   * Receiver-side bookkeeping of a received recipe (docs/phase-3-spec.md §2): what was last
+   * received from the sender. `rev === sync.receivedRev` means "untouched since receipt", so a
+   * newer version from the sender may replace it without a conflict. `saveUserRecipe` leaves
+   * it alone; it never travels in a share token (the receiver sets its own).
+   */
+  sync?: RecipeSync;
   /** Unknown keys are preserved on round-trip (PLAN.md §5). */
   [k: string]: unknown;
+}
+
+export interface RecipeSync {
+  /** The sender's `rev` of the version last received. */
+  receivedRev?: number;
+  /** ISO timestamp of that import. */
+  receivedAt?: string;
+  /** `recipeFingerprint` of the version last received (the same version arriving again = "present"). */
+  receivedFingerprint?: string;
 }
 
 export interface Profile {

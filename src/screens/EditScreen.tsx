@@ -21,7 +21,7 @@ import { clearOverride, deleteUserRecipe, duplicateAsOwn, getBaseRecipe, getOver
 import { dictionary, type Dictionary } from '@/dictionary';
 import { hasLang, newUserId, nowIso, type Lang, type Line, type Recipe, type Step, type Text } from '@/domain/model';
 import { applyLineOverrides, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
-import { parseLine } from '@/domain/parser';
+import { parseLineAuto } from '@/domain/parser';
 import { buildImportPrompt, parsePlainRecipe } from '@/domain/photo-import';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { splitSteps } from '@/domain/steps';
@@ -101,7 +101,7 @@ function effectiveLine(row: EditText, src: Line | undefined, manualIng: string |
   } else if (src && isStructured(src) && srcKnown && (src.raw[srcLang] ?? '') === raw[srcLang]) {
     line = { ...src, raw };
   } else {
-    const parsed = parseLine(raw[srcLang] as string, dict, srcLang);
+    const parsed = parseLineAuto(raw[srcLang] as string, dict, srcLang);
     const rest: Line = { raw };
     if (src) for (const [k, v] of Object.entries(src)) if (!STRUCT_KEYS.has(k)) rest[k] = v;
     line = { ...rest, ...parsed, raw };

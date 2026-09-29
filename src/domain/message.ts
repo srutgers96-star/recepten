@@ -62,6 +62,47 @@ function titleNames(nameNl: string, nameEn?: string): string[] {
   return [nl, en];
 }
 
+// --- Phase 3: patch and multi-item headers (docs/phase-3-spec.md §1 planMessages, §4 Share) ------
+
+export interface PatchShareMessageInput {
+  nameNl: string;
+  nameEn?: string;
+  by: string;
+  url: string;
+  lang: 'nl' | 'en';
+}
+
+const ADJUSTED = { nl: 'aangepast', en: 'adjusted' } as const;
+
+/**
+ * The message for an edited classic (`#p=`): line 1 "🍲 <name> (aangepast)", line 2 "van <by>",
+ * then the open line and the URL alone on the last line.
+ */
+export function buildPatchShareMessage(i: PatchShareMessageInput): string {
+  const lang = i.lang === 'en' ? 'en' : 'nl';
+  const by = i.by.trim();
+  const line1 = '🍲 ' + titleNames(i.nameNl, i.nameEn).join(' · ') + ` (${ADJUSTED[lang]})`;
+  const lines = [line1];
+  if (by) lines.push(lang === 'nl' ? `van ${by}` : `from ${by}`);
+  lines.push(OPEN_LINE[lang], i.url.trim());
+  return lines.join('\n');
+}
+
+/** "🍲 3 recepten van Stijn" / "🍲 3 recipes from Stijn": the compact header above several links. */
+export function buildMultiShareHeader(count: number, by: string, lang: 'nl' | 'en'): string {
+  const l = lang === 'en' ? 'en' : 'nl';
+  const n = Math.max(0, Math.floor(count));
+  const what = l === 'nl' ? (n === 1 ? 'recept' : 'recepten') : n === 1 ? 'recipe' : 'recipes';
+  const sender = by.trim();
+  const from = sender ? (l === 'nl' ? ` van ${sender}` : ` from ${sender}`) : '';
+  return `🍲 ${n} ${what}${from}`;
+}
+
+/** The "Open in Rutgers' Recepten (…)" line in the sender's language, for messages built elsewhere. */
+export function openLine(lang: 'nl' | 'en'): string {
+  return OPEN_LINE[lang === 'en' ? 'en' : 'nl'];
+}
+
 // --- Schema-2 recipe -> share message -----------------------------------------------------------
 
 export interface RecipeShareOptions {

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { defaultDictionaryData } from '../src/domain/data';
 import { loadDictionary } from '../src/domain/dictionary';
 import type { Recipe } from '../src/domain/model';
-import { parseLine, parseQty, reparseLine } from '../src/domain/parser';
+import { parseLine, parseQty, reparseLine, parseLineAuto } from '../src/domain/parser';
 import { searchRecipes } from '../src/domain/search';
 import { testDictionary } from './fixtures/test-dictionary';
 
@@ -247,5 +247,28 @@ describe('parseLine: corpus lines', () => {
     expect(again.unit).toBe('blik');
     const auto = reparseLine({ raw: { nl: '2 uien' }, ing: 'tomaat' }, dict, 'nl');
     expect(auto.ing).toBe('ui');
+  });
+});
+
+describe('parseLineAuto (language of the text, not of the column)', () => {
+  it('reads Dutch typed in the EN column', () => {
+    const dict = testDictionary();
+    const l = parseLineAuto('1 eetlepel olijfolie', dict, 'en');
+    expect(l.unit).toBe('el');
+    expect(l.ing).toBe('olijfolie');
+    expect(l.raw).toEqual({ en: '1 eetlepel olijfolie' });
+  });
+  it('reads English typed in the NL column', () => {
+    const dict = testDictionary();
+    const l = parseLineAuto('2 tablespoons olive oil', dict, 'nl');
+    expect(l.unit).toBe('el');
+    expect(l.ing).toBe('olijfolie');
+    expect(l.raw).toEqual({ nl: '2 tablespoons olive oil' });
+  });
+  it('keeps the preferred language on a tie', () => {
+    const dict = testDictionary();
+    const l = parseLineAuto('2 el olijfolie', dict, 'nl');
+    expect(l.unit).toBe('el');
+    expect(l.raw).toEqual({ nl: '2 el olijfolie' });
   });
 });

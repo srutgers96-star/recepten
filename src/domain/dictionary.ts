@@ -64,6 +64,8 @@ export interface Ingredient {
   cut?: 'slice' | 'chop';
   /** How a unit of this ingredient is called: foelie { stuk: { en: { one: 'blade' } } } -> "1 blade mace". */
   unitNames?: Record<string, { nl?: { one: string; many?: string }; en?: { one: string; many?: string } }>;
+  /** User entries only: ISO timestamp of the last save; the newer one wins when two phones merge (missing = older). */
+  updatedAt?: string;
   [k: string]: unknown;
 }
 
