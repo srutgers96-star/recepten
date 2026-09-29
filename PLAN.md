@@ -36,6 +36,7 @@ Stijn heeft het plan per thema doorgenomen. Deze besluiten gaan vóór alles wat
 | **Spraak in de kookstand (besloten 29-09)** | Twee opties, beide **optioneel** (schakelaar in Instellingen), fase 5: (1) **Voorlezen** van de huidige stap en de ingrediëntenlijst via de spraaksynthese van de telefoon (werkt op Android én iPhone, in de taal van het recept); (2) **Spraakcommando's** — "volgende", "vorige", "timer 10 minuten", "lees voor" — via spraakherkenning van de browser: Android Chrome eerst (herkenning via Google, dus met internet), iPhone experimenteel. Vervangt het anti-feature "voice control" uit §9. |
 | **Timerbalk** | Reset-knop ↻ (opnieuw vanaf de oorspronkelijke tijd) naast −1 / +1 / ×. Meerdere timers stapelen in de balk. Gebouwd 29-09. |
 | **Receptpagina** | Geen vinkjes bij de ingrediënten (lezen, niet afvinken); afvinken alleen in de kookstand en straks in de boodschappenlijst. |
+| **Kleine wensen (backlog)** | Grammen en milliliters altijd als heel getal tonen (62.25 g → 62 g); breuken (¼, ½, 1½) alleen bij lepels, stuks en teentjes. Lage prioriteit, meenemen bij de afwerking van de weergave (fase 5). |
 | **Werkwijze** | Claude Code bouwt; Stijn test op de telefoons. Bij vragen tijdens het bouwen: doorgaan met de rest als Stijn niet meekijkt, vragen bundelen. |
 
 ---
