@@ -81,6 +81,10 @@ const CSS = `
 :root{color-scheme:light dark;--paper:#eaf3fb;--card:#fff;--ink:#1f2733;--muted:#5b6775;--cobalt:#2b4fa8;--line:rgba(31,39,51,.12);--on:#fff}
 @media(prefers-color-scheme:dark){:root{--paper:#0f1a2b;--card:#17243a;--ink:#e8eef6;--muted:#9fb0c3;--cobalt:#6f8fe0;--line:rgba(232,238,246,.14);--on:#0f1a2b}}
 *{box-sizing:border-box}html,body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.45 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+/* The app shell (base.css) locks html/body/#app to the viewport and scrolls inside; that stylesheet can be
+   loaded on this page too, which left the Safari preview unscrollable. This page is a plain document. */
+html,body{height:auto!important;min-height:100%;overflow:auto!important;overscroll-behavior:auto!important}
+#app{height:auto!important;min-height:100%;overflow:visible!important;display:block!important}
 main{max-width:40rem;margin:auto;padding:calc(12px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 .top{display:flex;align-items:center;gap:8px}.top h1{flex:1;font-size:20px;color:var(--cobalt);margin:0}
 .lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}.lang button{min-width:44px;min-height:44px;border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:700}
