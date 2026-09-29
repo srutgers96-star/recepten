@@ -33,6 +33,9 @@ Stijn heeft het plan per thema doorgenomen. Deze besluiten gaan vóór alles wat
 | **Gamification (nieuw)** | Tweeledig, allebei apart uitzetbaar en nooit in de weg van gewone functionaliteit: (1) **dopamine-momenten** — confetti/animatie bij een recensie, eerste eigen recept, foto, mijlpaal; (2) een **badge-pagina**, uitgebreid en creatief, speelse namen ("Fishlover", "Van A tot Z", "Halverwege het boek", "Zeldzaam ingrediënt", "Kritische tong: 5× één ster", vegetarisch-reeksen, 200 gerechten gegeten, alles gekookt…), grotere mijlpalen extra feestelijk. Badges als **databestand** (`data/badges.json` met voorwaarde-regels) zodat Stijn ze later zelf kan uitbreiden. Vervangt het anti-feature "streaks/punten". |
 | **Foto's** | Eigen foto van het resultaat per recept, groot te bekijken; badges daarvoor. |
 | **Uitvoer** | Print / PDF-delen / kopiëren als tekst, in drie vormen: recepten, ingrediënten per recept, en de samengevoegde boodschappenlijst. |
+| **Spraak in de kookstand (besloten 29-09)** | Twee opties, beide **optioneel** (schakelaar in Instellingen), fase 5: (1) **Voorlezen** van de huidige stap en de ingrediëntenlijst via de spraaksynthese van de telefoon (werkt op Android én iPhone, in de taal van het recept); (2) **Spraakcommando's** — "volgende", "vorige", "timer 10 minuten", "lees voor" — via spraakherkenning van de browser: Android Chrome eerst (herkenning via Google, dus met internet), iPhone experimenteel. Vervangt het anti-feature "voice control" uit §9. |
+| **Timerbalk** | Reset-knop ↻ (opnieuw vanaf de oorspronkelijke tijd) naast −1 / +1 / ×. Meerdere timers stapelen in de balk. Gebouwd 29-09. |
+| **Receptpagina** | Geen vinkjes bij de ingrediënten (lezen, niet afvinken); afvinken alleen in de kookstand en straks in de boodschappenlijst. |
 | **Werkwijze** | Claude Code bouwt; Stijn test op de telefoons. Bij vragen tijdens het bouwen: doorgaan met de rest als Stijn niet meekijkt, vragen bundelen. |
 
 ---
@@ -739,7 +742,7 @@ Gededupliceerd uit de zes brainstorm-lenzen; zwakke of dubbele ideeën zijn wegg
 - Runtime machinevertaling in de app (geen API op telefoons; geen sleutel in een statische app).
 - Parallelle taalbestanden; vertaalde ingrediëntregels als tekst opslaan; numerieke/UUID-ids; raw-regel weggooien; samengestelde regels automatisch splitsen; imperial/US-cups; voeding/calorieën; barcode-scannen; volledige voorraadadministratie; supermarkt-API's; prijzen.
 - Custom `.recept`-extensie; foto's in het token; tombstones/verwijderingen via share in v1; korte links via Gist/dpaste/bit.ly; realtime gedeeld afvinken; CRDT-libraries.
-- Auto-schalen van getallen in stapteksten; voice control; auto-startende timers; rich-text-editor; PDF-libraries; auto-verweven van hoofd- en bijgerecht.
+- Auto-schalen van getallen in stapteksten; auto-startende timers; rich-text-editor; PDF-libraries; auto-verweven van hoofd- en bijgerecht. (Voorlezen en spraakcommando's zijn wél gewenst — zie §0 "Spraak in de kookstand".)
 - Paginatie/virtualisatie; hamburger-menu; nep-iOS/Material You-mimicry; grote tag-taxonomie; desktop-layouts als v1-doel; "snel"-badge uit minuten-optelling; de 2 s-splash; foto's van alle 196 gerechten als standaardlook.
 - Zware webstack (Next.js/SSR, GraphQL, Redux, monorepo-tooling); verplichte reviews voor twee personen.
 
