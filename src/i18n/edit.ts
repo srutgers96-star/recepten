@@ -110,18 +110,37 @@ export const edit: Dict = {
     en: 'Ingredient line count does not match: {got} in the translation, {expected} in the recipe. Nothing filled in.',
   },
   'edit.translateDone': { nl: 'Vertaling ingevuld: {lines} regels, {steps} stappen', en: 'Translation filled in: {lines} lines, {steps} steps' },
+  // PLAN §0 "Vertaling eigen recepten": the section in a single-column mode adds the other language.
+  'edit.addEnglish': { nl: 'Engels toevoegen', en: 'Add English' },
+  'edit.addDutch': { nl: 'Nederlands toevoegen', en: 'Add Dutch' },
+  'edit.addEnglishHint': {
+    nl: 'Kopieer de genummerde opdracht, plak hem in ChatGPT of Claude, en plak het antwoord hieronder terug. Het Nederlands blijft staan; het Engels komt ernaast.',
+    en: 'Copy the numbered prompt, paste it into ChatGPT or Claude, and paste the answer back below. The Dutch stays; the English is added next to it.',
+  },
+  'edit.addDutchHint': {
+    nl: 'Kopieer de genummerde opdracht, plak hem in ChatGPT of Claude, en plak het antwoord hieronder terug. Het Engels blijft staan; het Nederlands komt ernaast.',
+    en: 'Copy the numbered prompt, paste it into ChatGPT or Claude, and paste the answer back below. The English stays; the Dutch is added next to it.',
+  },
+  'edit.promptShow': { nl: 'Toon de opdracht (om zelf te kopiëren)', en: 'Show the prompt (to copy by hand)' },
 
   // --- Editor: import from a photo / text via an external AI ---
   'edit.import': { nl: 'Importeer van foto/tekst', en: 'Import from photo/text' },
   'edit.importHint': {
-    nl: 'Kopieer de instructie, plak hem met de foto (of de tekst) van het recept in ChatGPT of Claude, en plak het resultaat hieronder.',
-    en: 'Copy the instruction, paste it together with the photo (or the text) of the recipe into ChatGPT or Claude, and paste the result below.',
+    nl: 'Kopieer de instructie, plak hem met de foto (of de tekst) van het recept in ChatGPT of Claude, en plak het resultaat hieronder. Het recept komt in het Nederlands én het Engels terug.',
+    en: 'Copy the instruction, paste it together with the photo (or the text) of the recipe into ChatGPT or Claude, and paste the result below. The recipe comes back in Dutch and in English.',
   },
   'edit.copyImportPrompt': { nl: 'Kopieer instructie-prompt', en: 'Copy instruction prompt' },
   'edit.importPaste': { nl: 'Plak het resultaat', en: 'Paste the result' },
   'edit.importApply': { nl: 'Vul in', en: 'Fill in' },
   'edit.importNone': { nl: 'Geen recept herkend in de tekst.', en: 'No recipe recognised in the text.' },
   'edit.importDone': { nl: 'Ingevuld: {lines} ingrediënten, {steps} stappen', en: 'Filled in: {lines} ingredients, {steps} steps' },
+  'edit.importDoneBoth': { nl: 'Ingevuld in NL en EN: {lines} ingrediënten, {steps} stappen', en: 'Filled in NL and EN: {lines} ingredients, {steps} steps' },
+  'edit.importMismatch': {
+    nl: 'De twee taalblokken lopen niet gelijk ({detail}). Alleen {lang} is ingevuld; voeg de andere taal onderaan toe via "{section}".',
+    en: 'The two language blocks do not line up ({detail}). Only {lang} was filled in; add the other language at the bottom via "{section}".',
+  },
+  'edit.importMismatchLines': { nl: '{nl} ingrediëntregels in NL, {en} in EN', en: '{nl} ingredient lines in NL, {en} in EN' },
+  'edit.importMismatchSteps': { nl: '{nl} stappen in NL, {en} in EN', en: '{nl} steps in NL, {en} in EN' },
   'edit.promptText': { nl: 'Tekst om te kopiëren', en: 'Text to copy' },
 
   // --- Share (/share/:id) ---

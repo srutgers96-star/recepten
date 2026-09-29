@@ -581,3 +581,24 @@ button.lc-chip:disabled {
 .lc-editor-actions .btn-small {
   flex: 1 1 100%;
 }
+
+/* Collapsible prompt under "Kopieer voor vertaling" / "Kopieer instructie-prompt": select by hand when the clipboard refuses. */
+.edit-prompt-details {
+  margin-top: 10px;
+}
+
+.edit-prompt-details summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.edit-prompt-details textarea.edit-prompt {
+  margin-top: 6px;
+}

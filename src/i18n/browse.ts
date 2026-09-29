@@ -71,6 +71,9 @@ export const browse: Dict = {
   'recipe.timeActive': { nl: '{n} min bezig', en: '{n} min hands-on' },
   'recipe.timeTotal': { nl: '{n} min totaal', en: '{n} min total' },
   'recipe.machineTranslation': { nl: 'Automatische vertaling — tik om te verbeteren', en: 'Machine translation — tap to improve' },
+  // PLAN §0 "Vertaling eigen recepten" (3): an own/received recipe without its second language.
+  'recipe.missingEn': { nl: 'Engels ontbreekt — toevoegen', en: 'English missing — add' },
+  'recipe.missingNl': { nl: 'Nederlands ontbreekt — toevoegen', en: 'Dutch missing — add' },
   'tag.vegetarisch': { nl: 'vegetarisch', en: 'vegetarian' },
   'tag.vega-optie': { nl: 'vega-optie', en: 'veggie option' },
   'tag.snel': { nl: 'snel', en: 'quick' },

@@ -26,7 +26,7 @@ import {
   toggleFavorite,
 } from '@/db/repo';
 import { dictionary } from '@/dictionary';
-import { pickText, type Recipe } from '@/domain/model';
+import { hasLang, pickText, type Lang, type Recipe } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
@@ -153,6 +153,9 @@ export function RecipeScreen(props: { id: string }) {
   // Curator badge: the English edition of a classic is a machine translation until someone improves
   // it (the editor's override patch then sets text.en = 'human', src/screens/EditScreen.tsx).
   const machineEn = !!recipe && l === 'en' && recipe.text?.en === 'llm';
+  // PLAN §0 "Vertaling eigen recepten" (3): an own/received recipe that lacks the other language's
+  // name or steps gets a line that jumps to the editor's translation section. Classics never.
+  const missingLang: Lang | null = recipe && editable ? (['nl', 'en'] as const).find((x) => !hasLang(recipe.name, x) || !recipe.steps.some((s) => hasLang(s.text, x))) ?? null : null;
 
   async function onToggleFav() {
     if (!pid) return;
@@ -253,6 +256,12 @@ export function RecipeScreen(props: { id: string }) {
             </div>
 
             <p class="detail-meta">{meta.join(' · ')}</p>
+
+            {missingLang && (
+              <button type="button" class="detail-translate" onClick={() => navigate('/edit/' + id + '?translate=1')}>
+                {missingLang === 'en' ? t('recipe.missingEn') : t('recipe.missingNl')}
+              </button>
+            )}
 
             {machineEn && (
               <button type="button" class="curator-badge" onClick={() => navigate('/edit/' + id)}>

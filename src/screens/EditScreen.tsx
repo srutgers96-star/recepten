@@ -22,13 +22,13 @@ import { dictionary, type Dictionary } from '@/dictionary';
 import { hasLang, newUserId, nowIso, type Lang, type Line, type Recipe, type Step, type Text } from '@/domain/model';
 import { applyLineOverrides, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
 import { parseLineAuto } from '@/domain/parser';
-import { buildImportPrompt, parsePlainRecipe } from '@/domain/photo-import';
+import { buildImportPrompt, parseBilingualPlain, type PlainRecipe } from '@/domain/photo-import';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { splitSteps } from '@/domain/steps';
 import { buildTranslationPrompt, parseTranslationAnswer } from '@/domain/translate-prompt';
 import { lang, t, tIn } from '@/i18n';
 import { activeProfile } from '@/profile';
-import { navigate } from '@/router';
+import { navigate, route } from '@/router';
 
 type Mode = 'nl' | 'en' | 'both';
 type LoadState = 'loading' | 'ready' | 'missing';
@@ -221,8 +221,13 @@ export function EditScreen(props: { id?: string }) {
   // Photo/text import (add screen).
   const [importOpen, setImportOpen] = useState(false);
   const [importText, setImportText] = useState('');
-  // A prompt shown in a textarea when the clipboard refused (iOS without a user gesture, http dev server).
-  const [promptFallback, setPromptFallback] = useState('');
+  // Which section's collapsible prompt was opened because the clipboard refused (iOS without a
+  // user gesture, http dev server); the prompt itself is always there to select by hand.
+  const [promptOpen, setPromptOpen] = useState<'tr' | 'import' | ''>('');
+  // '/edit/:id?translate=1' (the "Engels ontbreekt — toevoegen" line on the recipe page): scroll
+  // the translation section into view once the recipe is loaded.
+  const wantTranslate = useRef(route.value.query.get('translate') === '1');
+  const trRef = useRef<HTMLDivElement>(null);
   // Original Line / Step per row key (unknown keys are carried over on save).
   const lineSrc = useRef(new Map<string, Line>());
   const stepSrc = useRef(new Map<string, Step>());
@@ -244,7 +249,7 @@ export function EditScreen(props: { id?: string }) {
     setTrText('');
     setImportOpen(false);
     setImportText('');
-    setPromptFallback('');
+    setPromptOpen('');
     lineCache.current.clear();
     if (!props.id) {
       const l: Lang = activeProfile.value?.lang ?? lang.value;
@@ -307,6 +312,14 @@ export function EditScreen(props: { id?: string }) {
       cancelled = true;
     };
   }, [props.id]);
+
+  // Once loaded with ?translate=1: bring the translation section into view (once per mount).
+  useEffect(() => {
+    if (state !== 'ready' || !wantTranslate.current) return;
+    wantTranslate.current = false;
+    const el = trRef.current;
+    if (el && typeof el.scrollIntoView === 'function') el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }, [state]);
 
   const langs = MODE_LANGS[mode];
   const servings = Math.max(1, Math.min(99, parseInt(servingsText, 10) || 0)) || 4;
@@ -524,42 +537,49 @@ export function EditScreen(props: { id?: string }) {
 
   // --- language pair ---------------------------------------------------------------------------
 
-  /** Puts `text` on the clipboard inside the tap; shows it in a textarea when the clipboard refuses. */
-  function copyToClipboard(text: string) {
-    setPromptFallback('');
+  /** Puts `text` on the clipboard inside the tap; opens that section's prompt when the clipboard refuses. */
+  function copyToClipboard(text: string, which: 'tr' | 'import') {
+    setPromptOpen('');
     const clip = typeof navigator !== 'undefined' ? navigator.clipboard : undefined;
     if (!clip || typeof clip.writeText !== 'function') {
       setStatus(t('edit.copyFailed'));
-      setPromptFallback(text);
+      setPromptOpen(which);
       return;
     }
     clip.writeText(text).then(
       () => setStatus(t('edit.promptCopied')),
       () => {
         setStatus(t('edit.copyFailed'));
-        setPromptFallback(text);
+        setPromptOpen(which);
       },
     );
   }
+
+  // Direction of the translation: fixed by the column mode ("Engels toevoegen" in NL mode adds
+  // English, "Nederlands toevoegen" in EN mode adds Dutch); the picker only exists in 'both'.
+  const trDir: Lang = mode === 'both' ? trFrom : mode;
+  const trTo: Lang = trDir === 'nl' ? 'en' : 'nl';
+  const translationPrompt = buildTranslationPrompt(
+    {
+      name: textOf(nameNl, nameEn),
+      lines: lines.filter(rowHasText).map((r) => ({ raw: textOf(r.nl, r.en) })),
+      steps: steps.filter(rowHasText).map((r) => ({ text: textOf(r.nl, r.en) })),
+    },
+    trDir,
+    trTo,
+  );
 
   function copyTranslationPrompt() {
-    const to: Lang = trFrom === 'nl' ? 'en' : 'nl';
-    const prompt = buildTranslationPrompt(
-      {
-        name: textOf(nameNl, nameEn),
-        lines: lines.filter(rowHasText).map((r) => ({ raw: textOf(r.nl, r.en) })),
-        steps: steps.filter(rowHasText).map((r) => ({ text: textOf(r.nl, r.en) })),
-      },
-      trFrom,
-      to,
-    );
-    copyToClipboard(prompt);
+    copyToClipboard(translationPrompt, 'tr');
   }
 
-  /** "Plak vertaling": fills ONLY the target language, refusing when the counts do not match. */
+  /**
+   * "Plak vertaling": fills ONLY the target language, refusing when the counts do not match, and
+   * switches to "both" so the result is visible next to the original.
+   */
   function applyTranslation() {
     const answer = parseTranslationAnswer(trText);
-    const to: Lang = trFrom === 'nl' ? 'en' : 'nl';
+    const to = trTo;
     const keptLines = lines.filter(rowHasText);
     const keptSteps = steps.filter(rowHasText);
     if (!answer.name && answer.lines.length === 0 && answer.steps.length === 0) {
@@ -597,28 +617,68 @@ export function EditScreen(props: { id?: string }) {
     }
     setTrText('');
     setTrOpen(false);
+    setMode('both');
     setStatus(t('edit.translateDone', { lines: answer.lines.length, steps: answer.steps.length }));
   }
 
   // --- photo / text import ---------------------------------------------------------------------
 
+  /** Language the prompt's instructions are written in (the recipe itself comes back in both). */
   const importLang: Lang = mode === 'both' ? lang.value : mode;
+  const importPrompt = buildImportPrompt(importLang);
 
+  /**
+   * "Vul in": both blocks fill both columns (mode → both); a single block fills its language;
+   * on a count mismatch only the first block is used and the message says so.
+   */
   function applyImport() {
-    const r = parsePlainRecipe(importText);
-    if (!r) {
+    const r = parseBilingualPlain(importText);
+    const first: Lang = r.first ?? 'nl';
+    if (!r.nl && !r.en) {
       setStatus(t('edit.importNone'));
       return;
     }
-    const mk = (s: string) => (importLang === 'nl' ? newEditText(s, '') : newEditText('', s));
-    if (r.name) (importLang === 'nl' ? setNameNl : setNameEn)(r.name);
-    if (r.servings) setServings(r.servings);
-    if (r.lines.length) setLines([...lines.filter(rowHasText), ...r.lines.map(mk)]);
-    if (r.steps.length) setSteps([...steps.filter(rowHasText), ...r.steps.map(mk)]);
-    setImportText('');
-    setImportOpen(false);
-    setPromptFallback('');
-    setStatus(t('edit.importDone', { lines: r.lines.length, steps: r.steps.length }));
+    const finish = () => {
+      setImportText('');
+      setImportOpen(false);
+      setPromptOpen('');
+    };
+    if (r.nl && r.en && !r.mismatch) {
+      const nl = r.nl;
+      const en = r.en;
+      if (nl.name) setNameNl(nl.name);
+      if (en.name) setNameEn(en.name);
+      const srv = nl.servings ?? en.servings;
+      if (srv) setServings(srv);
+      if (nl.lines.length) setLines([...lines.filter(rowHasText), ...nl.lines.map((s, i) => newEditText(s, en.lines[i] ?? ''))]);
+      if (nl.steps.length) setSteps([...steps.filter(rowHasText), ...nl.steps.map((s, i) => newEditText(s, en.steps[i] ?? ''))]);
+      setMode('both');
+      finish();
+      setStatus(t('edit.importDoneBoth', { lines: nl.lines.length, steps: nl.steps.length }));
+      return;
+    }
+    const only: PlainRecipe = (r[first] ?? r.nl ?? r.en) as PlainRecipe;
+    const mk = (s: string) => (first === 'nl' ? newEditText(s, '') : newEditText('', s));
+    if (only.name) (first === 'nl' ? setNameNl : setNameEn)(only.name);
+    if (only.servings) setServings(only.servings);
+    if (only.lines.length) setLines([...lines.filter(rowHasText), ...only.lines.map(mk)]);
+    if (only.steps.length) setSteps([...steps.filter(rowHasText), ...only.steps.map(mk)]);
+    const nextMode: Mode = mode === 'both' ? 'both' : first;
+    if (nextMode !== mode) setMode(nextMode);
+    finish();
+    if (r.mismatch) {
+      const detail = [
+        r.mismatch.lines ? t('edit.importMismatchLines', { nl: r.mismatch.lines[0], en: r.mismatch.lines[1] }) : '',
+        r.mismatch.steps ? t('edit.importMismatchSteps', { nl: r.mismatch.steps[0], en: r.mismatch.steps[1] }) : '',
+      ]
+        .filter(Boolean)
+        .join(', ');
+      // The section to point at carries the title it will have after the mode switch below.
+      const section = nextMode === 'both' ? t('edit.translate') : first === 'nl' ? t('edit.addEnglish') : t('edit.addDutch');
+      setStatus(t('edit.importMismatch', { detail, lang: first.toUpperCase(), section }));
+    } else {
+      setStatus(t('edit.importDone', { lines: only.lines.length, steps: only.steps.length }));
+    }
   }
 
   // --- render ----------------------------------------------------------------------------------
@@ -655,12 +715,13 @@ export function EditScreen(props: { id?: string }) {
     );
   }
 
-  const promptBox = promptFallback ? (
-    <label class="field">
-      <span>{t('edit.promptText')}</span>
-      <textarea class="input edit-prompt" readOnly rows={6} value={promptFallback} onFocus={(e) => (e.currentTarget as HTMLTextAreaElement).select()} />
-    </label>
-  ) : null;
+  /** The prompt of a section, collapsed; opened when the clipboard refused so it can be selected by hand. */
+  const promptBox = (text: string, which: 'tr' | 'import') => (
+    <details class="edit-prompt-details" open={promptOpen === which}>
+      <summary>{t('edit.promptShow')}</summary>
+      <textarea class="input edit-prompt" readOnly rows={6} value={text} aria-label={t('edit.promptText')} onFocus={(e) => (e.currentTarget as HTMLTextAreaElement).select()} />
+    </details>
+  );
 
   return (
     <>
@@ -703,11 +764,11 @@ export function EditScreen(props: { id?: string }) {
                 <h2>{t('edit.import')}</h2>
                 <p class="muted small">{t('edit.importHint')}</p>
                 <div class="actions">
-                  <button type="button" class="btn btn-secondary" onClick={() => copyToClipboard(buildImportPrompt(importLang))}>
+                  <button type="button" class="btn btn-secondary" onClick={() => copyToClipboard(importPrompt, 'import')}>
                     {t('edit.copyImportPrompt')}
                   </button>
                 </div>
-                {promptBox}
+                {promptBox(importPrompt, 'import')}
                 <label class="field">
                   <span>{t('edit.importPaste')}</span>
                   <textarea class="input" rows={8} value={importText} autocomplete="off" onInput={(e) => setImportText((e.currentTarget as HTMLTextAreaElement).value)} />
@@ -722,7 +783,7 @@ export function EditScreen(props: { id?: string }) {
                     onClick={() => {
                       setImportOpen(false);
                       setImportText('');
-                      setPromptFallback('');
+                      setPromptOpen('');
                     }}
                   >
                     {t('common.cancel')}
@@ -884,10 +945,11 @@ export function EditScreen(props: { id?: string }) {
           ))}
         </div>
 
-        {mode === 'both' && (
-          <div class="card edit-tools">
-            <h2>{t('edit.translate')}</h2>
-            <p class="muted small">{t('edit.translateHint')}</p>
+        {/* PLAN §0 "Vertaling eigen recepten" (1): in every column mode; NL mode adds English, EN mode adds Dutch. */}
+        <div class="card edit-tools" ref={trRef}>
+          <h2>{mode === 'nl' ? t('edit.addEnglish') : mode === 'en' ? t('edit.addDutch') : t('edit.translate')}</h2>
+          <p class="muted small">{mode === 'nl' ? t('edit.addEnglishHint') : mode === 'en' ? t('edit.addDutchHint') : t('edit.translateHint')}</p>
+          {mode === 'both' && (
             <div class="edit-paste-lang">
               <span class="muted small">{t('edit.translateFrom')}</span>
               <Segmented
@@ -900,37 +962,37 @@ export function EditScreen(props: { id?: string }) {
                 onChange={(next) => next[0] && setTrFrom(next[0])}
               />
             </div>
-            <div class="actions">
-              <button type="button" class="btn btn-secondary" onClick={copyTranslationPrompt}>
-                {t('edit.copyForTranslation')}
-              </button>
-              <button type="button" class="btn" onClick={() => setTrOpen(!trOpen)}>
-                {t('edit.pasteTranslation')}
-              </button>
-            </div>
-            {!importOpen && promptBox}
-            {trOpen && (
-              <>
-                <textarea class="input" rows={8} value={trText} autocomplete="off" onInput={(e) => setTrText((e.currentTarget as HTMLTextAreaElement).value)} />
-                <div class="actions">
-                  <button type="button" class="btn btn-primary" disabled={!trText.trim()} onClick={applyTranslation}>
-                    {t('edit.applyTranslation')}
-                  </button>
-                  <button
-                    type="button"
-                    class="btn"
-                    onClick={() => {
-                      setTrOpen(false);
-                      setTrText('');
-                    }}
-                  >
-                    {t('common.cancel')}
-                  </button>
-                </div>
-              </>
-            )}
+          )}
+          <div class="actions">
+            <button type="button" class="btn btn-secondary" onClick={copyTranslationPrompt}>
+              {t('edit.copyForTranslation')}
+            </button>
+            <button type="button" class="btn" onClick={() => setTrOpen(!trOpen)}>
+              {t('edit.pasteTranslation')}
+            </button>
           </div>
-        )}
+          {promptBox(translationPrompt, 'tr')}
+          {trOpen && (
+            <>
+              <textarea class="input" rows={8} value={trText} autocomplete="off" onInput={(e) => setTrText((e.currentTarget as HTMLTextAreaElement).value)} />
+              <div class="actions">
+                <button type="button" class="btn btn-primary" disabled={!trText.trim()} onClick={applyTranslation}>
+                  {t('edit.applyTranslation')}
+                </button>
+                <button
+                  type="button"
+                  class="btn"
+                  onClick={() => {
+                    setTrOpen(false);
+                    setTrText('');
+                  }}
+                >
+                  {t('common.cancel')}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
 
         {!valid && <p class="muted small">{t('edit.invalidHint')}</p>}
         <div class="actions">

@@ -64,6 +64,7 @@ kort wat er gebeurde.
 | 20 | *iPhone:* tik in Safari (niet in de app) op een link uit test 14 en op een link met `#b=`. | De voorproefpagina toont "Aanpassing van <naam> door <by>" met de gewijzigde velden, resp. de lijst met recepten uit de bundel, met **Kopieer receptcode** en **Open de app**. Er wordt niets opgeslagen. |
 | 21 | **Back-up-herinnering (fase 3):** Meer → Opslag: zie "Sinds de laatste back-up: N wijzigingen". Maak een back-up. | De teller staat op 0; de rode regel (en de kaart op Home en het badge op Meer) verschijnt alleen als er wijzigingen zijn én de laatste back-up ouder is dan 30 dagen. |
 | 22 | **Conflict (fase 3):** bewerk op BEIDE telefoons hetzelfde ontvangen recept (bv. de een de naam, de ander een stap), deel het daarna naar de ander. | De Inbox toont het label **Conflict** met per veld (naam / ingrediënten / stappen / overige) de keuze *van mij* / *van <naam>* / *allebei*; op een smal scherm passen de drie knopjes naast elkaar. **Importeer** past alleen de gekozen velden toe; **Maak ongedaan** zet ze terug. |
+| 23 | **Engels toevoegen:** open een eigen recept dat alleen Nederlands heeft en tik onder de tijd/herkomst-regel op **Engels ontbreekt — toevoegen**. | De editor opent en scrollt vanzelf naar de sectie **Engels toevoegen** onderaan (de knop **Kopieer voor vertaling** is in beeld zonder zelf te scrollen). Na **Plak vertaling** → **Vul in** springt de taalkeuze naar **beide** en staat het Nederlands er nog. |
 
 ### Stap 4 — kopieer en verstuur
 
@@ -135,6 +136,7 @@ a few words about what happened.
 | 20 | *iPhone:* in Safari (not in the app) tap a link from test 14 and a link containing `#b=`. | The preview page shows "Adjustment of <name> by <by>" with the changed fields, resp. the list of recipes in the bundle, with **Copy recipe code** and **Open the app**. Nothing is stored. |
 | 21 | **Backup reminder (phase 3):** More → Storage: see "Since the last backup: N changes". Make a backup. | The counter is 0; the red line (and the card on Home and the badge on More) only appears when there are changes AND the last backup is older than 30 days. |
 | 22 | **Conflict (phase 3):** edit the SAME received recipe on BOTH phones (e.g. one the name, the other a step), then share it to the other person. | The Inbox shows the **Conflict** label with a per-field choice (name / ingredients / steps / other) *mine* / *<name>'s* / *both*; on a narrow screen the three pills fit side by side. **Import** applies only the chosen fields; **Undo** puts them back. |
+| 23 | **Add English:** open an own recipe that only has Dutch and tap **English missing — add** under the time/origin line. | The editor opens and scrolls by itself to the **Add English** section at the bottom (the **Copy for translation** button is in view without scrolling). After **Paste translation** → **Fill in** the language choice jumps to **both** and the Dutch is still there. |
 
 ### Step 4 — copy and send
 
