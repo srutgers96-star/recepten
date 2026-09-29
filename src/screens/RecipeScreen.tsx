@@ -1,5 +1,5 @@
 // '#/recipe/:id' — detail (docs/phase-1-spec.md §5, phase-2 §5): name, category + tags, meta,
-// servings scaler, Koken / Deel, ★, ingredient lines through the dictionary (scaled, with
+// servings scaler, Koken / Deel, "+ Deze week" (phase 4), ★, ingredient lines through the dictionary (scaled, with
 // "Koppel ingrediënt"), numbered steps with timer chips (°F when enabled), "Bij dit gerecht",
 // notes per profile (autosave), and own → Bewerk / Verwijder, classic → "Maak eigen kopie".
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
@@ -11,12 +11,14 @@ import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
 import {
+  addToPlan,
   allRecipes,
   cookStats,
   deleteUserRecipe,
   duplicateAsOwn,
   getNote,
   getOverride,
+  getPlan,
   getRecipe,
   isBuiltinId,
   listFavorites,
@@ -76,6 +78,10 @@ export function RecipeScreen(props: { id: string }) {
   });
   const [editCat, setEditCat] = useState(false);
   const [catBusy, setCatBusy] = useState(false);
+  // Phase 4: "+ Deze week" / "Staat in je week" (the plan is live: the tick follows cook mode).
+  const plan = useLive(getPlan, []);
+  const inWeek = !!plan?.items.some((p) => p.recipeId === id);
+  const [weekBusy, setWeekBusy] = useState(false);
 
   // The delete confirmation is per recipe, in memory only.
   useEffect(() => {
@@ -171,6 +177,23 @@ export function RecipeScreen(props: { id: string }) {
     if (!recipe || !profile) return;
     const copy = await duplicateAsOwn(recipe, profile);
     navigate('/edit/' + copy.id);
+  }
+
+  /** "+ Deze week": a slot with the household servings (repo default); already there → open the week. */
+  async function onAddToWeek() {
+    if (weekBusy) return;
+    if (inWeek) {
+      navigate('/week');
+      return;
+    }
+    setWeekBusy(true);
+    try {
+      await addToPlan(id);
+    } catch (e) {
+      console.error('addToPlan', e);
+    } finally {
+      setWeekBusy(false);
+    }
   }
 
   /** Own/received recipes: saved in the recipe; classics: stored as an override patch {category}. */
@@ -277,6 +300,15 @@ export function RecipeScreen(props: { id: string }) {
                 {t('recipe.share')}
               </button>
             </div>
+            <button
+              type="button"
+              class={'btn btn-block detail-week' + (inWeek ? ' on' : '')}
+              aria-pressed={inWeek}
+              disabled={weekBusy || plan === undefined}
+              onClick={() => void onAddToWeek()}
+            >
+              {inWeek ? t('recipe.inWeek') : t('recipe.addToWeek')}
+            </button>
 
             <section class="section">
               <h2>{t('recipe.ingredients')}</h2>

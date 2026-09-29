@@ -14,12 +14,14 @@ import {
 } from '@/domain/model';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { applyLineOverrides, applyOverride, RECIPE_PATCH_KEYS, type LineOverride, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
-import type { Ingredient } from '@/domain/dictionary';
+import type { Dictionary, Ingredient } from '@/domain/dictionary';
 import { ingredientsData } from '@/domain/data';
 import { legacyChoices, planImport, resolveImport, type ImportChoices, type ImportPlan, type LocalState } from '@/domain/merge';
 import type { ParsedShare } from '@/domain/share';
+import { aggregate, type ListItem } from '@/domain/aggregate';
+import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, normalizeServings, planHash, planHashAll, type Plan, type PlanItem } from '@/domain/planner';
 import { db, getSetting, setSetting } from './db';
-import type { BackupBundle, ImportBefore, ImportSnapshot, ImportWrote, Setting } from './model';
+import type { BackupBundle, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Setting } from './model';
 
 export { getSetting, setSetting };
 
@@ -697,7 +699,7 @@ export async function backupHealth(now: number = Date.now()): Promise<BackupHeal
 }
 
 export async function exportBundle(): Promise<BackupBundle> {
-  const [profiles, userRecipes, favorites, notes, cookLog, settings, lineOverrides, userIngredients, overrides] = await Promise.all([
+  const [profiles, userRecipes, favorites, notes, cookLog, settings, lineOverrides, userIngredients, overrides, plans, lists, pantry] = await Promise.all([
     listProfiles(),
     db.userRecipes.toArray(),
     db.favorites.toArray(),
@@ -707,6 +709,9 @@ export async function exportBundle(): Promise<BackupBundle> {
     db.lineOverrides.toArray(),
     db.userIngredients.toArray(),
     db.overrides.toArray(),
+    db.plans.toArray(),
+    db.lists.toArray(),
+    db.pantry.toArray(),
   ]);
   return {
     v: 2,
@@ -722,6 +727,9 @@ export async function exportBundle(): Promise<BackupBundle> {
     lineOverrides,
     userIngredients,
     overrides,
+    plans,
+    lists,
+    pantry,
   };
 }
 
@@ -735,6 +743,10 @@ export interface RestoreResult {
   overrides: number;
   lineOverrides: number;
   userIngredients: number;
+  /** Phase 4: 1 when the file's plan / list replaced (or created) the local one, else 0. */
+  plans?: number;
+  lists?: number;
+  pantry?: number;
 }
 
 /** Settings that belong to this phone, not to the person: a restore never overwrites them. */
@@ -776,15 +788,44 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
   const overrides = Array.isArray(b.overrides)
     ? b.overrides.filter((o) => o && typeof o.baseId === 'string' && isBuiltinId(o.baseId) && o.patch && typeof o.patch === 'object')
     : [];
+  // Phase-4 rows (absent in older backups): one plan and one list, the newer `updatedAt` wins.
+  const plan = Array.isArray(b.plans) ? b.plans.find((p) => p && p.id === PLAN_ID && Array.isArray(p.items)) : undefined;
+  const list = Array.isArray(b.lists) ? b.lists.find((l) => l && l.id === LIST_ID && Array.isArray(l.items)) : undefined;
+  const pantry = Array.isArray(b.pantry) ? b.pantry.filter((p) => p && typeof p.ing === 'string' && p.ing.trim()) : [];
 
   let addedLog = 0;
   let wroteLineOverrides = 0;
   let wroteOverrides = 0;
-  await db.transaction('rw', [db.profiles, db.userRecipes, db.favorites, db.notes, db.cookLog, db.settings, db.lineOverrides, db.userIngredients, db.overrides], async () => {
+  let wrotePlan = 0;
+  let wroteList = 0;
+  await db.transaction('rw', [db.profiles, db.userRecipes, db.favorites, db.notes, db.cookLog, db.settings, db.lineOverrides, db.userIngredients, db.overrides, db.plans, db.lists, db.pantry], async () => {
     const hadProfiles = (await db.profiles.count()) > 0;
     await db.profiles.bulkPut(profiles);
     await db.userRecipes.bulkPut(recipes);
     await db.userIngredients.bulkPut(userIngredients);
+    if (plan) {
+      const cur = await db.plans.get(PLAN_ID);
+      if (!cur || (cur.updatedAt ?? '') <= (plan.updatedAt ?? '')) {
+        await db.plans.put({ ...plan, id: PLAN_ID, updatedAt: plan.updatedAt || nowIso() });
+        wrotePlan = 1;
+      }
+    }
+    if (list) {
+      const cur = await db.lists.get(LIST_ID);
+      if (!cur || (cur.updatedAt ?? '') <= (list.updatedAt ?? '')) {
+        await db.lists.put({
+          ...list,
+          id: LIST_ID,
+          extras: Array.isArray(list.extras) ? list.extras : [],
+          pinned: Array.isArray(list.pinned) ? list.pinned : [],
+          generatedFrom: typeof list.generatedFrom === 'string' ? list.generatedFrom : '',
+          generatedAt: list.generatedAt || nowIso(),
+          updatedAt: list.updatedAt || nowIso(),
+        });
+        wroteList = 1;
+      }
+    }
+    if (pantry.length) await db.pantry.bulkPut(pantry.map((p) => (typeof p.until === 'string' ? { ing: p.ing, until: p.until } : { ing: p.ing })));
     for (const o of lineOverrides) {
       const cur = await db.lineOverrides.get([o.recipeId, o.index]);
       if (cur && (cur.updatedAt ?? '') > (o.updatedAt ?? '')) continue;
@@ -829,7 +870,382 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
     overrides: wroteOverrides,
     lineOverrides: wroteLineOverrides,
     userIngredients: userIngredients.length,
+    plans: wrotePlan,
+    lists: wroteList,
+    pantry: pantry.length,
   };
+}
+
+// --- Week plan (docs/phase-4-spec.md §2) -----------------------------------------------------------
+
+const PLAN_ID = 'current';
+const LIST_ID = 'current';
+
+/** Setting 'household.servings' (number, default 4): the servings a new plan slot starts with. */
+export const HOUSEHOLD_SERVINGS_KEY = 'household.servings';
+
+export async function getHouseholdServings(): Promise<number> {
+  return normalizeServings(await getSetting<unknown>(HOUSEHOLD_SERVINGS_KEY, DEFAULT_SERVINGS));
+}
+
+export async function setHouseholdServings(n: number): Promise<void> {
+  await setSetting(HOUSEHOLD_SERVINGS_KEY, normalizeServings(n));
+}
+
+/** The current plan; an empty one (not stored) when there is none. */
+export async function getPlan(): Promise<Plan> {
+  const row = await db.plans.get(PLAN_ID);
+  if (!row) return emptyPlan();
+  return { ...row, id: PLAN_ID, items: Array.isArray(row.items) ? row.items : [] };
+}
+
+/** Stores the plan as 'current' with `updatedAt` stamped here. Returns the stored plan. */
+export async function savePlan(plan: Plan): Promise<Plan> {
+  const items: PlanItem[] = (Array.isArray(plan.items) ? plan.items : [])
+    .filter((p) => p && typeof p.id === 'string' && typeof p.recipeId === 'string')
+    .map((p) => ({ ...p, servings: normalizeServings(p.servings), addedAt: p.addedAt || nowIso() }));
+  const row: Plan = { ...plan, id: PLAN_ID, items, updatedAt: nowIso() };
+  const note = typeof plan.note === 'string' ? plan.note.trim() : '';
+  if (note) row.note = note;
+  else delete row.note;
+  await db.plans.put(row);
+  return row;
+}
+
+/** Read-modify-write of the plan in one transaction. */
+async function updatePlan(fn: (plan: Plan) => Plan | void): Promise<Plan> {
+  return db.transaction('rw', db.plans, db.settings, async () => {
+    const plan = await getPlan();
+    const next = fn(plan) ?? plan;
+    return savePlan(next);
+  });
+}
+
+/**
+ * Adds a dish (servings default: the household size). A recipe already in the plan is not added
+ * twice: its slot is returned instead. Returns the slot.
+ */
+export async function addToPlan(recipeId: string, servings?: number): Promise<PlanItem> {
+  const n = normalizeServings(servings, await getHouseholdServings());
+  let item: PlanItem | undefined;
+  await updatePlan((plan) => {
+    const existing = plan.items.find((p) => p.recipeId === recipeId);
+    if (existing) {
+      item = existing;
+      return;
+    }
+    item = newPlanItem(recipeId, n);
+    return { ...plan, items: [...plan.items, item] };
+  });
+  return item as PlanItem;
+}
+
+export async function removeFromPlan(itemId: string): Promise<void> {
+  await updatePlan((plan) => ({ ...plan, items: plan.items.filter((p) => p.id !== itemId) }));
+}
+
+export async function setPlanServings(itemId: string, n: number): Promise<void> {
+  await updatePlan((plan) => ({ ...plan, items: plan.items.map((p) => (p.id === itemId ? { ...p, servings: normalizeServings(n, p.servings) } : p)) }));
+}
+
+/** Toggles the lock and returns the new state. */
+export async function togglePlanLock(itemId: string): Promise<boolean> {
+  let locked = false;
+  await updatePlan((plan) => ({
+    ...plan,
+    items: plan.items.map((p) => {
+      if (p.id !== itemId) return p;
+      locked = !p.locked;
+      const next = { ...p };
+      if (locked) next.locked = true;
+      else delete next.locked;
+      return next;
+    }),
+  }));
+  return locked;
+}
+
+/** "Gekookt" on a slot: the dish stays in the plan but leaves the shopping list. */
+export async function markPlanCooked(itemId: string, cooked: boolean): Promise<void> {
+  await updatePlan((plan) => ({
+    ...plan,
+    items: plan.items.map((p) => {
+      if (p.id !== itemId) return p;
+      const next = { ...p };
+      if (cooked) next.cooked = true;
+      else delete next.cooked;
+      return next;
+    }),
+  }));
+}
+
+/**
+ * "Gekookt!" from cook mode: marks the slot(s) of that recipe cooked when the recipe is in the
+ * plan (no-op otherwise). Returns true when a slot was marked.
+ */
+export async function markRecipeCookedInPlan(recipeId: string): Promise<boolean> {
+  let hit = false;
+  await updatePlan((plan) => {
+    if (!plan.items.some((p) => p.recipeId === recipeId && !p.cooked)) return;
+    hit = true;
+    return { ...plan, items: plan.items.map((p) => (p.recipeId === recipeId ? { ...p, cooked: true } : p)) };
+  });
+  return hit;
+}
+
+export async function clearPlan(): Promise<void> {
+  await db.plans.delete(PLAN_ID);
+}
+
+// --- Shopping list --------------------------------------------------------------------------------
+
+export async function getList(): Promise<List | undefined> {
+  const row = await db.lists.get(LIST_ID);
+  if (!row) return undefined;
+  return {
+    ...row,
+    id: LIST_ID,
+    items: Array.isArray(row.items) ? row.items : [],
+    extras: Array.isArray(row.extras) ? row.extras : [],
+    pinned: Array.isArray(row.pinned) ? row.pinned : [],
+  };
+}
+
+/** Stores the list as 'current' with `updatedAt` stamped here (`pinned` is re-derived from the items). */
+export async function saveList(list: List): Promise<List> {
+  const items = Array.isArray(list.items) ? list.items.filter((it) => it && typeof it.key === 'string') : [];
+  const extras = (Array.isArray(list.extras) ? list.extras : []).filter((it) => it && typeof it.key === 'string');
+  const row: List = {
+    ...list,
+    id: LIST_ID,
+    items,
+    extras,
+    pinned: items.filter((it) => it.pinned).map((it) => it.key),
+    generatedFrom: typeof list.generatedFrom === 'string' ? list.generatedFrom : '',
+    generatedAt: list.generatedAt || nowIso(),
+    updatedAt: nowIso(),
+  };
+  await db.lists.put(row);
+  return row;
+}
+
+/** An empty list (not stored): the all-in shopping list before any plan. */
+function newList(): List {
+  const now = nowIso();
+  return { id: LIST_ID, items: [], generatedFrom: '', generatedAt: now, extras: [], pinned: [], updatedAt: now, sharedAt: null };
+}
+
+async function updateList(fn: (list: List) => List | void): Promise<List> {
+  return db.transaction('rw', db.lists, async () => {
+    const list = (await getList()) ?? newList();
+    return saveList(fn(list) ?? list);
+  });
+}
+
+/**
+ * Regenerates the list from the current plan: `aggregate` over the dishes that are not cooked,
+ * with the effective lines (line overrides applied), the pantry, the extras and the previous
+ * list (checks / in-house / adjustments / pins survive by key; new keys are `fresh`). The
+ * dictionary is a parameter because the repo knows no signals: pass `dictionary.value`
+ * (src/dictionary.ts). Returns the stored list.
+ */
+export async function generateList(dict: Dictionary): Promise<List> {
+  const [plan, previous, pantry, overrides] = await Promise.all([getPlan(), getList(), listPantry(), db.lineOverrides.toArray()]);
+  const recipes = new Map<string, Recipe>();
+  for (const p of plan.items) {
+    if (p.cooked || recipes.has(p.recipeId)) continue;
+    const r = await getRecipe(p.recipeId);
+    if (r) recipes.set(r.id, r);
+  }
+  const overridesByRecipe = new Map<string, LineOverride[]>();
+  for (const o of overrides) {
+    const list = overridesByRecipe.get(o.recipeId) ?? [];
+    list.push(o);
+    overridesByRecipe.set(o.recipeId, list);
+  }
+  const items = aggregate({
+    plan,
+    recipes,
+    lines: (id) => {
+      const r = recipes.get(id);
+      return r ? applyLineOverrides(r.lines, overridesByRecipe.get(id)) : [];
+    },
+    dict,
+    pantry: new Set(pantry.map((p) => p.ing)),
+    extras: previous?.extras ?? [],
+    ...(previous ? { previous: previous.items } : {}),
+  });
+  const now = nowIso();
+  const list: List = {
+    ...(previous ?? newList()),
+    id: LIST_ID,
+    items,
+    generatedFrom: planHash(plan),
+    generatedFromAll: planHashAll(plan),
+    generatedAt: now,
+    extras: previous?.extras ?? [],
+    pinned: items.filter((it) => it.pinned).map((it) => it.key),
+    updatedAt: now,
+  };
+  return saveList(list);
+}
+
+/**
+ * True when the plan changed since the list was generated (no list + dishes in the plan counts
+ * too). Ticking "Gekookt" alone does not count: when the full set of dishes + servings
+ * (`planHashAll`) is what the list was generated from, nothing needs buying. (Un-ticking a dish
+ * that was already cooked at generation is the one case this misses; "Bijwerken" is a tap away.)
+ */
+export async function isListStale(): Promise<boolean> {
+  const [plan, list] = await Promise.all([getPlan(), getList()]);
+  const hash = planHash(plan);
+  if (!list) return hash !== '';
+  if (list.generatedFrom === hash) return false;
+  if (typeof list.generatedFromAll !== 'string') return true;
+  return list.generatedFromAll !== planHashAll(plan);
+}
+
+/** Fields the user may change on an item in place (everything else is the generator's). */
+export type ListItemPatch = Partial<Pick<ListItem, 'checked' | 'inHouse' | 'adjusted' | 'pinned' | 'qty' | 'unit' | 'aisle' | 'label' | 'fresh'>>;
+
+/** Merges a patch into the item with that key (also in `extras` when it is one). No-op for an unknown key. */
+export async function setListItem(key: string, patch: ListItemPatch): Promise<void> {
+  await updateList((list) => {
+    const apply = (it: ListItem): ListItem => {
+      if (it.key !== key) return it;
+      const next = { ...it } as unknown as Record<string, unknown>;
+      for (const [k, v] of Object.entries(patch)) {
+        if (v === undefined) delete next[k];
+        else next[k] = v;
+      }
+      return next as unknown as ListItem;
+    };
+    return { ...list, items: list.items.map(apply), extras: list.extras.map(apply) };
+  });
+}
+
+/**
+ * Adds a manual item ("+ wc-papier"): key 'x|<id>' unless given, `manual: true`, aisle from the
+ * dictionary id when it has one (the caller passes `aisle` for unknown items). Returns the item.
+ */
+export async function addExtra(item: Partial<ListItem> & { key?: string }): Promise<ListItem> {
+  const extra: ListItem = {
+    ...item,
+    key: item.key && item.key.trim() ? item.key : `x|${newUserId().slice(2)}`,
+    aisle: item.aisle || 'overig',
+    section: item.section === 'inHouse' ? 'inHouse' : 'main',
+    sources: Array.isArray(item.sources) ? item.sources : [],
+    manual: true,
+  };
+  await updateList((list) => {
+    const others = list.items.filter((it) => it.key !== extra.key);
+    const otherExtras = list.extras.filter((it) => it.key !== extra.key);
+    return { ...list, items: [...others, extra], extras: [...otherExtras, extra] };
+  });
+  return extra;
+}
+
+/** Removes an item by key from the list (and from the extras). Works for generated items too ("Verwijder"). */
+export async function removeExtra(key: string): Promise<void> {
+  await updateList((list) => ({ ...list, items: list.items.filter((it) => it.key !== key), extras: list.extras.filter((it) => it.key !== key) }));
+}
+
+/**
+ * Undo of "Verwijder": puts the item back exactly as it was. A generated item returns to `items`
+ * only (the next regeneration recreates it from the plan); a manual one also to `extras`. An
+ * item with the same key is replaced.
+ */
+export async function restoreListItem(item: ListItem): Promise<void> {
+  await updateList((list) => {
+    const items = [...list.items.filter((it) => it.key !== item.key), item];
+    const extras = item.manual ? [...list.extras.filter((it) => it.key !== item.key), item] : list.extras;
+    return { ...list, items, extras };
+  });
+}
+
+/** "Elke week": toggles the pin and returns the new state. A pinned item survives regeneration. */
+export async function togglePinned(key: string): Promise<boolean> {
+  let pinned = false;
+  await updateList((list) => {
+    const flip = (it: ListItem): ListItem => {
+      if (it.key !== key) return it;
+      pinned = !it.pinned;
+      const next = { ...it };
+      if (pinned) next.pinned = true;
+      else delete next.pinned;
+      return next;
+    };
+    return { ...list, items: list.items.map(flip), extras: list.extras.map(flip) };
+  });
+  return pinned;
+}
+
+/** "Klaar": clears every check (the plan, the pins and the in-house flags stay). */
+export async function clearChecks(): Promise<void> {
+  await updateList((list) => {
+    const clear = (it: ListItem): ListItem => {
+      if (!it.checked) return it;
+      const next = { ...it };
+      delete next.checked;
+      return next;
+    };
+    return { ...list, items: list.items.map(clear), extras: list.extras.map(clear) };
+  });
+}
+
+/** "Deel lijst" happened: remembers the moment for "gedeeld om hh:mm" / "gewijzigd sinds delen". */
+export async function markListShared(atIso: string = nowIso()): Promise<void> {
+  // `sharedAt` and `updatedAt` get the SAME stamp: "gewijzigd sinds delen" is then exactly
+  // "updatedAt > sharedAt" (saveList would otherwise stamp updatedAt a few ms later).
+  await db.transaction('rw', db.lists, async () => {
+    const list = (await getList()) ?? newList();
+    const row = await saveList({ ...list, sharedAt: atIso });
+    await db.lists.put({ ...row, updatedAt: atIso });
+  });
+}
+
+// --- Pantry ("Heb ik al") -------------------------------------------------------------------------
+
+/** How long a non-perishable "in huis" is remembered. */
+export const PANTRY_DAYS = 21;
+
+/** The pantry rows that are still valid (expired ones are removed on read). */
+export async function listPantry(now: number = Date.now()): Promise<PantryItem[]> {
+  const rows = await db.pantry.toArray();
+  const expired = rows.filter((p) => typeof p.until === 'string' && new Date(p.until).getTime() < now).map((p) => p.ing);
+  if (expired.length) await db.pantry.bulkDelete(expired);
+  return rows.filter((p) => !expired.includes(p.ing)).sort((a, b) => a.ing.localeCompare(b.ing));
+}
+
+/**
+ * Marks an ingredient in house (or not). Non-perishables are remembered for 21 days
+ * (`opts.days` to change); a perishable one (`opts.perishable`, from the dictionary entry) is
+ * not remembered at all — the list item's own `inHouse` flag covers this list. Pass `opts.until`
+ * for an explicit date.
+ */
+export async function setInHouse(ing: string, on: boolean, opts: { perishable?: boolean; days?: number; until?: string | null } = {}): Promise<void> {
+  if (!on) {
+    await db.pantry.delete(ing);
+    return;
+  }
+  if (opts.perishable) return;
+  const row: PantryItem = { ing };
+  if (opts.until) row.until = opts.until;
+  else if (opts.until !== null) {
+    const days = typeof opts.days === 'number' && opts.days > 0 ? opts.days : PANTRY_DAYS;
+    row.until = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+  }
+  await db.pantry.put(row);
+}
+
+export async function clearPantry(): Promise<void> {
+  await db.pantry.clear();
+}
+
+/** Counters for the Storage screen: dishes in the plan, items on the list, pantry rows. */
+export async function weekCounts(): Promise<{ plan: number; list: number; pantry: number }> {
+  const [plan, list, pantry] = await Promise.all([getPlan(), getList(), db.pantry.count()]);
+  return { plan: plan.items.length, list: list?.items.length ?? 0, pantry };
 }
 
 // --- Timers ------------------------------------------------------------------------------------

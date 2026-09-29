@@ -1,0 +1,485 @@
+/* Phase-4 week styles (docs/phase-4-spec.md §3): the Week tab (hero, N stepper, slot rows, actions),
+   the Kies-N sheet, the Home "Deze week" card, "+ Deze week" on the detail page and the "+" in the
+   Recepten header. Owned by the week agent; imported by src/main.tsx after home.css. Tokens,
+   .btn, .chip, .sheet-*, .picker-*, .servings-step and .row-sub come from base/browse/home.css.
+   Mobile first: 360 px, 44 px targets, no text selection on controls. */
+
+/* ---------- Week: hero (empty plan) ---------- */
+
+.week-hero h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+}
+
+.week-hero > .muted {
+  margin: 0 0 12px;
+}
+
+.week-n {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 4px 0 14px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.week-n-value {
+  min-width: 56px;
+  text-align: center;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--cobalt);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Meer → "Huishouden": a compact stepper on a settings row (the − / + are .servings-step). */
+.household-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.household-step .value {
+  min-width: 64px;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.week-hero-actions {
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.week-pick {
+  min-height: 52px;
+  font-size: 18px;
+}
+
+/* The chip row inside the hero card bleeds to the card's 16 px padding (like .surprise). */
+.week-hero .filter-chips {
+  margin: 0 -16px;
+  padding: 6px 16px;
+}
+
+.week-filter-note {
+  margin: 4px 0 0;
+}
+
+/* ---------- Week: slots ---------- */
+
+.week-summary {
+  padding: 8px 0 4px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.week-clear {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 0 10px;
+}
+
+.week-slots {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.week-slot {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 8px;
+  padding: 6px 0 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.week-tick {
+  grid-row: 1 / span 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  color: var(--on-cobalt);
+  font: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.week-tick:active {
+  background: var(--press);
+}
+
+.week-tick.on {
+  background: var(--cobalt);
+  border-color: var(--cobalt);
+}
+
+.week-name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  min-height: 44px;
+  padding: 4px 4px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.week-name:active {
+  background: var(--press);
+}
+
+.week-name:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+
+.week-name-text {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.week-name .row-sub {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.week-slot.cooked .week-name-text {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.week-locked-label {
+  font-style: normal;
+}
+
+.week-tools {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* Servings stepper: − 4 pers. + — compact, but every button is 44 px. */
+.week-srv {
+  display: inline-flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.week-srv-step,
+.week-tool {
+  flex: none;
+  width: 40px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.week-srv-step:active,
+.week-tool:active {
+  background: var(--press);
+}
+
+.week-srv-step:disabled,
+.week-tool:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.week-srv-value {
+  min-width: 58px;
+  padding: 0 4px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.week-tool {
+  font-size: 17px;
+}
+
+.week-tool.on {
+  background: var(--press);
+  border-color: var(--cobalt);
+}
+
+.week-remove {
+  color: var(--muted);
+  font-size: 22px;
+}
+
+/* ---------- Week: actions, filter, share ---------- */
+
+.week-actions {
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 8px;
+}
+
+.week-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.week-hint {
+  margin: 0;
+}
+
+.week-filter .filter-chips {
+  padding-top: 4px;
+}
+
+.week-share .status {
+  min-height: 20px;
+}
+
+/* ---------- Kies-N sheet ---------- */
+
+.pick-sheet {
+  height: calc(100dvh - var(--sat) - 24px);
+}
+
+.pick-counter {
+  margin-left: 6px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.pick-tools {
+  flex: none;
+  padding: 0 max(16px, var(--sar)) 4px max(16px, var(--sal));
+}
+
+.pick-tools .filter-chips {
+  padding-bottom: 2px;
+}
+
+.pick-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0 4px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pick-body {
+  padding-top: 0;
+}
+
+.pick-list {
+  margin-top: 0;
+}
+
+.pick-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.pick-row:disabled {
+  cursor: default;
+}
+
+.pick-row.in-plan .picker-name {
+  color: var(--muted);
+}
+
+.pick-box {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  color: var(--on-cobalt);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: center;
+}
+
+.pick-row.on .pick-box {
+  background: var(--cobalt);
+  border-color: var(--cobalt);
+}
+
+.pick-row.in-plan .pick-box {
+  background: var(--line);
+  border-color: transparent;
+  color: var(--muted);
+}
+
+.pick-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pick-foot {
+  flex: none;
+  padding: 8px max(16px, var(--sar)) 0 max(16px, var(--sal));
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+
+/* ---------- Home: "Deze week" card ---------- */
+
+.week-card {
+  margin: 0 0 8px;
+}
+
+.week-card-empty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  color: inherit;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.week-card-empty:active {
+  background: var(--press);
+}
+
+.week-card-icon {
+  flex: none;
+  font-size: 26px;
+}
+
+.week-card-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.week-card-empty .chev,
+.week-card-title .chev {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.week-card-title {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+
+.week-card-title a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.week-card-list {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.week-card-list li a {
+  display: block;
+  min-height: 40px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.week-card-list li a:active {
+  background: var(--press);
+}
+
+.week-card-list li.cooked a {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.week-card-list li.week-card-more a {
+  color: var(--cobalt);
+  border-bottom: 0;
+}
+
+/* ---------- Recipe detail: "+ Deze week" ---------- */
+
+.detail-week {
+  margin: 0 0 12px;
+}
+
+.detail-week.on {
+  color: var(--cobalt);
+  border-color: var(--cobalt);
+  background: transparent;
+}
+
+/* ---------- Recipes header: "+" ---------- */
+
+.list-add {
+  color: var(--cobalt);
+}

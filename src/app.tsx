@@ -1,5 +1,6 @@
 // Root of the full app: boot (builtins, profiles, theme), shell (header/screen/nav), hash routing,
-// onboarding gate, install card, update bar, confetti. Routes per docs/phase-1-spec.md §4.
+// onboarding gate, install card, update bar, confetti. Routes per docs/phase-1-spec.md §4 plus
+// phase 4 (docs/phase-4-spec.md §3): '/week' and '/shopping'.
 import { useEffect, useState } from 'preact/hooks';
 import { loadCelebrateSettings } from './celebrate';
 import { Confetti } from './components/Confetti';
@@ -24,8 +25,10 @@ import { ProfilesScreen } from './screens/ProfilesScreen';
 import { RecipeScreen } from './screens/RecipeScreen';
 import { RecipesScreen } from './screens/RecipesScreen';
 import { ShareScreen } from './screens/ShareScreen';
+import { ShoppingScreen } from './screens/ShoppingScreen';
 import { StorageScreen } from './screens/StorageScreen';
 import { StoryScreen } from './screens/StoryScreen';
+import { WeekScreen } from './screens/WeekScreen';
 import { startTestTimerTicker } from './testtimer';
 import { initTheme } from './theme';
 import { startTimerEngine } from './timers';
@@ -68,6 +71,10 @@ function Screen(props: { r: Route }) {
     case 'inbox':
     case 'import': // alias: sw.ts share_target redirect and public/share/index.html
       return <InboxScreen />;
+    case 'week':
+      return <WeekScreen />;
+    case 'shopping':
+      return <ShoppingScreen />;
     case 'more':
       switch (seg[1]) {
         case undefined:

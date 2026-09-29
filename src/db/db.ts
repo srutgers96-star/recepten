@@ -10,11 +10,13 @@
 //   v4 (phase 2): lineOverrides ("Koppel ingrediënt" on a builtin's line), userIngredients
 //   (dictionary entries created by users) and overrides (curator patches on builtins). No data
 //   moves; the tables are simply added. Only src/db/repo.ts talks to this module.
+//   v5 (phase 4): plans (one row 'current'), lists (one row 'current') and pantry (by ingredient
+//   id) for the week plan and the shopping list. Tables added, nothing moves.
 import Dexie, { type Table } from 'dexie';
 import type { CookLogEntry, Favorite, Note, Profile, Recipe, RunningTimer } from '@/domain/model';
 import { newProfileId, nowIso } from '@/domain/model';
 import { normalizeRecipe } from '@/domain/recipe-io';
-import type { ImportSnapshot, Ingredient, LineOverride, RecipeOverride, Setting, UserRecipe } from './model';
+import type { ImportSnapshot, Ingredient, LineOverride, List, PantryItem, Plan, RecipeOverride, Setting, UserRecipe } from './model';
 
 export function dbNameFromBase(base: string): string {
   return /\/next\/?$/.test(base) ? 'recepten-next' : 'recepten';
@@ -33,6 +35,9 @@ export type AppDatabase = Dexie & {
   lineOverrides: Table<LineOverride, [string, number]>;
   userIngredients: Table<Ingredient, string>;
   overrides: Table<RecipeOverride, string>;
+  plans: Table<Plan, string>;
+  lists: Table<List, string>;
+  pantry: Table<PantryItem, string>;
 };
 
 export const db = new Dexie(dbNameFromBase(import.meta.env.BASE_URL)) as AppDatabase;
@@ -94,6 +99,12 @@ db.version(4).stores({
   lineOverrides: '[recipeId+index], recipeId',
   userIngredients: 'id',
   overrides: 'baseId',
+});
+
+db.version(5).stores({
+  plans: 'id',
+  lists: 'id',
+  pantry: 'ing',
 });
 
 /** The phase-0 language choice lived in localStorage; used once, to seed the first profile. */

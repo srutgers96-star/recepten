@@ -10,6 +10,8 @@ import { common } from './common';
 import { edit } from './edit';
 import { phase2 } from './phase2';
 import { settings } from './settings';
+import { week } from './week';
+import { shopping } from './shopping';
 
 export type { Lang };
 
@@ -17,7 +19,8 @@ export type { Lang };
 export type Dict = Record<string, { nl: string; en: string }>;
 
 // phase2 is merged last (docs/phase-2-spec.md §5 strings; it may refine an earlier key).
-const dict: Dict = { ...common, ...browse, ...edit, ...settings, ...phase2 };
+// Phase 4: week (Week tab, Kies-N sheet, nav) after phase2; shopping (the shopping agent) appends after it.
+const dict: Dict = { ...common, ...browse, ...edit, ...settings, ...phase2, ...week, ...shopping };
 
 const STORAGE_KEY = 'recepten.lang';
 

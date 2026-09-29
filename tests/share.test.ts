@@ -6,20 +6,25 @@ import type { Ingredient } from '../src/domain/dictionary';
 import type { Recipe } from '../src/domain/model';
 import type { LineOverride, RecipeOverride } from '../src/domain/overrides';
 import { buildShareMessageFor } from '../src/domain/message';
+import type { Plan } from '../src/domain/planner';
 import {
   buildBundleEnvelope,
   buildPatchEnvelope,
+  buildPlanEnvelope,
+  buildPlanShareMessage,
   buildRecipeEnvelope,
   bundleFileName,
   combineEnvelopes,
   envelopeItemCount,
   parseEnvelope,
+  planDishCount,
   planMessages,
   referencedIngredientIds,
   type PatchPayload,
+  type PlanPayload,
 } from '../src/domain/share';
 import { decodeToken, encodeToken, extractTokens } from '../src/domain/token';
-import { FROZEN_TOKEN_B, FROZEN_TOKEN_P, FROZEN_TOKEN_P_FFLATE } from './fixtures/frozen-share-tokens';
+import { FROZEN_ENVELOPE_W, FROZEN_TOKEN_B, FROZEN_TOKEN_P, FROZEN_TOKEN_P_FFLATE, FROZEN_TOKEN_W, FROZEN_TOKEN_W_FFLATE } from './fixtures/frozen-share-tokens';
 
 const APP_URL = 'https://stijn.github.io/recepten/';
 
@@ -230,8 +235,105 @@ describe('parseEnvelope', () => {
     expect(() => parseEnvelope(null)).toThrow('invalid-token');
     expect(() => parseEnvelope({ v: 2, t: 'x' })).toThrow('invalid-token');
     expect(() => parseEnvelope({ v: 3, t: 'r' })).toThrow('unsupported-version');
-    // 'w' is a valid token key but not a share: still invalid here.
+    // 'w' without a payload object is not a plan.
     expect(() => parseEnvelope({ v: 2, t: 'w' })).toThrow('invalid-token');
+  });
+});
+
+// --- Phase 4: the week plan (`#w=`) --------------------------------------------------------------
+
+const PLAN: Plan = {
+  id: 'current',
+  updatedAt: '2026-09-29T11:00:00.000Z',
+  note: '  Boodschappen zaterdag ',
+  items: [
+    { id: 'pi:1', recipeId: 'b:dahl', servings: 4, addedAt: 'x' },
+    { id: 'pi:2', recipeId: 'b:uiensoep', servings: 2, locked: true, addedAt: 'x' },
+    { id: 'pi:3', recipeId: 'u:abc12345', servings: 4, addedAt: 'x' },
+    { id: 'pi:4', recipeId: 'b:lasagne', servings: 4, cooked: true, addedAt: 'x' },
+  ],
+};
+
+describe('buildPlanEnvelope', () => {
+  it('carries the uncooked dishes with servings, embeds only the own recipes of the plan and their user ingredients', () => {
+    const builtin = recipe({ id: 'b:dahl', origin: { kind: 'builtin' } });
+    const stranger = recipe({ id: 'u:notinplan' });
+    const env = buildPlanEnvelope(PLAN, [builtin, stranger, recipe()], { by: 'Stijn', userIngredients: USER_INGREDIENTS });
+    expect(env.t).toBe('w');
+    expect(env.by).toBe('Stijn');
+    const w = env.w as PlanPayload;
+    expect(w.items).toEqual([
+      { rid: 'b:dahl', srv: 4 },
+      { rid: 'b:uiensoep', srv: 2 },
+      { rid: 'u:abc12345', srv: 4 },
+    ]);
+    expect(w.recipes.map((r) => r.id)).toEqual(['u:abc12345']);
+    expect(w.note).toBe('Boodschappen zaterdag');
+    expect((env.dict as { ing: Ingredient[] }).ing.map((i) => i.id)).toEqual(['bergkaas', 'pesto-huis']);
+    expect(planDishCount(env)).toBe(3);
+    expect(envelopeItemCount(env)).toBe(1);
+  });
+
+  it('folds line overrides into the embedded recipe and omits an empty note', () => {
+    const env = buildPlanEnvelope({ ...PLAN, note: '' }, [recipe()], {
+      by: '',
+      userIngredients: [],
+      lineOverrides: [{ recipeId: 'u:abc12345', index: 2, ing: 'zout', updatedAt: 'x' }],
+    });
+    const w = env.w as PlanPayload;
+    expect(w.note).toBeUndefined();
+    expect(w.recipes[0]?.lines[2]?.ing).toBe('zout');
+    expect('by' in env).toBe(false);
+  });
+
+  it('round-trips through the codec as kind "plan" with the recipes in the normal import path', async () => {
+    const env = buildPlanEnvelope(PLAN, [recipe()], { by: 'Stijn', userIngredients: USER_INGREDIENTS });
+    const parsed = parseEnvelope(await decodeToken(await encodeToken(env)));
+    expect(parsed.kind).toBe('plan');
+    expect(parsed.plan).toEqual({
+      items: [
+        { recipeId: 'b:dahl', servings: 4 },
+        { recipeId: 'b:uiensoep', servings: 2 },
+        { recipeId: 'u:abc12345', servings: 4 },
+      ],
+      note: 'Boodschappen zaterdag',
+    });
+    expect(parsed.recipes.map((r) => r.id)).toEqual(['u:abc12345']);
+    expect(parsed.patches).toEqual([]);
+    expect(parsed.dict.ing.map((i) => i.id)).toEqual(['bergkaas', 'pesto-huis']);
+  });
+
+  it('reads the frozen #w= token on both engines', async () => {
+    for (const token of [FROZEN_TOKEN_W, FROZEN_TOKEN_W_FFLATE]) {
+      const env = await decodeToken(token);
+      expect(env).toEqual(FROZEN_ENVELOPE_W);
+      const parsed = parseEnvelope(env);
+      expect(parsed.kind).toBe('plan');
+      expect(parsed.by).toBe('Stijn');
+      expect(parsed.plan?.items.map((i) => `${i.recipeId}@${i.servings}`)).toEqual(['b:dahl@4', 'b:uiensoep@2', 'u:abc12345@4']);
+      expect(parsed.plan?.note).toBe('Boodschappen zaterdag');
+      expect(parsed.recipes[0]?.name.nl).toBe('Pasta pesto');
+      expect(parsed.dict.ing[0]?.id).toBe('pesto-huis');
+    }
+  });
+
+  it('tolerates bad items and servings; a plan may be empty', () => {
+    const parsed = parseEnvelope({ v: 2, t: 'w', w: { items: [{ rid: 'b:x', srv: 'many' }, { srv: 2 }, null, { rid: ' ', srv: 1 }], recipes: [{}] } });
+    expect(parsed.kind).toBe('plan');
+    expect(parsed.plan?.items).toEqual([{ recipeId: 'b:x', servings: 4 }]);
+    expect(parsed.recipes).toEqual([]);
+    expect(parseEnvelope({ v: 2, t: 'w', w: {} }).plan?.items).toEqual([]);
+  });
+
+  it('planMessages: "🗓️ Weekplan van Stijn: 3 gerechten", open line and one #w= URL', async () => {
+    const env = buildPlanEnvelope(PLAN, [], { by: 'Stijn', userIngredients: [] });
+    const plan = await planMessages([env], APP_URL, { lang: 'nl' });
+    if (!('text' in plan)) throw new Error('expected text');
+    const lines = plan.text.split('\n');
+    expect(lines[0]).toBe('🗓️ Weekplan van Stijn: 3 gerechten');
+    expect(lines[1]).toMatch(/^Open in Rutgers' Recepten/);
+    expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['w']);
+    expect(buildPlanShareMessage({ dishes: 1, by: '', url: 'u', lang: 'en' }).split('\n')[0]).toBe('🗓️ Week plan: 1 dish');
   });
 });
 

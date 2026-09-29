@@ -1,4 +1,6 @@
-// Bottom nav: Home · Recepten · Toevoegen · Inbox (badge = received & unseen) · Meer.
+// Bottom nav (phase 4, docs/phase-4-spec.md §3): Home · Recepten · Week · Boodschappen · Meer.
+// "Toevoegen" lives in the Recepten header (+) and the Inbox under Meer; the received-&-unseen
+// badge therefore sits on the Meer tab.
 import { t } from '@/i18n';
 import { inboxUnseen } from '@/inbox-badge';
 import { navigateTab, route } from '@/router';
@@ -6,16 +8,16 @@ import { navigateTab, route } from '@/router';
 const ICONS = {
   home: <path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" />,
   recipes: <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5V5.5zM4 20.5A2.5 2.5 0 0 1 6.5 18H20" />,
-  add: <path d="M12 5v14M5 12h14" />,
-  inbox: <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 3v12M8 11l4 4 4-4" />,
+  week: <path d="M4 5h16v15H4zM4 10h16M8 3v4M16 3v4M8 14h2M14 14h2" />,
+  shopping: <path d="M3 4h2l2.5 11h11L21 7H6.5M9 19.5a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1M17 19.5a.5.5 0 1 0 0 1 .5.5 0 0 0 0-1" />,
   more: <path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3.5" />,
 };
 
 const TABS: Array<{ path: string; icon: keyof typeof ICONS; key: string }> = [
   { path: '/', icon: 'home', key: 'nav.home' },
   { path: '/recipes', icon: 'recipes', key: 'nav.recipes' },
-  { path: '/add', icon: 'add', key: 'nav.add' },
-  { path: '/inbox', icon: 'inbox', key: 'nav.inbox' },
+  { path: '/week', icon: 'week', key: 'nav.week' },
+  { path: '/shopping', icon: 'shopping', key: 'nav.shopping' },
   { path: '/more', icon: 'more', key: 'nav.more' },
 ];
 
@@ -29,14 +31,15 @@ export function tabFor(segment: string | undefined): string {
     case 'recipe':
     case 'cook':
     case 'share':
-      return '/recipes';
     case 'add':
     case 'edit':
-      return '/add';
-    case 'inbox':
-    case 'import':
-      return '/inbox';
+      return '/recipes';
+    case 'week':
+      return '/week';
+    case 'shopping':
+      return '/shopping';
     default:
+      // more, inbox/import, story, check, profiles, storage …
       return '/more';
   }
 }
@@ -61,7 +64,7 @@ export function Nav() {
             {ICONS[tab.icon]}
           </svg>
           <span>{t(tab.key)}</span>
-          {tab.path === '/inbox' && unseen > 0 && (
+          {tab.path === '/more' && unseen > 0 && (
             <span class="nav-badge" aria-label={String(unseen)}>
               {unseen > 99 ? '99+' : unseen}
             </span>

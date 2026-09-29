@@ -4,7 +4,8 @@
 // bar on top, and a last "Gekookt!" page (stars + note) → logCooked + confetti + back to the detail.
 // Phase 2: the checklist renders the dictionary lines scaled to the servings chosen on the detail
 // page (`?srv=6`, else the session memory, else the recipe's own), with a scaler on the card; the
-// steps show °F next to °C when that setting is on.
+// steps show °F next to °C when that setting is on. Phase 4: "Gekookt!" also ticks the dish in
+// the week plan (markRecipeCookedInPlan).
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { celebrate } from '@/celebrate';
 import { Header } from '@/components/Header';
@@ -13,7 +14,7 @@ import { parseServingsParam, rememberServings, rememberedServings, ServingsPicke
 import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
-import { getRecipe, logCooked } from '@/db/repo';
+import { getRecipe, logCooked, markRecipeCookedInPlan } from '@/db/repo';
 import { nowIso, pickText } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
@@ -167,6 +168,12 @@ export function CookScreen(props: { id: string }) {
           note: note.trim() ? note.trim() : null,
         });
         celebrate('cooked');
+      }
+      // Phase 4: a dish in the week plan gets its "Gekookt" tick (no-op when it is not in the plan).
+      try {
+        await markRecipeCookedInPlan(id);
+      } catch (e) {
+        console.error('markRecipeCookedInPlan', e);
       }
     } finally {
       setBusy(false);

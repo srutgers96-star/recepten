@@ -5,6 +5,9 @@
 //   t: 'p'  p: { baseId, rev, patch, lineOverrides?, name? } an edited classic (`#p=`), applied as an
 //                                                            override on the receiver, never a duplicate
 //   t: 'b'  b: { title?, recipes, patches, since? }          a bundle (`#b=` token or a .json file)
+//   t: 'w'  w: { items: [{rid, srv}], recipes, note? }       a week plan (`#w=`, docs/phase-4-spec.md §1):
+//                                                            the dishes with their servings plus the own
+//                                                            recipes the partner may lack (normal import)
 //
 // Every envelope may carry `dict: { ing: Ingredient[] }`: the USER ingredients (ids the bundled
 // dictionary does not know) the payload references, so the receiver can add the missing ones.
@@ -12,6 +15,7 @@
 import type { Ingredient } from './dictionary.ts';
 import { nowIso, type Lang, type Line, type Recipe, type Text } from './model.ts';
 import { applyLineOverrides, type LineOverride, type RecipeOverride, type RecipePatch } from './overrides.ts';
+import { normalizeServings, type Plan } from './planner.ts';
 import { normalizeRecipe } from './recipe-io.ts';
 import { buildMultiShareHeader, buildPatchShareMessage, buildShareMessageFor, openLine } from './message.ts';
 import { buildShareUrl, encodeToken, parseEnvelope as validateEnvelope, type Envelope, type TokenKey } from './token.ts';
@@ -45,9 +49,35 @@ export interface BundlePayload {
   [k: string]: unknown;
 }
 
-export type ShareKind = 'recipe' | 'patch' | 'bundle';
+/** One dish of a shared week plan as it travels: recipe id + servings. */
+export interface PlanPayloadItem {
+  rid: string;
+  srv: number;
+  [k: string]: unknown;
+}
 
-/** What parseEnvelope makes of any envelope: a flat list of recipes and patches plus the delta. */
+/** The `w` payload (docs/phase-4-spec.md §1). Unknown keys are preserved. */
+export interface PlanPayload {
+  items: PlanPayloadItem[];
+  /** Own / received recipes of the plan the partner may lack (builtins never travel). */
+  recipes: Recipe[];
+  note?: string;
+  [k: string]: unknown;
+}
+
+/** A received plan, as the Inbox offers it ("Overnemen" / "Toevoegen"). */
+export interface PlanShare {
+  items: Array<{ recipeId: string; servings: number }>;
+  note?: string;
+}
+
+export type ShareKind = 'recipe' | 'patch' | 'bundle' | 'plan';
+
+/**
+ * What parseEnvelope makes of any envelope: a flat list of recipes and patches plus the delta.
+ * A plan (`kind: 'plan'`) adds `plan`; its embedded recipes sit in `recipes` and go through the
+ * normal import plan.
+ */
 export interface ParsedShare {
   kind: ShareKind;
   by?: string;
@@ -58,6 +88,7 @@ export interface ParsedShare {
   dict: DictDelta;
   recipes: Recipe[];
   patches: PatchPayload[];
+  plan?: PlanShare;
 }
 
 export interface ShareContext {
@@ -222,6 +253,41 @@ export function buildBundleEnvelope(items: BundleItems, ctx: ShareContext, opts:
   return env;
 }
 
+/**
+ * `{v: 2, t: 'w', by, at, w: {items, recipes, note?}, dict?}`: the plan's dishes (cooked ones
+ * left out) with their servings, plus `recipes`: the own/received recipes of the plan the partner
+ * may lack (the caller passes them; builtins are dropped here). Line overrides in `ctx` are
+ * folded into those recipes by id. `note` from `plan.note`.
+ */
+export function buildPlanEnvelope(plan: Plan, recipes: readonly Recipe[], ctx: ShareContext): Envelope {
+  const items: PlanPayloadItem[] = plan.items.filter((p) => !p.cooked).map((p) => ({ rid: p.recipeId, srv: normalizeServings(p.servings) }));
+  const wanted = new Set(items.map((p) => p.rid));
+  const byRecipe = new Map<string, LineOverride[]>();
+  for (const o of ctx.lineOverrides ?? []) {
+    const list = byRecipe.get(o.recipeId) ?? [];
+    list.push(o);
+    byRecipe.set(o.recipeId, list);
+  }
+  const ids = new Set<string>();
+  const seen = new Set<string>();
+  const embedded: Recipe[] = [];
+  for (const r of recipes) {
+    if (!r || typeof r.id !== 'string' || r.id.startsWith('b:') || !wanted.has(r.id) || seen.has(r.id)) continue;
+    seen.add(r.id);
+    const out = travelRecipe(r, byRecipe.get(r.id));
+    for (const id of referencedIngredientIds(out.lines)) ids.add(id);
+    embedded.push(out);
+  }
+  const w: PlanPayload = { items, recipes: embedded };
+  const note = cleanString(plan.note);
+  if (note) w.note = note;
+  const env = baseEnvelope('w', ctx.by);
+  env.w = w;
+  const dict = dictDeltaFor(ids, ctx.userIngredients);
+  if (dict) env.dict = dict;
+  return env;
+}
+
 // --- Parsing ------------------------------------------------------------------------------------
 
 function readIngredient(v: unknown): Ingredient | null {
@@ -334,6 +400,28 @@ export function parseEnvelope(env: unknown): ParsedShare {
     if (since) out.since = since;
     return out;
   }
+  if (e.t === 'w') {
+    // A `w` without a payload object is not a plan (a stray "#w=" someone typed).
+    if (!isRecord(e.w)) throw new Error('invalid-token');
+    out.kind = 'plan';
+    const w = e.w;
+    const items: PlanShare['items'] = [];
+    if (Array.isArray(w.items)) for (const v of w.items) {
+      if (!isRecord(v)) continue;
+      const recipeId = cleanString(v.rid);
+      if (!recipeId) continue;
+      items.push({ recipeId, servings: normalizeServings(v.srv) });
+    }
+    const plan: PlanShare = { items };
+    const note = cleanString(w.note);
+    if (note) plan.note = note;
+    out.plan = plan;
+    if (Array.isArray(w.recipes)) for (const v of w.recipes) {
+      const r = readRecipe(v);
+      if (r) out.recipes.push(r);
+    }
+    return out;
+  }
   throw new Error('invalid-token');
 }
 
@@ -347,7 +435,29 @@ export function envelopeItemCount(env: Envelope): number {
     const b = env.b;
     return (Array.isArray(b.recipes) ? b.recipes.length : 0) + (Array.isArray(b.patches) ? b.patches.length : 0);
   }
+  // A plan counts its embedded recipes (what the import writes); the dishes are in planDishCount.
+  if (env.t === 'w' && isRecord(env.w)) return Array.isArray(env.w.recipes) ? env.w.recipes.length : 0;
   return 0;
+}
+
+/** Number of dishes a plan envelope carries (0 for other kinds). */
+export function planDishCount(env: Envelope): number {
+  if (env.t !== 'w' || !isRecord(env.w) || !Array.isArray(env.w.items)) return 0;
+  return env.w.items.length;
+}
+
+/**
+ * The WhatsApp text for a plan: "🗓️ Weekplan van Stijn: 7 gerechten", the open line and the
+ * `#w=` URL alone on the last line (one tappable link). The words are {nl, en} literals here
+ * rather than src/i18n keys because the domain layer is framework-free (the message.ts trade-off).
+ */
+export function buildPlanShareMessage(i: { dishes: number; by: string; url: string; lang: Lang }): string {
+  const lang: Lang = i.lang === 'en' ? 'en' : 'nl';
+  const n = Math.max(0, Math.floor(i.dishes));
+  const by = i.by.trim();
+  const what = lang === 'nl' ? (n === 1 ? 'gerecht' : 'gerechten') : n === 1 ? 'dish' : 'dishes';
+  const head = lang === 'nl' ? `🗓️ Weekplan${by ? ` van ${by}` : ''}: ${n} ${what}` : `🗓️ Week plan${by ? ` from ${by}` : ''}: ${n} ${what}`;
+  return [head, openLine(lang), i.url].join('\n');
 }
 
 /** "Stijn & co" -> "stijn-co" for the file name; empty -> "export". */
@@ -409,8 +519,10 @@ function envelopeName(env: Envelope): Text {
 
 /**
  * The WhatsApp text for the envelopes: a single recipe gets the four-line message from
- * message.ts, a single patch its "(aangepast)" variant, several items a compact header
- * ("🍲 3 recepten van Stijn"), the open line and one URL per line. Each URL is `#r=`/`#p=`/`#b=`.
+ * message.ts, a single patch its "(aangepast)" variant, a single plan "🗓️ Weekplan van Stijn:
+ * 7 gerechten", several items a compact header ("🍲 3 recepten van Stijn"), the open line and
+ * one URL per line. Each URL is `#r=`/`#p=`/`#w=`/`#b=`. (A plan combined with other envelopes
+ * into a bundle file keeps its recipes but loses the plan itself.)
  * When the text is longer than `limit` characters the result is a bundle FILE instead (pretty
  * JSON, not compressed), named "recepten-<name>-YYYY-MM-DD.json".
  */
@@ -433,6 +545,8 @@ export async function planMessages(envelopes: readonly Envelope[], appUrl: strin
     const input = { nameNl: name.nl ?? '', by, url: urls[0], lang } as Parameters<typeof buildPatchShareMessage>[0];
     if (name.en) input.nameEn = name.en;
     text = buildPatchShareMessage(input);
+  } else if (envelopes.length === 1 && first && first.t === 'w' && urls[0]) {
+    text = buildPlanShareMessage({ dishes: planDishCount(first), by, url: urls[0], lang });
   } else {
     const count = envelopes.reduce((n, e) => n + envelopeItemCount(e), 0);
     text = [buildMultiShareHeader(count, by, lang), openLine(lang), ...urls].join('\n');

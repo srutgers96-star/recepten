@@ -17,13 +17,44 @@ export type {
 } from '@/domain/model';
 export type { Ingredient } from '@/domain/dictionary';
 export type { AppliedOverride, LineOverride, RecipeOverride, RecipePatch, RecipePatchKey } from '@/domain/overrides';
+export type { Plan, PlanItem } from '@/domain/planner';
+export type { ListItem, ListSection, ListSource } from '@/domain/aggregate';
 import type { CookLogEntry, Favorite, Note, Profile, Recipe } from '@/domain/model';
 import type { Ingredient } from '@/domain/dictionary';
 import type { LineOverride, RecipeOverride } from '@/domain/overrides';
+import type { Plan } from '@/domain/planner';
+import type { ListItem } from '@/domain/aggregate';
 
 export interface Setting {
   key: string;
   value: unknown;
+}
+
+/** The one row of `lists` (phase 4, docs/phase-4-spec.md §2): the shopping list generated from the plan. */
+export interface List {
+  id: 'current';
+  /** All items (main, staples, in-house, check), as `aggregate` returned them plus the user's state. */
+  items: ListItem[];
+  /** `planHash` of the plan the list was generated from ('' = no dishes); ≠ the current hash means stale. */
+  generatedFrom: string;
+  /** `planHashAll` (cooked dishes included) at generation; when it still matches, only cooked flags changed and the list is not stale. Absent on older rows. */
+  generatedFromAll?: string;
+  generatedAt: string;
+  /** Manual items ("+ wc-papier, melk"); also present in `items`. */
+  extras: ListItem[];
+  /** Keys pinned with "elke week"; those items survive a regeneration. */
+  pinned: string[];
+  updatedAt: string;
+  /** ISO of the last "Deel lijst"; `updatedAt > sharedAt` = "gewijzigd sinds delen". */
+  sharedAt?: string | null;
+}
+
+export type ShoppingList = List;
+
+/** One row of `pantry`: an ingredient "in huis" (Heb ik al), optionally until a date (21 days for non-perishables). */
+export interface PantryItem {
+  ing: string;
+  until?: string;
 }
 
 /** The rows an import replaced, as they were before it (phase 3 undo). Absent rows were added. */
@@ -79,6 +110,10 @@ export interface BackupBundle {
   lineOverrides?: LineOverride[];
   userIngredients?: Ingredient[];
   overrides?: RecipeOverride[];
+  /** Phase 4 (schema v5 tables); absent in older backups. */
+  plans?: Plan[];
+  lists?: List[];
+  pantry?: PantryItem[];
 }
 
 // --- Phase-0 shape, only read by the v1 -> v2 upgrade in db.ts ---------------------------------

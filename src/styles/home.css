@@ -157,6 +157,24 @@
   -webkit-user-select: none;
 }
 
+/* "+" in the "Eigen & ontvangen" section header (spec §3: add lives here and on the Recipes
+   header). The title takes the free width so the "+" and "Alle recepten" sit together on the right. */
+.home-section h2 .home-section-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.home-section h2 .home-add {
+  min-width: 44px;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--cobalt);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 /* ---------- Phase 3: reminder cards (backup overdue, unsent changes) ---------- */
 
 /* Shared by Home and the Inbox (its "unsent changes" top card), hence not scoped to .home.

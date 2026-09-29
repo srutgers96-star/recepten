@@ -1,4 +1,5 @@
-// '#/more' — active profile (switch, "+ profiel"), language, theme, confetti, "°F erbij", the
+// '#/more' — Inbox row (with the unseen badge; phase 4 moved the Inbox tab here), active profile
+// (switch, "+ profiel"), language, theme, confetti, "°F erbij", the
 // dictionary (counts + own ingredients with delete), and the links to "Stuur nieuwe naar …"
 // (unsent-changes badge), Opslag & back-up (backup-due badge), Het verhaal, Apparaatcheck, plus
 // "Over" (version, sha, channel, GitHub).
@@ -7,17 +8,20 @@ import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/ce
 import { appInfo } from '@/components/AppInfo';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
-import { deleteUserIngredient, getFahrenheit, setFahrenheit } from '@/db/repo';
+import { deleteUserIngredient, getFahrenheit, getHouseholdServings, setFahrenheit, setHouseholdServings } from '@/db/repo';
 import { baseDictionary, dictionary, reloadDictionary, userIngredients } from '@/dictionary';
 import type { Lang } from '@/domain/model';
 import { lang, t } from '@/i18n';
-import { backupStatus, refreshShareBadges, unsentChanges } from '@/inbox-badge';
+import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { activeProfile, profiles, setActiveProfile } from '@/profile';
 import { navigate } from '@/router';
 import { setTheme, theme, type Theme } from '@/theme';
 import { Avatar } from './ProfilesScreen';
 
 const GITHUB_URL = 'https://github.com/srutgers96-star/recepten';
+/** "Huishouden" stepper range (a new week slot starts at this many servings). */
+const MIN_HOUSEHOLD = 1;
+const MAX_HOUSEHOLD = 12;
 
 function Chevron() {
   return (
@@ -102,13 +106,16 @@ export function MoreScreen() {
   const active = activeProfile.value;
   const others = profiles.value.filter((p) => p.id !== active?.id);
   const [fahrenheit, setF] = useState(false);
+  const [household, setHousehold] = useState<number | null>(null);
 
   const unsent = unsentChanges.value;
+  const unseen = inboxUnseen.value;
   const backupDue = backupStatus.value?.overdue === true;
 
   useEffect(() => {
     void loadCelebrateSettings();
     void getFahrenheit().then(setF, (e: unknown) => console.error('getFahrenheit', e));
+    void getHouseholdServings().then(setHousehold, (e: unknown) => console.error('getHouseholdServings', e));
     void refreshShareBadges();
   }, []);
 
@@ -117,10 +124,22 @@ export function MoreScreen() {
     void setFahrenheit(on).catch((e: unknown) => console.error('setFahrenheit', e));
   }
 
+  /** "Huishouden": the servings a new week slot starts with (spec §0 `household.servings`). */
+  function changeHousehold(delta: number) {
+    const next = Math.min(MAX_HOUSEHOLD, Math.max(MIN_HOUSEHOLD, (household ?? 4) + delta));
+    setHousehold(next);
+    void setHouseholdServings(next).catch((e: unknown) => console.error('setHouseholdServings', e));
+  }
+
   return (
     <>
       <Header title={t('more.title')} />
       <div class="screen">
+        {/* Phase 4: the Inbox moved here from the bottom nav; its unseen badge follows. */}
+        <section class="section menu more-inbox">
+          <MenuRow label={t('more.inbox')} sub={t('more.inboxHint')} to="/inbox" badge={unseen > 0 ? String(unseen > 99 ? '99+' : unseen) : undefined} />
+        </section>
+
         <section class="card">
           <h2>{t('more.profile')}</h2>
           {active ? (
@@ -194,6 +213,23 @@ export function MoreScreen() {
               <span class="track" />
             </span>
           </label>
+          <div class="setting">
+            <div class="label">
+              {t('more.household')}
+              <small>{t('more.householdHint')}</small>
+            </div>
+            <div class="household-step" role="group" aria-label={t('more.household')}>
+              <button type="button" class="servings-step" aria-label={t('more.householdLess')} disabled={household === null || household <= MIN_HOUSEHOLD} onClick={() => changeHousehold(-1)}>
+                −
+              </button>
+              <span class="value" aria-live="polite">
+                {household === null ? '…' : t('more.householdValue', { n: household })}
+              </span>
+              <button type="button" class="servings-step" aria-label={t('more.householdMore')} disabled={household === null || household >= MAX_HOUSEHOLD} onClick={() => changeHousehold(1)}>
+                +
+              </button>
+            </div>
+          </div>
           <label class="setting">
             <div class="label">
               {t('more.fahrenheit')}

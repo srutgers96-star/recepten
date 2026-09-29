@@ -5,9 +5,11 @@
 // Searching: `searchRecipes` groups (name → ingredient → category → tag) with a small header each,
 // so typing "onion" finds the recipes that contain `ui`. '#/recipes?cat=<id>' opens the list
 // pre-filtered on that category (Home shelf); the query is then dropped from the hash.
+// Phase 4: the "+" in the header opens '/add' (the Toevoegen tab left the bottom nav); the chips
+// are the generic `PickChips` (every tag in the data + the categories, spec §0).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { FilterChips, applyFilters, isActive, loadFilters, saveFilters, type Filters } from '@/components/FilterChips';
 import { Header } from '@/components/Header';
+import { PickChips, applyPickFilter, loadPickFilter, pickFilterActive, savePickFilter, tagIdsIn, type PickFilter } from '@/components/PickSheet';
 import { RecipeRow } from '@/components/RecipeRow';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
@@ -55,7 +57,7 @@ export function RecipesScreen() {
   const all = useLive(allRecipes, []);
   const favs = useLive(() => (pid ? listFavorites(pid) : Promise.resolve(new Set<string>())), [pid]);
   const [query, setQuery] = useState(savedQuery);
-  const [filters, setFilters] = useState<Filters>(() => loadFilters(LIST_FILTERS_KEY));
+  const [filters, setFilters] = useState<PickFilter>(() => loadPickFilter(LIST_FILTERS_KEY));
   const queryRef = useRef(query);
   queryRef.current = query;
   const scroller = useRef<HTMLDivElement>(null);
@@ -68,21 +70,23 @@ export function RecipesScreen() {
   const cat = route.value.path === '/recipes' ? route.value.query.get('cat') : null;
   useEffect(() => {
     if (!cat) return;
-    changeFilters({ quick: [], cats: [cat] });
+    changeFilters({ tags: [], cats: [cat], query: '' });
     setQuery('');
     navigate('/recipes', { replace: true });
   }, [cat]);
 
-  function changeFilters(next: Filters) {
+  function changeFilters(next: PickFilter) {
     setFilters(next);
-    saveFilters(LIST_FILTERS_KEY, next);
+    savePickFilter(LIST_FILTERS_KEY, next);
   }
 
-  const filtering = isActive(filters);
+  // The search box is the screen's own (grouped results); the chip filter carries no query.
+  const filtering = pickFilterActive(filters);
   const q = query.trim();
   const searching = q !== '';
 
-  const base = useMemo(() => applyFilters(all ?? [], filters), [all, filters]);
+  const tags = useMemo(() => tagIdsIn(all ?? []), [all]);
+  const base = useMemo(() => applyPickFilter(all ?? [], filters, dict, l), [all, filters, dict, l]);
   const searchGroups = useMemo<SearchGroup[]>(
     () => (searching ? searchRecipes(base, q, dict, l).map((g) => ({ kind: g.kind, recipes: sortByName(g.recipes, l) })) : []),
     [base, q, dict, l, searching],
@@ -138,7 +142,16 @@ export function RecipesScreen() {
 
   return (
     <>
-      <Header title={t('list.title')}>
+      <Header
+        title={t('list.title')}
+        action={
+          <button type="button" class="icon-btn list-add" aria-label={t('list.add')} onClick={() => navigate('/add')}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </button>
+        }
+      >
         <input
           class="input"
           type="search"
@@ -149,7 +162,7 @@ export function RecipesScreen() {
           value={query}
           onInput={(e) => setQuery((e.currentTarget as HTMLInputElement).value)}
         />
-        <FilterChips value={filters} onChange={changeFilters} />
+        <PickChips filter={filters} onChange={changeFilters} tags={tags} noQuery />
       </Header>
       <TimerBar />
       {/* The rail is positioned inside .az-area (list only), so it never overlays the header. */}

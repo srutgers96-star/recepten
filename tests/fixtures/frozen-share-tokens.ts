@@ -96,3 +96,60 @@ export const FROZEN_ENVELOPE_B: Envelope = {
     ],
   },
 };
+
+// Phase 4 (docs/phase-4-spec.md §1): a `#w=` week-plan envelope, produced ONCE on 2026-09-29 by
+// both engines. Three dishes (two classics, one own recipe embedded) plus the dictionary delta.
+export const FROZEN_TOKEN_W =
+  'bVLLbtswEPwVYc50QClOgfDWXnspEBcFavhAS2uJtUQyJCU3NfTvxUp-wjlyZnY0s9ojBqhCIEHhAIHtBxTekvljIaAZLWTxZSFfF8XrKi-UlErKJynlbwgcoI4wiboItT4imAoKW1XppoVADAPUchRXojdkoyN_Josr2Su9LfPieflyndwIBCqNp9k-lg11ekr7OBJogHoWKAPpRNXX2-S5XOXyPnnvqwdZ8ShzwdTGcsu9sdM3IwVeTJ8aFy6bGgWs7oh1toXCDx2TzjzF5CBAliF-ZJ4JliddcylESy02ApHCYCxjhUBr7Kly0IeL6VLKrD45nExvoVHgPX2wuuPESylHgd4ablhDwNgaCmftvXWeeZdOeceLlJ-LpjcR_CdiIj-HSvQ3XUa_O7fPKppDPJ2DfXOmzVJzgUd2qB3FXyY1UOuNgG6NjlPNDZPWJZoGXRXLRntPNvunE4VK15ypMuX00Snb-jhfwE1EMcU5wlm2YaimTut9omsvsjcK11GnqxtWm9gy4wYKhjdW0U73bfo579C7xJeZtGfVTreRBAaqoVLo6fOLyl9W8u6ixs0osOtTH6Zj2RP5eX4c_wM';
+export const FROZEN_TOKEN_W_FFLATE =
+  'bVNNj5swEP0raM5kBWy20nJrr72s1FSVWuXghAm4AZvaJtsW8d_3jQNJVlmJgz3vzfObD0Y6UVmkFKikV0pp9w-Hb0H_NrgoiRZZ8WmVPa-K501elFmG7yHLsp_AX6kcSQfuPJW_RnK6An9XVqppgXoH6fWUXoFBs_GW-wUsruBQqt0-Lx7XT9fMbUqO97rns7zfN9yp6PY-xTFSHlPaO1aBq8-3zvNsk4vtG-dDX93RinuadbrWRqo8ahPf9OykMUNorLt0akrJqI6FZ1pEX5QPKoHvYEFmCNCLXJJeAKEHVUtR5A23hDohe9JGYqiu1WYu2anY4ii6zrKknhVm0dsQRP8EDG-kThwDQmQwWiqskQB1nBbue-k86W2Y_SJrpsp11Qzak0zCB-7PpgL_heic-tXaY1Lx2cTDYuyL1W0Smkt4EoXasv-hQwMR3FSrlY9lbgU0NqB_SLQV5qz6nk3yHyNylarFU6X38dHoDSbiBtxYhALsjGSNyEioxrKoY4CHpS6xdmHYDrgYX1ClfSuIPTGmDsGKD2pow_dzD9Eh2cygemEdVOs5pRPDTXADjh9tVP60iet02ahpi4cOQxhcXJYj41-I-dP0Bg';
+
+export const FROZEN_ENVELOPE_W: Envelope = {
+  v: 2,
+  t: 'w',
+  by: 'Stijn',
+  at: '2026-09-29T12:00:00.000Z',
+  w: {
+    items: [
+      { rid: 'b:dahl', srv: 4 },
+      { rid: 'b:uiensoep', srv: 2 },
+      { rid: 'u:abc12345', srv: 4 },
+    ],
+    recipes: [
+      {
+        schema: 2,
+        id: 'u:abc12345',
+        rev: 3,
+        createdAt: '2026-09-10T10:00:00.000Z',
+        updatedAt: '2026-09-20T10:00:00.000Z',
+        origin: { kind: 'user', author: 'Stijn' },
+        name: { nl: 'Pasta pesto', en: 'Pesto pasta' },
+        tags: ['snel'],
+        servings: 2,
+        lines: [
+          { raw: { nl: '400 g pasta', en: '400 g pasta' }, qty: { min: 400 }, unit: 'g', ing: 'pasta' },
+          { raw: { nl: '1 pot pesto' }, ing: 'pesto-huis' },
+        ],
+        steps: [{ text: { nl: 'Kook de pasta.', en: 'Boil the pasta.' } }],
+        goesWith: [],
+        aliases: [],
+      },
+    ],
+    note: 'Boodschappen zaterdag',
+  },
+  dict: {
+    ing: [
+      {
+        id: 'pesto-huis',
+        nl: { one: 'huisgemaakte pesto' },
+        en: { one: 'homemade pesto' },
+        aisle: 'overig',
+        defaultUnit: 'pot',
+        staple: false,
+        veg: true,
+        updatedAt: '2026-09-15T00:00:00.000Z',
+      },
+    ],
+  },
+  future: { keep: true },
+};

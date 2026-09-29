@@ -14,13 +14,16 @@ import { ImportPreview } from '@/components/ImportPreview';
 import { useLive } from '@/db/live';
 import type { ImportSnapshot } from '@/db/model';
 import {
+  addToPlan,
   applyImportPlan,
+  getPlan,
   getRecipe,
   getSetting,
   isUndoable,
   listImports,
   localStateForImport,
   receivedPatches,
+  savePlan,
   setSetting,
   undoLastImport,
   userRecipes,
@@ -28,9 +31,11 @@ import {
 } from '@/db/repo';
 import { reloadDictionary } from '@/dictionary';
 import { defaultChoices, planImport, type ImportChoice, type ImportChoices, type ImportPlan } from '@/domain/merge';
-import { pickText, type Recipe } from '@/domain/model';
+import { pickText, type Recipe, type Text } from '@/domain/model';
+import { emptyPlan, newPlanItem } from '@/domain/planner';
 import { normalizeRecipe } from '@/domain/recipe-io';
-import { parseEnvelope, readPatchPayload, type ParsedShare, type PatchPayload } from '@/domain/share';
+import { parseEnvelope, readPatchPayload, type ParsedShare, type PatchPayload, type PlanShare } from '@/domain/share';
+import { planWrites } from '@/components/ImportPreview';
 import { decodeToken, extractTokens } from '@/domain/token';
 import { lang, t } from '@/i18n';
 import { INBOX_SEEN_KEY, refreshShareBadges, unsentChanges } from '@/inbox-badge';
@@ -64,6 +69,16 @@ interface Collected {
   share: ParsedShare;
   /** Human-readable problems per part (invalid code, newer version …). */
   problems: string[];
+  /** A received week plan (`#w=`, phase 4): the first one in the input; its recipes are in `share`. */
+  plan?: ReceivedPlan;
+}
+
+/** A `#w=` plan as the Inbox offers it: the dishes with a name when known here or in the token. */
+interface ReceivedPlan {
+  share: PlanShare;
+  by?: string;
+  /** Names of the embedded recipes by id (the receiver may not have them yet). */
+  names: Record<string, Text>;
 }
 
 function emptyShare(): ParsedShare {
@@ -84,6 +99,11 @@ function problemOf(e: unknown): string {
 
 function addShare(acc: Collected, parsed: ParsedShare) {
   const s = acc.share;
+  if (parsed.kind === 'plan' && parsed.plan && !acc.plan) {
+    const names: Record<string, Text> = {};
+    for (const r of parsed.recipes) names[r.id] = r.name;
+    acc.plan = { share: parsed.plan, names, ...(parsed.by ? { by: parsed.by } : {}) };
+  }
   if (!s.by && parsed.by) s.by = parsed.by;
   if (!s.at && parsed.at) s.at = parsed.at;
   if (!s.title && parsed.title) s.title = parsed.title;
@@ -253,6 +273,11 @@ export function InboxScreen() {
   const [result, setResult] = useState<ImportResult | null>(null);
   const [resultError, setResultError] = useState('');
   const [showHistory, setShowHistory] = useState(false);
+  // Phase 4: a received week plan (`#w=`) with the local names of its dishes and the outcome line.
+  const [received, setReceived] = useState<ReceivedPlan | null>(null);
+  const [planNames, setPlanNames] = useState<Record<string, Text>>({});
+  const [planNotice, setPlanNotice] = useState('');
+  const [planDone, setPlanDone] = useState(false);
   const seq = useRef(0);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const pending = pendingImport.value;
@@ -260,7 +285,7 @@ export function InboxScreen() {
   const ui = lang.value;
   const unsent = unsentChanges.value;
 
-  const received = useLive(receivedRows, []);
+  const receivedList = useLive(receivedRows, []);
   const seen = useLive(seenIds, []);
   const history = useLive(() => listImports(10), []);
 
@@ -312,20 +337,35 @@ export function InboxScreen() {
       setChoices({});
       setProblems([]);
       setError(null);
+      setReceived(null);
+      setPlanNames({});
+      setPlanNotice('');
+      setPlanDone(false);
       return;
     }
     const handle = setTimeout(async () => {
       let next: ImportPlan | null = null;
       let probs: string[] = [];
       let err: string | null = null;
+      let week: ReceivedPlan | null = null;
+      let names: Record<string, Text> = {};
       try {
         const got = await collect(trimmed, parts);
         probs = got.problems;
         const share = got.share;
         if (share.recipes.length || share.patches.length || share.dict.ing.length) {
           next = planImport(share, await localStateForImport());
-        } else if (!probs.length) {
+        } else if (!probs.length && !got.plan) {
           err = t('inbox.noToken');
+        }
+        if (got.plan) {
+          week = got.plan;
+          // Dish names: the local recipe when we have it, else the name embedded in the token.
+          names = { ...got.plan.names };
+          for (const it of got.plan.share.items) {
+            const local = await getRecipe(it.recipeId);
+            if (local) names[it.recipeId] = local.name;
+          }
         }
       } catch (e) {
         console.warn('inbox plan', e);
@@ -336,6 +376,10 @@ export function InboxScreen() {
       setChoices(next ? defaultChoices(next) : {});
       setProblems(probs);
       setError(err);
+      setReceived(week);
+      setPlanNames(names);
+      setPlanNotice('');
+      setPlanDone(false);
     }, 150);
     return () => clearTimeout(handle);
   }, [text, parts, ui]);
@@ -407,6 +451,57 @@ export function InboxScreen() {
     }
   }
 
+  /**
+   * "Overnemen" / "Toevoegen" on a received week plan (docs/phase-4-spec.md §1): the embedded
+   * recipes go through the normal import first (so their ids exist here), then the dishes we
+   * know become plan slots; unknown ids (recipes the sender did not include) are skipped.
+   */
+  async function takePlan(mode: 'replace' | 'append') {
+    if (!received || busy) return;
+    setBusy(true);
+    setPlanNotice('');
+    try {
+      if (plan && planWrites(plan, choices)) {
+        const res = await applyImportPlan(plan, choices, { name: plan.by ?? received.by ?? '' });
+        if (res.ingredients > 0) await reloadDictionary();
+        if (res.importId !== undefined) setResult(res);
+      }
+      const known: PlanShare['items'] = [];
+      let unknown = 0;
+      for (const it of received.share.items) {
+        if (await getRecipe(it.recipeId)) known.push(it);
+        else unknown++;
+      }
+      const parts: string[] = [];
+      if (mode === 'replace') {
+        const fresh = emptyPlan();
+        fresh.items = known.map((it) => newPlanItem(it.recipeId, it.servings));
+        if (received.share.note) fresh.note = received.share.note;
+        await savePlan(fresh);
+        parts.push(t('inbox.plan.taken', { n: known.length }));
+      } else {
+        const current = await getPlan();
+        const have = new Set(current.items.map((p) => p.recipeId));
+        let added = 0;
+        for (const it of known) {
+          if (have.has(it.recipeId)) continue;
+          await addToPlan(it.recipeId, it.servings);
+          added++;
+        }
+        parts.push(added > 0 ? t('inbox.plan.added', { n: added }) : t('inbox.plan.nothing'));
+      }
+      if (unknown === 1) parts.push(t('inbox.plan.unknownOne'));
+      else if (unknown > 1) parts.push(t('inbox.plan.unknown', { n: unknown }));
+      setPlanNotice(parts.join(' '));
+      setPlanDone(true);
+    } catch (e) {
+      console.error('take plan', e);
+      setPlanNotice(`${t('inbox.plan.failed')}: ${String((e as Error)?.message ?? e)}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function doUndo() {
     if (busy) return;
     setBusy(true);
@@ -432,8 +527,16 @@ export function InboxScreen() {
     navigate('/recipe/' + row.recipeId);
   }
 
-  const list = received ?? [];
+  const list = receivedList ?? [];
   const rows: ImportSnapshot[] = history ?? [];
+  const weekDishes = received?.share.items.length ?? 0;
+  const weekTitle = received
+    ? received.by
+      ? weekDishes === 1
+        ? t('inbox.plan.titleOne', { name: received.by })
+        : t('inbox.plan.title', { name: received.by, n: weekDishes })
+      : t('inbox.plan.titleAnon', { n: weekDishes })
+    : '';
   // Only the NEWEST import can be undone, and only until the next one (repo.undoLastImport).
   const undoable = isUndoable(rows[0]) ? rows[0] : undefined;
   const resultUndoable = !!result && result.importId !== undefined && !!undoable && undoable.id === result.importId;
@@ -501,7 +604,48 @@ export function InboxScreen() {
           </div>
         ))}
 
-        {plan && <ImportPreview plan={plan} choices={choices} ui={ui} busy={busy} onChoice={choose} onImport={() => void doImport()} onOpen={open} />}
+        {received && (
+          <section class="card inbox-plan">
+            <h3>{weekTitle}</h3>
+            {received.share.note && (
+              <p class="muted small">
+                {t('inbox.plan.note')}: {received.share.note}
+              </p>
+            )}
+            <ul>
+              {received.share.items.map((it, i) => {
+                const name = pickText(planNames[it.recipeId], ui);
+                return (
+                  <li key={it.recipeId + i} class={name ? '' : 'unknown'}>
+                    <span class="name">{name || t('inbox.plan.unknownDish')}</span>
+                    <span class="srv">{t('inbox.plan.servings', { n: it.servings })}</span>
+                  </li>
+                );
+              })}
+            </ul>
+            {!planDone && <p class="muted small">{t('inbox.plan.hint')}</p>}
+            {!planDone ? (
+              <div class="actions">
+                <button type="button" class="btn btn-primary" disabled={busy || weekDishes === 0} onClick={() => void takePlan('replace')}>
+                  {t('inbox.plan.take')}
+                </button>
+                <button type="button" class="btn" disabled={busy || weekDishes === 0} onClick={() => void takePlan('append')}>
+                  {t('inbox.plan.add')}
+                </button>
+              </div>
+            ) : (
+              <div class="actions">
+                <button type="button" class="btn btn-primary" onClick={() => navigate('/week')}>
+                  {t('inbox.plan.toWeek')} ›
+                </button>
+              </div>
+            )}
+            <div class="status" role="status">
+              {planNotice}
+            </div>
+          </section>
+        )}
+        {plan && !planDone && <ImportPreview plan={plan} choices={choices} ui={ui} busy={busy} onChoice={choose} onImport={() => void doImport()} onOpen={open} />}
         {resultError && <div class="card bad">{resultError}</div>}
 
         {result && (
@@ -528,7 +672,7 @@ export function InboxScreen() {
 
         <section class="section inbox-received">
           <h2>{t('inbox.received')}</h2>
-          {received && list.length === 0 && <div class="empty">{t('inbox.empty')}</div>}
+          {receivedList && list.length === 0 && <div class="empty">{t('inbox.empty')}</div>}
           <ul class="list">
             {list.map((r) => {
               const unseen = seen ? !seen.has(r.key) : false;

@@ -8,7 +8,8 @@ import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { reloadCelebrateSettings } from '@/celebrate';
 import { Header } from '@/components/Header';
 import type { BackupBundle } from '@/db/model';
-import { LAST_BACKUP_KEY, backupHealth, bundled, exportBundle, getBaseRecipe, importBundle, setSetting, type BackupHealth } from '@/db/repo';
+import { useLive } from '@/db/live';
+import { LAST_BACKUP_KEY, backupHealth, bundled, exportBundle, getBaseRecipe, importBundle, setSetting, weekCounts, type BackupHealth } from '@/db/repo';
 import { nowIso, type Text } from '@/domain/model';
 import { applyOverride } from '@/domain/overrides';
 import { buildBundleEnvelope, bundleFileName } from '@/domain/share';
@@ -57,6 +58,8 @@ export function StorageScreen() {
   const [busy, setBusy] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const by = activeProfile.value?.name ?? '';
+  // Phase 4 counters (plan / list / pantry), live: a restore updates them at once.
+  const week = useLive(weekCounts, []);
 
   const reload = useCallback(async () => {
     let persisted: boolean | null = null;
@@ -175,7 +178,9 @@ export function StorageScreen() {
       void refreshShareBadges();
       setRestoreStatus(t('storage.restored', { ...result }));
       // Counted inside the restore transaction: rows a newer local row won against are not in it.
-      setRestoreMore(t('storage.restoredMore', { overrides: result.overrides, lineOverrides: result.lineOverrides, ingredients: result.userIngredients }));
+      const more = t('storage.restoredMore', { overrides: result.overrides, lineOverrides: result.lineOverrides, ingredients: result.userIngredients });
+      const weekPart = (result.plans ?? 0) + (result.lists ?? 0) + (result.pantry ?? 0) > 0 ? ` · ${t('storage.restoredWeek', { plans: result.plans ?? 0, lists: result.lists ?? 0, pantry: result.pantry ?? 0 })}` : '';
+      setRestoreMore(more + weekPart);
     } catch (e) {
       setRestoreStatus((e as Error)?.message === 'invalid-bundle' ? t('storage.invalid') : `${t('common.error')}: ${String(e)}`);
     }
@@ -233,6 +238,12 @@ export function StorageScreen() {
             <dd>{show(bundle?.cookLog.length)}</dd>
             <dt>{t('storage.profiles')}</dt>
             <dd>{show(bundle?.profiles.length)}</dd>
+            <dt>{t('storage.plan')}</dt>
+            <dd>{show(week?.plan)}</dd>
+            <dt>{t('storage.list')}</dt>
+            <dd>{show(week?.list)}</dd>
+            <dt>{t('storage.pantry')}</dt>
+            <dd>{show(week?.pantry)}</dd>
           </dl>
         </section>
 

@@ -5,6 +5,8 @@
 //   #r=  one recipe (schema 2 or any older shape, through normalizeRecipe)
 //   #p=  an adjustment of a classic: "Aanpassing van <name> door <by>" + the changed fields
 //   #b=  a bundle: the recipes (names in both languages) and adjustments it holds
+//   #w=  a week plan: "Weekplan van <by>: N gerechten" and the own recipes it carries (builtins
+//        travel by id only, so they are counted, not named)
 // Ingredient lines are rendered through the bundled dictionary (schema-2 lines carry `ing`,
 // `qty`, `unit`, `prep` and usually only a Dutch `raw`), so the EN view shows English names;
 // a line the dictionary cannot render falls back to its raw text.
@@ -20,6 +22,7 @@ const S = {
     preview: 'Voorproefje van een gedeeld recept',
     previewPatch: 'Voorproefje van een gedeelde aanpassing',
     previewBundle: 'Voorproefje van een gedeelde bundel',
+    previewPlan: 'Voorproefje van een gedeeld weekplan',
     ingredients: 'Ingrediënten',
     method: 'Bereiding',
     tip: 'Serveertip',
@@ -44,12 +47,18 @@ const S = {
     bundleIngredients: (n: number) => `${n} ${n === 1 ? 'nieuw ingrediënt' : 'nieuwe ingrediënten'}`,
     adjusted: 'aangepast',
     empty: 'Deze bundel is leeg.',
+    planOf: (n: number, by: string) => `Weekplan${by ? ` van ${by}` : ''}: ${n} ${n === 1 ? 'gerecht' : 'gerechten'}`,
+    planFromApp: (n: number) => `${n} ${n === 1 ? 'gerecht' : 'gerechten'} uit de app zelf (staan al op je telefoon)`,
+    planNote: 'Notitie',
+    planHint: 'In de app kies je Overnemen (vervangt je week) of Toevoegen (alleen wat ontbreekt).',
+    planEmpty: 'Dit weekplan is leeg.',
   },
   en: {
     title: "Rutgers' Recipes",
     preview: 'Preview of a shared recipe',
     previewPatch: 'Preview of a shared adjustment',
     previewBundle: 'Preview of a shared bundle',
+    previewPlan: 'Preview of a shared week plan',
     ingredients: 'Ingredients',
     method: 'Method',
     tip: 'Serving tip',
@@ -74,6 +83,11 @@ const S = {
     bundleIngredients: (n: number) => `${n} new ${n === 1 ? 'ingredient' : 'ingredients'}`,
     adjusted: 'adjusted',
     empty: 'This bundle is empty.',
+    planOf: (n: number, by: string) => `Week plan${by ? ` from ${by}` : ''}: ${n} ${n === 1 ? 'dish' : 'dishes'}`,
+    planFromApp: (n: number) => `${n} ${n === 1 ? 'dish' : 'dishes'} from the app itself (already on your phone)`,
+    planNote: 'Note',
+    planHint: 'In the app choose Take over (replaces your week) or Add (only what is missing).',
+    planEmpty: 'This week plan is empty.',
   },
 } as const;
 
@@ -223,6 +237,33 @@ function bundleHtml(s: ParsedShare, by: string): string[] {
   return parts;
 }
 
+/** The week plan: "Weekplan van <by>: N gerechten", the embedded (own) recipes by name, the rest counted. */
+function planHtml(s: ParsedShare, by: string): string[] {
+  const L = S[lang];
+  const parts: string[] = [];
+  const plan = s.plan ?? { items: [] };
+  parts.push(`<h2>${esc(L.planOf(plan.items.length, by))}</h2>`);
+  if (plan.note) parts.push(`<p class="muted">${esc(L.planNote)}: ${esc(plan.note)}</p>`);
+  const embedded = new Map(s.recipes.map((r) => [r.id, r] as const));
+  const items: string[] = [];
+  let fromApp = 0;
+  for (const it of plan.items) {
+    const r = embedded.get(it.recipeId);
+    if (!r) {
+      fromApp++;
+      continue;
+    }
+    const first = pickText(r.name, lang) || '?';
+    const other = lang === 'nl' ? (r.name.en ?? '').trim() : (r.name.nl ?? '').trim();
+    const alt = other && other.toLowerCase() !== first.toLowerCase() ? `<span class="alt">${esc(other)}</span>` : '';
+    items.push(`<li>${esc(first)} <span class="tag">(${it.servings} ${esc(L.servings)})</span>${alt}</li>`);
+  }
+  if (fromApp) items.push(`<li class="muted">${esc(L.planFromApp(fromApp))}</li>`);
+  parts.push(items.length ? `<ul>${items.join('')}</ul>` : `<p>${esc(L.planEmpty)}</p>`);
+  parts.push(`<p class="muted">${esc(L.planHint)}</p>`);
+  return parts;
+}
+
 function render() {
   const L = S[lang];
   const parts: string[] = [];
@@ -231,12 +272,14 @@ function render() {
   const recipe = share?.kind === 'recipe' ? share.recipes[0] : undefined;
   const patch = share?.kind === 'patch' ? share.patches[0] : undefined;
   const bundle = share?.kind === 'bundle' ? share : undefined;
+  const plan = share?.kind === 'plan' ? share : undefined;
   const by = share?.by ?? '';
-  parts.push(`<p class="muted">${esc(patch ? L.previewPatch : bundle ? L.previewBundle : L.preview)}</p>`);
-  if (recipe || patch || bundle) {
+  parts.push(`<p class="muted">${esc(patch ? L.previewPatch : bundle ? L.previewBundle : plan ? L.previewPlan : L.preview)}</p>`);
+  if (recipe || patch || bundle || plan) {
     if (recipe) parts.push(...recipeHtml(recipe, by));
     else if (patch) parts.push(...patchHtml(patch, by));
     else if (bundle) parts.push(...bundleHtml(bundle, by));
+    else if (plan) parts.push(...planHtml(plan, by));
     parts.push(`<button type="button" class="btn" id="copy">${esc(L.copy)}</button><div class="status" id="status"></div>`);
     parts.push(`<div class="card"><strong>${esc(L.handoff)}</strong><ol>${L.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol><div class="muted">${esc(L.install)}</div></div>`);
     parts.push(`<a class="btn secondary" href="${esc(appUrl())}">${esc(L.openApp)}</a>`);
@@ -267,7 +310,7 @@ function render() {
 
 async function boot() {
   const m = /^#([rpwb])=([A-Za-z0-9_-]+)/.exec(location.hash);
-  if (m && (m[1] === 'r' || m[1] === 'p' || m[1] === 'b') && m[2]) {
+  if (m && m[2]) {
     try {
       const env = await decodeToken(m[2]);
       if (env.t !== m[1]) throw new Error('invalid-token');
@@ -275,7 +318,8 @@ async function boot() {
       const usable =
         (parsed.kind === 'recipe' && parsed.recipes.length > 0) ||
         (parsed.kind === 'patch' && parsed.patches.length > 0) ||
-        (parsed.kind === 'bundle' && (parsed.recipes.length > 0 || parsed.patches.length > 0));
+        (parsed.kind === 'bundle' && (parsed.recipes.length > 0 || parsed.patches.length > 0)) ||
+        (parsed.kind === 'plan' && (parsed.plan?.items.length ?? 0) > 0);
       if (usable) share = parsed;
       else problem = 'invalid';
     } catch (e) {
