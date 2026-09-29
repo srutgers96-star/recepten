@@ -37,6 +37,7 @@ Stijn heeft het plan per thema doorgenomen. Deze besluiten gaan vóór alles wat
 | **Timerbalk** | Reset-knop ↻ (opnieuw vanaf de oorspronkelijke tijd) naast −1 / +1 / ×. Meerdere timers stapelen in de balk. Gebouwd 29-09. |
 | **Receptpagina** | Geen vinkjes bij de ingrediënten (lezen, niet afvinken); afvinken alleen in de kookstand en straks in de boodschappenlijst. |
 | **Kleine wensen (backlog)** | Grammen en milliliters altijd als heel getal tonen (62.25 g → 62 g); breuken (¼, ½, 1½) alleen bij lepels, stuks en teentjes. Lage prioriteit, meenemen bij de afwerking van de weergave (fase 5). |
+| **Vertaling eigen recepten (besloten 29-09, direct na fase 3)** | (1) De sectie "Vertaling" (Kopieer voor vertaling → Plak vertaling) staat in élke kolomstand, als "Engels toevoegen" bij een Nederlands recept en "Nederlands toevoegen" bij een Engels recept; na plakken springt de editor naar "beide". (2) De foto/tekst-importprompt vraagt de AI om het recept in **beide talen** terug te geven (blok NL en blok EN, zelfde regels en stappen); de editor vult beide kolommen. (3) Op de receptpagina van een eigen recept zonder tweede taal: regel "Engels ontbreekt — toevoegen" die naar de editor springt. |
 | **Werkwijze** | Claude Code bouwt; Stijn test op de telefoons. Bij vragen tijdens het bouwen: doorgaan met de rest als Stijn niet meekijkt, vragen bundelen. |
 
 ---
