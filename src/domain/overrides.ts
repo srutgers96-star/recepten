@@ -27,6 +27,13 @@ export interface RecipeOverride {
   updatedAt: string;
   /** Name of the profile that made the edit (curator credit), or null. */
   by?: string | null;
+  /**
+   * Receiver-side bookkeeping of an override that came in through a share (phase 3, like
+   * `Recipe.sync`): `rev === sync.receivedRev` means "untouched since receipt", so a newer patch
+   * from the sender may replace it without a conflict. `saveOverride` keeps it while bumping
+   * `rev` (so a local edit makes the override "touched"); it never travels in a token.
+   */
+  sync?: { receivedRev?: number; receivedAt?: string };
 }
 
 /** One row of the `lineOverrides` table: a user correction of one line of a builtin. */

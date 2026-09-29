@@ -1,18 +1,39 @@
-// '#/inbox' — top: the import UI (textarea paste, "Plak van klembord" with readText in the tap,
-// file input validated by content, the share-target inbox from the 'share-inbox' cache when opened
-// with ?from=share, and a '#r=' hash handed over by the router as pendingImport); every input is
-// decoded to a schema-2 recipe and previewed as Nieuw / Al aanwezig (fingerprint) / Bijgewerkt,
-// "Bewaar" -> repo.importRecipes (origin received, receivedFrom = env.by). Below: the received
-// recipes, newest first, "van <naam>", unseen badge (setting 'inbox.seenIds'), tap -> detail.
+// '#/inbox' (docs/phase-3-spec.md §4 "Inbox") — top: the import UI. It accepts pasted text with
+// several tokens (`#r=` recipes, `#p=` patches of classics, `#b=` bundles), bundle files (.json/.txt
+// with a bundle envelope, the old backup format or a single recipe/envelope), the share-target
+// inbox from the 'share-inbox' cache (?from=share, src/sw.ts) and a token the router parked in
+// pendingImport. Everything is parsed with share.parseEnvelope, merged into ONE ParsedShare and
+// classified by merge.planImport against repo.localStateForImport(); <ImportPreview> shows every
+// item with its status and the choices (<ConflictCard>), ONE "Importeer" calls
+// repo.applyImportPlan. Below: the result line with "Maak ongedaan" (undoLastImport), the import
+// history (listImports, collapsible) and the received recipes (unseen badge via 'inbox.seenIds',
+// received patches of classics shown as "<klassieker> · aangepast door X").
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
+import { ImportPreview } from '@/components/ImportPreview';
 import { useLive } from '@/db/live';
-import { allRecipes, getRecipe, getSetting, importRecipes, isBuiltinId, setSetting, userRecipes } from '@/db/repo';
+import type { ImportSnapshot } from '@/db/model';
+import {
+  applyImportPlan,
+  getRecipe,
+  getSetting,
+  isUndoable,
+  listImports,
+  localStateForImport,
+  receivedPatches,
+  setSetting,
+  undoLastImport,
+  userRecipes,
+  type ImportResult,
+} from '@/db/repo';
+import { reloadDictionary } from '@/dictionary';
+import { defaultChoices, planImport, type ImportChoice, type ImportChoices, type ImportPlan } from '@/domain/merge';
 import { pickText, type Recipe } from '@/domain/model';
-import { normalizeRecipe, recipeFingerprint, recipeFromEnvelope } from '@/domain/recipe-io';
-import { decodeToken, extractTokens, parseEnvelope, type Envelope } from '@/domain/token';
+import { normalizeRecipe } from '@/domain/recipe-io';
+import { parseEnvelope, readPatchPayload, type ParsedShare, type PatchPayload } from '@/domain/share';
+import { decodeToken, extractTokens } from '@/domain/token';
 import { lang, t } from '@/i18n';
-import { INBOX_SEEN_KEY } from '@/inbox-badge';
+import { INBOX_SEEN_KEY, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { navigate, pendingImport, route } from '@/router';
 
 // --- Seen bookkeeping (setting 'inbox.seenIds'; the Nav badge in src/inbox-badge.ts follows it) ---
@@ -22,6 +43,7 @@ async function seenIds(): Promise<Set<string>> {
   return new Set(Array.isArray(raw) ? raw.filter((x): x is string => typeof x === 'string') : []);
 }
 
+/** Marks a received recipe id (or 'p:' + baseId of a received patch) as seen. */
 export async function markInboxSeen(id: string): Promise<void> {
   const seen = await seenIds();
   if (seen.has(id)) return;
@@ -29,29 +51,23 @@ export async function markInboxSeen(id: string): Promise<void> {
   await setSetting(INBOX_SEEN_KEY, [...seen]);
 }
 
-// --- Import preview ------------------------------------------------------------------------------
-
-type ItemStatus = 'new' | 'exists' | 'updated';
-
-interface PreviewItem {
-  key: string;
-  recipe?: Recipe;
-  /** Sender (envelope `by`, else the recipe's own origin). */
-  by?: string;
-  at?: string;
-  status?: ItemStatus;
-  /** Id of the recipe already present (same id, or same fingerprint under another id). */
-  existingId?: string;
-  savedId?: string;
-  saveNote?: string;
-  /** Set when the input could not be read as a recipe. */
-  problem?: string;
-}
+// --- Input -> one ParsedShare -------------------------------------------------------------------
 
 interface ShareInboxPayload {
   at: number;
   text: string;
   files: Array<{ name: string; type: string; text: string }>;
+}
+
+/** Everything the input held, merged: recipes and patches concatenated, dictionary entries by id. */
+interface Collected {
+  share: ParsedShare;
+  /** Human-readable problems per part (invalid code, newer version …). */
+  problems: string[];
+}
+
+function emptyShare(): ParsedShare {
+  return { kind: 'bundle', dict: { ing: [] }, recipes: [], patches: [] };
 }
 
 function usable(r: Recipe | null): r is Recipe {
@@ -62,48 +78,78 @@ function senderOf(r: Recipe): string | undefined {
   return r.origin.receivedFrom || r.origin.author || undefined;
 }
 
-function fromEnvelope(env: Envelope, key: string): PreviewItem {
-  if (env.t === 'b') return { key, problem: t('inbox.backup') };
-  if (env.t !== 'r') return { key, problem: `${t('inbox.unsupportedType')} ${env.t}` };
-  const recipe = recipeFromEnvelope(env);
-  if (!usable(recipe)) return { key, problem: t('inbox.invalid') };
-  const item: PreviewItem = { key, recipe };
-  const by = typeof env.by === 'string' && env.by.trim() ? env.by.trim() : senderOf(recipe);
-  if (by) item.by = by;
-  if (typeof env.at === 'string') item.at = env.at;
-  return item;
-}
-
 function problemOf(e: unknown): string {
   return (e as Error)?.message === 'unsupported-version' ? t('inbox.unsupported') : t('inbox.invalid');
 }
 
-/** Recognise pasted JSON by content: an envelope, a recipe (any shape), an array, or an export. */
-function fromJson(value: unknown, key: string, out: PreviewItem[]) {
+function addShare(acc: Collected, parsed: ParsedShare) {
+  const s = acc.share;
+  if (!s.by && parsed.by) s.by = parsed.by;
+  if (!s.at && parsed.at) s.at = parsed.at;
+  if (!s.title && parsed.title) s.title = parsed.title;
+  s.recipes.push(...parsed.recipes.filter(usable));
+  s.patches.push(...parsed.patches);
+  const have = new Set(s.dict.ing.map((e) => e.id));
+  for (const e of parsed.dict.ing) {
+    if (have.has(e.id)) continue;
+    have.add(e.id);
+    s.dict.ing.push(e);
+  }
+}
+
+function addRecipe(acc: Collected, r: Recipe) {
+  if (!usable(r)) return;
+  acc.share.recipes.push(r);
+  if (!acc.share.by) {
+    const by = senderOf(r);
+    if (by) acc.share.by = by;
+  }
+}
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v);
+}
+
+/**
+ * Recognise JSON by content: an envelope (r/p/b, also the backup format), an array, an export
+ * with `recipes` / `userRecipes`, a bare patch, a recipe in any shape. A v3 envelope says
+ * "update the app" (parseEnvelope checks the version like decodeToken does).
+ */
+function collectJson(value: unknown, acc: Collected, depth = 0) {
+  if (depth > 3) return;
   if (Array.isArray(value)) {
-    value.forEach((v, i) => fromJson(v, `${key}.${i}`, out));
+    for (const v of value) collectJson(v, acc, depth + 1);
     return;
   }
-  if (!value || typeof value !== 'object') return;
-  const o = value as Record<string, unknown>;
-  if (typeof o.v === 'number' && typeof o.t === 'string') {
-    // Same version check as decodeToken: a v3 envelope pasted as raw JSON says "update the app".
+  if (!isRecord(value)) return;
+  if (typeof value.v === 'number' && typeof value.t === 'string') {
     try {
-      out.push(fromEnvelope(parseEnvelope(o), key));
+      addShare(acc, parseEnvelope(value));
     } catch (e) {
-      out.push({ key, problem: problemOf(e) });
+      acc.problems.push(problemOf(e));
     }
     return;
   }
-  if (Array.isArray(o.userRecipes)) return fromJson(o.userRecipes, key, out);
-  if (Array.isArray(o.recipes)) return fromJson(o.recipes, key, out);
-  const recipe = normalizeRecipe(o);
-  if (usable(recipe)) {
-    const item: PreviewItem = { key, recipe };
-    const by = senderOf(recipe);
-    if (by) item.by = by;
-    out.push(item);
+  if (Array.isArray(value.userRecipes) || Array.isArray(value.recipes)) {
+    collectJson(value.userRecipes ?? value.recipes, acc, depth + 1);
+    if (Array.isArray(value.overrides)) collectJson(value.overrides, acc, depth + 1);
+    if (Array.isArray(value.userIngredients)) {
+      // Legacy export without an envelope: run its ingredients through the tolerant reader.
+      try {
+        addShare(acc, parseEnvelope({ v: 2, t: 'b', b: { recipes: [], patches: [] }, dict: { ing: value.userIngredients } }));
+      } catch {
+        /* ignore an unreadable dictionary part */
+      }
+    }
+    return;
   }
+  if (typeof value.baseId === 'string' && isRecord(value.patch)) {
+    const p: PatchPayload | null = readPatchPayload(value);
+    if (p) acc.share.patches.push(p);
+    return;
+  }
+  const recipe = normalizeRecipe(value);
+  if (recipe) addRecipe(acc, recipe);
 }
 
 /**
@@ -127,19 +173,38 @@ function jsonCandidates(part: string): unknown[] {
   }
 }
 
-/** Nieuw / Al aanwezig / Bijgewerkt, the same way importRecipes will decide. */
-async function withStatus(item: PreviewItem): Promise<PreviewItem> {
-  if (!item.recipe) return item;
-  const r = item.recipe;
-  const fp = recipeFingerprint(r);
-  const byId = await getRecipe(r.id);
-  if (byId) {
-    if (isBuiltinId(r.id) || recipeFingerprint(byId) === fp) return { ...item, status: 'exists', existingId: byId.id };
-    return { ...item, status: 'updated', existingId: byId.id };
+/** Tokens first (every `#r=`/`#p=`/`#b=` in the text), else JSON by content per part. */
+async function collect(text: string, parts: string[] | null): Promise<Collected> {
+  const acc: Collected = { share: emptyShare(), problems: [] };
+  const tokens = extractTokens(text);
+  if (tokens.length) {
+    for (const tk of tokens) {
+      try {
+        const env = await decodeToken(tk.token);
+        // The fragment key is part of the contract: "#r=" must carry a t:'r' envelope.
+        if (env.t !== tk.key) throw new Error('invalid-token');
+        addShare(acc, parseEnvelope(env));
+      } catch (e) {
+        acc.problems.push(problemOf(e));
+      }
+    }
+    return acc;
   }
-  const twin = (await allRecipes()).find((x) => recipeFingerprint(x) === fp);
-  if (twin) return { ...item, status: 'exists', existingId: twin.id };
-  return { ...item, status: 'new' };
+  const candidates = parts && parts.length > 1 ? parts : [text];
+  for (const part of candidates) for (const value of jsonCandidates(part)) collectJson(value, acc);
+  return acc;
+}
+
+// --- Received list ------------------------------------------------------------------------------
+
+interface ReceivedRow {
+  /** Recipe id, or 'p:' + baseId for a received patch (also the seen key). */
+  key: string;
+  recipeId: string;
+  name: Recipe['name'];
+  from?: string;
+  at: string;
+  patch: boolean;
 }
 
 function fmtDate(iso: string | undefined, l: string): string {
@@ -152,6 +217,26 @@ function receivedAt(r: Recipe): string {
   return r.origin.receivedAt || r.createdAt;
 }
 
+/** Received recipes + classics whose override came in through an import ("aangepast door X"). */
+async function receivedRows(): Promise<ReceivedRow[]> {
+  const [recipes, patched] = await Promise.all([userRecipes(), receivedPatches()]);
+  const rows: ReceivedRow[] = [];
+  for (const r of recipes) {
+    if (r.origin.kind !== 'received') continue;
+    const row: ReceivedRow = { key: r.id, recipeId: r.id, name: r.name, at: receivedAt(r), patch: false };
+    if (r.origin.receivedFrom) row.from = r.origin.receivedFrom;
+    rows.push(row);
+  }
+  for (const info of patched) {
+    const classic = await getRecipe(info.baseId);
+    if (!classic) continue;
+    const row: ReceivedRow = { key: 'p:' + info.baseId, recipeId: info.baseId, name: classic.name, at: info.at, patch: true };
+    if (info.from) row.from = info.from;
+    rows.push(row);
+  }
+  return rows.sort((a, b) => b.at.localeCompare(a.at));
+}
+
 // --- Screen --------------------------------------------------------------------------------------
 
 export function InboxScreen() {
@@ -159,17 +244,30 @@ export function InboxScreen() {
   // Share-target parts (message text, each file) kept separate for JSON detection; null once the
   // user edits the textarea or the text came from anywhere else.
   const [parts, setParts] = useState<string[] | null>(null);
-  const [items, setItems] = useState<PreviewItem[]>([]);
+  const [plan, setPlan] = useState<ImportPlan | null>(null);
+  const [choices, setChoices] = useState<ImportChoices>({});
+  const [problems, setProblems] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState<ImportResult | null>(null);
+  const [resultError, setResultError] = useState('');
+  const [showHistory, setShowHistory] = useState(false);
   const seq = useRef(0);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const pending = pendingImport.value;
   const fromShare = route.value.query.get('from') === 'share';
   const ui = lang.value;
+  const unsent = unsentChanges.value;
 
-  const received = useLive(async () => (await userRecipes()).filter((r) => r.origin.kind === 'received'), []);
+  const received = useLive(receivedRows, []);
   const seen = useLive(seenIds, []);
+  const history = useLive(() => listImports(10), []);
+
+  // The "unsent changes" card (spec §3: Inbox → top card when there is something unsent).
+  useEffect(() => {
+    void refreshShareBadges();
+  }, []);
 
   // A share token arrived in the URL hash (at boot or later): move it into the textarea.
   useEffect(() => {
@@ -205,41 +303,38 @@ export function InboxScreen() {
     })();
   }, [fromShare]);
 
-  // Analyse the text (debounced): tokens first, else JSON by content.
+  // Analyse the text (debounced): tokens first, else JSON by content; then plan against the db.
   useEffect(() => {
     const my = ++seq.current;
     const trimmed = text.trim();
     if (!trimmed) {
-      setItems([]);
+      setPlan(null);
+      setChoices({});
+      setProblems([]);
       setError(null);
       return;
     }
     const handle = setTimeout(async () => {
-      const found: PreviewItem[] = [];
+      let next: ImportPlan | null = null;
+      let probs: string[] = [];
       let err: string | null = null;
-      const tokens = extractTokens(trimmed);
-      if (tokens.length) {
-        for (const [i, tk] of tokens.entries()) {
-          const key = `${tk.key}${i}`;
-          try {
-            const env = await decodeToken(tk.token);
-            // The fragment key is part of the contract: "#r=" must carry a t:'r' envelope.
-            found.push(env.t === tk.key ? fromEnvelope(env, key) : { key, problem: t('inbox.invalid') });
-          } catch (e) {
-            found.push({ key, problem: problemOf(e) });
-          }
+      try {
+        const got = await collect(trimmed, parts);
+        probs = got.problems;
+        const share = got.share;
+        if (share.recipes.length || share.patches.length || share.dict.ing.length) {
+          next = planImport(share, await localStateForImport());
+        } else if (!probs.length) {
+          err = t('inbox.noToken');
         }
-      } else {
-        // JSON by content: each shared part on its own (a title line must not break a .json file).
-        const candidates = parts && parts.length > 1 ? parts : [trimmed];
-        candidates.forEach((part, i) => {
-          for (const value of jsonCandidates(part)) fromJson(value, `j${i}`, found);
-        });
-        if (!found.length) err = t('inbox.noToken');
+      } catch (e) {
+        console.warn('inbox plan', e);
+        err = t('inbox.invalid');
       }
-      const withStatuses = await Promise.all(found.map(withStatus));
       if (my !== seq.current) return;
-      setItems(withStatuses);
+      setPlan(next);
+      setChoices(next ? defaultChoices(next) : {});
+      setProblems(probs);
       setError(err);
     }, 150);
     return () => clearTimeout(handle);
@@ -281,33 +376,92 @@ export function InboxScreen() {
       .catch(() => setNotice(t('inbox.fileFailed')));
   }
 
-  async function save(item: PreviewItem) {
-    if (!item.recipe) return;
+  function clearText() {
+    setParts(null);
+    setText('');
+  }
+
+  function choose(id: string, choice: ImportChoice) {
+    setChoices((prev) => ({ ...prev, [id]: choice }));
+  }
+
+  async function doImport() {
+    if (!plan || busy) return;
+    setBusy(true);
+    setResultError('');
     try {
-      const result = await importRecipes([item.recipe], { name: item.by ?? '' });
-      const id = item.recipe.id;
-      const saved = result.added.includes(id) || result.updated.includes(id);
-      setItems((prev) =>
-        prev.map((it) =>
-          it.key === item.key ? { ...it, savedId: saved ? id : it.existingId, saveNote: saved ? t('inbox.saved') : t('inbox.skipped') } : it,
-        ),
-      );
+      const res = await applyImportPlan(plan, choices, { name: plan.by ?? '' });
+      if (res.ingredients > 0) await reloadDictionary();
+      if (res.importId === undefined) {
+        setNotice(t('inbox.nothingToImport'));
+      } else {
+        setResult(res);
+        setNotice('');
+        clearText();
+      }
     } catch (e) {
-      setItems((prev) => prev.map((it) => (it.key === item.key ? { ...it, saveNote: `${t('inbox.saveError')}: ${String(e)}` } : it)));
+      console.error('import', e);
+      setResultError(`${t('inbox.importError')}: ${String((e as Error)?.message ?? e)}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function doUndo() {
+    if (busy) return;
+    setBusy(true);
+    try {
+      const ok = await undoLastImport();
+      await reloadDictionary();
+      setResult(null);
+      setNotice(ok ? t('inbox.undone') : t('inbox.undoFailed'));
+    } catch (e) {
+      console.error('undo import', e);
+      setNotice(`${t('inbox.importError')}: ${String((e as Error)?.message ?? e)}`);
+    } finally {
+      setBusy(false);
     }
   }
 
   function open(id: string) {
-    void markInboxSeen(id);
     navigate('/recipe/' + id);
   }
 
-  const list = (received ?? []).slice().sort((a, b) => receivedAt(b).localeCompare(receivedAt(a)));
+  function openReceived(row: ReceivedRow) {
+    void markInboxSeen(row.key);
+    navigate('/recipe/' + row.recipeId);
+  }
+
+  const list = received ?? [];
+  const rows: ImportSnapshot[] = history ?? [];
+  // Only the NEWEST import can be undone, and only until the next one (repo.undoLastImport).
+  const undoable = isUndoable(rows[0]) ? rows[0] : undefined;
+  const resultUndoable = !!result && result.importId !== undefined && !!undoable && undoable.id === result.importId;
+  const written = result ? [...result.added, ...result.updated].filter((id) => !id.startsWith('p:')) : [];
 
   return (
     <>
       <Header title={t('inbox.title')} />
       <div class="screen form inbox">
+        {unsent > 0 && (
+          <a
+            class="card reminder"
+            href="#/share"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/share');
+            }}
+          >
+            <span class="reminder-icon" aria-hidden="true">
+              📤
+            </span>
+            <span class="reminder-text">
+              {unsent === 1 ? t('home.unsentOne') : t('home.unsent', { n: unsent })}
+              <span class="reminder-action">{t('home.unsentAction')} ›</span>
+            </span>
+            <span class="badge">{unsent}</span>
+          </a>
+        )}
         <p class="muted inbox-hint">{t('inbox.hint')}</p>
         <textarea
           class="input"
@@ -330,14 +484,7 @@ export function InboxScreen() {
             <input type="file" accept=".json,.txt,application/json,text/plain" style="display:none" onChange={onFile} />
           </label>
           {text && (
-            <button
-              type="button"
-              class="btn btn-small"
-              onClick={() => {
-                setParts(null);
-                setText('');
-              }}
-            >
+            <button type="button" class="btn btn-small" onClick={clearText}>
               {t('inbox.clear')}
             </button>
           )}
@@ -348,89 +495,60 @@ export function InboxScreen() {
         </div>
 
         {error && <div class="card bad">{error}</div>}
-
-        {items.map((item) => (
-          <div class="card inbox-item" key={item.key}>
-            {item.problem && <div class="bad">{item.problem}</div>}
-            {item.recipe && (
-              <>
-                <div class="muted small">{t('inbox.preview')}</div>
-                <h2 class="inbox-name">{pickText(item.recipe.name, ui)}</h2>
-                {item.recipe.name.en && item.recipe.name.nl && item.recipe.name.en !== item.recipe.name.nl && (
-                  <div class="muted">{ui === 'en' ? item.recipe.name.nl : item.recipe.name.en}</div>
-                )}
-                <p class="muted">
-                  {t('inbox.ingredients', { n: item.recipe.lines.filter((l) => l.kind !== 'header').length })}
-                  {' · '}
-                  {t('inbox.steps', { n: item.recipe.steps.length })}
-                  {item.by ? ` · ${t('common.from', { name: item.by })}` : ''}
-                  {item.at ? ` · ${t('inbox.at')} ${fmtDate(item.at, ui)}` : ''}
-                </p>
-                {item.savedId === undefined && item.status === 'new' && (
-                  <p>
-                    <span class="badge badge-green">{t('inbox.new')}</span>
-                  </p>
-                )}
-                {item.savedId === undefined && item.status === 'exists' && (
-                  <p>
-                    <span class="badge">{t('inbox.exists')}</span> <span class="muted small">{t('inbox.existsHint')}</span>
-                  </p>
-                )}
-                {item.savedId === undefined && item.status === 'updated' && (
-                  <p>
-                    <span class="badge">{t('inbox.updated')}</span> <span class="muted small">{t('inbox.updatedHint')}</span>
-                  </p>
-                )}
-                {item.savedId !== undefined ? (
-                  <div class="actions">
-                    <span class="ok inbox-note">{item.saveNote}</span>
-                    <button type="button" class="btn" onClick={() => open(item.savedId as string)}>
-                      {t('inbox.open')}
-                    </button>
-                  </div>
-                ) : item.status === 'exists' && item.existingId ? (
-                  <div class="actions">
-                    <button type="button" class="btn btn-block" onClick={() => navigate('/recipe/' + item.existingId)}>
-                      {t('inbox.open')}
-                    </button>
-                  </div>
-                ) : (
-                  <div class="actions">
-                    <button type="button" class="btn btn-primary btn-block" onClick={() => void save(item)}>
-                      {t('inbox.save')}
-                    </button>
-                  </div>
-                )}
-                {item.savedId === undefined && item.saveNote && <div class="bad small">{item.saveNote}</div>}
-              </>
-            )}
+        {problems.map((p, i) => (
+          <div class="card bad" key={'p' + i}>
+            {p}
           </div>
         ))}
+
+        {plan && <ImportPreview plan={plan} choices={choices} ui={ui} busy={busy} onChoice={choose} onImport={() => void doImport()} onOpen={open} />}
+        {resultError && <div class="card bad">{resultError}</div>}
+
+        {result && (
+          <div class="card inbox-result">
+            <div class="ok inbox-result-line">
+              {t('inbox.result', { added: result.added.length, updated: result.updated.length, skipped: result.skipped.length })}
+              {result.copies.length > 0 ? ` · ${t('inbox.resultCopies', { n: result.copies.length })}` : ''}
+              {result.ingredients > 0 ? ` · ${t('inbox.resultIngredients', { n: result.ingredients })}` : ''}
+            </div>
+            <div class="actions inbox-result-actions">
+              {written.length === 1 && (
+                <button type="button" class="btn" onClick={() => open(written[0] as string)}>
+                  {t('inbox.open')}
+                </button>
+              )}
+              {resultUndoable && (
+                <button type="button" class="btn btn-danger" disabled={busy} onClick={() => void doUndo()}>
+                  {t('inbox.undo')}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         <section class="section inbox-received">
           <h2>{t('inbox.received')}</h2>
           {received && list.length === 0 && <div class="empty">{t('inbox.empty')}</div>}
           <ul class="list">
             {list.map((r) => {
-              const unseen = seen ? !seen.has(r.id) : false;
-              const from = r.origin.receivedFrom;
+              const unseen = seen ? !seen.has(r.key) : false;
+              const meta: string[] = [];
+              if (r.patch) meta.push(r.from ? t('inbox.patchBy', { name: r.from }) : t('inbox.patchAnon'));
+              else if (r.from) meta.push(t('common.from', { name: r.from }));
+              meta.push(fmtDate(r.at, ui));
               return (
-                <li key={r.id}>
+                <li key={r.key}>
                   <a
                     class="row inbox-row"
-                    href={'#/recipe/' + r.id}
+                    href={'#/recipe/' + r.recipeId}
                     onClick={(e) => {
                       e.preventDefault();
-                      open(r.id);
+                      openReceived(r);
                     }}
                   >
                     <span class="name">
                       <span class="inbox-row-name">{pickText(r.name, ui)}</span>
-                      <span class="muted small inbox-row-meta">
-                        {from ? t('common.from', { name: from }) : ''}
-                        {from ? ' · ' : ''}
-                        {fmtDate(receivedAt(r), ui)}
-                      </span>
+                      <span class="muted small inbox-row-meta">{meta.join(' · ')}</span>
                     </span>
                     {unseen && <span class="badge badge-green">{t('inbox.unseen')}</span>}
                     <span class="chev">›</span>
@@ -439,6 +557,47 @@ export function InboxScreen() {
               );
             })}
           </ul>
+        </section>
+
+        <section class="section inbox-history">
+          <button type="button" class="inbox-history-toggle" aria-expanded={showHistory} onClick={() => setShowHistory((v) => !v)}>
+            <span class="inbox-history-title">
+              {t('inbox.history')}
+              {rows.length > 0 ? ` (${rows.length})` : ''}
+            </span>
+            <span class="muted small">{showHistory ? t('inbox.hide') : t('inbox.show')}</span>
+          </button>
+          {showHistory && (
+            <ul class="list inbox-history-list">
+              {history && rows.length === 0 && <li class="muted small inbox-history-empty">{t('inbox.historyEmpty')}</li>}
+              {rows.map((s) => (
+                <li class="inbox-history-row" key={s.id ?? s.at}>
+                  <div class="inbox-history-main">
+                    <div class="inbox-history-when">
+                      {fmtDate(s.at, ui)}
+                      {' · '}
+                      {s.from ? t('common.from', { name: s.from }) : t('inbox.senderUnknown')}
+                      {s.undone && (
+                        <>
+                          {' '}
+                          <span class="badge badge-muted">{t('inbox.historyUndone')}</span>
+                        </>
+                      )}
+                    </div>
+                    <div class="muted small">
+                      {t('inbox.result', { added: s.added.length, updated: s.updated.length, skipped: s.skipped.length })}
+                      {s.copies && s.copies.length > 0 ? ` · ${t('inbox.resultCopies', { n: s.copies.length })}` : ''}
+                    </div>
+                  </div>
+                  {undoable && undoable.id === s.id && (
+                    <button type="button" class="btn btn-small btn-danger" disabled={busy} onClick={() => void doUndo()}>
+                      {t('inbox.undo')}
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
     </>

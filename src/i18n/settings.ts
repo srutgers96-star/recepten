@@ -20,6 +20,9 @@ export const settings: Dict = {
   'more.confetti': { nl: 'Confetti', en: 'Confetti' },
   'more.confettiHint': { nl: 'Bij "Gekookt!" en je eerste eigen recept', en: 'On "Cooked!" and your first own recipe' },
   'more.storage': { nl: 'Opslag & back-up', en: 'Storage & backup' },
+  'more.sendNew': { nl: 'Stuur nieuwe naar …', en: 'Send new to …' },
+  'more.sendNewHint': { nl: 'Alles wat je sinds de vorige keer maakte of aanpaste', en: 'Everything you made or changed since last time' },
+  'more.backupDue': { nl: 'back-up nodig', en: 'backup due' },
   'more.story': { nl: 'Het verhaal', en: 'The story' },
   'more.check': { nl: 'Apparaatcheck', en: 'Device check' },
   'more.about': { nl: 'Over', en: 'About' },
@@ -113,6 +116,39 @@ export const settings: Dict = {
   },
   'storage.invalid': { nl: 'Dit is geen back-upbestand van Recepten.', en: 'This is not a Recepten backup file.' },
   'storage.readFailed': { nl: 'Bestand kon niet worden gelezen.', en: 'Could not read the file.' },
+  // --- Phase 3: counters per table, backup health, export ---
+  'storage.overrides': { nl: 'Aangepaste klassiekers', en: 'Adjusted classics' },
+  'storage.lineOverrides': { nl: 'Gekoppelde regels (klassiekers)', en: 'Linked lines (classics)' },
+  'storage.ingredients': { nl: 'Eigen ingrediënten', en: 'Own ingredients' },
+  'storage.unbacked': { nl: 'Sinds de laatste back-up', en: 'Since the last backup' },
+  'storage.changes': { nl: '{n} wijzigingen', en: '{n} changes' },
+  'storage.upToDate': { nl: 'Alles zit in de laatste back-up.', en: 'Everything is in the last backup.' },
+  'storage.overdue': {
+    nl: 'Je laatste back-up is meer dan 30 dagen oud en er zijn {n} wijzigingen die nog nergens anders staan. Maak nu een back-up.',
+    en: 'Your last backup is more than 30 days old and {n} changes exist nowhere else yet. Make a backup now.',
+  },
+  'storage.overdueNever': {
+    nl: 'Nog nooit een back-up gemaakt en er zijn al {n} wijzigingen die nergens anders staan. Maak er nu een.',
+    en: 'No backup ever made, and {n} changes exist nowhere else yet. Make one now.',
+  },
+  'storage.restoredMore': {
+    nl: 'Ook hersteld: {overrides} aangepaste klassiekers, {lineOverrides} gekoppelde regels, {ingredients} eigen ingrediënten.',
+    en: 'Also restored: {overrides} adjusted classics, {lineOverrides} linked lines, {ingredients} own ingredients.',
+  },
+  'storage.shareBundle': {
+    nl: 'Dit is een deelbundel (recepten van iemand anders), geen back-up. Importeer hem via de Inbox.',
+    en: 'This is a share bundle (recipes from someone else), not a backup. Import it via the Inbox.',
+  },
+  'storage.goInbox': { nl: 'Naar Inbox', en: 'Go to Inbox' },
+  'storage.export': { nl: 'Exporteer eigen recepten', en: 'Export own recipes' },
+  'storage.exportHint': {
+    nl: 'Eén bestand met je eigen en ontvangen recepten, aangepaste klassiekers en eigen ingrediënten. Op de andere telefoon importeer je het via de Inbox (niet via Herstel): daar zie je per recept wat nieuw is.',
+    en: 'One file with your own and received recipes, adjusted classics and own ingredients. On the other phone import it via the Inbox (not via Restore): it shows per recipe what is new.',
+  },
+  'storage.exportShared': { nl: 'Export gedeeld', en: 'Export shared' },
+  'storage.exportDownloaded': { nl: 'Export gedownload', en: 'Export downloaded' },
+  'storage.exportFailed': { nl: 'Exporteren mislukt', en: 'Export failed' },
+  'storage.exportEmpty': { nl: 'Niets te exporteren: nog geen eigen recepten of aanpassingen.', en: 'Nothing to export: no own recipes or adjustments yet.' },
 
   // --- Het verhaal ------------------------------------------------------------------------------
   'story.title': { nl: 'Het verhaal', en: 'The story' },

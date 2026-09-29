@@ -1,7 +1,9 @@
 // '#/' — Home "Vanavond?": greeting, "Verras me" (with optional filter chips that constrain the
 // dice), the categories shelf, favourites chips (per profile), recently cooked, own & received
 // recipes, the story link and the planner teaser (docs/phase-1-spec.md §5, phase-2-spec.md §5).
-import { useMemo, useState } from 'preact/hooks';
+// Phase 3: two muted reminder cards under the greeting — backup overdue (> 30 days of unbacked
+// changes) → Opslag, and unsent changes (a partner in 'share.lastSentTo' is behind) → Stuur nieuwe.
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { CategoryShelf } from '@/components/CategoryShelf';
 import { FilterChips, applyFilters, isActive, loadFilters, saveFilters, type Filters } from '@/components/FilterChips';
 import { Header } from '@/components/Header';
@@ -11,6 +13,7 @@ import { useLive } from '@/db/live';
 import { allRecipes, listFavorites, recentCooked, userRecipes } from '@/db/repo';
 import { pickText, type Recipe } from '@/domain/model';
 import { lang, t } from '@/i18n';
+import { backupStatus, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { activeProfile, profiles } from '@/profile';
 import { navigate, navigateTab } from '@/router';
 
@@ -43,6 +46,12 @@ export function HomeScreen() {
   const own = useLive(userRecipes, []);
   const [, bump] = useState(0);
   const [filters, setFilters] = useState<Filters>(() => loadFilters(SURPRISE_FILTERS_KEY));
+  const backup = backupStatus.value;
+  const unsent = unsentChanges.value;
+
+  useEffect(() => {
+    void refreshShareBadges();
+  }, []);
 
   const byId = useMemo(() => new Map((all ?? []).map((r) => [r.id, r] as const)), [all]);
   // The dice only rolls over recipes that match the chips; the pick is re-rolled when it drops out.
@@ -72,6 +81,43 @@ export function HomeScreen() {
       <TimerBar />
       <div class="screen home">
         <h2 class="home-greeting">{profile ? t('home.greeting', { name: profile.name }) : t('home.greetingAnon')}</h2>
+
+        {backup?.overdue && (
+          <a
+            class="card reminder"
+            href="#/more/storage"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/more/storage');
+            }}
+          >
+            <span class="reminder-icon" aria-hidden="true">
+              💾
+            </span>
+            <span class="reminder-text">
+              {t(backup.lastBackupAt ? 'home.backupOverdue' : 'home.backupNever', { n: backup.unbackedChanges })}
+              <span class="reminder-action">{t('home.backupAction')} ›</span>
+            </span>
+          </a>
+        )}
+        {unsent > 0 && (
+          <a
+            class="card reminder"
+            href="#/share"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/share');
+            }}
+          >
+            <span class="reminder-icon" aria-hidden="true">
+              📤
+            </span>
+            <span class="reminder-text">
+              {unsent === 1 ? t('home.unsentOne') : t('home.unsent', { n: unsent })}
+              <span class="reminder-action">{t('home.unsentAction')} ›</span>
+            </span>
+          </a>
+        )}
 
         <section class="card surprise">
           <div class="muted small">{t('home.surprise')}</div>

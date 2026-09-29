@@ -215,6 +215,214 @@
   flex: none;
 }
 
+/* ---------- Inbox: phase 3 — import preview, conflict card, result, history ---------- */
+
+.ip-summary {
+  margin: 4px 0 0;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.ip-dict {
+  margin-top: 4px;
+}
+
+.ip-item {
+  margin: 12px 0;
+}
+
+.ip-item.ip-skipped {
+  opacity: 0.75;
+}
+
+.ip-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ip-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.ip-kind {
+  margin-bottom: 2px;
+}
+
+.ip-name {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.ip-alt {
+  margin-top: 2px;
+}
+
+.ip-head .badge {
+  flex: none;
+  margin-top: 4px;
+  max-width: 45%;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.ip-counts {
+  margin: 6px 0 0;
+}
+
+.ip-present {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.ip-present .btn {
+  flex: none;
+}
+
+.ip-actions {
+  margin-top: 8px;
+}
+
+.ip-nothing {
+  margin: -8px 0 12px;
+  text-align: center;
+}
+
+/* Conflict card: one segmented control per field; 44 px pills, no text selection on controls. */
+.cc {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.cc-hint {
+  margin: 0 0 10px;
+}
+
+.cc-field {
+  margin: 0 0 12px;
+}
+
+.cc-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cc-summary {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.cc .seg {
+  gap: 6px;
+}
+
+.cc .seg label {
+  flex: 1 1 auto;
+  justify-content: center;
+  padding: 0 10px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cc-all {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.cc-all .btn {
+  flex: 1 1 auto;
+}
+
+.cc-open {
+  margin-top: 10px;
+  width: 100%;
+}
+
+/* Result line after an import. */
+.inbox-result-line {
+  font-weight: 600;
+}
+
+.inbox-result-actions {
+  margin: 12px 0 0;
+}
+
+/* Collapsible import history. */
+.inbox-history {
+  margin-top: 8px;
+}
+
+.inbox-history-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.inbox-history-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.inbox-history-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.inbox-history-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.inbox-history-when {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.inbox-history-row .btn {
+  flex: none;
+}
+
+.inbox-history-empty {
+  padding: 10px 0;
+}
+
 /* ---------- Editor: phase 2 (override card, import/translation tools, ingredient chips) ---------- */
 
 .edit-override {

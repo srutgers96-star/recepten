@@ -25,7 +25,11 @@ IndexedDB unless the database name differs.
   stays); `builtins` are simply replaced on a new `dataVersion`, never edited.
 - `navigator.storage.persist()` on **every** start; Settings → Storage shows standalone yes/no,
   persisted yes/no, recipe count, last backup, and a red line when there are > 30 days of un-backed-up
-  changes.
+  changes. **"> 30 days of un-backed-up changes" means (2026-09-29, phase 3): the OLDEST change that
+  is in no backup yet is more than 30 days old** (`repo.backupHealth`: `min(updatedAt) < now − 30 d`
+  over rows newer than `backup.lastAt`). A change made yesterday is never overdue however old the
+  last backup is, and a fresh install becomes overdue 30 days after its first change — not on day one.
+  The same verdict drives the Meer badge and the Home reminder card.
 - **Backups are mandatory and the only real guarantee:** one tap creates `recepten-YYYY-MM-DD.json`
   via `navigator.share({files})` (or the same bytes as `.txt` when `.json` is refused) to
   Files/Drive/WhatsApp; restore reads the file back, validated on content.

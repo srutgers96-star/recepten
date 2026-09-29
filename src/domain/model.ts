@@ -134,7 +134,10 @@ export interface RecipeSync {
   receivedRev?: number;
   /** ISO timestamp of that import. */
   receivedAt?: string;
-  /** `recipeFingerprint` of the version last received (the same version arriving again = "present"). */
+  /**
+   * `contentFingerprint` (src/domain/merge.ts: `recipeFingerprint` + a hash of the steps) of the
+   * version last received or seen, so the same version arriving again is "present".
+   */
   receivedFingerprint?: string;
 }
 

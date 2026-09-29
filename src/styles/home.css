@@ -156,3 +156,51 @@
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* ---------- Phase 3: reminder cards (backup overdue, unsent changes) ---------- */
+
+/* Shared by Home and the Inbox (its "unsent changes" top card), hence not scoped to .home.
+   Muted on purpose: a nudge, not an alarm. The whole card is the tap target (≥ 44 px). */
+.reminder {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  background: transparent;
+  border-style: dashed;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.reminder:active {
+  background: var(--press);
+}
+
+.reminder-icon {
+  flex: none;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.reminder-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reminder-action {
+  color: var(--cobalt);
+  font-weight: 600;
+}
+
+.reminder > .badge {
+  flex: none;
+}

@@ -1,6 +1,6 @@
 # ADR-0004 — Share token: `#r=` deflate-raw + base64url, ≤ ~3.5 KB per message, files above that
 
-**Status:** Accepted · **Date:** 2026-09-24
+**Status:** Accepted · **Date:** 2026-09-24 · **Amended:** 2026-09-29 (phase 3: `p` and `b` kinds, dict delta, the 3.5 KB rule in code)
 
 ## Context
 
@@ -40,6 +40,45 @@ token = base64url( deflate-raw( UTF-8 JSON envelope ) )     // only [A-Za-z0-9_-
   exactly one field; fallbacks `https://wa.me/?text=` and a Copy button. "Share as text" is a separate
   button for people without the app.
 - Native `CompressionStream`/`DecompressionStream`; **fflate** loaded lazily only where they are missing.
+
+## Phase 3 (2026-09-29): the `p` and `b` kinds, the dictionary delta, the 3.5 KB rule in code
+
+Contract in `src/domain/share.ts` (docs/phase-3-spec.md §1); `token.ts` is unchanged, the fragment keys
+stay the type. Every envelope is `{ v: 2, t, by?, at?, msg?, dict?, … }`.
+
+| `t` | payload | meaning |
+|---|---|---|
+| `r` | `r: Recipe` — schema 2, both languages, the "Koppel" line overrides folded into the lines, override applied for a classic; receiver-side `sync`/`override` stripped | one recipe |
+| `p` | `p: { baseId, rev, patch: RecipePatch, lineOverrides?, name?, updatedAt? }` | an **adjusted classic**: applied as an override on the receiver's own copy, never a duplicate. `name` is the sender's effective name so the message header and the Safari landing page can say which classic without a database |
+| `b` | `b: { title?, recipes: Recipe[], patches: PatchPayload[], since? }` | a **bundle**: delta share ("Stuur nieuwe naar …") or the export of own recipes; also the shape of a bundle *file* |
+
+- **`dict: { ing: Ingredient[] }`** — only the USER-created dictionary entries (ids the bundled dictionary
+  does not know) that the payload references. The receiver adds missing ones and never overwrites a
+  builtin id; between user entries the newer `updatedAt` wins. Builtin ids never travel.
+- **The 3.5 KB rule is code, not advice:** `planMessages(envelopes, appUrl, { limit = 3500 })` packs as
+  many `#r=`/`#p=` links as fit into ONE WhatsApp text (header lines from `message.ts`, the open line,
+  one URL per line) and, above the limit, returns a bundle **file** instead — pretty JSON of one `b`
+  envelope named `recepten-<name>-YYYY-MM-DD.json`, shared with `navigator.share({ files })` as `.json`,
+  the same bytes as `.txt` when the platform refuses `.json`, an `<a download>` as the last resort.
+  A single recipe over the limit takes the same route. The importer recognises files by content
+  (`parseEnvelope`, which also reads the legacy backup shape), never by extension.
+- **Message formats (exact):** one `r` = the phase-1 four-line message; one `p` = `🍲 <name> (aangepast)`
+  / `van <by>` / open line / URL; several items = `🍲 <n> recepten van <by>` / open line / one URL per line.
+- **Landing (`src/landing.ts`, iOS Safari outside the app):** `#p=` shows "Aanpassing van <name> door <by>"
+  with the changed fields and the patched content, `#b=` lists the recipes (both languages) and the
+  adjustments; both keep "Kopieer receptcode" + "Open de app" and still never write storage.
+- **Frozen tokens:** `tests/fixtures/frozen-share-tokens.ts` holds a `#p=` and a `#b=` token (native
+  and fflate engines) next to the phase-1 `#r=` tokens; they must decode forever.
+- **Delta share bookkeeping** is a setting, not part of the token: `share.lastSentTo = { [name]: ISO }`.
+  A share-sheet success stores the date; Copy / wa.me cannot know, so "Markeer als verzonden" exists.
+- Deletions never travel (no tombstones in v1); `sync` on a received recipe is receiver-side only.
+  A received **override** carries the same bookkeeping (`RecipeOverride.sync = { receivedRev }`, set by
+  the importer, kept by `saveOverride` while it bumps `rev`), so a patch of a classic follows the same
+  new / update / conflict rule as a recipe: an update only replaces an override that is untouched since
+  it was received; an override made here (no `sync`) makes a differing incoming patch a conflict.
+- A `p` envelope with an **empty patch** `{}` and `lineOverrides` carries the "Koppel ingrediënt" links of
+  a classic that has no override (an `r` of a classic would be "Heb je al" on the receiver). The receiver
+  writes the line overrides only and never an override row.
 
 ## Consequences
 

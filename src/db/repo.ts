@@ -186,13 +186,16 @@ export async function listUserIngredients(): Promise<Ingredient[]> {
 }
 
 /**
- * Inserts or replaces a user ingredient (put by id). The caller (IngredientPicker) chooses an id
- * that does not collide with the bundled dictionary, and calls `reloadDictionary()` afterwards.
+ * Inserts or replaces a user ingredient (put by id); `updatedAt` is stamped here, so the entry
+ * counts as a change for backups / delta shares and wins the "newer updatedAt" rule against an
+ * older copy from the other phone (imports bypass this and keep the sender's stamp: bulkPut in
+ * applyImportPlan / importBundle). The caller (IngredientPicker) chooses an id that does not
+ * collide with the bundled dictionary, and calls `reloadDictionary()` afterwards.
  */
 export async function saveUserIngredient(entry: Ingredient): Promise<void> {
   if (!entry || typeof entry.id !== 'string' || !/^[a-z0-9][a-z0-9-]*$/.test(entry.id)) throw new Error('invalid-ingredient-id');
   if (!entry.nl?.one?.trim() && !entry.en?.one?.trim()) throw new Error('invalid-ingredient-name');
-  await db.userIngredients.put(entry);
+  await db.userIngredients.put({ ...entry, updatedAt: nowIso() });
 }
 
 export async function deleteUserIngredient(id: string): Promise<void> {
@@ -216,7 +219,8 @@ const PROTECTED_RECIPE_KEYS = new Set(['schema', 'id', 'rev', 'createdAt', 'upda
  * Saves the patch for a builtin (rev bumped on every save, `updatedAt` set here). The patch
  * REPLACES the stored one; merge with `getOverride()` first when you only change one field.
  * The schema-2 patch keys (name, description, steps, lines, category, tags, servingTip) and
- * unknown keys are kept, identity keys are dropped; an empty patch removes the override.
+ * unknown keys are kept, identity keys are dropped; an empty patch removes the override. A
+ * received override keeps its `sync` (the rev bump then makes it "touched since receipt").
  * Throws Error('override-builtin-only') for a non-builtin id.
  */
 export async function saveOverride(o: { baseId: string; patch: RecipePatch; by?: string | null }): Promise<RecipeOverride | undefined> {
@@ -239,6 +243,7 @@ export async function saveOverride(o: { baseId: string; patch: RecipePatch; by?:
       updatedAt: nowIso(),
       by: o.by ?? existing?.by ?? null,
     };
+    if (existing?.sync) row.sync = existing.sync;
     await db.overrides.put(row);
     return row;
   });
@@ -271,9 +276,10 @@ export async function duplicateAsOwn(r: Recipe, profile: Profile): Promise<Recip
     goesWith: [...r.goesWith],
     aliases: [...r.aliases],
   };
-  // A builtin read through getRecipe() carries the applied-override marker (applyOverride);
-  // an own copy is a plain recipe again.
+  // A builtin read through getRecipe() carries the applied-override marker (applyOverride) and a
+  // received recipe its receiver-side `sync`; an own copy is a plain recipe again.
   delete (copy as { override?: unknown }).override;
+  delete (copy as { sync?: unknown }).sync;
   await db.userRecipes.put(copy);
   return copy;
 }
@@ -385,11 +391,16 @@ const INBOX_SEEN_KEY = 'inbox.seenIds';
 
 let builtinIngredientIds: ReadonlySet<string> | undefined;
 
-/** Everything `planImport` (src/domain/merge.ts) compares an incoming share against. */
+/**
+ * Everything `planImport` (src/domain/merge.ts) compares an incoming share against: the recipes
+ * as the user sees them (overrides applied), the classics as shipped (`bases`, so a "both" copy
+ * of an incoming patch is their version and not a blend with my override), the overrides and
+ * the user ingredients.
+ */
 export async function localStateForImport(): Promise<LocalState> {
-  const [recipes, overrides, userIngredients] = await Promise.all([allRecipes(), db.overrides.toArray(), db.userIngredients.toArray()]);
+  const [recipes, bases, overrides, userIngredients] = await Promise.all([allRecipes(), db.builtins.toArray(), db.overrides.toArray(), db.userIngredients.toArray()]);
   if (!builtinIngredientIds) builtinIngredientIds = new Set(ingredientsData.map((i) => i.id));
-  return { recipes, overrides, userIngredients, builtinIngredientIds };
+  return { recipes, bases, overrides, userIngredients, builtinIngredientIds };
 }
 
 /**
@@ -448,13 +459,17 @@ export async function applyImportPlan(plan: ImportPlan, choices: ImportChoices, 
     if (w.lineOverrides.length) await db.lineOverrides.bulkPut(w.lineOverrides);
     if (w.userIngredients.length) await db.userIngredients.bulkPut(w.userIngredients);
 
-    // Unseen for the Inbox badge: a re-received (updated) recipe shows up again.
+    // Unseen for the Inbox badge: a re-received (updated) recipe shows up again. The dropped
+    // ids go into the snapshot so an undo does not leave a restored recipe badged as unseen.
     const received = w.recipes.filter((r) => r.origin.kind === 'received').map((r) => r.id);
     if (received.length) {
       const seen = stringArray((await db.settings.get(INBOX_SEEN_KEY))?.value);
       const drop = new Set(received);
       const kept = seen.filter((id) => !drop.has(id));
-      if (kept.length !== seen.length) await db.settings.put({ key: INBOX_SEEN_KEY, value: kept });
+      if (kept.length !== seen.length) {
+        before.seenIds = seen.filter((id) => drop.has(id));
+        await db.settings.put({ key: INBOX_SEEN_KEY, value: kept });
+      }
     }
 
     const snapshot: ImportSnapshot = {
@@ -473,18 +488,23 @@ export async function applyImportPlan(plan: ImportPlan, choices: ImportChoices, 
   return result;
 }
 
+/** True for the snapshot "Maak ongedaan" may restore: the NEWEST import, not undone, with a phase-3 snapshot. */
+export function isUndoable(latest: ImportSnapshot | undefined): latest is ImportSnapshot & { id: number; before: ImportBefore; wrote: ImportWrote } {
+  return !!latest && latest.id !== undefined && !latest.undone && !!latest.before && !!latest.wrote;
+}
+
 /**
- * Restores the state before the most recent import that has a `before` snapshot and was not
- * undone yet: added rows are deleted, replaced rows put back. Returns false when there is
- * nothing to undo. The caller refreshes the dictionary afterwards.
+ * Restores the state before the most recent import (docs/phase-3-spec.md §4: "until the next
+ * import"): added rows are deleted, replaced rows put back, the received ids the import
+ * re-badged as unseen are marked seen again. Only the NEWEST snapshot can be undone: an older
+ * one may hold rows the user edited since. Returns false when there is nothing to undo. The
+ * caller refreshes the dictionary afterwards.
  */
 export async function undoLastImport(): Promise<boolean> {
-  const rows = await db.imports.orderBy('at').reverse().toArray();
-  const latest = rows.find((s) => !s.undone && s.before && s.wrote);
-  if (!latest || latest.id === undefined) return false;
-  const before = latest.before as ImportBefore;
-  const wrote = latest.wrote as ImportWrote;
-  await db.transaction('rw', [db.userRecipes, db.overrides, db.lineOverrides, db.userIngredients, db.imports], async () => {
+  const latest = await db.imports.orderBy('at').reverse().first();
+  if (!isUndoable(latest)) return false;
+  const { before, wrote } = latest;
+  await db.transaction('rw', [db.userRecipes, db.overrides, db.lineOverrides, db.userIngredients, db.imports, db.settings], async () => {
     if (wrote.recipes.length) await db.userRecipes.bulkDelete(wrote.recipes);
     if (before.recipes.length) await db.userRecipes.bulkPut(before.recipes);
     if (wrote.overrides.length) await db.overrides.bulkDelete(wrote.overrides);
@@ -493,14 +513,49 @@ export async function undoLastImport(): Promise<boolean> {
     if (before.lineOverrides.length) await db.lineOverrides.bulkPut(before.lineOverrides);
     if (wrote.userIngredients.length) await db.userIngredients.bulkDelete(wrote.userIngredients);
     if (before.userIngredients.length) await db.userIngredients.bulkPut(before.userIngredients);
-    await db.imports.update(latest.id as number, { undone: true });
+    if (before.seenIds?.length) {
+      const seen = stringArray((await db.settings.get(INBOX_SEEN_KEY))?.value);
+      await db.settings.put({ key: INBOX_SEEN_KEY, value: [...new Set([...seen, ...before.seenIds])] });
+    }
+    await db.imports.update(latest.id, { undone: true });
   });
   return true;
 }
 
-/** The import history, newest first (default the last 10). Only the newest not-undone one can be undone. */
+/** The import history, newest first (default the last 10). Only the newest one can be undone (`isUndoable`). */
 export async function listImports(limit = 10): Promise<ImportSnapshot[]> {
   return db.imports.orderBy('at').reverse().limit(limit).toArray();
+}
+
+/** A classic whose override came in through an import: who sent it and when (newest import wins). */
+export interface ReceivedPatch {
+  baseId: string;
+  from: string;
+  at: string;
+}
+
+/**
+ * Classics adjusted by someone else: every `'p:' + baseId` in a non-undone import's `added` /
+ * `updated` whose override still exists and (phase-3 snapshots) whose override row that import
+ * wrote — a links-only patch writes no override, so my own override is never credited to the
+ * sender. Shared by the Inbox list ("aangepast door X") and the unseen badge (seen key =
+ * `'p:' + baseId` in 'inbox.seenIds'), so both count the same rows.
+ */
+export async function receivedPatches(): Promise<ReceivedPatch[]> {
+  const [imports, overrides] = await Promise.all([db.imports.orderBy('at').reverse().toArray(), db.overrides.toArray()]);
+  const overridden = new Set(overrides.map((o) => o.baseId));
+  const out = new Map<string, ReceivedPatch>();
+  for (const s of imports) {
+    if (s.undone) continue;
+    for (const id of [...s.added, ...s.updated]) {
+      if (!id.startsWith('p:')) continue;
+      const baseId = id.slice(2);
+      if (!overridden.has(baseId) || out.has(baseId)) continue;
+      if (s.wrote && !s.wrote.overrides.includes(baseId)) continue;
+      out.set(baseId, { baseId, from: s.from, at: s.at });
+    }
+  }
+  return [...out.values()];
 }
 
 /**
@@ -597,11 +652,17 @@ export interface BackupHealth {
   lastBackupAt: string | null;
   /** Rows (recipes, overrides, line overrides, ingredients, notes, favourites, cook-log entries) changed since the last backup. */
   unbackedChanges: number;
-  /** Changes exist and the last backup is older than 30 days (or there never was one). */
+  /** ISO timestamp of the OLDEST change that is in no backup yet (null when there is none). */
+  oldestChangeAt: string | null;
+  /**
+   * "> 30 days of un-backed-up changes" (ADR-0003): the oldest change that is in no backup is
+   * more than 30 days old. A change made yesterday is never overdue, however old the last
+   * backup is; a fresh install becomes overdue 30 days after its first change.
+   */
   overdue: boolean;
 }
 
-export async function backupHealth(): Promise<BackupHealth> {
+export async function backupHealth(now: number = Date.now()): Promise<BackupHealth> {
   const raw = await getSetting<unknown>(LAST_BACKUP_KEY, null);
   const lastBackupAt = typeof raw === 'string' && raw.trim() ? raw : null;
   const since = lastBackupAt ?? '';
@@ -615,17 +676,24 @@ export async function backupHealth(): Promise<BackupHealth> {
     db.cookLog.toArray(),
   ]);
   let n = 0;
-  for (const r of recipes) if ((r.updatedAt ?? '') > since) n++;
-  for (const o of overrides) if ((o.updatedAt ?? '') > since) n++;
-  for (const o of lineOverrides) if ((o.updatedAt ?? '') > since) n++;
+  let oldest: string | null = null;
+  /** Counts a change with its timestamp; an unknown timestamp (phase-2 rows) counts as very old. */
+  const change = (at: string | undefined) => {
+    n++;
+    const iso = at && !Number.isNaN(new Date(at).getTime()) ? at : '1970-01-01T00:00:00.000Z';
+    if (oldest === null || iso < oldest) oldest = iso;
+  };
+  for (const r of recipes) if ((r.updatedAt ?? '') > since) change(r.updatedAt);
+  for (const o of overrides) if ((o.updatedAt ?? '') > since) change(o.updatedAt);
+  for (const o of lineOverrides) if ((o.updatedAt ?? '') > since) change(o.updatedAt);
   // User ingredients saved before phase 3 have no updatedAt: they count only when there was never a backup.
-  for (const e of ingredients) if ((e.updatedAt ?? '') > since || !lastBackupAt) n++;
-  for (const x of notes) if ((x.updatedAt ?? '') > since) n++;
-  for (const f of favorites) if ((f.at ?? '') > since) n++;
-  for (const c of cookLog) if ((c.at ?? '') > since) n++;
-  const lastMs = lastBackupAt ? new Date(lastBackupAt).getTime() : NaN;
-  const old = Number.isNaN(lastMs) || Date.now() - lastMs > BACKUP_OVERDUE_MS;
-  return { lastBackupAt, unbackedChanges: n, overdue: n > 0 && old };
+  for (const e of ingredients) if ((e.updatedAt ?? '') > since || !lastBackupAt) change(e.updatedAt);
+  for (const x of notes) if ((x.updatedAt ?? '') > since) change(x.updatedAt);
+  for (const f of favorites) if ((f.at ?? '') > since) change(f.at);
+  for (const c of cookLog) if ((c.at ?? '') > since) change(c.at);
+  const oldestChangeAt: string | null = oldest;
+  const overdue = oldestChangeAt !== null && now - new Date(oldestChangeAt).getTime() > BACKUP_OVERDUE_MS;
+  return { lastBackupAt, unbackedChanges: n, oldestChangeAt, overdue };
 }
 
 export async function exportBundle(): Promise<BackupBundle> {
@@ -657,12 +725,16 @@ export async function exportBundle(): Promise<BackupBundle> {
   };
 }
 
+/** What a restore wrote per table (rows the file held but a newer local row won against are not counted). */
 export interface RestoreResult {
   recipes: number;
   favorites: number;
   notes: number;
   cookLog: number;
   profiles: number;
+  overrides: number;
+  lineOverrides: number;
+  userIngredients: number;
 }
 
 /** Settings that belong to this phone, not to the person: a restore never overwrites them. */
@@ -706,6 +778,8 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
     : [];
 
   let addedLog = 0;
+  let wroteLineOverrides = 0;
+  let wroteOverrides = 0;
   await db.transaction('rw', [db.profiles, db.userRecipes, db.favorites, db.notes, db.cookLog, db.settings, db.lineOverrides, db.userIngredients, db.overrides], async () => {
     const hadProfiles = (await db.profiles.count()) > 0;
     await db.profiles.bulkPut(profiles);
@@ -713,11 +787,15 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
     await db.userIngredients.bulkPut(userIngredients);
     for (const o of lineOverrides) {
       const cur = await db.lineOverrides.get([o.recipeId, o.index]);
-      if (!cur || (cur.updatedAt ?? '') <= (o.updatedAt ?? '')) await db.lineOverrides.put({ ...o, updatedAt: o.updatedAt || nowIso() });
+      if (cur && (cur.updatedAt ?? '') > (o.updatedAt ?? '')) continue;
+      await db.lineOverrides.put({ ...o, updatedAt: o.updatedAt || nowIso() });
+      wroteLineOverrides++;
     }
     for (const o of overrides) {
       const cur = await db.overrides.get(o.baseId);
-      if (!cur || (cur.updatedAt ?? '') <= (o.updatedAt ?? '')) await db.overrides.put({ ...o, rev: Math.max(1, Math.floor(o.rev || 1)), updatedAt: o.updatedAt || nowIso() });
+      if (cur && (cur.updatedAt ?? '') > (o.updatedAt ?? '')) continue;
+      await db.overrides.put({ ...o, rev: Math.max(1, Math.floor(o.rev || 1)), updatedAt: o.updatedAt || nowIso() });
+      wroteOverrides++;
     }
     await db.favorites.bulkPut(favorites.map((f) => ({ recipeId: f.recipeId, profileId: f.profileId, at: f.at || nowIso() })));
     await db.notes.bulkPut(notes.map((n) => ({ recipeId: n.recipeId, profileId: n.profileId, text: n.text, updatedAt: n.updatedAt || nowIso() })));
@@ -742,7 +820,16 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
       await db.settings.put({ key: s.key, value: s.value });
     }
   });
-  return { recipes: recipes.length, favorites: favorites.length, notes: notes.length, cookLog: addedLog, profiles: profiles.length };
+  return {
+    recipes: recipes.length,
+    favorites: favorites.length,
+    notes: notes.length,
+    cookLog: addedLog,
+    profiles: profiles.length,
+    overrides: wroteOverrides,
+    lineOverrides: wroteLineOverrides,
+    userIngredients: userIngredients.length,
+  };
 }
 
 // --- Timers ------------------------------------------------------------------------------------

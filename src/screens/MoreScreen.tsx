@@ -1,6 +1,7 @@
 // '#/more' — active profile (switch, "+ profiel"), language, theme, confetti, "°F erbij", the
-// dictionary (counts + own ingredients with delete), and the links to Opslag & back-up, Het
-// verhaal, Apparaatcheck, plus "Over" (version, sha, channel, GitHub).
+// dictionary (counts + own ingredients with delete), and the links to "Stuur nieuwe naar …"
+// (unsent-changes badge), Opslag & back-up (backup-due badge), Het verhaal, Apparaatcheck, plus
+// "Over" (version, sha, channel, GitHub).
 import { useEffect, useState } from 'preact/hooks';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo } from '@/components/AppInfo';
@@ -10,6 +11,7 @@ import { deleteUserIngredient, getFahrenheit, setFahrenheit } from '@/db/repo';
 import { baseDictionary, dictionary, reloadDictionary, userIngredients } from '@/dictionary';
 import type { Lang } from '@/domain/model';
 import { lang, t } from '@/i18n';
+import { backupStatus, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { activeProfile, profiles, setActiveProfile } from '@/profile';
 import { navigate } from '@/router';
 import { setTheme, theme, type Theme } from '@/theme';
@@ -25,10 +27,14 @@ function Chevron() {
   );
 }
 
-function MenuRow(props: { label: string; to: string }) {
+function MenuRow(props: { label: string; to: string; sub?: string; badge?: string; badgeTone?: 'orange' | 'red' }) {
   return (
     <button type="button" class="row" onClick={() => navigate(props.to)}>
-      <span class="name">{props.label}</span>
+      <span class="name">
+        {props.label}
+        {props.sub && <span class="row-sub">{props.sub}</span>}
+      </span>
+      {props.badge && <span class={'badge menu-badge' + (props.badgeTone === 'red' ? ' badge-next' : '')}>{props.badge}</span>}
       <Chevron />
     </button>
   );
@@ -97,9 +103,13 @@ export function MoreScreen() {
   const others = profiles.value.filter((p) => p.id !== active?.id);
   const [fahrenheit, setF] = useState(false);
 
+  const unsent = unsentChanges.value;
+  const backupDue = backupStatus.value?.overdue === true;
+
   useEffect(() => {
     void loadCelebrateSettings();
     void getFahrenheit().then(setF, (e: unknown) => console.error('getFahrenheit', e));
+    void refreshShareBadges();
   }, []);
 
   function toggleFahrenheit(on: boolean) {
@@ -199,7 +209,8 @@ export function MoreScreen() {
         <DictionarySection />
 
         <section class="section menu">
-          <MenuRow label={t('more.storage')} to="/more/storage" />
+          <MenuRow label={t('more.sendNew')} sub={t('more.sendNewHint')} to="/share" badge={unsent > 0 ? String(unsent > 99 ? '99+' : unsent) : undefined} />
+          <MenuRow label={t('more.storage')} to="/more/storage" badge={backupDue ? t('more.backupDue') : undefined} badgeTone="red" />
           <MenuRow label={t('more.story')} to="/story" />
           <MenuRow label={t('more.check')} to="/check" />
         </section>

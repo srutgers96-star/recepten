@@ -3,8 +3,21 @@
 import { describe, expect, it } from 'vitest';
 import type { Ingredient } from '../src/domain/dictionary';
 import type { Recipe } from '../src/domain/model';
-import type { RecipeOverride } from '../src/domain/overrides';
-import { contentFingerprint, copyName, defaultChoices, legacyChoices, planImport, resolveImport, type LocalState, type RecipeImportItem, type PatchImportItem } from '../src/domain/merge';
+import type { LineOverride, RecipeOverride } from '../src/domain/overrides';
+import {
+  contentFingerprint,
+  copyName,
+  defaultChoices,
+  isOverrideUntouchedSinceReceipt,
+  isUntouchedSinceReceipt,
+  legacyChoices,
+  planImport,
+  resolveImport,
+  type LocalState,
+  type RecipeImportItem,
+  type PatchImportItem,
+} from '../src/domain/merge';
+import { applyOverride } from '../src/domain/overrides';
 import type { ParsedShare, PatchPayload } from '../src/domain/share';
 
 const NOW = '2026-09-29T12:00:00.000Z';
@@ -121,11 +134,18 @@ describe('row: same id, newer rev, local untouched since receipt -> update', () 
     expect(item(plan).status).toBe('present');
   });
 
-  it('a phase-1 received recipe without sync counts as untouched', () => {
+  it('a phase-1 received recipe without sync counts as untouched: the same or a newer rev updates it', () => {
     const mine: Recipe = { ...recipe({ rev: 1 }), origin: { kind: 'received', receivedFrom: 'Anna', receivedAt: '2026-09-21T00:00:00.000Z' } };
     const plan = planImport(share({ recipes: [recipe({ rev: 1, steps: [{ text: { nl: 'Anders.' } }] })] }), local({ recipes: [BUILTIN, mine] }));
     expect(item(plan).status).toBe('update');
     expect(item(plan).fields).toEqual(['steps']);
+  });
+
+  it('a phase-1 received recipe without sync is NOT overwritten by an older rev (present)', () => {
+    const mine: Recipe = { ...recipe({ rev: 3 }), origin: { kind: 'received', receivedFrom: 'Anna', receivedAt: '2026-09-21T00:00:00.000Z' } };
+    const plan = planImport(share({ recipes: [recipe({ rev: 2, steps: [{ text: { nl: 'Oud.' } }] })] }), local({ recipes: [BUILTIN, mine] }));
+    expect(item(plan).status).toBe('present');
+    expect(resolveImport(plan, defaultChoices(plan), { now: NOW }).recipes).toEqual([]);
   });
 });
 
@@ -183,6 +203,22 @@ describe('row: same id, both changed -> conflict', () => {
     expect(kept.name).toEqual(mine.name);
     expect(kept.rev).toBe(mine.rev);
     expect(kept.sync?.receivedFingerprint).toBe(contentFingerprint(theirs));
+    expect(kept.sync?.receivedAt).toBe(NOW);
+    // ... but NOT the received rev: mine.rev (4) equals theirs.rev (4), so taking it over would make
+    // mine "untouched since receipt" and the sender's next version would silently replace my edits.
+    expect(kept.sync?.receivedRev).toBe(mine.sync?.receivedRev);
+    expect(isUntouchedSinceReceipt(kept)).toBe(false);
+    // The partner's next version is therefore a conflict again, not an update.
+    const next = planImport(share({ recipes: [recipe({ rev: 5, steps: [{ text: { nl: 'Nog eens anders.' } }] })] }), local({ recipes: [BUILTIN, kept] }));
+    expect(item(next).status).toBe('conflict');
+  });
+
+  it('the same version arriving again after "both" is present (the seen fingerprint)', () => {
+    const plan = planImport(share({ recipes: [theirs] }), local({ recipes: [BUILTIN, mine] }));
+    const w = resolveImport(plan, { 'u:abc12345': { action: 'both' } }, { now: NOW, newId: () => 'u:copy0001' });
+    const kept = w.recipes.find((r) => r.id === 'u:abc12345') as Recipe;
+    const again = planImport(share({ recipes: [theirs] }), local({ recipes: [BUILTIN, kept] }));
+    expect(item(again).status).toBe('present');
   });
 
   it('a per-field "both" merges the theirs fields into mine AND adds the copy', () => {
@@ -276,15 +312,19 @@ describe('row: patch for a classic -> new / update / conflict on the override', 
     patch: { name: { en: 'French onion soup' }, steps: [{ text: { nl: 'Snipper de uien fijn.', en: 'Slice the onions thinly.' } }] },
     lineOverrides: [{ recipeId: 'b:uiensoep', index: 1, ing: 'runderbouillon', updatedAt: '2026-09-29T09:00:00.000Z' }],
   };
+  /** An override made on THIS phone (no sync). */
   const mineOverride: RecipeOverride = { baseId: 'b:uiensoep', rev: 1, patch: { name: { en: 'Onion soup, French style' } }, updatedAt: '2026-09-22T00:00:00.000Z', by: 'Stijn' };
+  /** An override as this phone received it (rev 1 from Anna), untouched since. */
+  const receivedOverride: RecipeOverride = { ...mineOverride, by: 'Anna', sync: { receivedRev: 1, receivedAt: '2026-09-22T00:00:00.000Z' } };
 
-  it('new: no local override -> the override and its line overrides are written', () => {
+  it('new: no local override -> the override (with sync) and its line overrides are written', () => {
     const plan = planImport(share({ patches: [patch] }), local());
     expect(patchItem(plan)).toMatchObject({ kind: 'patch', id: 'p:b:uiensoep', status: 'new' });
     expect(patchItem(plan).base).toBe(BUILTIN);
     const w = resolveImport(plan, defaultChoices(plan), { now: NOW });
     expect(w.added).toEqual(['p:b:uiensoep']);
-    expect(w.overrides).toEqual([{ baseId: 'b:uiensoep', rev: 2, patch: patch.patch, updatedAt: NOW, by: 'Anna' }]);
+    expect(w.overrides).toEqual([{ baseId: 'b:uiensoep', rev: 2, patch: patch.patch, updatedAt: NOW, by: 'Anna', sync: { receivedRev: 2, receivedAt: NOW } }]);
+    expect(isOverrideUntouchedSinceReceipt(w.overrides[0] as RecipeOverride)).toBe(true);
     expect(w.lineOverrides).toEqual(patch.lineOverrides);
     expect(w.recipes).toEqual([]);
   });
@@ -294,8 +334,8 @@ describe('row: patch for a classic -> new / update / conflict on the override', 
     expect(patchItem(plan).status).toBe('present');
   });
 
-  it('update: incoming rev > local rev, texts merge per language', () => {
-    const plan = planImport(share({ patches: [patch] }), local({ overrides: [{ ...mineOverride, patch: { name: { nl: 'Franse uiensoep' } } }] }));
+  it('update: incoming rev > local rev and the override is untouched since receipt; texts merge per language', () => {
+    const plan = planImport(share({ patches: [patch] }), local({ overrides: [{ ...receivedOverride, patch: { name: { nl: 'Franse uiensoep' } } }] }));
     expect(patchItem(plan).status).toBe('update');
     expect(patchItem(plan).fields).toEqual(['name', 'steps']);
     const w = resolveImport(plan, defaultChoices(plan), { now: NOW });
@@ -303,6 +343,34 @@ describe('row: patch for a classic -> new / update / conflict on the override', 
     expect(w.overrides[0]?.patch.name).toEqual({ nl: 'Franse uiensoep', en: 'French onion soup' });
     expect(w.overrides[0]?.patch.steps).toEqual(patch.patch.steps);
     expect(w.overrides[0]?.rev).toBe(2);
+    expect(w.overrides[0]?.sync).toEqual({ receivedRev: 2, receivedAt: NOW });
+  });
+
+  it('an older patch than the one received, override untouched: nothing new (present)', () => {
+    const plan = planImport(share({ patches: [{ ...patch, rev: 1 }] }), local({ overrides: [{ ...receivedOverride, rev: 3, sync: { receivedRev: 3 } }] }));
+    expect(patchItem(plan).status).toBe('present');
+  });
+
+  it('conflict: the override was edited here after it was received, even when their rev is higher', () => {
+    // Received at rev 1, saved once here (rev 2, sync kept by saveOverride), they edited twice (rev 4).
+    const edited: RecipeOverride = { ...receivedOverride, rev: 2, patch: { name: { en: 'Onion soup, my way' } } };
+    const plan = planImport(share({ patches: [{ ...patch, rev: 4 }] }), local({ overrides: [edited] }));
+    expect(isOverrideUntouchedSinceReceipt(edited)).toBe(false);
+    expect(patchItem(plan).status).toBe('conflict');
+    expect(patchItem(plan).fields).toEqual(['name', 'steps']);
+    expect(defaultChoices(plan)['p:b:uiensoep']).toEqual({ action: 'skip' });
+    expect(resolveImport(plan, defaultChoices(plan), { now: NOW }).overrides).toEqual([]);
+    // Taking theirs for a field is a fork: rev past both, received rev = theirs (touched again).
+    const w = resolveImport(plan, { 'p:b:uiensoep': { action: 'fields', fields: { steps: 'theirs' } } }, { now: NOW });
+    expect(w.overrides[0]?.patch).toEqual({ name: { en: 'Onion soup, my way' }, steps: patch.patch.steps });
+    expect(w.overrides[0]?.rev).toBe(5);
+    expect(w.overrides[0]?.sync?.receivedRev).toBe(4);
+    expect(isOverrideUntouchedSinceReceipt(w.overrides[0] as RecipeOverride)).toBe(false);
+  });
+
+  it('conflict: an override made here (no sync) versus any differing incoming patch, whatever the rev', () => {
+    const plan = planImport(share({ patches: [{ ...patch, rev: 9 }] }), local({ overrides: [mineOverride] }));
+    expect(patchItem(plan).status).toBe('conflict');
   });
 
   it('conflict: same or lower rev with other content; per-field choice; "both" makes an own copy of their version', () => {
@@ -324,6 +392,49 @@ describe('row: patch for a classic -> new / update / conflict on the override', 
     expect(copy.steps[0]?.text.nl).toBe('Snipper de uien fijn.');
     expect(copy.lines[1]?.ing).toBe('runderbouillon');
     expect(copy.origin).toEqual({ kind: 'received', receivedFrom: 'Anna', receivedAt: NOW, basedOn: 'b:uiensoep' });
+  });
+
+  it('"both" starts from the classic AS SHIPPED (local.bases), not from my overridden view of it', () => {
+    // My override renames the classic and adds a description; theirs only changes the steps.
+    const mine: RecipeOverride = { ...mineOverride, patch: { name: { nl: 'Mijn uiensoep', en: 'My onion soup' }, description: { nl: 'Mijn beschrijving' } } };
+    const theirs: PatchPayload = { baseId: 'b:uiensoep', rev: 1, patch: { steps: [{ text: { nl: 'Snipper de uien fijn.', en: 'Slice the onions thinly.' } }] } };
+    const state = local({ recipes: [applyOverride(BUILTIN, mine)], bases: [BUILTIN], overrides: [mine] });
+    const plan = planImport(share({ patches: [theirs] }), state);
+    expect(patchItem(plan).status).toBe('conflict');
+    expect(patchItem(plan).base).toBe(BUILTIN);
+    const w = resolveImport(plan, { 'p:b:uiensoep': { action: 'both' } }, { now: NOW, newId: () => 'u:copy0010' });
+    expect(w.overrides).toEqual([]);
+    const copy = w.recipes[0] as Recipe;
+    // Their version: the shipped name with the suffix, their steps, none of my fields.
+    expect(copy.name).toEqual({ nl: 'Uiensoep (Annas versie)', en: "Onion soup (Anna's version)" });
+    expect(copy.steps[0]?.text.nl).toBe('Snipper de uien fijn.');
+    expect(copy.description).toBeUndefined();
+    expect(copy.override).toBeUndefined();
+    expect(copy.sync).toBeUndefined();
+    expect(copy.rev).toBe(1);
+  });
+
+  it('a patch without fields carries line links only: line overrides are written, never an override row', () => {
+    const links: PatchPayload = { baseId: 'b:uiensoep', rev: 1, patch: {}, lineOverrides: patch.lineOverrides as LineOverride[] };
+    // Without a local override.
+    const plan = planImport(share({ patches: [links] }), local());
+    expect(patchItem(plan)).toMatchObject({ status: 'new', linksOnly: true });
+    expect(patchItem(plan).existing).toBeUndefined();
+    const w = resolveImport(plan, defaultChoices(plan), { now: NOW });
+    expect(w.overrides).toEqual([]);
+    expect(w.lineOverrides).toEqual(links.lineOverrides);
+    expect(w.updated).toEqual(['p:b:uiensoep']);
+    expect(w.added).toEqual([]);
+    // With my own override: it stays untouched, only the links arrive.
+    const plan2 = planImport(share({ patches: [links] }), local({ overrides: [mineOverride] }));
+    expect(patchItem(plan2)).toMatchObject({ status: 'new', linksOnly: true });
+    const w2 = resolveImport(plan2, defaultChoices(plan2), { now: NOW });
+    expect(w2.overrides).toEqual([]);
+    expect(w2.lineOverrides).toEqual(links.lineOverrides);
+    // No fields and no links: nothing to apply.
+    const plan3 = planImport(share({ patches: [{ baseId: 'b:uiensoep', rev: 1, patch: {} }] }), local());
+    expect(patchItem(plan3).status).toBe('present');
+    expect(resolveImport(plan3, { 'p:b:uiensoep': { action: 'apply' } }, { now: NOW }).lineOverrides).toEqual([]);
   });
 
   it('a patch for a classic this phone does not have is skipped with problem unknown-base', () => {

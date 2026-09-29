@@ -335,3 +335,108 @@
   flex: none;
   min-height: 44px;
 }
+
+/* ---------- Phase 3: Meer rows with a badge ---------- */
+
+.menu .row .menu-badge {
+  flex: none;
+  margin-left: 8px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---------- Phase 3: Opslag — backup health ---------- */
+
+.card.backup-overdue {
+  border-color: var(--tomato);
+}
+
+.backup-overdue-line {
+  margin: 10px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.restore-more {
+  display: block;
+  margin-top: 4px;
+}
+
+/* ---------- Phase 3: "Stuur nieuwe naar …" (delta share) ---------- */
+
+.delta .partner-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.delta .partner-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.delta .partner-chip:active {
+  background: var(--press);
+}
+
+.delta .partner-chip.on {
+  background: var(--cobalt);
+  border-color: var(--cobalt);
+  color: var(--on-cobalt);
+}
+
+.delta .partner-input {
+  margin-top: 10px;
+  width: 100%;
+  font-size: 16px; /* no iOS zoom */
+}
+
+.delta .partner-since {
+  margin: 10px 0 0;
+}
+
+.delta .delta-summary {
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.delta .delta-list {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+}
+
+.delta .delta-list li {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.delta .delta-list li:last-child {
+  border-bottom: 0;
+}
+
+/* Share screen: the "aangepast" badge next to the name of an adjusted classic. */
+.share .share-badge {
+  margin-left: 8px;
+  vertical-align: middle;
+}

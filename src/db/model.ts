@@ -32,6 +32,8 @@ export interface ImportBefore {
   overrides: RecipeOverride[];
   lineOverrides: LineOverride[];
   userIngredients: Ingredient[];
+  /** Received ids the import dropped from 'inbox.seenIds' (re-badged as unseen); undo puts them back. */
+  seenIds?: string[];
 }
 
 /** The keys an import wrote (put or, for `clearedLineOverrides`, deleted), so undo knows what to remove. */
