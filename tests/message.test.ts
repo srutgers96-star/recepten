@@ -2,7 +2,9 @@
 import { describe, it, expect } from 'vitest';
 import type { Recipe } from '../src/domain/model';
 import { APP_NAME, buildReadableRecipe, buildShareMessage, buildShareMessageFor, countIngredientLines, recipeHasLang, shareMessageInput } from '../src/domain/message';
+import { parseLine } from '../src/domain/parser';
 import { extractTokens } from '../src/domain/token';
+import { testDictionary } from './fixtures/test-dictionary';
 
 const TOKEN = 'eJx9kU1v2zAMhu_5FYQvAbCdEfGhIjKlMnOpQrStUvWxYz0123456789';
 const URL = `https://stijn.github.io/recepten/#r=${TOKEN}`;
@@ -194,5 +196,22 @@ describe('buildReadableRecipe', () => {
     expect(buildReadableRecipe(nlOnly, ['en'])).toBe('\u{1F372} Dahl\n2 servings\n\nIngredients:\n- 1 ui\n\nMethod:\n1. Fruit de ui.');
     // No languages at all: Dutch.
     expect(buildReadableRecipe(nlOnly, [])).toBe(buildReadableRecipe(nlOnly, ['nl']));
+  });
+
+  it('renders ingredient lines through the dictionary when one is given (a classic reads English in English)', () => {
+    const dict = testDictionary();
+    const classic: Recipe = {
+      ...RECIPE,
+      name: { nl: 'Uiensoep', en: 'Onion soup' },
+      lines: [parseLine('2 rode uien [gesnipperd]', dict, 'nl'), { raw: { nl: 'Garnering:' }, kind: 'header' }, parseLine('Parmezaanse kaas [vers geraspt]', dict, 'nl'), { raw: { nl: 'iets onbekends' } }],
+      steps: [{ text: { nl: 'Fruit de uien.', en: 'Fry the onions.' } }],
+      servingTip: null,
+    };
+    // Without a dictionary: the raw text (Dutch lines under the English heading).
+    expect(buildReadableRecipe(classic, ['en'])).toContain('- 2 rode uien [gesnipperd]');
+    // With one: rendered per language; a header and an unresolved line keep their raw text.
+    const en = buildReadableRecipe(classic, ['en'], undefined, dict);
+    expect(en).toBe(['\u{1F372} Onion soup', '2 servings', '', 'Ingredients:', '- 2 red onions, finely diced', 'Garnering:', '- Parmesan, freshly grated', '- iets onbekends', '', 'Method:', '1. Fry the onions.'].join('\n'));
+    expect(buildReadableRecipe(classic, ['nl'], undefined, dict)).toContain('- 2 rode uien, gesnipperd');
   });
 });

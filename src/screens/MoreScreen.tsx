@@ -1,10 +1,13 @@
-// '#/more' — active profile (switch, "+ profiel"), language, theme, confetti, and the links to
-// Opslag & back-up, Het verhaal, Apparaatcheck, plus "Over" (version, sha, channel, GitHub).
-import { useEffect } from 'preact/hooks';
+// '#/more' — active profile (switch, "+ profiel"), language, theme, confetti, "°F erbij", the
+// dictionary (counts + own ingredients with delete), and the links to Opslag & back-up, Het
+// verhaal, Apparaatcheck, plus "Over" (version, sha, channel, GitHub).
+import { useEffect, useState } from 'preact/hooks';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo } from '@/components/AppInfo';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
+import { deleteUserIngredient, getFahrenheit, setFahrenheit } from '@/db/repo';
+import { baseDictionary, dictionary, reloadDictionary, userIngredients } from '@/dictionary';
 import type { Lang } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { activeProfile, profiles, setActiveProfile } from '@/profile';
@@ -31,13 +34,78 @@ function MenuRow(props: { label: string; to: string }) {
   );
 }
 
+/** "Woordenboek": builtin + own counts; tap opens the own entries, each with a delete button. */
+function DictionarySection() {
+  const l = lang.value;
+  const [open, setOpen] = useState(false);
+  const own = userIngredients.value;
+  const builtin = baseDictionary().ingredients.length;
+  const dict = dictionary.value;
+
+  async function remove(id: string, name: string) {
+    if (!confirm(t('more.dictDeleteConfirm', { name }))) return;
+    try {
+      await deleteUserIngredient(id);
+      await reloadDictionary();
+    } catch (e) {
+      console.error('deleteUserIngredient', e);
+    }
+  }
+
+  return (
+    <section class="section">
+      <h2>{t('more.dictionary')}</h2>
+      <div class="menu">
+        <button type="button" class="row" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
+          <span class="name">
+            {t('more.dictCounts', { builtin, own: own.length })}
+            <span class="row-sub">{t('more.dictHint')}</span>
+          </span>
+          <Chevron />
+        </button>
+      </div>
+      {open &&
+        (own.length === 0 ? (
+          <p class="muted dict-empty">{t('more.dictNone')}</p>
+        ) : (
+          <ul class="list dict-list">
+            {own.map((i) => {
+              const name = (l === 'nl' ? i.nl.one : i.en.one) || i.nl.one || i.en.one || i.id;
+              const other = (l === 'nl' ? i.en.one : i.nl.one) || '';
+              const aisle = dict.aisle(i.aisle);
+              const aisleName = aisle ? (l === 'nl' ? aisle.nl : aisle.en) : i.aisle;
+              return (
+                <li key={i.id} class="dict-row">
+                  <span class="name">
+                    {name}
+                    <span class="row-sub">{[other, aisleName].filter(Boolean).join(' · ')}</span>
+                  </span>
+                  <button type="button" class="btn btn-small" onClick={() => void remove(i.id, name)} aria-label={`${t('more.dictDelete')} ${name}`}>
+                    {t('more.dictDelete')}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        ))}
+    </section>
+  );
+}
+
 export function MoreScreen() {
   const active = activeProfile.value;
   const others = profiles.value.filter((p) => p.id !== active?.id);
+  const [fahrenheit, setF] = useState(false);
 
   useEffect(() => {
     void loadCelebrateSettings();
+    void getFahrenheit().then(setF, (e: unknown) => console.error('getFahrenheit', e));
   }, []);
+
+  function toggleFahrenheit(on: boolean) {
+    setF(on);
+    void setFahrenheit(on).catch((e: unknown) => console.error('setFahrenheit', e));
+  }
 
   return (
     <>
@@ -116,7 +184,19 @@ export function MoreScreen() {
               <span class="track" />
             </span>
           </label>
+          <label class="setting">
+            <div class="label">
+              {t('more.fahrenheit')}
+              <small>{t('more.fahrenheitHint')}</small>
+            </div>
+            <span class="switch">
+              <input type="checkbox" checked={fahrenheit} onChange={(e) => toggleFahrenheit((e.currentTarget as HTMLInputElement).checked)} />
+              <span class="track" />
+            </span>
+          </label>
         </section>
+
+        <DictionarySection />
 
         <section class="section menu">
           <MenuRow label={t('more.storage')} to="/more/storage" />

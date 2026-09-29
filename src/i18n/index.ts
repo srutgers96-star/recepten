@@ -8,6 +8,7 @@ import type { Lang } from '@/domain/model';
 import { browse } from './browse';
 import { common } from './common';
 import { edit } from './edit';
+import { phase2 } from './phase2';
 import { settings } from './settings';
 
 export type { Lang };
@@ -15,7 +16,8 @@ export type { Lang };
 /** One dictionary: key -> {nl, en}. Both languages are mandatory for every key. */
 export type Dict = Record<string, { nl: string; en: string }>;
 
-const dict: Dict = { ...common, ...browse, ...edit, ...settings };
+// phase2 is merged last (docs/phase-2-spec.md §5 strings; it may refine an earlier key).
+const dict: Dict = { ...common, ...browse, ...edit, ...settings, ...phase2 };
 
 const STORAGE_KEY = 'recepten.lang';
 

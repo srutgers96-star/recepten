@@ -1,8 +1,11 @@
-// '#/' — Home "Vanavond?": greeting, "Verras me", favourites chips (per profile), recently cooked,
-// own & received recipes, the story link and the planner teaser (docs/phase-1-spec.md §5).
+// '#/' — Home "Vanavond?": greeting, "Verras me" (with optional filter chips that constrain the
+// dice), the categories shelf, favourites chips (per profile), recently cooked, own & received
+// recipes, the story link and the planner teaser (docs/phase-1-spec.md §5, phase-2-spec.md §5).
 import { useMemo, useState } from 'preact/hooks';
+import { CategoryShelf } from '@/components/CategoryShelf';
+import { FilterChips, applyFilters, isActive, loadFilters, saveFilters, type Filters } from '@/components/FilterChips';
 import { Header } from '@/components/Header';
-import { RecipeRow, formatShortDate } from '@/components/RecipeRow';
+import { RecipeRow, formatShortDate, otherLanguageName } from '@/components/RecipeRow';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
 import { allRecipes, listFavorites, recentCooked, userRecipes } from '@/db/repo';
@@ -13,6 +16,9 @@ import { navigate, navigateTab } from '@/router';
 
 // Module-level so the suggestion stays the same when you come back to Home (reroll changes it).
 let surpriseId: string | null = null;
+
+/** The dice filters survive a reload (own key: the list has its own selection). */
+const SURPRISE_FILTERS_KEY = 'recepten.surpriseFilters';
 
 function pickRandom(list: Recipe[], not: string | null): string | null {
   if (!list.length) return null;
@@ -36,10 +42,21 @@ export function HomeScreen() {
   const cooked = useLive(() => recentCooked(undefined, 5), []);
   const own = useLive(userRecipes, []);
   const [, bump] = useState(0);
+  const [filters, setFilters] = useState<Filters>(() => loadFilters(SURPRISE_FILTERS_KEY));
 
   const byId = useMemo(() => new Map((all ?? []).map((r) => [r.id, r] as const)), [all]);
-  if (all && all.length && (!surpriseId || !byId.has(surpriseId))) surpriseId = pickRandom(all, null);
-  const surprise = surpriseId ? byId.get(surpriseId) : undefined;
+  // The dice only rolls over recipes that match the chips; the pick is re-rolled when it drops out.
+  const pool = useMemo(() => applyFilters(all ?? [], filters), [all, filters]);
+  const poolIds = useMemo(() => new Set(pool.map((r) => r.id)), [pool]);
+  if (pool.length && (!surpriseId || !poolIds.has(surpriseId))) surpriseId = pickRandom(pool, null);
+  const surprise = surpriseId && poolIds.has(surpriseId) ? byId.get(surpriseId) : undefined;
+  const surpriseAlt = surprise ? otherLanguageName(surprise, l) : null;
+  const filtering = isActive(filters);
+
+  function changeFilters(next: Filters) {
+    setFilters(next);
+    saveFilters(SURPRISE_FILTERS_KEY, next);
+  }
 
   const favList = useMemo(() => {
     if (!favs || !all) return [];
@@ -58,10 +75,12 @@ export function HomeScreen() {
 
         <section class="card surprise">
           <div class="muted small">{t('home.surprise')}</div>
+          <FilterChips value={filters} onChange={changeFilters} label={t('home.surpriseFilters')} />
           {surprise ? (
             <>
               <button type="button" class="surprise-name" onClick={() => openRecipe(surprise.id)}>
                 {pickText(surprise.name, l)}
+                {surpriseAlt && <span class="surprise-alt">{surpriseAlt}</span>}
               </button>
               <div class="surprise-actions">
                 <button type="button" class="btn btn-primary" onClick={() => openRecipe(surprise.id)}>
@@ -71,7 +90,7 @@ export function HomeScreen() {
                   type="button"
                   class="btn btn-secondary"
                   onClick={() => {
-                    surpriseId = pickRandom(all ?? [], surpriseId);
+                    surpriseId = pickRandom(pool, surpriseId);
                     bump((n) => n + 1);
                   }}
                 >
@@ -79,10 +98,14 @@ export function HomeScreen() {
                 </button>
               </div>
             </>
+          ) : all && filtering ? (
+            <div class="muted">{t('home.noMatch')}</div>
           ) : (
             <div class="muted">{t('common.loading')}</div>
           )}
         </section>
+
+        <CategoryShelf recipes={all ?? []} />
 
         <section class="home-section">
           <h2>{t('home.favorites')}</h2>

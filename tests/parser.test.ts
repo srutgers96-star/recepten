@@ -1,6 +1,7 @@
 // parseLine (docs/phase-2-spec.md §3): the five worked examples of PLAN.md §5 plus real corpus lines.
 import { describe, expect, it } from 'vitest';
-import { defaultDictionary } from '../src/domain/data';
+import { defaultDictionaryData } from '../src/domain/data';
+import { loadDictionary } from '../src/domain/dictionary';
 import type { Recipe } from '../src/domain/model';
 import { parseLine, parseQty, reparseLine } from '../src/domain/parser';
 import { searchRecipes } from '../src/domain/search';
@@ -193,7 +194,7 @@ describe('parseLine: corpus lines', () => {
   });
 
   it('works with an empty ingredient list: ing null, name kept', () => {
-    const empty = defaultDictionary();
+    const empty = loadDictionary({ ...defaultDictionaryData(), ingredients: [] });
     expect(empty.ingredients).toHaveLength(0);
     expect(parseLine('1 rode ui [gesnipperd]', empty, 'nl')).toMatchObject({ qty: { min: 1 }, unit: null, ing: null, name: 'ui', qual: ['rode'], prep: { en: 'finely diced' } });
     expect(parseLine('2 el olijfolie', empty, 'nl')).toMatchObject({ qty: { min: 2 }, unit: 'el', ing: null, name: 'olijfolie' });

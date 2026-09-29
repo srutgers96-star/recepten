@@ -97,4 +97,25 @@ export const common: Dict = {
 
   'update.new': { nl: 'Nieuwe versie', en: 'New version' },
   'update.reload': { nl: 'Vernieuwen', en: 'Reload' },
+
+  // IngredientPicker (src/components/IngredientPicker.tsx): "Koppel ingrediënt" sheet.
+  'picker.title': { nl: 'Koppel ingrediënt', en: 'Link ingredient' },
+  'picker.search': { nl: 'Zoek ingrediënt (NL of EN)', en: 'Search ingredient (NL or EN)' },
+  'picker.hint': { nl: 'Typ een paar letters van het ingrediënt.', en: 'Type a few letters of the ingredient.' },
+  'picker.new': { nl: 'Nieuw ingrediënt', en: 'New ingredient' },
+  'picker.nl': { nl: 'Nederlands', en: 'Dutch' },
+  'picker.en': { nl: 'Engels', en: 'English' },
+  'picker.singular': { nl: 'enkelvoud', en: 'singular' },
+  'picker.plural': { nl: 'meervoud', en: 'plural' },
+  'picker.aisle': { nl: 'Schap in de supermarkt', en: 'Supermarket aisle' },
+  'picker.unit': { nl: 'Standaard eenheid', en: 'Default unit' },
+  'picker.unitPieces': { nl: 'stuks (geteld)', en: 'pieces (counted)' },
+  'picker.unitNone': { nl: 'geen eenheid', en: 'no unit' },
+  'picker.veg': { nl: 'Vegetarisch', en: 'Vegetarian' },
+  'picker.staple': { nl: 'Voorraadkast (zout, olie, kruiden …)', en: 'Pantry staple (salt, oil, spices …)' },
+  'picker.save': { nl: 'Bewaar en koppel', en: 'Save and link' },
+  'picker.cancel': { nl: 'Terug naar zoeken', en: 'Back to search' },
+  'picker.none': { nl: 'Niets gevonden. Maak een nieuw ingrediënt.', en: 'Nothing found. Create a new ingredient.' },
+  'picker.nameRequired': { nl: 'Vul minstens één naam in.', en: 'Enter at least one name.' },
+  'picker.own': { nl: 'eigen', en: 'own' },
 };

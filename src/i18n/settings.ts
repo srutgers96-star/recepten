@@ -27,6 +27,20 @@ export const settings: Dict = {
   'more.channel': { nl: 'Kanaal', en: 'Channel' },
   'more.build': { nl: 'Build', en: 'Build' },
   'more.github': { nl: 'Broncode op GitHub', en: 'Source code on GitHub' },
+  'more.fahrenheit': { nl: '°F erbij', en: 'Show °F too' },
+  'more.fahrenheitHint': { nl: 'Oventemperaturen ook in Fahrenheit: 200 °C (400 °F)', en: 'Oven temperatures in Fahrenheit as well: 200 °C (400 °F)' },
+  'more.dictionary': { nl: 'Woordenboek', en: 'Dictionary' },
+  'more.dictCounts': { nl: '{builtin} ingrediënten · {own} eigen', en: '{builtin} ingredients · {own} own' },
+  'more.dictHint': { nl: 'Eigen ingrediënten bekijken en verwijderen', en: 'View and delete your own ingredients' },
+  'more.dictNone': {
+    nl: 'Nog geen eigen ingrediënten. Die maak je via "Koppel ingrediënt" → "Nieuw ingrediënt".',
+    en: 'No own ingredients yet. Create one via "Link ingredient" → "New ingredient".',
+  },
+  'more.dictDelete': { nl: 'Verwijder', en: 'Delete' },
+  'more.dictDeleteConfirm': {
+    nl: 'Ingrediënt "{name}" verwijderen? Regels die eraan gekoppeld zijn tonen daarna weer de losse tekst.',
+    en: 'Delete ingredient "{name}"? Lines linked to it will show their plain text again.',
+  },
 
   // --- Profielen --------------------------------------------------------------------------------
   'profiles.title': { nl: 'Profielen', en: 'Profiles' },

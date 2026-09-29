@@ -1,8 +1,9 @@
-// A small ingredient list for the parser/render/scale tests: data/ingredients.json does not exist
-// yet (the dictionary agents write it), so the tests layer these entries over the bundled vocab
-// with `withUserEntries`, which also exercises that path.
-import { defaultDictionary } from '../../src/domain/data';
-import { withUserEntries, type Dictionary, type Ingredient } from '../../src/domain/dictionary';
+// A small, fixed ingredient list for the parser/render/scale tests. The bundled vocab (units,
+// qualifiers, prep phrases, aisles, categories) is used WITHOUT data/ingredients.json so the
+// expectations stay stable while the real dictionary grows; the entries are layered on with
+// `withUserEntries`, which also exercises that path.
+import { defaultDictionaryData } from '../../src/domain/data';
+import { loadDictionary, withUserEntries, type Dictionary, type Ingredient } from '../../src/domain/dictionary';
 
 type Names = { one: string; many?: string };
 
@@ -59,6 +60,6 @@ let cached: Dictionary | undefined;
 
 /** The bundled vocab plus TEST_INGREDIENTS. */
 export function testDictionary(): Dictionary {
-  if (!cached) cached = withUserEntries(defaultDictionary(), TEST_INGREDIENTS);
+  if (!cached) cached = withUserEntries(loadDictionary({ ...defaultDictionaryData(), ingredients: [] }), TEST_INGREDIENTS);
   return cached;
 }

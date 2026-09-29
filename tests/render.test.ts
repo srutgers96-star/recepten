@@ -121,4 +121,17 @@ describe('renderLineParts', () => {
     const p = renderLineParts(line('4 blikjes tonijn op water'), dict, 'en', 0.5);
     expect(p).toMatchObject({ qty: '2', unit: 'tins', name: 'tonijn op water', resolved: false, text: '2 blikjes tonijn op water' });
   });
+
+  it('treats an `ing` this dictionary does not know as unresolved (raw text, never the slug)', () => {
+    // A received recipe linked to a user-created entry on the other phone.
+    const l = { ...line('2 gerookte makreelfilets'), ing: 'gerookte-makreel-2', name: 'gerookte makreelfilets', confidence: 1 };
+    const p = renderLineParts(l, dict, 'en');
+    expect(p.resolved).toBe(false);
+    expect(p.text).toBe('2 gerookte makreelfilets');
+    expect(renderLine(l, dict, 'nl')).toBe('2 gerookte makreelfilets');
+    expect(renderLine(l, dict, 'nl', 2)).toBe('4 gerookte makreelfilets');
+    // An unknown alternative falls back to its raw text as well.
+    const withAlt = { ...line('250 g schelvisfilet'), alt: [{ raw: { nl: 'wijting' }, ing: 'wijting-9', name: 'wijting' }] };
+    expect(renderLine(withAlt, dict, 'en')).toBe('250 g haddock fillet (or wijting)');
+  });
 });

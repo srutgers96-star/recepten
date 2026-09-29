@@ -36,11 +36,15 @@ function ingredientIds(term: string, dict: Dictionary, lang: Lang): Set<string> 
   return new Set(dict.search(term, lang).map((i) => i.id));
 }
 
-/** Every term matches an ingredient line: a resolved id (via the dictionary) or the raw text. */
-export function matchesIngredient(recipe: Recipe, terms: readonly string[], dict: Dictionary, lang: Lang): boolean {
+/**
+ * Every term matches an ingredient line: a resolved id (via the dictionary) or the raw text.
+ * `idsPerTerm` (one id set per term, from `ingredientIds`) lets `searchRecipes` scan the
+ * dictionary once per query instead of once per recipe.
+ */
+export function matchesIngredient(recipe: Recipe, terms: readonly string[], dict: Dictionary, lang: Lang, idsPerTerm?: readonly Set<string>[]): boolean {
   if (terms.length === 0) return false;
-  return terms.every((term) => {
-    const ids = ingredientIds(term, dict, lang);
+  return terms.every((term, i) => {
+    const ids = idsPerTerm?.[i] ?? ingredientIds(term, dict, lang);
     return recipe.lines.some((line) => {
       if (line.kind === 'header') return false;
       if (line.ing && ids.has(line.ing)) return true;
@@ -71,9 +75,11 @@ export function searchRecipes(recipes: readonly Recipe[], query: string, dict: D
   const terms = queryTerms(query);
   if (terms.length === 0) return recipes.length ? [{ kind: 'name', recipes: [...recipes] }] : [];
   const groups: Record<SearchGroupKind, Recipe[]> = { name: [], ingredient: [], category: [], tag: [] };
+  // One dictionary scan per term for the whole query, not per recipe.
+  const idsPerTerm = terms.map((term) => ingredientIds(term, dict, lang));
   for (const r of recipes) {
     if (matchesName(r, terms)) groups.name.push(r);
-    else if (matchesIngredient(r, terms, dict, lang)) groups.ingredient.push(r);
+    else if (matchesIngredient(r, terms, dict, lang, idsPerTerm)) groups.ingredient.push(r);
     else if (matchesCategory(r, terms, dict)) groups.category.push(r);
     else if (matchesTag(r, terms)) groups.tag.push(r);
   }

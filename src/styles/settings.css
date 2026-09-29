@@ -303,3 +303,35 @@
   object-fit: cover;
   margin: 16px auto 0;
 }
+
+/* ---------- Woordenboek (Meer): own ingredients ---------- */
+
+.dict-empty {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+
+.dict-list {
+  margin-top: 4px;
+}
+
+.dict-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dict-row .name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dict-row .btn {
+  flex: none;
+  min-height: 44px;
+}

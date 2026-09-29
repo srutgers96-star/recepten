@@ -6,8 +6,10 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
-import { getRecipe } from '@/db/repo';
+import { getRecipe, listLineOverrides } from '@/db/repo';
+import { dictionary } from '@/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
+import { applyLineOverrides } from '@/domain/overrides';
 import { buildReadableRecipe, buildShareMessageFor, countIngredientLines, recipeHasLang } from '@/domain/message';
 import { recipeToShareEnvelope } from '@/domain/recipe-io';
 import { buildShareUrl, encodeToken } from '@/domain/token';
@@ -54,8 +56,11 @@ export function ShareScreen(props: { id: string }) {
     setRecipe(undefined);
     setStatus('');
     setTextStatus('');
-    getRecipe(props.id).then((r) => {
+    // The effective recipe travels: override patch applied (getRecipe) AND the "Koppel" line
+    // overrides folded into the lines, so a linked ingredient reaches the other phone.
+    Promise.all([getRecipe(props.id), listLineOverrides(props.id)]).then(([base, overrides]) => {
       if (cancelled) return;
+      const r = base ? { ...base, lines: applyLineOverrides(base.lines, overrides) } : undefined;
       setRecipe(r ?? null);
       if (r) {
         // Default text language: the UI language when the recipe has it, else the other one.
@@ -88,7 +93,9 @@ export function ShareScreen(props: { id: string }) {
 
   const url = token ? buildShareUrl(appInfo.appUrl, 'r', token) : '';
   const message = recipe && url ? buildShareMessageFor(recipe, { by, url, lang: ui }) : '';
-  const readable = useMemo(() => (recipe && url ? buildReadableRecipe(recipe, TEXT_LANGS[textLangs], url) : ''), [recipe, url, textLangs]);
+  // Ingredient lines through the dictionary in each language (same text as the landing page).
+  const dict = dictionary.value;
+  const readable = useMemo(() => (recipe && url ? buildReadableRecipe(recipe, TEXT_LANGS[textLangs], url, dict) : ''), [recipe, url, textLangs, dict]);
 
   const langOptions = useMemo(() => {
     if (!recipe) return [];

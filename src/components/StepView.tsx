@@ -2,10 +2,51 @@
 // Used as a numbered list item on the detail screen and as the big card in cook mode (`big`).
 // A chip starts a timer in the global store (src/timers.ts); while that timer runs the chip shows
 // the countdown instead, so a second tap never starts a duplicate.
+//
+// Phase 2: with the setting "°F erbij" (units.fahrenheit) on, oven temperatures in the text render
+// as "200 °C (400 °F)" (docs/phase-2-spec.md §5). The step text itself is never rewritten; the
+// conversion is applied at render time only.
+import { useLive } from '@/db/live';
+import { getFahrenheit } from '@/db/repo';
 import { pickText, type Step, type TimerSpec } from '@/domain/model';
 import { findTimers, formatTimer, timerMs } from '@/domain/timers';
 import { lang, t } from '@/i18n';
 import { findRunningTimer, formatRemaining, now, remainingMs, startTimer } from '@/timers';
+
+/** The oven table (docs/phase-2-spec.md §5); other values fall back to the formula, rounded to 5. */
+const OVEN_F: Record<number, number> = {
+  140: 275,
+  150: 300,
+  160: 325,
+  170: 340,
+  180: 350,
+  190: 375,
+  200: 400,
+  220: 425,
+  230: 450,
+  250: 480,
+};
+
+export function celsiusToF(c: number): number {
+  const table = OVEN_F[c];
+  if (table !== undefined) return table;
+  return Math.round((c * 9) / 5 / 5 + 32 / 5) * 5;
+}
+
+const TEMP_RE = /(\d{2,3})\s?(°C|℃)(?!\s?\()/gu;
+
+/** "200 °C" / "200°C" / "200 ℃" -> "200 °C (400 °F)"; text already carrying a °F stays as it is. */
+export function addFahrenheit(text: string): string {
+  return text.replace(TEMP_RE, (_m, num: string) => {
+    const c = Number(num);
+    return `${c} °C (${celsiusToF(c)} °F)`;
+  });
+}
+
+/** Live value of the setting units.fahrenheit (false until read). */
+export function useFahrenheit(): boolean {
+  return useLive(() => getFahrenheit(), []) === true;
+}
 
 export interface StepViewProps {
   recipeId: string;
@@ -16,6 +57,8 @@ export interface StepViewProps {
   step: Step;
   /** Cook-mode typography (20-22 px). */
   big?: boolean;
+  /** Append °F to oven temperatures (setting units.fahrenheit). */
+  fahrenheit?: boolean;
 }
 
 /** Timer specs of a step: as stored, else derived from the displayed text. */
@@ -60,8 +103,9 @@ export function TimerChips(props: { recipeId: string; recipeName: string; index:
 }
 
 export function StepView(props: StepViewProps) {
-  const text = pickText(props.step.text, lang.value);
-  const specs = stepTimers(props.step, text);
+  const source = pickText(props.step.text, lang.value);
+  const specs = stepTimers(props.step, source);
+  const text = props.fahrenheit ? addFahrenheit(source) : source;
   if (props.big) {
     return (
       <div class="step-big">

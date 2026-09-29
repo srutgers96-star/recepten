@@ -25,7 +25,6 @@ export const browse: Dict = {
     nl: 'Weekplanner en boodschappenlijst komen in een volgende versie.',
     en: 'The weekly planner and shopping list are coming in a later version.',
   },
-  'home.by': { nl: 'door {name}', en: 'by {name}' },
 
   // --- A-Z list ---
   'list.title': { nl: 'Recepten', en: 'Recipes' },
@@ -36,7 +35,6 @@ export const browse: Dict = {
   'list.count': { nl: '{n} recepten', en: '{n} recipes' },
 
   // --- Detail ---
-  'recipe.persons': { nl: '{n} pers.', en: 'serves {n}' },
   'recipe.cook': { nl: 'Koken', en: 'Cook' },
   'recipe.share': { nl: 'Deel', en: 'Share' },
   'recipe.fav': { nl: 'Maak favoriet', en: 'Add to favourites' },
@@ -65,6 +63,37 @@ export const browse: Dict = {
   'recipe.copyHint': { nl: 'Klassiekers zijn vast; een kopie kun je bewerken.', en: 'Classics are fixed; a copy can be edited.' },
   'recipe.copyNoProfile': { nl: 'Kies eerst een profiel (Meer) om een kopie te maken.', en: 'Choose a profile first (More) to make a copy.' },
   'recipe.notFound': { nl: 'Recept niet gevonden', en: 'Recipe not found' },
+
+  // --- Detail, phase 2: category, tags, time, curator badge ---
+  'recipe.category': { nl: 'Categorie', en: 'Category' },
+  'recipe.noCategory': { nl: 'geen categorie', en: 'no category' },
+  'recipe.changeCategory': { nl: 'wijzig', en: 'change' },
+  'recipe.timeActive': { nl: '{n} min bezig', en: '{n} min hands-on' },
+  'recipe.timeTotal': { nl: '{n} min totaal', en: '{n} min total' },
+  'recipe.machineTranslation': { nl: 'Automatische vertaling — tik om te verbeteren', en: 'Machine translation — tap to improve' },
+  'tag.vegetarisch': { nl: 'vegetarisch', en: 'vegetarian' },
+  'tag.vega-optie': { nl: 'vega-optie', en: 'veggie option' },
+  'tag.snel': { nl: 'snel', en: 'quick' },
+  'tag.oven': { nl: 'oven', en: 'oven' },
+  'tag.wok': { nl: 'wok', en: 'wok' },
+  'tag.kids': { nl: 'kids', en: 'kids' },
+  'tag.wereld': { nl: 'wereld', en: 'world' },
+  'tag.feest': { nl: 'feest', en: 'party' },
+  'tag.zomer': { nl: 'zomer', en: 'summer' },
+  'tag.winter': { nl: 'winter', en: 'winter' },
+
+  // --- Servings scaler + ingredient lines (detail and cook mode) ---
+  'servings.label': { nl: 'Aantal personen', en: 'Number of people' },
+  'servings.less': { nl: 'Minder personen', en: 'Fewer people' },
+  'servings.more': { nl: 'Meer personen', en: 'More people' },
+  'servings.persons': { nl: '{n} pers.', en: 'serves {n}' },
+  'servings.base': { nl: 'recept: {n}', en: 'recipe: {n}' },
+  'servings.orig': { nl: '({n} pers.: {amt})', en: '(serves {n}: {amt})' },
+  'line.link': { nl: 'Koppel ingrediënt', en: 'Link ingredient' },
+  'line.linkHint': {
+    nl: 'Regels met een ? kent de app nog niet: tik erop om het ingrediënt te koppelen.',
+    en: 'Lines with a ? are not recognised yet: tap one to link the ingredient.',
+  },
 
   // --- Cook mode ---
   'cook.title': { nl: 'Koken', en: 'Cooking' },

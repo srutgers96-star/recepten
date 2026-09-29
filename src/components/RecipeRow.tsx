@@ -1,6 +1,7 @@
 // One list row for a recipe (A-Z list, Home): name in the active language (fallback the other),
-// small badges — ★ favourite, "eigen", "van <naam>" — and a chevron. Tapping opens the detail.
-import { pickText, type Lang, type Recipe } from '@/domain/model';
+// the other language's name as a muted second line when it exists and differs, small badges —
+// ★ favourite, "eigen", "van <naam>" — and a chevron. Tapping opens the detail.
+import { hasLang, pickText, type Lang, type Recipe } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { navigate } from '@/router';
 
@@ -11,9 +12,20 @@ export interface RecipeRowProps {
   subtitle?: string;
 }
 
+/** The name in the other language, when it exists and differs from the shown name. */
+export function otherLanguageName(r: Recipe, l: Lang): string | null {
+  const other: Lang = l === 'nl' ? 'en' : 'nl';
+  if (!hasLang(r.name, l) || !hasLang(r.name, other)) return null;
+  const shown = pickText(r.name, l);
+  const alt = (r.name[other] ?? '').trim();
+  return alt && alt.toLowerCase() !== shown.toLowerCase() ? alt : null;
+}
+
 export function RecipeRow(props: RecipeRowProps) {
   const r = props.recipe;
-  const name = pickText(r.name, lang.value);
+  const l = lang.value;
+  const name = pickText(r.name, l);
+  const altName = otherLanguageName(r, l);
   const kind = r.origin.kind;
   return (
     <a
@@ -26,6 +38,11 @@ export function RecipeRow(props: RecipeRowProps) {
     >
       <span class="name">
         {name}
+        {altName && (
+          <span class="row-sub row-alt" lang={l === 'nl' ? 'en' : 'nl'}>
+            {altName}
+          </span>
+        )}
         {props.subtitle && <span class="row-sub">{props.subtitle}</span>}
       </span>
       <span class="row-badges">

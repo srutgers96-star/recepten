@@ -7,6 +7,7 @@ import { InstallCard } from './components/InstallCard';
 import { Nav } from './components/Nav';
 import { UpdateBar } from './components/UpdateBar';
 import { ensureBuiltins } from './db/repo';
+import { loadDictionary } from './dictionary';
 import { lang, t } from './i18n';
 import { startInboxBadge } from './inbox-badge';
 import { loadProfiles, needsOnboarding } from './profile';
@@ -114,6 +115,13 @@ export function App(props: { openImportFromHash: boolean }) {
         await loadProfiles();
       } catch (e) {
         errors.push(String(e));
+      }
+      // User-created ingredients on top of the bundled dictionary (never fatal: the base
+      // dictionary is in the bundle and the signal already holds it).
+      try {
+        await loadDictionary();
+      } catch (e) {
+        console.error('loadDictionary', e);
       }
       if (cancelled) return;
       if (errors.length) setBootError(errors.join(' · '));

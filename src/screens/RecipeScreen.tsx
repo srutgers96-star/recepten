@@ -1,15 +1,34 @@
-// '#/recipe/:id' — detail (docs/phase-1-spec.md §5): name, servings, meta, Koken / Deel, ★,
-// tickable ingredients (memory only), numbered steps with timer chips, "Bij dit gerecht", notes
-// per profile (autosave), and own → Bewerk / Verwijder, classic → "Maak eigen kopie".
+// '#/recipe/:id' — detail (docs/phase-1-spec.md §5, phase-2 §5): name, category + tags, meta,
+// servings scaler, Koken / Deel, ★, ingredient lines through the dictionary (scaled, with
+// "Koppel ingrediënt"), numbered steps with timer chips (°F when enabled), "Bij dit gerecht",
+// notes per profile (autosave), and own → Bewerk / Verwijder, classic → "Maak eigen kopie".
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
+import { IngredientList } from '@/components/LineView';
 import { formatShortDate } from '@/components/RecipeRow';
-import { StepView } from '@/components/StepView';
+import { rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
+import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
-import { allRecipes, cookStats, deleteUserRecipe, duplicateAsOwn, getNote, getRecipe, listFavorites, setNote, toggleFavorite } from '@/db/repo';
+import {
+  allRecipes,
+  cookStats,
+  deleteUserRecipe,
+  duplicateAsOwn,
+  getNote,
+  getOverride,
+  getRecipe,
+  isBuiltinId,
+  listFavorites,
+  saveOverride,
+  saveUserRecipe,
+  setNote,
+  toggleFavorite,
+} from '@/db/repo';
+import { dictionary } from '@/dictionary';
 import { pickText, type Recipe } from '@/domain/model';
 import { lang, t } from '@/i18n';
+import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
 import { navigate } from '@/router';
 
@@ -26,6 +45,13 @@ function originLine(r: Recipe, l: 'nl' | 'en', all: Recipe[] | undefined): strin
   return t('recipe.classic');
 }
 
+/** Label of a tag (data/recipes.json `tags`); unknown tags show their id. */
+export function tagLabel(tag: string): string {
+  const key = 'tag.' + tag;
+  const label = t(key);
+  return label === key ? tag : label;
+}
+
 export function RecipeScreen(props: { id: string }) {
   const id = props.id;
   const l = lang.value;
@@ -35,15 +61,26 @@ export function RecipeScreen(props: { id: string }) {
   const favs = useLive(() => (pid ? listFavorites(pid) : Promise.resolve(new Set<string>())), [pid]);
   const stats = useLive(() => cookStats(id), [id]);
   const all = useLive(allRecipes, []);
+  const lines = useRecipeLines(recipe);
+  const fahrenheit = useFahrenheit();
+  const dict = dictionary.value;
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [note, setNoteText] = useState('');
   const [noteSaved, setNoteSaved] = useState(false);
   const noteTimer = useRef<number | null>(null);
   const noteDirty = useRef<string | null>(null);
+  // Servings: the session memory for this recipe, else the recipe's own (classics: 4).
+  const [chosen, setChosen] = useState<number | null>(() => {
+    const n = rememberedServings(id, 0);
+    return n > 0 ? n : null;
+  });
+  const [editCat, setEditCat] = useState(false);
+  const [catBusy, setCatBusy] = useState(false);
 
   // The delete confirmation is per recipe, in memory only.
   useEffect(() => {
     setConfirmDelete(false);
+    setEditCat(false);
   }, [id]);
 
   // Notes: load per recipe + profile; autosave debounced; flush on leave.
@@ -83,6 +120,13 @@ export function RecipeScreen(props: { id: string }) {
   const name = recipe ? pickText(recipe.name, l) : '';
   const isFav = !!favs?.has(id);
   const editable = !!recipe && recipe.origin.kind !== 'builtin';
+  const base = recipe && recipe.servings > 0 ? recipe.servings : 4;
+  const servings = chosen ?? base;
+
+  function onServings(n: number) {
+    setChosen(n);
+    rememberServings(id, n);
+  }
 
   const related = useMemo(() => {
     if (!recipe || !all) return [];
@@ -93,7 +137,8 @@ export function RecipeScreen(props: { id: string }) {
 
   const meta: string[] = [];
   if (recipe) {
-    meta.push(t('recipe.persons', { n: recipe.servings }));
+    if (recipe.time?.active) meta.push(t('recipe.timeActive', { n: recipe.time.active }));
+    if (recipe.time?.total && recipe.time.total !== recipe.time.active) meta.push(t('recipe.timeTotal', { n: recipe.time.total }));
     meta.push(originLine(recipe, l, all));
     if (stats) {
       if (stats.count > 0) {
@@ -102,6 +147,12 @@ export function RecipeScreen(props: { id: string }) {
       } else meta.push(t('recipe.neverCooked'));
     }
   }
+
+  const category = recipe?.category ? dict.category(recipe.category) : undefined;
+  const categoryName = category ? category[l] : recipe?.category ?? '';
+  // Curator badge: the English edition of a classic is a machine translation until someone improves
+  // it (the editor's override patch then sets text.en = 'human', src/screens/EditScreen.tsx).
+  const machineEn = !!recipe && l === 'en' && recipe.text?.en === 'llm';
 
   async function onToggleFav() {
     if (!pid) return;
@@ -117,6 +168,25 @@ export function RecipeScreen(props: { id: string }) {
     if (!recipe || !profile) return;
     const copy = await duplicateAsOwn(recipe, profile);
     navigate('/edit/' + copy.id);
+  }
+
+  /** Own/received recipes: saved in the recipe; classics: stored as an override patch {category}. */
+  async function onCategory(cat: string) {
+    if (!recipe || catBusy) return;
+    setCatBusy(true);
+    try {
+      if (isBuiltinId(recipe.id)) {
+        const existing = await getOverride(recipe.id);
+        await saveOverride({ baseId: recipe.id, patch: { ...(existing?.patch ?? {}), category: cat }, by: profile?.name ?? null });
+      } else {
+        await saveUserRecipe({ ...recipe, category: cat });
+      }
+      setEditCat(false);
+    } catch (e) {
+      console.error('category', e);
+    } finally {
+      setCatBusy(false);
+    }
   }
 
   return (
@@ -141,10 +211,57 @@ export function RecipeScreen(props: { id: string }) {
                 {isFav ? '★' : '☆'}
               </button>
             </div>
+
+            <div class="detail-cat">
+              {editCat ? (
+                <label class="detail-cat-edit">
+                  <span class="visually-hidden">{t('recipe.category')}</span>
+                  <select
+                    class="input"
+                    value={recipe.category ?? ''}
+                    disabled={catBusy}
+                    onChange={(e) => void onCategory((e.currentTarget as HTMLSelectElement).value)}
+                  >
+                    {!recipe.category && <option value="">{t('recipe.noCategory')}</option>}
+                    {dict.categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c[l]}
+                      </option>
+                    ))}
+                  </select>
+                  <button type="button" class="icon-btn" onClick={() => setEditCat(false)}>
+                    {t('common.cancel')}
+                  </button>
+                </label>
+              ) : (
+                <>
+                  <span class="detail-cat-name">{categoryName || t('recipe.noCategory')}</span>
+                  <button type="button" class="link-btn" onClick={() => setEditCat(true)}>
+                    {t('recipe.changeCategory')}
+                  </button>
+                  {recipe.tags.length > 0 && (
+                    <span class="tags">
+                      {recipe.tags.map((tag) => (
+                        <span key={tag} class="tag">
+                          {tagLabel(tag)}
+                        </span>
+                      ))}
+                    </span>
+                  )}
+                </>
+              )}
+            </div>
+
             <p class="detail-meta">{meta.join(' · ')}</p>
 
+            {machineEn && (
+              <button type="button" class="curator-badge" onClick={() => navigate('/edit/' + id)}>
+                {t('recipe.machineTranslation')}
+              </button>
+            )}
+
             <div class="detail-actions">
-              <button type="button" class="btn btn-primary" onClick={() => navigate('/cook/' + id)}>
+              <button type="button" class="btn btn-primary" onClick={() => navigate(`/cook/${id}?srv=${servings}`)}>
                 {t('recipe.cook')}
               </button>
               <button type="button" class="btn btn-secondary" onClick={() => navigate('/share/' + id)}>
@@ -154,25 +271,9 @@ export function RecipeScreen(props: { id: string }) {
 
             <section class="section">
               <h2>{t('recipe.ingredients')}</h2>
-              <ul class="ing">
-                {recipe.lines.map((line, i) => {
-                  const text = pickText(line.raw, l);
-                  if (line.kind === 'header') {
-                    return (
-                      <li key={i} class="ing-header">
-                        {text.replace(/:\s*$/, '')}
-                      </li>
-                    );
-                  }
-                  // Plain list here: ticking off belongs to the cook mode ("Klaarzetten") and the
-                  // shopping list (phase 4), not to reading a recipe.
-                  return (
-                    <li key={i} class="ing-line">
-                      <span class="txt">{text}</span>
-                    </li>
-                  );
-                })}
-              </ul>
+              <ServingsPicker value={servings} base={base} onChange={onServings} />
+              <IngredientList recipeId={id} lines={lines} servings={servings} base={base} />
+              {lines.some((ln) => ln.kind !== 'header' && !(ln.ing && dict.get(ln.ing))) && <p class="muted small ing-hint">{t('line.linkHint')}</p>}
             </section>
 
             <section class="section">
@@ -180,9 +281,10 @@ export function RecipeScreen(props: { id: string }) {
               {recipe.steps.some((s) => s.timers && s.timers.length) && <p class="muted small">{t('recipe.timerHint')}</p>}
               <ol class="steps">
                 {recipe.steps.map((s, i) => (
-                  <StepView key={i} recipeId={id} recipeName={name} index={i} step={s} />
+                  <StepView key={i} recipeId={id} recipeName={name} index={i} step={s} fahrenheit={fahrenheit} />
                 ))}
               </ol>
+              {recipe.servingTip && pickText(recipe.servingTip, l) && <p class="serving-tip">{pickText(recipe.servingTip, l)}</p>}
             </section>
 
             {related.length > 0 && (

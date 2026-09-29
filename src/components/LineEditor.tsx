@@ -2,6 +2,7 @@
 // chosen language (NL, EN or both), "+" to add, ✕ per row. Single-line mode: Enter moves focus to
 // the next field and adds a row after the last one (never submits). Multi-line mode (steps):
 // textareas, Enter inserts a line break. All fields are 16 px (no iOS zoom), targets 44 px.
+import type { ComponentChildren } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import type { Lang } from '@/domain/model';
 
@@ -36,6 +37,8 @@ export interface LineEditorProps {
   placeholder?: Partial<Record<Lang, string>>;
   addLabel: string;
   removeLabel: string;
+  /** Rendered under the fields of a row (the ingredient chips); null/undefined renders nothing. */
+  renderExtra?: (item: EditText, idx: number) => ComponentChildren;
 }
 
 function focusField(el: HTMLElement) {
@@ -119,6 +122,7 @@ export function LineEditor(props: LineEditorProps) {
                 )}
               </div>
             ))}
+            {props.renderExtra?.(it, idx)}
           </div>
           <button type="button" class="btn btn-icon btn-danger" aria-label={props.removeLabel} onClick={() => remove(idx)}>
             ✕

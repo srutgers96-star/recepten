@@ -3,8 +3,13 @@
 // shape) through normalizeRecipe, shows the recipe read-only with an NL/EN switch, offers "Copy
 // recipe code" and the hand-off card. It NEVER writes to storage (invariant, CLAUDE.md 6):
 // Safari's bucket is invisible to the Home Screen app. Imports domain modules only (no Dexie).
+// Ingredient lines are rendered through the bundled dictionary (schema-2 lines carry `ing`,
+// `qty`, `unit`, `prep` and usually only a Dutch `raw`), so the EN view shows English names;
+// a line the dictionary cannot render falls back to its raw text.
+import { defaultDictionary } from './domain/data';
 import { pickText, type Lang, type Recipe } from './domain/model';
 import { normalizeRecipe } from './domain/recipe-io';
+import { renderLine } from './domain/render';
 import { decodeToken } from './domain/token';
 
 const S = {
@@ -91,8 +96,20 @@ function render() {
     const description = pickText(recipe.description, lang);
     if (description) parts.push(`<p>${esc(description)}</p>`);
     if (recipe.lines.length) {
+      const dict = defaultDictionary();
       const lines = recipe.lines
-        .map((l) => ({ text: pickText(l.raw, lang), header: l.kind === 'header' }))
+        .map((l) => {
+          const header = l.kind === 'header';
+          let text = '';
+          if (!header) {
+            try {
+              text = renderLine(l, dict, lang);
+            } catch {
+              text = '';
+            }
+          }
+          return { text: text || pickText(l.raw, lang), header };
+        })
         .filter((l) => l.text)
         .map((l) => `<li${l.header ? ' class="head"' : ''}>${esc(l.text)}</li>`)
         .join('');

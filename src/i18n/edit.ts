@@ -23,6 +23,10 @@ export const edit: Dict = {
     nl: 'Een regel die eindigt op ":" wordt een kopje, bv. "Dressing:".',
     en: 'A line ending in ":" becomes a header, e.g. "Dressing:".',
   },
+  'edit.enFromDictionaryHint': {
+    nl: 'Herkende ingrediënten (✓) worden in het Engels uit het woordenboek weergegeven; de Engelse tekst van zo\'n regel telt niet mee. Pas ze aan via de chips of "Koppel".',
+    en: 'Recognised ingredients (✓) are shown in English from the dictionary; the English text of such a line is not used. Adjust them through the chips or "Link".',
+  },
   'edit.addLine': { nl: '+ regel', en: '+ line' },
   'edit.removeLine': { nl: 'Verwijder regel', en: 'Remove line' },
   'edit.steps': { nl: 'Bereiding', en: 'Method' },
@@ -51,11 +55,74 @@ export const edit: Dict = {
     en: 'Delete this recipe? This cannot be undone.',
   },
   'edit.notFound': { nl: 'Recept niet gevonden', en: 'Recipe not found' },
-  'edit.builtin': {
-    nl: 'Een klassieker kun je niet bewerken. Maak een eigen kopie en pas die aan.',
-    en: 'A classic cannot be edited. Make your own copy and change that.',
-  },
   'edit.makeCopy': { nl: 'Maak eigen kopie', en: 'Make my own copy' },
+  'edit.servingTip': { nl: 'Serveertip', en: 'Serving tip' },
+  'edit.servingTipPlaceholder': { nl: 'bv. Lekker met stokbrood', en: 'e.g. Nice with crusty bread' },
+
+  // --- Editor: builtin in override mode (docs/phase-2-spec.md §5 "Curator") ---
+  'edit.titleOverride': { nl: 'Aanpassing van klassieker', en: 'Tweak of a classic' },
+  'edit.overrideHint': {
+    nl: 'De klassieker zelf blijft zoals hij is; alleen wat je hier verandert wordt bewaard als aanpassing. Personen kun je niet wijzigen (maak daarvoor een eigen kopie).',
+    en: 'The classic itself stays as it is; only what you change here is kept as a tweak. Servings cannot be changed (make your own copy for that).',
+  },
+  'edit.overrideActive': { nl: 'Aangepast op {date}', en: 'Tweaked on {date}' },
+  'edit.restoreOriginal': { nl: 'Herstel origineel', en: 'Restore original' },
+  'edit.confirmRestore': {
+    nl: 'Alle aanpassingen van deze klassieker wissen en het origineel terugzetten?',
+    en: 'Remove all tweaks of this classic and restore the original?',
+  },
+
+  // --- Editor: ingredient chips ---
+  'edit.headerChip': { nl: 'kopje', en: 'heading' },
+  'edit.unresolved': { nl: 'Ingrediënt niet herkend', en: 'Ingredient not recognised' },
+  'edit.link': { nl: 'Koppel', en: 'Link' },
+  'edit.newIngredient': { nl: 'Nieuw ingrediënt', en: 'New ingredient' },
+  'edit.chipEdit': { nl: 'Regel aanpassen', en: 'Adjust line' },
+  'edit.qty': { nl: 'Hoeveelheid', en: 'Quantity' },
+  'edit.qtyInvalid': { nl: 'Hoeveelheid niet begrepen (bv. 2, 2-3, ½, 1,5).', en: 'Quantity not understood (e.g. 2, 2-3, ½, 1.5).' },
+  'edit.unit': { nl: 'Eenheid', en: 'Unit' },
+  'edit.unitNone': { nl: 'stuks / geen', en: 'pieces / none' },
+  'edit.prep': { nl: 'Bewerking', en: 'Preparation' },
+  'edit.prepPlaceholder': { nl: 'bv. fijngehakt', en: 'e.g. finely chopped' },
+  'edit.optional': { nl: 'Optioneel', en: 'Optional' },
+  'edit.apply': { nl: 'Pas toe', en: 'Apply' },
+  'edit.relink': { nl: 'Ander ingrediënt', en: 'Other ingredient' },
+
+  // --- Editor: language pair (translate via an external AI) ---
+  'edit.translate': { nl: 'Vertaling', en: 'Translation' },
+  'edit.translateHint': {
+    nl: 'Kopieer de genummerde opdracht, plak hem in ChatGPT of Claude, en plak het antwoord hieronder terug. Alleen de andere taal wordt ingevuld.',
+    en: 'Copy the numbered prompt, paste it into ChatGPT or Claude, and paste the answer back below. Only the other language is filled in.',
+  },
+  'edit.translateFrom': { nl: 'Richting', en: 'Direction' },
+  'edit.copyForTranslation': { nl: 'Kopieer voor vertaling', en: 'Copy for translation' },
+  'edit.pasteTranslation': { nl: 'Plak vertaling', en: 'Paste translation' },
+  'edit.applyTranslation': { nl: 'Vul in', en: 'Fill in' },
+  'edit.promptCopied': { nl: 'Gekopieerd — plak in ChatGPT of Claude', en: 'Copied — paste into ChatGPT or Claude' },
+  'edit.copyFailed': { nl: 'Kopiëren mislukt — kopieer de tekst hieronder zelf.', en: 'Copy failed — copy the text below yourself.' },
+  'edit.translateNone': { nl: 'Geen genummerde vertaling gevonden in de tekst.', en: 'No numbered translation found in the text.' },
+  'edit.translateStepsMismatch': {
+    nl: 'Aantal stappen klopt niet: {got} in de vertaling, {expected} in het recept. Niets ingevuld.',
+    en: 'Step count does not match: {got} in the translation, {expected} in the recipe. Nothing filled in.',
+  },
+  'edit.translateLinesMismatch': {
+    nl: 'Aantal ingrediëntregels klopt niet: {got} in de vertaling, {expected} in het recept. Niets ingevuld.',
+    en: 'Ingredient line count does not match: {got} in the translation, {expected} in the recipe. Nothing filled in.',
+  },
+  'edit.translateDone': { nl: 'Vertaling ingevuld: {lines} regels, {steps} stappen', en: 'Translation filled in: {lines} lines, {steps} steps' },
+
+  // --- Editor: import from a photo / text via an external AI ---
+  'edit.import': { nl: 'Importeer van foto/tekst', en: 'Import from photo/text' },
+  'edit.importHint': {
+    nl: 'Kopieer de instructie, plak hem met de foto (of de tekst) van het recept in ChatGPT of Claude, en plak het resultaat hieronder.',
+    en: 'Copy the instruction, paste it together with the photo (or the text) of the recipe into ChatGPT or Claude, and paste the result below.',
+  },
+  'edit.copyImportPrompt': { nl: 'Kopieer instructie-prompt', en: 'Copy instruction prompt' },
+  'edit.importPaste': { nl: 'Plak het resultaat', en: 'Paste the result' },
+  'edit.importApply': { nl: 'Vul in', en: 'Fill in' },
+  'edit.importNone': { nl: 'Geen recept herkend in de tekst.', en: 'No recipe recognised in the text.' },
+  'edit.importDone': { nl: 'Ingevuld: {lines} ingrediënten, {steps} stappen', en: 'Filled in: {lines} ingredients, {steps} steps' },
+  'edit.promptText': { nl: 'Tekst om te kopiëren', en: 'Text to copy' },
 
   // --- Share (/share/:id) ---
   'share.title': { nl: 'Delen', en: 'Share' },

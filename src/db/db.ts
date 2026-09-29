@@ -6,12 +6,15 @@
 //   v2/v3 (phase 1): the schema-2 tables. Dexie cannot change a table's primary key in place, so
 //   v2 moves the old userRecipes rows (converted with normalizeRecipe) into a temporary table and
 //   v3 moves them into the new `userRecipes` keyed by the string id. A fresh install creates the
-//   final schema directly. Only src/db/repo.ts talks to this module.
+//   final schema directly.
+//   v4 (phase 2): lineOverrides ("Koppel ingrediënt" on a builtin's line), userIngredients
+//   (dictionary entries created by users) and overrides (curator patches on builtins). No data
+//   moves; the tables are simply added. Only src/db/repo.ts talks to this module.
 import Dexie, { type Table } from 'dexie';
 import type { CookLogEntry, Favorite, Note, Profile, Recipe, RunningTimer } from '@/domain/model';
 import { newProfileId, nowIso } from '@/domain/model';
 import { normalizeRecipe } from '@/domain/recipe-io';
-import type { ImportSnapshot, Setting, UserRecipe } from './model';
+import type { ImportSnapshot, Ingredient, LineOverride, RecipeOverride, Setting, UserRecipe } from './model';
 
 export function dbNameFromBase(base: string): string {
   return /\/next\/?$/.test(base) ? 'recepten-next' : 'recepten';
@@ -27,6 +30,9 @@ export type AppDatabase = Dexie & {
   settings: Table<Setting, string>;
   imports: Table<ImportSnapshot, number>;
   timers: Table<RunningTimer, string>;
+  lineOverrides: Table<LineOverride, [string, number]>;
+  userIngredients: Table<Ingredient, string>;
+  overrides: Table<RecipeOverride, string>;
 };
 
 export const db = new Dexie(dbNameFromBase(import.meta.env.BASE_URL)) as AppDatabase;
@@ -83,6 +89,12 @@ db.version(3)
     const rows = (await tx.table('userRecipesV2').toArray()) as Recipe[];
     if (rows.length) await tx.table('userRecipes').bulkPut(rows);
   });
+
+db.version(4).stores({
+  lineOverrides: '[recipeId+index], recipeId',
+  userIngredients: 'id',
+  overrides: 'baseId',
+});
 
 /** The phase-0 language choice lived in localStorage; used once, to seed the first profile. */
 function phase0Lang(): 'nl' | 'en' {

@@ -214,3 +214,162 @@
 .inbox-row .badge {
   flex: none;
 }
+
+/* ---------- Editor: phase 2 (override card, import/translation tools, ingredient chips) ---------- */
+
+.edit-override {
+  margin-top: 0;
+}
+
+.edit-override p {
+  margin: 0;
+}
+
+.edit-override-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-import {
+  margin: 0 0 16px;
+}
+
+.edit-tools {
+  margin-top: 0;
+}
+
+.edit-tools h2 {
+  margin-bottom: 4px;
+}
+
+.edit-tools .field {
+  margin-top: 12px;
+}
+
+.edit-tools textarea.input {
+  min-height: 140px;
+  resize: vertical;
+}
+
+textarea.edit-prompt {
+  font-size: 14px;
+  line-height: 1.35;
+  min-height: 120px;
+}
+
+/* Chips under an ingredient input: [2] [el] [olijfolie ✓] or [? naam] Koppel / Nieuw ingrediënt. */
+.lc-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 0 0 2px 2px;
+}
+
+.lc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.lc-chip:active {
+  background: var(--press);
+}
+
+button.lc-chip:disabled {
+  opacity: 0.7;
+}
+
+.lc-ok {
+  border-color: var(--rosemary);
+  color: var(--rosemary);
+}
+
+.lc-tick {
+  font-weight: 700;
+}
+
+.lc-soft {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.lc-muted {
+  color: var(--muted);
+  font-weight: 500;
+  min-height: 32px;
+}
+
+.lc-unresolved {
+  border-style: dashed;
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.lc-btn {
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+/* Inline editor for qty / unit / prep / optional of a resolved line. */
+.lc-editor {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  padding: 12px;
+  margin-bottom: 4px;
+}
+
+.lc-editor .field {
+  margin-bottom: 10px;
+}
+
+.lc-editor-row {
+  display: flex;
+  gap: 10px;
+}
+
+.lc-qty {
+  flex: 0 0 110px;
+  min-width: 0;
+}
+
+.lc-unit {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.lc-editor-actions {
+  margin: 8px 0 0;
+}
+
+.lc-editor-actions .btn-small {
+  flex: 1 1 100%;
+}

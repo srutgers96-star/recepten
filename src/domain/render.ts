@@ -90,6 +90,17 @@ export function unitLabel(unit: Unit, lang: Lang, qty?: Qty | null, ing?: Ingred
   return plural && unit.nl.many ? unit.nl.many : unit.nl.one;
 }
 
+/**
+ * The unit's own name in a language, WITHOUT the English display conversion (dl stays "dl", not
+ * "ml") and without an ingredient's own unit names: what the raw text of a line should say so
+ * that parsing it back yields the same unit (the editor's `rawFromLine`).
+ */
+export function unitName(unit: Unit, lang: Lang, qty?: Qty | null): string {
+  const plural = isPlural(qty);
+  const n = lang === 'en' ? unit.en : unit.nl;
+  return plural && n.many ? n.many : n.one;
+}
+
 function multiplyQty(q: Qty, s: number): Qty {
   const out: Qty = { min: Math.round(q.min * s * 1000) / 1000 };
   if (q.max !== undefined) out.max = Math.round(q.max * s * 1000) / 1000;
@@ -195,7 +206,7 @@ function altText(line: Line, dict: Dictionary, lang: Lang, factor: number): stri
 }
 
 function renderAlt(alt: Line, dict: Dictionary, lang: Lang, factor: number, parent: Line): string {
-  if (!alt.ing) {
+  if (!alt.ing || !dict.get(alt.ing)) {
     // Unresolved alternative: its own raw text (scaled when its qty parsed).
     return rawText(alt, dict, lang, factor);
   }
@@ -228,7 +239,9 @@ function rawText(line: Line, dict: Dictionary, lang: Lang, factor: number): stri
 /**
  * The pieces of a rendered line for the UI chips: `[2] [el] [olijfolie ✓]`. `text` is the full
  * line. Unresolved lines return `resolved: false` with the raw text in `text` and whatever was
- * parsed (qty, unit, name part) in the fields.
+ * parsed (qty, unit, name part) in the fields. A line whose `ing` this dictionary does not know
+ * (a received recipe linked to a user entry on the other phone) counts as unresolved too: the
+ * slug is never shown as a product name.
  */
 export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor = 1): LineParts {
   const empty: LineParts = { qty: '', unit: '', name: '', prep: '', note: '', alt: '', part: '', packSize: '', optional: '', gloss: '', resolved: false, text: '' };
@@ -249,7 +262,8 @@ export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor
       ? lang === 'nl' ? '(optioneel)' : '(optional)'
       : '';
 
-  if (!line.ing) {
+  const ing = line.ing ? dict.get(line.ing) : undefined;
+  if (!line.ing || !ing) {
     const text = rawText(line, dict, lang, factor);
     return {
       ...empty,
@@ -265,7 +279,6 @@ export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor
     };
   }
 
-  const ing = dict.get(line.ing);
   const parts: LineParts = {
     qty: qShown ? qtyText(qShown, lang) : '',
     unit: unitShown ? unitLabel(unitShown, lang, qShown, ing) : '',
@@ -276,7 +289,7 @@ export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor
     part: line.part ? partLabel(line.part, lang, q) : '',
     packSize: line.packSize ?? '',
     optional,
-    gloss: lang === 'en' ? (ing?.gloss?.en ?? '') : '',
+    gloss: lang === 'en' ? (ing.gloss?.en ?? '') : '',
     resolved: true,
     text: '',
   };

@@ -10,6 +10,8 @@
 // lines, numbered steps, serving tip) in NL, EN or both, for people without the app — link last.
 // Framework-free.
 import { hasLang, pickText, type Lang, type Recipe, type Text } from './model.ts';
+import type { Dictionary } from './dictionary.ts';
+import { renderLine } from './render.ts';
 
 export interface ShareMessageInput {
   nameNl: string;
@@ -128,7 +130,20 @@ function oneParagraph(s: string): string {
   return s.replace(/\s*\n+\s*/g, ' ').trim();
 }
 
-function readableBlock(r: Recipe, lang: Lang): string {
+/** A non-header line in a language: through the dictionary when given (same as the landing page), else its raw text. */
+function readableLine(line: Recipe['lines'][number], lang: Lang, dict: Dictionary | undefined): string {
+  if (dict && line.kind !== 'header') {
+    try {
+      const text = renderLine(line, dict, lang);
+      if (text) return text;
+    } catch {
+      // A malformed line falls back to its raw text below.
+    }
+  }
+  return pickText(line.raw, lang);
+}
+
+function readableBlock(r: Recipe, lang: Lang, dict: Dictionary | undefined): string {
   const L = LABELS[lang];
   const out: string[] = [];
   out.push('🍲 ' + (pickText(r.name, lang) || '?'));
@@ -139,7 +154,7 @@ function readableBlock(r: Recipe, lang: Lang): string {
   if (r.lines.length) {
     out.push('', L.ingredients);
     for (const line of r.lines) {
-      const text = pickText(line.raw, lang);
+      const text = readableLine(line, lang, dict);
       if (!text) continue;
       out.push(line.kind === 'header' ? text : '- ' + text);
     }
@@ -165,16 +180,19 @@ function readableBlock(r: Recipe, lang: Lang): string {
  * The readable recipe for people without the app: title, servings, lines (group headers kept as
  * they are), numbered steps and the serving tip, one block per language (NL first), and the link
  * alone on the last line when given. A requested language without any text is skipped, unless
- * that would leave nothing (then the first language is rendered with fallbacks).
+ * that would leave nothing (then the first language is rendered with fallbacks). With a
+ * dictionary the ingredient lines are rendered through it in each language (a classic's English
+ * block then has English ingredient lines, as on the landing page); without one they are the
+ * raw text.
  */
-export function buildReadableRecipe(recipe: Recipe, langs: Lang[], url?: string): string {
+export function buildReadableRecipe(recipe: Recipe, langs: Lang[], url?: string, dict?: Dictionary): string {
   // Canonical order NL then EN, whatever order was asked for.
   const wanted: Lang[] = (['nl', 'en'] as Lang[]).filter((l) => langs.includes(l));
   if (!wanted.length) wanted.push('nl');
   const available = wanted.filter((l) => recipeHasLang(recipe, l));
   const use: Lang[] = available.length ? available : [wanted[0] as Lang];
 
-  const parts = [use.map((l) => readableBlock(recipe, l)).join('\n\n')];
+  const parts = [use.map((l) => readableBlock(recipe, l, dict)).join('\n\n')];
   const link = (url ?? '').trim();
   if (link) parts.push(OPEN_LINE_READABLE[use[0] as Lang] + '\n' + link);
   return parts.join('\n\n');

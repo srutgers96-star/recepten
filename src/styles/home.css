@@ -1,0 +1,158 @@
+/* Phase-2 home / list styles (categories shelf, filter chips, search groups, bilingual rows).
+   Owned by the home/list/settings agent; imported by src/main.tsx after settings.css. Tokens and
+   the .chips strip / .chip pill come from base.css and browse.css. Mobile first: 360 px,
+   44 px targets, no text selection on controls. */
+
+/* ---------- Bilingual rows ---------- */
+
+/* The other language's name under the row name (RecipeRow). */
+.row-alt {
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* "Verras me": the name button stacks the other language's name underneath. */
+.surprise-name {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.surprise-alt {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ---------- Filter chips (list header + dice) ---------- */
+
+.filter-chips {
+  padding-top: 8px;
+  padding-bottom: 4px;
+}
+
+/* Inside the card the strip bleeds to the card's own 16 px padding, not the safe-area gutter. */
+.surprise .filter-chips {
+  margin: 0 -16px;
+  padding: 6px 16px;
+}
+
+.filter-chips .chip {
+  min-height: 36px; /* the strip stays compact; the 44 px hit area comes from the row padding */
+  padding: 4px 12px;
+  border: 0;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.filter-chips .chip.on {
+  background: var(--cobalt);
+  color: #fff;
+  box-shadow: none;
+}
+
+.filter-chips .chip-clear {
+  min-width: 36px;
+  padding: 0 10px;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.filter-chips .chip-cat {
+  font-weight: 500;
+}
+
+/* Header search + chips: no extra gap under the input (the chips carry their own padding). */
+.header-sub .filter-chips {
+  padding-bottom: 0;
+}
+
+/* ---------- Categories shelf (Home) ---------- */
+
+/* Two rows of tiles, scrolling sideways; edge-to-edge like the favourites strip. */
+.cat-shelf {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, auto);
+  grid-auto-columns: 128px;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 calc(-1 * max(16px, var(--sar))) 0 calc(-1 * max(16px, var(--sal)));
+  padding: 2px max(16px, var(--sar)) 8px max(16px, var(--sal));
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.cat-shelf::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-tile {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 6px 10px 6px 8px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.cat-tile:active {
+  background: var(--press);
+}
+
+.cat-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.cat-name {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cat-count {
+  color: var(--muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Search result groups (Recipes list) ---------- */
+
+.group-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 14px 0 4px;
+  user-select: none;
+  -webkit-user-select: none;
+}

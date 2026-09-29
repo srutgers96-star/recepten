@@ -2,17 +2,23 @@
 // then one step per screen in big type with timer chips, progress dots + "stap 3 van 8", swipe
 // (pointer events, 60 px) and big prev/next tap zones, wake lock while open, the running-timers
 // bar on top, and a last "Gekookt!" page (stars + note) → logCooked + confetti + back to the detail.
+// Phase 2: the checklist renders the dictionary lines scaled to the servings chosen on the detail
+// page (`?srv=6`, else the session memory, else the recipe's own), with a scaler on the card; the
+// steps show °F next to °C when that setting is on.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { celebrate } from '@/celebrate';
 import { Header } from '@/components/Header';
-import { StepView } from '@/components/StepView';
+import { IngredientList } from '@/components/LineView';
+import { parseServingsParam, rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
+import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
 import { getRecipe, logCooked } from '@/db/repo';
 import { nowIso, pickText } from '@/domain/model';
 import { lang, t } from '@/i18n';
+import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
-import { goBack } from '@/router';
+import { goBack, route } from '@/router';
 
 const SWIPE_PX = 60;
 
@@ -60,6 +66,18 @@ export function CookScreen(props: { id: string }) {
   const l = lang.value;
   const profile = activeProfile.value;
   const recipe = useLive(async () => (await getRecipe(id)) ?? null, [id]);
+  const lines = useRecipeLines(recipe);
+  const fahrenheit = useFahrenheit();
+  // Servings: the detail page passes its choice as ?srv=; else the session memory; else the recipe's.
+  const [chosen, setChosen] = useState<number | null>(() => {
+    const fromQuery = parseServingsParam(route.value.query.get('srv'));
+    if (fromQuery) {
+      rememberServings(id, fromQuery);
+      return fromQuery;
+    }
+    const n = rememberedServings(id, 0);
+    return n > 0 ? n : null;
+  });
   const [page, setPage] = useState(0);
   const [dir, setDir] = useState<'next' | 'prev'>('next');
   const [ticked, setTicked] = useState<Set<number>>(() => new Set());
@@ -80,10 +98,16 @@ export function CookScreen(props: { id: string }) {
   }, [id]);
 
   const steps = recipe?.steps ?? [];
-  const lines = recipe?.lines ?? [];
   const total = steps.length + 2; // prepare + steps + done
   const last = total - 1;
   const name = recipe ? pickText(recipe.name, l) : '';
+  const base = recipe && recipe.servings > 0 ? recipe.servings : 4;
+  const servings = chosen ?? base;
+
+  function onServings(n: number) {
+    setChosen(n);
+    rememberServings(id, n);
+  }
 
   function go(n: number) {
     if (!recipe || n < 0 || n > last || n === page) return;
@@ -200,41 +224,24 @@ export function CookScreen(props: { id: string }) {
                   <p class="muted">
                     {t('cook.prepareHint')} {tickable.length > 0 && <strong>{t('cook.ready', { n: tickedCount, total: tickable.length })}</strong>}
                   </p>
-                  <ul class="ing big">
-                    {lines.map((line, i) => {
-                      const text = pickText(line.raw, l);
-                      if (line.kind === 'header') {
-                        return (
-                          <li key={i} class="ing-header">
-                            {text.replace(/:\s*$/, '')}
-                          </li>
-                        );
-                      }
-                      const on = ticked.has(i);
-                      return (
-                        <li key={i}>
-                          <button
-                            type="button"
-                            class={'ing-row' + (on ? ' on' : '')}
-                            aria-pressed={on}
-                            onClick={() =>
-                              setTicked((prev) => {
-                                const next = new Set(prev);
-                                if (next.has(i)) next.delete(i);
-                                else next.add(i);
-                                return next;
-                              })
-                            }
-                          >
-                            <span class="box" aria-hidden="true">
-                              {on ? '✓' : ''}
-                            </span>
-                            <span class="txt">{text}</span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <ServingsPicker compact value={servings} base={base} onChange={onServings} />
+                  <IngredientList
+                    recipeId={id}
+                    lines={lines}
+                    servings={servings}
+                    base={base}
+                    big
+                    tick={{
+                      ticked,
+                      toggle: (i) =>
+                        setTicked((prev) => {
+                          const next = new Set(prev);
+                          if (next.has(i)) next.delete(i);
+                          else next.add(i);
+                          return next;
+                        }),
+                    }}
+                  />
                   <p class="muted small cook-foot">
                     {wake === false ? t('cook.wakeNo') : t('cook.wakeHint')} {t('cook.swipeHint')}
                   </p>
@@ -243,7 +250,7 @@ export function CookScreen(props: { id: string }) {
               {!isPrepare && !isDone && steps[stepIndex] && (
                 <>
                   <div class="cook-kicker">{t('cook.stepOf', { n: stepIndex + 1, total: steps.length })}</div>
-                  <StepView big recipeId={id} recipeName={name} index={stepIndex} step={steps[stepIndex]!} />
+                  <StepView big recipeId={id} recipeName={name} index={stepIndex} step={steps[stepIndex]!} fahrenheit={fahrenheit} />
                 </>
               )}
               {isDone && (

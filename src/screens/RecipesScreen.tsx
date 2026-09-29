@@ -1,34 +1,40 @@
 // '#/recipes' — all recipes (classics + own + received) grouped by initial in the active language,
-// sticky letter headers, A-Z rail and search. The rail/scroll logic is the one that passed the
-// phone test in phase 0; the data now comes from the repository (schema 2).
+// sticky letter headers, A-Z rail, bilingual search and filter chips (docs/phase-2-spec.md §5).
+// The rail/scroll logic is the one that passed the phone test in phase 0; the data comes from the
+// repository (schema 2). Unfiltered: letter groups + rail. Filtering (chips): a plain sorted list.
+// Searching: `searchRecipes` groups (name → ingredient → category → tag) with a small header each,
+// so typing "onion" finds the recipes that contain `ui`. '#/recipes?cat=<id>' opens the list
+// pre-filtered on that category (Home shelf); the query is then dropped from the hash.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { FilterChips, applyFilters, isActive, loadFilters, saveFilters, type Filters } from '@/components/FilterChips';
 import { Header } from '@/components/Header';
 import { RecipeRow } from '@/components/RecipeRow';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
 import { allRecipes, listFavorites } from '@/db/repo';
+import { dictionary } from '@/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
-import { foldDiacritics, initialOf } from '@/domain/recipe-source';
+import { initialOf } from '@/domain/recipe-source';
+import { searchRecipes, type SearchGroup } from '@/domain/search';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
+import { navigate, route } from '@/router';
 
 interface Group {
   letter: string;
   items: Recipe[];
 }
 
+/** localStorage key of the list's chip selection (spec §5). */
+export const LIST_FILTERS_KEY = 'recepten.filters';
+
 // Scroll position and query survive a trip to a detail screen (feels like an app, not a page).
 let savedScroll = 0;
 let savedQuery = '';
 
-function norm(s: string): string {
-  return foldDiacritics(s).toLowerCase();
-}
-
-function matches(r: Recipe, q: string): boolean {
-  if (r.name.nl && norm(r.name.nl).includes(q)) return true;
-  if (r.name.en && norm(r.name.en).includes(q)) return true;
-  return r.aliases.some((a) => norm(a).includes(q));
+function sortByName(list: readonly Recipe[], l: Lang): Recipe[] {
+  const locale = l === 'nl' ? 'nl' : 'en';
+  return [...list].sort((a, b) => pickText(a.name, l).localeCompare(pickText(b.name, l), locale, { sensitivity: 'base' }));
 }
 
 function groupRecipes(list: Recipe[], l: Lang): Group[] {
@@ -40,11 +46,7 @@ function groupRecipes(list: Recipe[], l: Lang): Group[] {
     else map.set(k, [r]);
   }
   const letters = [...map.keys()].sort((a, b) => (a === '#' ? 1 : b === '#' ? -1 : a.localeCompare(b)));
-  const locale = l === 'nl' ? 'nl' : 'en';
-  return letters.map((letter) => ({
-    letter,
-    items: (map.get(letter) ?? []).sort((a, b) => pickText(a.name, l).localeCompare(pickText(b.name, l), locale, { sensitivity: 'base' })),
-  }));
+  return letters.map((letter) => ({ letter, items: sortByName(map.get(letter) ?? [], l) }));
 }
 
 export function RecipesScreen() {
@@ -53,18 +55,41 @@ export function RecipesScreen() {
   const all = useLive(allRecipes, []);
   const favs = useLive(() => (pid ? listFavorites(pid) : Promise.resolve(new Set<string>())), [pid]);
   const [query, setQuery] = useState(savedQuery);
+  const [filters, setFilters] = useState<Filters>(() => loadFilters(LIST_FILTERS_KEY));
   const queryRef = useRef(query);
   queryRef.current = query;
   const scroller = useRef<HTMLDivElement>(null);
   const rail = useRef<HTMLDivElement>(null);
   const [railLetter, setRailLetter] = useState<string | null>(null);
+  const dict = dictionary.value;
 
-  const filtered = useMemo(() => {
-    const list = all ?? [];
-    const q = norm(query.trim());
-    return q ? list.filter((r) => matches(r, q)) : list;
-  }, [all, query]);
-  const groups = useMemo(() => groupRecipes(filtered, l), [filtered, l]);
+  // '#/recipes?cat=<id>' from the Home shelf: replace the selection, then drop the query from the
+  // hash so a reload or a tab switch does not re-apply it.
+  const cat = route.value.path === '/recipes' ? route.value.query.get('cat') : null;
+  useEffect(() => {
+    if (!cat) return;
+    changeFilters({ quick: [], cats: [cat] });
+    setQuery('');
+    navigate('/recipes', { replace: true });
+  }, [cat]);
+
+  function changeFilters(next: Filters) {
+    setFilters(next);
+    saveFilters(LIST_FILTERS_KEY, next);
+  }
+
+  const filtering = isActive(filters);
+  const q = query.trim();
+  const searching = q !== '';
+
+  const base = useMemo(() => applyFilters(all ?? [], filters), [all, filters]);
+  const searchGroups = useMemo<SearchGroup[]>(
+    () => (searching ? searchRecipes(base, q, dict, l).map((g) => ({ kind: g.kind, recipes: sortByName(g.recipes, l) })) : []),
+    [base, q, dict, l, searching],
+  );
+  const groups = useMemo(() => (searching || filtering ? [] : groupRecipes(base, l)), [base, l, searching, filtering]);
+  const plain = useMemo(() => (!searching && filtering ? sortByName(base, l) : []), [base, l, searching, filtering]);
+  const count = searching ? searchGroups.reduce((n, g) => n + g.recipes.length, 0) : base.length;
 
   // Remember the position on leave …
   useEffect(() => {
@@ -104,6 +129,13 @@ export function RecipesScreen() {
     }
   }
 
+  const countLabel = !all
+    ? t('common.loading')
+    : searching || filtering
+      ? t('list.filtered', { n: count, total: all.length })
+      : t('list.count', { n: count });
+  const empty = all && count === 0;
+
   return (
     <>
       <Header title={t('list.title')}>
@@ -117,13 +149,36 @@ export function RecipesScreen() {
           value={query}
           onInput={(e) => setQuery((e.currentTarget as HTMLInputElement).value)}
         />
+        <FilterChips value={filters} onChange={changeFilters} />
       </Header>
       <TimerBar />
       {/* The rail is positioned inside .az-area (list only), so it never overlays the header. */}
       <div class="az-area">
-        <div class="screen has-az" ref={scroller}>
-          <div class="muted small list-count">{all ? t('list.count', { n: filtered.length }) : t('common.loading')}</div>
-          {all && groups.length === 0 && <div class="empty">{t('list.empty')}</div>}
+        <div class={'screen' + (groups.length > 1 ? ' has-az' : '')} ref={scroller}>
+          <div class="muted small list-count">{countLabel}</div>
+          {empty && <div class="empty">{t('list.empty')}</div>}
+          {searching &&
+            searchGroups.map((g) => (
+              <section key={g.kind}>
+                <div class="group-head">{t('search.' + g.kind)}</div>
+                <ul class="list">
+                  {g.recipes.map((r) => (
+                    <li key={r.id}>
+                      <RecipeRow recipe={r} favorite={favs?.has(r.id)} />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          {!searching && filtering && (
+            <ul class="list">
+              {plain.map((r) => (
+                <li key={r.id}>
+                  <RecipeRow recipe={r} favorite={favs?.has(r.id)} />
+                </li>
+              ))}
+            </ul>
+          )}
           {groups.map((g) => (
             <section key={g.letter}>
               <div class="letter" data-letter={g.letter}>

@@ -15,7 +15,11 @@ export type {
   Text,
   TimerSpec,
 } from '@/domain/model';
+export type { Ingredient } from '@/domain/dictionary';
+export type { AppliedOverride, LineOverride, RecipeOverride, RecipePatch, RecipePatchKey } from '@/domain/overrides';
 import type { CookLogEntry, Favorite, Note, Profile, Recipe } from '@/domain/model';
+import type { Ingredient } from '@/domain/dictionary';
+import type { LineOverride, RecipeOverride } from '@/domain/overrides';
 
 export interface Setting {
   key: string;
@@ -46,6 +50,10 @@ export interface BackupBundle {
   notes: Note[];
   cookLog: CookLogEntry[];
   settings: Setting[];
+  /** Phase 2 (schema v4 tables); absent in older backups. */
+  lineOverrides?: LineOverride[];
+  userIngredients?: Ingredient[];
+  overrides?: RecipeOverride[];
 }
 
 // --- Phase-0 shape, only read by the v1 -> v2 upgrade in db.ts ---------------------------------
