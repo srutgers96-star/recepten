@@ -20,6 +20,7 @@ const S = {
     handoff: 'Bewaren in je app',
     steps: ['Tik op "Kopieer receptcode"', 'Open Recepten op je beginscherm', 'Tab Inbox → Plak van klembord → Bewaar'],
     install: 'Nog geen app? Deel → Zet op beginscherm.',
+    openApp: "Open Rutgers' Recepten (hele app)",
     invalid: 'Deze link bevat geen leesbaar recept.',
     unsupported: 'Deze code is nieuwer dan deze pagina. Update de app.',
     by: 'van',
@@ -37,6 +38,7 @@ const S = {
     handoff: 'Save it in your app',
     steps: ['Tap "Copy recipe code"', 'Open Recepten on your Home Screen', 'Inbox tab → Paste from clipboard → Save'],
     install: 'No app yet? Share → Add to Home Screen.',
+    openApp: "Open Rutgers' Recipes (the whole app)",
     invalid: 'This link does not contain a readable recipe.',
     unsupported: 'This code is newer than this page. Update the app.',
     by: 'from',
@@ -55,10 +57,16 @@ main{max-width:40rem;margin:auto;padding:calc(12px + env(safe-area-inset-top)) m
 h2{font-size:26px;margin:20px 0 4px}h3{font-size:17px;margin:20px 0 8px}p{margin:0 0 12px}.muted{color:var(--muted);font-size:14px}
 ul{margin:0;padding:0;list-style:none}li{padding:8px 0;border-bottom:1px solid var(--line)}li.head{font-weight:700;color:var(--cobalt);border-bottom:0;padding-top:14px}
 ol{margin:0;padding-left:24px}ol li{padding:6px 0 6px 4px;border-bottom:1px solid var(--line)}
-.btn{display:block;width:100%;min-height:48px;margin:20px 0 8px;border:0;border-radius:12px;background:var(--cobalt);color:var(--on);font:inherit;font-weight:600}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;margin:20px 0 8px;border:0;border-radius:12px;background:var(--cobalt);color:var(--on);font:inherit;font-weight:600;text-decoration:none;box-sizing:border-box}
+.btn.secondary{background:transparent;color:var(--cobalt);border:1px solid var(--cobalt)}
 .card{background:var(--card);border:1px solid var(--cobalt);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:14px}.card ol{margin:6px 0;padding-left:20px}.card ol li{border:0;padding:2px 0}
 .status{min-height:22px;font-size:14px;color:var(--muted)}
 `;
+
+/** The app itself (no token): opening it in Safari is the first step towards "Add to Home Screen". */
+function appUrl(): string {
+  return location.origin + import.meta.env.BASE_URL;
+}
 
 function esc(s: string): string {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
@@ -102,8 +110,10 @@ function render() {
     if (tip) parts.push(`<h3>${esc(L.tip)}</h3><p>${esc(tip)}</p>`);
     parts.push(`<button type="button" class="btn" id="copy">${esc(L.copy)}</button><div class="status" id="status"></div>`);
     parts.push(`<div class="card"><strong>${esc(L.handoff)}</strong><ol>${L.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol><div class="muted">${esc(L.install)}</div></div>`);
+    parts.push(`<a class="btn secondary" href="${esc(appUrl())}">${esc(L.openApp)}</a>`);
   } else {
     parts.push(`<p>${esc(problem === 'unsupported' ? L.unsupported : L.invalid)}</p>`);
+    parts.push(`<a class="btn" href="${esc(appUrl())}">${esc(L.openApp)}</a>`);
     parts.push(`<div class="card"><div class="muted">${esc(L.install)}</div></div>`);
   }
   parts.push('</main>');

@@ -35,16 +35,14 @@ export function RecipeScreen(props: { id: string }) {
   const favs = useLive(() => (pid ? listFavorites(pid) : Promise.resolve(new Set<string>())), [pid]);
   const stats = useLive(() => cookStats(id), [id]);
   const all = useLive(allRecipes, []);
-  const [ticked, setTicked] = useState<Set<number>>(() => new Set());
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [note, setNoteText] = useState('');
   const [noteSaved, setNoteSaved] = useState(false);
   const noteTimer = useRef<number | null>(null);
   const noteDirty = useRef<string | null>(null);
 
-  // Tick state and the delete confirmation are per recipe, in memory only.
+  // The delete confirmation is per recipe, in memory only.
   useEffect(() => {
-    setTicked(new Set());
     setConfirmDelete(false);
   }, [id]);
 
@@ -166,27 +164,11 @@ export function RecipeScreen(props: { id: string }) {
                       </li>
                     );
                   }
-                  const on = ticked.has(i);
+                  // Plain list here: ticking off belongs to the cook mode ("Klaarzetten") and the
+                  // shopping list (phase 4), not to reading a recipe.
                   return (
-                    <li key={i}>
-                      <button
-                        type="button"
-                        class={'ing-row' + (on ? ' on' : '')}
-                        aria-pressed={on}
-                        onClick={() =>
-                          setTicked((prev) => {
-                            const next = new Set(prev);
-                            if (next.has(i)) next.delete(i);
-                            else next.add(i);
-                            return next;
-                          })
-                        }
-                      >
-                        <span class="box" aria-hidden="true">
-                          {on ? '✓' : ''}
-                        </span>
-                        <span class="txt">{text}</span>
-                      </button>
+                    <li key={i} class="ing-line">
+                      <span class="txt">{text}</span>
                     </li>
                   );
                 })}

@@ -436,6 +436,17 @@
   font-size: 17px;
 }
 
+/* Plain ingredient line on the detail page (no checkbox: ticking lives in the cook mode). */
+.ing-line {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  line-height: 1.4;
+}
+
+.ing-line:last-child {
+  border-bottom: 0;
+}
+
 /* Numbered steps with timer chips. */
 .steps {
   margin: 0;
