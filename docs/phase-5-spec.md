@@ -58,6 +58,41 @@ Additions decided 2026-09-30 (Stijn):
 9. Gram rounding (PLAN §0 "Kleine wensen"): `formatQty` shows whole numbers for g/ml/kg/l (62.25 g → 62 g;
    1.3 kg stays "1,3 kg"), fractions only for count units, spoons and pieces.
 
+## Block A-bis — English input & line translation (decided 30-09, after block A)
+
+1. **Free text is never half-translated.** Parenthetical text on a line: try `prep-phrases.json`
+   (incl. `{n}` templates) for the whole parenthetical and for `,`/`;`-separated parts; a match → `prep`
+   (both languages); no match → `note` in the SOURCE language only, rendered in that language and
+   styled muted (`LineView`/chips show it in quotes or grey) — never a mix of translated qualifier +
+   raw name; when the ingredient itself is unresolved the whole line renders raw (already the rule).
+2. **Translation prompt only asks for what the app cannot do**: name, description, steps, serving tip,
+   per-line free text (`note`, unmatched prep) and unresolved lines in full — numbered as today.
+   `parseTranslationAnswer` writes only those parts into the target language (`note.{to}`,
+   `prep.{to}`, `raw.{to}` for unresolved lines). Resolved lines keep `raw` in the source language;
+   the target rendering comes from the dictionary. Never overwrite existing target text unless the
+   user pastes explicitly for that field (a per-line "replace" is not needed in v1).
+3. Editor mode "beide": for resolved lines the other column shows the dictionary rendering as a grey
+   placeholder (read-only look, editable on tap); saving stores nothing for that language unless the
+   user typed something different from the placeholder.
+4. **US English**: units `lb`/`pound(s)` (453.6 g), `oz`/`ounce(s)` (28.35 g), `cup` US (240 ml —
+   keep `kop` for NL "kop"; EN `cup` maps to `kop` today: make `cup` its own unit `cup` = 240 ml, en
+   one/many cup/cups, nl render "ml" ×240, and keep `kop` NL-only), `fl oz`, `stick` (butter, 113 g),
+   `pint` (473 ml US / 568 ml UK → use 500 ml), `quart`; NL rendering converts to g/ml; EN keeps them.
+   Aliases: ground beef/ground meat → gehakt, heavy cream → slagroom, powdered/confectioners' sugar →
+   poedersuiker, all-purpose flour → bloem, cornstarch → maizena, scallions (exists), cilantro (exists),
+   eggplant (exists), zucchini (exists), shrimp (exists), garbanzo beans → kikkererwten, bell pepper
+   (exists), green/red onion, arugula (exists), bacon strips, etc. Note phrases table (nl↔en):
+   approximately/about/roughly ↔ ongeveer, to taste ↔ naar smaak, optional ↔ optioneel, divided ↔
+   verdeeld, or more ↔ of meer, for serving ↔ om te serveren, at room temperature ↔ op kamertemperatuur,
+   melted ↔ gesmolten, softened ↔ zacht, plus quantity+unit conversion inside notes ("approximately 1
+   pound" → "ongeveer 450 g").
+5. Tests: Gabi's line `1 medium eggplant (approximately 1 pound)` (EN column) → aubergine, middelgrote,
+   note en "approximately 1 pound", NL render `1 middelgrote aubergine (ongeveer 450 g)`; Stijn's line
+   `1 grote groene appel (gesneden in blokjes van ongeveer 2 cm breed)` → appel, grote+groene, prep via
+   template or note NL only, EN render `1 large green apple (…)` with the note muted; `1 lb ground beef`
+   → gehakt 454 g; translation prompt for a recipe with 3 resolved + 1 unresolved line lists only the
+   unresolved line and the notes.
+
 ## Block B — Cook mode+: read-aloud, voice, timer sound
 
 1. `src/speech.ts`: `speak(text, lang)` via `speechSynthesis` (voice by lang, rate 0.95, cancel on
