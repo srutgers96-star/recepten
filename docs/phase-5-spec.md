@@ -93,6 +93,23 @@ Additions decided 2026-09-30 (Stijn):
    → gehakt 454 g; translation prompt for a recipe with 3 resolved + 1 unresolved line lists only the
    unresolved line and the notes.
 
+6. **Dictionary hygiene (Stijn/Gabi 30-09)**: IngredientPicker "Nieuw ingrediënt" first checks whether
+   the typed name (either language, aliases included, case/diacritic-insensitive) already resolves →
+   "Bestaat al: aubergine (eggplant) — die gebruiken?" with one tap to link instead of creating; own
+   entries get **Fuseer met bestaand** in the dictionary screen (Meer → Woordenboek → own entry → pick
+   the existing entry → every own recipe line, line override, list item and pantry row referencing the
+   old id is rewritten to the new id in one transaction; the own entry is deleted; undo via the last
+   snapshot); own entries can be edited (nl/en names, aisle). A "Opruimen" helper lists own entries
+   whose names match an existing entry and offers to merge them all.
+7. **Translation answer tolerance**: the recipe name is taken from "1." OR "Name:/Naam:/Title:/Titel:"
+   OR the first non-empty line before the first "I1"/"S1" marker; a missing name never blocks the rest.
+8. **Select mode in the recipe list**: long-press (or a "Selecteer" header button) → checkboxes →
+   actions: Deel (one message with several tokens or a bundle file), + Deze week, Categorie/labels
+   wijzigen, Verwijder (own only), Exporteer; also usable on the Home "Eigen & ontvangen" list.
+9. **File import everywhere**: "Kies bestand" (recipe/bundle/backup files) also in the Add screen's
+   import section and in the "+" menu of Recipes; after every export on Android show "Opgeslagen als
+   <naam> in Downloads" and put "Deel het bestand" (WhatsApp to yourself / Drive) first.
+
 ## Block B — Cook mode+: read-aloud, voice, timer sound
 
 1. `src/speech.ts`: `speak(text, lang)` via `speechSynthesis` (voice by lang, rate 0.95, cancel on
