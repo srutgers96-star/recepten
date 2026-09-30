@@ -2,7 +2,7 @@
 // scaling and rounding rules of PLAN.md §8 step 5.
 import { describe, expect, it } from 'vitest';
 import { parseLine } from '../src/domain/parser';
-import { formatQty, renderLine, renderLineParts } from '../src/domain/render';
+import { formatQty, numberStyleFor, renderLine, renderLineParts } from '../src/domain/render';
 import { testDictionary } from './fixtures/test-dictionary';
 
 const dict = testDictionary();
@@ -21,6 +21,31 @@ describe('formatQty', () => {
     expect(formatQty(400, undefined, 'nl', true)).toBe('ca. 400');
     expect(formatQty(400, undefined, 'en', true)).toBe('approx. 400');
     expect(formatQty(1 / 3)).toBe('⅓');
+  });
+
+  it('follows the unit (PLAN.md §0 "Kleine wensen"): whole g/ml, decimal kg/l/dl, fractions elsewhere', () => {
+    const u = (id: string) => dict.unit(id)!;
+    expect(numberStyleFor(u('g'))).toBe('whole');
+    expect(numberStyleFor(u('ml'))).toBe('whole');
+    expect(numberStyleFor(u('kg'))).toBe('decimal');
+    expect(numberStyleFor(u('l'))).toBe('decimal');
+    expect(numberStyleFor(u('dl'))).toBe('decimal');
+    expect(numberStyleFor(u('el'))).toBe('fraction');
+    expect(numberStyleFor(u('kop'))).toBe('fraction');
+    expect(numberStyleFor(u('teen'))).toBe('fraction');
+    expect(numberStyleFor(null)).toBe('fraction');
+    expect(formatQty(62.25, undefined, 'nl', false, u('g'))).toBe('62');
+    expect(formatQty(62.5, undefined, 'en', false, u('ml'))).toBe('63');
+    expect(formatQty(62.25, 63.75, 'nl', false, u('g'))).toBe('62-64');
+    expect(formatQty(62.2, 62.4, 'nl', false, u('g'))).toBe('62');
+    expect(formatQty(1.3, undefined, 'nl', false, u('kg'))).toBe('1,3');
+    expect(formatQty(1.3, undefined, 'en', false, u('kg'))).toBe('1.3');
+    expect(formatQty(1.5, undefined, 'nl', false, u('kg'))).toBe('1,5');
+    expect(formatQty(0.5, undefined, 'nl', false, u('l'))).toBe('0,5');
+    expect(formatQty(2.5, undefined, 'nl', false, u('dl'))).toBe('2,5');
+    expect(formatQty(1.5, undefined, 'nl', false, u('el'))).toBe('1½');
+    expect(formatQty(0.25, undefined, 'nl', false, u('teen'))).toBe('¼');
+    expect(formatQty(400, undefined, 'en', true, u('g'))).toBe('approx. 400');
   });
 });
 
@@ -84,6 +109,17 @@ describe('renderLine: scaling', () => {
     expect(both('ca. 400 g aardappelen', 0.75)).toEqual(['ca. 300 g aardappelen', 'approx. 300 g potatoes']);
   });
 
+  it('shows grams and millilitres as whole numbers, kilos and litres with decimals', () => {
+    expect(both('62,25 g boter')).toEqual(['62 g boter', '62 g butter']);
+    expect(both('1,3 kg aardappelen')).toEqual(['1,3 kg aardappelen', '1.3 kg potatoes']);
+    expect(both('1½ kg aardappelen')).toEqual(['1,5 kg aardappelen', '1.5 kg potatoes']);
+    expect(both('1½ el mayonaise')).toEqual(['1½ el mayonaise', '1½ tbsp mayonnaise']);
+    expect(both('2,5 dl kippenbouillon')).toEqual(['2,5 dl kippenbouillon', '250 ml chicken stock']);
+    // an unresolved line keeps its raw text at factor 1 and follows the unit's style when scaled
+    expect(both('62,5 g wonderpoeder')).toEqual(['62,5 g wonderpoeder', '62,5 g wonderpoeder']);
+    expect(both('1,5 kg wonderpoeder', 0.5)[0]).toBe('0,75 kg wonderpoeder');
+  });
+
   it('never scales a pinch', () => {
     expect(both('1 mp cayennepeper', 2)).toEqual(['1 mespunt cayennepeper', '1 pinch cayenne pepper']);
     expect(both('snufje nootmuskaat', 0.5)).toEqual(['snufje nootmuskaat', 'pinch nutmeg']);
@@ -92,7 +128,7 @@ describe('renderLine: scaling', () => {
   it('shows sub-1 metric amounts in the base unit', () => {
     expect(both('1 kg aardappelen', 0.5)).toEqual(['500 g aardappelen', '500 g potatoes']);
     expect(both('1,25 dl kippenbouillon', 0.5)).toEqual(['65 ml kippenbouillon', '65 ml chicken stock']);
-    expect(both('1,25 dl kippenbouillon', 2)).toEqual(['2½ dl kippenbouillon', '250 ml chicken stock']);
+    expect(both('1,25 dl kippenbouillon', 2)).toEqual(['2,5 dl kippenbouillon', '250 ml chicken stock']);
     // unresolved lines only get the number replaced inside the raw text
     expect(both('1,25 dl water', 0.5)[0]).toBe('0,65 dl water');
   });

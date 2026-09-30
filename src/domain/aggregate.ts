@@ -649,18 +649,19 @@ export function groupByAisle(items: readonly ListItem[], dict: Dictionary, lang:
 
 // --- Rendering ---------------------------------------------------------------------------------
 
-function numberText(n: number, lang: Lang): string {
-  return formatQty(clean(n), undefined, lang);
+/** Number as the recipe view shows it: whole for g/ml, decimal for kg/l, fractions for everything else (PLAN §0 "Kleine wensen"). */
+function numberText(n: number, lang: Lang, unit?: Unit | null): string {
+  return formatQty(clean(n), undefined, lang, false, unit);
 }
 
-/** "1,3 kg" / "500 g", "1½ l" / "250 ml", "3 el", "7 teentjes" (unit label via the dictionary). */
+/** "1,3 kg" / "500 g", "1,5 l" / "250 ml", "3 el", "7 teentjes" (unit label via the dictionary). */
 function amountText(qty: number, unit: string | null, dict: Dictionary, lang: Lang, ing?: Ingredient): string {
   if (!unit) return numberText(qty, lang);
-  if (unit === 'g' && qty >= 1000) return `${numberText(qty / 1000, lang)} kg`;
-  if (unit === 'ml' && qty >= 1000) return `${numberText(qty / 1000, lang)} l`;
+  if (unit === 'g' && qty >= 1000) return `${numberText(qty / 1000, lang, dict.unit('kg'))} kg`;
+  if (unit === 'ml' && qty >= 1000) return `${numberText(qty / 1000, lang, dict.unit('l'))} l`;
   const u = dict.unit(unit);
   if (!u) return `${numberText(qty, lang)} ${unit}`;
-  return `${numberText(qty, lang)} ${unitLabel(u, lang, { min: qty }, ing)}`;
+  return `${numberText(qty, lang, u)} ${unitLabel(u, lang, { min: qty }, ing)}`;
 }
 
 function nameText(it: ListItem, ing: Ingredient, dict: Dictionary, lang: Lang, qty: number | null, unit: string | null): string {

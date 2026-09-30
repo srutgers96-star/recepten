@@ -45,6 +45,41 @@ export const settings: Dict = {
     en: 'Delete ingredient "{name}"? Lines linked to it will show their plain text again.',
   },
 
+  // --- Phase 5: Meer rows (docs/phase-5-spec.md A.6 + A.8) ---
+  'more.checkRecipes': { nl: 'Controleer mijn recepten', en: 'Check my recipes' },
+  'more.checkRecipesHint': { nl: 'Voorstel voor categorie en dieet per eigen recept', en: 'Suggested category and diet per own recipe' },
+  'more.householdRow': { nl: 'Huishouden', en: 'Household' },
+  'more.householdRowHint': { nl: 'Naam en wie er meekookt', en: 'Name and who cooks along' },
+
+  // --- Phase 5: Huishouden (docs/phase-5-spec.md A.8) ---
+  'household.title': { nl: 'Huishouden', en: 'Household' },
+  'household.intro': {
+    nl: 'Eén huishouden per telefoon. De profielen op deze telefoon zijn automatisch lid; wie op een andere telefoon kookt voeg je hier met de hand toe (kaartjes via link of QR komen later).',
+    en: 'One household per phone. The profiles on this phone are members automatically; someone who cooks on another phone is added by hand here (member cards via link or QR come later).',
+  },
+  'household.name': { nl: 'Naam van het huishouden', en: 'Household name' },
+  // The default household name is never stored (the setting keeps ''); it is rendered in the active language.
+  'household.defaultName': { nl: 'Thuis', en: 'Home' },
+  'household.members': { nl: 'Leden', en: 'Members' },
+  'household.memberCount': { nl: '{n} leden', en: '{n} members' },
+  'household.memberOne': { nl: '1 lid', en: '1 member' },
+  'household.local': { nl: 'op deze telefoon', en: 'on this phone' },
+  'household.byHand': { nl: 'met de hand toegevoegd', en: 'added by hand' },
+  'household.fromCard': { nl: 'via kaartje', en: 'via card' },
+  'household.manageProfiles': { nl: 'Profielen op deze telefoon beheren', en: 'Manage the profiles on this phone' },
+  'household.add': { nl: 'Voeg lid toe', en: 'Add member' },
+  'household.memberName': { nl: 'Naam', en: 'Name' },
+  'household.memberNamePlaceholder': { nl: 'bv. Oma', en: 'e.g. Grandma' },
+  'household.memberColor': { nl: 'Kleur', en: 'Colour' },
+  'household.edit': { nl: 'Bewerk', en: 'Edit' },
+  'household.remove': { nl: 'Verwijder', en: 'Remove' },
+  'household.removeConfirm': {
+    nl: 'Lid "{name}" uit het huishouden halen? De kooklog blijft staan.',
+    en: 'Remove member "{name}" from the household? The cook log stays.',
+  },
+  'household.nameExists': { nl: 'Er is al een lid met deze naam.', en: 'There is already a member with this name.' },
+  'household.saved': { nl: 'Bewaard', en: 'Saved' },
+
   // --- Profielen --------------------------------------------------------------------------------
   'profiles.title': { nl: 'Profielen', en: 'Profiles' },
   'profiles.intro': {
@@ -149,6 +184,25 @@ export const settings: Dict = {
   'storage.exportDownloaded': { nl: 'Export gedownload', en: 'Export downloaded' },
   'storage.exportFailed': { nl: 'Exporteren mislukt', en: 'Export failed' },
   'storage.exportEmpty': { nl: 'Niets te exporteren: nog geen eigen recepten of aanpassingen.', en: 'Nothing to export: no own recipes or adjustments yet.' },
+  // --- Phase 5 (docs/phase-5-spec.md 30-09 "Reset app") ---
+  'storage.reset': { nl: 'App resetten', en: 'Reset app' },
+  'storage.resetHint': {
+    nl: 'Wist alles op deze telefoon: eigen en ontvangen recepten, favorieten, notities, kooklog, profielen, week en boodschappenlijst. De klassiekers komen terug; de app begint opnieuw bij "Wie ben jij?".',
+    en: 'Wipes everything on this phone: own and received recipes, favourites, notes, cook log, profiles, week and shopping list. The classics come back; the app starts over at "Who are you?".',
+  },
+  'storage.resetConfirm': { nl: 'Weet je het zeker? Je verliest je geschiedenis en eigen recepten.', en: 'Are you sure? You will lose your history and your own recipes.' },
+  'storage.resetYes': { nl: 'Ja', en: 'Yes' },
+  'storage.resetNo': { nl: 'Nee', en: 'No' },
+  'storage.resetExportFirst': { nl: 'Ja, maar exporteer eerst mijn recepten', en: 'Yes, but export my recipes first' },
+  'storage.resetHistoryHint': {
+    nl: 'De export bevat alleen eigen recepten en aanpassingen. Geschiedenis (kooklog, favorieten, notities) zit alleen in een back-up.',
+    en: 'The export holds only your own recipes and adjustments. History (cook log, favourites, notes) is only in a backup.',
+  },
+  'storage.resetting': { nl: 'Bezig met resetten…', en: 'Resetting…' },
+  'storage.resetExporting': { nl: 'Eerst exporteren…', en: 'Exporting first…' },
+  'storage.resetExportAborted': { nl: 'Export afgebroken — er is niets gewist.', en: 'Export cancelled — nothing was wiped.' },
+  'storage.resetExportFailed': { nl: 'Exporteren mislukt — er is niets gewist.', en: 'Export failed — nothing was wiped.' },
+  'storage.resetFailed': { nl: 'Resetten mislukt', en: 'Reset failed' },
 
   // --- Het verhaal ------------------------------------------------------------------------------
   'story.title': { nl: 'Het verhaal', en: 'The story' },

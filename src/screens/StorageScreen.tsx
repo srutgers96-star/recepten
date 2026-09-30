@@ -4,12 +4,14 @@
 // <a download>), "Herstel" (<input type=file> → importBundle → counters per table) and
 // "Exporteer eigen recepten" (a share bundle of own + received recipes, adjusted classics and
 // own ingredients, importable on the other phone via the Inbox). Invariant 9: share ONE field.
+// Phase 5 (docs/phase-5-spec.md 30-09 "Reset app"): "App resetten" with Ja / Nee / "Ja, maar
+// exporteer eerst mijn recepten" (the export share first; the reset only after it succeeded).
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { reloadCelebrateSettings } from '@/celebrate';
 import { Header } from '@/components/Header';
 import type { BackupBundle } from '@/db/model';
 import { useLive } from '@/db/live';
-import { LAST_BACKUP_KEY, backupHealth, bundled, exportBundle, getBaseRecipe, importBundle, setSetting, weekCounts, type BackupHealth } from '@/db/repo';
+import { LAST_BACKUP_KEY, backupHealth, bundled, exportBundle, getBaseRecipe, importBundle, resetEverything, setSetting, weekCounts, type BackupHealth } from '@/db/repo';
 import { nowIso, type Text } from '@/domain/model';
 import { applyOverride } from '@/domain/overrides';
 import { buildBundleEnvelope, bundleFileName } from '@/domain/share';
@@ -56,6 +58,8 @@ export function StorageScreen() {
   const [restoreIsShare, setRestoreIsShare] = useState(false);
   const [exportStatus, setExportStatus] = useState('');
   const [busy, setBusy] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [resetStatus, setResetStatus] = useState('');
   const fileInput = useRef<HTMLInputElement>(null);
   const by = activeProfile.value?.name ?? '';
   // Phase 4 counters (plan / list / pantry), live: a restore updates them at once.
@@ -131,23 +135,78 @@ export function StorageScreen() {
     }
   }
 
+  /** Own recipes + adjusted classics in the export bundle (0 = nothing to export). */
+  function exportCount(env: Envelope): number {
+    const b = env.b as { recipes?: unknown[]; patches?: unknown[] } | undefined;
+    return (b?.recipes?.length ?? 0) + (b?.patches?.length ?? 0);
+  }
+
+  /** The export share itself (also the first step of "Ja, maar exporteer eerst"). Call within the tap. */
+  function shareExport(env: Envelope) {
+    const fresh: Envelope = { ...env, at: nowIso() };
+    return shareJsonFile(bundleFileName(by || 'export'), JSON.stringify(fresh, null, 2));
+  }
+
   async function exportOwn() {
     if (!exportEnv || busy) return;
-    const count = ((exportEnv.b as { recipes?: unknown[]; patches?: unknown[] } | undefined)?.recipes?.length ?? 0) + ((exportEnv.b as { patches?: unknown[] } | undefined)?.patches?.length ?? 0);
-    if (count === 0) {
+    if (exportCount(exportEnv) === 0) {
       setExportStatus(t('storage.exportEmpty'));
       return;
     }
     setBusy(true);
     setExportStatus('');
     try {
-      const fresh: Envelope = { ...exportEnv, at: nowIso() };
-      const r = await shareJsonFile(bundleFileName(by || 'export'), JSON.stringify(fresh, null, 2));
+      const r = await shareExport(exportEnv);
       if (r.outcome === 'shared') setExportStatus(t('storage.exportShared'));
       else if (r.outcome === 'downloaded') setExportStatus(t('storage.exportDownloaded'));
       else if (r.outcome === 'failed') setExportStatus(`${t('storage.exportFailed')}: ${r.error ?? ''}`);
     } catch (e) {
       setExportStatus(`${t('storage.exportFailed')}: ${String(e)}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  /** Wipes everything and reloads to '#/' (onboarding takes over; the service worker stays). */
+  async function doReset() {
+    setResetStatus(t('storage.resetting'));
+    await resetEverything();
+    location.hash = '#/';
+    location.reload();
+  }
+
+  /**
+   * "App resetten" → Ja / "Ja, maar exporteer eerst mijn recepten". With `exportFirst` the
+   * own-recipes export share runs first and the reset waits for its promise: only a share that
+   * went through (shared or downloaded) is followed by the wipe; cancelled or failed → nothing
+   * is wiped. Nothing to export → the button is disabled; should it fire anyway, the person is
+   * told nothing was exported and nothing is wiped.
+   */
+  async function reset(exportFirst: boolean) {
+    if (busy) return;
+    setBusy(true);
+    setResetStatus('');
+    try {
+      if (exportFirst) {
+        if (!exportEnv || exportCount(exportEnv) === 0) {
+          setResetStatus(t('storage.exportEmpty'));
+          return;
+        }
+        setResetStatus(t('storage.resetExporting'));
+        // navigator.share runs before the first await inside shareJsonFile: still within the tap.
+        const r = await shareExport(exportEnv);
+        if (r.outcome === 'aborted') {
+          setResetStatus(t('storage.resetExportAborted'));
+          return;
+        }
+        if (r.outcome === 'failed') {
+          setResetStatus(`${t('storage.resetExportFailed')} ${r.error ?? ''}`.trim());
+          return;
+        }
+      }
+      await doReset();
+    } catch (e) {
+      setResetStatus(`${t('storage.resetFailed')}: ${String(e)}`);
     } finally {
       setBusy(false);
     }
@@ -314,6 +373,37 @@ export function StorageScreen() {
           </div>
           <div class="status" role="status">
             {exportStatus}
+          </div>
+        </section>
+
+        <section class={'card' + (confirmReset ? ' reset-card' : '')}>
+          <h2>{t('storage.reset')}</h2>
+          <p class="muted small">{t('storage.resetHint')}</p>
+          {confirmReset ? (
+            <div class="confirm" role="alertdialog" aria-label={t('storage.reset')}>
+              <p>{t('storage.resetConfirm')}</p>
+              <div class="actions">
+                <button type="button" class="btn btn-primary btn-danger" disabled={busy} onClick={() => void reset(false)}>
+                  {t('storage.resetYes')}
+                </button>
+                <button type="button" class="btn" disabled={busy} onClick={() => setConfirmReset(false)}>
+                  {t('storage.resetNo')}
+                </button>
+                <button type="button" class="btn btn-secondary" disabled={busy || !exportEnv || exportCount(exportEnv) === 0} onClick={() => void reset(true)}>
+                  {t('storage.resetExportFirst')}
+                </button>
+              </div>
+              <p class="muted small">{exportEnv && exportCount(exportEnv) === 0 ? t('storage.exportEmpty') : t('storage.resetHistoryHint')}</p>
+            </div>
+          ) : (
+            <div class="actions" style="margin-bottom:0">
+              <button type="button" class="btn btn-danger" disabled={busy} onClick={() => setConfirmReset(true)}>
+                {t('storage.reset')}
+              </button>
+            </div>
+          )}
+          <div class="status" role="status">
+            {resetStatus}
           </div>
         </section>
       </div>

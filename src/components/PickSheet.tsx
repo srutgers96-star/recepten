@@ -7,15 +7,20 @@
 // The same generic chips (`PickChips` + `applyPickFilter`) serve the Recipes list and the Home
 // dice (spec §0: one chip row that follows the data), persisted per screen with
 // `loadPickFilter` / `savePickFilter`.
+// Phase 5 (docs/phase-5-spec.md A.3): a prominent "Dieet" row (vegetarisch · vegan · glutenvrij,
+// src/components/FilterChips.tsx `DietChips`) sits above the generic row; its "ook als optie"
+// toggle (`PickFilter.optie`) lets a chosen diet tag also match the `-optie` variant.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { formatShortDate } from '@/components/RecipeRow';
-import { categoryLabel } from '@/components/FilterChips';
+import { DIET_ROW_TAGS, DietChips, OPTIE_TAG, categoryLabel, isDietTag, tagChipLabel } from '@/components/FilterChips';
 import { dictionary } from '@/dictionary';
 import type { Dictionary } from '@/domain/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
 import { pickRecipes, type PlanItem } from '@/domain/planner';
 import { flattenResults, searchRecipes } from '@/domain/search';
-import { hasKey, lang, t } from '@/i18n';
+import { lang, t } from '@/i18n';
+
+export { tagChipLabel };
 
 export interface PickFilter {
   /** Tag ids; AND together (a recipe must carry all of them). */
@@ -24,6 +29,8 @@ export interface PickFilter {
   cats: string[];
   /** Free-text search over name, ingredient, category and tag (src/domain/search.ts). */
   query: string;
+  /** "Ook als optie": a diet tag in `tags` also matches its -optie variant (vegetarisch → vega-optie). */
+  optie?: boolean;
 }
 
 export const EMPTY_PICK_FILTER: PickFilter = { tags: [], cats: [], query: '' };
@@ -51,9 +58,11 @@ function hasChicken(r: Recipe): boolean {
  */
 const DERIVED_TAGS: Record<string, (r: Recipe) => boolean> = { kip: hasChicken };
 
-function hasTag(r: Recipe, tag: string): boolean {
+function hasTag(r: Recipe, tag: string, optie = false): boolean {
   const derived = DERIVED_TAGS[tag];
-  return derived ? derived(r) : r.tags.includes(tag);
+  if (derived) return derived(r);
+  if (r.tags.includes(tag)) return true;
+  return optie && isDietTag(tag) && r.tags.includes(OPTIE_TAG[tag]);
 }
 
 /** Every tag id present in the recipes, most frequent first, then the derived ones that match anything. */
@@ -66,7 +75,7 @@ export function tagIdsIn(recipes: readonly Recipe[]): string[] {
 }
 
 function sanitizePickFilter(v: unknown): PickFilter {
-  const o = (v && typeof v === 'object' ? v : {}) as { tags?: unknown; cats?: unknown; query?: unknown; quick?: unknown };
+  const o = (v && typeof v === 'object' ? v : {}) as { tags?: unknown; cats?: unknown; query?: unknown; quick?: unknown; optie?: unknown };
   const strings = (list: unknown): string[] => (Array.isArray(list) ? list.filter((x): x is string => typeof x === 'string' && x !== '') : []);
   const tags = strings(o.tags);
   const cats = strings(o.cats);
@@ -75,7 +84,9 @@ function sanitizePickFilter(v: unknown): PickFilter {
     if (q === 'vis') cats.push(q);
     else tags.push(q);
   }
-  return { tags: [...new Set(tags)], cats: [...new Set(cats)], query: typeof o.query === 'string' ? o.query : '' };
+  const out: PickFilter = { tags: [...new Set(tags)], cats: [...new Set(cats)], query: typeof o.query === 'string' ? o.query : '' };
+  if (o.optie === true) out.optie = true;
+  return out;
 }
 
 /** The persisted chip selection of a screen (localStorage; the query is never persisted). */
@@ -90,28 +101,19 @@ export function loadPickFilter(key: string): PickFilter {
 
 export function savePickFilter(key: string, f: PickFilter): void {
   try {
-    if (f.tags.length || f.cats.length) localStorage.setItem(key, JSON.stringify({ tags: f.tags, cats: f.cats }));
+    if (f.tags.length || f.cats.length || f.optie) localStorage.setItem(key, JSON.stringify({ tags: f.tags, cats: f.cats, ...(f.optie ? { optie: true } : {}) }));
     else localStorage.removeItem(key);
   } catch {
     /* storage may be unavailable (private mode) */
   }
 }
 
-/** Chip label of a tag: `filter.<id>` (capitalised chip strings), else `tag.<id>`, else the id. */
-export function tagChipLabel(id: string): string {
-  if (hasKey('filter.' + id)) return t('filter.' + id);
-  if (hasKey('tag.' + id)) {
-    const s = t('tag.' + id);
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  }
-  return id;
-}
-
 /** The recipes that match the chips and the query (the pool of Kies N, Verras me and reroll). */
 export function applyPickFilter(recipes: readonly Recipe[], f: PickFilter, dict: Dictionary, l: Lang): Recipe[] {
+  const optie = f.optie === true;
   let out = recipes.filter((r) => {
     if (f.cats.length && !f.cats.some((c) => r.category === c || r.tags.includes(c))) return false;
-    return f.tags.every((tag) => hasTag(r, tag));
+    return f.tags.every((tag) => hasTag(r, tag, optie));
   });
   const q = f.query.trim();
   if (q) out = flattenResults(searchRecipes(out, q, dict, l));
@@ -131,42 +133,60 @@ export interface PickChipsProps {
   noQuery?: boolean;
 }
 
-/** The generic chip row: [×] query · tags … · categories …, multi-select. A tag that shares its id with a category ("oven") is folded into that category chip. */
+/**
+ * The chip rows: first the diet row (vegetarisch · vegan · glutenvrij + "ook als optie",
+ * docs/phase-5-spec.md A.3), then the generic row: [×] query · tags … · categories …,
+ * multi-select. A tag that shares its id with a category ("oven") is folded into that category
+ * chip; the diet tags and their -optie variants live in the diet row only.
+ */
 export function PickChips(props: PickChipsProps) {
   const f = props.filter;
   const dict = dictionary.value;
   const active = pickFilterActive(f);
   const q = f.query.trim();
   const catIds = new Set(dict.categories.map((c) => c.id));
-  const tags = props.tags.filter((id) => !catIds.has(id));
+  const tags = props.tags.filter((id) => !catIds.has(id) && !DIET_ROW_TAGS.has(id));
   return (
-    <div class="chips filter-chips pick-chips" role="group" aria-label={t('pick.filters')}>
-      {active && (
-        <button type="button" class="chip chip-clear" onClick={() => props.onChange(EMPTY_PICK_FILTER)} aria-label={t('pick.clear')}>
-          ×
-        </button>
-      )}
-      {!props.noQuery && q && (
-        <button type="button" class="chip on chip-query" onClick={() => props.onChange({ ...f, query: '' })} aria-label={t('pick.clear')}>
-          “{q}” ×
-        </button>
-      )}
-      {tags.map((id) => {
-        const on = f.tags.includes(id);
-        return (
-          <button key={id} type="button" class={'chip' + (on ? ' on' : '')} aria-pressed={on} onClick={() => props.onChange({ ...f, tags: toggle(f.tags, id) })}>
-            {tagChipLabel(id)}
+    <div class="pick-rows">
+      <DietChips
+        selected={f.tags}
+        optie={f.optie === true}
+        onToggle={(tag) => props.onChange({ ...f, tags: toggle(f.tags, tag) })}
+        onOptie={(on) => {
+          const next = { ...f };
+          if (on) next.optie = true;
+          else delete next.optie;
+          props.onChange(next);
+        }}
+      />
+      <div class="chips filter-chips pick-chips" role="group" aria-label={t('pick.filters')}>
+        {active && (
+          <button type="button" class="chip chip-clear" onClick={() => props.onChange(EMPTY_PICK_FILTER)} aria-label={t('pick.clear')}>
+            ×
           </button>
-        );
-      })}
-      {dict.categories.map((c) => {
-        const on = f.cats.includes(c.id);
-        return (
-          <button key={c.id} type="button" class={'chip chip-cat' + (on ? ' on' : '')} aria-pressed={on} onClick={() => props.onChange({ ...f, cats: toggle(f.cats, c.id) })}>
-            {categoryLabel(c, c.id)}
+        )}
+        {!props.noQuery && q && (
+          <button type="button" class="chip on chip-query" onClick={() => props.onChange({ ...f, query: '' })} aria-label={t('pick.clear')}>
+            “{q}” ×
           </button>
-        );
-      })}
+        )}
+        {tags.map((id) => {
+          const on = f.tags.includes(id);
+          return (
+            <button key={id} type="button" class={'chip' + (on ? ' on' : '')} aria-pressed={on} onClick={() => props.onChange({ ...f, tags: toggle(f.tags, id) })}>
+              {tagChipLabel(id)}
+            </button>
+          );
+        })}
+        {dict.categories.map((c) => {
+          const on = f.cats.includes(c.id);
+          return (
+            <button key={c.id} type="button" class={'chip chip-cat' + (on ? ' on' : '')} aria-pressed={on} onClick={() => props.onChange({ ...f, cats: toggle(f.cats, c.id) })}>
+              {categoryLabel(c, c.id)}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -305,15 +305,17 @@ describe('rule 6: rounding for display', () => {
     expect(adjustStep('tl', 1)).toBe(0.5);
   });
 
-  it('effectiveQty adds the user delta and never goes below 0; "1,3 kg" and "1½ l" formatting', () => {
+  it('effectiveQty adds the user delta and never goes below 0; "1,3 kg" and "1,5 l" formatting (phase 5: decimals for kg/l)', () => {
     expect(effectiveQty({ qty: 4, adjusted: -1 })).toBe(3);
     expect(effectiveQty({ qty: 1, adjusted: -5 })).toBe(0);
     expect(effectiveQty({ qty: null })).toBeNull();
     expect(effectiveQty({ qty: null, adjusted: 1 })).toBe(1);
     const items = run([rec('b:a', 'A', ['1,5 l melk', '1,3 kg aardappelen'])]);
-    // melk is a staple, but 1½ l is far over the 250 ml threshold: a real line.
+    // melk is a staple, but 1,5 l is far over the 250 ml threshold: a real line.
     expect(one(items, 'melk').section).toBe('main');
-    expect(nl(one(items, 'melk'))).toBe('1½ l melk');
+    expect(nl(one(items, 'melk'))).toBe('1,5 l melk');
+    // g/ml totals are whole numbers (PLAN §0 "Kleine wensen"): never "62¼ g" (boter is a staple: "(≈ 60 g)").
+    expect(nl(one(run([rec('b:b', 'B', ['62,25 g boter'])]), 'boter'))).toBe('boter (≈ 60 g)');
     expect(nl(one(items, 'aardappel'))).toBe('1,3 kg aardappelen');
     expect(nl({ ...one(items, 'aardappel'), adjusted: 50 })).toBe('1,35 kg aardappelen');
   });

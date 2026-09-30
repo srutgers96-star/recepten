@@ -15,10 +15,12 @@ import { Header } from '@/components/Header';
 import { IngredientPicker } from '@/components/IngredientPicker';
 import { LineChips, rawFromLine, type LineEdit } from '@/components/LineChips';
 import { LineEditor, editTextHasContent, newEditText, type EditText } from '@/components/LineEditor';
+import { MetaRows, applySuggestion, metaEqual, type MetaValue } from '@/components/MetaRows';
 import { Segmented } from '@/components/Segmented';
 import { celebrate } from '@/celebrate';
 import { clearOverride, deleteUserRecipe, duplicateAsOwn, getBaseRecipe, getOverride, getRecipe, isBuiltinId, listLineOverrides, saveOverride, saveUserRecipe, userRecipes } from '@/db/repo';
 import { dictionary, type Dictionary } from '@/dictionary';
+import { suggestMeta } from '@/domain/diet';
 import { hasLang, newUserId, nowIso, type Lang, type Line, type Recipe, type Step, type Text } from '@/domain/model';
 import { applyLineOverrides, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
 import { parseLineAuto } from '@/domain/parser';
@@ -156,21 +158,31 @@ function englishChanged(draft: Recipe, base: Recipe): boolean {
   return draft.lines.length !== base.lines.length || draft.lines.some((l, i) => en(l.raw) !== en(base.lines[i]?.raw));
 }
 
+/** True when both carry the same tags (order ignored). */
+function sameTags(a: readonly string[], b: readonly string[]): boolean {
+  return a.length === b.length && a.every((tag) => b.includes(tag));
+}
+
 /**
- * The override patch for a builtin: the previous patch with name / servingTip / lines / steps set
- * when they differ from the shipped recipe and removed when they are equal again (repo.saveOverride
- * replaces the stored patch, and an empty patch removes the override). When the English text of
- * a machine-translated classic (`text.en === 'llm'`) was changed, the patch also marks it
- * `text.en = 'human'` (with the curator's name), which turns the "Machine translation" badge off.
+ * The override patch for a builtin: the previous patch with name / servingTip / lines / steps /
+ * category / tags set when they differ from the shipped recipe and removed when they are equal
+ * again (repo.saveOverride replaces the stored patch, and an empty patch removes the override).
+ * When the English text of a machine-translated classic (`text.en === 'llm'`) was changed, the
+ * patch also marks it `text.en = 'human'` (with the curator's name), which turns the "Machine
+ * translation" badge off. `metaManual` (the person chose category/tags by hand, phase-5 A.4)
+ * rides along as an unknown key that `applyOverride` copies onto the recipe.
  */
 export function buildOverridePatch(draft: Recipe, base: Recipe, prev: RecipePatch | undefined, by?: string | null): RecipePatch {
   const patch: RecipePatch = { ...(prev ?? {}) };
-  const put = (k: 'name' | 'servingTip' | 'lines' | 'steps' | 'text', changed: boolean, v: unknown) => {
+  const put = (k: 'name' | 'servingTip' | 'lines' | 'steps' | 'text' | 'category' | 'tags' | 'metaManual', changed: boolean, v: unknown) => {
     if (changed) (patch as Record<string, unknown>)[k] = v;
     else delete patch[k];
   };
   put('name', textKey(draft.name) !== textKey(base.name), draft.name);
   put('servingTip', textKey(draft.servingTip) !== textKey(base.servingTip), draft.servingTip ?? null);
+  put('category', (draft.category ?? null) !== (base.category ?? null), draft.category ?? null);
+  put('tags', !sameTags(draft.tags, base.tags), draft.tags);
+  put('metaManual', draft.metaManual === true, true);
   const stepsChanged = draft.steps.length !== base.steps.length || draft.steps.some((s, i) => textKey(s.text) !== textKey(base.steps[i]?.text));
   put('steps', stepsChanged, draft.steps);
   const linesChanged = draft.lines.length !== base.lines.length || draft.lines.some((l, i) => stable(l) !== stable(base.lines[i]));
@@ -203,6 +215,10 @@ export function EditScreen(props: { id?: string }) {
   const [servingsText, setServingsText] = useState('4');
   const [lines, setLines] = useState<EditText[]>([]);
   const [steps, setSteps] = useState<EditText[]>([]);
+  // Category + diet/labels (phase-5 A.4). `metaManual`: the person chose them (or an import
+  // supplied them); until then a NEW recipe follows the live suggestion. Stored on the recipe.
+  const [meta, setMeta] = useState<MetaValue>({ category: null, tags: [] });
+  const [metaManual, setMetaManual] = useState(false);
   const [pasteOpen, setPasteOpen] = useState(false);
   const [pasteText, setPasteText] = useState('');
   const [pasteLang, setPasteLang] = useState<Lang>('nl');
@@ -268,6 +284,8 @@ export function EditScreen(props: { id?: string }) {
       setServingsText('4');
       setLines([newEditText(), newEditText(), newEditText()]);
       setSteps([newEditText()]);
+      setMeta({ category: null, tags: [] });
+      setMetaManual(false);
       setState('ready');
       return;
     }
@@ -306,6 +324,8 @@ export function EditScreen(props: { id?: string }) {
       setServingsText(String(r.servings || 4));
       setLines(rowsOf(r.lines, (x) => x.raw, lineSrc.current));
       setSteps(rowsOf(r.steps, (s) => s.text, stepSrc.current));
+      setMeta({ category: r.category ?? null, tags: [...r.tags] });
+      setMetaManual(r.metaManual === true);
       setState('ready');
     });
     return () => {
@@ -352,6 +372,57 @@ export function EditScreen(props: { id?: string }) {
     return line;
   }
 
+  // --- category + diet/labels -------------------------------------------------------------------
+
+  /** The live suggestion (src/domain/diet.ts) from the name, the parsed lines and the steps. */
+  const dict = dictionary.value;
+  const suggestion = useMemo(
+    () =>
+      state === 'ready'
+        ? suggestMeta(
+            {
+              name: textOf(nameNl, nameEn),
+              lines: lines.filter(rowHasText).map((x) => lineFor(x)),
+              steps: steps.filter(rowHasText).map((x) => ({ text: textOf(x.nl, x.en) })),
+              time: existing?.time ?? null,
+            },
+            dict,
+          )
+        : null,
+    [state, nameNl, nameEn, lines, steps, links, dict, existing],
+  );
+
+  // A new recipe follows the suggestion until the person touches the rows (or an import fills
+  // them). Only the sure part is applied; an unsure diet tag stays a "waarschijnlijk" chip.
+  useEffect(() => {
+    if (state !== 'ready' || props.id || metaManual || !suggestion) return;
+    setMeta((m) => {
+      const next = { ...applySuggestion(m, suggestion), category: suggestion.category ?? null };
+      return metaEqual(next, m) ? m : next;
+    });
+  }, [state, props.id, metaManual, suggestion]);
+
+  function changeMeta(next: MetaValue) {
+    setMeta(next);
+    setMetaManual(true);
+  }
+
+  /**
+   * Category / labels from an import ("Categorie:" / "Labels:" lines): the first block that has
+   * them wins (nl before en). Counts as a manual choice; the suggestion hint still offers the
+   * ingredient facts. A `Labels:` line whose words were all unknown parses to `[]`
+   * (photo-import.ts `tagIdsFromText`) and counts as "no labels line": it must not wipe the live
+   * diet suggestion of a new recipe. Returns true when anything was actually taken over.
+   */
+  function importMeta(blocks: (PlainRecipe | undefined)[]): boolean {
+    const category = blocks.find((b) => b?.category !== undefined)?.category;
+    const tags = blocks.find((b) => b?.tags !== undefined && b.tags.length > 0)?.tags;
+    if (category === undefined && tags === undefined) return false;
+    setMeta((m) => ({ category: category ?? m.category, tags: tags ? [...new Set(tags)] : m.tags }));
+    setMetaManual(true);
+    return true;
+  }
+
   /**
    * The schema-2 recipe from the form; normalizeRecipe derives header lines and step timers.
    * Invariants 2 + 3: a row with text only in the hidden language is kept, not deleted (translating
@@ -376,17 +447,23 @@ export function EditScreen(props: { id?: string }) {
       aliases: [],
     };
     const tip = textOf(tipNl, tipEn);
-    const draft = {
+    const draft: Recipe = {
       ...src,
       name: textOf(nameNl, nameEn),
       servings,
       servingTip: tip.nl || tip.en ? tip : null,
+      category: meta.category,
+      tags: [...meta.tags],
       lines: lines.filter(rowHasText).map((x) => lineFor(x)),
       steps: steps.filter(rowHasText).map((x) => {
         const { text: _text, timers: _timers, ...rest } = stepSrc.current.get(x.key) ?? ({ text: {} } as Step);
         return { ...rest, text: textOf(x.nl, x.en) };
       }),
     };
+    // Phase-5 A.4: `metaManual: true` = category/tags were chosen by hand (the check screen and
+    // the auto-suggestion leave such a recipe alone); absent otherwise.
+    if (metaManual) draft.metaManual = true;
+    else delete draft.metaManual;
     return normalizeRecipe(draft);
   }
 
@@ -652,9 +729,10 @@ export function EditScreen(props: { id?: string }) {
       if (srv) setServings(srv);
       if (nl.lines.length) setLines([...lines.filter(rowHasText), ...nl.lines.map((s, i) => newEditText(s, en.lines[i] ?? ''))]);
       if (nl.steps.length) setSteps([...steps.filter(rowHasText), ...nl.steps.map((s, i) => newEditText(s, en.steps[i] ?? ''))]);
+      const metaTaken = importMeta([nl, en]);
       setMode('both');
       finish();
-      setStatus(t('edit.importDoneBoth', { lines: nl.lines.length, steps: nl.steps.length }));
+      setStatus(t('edit.importDoneBoth', { lines: nl.lines.length, steps: nl.steps.length }) + (metaTaken ? ' · ' + t('edit.importMeta') : ''));
       return;
     }
     const only: PlainRecipe = (r[first] ?? r.nl ?? r.en) as PlainRecipe;
@@ -663,6 +741,8 @@ export function EditScreen(props: { id?: string }) {
     if (only.servings) setServings(only.servings);
     if (only.lines.length) setLines([...lines.filter(rowHasText), ...only.lines.map(mk)]);
     if (only.steps.length) setSteps([...steps.filter(rowHasText), ...only.steps.map(mk)]);
+    // On a mismatch the other block may still carry the Categorie/Labels lines (nl first).
+    const metaTaken = importMeta(first === 'nl' ? [r.nl, r.en] : [r.en, r.nl]);
     const nextMode: Mode = mode === 'both' ? 'both' : first;
     if (nextMode !== mode) setMode(nextMode);
     finish();
@@ -677,7 +757,7 @@ export function EditScreen(props: { id?: string }) {
       const section = nextMode === 'both' ? t('edit.translate') : first === 'nl' ? t('edit.addEnglish') : t('edit.addDutch');
       setStatus(t('edit.importMismatch', { detail, lang: first.toUpperCase(), section }));
     } else {
-      setStatus(t('edit.importDone', { lines: only.lines.length, steps: only.steps.length }));
+      setStatus(t('edit.importDone', { lines: only.lines.length, steps: only.steps.length }) + (metaTaken ? ' · ' + t('edit.importMeta') : ''));
     }
   }
 
@@ -943,6 +1023,12 @@ export function EditScreen(props: { id?: string }) {
               />
             </div>
           ))}
+        </div>
+
+        {/* Phase-5 A.4: category + diet/labels, with the live suggestion from the lines above. */}
+        <div class="edit-meta">
+          <MetaRows value={meta} suggestion={suggestion} onChange={changeMeta} disabled={busy} />
+          {!props.id && !metaManual && <p class="muted small edit-hint">{t('meta.autoHint')}</p>}
         </div>
 
         {/* PLAN §0 "Vertaling eigen recepten" (1): in every column mode; NL mode adds English, EN mode adds Dutch. */}

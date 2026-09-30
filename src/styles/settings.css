@@ -440,3 +440,95 @@
   margin-left: 8px;
   vertical-align: middle;
 }
+
+/* ---------- Phase 5: Opslag — "App resetten" ---------- */
+
+.card.reset-card {
+  border-color: var(--tomato);
+}
+
+.reset-card .confirm {
+  margin-top: 10px;
+}
+
+/* Three choices stacked full-width: Ja · Nee · "Ja, maar exporteer eerst mijn recepten". */
+.reset-card .confirm .actions {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.reset-card .confirm .actions .btn {
+  width: 100%;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+.reset-card .btn-danger.btn-primary {
+  background: var(--tomato);
+  border-color: var(--tomato);
+  color: #fff;
+}
+
+/* ---------- Phase 5: Huishouden ---------- */
+
+.household-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.household-name .input {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px; /* no iOS zoom */
+}
+
+.member-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.member-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.member-row:last-child {
+  border-bottom: 0;
+}
+
+.member-row .who {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-row .who strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-row .who .small {
+  display: block;
+}
+
+.member-row .actions {
+  flex: none;
+  margin: 0;
+  gap: 6px;
+}
+
+.member-row .actions .btn {
+  min-height: 44px;
+  padding: 0 10px;
+}
+
+.member-form {
+  margin-top: 8px;
+}

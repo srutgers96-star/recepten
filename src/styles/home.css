@@ -42,7 +42,7 @@
 }
 
 .filter-chips .chip {
-  min-height: 36px; /* the strip stays compact; the 44 px hit area comes from the row padding */
+  min-height: 36px; /* generic chips stay compact (phase 4); the diet row below is 44 px */
   padding: 4px 12px;
   border: 0;
   font: inherit;
@@ -221,4 +221,108 @@
 
 .reminder > .badge {
   flex: none;
+}
+
+/* ---------- Phase 5: "Dieet" chip row (Home dice, Recipes header, Week filter, Kies-N sheet) ---------- */
+
+/* The two rows (diet + generic) stack; each row is its own scrolling strip. */
+.pick-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.diet-chips {
+  align-items: center;
+  padding-top: 8px;
+  padding-bottom: 0;
+}
+
+/* Inside the surprise card both rows bleed to the card's own padding, like .surprise .filter-chips. */
+.surprise .diet-chips {
+  margin: 0 -16px;
+  padding: 6px 16px 0;
+}
+
+.diet-label {
+  flex: none;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding-right: 2px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The diet chips are the prominent ones: rosemary outline, filled when on. They (and the
+   "ook als optie" toggle) are full 44 px tap targets — row padding never enlarges a button. */
+.filter-chips .chip-diet,
+.filter-chips .chip-optie {
+  min-height: 44px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.filter-chips .chip-diet {
+  box-shadow: inset 0 0 0 1.5px var(--rosemary);
+  color: var(--rosemary);
+}
+
+.filter-chips .chip-diet.on {
+  background: var(--rosemary);
+  color: #fff;
+  box-shadow: none;
+}
+
+/* "ook als optie": a secondary toggle; disabled until a diet chip is on. */
+.filter-chips .chip-optie {
+  font-weight: 500;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.filter-chips .chip-optie.on {
+  background: var(--card);
+  color: var(--rosemary);
+  box-shadow: inset 0 0 0 1.5px var(--rosemary);
+}
+
+.filter-chips .chip-optie:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ---------- Phase 5: diet chips under the recipe title ---------- */
+
+.detail-diet {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.detail-diet .tag-diet {
+  font-size: 13px;
+  padding: 4px 10px;
+  border-color: var(--rosemary);
+  background: color-mix(in srgb, var(--rosemary) 12%, var(--card));
+  color: var(--rosemary);
+}
+
+.detail-diet .tag-optie {
+  background: var(--card);
+  border-style: dashed;
+}
+
+/* Only probable: muted, dashed, with the "waarschijnlijk" note. */
+.detail-diet .tag-unsure {
+  border-style: dashed;
+  background: var(--card);
+  color: var(--muted);
+}
+
+.detail-diet .tag-unsure-note {
+  font-weight: 500;
+  font-style: italic;
 }

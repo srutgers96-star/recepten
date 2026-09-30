@@ -46,28 +46,56 @@ const FRACTIONS: [number, string][] = [
   [0.125, '⅛'],
 ];
 
-function formatNumber(n: number, lang: Lang): string {
-  if (!Number.isFinite(n)) return '';
-  const whole = Math.floor(n + 1e-9);
-  const frac = n - whole;
-  if (frac < 1e-6) return String(whole);
-  for (const [value, glyph] of FRACTIONS) {
-    if (Math.abs(frac - value) < 0.01) return (whole === 0 ? '' : String(whole)) + glyph;
-  }
+/**
+ * How a number is written for a unit (PLAN.md §0 "Kleine wensen", docs/phase-5-spec.md A.9):
+ * 'whole' for g and ml (62.25 g -> "62 g"), 'decimal' for kg, l, dl, cl (1.3 kg stays "1,3 kg",
+ * never "1⅓ kg"), 'fraction' for everything else: counted pieces, spoons, cups, pinches
+ * ("1½ el", "¼ ui", "2 teentjes").
+ */
+export type NumberStyle = 'whole' | 'decimal' | 'fraction';
+
+export function numberStyleFor(unit: Unit | null | undefined): NumberStyle {
+  const kind = scaleKindOf(unit);
+  if (kind !== 'mass' && kind !== 'volume') return 'fraction';
+  const conv = unit?.group === 'mass' ? unit.g : unit?.ml;
+  return conv === 1 ? 'whole' : 'decimal';
+}
+
+function decimalText(n: number, lang: Lang): string {
   const s = (Math.round(n * 100) / 100).toString();
   return lang === 'nl' ? s.replace('.', ',') : s;
 }
 
-/** "½", "1½", "2-3", "ca. 400" / "approx. 400"; decimals only for non-fraction values. */
-export function formatQty(min: number, max?: number, lang: Lang = 'nl', approx = false): string {
-  const a = formatNumber(min, lang);
-  const text = max !== undefined && max > min ? `${a}-${formatNumber(max, lang)}` : a;
+function formatNumber(n: number, lang: Lang, style: NumberStyle): string {
+  if (!Number.isFinite(n)) return '';
+  if (style === 'whole') return String(Math.round(n));
+  const whole = Math.floor(n + 1e-9);
+  const frac = n - whole;
+  if (frac < 1e-6) return String(whole);
+  if (style === 'decimal') return decimalText(n, lang);
+  for (const [value, glyph] of FRACTIONS) {
+    if (Math.abs(frac - value) < 0.01) return (whole === 0 ? '' : String(whole)) + glyph;
+  }
+  return decimalText(n, lang);
+}
+
+/**
+ * "½", "1½", "2-3", "ca. 400" / "approx. 400". With `unit`, the number style follows the unit
+ * (`numberStyleFor`): whole numbers for g/ml, decimals for kg/l/dl, fractions otherwise. Without
+ * a unit (counted pieces, the editor's raw text) fractions are used and decimals only for values
+ * that are not a fraction.
+ */
+export function formatQty(min: number, max?: number, lang: Lang = 'nl', approx = false, unit?: Unit | null): string {
+  const style = numberStyleFor(unit);
+  const a = formatNumber(min, lang, style);
+  const b = max !== undefined ? formatNumber(max, lang, style) : undefined;
+  const text = b !== undefined && b !== a && max !== undefined && max > min ? `${a}-${b}` : a;
   if (!approx) return text;
   return (lang === 'nl' ? 'ca. ' : 'approx. ') + text;
 }
 
-function qtyText(q: Qty, lang: Lang): string {
-  return formatQty(q.min, q.max, lang, q.approx === true);
+function qtyText(q: Qty, lang: Lang, unit?: Unit | null): string {
+  return formatQty(q.min, q.max, lang, q.approx === true, unit);
 }
 
 function isPlural(q: Qty | null | undefined): boolean {
@@ -233,7 +261,8 @@ function rawText(line: Line, dict: Dictionary, lang: Lang, factor: number): stri
   if (!m) return raw;
   const consumed = raw.slice(start, start + m.length);
   const trailing = /\s*$/.exec(consumed)?.[0] ?? '';
-  return raw.slice(0, start) + qtyText(q, lang) + trailing + raw.slice(start + m.length);
+  const unit = line.unit ? dict.unit(line.unit) : undefined;
+  return raw.slice(0, start) + qtyText(q, lang, unit) + trailing + raw.slice(start + m.length);
 }
 
 /**
@@ -267,7 +296,7 @@ export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor
     const text = rawText(line, dict, lang, factor);
     return {
       ...empty,
-      qty: qShown ? qtyText(qShown, lang) : '',
+      qty: qShown ? qtyText(qShown, lang, unitShown) : '',
       unit: unitShown ? unitLabel(unitShown, lang, qShown) : '',
       name: line.name ?? '',
       prep,
@@ -280,7 +309,7 @@ export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor
   }
 
   const parts: LineParts = {
-    qty: qShown ? qtyText(qShown, lang) : '',
+    qty: qShown ? qtyText(qShown, lang, unitShown) : '',
     unit: unitShown ? unitLabel(unitShown, lang, qShown, ing) : '',
     name: nameText(line, dict, lang, q, unit),
     prep,

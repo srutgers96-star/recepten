@@ -1,0 +1,769 @@
+{
+  "aardappel": {
+    "vegan": true,
+    "gluten": false
+  },
+  "aardappelpuree": {
+    "vegan": true,
+    "gluten": false
+  },
+  "abrikoos": {
+    "vegan": true,
+    "gluten": false
+  },
+  "afbakstokbrood": {
+    "vegan": true,
+    "gluten": true
+  },
+  "allesbinder": {
+    "vegan": true,
+    "gluten": false
+  },
+  "amandel": {
+    "vegan": true,
+    "gluten": false
+  },
+  "andijvie": {
+    "vegan": true,
+    "gluten": false
+  },
+  "ansjovis": {
+    "vegan": false,
+    "gluten": false
+  },
+  "appel": {
+    "vegan": true,
+    "gluten": false
+  },
+  "appelmoes": {
+    "vegan": true,
+    "gluten": false
+  },
+  "appelsap": {
+    "vegan": true,
+    "gluten": false
+  },
+  "arachideolie": {
+    "vegan": true,
+    "gluten": false
+  },
+  "asperge": {
+    "vegan": true,
+    "gluten": false
+  },
+  "aubergine": {
+    "vegan": true,
+    "gluten": false
+  },
+  "augurk": {
+    "vegan": true,
+    "gluten": false
+  },
+  "augurkennat": {
+    "vegan": true,
+    "gluten": false
+  },
+  "avocado": {
+    "vegan": true,
+    "gluten": false
+  },
+  "azijn": {
+    "vegan": true,
+    "gluten": false
+  },
+  "bacon": {
+    "vegan": false,
+    "gluten": false
+  },
+  "bakgember": {
+    "vegan": true,
+    "gluten": false
+  },
+  "balsamicoazijn": {
+    "vegan": true,
+    "gluten": false
+  },
+  "balti-kooksaus": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "basilicum": {
+    "vegan": true,
+    "gluten": false
+  },
+  "basterdsuiker": {
+    "vegan": true,
+    "gluten": false
+  },
+  "bavette": {
+    "vegan": true,
+    "gluten": true
+  },
+  "biefstuk": {
+    "vegan": false,
+    "gluten": false
+  },
+  "bier": {
+    "vegan": true,
+    "gluten": true
+  },
+  "bieslook": {
+    "vegan": true,
+    "gluten": false
+  },
+  "bladerdeeg": {
+    "vegan": false,
+    "gluten": true
+  },
+  "blauwe-kaas": {
+    "vegan": false,
+    "gluten": false
+  },
+  "bleekselderij": {
+    "vegan": true,
+    "gluten": false
+  },
+  "bloem": {
+    "vegan": true,
+    "gluten": true
+  },
+  "bloemkool": {
+    "vegan": true,
+    "gluten": false
+  },
+  "boemboe-pinda-sate": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "boerenkool": {
+    "vegan": true,
+    "gluten": false
+  },
+  "boon": {
+    "vegan": true,
+    "gluten": false
+  },
+  "bosui": {
+    "vegan": true,
+    "gluten": false
+  },
+  "boter": {
+    "vegan": false,
+    "gluten": false
+  },
+  "botersla": {
+    "vegan": true,
+    "gluten": false
+  },
+  "bouillon": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "bouillonpoeder": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "braadkip": {
+    "vegan": false,
+    "gluten": false
+  },
+  "braadworst": {
+    "vegan": false,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "broccoli": {
+    "vegan": true,
+    "gluten": false
+  },
+  "brood": {
+    "vegan": true,
+    "gluten": true
+  },
+  "broodkruim": {
+    "vegan": true,
+    "gluten": true
+  },
+  "bruine-boon": {
+    "vegan": true,
+    "gluten": false
+  },
+  "buikspek": {
+    "vegan": false,
+    "gluten": false
+  },
+  "burgerbroodje": {
+    "vegan": false,
+    "gluten": true
+  },
+  "cajunkruiden": {
+    "vegan": true,
+    "gluten": false
+  },
+  "camembert": {
+    "vegan": false,
+    "gluten": false
+  },
+  "cannelloni": {
+    "vegan": true,
+    "gluten": true
+  },
+  "cashewnoot": {
+    "vegan": true,
+    "gluten": false
+  },
+  "cayennepeper": {
+    "vegan": true,
+    "gluten": false
+  },
+  "champignon": {
+    "vegan": true,
+    "gluten": false
+  },
+  "cheddar": {
+    "vegan": false,
+    "gluten": false
+  },
+  "chili-olie": {
+    "vegan": true,
+    "gluten": false
+  },
+  "chilipoeder": {
+    "vegan": true,
+    "gluten": false
+  },
+  "chilisaus": {
+    "vegan": true,
+    "gluten": false
+  },
+  "chilivlokken": {
+    "vegan": true,
+    "gluten": false
+  },
+  "chinese-kool": {
+    "vegan": true,
+    "gluten": false
+  },
+  "chorizo": {
+    "vegan": false,
+    "gluten": false
+  },
+  "citroen": {
+    "vegan": true,
+    "gluten": false
+  },
+  "citroengras": {
+    "vegan": true,
+    "gluten": false
+  },
+  "citroensap": {
+    "vegan": true,
+    "gluten": false
+  },
+  "citroenschil": {
+    "vegan": true,
+    "gluten": false
+  },
+  "courgette": {
+    "vegan": true,
+    "gluten": false
+  },
+  "couscous": {
+    "vegan": true,
+    "gluten": true
+  },
+  "creme-fraiche": {
+    "vegan": false,
+    "gluten": false
+  },
+  "currypasta": {
+    "vegan": true,
+    "gluten": false
+  },
+  "dadel": {
+    "vegan": true,
+    "gluten": false
+  },
+  "danish-blue": {
+    "vegan": false,
+    "gluten": false
+  },
+  "diepvriesspinazie": {
+    "vegan": true,
+    "gluten": false
+  },
+  "dijonmosterd": {
+    "vegan": true,
+    "gluten": false
+  },
+  "dille": {
+    "vegan": true,
+    "gluten": false
+  },
+  "doperwt": {
+    "vegan": true,
+    "gluten": false
+  },
+  "dragon": {
+    "vegan": true,
+    "gluten": false
+  },
+  "dragonazijn": {
+    "vegan": true,
+    "gluten": false
+  },
+  "drumstick": {
+    "vegan": false,
+    "gluten": false
+  },
+  "duan-salam": {
+    "vegan": true,
+    "gluten": false
+  },
+  "eekhoorntjesbrood": {
+    "vegan": true,
+    "gluten": false
+  },
+  "ei": {
+    "vegan": false,
+    "gluten": false
+  },
+  "eidooier": {
+    "vegan": false,
+    "gluten": false
+  },
+  "eiermie": {
+    "vegan": false,
+    "gluten": true
+  },
+  "eikenbladsla": {
+    "vegan": true,
+    "gluten": false
+  },
+  "farfalle": {
+    "vegan": true,
+    "gluten": true
+  },
+  "feta": {
+    "vegan": false,
+    "gluten": false
+  },
+  "flatbread": {
+    "vegan": true,
+    "gluten": true
+  },
+  "foelie": {
+    "vegan": true,
+    "gluten": false
+  },
+  "franse-tuinkruiden": {
+    "vegan": true,
+    "gluten": false
+  },
+  "fusilli": {
+    "vegan": true,
+    "gluten": true
+  },
+  "gado-gado-saus": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "garam-masala": {
+    "vegan": true,
+    "gluten": false
+  },
+  "garnaal": {
+    "vegan": false,
+    "gluten": false
+  },
+  "gebakken-uitjes": {
+    "vegan": true,
+    "gluten": true
+  },
+  "gehakt": {
+    "vegan": false,
+    "gluten": false
+  },
+  "gehaktkruiden": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "geitenkaas": {
+    "vegan": false,
+    "gluten": false
+  },
+  "gember": {
+    "vegan": true,
+    "gluten": false
+  },
+  "gemberpoeder": {
+    "vegan": true,
+    "gluten": false
+  },
+  "gembersap": {
+    "vegan": true,
+    "gluten": false
+  },
+  "gembersiroop": {
+    "vegan": true,
+    "gluten": false
+  },
+  "gnocchi": {
+    "vegan": true,
+    "gluten": true
+  },
+  "gorgonzola": {
+    "vegan": false,
+    "gluten": false
+  },
+  "griekse-yoghurt": {
+    "vegan": false,
+    "gluten": false
+  },
+  "groentebouillon": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "groentebouillonpoeder": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "gruyere": {
+    "vegan": false,
+    "gluten": false
+  },
+  "hacheevlees": {
+    "vegan": false,
+    "gluten": false
+  },
+  "ham": {
+    "vegan": false,
+    "gluten": false
+  },
+  "hamblokjes": {
+    "vegan": false,
+    "gluten": false
+  },
+  "hamschijf": {
+    "vegan": false,
+    "gluten": false
+  },
+  "haricots-verts": {
+    "vegan": true,
+    "gluten": false
+  },
+  "hazelnoot": {
+    "vegan": true,
+    "gluten": false
+  },
+  "hokkien-mie": {
+    "vegan": true,
+    "gluten": true
+  },
+  "honing": {
+    "vegan": false,
+    "gluten": false
+  },
+  "ijsbergsla": {
+    "vegan": true,
+    "gluten": false
+  },
+  "italiaanse-kruiden": {
+    "vegan": true,
+    "gluten": false
+  },
+  "japanse-sojasaus": {
+    "vegan": true,
+    "gluten": true
+  },
+  "jeneverbes": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kaas": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kaastortellini": {
+    "vegan": false,
+    "gluten": true
+  },
+  "kabeljauwfilet": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kalamata-olijf": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kalfsfilet": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kalfsschenkel": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kalkoenfilet": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kaneel": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kaneelstokje": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kappertjes": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kapucijners": {
+    "vegan": true,
+    "gluten": false
+  },
+  "karnemelk": {
+    "vegan": false,
+    "gluten": false
+  },
+  "karwijzaad": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kastanjechampignon": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kerrie": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kerstomaat": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kervel": {
+    "vegan": true,
+    "gluten": false
+  },
+  "ketchup": {
+    "vegan": true,
+    "gluten": false
+  },
+  "ketjap-asin": {
+    "vegan": true,
+    "gluten": true
+  },
+  "ketjap-manis": {
+    "vegan": true,
+    "gluten": true
+  },
+  "ketoembar": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kidneybonen": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kip": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kipdijfilet": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kipfilet": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kipgehakt": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kipkarbonade": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kipkruiden": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kippenbouillon": {
+    "vegan": false,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "kippenbouillonblokje": {
+    "vegan": false,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "kippenbout": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kippenfond": {
+    "vegan": false,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "kippenvleugel": {
+    "vegan": false,
+    "gluten": false
+  },
+  "knoflook": {
+    "vegan": true,
+    "gluten": false
+  },
+  "knoflookpoeder": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kokos": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kokosmelk": {
+    "vegan": true,
+    "gluten": false
+  },
+  "komijn": {
+    "vegan": true,
+    "gluten": false
+  },
+  "komijnzaad": {
+    "vegan": true,
+    "gluten": false
+  },
+  "komkommer": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kookroom": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kool": {
+    "vegan": true,
+    "gluten": false
+  },
+  "koolraap": {
+    "vegan": true,
+    "gluten": false
+  },
+  "koriander": {
+    "vegan": true,
+    "gluten": false
+  },
+  "krieltjes": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kroepoek": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kroepoek-atjar-en-seroendeng": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kruidenboter": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kruidenbouillon": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "kruidenbouillonpoeder": {
+    "vegan": true,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "kruidenkaas": {
+    "vegan": false,
+    "gluten": false
+  },
+  "kruidnagel": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kruidnagelpoeder": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kurkuma": {
+    "vegan": true,
+    "gluten": false
+  },
+  "kwark": {
+    "vegan": false,
+    "gluten": false
+  },
+  "lamsbout": {
+    "vegan": false,
+    "gluten": false
+  },
+  "lamsfond": {
+    "vegan": false,
+    "gluten": false,
+    "glutenUnsure": true
+  },
+  "lamsgehakt": {
+    "vegan": false,
+    "gluten": false
+  },
+  "laos": {
+    "vegan": true,
+    "gluten": false
+  },
+  "lasagnebladen": {
+    "vegan": true,
+    "gluten": true
+  },
+  "laurierblad": {
+    "vegan": true,
+    "gluten": false
+  },
+  "limoen": {
+    "vegan": true,
+    "gluten": false
+  },
+  "limoensap": {
+    "vegan": true,
+    "gluten": false
+  },
+  "linguine": {
+    "vegan": true,
+    "gluten": true
+  },
+  "linze": {
+    "vegan": true,
+    "gluten": false
+  },
+  "lollo-rosso": {
+    "vegan": true,
+    "gluten": false
+  },
+  "macadamianoot": {
+    "vegan": true,
+    "gluten": false
+  },
+  "macaroni": {
+    "vegan": true,
+    "gluten": true
+  }
+}

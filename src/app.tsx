@@ -1,6 +1,7 @@
 // Root of the full app: boot (builtins, profiles, theme), shell (header/screen/nav), hash routing,
 // onboarding gate, install card, update bar, confetti. Routes per docs/phase-1-spec.md §4 plus
-// phase 4 (docs/phase-4-spec.md §3): '/week' and '/shopping'.
+// phase 4 (docs/phase-4-spec.md §3): '/week' and '/shopping', and phase 5 (docs/phase-5-spec.md
+// block A): '/more/check-recipes' and '/more/household'.
 import { useEffect, useState } from 'preact/hooks';
 import { loadCelebrateSettings } from './celebrate';
 import { Confetti } from './components/Confetti';
@@ -14,10 +15,12 @@ import { startInboxBadge } from './inbox-badge';
 import { loadProfiles, needsOnboarding } from './profile';
 import { requestPersistentStorage } from './pwa';
 import { IMPORT_ROUTE, navigate, route, startRouter, type Route } from './router';
+import { CheckRecipesScreen } from './screens/CheckRecipesScreen';
 import { CheckScreen } from './screens/CheckScreen';
 import { CookScreen } from './screens/CookScreen';
 import { EditScreen } from './screens/EditScreen';
 import { HomeScreen } from './screens/HomeScreen';
+import { HouseholdScreen } from './screens/HouseholdScreen';
 import { InboxScreen } from './screens/InboxScreen';
 import { MoreScreen } from './screens/MoreScreen';
 import { OnboardingScreen } from './screens/OnboardingScreen';
@@ -83,6 +86,11 @@ function Screen(props: { r: Route }) {
           return <ProfilesScreen />;
         case 'storage':
           return <StorageScreen />;
+        // Phase 5 (docs/phase-5-spec.md A.6 + A.8).
+        case 'check-recipes':
+          return <CheckRecipesScreen />;
+        case 'household':
+          return <HouseholdScreen />;
         default:
           return <NotFound />;
       }

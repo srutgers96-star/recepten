@@ -11,7 +11,13 @@ translation sessions; `llm/` holds the committed answers of those sessions.
 | `units.json` | Units (`g`, `el`, `teen`, `blik`, …) with NL/EN names, aliases, `g`/`ml` conversions; `dl` renders as ml in English. | hand (docs/phase-2-spec.md §1) |
 | `qualifiers.json` | Qualifier words (`rode`, `grote`, `verse`, …) with `variant: true` when they make a different shopping item. | hand |
 | `prep-phrases.json` | `[bracket]` prep notes NL → EN, incl. `{n}` templates ("blokjes van {n} cm"); `enSliced` = the English for ingredients with `cut: "slice"` ("fijngesneden" → finely chopped herbs, finely sliced onion). | hand |
-| `ingredients.json` | The bilingual ingredient dictionary (~380 entries): id = slug of the Dutch base noun, NL/EN names, aliases, aisle, default/buy unit, `staple`, `veg`, `gloss.en` for Dutch-only products, `cut: "slice"` for products that are sliced rather than chopped, `unitNames` for a product's own unit name (foelie: "1 blade mace"). | hand + `tools/apply-llm-batch.ts --apply` (appends NEW entries) |
+| `ingredients.json` | The bilingual ingredient dictionary (~380 entries): id = slug of the Dutch base noun, NL/EN names, aliases, aisle, default/buy unit, `staple`, `veg`, `vegan`, `gluten` (+ `glutenUnsure: true` when the gluten flag is a best guess — stock cubes, sauces; only next to `gluten: false`, since `gluten: true` is a fact and `validate:data` rejects the pair), `gloss.en` for Dutch-only products, `cut: "slice"` for products that are sliced rather than chopped, `unitNames` for a product's own unit name (foelie: "1 blade mace"). | hand + `tools/apply-llm-batch.ts --apply` (appends NEW entries) |
+
+Diet flags follow the conventional Dutch reading, not the strictest one: hard cheeses made with
+animal rennet (`parmezaanse-kaas`, `blauwe-kaas`, …) and `pesto` count as `veg: true`, as they do on
+Dutch supermarket labels; a strict vegetarian reads the ingredient list. Products that come in a
+gluten-free and a wheat variant (`taco`, `tomatensoep`, stock cubes) are `gluten: false,
+glutenUnsure: true`, so a recipe with them shows "waarschijnlijk glutenvrij" instead of a sure tag.
 | `categories.json`, `aisles.json` | Recipe categories and the fixed supermarket aisle order. | hand |
 | `llm/batch-NN.json` | The answers of the translation/structuring sessions (schema: docs/phase-2-spec.md §4 "Batch file schema"). Committed as provenance; merged by `tools/apply-llm-batch.ts` and replayed by `npm run migrate`. | Claude Code sessions |
 | `review/lines.json` | Human-reviewed corrections for single ingredient lines (`{ id, i, raw, ing?, qual?, note?, prep?, optional?, why }`), applied **last** by `npm run migrate` and `--apply all` (`tools/apply-review.ts`). For what neither the parser nor a batch can express (a batch never overrides a parser hit). Never quantities. | hand (review sessions) |
@@ -24,7 +30,7 @@ translation sessions; `llm/` holds the committed answers of those sessions.
 ## `recipes.json`
 
 ```
-{ schema: 2, dataVersion: 2, generatedAt: "<ISO>", recipes: Recipe[] }   // sorted by name.nl
+{ schema: 2, dataVersion: 3, generatedAt: "<ISO>", recipes: Recipe[] }   // sorted by name.nl
 ```
 
 `Recipe` is the domain type in `src/domain/model.ts` (docs/phase-1-spec.md §1, phase-2-spec.md §2).
@@ -111,7 +117,8 @@ The app keeps a copy of the classics in its `builtins` table (`src/db/repo.ts` `
 On start it compares `settings.dataVersion` with the bundled `dataVersion` and re-imports the whole
 file when they differ. **Bump `DATA_VERSION` in `tools/migrate-from-recepten2.ts`** whenever the
 bundled classics change in a way every phone must pick up (new translations, fixed text, added
-recipes). Version 2 = structured lines (phase 2). Builtins are never edited in place: "Maak eigen
+recipes). Version 2 = structured lines (phase 2); version 3 = diet tags derived from the ingredient flags
+(phase 5 block A). Builtins are never edited in place: "Maak eigen
 kopie" creates a `u:` recipe with `origin.basedOn` pointing at the classic.
 
 ## Validation

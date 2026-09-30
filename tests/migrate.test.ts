@@ -17,7 +17,7 @@ describe('migrate', () => {
   it('produces 196 recipes with unique builtin ids, sorted by name', () => {
     expect(file.schema).toBe(2);
     expect(file.dataVersion).toBe(DATA_VERSION);
-    expect(DATA_VERSION).toBe(2);
+    expect(DATA_VERSION).toBe(3);
     expect(file.generatedAt).toBe(GENERATED_AT);
     expect(file.recipes).toHaveLength(196);
     const ids = new Set(file.recipes.map((r) => r.id));

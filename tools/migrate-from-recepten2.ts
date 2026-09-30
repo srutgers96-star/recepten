@@ -14,7 +14,9 @@
 // can be found by name. A first "step" that only states the servings becomes `servingTip`
 // (splitServingNote). Then the committed batches are replayed with `applyBatch`
 // (tools/apply-llm-batch.ts) and the human review layer (data/review/lines.json,
-// tools/apply-review.ts) last: recipes.json = parse(raw) ⊕ llm enrichment ⊕ review, so the file is
+// tools/apply-review.ts) and, last, the fact-based diet tags (tools/derive-tags.ts
+// `applyDerivedTags`: vegetarisch/vegan/glutenvrij from the dictionary flags, docs/phase-5-spec.md
+// A.3): recipes.json = parse(raw) ⊕ llm enrichment ⊕ review ⊕ diet facts, so the file is
 // reproducible from scratch. Output is deterministic except `generatedAt`.
 //
 // Run:   node --experimental-strip-types tools/migrate-from-recepten2.ts   (or: npm run migrate)
@@ -33,9 +35,10 @@ import { findTimers } from '../src/domain/timers.ts';
 import { applyBatch, batchPaths, checkBatch, readJson, type BatchFile } from './apply-llm-batch.ts';
 import { applyReview, checkReview, readReview, type ReviewFile } from './apply-review.ts';
 import { readDictionaryData } from './build-dictionary-seed.ts';
+import { applyDerivedTags } from './derive-tags.ts';
 
 /** Bump when the bundled classics change in a way the app must re-import (repo.ensureBuiltins). */
-export const DATA_VERSION = 2;
+export const DATA_VERSION = 3;
 
 /** First edition of the book: the "creation" date of every classic (deterministic output). */
 export const BUILTIN_TIMESTAMP = '2025-12-01T00:00:00.000Z';
@@ -54,6 +57,8 @@ export interface MigrationInputs {
   batches: { path: string; batch: unknown }[];
   /** data/review/lines.json (human corrections, applied last), null when absent. */
   review?: ReviewFile | null;
+  /** Set the fact-based diet tags as the last step (default true); tools/derive-tags.ts measures with false. */
+  deriveTags?: boolean;
 }
 
 const SIDE_DISH_RE = /^(.*?)\s*\((?:voor\s+)?bij\s+(?:de\s+|het\s+|een\s+)?([^)]+)\)\s*$/i;
@@ -142,6 +147,9 @@ export function migrate(raw: unknown, generatedAt: string, inputs: MigrationInpu
     if (errors.length > 0) throw new Error(`data/review/lines.json: ${errors.length} error(s):\n  ${errors.join('\n  ')}`);
     recipes = applyReview(recipes, inputs.review).recipes;
   }
+
+  // Diet facts last: the dictionary, not the LLM, decides vegetarisch / vegan / glutenvrij.
+  if (inputs.deriveTags !== false) recipes = recipes.map((r) => applyDerivedTags(r, dict));
 
   const collator = new Intl.Collator('nl', { sensitivity: 'base' });
   recipes.sort((a, b) => collator.compare(a.name.nl ?? '', b.name.nl ?? '') || a.id.localeCompare(b.id));

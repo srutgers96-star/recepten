@@ -20,6 +20,21 @@ export const phase2: Dict = {
   'filter.kip': { nl: 'Kip', en: 'Chicken' },
   'filter.wereld': { nl: 'Wereld', en: 'World' },
 
+  // --- Phase 5 (docs/phase-5-spec.md A.3): the "Dieet" chip row + the new diet tags ---
+  'filter.diet': { nl: 'Dieet', en: 'Diet' },
+  'filter.dietOptie': { nl: 'ook als optie', en: 'options too' },
+  'filter.dietOptieHint': {
+    nl: 'Ook recepten die dit als optie aanbieden (vega-optie, vegan-optie, glutenvrij-optie).',
+    en: 'Also recipes that offer it as an option (veggie, vegan or gluten-free option).',
+  },
+  'filter.vegan-optie': { nl: 'Vegan-optie', en: 'Vegan option' },
+  'filter.glutenvrij-optie': { nl: 'Glutenvrij-optie', en: 'Gluten-free option' },
+  'tag.vegan-optie': { nl: 'vegan-optie', en: 'vegan option' },
+  'tag.glutenvrij-optie': { nl: 'glutenvrij-optie', en: 'gluten-free option' },
+  // Recipe detail: the diet chips under the title.
+  'recipe.diet': { nl: 'Dieet', en: 'Diet' },
+  'recipe.dietProbably': { nl: 'waarschijnlijk', en: 'probably' },
+
   // --- Recipes list: search placeholder (bilingual now), groups + filtered count ---
   'list.search': { nl: 'Zoek op naam of ingrediënt', en: 'Search by name or ingredient' },
   'list.filtered': { nl: '{n} van {total} recepten', en: '{n} of {total} recipes' },

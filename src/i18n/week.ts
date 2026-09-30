@@ -14,7 +14,7 @@ export const week: Dict = {
   'more.inboxHint': { nl: 'Ontvangen recepten en aanpassingen', en: 'Received recipes and adjustments' },
 
   // --- Meer: household size (spec §0 "household.servings") ---
-  'more.household': { nl: 'Huishouden', en: 'Household' },
+  'more.household': { nl: 'Aantal personen', en: 'Number of people' },
   'more.householdHint': { nl: 'Nieuwe gerechten in je week starten met dit aantal personen.', en: 'New dishes in your week start with this many people.' },
   'more.householdValue': { nl: '{n} pers.', en: '{n} people' },
   'more.householdLess': { nl: 'Minder personen', en: 'Fewer people' },

@@ -2,6 +2,8 @@
 // servings scaler, Koken / Deel, "+ Deze week" (phase 4), ★, ingredient lines through the dictionary (scaled, with
 // "Koppel ingrediënt"), numbered steps with timer chips (°F when enabled), "Bij dit gerecht",
 // notes per profile (autosave), and own → Bewerk / Verwijder, classic → "Maak eigen kopie".
+// Phase 5 (docs/phase-5-spec.md A.3): diet chips under the title (vegetarisch · vegan · glutenvrij
+// and the -optie tags); for own recipes derived live from the lines, "waarschijnlijk" when unsure.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { IngredientList } from '@/components/LineView';
@@ -27,14 +29,48 @@ import {
   setNote,
   toggleFavorite,
 } from '@/db/repo';
+import { DIET_ROW_TAGS, OPTIE_TAG, tagTextLabel } from '@/components/FilterChips';
 import { dictionary } from '@/dictionary';
-import { hasLang, pickText, type Lang, type Recipe } from '@/domain/model';
+import { DIET_TAGS, dietTags, type DietTag } from '@/domain/diet';
+import type { Dictionary } from '@/domain/dictionary';
+import { hasLang, pickText, type Lang, type Line, type Recipe } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
 import { navigate } from '@/router';
 
 const NOTE_DEBOUNCE_MS = 600;
+
+/** One diet chip on the detail page: the tag and whether it is only probable ("waarschijnlijk"). */
+interface DietChip {
+  tag: string;
+  unsure: boolean;
+}
+
+/**
+ * The diet chips under the title (docs/phase-5-spec.md A.3). An untouched classic shows its
+ * stored tags (derived from the ingredients at build time, tools/derive-tags.ts). An own or
+ * received recipe — and a classic whose lines were adjusted (an override with `lines`, or a
+ * hand-linked ingredient) — shows its stored diet tags plus what `dietTags` finds in its
+ * effective lines right now; a tag that is not stored and rests on lines the dictionary cannot
+ * judge is marked "waarschijnlijk". The -optie tags (vega-optie, …) are shown as stored, after
+ * the diet tags.
+ */
+function dietChipsFor(recipe: Recipe, lines: readonly Line[], dict: Dictionary, linesAdjusted: boolean): DietChip[] {
+  const stored = new Set(recipe.tags);
+  const out: DietChip[] = [];
+  if (recipe.origin.kind === 'builtin' && !linesAdjusted) {
+    for (const tag of DIET_TAGS) if (stored.has(tag)) out.push({ tag, unsure: false });
+  } else {
+    const facts = dietTags(lines, dict);
+    for (const tag of DIET_TAGS) {
+      if (stored.has(tag)) out.push({ tag, unsure: false });
+      else if (facts[tag] === true) out.push({ tag, unsure: facts.unsure.includes(tag as DietTag) });
+    }
+  }
+  for (const tag of DIET_TAGS) if (stored.has(OPTIE_TAG[tag])) out.push({ tag: OPTIE_TAG[tag], unsure: false });
+  return out;
+}
 
 function originLine(r: Recipe, l: 'nl' | 'en', all: Recipe[] | undefined): string {
   const o = r.origin;
@@ -64,6 +100,11 @@ export function RecipeScreen(props: { id: string }) {
   const stats = useLive(() => cookStats(id), [id]);
   const all = useLive(allRecipes, []);
   const lines = useRecipeLines(recipe);
+  // A classic whose ingredient lines differ from the shipped ones: an override patch with
+  // `lines`, or a hand-linked ingredient (line override). Its diet chips are then derived live.
+  const override = useLive(() => (isBuiltinId(id) ? getOverride(id) : Promise.resolve(undefined)), [id]);
+  // (applyLineOverrides copies the array but keeps the untouched line objects, hence the per-line check.)
+  const linesAdjusted = Array.isArray(override?.patch?.lines) || (!!recipe && lines.some((ln, i) => ln !== recipe.lines[i]));
   const fahrenheit = useFahrenheit();
   const dict = dictionary.value;
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -156,6 +197,9 @@ export function RecipeScreen(props: { id: string }) {
 
   const category = recipe?.category ? dict.category(recipe.category) : undefined;
   const categoryName = category ? category[l] : recipe?.category ?? '';
+  // Phase 5: diet chips under the title; the generic tag list below leaves those tags out.
+  const dietChips = useMemo(() => (recipe ? dietChipsFor(recipe, lines, dict, linesAdjusted) : []), [recipe, lines, dict, linesAdjusted]);
+  const otherTags = recipe ? recipe.tags.filter((tag) => !DIET_ROW_TAGS.has(tag)) : [];
   // Curator badge: the English edition of a classic is a machine translation until someone improves
   // it (the editor's override patch then sets text.en = 'human', src/screens/EditScreen.tsx).
   const machineEn = !!recipe && l === 'en' && recipe.text?.en === 'llm';
@@ -196,16 +240,21 @@ export function RecipeScreen(props: { id: string }) {
     }
   }
 
-  /** Own/received recipes: saved in the recipe; classics: stored as an override patch {category}. */
+  /**
+   * Own/received recipes: saved in the recipe; classics: stored as an override patch {category}.
+   * Either way `metaManual: true` rides along (phase-5 A.4): a category chosen here by hand is a
+   * manual choice, so the editor's auto-suggestion and "Controleer mijn recepten" leave it alone
+   * (same shape as EditScreen.buildOverridePatch).
+   */
   async function onCategory(cat: string) {
     if (!recipe || catBusy) return;
     setCatBusy(true);
     try {
       if (isBuiltinId(recipe.id)) {
         const existing = await getOverride(recipe.id);
-        await saveOverride({ baseId: recipe.id, patch: { ...(existing?.patch ?? {}), category: cat }, by: profile?.name ?? null });
+        await saveOverride({ baseId: recipe.id, patch: { ...(existing?.patch ?? {}), category: cat, metaManual: true }, by: profile?.name ?? null });
       } else {
-        await saveUserRecipe({ ...recipe, category: cat });
+        await saveUserRecipe({ ...recipe, category: cat, metaManual: true });
       }
       setEditCat(false);
     } catch (e) {
@@ -238,6 +287,17 @@ export function RecipeScreen(props: { id: string }) {
               </button>
             </div>
 
+            {dietChips.length > 0 && (
+              <div class="detail-diet" role="list" aria-label={t('recipe.diet')}>
+                {dietChips.map((c) => (
+                  <span key={c.tag} role="listitem" class={'tag tag-diet' + (c.unsure ? ' tag-unsure' : '') + (c.tag.endsWith('-optie') ? ' tag-optie' : '')}>
+                    {tagTextLabel(c.tag)}
+                    {c.unsure && <span class="tag-unsure-note"> · {t('recipe.dietProbably')}</span>}
+                  </span>
+                ))}
+              </div>
+            )}
+
             <div class="detail-cat">
               {editCat ? (
                 <label class="detail-cat-edit">
@@ -265,9 +325,9 @@ export function RecipeScreen(props: { id: string }) {
                   <button type="button" class="link-btn" onClick={() => setEditCat(true)}>
                     {t('recipe.changeCategory')}
                   </button>
-                  {recipe.tags.length > 0 && (
+                  {otherTags.length > 0 && (
                     <span class="tags">
-                      {recipe.tags.map((tag) => (
+                      {otherTags.map((tag) => (
                         <span key={tag} class="tag">
                           {tagLabel(tag)}
                         </span>

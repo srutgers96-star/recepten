@@ -6941,7 +6941,7 @@
         "name": "arachideolie",
         "confidence": 1
       },
-      "nl": "1¼ dl arachideolie",
+      "nl": "1,25 dl arachideolie",
       "en": "125 ml groundnut oil"
     },
     {
@@ -6963,7 +6963,7 @@
         ],
         "confidence": 1
       },
-      "nl": "1¼ dl droge witte wijn",
+      "nl": "1,25 dl droge witte wijn",
       "en": "125 ml dry white wine"
     },
     {
@@ -6981,7 +6981,7 @@
         "name": "water",
         "confidence": 1
       },
-      "nl": "1¼ dl water",
+      "nl": "1,25 dl water",
       "en": "125 ml water"
     },
     {
@@ -10519,7 +10519,7 @@
         "name": "sherry",
         "confidence": 1
       },
-      "nl": "1¼ dl sherry",
+      "nl": "1,25 dl sherry",
       "en": "125 ml sherry"
     },
     {
@@ -10594,8 +10594,8 @@
         "name": "aardappelen",
         "confidence": 1
       },
-      "nl": "1½ kg aardappelen",
-      "en": "1½ kg potatoes"
+      "nl": "1,5 kg aardappelen",
+      "en": "1.5 kg potatoes"
     },
     {
       "raw": "1½ kg aardappelen [stukken] (of instant puree)",
@@ -10629,8 +10629,8 @@
         "altMode": "or",
         "confidence": 1
       },
-      "nl": "1½ kg aardappelen (of aardappelpuree), stukken",
-      "en": "1½ kg potatoes (or mashed potato), pieces"
+      "nl": "1,5 kg aardappelen (of aardappelpuree), stukken",
+      "en": "1.5 kg potatoes (or mashed potato), pieces"
     },
     {
       "raw": "1½ kg aardappels [plakjes]",
@@ -10651,8 +10651,8 @@
         },
         "confidence": 1
       },
-      "nl": "1½ kg aardappelen, plakjes",
-      "en": "1½ kg potatoes, sliced"
+      "nl": "1,5 kg aardappelen, plakjes",
+      "en": "1.5 kg potatoes, sliced"
     },
     {
       "raw": "1½ kg spinazie",
@@ -10669,8 +10669,8 @@
         "name": "spinazie",
         "confidence": 1
       },
-      "nl": "1½ kg spinazie",
-      "en": "1½ kg spinach"
+      "nl": "1,5 kg spinazie",
+      "en": "1.5 kg spinach"
     },
     {
       "raw": "1½ ltr kippenbouillon (pot)",
@@ -10691,8 +10691,8 @@
         },
         "confidence": 1
       },
-      "nl": "1½ l kippenbouillon (pot)",
-      "en": "1½ l chicken stock (jar)"
+      "nl": "1,5 l kippenbouillon (pot)",
+      "en": "1.5 l chicken stock (jar)"
     },
     {
       "raw": "1½ tl gedroogde dragon",
@@ -16507,7 +16507,7 @@
         "name": "kippenbouillon",
         "confidence": 1
       },
-      "nl": "2½ dl kippenbouillon",
+      "nl": "2,5 dl kippenbouillon",
       "en": "250 ml chicken stock"
     },
     {
@@ -16528,7 +16528,7 @@
         ],
         "confidence": 1
       },
-      "nl": "2½ dl rode wijn",
+      "nl": "2,5 dl rode wijn",
       "en": "250 ml red wine"
     },
     {
@@ -16546,7 +16546,7 @@
         "name": "santen",
         "confidence": 1
       },
-      "nl": "2½ dl santen",
+      "nl": "2,5 dl santen",
       "en": "250 ml coconut cream"
     },
     {
@@ -16564,7 +16564,7 @@
         "name": "tomatenpuree",
         "confidence": 1
       },
-      "nl": "2½ dl tomatenpuree",
+      "nl": "2,5 dl tomatenpuree",
       "en": "250 ml tomato purée"
     },
     {
@@ -16582,7 +16582,7 @@
         "name": "water",
         "confidence": 1
       },
-      "nl": "2½ dl water",
+      "nl": "2,5 dl water",
       "en": "250 ml water"
     },
     {
@@ -16600,8 +16600,8 @@
         "name": "water",
         "confidence": 1
       },
-      "nl": "2½ l water",
-      "en": "2½ l water"
+      "nl": "2,5 l water",
+      "en": "2.5 l water"
     },
     {
       "raw": "2–3 el koriander [gesnipperd]",
@@ -17810,7 +17810,7 @@
         ],
         "confidence": 1
       },
-      "nl": "3¾ dl rode wijn",
+      "nl": "3,75 dl rode wijn",
       "en": "375 ml red wine"
     },
     {

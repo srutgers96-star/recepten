@@ -27,8 +27,32 @@ export interface ValidationResult {
   stats: { recipes: number; lines: number; resolved?: number; translated?: number };
 }
 
-/** The tag vocabulary of docs/phase-2-spec.md §1 (`recipes.json` → `tags`). */
-export const RECIPE_TAGS: readonly string[] = ['vegetarisch', 'vega-optie', 'snel', 'oven', 'wok', 'kids', 'wereld', 'feest', 'zomer', 'winter'];
+/**
+ * The tag vocabulary of docs/phase-2-spec.md §1 (`recipes.json` → `tags`) plus the phase-5 diet
+ * tags (PLAN.md §0 "Dieet-categorieën": vegan, glutenvrij and their "-optie" variants).
+ */
+export const RECIPE_TAGS: readonly string[] = [
+  'vegetarisch',
+  'vega-optie',
+  'vegan',
+  'vegan-optie',
+  'glutenvrij',
+  'glutenvrij-optie',
+  'snel',
+  'oven',
+  'wok',
+  'kids',
+  'wereld',
+  'feest',
+  'zomer',
+  'winter',
+];
+
+/**
+ * Ingredient diet flags (docs/phase-5-spec.md A.1). Required on every entry once ANY entry has
+ * them: an error when some entries carry the flag and others do not (a half-merged slice).
+ */
+export const INGREDIENT_DIET_FLAGS: readonly string[] = ['vegan', 'gluten'];
 
 /** `Line.part` values (src/domain/model.ts `LinePart`). */
 export const LINE_PARTS: readonly string[] = ['sap', 'rasp', 'rasp-en-sap', 'wit', 'geel', 'blaadjes'];
@@ -420,8 +444,9 @@ export function validateSchema2(data: unknown, refs?: DictionaryRefs): Validatio
 //
 // Errors: unique slug ids per file, required names, unit groups / qualifier kinds known, `{n}`
 // balanced in prep templates, ingredient aisle / defaultUnit / buyUnit / gramsPer keys known,
-// staple/veg booleans, a Dutch name or alias claimed by two ingredients (the parser could only
-// pick one). Warnings: an English name claimed twice (English input is best effort).
+// staple/veg booleans, vegan/gluten booleans on every entry once any entry has them (phase 5),
+// a Dutch name or alias claimed by two ingredients (the parser could only pick one). Warnings:
+// an English name claimed twice (English input is best effort), no diet flags at all yet.
 
 function checkIds(items: unknown, file: string, errors: string[]): Record<string, unknown>[] {
   if (!Array.isArray(items)) {
@@ -521,7 +546,12 @@ export function validateDictionary(data: DictionaryData): ValidationResult {
       else for (const [k, v] of Object.entries(gramsPer)) if (!unitOrPiece(k) || typeof v !== 'number' || !(v > 0)) errors.push(`${label}: gramsPer.${k} must map a unit id (or "stuk") to a positive number.`);
     }
     for (const k of ['staple', 'veg']) if (typeof ing[k] !== 'boolean') errors.push(`${label}: "${k}" must be a boolean.`);
-    if (ing['perishable'] !== undefined && typeof ing['perishable'] !== 'boolean') errors.push(`${label}: "perishable" must be a boolean.`);
+    for (const k of [...INGREDIENT_DIET_FLAGS, 'glutenUnsure', 'perishable']) {
+      if (ing[k] !== undefined && typeof ing[k] !== 'boolean') errors.push(`${label}: "${k}" must be a boolean.`);
+    }
+    if (ing['glutenUnsure'] !== undefined && ing['gluten'] === undefined) errors.push(`${label}: "glutenUnsure" needs a "gluten" flag next to it.`);
+    // src/domain/diet.ts treats `gluten: true` as a hard fact and never reads `glutenUnsure` then.
+    if (ing['gluten'] === true && ing['glutenUnsure'] === true) errors.push(`${label}: "gluten: true" is a fact; drop "glutenUnsure" or use "gluten": false, "glutenUnsure": true.`);
     const gloss = ing['gloss'];
     if (gloss !== undefined && (!isRecord(gloss) || typeof gloss['en'] !== 'string')) errors.push(`${label}: "gloss" must be { en }.`);
     if (ing['cut'] !== undefined && ing['cut'] !== 'slice' && ing['cut'] !== 'chop') errors.push(`${label}: "cut" must be slice | chop.`);
@@ -559,6 +589,17 @@ export function validateDictionary(data: DictionaryData): ValidationResult {
       const owner = enKeys.get(key);
       if (owner !== undefined && owner !== id) warnings.push(`${label}: English name ${JSON.stringify(n)} is also claimed by ${JSON.stringify(owner)}.`);
       else enKeys.set(key, id);
+    }
+  }
+
+  // Diet flags: all or none. Some entries flagged and others not means a half-merged slice.
+  for (const flag of INGREDIENT_DIET_FLAGS) {
+    const missing = ingredients.filter((ing) => ing[flag] === undefined);
+    if (missing.length > 0 && missing.length < ingredients.length) {
+      const ids = missing.slice(0, 10).map((ing) => JSON.stringify(ing['id'])).join(', ');
+      errors.push(`ingredients.json: "${flag}" is set on ${ingredients.length - missing.length} entries but missing on ${missing.length}: ${ids}${missing.length > 10 ? ', …' : ''}.`);
+    } else if (missing.length === ingredients.length && ingredients.length > 0) {
+      warnings.push(`ingredients.json: no entry has the "${flag}" flag yet (docs/phase-5-spec.md A.1); diet tags stay "unsure".`);
     }
   }
 

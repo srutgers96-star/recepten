@@ -20,6 +20,7 @@ import { legacyChoices, planImport, resolveImport, type ImportChoices, type Impo
 import type { ParsedShare } from '@/domain/share';
 import { aggregate, type ListItem } from '@/domain/aggregate';
 import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, normalizeServings, planHash, planHashAll, type Plan, type PlanItem } from '@/domain/planner';
+import { HOUSEHOLD_KEY, normalizeHousehold, type HouseholdSetting } from '@/domain/household';
 import { db, getSetting, setSetting } from './db';
 import type { BackupBundle, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Setting } from './model';
 
@@ -890,6 +891,42 @@ export async function getHouseholdServings(): Promise<number> {
 
 export async function setHouseholdServings(n: number): Promise<void> {
   await setSetting(HOUSEHOLD_SERVINGS_KEY, normalizeServings(n));
+}
+
+// --- Household (docs/phase-5-spec.md block A.8) -----------------------------------------------------
+
+/** Setting 'household' ({ name, members }): the household name and the hand-added members (src/domain/household.ts). */
+export async function getHousehold(): Promise<HouseholdSetting> {
+  return normalizeHousehold(await getSetting<unknown>(HOUSEHOLD_KEY, null));
+}
+
+export async function setHousehold(h: HouseholdSetting): Promise<void> {
+  await setSetting(HOUSEHOLD_KEY, normalizeHousehold(h));
+}
+
+// --- Reset (docs/phase-5-spec.md 30-09 "Reset app") ------------------------------------------------
+
+/**
+ * "App resetten": clears EVERY Dexie table (builtins included: `ensureBuiltins` re-seeds them on
+ * the next boot because settings.dataVersion is gone too) and every `recepten.*` localStorage key
+ * (language, theme mirror, chip selections, device-check answers, fired timers). The service
+ * worker and its caches are untouched. The caller reloads to '#/' afterwards: the in-memory
+ * signals (profiles, dictionary, theme) are stale until then, and onboarding takes over.
+ */
+export async function resetEverything(): Promise<void> {
+  await db.transaction('rw', db.tables, async () => {
+    for (const table of db.tables) await table.clear();
+  });
+  try {
+    const keys: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('recepten.')) keys.push(k);
+    }
+    for (const k of keys) localStorage.removeItem(k);
+  } catch {
+    /* storage may be unavailable (private mode) */
+  }
 }
 
 /** The current plan; an empty one (not stored) when there is none. */

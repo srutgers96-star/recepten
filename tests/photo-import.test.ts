@@ -1,6 +1,6 @@
 // buildImportPrompt / parsePlainRecipe (docs/phase-2-spec.md §5 "Foto-import").
 import { describe, expect, it } from 'vitest';
-import { buildImportPrompt, parseBilingualPlain, parsePlainRecipe } from '../src/domain/photo-import';
+import { buildImportPrompt, categoryIdFromWord, parseBilingualPlain, parsePlainRecipe, tagIdsFromText } from '../src/domain/photo-import';
 
 describe('buildImportPrompt', () => {
   it('describes the plain format in both languages', () => {
@@ -14,6 +14,24 @@ describe('buildImportPrompt', () => {
     expect(en).toContain('## Ingredients');
     expect(en).toContain('## Method');
     expect(en).toContain('Servings:');
+  });
+
+  it('asks for the optional category and labels lines and lists the vocabularies', () => {
+    const nl = buildImportPrompt('nl', { bilingual: false });
+    expect(nl).toContain('Categorie: pasta');
+    expect(nl).toContain('Labels: vegetarisch, snel');
+    expect(nl).toContain('hartige-taart');
+    expect(nl).toContain('glutenvrij-optie');
+    const en = buildImportPrompt('en', { bilingual: false });
+    expect(en).toContain('Category: pasta');
+    expect(en).toContain('Tags: vegetarian, quick');
+    for (const l of ['nl', 'en'] as const) {
+      const p = buildImportPrompt(l);
+      expect(p).toContain('Categorie: pasta');
+      expect(p).toContain('Category: pasta');
+      expect(p).toContain('Labels:');
+      expect(p).toContain('Tags:');
+    }
   });
 });
 
@@ -44,6 +62,35 @@ describe('parsePlainRecipe', () => {
     expect(r?.lines).toEqual(['Dressing:', '2 el olie']);
   });
 
+  it('reads Categorie:/Labels: and Category:/Tags: lines into ids, dropping unknown words', () => {
+    const nl = parsePlainRecipe('# Uiensoep\nPorties: 6\nCategorie: Soep\nLabels: vegetarisch, snel, onbekend\n## Ingrediënten\n4 uien\n## Bereiding\nKook.');
+    expect(nl).toEqual({ name: 'Uiensoep', servings: 6, category: 'soep', tags: ['vegetarisch', 'snel'], lines: ['4 uien'], steps: ['Kook.'] });
+    const en = parsePlainRecipe('# Pie\n**Category:** Savoury pie\nTags: vegetarian; quick and oven\n## Ingredients\n1 egg\n## Method\nBake.');
+    expect(en?.category).toBe('hartige-taart');
+    expect(en?.tags).toEqual(['vegetarisch', 'snel', 'oven']);
+    // Unknown category: no key at all; no lines: no keys at all (the editor keeps its own values).
+    const odd = parsePlainRecipe('# X\nCategorie: Toetje\nLabels: -\n## Ingrediënten\n1 ei\n## Bereiding\nRoer.');
+    expect(odd).not.toHaveProperty('category');
+    expect(odd?.tags).toEqual([]);
+    const none = parsePlainRecipe('# X\n## Ingrediënten\n1 ei\n## Bereiding\nLabels: dit is een stap.');
+    expect(none).not.toHaveProperty('category');
+    expect(none).not.toHaveProperty('tags');
+    expect(none?.steps).toEqual(['Labels: dit is een stap.']);
+  });
+
+  it('maps category and tag words in both languages, tolerant of case, diacritics and decoration', () => {
+    expect(categoryIdFromWord('Wok & noedels')).toBe('wok-noedels');
+    expect(categoryIdFromWord('Wok & noodles')).toBe('wok-noedels');
+    expect(categoryIdFromWord('Pasta (vegetarisch)')).toBe('pasta');
+    expect(categoryIdFromWord('hartige-taart')).toBe('hartige-taart');
+    expect(categoryIdFromWord('Stamppot (Dutch mash)')).toBe('stamppot');
+    expect(categoryIdFromWord('Dessert')).toBeUndefined();
+    expect(tagIdsFromText('gluten-free, plant-based, kids')).toEqual(['glutenvrij', 'vegan', 'kids']);
+    expect(tagIdsFromText('Vegetarisch · Zomer · vegetarisch')).toEqual(['vegetarisch', 'zomer']);
+    expect(tagIdsFromText('veggie option / world')).toEqual(['vega-optie', 'wereld']);
+    expect(tagIdsFromText('')).toEqual([]);
+  });
+
   it('returns null for text without a recipe', () => {
     expect(parsePlainRecipe('')).toBeNull();
     expect(parsePlainRecipe('   \n\n')).toBeNull();
@@ -71,6 +118,15 @@ const NL_BLOCK = '# Uiensoep\nPorties: 6\n## Ingrediënten\n4 uien\n1 l bouillon
 const EN_BLOCK = '# Onion soup\nServings: 6\n## Ingredients\n4 onions\n1 l stock\n## Method\nSlice the onions.\n\nSimmer for 20 minutes.\n';
 
 describe('parseBilingualPlain', () => {
+  it('carries category and tags per block', () => {
+    const r = parseBilingualPlain(`=== NL ===\n# Soep\nCategorie: soep\nLabels: snel\n## Ingrediënten\n1 ui\n## Bereiding\nKook.\n=== EN ===\n# Soup\nCategory: Soup\nTags: quick\n## Ingredients\n1 onion\n## Method\nBoil.`);
+    expect(r.mismatch).toBeUndefined();
+    expect(r.nl?.category).toBe('soep');
+    expect(r.en?.category).toBe('soep');
+    expect(r.nl?.tags).toEqual(['snel']);
+    expect(r.en?.tags).toEqual(['snel']);
+  });
+
   it('reads two blocks', () => {
     const r = parseBilingualPlain(`=== NL ===\n${NL_BLOCK}\n=== EN ===\n${EN_BLOCK}`);
     expect(r.mismatch).toBeUndefined();

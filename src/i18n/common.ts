@@ -35,7 +35,6 @@ export const common: Dict = {
   'common.offline': { nl: 'offline', en: 'offline' },
   'common.from': { nl: 'van {name}', en: 'from {name}' },
 
-  'list.search': { nl: 'Zoek op naam', en: 'Search by name' },
   'list.empty': { nl: 'Geen recepten gevonden', en: 'No recipes found' },
 
   'check.title': { nl: 'Apparaatcheck', en: 'Device check' },

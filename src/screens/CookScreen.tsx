@@ -160,6 +160,9 @@ export function CookScreen(props: { id: string }) {
     setBusy(true);
     try {
       if (profile) {
+        // Phase 5 (docs/phase-5-spec.md A.8): the cook-log entry is attributed to a household
+        // member; a local member's id IS the profile id (src/domain/household.ts), so `profileId`
+        // stays the field and no migration is needed.
         await logCooked({
           recipeId: id,
           profileId: profile.id,

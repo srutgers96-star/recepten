@@ -58,6 +58,11 @@ export interface Ingredient {
   gramsPer?: Record<string, number>;
   staple: boolean;
   veg: boolean;
+  /** Diet flags (docs/phase-5-spec.md block A.1): plant-based; contains gluten. Missing = unknown (`diet.ts` says "unsure"). */
+  vegan?: boolean;
+  gluten?: boolean;
+  /** `gluten` is a best guess (a stock cube, a sauce): diet.ts treats the line as unsure. */
+  glutenUnsure?: boolean;
   perishable?: boolean;
   gloss?: { en: string };
   /** 'slice' = "fijngesneden" means finely sliced (onion, leek, chicken); default = finely chopped. */

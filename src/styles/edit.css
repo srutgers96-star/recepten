@@ -602,3 +602,266 @@ button.lc-chip:disabled {
 .edit-prompt-details textarea.edit-prompt {
   margin-top: 6px;
 }
+
+/* ---------- Editor: "Categorie" + "Dieet & labels" rows (phase 5 A.4, src/components/MetaRows.tsx) ---------- */
+
+.edit-meta {
+  margin: 0 0 16px;
+}
+
+.edit-meta .edit-hint {
+  margin-top: 0;
+}
+
+.meta-rows .field {
+  margin-bottom: 12px;
+}
+
+.meta-cat select.input {
+  width: 100%;
+}
+
+/* Tag chips: 44 px pills, wrapping; a diet tag the dictionary only guesses at is dashed with a "?". */
+.meta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.meta-chip:active {
+  background: var(--press);
+}
+
+.meta-chip:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.meta-chip.on {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  border-color: transparent;
+}
+
+.meta-chip.diet.on {
+  background: var(--rosemary);
+  color: #fff;
+}
+
+.meta-chip.maybe {
+  border-style: dashed;
+  border-color: var(--rosemary);
+  color: var(--rosemary);
+}
+
+.meta-chip-q {
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.meta-hint {
+  margin: 8px 0 0;
+}
+
+/* "Voorstel: Pasta · vegetarisch, snel  [Overnemen]" under the rows. */
+.meta-suggest {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px dashed var(--line);
+  background: var(--card);
+}
+
+.meta-suggest-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.meta-suggest .btn {
+  flex: none;
+}
+
+/* ---------- "Controleer mijn recepten" (/more/check-recipes, phase 5 A.6) ---------- */
+
+.cr-intro {
+  margin: 12px 0 8px;
+}
+
+.cr-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 12px;
+}
+
+.cr-count {
+  font-weight: 700;
+}
+
+.cr-summary .btn {
+  flex: none;
+}
+
+.cr-card {
+  margin-bottom: 12px;
+}
+
+.cr-card.cr-skipped {
+  opacity: 0.8;
+}
+
+.cr-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cr-name {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cr-badges {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  margin-top: 4px;
+  max-width: 45%;
+}
+
+.cr-badges .badge {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* "Nu: … / Voorstel: …" as a two-column definition list that stacks at 360 px. */
+.cr-compare {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 10px;
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.cr-compare dt {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  padding-top: 2px;
+}
+
+.cr-compare dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.cr-compare .cr-suggested {
+  font-weight: 600;
+}
+
+.cr-actions {
+  margin: 10px 0 0;
+  flex-wrap: wrap;
+}
+
+.cr-actions .btn {
+  flex: 1 1 auto;
+}
+
+.cr-edit {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.cr-finished {
+  margin: 4px 0 12px;
+}
+
+.cr-done {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.cr-done li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.cr-tick {
+  color: var(--rosemary);
+  font-weight: 700;
+}
+
+.cr-done-name {
+  font-weight: 600;
+}
+
+.cr-skipped-block {
+  margin: 4px 0 12px;
+}
+
+.cr-skipped-block > .btn {
+  margin-bottom: 10px;
+}
+
+/* "Eerder zelf gekozen": the collapsed block of hand-chosen recipes (never in "Alles overnemen"). */
+.cr-manual-hint {
+  margin: 0 0 10px;
+}

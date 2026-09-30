@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "dataVersion": 2,
-  "generatedAt": "2026-09-29T11:24:38.659Z",
+  "dataVersion": 3,
+  "generatedAt": "2026-09-30T19:26:06.198Z",
   "recipes": [
     {
       "schema": 2,
@@ -18,7 +18,8 @@
       },
       "tags": [
         "vegetarisch",
-        "oven"
+        "oven",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -175,7 +176,8 @@
       },
       "tags": [
         "snel",
-        "oven"
+        "oven",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -310,7 +312,8 @@
       },
       "tags": [
         "vegetarisch",
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -419,7 +422,8 @@
       },
       "tags": [
         "vega-optie",
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -608,7 +612,8 @@
       },
       "tags": [
         "oven",
-        "wereld"
+        "wereld",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -1229,7 +1234,9 @@
       "tags": [
         "vegetarisch",
         "snel",
-        "zomer"
+        "zomer",
+        "vegan",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -1592,7 +1599,8 @@
         "vega-optie",
         "oven",
         "kids",
-        "winter"
+        "winter",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -2525,7 +2533,8 @@
       },
       "tags": [
         "vegetarisch",
-        "winter"
+        "winter",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -3340,7 +3349,8 @@
         "en": "Courgette mash with salmon"
       },
       "tags": [
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -4118,7 +4128,8 @@
       },
       "tags": [
         "vegetarisch",
-        "wereld"
+        "wereld",
+        "vegan"
       ],
       "servings": 4,
       "lines": [
@@ -4659,7 +4670,8 @@
         "en": "Dutch pea soup"
       },
       "tags": [
-        "winter"
+        "winter",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -5768,7 +5780,8 @@
       },
       "tags": [
         "snel",
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -6959,7 +6972,8 @@
         "en": "Pan-fried chicken breast with chorizo in a creamy mustard sauce"
       },
       "tags": [
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -8131,7 +8145,8 @@
         "en": "Mince and salami bake"
       },
       "tags": [
-        "oven"
+        "oven",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -8713,7 +8728,8 @@
         "en": "Marinated chicken breast with cashew nuts"
       },
       "tags": [
-        "wereld"
+        "wereld",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -9433,7 +9449,8 @@
         "en": "Braised chicken with tomato and coconut"
       },
       "tags": [
-        "wereld"
+        "wereld",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -9825,7 +9842,8 @@
       },
       "tags": [
         "vegetarisch",
-        "oven"
+        "oven",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -10855,7 +10873,8 @@
       "tags": [
         "vegetarisch",
         "snel",
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -11070,7 +11089,8 @@
       "tags": [
         "snel",
         "wok",
-        "wereld"
+        "wereld",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -11277,7 +11297,8 @@
       },
       "tags": [
         "vega-optie",
-        "wereld"
+        "wereld",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -12017,7 +12038,8 @@
         "en": "Hete bliksem with pork belly and mustard sauce"
       },
       "tags": [
-        "winter"
+        "winter",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -12690,7 +12712,8 @@
         "en": "Husselpot"
       },
       "tags": [
-        "winter"
+        "winter",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -13687,7 +13710,8 @@
         "en": "Veal with spinach"
       },
       "tags": [
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -13959,7 +13983,8 @@
         "en": "Turkey and green bean cocktail with yoghurt sauce"
       },
       "tags": [
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -15027,7 +15052,9 @@
         "nl": "Kip met sesamzaad",
         "en": "Chicken with sesame seeds"
       },
-      "tags": [],
+      "tags": [
+        "glutenvrij"
+      ],
       "servings": 4,
       "lines": [
         {
@@ -15160,7 +15187,8 @@
         "en": "Chicken and courgette salad with pesto"
       },
       "tags": [
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -15612,7 +15640,8 @@
         "en": "Chicken, ham and sun-dried tomato salad"
       },
       "tags": [
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -16806,7 +16835,8 @@
       },
       "tags": [
         "snel",
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -17347,7 +17377,8 @@
       },
       "tags": [
         "vegetarisch",
-        "winter"
+        "winter",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -17939,7 +17970,8 @@
       },
       "tags": [
         "wok",
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -19962,7 +19994,8 @@
       },
       "tags": [
         "oven",
-        "kids"
+        "kids",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -20148,7 +20181,8 @@
       "tags": [
         "vegetarisch",
         "wereld",
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -20336,7 +20370,8 @@
       },
       "tags": [
         "snel",
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -20812,7 +20847,8 @@
       "tags": [
         "oven",
         "wereld",
-        "vega-optie"
+        "vega-optie",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -24267,7 +24303,8 @@
       "tags": [
         "vegetarisch",
         "snel",
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -26200,7 +26237,9 @@
       "tags": [
         "vegetarisch",
         "snel",
-        "zomer"
+        "zomer",
+        "vegan",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -27783,7 +27822,8 @@
       },
       "tags": [
         "snel",
-        "kids"
+        "kids",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -27919,7 +27959,8 @@
         "en": "Risotto with bacon and spring onion"
       },
       "tags": [
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -28261,7 +28302,8 @@
         "vegetarisch",
         "wok",
         "wereld",
-        "snel"
+        "snel",
+        "vegan"
       ],
       "servings": 4,
       "lines": [
@@ -28493,7 +28535,8 @@
       "tags": [
         "snel",
         "vega-optie",
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -28668,7 +28711,8 @@
       "tags": [
         "vegetarisch",
         "wok",
-        "snel"
+        "snel",
+        "vegan"
       ],
       "servings": 4,
       "lines": [
@@ -28866,7 +28910,8 @@
       },
       "tags": [
         "wok",
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -29081,7 +29126,8 @@
       },
       "tags": [
         "wok",
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -29338,7 +29384,8 @@
       "tags": [
         "vegetarisch",
         "wok",
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -29528,7 +29575,8 @@
       "tags": [
         "wok",
         "snel",
-        "vega-optie"
+        "vega-optie",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -29731,7 +29779,8 @@
         "vegetarisch",
         "wok",
         "wereld",
-        "snel"
+        "snel",
+        "vegan"
       ],
       "servings": 4,
       "lines": [
@@ -29991,7 +30040,8 @@
       "tags": [
         "oven",
         "feest",
-        "winter"
+        "winter",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -30386,7 +30436,9 @@
         "nl": "Romige vissaus met spekjes en rijst",
         "en": "Creamy fish and bacon sauce with rice"
       },
-      "tags": [],
+      "tags": [
+        "glutenvrij"
+      ],
       "servings": 4,
       "lines": [
         {
@@ -30809,7 +30861,8 @@
       },
       "tags": [
         "snel",
-        "vegetarisch"
+        "vegetarisch",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -31453,7 +31506,8 @@
       },
       "tags": [
         "wereld",
-        "winter"
+        "winter",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -31881,7 +31935,8 @@
         "en": "Salade Niçoise"
       },
       "tags": [
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -32109,7 +32164,8 @@
       },
       "tags": [
         "snel",
-        "zomer"
+        "zomer",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -33299,7 +33355,9 @@
         "vegetarisch",
         "snel",
         "zomer",
-        "wereld"
+        "wereld",
+        "vegan",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -33475,7 +33533,8 @@
       },
       "tags": [
         "wereld",
-        "vega-optie"
+        "vega-optie",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -35925,7 +35984,8 @@
       "tags": [
         "vegetarisch",
         "oven",
-        "winter"
+        "winter",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -37734,7 +37794,9 @@
       "tags": [
         "vegetarisch",
         "snel",
-        "zomer"
+        "zomer",
+        "vegan",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -37826,7 +37888,8 @@
         "en": "Tuna with new potatoes"
       },
       "tags": [
-        "oven"
+        "oven",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -38020,7 +38083,8 @@
       },
       "tags": [
         "oven",
-        "vega-optie"
+        "vega-optie",
+        "vegetarisch"
       ],
       "servings": 4,
       "lines": [
@@ -39456,7 +39520,8 @@
       },
       "tags": [
         "snel",
-        "kids"
+        "kids",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -40429,7 +40494,8 @@
         "en": "Carrots with salami and raisins"
       },
       "tags": [
-        "snel"
+        "snel",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -41149,7 +41215,8 @@
         "en": "Salmon and sweetcorn bake"
       },
       "tags": [
-        "oven"
+        "oven",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [
@@ -41437,7 +41504,8 @@
       },
       "tags": [
         "vegetarisch",
-        "oven"
+        "oven",
+        "glutenvrij"
       ],
       "servings": 4,
       "lines": [

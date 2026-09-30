@@ -33,7 +33,8 @@ Binding for all agents. Contracts marked **CONTRACT** cross ownership boundaries
   bakken (bloem/suiker), diepvries, dranken, snacks-zoet, huishoudelijk, drogisterij, overig.
 - `ingredients.json` (the dictionary, ~400-450 entries): `{ id, nl: { one, many? }, en: { one, many? },
   aliases?: { nl?: string[], en?: string[] }, aisle, defaultUnit: 'stuk'|<unit id>|null, buyUnit?: string,
-  gramsPer?: Record<string, number>, staple: boolean, veg: boolean, perishable?: boolean, gloss?: { en: string },
+  gramsPer?: Record<string, number>, staple: boolean, veg: boolean, vegan: boolean, gluten: boolean, glutenUnsure?: true,
+  perishable?: boolean, gloss?: { en: string },
   cut?: 'slice'|'chop', unitNames?: Record<unitId, { nl?: {one, many?}, en?: {one, many?} }> }` (`unitNames`: how a unit
   of this product is called, foelie `{ stuk: { en: { one: 'blade' } } }` → "1 blade mace").
   Id rules: slug of the Dutch singular base noun (`ui`, `knoflook`, `rode-peper`, `zure-room`,
@@ -42,11 +43,13 @@ Binding for all agents. Contracts marked **CONTRACT** cross ownership boundaries
   `ui` + variant qualifier `rode`). Compound pantry items are entries (`zout-en-peper`,
   `olie-en-boter-om-in-te-bakken`, staple). Dutch-only products get a `gloss.en` ("rookworst — Dutch
   smoked sausage"). `staple` = pantry (zout, peper, olie, boter, suiker, bloem, azijn, sojasaus, bouillon-
-  blokje, kruiden gedroogd). `veg` = vegetarian ingredient.
+  blokje, kruiden gedroogd). `veg` = vegetarian ingredient; `vegan` = plant-based; `gluten` = contains gluten
+  (wheat products, pasta, couscous, bread, breadcrumbs, flour, soy sauce, beer); `glutenUnsure: true` marks a
+  best guess (stock cubes, sauces; docs/phase-5-spec.md A.1) — src/domain/diet.ts reports "waarschijnlijk" then.
 - `recipes.json` (`{ schema: 2, dataVersion: 2, generatedAt, recipes[] }`): every recipe gets `name.en`,
-  `steps[].text.en`, `servingTip.en` if present, `category`, `tags` (subset of: vegetarisch, vega-optie,
-  snel, oven, wok, kids, wereld, feest, zomer, winter), `time: { active, total }` (minutes, estimated from
-  the text), `text: { en: 'llm' }`, and structured `lines` (see §2). Quantities in the Dutch raw line are
+  `steps[].text.en`, `servingTip.en` if present, `category`, `tags` (subset of: vegetarisch, vega-optie, vegan,
+  vegan-optie, glutenvrij, glutenvrij-optie, snel, oven, wok, kids, wereld, feest, zomer, winter), `time: { active,
+  total }` (minutes, estimated from the text), `text: { en: 'llm' }`, and structured `lines` (see §2). Quantities in the Dutch raw line are
   the source of truth and are NEVER changed by the pass.
 - `data/llm/` — the batch outputs (`batch-01.json` …) committed as provenance; `tools/apply-llm-batch.ts`
   merges them. `data/README.md` documents all files.

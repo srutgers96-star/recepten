@@ -2,7 +2,8 @@
 // (switch, "+ profiel"), language, theme, confetti, "°F erbij", the
 // dictionary (counts + own ingredients with delete), and the links to "Stuur nieuwe naar …"
 // (unsent-changes badge), Opslag & back-up (backup-due badge), Het verhaal, Apparaatcheck, plus
-// "Over" (version, sha, channel, GitHub).
+// "Over" (version, sha, channel, GitHub). Phase 5: "Huishouden" (under the profile card) and
+// "Controleer mijn recepten" (docs/phase-5-spec.md A.6 / A.8).
 import { useEffect, useState } from 'preact/hooks';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo } from '@/components/AppInfo';
@@ -166,6 +167,8 @@ export function MoreScreen() {
           </div>
           <div class="menu" style="margin-top:8px">
             <MenuRow label={t('more.manageProfiles')} to="/more/profiles" />
+            {/* Phase 5 (docs/phase-5-spec.md A.8): the household (name + members). */}
+            <MenuRow label={t('more.householdRow')} sub={t('more.householdRowHint')} to="/more/household" />
           </div>
         </section>
 
@@ -246,6 +249,8 @@ export function MoreScreen() {
 
         <section class="section menu">
           <MenuRow label={t('more.sendNew')} sub={t('more.sendNewHint')} to="/share" badge={unsent > 0 ? String(unsent > 99 ? '99+' : unsent) : undefined} />
+          {/* Phase 5 (docs/phase-5-spec.md A.6): suggested category + diet tags per own recipe. */}
+          <MenuRow label={t('more.checkRecipes')} sub={t('more.checkRecipesHint')} to="/more/check-recipes" />
           <MenuRow label={t('more.storage')} to="/more/storage" badge={backupDue ? t('more.backupDue') : undefined} badgeTone="red" />
           <MenuRow label={t('more.story')} to="/story" />
           <MenuRow label={t('more.check')} to="/check" />
