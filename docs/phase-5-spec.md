@@ -85,12 +85,14 @@ Additions decided 2026-09-30 (Stijn):
    approximately/about/roughly ↔ ongeveer, to taste ↔ naar smaak, optional ↔ optioneel, divided ↔
    verdeeld, or more ↔ of meer, for serving ↔ om te serveren, at room temperature ↔ op kamertemperatuur,
    melted ↔ gesmolten, softened ↔ zacht, plus quantity+unit conversion inside notes ("approximately 1
-   pound" → "ongeveer 450 g").
+   pound" → "ongeveer 450 g"). A pack size in US units ("(15 oz)", "(28-ounce)") stays a converted
+   note (`note` en "15 oz" / nl "430 g"), not a `packSize` (decided 01-10: EN keeps the US text, and
+   the shopping list does not round US tins to packs).
 5. Tests: Gabi's line `1 medium eggplant (approximately 1 pound)` (EN column) → aubergine, middelgrote,
    note en "approximately 1 pound", NL render `1 middelgrote aubergine (ongeveer 450 g)`; Stijn's line
    `1 grote groene appel (gesneden in blokjes van ongeveer 2 cm breed)` → appel, grote+groene, prep via
    template or note NL only, EN render `1 large green apple (…)` with the note muted; `1 lb ground beef`
-   → gehakt 454 g; translation prompt for a recipe with 3 resolved + 1 unresolved line lists only the
+   → rundergehakt 454 g (`ground meat` → gehakt); translation prompt for a recipe with 3 resolved + 1 unresolved line lists only the
    unresolved line and the notes.
 
 6. **Dictionary hygiene (Stijn/Gabi 30-09)**: IngredientPicker "Nieuw ingrediënt" first checks whether

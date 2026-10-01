@@ -92,7 +92,8 @@ export const STAPLE_THRESHOLD = { g: 250, ml: 250, count: 5, package: 1 } as con
 
 const PM_UNIT = 'pm';
 const STUK = 'stuk';
-const SPOON_IDS = new Set(['el', 'tl', 'kop', 'glas']);
+// US cup / fluid ounce lines (phase 5 A-bis.4) aggregate like the Dutch spoon/cup units.
+const SPOON_IDS = new Set(['el', 'tl', 'kop', 'glas', 'cup', 'floz']);
 const METRIC_VOLUME = new Set(['ml', 'cl', 'dl', 'l']);
 const EPS = 1e-9;
 

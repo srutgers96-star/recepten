@@ -41,6 +41,12 @@ export const route = signal<Route>(parseHash('#/'));
  */
 export const pendingImport = signal<string | null>(null);
 
+/**
+ * Plain text of a file chosen in the Recipes "+" menu (A-bis.9), waiting for the Add screen's
+ * import box. The Add screen reads and clears it.
+ */
+export const pendingImportText = signal<string | null>(null);
+
 function stateIdx(): number {
   const s = history.state as NavState | null;
   return s && typeof s.idx === 'number' ? s.idx : 0;

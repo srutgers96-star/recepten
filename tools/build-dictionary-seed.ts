@@ -42,7 +42,7 @@ function readJson(path: string): unknown {
 }
 
 /**
- * The dictionary data as the Node tools see it: the five vocab files plus data/ingredients.json
+ * The dictionary data as the Node tools see it: the six vocab files (incl. note-phrases.json) plus data/ingredients.json
  * when it exists (empty list otherwise). `withIngredients: false` forces the empty list.
  */
 export function readDictionaryData(root: string, withIngredients = true): DictionaryData {
@@ -55,6 +55,7 @@ export function readDictionaryData(root: string, withIngredients = true): Dictio
     ingredients: withIngredients && existsSync(ingredientsPath) ? (readJson(ingredientsPath) as Ingredient[]) : [],
     aisles: readJson(d('aisles.json')) as DictionaryData['aisles'],
     categories: readJson(d('categories.json')) as DictionaryData['categories'],
+    notePhrases: readJson(d('note-phrases.json')) as DictionaryData['notePhrases'],
   };
 }
 

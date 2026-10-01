@@ -33,11 +33,11 @@ import { parseLineAuto } from '@/domain/parser';
 import { buildImportPrompt, parseBilingualPlain, type PlainRecipe } from '@/domain/photo-import';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { splitSteps } from '@/domain/steps';
-import { extractTokens } from '@/domain/token';
-import { applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation, type TranslatableLine } from '@/domain/translate-prompt';
+import { answeredSteps, applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation, type TranslatableLine } from '@/domain/translate-prompt';
 import { lang, t, tIn } from '@/i18n';
 import { activeProfile } from '@/profile';
-import { navigate, pendingImport, route } from '@/router';
+import { fileHasRecipes } from '@/file-import';
+import { navigate, pendingImport, pendingImportText, route } from '@/router';
 
 type Mode = 'nl' | 'en' | 'both';
 type LoadState = 'loading' | 'ready' | 'missing';
@@ -72,41 +72,6 @@ function withoutForeign(line: Line, l: Lang): Line {
   if (out.note && !hasLang(out.note, l)) out.note = null;
   if (out.prep && !hasLang(out.prep, l)) out.prep = null;
   return out;
-}
-
-function isRecord(v: unknown): v is Record<string, unknown> {
-  return typeof v === 'object' && v !== null && !Array.isArray(v);
-}
-
-/** True when a JSON value carries recipes in any shape the Inbox understands (envelope, export, patch, bare recipe). */
-function jsonHasRecipes(value: unknown, depth = 0): boolean {
-  if (depth > 3) return false;
-  if (Array.isArray(value)) return value.some((v) => jsonHasRecipes(v, depth + 1));
-  if (!isRecord(value)) return false;
-  if (typeof value.v === 'number' && typeof value.t === 'string') return true;
-  if (Array.isArray(value.userRecipes) || Array.isArray(value.recipes)) return true;
-  if (typeof value.baseId === 'string' && isRecord(value.patch)) return true;
-  return normalizeRecipe(value) !== null;
-}
-
-/**
- * "Kies bestand" (A-bis.9): does the file hold recipes (share tokens or JSON) — then the Inbox
- * imports it — or is it plain text for the photo/text import?
- */
-function fileHasRecipes(text: string): boolean {
-  if (extractTokens(text).length) return true;
-  const s = text.trim();
-  const candidates: string[] = [s];
-  const idx = [s.indexOf('{'), s.indexOf('[')].filter((i) => i > 0).sort((a, b) => a - b)[0];
-  if (idx !== undefined) candidates.push(s.slice(idx));
-  for (const c of candidates) {
-    try {
-      return jsonHasRecipes(JSON.parse(c));
-    } catch {
-      /* not JSON */
-    }
-  }
-  return false;
 }
 
 /**
@@ -158,10 +123,13 @@ function effectiveLine(row: EditText, src: Line | undefined, manualIng: string |
     if (src) for (const [k, v] of Object.entries(src)) if (!STRUCT_KEYS.has(k)) rest[k] = v;
     line = { ...rest, ...parsed, raw };
     if (src && parsed.kind !== 'header') {
+      // A pasted translation of the note/prep survives a re-parse as long as the source-language
+      // text is the same, whichever language the row is written in.
+      const other: Lang = srcLang === 'nl' ? 'en' : 'nl';
       for (const k of ['prep', 'note'] as const) {
         const s = src[k];
         const p = parsed[k];
-        if (s && p && s.nl && s.nl === p.nl && s.en && !p.en) line[k] = { ...p, en: s.en };
+        if (s && p && s[srcLang] && s[srcLang] === p[srcLang] && s[other] && !p[other]) line[k] = { ...p, [other]: s[other] };
       }
       if (!parsed.ing && src.ing && dict.get(src.ing)) {
         line.ing = src.ing;
@@ -342,6 +310,14 @@ export function EditScreen(props: { id?: string }) {
       setSteps([newEditText()]);
       setMeta({ category: null, tags: [] });
       setMetaManual(false);
+      // Plain text from "Kies bestand" in the Recipes "+" menu (A-bis.9) lands in the import box.
+      const fromFile = pendingImportText.value;
+      if (fromFile) {
+        pendingImportText.value = null;
+        setImportOpen(true);
+        setImportText(fromFile);
+        setStatus(t('edit.fileText'));
+      }
       setState('ready');
       return;
     }
@@ -646,7 +622,10 @@ export function EditScreen(props: { id?: string }) {
       delete edited.role;
       if (edited.note && edited.note.nl === 'naar smaak') edited.note = null;
     }
-    const rawFor = (x: Lang): string => (rewrite(x) ? rawFromLine(x === srcLang ? edited : withoutForeign(edited, x), dict, x) : row[x]);
+    // Each language's raw text carries only the free text that exists in that language (A-bis.1):
+    // a prep typed in English on a Dutch row lives in the structured line only (`lineSrc`, which
+    // `effectiveLine` reuses while the Dutch text is unchanged), never as English inside the Dutch raw.
+    const rawFor = (x: Lang): string => (rewrite(x) ? rawFromLine(withoutForeign(edited, x), dict, x) : row[x]);
     const nl = rawFor('nl');
     const en = rawFor('en');
     lineSrc.current.set(rowKey, { ...edited, raw: textOf(nl, en) });
@@ -737,16 +716,17 @@ export function EditScreen(props: { id?: string }) {
   function applyTranslation() {
     const answer = parseTranslationAnswer(trText);
     const to = trTo;
-    const keptSteps = steps.filter(rowHasText);
     const hasLineItems = answer.lines.length > 0 || Object.keys(answer.notes).length > 0 || Object.keys(answer.preps).length > 0;
     if (!answer.name && !hasLineItems && answer.steps.length === 0 && !answer.description && !answer.servingTip) {
       setStatus(t('edit.translateNone'));
       return;
     }
-    if (answer.steps.length > 0 && answer.steps.length !== keptSteps.length) {
-      setStatus(t('edit.translateStepsMismatch', { got: answer.steps.length, expected: keptSteps.length }));
+    // S-items that match neither the asked step numbers nor their count cannot be placed.
+    if (answer.steps.length > 0 && answer.steps.length !== trPlan.steps.length && !trPlan.steps.some((n) => answer.stepByNumber[n] !== undefined)) {
+      setStatus(t('edit.translateStepsMismatch', { got: answer.steps.length, expected: trPlan.steps.length }));
       return;
     }
+    const stepsByNumber = answeredSteps(answer, trPlan.steps);
     // I-items that match neither the asked row numbers nor their count cannot be placed.
     if (answer.lines.length > 0 && trPlan.lines.length > 0 && answer.lines.length !== trPlan.lines.length && !trPlan.lines.some((n) => answer.lineByNumber[n] !== undefined)) {
       setStatus(t('edit.translateNoLines', { got: answer.lines.length, expected: trPlan.lines.length, rows: trPlan.lines.join(', ') }));
@@ -772,23 +752,30 @@ export function EditScreen(props: { id?: string }) {
         }),
       );
     }
-    if (answer.name) (to === 'nl' ? setNameNl : setNameEn)(answer.name);
-    if (answer.servingTip) (to === 'nl' ? setTipNl : setTipEn)(answer.servingTip);
+    // Existing target text is never overwritten (A-bis.2), like the lines.
+    const nameEmpty = (to === 'nl' ? nameNl : nameEn).trim() === '';
+    const tipEmpty = (to === 'nl' ? tipNl : tipEn).trim() === '';
+    const nameSet = !!answer.name && nameEmpty;
+    if (nameSet) (to === 'nl' ? setNameNl : setNameEn)(answer.name as string);
+    if (answer.servingTip && tipEmpty) (to === 'nl' ? setTipNl : setTipEn)(answer.servingTip);
     if (answer.description) setDescTr({ ...(descTr ?? existing?.description ?? {}), [to]: answer.description });
+    let stepsSet = 0;
     if (answer.steps.length) {
       let i = 0;
       setSteps(
         steps.map((r) => {
           if (!rowHasText(r)) return r;
-          const v = answer.steps[i++];
-          return v ? { ...r, [to]: v } : r;
+          const v = stepsByNumber[++i];
+          if (!v || r[to].trim() !== '') return r;
+          stepsSet++;
+          return { ...r, [to]: v };
         }),
       );
     }
     setTrText('');
     setTrOpen(false);
     setMode('both');
-    setStatus(t('edit.translateApplied', { lines: applied.changed, steps: answer.steps.length, name: answer.name ? t('edit.translateName') : '' }));
+    setStatus(t('edit.translateApplied', { lines: applied.changed, steps: stepsSet, name: nameSet ? t('edit.translateName') : '' }));
   }
 
   // --- photo / text import ---------------------------------------------------------------------

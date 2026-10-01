@@ -519,6 +519,31 @@ export function validateDictionary(data: DictionaryData): ValidationResult {
     });
   }
 
+  // data/note-phrases.json (phase 5 A-bis.1): { nl, en, aliases?: { nl?, en? } }, same "{n}" count on both sides.
+  if (data.notePhrases !== undefined) {
+    if (!Array.isArray(data.notePhrases)) errors.push('note-phrases.json: must be an array.');
+    else {
+      const seenNote = new Set<string>();
+      data.notePhrases.forEach((p: unknown, i: number) => {
+        if (!isRecord(p) || typeof p['nl'] !== 'string' || typeof p['en'] !== 'string' || p['nl'].trim() === '' || p['en'].trim() === '') {
+          errors.push(`note-phrases.json[${i}]: must be { nl, en } with non-empty strings.`);
+          return;
+        }
+        const slots = (s: string) => s.split('{n}').length - 1;
+        if (slots(p['nl']) !== slots(p['en'])) errors.push(`note-phrases.json ${JSON.stringify(p['nl'])}: "{n}" count differs between nl and en.`);
+        if (p['aliases'] !== undefined) {
+          const a = p['aliases'];
+          if (!isRecord(a) || (a['nl'] !== undefined && !isStringArray(a['nl'])) || (a['en'] !== undefined && !isStringArray(a['en']))) {
+            errors.push(`note-phrases.json ${JSON.stringify(p['nl'])}: "aliases" must be { nl?: string[], en?: string[] }.`);
+          }
+        }
+        const key = normalizeKey(p['nl']);
+        if (seenNote.has(key)) warnings.push(`note-phrases.json: duplicate nl phrase ${JSON.stringify(p['nl'])}.`);
+        seenNote.add(key);
+      });
+    }
+  }
+
   for (const [file, items] of [['aisles.json', data.aisles], ['categories.json', data.categories]] as const) {
     for (const item of checkIds(items, file, errors)) {
       const label = `${file} ${JSON.stringify(item['id'])}`;
@@ -633,9 +658,9 @@ function main(): void {
   const dictData = readDictionaryData(root);
   const dictionary = validateDictionary(dictData);
   print(
-    'data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json',
+    'data/{units,qualifiers,prep-phrases,note-phrases,ingredients,aisles,categories}.json',
     dictionary,
-    `${dictData.units.length} units, ${dictData.qualifiers.length} qualifiers, ${dictData.prepPhrases.length} prep phrases, ${dictData.ingredients.length} ingredients`,
+    `${dictData.units.length} units, ${dictData.qualifiers.length} qualifiers, ${dictData.prepPhrases.length} prep phrases, ${dictData.notePhrases?.length ?? 0} note phrases, ${dictData.ingredients.length} ingredients`,
   );
   if (dictionary.errors.length > 0) failed = true;
 

@@ -8,13 +8,13 @@
 // The prompt only asks for what the app cannot do itself (A-bis.2): resolved ingredient lines are
 // rendered from the dictionary in either language, so only their free text goes out:
 //
-//   1. <name>
+//   1. <name>                     only when the target language has no name yet
 //   D. <description>              only when present
 //   T. <serving tip>              only when present
 //   I3. <ingredient line>         unresolved lines (and headers), numbered by their ROW (1-based)
 //   N5. <note>                    the (parenthesised) note of row 5 that has no translation yet
 //   P5. <prep>                    the preparation note of row 5 that has no translation yet
-//   S1. <step>                    … Sn.
+//   S3. <step>                    steps without target text, numbered by their ROW (1-based)
 //
 // `parseTranslationAnswer` is tolerant: markdown bold/bullets around the markers, "I1:" or "I1)"
 // instead of "I1.", chatter before/after the list, a missing name (or the name as "Title:" /
@@ -54,6 +54,8 @@ export interface TranslationOptions {
 
 /** What a prompt asks for, so the caller can check the answer against it ("expected 3 lines"). */
 export interface TranslationPlan {
+  /** Whether the name is sent as "1." (no name in the target language yet). */
+  name: boolean;
   /** 1-based row numbers sent as I-items (unresolved lines and headers without target text). */
   lines: number[];
   /** 1-based row numbers sent as N-items (notes without target text). */
@@ -62,7 +64,8 @@ export interface TranslationPlan {
   preps: number[];
   description: boolean;
   servingTip: boolean;
-  steps: number;
+  /** 1-based step numbers sent as S-items (steps without target text). */
+  steps: number[];
 }
 
 export interface TranslationAnswer {
@@ -78,8 +81,10 @@ export interface TranslationAnswer {
   notes: Record<number, string>;
   /** P-items by row number. */
   preps: Record<number, string>;
-  /** Steps in order (S1..Sn). */
+  /** Steps in marker order (legacy shape; `stepByNumber` has the numbers). */
   steps: string[];
+  /** S-items by their marker number ("S3." -> 3). */
+  stepByNumber: Record<number, string>;
 }
 
 function text(t: Text | null | undefined, lang: Lang): string {
@@ -94,7 +99,7 @@ function isResolvedDefault(line: TranslatableLine): boolean {
 /** Which parts of the recipe the prompt sends (A-bis.2: only what the app cannot translate itself). */
 export function planTranslation(recipe: TranslatableRecipe, from: Lang, to: Lang, opts: TranslationOptions = {}): TranslationPlan {
   const isResolved = opts.isResolved ?? isResolvedDefault;
-  const plan: TranslationPlan = { lines: [], notes: [], preps: [], description: false, servingTip: false, steps: recipe.steps.length };
+  const plan: TranslationPlan = { name: false, lines: [], notes: [], preps: [], description: false, servingTip: false, steps: [] };
   recipe.lines.forEach((line, i) => {
     const n = i + 1;
     if (line.kind === 'header' || !isResolved(line, i)) {
@@ -106,6 +111,10 @@ export function planTranslation(recipe: TranslatableRecipe, from: Lang, to: Lang
   });
   plan.description = hasLang(recipe.description, from) && !hasLang(recipe.description, to);
   plan.servingTip = hasLang(recipe.servingTip, from) && !hasLang(recipe.servingTip, to);
+  plan.name = !hasLang(recipe.name, to);
+  recipe.steps.forEach((step, i) => {
+    if (!hasLang(step.text, to)) plan.steps.push(i + 1);
+  });
   return plan;
 }
 
@@ -128,9 +137,9 @@ export function buildTranslationPrompt(recipe: TranslatableRecipe, from: Lang, t
     '- A line that is only a heading ending in ":" (like "Dressing:") stays a heading. Text in [brackets] or (parentheses) keeps its brackets.',
     '- If a line is empty, answer with the marker only.',
     '',
-    `1. ${text(recipe.name, from)}`,
   ];
   const body: string[] = [];
+  if (plan.name) body.push(`1. ${text(recipe.name, from)}`);
   if (plan.description) body.push(`D. ${text(recipe.description, from)}`);
   if (plan.servingTip) body.push(`T. ${text(recipe.servingTip, from)}`);
   const items: { n: number; kind: 'I' | 'N' | 'P'; text: string }[] = [];
@@ -139,7 +148,7 @@ export function buildTranslationPrompt(recipe: TranslatableRecipe, from: Lang, t
   for (const n of plan.preps) items.push({ n, kind: 'P', text: text(recipe.lines[n - 1]?.prep, from) });
   items.sort((a, b) => a.n - b.n || a.kind.localeCompare(b.kind));
   for (const it of items) body.push(`${it.kind}${it.n}. ${it.text}`);
-  for (let i = 0; i < recipe.steps.length; i++) body.push(`S${i + 1}. ${text(recipe.steps[i]?.text, from)}`);
+  for (const n of plan.steps) body.push(`S${n}. ${text(recipe.steps[n - 1]?.text, from)}`);
   return [...head, ...body].join('\n') + '\n';
 }
 
@@ -275,6 +284,7 @@ export function parseTranslationAnswer(answer: string): TranslationAnswer {
     notes: byNumber('note'),
     preps: byNumber('prep'),
     steps: ordered('step').map((it) => it.text.trim()),
+    stepByNumber: byNumber('step'),
   };
   const name = items.find((it) => it.kind === 'name');
   if (name && name.text.trim()) out.name = name.text.trim();
@@ -345,4 +355,20 @@ export function applyTranslationAnswer(lines: readonly Line[], answer: Translati
     return next ?? line;
   });
   return { lines: out, changed };
+}
+
+/**
+ * The answered steps by step number (A-bis.2): `stepByNumber` when the answer uses the numbers the
+ * prompt asked for; when it has exactly as many S-items as were asked but under other numbers (an
+ * assistant that renumbered 1..n), they are mapped onto `asked` in order.
+ */
+export function answeredSteps(answer: TranslationAnswer, asked: readonly number[]): Record<number, string> {
+  if (asked.length > 0 && answer.steps.length === asked.length && !asked.every((n) => answer.stepByNumber[n] !== undefined)) {
+    const out: Record<number, string> = {};
+    asked.forEach((n, i) => {
+      out[n] = answer.steps[i] as string;
+    });
+    return out;
+  }
+  return answer.stepByNumber;
 }

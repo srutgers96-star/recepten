@@ -256,9 +256,10 @@ export function DictionaryScreen() {
     }
   }
 
-  /** Every duplicate in turn (each with its own snapshot; only the last one is undoable, so no undo is offered). */
+  /** Every duplicate in turn (each with its own snapshot; only the last one is undoable, so the person confirms first and no undo is offered). */
   async function mergeAll() {
     if (!dupes || !dupes.length) return;
+    if (!confirm(t('dict.mergeAllConfirm', { n: dupes.length }))) return;
     let n = 0;
     for (const d of dupes) {
       if (await merge(d.own, d.existing.id, true)) n++;

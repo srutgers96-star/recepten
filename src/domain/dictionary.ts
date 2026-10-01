@@ -443,6 +443,13 @@ export class Dictionary {
     return lang === 'nl' ? this.prepFor(text, opts) : this.prepFromEn(text);
   }
 
+  /** Whether the whole text is a note phrase (data/note-phrases.json: "verdeeld", "gesmolten"), not a preparation. */
+  isNotePhrase(text: string, lang: Lang): boolean {
+    const key = normalizeKey(text);
+    if (!key) return false;
+    return this.noteExact[lang].has(key) || this.noteTemplates[lang].some((t) => t.re.test(key));
+  }
+
   /** A whole phrase's translation into the other language (prep or note phrase), undefined when unknown. */
   phraseTranslation(text: string, lang: Lang): string | undefined {
     const key = normalizeKey(text);

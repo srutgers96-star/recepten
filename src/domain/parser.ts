@@ -293,6 +293,15 @@ const SIZE_BEFORE_SLICE: Record<string, string> = { dunne: 'dun gesneden', dikke
 const PARTICIPLE_RE = /^(?:ge|ont|uit|af|ver)\S{2,}(?:d|t|en)$/iu;
 const CUBE_NOTE_RE = /^blokjes?$/iu;
 
+/**
+ * Whether a parenthetical reads as a preparation rather than a product word: it holds a past
+ * participle ("gesneden", "ontdooid", "chopped", "melted"), unlike "(blokje)", "(fles)", "(cube)".
+ */
+function readsAsPrep(text: string, lang: Lang): boolean {
+  const words = text.toLowerCase().split(/[\s,;]+/u);
+  return lang === 'nl' ? words.some((w) => PARTICIPLE_RE.test(w)) : words.some((w) => /^\S{3,}ed$/u.test(w));
+}
+
 function addPrep(body: Body, t: Text, lang: Lang): void {
   if (!t.nl && !t.en) return;
   if (lang === 'nl' ? t.en === undefined : t.nl === undefined) body.prepOk = false;
@@ -670,9 +679,16 @@ function classifyParen(text: string, dict: Dictionary, lang: Lang, body: Body): 
       }
     }
   }
-  // A free-text note: both languages when the whole text is known ("ontdooid", "op kamertemperatuur",
-  // "approximately 1 pound"), else the source language only (A-bis.1).
-  const note = noteText(t, dict, lang, body);
+  // A known phrase in parentheses that reads as a preparation ("(ontdooid)", "(fijngehakt)",
+  // "(finely chopped)") is the prep of the line, in both languages (A-bis.1). Anything else is a
+  // free-text note: both languages when the whole text is known ("(blokje)", "(verdeeld)" and the
+  // other note phrases, "approximately 1 pound"), else the source language only.
+  const known = prepText(t, dict, lang, body);
+  if (bilingual(known) && readsAsPrep(t, lang) && !dict.isNotePhrase(t, lang)) {
+    addPrep(body, known, lang);
+    return;
+  }
+  const note = bilingual(known) ? known : (qtyNote(t, dict, lang) ?? { [lang]: t });
   body.note = joinText(body.note, note, '; ', lang);
   body.parenOk = Math.min(body.parenOk, bilingual(note) ? 1 : 0.5);
 }

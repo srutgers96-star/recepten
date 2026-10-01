@@ -411,7 +411,12 @@ export const edit: Dict = {
   },
   'dict.cleanupNone': { nl: 'Geen dubbele eigen ingrediënten gevonden.', en: 'No duplicate own ingredients found.' },
   'dict.cleanupCount': { nl: '{n} eigen ingrediënten bestaan al:', en: '{n} own ingredients already exist:' },
+  'dict.cleanupRow': { nl: '{own} → bestaat al als {existing}', en: '{own} → already exists as {existing}' },
   'dict.mergeAll': { nl: 'Fuseer alles', en: 'Merge all' },
+  'dict.mergeAllConfirm': {
+    nl: '{n} eigen ingrediënten fuseren met de bestaande? Alleen de laatste fusie kan daarna ongedaan gemaakt worden.',
+    en: 'Merge {n} own ingredients into the existing ones? Only the last merge can be undone afterwards.',
+  },
   'dict.mergeOne': { nl: 'Fuseer', en: 'Merge' },
   'dict.save': { nl: 'Bewaar', en: 'Save' },
   'dict.saved': { nl: 'Bewaard.', en: 'Saved.' },

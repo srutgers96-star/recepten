@@ -2,7 +2,7 @@
 // "Language pair", docs/phase-5-spec.md A-bis.2 and A-bis.7).
 import { describe, expect, it } from 'vitest';
 import type { Line } from '../src/domain/model';
-import { applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation } from '../src/domain/translate-prompt';
+import { answeredSteps, applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation } from '../src/domain/translate-prompt';
 
 const recipe = {
   name: { nl: 'Uiensoep', en: '' },
@@ -38,7 +38,7 @@ describe('buildTranslationPrompt', () => {
 
   it('asks only for free text of resolved lines (N/P by row) and unresolved lines in full (A-bis.2/A-bis.5)', () => {
     const plan = planTranslation(parsedRecipe, 'nl', 'en');
-    expect(plan).toEqual({ lines: [4], notes: [1], preps: [3], description: true, servingTip: true, steps: 1 });
+    expect(plan).toEqual({ name: true, lines: [4], notes: [1], preps: [3], description: true, servingTip: true, steps: [1] });
     const p = buildTranslationPrompt(parsedRecipe, 'nl', 'en');
     const body = p.slice(p.indexOf('\n1. '));
     expect(body).toBe('\n1. Stoofpot\nD. Lekker in de herfst.\nT. Met brood.\nN1. gesneden in blokjes van ongeveer 2 cm breed\nP3. op de ouderwetse manier\nI4. 4 blikjes tonijn op water\nS1. Kook.\n');
@@ -54,6 +54,20 @@ describe('buildTranslationPrompt', () => {
       lines: [{ raw: { nl: '4 eieren (verdeeld)' }, ing: 'ei', note: { nl: 'verdeeld', en: 'divided' } }],
     };
     expect(planTranslation(r, 'nl', 'en')).toMatchObject({ lines: [], notes: [], preps: [], description: false });
+  });
+
+  it('skips the name and the steps that already have target text, sending a sparse S-list by row (A-bis.2)', () => {
+    const r = { name: { nl: 'Soep', en: 'Soup' }, lines: [], steps: [{ text: { nl: 'Snij.', en: 'Chop.' } }, { text: { nl: 'Kook.' } }, { text: { nl: 'Serveer.' } }] };
+    const plan = planTranslation(r, 'nl', 'en');
+    expect(plan.name).toBe(false);
+    expect(plan.steps).toEqual([2, 3]);
+    const p = buildTranslationPrompt(r, 'nl', 'en');
+    expect(p).not.toContain('1. Soep');
+    expect(p).not.toContain('\nS1.');
+    expect(p.slice(p.indexOf('S2.'))).toBe('S2. Kook.\nS3. Serveer.\n');
+    expect(answeredSteps(parseTranslationAnswer('S2. Cook.\nS3. Serve.'), plan.steps)).toEqual({ 2: 'Cook.', 3: 'Serve.' });
+    // Renumbered 1..n by the assistant: mapped onto the asked rows in order.
+    expect(answeredSteps(parseTranslationAnswer('S1. Cook.\nS2. Serve.'), plan.steps)).toEqual({ 2: 'Cook.', 3: 'Serve.' });
   });
 
   it('takes an isResolved predicate for ids the dictionary in use does not know', () => {
@@ -73,6 +87,7 @@ describe('parseTranslationAnswer', () => {
       notes: {},
       preps: {},
       steps: ['Finely slice the onions.', 'Simmer for 20 minutes.'],
+      stepByNumber: { 1: 'Finely slice the onions.', 2: 'Simmer for 20 minutes.' },
     });
   });
 
@@ -137,7 +152,7 @@ describe('parseTranslationAnswer', () => {
   it('keeps empty markers as empty strings and returns empty lists for junk', () => {
     expect(parseTranslationAnswer('I1.\nI2. b')).toMatchObject({ lines: ['', 'b'], steps: [] });
     expect(parseTranslationAnswer('hello there')).toMatchObject({ lines: [], steps: [], name: 'hello there' });
-    expect(parseTranslationAnswer('')).toEqual({ lines: [], lineByNumber: {}, notes: {}, preps: {}, steps: [] });
+    expect(parseTranslationAnswer('')).toEqual({ lines: [], lineByNumber: {}, notes: {}, preps: {}, steps: [], stepByNumber: {} });
   });
 
   it('does not mistake a step starting with "I" for a marker', () => {

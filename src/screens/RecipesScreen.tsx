@@ -5,7 +5,8 @@
 // Searching: `searchRecipes` groups (name → ingredient → category → tag) with a small header each,
 // so typing "onion" finds the recipes that contain `ui`. '#/recipes?cat=<id>' opens the list
 // pre-filtered on that category (Home shelf); the query is then dropped from the hash.
-// Phase 4: the "+" in the header opens '/add' (the Toevoegen tab left the bottom nav); the chips
+// Phase 4: the "+" in the header opens a small menu: Nieuw recept ('/add') or Kies bestand (A-bis.9:
+// a recipe/bundle/backup file goes to the Inbox, plain text to the Add screen's import box); the chips
 // are the generic `PickChips` (every tag in the data + the categories, spec §0).
 // Phase 5 (docs/phase-5-spec.md A-bis.8): select mode. "Selecteer" in the header, a long-press on
 // a row, or '#/recipes?select=1[&id=<id>]' (Home) turns the rows into checkboxes and shows the
@@ -32,7 +33,8 @@ import { buildBundleEnvelope, buildPatchEnvelope, buildRecipeEnvelope, bundleFil
 import type { Envelope } from '@/domain/token';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
-import { navigate, route } from '@/router';
+import { fileHasRecipes } from '@/file-import';
+import { navigate, pendingImport, pendingImportText, route } from '@/router';
 import { shareJsonFile, shareText } from '@/share-actions';
 
 interface Group {
@@ -98,6 +100,33 @@ export function RecipesScreen() {
   const [selectBusy, setSelectBusy] = useState(false);
   const [shareData, setShareData] = useState<ShareData | null>(null);
   const [building, setBuilding] = useState(false);
+  const [addMenu, setAddMenu] = useState(false);
+  const [addStatus, setAddStatus] = useState('');
+
+  /** "Kies bestand" in the "+" menu: recipes go to the Inbox, plain text to the Add screen's import box. */
+  function onAddFile(e: Event) {
+    const input = e.currentTarget as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+    file.text().then(
+      (text) => {
+        if (!text.trim()) {
+          setAddStatus(t('edit.fileEmpty'));
+          return;
+        }
+        setAddMenu(false);
+        if (fileHasRecipes(text)) {
+          pendingImport.value = text;
+          navigate('/inbox');
+        } else {
+          pendingImportText.value = text;
+          navigate('/add');
+        }
+      },
+      () => setAddStatus(t('edit.fileFailed')),
+    );
+  }
 
   // '#/recipes?cat=<id>' from the Home shelf: replace the selection, then drop the query from the
   // hash so a reload or a tab switch does not re-apply it. '?select=1[&id=<id>]' (Home "Selecteer"
@@ -408,7 +437,7 @@ export function RecipesScreen() {
               <button type="button" class="icon-btn list-select" onClick={() => enterSelect(null)}>
                 {t('select.enter')}
               </button>
-              <button type="button" class="icon-btn list-add" aria-label={t('list.add')} onClick={() => navigate('/add')}>
+              <button type="button" class="icon-btn list-add" aria-label={t('list.add')} aria-haspopup="dialog" onClick={() => setAddMenu(true)}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
                   <path d="M12 5v14M5 12h14" />
                 </svg>
@@ -494,6 +523,34 @@ export function RecipesScreen() {
         )}
         {railLetter && <div class="az-bubble">{railLetter}</div>}
       </div>
+      {addMenu && (
+        <div class="sheet-backdrop" onClick={() => setAddMenu(false)}>
+          <div class="sheet" role="dialog" aria-modal="true" aria-label={t('list.add')} onClick={(e) => e.stopPropagation()}>
+            <div class="sheet-head">
+              <h2>{t('list.add')}</h2>
+              <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={() => setAddMenu(false)}>
+                ×
+              </button>
+            </div>
+            <div class="sheet-body add-menu">
+              <button type="button" class="add-menu-row" onClick={() => navigate('/add')}>
+                <strong>{t('list.addNew')}</strong>
+                <span class="muted small">{t('list.addNewHint')}</span>
+              </button>
+              <label class="add-menu-row">
+                <strong>{t('list.addFile')}</strong>
+                <span class="muted small">{t('list.addFileHint')}</span>
+                <input type="file" accept=".json,.txt,application/json,text/plain" style="display:none" onChange={onAddFile} />
+              </label>
+              {addStatus && (
+                <p class="muted small" role="status">
+                  {addStatus}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       {selectMode && (
         <SelectBar
           selected={selectedList}
