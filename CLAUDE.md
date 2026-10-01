@@ -1,6 +1,6 @@
 # CLAUDE.md — Rutgers' Recepten v2
 
-Project brief for AI assistants. Read this first. The full design is `PLAN.md` (its §0 decisions table
+Project brief for AI assistants. Read this first, then `docs/STATUS.md` (where the work stands and what is next). The full design is `PLAN.md` (its §0 decisions table
 wins over everything else in that file). Decisions with their "why" live in `docs/adr/`.
 
 ## Who uses this
