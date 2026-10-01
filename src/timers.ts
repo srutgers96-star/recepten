@@ -2,9 +2,10 @@
 // timers keep counting while you browse or leave the app. Persisted through the repo (`timers`
 // table) so they survive a reload; wall-clock `endAt`; one interval while anything runs.
 //
-// On finish: beep (WebAudio, unlocked on the first tap in the app — the phase-0 approach that proved
-// to sound in the background on Android, see src/testtimer.ts), vibrate, and — when Notification
-// permission is granted — a service-worker notification "Timer klaar — <label>" (tag `timer:<id>`).
+// On finish: the chosen timer sound (src/sounds.ts; WebAudio, unlocked on the first tap in the app —
+// the phase-0 approach that proved to sound in the background on Android, see src/testtimer.ts),
+// vibrate (when `timer.vibrate` is on), and — when Notification permission is granted — a
+// service-worker notification "Timer klaar — <label>" (tag `timer:<id>`).
 // While a timer runs (permission granted) a silent notification with the remaining minutes is
 // refreshed once per minute under the same tag ("min-tijd zien"). A finished timer stays in the
 // store (showing "Klaar") until the user dismisses it with ×.
@@ -14,6 +15,7 @@ import { timerMs } from '@/domain/timers';
 import { deleteTimer, getSetting, listTimers, putTimer, setSetting } from '@/db/repo';
 import { lang, tIn } from '@/i18n';
 import { navigate, route } from '@/router';
+import { loadSoundSettings, playTimerSound, timerSound, timerVibrate } from '@/sounds';
 
 export const NOTIF_ASKED_SETTING = 'timers.notifAsked';
 const FIRED_KEY = 'recepten.timers.fired';
@@ -87,26 +89,6 @@ export function unlockAudio() {
     osc.stop(ctx.currentTime + 0.05);
   } catch (e) {
     console.warn('AudioContext', e);
-  }
-}
-
-/** Three short 880 Hz beeps (the pattern that proved to sound in the background), played twice. */
-function beep(ctx: AudioContext) {
-  const start = ctx.currentTime;
-  for (let round = 0; round < 2; round++) {
-    for (let i = 0; i < 3; i++) {
-      const at = start + round * 1.2 + i * 0.3;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = 880;
-      gain.gain.setValueAtTime(0.0001, at);
-      gain.gain.exponentialRampToValueAtTime(0.5, at + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.22);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start(at);
-      osc.stop(at + 0.25);
-    }
   }
 }
 
@@ -198,7 +180,7 @@ function notifyDone(t: RunningTimer) {
     icon: iconUrl(),
     renotify: true,
     requireInteraction: true,
-    vibrate: [300, 150, 300, 150, 300],
+    ...(timerVibrate.value ? { vibrate: [300, 150, 300, 150, 300] } : {}),
     data: { path: pathFor(t) },
   });
 }
@@ -239,12 +221,12 @@ function fire(t: RunningTimer) {
   saveFired();
   notifiedMinute.delete(t.id);
   try {
-    if (audio) beep(audio);
+    if (audio) playTimerSound(audio, timerSound.value);
   } catch (e) {
-    console.warn('beep', e);
+    console.warn('playTimerSound', e);
   }
   try {
-    navigator.vibrate?.([300, 150, 300, 150, 300]);
+    if (timerVibrate.value) navigator.vibrate?.([300, 150, 300, 150, 300]);
   } catch {
     /* ignore */
   }
@@ -305,6 +287,8 @@ export function startTimerEngine(): Promise<void> {
         }
       });
     }
+    // Sound/vibrate settings must be known before the first tick can fire an overdue timer.
+    await loadSoundSettings();
     try {
       const list = await listTimers();
       // Prune bookkeeping of timers that no longer exist.

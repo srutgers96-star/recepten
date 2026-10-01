@@ -533,6 +533,38 @@
   margin-top: 8px;
 }
 
+/* ---------- Phase 5 (block B): Kookstand & timer ---------- */
+
+/* Greyed-out line when speech synthesis / recognition is missing on this device. */
+.setting.unavailable .label {
+  color: var(--muted);
+}
+
+/* Stacked setting row: label on top, control below — the four sound pills plus
+   the "Luister" button need the full width at 360 px. */
+.setting.setting-stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 10px 0;
+}
+
+.timer-sound-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.timer-sound-row .seg {
+  flex: 1 1 auto;
+}
+
+.timer-sound-row .btn {
+  flex: none;
+  min-height: 44px;
+}
+
 /* ---------- Phase 5 (A-bis.9): "Deel het bestand" first, "Download" second ---------- */
 .file-actions {
   display: flex;

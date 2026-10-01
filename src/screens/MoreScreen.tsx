@@ -1,12 +1,13 @@
 // '#/more' — Inbox row (with the unseen badge; phase 4 moved the Inbox tab here), active profile
-// (switch, "+ profiel"), language, theme, confetti, "°F erbij", the
+// (switch, "+ profiel"), language, theme, confetti, "°F erbij", the "Kookstand & timer" section
+// (read-aloud, voice commands, timer sound & vibrate — phase 5 block B), the
 // dictionary row (counts → '/more/dictionary', phase 5 A-bis.6), and the links to "Stuur nieuwe naar …"
 // (unsent-changes badge), Opslag & back-up (backup-due badge), Het verhaal, Apparaatcheck, plus
 // "Over" (version, sha, channel, GitHub). Phase 5: "Huishouden" (under the profile card) and
 // "Controleer mijn recepten" (docs/phase-5-spec.md A.6 / A.8).
 import { useEffect, useState } from 'preact/hooks';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
-import { appInfo } from '@/components/AppInfo';
+import { appInfo, isIOS } from '@/components/AppInfo';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
 import { getFahrenheit, getHouseholdServings, setFahrenheit, setHouseholdServings } from '@/db/repo';
@@ -16,7 +17,10 @@ import { lang, t } from '@/i18n';
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { activeProfile, profiles, setActiveProfile } from '@/profile';
 import { navigate } from '@/router';
+import { loadSoundSettings, previewTimerSound, setTimerSound, setTimerVibrate, timerSound, timerVibrate, type TimerSound } from '@/sounds';
+import { canSpeak, loadSpeechSettings, readAloud, setReadAloud } from '@/speech';
 import { setTheme, theme, type Theme } from '@/theme';
+import { canListen, commandsEnabled, loadVoiceSettings, setCommandsEnabled } from '@/voice';
 import { Avatar } from './ProfilesScreen';
 
 const GITHUB_URL = 'https://github.com/srutgers96-star/recepten';
@@ -72,6 +76,10 @@ export function MoreScreen() {
 
   useEffect(() => {
     void loadCelebrateSettings();
+    // Phase 5 block B: read-aloud, voice commands, timer sound & vibrate (all idempotent loads).
+    void loadSpeechSettings();
+    void loadVoiceSettings();
+    void loadSoundSettings();
     void getFahrenheit().then(setF, (e: unknown) => console.error('getFahrenheit', e));
     void getHouseholdServings().then(setHousehold, (e: unknown) => console.error('getHouseholdServings', e));
     void refreshShareBadges();
@@ -197,6 +205,79 @@ export function MoreScreen() {
             </div>
             <span class="switch">
               <input type="checkbox" checked={fahrenheit} onChange={(e) => toggleFahrenheit((e.currentTarget as HTMLInputElement).checked)} />
+              <span class="track" />
+            </span>
+          </label>
+        </section>
+
+        {/* Phase 5 block B (docs/phase-5-spec.md B.1–B.3): read-aloud, voice commands, timer sound. */}
+        <section class="section">
+          <h2>{t('more.cookTimer')}</h2>
+          {canSpeak() ? (
+            <label class="setting">
+              <div class="label">
+                {t('more.readAloud')}
+                <small>{t('more.readAloudHint')}</small>
+              </div>
+              <span class="switch">
+                <input type="checkbox" checked={readAloud.value} onChange={(e) => void setReadAloud((e.currentTarget as HTMLInputElement).checked)} />
+                <span class="track" />
+              </span>
+            </label>
+          ) : (
+            <div class="setting unavailable">
+              <div class="label">{t('more.readAloudUnavailable')}</div>
+            </div>
+          )}
+          {canListen() ? (
+            <label class="setting">
+              <div class="label">
+                {t('more.voiceCommands')}
+                <small>{t('more.voiceCommandsHint')}</small>
+              </div>
+              <span class="switch">
+                <input type="checkbox" checked={commandsEnabled.value} onChange={(e) => void setCommandsEnabled((e.currentTarget as HTMLInputElement).checked)} />
+                <span class="track" />
+              </span>
+            </label>
+          ) : (
+            /* Realistic outcome on iPhone: no SpeechRecognition — say so instead of hiding the row. */
+            <div class="setting unavailable">
+              <div class="label">{t('more.voiceUnavailable')}</div>
+            </div>
+          )}
+          <div class="setting setting-stack">
+            <div class="label">
+              {t('more.timerSound')}
+              {/* iOS only: the side silent switch mutes web audio; the notification is the only way (invariant 13). */}
+              {isIOS() && <small>{t('more.timerSoundIOSHint')}</small>}
+            </div>
+            <div class="timer-sound-row">
+              <Segmented<TimerSound>
+                name="timerSound"
+                options={[
+                  { value: 'beeps', label: t('more.timerSound.beeps') },
+                  { value: 'bell', label: t('more.timerSound.bell') },
+                  { value: 'melody', label: t('more.timerSound.melody') },
+                  { value: 'off', label: t('more.timerSound.off') },
+                ]}
+                selected={[timerSound.value]}
+                onChange={(v) => {
+                  if (v[0]) void setTimerSound(v[0]);
+                }}
+              />
+              <button type="button" class="btn" disabled={timerSound.value === 'off'} onClick={() => previewTimerSound(timerSound.value)}>
+                {t('more.timerSoundPreview')}
+              </button>
+            </div>
+          </div>
+          <label class="setting">
+            <div class="label">
+              {t('more.timerVibrate')}
+              <small>{t('more.timerVibrateHint')}</small>
+            </div>
+            <span class="switch">
+              <input type="checkbox" checked={timerVibrate.value} onChange={(e) => void setTimerVibrate((e.currentTarget as HTMLInputElement).checked)} />
               <span class="track" />
             </span>
           </label>

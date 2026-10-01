@@ -25,6 +25,9 @@ import { activeProfile, loadProfiles } from '@/profile';
 import { isStandalone } from '@/pwa';
 import { navigate } from '@/router';
 import { downloadBlob, shareJsonFile } from '@/share-actions';
+import { reloadSoundSettings } from '@/sounds';
+import { reloadSpeechSettings } from '@/speech';
+import { reloadVoiceSettings } from '@/voice';
 
 interface Facts {
   standalone: boolean;
@@ -247,9 +250,10 @@ export function StorageScreen() {
     }
     try {
       const result = await importBundle(parsed as BackupBundle);
-      // Refresh the in-memory mirrors of what the restore may have changed (the active profile is
-      // kept when this phone already had one; theme and last-backup date are never restored).
-      await Promise.all([loadProfiles(), reloadCelebrateSettings()]);
+      // Refresh the in-memory mirrors of what the restore may have changed: profiles, confetti,
+      // timer sound/vibrate, read-aloud and voice commands (the active profile is kept when this
+      // phone already had one; theme and last-backup date are never restored).
+      await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings()]);
       await reload();
       void refreshShareBadges();
       setRestoreStatus(t('storage.restored', { ...result }));

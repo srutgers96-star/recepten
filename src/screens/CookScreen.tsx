@@ -5,7 +5,10 @@
 // Phase 2: the checklist renders the dictionary lines scaled to the servings chosen on the detail
 // page (`?srv=6`, else the session memory, else the recipe's own), with a scaler on the card; the
 // steps show °F next to °C when that setting is on. Phase 4: "Gekookt!" also ticks the dish in
-// the week plan (markRecipeCookedInPlan).
+// the week plan (markRecipeCookedInPlan). Phase 5 (docs/phase-5-spec.md B.1-2): a 🔊 "Lees voor"
+// button per step (tap = the step, long-press = the scaled ingredient list; auto-read on step
+// change with the setting speech.readAloud) and — only when the API exists and speech.commands is
+// on — a mic button for voice commands (volgende/vorige/lees voor/stop/timer N minuten).
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { celebrate } from '@/celebrate';
 import { Header } from '@/components/Header';
@@ -15,13 +18,68 @@ import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
 import { getRecipe, logCooked, markRecipeCookedInPlan } from '@/db/repo';
-import { nowIso, pickText } from '@/domain/model';
+import { lineText } from '@/dictionary';
+import { nowIso, pickText, type Lang } from '@/domain/model';
+import { pickSpoken, type VoiceCommand } from '@/domain/voice';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
 import { goBack, route } from '@/router';
+import { canSpeak, loadSpeechSettings, readAloud, speak, speaking, stopSpeaking } from '@/speech';
+import { MINUTE_MS, startTimer } from '@/timers';
+import { canListen, commandsEnabled, loadVoiceSettings, micState, startListening, stopListening } from '@/voice';
 
 const SWIPE_PX = 60;
+const LONG_PRESS_MS = 500;
+const LONG_PRESS_MOVE_PX = 10;
+
+/**
+ * Pointer handlers for the 🔊 button: a still ~500 ms press fires `onLong` (read the ingredient
+ * list) and swallows the click that follows, so it never also toggles the step reading. Same
+ * pattern as the long press in src/components/LineView.tsx.
+ */
+function useLongPress(onLong: () => void) {
+  const timer = useRef<number | null>(null);
+  const start = useRef<{ x: number; y: number } | null>(null);
+  const fired = useRef(false);
+  const cancel = () => {
+    if (timer.current !== null) window.clearTimeout(timer.current);
+    timer.current = null;
+    start.current = null;
+  };
+  return {
+    onPointerDown(e: PointerEvent) {
+      cancel();
+      fired.current = false;
+      start.current = { x: e.clientX, y: e.clientY };
+      timer.current = window.setTimeout(() => {
+        timer.current = null;
+        start.current = null;
+        fired.current = true;
+        onLong();
+      }, LONG_PRESS_MS);
+    },
+    onPointerMove(e: PointerEvent) {
+      const s = start.current;
+      if (!s) return;
+      if (Math.abs(e.clientX - s.x) > LONG_PRESS_MOVE_PX || Math.abs(e.clientY - s.y) > LONG_PRESS_MOVE_PX) cancel();
+    },
+    onPointerUp: cancel,
+    onPointerCancel: cancel,
+    onPointerLeave: cancel,
+    onClickCapture(e: MouseEvent) {
+      // The tap that ends a long press must not also act as a normal tap.
+      if (fired.current) {
+        fired.current = false;
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    onContextMenu(e: Event) {
+      e.preventDefault();
+    },
+  };
+}
 
 type WakeLockSentinelLike = { release(): Promise<void>; addEventListener?: (type: 'release', cb: () => void) => void };
 
@@ -116,6 +174,102 @@ export function CookScreen(props: { id: string }) {
     setPage(n);
     if (card.current) card.current.scrollTop = 0;
   }
+
+  // --- Phase 5 B.1-2: read-aloud + voice commands (invariant 13: only offered when the API exists).
+  const speechOk = canSpeak();
+  const showMic = canListen() && commandsEnabled.value;
+  const mic = micState.value;
+  const isSpeaking = speaking.value;
+
+  useEffect(() => {
+    void loadSpeechSettings();
+    void loadVoiceSettings();
+    return () => {
+      stopSpeaking();
+      stopListening();
+    };
+  }, []);
+
+  /** Reads one step in the language it is shown in (pickSpoken makes the fallback explicit). */
+  function speakStep(index: number) {
+    const step = steps[index];
+    if (!step) return;
+    const s = pickSpoken(step.text, l);
+    speak(s.text, s.lang);
+  }
+
+  /** Reads the scaled ingredient lines as the "Klaarzetten" page shows them; headers are skipped. */
+  function speakIngredients() {
+    const factor = base > 0 && servings > 0 ? servings / base : 1;
+    const parts: string[] = [];
+    for (const ln of lines) {
+      if (ln.kind === 'header') continue; // the sentence break between lines is pause enough
+      const text = lineText(ln, l, factor).trim();
+      if (text) parts.push(text);
+    }
+    if (parts.length) speak(parts.join('. '), l);
+  }
+
+  const press = useLongPress(() => speakIngredients());
+
+  function onReadTap() {
+    if (speaking.value) stopSpeaking();
+    else speakStep(page - 1);
+  }
+
+  // Auto-read on a page change onto a step (setting speech.readAloud); every other page change
+  // stops the voice. Runs once at mount too (page 0 = Klaarzetten: a harmless stop).
+  useEffect(() => {
+    const step = page > 0 && page <= steps.length ? steps[page - 1] : undefined;
+    if (step && readAloud.value && canSpeak()) {
+      const s = pickSpoken(step.text, lang.value);
+      speak(s.text, s.lang);
+    } else {
+      stopSpeaking();
+    }
+  }, [page, id]);
+
+  // The recognition callback lives as long as the mic runs; the ref keeps it at the latest state.
+  const onVoiceCommand = useRef<(cmd: VoiceCommand) => void>(() => undefined);
+  onVoiceCommand.current = (cmd) => {
+    if (!recipe) return;
+    const onStep = page > 0 && page <= steps.length;
+    switch (cmd.kind) {
+      case 'next':
+        go(page + 1);
+        break;
+      case 'prev':
+        go(page - 1);
+        break;
+      case 'read':
+        if (onStep) speakStep(page - 1);
+        else if (page === 0) speakIngredients();
+        break;
+      case 'stop':
+        stopSpeaking();
+        break;
+      case 'timer':
+        void startTimer({
+          durationMs: cmd.minutes * MINUTE_MS,
+          label: onStep ? `${name} · ${t('cook.stepShort', { n: page })}` : name,
+          recipeId: id,
+          stepIndex: onStep ? page - 1 : null,
+        });
+        break;
+    }
+  };
+
+  function toggleMic() {
+    if (micState.value !== 'off') {
+      stopListening();
+      return;
+    }
+    const voiceLang: Lang = activeProfile.value?.lang ?? lang.value;
+    startListening(voiceLang, (cmd) => onVoiceCommand.current(cmd));
+  }
+
+  const micLabel =
+    mic === 'listening' ? t('cook.micListening') : mic === 'starting' ? t('cook.micOn') : mic === 'error' ? t('cook.micError') : t('cook.micOff');
 
   // --- Swipe: pointerdown/pointerup delta ≥ 60 px horizontal; vertical movement dominating = scroll.
   function onPointerDown(e: PointerEvent) {
@@ -261,6 +415,21 @@ export function CookScreen(props: { id: string }) {
                 <>
                   <div class="cook-kicker">{t('cook.stepOf', { n: stepIndex + 1, total: steps.length })}</div>
                   <StepView big recipeId={id} recipeName={name} index={stepIndex} step={steps[stepIndex]!} fahrenheit={fahrenheit} />
+                  {speechOk && (
+                    <div class="cook-speak">
+                      <button
+                        type="button"
+                        class={'btn-speak' + (isSpeaking ? ' on' : '')}
+                        title={t('cook.readAloudHint')}
+                        aria-label={isSpeaking ? t('cook.readAloudStop') : `${t('cook.readAloud')} — ${t('cook.readAloudHint')}`}
+                        onClick={onReadTap}
+                        {...press}
+                      >
+                        <span aria-hidden="true">{isSpeaking ? '■' : '🔊'}</span>
+                        {isSpeaking ? t('cook.readAloudStop') : t('cook.readAloud')}
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
               {isDone && (
@@ -307,6 +476,23 @@ export function CookScreen(props: { id: string }) {
           </div>
 
           <div class="cook-nav">
+            {showMic && (
+              <button
+                type="button"
+                class={'cook-mic' + (mic !== 'off' ? ' ' + mic : '')}
+                aria-pressed={mic !== 'off'}
+                aria-label={`${t('cook.mic')} — ${micLabel}`}
+                title={t('cook.mic')}
+                onClick={toggleMic}
+              >
+                <span class="mic-ico" aria-hidden="true">
+                  🎤
+                </span>
+                <span class="mic-state" aria-live="polite">
+                  {micLabel}
+                </span>
+              </button>
+            )}
             <button type="button" class="btn btn-secondary" disabled={page === 0} onClick={() => go(page - 1)}>
               ‹ {isDone ? t('cook.notYet') : t('cook.prev')}
             </button>

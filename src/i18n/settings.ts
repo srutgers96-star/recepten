@@ -45,6 +45,44 @@ export const settings: Dict = {
     en: 'Delete ingredient "{name}"? Lines linked to it will show their plain text again.',
   },
 
+  // --- Phase 5 block B: Kookstand & timer (docs/phase-5-spec.md B.1–B.3) ---
+  'more.cookTimer': { nl: 'Kookstand & timer', en: 'Cook mode & timer' },
+  'more.readAloud': { nl: 'Voorlezen', en: 'Read aloud' },
+  'more.readAloudHint': {
+    nl: 'Leest elke stap automatisch voor in de kookstand; 🔊 per stap blijft altijd werken',
+    en: 'Reads each step aloud automatically in cooking mode; 🔊 per step always keeps working',
+  },
+  'more.readAloudUnavailable': {
+    nl: 'Voorlezen is op dit toestel niet beschikbaar',
+    en: 'Read-aloud is not available on this device',
+  },
+  'more.voiceCommands': { nl: 'Spraakcommando’s', en: 'Voice commands' },
+  // Honest capability text (CLAUDE.md invariant 13), phrased platform-neutrally: Android recognises
+  // through Google (internet required), iPhone through Apple dictation (can even work on-device).
+  'more.voiceCommandsHint': {
+    nl: 'Zeg "volgende", "vorige", "timer 10 minuten", "lees voor" of "stop" in de kookstand. Herkenning loopt via de spraakdienst van je telefoon en heeft meestal internet nodig. Op iPhone experimenteel.',
+    en: 'Say "next", "previous", "timer 10 minutes", "read" or "stop" in cooking mode. Recognition uses your phone’s speech service and usually needs internet. Experimental on iPhone.',
+  },
+  'more.voiceUnavailable': {
+    nl: 'Spraakherkenning is op dit toestel niet beschikbaar',
+    en: 'Speech recognition is not available on this device',
+  },
+  'more.timerSound': { nl: 'Timergeluid', en: 'Timer sound' },
+  'more.timerSound.beeps': { nl: 'Piepjes', en: 'Beeps' },
+  'more.timerSound.bell': { nl: 'Belletje', en: 'Bell' },
+  'more.timerSound.melody': { nl: 'Melodietje', en: 'Melody' },
+  'more.timerSound.off': { nl: 'Uit', en: 'Off' },
+  'more.timerSoundPreview': { nl: 'Luister', en: 'Listen' },
+  'more.timerSoundIOSHint': {
+    nl: 'iPhone: staat de stil-schakelaar aan de zijkant aan, dan is er geen geluid uit de app — de melding is dan de enige weg.',
+    en: 'iPhone: with the silent switch on the side on, the app cannot make a sound — the notification is then the only way.',
+  },
+  'more.timerVibrate': { nl: 'Trillen bij afloop', en: 'Vibrate when done' },
+  'more.timerVibrateHint': {
+    nl: 'iPhone kan niet trillen vanuit een web-app; daar trilt alleen de melding.',
+    en: 'An iPhone cannot vibrate from a web app; only the notification vibrates there.',
+  },
+
   // --- Phase 5: Meer rows (docs/phase-5-spec.md A.6 + A.8) ---
   'more.checkRecipes': { nl: 'Controleer mijn recepten', en: 'Check my recipes' },
   'more.checkRecipesHint': { nl: 'Voorstel voor categorie en dieet per eigen recept', en: 'Suggested category and diet per own recipe' },

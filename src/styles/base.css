@@ -18,6 +18,7 @@
   --line: rgba(31, 39, 51, 0.12);
   --press: rgba(43, 79, 168, 0.1);
   --on-cobalt: #ffffff;
+  --on-rosemary: #ffffff;
 
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
@@ -44,6 +45,7 @@
     --line: rgba(232, 238, 246, 0.14);
     --press: rgba(111, 143, 224, 0.16);
     --on-cobalt: #0f1a2b;
+    --on-rosemary: #0f1a2b;
   }
 }
 
@@ -61,6 +63,7 @@
   --line: rgba(232, 238, 246, 0.14);
   --press: rgba(111, 143, 224, 0.16);
   --on-cobalt: #0f1a2b;
+  --on-rosemary: #0f1a2b;
 }
 
 :root[data-theme='light'] {

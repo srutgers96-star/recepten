@@ -122,6 +122,17 @@ export const browse: Dict = {
   'cook.wakeNo': { nl: 'Scherm aan houden lukt niet op dit toestel.', en: 'Keeping the screen on is not supported on this phone.' },
   'cook.swipeHint': { nl: 'Veeg of tik om te bladeren.', en: 'Swipe or tap to move on.' },
 
+  // --- Cook mode, phase 5 B.1-2: read-aloud + voice commands ---
+  'cook.readAloud': { nl: 'Lees voor', en: 'Read aloud' },
+  'cook.readAloudStop': { nl: 'Stop voorlezen', en: 'Stop reading' },
+  'cook.readAloudList': { nl: 'Ingrediënten voorlezen', en: 'Read the ingredients' },
+  'cook.readAloudHint': { nl: 'Houd ingedrukt voor de ingrediënten', en: 'Hold to hear the ingredients' },
+  'cook.mic': { nl: 'Spraakcommando’s', en: 'Voice commands' },
+  'cook.micOff': { nl: 'Mic uit', en: 'Mic off' },
+  'cook.micOn': { nl: 'Mic aan…', en: 'Mic on…' },
+  'cook.micListening': { nl: 'Luistert…', en: 'Listening…' },
+  'cook.micError': { nl: 'Mic-fout', en: 'Mic error' },
+
   // --- Timers ---
   'timer.title': { nl: 'Timers', en: 'Timers' },
   'timer.done': { nl: 'Klaar!', en: 'Done!' },
@@ -142,4 +153,9 @@ export const browse: Dict = {
   },
   'timer.askYes': { nl: 'Meldingen aanzetten', en: 'Turn on notifications' },
   'timer.askNo': { nl: 'Niet nu', en: 'Not now' },
+  // Phase 5 B.3: the 🔔/🔕 sound toggle in the timer bar. 'timer.sound' is the fixed accessible
+  // name (the on/off state comes from aria-pressed); soundOn/soundOff feed the sighted tooltip.
+  'timer.sound': { nl: 'Timergeluid', en: 'Timer sound' },
+  'timer.soundOn': { nl: 'Timergeluid aan', en: 'Timer sound on' },
+  'timer.soundOff': { nl: 'Timergeluid uit', en: 'Timer sound off' },
 };

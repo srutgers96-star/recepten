@@ -984,7 +984,8 @@ function stringArray(v: unknown): string[] {
  * when a profile already exists) are left alone, so restoring the other person's backup on this
  * phone adds their recipes/favourites without switching who this phone is. Throws
  * Error('invalid-bundle') for anything that is not a v2 backup. The caller refreshes the in-memory
- * mirrors afterwards (loadProfiles, reloadCelebrateSettings).
+ * mirrors afterwards (loadProfiles, reloadCelebrateSettings, reloadSoundSettings,
+ * reloadSpeechSettings, reloadVoiceSettings).
  */
 export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
   if (!b || typeof b !== 'object' || b.v !== 2 || b.t !== 'b') throw new Error('invalid-bundle');

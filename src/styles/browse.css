@@ -637,6 +637,28 @@ textarea.input.notes {
   line-height: 1;
 }
 
+/* Phase 5 B.3: slim head row with the one 🔔/🔕 sound toggle for the whole bar. On its own row:
+   as a fifth 44 px button on the first timer row it left the timer label ~18 px at 360 px width. */
+.timerbar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.timerbar-head-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.timerbar-btn.bell {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+}
+
 .timerbar-ask {
   padding: 10px 0 8px;
   border-bottom: 1px solid var(--line);
@@ -1379,4 +1401,119 @@ textarea.input.notes {
   font-size: 11px;
   font-weight: 700;
   color: var(--muted);
+}
+
+/* ---------- Phase 5 (B.1-2): read-aloud + voice commands in cook mode ---------- */
+
+.cook-speak {
+  margin: 4px 0 0;
+}
+
+/* 🔊 "Lees voor" under the step text; tap reads the step, a long press reads the ingredients. */
+.btn-speak {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  max-width: 100%;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.btn-speak:active {
+  background: var(--press);
+}
+
+/* Speaking: the button is the stop control (tokens cover dark mode). */
+.btn-speak.on {
+  background: var(--cobalt);
+  border-color: var(--cobalt);
+  color: var(--on-cobalt);
+}
+
+/* Mic button in the cook nav: icon + a tiny visible state label; colour mirrors the mic state. */
+.cook-mic {
+  flex: none;
+  min-width: 64px;
+  min-height: 56px;
+  padding: 4px 8px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.cook-mic:active {
+  background: var(--press);
+}
+
+.cook-mic .mic-ico {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.cook-mic .mic-state {
+  max-width: 80px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cook-mic.starting {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+/* Green fill with a text token: white fails contrast (~2.6:1) on the light dark-mode rosemary
+   (#6fb06a), so --on-rosemary flips to dark text there — same idea as --on-cobalt. */
+.cook-mic.listening {
+  border-color: var(--rosemary);
+  background: var(--rosemary);
+  color: var(--on-rosemary);
+}
+
+.cook-mic.listening .mic-ico {
+  animation: mic-pulse 1.4s ease-in-out infinite;
+}
+
+.cook-mic.error {
+  border-color: var(--tomato);
+  color: var(--tomato);
+}
+
+@keyframes mic-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cook-mic.listening .mic-ico {
+    animation: none;
+  }
 }
