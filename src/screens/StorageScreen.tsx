@@ -10,6 +10,7 @@
 // yourself, Drive, Files; falls back to a download) and "Download" second (straight to
 // Downloads); after a download the status says "Opgeslagen als <naam> in Downloads".
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
+import { reloadBadgeSettings } from '@/badges';
 import { reloadCelebrateSettings } from '@/celebrate';
 import { Header } from '@/components/Header';
 import type { BackupBundle } from '@/db/model';
@@ -251,9 +252,9 @@ export function StorageScreen() {
     try {
       const result = await importBundle(parsed as BackupBundle);
       // Refresh the in-memory mirrors of what the restore may have changed: profiles, confetti,
-      // timer sound/vibrate, read-aloud and voice commands (the active profile is kept when this
-      // phone already had one; theme and last-backup date are never restored).
-      await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings()]);
+      // timer sound/vibrate, read-aloud, voice commands and badges (the active profile is kept
+      // when this phone already had one; theme and last-backup date are never restored).
+      await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadBadgeSettings()]);
       await reload();
       void refreshShareBadges();
       setRestoreStatus(t('storage.restored', { ...result }));

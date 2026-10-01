@@ -10,6 +10,7 @@
 // change with the setting speech.readAloud) and — only when the API exists and speech.commands is
 // on — a mic button for voice commands (volgende/vorige/lees voor/stop/timer N minuten).
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
 import { Header } from '@/components/Header';
 import { IngredientList } from '@/components/LineView';
@@ -17,7 +18,7 @@ import { parseServingsParam, rememberServings, rememberedServings, ServingsPicke
 import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
-import { getRecipe, logCooked, markRecipeCookedInPlan } from '@/db/repo';
+import { getRecipe, listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
 import { lineText } from '@/dictionary';
 import { nowIso, pickText, type Lang } from '@/domain/model';
 import { pickSpoken, type VoiceCommand } from '@/domain/voice';
@@ -32,6 +33,9 @@ import { canListen, commandsEnabled, loadVoiceSettings, micState, startListening
 const SWIPE_PX = 60;
 const LONG_PRESS_MS = 500;
 const LONG_PRESS_MOVE_PX = 10;
+
+/** Cook counts of one member that earn the big burst instead of the normal one (phase 5 C.4). */
+const COOK_MILESTONES = new Set([10, 25, 50]);
 
 /**
  * Pointer handlers for the 🔊 button: a still ~500 ms press fires `onLong` (read the ingredient
@@ -144,6 +148,9 @@ export function CookScreen(props: { id: string }) {
   const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
   const wake = useWakeLock();
+  // Phase 5 C.4: the FIRST time stars are picked in this visit gets the small burst — changing
+  // the rating afterwards does not fire it again.
+  const starsCelebrated = useRef(false);
 
   const card = useRef<HTMLDivElement>(null);
   const swipe = useRef<{ x: number; y: number; id: number; drag: boolean } | null>(null);
@@ -154,6 +161,7 @@ export function CookScreen(props: { id: string }) {
     setTicked(new Set());
     setStars(0);
     setNote('');
+    starsCelebrated.current = false;
   }, [id]);
 
   const steps = recipe?.steps ?? [];
@@ -309,6 +317,16 @@ export function CookScreen(props: { id: string }) {
     }
   }
 
+  /** A tap on star n: toggle off when it was the rating already; first pick = small burst (C.4). */
+  function chooseStars(n: number) {
+    const next = stars === n ? 0 : n;
+    setStars(next);
+    if (next > 0 && !starsCelebrated.current) {
+      starsCelebrated.current = true;
+      celebrate('stars');
+    }
+  }
+
   async function onCooked() {
     if (busy) return;
     setBusy(true);
@@ -324,7 +342,15 @@ export function CookScreen(props: { id: string }) {
           stars: stars > 0 ? stars : null,
           note: note.trim() ? note.trim() : null,
         });
-        celebrate('cooked');
+        // Phase 5 C.4: this member's 10th/25th/50th cook gets the big burst instead of the normal one.
+        let kind: 'cooked' | 'milestone' = 'cooked';
+        try {
+          const mine = (await listCookLog()).filter((e) => e.profileId === profile.id).length;
+          if (COOK_MILESTONES.has(mine)) kind = 'milestone';
+        } catch (e) {
+          console.error('listCookLog', e);
+        }
+        celebrate(kind);
       }
       // Phase 4: a dish in the week plan gets its "Gekookt" tick (no-op when it is not in the plan).
       try {
@@ -332,6 +358,9 @@ export function CookScreen(props: { id: string }) {
       } catch (e) {
         console.error('markRecipeCookedInPlan', e);
       }
+      // Phase 5 block C: start the badge check, but never make goBack wait for it — the toast
+      // signal survives the navigation (the shell renders it).
+      if (profile) void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
     } finally {
       setBusy(false);
     }
@@ -448,7 +477,7 @@ export function CookScreen(props: { id: string }) {
                             aria-checked={stars === n}
                             aria-label={t('cook.starN', { n })}
                             class={n <= stars ? 'on' : ''}
-                            onClick={() => setStars(stars === n ? 0 : n)}
+                            onClick={() => chooseStars(n)}
                           >
                             ★
                           </button>

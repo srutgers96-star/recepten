@@ -1,10 +1,12 @@
 // Dopamine moments (PLAN.md §0 "Gamification"): `celebrate(kind)` triggers the confetti burst that
 // <Confetti/> (src/components/Confetti.tsx, mounted once in the shell) renders. Never in the way:
-// off with the setting `confetti = false` and under `prefers-reduced-motion`. Badges come later.
+// off with the setting `confetti = false` and under `prefers-reduced-motion`. Phase 5 block C:
+// 'stars' is the small burst (rating a recipe), 'milestone' stays the big one (cook milestones,
+// new badges — src/badges.ts fires it from checkNewBadges).
 import { signal } from '@preact/signals';
 import { getSetting, setSetting } from '@/db/repo';
 
-export type CelebrationKind = 'cooked' | 'firstRecipe' | 'milestone';
+export type CelebrationKind = 'cooked' | 'firstRecipe' | 'milestone' | 'stars';
 
 export interface Celebration {
   kind: CelebrationKind;

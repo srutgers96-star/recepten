@@ -562,6 +562,11 @@ export async function cookedRecipeIds(): Promise<Set<string>> {
   return new Set(rows.map((r) => r.recipeId));
 }
 
+/** Every cook-log entry, ascending on `at` (badge evaluation and the cook milestones, phase 5 C). */
+export async function listCookLog(): Promise<CookLogEntry[]> {
+  return db.cookLog.orderBy('at').toArray();
+}
+
 // --- Profiles ----------------------------------------------------------------------------------
 
 export async function listProfiles(): Promise<Profile[]> {
@@ -861,6 +866,23 @@ export async function markSentTo(name: string, atIso: string = nowIso()): Promis
   const current = await getLastSentTo();
   current[key] = atIso;
   await setSetting(LAST_SENT_TO_KEY, current);
+}
+
+// --- Share counter (phase 5 block C: badge rule 'shared') ------------------------------------------
+
+/** Setting 'stats.sharedRecipes' (number): recipes successfully shared from this phone. */
+export const SHARED_RECIPES_KEY = 'stats.sharedRecipes';
+
+export async function getSharedRecipes(): Promise<number> {
+  const v = await getSetting<unknown>(SHARED_RECIPES_KEY, 0);
+  return typeof v === 'number' && Number.isFinite(v) && v > 0 ? Math.floor(v) : 0;
+}
+
+/** +n (default 1) after a 'shared' outcome; shopping lists and backups are never counted. */
+export async function bumpSharedRecipes(n = 1): Promise<void> {
+  const add = Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+  if (add === 0) return;
+  await setSetting(SHARED_RECIPES_KEY, (await getSharedRecipes()) + add);
 }
 
 // --- Backup health (docs/phase-3-spec.md §4 Storage / Home) --------------------------------------

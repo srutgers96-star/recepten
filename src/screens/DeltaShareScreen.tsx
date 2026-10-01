@@ -7,9 +7,10 @@
 // is stored automatically; "Markeer als verzonden" covers Copy / wa.me (share() cannot tell
 // whether it was sent). Invariant 9: navigator.share with exactly one field, inside the tap.
 import { useEffect, useState } from 'preact/hooks';
+import { checkNewBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
-import { collectDeltaSince, getLastSentTo, markSentTo, type DeltaSince } from '@/db/repo';
+import { bumpSharedRecipes, collectDeltaSince, getLastSentTo, markSentTo, type DeltaSince } from '@/db/repo';
 import { pickText, type Text } from '@/domain/model';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
 import { lang, t } from '@/i18n';
@@ -39,6 +40,19 @@ function summarize(d: DeltaSince): string {
 
 function ingredientName(e: { nl: { one: string }; en: { one: string }; id: string }, l: 'nl' | 'en'): string {
   return (l === 'nl' ? e.nl.one : e.en.one) || e.nl.one || e.en.one || e.id;
+}
+
+/**
+ * Phase 5 block C (badge rule 'shared'): n recipes left this phone through the share sheet.
+ * Fire-and-forget: bump the counter, then re-check badges for the active profile.
+ */
+function countShared(n: number) {
+  void bumpSharedRecipes(n)
+    .then(() => {
+      const pid = activeProfile.value?.id;
+      return pid ? checkNewBadges(pid) : undefined;
+    })
+    .catch((e: unknown) => console.error('bumpSharedRecipes', e));
 }
 
 export function DeltaShareScreen() {
@@ -128,11 +142,15 @@ export function DeltaShareScreen() {
     if (!plan || !('text' in plan) || busy) return;
     setBusy(true);
     setStatus('');
+    // Recipes + patched classics in this delta count for the 'shared' badge (ingredients do not).
+    const shared = delta ? delta.recipes.length + delta.patches.length : 0;
     // navigator.share runs before the first await inside shareText: still within the tap.
     void shareText(plan.text)
       .then(async (r) => {
-        if (r.outcome === 'shared') await markSent(true);
-        else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
+        if (r.outcome === 'shared') {
+          await markSent(true);
+          countShared(shared);
+        } else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
         else if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
       })
       .finally(() => setBusy(false));
@@ -147,10 +165,13 @@ export function DeltaShareScreen() {
     if (!plan || !('file' in plan) || busy) return;
     setBusy(true);
     setStatus('');
+    const shared = delta ? delta.recipes.length + delta.patches.length : 0;
     void shareJsonFile(plan.file.name, plan.file.json)
       .then(async (r) => {
-        if (r.outcome === 'shared') await markSent(true);
-        else if (r.outcome === 'downloaded') setStatus(t('share.fileDownloaded', { name: r.name }));
+        if (r.outcome === 'shared') {
+          await markSent(true);
+          countShared(shared);
+        } else if (r.outcome === 'downloaded') setStatus(t('share.fileDownloaded', { name: r.name }));
         else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
       })
       .finally(() => setBusy(false));

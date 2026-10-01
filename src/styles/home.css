@@ -327,6 +327,14 @@
   font-style: italic;
 }
 
+/* ---------- Phase 5 (block C): the "Badges 7/40" link-card ---------- */
+
+/* The counter next to the title, cobalt like the other link accents; tabular so 7/40 never jumps. */
+.badges-card .badges-card-count {
+  color: var(--cobalt);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---------- Phase 5 (A-bis.8): "Selecteer" next to the "Eigen & ontvangen" title ---------- */
 .home-section h2 .home-select {
   min-height: 44px;

@@ -13,10 +13,11 @@
 // "Deel het bestand" first, "Download" second; a download reports "Opgeslagen als … in Downloads".
 // '#/share' without an id is "Stuur nieuwe naar …" (DeltaShareScreen; no router change).
 import { useEffect, useMemo, useState } from 'preact/hooks';
+import { checkNewBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
-import { getOverride, getRecipe, isBuiltinId, listLineOverrides, listUserIngredients } from '@/db/repo';
+import { bumpSharedRecipes, getOverride, getRecipe, isBuiltinId, listLineOverrides, listUserIngredients } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import type { Ingredient } from '@/domain/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
@@ -58,12 +59,26 @@ interface Built {
   url: string;
 }
 
+/**
+ * Phase 5 block C (badge rule 'shared'): one recipe left this phone through the share sheet.
+ * Fire-and-forget: bump the counter, then re-check badges for the active profile.
+ */
+function countRecipeShared() {
+  void bumpSharedRecipes(1)
+    .then(() => {
+      const pid = activeProfile.value?.id;
+      return pid ? checkNewBadges(pid) : undefined;
+    })
+    .catch((e: unknown) => console.error('bumpSharedRecipes', e));
+}
+
 /** Share plain text: the share sheet when there is one, else WhatsApp's web intent. */
-function doShareText(text: string, setStatus: (s: string) => void) {
+function doShareText(text: string, setStatus: (s: string) => void, onShared?: () => void) {
   setStatus('');
   void shareText(text).then((r) => {
     if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
     else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
+    else if (r.outcome === 'shared' && onShared) onShared();
   });
 }
 
@@ -164,8 +179,10 @@ function RecipeShareScreen(props: { id: string }) {
     if (!file) return;
     setStatus('');
     void shareJsonFile(file.name, file.json).then((r) => {
-      if (r.outcome === 'shared') setStatus(t('share.fileShared'));
-      else if (r.outcome === 'downloaded') setStatus(t('share.fileDownloaded', { name: r.name }));
+      if (r.outcome === 'shared') {
+        setStatus(t('share.fileShared'));
+        countRecipeShared();
+      } else if (r.outcome === 'downloaded') setStatus(t('share.fileDownloaded', { name: r.name }));
       else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
     });
   }
@@ -229,7 +246,7 @@ function RecipeShareScreen(props: { id: string }) {
               <>
                 <pre class="report share-preview">{message || error || t('share.encoding')}</pre>
                 <div class="actions">
-                  <button type="button" class="btn btn-primary btn-block" disabled={!message} onClick={() => doShareText(message, setStatus)}>
+                  <button type="button" class="btn btn-primary btn-block" disabled={!message} onClick={() => doShareText(message, setStatus, countRecipeShared)}>
                     {t('share.whatsapp')}
                   </button>
                   <button type="button" class="btn" disabled={!message} onClick={() => doCopy(message, setStatus)}>
@@ -253,7 +270,7 @@ function RecipeShareScreen(props: { id: string }) {
               )}
               <pre class="report share-preview share-readable">{readable || t('share.encoding')}</pre>
               <div class="actions">
-                <button type="button" class="btn btn-primary btn-block" disabled={!readable} onClick={() => doShareText(readable, setTextStatus)}>
+                <button type="button" class="btn btn-primary btn-block" disabled={!readable} onClick={() => doShareText(readable, setTextStatus, countRecipeShared)}>
                   {t('share.asText')}
                 </button>
                 <button type="button" class="btn" disabled={!readable} onClick={() => doCopy(readable, setTextStatus)}>

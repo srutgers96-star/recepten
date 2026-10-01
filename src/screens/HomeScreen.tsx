@@ -9,7 +9,9 @@
 // chips are the generic `PickChips` (spec §0); "+" in the "Eigen & ontvangen" header opens '/add'.
 // Phase 5 (docs/phase-5-spec.md A-bis.8): "Selecteer" next to that title and a long-press on one
 // of its rows open the Recipes screen in select mode ('#/recipes?select=1[&id=…]').
+// Phase 5 block C: a compact "Badges 7/40" link-card (active profile) when badges are enabled.
 import { useEffect, useMemo, useState } from 'preact/hooks';
+import { badgeStatuses, badgesEnabled, loadBadgeSettings } from '@/badges';
 import { CategoryShelf } from '@/components/CategoryShelf';
 import { Header } from '@/components/Header';
 import { PickChips, applyPickFilter, loadPickFilter, pickFilterActive, savePickFilter, tagIdsIn, type PickFilter } from '@/components/PickSheet';
@@ -62,6 +64,27 @@ export function HomeScreen() {
   useEffect(() => {
     void refreshShareBadges();
   }, []);
+
+  // Phase 5 block C: the compact "Badges 7/40" link-card for the active profile. Badges off =
+  // the card is gone entirely (PLAN.md §0: gamification never in the way).
+  const badgesOn = badgesEnabled.value;
+  const [badgeCount, setBadgeCount] = useState<{ earned: number; total: number } | null>(null);
+  useEffect(() => {
+    if (!badgesOn || !pid) {
+      setBadgeCount(null);
+      return;
+    }
+    let cancelled = false;
+    void loadBadgeSettings()
+      .then(() => (badgesEnabled.value ? badgeStatuses(pid) : null))
+      .then((list) => {
+        if (!cancelled && list) setBadgeCount({ earned: list.filter((s) => s.earned).length, total: list.length });
+      })
+      .catch((e: unknown) => console.error('badgeStatuses', e));
+    return () => {
+      cancelled = true;
+    };
+  }, [badgesOn, pid]);
 
   const byId = useMemo(() => new Map((all ?? []).map((r) => [r.id, r] as const)), [all]);
   const tags = useMemo(() => tagIdsIn(all ?? []), [all]);
@@ -391,6 +414,33 @@ export function HomeScreen() {
             </ul>
           )}
         </section>
+
+        {badgesOn && badgeCount && (
+          <a
+            class="card link-card badges-card"
+            href="#/more/badges"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/more/badges');
+            }}
+          >
+            <span class="link-card-icon" aria-hidden="true">
+              🏆
+            </span>
+            <span class="link-card-text">
+              <strong>
+                {t('home.badges')}{' '}
+                <span class="badges-card-count">
+                  {badgeCount.earned}/{badgeCount.total}
+                </span>
+              </strong>
+              <span class="muted small">{t('home.badgesHint')}</span>
+            </span>
+            <span class="chev" aria-hidden="true">
+              ›
+            </span>
+          </a>
+        )}
 
         <a
           class="card link-card"

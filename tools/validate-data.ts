@@ -1,10 +1,10 @@
 // tools/validate-data.ts — data guard for CI and for the local dev loop.
 //
 // Validates the schema-1 source corpus (data/source/recipes-recepten2.json), the dictionary files
-// (data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json, docs/phase-2-spec.md §1)
-// and the generated schema-2 file data/recipes.json (tools/migrate-from-recepten2.ts, §2 + §4:
+// (data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json, docs/phase-2-spec.md §1),
+// the generated schema-2 file data/recipes.json (tools/migrate-from-recepten2.ts, §2 + §4:
 // dictionary references, `name.en` and every `steps[].text.en` when `text.en` is set, categories,
-// tags, units and qualifiers).
+// tags, units and qualifiers) and the badge list data/badges.json (docs/phase-5-spec.md "Block C").
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
 // Exit:  1 when any error was found, 0 otherwise. Warnings never fail the run.
@@ -632,6 +632,121 @@ export function validateDictionary(data: DictionaryData): ValidationResult {
 }
 
 // ---------------------------------------------------------------------------
+// Badges: data/badges.json (docs/phase-5-spec.md "Block C", src/domain/badges.ts `Badge`)
+// ---------------------------------------------------------------------------
+//
+// Errors: array of badges with unique kebab-case ids, `nl` and `en` each a non-empty name +
+// description, a non-empty icon, a rule whose kind is in the fixed list with an integer n >= 1
+// where applicable, category/tag/ingredient rule ids that exist in the dictionary (same ref sets
+// as validateSchema2), and tier in {1, 2, 3} when present. Warnings: stray rule fields.
+
+/** Rule kinds that carry `{ n }` only (src/domain/badges.ts `BadgeRule`). */
+export const BADGE_COUNT_KINDS: readonly string[] = [
+  'cookCount',
+  'distinctRecipes',
+  'ownRecipes',
+  'reviews',
+  'oneStar',
+  'photos',
+  'shared',
+  'received',
+  'streakWeeks',
+];
+/** Rule kinds that carry `{ id, n }`, checked against the dictionary refs. */
+export const BADGE_REF_KINDS: readonly string[] = ['category', 'tag', 'ingredient'];
+/** Rule kinds without fields. */
+export const BADGE_BARE_KINDS: readonly string[] = ['letters', 'allClassics', 'halfClassics'];
+
+const ALL_BADGE_KINDS: readonly string[] = [...BADGE_COUNT_KINDS, ...BADGE_REF_KINDS, ...BADGE_BARE_KINDS];
+
+/** Which ref set a ref-kind rule id is checked against. */
+const BADGE_REF_SET: Readonly<Record<string, keyof DictionaryRefs>> = {
+  category: 'categories',
+  tag: 'tags',
+  ingredient: 'ingredients',
+};
+
+/**
+ * Validate data/badges.json. Pure: takes the parsed JSON, returns errors/warnings.
+ * With `refs` (see `refsFromData`) category/tag/ingredient rule ids are checked as well.
+ */
+export function validateBadges(data: unknown, refs?: DictionaryRefs): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  if (!Array.isArray(data)) {
+    errors.push('badges.json: must be an array of badges.');
+    return { errors, warnings, stats: { recipes: 0, lines: 0 } };
+  }
+
+  const seen = new Map<string, number>();
+  data.forEach((badge: unknown, index: number) => {
+    const where = `badges.json[${index}]`;
+    if (!isRecord(badge)) {
+      errors.push(`${where}: not an object.`);
+      return;
+    }
+
+    const id = badge['id'];
+    const label = typeof id === 'string' && id !== '' ? `badges.json ${JSON.stringify(id)}` : where;
+    if (typeof id !== 'string' || !ID_RE.test(id)) {
+      errors.push(`${where}: "id" must be a kebab-case slug (a-z, 0-9, dashes), got ${JSON.stringify(id)}.`);
+    } else {
+      const first = seen.get(id);
+      if (first !== undefined) errors.push(`${label}: duplicate id (also badge #${first}).`);
+      else seen.set(id, index);
+    }
+
+    for (const lang of ['nl', 'en'] as const) {
+      const text = badge[lang];
+      if (!isRecord(text)) {
+        errors.push(`${label}: "${lang}" must be { name, description }.`);
+        continue;
+      }
+      for (const field of ['name', 'description'] as const) {
+        const v = text[field];
+        if (typeof v !== 'string' || v.trim() === '') errors.push(`${label}: "${lang}.${field}" must be a non-empty string.`);
+      }
+    }
+
+    const icon = badge['icon'];
+    if (typeof icon !== 'string' || icon.trim() === '') errors.push(`${label}: "icon" must be a non-empty string.`);
+
+    const rule = badge['rule'];
+    if (!isRecord(rule) || typeof rule['kind'] !== 'string' || !ALL_BADGE_KINDS.includes(rule['kind'])) {
+      errors.push(`${label}: "rule.kind" must be one of ${ALL_BADGE_KINDS.join(' | ')}.`);
+    } else {
+      const kind = rule['kind'];
+      const needsN = BADGE_COUNT_KINDS.includes(kind) || BADGE_REF_KINDS.includes(kind);
+      if (needsN) {
+        const n = rule['n'];
+        if (typeof n !== 'number' || !Number.isInteger(n) || n < 1) errors.push(`${label}: rule.n must be an integer >= 1 for kind "${kind}".`);
+      } else if (rule['n'] !== undefined || rule['id'] !== undefined) {
+        warnings.push(`${label}: rule kind "${kind}" takes no fields; "n"/"id" are ignored.`);
+      }
+      if (BADGE_REF_KINDS.includes(kind)) {
+        const refId = rule['id'];
+        if (typeof refId !== 'string' || refId === '') {
+          errors.push(`${label}: rule.id must be a non-empty id string for kind "${kind}".`);
+        } else if (refs) {
+          const refSet = BADGE_REF_SET[kind];
+          if (refSet && !refs[refSet].has(refId)) {
+            errors.push(`${label}: rule.id ${JSON.stringify(refId)} is not a known ${kind} id.`);
+          }
+        }
+      } else if (BADGE_COUNT_KINDS.includes(kind) && rule['id'] !== undefined) {
+        warnings.push(`${label}: rule kind "${kind}" takes no "id"; it is ignored.`);
+      }
+    }
+
+    const tier = badge['tier'];
+    if (tier !== undefined && tier !== 1 && tier !== 2 && tier !== 3) errors.push(`${label}: "tier" must be 1, 2 or 3 when present.`);
+  });
+
+  return { errors, warnings, stats: { recipes: 0, lines: data.length } };
+}
+
+// ---------------------------------------------------------------------------
 // CLI entry
 // ---------------------------------------------------------------------------
 
@@ -663,6 +778,11 @@ function main(): void {
     `${dictData.units.length} units, ${dictData.qualifiers.length} qualifiers, ${dictData.prepPhrases.length} prep phrases, ${dictData.notePhrases?.length ?? 0} note phrases, ${dictData.ingredients.length} ingredients`,
   );
   if (dictionary.errors.length > 0) failed = true;
+
+  const badgesRel = 'data/badges.json';
+  const badges = validateBadges(readJson(join(root, badgesRel)), refsFromData(dictData));
+  print(badgesRel, badges, `${badges.stats.lines} badges`);
+  if (badges.errors.length > 0) failed = true;
 
   const schema2Rel = 'data/recipes.json';
   const schema2Path = join(root, schema2Rel);

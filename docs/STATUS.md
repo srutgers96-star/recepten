@@ -1,38 +1,43 @@
-# Status — Rutgers' Recepten (bijgewerkt 1 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 2 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 
 ## Online (https://srutgers96-star.github.io/recepten/)
-Fase 0–4 compleet + fase 5 blok A, A-bis en B (1 oktober 2026). Repo: https://github.com/srutgers96-star/recepten.
+Fase 0–4 compleet + fase 5 blok A, A-bis, B en C (2 oktober 2026). Repo: https://github.com/srutgers96-star/recepten.
 
 ## Lokaal gecommit, nog NIET gepusht
 (niets — alles staat online)
 
 ## Afgerond (ter info)
-Blok B (kookstand+): src/speech.ts (voorlezen, stem per taal, cancel bij navigatie), src/voice.ts +
-src/domain/voice.ts (spraakcommando's: volgende/vorige/timer N/lees voor/stop, NL+EN, echo-guard
-hearingOwnVoice + 'ga terug'/'go back'), src/sounds.ts (timer.sound beeps/bell/melody/off + timer.vibrate,
-WebAudio), 🔊 per stap + mic-knop in CookScreen, 🔔 in de timerbalk (eigen koprij), sectie "Kookstand &
-timer" in Meer, reloadSpeech/Voice/SoundSettings na restore, DEVICE-TEST rijen 41–43 (NL+EN),
-tests/voice.test.ts. Gebouwd via workflow (4 bouwers → integratie → 3 reviews → verificatie → fix;
-12 bevindingen gerepareerd).
+Blok C (gamification): data/badges.json (43 badges NL+EN, gevalideerd door validateBadges in
+tools/validate-data.ts), src/domain/badges.ts (pure evaluatie: cookCount/distinct/letters/streakWeeks/
+category/tag/ingredient/allClassics/…; fotobadges verborgen tot blok D) + 28 tests, src/badges.ts
+(badges.enabled, badges.earned, toast-wachtrij, checkNewBadges na koken/opslaan/import/delen),
+BadgesScreen op /more/badges (tabs per lid + Samen, ?tab=), Home-kaart "Badges N/M", toast in de shell,
+Badges-switch + rij in Meer, celebrate 'stars' (kleine burst) + milestones 10/25/50, share-teller
+stats.sharedRecipes, DEVICE-TEST rijen 44–45. Blok B (kookstand+): voorlezen, spraakcommando's,
+timergeluid — zie commit 4e4519e.
 
-## Volgende stap: blok C (badges & confetti), zie docs/phase-5-spec.md "Block C"
-1. data/badges.json (~40 badges met regel-soorten, speelse namen NL+EN) + src/domain/badges.ts (puur,
-   geëvalueerd over kooklog/recepten/foto's per lid en huishouden) + tests.
-2. Scherm /more/badges (+ Home-kaart "Badges 7/40" als aan): grid per lid + "Samen", verdiend vs
-   vergrendeld met voortgang, tik → detail; nieuwe badge → toast + confetti (milestone-soort).
-3. Instellingen: badges.enabled naast confetti; beide uit = geen gamification.
-4. Extra dopamine-momenten: sterren geven → kleine confetti; eerste foto; 10e/25e/50e kook groter.
+## Volgende stap: blok D (foto's, print/kopieer, verhaal, curator, QR), zie docs/phase-5-spec.md "Block D"
+1. Eigen foto per recept (photos-tabel: recipeId, memberId, blob ≤1024px WebP/JPEG via canvas, at);
+   detail toont nieuwste foto als hero + galerij; "Gekookt!" biedt "Foto toevoegen". Nooit in tokens;
+   in back-ups optioneel (standaard zonder, met schakelaar). Fotobadges (blok C) gaan dan live:
+   badgeData() toont ze weer en badgeStatuses telt echte foto's.
+2. Print/PDF/kopieer: window.print() met print-stylesheets voor recept (één pagina), ingrediënten per
+   recept, boodschappenlijst (A4, gangpad-kolommen); "Kopieer als tekst" voor dezelfde drie.
+3. Verhaalpagina compleet: cover-hero, beide talen, "Samen al N van de 196", huishoudleden.
+4. Curator-scherm voor Gabi (/more/curator): 196 met status machine/reviewed/missing, EN naast NL,
+   override text.en='human' + reviewedBy, "Stuur correcties" = bundel overrides via share.
+5. QR: ADR-regel voor 'qrcode' óf eigen encoder in src/domain/qr.ts; "Toon QR" achter Experimenten-flag.
 Daarna: npm run check/test/build/build:next/validate:data, smoke-test, commit, push, gh run watch, live check.
 
 ## Daarna, blok voor blok, elk apart online (zie docs/phase-5-spec.md en het tijdsoverzicht)
-C badges & confetti → D foto's/print/curator/verhuizen/QR → E groot woordenboek →
-F vrienden via link/QR + varianten. Stijn zegt per blok "door".
+D foto's/print/curator/QR → E groot woordenboek → F vrienden via link/QR + varianten.
+Stijn zegt per blok "door".
 
 ## Praktisch
 - Git/gh niet in PATH van de tool-shell: `export PATH="/c/Program Files/Git/cmd:/c/Program Files/GitHub CLI:$PATH"` (Bash) of absolute paden.
 - Commits in het Nederlands, afsluiten met `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>`.
 - Gabi (iPhone, Engels) test mee en schrijft soms zelf in de chat — in het Engels antwoorden.
 - Open bugs/wensen: zie PLAN.md §0 (rijen van 29/30-09) en docs/DEVICE-TEST.md.
-- Blok B moet nog op beide telefoons door DEVICE-TEST rijen 41–43 (voorlezen, spraak, timergeluid).
+- Blok B+C moeten nog op beide telefoons door DEVICE-TEST rijen 41–45 (voorlezen, spraak, timergeluid, badges, gamification-uit).

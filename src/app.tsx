@@ -1,8 +1,10 @@
 // Root of the full app: boot (builtins, profiles, theme), shell (header/screen/nav), hash routing,
 // onboarding gate, install card, update bar, confetti. Routes per docs/phase-1-spec.md §4 plus
 // phase 4 (docs/phase-4-spec.md §3): '/week' and '/shopping', and phase 5 (docs/phase-5-spec.md
-// block A): '/more/check-recipes' and '/more/household'; block A-bis: '/more/dictionary'.
+// block A): '/more/check-recipes' and '/more/household'; block A-bis: '/more/dictionary';
+// block C: '/more/badges' plus the new-badge toast next to <Confetti/>.
 import { useEffect, useState } from 'preact/hooks';
+import { badgeToast, dismissBadgeToast, loadBadgeSettings } from './badges';
 import { loadCelebrateSettings } from './celebrate';
 import { Confetti } from './components/Confetti';
 import { InstallCard } from './components/InstallCard';
@@ -15,6 +17,7 @@ import { startInboxBadge } from './inbox-badge';
 import { loadProfiles, needsOnboarding } from './profile';
 import { requestPersistentStorage } from './pwa';
 import { IMPORT_ROUTE, navigate, route, startRouter, type Route } from './router';
+import { BadgesScreen } from './screens/BadgesScreen';
 import { CheckRecipesScreen } from './screens/CheckRecipesScreen';
 import { CheckScreen } from './screens/CheckScreen';
 import { CookScreen } from './screens/CookScreen';
@@ -42,6 +45,45 @@ startRouter();
 initTheme();
 // The device-check test timer counts (and fires) on every screen, not only while Check is open.
 startTestTimerTicker();
+
+/** Toast lifetime; long enough to read "Nieuwe badge: …", short enough to never nag. */
+const BADGE_TOAST_MS = 6000;
+
+/**
+ * The "new badge" toast (docs/phase-5-spec.md C.2), mounted once in the shell next to <Confetti/>.
+ * Tap → the badges screen; auto-dismisses after ~6 s. The aria-live wrapper is always mounted so
+ * screen readers announce the toast when it appears. Badges off → badgeToast never fires (no trace).
+ */
+function BadgeToast() {
+  const nb = badgeToast.value;
+  useEffect(() => {
+    if (!nb) return;
+    const handle = setTimeout(dismissBadgeToast, BADGE_TOAST_MS);
+    return () => clearTimeout(handle);
+  }, [nb]);
+  return (
+    <div class="badge-toast-wrap" aria-live="polite">
+      {nb && (
+        <button
+          type="button"
+          class="badge-toast"
+          title={t('badges.toastOpen')}
+          onClick={() => {
+            dismissBadgeToast();
+            // '?tab=': open on the tab that actually earned it. 'all' = "Samen": a household badge
+            // can be reached together while every member tab still shows it locked.
+            navigate('/more/badges?tab=' + encodeURIComponent(nb.memberId));
+          }}
+        >
+          <span class="badge-toast-icon" aria-hidden="true">
+            {nb.badge.icon}
+          </span>
+          <span class="badge-toast-text">{t(nb.memberId === 'all' ? 'badges.toastTogether' : 'badges.toast', { name: nb.badge[lang.value].name })}</span>
+        </button>
+      )}
+    </div>
+  );
+}
 
 function NotFound() {
   return (
@@ -95,6 +137,9 @@ function Screen(props: { r: Route }) {
         // Phase 5 (docs/phase-5-spec.md A-bis.6): the dictionary screen (own entries, merge, clean-up).
         case 'dictionary':
           return <DictionaryScreen />;
+        // Phase 5 (docs/phase-5-spec.md C.2): badges per member + "Samen".
+        case 'badges':
+          return <BadgesScreen />;
         default:
           return <NotFound />;
       }
@@ -117,6 +162,7 @@ export function App(props: { openImportFromHash: boolean }) {
     document.documentElement.lang = lang.value;
     void requestPersistentStorage();
     void loadCelebrateSettings();
+    void loadBadgeSettings();
     // The router already moved a boot-time token into pendingImport and routed to the inbox;
     // this only guards the case where boot said "token" but the hash was already changed.
     const seg = route.value.segments[0];
@@ -181,6 +227,7 @@ export function App(props: { openImportFromHash: boolean }) {
       <InstallCard />
       {!onboarding && <Nav />}
       <Confetti />
+      <BadgeToast />
     </div>
   );
 }

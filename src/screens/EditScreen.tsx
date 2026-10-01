@@ -17,6 +17,7 @@
 // dictionary rendering as the other column's grey placeholder (nothing stored unless typed);
 // "Kies bestand" reads a recipe/bundle/backup file and hands it to the Inbox for the merge UI.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
 import { IngredientPicker } from '@/components/IngredientPicker';
 import { LineChips, rawFromLine, type LineEdit } from '@/components/LineChips';
@@ -520,6 +521,10 @@ export function EditScreen(props: { id?: string }) {
       const firstOwn = !existing && (await userRecipes()).every((r) => r.origin.kind !== 'user');
       await saveUserRecipe(recipe);
       if (firstOwn) celebrate('firstRecipe');
+      // Phase 5 block C: an own recipe can finish 'Eigen inbreng'/'Receptenschrijver' the moment
+      // it is saved; never make the navigation wait for it (the shell renders the toast).
+      const pid = activeProfile.value?.id;
+      if (pid) void checkNewBadges(pid).catch((e: unknown) => console.error('checkNewBadges', e));
       navigate('/recipe/' + recipe.id, { replace: true });
     } catch (e) {
       setStatus(`${t('edit.saveError')}: ${String(e)}`);

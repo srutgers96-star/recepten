@@ -19,6 +19,13 @@ export const settings: Dict = {
   'more.theme.dark': { nl: 'Donker', en: 'Dark' },
   'more.confetti': { nl: 'Confetti', en: 'Confetti' },
   'more.confettiHint': { nl: 'Bij "Gekookt!" en je eerste eigen recept', en: 'On "Cooked!" and your first own recipe' },
+  // --- Phase 5 block C: badges (PLAN §0 Gamification: both off = no gamification at all) ---
+  'more.badges': { nl: 'Badges', en: 'Badges' },
+  'more.badgesHint': {
+    nl: 'Badgepagina en een melding bij een nieuwe badge. Badges én Confetti uit = nergens gamification.',
+    en: 'Badge page and a toast for a new badge. Badges and Confetti both off = no gamification anywhere.',
+  },
+  'more.badgesRowHint': { nl: 'Verdiend en nog te verdienen, per lid en Samen', en: 'Earned and still to earn, per member and Together' },
   'more.storage': { nl: 'Opslag & back-up', en: 'Storage & backup' },
   'more.sendNew': { nl: 'Stuur nieuwe naar …', en: 'Send new to …' },
   'more.sendNewHint': { nl: 'Alles wat je sinds de vorige keer maakte of aanpaste', en: 'Everything you made or changed since last time' },

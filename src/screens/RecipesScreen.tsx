@@ -16,6 +16,7 @@
 // Verwijder (own and received only, confirm) and Exporteer (a bundle file). Escape or "Klaar"
 // leaves select mode.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { checkNewBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { PickChips, applyPickFilter, loadPickFilter, pickFilterActive, savePickFilter, tagIdsIn, type PickFilter } from '@/components/PickSheet';
@@ -23,7 +24,7 @@ import { RecipeRow } from '@/components/RecipeRow';
 import { SelectBar, type MetaChange } from '@/components/SelectBar';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
-import { addToPlan, allRecipes, deleteUserRecipe, getOverride, isBuiltinId, listFavorites, listLineOverrides, listUserIngredients, saveOverride, saveUserRecipe } from '@/db/repo';
+import { addToPlan, allRecipes, bumpSharedRecipes, deleteUserRecipe, getOverride, isBuiltinId, listFavorites, listLineOverrides, listUserIngredients, saveOverride, saveUserRecipe } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
 import { type LineOverride, type RecipeOverride } from '@/domain/overrides';
@@ -76,6 +77,19 @@ function linksOnlyOverride(baseId: string, lineOverrides: LineOverride[]): Recip
 interface ShareData {
   plan: MessagePlan;
   bundle: Envelope;
+}
+
+/**
+ * Phase 5 block C (badge rule 'shared'): n recipes left this phone through the share sheet.
+ * Fire-and-forget: bump the counter, then re-check badges for the active profile.
+ */
+function countShared(n: number) {
+  void bumpSharedRecipes(n)
+    .then(() => {
+      const pid = activeProfile.value?.id;
+      return pid ? checkNewBadges(pid) : undefined;
+    })
+    .catch((e: unknown) => console.error('bumpSharedRecipes', e));
 }
 
 export function RecipesScreen() {
@@ -302,16 +316,22 @@ export function RecipesScreen() {
     if (!shareData || selectBusy) return;
     setSelectBusy(true);
     setSelectStatus('');
+    // Count what is in the share sheet now, not what is selected when the sheet closes.
+    const shared = selectedList.length;
     const plan = shareData.plan;
     const done = 'text' in plan
       ? shareText(plan.text).then((r) => {
-          if (r.outcome === 'shared') setSelectStatus(t('select.shared'));
-          else if (r.outcome === 'no-share-api') setSelectStatus(t('share.noShareApi'));
+          if (r.outcome === 'shared') {
+            setSelectStatus(t('select.shared'));
+            countShared(shared);
+          } else if (r.outcome === 'no-share-api') setSelectStatus(t('share.noShareApi'));
           else if (r.outcome === 'failed') setSelectStatus(`${t('share.error')}: ${r.error ?? ''}`);
         })
       : shareJsonFile(plan.file.name, plan.file.json).then((r) => {
-          if (r.outcome === 'shared') setSelectStatus(t('share.fileShared'));
-          else if (r.outcome === 'downloaded') setSelectStatus(t('share.fileDownloaded', { name: r.name }));
+          if (r.outcome === 'shared') {
+            setSelectStatus(t('share.fileShared'));
+            countShared(shared);
+          } else if (r.outcome === 'downloaded') setSelectStatus(t('share.fileDownloaded', { name: r.name }));
           else if (r.outcome === 'failed') setSelectStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
         });
     void done.finally(() => setSelectBusy(false));

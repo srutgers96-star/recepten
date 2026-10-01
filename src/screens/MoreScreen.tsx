@@ -6,6 +6,7 @@
 // "Over" (version, sha, channel, GitHub). Phase 5: "Huishouden" (under the profile card) and
 // "Controleer mijn recepten" (docs/phase-5-spec.md A.6 / A.8).
 import { useEffect, useState } from 'preact/hooks';
+import { badgesEnabled, loadBadgeSettings, setBadgesEnabled } from '@/badges';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo, isIOS } from '@/components/AppInfo';
 import { Header, chooseLang } from '@/components/Header';
@@ -76,6 +77,8 @@ export function MoreScreen() {
 
   useEffect(() => {
     void loadCelebrateSettings();
+    // Phase 5 block C: the badges switch mirrors the setting 'badges.enabled' (idempotent load).
+    void loadBadgeSettings();
     // Phase 5 block B: read-aloud, voice commands, timer sound & vibrate (all idempotent loads).
     void loadSpeechSettings();
     void loadVoiceSettings();
@@ -178,6 +181,17 @@ export function MoreScreen() {
             </div>
             <span class="switch">
               <input type="checkbox" checked={confettiEnabled.value} onChange={(e) => void setConfettiEnabled((e.currentTarget as HTMLInputElement).checked)} />
+              <span class="track" />
+            </span>
+          </label>
+          {/* Phase 5 block C: badges off = no badge row, no Home card, no toast (PLAN §0 Gamification). */}
+          <label class="setting">
+            <div class="label">
+              {t('more.badges')}
+              <small>{t('more.badgesHint')}</small>
+            </div>
+            <span class="switch">
+              <input type="checkbox" checked={badgesEnabled.value} onChange={(e) => void setBadgesEnabled((e.currentTarget as HTMLInputElement).checked)} />
               <span class="track" />
             </span>
           </label>
@@ -286,6 +300,8 @@ export function MoreScreen() {
         <DictionarySection />
 
         <section class="section menu">
+          {/* Phase 5 block C: only while the switch above is on — off means no trace of gamification. */}
+          {badgesEnabled.value && <MenuRow label={`🏆 ${t('more.badges')}`} sub={t('more.badgesRowHint')} to="/more/badges" />}
           <MenuRow label={t('more.sendNew')} sub={t('more.sendNewHint')} to="/share" badge={unsent > 0 ? String(unsent > 99 ? '99+' : unsent) : undefined} />
           {/* Phase 5 (docs/phase-5-spec.md A.6): suggested category + diet tags per own recipe. */}
           <MenuRow label={t('more.checkRecipes')} sub={t('more.checkRecipesHint')} to="/more/check-recipes" />

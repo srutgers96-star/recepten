@@ -41,8 +41,11 @@ function mulberry32(seed: number): () => number {
 
 export function Confetti(props: ConfettiProps) {
   const current = celebration.value;
-  const pieces = props.pieces ?? 80;
-  const durationMs = props.durationMs ?? 1200;
+  // Phase 5 block C: 'stars' (rating a recipe) is the small burst — fewer pieces, a shorter
+  // flight. Every other kind keeps the full burst; the overlay carries data-kind either way.
+  const small = current?.kind === 'stars';
+  const pieces = props.pieces ?? (small ? 26 : 80);
+  const durationMs = props.durationMs ?? (small ? 850 : 1200);
 
   useEffect(() => {
     if (!current) return;
@@ -56,9 +59,9 @@ export function Confetti(props: ConfettiProps) {
     const out: Array<{ style: string; round: boolean }> = [];
     for (let i = 0; i < pieces; i++) {
       const angle = -Math.PI / 2 + (rnd() - 0.5) * Math.PI * 1.4; // mostly upwards, wide fan
-      const dist = 120 + rnd() * 320;
+      const dist = small ? 80 + rnd() * 180 : 120 + rnd() * 320; // the small burst stays close
       const dx = Math.cos(angle) * dist;
-      const dy = Math.sin(angle) * dist + 140; // gravity: pieces end lower than they peaked
+      const dy = Math.sin(angle) * dist + (small ? 90 : 140); // gravity: pieces end lower than they peaked
       const color = COLORS[Math.floor(rnd() * COLORS.length)] ?? COLORS[0];
       const style = [
         `--c:${color}`,

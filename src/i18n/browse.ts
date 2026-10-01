@@ -21,6 +21,9 @@ export const browse: Dict = {
   'home.allRecipes': { nl: 'Alle recepten', en: 'All recipes' },
   'home.story': { nl: 'Het verhaal', en: 'The story' },
   'home.storyHint': { nl: 'Waar dit boek vandaan komt', en: 'Where this book comes from' },
+  // Phase 5 block C: the "Badges 7/40" link-card (names/descriptions live in data/badges.json).
+  'home.badges': { nl: 'Badges', en: 'Badges' },
+  'home.badgesHint': { nl: 'Wat heb je al verdiend?', en: 'What have you earned so far?' },
   'home.teaser': {
     nl: 'Weekplanner en boodschappenlijst komen in een volgende versie.',
     en: 'The weekly planner and shopping list are coming in a later version.',

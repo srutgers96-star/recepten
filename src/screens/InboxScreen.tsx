@@ -9,6 +9,7 @@
 // history (listImports, collapsible) and the received recipes (unseen badge via 'inbox.seenIds',
 // received patches of classics shown as "<klassieker> · aangepast door X").
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
 import { ImportPreview } from '@/components/ImportPreview';
 import { useLive } from '@/db/live';
@@ -39,6 +40,7 @@ import { planWrites } from '@/components/ImportPreview';
 import { decodeToken, extractTokens } from '@/domain/token';
 import { lang, t } from '@/i18n';
 import { INBOX_SEEN_KEY, refreshShareBadges, unsentChanges } from '@/inbox-badge';
+import { activeProfile } from '@/profile';
 import { navigate, pendingImport, route } from '@/router';
 
 // --- Seen bookkeeping (setting 'inbox.seenIds'; the Nav badge in src/inbox-badge.ts follows it) ---
@@ -54,6 +56,12 @@ export async function markInboxSeen(id: string): Promise<void> {
   if (seen.has(id)) return;
   seen.add(id);
   await setSetting(INBOX_SEEN_KEY, [...seen]);
+}
+
+/** Phase 5 block C: received recipes can finish 'Verzamelaar' the moment they are imported. */
+function checkBadgesAfterImport() {
+  const pid = activeProfile.value?.id;
+  if (pid) void checkNewBadges(pid).catch((e: unknown) => console.error('checkNewBadges', e));
 }
 
 // --- Input -> one ParsedShare -------------------------------------------------------------------
@@ -442,6 +450,7 @@ export function InboxScreen() {
         setResult(res);
         setNotice('');
         clearText();
+        checkBadgesAfterImport();
       }
     } catch (e) {
       console.error('import', e);
@@ -464,7 +473,10 @@ export function InboxScreen() {
       if (plan && planWrites(plan, choices)) {
         const res = await applyImportPlan(plan, choices, { name: plan.by ?? received.by ?? '' });
         if (res.ingredients > 0) await reloadDictionary();
-        if (res.importId !== undefined) setResult(res);
+        if (res.importId !== undefined) {
+          setResult(res);
+          checkBadgesAfterImport();
+        }
       }
       const known: PlanShare['items'] = [];
       let unknown = 0;
