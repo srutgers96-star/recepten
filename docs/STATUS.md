@@ -3,13 +3,17 @@
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 
 ## Online (https://srutgers96-star.github.io/recepten/)
-Fase 0–4 compleet + fase 5 blok A (commit cffd621). Repo: https://github.com/srutgers96-star/recepten.
+Fase 0–4 compleet + fase 5 blok A en A-bis (commit c5d23db, 1 oktober 2026). Repo: https://github.com/srutgers96-star/recepten.
 
 ## Lokaal gecommit, nog NIET gepusht
+(niets — alles staat online)
+
+## Afgerond (ter info)
 Blok A-bis deel 1 (commit a3bb8b3): Amerikaanse eenheden/namen, note-phrases, parser/render (noteForeign),
 translate-prompt herschreven, merge-ingredients.ts, selecteer-stand in de receptenlijst, exporthints.
 
-## Volgende stap: blok A-bis deel 2 (spec: docs/phase-5-spec.md "Block A-bis", items 1–9)
+## Volgende stap: blok B (kookstand+), zie docs/phase-5-spec.md "Block B"
+A-bis deel 2 is af (ter info stond hier:) (spec: docs/phase-5-spec.md "Block A-bis", items 1–9)
 Nog te bouwen: IngredientPicker "bestaat al"-banner (findExisting), src/screens/DictionaryScreen.tsx
 (zoeken, eigen entry bewerken, Fuseer met bestaand via repo.mergeIngredient + undo, Opruimen),
 route '/more/dictionary' (bestaat al in app.tsx? controleer), EditScreen: nieuwe vertaalprompt koppelen
