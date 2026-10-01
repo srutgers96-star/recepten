@@ -22,7 +22,14 @@
 // qualifier; "fijngesneden" is chopped or sliced depending on the ingredient (`cut`).
 //
 // English input (lang 'en') uses the English unit/qualifier tables, "juice of", " or ", "to taste",
-// "(garnish)" and reads "1.5" as a decimal; "1,5" is accepted in both languages.
+// "(garnish)" and reads "1.5" as a decimal; "1,5" is accepted in both languages. US units (lb, oz,
+// cup, stick) are units.json ids; the renderer converts them for Dutch readers.
+//
+// Free text is never half-translated (docs/phase-5-spec.md A-bis.1): a parenthetical or comma tail
+// is translated as a whole through the prep phrases and note phrases (incl. `,`/`;`/and-parts and
+// "{n}" templates), or as "[phrase] quantity unit [phrase]" with the unit converted for the other
+// language ("approximately 1 pound" -> "ongeveer 450 g"); anything else stays a note in the SOURCE
+// language only, and the renderer marks it (`noteForeign`) when it shows it in the other language.
 import type { Lang, Line, LinePart, Qty, Text } from './model.ts';
 import type { Dictionary } from './dictionary.ts';
 import { normalizeKey } from './dictionary.ts';
@@ -42,7 +49,7 @@ const NUMBER = [
   String.raw`\d+(?:[.,]\d+)?`, // 400, 1,5, 1.5
   VULGAR_CLASS, // ½
 ].join('|');
-const APPROX = String.raw`(?:ca\.?|circa|±|ongeveer|approx\.?|about|roughly)\s*`;
+const APPROX = String.raw`(?:ca\.?|circa|±|ongeveer|zo'n|approximately|approx\.?|about|around|roughly)\s*`;
 const RANGE_SEP = String.raw`(?:\s?[-–—]\s?|\s+(?:tot|à|of|to|or)\s+)`;
 const QTY_RE = new RegExp(
   String.raw`^(${APPROX})?(?:(${NUMBER})${RANGE_SEP}(${NUMBER})|(\d+)\+(\d+)|(${NUMBER}))(?=\s|$|\p{L})\s*`,
@@ -105,15 +112,21 @@ function tidyName(s: string): string {
   return collapse(s).replace(/^[,;.\s]+|[,;.\s]+$/g, '');
 }
 
-function joinText(a: Text | null | undefined, b: Text, sep: string): Text {
+/**
+ * Joins two texts per language. The source language (`source`, the language the line was written in)
+ * keeps every part; the other language is only claimed when EVERY part has it, so a reader of that
+ * language falls back to the complete source text instead of seeing half a note. Without `source`
+ * (legacy) Dutch is treated as the source.
+ */
+function joinText(a: Text | null | undefined, b: Text, sep: string, source: Lang = 'nl'): Text {
   if (!a) return b;
+  const other: Lang = source === 'nl' ? 'en' : 'nl';
   const out: Text = {};
-  const nl = [a.nl, b.nl].filter((s): s is string => !!s);
-  const en = [a.en, b.en].filter((s): s is string => !!s);
-  if (nl.length) out.nl = nl.join(sep);
-  // Only claim an English text when every part has one.
-  if (en.length && en.length === nl.length) out.en = en.join(sep);
-  else if (en.length && !nl.length) out.en = en.join(sep);
+  const src = [a[source], b[source]].filter((s): s is string => !!s);
+  const oth = [a[other], b[other]].filter((s): s is string => !!s);
+  if (src.length) out[source] = src.join(sep);
+  if (oth.length && oth.length === src.length) out[other] = oth.join(sep);
+  else if (oth.length && !src.length) out[other] = oth.join(sep);
   return out;
 }
 
@@ -229,6 +242,7 @@ function matchUnit(text: string, dict: Dictionary, lang: Lang): { id: string; re
     // Consume the same number of source characters (keys only fold diacritics, so lengths match).
     let rest = text.slice(alias.length);
     rest = rest.replace(/^\.?,?\s*/, '');
+    if (lang === 'en') rest = rest.replace(/^of\s+/iu, '');
     return { id: unit.id, rest };
   }
   return null;
@@ -282,13 +296,86 @@ const CUBE_NOTE_RE = /^blokjes?$/iu;
 function addPrep(body: Body, t: Text, lang: Lang): void {
   if (!t.nl && !t.en) return;
   if (lang === 'nl' ? t.en === undefined : t.nl === undefined) body.prepOk = false;
-  body.prep = joinText(body.prep, t, '; ');
+  body.prep = joinText(body.prep, t, '; ', lang);
 }
 
 function prepText(text: string, dict: Dictionary, lang: Lang, body: Body): Text {
-  if (lang !== 'nl') return dict.prepFromEn(text);
   const ing = body.ing ? dict.get(body.ing) : undefined;
-  return dict.prepFor(text, { slice: ing?.cut === 'slice' });
+  return dict.noteFor(text, lang, { slice: ing?.cut === 'slice' });
+}
+
+/** Both languages known for this text. */
+function bilingual(t: Text): boolean {
+  return t.nl !== undefined && t.en !== undefined;
+}
+
+/** Rounded the way the shopping list rounds base amounts: to 1 below 10, 5 below 100, 10 below 1000, 50 above. */
+function niceAmount(n: number): number {
+  const roundTo = (v: number, step: number) => Math.round(v / step) * step;
+  const multiple = (v: number, step: number) => Math.abs(v / step - Math.round(v / step)) < 1e-9;
+  if (n < 10) return Math.max(1, Math.round(n));
+  if (n < 100) return roundTo(n, 5);
+  if (n < 1000) return multiple(n, 5) ? n : roundTo(n, 10);
+  return multiple(n, 50) ? n : roundTo(n, 50);
+}
+
+const APPROX_PREFIX_RE = new RegExp(`^${APPROX}`, 'iu');
+
+/**
+ * A note of the form "[phrase] quantity unit [phrase]" ("approximately 1 pound", "3 cups", "about 4-5
+ * lbs total", "28-ounce", "ongeveer 2 dl"), translated with the unit converted for the other language
+ * when units.json says so (`nl.render`/`en.render`: lb -> g, cup -> ml, dl -> ml) and otherwise named in
+ * that language ("2 cm" stays). The phrases around the amount must be known note/prep phrases.
+ * Null when the text is not of this form.
+ */
+function qtyNote(text: string, dict: Dictionary, lang: Lang): Text | null {
+  const other: Lang = lang === 'nl' ? 'en' : 'nl';
+  const t = collapse(text).replace(/(\d)-(?=\p{L})/gu, '$1 '); // "28-ounce" -> "28 ounce"
+  const words = t.split(' ');
+  // Longest leading phrase first, so "approximately" is translated as a phrase, not read as "ca.".
+  for (let i = words.length - 1; i >= 0; i--) {
+    const prefix = words.slice(0, i).join(' ');
+    const prefixOut = prefix ? dict.phraseTranslation(prefix, lang) : '';
+    if (prefixOut === undefined) continue;
+    const rest = words.slice(i).join(' ');
+    const q = parseQty(rest, lang);
+    if (!q) continue;
+    const u = matchUnit(rest.slice(q.length), dict, lang);
+    if (!u) continue;
+    const tail = tidyName(u.rest);
+    const tailOut = tail ? dict.phraseTranslation(tail, lang) : '';
+    if (tailOut === undefined) continue;
+    const unit = dict.unit(u.id);
+    if (!unit) continue;
+    const conv = unit[other];
+    const target = conv.render && conv.scale ? dict.unit(conv.render) : undefined;
+    const approxWord = other === 'nl' ? 'ca. ' : 'approx. ';
+    let amount: string;
+    if (target && conv.scale) {
+      const scale = conv.scale;
+      const min = niceAmount(q.qty.min * scale);
+      const max = q.qty.max !== undefined ? niceAmount(q.qty.max * scale) : undefined;
+      amount = `${q.qty.approx ? approxWord : ''}${max !== undefined && max !== min ? `${min}-${max}` : `${min}`} ${target[other].one}`;
+    } else {
+      const number = rest.slice(0, q.length).trim().replace(APPROX_PREFIX_RE, '');
+      const plural = (q.qty.max ?? q.qty.min) > 1;
+      const names = unit[other];
+      amount = `${q.qty.approx ? approxWord : ''}${number} ${plural && names.many ? names.many : names.one}`;
+    }
+    return { [lang]: collapse(text), [other]: [prefixOut, amount, tailOut].filter(Boolean).join(' ') };
+  }
+  return null;
+}
+
+/**
+ * A free-text note in both languages when the whole text is known (prep/note phrases, or a quantity
+ * with a unit), else in the source language only (docs/phase-5-spec.md A-bis.1: never a mix).
+ */
+function noteText(text: string, dict: Dictionary, lang: Lang, body: Body): Text {
+  const t = collapse(text);
+  const known = prepText(t, dict, lang, body);
+  if (bilingual(known)) return known;
+  return qtyNote(t, dict, lang) ?? { [lang]: t };
 }
 
 /**
@@ -304,6 +391,8 @@ function parseNamePart(text: string, dict: Dictionary, lang: Lang, body: Body, q
   const preps: string[] = [];
   /** A comma tail ("kidneybonen, afgegoten"), classified after resolution. */
   let commaTail: string | null = null;
+  /** The unit as written ("sticks"), for the butter-stick rule below. */
+  let unitWord = '';
 
   // A dictionary alias that starts with a unit word ("blik tomaten" -> tomaten uit blik, "teentje
   // knoflook") beats the unit-first grammar, which would otherwise never let such an alias fire.
@@ -326,6 +415,7 @@ function parseNamePart(text: string, dict: Dictionary, lang: Lang, body: Body, q
       const u = matchUnit(rest, dict, lang);
       if (u) {
         unit = u.id;
+        unitWord = rest.slice(0, rest.length - u.rest.length).replace(/[.,\s]+$/u, '');
         rest = u.rest;
         // "8 dunne sneetjes stokbrood": the size word describes the slices, not the bread.
         if (quals.length && SLICE_UNITS.has(unit) && quals.every((q) => SIZE_BEFORE_SLICE[q.id] !== undefined)) {
@@ -372,45 +462,67 @@ function parseNamePart(text: string, dict: Dictionary, lang: Lang, body: Body, q
     }
   }
 
-  // Resolution: whole name first, then without leading qualifiers one at a time.
-  const tryResolve = (candidate: string): string | null => {
+  // Resolution: whole name first, then without leading qualifiers one at a time. Two passes: plain
+  // names first ("gepelde tomaten uit blik" -> qual + "tomaten uit blik"), the prep-phrase rules
+  // only when no candidate resolves as it stands.
+  /** The name without the prep phrase the second pass split off ("garlic" of "garlic minced"). */
+  let phraseHead: string | null = null;
+  const tryResolve = (candidate: string, phrases: boolean): string | null => {
     if (!candidate) return null;
-    const id = resolveName(candidate, dict, lang);
-    if (id) return id;
-    const p = PURPOSE_RE.exec(candidate);
-    if (p) {
-      const bare = tidyName(candidate.slice(0, p.index));
-      const id2 = resolveName(bare, dict, lang);
-      if (id2) {
-        body.note = joinText(body.note, NOTE_TEXT['om in te bakken'], '; ');
-        return id2;
+    phraseHead = null;
+    if (!phrases) {
+      const id = resolveName(candidate, dict, lang);
+      if (id) return id;
+      const p = PURPOSE_RE.exec(candidate);
+      if (p) {
+        const bare = tidyName(candidate.slice(0, p.index));
+        const id2 = resolveName(bare, dict, lang);
+        if (id2) {
+          body.note = joinText(body.note, NOTE_TEXT['om in te bakken'], '; ', lang);
+          return id2;
+        }
+      }
+      return null;
+    }
+    // A known prep phrase at the end of the name ("olijven zonder pit", "champignons gehalveerd";
+    // US style "garlic minced", "onion chopped"), and in English also in front of it ("minced garlic").
+    const words = candidate.split(' ');
+    for (let k = 1; k <= Math.min(lang === 'nl' ? 3 : 6, words.length - 1); k++) {
+      const tailText = words.slice(-k).join(' ');
+      if (lang === 'nl' && k === 1 && !PARTICIPLE_RE.test(tailText)) continue;
+      if (dict.phraseTranslation(tailText, lang) === undefined) continue;
+      const id3 = resolveName(words.slice(0, -k).join(' '), dict, lang);
+      if (id3) {
+        preps.push(tailText);
+        phraseHead = words.slice(0, -k).join(' ');
+        return id3;
       }
     }
-    // A known prep phrase at the end of the name ("olijven zonder pit", "champignons gehalveerd").
-    if (lang === 'nl') {
-      const words = candidate.split(' ');
-      for (let k = 1; k <= Math.min(3, words.length - 1); k++) {
-        const tailText = words.slice(-k).join(' ');
-        if (k === 1 && !PARTICIPLE_RE.test(tailText)) continue;
-        if (dict.prepFor(tailText).en === undefined) continue;
-        const id3 = resolveName(words.slice(0, -k).join(' '), dict, lang);
-        if (id3) {
-          preps.push(tailText);
-          return id3;
+    if (lang === 'en') {
+      for (let k = 1; k <= Math.min(2, words.length - 1); k++) {
+        const headText = words.slice(0, k).join(' ');
+        if (dict.phraseTranslation(headText, lang) === undefined) continue;
+        const id4 = resolveName(words.slice(k).join(' '), dict, lang);
+        if (id4) {
+          preps.push(headText);
+          phraseHead = words.slice(k).join(' ');
+          return id4;
         }
       }
     }
     return null;
   };
   const resolveWith = (nameText: string): boolean => {
-    for (let i = 0; i <= quals.length; i++) {
-      const candidate = [...quals.slice(i).map((q) => q.word), nameText].filter(Boolean).join(' ');
-      const id = tryResolve(candidate);
-      if (id) {
-        body.ing = id;
-        body.qual = quals.slice(0, i).map((q) => q.id);
-        body.name = candidate;
-        return true;
+    for (const phrases of [false, true]) {
+      for (let i = 0; i <= quals.length; i++) {
+        const candidate = [...quals.slice(i).map((q) => q.word), nameText].filter(Boolean).join(' ');
+        const id = tryResolve(candidate, phrases);
+        if (id) {
+          body.ing = id;
+          body.qual = quals.slice(0, i).map((q) => q.id);
+          body.name = phraseHead ?? candidate;
+          return true;
+        }
       }
     }
     return false;
@@ -451,6 +563,9 @@ function parseNamePart(text: string, dict: Dictionary, lang: Lang, body: Body, q
       const tinned = resolveName(`${body.name} uit blik`, dict, lang);
       if (tinned && tinned !== body.ing) body.ing = tinned;
     }
+    // "2 sticks butter": "stick(s)" is indexed as the celery stalk unit ("2 sticks celery"); for an
+    // ingredient bought by weight it is the US butter stick (units.json 'stick', 113 g).
+    if (unit === 'stengel' && lang === 'en' && /^sticks?$/iu.test(unitWord) && ing?.defaultUnit === 'g' && dict.unit('stick')) body.unit = 'stick';
     // "5 selderijstengels", "2 knoflookteentjes": an alias that ends in the ingredient's own count
     // unit ("stengels", "teentjes") sets that unit, unless the product's name itself ends in it
     // ("laurierblad" is not counted in leaves of bay leaf).
@@ -463,13 +578,25 @@ function parseNamePart(text: string, dict: Dictionary, lang: Lang, body: Body, q
         if (keys.some((k) => last.length > k.length && last.endsWith(k)) && !keys.some((k) => own.endsWith(k))) body.unit = ing.defaultUnit;
       }
     }
+    // English noun-first counts: "2 garlic cloves", "6 bacon strips", "3 celery sticks" -> the count
+    // unit is the last word of the name, unless the product's own name ends in it ("bay leaves").
+    if (unit === null && lang === 'en' && ing && body.qty !== null && preps.length === 0) {
+      const words = normalizeKey(body.name).split(' ');
+      const last = words.length > 1 ? (words[words.length - 1] as string) : '';
+      const u = last ? dict.unitByAlias(last, 'en') : undefined;
+      if (u && u.group === 'count') {
+        const own = [ing.en.one, ing.en.many].filter((n): n is string => !!n).map(normalizeKey);
+        const keys = [u.en.one, u.en.many, ...(u.aliases?.en ?? [])].filter((k): k is string => !!k).map(normalizeKey);
+        if (!own.some((n) => keys.some((k) => n.endsWith(k)))) body.unit = u.id;
+      }
+    }
   }
 
   for (const p of preps) addPrep(body, prepText(p, dict, lang, body), lang);
   if (commaTail !== null) {
     const t = prepText(commaTail, dict, lang, body);
-    if (t.en !== undefined && t.nl !== undefined) body.prep = joinText(body.prep, t, '; ');
-    else body.note = joinText(body.note, lang === 'nl' ? { nl: commaTail } : { en: commaTail }, '; ');
+    if (bilingual(t)) body.prep = joinText(body.prep, t, '; ', lang);
+    else body.note = joinText(body.note, qtyNote(commaTail, dict, lang) ?? { [lang]: commaTail }, '; ', lang);
   }
 }
 
@@ -479,11 +606,18 @@ function classifyParen(text: string, dict: Dictionary, lang: Lang, body: Body): 
   body.hadParens = true;
   if (PACK_SIZE_RE.test(t)) {
     if (body.packSize === null) body.packSize = normalisePackSize(t);
-    else body.note = joinText(body.note, lang === 'nl' ? { nl: t } : { en: t }, '; ');
+    else body.note = joinText(body.note, noteText(t, dict, lang, body), '; ', lang);
     return;
   }
   const alt = ALT_PAREN_RE.exec(t);
   if (alt) {
+    const phrase = noteText(t, dict, lang, body);
+    if (bilingual(phrase)) {
+      // "(or to taste)", "(of naar behoefte)": a note phrase, not another product.
+      body.note = joinText(body.note, phrase, '; ', lang);
+      if (/\b(?:to taste|naar smaak)\b/iu.test(`${phrase.nl} ${phrase.en}`)) body.optional = true;
+      return;
+    }
     body.alt.push(parseAlt(alt[1] as string, dict, lang));
     if (body.altMode === null) body.altMode = 'or';
     return;
@@ -499,7 +633,7 @@ function classifyParen(text: string, dict: Dictionary, lang: Lang, body: Body): 
   }
   if (TO_TASTE_PAREN_RE.test(t)) {
     body.optional = true;
-    body.note = joinText(body.note, NOTE_TEXT['naar smaak'], '; ');
+    body.note = joinText(body.note, NOTE_TEXT['naar smaak'], '; ', lang);
     return;
   }
   if (body.ing) {
@@ -536,10 +670,11 @@ function classifyParen(text: string, dict: Dictionary, lang: Lang, body: Body): 
       }
     }
   }
-  // A free-text note; translated when it happens to be a known phrase ("ontdooid", "op kamertemperatuur").
-  const note = lang === 'nl' ? dict.prepFor(t) : dict.prepFromEn(t);
-  body.note = joinText(body.note, note, '; ');
-  body.parenOk = Math.min(body.parenOk, note.en !== undefined && note.nl !== undefined ? 1 : 0.5);
+  // A free-text note: both languages when the whole text is known ("ontdooid", "op kamertemperatuur",
+  // "approximately 1 pound"), else the source language only (A-bis.1).
+  const note = noteText(t, dict, lang, body);
+  body.note = joinText(body.note, note, '; ', lang);
+  body.parenOk = Math.min(body.parenOk, bilingual(note) ? 1 : 0.5);
 }
 
 /** "30 g + 40 g boter": two amounts in the same unit add up; the split is kept as a note. */
@@ -554,7 +689,7 @@ function parseSplitQty(text: string, dict: Dictionary, lang: Lang, body: Body): 
   const a = round3(parseNumber(m[1] as string));
   const b = round3(parseNumber(m[3] as string));
   body.qty = { min: round3(a + b) };
-  body.note = joinText(body.note, { nl: `${m[1]} ${u1.nl.one} + ${m[3]} ${u1.nl.one}`, en: `${m[1]} ${u1.en.one} + ${m[3]} ${u1.en.one}` }, '; ');
+  body.note = joinText(body.note, { nl: `${m[1]} ${u1.nl.one} + ${m[3]} ${u1.nl.one}`, en: `${m[1]} ${u1.en.one} + ${m[3]} ${u1.en.one}` }, '; ', lang);
   return `${m[2]} ${text.slice(m[0].length)}`;
 }
 
@@ -591,12 +726,12 @@ function parseBody(input: string, dict: Dictionary, lang: Lang): Body {
   const taste = TO_TASTE_RE.exec(text);
   if (taste && taste.index > 0) {
     body.optional = true;
-    body.note = joinText(body.note, NOTE_TEXT['naar smaak'], '; ');
+    body.note = joinText(body.note, NOTE_TEXT['naar smaak'], '; ', lang);
     text = tidyName(text.slice(0, taste.index));
   }
   const choice = OF_CHOICE_RE.exec(text);
   if (choice && choice.index > 0) {
-    body.note = joinText(body.note, NOTE_TEXT['naar keuze'], '; ');
+    body.note = joinText(body.note, NOTE_TEXT['naar keuze'], '; ', lang);
     text = tidyName(text.slice(0, choice.index));
   }
 
@@ -636,9 +771,18 @@ function parseBody(input: string, dict: Dictionary, lang: Lang): Body {
     const or = orRe.exec(text);
     const comma = text.indexOf(',');
     if (or && (comma === -1 || or.index < comma) && !text.slice(0, or.index).endsWith('-')) {
-      body.altMode = 'or';
-      altText = text.slice(or.index + or[0].length);
-      text = text.slice(0, or.index);
+      // "olive oil or as needed", "zout of meer naar smaak": a known phrase after "or" is a note.
+      const tail = collapse(text.slice(or.index));
+      const phrase = dict.phraseTranslation(tail, lang);
+      if (phrase !== undefined) {
+        body.note = joinText(body.note, { [lang]: tail, [lang === 'nl' ? 'en' : 'nl']: phrase }, '; ', lang);
+        if (/\b(?:to taste|naar smaak)\b/iu.test(`${tail} ${phrase}`)) body.optional = true;
+        text = tidyName(text.slice(0, or.index));
+      } else {
+        body.altMode = 'or';
+        altText = text.slice(or.index + or[0].length);
+        text = text.slice(0, or.index);
+      }
     }
   }
 

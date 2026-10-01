@@ -14,8 +14,9 @@ import {
 } from '@/domain/model';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { applyLineOverrides, applyOverride, RECIPE_PATCH_KEYS, type LineOverride, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
-import type { Dictionary, Ingredient } from '@/domain/dictionary';
+import { normalizeKey, type Dictionary, type Ingredient } from '@/domain/dictionary';
 import { ingredientsData } from '@/domain/data';
+import { rewriteIngredientId, rewriteLinesIngredientId } from '@/domain/merge-ingredients';
 import { legacyChoices, planImport, resolveImport, type ImportChoices, type ImportPlan, type LocalState } from '@/domain/merge';
 import type { ParsedShare } from '@/domain/share';
 import { aggregate, type ListItem } from '@/domain/aggregate';
@@ -203,6 +204,212 @@ export async function saveUserIngredient(entry: Ingredient): Promise<void> {
 
 export async function deleteUserIngredient(id: string): Promise<void> {
   await db.userIngredients.delete(id);
+}
+
+// --- Dictionary hygiene: "Fuseer met bestaand" (docs/phase-5-spec.md A-bis.6) ----------------------
+
+/** What `mergeIngredient` rewrote (for the toast) and the snapshot row that undoes it. */
+export interface MergeResult {
+  oldId: string;
+  newId: string;
+  /** Own/received recipes whose lines were rewritten. */
+  recipes: number;
+  /** Individual line references (alternatives included) rewritten across those recipes. */
+  lineRefs: number;
+  /** Override patches of classics whose `lines` were rewritten. */
+  overrides: number;
+  lineOverrides: number;
+  listItems: number;
+  pantry: boolean;
+  /** Row id of the `imports` snapshot; `undoMerge(importId)` restores everything. */
+  importId: number;
+}
+
+/** The extra undo state a merge snapshot carries next to `before` / `wrote` (lists and pantry are not import tables). */
+interface MergeUndo {
+  oldId: string;
+  newId: string;
+  /** The shopping-list row as it was (null = none); `listWrote` = the merge replaced it. */
+  listBefore: List | null;
+  listWrote: boolean;
+  /** The pantry rows of old and new id as they were; `pantryWrote` = the ids the merge put. */
+  pantryBefore: PantryItem[];
+  pantryWrote: string[];
+}
+
+type MergeSnapshot = ImportSnapshot & { merge?: MergeUndo };
+
+function isMergeSnapshot(s: ImportSnapshot | undefined): s is MergeSnapshot & { merge: MergeUndo } {
+  return !!s && typeof (s as MergeSnapshot).merge === 'object' && (s as MergeSnapshot).merge !== null;
+}
+
+/**
+ * Replaces the own dictionary entry `oldId` by the existing entry `newId` everywhere, in ONE
+ * transaction: lines of own/received recipes (alternatives included), `lines` of override patches,
+ * line overrides of classics, the shopping list (items and extras, keys rewritten) and the pantry
+ * (rows merged); then deletes the own entry. Changed recipes and overrides get a rev bump. The
+ * replaced rows go into an `imports` snapshot so `undoMerge` / `undoLastImport` restore them
+ * exactly. Throws Error('merge-same-id'), Error('merge-not-own') when `oldId` is not an own entry
+ * and Error('merge-unknown-target') when `newId` is neither bundled nor an own entry. The caller
+ * refreshes the dictionary afterwards (`reloadDictionary`).
+ */
+export async function mergeIngredient(oldId: string, newId: string): Promise<MergeResult> {
+  if (!oldId || !newId || oldId === newId) throw new Error('merge-same-id');
+  const now = nowIso();
+  if (!builtinIngredientIds) builtinIngredientIds = new Set(ingredientsData.map((i) => i.id));
+  const builtinIds = builtinIngredientIds;
+  return db.transaction('rw', [db.userRecipes, db.overrides, db.lineOverrides, db.userIngredients, db.lists, db.pantry, db.imports], async () => {
+    const oldEntry = await db.userIngredients.get(oldId);
+    if (!oldEntry) throw new Error('merge-not-own');
+    if (!builtinIds.has(newId) && !(await db.userIngredients.get(newId))) throw new Error('merge-unknown-target');
+    const recipes = await db.userRecipes.toArray();
+    const overrides = await db.overrides.toArray();
+    const lineOverrides = await db.lineOverrides.toArray();
+    const list = await db.lists.get(LIST_ID);
+    const pantry = await db.pantry.toArray();
+
+    const rw = rewriteIngredientId(recipes as Array<Recipe & Record<string, unknown>>, lineOverrides as Array<LineOverride & Record<string, unknown>>, [], pantry as Array<PantryItem & Record<string, unknown>>, oldId, newId);
+    const recipeWrites: Recipe[] = rw.recipes.map((r) => ({ ...(r as Recipe), rev: r.rev + 1, updatedAt: now }));
+    const overrideWrites: RecipeOverride[] = [];
+    for (const o of overrides) {
+      const ls = o.patch?.lines;
+      if (!Array.isArray(ls)) continue;
+      const r = rewriteLinesIngredientId(ls, oldId, newId);
+      if (r.changed) overrideWrites.push({ ...o, patch: { ...o.patch, lines: r.lines }, rev: o.rev + 1, updatedAt: now });
+    }
+    // Shopping list: items and extras (an extra is also in `items`); the key starts with the id.
+    let listNext: List | null = null;
+    let listItems = 0;
+    if (list) {
+      const items = Array.isArray(list.items) ? list.items : [];
+      const extras = Array.isArray(list.extras) ? list.extras : [];
+      listItems = items.filter((it) => it.ing === oldId).length;
+      if (listItems || extras.some((it) => it.ing === oldId)) {
+        const rekey = (it: ListItem): ListItem =>
+          it.ing === oldId ? { ...it, ing: newId, key: it.key.startsWith(`${oldId}|`) ? `${newId}|${it.key.slice(oldId.length + 1)}` : it.key } : it;
+        const nextItems = items.map(rekey);
+        listNext = { ...list, items: nextItems, extras: extras.map(rekey), pinned: nextItems.filter((it) => it.pinned).map((it) => it.key), updatedAt: now };
+      }
+    }
+
+    const changedIds = new Set(recipeWrites.map((r) => r.id));
+    const before: ImportBefore = {
+      recipes: recipes.filter((r) => changedIds.has(r.id)),
+      overrides: overrides.filter((o) => overrideWrites.some((w) => w.baseId === o.baseId)),
+      lineOverrides: lineOverrides.filter((o) => o.ing === oldId),
+      userIngredients: [oldEntry],
+    };
+    const wrote: ImportWrote = {
+      recipes: recipeWrites.map((r) => r.id),
+      overrides: overrideWrites.map((o) => o.baseId),
+      lineOverrides: rw.lineOverrides.map((o) => [o.recipeId, o.index] as [string, number]),
+      userIngredients: [],
+    };
+    const merge: MergeUndo = {
+      oldId,
+      newId,
+      listBefore: listNext ? (list ?? null) : null,
+      listWrote: !!listNext,
+      pantryBefore: pantry.filter((p) => p.ing === oldId || p.ing === newId),
+      pantryWrote: rw.pantry.map((p) => p.ing),
+    };
+
+    if (recipeWrites.length) await db.userRecipes.bulkPut(recipeWrites);
+    if (overrideWrites.length) await db.overrides.bulkPut(overrideWrites);
+    if (rw.lineOverrides.length) await db.lineOverrides.bulkPut(rw.lineOverrides as LineOverride[]);
+    if (listNext) await db.lists.put(listNext);
+    if (rw.pantryDelete.length) await db.pantry.bulkDelete(rw.pantryDelete);
+    if (rw.pantry.length) await db.pantry.bulkPut(rw.pantry as PantryItem[]);
+    await db.userIngredients.delete(oldId);
+
+    const name = oldEntry.nl?.one || oldEntry.en?.one || oldId;
+    const snapshot: MergeSnapshot = {
+      at: now,
+      from: `${name} → ${newId}`,
+      added: [],
+      updated: wrote.recipes,
+      skipped: [],
+      copies: [],
+      previous: before.recipes,
+      before,
+      wrote,
+      merge,
+    };
+    const importId = (await db.imports.add(snapshot)) as number;
+    return {
+      oldId,
+      newId,
+      recipes: recipeWrites.length,
+      lineRefs: rw.lineRefs,
+      overrides: overrideWrites.length,
+      lineOverrides: rw.lineOverrides.length,
+      listItems,
+      pantry: rw.pantry.length > 0,
+      importId,
+    };
+  });
+}
+
+/**
+ * Undoes the merge with snapshot row `importId`, but only while it is still the newest snapshot
+ * (a later import may hold rows edited since). Returns false when it is not, or was undone already.
+ */
+export async function undoMerge(importId: number): Promise<boolean> {
+  const latest = await db.imports.orderBy('at').reverse().first();
+  if (!latest || latest.id !== importId || !isMergeSnapshot(latest)) return false;
+  return undoLastImport();
+}
+
+/** An own entry whose name (either language, plural or alias) already is an existing entry. */
+export interface OwnDuplicate {
+  own: Ingredient;
+  existing: Ingredient;
+}
+
+/**
+ * "Opruimen" (A-bis.6): own entries that duplicate a bundled entry — or an earlier own entry with
+ * the same name. `base` is the BUNDLED dictionary (`baseDictionary()`, without user entries): in
+ * the full dictionary an own entry would resolve to itself. Order follows `listUserIngredients` (by id).
+ */
+export async function findOwnDuplicates(base: Dictionary): Promise<OwnDuplicate[]> {
+  const own = await listUserIngredients();
+  const out: OwnDuplicate[] = [];
+  const seen = new Map<string, Ingredient>();
+  const namesOf = (e: Ingredient): Array<[string, 'nl' | 'en']> => {
+    const names: Array<[string, 'nl' | 'en']> = [];
+    for (const l of ['nl', 'en'] as const) {
+      if (e[l]?.one) names.push([e[l].one, l]);
+      if (e[l]?.many) names.push([e[l].many as string, l]);
+      for (const a of e.aliases?.[l] ?? []) names.push([a, l]);
+    }
+    return names;
+  };
+  for (const e of own) {
+    const names = namesOf(e);
+    let hit: Ingredient | undefined;
+    for (const [n, l] of names) {
+      hit = base.findExisting(n, l);
+      if (hit) break;
+    }
+    if (!hit) {
+      for (const [n] of names) {
+        const k = normalizeKey(n);
+        if (k && seen.has(k)) {
+          hit = seen.get(k);
+          break;
+        }
+      }
+    }
+    if (hit && hit.id !== e.id) {
+      out.push({ own: e, existing: hit });
+      continue;
+    }
+    for (const [n] of names) {
+      const k = normalizeKey(n);
+      if (k && !seen.has(k)) seen.set(k, e);
+    }
+  }
+  return out;
 }
 
 // --- Recipe overrides (curator patches on builtins) -----------------------------------------------
@@ -507,7 +714,17 @@ export async function undoLastImport(): Promise<boolean> {
   const latest = await db.imports.orderBy('at').reverse().first();
   if (!isUndoable(latest)) return false;
   const { before, wrote } = latest;
-  await db.transaction('rw', [db.userRecipes, db.overrides, db.lineOverrides, db.userIngredients, db.imports, db.settings], async () => {
+  // A merge snapshot (`mergeIngredient`) also touched the shopping list and the pantry.
+  const merge = isMergeSnapshot(latest) ? latest.merge : undefined;
+  await db.transaction('rw', [db.userRecipes, db.overrides, db.lineOverrides, db.userIngredients, db.imports, db.settings, db.lists, db.pantry], async () => {
+    if (merge) {
+      if (merge.listWrote) {
+        if (merge.listBefore) await db.lists.put(merge.listBefore);
+        else await db.lists.delete(LIST_ID);
+      }
+      if (merge.pantryWrote.length) await db.pantry.bulkDelete(merge.pantryWrote);
+      if (merge.pantryBefore.length) await db.pantry.bulkPut(merge.pantryBefore);
+    }
     if (wrote.recipes.length) await db.userRecipes.bulkDelete(wrote.recipes);
     if (before.recipes.length) await db.userRecipes.bulkPut(before.recipes);
     if (wrote.overrides.length) await db.overrides.bulkDelete(wrote.overrides);

@@ -8,6 +8,7 @@
 //
 // `IngredientList` is the list the detail page and the cook mode ("Klaarzetten") render: it owns
 // the picker state and, in cook mode, the tick boxes.
+import type { ComponentChildren } from 'preact';
 import { useRef, useState } from 'preact/hooks';
 import { IngredientPicker } from '@/components/IngredientPicker';
 import { isBuiltinId, linkUserRecipeLine, setLineOverride } from '@/db/repo';
@@ -86,14 +87,39 @@ export function LineText(props: { line: Line; lang: Lang; factor: number; base: 
       rest = p.text.slice(prefix.length);
     }
   }
+  // A-bis.1: a note or prep shown in the OTHER language (no translation yet) is greyed. The text
+  // is split around the exact substrings `renderLineParts` composed (", prep" and "(note)").
+  const foreign: string[] = [];
+  if (p.resolved && p.prepForeign && p.prep) foreign.push(p.prep);
+  if (p.resolved && p.noteForeign && p.note) foreign.push(`(${p.note})`);
+  const body = foreign.length ? splitForeign(rest, foreign) : rest;
   return (
     <span class={'ing-text' + (p.resolved ? '' : ' raw')}>
       {head && <b class="ing-amt">{head}</b>}
-      {rest}
+      {body}
       {p.gloss && <span class="ing-gloss muted"> — {p.gloss}</span>}
       {orig && <span class="ing-orig muted small"> {t('servings.orig', { n: base, amt: orig })}</span>}
     </span>
   );
+}
+
+/** `text` with every occurrence of the given substrings wrapped in a muted, italic span. */
+function splitForeign(text: string, parts: string[]): ComponentChildren {
+  const out: ComponentChildren[] = [];
+  let rest = text;
+  for (const part of parts) {
+    const idx = rest.indexOf(part);
+    if (idx < 0) continue;
+    out.push(rest.slice(0, idx));
+    out.push(
+      <span class="ing-foreign" title={t('edit.foreignHint')}>
+        {part}
+      </span>,
+    );
+    rest = rest.slice(idx + part.length);
+  }
+  out.push(rest);
+  return out;
 }
 
 export interface LineViewProps {

@@ -532,3 +532,18 @@
 .member-form {
   margin-top: 8px;
 }
+
+/* ---------- Phase 5 (A-bis.9): "Deel het bestand" first, "Download" second ---------- */
+.file-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.file-actions .btn {
+  flex: 1 1 140px;
+}
+
+.file-hint {
+  margin: 8px 0 0;
+}

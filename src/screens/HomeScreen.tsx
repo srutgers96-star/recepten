@@ -7,6 +7,8 @@
 // changes) → Opslag, and unsent changes (a partner in 'share.lastSentTo' is behind) → Stuur nieuwe.
 // Phase 4: a third one for unseen Inbox items (the Inbox tab moved under Meer, spec §3); the dice
 // chips are the generic `PickChips` (spec §0); "+" in the "Eigen & ontvangen" header opens '/add'.
+// Phase 5 (docs/phase-5-spec.md A-bis.8): "Selecteer" next to that title and a long-press on one
+// of its rows open the Recipes screen in select mode ('#/recipes?select=1[&id=…]').
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { CategoryShelf } from '@/components/CategoryShelf';
 import { Header } from '@/components/Header';
@@ -326,6 +328,20 @@ export function HomeScreen() {
         <section class="home-section">
           <h2>
             <span class="home-section-title">{t('home.ownReceived')}</span>
+            {/* Phase 5 (A-bis.8): select mode lives on the Recipes screen; this opens it (long-press
+                on a row below preselects that recipe). */}
+            {ownList.length > 0 && (
+              <a
+                class="home-select"
+                href="#/recipes?select=1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/recipes?select=1');
+                }}
+              >
+                {t('select.enter')}
+              </a>
+            )}
             <a
               class="home-add"
               href="#/add"
@@ -369,7 +385,7 @@ export function HomeScreen() {
             <ul class="list">
               {ownList.map((r) => (
                 <li key={r.id}>
-                  <RecipeRow recipe={r} favorite={favs?.has(r.id)} subtitle={formatShortDate(r.updatedAt, l)} />
+                  <RecipeRow recipe={r} favorite={favs?.has(r.id)} subtitle={formatShortDate(r.updatedAt, l)} onLongPress={(x) => navigate('/recipes?select=1&id=' + encodeURIComponent(x.id))} />
                 </li>
               ))}
             </ul>

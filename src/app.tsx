@@ -1,7 +1,7 @@
 // Root of the full app: boot (builtins, profiles, theme), shell (header/screen/nav), hash routing,
 // onboarding gate, install card, update bar, confetti. Routes per docs/phase-1-spec.md §4 plus
 // phase 4 (docs/phase-4-spec.md §3): '/week' and '/shopping', and phase 5 (docs/phase-5-spec.md
-// block A): '/more/check-recipes' and '/more/household'.
+// block A): '/more/check-recipes' and '/more/household'; block A-bis: '/more/dictionary'.
 import { useEffect, useState } from 'preact/hooks';
 import { loadCelebrateSettings } from './celebrate';
 import { Confetti } from './components/Confetti';
@@ -18,6 +18,7 @@ import { IMPORT_ROUTE, navigate, route, startRouter, type Route } from './router
 import { CheckRecipesScreen } from './screens/CheckRecipesScreen';
 import { CheckScreen } from './screens/CheckScreen';
 import { CookScreen } from './screens/CookScreen';
+import { DictionaryScreen } from './screens/DictionaryScreen';
 import { EditScreen } from './screens/EditScreen';
 import { HomeScreen } from './screens/HomeScreen';
 import { HouseholdScreen } from './screens/HouseholdScreen';
@@ -91,6 +92,9 @@ function Screen(props: { r: Route }) {
           return <CheckRecipesScreen />;
         case 'household':
           return <HouseholdScreen />;
+        // Phase 5 (docs/phase-5-spec.md A-bis.6): the dictionary screen (own entries, merge, clean-up).
+        case 'dictionary':
+          return <DictionaryScreen />;
         default:
           return <NotFound />;
       }

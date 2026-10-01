@@ -6,6 +6,9 @@
 // own ingredients, importable on the other phone via the Inbox). Invariant 9: share ONE field.
 // Phase 5 (docs/phase-5-spec.md 30-09 "Reset app"): "App resetten" with Ja / Nee / "Ja, maar
 // exporteer eerst mijn recepten" (the export share first; the reset only after it succeeded).
+// A-bis.9: backup and export each offer "Deel het bestand" FIRST (share sheet: WhatsApp to
+// yourself, Drive, Files; falls back to a download) and "Download" second (straight to
+// Downloads); after a download the status says "Opgeslagen als <naam> in Downloads".
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { reloadCelebrateSettings } from '@/celebrate';
 import { Header } from '@/components/Header';
@@ -21,7 +24,7 @@ import { refreshShareBadges } from '@/inbox-badge';
 import { activeProfile, loadProfiles } from '@/profile';
 import { isStandalone } from '@/pwa';
 import { navigate } from '@/router';
-import { shareJsonFile } from '@/share-actions';
+import { downloadBlob, shareJsonFile } from '@/share-actions';
 
 interface Facts {
   standalone: boolean;
@@ -45,6 +48,16 @@ function formatWhen(iso: string | null): string {
 function isShareBundle(parsed: unknown): boolean {
   const o = parsed as { t?: unknown; b?: unknown; userRecipes?: unknown } | null;
   return !!o && typeof o === 'object' && o.t === 'b' && !!o.b && typeof o.b === 'object' && !Array.isArray(o.userRecipes);
+}
+
+/** "Download": the plain <a download> straight away (no share sheet), same result shape as shareJsonFile. */
+function downloadJson(name: string, json: string): { outcome: 'downloaded' | 'failed'; name: string; error?: string } {
+  try {
+    downloadBlob(name, new Blob([json], { type: 'application/json' }));
+    return { outcome: 'downloaded', name };
+  } catch (e) {
+    return { outcome: 'failed', name, error: String(e) };
+  }
 }
 
 export function StorageScreen() {
@@ -110,21 +123,23 @@ export function StorageScreen() {
     void refreshShareBadges();
   }
 
-  async function makeBackup() {
+  /** "Deel het bestand" (share sheet, download as the fallback) or "Download" (straight to Downloads). */
+  async function makeBackup(how: 'share' | 'download') {
     if (!bundle || busy) return;
     setBusy(true);
     setStatus('');
     try {
       const fresh: BackupBundle = { ...bundle, at: nowIso() };
-      const stem = `recepten-${fresh.at.slice(0, 10)}`;
+      const name = `recepten-${fresh.at.slice(0, 10)}.json`;
+      const json = JSON.stringify(fresh);
       // navigator.share runs before the first await inside shareJsonFile: still within the tap.
-      const r = await shareJsonFile(`${stem}.json`, JSON.stringify(fresh));
+      const r = how === 'share' ? await shareJsonFile(name, json) : downloadJson(name, json);
       if (r.outcome === 'shared') {
         await markBackedUp();
         setStatus(t('storage.backupShared'));
       } else if (r.outcome === 'downloaded') {
         await markBackedUp();
-        setStatus(t('storage.backupDownloaded'));
+        setStatus(t('storage.savedDownloads', { name: r.name }));
       } else if (r.outcome === 'failed') {
         setStatus(`${t('storage.backupFailed')}: ${r.error ?? ''}`);
       }
@@ -142,12 +157,14 @@ export function StorageScreen() {
   }
 
   /** The export share itself (also the first step of "Ja, maar exporteer eerst"). Call within the tap. */
-  function shareExport(env: Envelope) {
+  function shareExport(env: Envelope, how: 'share' | 'download' = 'share') {
     const fresh: Envelope = { ...env, at: nowIso() };
-    return shareJsonFile(bundleFileName(by || 'export'), JSON.stringify(fresh, null, 2));
+    const name = bundleFileName(by || 'export');
+    const json = JSON.stringify(fresh, null, 2);
+    return how === 'share' ? shareJsonFile(name, json) : Promise.resolve(downloadJson(name, json));
   }
 
-  async function exportOwn() {
+  async function exportOwn(how: 'share' | 'download') {
     if (!exportEnv || busy) return;
     if (exportCount(exportEnv) === 0) {
       setExportStatus(t('storage.exportEmpty'));
@@ -156,9 +173,9 @@ export function StorageScreen() {
     setBusy(true);
     setExportStatus('');
     try {
-      const r = await shareExport(exportEnv);
+      const r = await shareExport(exportEnv, how);
       if (r.outcome === 'shared') setExportStatus(t('storage.exportShared'));
-      else if (r.outcome === 'downloaded') setExportStatus(t('storage.exportDownloaded'));
+      else if (r.outcome === 'downloaded') setExportStatus(t('storage.savedDownloads', { name: r.name }));
       else if (r.outcome === 'failed') setExportStatus(`${t('storage.exportFailed')}: ${r.error ?? ''}`);
     } catch (e) {
       setExportStatus(`${t('storage.exportFailed')}: ${String(e)}`);
@@ -321,11 +338,15 @@ export function StorageScreen() {
             </p>
           )}
           {health && !health.overdue && health.unbackedChanges === 0 && <p class="ok small">{t('storage.upToDate')}</p>}
-          <div class="actions" style="margin-bottom:0">
-            <button type="button" class="btn btn-primary" disabled={!bundle || busy} onClick={() => void makeBackup()}>
-              {t('storage.makeBackup')}
+          <div class="actions file-actions" style="margin-bottom:0">
+            <button type="button" class="btn btn-primary" disabled={!bundle || busy} onClick={() => void makeBackup('share')}>
+              {t('storage.shareFile')}
+            </button>
+            <button type="button" class="btn" disabled={!bundle || busy} onClick={() => void makeBackup('download')}>
+              {t('storage.download')}
             </button>
           </div>
+          <p class="muted small file-hint">{t('storage.fileHint')}</p>
           <div class="status" role="status">
             {status}
           </div>
@@ -366,11 +387,15 @@ export function StorageScreen() {
         <section class="card">
           <h2>{t('storage.export')}</h2>
           <p class="muted small">{t('storage.exportHint')}</p>
-          <div class="actions" style="margin-bottom:0">
-            <button type="button" class="btn" disabled={!exportEnv || busy} onClick={() => void exportOwn()}>
-              {t('storage.export')}
+          <div class="actions file-actions" style="margin-bottom:0">
+            <button type="button" class="btn btn-primary" disabled={!exportEnv || busy} onClick={() => void exportOwn('share')}>
+              {t('storage.shareFile')}
+            </button>
+            <button type="button" class="btn" disabled={!exportEnv || busy} onClick={() => void exportOwn('download')}>
+              {t('storage.download')}
             </button>
           </div>
+          <p class="muted small file-hint">{t('storage.fileHint')}</p>
           <div class="status" role="status">
             {exportStatus}
           </div>

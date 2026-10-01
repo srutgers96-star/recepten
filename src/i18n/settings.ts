@@ -34,7 +34,7 @@ export const settings: Dict = {
   'more.fahrenheitHint': { nl: 'Oventemperaturen ook in Fahrenheit: 200 °C (400 °F)', en: 'Oven temperatures in Fahrenheit as well: 200 °C (400 °F)' },
   'more.dictionary': { nl: 'Woordenboek', en: 'Dictionary' },
   'more.dictCounts': { nl: '{builtin} ingrediënten · {own} eigen', en: '{builtin} ingredients · {own} own' },
-  'more.dictHint': { nl: 'Eigen ingrediënten bekijken en verwijderen', en: 'View and delete your own ingredients' },
+  'more.dictHint': { nl: 'Eigen ingrediënten bekijken, bewerken en samenvoegen', en: 'View, edit and merge your own ingredients' },
   'more.dictNone': {
     nl: 'Nog geen eigen ingrediënten. Die maak je via "Koppel ingrediënt" → "Nieuw ingrediënt".',
     en: 'No own ingredients yet. Create one via "Link ingredient" → "New ingredient".',
@@ -184,6 +184,14 @@ export const settings: Dict = {
   'storage.exportDownloaded': { nl: 'Export gedownload', en: 'Export downloaded' },
   'storage.exportFailed': { nl: 'Exporteren mislukt', en: 'Export failed' },
   'storage.exportEmpty': { nl: 'Niets te exporteren: nog geen eigen recepten of aanpassingen.', en: 'Nothing to export: no own recipes or adjustments yet.' },
+  // --- Phase 5 (docs/phase-5-spec.md A-bis.9): "Deel het bestand" first, "Download" second ---
+  'storage.shareFile': { nl: 'Deel het bestand', en: 'Share the file' },
+  'storage.download': { nl: 'Download', en: 'Download' },
+  'storage.fileHint': {
+    nl: 'Delen: naar WhatsApp (aan jezelf), Drive of Bestanden. Download: het bestand komt in Downloads.',
+    en: 'Share: to WhatsApp (to yourself), Drive or Files. Download: the file lands in Downloads.',
+  },
+  'storage.savedDownloads': { nl: 'Opgeslagen als {name} in Downloads', en: 'Saved as {name} in Downloads' },
   // --- Phase 5 (docs/phase-5-spec.md 30-09 "Reset app") ---
   'storage.reset': { nl: 'App resetten', en: 'Reset app' },
   'storage.resetHint': {

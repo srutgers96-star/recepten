@@ -1,6 +1,6 @@
 // '#/more' — Inbox row (with the unseen badge; phase 4 moved the Inbox tab here), active profile
 // (switch, "+ profiel"), language, theme, confetti, "°F erbij", the
-// dictionary (counts + own ingredients with delete), and the links to "Stuur nieuwe naar …"
+// dictionary row (counts → '/more/dictionary', phase 5 A-bis.6), and the links to "Stuur nieuwe naar …"
 // (unsent-changes badge), Opslag & back-up (backup-due badge), Het verhaal, Apparaatcheck, plus
 // "Over" (version, sha, channel, GitHub). Phase 5: "Huishouden" (under the profile card) and
 // "Controleer mijn recepten" (docs/phase-5-spec.md A.6 / A.8).
@@ -9,8 +9,8 @@ import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/ce
 import { appInfo } from '@/components/AppInfo';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
-import { deleteUserIngredient, getFahrenheit, getHouseholdServings, setFahrenheit, setHouseholdServings } from '@/db/repo';
-import { baseDictionary, dictionary, reloadDictionary, userIngredients } from '@/dictionary';
+import { getFahrenheit, getHouseholdServings, setFahrenheit, setHouseholdServings } from '@/db/repo';
+import { baseDictionary, userIngredients } from '@/dictionary';
 import type { Lang } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
@@ -45,60 +45,17 @@ function MenuRow(props: { label: string; to: string; sub?: string; badge?: strin
   );
 }
 
-/** "Woordenboek": builtin + own counts; tap opens the own entries, each with a delete button. */
+/** "Woordenboek": builtin + own counts; the row opens the dictionary screen (A-bis.6: own entries
+ *  editable, "Fuseer met bestaand", "Opruimen"). */
 function DictionarySection() {
-  const l = lang.value;
-  const [open, setOpen] = useState(false);
   const own = userIngredients.value;
   const builtin = baseDictionary().ingredients.length;
-  const dict = dictionary.value;
-
-  async function remove(id: string, name: string) {
-    if (!confirm(t('more.dictDeleteConfirm', { name }))) return;
-    try {
-      await deleteUserIngredient(id);
-      await reloadDictionary();
-    } catch (e) {
-      console.error('deleteUserIngredient', e);
-    }
-  }
-
   return (
     <section class="section">
       <h2>{t('more.dictionary')}</h2>
       <div class="menu">
-        <button type="button" class="row" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
-          <span class="name">
-            {t('more.dictCounts', { builtin, own: own.length })}
-            <span class="row-sub">{t('more.dictHint')}</span>
-          </span>
-          <Chevron />
-        </button>
+        <MenuRow label={t('more.dictCounts', { builtin, own: own.length })} sub={t('more.dictHint')} to="/more/dictionary" />
       </div>
-      {open &&
-        (own.length === 0 ? (
-          <p class="muted dict-empty">{t('more.dictNone')}</p>
-        ) : (
-          <ul class="list dict-list">
-            {own.map((i) => {
-              const name = (l === 'nl' ? i.nl.one : i.en.one) || i.nl.one || i.en.one || i.id;
-              const other = (l === 'nl' ? i.en.one : i.nl.one) || '';
-              const aisle = dict.aisle(i.aisle);
-              const aisleName = aisle ? (l === 'nl' ? aisle.nl : aisle.en) : i.aisle;
-              return (
-                <li key={i.id} class="dict-row">
-                  <span class="name">
-                    {name}
-                    <span class="row-sub">{[other, aisleName].filter(Boolean).join(' · ')}</span>
-                  </span>
-                  <button type="button" class="btn btn-small" onClick={() => void remove(i.id, name)} aria-label={`${t('more.dictDelete')} ${name}`}>
-                    {t('more.dictDelete')}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        ))}
     </section>
   );
 }

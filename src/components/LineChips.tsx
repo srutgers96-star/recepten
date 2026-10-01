@@ -3,6 +3,11 @@
 // unresolved one. Tapping a chip of a resolved line opens a small inline editor for quantity,
 // unit, prep note and "optioneel"; the editor screen writes the result back into the raw text
 // (raw stays the source of truth, invariant 2) with `rawFromLine`.
+//
+// A-bis.1: a note or prep that only exists in the other language is shown in that language,
+// greyed and in quotes (`noteForeign` / `prepForeign` from `renderLineParts`) — never half
+// translated. The inline editor reports whether the prep field was touched (`prepChanged`), so
+// an untouched foreign prep is kept as it is instead of being re-read in the wrong language.
 import { useState } from 'preact/hooks';
 import type { Lang, Line, Qty } from '@/domain/model';
 import { parseQty } from '@/domain/parser';
@@ -18,6 +23,8 @@ export interface LineEdit {
   unit: string | null;
   /** Prep note as typed, in `lang` of the chips ('' = none). */
   prep: string;
+  /** False when the prep field was left as seeded: the screen keeps the line's prep text untouched. */
+  prepChanged: boolean;
   optional: boolean;
 }
 
@@ -37,7 +44,7 @@ export interface LineChipsProps {
   onApply: (edit: LineEdit) => void;
 }
 
-/** Prep text of a line in a language ('' when none). */
+/** Prep text of a line in a language, falling back to the other language ('' when none). */
 function prepTextOf(line: Line, lang: Lang): string {
   const p = line.prep;
   if (!p) return '';
@@ -51,7 +58,8 @@ function LineChipEditor(props: { line: Line; lang: Lang; onApply: (edit: LineEdi
   // (which show 500 ml / 100 ml in English): applying without touching the amount must be a no-op.
   const [qty, setQty] = useState(seedQty(line, lang));
   const [unit, setUnit] = useState(line.unit ?? '');
-  const [prep, setPrep] = useState(prepTextOf(line, lang));
+  const seededPrep = prepTextOf(line, lang);
+  const [prep, setPrep] = useState(seededPrep);
   const [optional, setOptional] = useState(line.optional === true);
   const [qtyBad, setQtyBad] = useState(false);
 
@@ -66,7 +74,7 @@ function LineChipEditor(props: { line: Line; lang: Lang; onApply: (edit: LineEdi
       }
       q = m.qty;
     }
-    props.onApply({ qty: q, unit: unit === '' ? null : unit, prep: prep.trim(), optional });
+    props.onApply({ qty: q, unit: unit === '' ? null : unit, prep: prep.trim(), prepChanged: prep.trim() !== seededPrep.trim(), optional });
   }
 
   return (
@@ -192,9 +200,14 @@ export function LineChips(props: LineChipsProps) {
           </>
         )}
         {resolved && p.prep && (
-          <button type="button" class="lc-chip lc-soft" onClick={open}>
-            {p.prep}
+          <button type="button" class={'lc-chip lc-soft' + (p.prepForeign ? ' lc-foreign' : '')} title={p.prepForeign ? t('edit.foreignHint') : undefined} onClick={open}>
+            {p.prepForeign ? `“${p.prep}”` : p.prep}
           </button>
+        )}
+        {resolved && p.note && (
+          <span class={'lc-chip lc-soft' + (p.noteForeign ? ' lc-foreign' : '')} title={p.noteForeign ? t('edit.foreignHint') : t('edit.noteChip')}>
+            {p.noteForeign ? `“${p.note}”` : `(${p.note})`}
+          </span>
         )}
         {resolved && p.optional && (
           <button type="button" class="lc-chip lc-soft" onClick={open}>

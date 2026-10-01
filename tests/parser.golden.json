@@ -2,8 +2,8 @@
   "generatedBy": "node --experimental-strip-types tools/gen-golden.ts",
   "source": "data/source/recipes-recepten2.json",
   "dictionary": {
-    "ingredients": 376,
-    "units": 42,
+    "ingredients": 378,
+    "units": 49,
     "qualifiers": 100,
     "prepPhrases": 152
   },
@@ -4692,7 +4692,7 @@
         },
         "unit": "pot",
         "ing": "kalamata-olijf",
-        "name": "kalamata olijven zonder pit",
+        "name": "kalamata olijven",
         "prep": {
           "nl": "zonder pit",
           "en": "pitted"
@@ -7971,7 +7971,7 @@
         },
         "unit": "g",
         "ing": "olijf",
-        "name": "olijven zonder pit",
+        "name": "olijven",
         "qual": [
           "groene"
         ],
@@ -9674,7 +9674,7 @@
         },
         "unit": null,
         "ing": "olijf",
-        "name": "olijven zonder pit",
+        "name": "olijven",
         "qual": [
           "zwarte"
         ],
@@ -14311,7 +14311,7 @@
         },
         "unit": null,
         "ing": "olijf",
-        "name": "olijven zonder pit",
+        "name": "olijven",
         "qual": [
           "zwarte"
         ],

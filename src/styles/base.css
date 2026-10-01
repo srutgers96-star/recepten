@@ -963,3 +963,33 @@ button.row {
 .picker-form .actions {
   margin-top: 8px;
 }
+
+/* "Bestaat al: aubergine (eggplant) — die gebruiken?" under the name fields (phase-5 A-bis.6). */
+.picker-exists {
+  border: 1px solid var(--orange);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  background: var(--card);
+}
+
+.picker-exists-text {
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.picker-exists .picker-exists-actions {
+  margin-top: 8px;
+}
+
+/* The entry that may not be picked (the own entry being merged). */
+.picker-item.picker-excluded {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* A note or prep rendered in its source language because it has no translation yet (A-bis.1). */
+.ing-foreign {
+  color: var(--muted);
+  font-style: italic;
+}

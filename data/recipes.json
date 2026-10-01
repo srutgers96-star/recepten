@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "dataVersion": 3,
-  "generatedAt": "2026-09-30T19:26:06.198Z",
+  "generatedAt": "2026-09-30T19:56:44.044Z",
   "recipes": [
     {
       "schema": 2,
@@ -29175,7 +29175,7 @@
           },
           "unit": null,
           "ing": "olijf",
-          "name": "olijven zonder pit",
+          "name": "olijven",
           "qual": [
             "zwarte"
           ],
@@ -32055,7 +32055,7 @@
           },
           "unit": "pot",
           "ing": "kalamata-olijf",
-          "name": "kalamata olijven zonder pit",
+          "name": "kalamata olijven",
           "prep": {
             "nl": "zonder pit",
             "en": "pitted"
@@ -33871,7 +33871,7 @@
           },
           "unit": null,
           "ing": "olijf",
-          "name": "olijven zonder pit",
+          "name": "olijven",
           "qual": [
             "zwarte"
           ],
@@ -37042,7 +37042,7 @@
           },
           "unit": "g",
           "ing": "olijf",
-          "name": "olijven zonder pit",
+          "name": "olijven",
           "qual": [
             "groene"
           ],

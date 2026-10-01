@@ -10,6 +10,12 @@
 // changed fields (name, servingTip, lines, steps) as a RecipeOverride patch (repo.saveOverride),
 // "Herstel origineel" removes it. The structure of a line (qty, unit, ing, …) is re-derived from
 // its raw text whenever that text changes (invariant 2); a hand-linked ingredient wins.
+//
+// Block A-bis (docs/phase-5-spec.md): the translation prompt only carries what the app cannot do
+// itself (name, steps, free text of recognised lines, unrecognised lines) and "Plak vertaling"
+// writes only those parts into the target language; in "both" mode a recognised line shows its
+// dictionary rendering as the other column's grey placeholder (nothing stored unless typed);
+// "Kies bestand" reads a recipe/bundle/backup file and hands it to the Inbox for the merge UI.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { IngredientPicker } from '@/components/IngredientPicker';
@@ -19,7 +25,7 @@ import { MetaRows, applySuggestion, metaEqual, type MetaValue } from '@/componen
 import { Segmented } from '@/components/Segmented';
 import { celebrate } from '@/celebrate';
 import { clearOverride, deleteUserRecipe, duplicateAsOwn, getBaseRecipe, getOverride, getRecipe, isBuiltinId, listLineOverrides, saveOverride, saveUserRecipe, userRecipes } from '@/db/repo';
-import { dictionary, type Dictionary } from '@/dictionary';
+import { dictionary, lineText, type Dictionary } from '@/dictionary';
 import { suggestMeta } from '@/domain/diet';
 import { hasLang, newUserId, nowIso, type Lang, type Line, type Recipe, type Step, type Text } from '@/domain/model';
 import { applyLineOverrides, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
@@ -27,10 +33,11 @@ import { parseLineAuto } from '@/domain/parser';
 import { buildImportPrompt, parseBilingualPlain, type PlainRecipe } from '@/domain/photo-import';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { splitSteps } from '@/domain/steps';
-import { buildTranslationPrompt, parseTranslationAnswer } from '@/domain/translate-prompt';
+import { extractTokens } from '@/domain/token';
+import { applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation, type TranslatableLine } from '@/domain/translate-prompt';
 import { lang, t, tIn } from '@/i18n';
 import { activeProfile } from '@/profile';
-import { navigate, route } from '@/router';
+import { navigate, pendingImport, route } from '@/router';
 
 type Mode = 'nl' | 'en' | 'both';
 type LoadState = 'loading' | 'ready' | 'missing';
@@ -57,6 +64,49 @@ function textOf(nl: string, en: string): Text {
 /** True when the row has text in ANY language — a hidden language is never dropped on save. */
 function rowHasText(x: EditText): boolean {
   return x.nl.trim() !== '' || x.en.trim() !== '';
+}
+
+/** The line without a note/prep that has no text in `l` (never copied into that language's raw text, A-bis.1). */
+function withoutForeign(line: Line, l: Lang): Line {
+  const out: Line = { ...line };
+  if (out.note && !hasLang(out.note, l)) out.note = null;
+  if (out.prep && !hasLang(out.prep, l)) out.prep = null;
+  return out;
+}
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v);
+}
+
+/** True when a JSON value carries recipes in any shape the Inbox understands (envelope, export, patch, bare recipe). */
+function jsonHasRecipes(value: unknown, depth = 0): boolean {
+  if (depth > 3) return false;
+  if (Array.isArray(value)) return value.some((v) => jsonHasRecipes(v, depth + 1));
+  if (!isRecord(value)) return false;
+  if (typeof value.v === 'number' && typeof value.t === 'string') return true;
+  if (Array.isArray(value.userRecipes) || Array.isArray(value.recipes)) return true;
+  if (typeof value.baseId === 'string' && isRecord(value.patch)) return true;
+  return normalizeRecipe(value) !== null;
+}
+
+/**
+ * "Kies bestand" (A-bis.9): does the file hold recipes (share tokens or JSON) — then the Inbox
+ * imports it — or is it plain text for the photo/text import?
+ */
+function fileHasRecipes(text: string): boolean {
+  if (extractTokens(text).length) return true;
+  const s = text.trim();
+  const candidates: string[] = [s];
+  const idx = [s.indexOf('{'), s.indexOf('[')].filter((i) => i > 0).sort((a, b) => a - b)[0];
+  if (idx !== undefined) candidates.push(s.slice(idx));
+  for (const c of candidates) {
+    try {
+      return jsonHasRecipes(JSON.parse(c));
+    } catch {
+      /* not JSON */
+    }
+  }
+  return false;
 }
 
 /**
@@ -237,6 +287,10 @@ export function EditScreen(props: { id?: string }) {
   // Photo/text import (add screen).
   const [importOpen, setImportOpen] = useState(false);
   const [importText, setImportText] = useState('');
+  // "Kies bestand": the text of a chosen file that holds recipes (offered to the Inbox).
+  const [fileRecipes, setFileRecipes] = useState<string | null>(null);
+  // The description with a pasted translation added (the editor has no description field).
+  const [descTr, setDescTr] = useState<Text | null>(null);
   // Which section's collapsible prompt was opened because the clipboard refused (iOS without a
   // user gesture, http dev server); the prompt itself is always there to select by hand.
   const [promptOpen, setPromptOpen] = useState<'tr' | 'import' | ''>('');
@@ -265,6 +319,8 @@ export function EditScreen(props: { id?: string }) {
     setTrText('');
     setImportOpen(false);
     setImportText('');
+    setFileRecipes(null);
+    setDescTr(null);
     setPromptOpen('');
     lineCache.current.clear();
     if (!props.id) {
@@ -464,6 +520,7 @@ export function EditScreen(props: { id?: string }) {
     // the auto-suggestion leave such a recipe alone); absent otherwise.
     if (metaManual) draft.metaManual = true;
     else delete draft.metaManual;
+    if (descTr) draft.description = descTr;
     return normalizeRecipe(draft);
   }
 
@@ -566,6 +623,12 @@ export function EditScreen(props: { id?: string }) {
    * were edited in and the language the parser reads (Dutch when present, else English) — the
    * edit must land in the parsed text; a hand-written line in the other language is left as
    * typed. `rawFromLine` writes the quantity and unit as stored, so nothing is re-united.
+   *
+   * A-bis.1: free text is never translated here. A prep typed in the chips is looked up in the
+   * language of the chips (`noteFor`: both languages when known, else that language only); an
+   * untouched prep keeps its stored text. The parsed language's raw text carries everything, the
+   * other language's raw text only what exists in it — a foreign note is not copied over. The
+   * edited line is stored as the row's source so `effectiveLine` keeps the exact structure.
    */
   function applyChipEdit(rowKey: string, edit: LineEdit) {
     const row = lines.find((r) => r.key === rowKey);
@@ -575,7 +638,7 @@ export function EditScreen(props: { id?: string }) {
     const srcLang: Lang = row.nl.trim() ? 'nl' : 'en';
     const rewrite = (x: Lang) => (x === l || x === srcLang) && row[x].trim() !== '';
     const edited: Line = { ...lineFor(row), qty: edit.qty, unit: edit.unit };
-    edited.prep = edit.prep ? (l === 'nl' ? dict.prepFor(edit.prep) : dict.prepFromEn(edit.prep)) : null;
+    if (edit.prepChanged) edited.prep = edit.prep ? dict.noteFor(edit.prep, l) : null;
     if (edit.optional) {
       edited.optional = true;
     } else {
@@ -583,17 +646,12 @@ export function EditScreen(props: { id?: string }) {
       delete edited.role;
       if (edited.note && edited.note.nl === 'naar smaak') edited.note = null;
     }
-    setLines(
-      lines.map((r) =>
-        r.key !== rowKey
-          ? r
-          : {
-              ...r,
-              nl: rewrite('nl') ? rawFromLine(edited, dict, 'nl') : r.nl,
-              en: rewrite('en') ? rawFromLine(edited, dict, 'en') : r.en,
-            },
-      ),
-    );
+    const rawFor = (x: Lang): string => (rewrite(x) ? rawFromLine(x === srcLang ? edited : withoutForeign(edited, x), dict, x) : row[x]);
+    const nl = rawFor('nl');
+    const en = rawFor('en');
+    lineSrc.current.set(rowKey, { ...edited, raw: textOf(nl, en) });
+    lineCache.current.delete(rowKey);
+    setLines(lines.map((r) => (r.key !== rowKey ? r : { ...r, nl, en })));
     setChipRow(null);
   }
 
@@ -608,6 +666,19 @@ export function EditScreen(props: { id?: string }) {
     const ing = lineFor(row).ing;
     return !!ing && !!dictionary.value.get(ing);
   }
+
+  /**
+   * A-bis.3: in "both" mode the empty column of a recognised line shows the dictionary rendering
+   * in that language as a grey placeholder; typing replaces it, leaving it empty stores nothing.
+   */
+  function linePlaceholder(it: EditText, l: Lang): string {
+    if (langs.length > 1 && it[l].trim() === '' && rowHasText(it)) {
+      const line = lineFor(it);
+      if (line.kind !== 'header' && !!line.ing && !!dictionary.value.get(line.ing)) return lineText(line, l);
+    }
+    return tIn(l, 'edit.linePlaceholder');
+  }
+  const showPlaceholderHint = langs.length > 1 && lines.some((it) => rowHasText(it) && langs.some((l) => it[l].trim() === '') && rowResolved(it));
 
   const pickRow = pickFor ? lines.find((r) => r.key === pickFor) : undefined;
   const pickQuery = pickRow ? lineFor(pickRow).name || pickRow[lang.value].trim() || pickRow.nl.trim() || pickRow.en.trim() : '';
@@ -636,30 +707,39 @@ export function EditScreen(props: { id?: string }) {
   // English, "Nederlands toevoegen" in EN mode adds Dutch); the picker only exists in 'both'.
   const trDir: Lang = mode === 'both' ? trFrom : mode;
   const trTo: Lang = trDir === 'nl' ? 'en' : 'nl';
-  const translationPrompt = buildTranslationPrompt(
-    {
-      name: textOf(nameNl, nameEn),
-      lines: lines.filter(rowHasText).map((r) => ({ raw: textOf(r.nl, r.en) })),
-      steps: steps.filter(rowHasText).map((r) => ({ text: textOf(r.nl, r.en) })),
-    },
-    trDir,
-    trTo,
-  );
+  // A-bis.2: the prompt carries the parsed lines, so recognised ones only send their free text.
+  const keptRows = lines.filter(rowHasText);
+  const keptLines = keptRows.map((r) => lineFor(r));
+  const isResolved = (l: TranslatableLine) => !!l.ing && !!dictionary.value.get(l.ing);
+  const trRecipe = {
+    name: textOf(nameNl, nameEn),
+    description: descTr ?? existing?.description ?? null,
+    servingTip: textOf(tipNl, tipEn),
+    lines: keptLines,
+    steps: steps.filter(rowHasText).map((r) => ({ text: textOf(r.nl, r.en) })),
+  };
+  const trPlan = planTranslation(trRecipe, trDir, trTo, { isResolved });
+  const translationPrompt = buildTranslationPrompt(trRecipe, trDir, trTo, { isResolved });
 
   function copyTranslationPrompt() {
     copyToClipboard(translationPrompt, 'tr');
   }
 
   /**
-   * "Plak vertaling": fills ONLY the target language, refusing when the counts do not match, and
-   * switches to "both" so the result is visible next to the original.
+   * "Plak vertaling" (A-bis.2): the answer's N/P/I items go into the target language of the parsed
+   * lines (`applyTranslationAnswer`: notes and preps of recognised lines, the raw text of the
+   * others; existing target text is never overwritten). A translated line becomes the row's
+   * source so its structure survives; only unrecognised lines and headers get text in the other
+   * column — recognised ones render from the dictionary. Name, serving tip, description and steps
+   * are positional as before. Refuses when the step count does not match, and switches to "both"
+   * so the result is visible next to the original.
    */
   function applyTranslation() {
     const answer = parseTranslationAnswer(trText);
     const to = trTo;
-    const keptLines = lines.filter(rowHasText);
     const keptSteps = steps.filter(rowHasText);
-    if (!answer.name && answer.lines.length === 0 && answer.steps.length === 0) {
+    const hasLineItems = answer.lines.length > 0 || Object.keys(answer.notes).length > 0 || Object.keys(answer.preps).length > 0;
+    if (!answer.name && !hasLineItems && answer.steps.length === 0 && !answer.description && !answer.servingTip) {
       setStatus(t('edit.translateNone'));
       return;
     }
@@ -667,21 +747,34 @@ export function EditScreen(props: { id?: string }) {
       setStatus(t('edit.translateStepsMismatch', { got: answer.steps.length, expected: keptSteps.length }));
       return;
     }
-    if (answer.lines.length > 0 && answer.lines.length !== keptLines.length) {
-      setStatus(t('edit.translateLinesMismatch', { got: answer.lines.length, expected: keptLines.length }));
+    // I-items that match neither the asked row numbers nor their count cannot be placed.
+    if (answer.lines.length > 0 && trPlan.lines.length > 0 && answer.lines.length !== trPlan.lines.length && !trPlan.lines.some((n) => answer.lineByNumber[n] !== undefined)) {
+      setStatus(t('edit.translateNoLines', { got: answer.lines.length, expected: trPlan.lines.length, rows: trPlan.lines.join(', ') }));
       return;
     }
-    if (answer.name) (to === 'nl' ? setNameNl : setNameEn)(answer.name);
-    if (answer.lines.length) {
-      let i = 0;
+    const applied = applyTranslationAnswer(keptLines, answer, to, { isResolved, lineNumbers: trPlan.lines });
+    if (applied.changed) {
+      const byKey = new Map<string, Line>();
+      keptRows.forEach((row, i) => {
+        const next = applied.lines[i];
+        if (next && next !== keptLines[i]) byKey.set(row.key, next);
+      });
+      for (const [key, next] of byKey) {
+        lineSrc.current.set(key, next);
+        lineCache.current.delete(key);
+      }
       setLines(
         lines.map((r) => {
-          if (!rowHasText(r)) return r;
-          const v = answer.lines[i++];
-          return v ? { ...r, [to]: v } : r;
+          const next = byKey.get(r.key);
+          if (!next) return r;
+          const rawTo = next.raw[to];
+          return typeof rawTo === 'string' && rawTo.trim() && r[to].trim() === '' ? { ...r, [to]: rawTo } : r;
         }),
       );
     }
+    if (answer.name) (to === 'nl' ? setNameNl : setNameEn)(answer.name);
+    if (answer.servingTip) (to === 'nl' ? setTipNl : setTipEn)(answer.servingTip);
+    if (answer.description) setDescTr({ ...(descTr ?? existing?.description ?? {}), [to]: answer.description });
     if (answer.steps.length) {
       let i = 0;
       setSteps(
@@ -695,7 +788,7 @@ export function EditScreen(props: { id?: string }) {
     setTrText('');
     setTrOpen(false);
     setMode('both');
-    setStatus(t('edit.translateDone', { lines: answer.lines.length, steps: answer.steps.length }));
+    setStatus(t('edit.translateApplied', { lines: applied.changed, steps: answer.steps.length, name: answer.name ? t('edit.translateName') : '' }));
   }
 
   // --- photo / text import ---------------------------------------------------------------------
@@ -759,6 +852,41 @@ export function EditScreen(props: { id?: string }) {
     } else {
       setStatus(t('edit.importDone', { lines: only.lines.length, steps: only.steps.length }) + (metaTaken ? ' · ' + t('edit.importMeta') : ''));
     }
+  }
+
+  /**
+   * "Kies bestand" (A-bis.9): a file with recipes (share tokens, a recipe/bundle/backup JSON) is
+   * offered to the Inbox — the merge UI lives there; plain text goes into the import box.
+   */
+  function onFile(e: Event) {
+    const input = e.currentTarget as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+    file.text().then(
+      (s) => {
+        if (!s.trim()) {
+          setStatus(t('edit.fileEmpty'));
+          return;
+        }
+        if (fileHasRecipes(s)) {
+          setFileRecipes(s);
+          setStatus('');
+          return;
+        }
+        setFileRecipes(null);
+        setImportOpen(true);
+        setImportText(s);
+        setStatus(t('edit.fileText'));
+      },
+      () => setStatus(t('edit.fileFailed')),
+    );
+  }
+
+  function openFileInInbox() {
+    if (!fileRecipes) return;
+    pendingImport.value = fileRecipes;
+    navigate('/inbox');
   }
 
   // --- render ----------------------------------------------------------------------------------
@@ -847,7 +975,25 @@ export function EditScreen(props: { id?: string }) {
                   <button type="button" class="btn btn-secondary" onClick={() => copyToClipboard(importPrompt, 'import')}>
                     {t('edit.copyImportPrompt')}
                   </button>
+                  <label class="btn">
+                    {t('edit.chooseFile')}
+                    <input type="file" accept=".json,.txt,application/json,text/plain" style="display:none" onChange={onFile} />
+                  </label>
                 </div>
+                <p class="muted small">{t('edit.fileHint')}</p>
+                {fileRecipes && (
+                  <div class="edit-file-card" role="status">
+                    <p>{t('edit.fileHasRecipes')}</p>
+                    <div class="actions">
+                      <button type="button" class="btn btn-primary" onClick={openFileInInbox}>
+                        {t('edit.openInInbox')}
+                      </button>
+                      <button type="button" class="btn" onClick={() => setFileRecipes(null)}>
+                        {t('common.cancel')}
+                      </button>
+                    </div>
+                  </div>
+                )}
                 {promptBox(importPrompt, 'import')}
                 <label class="field">
                   <span>{t('edit.importPaste')}</span>
@@ -863,6 +1009,7 @@ export function EditScreen(props: { id?: string }) {
                     onClick={() => {
                       setImportOpen(false);
                       setImportText('');
+                      setFileRecipes(null);
                       setPromptOpen('');
                     }}
                   >
@@ -928,7 +1075,7 @@ export function EditScreen(props: { id?: string }) {
             items={lines}
             langs={langs}
             onChange={setLines}
-            placeholder={{ nl: tIn('nl', 'edit.linePlaceholder'), en: tIn('en', 'edit.linePlaceholder') }}
+            placeholder={linePlaceholder}
             addLabel={t('edit.addLine')}
             removeLabel={t('edit.removeLine')}
             renderExtra={(it) =>
@@ -951,6 +1098,7 @@ export function EditScreen(props: { id?: string }) {
           {langs.includes('en') && lines.some((row) => row.nl.trim() !== '' && row.en.trim() !== '' && rowResolved(row)) && (
             <p class="muted small edit-hint">{t('edit.enFromDictionaryHint')}</p>
           )}
+          {showPlaceholderHint && <p class="muted small edit-hint">{t('edit.placeholderHint')}</p>}
         </div>
 
         <div class="field">
@@ -1035,6 +1183,7 @@ export function EditScreen(props: { id?: string }) {
         <div class="card edit-tools" ref={trRef}>
           <h2>{mode === 'nl' ? t('edit.addEnglish') : mode === 'en' ? t('edit.addDutch') : t('edit.translate')}</h2>
           <p class="muted small">{mode === 'nl' ? t('edit.addEnglishHint') : mode === 'en' ? t('edit.addDutchHint') : t('edit.translateHint')}</p>
+          {keptLines.length > trPlan.lines.length && <p class="muted small">{t('edit.translateOnlyFree')}</p>}
           {mode === 'both' && (
             <div class="edit-paste-lang">
               <span class="muted small">{t('edit.translateFrom')}</span>

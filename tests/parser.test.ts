@@ -2,9 +2,11 @@
 import { describe, expect, it } from 'vitest';
 import { defaultDictionaryData } from '../src/domain/data';
 import { loadDictionary } from '../src/domain/dictionary';
-import type { Recipe } from '../src/domain/model';
+import type { Line, Recipe } from '../src/domain/model';
 import { parseLine, parseQty, reparseLine, parseLineAuto } from '../src/domain/parser';
+import { renderLine, renderLineParts } from '../src/domain/render';
 import { searchRecipes } from '../src/domain/search';
+import { fullDictionary } from './fixtures/full-dictionary';
 import { testDictionary } from './fixtures/test-dictionary';
 
 const dict = testDictionary();
@@ -270,5 +272,129 @@ describe('parseLineAuto (language of the text, not of the column)', () => {
     const l = parseLineAuto('2 el olijfolie', dict, 'nl');
     expect(l.unit).toBe('el');
     expect(l.raw).toEqual({ nl: '2 el olijfolie' });
+  });
+});
+
+// --- Block A-bis (docs/phase-5-spec.md): US units and names, notes never half-translated ---------
+
+describe('A-bis: English input with the full dictionary', () => {
+  const full = fullDictionary();
+  const enFull = (raw: string) => parseLine(raw, full, 'en');
+  const nlFull = (raw: string) => parseLine(raw, full, 'nl');
+  const bothFull = (line: Line) => [renderLine(line, full, 'nl'), renderLine(line, full, 'en')];
+
+  it("Gabi's line: 1 medium eggplant (approximately 1 pound)", () => {
+    const line = enFull('1 medium eggplant (approximately 1 pound)');
+    expect(line).toMatchObject({ ing: 'aubergine', qual: ['middelgrote'], note: { en: 'approximately 1 pound', nl: 'ongeveer 450 g' } });
+    expect(bothFull(line)).toEqual(['1 middelgrote aubergine (ongeveer 450 g)', '1 medium aubergine (approximately 1 pound)']);
+    expect(renderLineParts(line, full, 'nl').noteForeign).toBe(false);
+  });
+
+  it("Stijn's line: the note stays Dutch only and is flagged in English", () => {
+    const line = nlFull('1 grote groene appel (gesneden in blokjes van ongeveer 2 cm breed)');
+    expect(line).toMatchObject({ ing: 'appel', qual: ['grote', 'groene'], note: { nl: 'gesneden in blokjes van ongeveer 2 cm breed' } });
+    expect(line.note?.en).toBeUndefined();
+    expect(line.prep).toBeUndefined();
+    expect(bothFull(line)).toEqual([
+      '1 grote groene appel (gesneden in blokjes van ongeveer 2 cm breed)',
+      '1 large green apple (gesneden in blokjes van ongeveer 2 cm breed)',
+    ]);
+    expect(renderLineParts(line, full, 'en').noteForeign).toBe(true);
+    expect(renderLineParts(line, full, 'nl').noteForeign).toBe(false);
+  });
+
+  it('lb, oz, cup, stick, pint: parsed as US units, rendered in g/ml for Dutch, kept in English', () => {
+    expect(enFull('1 lb ground beef')).toMatchObject({ qty: { min: 1 }, unit: 'lb', ing: 'rundergehakt' });
+    expect(bothFull(enFull('1 lb ground beef'))).toEqual(['454 g rundergehakt', '1 lb beef mince']);
+    expect(bothFull(enFull('1 pound ground meat'))).toEqual(['454 g gehakt', '1 lb mince']);
+    expect(bothFull(enFull('8 oz cream cheese, softened'))).toEqual(['227 g roomkaas, zacht', '8 oz cream cheese, softened']);
+    expect(enFull('1/2 cup heavy cream')).toMatchObject({ qty: { min: 0.5 }, unit: 'cup', ing: 'slagroom' });
+    expect(bothFull(enFull('1/2 cup heavy cream'))).toEqual(['120 ml slagroom', '½ cup double cream']);
+    expect(bothFull(enFull('2 cups all-purpose flour'))).toEqual(['480 ml bloem', '2 cups plain flour']);
+    expect(bothFull(enFull('2 sticks butter'))).toEqual(['226 g boter', '2 sticks butter']);
+    expect(bothFull(enFull('2 sticks celery'))).toEqual(['2 stengels bleekselderij', '2 stalks celery']);
+    expect(bothFull(enFull('1 pint milk'))).toEqual(['500 ml melk', '1 pint milk']);
+    expect(bothFull(enFull('2 tbsp cornstarch'))).toEqual(['2 el maïzena', '2 tbsp cornflour']);
+    expect(bothFull(enFull('3 tbsp powdered sugar'))).toEqual(['3 el poedersuiker', '3 tbsp icing sugar']);
+    // scaling: US units in ¼ steps, the Dutch conversion follows
+    expect(renderLine(enFull('1 lb ground beef'), full, 'nl', 0.5)).toBe('227 g rundergehakt');
+    expect(renderLine(enFull('1 lb ground beef'), full, 'en', 0.5)).toBe('½ lb beef mince');
+    expect(renderLine(enFull('1/2 cup heavy cream'), full, 'en', 2)).toBe('1 cup double cream');
+    // Dutch "kop" stays kop and still reads as "cup" in English; English "cup" is the US cup
+    expect(nlFull('1 kop rijst')).toMatchObject({ unit: 'kop', ing: 'rijst' });
+    expect(bothFull(nlFull('1 kop rijst'))).toEqual(['1 kop rijst', '1 cup rice']);
+    expect(full.unitByAlias('cup', 'en')?.id).toBe('cup');
+    expect(full.unitByAlias('kopje', 'nl')?.id).toBe('kop');
+  });
+
+  it('US names: red onion is ui + rode, green onion, garbanzo beans, bacon strips, cilantro', () => {
+    expect(enFull('1 red onion')).toMatchObject({ ing: 'ui', qual: ['rode'] });
+    expect(bothFull(enFull('1 red onion'))).toEqual(['1 rode ui', '1 red onion']);
+    expect(enFull('3 green onions')).toMatchObject({ ing: 'bosui' });
+    expect(enFull('1 can (15 oz) garbanzo beans, drained and rinsed')).toMatchObject({
+      unit: 'blik',
+      ing: 'kikkererwt',
+      prep: { en: 'drained and rinsed', nl: 'uitgelekt en afgespoeld' },
+      note: { en: '15 oz', nl: '430 g' },
+    });
+    expect(bothFull(enFull('6 bacon strips'))).toEqual(['6 plakken bacon', '6 slices bacon']);
+    expect(bothFull(enFull('2 garlic cloves'))).toEqual(['2 teentjes knoflook', '2 cloves garlic']);
+    expect(enFull('2 bay leaves').unit).toBeNull();
+    expect(bothFull(enFull('1/4 cup chopped fresh cilantro'))).toEqual(['60 ml gehakte verse koriander', '¼ cup chopped fresh coriander']);
+    expect(enFull('1 large yellow bell pepper seeded, membranes removed and chopped')).toMatchObject({
+      ing: 'paprika',
+      qual: ['grote', 'gele'],
+      prep: { nl: 'zonder zaadjes; zaadlijsten verwijderd en gehakt' },
+    });
+  });
+
+  it('prep phrases before or after the name (US style) and note phrases after "or"', () => {
+    expect(enFull('5 cloves garlic minced')).toMatchObject({ unit: 'teen', ing: 'knoflook', name: 'garlic', prep: { nl: 'fijngehakt', en: 'minced' } });
+    expect(enFull('1 large onion chopped (3 cups)')).toMatchObject({ ing: 'ui', qual: ['grote'], prep: { nl: 'gehakt' }, note: { en: '3 cups', nl: '720 ml' } });
+    expect(enFull('2 teaspoons salt plus more for sauce')).toMatchObject({ unit: 'tl', ing: 'zout', prep: { nl: 'plus extra voor de saus', en: 'plus more for sauce' } });
+    expect(enFull('1/4 cup extra-virgin olive oil or as needed')).toMatchObject({ ing: 'olijfolie', note: { en: 'or as needed', nl: 'of naar behoefte' } });
+    expect(enFull('1/4 cup extra-virgin olive oil or as needed').alt).toBeUndefined();
+    expect(enFull('1 tsp cinnamon (or to taste)')).toMatchObject({ ing: 'kaneel', optional: true, note: { nl: 'naar smaak', en: 'or to taste' } });
+    expect(enFull('1/2 cup chopped fresh cilantro divided')).toMatchObject({ ing: 'koriander', prep: { nl: 'verdeeld', en: 'divided' } });
+  });
+
+  it('quantity notes convert the unit for the other language, in both directions', () => {
+    expect(enFull('1 can (28-ounce) crushed tomatoes')).toMatchObject({ unit: 'blik', ing: 'tomaten-uit-blik', note: { en: '28-ounce', nl: '790 g' } });
+    expect(enFull('2 racks ribs (about 4–5 lbs total)').note).toEqual({ en: 'about 4–5 lbs total', nl: 'ongeveer 1800-2250 g in totaal' });
+    expect(nlFull('2 dl room (ongeveer 2 dl)').note).toEqual({ nl: 'ongeveer 2 dl', en: 'approximately 200 ml' });
+    expect(nlFull('4 eieren (verdeeld)').note).toEqual({ nl: 'verdeeld', en: 'divided' });
+    expect(nlFull('1 ui (ongeveer 2 cm)').note).toEqual({ nl: 'ongeveer 2 cm', en: 'approximately 2 cm' });
+  });
+
+  it('an unresolved line renders raw in both languages, an unknown note stays in its own language', () => {
+    const line = enFull('2 full racks pork baby back ribs (about 4–5 lbs total)');
+    expect(line.ing).toBeNull();
+    expect(bothFull(line)).toEqual(['2 full racks pork baby back ribs (about 4–5 lbs total)', '2 full racks pork baby back ribs (about 4–5 lbs total)']);
+    const odd = enFull('1 onion (the way grandma did it)');
+    expect(odd.note).toEqual({ en: 'the way grandma did it' });
+    expect(renderLineParts(odd, full, 'nl')).toMatchObject({ note: 'the way grandma did it', noteForeign: true });
+    expect(renderLineParts(odd, full, 'en')).toMatchObject({ note: 'the way grandma did it', noteForeign: false });
+    // two notes: the source language keeps both, the other language is not claimed
+    const two = enFull('1 onion (approximately 1 pound) (the way grandma did it)');
+    expect(two.note).toEqual({ en: 'approximately 1 pound; the way grandma did it' });
+  });
+
+  it('findExisting: the entry a typed name already is, in either language (A-bis.6)', () => {
+    expect(full.findExisting('Eggplant')?.id).toBe('aubergine');
+    expect(full.findExisting('aubergines', 'en')?.id).toBe('aubergine');
+    expect(full.findExisting('Cilantro', 'nl')?.id).toBe('koriander');
+    expect(full.findExisting('Maïzena', 'en')?.id).toBe('maizena');
+    expect(full.findExisting('mince meat')?.id).toBe('gehakt');
+    expect(full.findExisting('barbecue sauce')).toBeUndefined();
+    expect(full.findExisting('')).toBeUndefined();
+  });
+
+  it('English prep notes: templates and compositions (prepFromEn)', () => {
+    expect(full.prepFromEn('2 cm dice')).toEqual({ en: '2 cm dice', nl: 'blokjes van 2 cm' });
+    expect(full.prepFromEn('cut into 1/2 to 1-inch cubes')).toEqual({ en: 'cut into 1/2 to 1-inch cubes', nl: 'in blokjes van ½-1 inch' });
+    expect(full.prepFromEn('peeled and finely chopped')).toEqual({ en: 'peeled and finely chopped', nl: 'gepeld en fijngehakt' });
+    expect(full.prepFromEn('3 finely chopped')).toEqual({ en: '3 finely chopped', nl: '3 fijngehakt' });
+    expect(full.prepFromEn('the way grandma did it')).toEqual({ en: 'the way grandma did it' });
+    expect(full.prepFor('ongeveer')).toEqual({ nl: 'ongeveer', en: 'approximately' });
   });
 });

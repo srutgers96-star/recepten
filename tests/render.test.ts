@@ -171,3 +171,35 @@ describe('renderLineParts', () => {
     expect(renderLine(withAlt, dict, 'en')).toBe('250 g haddock fillet (or wijting)');
   });
 });
+
+describe('renderLineParts: noteForeign / prepForeign (docs/phase-5-spec.md A-bis.1)', () => {
+  it('flags a note or prep that is shown in the other language because its own is missing', () => {
+    const l = line('1 ui (op een manier die niemand kent) [op een andere manier]');
+    expect(l.note).toEqual({ nl: 'op een manier die niemand kent' });
+    expect(l.prep).toEqual({ nl: 'op een andere manier' });
+    const en = renderLineParts(l, dict, 'en');
+    expect(en).toMatchObject({ note: 'op een manier die niemand kent', noteForeign: true, prep: 'op een andere manier', prepForeign: true });
+    expect(en.text).toBe('1 onion, op een andere manier (op een manier die niemand kent)');
+    expect(renderLineParts(l, dict, 'nl')).toMatchObject({ noteForeign: false, prepForeign: false });
+    // translated notes are never foreign
+    expect(renderLineParts(line('2 dl kippenbouillon (blokje)'), dict, 'en')).toMatchObject({ note: 'cube', noteForeign: false });
+    expect(renderLineParts(line('zout en peper'), dict, 'en')).toMatchObject({ note: '', noteForeign: false, prepForeign: false });
+    // unresolved lines carry the flag too
+    const raw = renderLineParts({ ...line('4 blikjes tonijn op water'), note: { en: 'from the deli' } }, dict, 'nl');
+    expect(raw).toMatchObject({ resolved: false, note: 'from the deli', noteForeign: true });
+  });
+
+  it('renders US units in g/ml for Dutch and as written for English (units.json nl.render)', () => {
+    const lb = { ...line('1 ui'), qty: { min: 1 }, unit: 'lb', ing: 'kabeljauw', name: 'cod' };
+    expect(renderLine(lb, dict, 'nl')).toBe('454 g kabeljauw');
+    expect(renderLine(lb, dict, 'en')).toBe('1 lb cod');
+    expect(renderLine(lb, dict, 'nl', 0.5)).toBe('227 g kabeljauw');
+    expect(renderLine(lb, dict, 'en', 0.5)).toBe('½ lb cod');
+    expect(renderLine(lb, dict, 'en', 1.5)).toBe('1½ lb cod');
+    const cup = { ...line('1 ui'), qty: { min: 0.5 }, unit: 'cup', ing: 'mayonaise', name: 'mayonnaise' };
+    expect(renderLine(cup, dict, 'nl')).toBe('120 ml mayonaise');
+    expect(renderLine(cup, dict, 'en')).toBe('½ cup mayonnaise');
+    expect(numberStyleFor(dict.unit('lb'))).toBe('fraction');
+    expect(numberStyleFor(dict.unit('cup'))).toBe('fraction');
+  });
+});

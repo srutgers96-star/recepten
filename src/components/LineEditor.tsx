@@ -34,7 +34,11 @@ export interface LineEditorProps {
   multiline?: boolean;
   /** Row numbers "1." in front of every row (steps). */
   numbered?: boolean;
-  placeholder?: Partial<Record<Lang, string>>;
+  /**
+   * Placeholder per language, or a function per row and language (the editor's "both" mode shows
+   * the dictionary rendering of a recognised line as the other column's placeholder, A-bis.3).
+   */
+  placeholder?: Partial<Record<Lang, string>> | ((item: EditText, lang: Lang) => string);
   addLabel: string;
   removeLabel: string;
   /** Rendered under the fields of a row (the ingredient chips); null/undefined renders nothing. */
@@ -87,6 +91,11 @@ export function LineEditor(props: LineEditorProps) {
   }
 
   const showTag = props.langs.length > 1;
+  const placeholderOf = (it: EditText, l: Lang): string => {
+    const p = props.placeholder;
+    if (!p) return '';
+    return typeof p === 'function' ? p(it, l) : (p[l] ?? '');
+  };
 
   return (
     <div class={'le' + (props.multiline ? ' le-multi' : '')} ref={root}>
@@ -102,7 +111,7 @@ export function LineEditor(props: LineEditorProps) {
                     class="input le-input"
                     rows={3}
                     value={it[l]}
-                    placeholder={props.placeholder?.[l] ?? ''}
+                    placeholder={placeholderOf(it, l)}
                     autocomplete="off"
                     data-focus={`${it.key}:${l}`}
                     onInput={(e) => update(idx, l, (e.currentTarget as HTMLTextAreaElement).value)}
@@ -112,7 +121,7 @@ export function LineEditor(props: LineEditorProps) {
                     class="input le-input"
                     type="text"
                     value={it[l]}
-                    placeholder={props.placeholder?.[l] ?? ''}
+                    placeholder={placeholderOf(it, l)}
                     autocomplete="off"
                     enterKeyHint="next"
                     data-focus={`${it.key}:${l}`}

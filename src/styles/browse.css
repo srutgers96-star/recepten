@@ -1216,3 +1216,167 @@ textarea.input.notes {
   background: var(--press);
   border-radius: 8px;
 }
+
+/* ---------- Phase 5 (A-bis.8): select mode in the recipe list ---------- */
+
+/* "Selecteer" / "Klaar" text buttons in the header (44 px, next to the "+"). */
+.list-select {
+  font-size: 15px;
+  padding: 0 8px;
+}
+
+/* The checkbox at the left of a selectable row. */
+.row-check {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 2px solid var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--on-cobalt);
+  background: transparent;
+}
+
+.row-check.on {
+  border-color: var(--cobalt);
+  background: var(--cobalt);
+}
+
+.row-selected {
+  background: var(--press);
+}
+
+/* Room for the bar: the list ends above it, not under it. */
+.screen.selecting {
+  padding-bottom: 8px;
+}
+
+/* The action bar above the nav: count line, five icon+label actions in one row (fits 360 px). */
+.select-bar {
+  flex: none;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  padding: 6px max(12px, var(--sar)) 6px max(12px, var(--sal));
+}
+
+.select-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 2px 4px 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.select-status {
+  color: var(--cobalt);
+  font-weight: 600;
+}
+
+.select-actions {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.select-action {
+  min-height: 52px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 2px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--cobalt);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.select-action:active {
+  background: var(--press);
+}
+
+.select-action:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.select-action.danger {
+  color: var(--tomato);
+}
+
+.select-confirm {
+  margin: 4px 0;
+}
+
+/* Category/labels sheet: tri-state tag chips (on / off / "deels"). */
+.select-meta-hint {
+  margin: 4px 0 12px;
+}
+
+.select-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.select-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.select-tag:active {
+  background: var(--press);
+}
+
+.select-tag.on {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  border-color: transparent;
+}
+
+.select-tag.diet.on {
+  background: var(--rosemary);
+  color: #fff;
+}
+
+.select-tag.mixed {
+  border-style: dashed;
+  border-color: var(--cobalt);
+}
+
+.select-tag-mixed {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}

@@ -1,7 +1,7 @@
 // The bilingual dictionary (docs/phase-2-spec.md §1 data files, §3 `dictionary.ts`). Framework-free.
 //
 // `loadDictionary(data)` builds lookup indexes over the JSON vocab files (units, qualifiers,
-// prep-phrases, ingredients, aisles, categories); the result is memoised per data object.
+// prep-phrases, note-phrases, ingredients, aisles, categories); the result is memoised per data object.
 // Lookups are diacritic- and case-insensitive and understand Dutch plurals/diminutives and
 // English plurals heuristically, so "sjalotjes" finds `sjalot` even without an alias.
 // `withUserEntries(dict, entries)` layers user-created ingredients on top (builtins always win).
@@ -17,7 +17,8 @@ export interface Unit {
   g?: number;
   /** Millilitres per unit (volume units). */
   ml?: number;
-  nl: { one: string; many?: string; long?: string };
+  /** `render`/`scale`: show this unit as another one in Dutch (US "lb" -> "g" × 453.6, "cup" -> "ml" × 240). */
+  nl: { one: string; many?: string; long?: string; render?: string; scale?: number };
   /** `render`/`scale`: show this unit as another one in English ("dl" -> "ml" × 100). */
   en: { one: string; many?: string; long?: string; render?: string; scale?: number };
   aliases?: { nl?: string[]; en?: string[] };
@@ -44,6 +45,18 @@ export interface PrepPhrase {
   nl: string;
   en: string;
   enSliced?: string;
+}
+
+/**
+ * A free-text note phrase that is the same in both languages (data/note-phrases.json, docs/phase-5-spec.md
+ * A-bis.4): "approximately" <-> "ongeveer", "divided" <-> "verdeeld". Aliases are extra spellings per
+ * language ("about", "roughly"); `{n}` templates work like in PrepPhrase. Matched only against a WHOLE
+ * note (or a whole `,`/`;`/and-part of it), never inside running text, so a note is never half-translated.
+ */
+export interface NotePhrase {
+  nl: string;
+  en: string;
+  aliases?: { nl?: string[]; en?: string[] };
 }
 
 export interface Ingredient {
@@ -92,6 +105,8 @@ export interface DictionaryData {
   units: Unit[];
   qualifiers: Qualifier[];
   prepPhrases: PrepPhrase[];
+  /** data/note-phrases.json; optional so older callers keep working (no note translation then). */
+  notePhrases?: NotePhrase[];
   ingredients: Ingredient[];
   aisles: Aisle[];
   categories: Category[];
@@ -189,26 +204,36 @@ export function englishBaseForms(key: string): string[] {
 
 interface PrepTemplate {
   re: RegExp;
-  en: string;
-  nl: string;
+  /** The rendering in the OTHER language ({n} slots filled in order). */
+  out: string;
 }
 
-/** Numbers as they appear in normalised prep notes: "2", "2-3", "1 1/2" (was "1½"), "1/2", "1,5". */
-const TEMPLATE_NUMBER = String.raw`((?:\d+\s\d+/\d+|\d+/\d+|\d+(?:[.,]\d+)?)(?:\s?[-–]\s?(?:\d+\s\d+/\d+|\d+/\d+|\d+(?:[.,]\d+)?))?)`;
+/** Numbers as they appear in normalised prep notes: "2", "2-3", "1/2 to 1", "1 1/2" (was "1½"), "1/2", "1,5". */
+const TEMPLATE_NUMBER = String.raw`((?:\d+\s\d+/\d+|\d+/\d+|\d+(?:[.,]\d+)?)(?:(?:\s?[-–]\s?|\s(?:to|tot|a)\s)(?:\d+\s\d+/\d+|\d+/\d+|\d+(?:[.,]\d+)?))?)`;
 
 function escapeRe(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function templateRe(nl: string): RegExp {
-  const parts = normalizeKey(nl).split('{n}').map(escapeRe);
+function templateRe(phrase: string): RegExp {
+  const parts = normalizeKey(phrase).split('{n}').map(escapeRe);
   return new RegExp('^' + parts.join(TEMPLATE_NUMBER) + '$');
+}
+
+function fillTemplate(t: PrepTemplate, m: RegExpExecArray): string {
+  let out = t.out;
+  for (let i = 1; i < m.length; i++) {
+    const n = prettyNumber((m[i] as string).replace(',', '.').replace(/\s?[-–]\s?|\s(?:to|tot|a)\s/, '-'));
+    out = out.replace('{n}', n);
+  }
+  return out;
 }
 
 export class Dictionary {
   readonly units: readonly Unit[];
   readonly qualifiers: readonly Qualifier[];
   readonly prepPhrases: readonly PrepPhrase[];
+  readonly notePhrases: readonly NotePhrase[];
   readonly ingredients: readonly Ingredient[];
   readonly aisles: readonly Aisle[];
   readonly categories: readonly Category[];
@@ -222,7 +247,13 @@ export class Dictionary {
   private readonly qualByWord: Record<Lang, Map<string, Qualifier>> = { nl: new Map(), en: new Map() };
   private readonly prepExact = new Map<string, PrepPhrase>();
   private readonly prepExactEn = new Map<string, PrepPhrase>();
+  /** Dutch `{n}` templates -> English. */
   private readonly prepTemplates: PrepTemplate[] = [];
+  /** English `{n}` templates -> Dutch. */
+  private readonly prepTemplatesEn: PrepTemplate[] = [];
+  /** Note phrases (data/note-phrases.json): exact keys and `{n}` templates per language, consulted after the prep phrases. */
+  private readonly noteExact: Record<Lang, Map<string, NotePhrase>> = { nl: new Map(), en: new Map() };
+  private readonly noteTemplates: Record<Lang, PrepTemplate[]> = { nl: [], en: [] };
   private readonly aisleById = new Map<string, Aisle>();
   private readonly categoryById = new Map<string, Category>();
 
@@ -230,6 +261,7 @@ export class Dictionary {
     this.units = [...data.units];
     this.qualifiers = [...data.qualifiers];
     this.prepPhrases = [...data.prepPhrases];
+    this.notePhrases = [...(data.notePhrases ?? [])];
     this.ingredients = [...data.ingredients];
     this.aisles = [...data.aisles].sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
     this.categories = [...data.categories].sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
@@ -253,7 +285,8 @@ export class Dictionary {
 
     for (const p of this.prepPhrases) {
       if (p.nl.includes('{n}')) {
-        this.prepTemplates.push({ re: templateRe(p.nl), en: p.en, nl: p.nl });
+        this.prepTemplates.push({ re: templateRe(p.nl), out: p.en });
+        if (p.en.includes('{n}')) this.prepTemplatesEn.push({ re: templateRe(p.en), out: p.nl });
       } else {
         this.setFirst(this.prepExact, normalizeKey(p.nl), p);
         // English -> Dutch: an unambiguous phrase ("fijngehakt") wins over one whose English
@@ -265,6 +298,15 @@ export class Dictionary {
       if (p.nl.includes('{n}') || !p.enSliced) continue;
       this.setFirst(this.prepExactEn, normalizeKey(p.en), p);
       this.setFirst(this.prepExactEn, normalizeKey(p.enSliced), p);
+    }
+    for (const n of this.notePhrases) {
+      for (const lang of ['nl', 'en'] as const) {
+        for (const form of [n[lang], ...(n.aliases?.[lang] ?? [])]) {
+          if (!form) continue;
+          if (form.includes('{n}')) this.noteTemplates[lang].push({ re: templateRe(form), out: n[otherLang(lang)] });
+          else this.setFirst(this.noteExact[lang], normalizeKey(form), n);
+        }
+      }
     }
 
     for (const ing of this.ingredients) this.indexIngredient(ing);
@@ -341,6 +383,17 @@ export class Dictionary {
     return undefined;
   }
 
+  /**
+   * The entry a typed name already IS (docs/phase-5-spec.md A-bis.6, "Bestaat al: aubergine (eggplant)"):
+   * a name or alias in either language, case- and diacritic-insensitive, plurals included. Undefined
+   * when the name is new. `lang` only decides which language is tried first.
+   */
+  findExisting(name: string, lang: Lang = 'nl'): Ingredient | undefined {
+    const key = normalizeKey(name);
+    if (!key) return undefined;
+    return this.ingByName[lang].get(key) ?? this.ingByName[otherLang(lang)].get(key) ?? this.ingredientByName(name, lang);
+  }
+
   /** Unit for an alias as written ("el", "eetlepels", "tbsp", "Blikje"). */
   unitByAlias(text: string, lang: Lang): Unit | undefined {
     const key = normalizeKey(text);
@@ -373,29 +426,40 @@ export class Dictionary {
     return en === undefined ? { nl: text } : { nl: text, en };
   }
 
-  /** Reverse of `prepFor` for English input: "finely chopped" -> {en, nl: "fijngehakt"} when known. */
+  /**
+   * Reverse of `prepFor` for English input: "finely chopped" -> {en, nl: "fijngehakt"} when known.
+   * Same strategy as the Dutch side: exact prep phrases, `{n}` templates, note phrases, then a leading
+   * count and parts split on ';', ',' and ' and '. `nl` is left out when any part is unknown.
+   */
   prepFromEn(en: string): Text {
     const text = en.replace(/\s+/g, ' ').trim();
     if (!text) return {};
-    const hit = this.prepExactEn.get(normalizeKey(text));
-    return hit ? { nl: hit.nl, en: text } : { en: text };
+    const nl = this.translatePrepEn(normalizeKey(text), 0);
+    return nl === undefined ? { en: text } : { nl, en: text };
+  }
+
+  /** `prepFor` / `prepFromEn` by the language of the text: the note in both languages when known. */
+  noteFor(text: string, lang: Lang, opts?: { slice?: boolean }): Text {
+    return lang === 'nl' ? this.prepFor(text, opts) : this.prepFromEn(text);
+  }
+
+  /** A whole phrase's translation into the other language (prep or note phrase), undefined when unknown. */
+  phraseTranslation(text: string, lang: Lang): string | undefined {
+    const key = normalizeKey(text);
+    if (!key) return undefined;
+    return lang === 'nl' ? this.translatePrep(key, 0, false) : this.translatePrepEn(key, 0);
   }
 
   private translatePrep(key: string, depth: number, slice: boolean): string | undefined {
     if (!key) return undefined;
     const exact = this.prepExact.get(key);
     if (exact) return slice && exact.enSliced ? exact.enSliced : exact.en;
-    for (const t of this.prepTemplates) {
+    for (const t of [...this.prepTemplates, ...this.noteTemplates.nl]) {
       const m = t.re.exec(key);
-      if (m) {
-        let out = t.en;
-        for (let i = 1; i < m.length; i++) {
-          const n = prettyNumber((m[i] as string).replace(',', '.').replace(/\s?[-–]\s?/, '-'));
-          out = out.replace('{n}', n);
-        }
-        return out;
-      }
+      if (m) return fillTemplate(t, m);
     }
+    const note = this.noteExact.nl.get(key);
+    if (note) return note.en;
     if (depth > 2) return undefined;
     // "3 fijngesneden" -> "3 finely sliced"
     const lead = /^(\d+)\s+(.+)$/.exec(key);
@@ -412,6 +476,37 @@ export class Dictionary {
       const parts = key.split(sep).map((p) => p.trim()).filter(Boolean);
       if (parts.length < 2) continue;
       const translated = parts.map((p) => this.translatePrep(p, depth + 1, slice));
+      if (translated.every((t) => t !== undefined)) return translated.join(joiner);
+    }
+    return undefined;
+  }
+
+  private translatePrepEn(key: string, depth: number): string | undefined {
+    if (!key) return undefined;
+    const exact = this.prepExactEn.get(key);
+    if (exact) return exact.nl;
+    for (const t of [...this.prepTemplatesEn, ...this.noteTemplates.en]) {
+      const m = t.re.exec(key);
+      if (m) return fillTemplate(t, m);
+    }
+    const note = this.noteExact.en.get(key);
+    if (note) return note.nl;
+    if (depth > 2) return undefined;
+    // "3 finely chopped" -> "3 fijngehakt"
+    const lead = /^(\d+)\s+(.+)$/.exec(key);
+    if (lead) {
+      const rest = this.translatePrepEn(lead[2] as string, depth + 1);
+      return rest === undefined ? undefined : `${lead[1]} ${rest}`;
+    }
+    for (const [sep, joiner] of [
+      [';', '; '],
+      [',', ', '],
+      [' and ', ' en '],
+    ] as const) {
+      if (!key.includes(sep)) continue;
+      const parts = key.split(sep).map((p) => p.trim()).filter(Boolean);
+      if (parts.length < 2) continue;
+      const translated = parts.map((p) => this.translatePrepEn(p, depth + 1));
       if (translated.every((t) => t !== undefined)) return translated.join(joiner);
     }
     return undefined;
@@ -486,6 +581,7 @@ export class Dictionary {
       units: [...this.units],
       qualifiers: [...this.qualifiers],
       prepPhrases: [...this.prepPhrases],
+      notePhrases: [...this.notePhrases],
       ingredients: [...this.ingredients],
       aisles: [...this.aisles],
       categories: [...this.categories],

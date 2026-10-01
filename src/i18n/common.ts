@@ -117,4 +117,9 @@ export const common: Dict = {
   'picker.none': { nl: 'Niets gevonden. Maak een nieuw ingrediënt.', en: 'Nothing found. Create a new ingredient.' },
   'picker.nameRequired': { nl: 'Vul minstens één naam in.', en: 'Enter at least one name.' },
   'picker.own': { nl: 'eigen', en: 'own' },
+  // --- "Nieuw ingrediënt" already exists (docs/phase-5-spec.md A-bis.6) ---
+  'picker.exists': { nl: 'Bestaat al: {name} — die gebruiken?', en: 'Already exists: {name} — use it?' },
+  'picker.useExisting': { nl: 'Gebruik', en: 'Use it' },
+  'picker.newAnyway': { nl: 'Toch nieuw', en: 'Create anyway' },
+  'picker.exclude': { nl: 'Dat is het eigen ingrediënt zelf; kies een ander.', en: 'That is the own entry itself; pick another.' },
 };

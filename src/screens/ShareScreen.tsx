@@ -9,7 +9,8 @@
 //   - a classic without an override travels as `#r=` like before.
 // "Deel via WhatsApp" (navigator.share({text}) ONLY inside the tap handler, exactly one field;
 // wa.me fallback), "Kopieer", and "Deel als tekst": the readable full recipe in NL / EN / both.
-// A recipe too big for one message (> 3.5 KB) becomes a .json file instead (planMessages).
+// A recipe too big for one message (> 3.5 KB) becomes a .json file instead (planMessages):
+// "Deel het bestand" first, "Download" second; a download reports "Opgeslagen als … in Downloads".
 // '#/share' without an id is "Stuur nieuwe naar …" (DeltaShareScreen; no router change).
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { appInfo } from '@/components/AppInfo';
@@ -26,7 +27,7 @@ import { buildShareUrl, encodeToken, type Envelope } from '@/domain/token';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { navigate } from '@/router';
-import { copyText, shareJsonFile, shareText } from '@/share-actions';
+import { copyText, downloadBlob, shareJsonFile, shareText } from '@/share-actions';
 import { DeltaShareScreen } from './DeltaShareScreen';
 
 type TextLangs = 'nl' | 'en' | 'both';
@@ -158,6 +159,7 @@ function RecipeShareScreen(props: { id: string }) {
 
   const name = recipe ? pickText(recipe.name, ui) : '';
 
+  /** A-bis.9: "Deel het bestand" first (share sheet, download as the fallback), "Download" second. */
   function shareFile() {
     if (!file) return;
     setStatus('');
@@ -166,6 +168,17 @@ function RecipeShareScreen(props: { id: string }) {
       else if (r.outcome === 'downloaded') setStatus(t('share.fileDownloaded', { name: r.name }));
       else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
     });
+  }
+
+  function downloadFile() {
+    if (!file) return;
+    setStatus('');
+    try {
+      downloadBlob(file.name, new Blob([file.json], { type: 'application/json' }));
+      setStatus(t('share.fileDownloaded', { name: file.name }));
+    } catch (e) {
+      setStatus(`${t('share.fileFailed')}: ${String(e)}`);
+    }
   }
 
   return (
@@ -200,9 +213,12 @@ function RecipeShareScreen(props: { id: string }) {
             {file ? (
               <>
                 <p class="warn">{t('share.tooLarge', { n: file.json.length })}</p>
-                <div class="actions">
-                  <button type="button" class="btn btn-primary btn-block" onClick={shareFile}>
-                    {t('share.file')}
+                <div class="actions file-actions">
+                  <button type="button" class="btn btn-primary" onClick={shareFile}>
+                    {t('share.fileButton')}
+                  </button>
+                  <button type="button" class="btn" onClick={downloadFile}>
+                    {t('share.download')}
                   </button>
                 </div>
                 <div class="status" role="status">

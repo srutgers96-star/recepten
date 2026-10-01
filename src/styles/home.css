@@ -326,3 +326,12 @@
   font-weight: 500;
   font-style: italic;
 }
+
+/* ---------- Phase 5 (A-bis.8): "Selecteer" next to the "Eigen & ontvangen" title ---------- */
+.home-section h2 .home-select {
+  min-height: 44px;
+  padding: 0 6px;
+  color: var(--cobalt);
+  user-select: none;
+  -webkit-user-select: none;
+}

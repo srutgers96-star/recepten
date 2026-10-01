@@ -60,7 +60,10 @@ export const phase2: Dict = {
   },
   'share.file': { nl: 'Deel als bestand', en: 'Share as a file' },
   'share.fileShared': { nl: 'Bestand gedeeld', en: 'File shared' },
-  'share.fileDownloaded': { nl: 'Bestand gedownload ({name})', en: 'File downloaded ({name})' },
+  // A-bis.9: after the download fallback the person is told where the file went.
+  'share.fileDownloaded': { nl: 'Opgeslagen als {name} in Downloads', en: 'Saved as {name} in Downloads' },
+  'share.fileButton': { nl: 'Deel het bestand', en: 'Share the file' },
+  'share.download': { nl: 'Download', en: 'Download' },
   'share.fileFailed': { nl: 'Bestand delen mislukt', en: 'Sharing the file failed' },
 
   // --- Phase 3: "Stuur nieuwe naar …" (delta share) ---
@@ -108,4 +111,32 @@ export const phase2: Dict = {
   'home.unsent': { nl: '{n} nieuwe of aangepaste recepten nog niet gedeeld.', en: '{n} new or changed recipes not shared yet.' },
   'home.unsentOne': { nl: '1 nieuw of aangepast recept nog niet gedeeld.', en: '1 new or changed recipe not shared yet.' },
   'home.unsentAction': { nl: 'Stuur nieuwe naar …', en: 'Send new to …' },
+
+  // --- Phase 5 (docs/phase-5-spec.md A-bis.8): select mode in the recipe list ---
+  'select.enter': { nl: 'Selecteer', en: 'Select' },
+  'select.done': { nl: 'Klaar', en: 'Done' },
+  'select.count': { nl: '{n} geselecteerd', en: '{n} selected' },
+  'select.none': { nl: 'Tik op recepten om ze te selecteren', en: 'Tap recipes to select them' },
+  'select.share': { nl: 'Deel', en: 'Share' },
+  'select.week': { nl: 'Deze week', en: 'This week' },
+  'select.meta': { nl: 'Labels', en: 'Labels' },
+  'select.delete': { nl: 'Verwijder', en: 'Delete' },
+  'select.export': { nl: 'Exporteer', en: 'Export' },
+  'select.shared': { nl: 'Gedeeld', en: 'Shared' },
+  'select.weekAdded': { nl: '{n} toegevoegd aan je week', en: '{n} added to your week' },
+  'select.deleteOne': { nl: '1 eigen recept verwijderen? Dit kan niet ongedaan worden gemaakt.', en: 'Delete 1 own recipe? This cannot be undone.' },
+  'select.deleteConfirm': { nl: '{n} eigen recepten verwijderen? Dit kan niet ongedaan worden gemaakt.', en: 'Delete {n} own recipes? This cannot be undone.' },
+  'select.deleteOnlyOwn': { nl: '{n} klassieker(s) in je selectie blijven staan.', en: '{n} classic(s) in your selection stay.' },
+  'select.deleted': { nl: '{n} recepten verwijderd', en: '{n} recipes deleted' },
+  'select.metaTitle': { nl: 'Categorie en labels', en: 'Category and labels' },
+  'select.metaHint': {
+    nl: 'Geldt voor alle {n} geselecteerde recepten. Bij een klassieker wordt het een aanpassing.',
+    en: 'Applies to all {n} selected recipes. On a classic it becomes an adjustment.',
+  },
+  'select.metaKeep': { nl: '(laat zoals het is)', en: '(leave as it is)' },
+  'select.metaMixed': { nl: 'deels', en: 'some' },
+  'select.metaTagsHint': { nl: 'Alleen labels die je aantikt veranderen; "deels" = niet bij alle.', en: 'Only the labels you tap change; "some" = not on all of them.' },
+  'select.metaApply': { nl: 'Toepassen', en: 'Apply' },
+  'select.metaApplied': { nl: 'Categorie/labels bijgewerkt voor {n} recepten', en: 'Category/labels updated for {n} recipes' },
+  'select.exportTitle': { nl: 'Selectie · {name}', en: 'Selection · {name}' },
 };

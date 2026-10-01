@@ -2,6 +2,11 @@
 // languages and pick an entry, or create a new user ingredient (nl/en names, aisle, default unit,
 // veg/staple) which is stored in `userIngredients`, merged into the dictionary signal and picked.
 // The caller stores the picked id (a line override for builtins, the line itself for own recipes).
+//
+// Dictionary hygiene (docs/phase-5-spec.md A-bis.6): before a new entry is created, the typed
+// name is checked against the dictionary in both languages (aliases and plurals included,
+// `Dictionary.findExisting`); a hit shows "Bestaat al: aubergine (eggplant) — die gebruiken?"
+// with one tap to pick that entry instead ("Gebruik") or to create the new one anyway.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { slugId } from '@/domain/recipe-source';
 import type { Ingredient } from '@/domain/dictionary';
@@ -15,6 +20,12 @@ export interface IngredientPickerProps {
   initialQuery?: string;
   /** True opens the sheet on the "Nieuw ingrediënt" form right away, with `initialQuery` as the name. */
   startNew?: boolean;
+  /** Sheet title (default "Koppel ingrediënt"); the dictionary screen's "Fuseer" passes its own. */
+  title?: string;
+  /** An id that must not be picked (the own entry being merged): shown greyed with a hint. */
+  excludeId?: string;
+  /** False hides "+ Nieuw ingrediënt" (a merge target must exist already). Default true. */
+  allowNew?: boolean;
   onPick: (id: string) => void;
   onClose: () => void;
 }
@@ -27,6 +38,14 @@ export function uniqueIngredientId(nameNl: string, nameEn: string): string {
   let id = base;
   for (let n = 2; dictionary.value.get(id); n++) id = `${base}-${n}`;
   return id;
+}
+
+/** "aubergine (eggplant)": the entry's name in the UI language with the other language in brackets. */
+export function ingredientLabel(ing: Ingredient, l: 'nl' | 'en'): string {
+  const other = l === 'nl' ? 'en' : 'nl';
+  const own = ing[l]?.one || ing[other]?.one || ing.id;
+  const alt = ing[other]?.one || '';
+  return alt && alt !== own ? `${own} (${alt})` : own;
 }
 
 export function IngredientPicker(props: IngredientPickerProps) {
@@ -42,6 +61,8 @@ export function IngredientPicker(props: IngredientPickerProps) {
   const [staple, setStaple] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // "Toch nieuw": the existing entry id the person chose to ignore for this form.
+  const [ignoreExisting, setIgnoreExisting] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   // The latest props, read by the effects below without re-running them on every render (the
   // caller recomputes `initialQuery` and passes an inline `onClose`; a dictionary change while
@@ -67,6 +88,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
     setStaple(false);
     setError(null);
     setBusy(false);
+    setIgnoreExisting(null);
     const id = window.setTimeout(() => searchRef.current?.focus(), 50);
     return () => window.clearTimeout(id);
   }, [props.open]);
@@ -88,11 +110,17 @@ export function IngredientPicker(props: IngredientPickerProps) {
   const dict = dictionary.value;
   const q = query.trim();
   const results = q ? dict.search(q, l).slice(0, MAX_RESULTS) : [];
+  const allowNew = props.allowNew !== false;
+
+  // A-bis.6: the typed name (either language) already is an entry.
+  const existing = mode === 'new' ? (dict.findExisting(nlOne.trim(), 'nl') ?? dict.findExisting(enOne.trim(), 'en')) : undefined;
+  const existingShown = existing && existing.id !== ignoreExisting ? existing : undefined;
 
   const startNew = () => {
     if (l === 'nl') setNlOne(q);
     else setEnOne(q);
     setError(null);
+    setIgnoreExisting(null);
     setMode('new');
   };
 
@@ -103,6 +131,8 @@ export function IngredientPicker(props: IngredientPickerProps) {
       setError(t('picker.nameRequired'));
       return;
     }
+    // The banner is already visible; a submit with it open is not a "create anyway".
+    if (existingShown) return;
     setBusy(true);
     setError(null);
     try {
@@ -125,11 +155,13 @@ export function IngredientPicker(props: IngredientPickerProps) {
     }
   };
 
+  const title = props.title ?? t('picker.title');
+
   return (
     <div class="sheet-backdrop" onClick={props.onClose}>
-      <div class="sheet" role="dialog" aria-modal="true" aria-label={t('picker.title')} onClick={(e) => e.stopPropagation()}>
+      <div class="sheet" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
         <div class="sheet-head">
-          <h2>{mode === 'new' ? t('picker.new') : t('picker.title')}</h2>
+          <h2>{mode === 'new' ? t('picker.new') : title}</h2>
           <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={props.onClose}>
             ×
           </button>
@@ -151,24 +183,26 @@ export function IngredientPicker(props: IngredientPickerProps) {
             {q === '' ? (
               <div class="muted small picker-hint">{t('picker.hint')}</div>
             ) : results.length === 0 ? (
-              <div class="muted small picker-hint">{t('picker.none')}</div>
+              <div class="muted small picker-hint">{allowNew ? t('picker.none') : t('dict.noResults')}</div>
             ) : (
               <ul class="picker-list">
                 {results.map((ing) => {
                   const own = ing[l]?.one ?? ing[other]?.one ?? ing.id;
                   const alt = ing[other]?.one ?? '';
                   const aisleName = dict.aisle(ing.aisle)?.[l] ?? '';
+                  const excluded = ing.id === props.excludeId;
                   return (
                     <li key={ing.id}>
-                      <button type="button" class="picker-item" onClick={() => props.onPick(ing.id)}>
+                      <button type="button" class={'picker-item' + (excluded ? ' picker-excluded' : '')} disabled={excluded} onClick={() => props.onPick(ing.id)}>
                         <span class="picker-name">
                           {own}
                           {isUserIngredientId(ing.id) && <span class="badge badge-muted picker-own">{t('picker.own')}</span>}
                         </span>
                         <span class="picker-sub muted small">
-                          {alt && alt !== own ? alt : ''}
-                          {alt && alt !== own && aisleName ? ' · ' : ''}
-                          {aisleName}
+                          {excluded ? t('picker.exclude') : ''}
+                          {!excluded && alt && alt !== own ? alt : ''}
+                          {!excluded && alt && alt !== own && aisleName ? ' · ' : ''}
+                          {!excluded ? aisleName : ''}
                         </span>
                       </button>
                     </li>
@@ -176,11 +210,13 @@ export function IngredientPicker(props: IngredientPickerProps) {
                 })}
               </ul>
             )}
-            <div class="actions">
-              <button type="button" class="btn btn-secondary btn-block" onClick={startNew}>
-                + {t('picker.new')}
-              </button>
-            </div>
+            {allowNew && (
+              <div class="actions">
+                <button type="button" class="btn btn-secondary btn-block" onClick={startNew}>
+                  + {t('picker.new')}
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <form
@@ -214,6 +250,22 @@ export function IngredientPicker(props: IngredientPickerProps) {
                 <input class="input" type="text" autocapitalize="off" value={enMany} onInput={(e) => setEnMany((e.currentTarget as HTMLInputElement).value)} />
               </label>
             </div>
+            {existingShown && (
+              <div class="picker-exists" role="status">
+                <div class="picker-exists-text">
+                  {t('picker.exists', { name: ingredientLabel(existingShown, l) })}
+                  {isUserIngredientId(existingShown.id) && <span class="badge badge-muted picker-own">{t('picker.own')}</span>}
+                </div>
+                <div class="actions picker-exists-actions">
+                  <button type="button" class="btn btn-primary" disabled={busy} onClick={() => props.onPick(existingShown.id)}>
+                    {t('picker.useExisting')}
+                  </button>
+                  <button type="button" class="btn" disabled={busy} onClick={() => setIgnoreExisting(existingShown.id)}>
+                    {t('picker.newAnyway')}
+                  </button>
+                </div>
+              </div>
+            )}
             <label class="field">
               <span>{t('picker.aisle')}</span>
               <select class="input" value={aisle} onChange={(e) => setAisle((e.currentTarget as HTMLSelectElement).value)}>
@@ -251,7 +303,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
               <button type="button" class="btn" disabled={busy} onClick={() => setMode('search')}>
                 {t('picker.cancel')}
               </button>
-              <button type="submit" class="btn btn-primary" disabled={busy}>
+              <button type="submit" class="btn btn-primary" disabled={busy || !!existingShown}>
                 {t('picker.save')}
               </button>
             </div>

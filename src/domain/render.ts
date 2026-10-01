@@ -5,12 +5,15 @@
 //   EN  250 g haddock fillet (or cod), 2-3 cm pieces
 //
 // Only names change between languages: el -> tbsp, teentje -> clove, dl -> ml × 100 (units.json
-// `en.render`/`en.scale`); grams, ml and °C stay. Unresolved lines (ing null) render their raw text,
-// scaled only when the quantity was parsed. Pinches never scale.
-import { pickText, type Lang, type Line, type LinePart, type Qty } from './model.ts';
+// `en.render`/`en.scale`); grams, ml and °C stay. US units convert the other way for Dutch readers
+// (`nl.render`/`nl.scale`: lb -> g × 453.6, cup -> ml × 240) and stay as written in English.
+// Unresolved lines (ing null) render their raw text, scaled only when the quantity was parsed.
+// Pinches never scale. A note or prep that exists only in the other language is shown in that
+// language and flagged (`noteForeign` / `prepForeign`) so the UI can grey it (A-bis.1).
+import { hasLang, pickText, type Lang, type Line, type LinePart, type Qty } from './model.ts';
 import type { Dictionary, Ingredient, Unit } from './dictionary.ts';
 import { parseQty } from './parser.ts';
-import { scaleKindOf, scaleQty } from './scale.ts';
+import { roundScaled, scaleKindOf, scaleQty } from './scale.ts';
 
 export interface LineParts {
   /** "2", "1½", "2-3", "" when there is no quantity. */
@@ -33,6 +36,10 @@ export interface LineParts {
   gloss: string;
   /** False when the line renders its raw text. */
   resolved: boolean;
+  /** True when `note` is shown in the other language because there is no text in `lang` (grey it). */
+  noteForeign: boolean;
+  /** Same for `prep`. */
+  prepForeign: boolean;
   /** The full line as `renderLine` returns it. */
   text: string;
 }
@@ -49,14 +56,16 @@ const FRACTIONS: [number, string][] = [
 /**
  * How a number is written for a unit (PLAN.md §0 "Kleine wensen", docs/phase-5-spec.md A.9):
  * 'whole' for g and ml (62.25 g -> "62 g"), 'decimal' for kg, l, dl, cl (1.3 kg stays "1,3 kg",
- * never "1⅓ kg"), 'fraction' for everything else: counted pieces, spoons, cups, pinches
- * ("1½ el", "¼ ui", "2 teentjes").
+ * never "1⅓ kg"), 'fraction' for everything else: counted pieces, spoons, cups, pinches and the US
+ * units ("1½ el", "¼ ui", "2 teentjes", "½ lb").
  */
 export type NumberStyle = 'whole' | 'decimal' | 'fraction';
 
 export function numberStyleFor(unit: Unit | null | undefined): NumberStyle {
   const kind = scaleKindOf(unit);
   if (kind !== 'mass' && kind !== 'volume') return 'fraction';
+  // US units are written in fractions ("½ lb", "1½ pints"); their Dutch rendering is g/ml anyway.
+  if (isUsUnit(unit)) return 'fraction';
   const conv = unit?.group === 'mass' ? unit.g : unit?.ml;
   return conv === 1 ? 'whole' : 'decimal';
 }
@@ -140,17 +149,28 @@ function isQuarterStep(n: number): boolean {
   return Math.abs(n * 4 - Math.round(n * 4)) < 1e-9;
 }
 
+/** A unit that is shown as another one in `lang` (units.json `nl.render` for lb/oz/cup, `en.render` for dl). */
+function rendersAs(unit: Unit, lang: Lang): { target: string; scale: number } | null {
+  const n = unit[lang];
+  return n.render && n.scale ? { target: n.render, scale: n.scale } : null;
+}
+
+/** US units (lb, oz, cup, stick, pint, quart): rendered in g/ml for Dutch readers. */
+function isUsUnit(unit: Unit | null | undefined): boolean {
+  return !!unit && rendersAs(unit, 'nl') !== null;
+}
+
 /**
  * The unit and quantity to show: a metric unit that scaled below 1 (½ kg, ¾ l) or, for dl, off
  * the ¼ steps (0,65 dl) is shown in its base unit (500 g, 65 ml); in English dl always becomes ml
- * (units.json `en.render`/`en.scale`).
+ * (units.json `en.render`/`en.scale`), in Dutch lb/oz/cup always become g/ml (`nl.render`).
  */
 function displayUnit(q: Qty | null, unit: Unit | undefined, dict: Dictionary, lang: Lang): { q: Qty | null; unit: Unit | undefined } {
   if (!q || !unit) return { q, unit };
   let shownQ = q;
   let shownUnit = unit;
   const conv = unit.group === 'mass' ? unit.g : unit.group === 'volume' ? unit.ml : undefined;
-  if (conv && conv > 1 && scaleKindOf(unit) !== 'spoon') {
+  if (conv && conv > 1 && scaleKindOf(unit) !== 'spoon' && !isUsUnit(unit)) {
     const offGrid = conv <= 100 && (!isQuarterStep(q.min) || (q.max !== undefined && !isQuarterStep(q.max)));
     if (q.min < 1 || offGrid) {
       const base = dict.unit(unit.group === 'mass' ? 'g' : 'ml');
@@ -160,10 +180,13 @@ function displayUnit(q: Qty | null, unit: Unit | undefined, dict: Dictionary, la
       }
     }
   }
-  if (lang === 'en' && shownUnit.en.render && shownUnit.en.scale) {
-    const target = dict.unit(shownUnit.en.render);
-    shownQ = multiplyQty(shownQ, shownUnit.en.scale);
-    if (target) shownUnit = target;
+  const as = rendersAs(shownUnit, lang);
+  if (as) {
+    const target = dict.unit(as.target);
+    if (target) {
+      shownQ = multiplyQty(shownQ, as.scale);
+      shownUnit = target;
+    }
   }
   return { q: shownQ, unit: shownUnit };
 }
@@ -195,6 +218,17 @@ function capitaliseLike(raw: string, text: string): string {
 function scaled(line: Line, dict: Dictionary, factor: number): Qty | null {
   if (!line.qty) return null;
   const unit = line.unit ? dict.unit(line.unit) : null;
+  // US units scale in ¼ steps like spoons ("1 lb" × ½ = "½ lb", 227 g in Dutch), not rounded in grams.
+  if (unit && isUsUnit(unit) && factor !== 1 && factor > 0 && scaleKindOf(unit) !== 'pinch') {
+    const q = line.qty;
+    const out: Qty = { min: roundScaled(q.min * factor, 'spoon', unit, factor > 1) };
+    if (q.max !== undefined) {
+      const max = roundScaled(q.max * factor, 'spoon', unit, factor > 1);
+      if (max > out.min) out.max = max;
+    }
+    if (q.approx) out.approx = true;
+    return out;
+  }
   return scaleQty(line.qty, factor, unit);
 }
 
@@ -273,7 +307,7 @@ function rawText(line: Line, dict: Dictionary, lang: Lang, factor: number): stri
  * slug is never shown as a product name.
  */
 export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor = 1): LineParts {
-  const empty: LineParts = { qty: '', unit: '', name: '', prep: '', note: '', alt: '', part: '', packSize: '', optional: '', gloss: '', resolved: false, text: '' };
+  const empty: LineParts = { qty: '', unit: '', name: '', prep: '', note: '', alt: '', part: '', packSize: '', optional: '', gloss: '', resolved: false, noteForeign: false, prepForeign: false, text: '' };
   if (line.kind === 'header') {
     const text = pickText(line.raw, lang);
     return { ...empty, name: text, text };
@@ -285,6 +319,8 @@ export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor
   const unitShown = shown.unit;
   const prep = line.prep ? pickText(line.prep, lang) : '';
   const note = line.note ? pickText(line.note, lang) : '';
+  const prepForeign = prep !== '' && !hasLang(line.prep, lang);
+  const noteForeign = note !== '' && !hasLang(line.note, lang);
   const optional = line.role === 'garnish'
     ? lang === 'nl' ? '(garnering)' : '(garnish)'
     : line.optional && !(line.note && line.note.nl === 'naar smaak')
@@ -304,6 +340,8 @@ export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor
       part: line.part ? partLabel(line.part, lang, q) : '',
       packSize: line.packSize ?? '',
       optional,
+      noteForeign,
+      prepForeign,
       text,
     };
   }
@@ -320,6 +358,8 @@ export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor
     optional,
     gloss: lang === 'en' ? (ing.gloss?.en ?? '') : '',
     resolved: true,
+    noteForeign,
+    prepForeign,
     text: '',
   };
   let packText = '';
