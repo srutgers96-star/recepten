@@ -106,7 +106,7 @@ Alle ontwerpkeuzes hieronder volgen uit deze feiten. Status: **VERIFIED** (prima
 | iOS 26: elke site kan als webapp op het beginscherm; opent standalone ("Open als webapp" staat standaard aan). EU-DMA-beperking is in maart 2024 teruggedraaid. | VERIFIED | Installatie = Delen → Zet op beginscherm. |
 | De geïnstalleerde app start altijd vanaf `start_url`; fragment/parameters bereiken de app nooit. | LIKELY | `start_url` stabiel; nooit data via URL "in de app" willen krijgen. |
 | `<input type=file>` werkt; `accept` wordt op iOS genegeerd. | LIKELY | Bestanden valideren op inhoud. |
-| Native iOS-app: bouwen/signen vereist macOS+Xcode (Kotlin/Native, Flutter, Expo allemaal); installeren op haar iPhone vereist €99/jaar (TestFlight) of gratis Apple-ID met **7-daagse** hersignering op hetzelfde wifi. EU-alternatieve distributie en AltStore PAL zijn geen hobby-routes. | VERIFIED | Native iOS is alleen een betaalde upgrade later (ADR-0007). |
+| Native iOS-app: bouwen/signen vereist macOS+Xcode (Kotlin/Native, Flutter, Expo allemaal); installeren op haar iPhone vereist €99/jaar (TestFlight) of gratis Apple-ID met **7-daagse** hersignering op hetzelfde wifi. EU-alternatieve distributie en AltStore PAL zijn geen hobby-routes. | VERIFIED | Native iOS is alleen een betaalde upgrade later (ADR-0008). |
 | Compose Multiplatform for Web is Beta, canvas-gerenderd; of haar Safari de Wasm-GC-build draait is niet geverifieerd. | VERIFIED / UNKNOWN | Niet gebruikt. |
 
 ### Android
@@ -191,7 +191,7 @@ De vraag uit D2, eerlijk beantwoord. Drie routes, allemaal vanaf jouw Windows-pc
 
 **Wat zij concreet krijgt bij (ii):** dezelfde app als jij, UI in Brits Engels, de 196 klassiekers vertaald en door haar zelf nagekeken (Curator-scherm), ingrediënten die automatisch in het Engels renderen, haar eigen recepten in het Engels (die bij jou in het Nederlands verschijnen voor zover het woordenboek reikt), weekplanner en boodschappenlijst, kookstand met wake lock, back-up naar Files, en ontvangen van jouw recepten in ±10 seconden (lang drukken → Kopieer → app → Plak). Bundels en back-ups kosten haar drie extra tikken (Bewaar in Bestanden → app → Kies bestand); dat staat ook zo in §7.
 
-**Wat later nog kan (ADR-0007, niet gepland):** als het plakken na twee maanden echt gebruik irriteert, koopt €99/jaar een native iOS-schil via cloud-build + TestFlight met Share Extension en Universal Links; het token, de datafiles en `src/domain/` gaan ongewijzigd mee. Voor Android kan een Capacitor-schil (Kotlin-glue van jouw hand) ooit AlarmManager-timers en "Openen met" toevoegen; ook dat verandert niets aan de webapp.
+**Wat later nog kan (ADR-0008, niet gepland):** als het plakken na twee maanden echt gebruik irriteert, koopt €99/jaar een native iOS-schil via cloud-build + TestFlight met Share Extension en Universal Links; het token, de datafiles en `src/domain/` gaan ongewijzigd mee. Voor Android kan een Capacitor-schil (Kotlin-glue van jouw hand) ooit AlarmManager-timers en "Openen met" toevoegen; ook dat verandert niets aan de webapp.
 
 ---
 
@@ -740,7 +740,7 @@ Gededupliceerd uit de zes brainstorm-lenzen; zwakke of dubbele ideeën zijn wegg
 
 ### Later
 
-- Seizoensschap; manifest-shortcuts (Android); hetelucht/gas mark; multi-winkel-splitsing; import van website-URL (paste-route eerst; later stateless proxy); OCR in-app (Tesseract WASM; Live Text/Lens + plakken volstaat nu); optionele persoonlijke LLM-sleutel in Settings; versleutelde relay-sync (Cloudflare Worker + KV, alleen ciphertext); optionele TWA-APK voor Android-vrienden; Capacitor-schil met AlarmManager-timers en "Openen met" (jouw Kotlin); betaalde native iOS (€99/jaar, ADR-0007).
+- Seizoensschap; manifest-shortcuts (Android); hetelucht/gas mark; multi-winkel-splitsing; import van website-URL (paste-route eerst; later stateless proxy); OCR in-app (Tesseract WASM; Live Text/Lens + plakken volstaat nu); optionele persoonlijke LLM-sleutel in Settings; versleutelde relay-sync (Cloudflare Worker + KV, alleen ciphertext); optionele TWA-APK voor Android-vrienden; Capacitor-schil met AlarmManager-timers en "Openen met" (jouw Kotlin); betaalde native iOS (€99/jaar, ADR-0008).
 
 ### Anti-features (bewust niet bouwen)
 
@@ -786,7 +786,7 @@ Mijlpalen in kern-dagen: testpagina en D2-besluit dag 4 · dagelijkse app op bei
 |---|---|---|
 | De WebAPK voelt voor jou als een website (D2). | hoog | Fase 0 is de go/no-go met een meetbare checklist op jouw telefoon; beslismoment 2 na fase 1; fallback (iii) precies gespecificeerd; data/parser/token/tools blijven bruikbaar. |
 | Kooktimers gaan niet af als de app dicht is; de app voelt daardoor "beperkt". | hoog | UNKNOWN op beide platforms, getest in fase 0; UI ontworpen op het slechtste geval (aftelling + geluid zolang open, "zet ook een timer op je telefoon"); eerlijk op de verlieslijst; later Capacitor-schil met AlarmManager. |
-| Kopiëren → app → plakken irriteert haar en ze stopt met importeren. | hoog | Import één tik diep, hele bericht plakbaar, meerdere tokens per bericht, textarea zonder API, wekelijkse delta in tekst i.p.v. bestand, QR als het werkt; na 2 maanden gebruik evalueren tegen ADR-0007 (€99/jaar native iOS). |
+| Kopiëren → app → plakken irriteert haar en ze stopt met importeren. | hoog | Import één tik diep, hele bericht plakbaar, meerdere tokens per bericht, textarea zonder API, wekelijkse delta in tekst i.p.v. bestand, QR als het werkt; na 2 maanden gebruik evalueren tegen ADR-0008 (€99/jaar native iOS). |
 | Haar eigen recepten verdwijnen (websitegegevens gewist, icoon verwijderd, iOS-bug). | hoog | Verplichte installatie op het beginscherm + permanente waarschuwing in Safari-tab; `persist()`; back-up met 30-dagen-badge; WhatsApp-geschiedenis als tweede kopie; ingebouwde recepten komen altijd terug. |
 | Inspanning loopt uit (hobby-project, grote Must-lijst). | hoog | Hobby-dag gedefinieerd; kern/als-tijd-over per fase; elke fase op zichzelf bruikbaar; `main` altijd werkend. |
 | De iPhone is zelden fysiek beschikbaar voor tests. | middel | Apparaatcheck-pagina in de app die resultaten als tekst teruggeeft via WhatsApp; `/next/` als haar testkanaal; Playwright alleen als regressiewacht. |
@@ -806,7 +806,7 @@ Mijlpalen in kern-dagen: testpagina en D2-besluit dag 4 · dagelijkse app op bei
 |---|---|
 | **Wonen jullie samen / hoe vaak is haar iPhone fysiek beschikbaar** voor de fase-0-tests en de iPhone-specifieke flows (Plak-callout, standalone, wake lock, timer)? | Wekelijks. Is het minder: fase-0-iPhone-tests doet zij zelf via de Apparaatcheck-pagina en stuurt de tekst terug via WhatsApp. |
 | Zijn `AndroidStudioProjects\Recepten` en `\FamilyRecipes` eerdere pogingen met iets bruikbaars (nieuwere `recipes.json`, foto's)? Is Recepten2 de gezaghebbende bron van de 196? | Ja, Recepten2 is de bron; de andere twee worden alleen gediff't op `recipes.json` vóór de migratie. |
-| Heeft een van jullie (ooit) toegang tot een Mac? | Nee. Native iOS blijft een betaald cloud-pad (ADR-0007). |
+| Heeft een van jullie (ooit) toegang tot een Mac? | Nee. Native iOS blijft een betaald cloud-pad (ADR-0008). |
 | Is een **publieke** GitHub-repo (en dus publiek leesbare recepten en code) akkoord, of liever Cloudflare Pages met privérepo? | Publiek; GitHub Pages. |
 | Wat is je GitHub-gebruikersnaam en mag de repo `recepten` heten (URL `https://<jij>.github.io/recepten/`)? | `recepten`; map `AndroidStudioProjects\RutgersRecepten`. |
 | App-naam: "Rutgers' Recepten" (korte naam "Recepten")? | Ja. |

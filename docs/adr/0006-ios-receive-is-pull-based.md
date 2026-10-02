@@ -51,6 +51,6 @@ desktop) → full app with the import preview open.
   (mobile UA, `#r=`, non-standalone → landing).
 - The app shows a **permanent** banner when it runs in a Safari tab ("Add me to your home screen,
   otherwise Safari may wipe your recipes after 7 days").
-- If pasting really irritates after two months of use, the documented escape is ADR-0007: €99/year for
+- If pasting really irritates after two months of use, the documented escape is ADR-0008: €99/year for
   a native iOS shell with a Share Extension and Universal Links; token, data files and `src/domain/`
   go along unchanged.

@@ -1517,3 +1517,273 @@ textarea.input.notes {
     animation: none;
   }
 }
+
+/* ---------- Phase 5 (D.1-2): photos on the recipe page + print/copy ---------- */
+
+/* Hero: the latest photo, full width above the title (tap = view large). */
+.detail-hero {
+  display: block;
+  width: 100%;
+  margin: 14px 0 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  overflow: hidden;
+  line-height: 0;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.detail-hero:active {
+  opacity: 0.85;
+}
+
+.detail-hero-img {
+  display: block;
+  width: 100%;
+  max-height: 40vh;
+  object-fit: cover;
+}
+
+/* Gallery strip: full-bleed horizontal scroll like .chips; 72 px thumbs (≥44 px targets). */
+.photo-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 2px calc(-1 * max(16px, var(--sar))) 10px calc(-1 * max(16px, var(--sal)));
+  padding: 2px max(16px, var(--sar)) 4px max(16px, var(--sal));
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.photo-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.photo-thumb {
+  position: relative;
+  flex: none;
+  width: 72px;
+  height: 72px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.photo-thumb:active {
+  opacity: 0.85;
+}
+
+.photo-thumb-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Who took it: a small dot in the member's colour with the initial. The profile swatches are
+   mid-dark in both themes, so white text + a white ring on the photo reads everywhere. */
+.photo-dot {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* "+ Foto" tile at the end of the strip (a <label> around a hidden file input). */
+.photo-add {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--cobalt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.photo-add:active {
+  background: var(--press);
+}
+
+.photo-add.busy {
+  opacity: 0.5;
+}
+
+.photo-add-label {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* First photo, before any strip exists: one small text button under the meta (no empty section). */
+.photo-add-first {
+  display: inline-flex;
+  align-items: center;
+  margin: -6px 0 8px;
+}
+
+.photo-error {
+  margin: 0 0 8px;
+}
+
+/* Full-screen viewer: deliberately dark in both themes (it is a photo lightbox). The overlay
+   itself never scrolls; touch-action: none keeps a swipe on the photo from scrolling the
+   .screen behind it (the overlay is a DOM child of the scrolling screen). */
+.photo-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.9);
+  padding: max(10px, var(--sat)) max(14px, var(--sar)) max(14px, var(--sab)) max(14px, var(--sal));
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+.photo-overlay-top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.photo-overlay-meta {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.photo-overlay-close {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.photo-overlay-img {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  object-fit: contain;
+  margin: 10px 0;
+}
+
+.photo-overlay-foot {
+  flex: none;
+}
+
+.photo-overlay-foot .actions {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+}
+
+.photo-overlay-foot .actions .btn {
+  flex: 1;
+}
+
+.photo-overlay-ask {
+  color: #fff;
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+/* Print + "Kopieer als tekst" row under the week button; iOS shows the hint instead of Print. */
+.detail-tools {
+  display: flex;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.detail-tools .btn {
+  flex: 1;
+  min-height: 48px;
+}
+
+.print-ios-hint {
+  margin: 0 0 8px;
+}
+
+/* The small chooser (heel recept / alleen ingrediënten / annuleer), stacked for 360 px. */
+.detail-tools-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.detail-tools-menu .btn {
+  min-height: 48px;
+}
+
+/* "Gekopieerd ✓" flash under the tools row. */
+.tool-flash {
+  margin: -2px 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rosemary);
+}
+
+.tool-flash.fail {
+  color: var(--tomato);
+}
+
+/* Phase 5 block D: "📷 Foto toevoegen" on the "Gekookt!" page (CookScreen) */
+.cook-photo {
+  margin-top: 12px;
+}
+
+.cook-photo.done {
+  border-color: var(--rosemary);
+  color: var(--rosemary);
+}

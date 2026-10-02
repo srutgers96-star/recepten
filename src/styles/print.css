@@ -1,0 +1,366 @@
+/* Rutgers' Recepten — print stylesheets (phase-5 block D.2, owned by the print-copy agent).
+   Everything sits behind @media print AND html[data-print="…"], which printPage() in src/print.ts
+   sets for the duration of the dialog; a plain browser print (no attribute) stays untouched.
+   Kinds:
+     recipe       the open recipe on one A4: big name, meta line, 2-column ingredients, compact steps
+     ingredients  only name + servings + the ingredient list
+     shopping     the list on A4 with aisle columns and a ☐ before every line
+   Written against today's class names (base.css / browse.css / shopping.css); the integrator
+   fine-tunes selectors other owners rename — the block-D photo hero/gallery classes in particular. */
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  /* ---------- App shell: let content flow over pages (the app itself never scrolls <body>) ---- */
+
+  html[data-print],
+  html[data-print] body {
+    height: auto;
+    overflow: visible;
+    background: #fff;
+  }
+
+  /* Black on white whatever the theme: repaint the tokens once, everything else follows.
+     !important: the forced dark theme sits on the same <html> as :root[data-theme='dark']
+     (specificity (0,2,0), base.css) and would otherwise beat this (0,1,1) selector. */
+  html[data-print] {
+    --paper: #fff !important;
+    --card: #fff !important;
+    --ink: #000 !important;
+    --muted: #3a3a3a !important;
+    --cobalt: #000 !important;
+    --tomato: #000 !important;
+    --rosemary: #000 !important;
+    --orange: #000 !important;
+    --line: rgba(0, 0, 0, 0.35) !important;
+    --press: transparent !important;
+    --on-cobalt: #000 !important;
+    --on-rosemary: #000 !important;
+  }
+
+  html[data-print] body {
+    color: #000;
+    font-size: 11pt;
+    line-height: 1.35;
+  }
+
+  html[data-print] * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  html[data-print] #app,
+  html[data-print] .shell,
+  html[data-print] .screen-wrap {
+    display: block;
+    height: auto;
+  }
+
+  html[data-print] .screen {
+    overflow: visible;
+    height: auto;
+    padding: 0;
+  }
+
+  html[data-print] .screen.form {
+    padding-bottom: 0;
+  }
+
+  html[data-print] .header {
+    position: static;
+    padding: 0;
+  }
+
+  /* ---------- Always hidden on paper: chrome, buttons, overlays ---------- */
+
+  html[data-print] .nav,
+  html[data-print] .header-action,
+  html[data-print] .header-sub,
+  html[data-print] .icon-btn,
+  html[data-print] .lang-toggle,
+  html[data-print] .badge,
+  html[data-print] .timerbar,
+  html[data-print] .timer-chip,
+  html[data-print] .snackbar,
+  html[data-print] .badge-toast-wrap,
+  html[data-print] .confetti,
+  html[data-print] .installcard,
+  html[data-print] .updatebar,
+  html[data-print] .sheet-backdrop,
+  html[data-print] .az-rail,
+  html[data-print] .btn,
+  html[data-print] .link-btn,
+  html[data-print] .actions,
+  /* the "?" link-ingredient chip on an unknown line (LineView) is a button, not content */
+  html[data-print] .ing-q,
+  /* utility: screens mark anything paper should never show (photo strip, tools row, …) */
+  html[data-print] .no-print {
+    display: none !important;
+  }
+
+  /* ---------- Recipe on one A4 ---------- */
+
+  /* The detail head carries the name; the app header would only repeat chrome. */
+  html[data-print='recipe'] .header,
+  html[data-print='recipe'] .detail-actions,
+  html[data-print='recipe'] .detail-manage,
+  html[data-print='recipe'] .detail-translate,
+  html[data-print='recipe'] .detail-cat-edit,
+  html[data-print='recipe'] .fav-btn,
+  html[data-print='recipe'] .copy-hint,
+  html[data-print='recipe'] .ing-hint,
+  html[data-print='recipe'] .chips,
+  /* "Lekker bij" is only chips: hide the whole section, or its heading dangles empty */
+  html[data-print='recipe'] .section:has(.chips),
+  html[data-print='recipe'] .curator-badge,
+  html[data-print='recipe'] .saved-flag,
+  html[data-print='recipe'] .notes-foot,
+  html[data-print='recipe'] .input.notes,
+  html[data-print='recipe'] .section:has(.input.notes),
+  html[data-print='recipe'] .servings-step,
+  html[data-print='recipe'] .servings-preset,
+  /* own-photo hero & gallery (block D.1; real class names, also covered by .no-print above) */
+  html[data-print='recipe'] .detail-hero,
+  html[data-print='recipe'] .photo-strip,
+  html[data-print='recipe'] .photo-add-first,
+  html[data-print='recipe'] .photo-error,
+  html[data-print='recipe'] .photo-overlay {
+    display: none !important;
+  }
+
+  html[data-print='recipe'] .detail-head {
+    margin: 0 0 2pt;
+  }
+
+  html[data-print='recipe'] .detail-title {
+    font-size: 20pt;
+    line-height: 1.15;
+  }
+
+  html[data-print='recipe'] .detail-meta,
+  html[data-print='recipe'] .detail-cat,
+  html[data-print='recipe'] .detail-diet,
+  html[data-print='recipe'] .tags {
+    margin: 0 0 4pt;
+    font-size: 9.5pt;
+    color: #3a3a3a;
+  }
+
+  html[data-print='recipe'] .section {
+    margin: 8pt 0 0;
+  }
+
+  html[data-print='recipe'] .section h2 {
+    font-size: 12pt;
+    margin: 0 0 3pt;
+  }
+
+  html[data-print='recipe'] .servings {
+    margin: 0 0 4pt;
+    font-size: 10pt;
+  }
+
+  /* Ingredients in two columns so an average recipe fits one page. */
+  html[data-print='recipe'] .ing {
+    column-count: 2;
+    column-gap: 20pt;
+    margin: 0;
+    font-size: 9.5pt;
+    line-height: 1.3;
+  }
+
+  html[data-print='recipe'] .ing-item,
+  html[data-print='recipe'] .ing-row {
+    break-inside: avoid;
+    min-height: 0;
+    padding: 1pt 0;
+  }
+
+  html[data-print='recipe'] .ing-header {
+    break-after: avoid;
+    font-weight: 700;
+  }
+
+  html[data-print='recipe'] .steps {
+    margin: 0;
+    font-size: 10pt;
+    line-height: 1.3;
+  }
+
+  html[data-print='recipe'] .step {
+    break-inside: avoid;
+    padding: 2pt 0;
+  }
+
+  html[data-print='recipe'] .serving-tip {
+    font-size: 9.5pt;
+    font-style: italic;
+  }
+
+  /* ---------- Only the ingredients of a recipe ---------- */
+
+  html[data-print='ingredients'] .header,
+  html[data-print='ingredients'] .detail-meta,
+  html[data-print='ingredients'] .detail-cat,
+  html[data-print='ingredients'] .detail-diet,
+  html[data-print='ingredients'] .detail-actions,
+  html[data-print='ingredients'] .detail-manage,
+  html[data-print='ingredients'] .detail-translate,
+  html[data-print='ingredients'] .detail-cat-edit,
+  html[data-print='ingredients'] .fav-btn,
+  html[data-print='ingredients'] .copy-hint,
+  html[data-print='ingredients'] .ing-hint,
+  html[data-print='ingredients'] .chips,
+  html[data-print='ingredients'] .section:has(.chips),
+  html[data-print='ingredients'] .curator-badge,
+  html[data-print='ingredients'] .tags,
+  html[data-print='ingredients'] .tag-unsure-note,
+  html[data-print='ingredients'] .serving-tip,
+  html[data-print='ingredients'] .steps,
+  html[data-print='ingredients'] .section:has(.steps),
+  html[data-print='ingredients'] .input.notes,
+  html[data-print='ingredients'] .section:has(.input.notes),
+  html[data-print='ingredients'] .notes-foot,
+  html[data-print='ingredients'] .saved-flag,
+  html[data-print='ingredients'] .servings-step,
+  html[data-print='ingredients'] .servings-preset,
+  html[data-print='ingredients'] .detail-hero,
+  html[data-print='ingredients'] .photo-strip,
+  html[data-print='ingredients'] .photo-add-first,
+  html[data-print='ingredients'] .photo-error,
+  html[data-print='ingredients'] .photo-overlay {
+    display: none !important;
+  }
+
+  html[data-print='ingredients'] .detail-title {
+    font-size: 16pt;
+    line-height: 1.15;
+  }
+
+  html[data-print='ingredients'] .servings {
+    margin: 2pt 0 6pt;
+    font-size: 10.5pt;
+  }
+
+  html[data-print='ingredients'] .section {
+    margin: 4pt 0 0;
+  }
+
+  html[data-print='ingredients'] .section h2 {
+    font-size: 11pt;
+    margin: 0 0 3pt;
+  }
+
+  html[data-print='ingredients'] .ing {
+    margin: 0;
+    font-size: 10.5pt;
+    line-height: 1.35;
+  }
+
+  html[data-print='ingredients'] .ing-item,
+  html[data-print='ingredients'] .ing-row {
+    break-inside: avoid;
+    min-height: 0;
+    padding: 1.5pt 0;
+  }
+
+  /* ---------- Shopping list on A4: aisle columns + checkboxes ---------- */
+
+  html[data-print='shopping'] .shop-plan,
+  html[data-print='shopping'] .shop-banner,
+  html[data-print='shopping'] .shop-tools,
+  html[data-print='shopping'] .shop-status,
+  html[data-print='shopping'] .shop-share,
+  html[data-print='shopping'] .shop-print-hint,
+  html[data-print='shopping'] .xf,
+  html[data-print='shopping'] .shop > p,
+  html[data-print='shopping'] .shop-block .hint,
+  /* staples at rest and "in huis" hold ProtoRows (.pr); they are not shopping lines */
+  html[data-print='shopping'] .shop-block:has(.pr),
+  html[data-print='shopping'] .pr-step,
+  html[data-print='shopping'] .lr-box,
+  html[data-print='shopping'] .lr-pin,
+  html[data-print='shopping'] .shop-aisle-head .chev,
+  html[data-print='shopping'] .shop-aisle-head .count {
+    display: none !important;
+  }
+
+  html[data-print='shopping'] .header h1 {
+    font-size: 16pt;
+    margin: 0 0 6pt;
+  }
+
+  /* Aisle columns; each aisle stays in one piece. */
+  html[data-print='shopping'] .shop {
+    column-count: 2;
+    column-gap: 24pt;
+  }
+
+  html[data-print='shopping'] .shop-aisle,
+  html[data-print='shopping'] .shop-block {
+    break-inside: avoid;
+    margin: 0 0 8pt;
+    padding: 0;
+    border: 0;
+  }
+
+  html[data-print='shopping'] .shop-aisle-head {
+    position: static;
+    min-height: 0;
+    padding: 0 0 2pt;
+    border-bottom: 0.75pt solid #000;
+    background: #fff;
+    color: #000;
+    font-size: 10pt;
+  }
+
+  html[data-print='shopping'] .shop-block h3 {
+    padding: 0 0 2pt;
+    border-bottom: 0.75pt solid #000;
+    color: #000;
+    font-size: 10pt;
+    letter-spacing: 0.04em;
+  }
+
+  html[data-print='shopping'] .list {
+    margin: 0;
+    padding: 0;
+  }
+
+  html[data-print='shopping'] .lr {
+    border-bottom: 0;
+  }
+
+  html[data-print='shopping'] .lr-main {
+    min-height: 0;
+    padding: 1.5pt 0;
+    font-size: 10pt;
+  }
+
+  /* A ☐ before every line (the on-screen .lr-box div is hidden above). */
+  html[data-print='shopping'] .lr-main::before {
+    content: '☐';
+    flex: none;
+    margin-right: 5pt;
+    font-size: 11pt;
+    line-height: 1;
+  }
+
+  /* Ticked lines keep their on-screen look: ☑ + strike-through (or they are simply not rendered
+     when "Verberg afgevinkt" is on — printing follows the screen state). */
+  html[data-print='shopping'] .lr.checked .lr-main::before {
+    content: '☑';
+  }
+
+  html[data-print='shopping'] .lr.checked .lr-text {
+    color: #3a3a3a;
+    text-decoration: line-through;
+  }
+
+  html[data-print='shopping'] .lr-text {
+    font-size: 10pt;
+    line-height: 1.3;
+  }
+}

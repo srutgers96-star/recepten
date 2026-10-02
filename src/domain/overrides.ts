@@ -75,12 +75,25 @@ export function mergeText(base: Text | null | undefined, patch: Text | null | un
   return out;
 }
 
+/**
+ * Whether a patch row carries content of its own. The curator's filler rows for untouched
+ * entries (`{ text: {} }` / `{ raw: {} }`) carry none: on a length mismatch — the classic
+ * changed upstream — such a row falls back to the base entry per index instead of going blank,
+ * while a row with own content keeps today's replace semantics.
+ */
+function stepHasOwnContent(s: Step): boolean {
+  return Object.keys(s).some((k) => k !== 'text') || hasText(s.text?.nl) || hasText(s.text?.en);
+}
+
+function lineHasOwnContent(l: Line): boolean {
+  return Object.keys(l).some((k) => k !== 'raw') || hasText(l.raw?.nl) || hasText(l.raw?.en);
+}
+
 function mergeSteps(base: readonly Step[], patch: readonly Step[]): Step[] {
-  if (patch.length !== base.length) {
-    return patch.map((s) => ({ ...s, text: { ...(s.text ?? {}) } }));
-  }
+  const sameLength = patch.length === base.length;
   return patch.map((s, i) => {
-    const b = base[i] as Step;
+    const b = sameLength || !stepHasOwnContent(s) ? (base[i] as Step | undefined) : undefined;
+    if (!b) return { ...s, text: { ...(s.text ?? {}) } };
     const out: Step = { ...b, ...s, text: mergeText(b.text, s.text) ?? {} };
     if (s.timers === undefined && b.timers) out.timers = b.timers;
     return out;
@@ -90,7 +103,7 @@ function mergeSteps(base: readonly Step[], patch: readonly Step[]): Step[] {
 function mergeLines(base: readonly Line[], patch: readonly Line[]): Line[] {
   const sameLength = patch.length === base.length;
   return patch.map((l, i) => {
-    const b = sameLength ? (base[i] as Line) : undefined;
+    const b = sameLength || !lineHasOwnContent(l) ? (base[i] as Line | undefined) : undefined;
     const out: Line = b ? { ...b, ...l } : { ...l };
     // Invariant 2: a raw line is never deleted. A patched line without raw keeps the original's.
     const raw = mergeText(b?.raw, l.raw) ?? {};

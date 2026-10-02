@@ -12,11 +12,13 @@
 //   moves; the tables are simply added. Only src/db/repo.ts talks to this module.
 //   v5 (phase 4): plans (one row 'current'), lists (one row 'current') and pantry (by ingredient
 //   id) for the week plan and the shopping list. Tables added, nothing moves.
+//   v6 (phase 5 block D): photos (own photo per recipe, blob re-encoded ≤ 1024 px). Purely
+//   additive; nothing moves.
 import Dexie, { type Table } from 'dexie';
 import type { CookLogEntry, Favorite, Note, Profile, Recipe, RunningTimer } from '@/domain/model';
 import { newProfileId, nowIso } from '@/domain/model';
 import { normalizeRecipe } from '@/domain/recipe-io';
-import type { ImportSnapshot, Ingredient, LineOverride, List, PantryItem, Plan, RecipeOverride, Setting, UserRecipe } from './model';
+import type { ImportSnapshot, Ingredient, LineOverride, List, PantryItem, Photo, Plan, RecipeOverride, Setting, UserRecipe } from './model';
 
 export function dbNameFromBase(base: string): string {
   return /\/next\/?$/.test(base) ? 'recepten-next' : 'recepten';
@@ -38,6 +40,7 @@ export type AppDatabase = Dexie & {
   plans: Table<Plan, string>;
   lists: Table<List, string>;
   pantry: Table<PantryItem, string>;
+  photos: Table<Photo, number>;
 };
 
 export const db = new Dexie(dbNameFromBase(import.meta.env.BASE_URL)) as AppDatabase;
@@ -105,6 +108,10 @@ db.version(5).stores({
   plans: 'id',
   lists: 'id',
   pantry: 'ing',
+});
+
+db.version(6).stores({
+  photos: '++id, recipeId, at',
 });
 
 /** The phase-0 language choice lived in localStorage; used once, to seed the first profile. */

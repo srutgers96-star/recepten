@@ -88,6 +88,23 @@ export const browse: Dict = {
   'tag.zomer': { nl: 'zomer', en: 'summer' },
   'tag.winter': { nl: 'winter', en: 'winter' },
 
+  // --- Detail, phase 5 block D (1-2): own photos + print / copy as text ---
+  'recipe.photos': { nl: 'Foto’s', en: 'Photos' },
+  'recipe.addPhoto': { nl: '+ Foto', en: '+ Photo' },
+  'recipe.photoView': { nl: 'Bekijk foto', en: 'View photo' },
+  'recipe.photoBy': { nl: 'Foto van {name}', en: 'Photo by {name}' },
+  'recipe.photoDeleteConfirm': { nl: 'Deze foto verwijderen? Dit kan niet ongedaan worden gemaakt.', en: 'Delete this photo? This cannot be undone.' },
+  'recipe.photoError': { nl: 'Foto toevoegen lukte niet. Probeer een andere foto.', en: 'Could not add the photo. Try a different one.' },
+  'recipe.print': { nl: 'Print', en: 'Print' },
+  'recipe.copyAsText': { nl: 'Kopieer als tekst', en: 'Copy as text' },
+  'recipe.wholeRecipe': { nl: 'Heel recept', en: 'Whole recipe' },
+  'recipe.ingredientsOnly': { nl: 'Alleen ingrediënten', en: 'Ingredients only' },
+  // Honest wording (invariant 13): window.print() is unreliable in an iOS Home Screen app, so the
+  // iPhone gets this hint instead of a dead Print button (the share sheet has a Print activity).
+  'recipe.printIosHint': { nl: 'Printen op iPhone: Deel → Print.', en: 'To print on iPhone: Share → Print.' },
+  'recipe.copied': { nl: 'Gekopieerd ✓', en: 'Copied ✓' },
+  'recipe.copyFailed': { nl: 'Kopiëren lukte niet.', en: 'Copying failed.' },
+
   // --- Servings scaler + ingredient lines (detail and cook mode) ---
   'servings.label': { nl: 'Aantal personen', en: 'Number of people' },
   'servings.less': { nl: 'Minder personen', en: 'Fewer people' },
@@ -135,6 +152,12 @@ export const browse: Dict = {
   'cook.micOn': { nl: 'Mic aan…', en: 'Mic on…' },
   'cook.micListening': { nl: 'Luistert…', en: 'Listening…' },
   'cook.micError': { nl: 'Mic-fout', en: 'Mic error' },
+
+  // --- Cook mode, phase 5 block D.1: "Foto toevoegen" on the "Gekookt!" page ---
+  'cook.photoAdd': { nl: 'Foto toevoegen', en: 'Add a photo' },
+  'cook.photoBusy': { nl: 'Foto toevoegen…', en: 'Adding photo…' },
+  'cook.photoAdded': { nl: 'Foto toegevoegd', en: 'Photo added' },
+  'cook.photoFailed': { nl: 'Foto toevoegen lukte niet — probeer opnieuw', en: 'Could not add the photo — try again' },
 
   // --- Timers ---
   'timer.title': { nl: 'Timers', en: 'Timers' },

@@ -1,12 +1,18 @@
 // '#/story' — cover hero, the About text of the first edition (NL verbatim, EN translation), the
-// edition line and "Samen al N van de 196 gekookt" (distinct builtin ids in the cook log).
-import { useEffect, useState } from 'preact/hooks';
+// edition line, "Samen al N van de 196 gekookt" (distinct builtin ids in the cook log) and — phase
+// 5 block D.3 — the household: its name and everyone who cooks along (profiles on this phone plus
+// the hand-added members, src/domain/household.ts).
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
-import { bundled, cookedRecipeIds, isBuiltinId } from '@/db/repo';
-import { t } from '@/i18n';
+import { bundled, cookedRecipeIds, getHousehold, isBuiltinId } from '@/db/repo';
+import { householdName, membersFrom, type HouseholdSetting } from '@/domain/household';
+import { lang, t } from '@/i18n';
+import { profiles } from '@/profile';
+import { Avatar } from './ProfilesScreen';
 
 export function StoryScreen() {
   const [cooked, setCooked] = useState<number | null>(null);
+  const [household, setHousehold] = useState<HouseholdSetting | null>(null);
   const total = bundled.recipes.length;
 
   useEffect(() => {
@@ -19,10 +25,20 @@ export function StoryScreen() {
         setCooked(n);
       })
       .catch(() => setCooked(0));
+    // The household card (D.3): name + members; profiles alone are fine while it loads.
+    getHousehold()
+      .then((h) => {
+        if (!cancelled) setHousehold(h);
+      })
+      .catch((e: unknown) => console.error('getHousehold', e));
     return () => {
       cancelled = true;
     };
   }, []);
+
+  // Local profiles first, then the hand-added / card members (domain/household rules).
+  const list = profiles.value;
+  const members = useMemo(() => membersFrom(list, household ?? { name: '', members: [] }), [list, household]);
 
   return (
     <>
@@ -42,6 +58,21 @@ export function StoryScreen() {
           <div>{t('story.cooked', { n: cooked ?? 0, total })}</div>
           <div class="muted small">{t('story.cookedHint')}</div>
         </div>
+        {/* Phase 5 block D.3: who cooks along — the household name and its members. */}
+        {members.length > 0 && (
+          <section class="card story-members">
+            <h2>{t('story.members')}</h2>
+            <div class="muted small">{householdName(household, lang.value)}</div>
+            <ul class="member-chips">
+              {members.map((m) => (
+                <li key={m.id} class="member">
+                  <Avatar profile={m} />
+                  <span>{m.name}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </>
   );

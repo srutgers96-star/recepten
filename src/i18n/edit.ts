@@ -233,6 +233,17 @@ export const edit: Dict = {
   'share.textLang': { nl: 'Taal', en: 'Language' },
   'share.copyText': { nl: 'Kopieer tekst', en: 'Copy text' },
 
+  // --- Share: QR (phase 5 block D.5, behind the Experimenten flag) ---
+  'share.qrShow': { nl: 'Toon QR', en: 'Show QR' },
+  'share.qrHide': { nl: 'Verberg QR', en: 'Hide QR' },
+  'share.qrHint': {
+    nl: 'Scan met de camera-app van de andere telefoon. Die opent de voorproefpagina — op een iPhone is dat Safari; kopieer daar de receptcode en plak hem in de app.',
+    en: 'Scan with the other phone’s camera app. It opens the preview page — on an iPhone that is Safari; copy the recipe code there and paste it into the app.',
+  },
+  'share.qrAlt': { nl: 'QR-code met de receptlink', en: 'QR code with the recipe link' },
+  'share.qrLoading': { nl: 'QR-code maken…', en: 'Creating QR code…' },
+  'share.qrError': { nl: 'QR-code kon niet worden gemaakt.', en: 'Could not create the QR code.' },
+
   // --- Inbox (/inbox): import + received ---
   'inbox.title': { nl: 'Inbox', en: 'Inbox' },
   'inbox.hint': {

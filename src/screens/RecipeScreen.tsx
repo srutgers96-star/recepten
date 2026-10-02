@@ -4,7 +4,12 @@
 // notes per profile (autosave), and own → Bewerk / Verwijder, classic → "Maak eigen kopie".
 // Phase 5 (docs/phase-5-spec.md A.3): diet chips under the title (vegetarisch · vegan · glutenvrij
 // and the -optie tags); for own recipes derived live from the lines, "waarschijnlijk" when unsure.
+// Phase 5 block D (1-2): latest own photo as hero + gallery strip with a big-view overlay and
+// "+ Foto" (photos never travel in tokens), and Print / "Kopieer als tekst" (src/print.ts +
+// src/domain/recipe-text.ts); on iOS the Print button is an honest share-sheet hint instead.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { checkNewBadges } from '@/badges';
+import { isIOS } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { IngredientList } from '@/components/LineView';
 import { formatShortDate } from '@/components/RecipeRow';
@@ -12,32 +17,42 @@ import { rememberServings, rememberedServings, ServingsPicker } from '@/componen
 import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
+import type { Photo } from '@/db/model';
 import {
+  addPhoto,
   addToPlan,
   allRecipes,
   cookStats,
+  deletePhoto,
   deleteUserRecipe,
   duplicateAsOwn,
+  getHousehold,
   getNote,
   getOverride,
   getPlan,
   getRecipe,
   isBuiltinId,
   listFavorites,
+  listPhotos,
   saveOverride,
   saveUserRecipe,
   setNote,
   toggleFavorite,
 } from '@/db/repo';
 import { DIET_ROW_TAGS, OPTIE_TAG, tagTextLabel } from '@/components/FilterChips';
-import { dictionary } from '@/dictionary';
+import { dictionary, lineText } from '@/dictionary';
 import { DIET_TAGS, dietTags, type DietTag } from '@/domain/diet';
 import type { Dictionary } from '@/domain/dictionary';
-import { hasLang, pickText, type Lang, type Line, type Recipe } from '@/domain/model';
+import { memberById, membersFrom, type Member } from '@/domain/household';
+import { hasLang, nowIso, pickText, type Lang, type Line, type Recipe } from '@/domain/model';
+import { ingredientsAsText, recipeAsText, type RecipeTextInput } from '@/domain/recipe-text';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
-import { activeProfile } from '@/profile';
+import { encodePhotoFile, usePhotoUrl } from '@/photo';
+import { printPage } from '@/print';
+import { activeProfile, profiles } from '@/profile';
 import { navigate } from '@/router';
+import { copyText } from '@/share-actions';
 
 const NOTE_DEBOUNCE_MS = 600;
 
@@ -90,6 +105,90 @@ export function tagLabel(tag: string): string {
   return label === key ? tag : label;
 }
 
+/** First letter of a member name for the little colour dot on a thumbnail. */
+function memberInitial(name: string): string {
+  const ch = name.trim().charAt(0);
+  return ch ? ch.toLocaleUpperCase() : '?';
+}
+
+/** One 72 px thumbnail in the gallery strip, with the member's colour dot + initial. */
+function PhotoThumb(props: { photo: Photo; member: Member | undefined; onOpen: (p: Photo) => void }) {
+  const url = usePhotoUrl(props.photo);
+  const m = props.member;
+  return (
+    <button
+      type="button"
+      class="photo-thumb"
+      aria-label={m ? t('recipe.photoBy', { name: m.name }) : t('recipe.photoView')}
+      onClick={() => props.onOpen(props.photo)}
+    >
+      {url && <img class="photo-thumb-img" src={url} alt="" loading="lazy" />}
+      {m && (
+        <span class="photo-dot" style={{ background: m.color }} aria-hidden="true">
+          {memberInitial(m.name)}
+        </span>
+      )}
+    </button>
+  );
+}
+
+/**
+ * Full-screen photo viewer (no library): tap the backdrop, the × or Escape to close;
+ * "Verwijder" asks once, then calls onDelete. Deliberately dark in both themes.
+ */
+function PhotoOverlay(props: { photo: Photo; member: Member | undefined; busy: boolean; onClose: () => void; onDelete: (p: Photo) => void }) {
+  const l = lang.value;
+  const url = usePhotoUrl(props.photo);
+  const [confirm, setConfirm] = useState(false);
+  const closeBtn = useRef<HTMLButtonElement>(null);
+  const { onClose } = props;
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+  // aria-modal hides the background from assistive tech but moves no focus by itself: put it on
+  // the × on open and hand it back to the opener (the tapped thumbnail) on close.
+  useEffect(() => {
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeBtn.current?.focus();
+    return () => opener?.focus();
+  }, []);
+  const meta = [props.member?.name, formatShortDate(props.photo.at, l)].filter((x): x is string => !!x).join(' · ');
+  return (
+    <div class="photo-overlay no-print" role="dialog" aria-modal="true" aria-label={t('recipe.photoView')} onClick={onClose}>
+      <div class="photo-overlay-top" onClick={(e) => e.stopPropagation()}>
+        <span class="photo-overlay-meta">{meta}</span>
+        <button ref={closeBtn} type="button" class="photo-overlay-close" aria-label={t('common.close')} onClick={onClose}>
+          ×
+        </button>
+      </div>
+      {url && <img class="photo-overlay-img" src={url} alt="" onClick={(e) => e.stopPropagation()} />}
+      <div class="photo-overlay-foot" onClick={(e) => e.stopPropagation()}>
+        {confirm ? (
+          <>
+            <p class="photo-overlay-ask">{t('recipe.photoDeleteConfirm')}</p>
+            <div class="actions">
+              <button type="button" class="btn btn-danger" disabled={props.busy} onClick={() => props.onDelete(props.photo)}>
+                {t('recipe.deleteYes')}
+              </button>
+              <button type="button" class="btn" onClick={() => setConfirm(false)}>
+                {t('common.cancel')}
+              </button>
+            </div>
+          </>
+        ) : (
+          <button type="button" class="btn btn-danger" onClick={() => setConfirm(true)}>
+            {t('common.delete')}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function RecipeScreen(props: { id: string }) {
   const id = props.id;
   const l = lang.value;
@@ -123,12 +222,40 @@ export function RecipeScreen(props: { id: string }) {
   const plan = useLive(getPlan, []);
   const inWeek = !!plan?.items.some((p) => p.recipeId === id);
   const [weekBusy, setWeekBusy] = useState(false);
+  // Phase 5 block D: own photos, newest first (photos[0] is the hero), plus the big-view overlay
+  // and "+ Foto". The member dot on a thumb comes from the household (profiles + hand-added members).
+  const photos = useLive(() => listPhotos(id), [id]);
+  const hero = photos?.[0];
+  const heroUrl = usePhotoUrl(hero);
+  const household = useLive(getHousehold, []);
+  const members = useMemo(() => membersFrom(profiles.value, household), [household, profiles.value]);
+  const [viewPhoto, setViewPhoto] = useState<Photo | null>(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoDelBusy, setPhotoDelBusy] = useState(false);
+  const [photoError, setPhotoError] = useState(false);
+  // Phase 5 block D: Print / "Kopieer als tekst" share one small chooser (heel recept / alleen
+  // ingrediënten). iOS gets a share-sheet hint instead of a Print button (invariant 13).
+  const ios = isIOS();
+  const [toolsMenu, setToolsMenu] = useState<'print' | 'copy' | null>(null);
+  const [copyFlash, setCopyFlash] = useState<'ok' | 'fail' | null>(null);
+  const flashTimer = useRef<number | null>(null);
 
   // The delete confirmation is per recipe, in memory only.
   useEffect(() => {
     setConfirmDelete(false);
     setEditCat(false);
+    setViewPhoto(null);
+    setToolsMenu(null);
+    setPhotoError(false);
   }, [id]);
+
+  // The "Gekopieerd ✓" flash never outlives the screen.
+  useEffect(
+    () => () => {
+      if (flashTimer.current !== null) window.clearTimeout(flashTimer.current);
+    },
+    [],
+  );
 
   // Notes: load per recipe + profile; autosave debounced; flush on leave.
   useEffect(() => {
@@ -264,6 +391,84 @@ export function RecipeScreen(props: { id: string }) {
     }
   }
 
+  /**
+   * "+ Foto": re-encode on the phone (≤1024 px WebP/JPEG, src/photo.ts) and store it with the
+   * active member. Photos never travel in share tokens (phase-5 D.1).
+   */
+  async function onPhotoFile(e: Event) {
+    const input = e.currentTarget as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = ''; // so the same photo can be picked again after a failure
+    if (!file || !pid || photoBusy) return;
+    setPhotoBusy(true);
+    setPhotoError(false);
+    try {
+      const blob = await encodePhotoFile(file);
+      await addPhoto({ recipeId: id, memberId: pid, blob, at: nowIso() });
+      void checkNewBadges(pid).catch((err: unknown) => console.error('checkNewBadges', err));
+    } catch (err) {
+      console.error('addPhoto', err);
+      setPhotoError(true);
+    } finally {
+      setPhotoBusy(false);
+    }
+  }
+
+  async function onDeletePhoto(p: Photo) {
+    if (p.id === undefined || photoDelBusy) return;
+    setPhotoDelBusy(true);
+    try {
+      await deletePhoto(p.id);
+      setViewPhoto(null);
+    } catch (e) {
+      console.error('deletePhoto', e);
+    } finally {
+      setPhotoDelBusy(false);
+    }
+  }
+
+  /**
+   * The recipe as the plain-text contract of src/domain/recipe-text.ts: exactly the line texts
+   * the screen shows (lineText over the effective lines, scaled to the chosen servings).
+   */
+  function asTextInput(r: Recipe): RecipeTextInput {
+    const factor = base > 0 && servings > 0 ? servings / base : 1;
+    const timeParts: string[] = [];
+    if (r.time?.active) timeParts.push(t('recipe.timeActive', { n: r.time.active }));
+    if (r.time?.total && r.time.total !== r.time.active) timeParts.push(t('recipe.timeTotal', { n: r.time.total }));
+    return {
+      name: pickText(r.name, l),
+      servings,
+      timeLabel: timeParts.length ? timeParts.join(' · ') : null,
+      lines: lines.map((ln) => ({ text: lineText(ln, l, factor).trim(), header: ln.kind === 'header' })).filter((x) => x.text !== ''),
+      steps: r.steps.map((s) => pickText(s.text, l)).filter((s) => s !== ''),
+      lang: l,
+    };
+  }
+
+  function flashCopy(kind: 'ok' | 'fail') {
+    setCopyFlash(kind);
+    if (flashTimer.current !== null) window.clearTimeout(flashTimer.current);
+    flashTimer.current = window.setTimeout(() => {
+      flashTimer.current = null;
+      setCopyFlash(null);
+    }, 2500);
+  }
+
+  async function onCopyAs(kind: 'recipe' | 'ingredients') {
+    if (!recipe) return;
+    setToolsMenu(null);
+    const input = asTextInput(recipe);
+    const res = await copyText(kind === 'recipe' ? recipeAsText(input) : ingredientsAsText(input));
+    if (!res.ok) console.error('copyText', res.error);
+    flashCopy(res.ok ? 'ok' : 'fail');
+  }
+
+  function onPrintAs(kind: 'recipe' | 'ingredients') {
+    setToolsMenu(null);
+    printPage(kind);
+  }
+
   return (
     <>
       <Header title={name || t('app.title')} back backLabel={t('common.back')} />
@@ -273,11 +478,16 @@ export function RecipeScreen(props: { id: string }) {
         {recipe === undefined && <div class="empty">{t('common.loading')}</div>}
         {recipe && (
           <>
+            {hero && heroUrl && (
+              <button type="button" class="detail-hero no-print" aria-label={t('recipe.photoView')} onClick={() => setViewPhoto(hero)}>
+                <img class="detail-hero-img" src={heroUrl} alt="" />
+              </button>
+            )}
             <div class="detail-head">
               <h2 class="detail-title">{name}</h2>
               <button
                 type="button"
-                class={'fav-btn' + (isFav ? ' on' : '')}
+                class={'fav-btn no-print' + (isFav ? ' on' : '')}
                 aria-pressed={isFav}
                 aria-label={isFav ? t('recipe.unfav') : t('recipe.fav')}
                 disabled={!pid}
@@ -340,19 +550,46 @@ export function RecipeScreen(props: { id: string }) {
 
             <p class="detail-meta">{meta.join(' · ')}</p>
 
+            {/* Phase 5 block D: gallery strip, newest first, with "+ Foto" at the end. No photos
+                = no empty section: only the small "+ Foto" text button remains (spec D.1). */}
+            {photos && photos.length > 0 && (
+              <div class="photo-strip no-print" role="group" aria-label={t('recipe.photos')}>
+                {photos.map((p) => (
+                  <PhotoThumb key={p.id ?? p.at} photo={p} member={memberById(members, p.memberId)} onOpen={setViewPhoto} />
+                ))}
+                {!!pid && (
+                  <label class={'photo-add' + (photoBusy ? ' busy' : '')}>
+                    <span class="photo-add-label">{t('recipe.addPhoto')}</span>
+                    <input type="file" accept="image/*" style="display:none" disabled={photoBusy} onChange={(e) => void onPhotoFile(e)} />
+                  </label>
+                )}
+              </div>
+            )}
+            {photos && photos.length === 0 && !!pid && (
+              <label class="link-btn photo-add-first no-print">
+                {t('recipe.addPhoto')}
+                <input type="file" accept="image/*" style="display:none" disabled={photoBusy} onChange={(e) => void onPhotoFile(e)} />
+              </label>
+            )}
+            {photoError && (
+              <p class="muted small photo-error no-print" role="status">
+                {t('recipe.photoError')}
+              </p>
+            )}
+
             {missingLang && (
-              <button type="button" class="detail-translate" onClick={() => navigate('/edit/' + id + '?translate=1')}>
+              <button type="button" class="detail-translate no-print" onClick={() => navigate('/edit/' + id + '?translate=1')}>
                 {missingLang === 'en' ? t('recipe.missingEn') : t('recipe.missingNl')}
               </button>
             )}
 
             {machineEn && (
-              <button type="button" class="curator-badge" onClick={() => navigate('/edit/' + id)}>
+              <button type="button" class="curator-badge no-print" onClick={() => navigate('/edit/' + id)}>
                 {t('recipe.machineTranslation')}
               </button>
             )}
 
-            <div class="detail-actions">
+            <div class="detail-actions no-print">
               <button type="button" class="btn btn-primary" onClick={() => navigate(`/cook/${id}?srv=${servings}`)}>
                 {t('recipe.cook')}
               </button>
@@ -362,13 +599,45 @@ export function RecipeScreen(props: { id: string }) {
             </div>
             <button
               type="button"
-              class={'btn btn-block detail-week' + (inWeek ? ' on' : '')}
+              class={'btn btn-block detail-week no-print' + (inWeek ? ' on' : '')}
               aria-pressed={inWeek}
               disabled={weekBusy || plan === undefined}
               onClick={() => void onAddToWeek()}
             >
               {inWeek ? t('recipe.inWeek') : t('recipe.addToWeek')}
             </button>
+
+            {/* Phase 5 block D: Print + "Kopieer als tekst". On iOS window.print() is unreliable
+                in a Home Screen app, so the iPhone gets a short honest hint instead (invariant 13). */}
+            <div class="detail-tools no-print">
+              {!ios && (
+                <button type="button" class="btn" aria-expanded={toolsMenu === 'print'} onClick={() => setToolsMenu(toolsMenu === 'print' ? null : 'print')}>
+                  {t('recipe.print')}
+                </button>
+              )}
+              <button type="button" class="btn" aria-expanded={toolsMenu === 'copy'} onClick={() => setToolsMenu(toolsMenu === 'copy' ? null : 'copy')}>
+                {t('recipe.copyAsText')}
+              </button>
+            </div>
+            {ios && <p class="muted small print-ios-hint no-print">{t('recipe.printIosHint')}</p>}
+            {toolsMenu !== null && (
+              <div class="detail-tools-menu no-print" role="group" aria-label={toolsMenu === 'print' ? t('recipe.print') : t('recipe.copyAsText')}>
+                <button type="button" class="btn" onClick={() => (toolsMenu === 'print' ? onPrintAs('recipe') : void onCopyAs('recipe'))}>
+                  {t('recipe.wholeRecipe')}
+                </button>
+                <button type="button" class="btn" onClick={() => (toolsMenu === 'print' ? onPrintAs('ingredients') : void onCopyAs('ingredients'))}>
+                  {t('recipe.ingredientsOnly')}
+                </button>
+                <button type="button" class="btn" onClick={() => setToolsMenu(null)}>
+                  {t('common.cancel')}
+                </button>
+              </div>
+            )}
+            {copyFlash !== null && (
+              <p class={'tool-flash no-print' + (copyFlash === 'fail' ? ' fail' : '')} role="status">
+                {copyFlash === 'ok' ? t('recipe.copied') : t('recipe.copyFailed')}
+              </p>
+            )}
 
             <section class="section">
               <h2>{t('recipe.ingredients')}</h2>
@@ -379,7 +648,8 @@ export function RecipeScreen(props: { id: string }) {
 
             <section class="section">
               <h2>{t('recipe.steps')}</h2>
-              {recipe.steps.some((s) => s.timers && s.timers.length) && <p class="muted small">{t('recipe.timerHint')}</p>}
+              {/* a tap instruction has no business on paper */}
+              {recipe.steps.some((s) => s.timers && s.timers.length) && <p class="muted small no-print">{t('recipe.timerHint')}</p>}
               <ol class="steps">
                 {recipe.steps.map((s, i) => (
                   <StepView key={i} recipeId={id} recipeName={name} index={i} step={s} fahrenheit={fahrenheit} />
@@ -462,6 +732,16 @@ export function RecipeScreen(props: { id: string }) {
                 </>
               )}
             </section>
+
+            {viewPhoto && (
+              <PhotoOverlay
+                photo={viewPhoto}
+                member={memberById(members, viewPhoto.memberId)}
+                busy={photoDelBusy}
+                onClose={() => setViewPhoto(null)}
+                onDelete={(p) => void onDeletePhoto(p)}
+              />
+            )}
           </>
         )}
       </div>

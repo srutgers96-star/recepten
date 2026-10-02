@@ -57,6 +57,32 @@ export interface PantryItem {
   until?: string;
 }
 
+/**
+ * One row of `photos` (phase 5 block D): an own photo of a cooked dish, re-encoded on the phone
+ * (longest edge ≤ 1024 px, WebP or JPEG) BEFORE it is stored, so the blob stays small. Photos
+ * never travel in share tokens; backups carry them only on request (BackupBundle.photos).
+ */
+export interface Photo {
+  id?: number;
+  recipeId: string;
+  /** Household member who took it (a local member's id IS the profile id). */
+  memberId: string;
+  blob: Blob;
+  /** ISO timestamp; recipeId+at identifies a photo across backups (restore dedupe). */
+  at: string;
+}
+
+/** A photo as it travels in a backup file: the blob base64-encoded, its MIME type kept. */
+export interface BundledPhoto {
+  recipeId: string;
+  memberId: string;
+  at: string;
+  /** MIME type of the decoded blob (image/webp or image/jpeg). */
+  type: string;
+  /** base64 (standard alphabet) of the blob's bytes. */
+  data: string;
+}
+
 /** The rows an import replaced, as they were before it (phase 3 undo). Absent rows were added. */
 export interface ImportBefore {
   recipes: Recipe[];
@@ -114,6 +140,8 @@ export interface BackupBundle {
   plans?: Plan[];
   lists?: List[];
   pantry?: PantryItem[];
+  /** Phase 5 block D: only present when the backup was made WITH photos (default is without). */
+  photos?: BundledPhoto[];
 }
 
 // --- Phase-0 shape, only read by the v1 -> v2 upgrade in db.ts ---------------------------------

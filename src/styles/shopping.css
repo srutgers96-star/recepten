@@ -88,6 +88,11 @@
   color: var(--muted);
 }
 
+/* iPhone print hint (block D.2): replaces the Print button under the toolbar. */
+.shop-print-hint {
+  margin: -4px 0 10px;
+}
+
 /* ---------- Aisle sections ---------- */
 
 .shop-aisle {

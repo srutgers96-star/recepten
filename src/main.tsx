@@ -7,6 +7,7 @@ import './styles/home.css';
 import './styles/week.css';
 import './styles/shopping.css';
 import './styles/badges.css';
+import './styles/print.css';
 import { App } from './app';
 import { registerServiceWorker } from './pwa';
 

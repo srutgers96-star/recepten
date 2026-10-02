@@ -18,9 +18,10 @@ import { parseServingsParam, rememberServings, rememberedServings, ServingsPicke
 import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
-import { getRecipe, listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
+import { addPhoto, getRecipe, listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
 import { lineText } from '@/dictionary';
 import { nowIso, pickText, type Lang } from '@/domain/model';
+import { encodePhotoFile } from '@/photo';
 import { pickSpoken, type VoiceCommand } from '@/domain/voice';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
@@ -155,6 +156,30 @@ export function CookScreen(props: { id: string }) {
   const card = useRef<HTMLDivElement>(null);
   const swipe = useRef<{ x: number; y: number; id: number; drag: boolean } | null>(null);
   const swiped = useRef(false);
+
+  // --- Phase 5 block D: "Foto toevoegen" on the "Gekookt!" page (docs/phase-5-spec.md D.1).
+  const [photoState, setPhotoState] = useState<'idle' | 'busy' | 'done' | 'error'>('idle');
+  const photoInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setPhotoState('idle');
+  }, [id]);
+
+  /** Re-encodes the picked picture (≤ 1024 px WebP/JPEG) and stores it for this recipe + member. */
+  async function onPhotoPicked(file: File) {
+    if (!profile || photoState === 'busy') return;
+    setPhotoState('busy');
+    try {
+      const blob = await encodePhotoFile(file);
+      await addPhoto({ recipeId: id, memberId: profile.id, blob, at: nowIso() });
+      setPhotoState('done');
+      // The photo badges count household-wide; never block the UI on the check.
+      void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
+    } catch (e) {
+      console.error('addPhoto', e);
+      setPhotoState('error');
+    }
+  }
 
   useEffect(() => {
     setPage(0);
@@ -492,6 +517,34 @@ export function CookScreen(props: { id: string }) {
                           onInput={(e) => setNote((e.currentTarget as HTMLTextAreaElement).value)}
                         />
                       </label>
+                      <input
+                        ref={photoInput}
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        style="display:none"
+                        onChange={(e) => {
+                          const input = e.currentTarget as HTMLInputElement;
+                          const f = input.files?.[0];
+                          input.value = '';
+                          if (f) void onPhotoPicked(f);
+                        }}
+                      />
+                      <button
+                        type="button"
+                        class={'btn btn-block cook-photo' + (photoState === 'done' ? ' done' : '')}
+                        disabled={photoState === 'busy'}
+                        onClick={() => photoInput.current?.click()}
+                      >
+                        <span aria-hidden="true">📷</span>{' '}
+                        {photoState === 'busy'
+                          ? t('cook.photoBusy')
+                          : photoState === 'done'
+                            ? `${t('cook.photoAdded')} ✓`
+                            : photoState === 'error'
+                              ? t('cook.photoFailed')
+                              : t('cook.photoAdd')}
+                      </button>
                     </>
                   ) : (
                     <p class="muted">{t('cook.noProfile')}</p>

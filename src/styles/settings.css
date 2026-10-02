@@ -565,6 +565,152 @@
   min-height: 44px;
 }
 
+/* ---------- Phase 5 (block D.3): Het verhaal — who cooks along ---------- */
+
+.story-members .member-chips {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.story-members .member {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  font-weight: 600;
+}
+
+.story-members .member .avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
+}
+
+/* ---------- Phase 5 (block D.4): Curator — the English side of the classics ---------- */
+
+.curator-count {
+  margin: 0 0 10px;
+}
+
+.curator-send-hint {
+  margin: 8px 0 0;
+}
+
+/* Filter chips (Alle / Machine / Gecontroleerd / Ontbreekt), 44 px targets. */
+.curator-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.curator-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.curator-chip:active {
+  background: var(--press);
+}
+
+.curator-chip.on {
+  background: var(--cobalt);
+  border-color: var(--cobalt);
+  color: var(--on-cobalt);
+}
+
+.curator-list {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+/* List rows: NL name + EN name (or "nog geen Engelse naam") + the status chip in token colours
+   (.badge = orange "machine", .badge-green "gecontroleerd", .badge-next "ontbreekt", base.css). */
+.curator-row .name strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.curator-row .badge {
+  flex: none;
+}
+
+/* Language pair: the Dutch reference stacked above the EN input at 360 px, two columns from 560 px. */
+.curator-pair {
+  display: grid;
+  gap: 4px 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.curator-pair:last-child {
+  border-bottom: 0;
+}
+
+.curator-pair .pair-nl {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.curator-pair.is-header .pair-nl {
+  font-weight: 700;
+}
+
+.curator-pair .pair-index {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.curator-pair .input {
+  width: 100%;
+  font-size: 16px; /* no iOS zoom */
+}
+
+@media (min-width: 560px) {
+  .curator-pair {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .curator-pair .pair-nl {
+    padding-top: 10px; /* align the reference with the input's first text line */
+  }
+}
+
+.curator-edit-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.curator-edit h3 {
+  margin: 18px 0 2px;
+  font-size: 15px;
+}
+
 /* ---------- Phase 5 (A-bis.9): "Deel het bestand" first, "Download" second ---------- */
 .file-actions {
   display: flex;
@@ -578,4 +724,10 @@
 
 .file-hint {
   margin: 8px 0 0;
+}
+
+/* Phase 5 block D: "Met foto's" toggle inside the backup card (StorageScreen); reuses .setting/.switch but drops the list divider inside the card */
+.backup-photos {
+  border-bottom: 0;
+  margin-top: 4px;
 }

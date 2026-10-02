@@ -23,7 +23,7 @@ import { aggregate, type ListItem } from '@/domain/aggregate';
 import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, normalizeServings, planHash, planHashAll, type Plan, type PlanItem } from '@/domain/planner';
 import { HOUSEHOLD_KEY, normalizeHousehold, type HouseholdSetting } from '@/domain/household';
 import { db, getSetting, setSetting } from './db';
-import type { BackupBundle, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Setting } from './model';
+import type { BackupBundle, BundledPhoto, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Photo, Setting } from './model';
 
 export { getSetting, setSetting };
 
@@ -143,11 +143,14 @@ export async function linkUserRecipeLine(recipeId: string, index: number, ing: s
 }
 
 export async function deleteUserRecipe(id: string): Promise<void> {
-  await db.transaction('rw', db.userRecipes, db.favorites, db.notes, db.lineOverrides, async () => {
+  await db.transaction('rw', [db.userRecipes, db.favorites, db.notes, db.lineOverrides, db.photos], async () => {
     await db.userRecipes.delete(id);
     await db.favorites.where('recipeId').equals(id).delete();
     await db.notes.where('recipeId').equals(id).delete();
     await db.lineOverrides.where('recipeId').equals(id).delete();
+    // Photos are only reachable through the recipe page: without this they would be orphaned
+    // blobs that still count on the Opslag screen and ride along in every "Met foto's" backup.
+    await db.photos.where('recipeId').equals(id).delete();
   });
 }
 
@@ -567,6 +570,76 @@ export async function listCookLog(): Promise<CookLogEntry[]> {
   return db.cookLog.orderBy('at').toArray();
 }
 
+// --- Photos (docs/phase-5-spec.md Block D item 1) -------------------------------------------------
+
+/** Stores a photo (already re-encoded by src/photo.ts encodePhotoFile). Returns the row id. */
+export async function addPhoto(p: Omit<Photo, 'id'>): Promise<number> {
+  return (await db.photos.add({ recipeId: p.recipeId, memberId: p.memberId, blob: p.blob, at: p.at })) as number;
+}
+
+/** All photos of one recipe, newest first. */
+export async function listPhotos(recipeId: string): Promise<Photo[]> {
+  const rows = await db.photos.where('recipeId').equals(recipeId).toArray();
+  return rows.sort((a, b) => b.at.localeCompare(a.at));
+}
+
+/** The newest photo of one recipe (the detail-page hero), or undefined. */
+export async function latestPhoto(recipeId: string): Promise<Photo | undefined> {
+  return (await listPhotos(recipeId))[0];
+}
+
+export async function deletePhoto(id: number): Promise<void> {
+  await db.photos.delete(id);
+}
+
+/** Household-wide photo count (badge facts and the Storage counters). */
+export async function countPhotos(): Promise<number> {
+  return db.photos.count();
+}
+
+// Base64 codec for photos in backup files. Standard alphabet via btoa/atob (available in every
+// browser and in Node ≥ 16, so the roundtrip is pinned in tests/photos.test.ts). Chunked so a
+// multi-hundred-kB photo never blows the argument limit of String.fromCharCode.
+const B64_CHUNK = 0x8000;
+
+export function bytesToBase64(bytes: Uint8Array): string {
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += B64_CHUNK) {
+    bin += String.fromCharCode(...bytes.subarray(i, i + B64_CHUNK));
+  }
+  return btoa(bin);
+}
+
+/** Inverse of bytesToBase64; null for a string that is not valid base64. */
+export function base64ToBytes(data: string): Uint8Array<ArrayBuffer> | null {
+  try {
+    const bin = atob(data);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return bytes;
+  } catch {
+    return null;
+  }
+}
+
+/** A stored photo -> its backup-file shape (blob bytes base64-encoded, MIME type kept). */
+export async function encodeBundledPhoto(p: Photo): Promise<BundledPhoto> {
+  const bytes = new Uint8Array(await p.blob.arrayBuffer());
+  return { recipeId: p.recipeId, memberId: p.memberId, at: p.at, type: p.blob.type || 'image/jpeg', data: bytesToBase64(bytes) };
+}
+
+/** A backup-file photo entry -> a storable row (base64 -> Blob). Null for anything malformed. */
+export function decodeBundledPhoto(e: unknown): Omit<Photo, 'id'> | null {
+  const o = e as Partial<BundledPhoto> | null;
+  if (!o || typeof o !== 'object') return null;
+  if (typeof o.recipeId !== 'string' || !o.recipeId || typeof o.memberId !== 'string' || typeof o.at !== 'string' || !o.at) return null;
+  if (typeof o.data !== 'string' || o.data === '') return null;
+  const bytes = base64ToBytes(o.data);
+  if (!bytes || bytes.length === 0) return null;
+  const type = typeof o.type === 'string' && o.type.startsWith('image/') ? o.type : 'image/jpeg';
+  return { recipeId: o.recipeId, memberId: o.memberId, at: o.at, blob: new Blob([bytes], { type }) };
+}
+
 // --- Profiles ----------------------------------------------------------------------------------
 
 export async function listProfiles(): Promise<Profile[]> {
@@ -938,7 +1011,13 @@ export async function backupHealth(now: number = Date.now()): Promise<BackupHeal
   return { lastBackupAt, unbackedChanges: n, oldestChangeAt, overdue };
 }
 
-export async function exportBundle(): Promise<BackupBundle> {
+/**
+ * The backup bundle. Default WITHOUT photos (a photo backup is many times larger); pass
+ * `{ withPhotos: true }` to include them base64-encoded (BackupBundle.photos). The Storage
+ * screen pre-builds the photo-less bundle on mount and rebuilds with photos only when the
+ * "Met foto's" toggle is on.
+ */
+export async function exportBundle(opts?: { withPhotos?: boolean }): Promise<BackupBundle> {
   const [profiles, userRecipes, favorites, notes, cookLog, settings, lineOverrides, userIngredients, overrides, plans, lists, pantry] = await Promise.all([
     listProfiles(),
     db.userRecipes.toArray(),
@@ -953,7 +1032,7 @@ export async function exportBundle(): Promise<BackupBundle> {
     db.lists.toArray(),
     db.pantry.toArray(),
   ]);
-  return {
+  const bundle: BackupBundle = {
     v: 2,
     t: 'b',
     at: nowIso(),
@@ -971,6 +1050,11 @@ export async function exportBundle(): Promise<BackupBundle> {
     lists,
     pantry,
   };
+  if (opts?.withPhotos) {
+    const rows = await db.photos.orderBy('at').toArray();
+    bundle.photos = await Promise.all(rows.map(encodeBundledPhoto));
+  }
+  return bundle;
 }
 
 /** What a restore wrote per table (rows the file held but a newer local row won against are not counted). */
@@ -987,6 +1071,8 @@ export interface RestoreResult {
   plans?: number;
   lists?: number;
   pantry?: number;
+  /** Phase 5 block D: photos written (a photo already here — same recipeId+at — is not re-added). */
+  photos?: number;
 }
 
 /** Settings that belong to this phone, not to the person: a restore never overwrites them. */
@@ -1033,13 +1119,18 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
   const plan = Array.isArray(b.plans) ? b.plans.find((p) => p && p.id === PLAN_ID && Array.isArray(p.items)) : undefined;
   const list = Array.isArray(b.lists) ? b.lists.find((l) => l && l.id === LIST_ID && Array.isArray(l.items)) : undefined;
   const pantry = Array.isArray(b.pantry) ? b.pantry.filter((p) => p && typeof p.ing === 'string' && p.ing.trim()) : [];
+  // Phase 5 block D (absent in backups made without "Met foto's"): base64 -> Blob, malformed
+  // entries dropped. Deduped on recipeId+at inside the transaction, so a double restore of the
+  // same file never duplicates a photo.
+  const photos = Array.isArray(b.photos) ? b.photos.map(decodeBundledPhoto).filter((p): p is Omit<Photo, 'id'> => p !== null) : [];
 
   let addedLog = 0;
   let wroteLineOverrides = 0;
   let wroteOverrides = 0;
   let wrotePlan = 0;
   let wroteList = 0;
-  await db.transaction('rw', [db.profiles, db.userRecipes, db.favorites, db.notes, db.cookLog, db.settings, db.lineOverrides, db.userIngredients, db.overrides, db.plans, db.lists, db.pantry], async () => {
+  let wrotePhotos = 0;
+  await db.transaction('rw', [db.profiles, db.userRecipes, db.favorites, db.notes, db.cookLog, db.settings, db.lineOverrides, db.userIngredients, db.overrides, db.plans, db.lists, db.pantry, db.photos], async () => {
     const hadProfiles = (await db.profiles.count()) > 0;
     await db.profiles.bulkPut(profiles);
     await db.userRecipes.bulkPut(recipes);
@@ -1092,6 +1183,18 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
     }
     if (fresh.length) await db.cookLog.bulkAdd(fresh);
     addedLog = fresh.length;
+    if (photos.length) {
+      const have = new Set((await db.photos.toArray()).map((p) => `${p.recipeId}|${p.at}`));
+      const freshPhotos: Array<Omit<Photo, 'id'>> = [];
+      for (const p of photos) {
+        const k = `${p.recipeId}|${p.at}`;
+        if (have.has(k)) continue;
+        have.add(k);
+        freshPhotos.push(p);
+      }
+      if (freshPhotos.length) await db.photos.bulkAdd(freshPhotos as Photo[]);
+      wrotePhotos = freshPhotos.length;
+    }
     for (const s of settings) {
       if (s.key === ACTIVE_PROFILE_SETTING && hadProfiles) continue;
       if (s.key === INBOX_SEEN_SETTING) {
@@ -1114,6 +1217,7 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
     plans: wrotePlan,
     lists: wroteList,
     pantry: pantry.length,
+    photos: wrotePhotos,
   };
 }
 

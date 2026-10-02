@@ -3,15 +3,16 @@
 // (read-aloud, voice commands, timer sound & vibrate — phase 5 block B), the
 // dictionary row (counts → '/more/dictionary', phase 5 A-bis.6), and the links to "Stuur nieuwe naar …"
 // (unsent-changes badge), Opslag & back-up (backup-due badge), Het verhaal, Apparaatcheck, plus
-// "Over" (version, sha, channel, GitHub). Phase 5: "Huishouden" (under the profile card) and
-// "Controleer mijn recepten" (docs/phase-5-spec.md A.6 / A.8).
+// "Over" (version, sha, channel, GitHub). Phase 5: "Huishouden" (under the profile card),
+// "Controleer mijn recepten" (docs/phase-5-spec.md A.6 / A.8), and block D: the "Curator" row
+// ('/more/curator') plus the "Experimenten" switch in "Over" (setting 'experiments').
 import { useEffect, useState } from 'preact/hooks';
 import { badgesEnabled, loadBadgeSettings, setBadgesEnabled } from '@/badges';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo, isIOS } from '@/components/AppInfo';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
-import { getFahrenheit, getHouseholdServings, setFahrenheit, setHouseholdServings } from '@/db/repo';
+import { getFahrenheit, getHouseholdServings, getSetting, setFahrenheit, setHouseholdServings, setSetting } from '@/db/repo';
 import { baseDictionary, userIngredients } from '@/dictionary';
 import type { Lang } from '@/domain/model';
 import { lang, t } from '@/i18n';
@@ -28,6 +29,11 @@ const GITHUB_URL = 'https://github.com/srutgers96-star/recepten';
 /** "Huishouden" stepper range (a new week slot starts at this many servings). */
 const MIN_HOUSEHOLD = 1;
 const MAX_HOUSEHOLD = 12;
+/**
+ * Phase 5 block D: features under construction sit behind this boolean setting (default off).
+ * Readers use getSetting('experiments', false); right now that is "Toon QR" on the share screen.
+ */
+const EXPERIMENTS_KEY = 'experiments';
 
 function Chevron() {
   return (
@@ -70,6 +76,7 @@ export function MoreScreen() {
   const others = profiles.value.filter((p) => p.id !== active?.id);
   const [fahrenheit, setF] = useState(false);
   const [household, setHousehold] = useState<number | null>(null);
+  const [experiments, setExperiments] = useState(false);
 
   const unsent = unsentChanges.value;
   const unseen = inboxUnseen.value;
@@ -85,12 +92,22 @@ export function MoreScreen() {
     void loadSoundSettings();
     void getFahrenheit().then(setF, (e: unknown) => console.error('getFahrenheit', e));
     void getHouseholdServings().then(setHousehold, (e: unknown) => console.error('getHouseholdServings', e));
+    // Phase 5 block D: the experiments flag (default off), same pattern as the °F switch.
+    void getSetting<unknown>(EXPERIMENTS_KEY, false).then(
+      (v) => setExperiments(v === true),
+      (e: unknown) => console.error('getExperiments', e),
+    );
     void refreshShareBadges();
   }, []);
 
   function toggleFahrenheit(on: boolean) {
     setF(on);
     void setFahrenheit(on).catch((e: unknown) => console.error('setFahrenheit', e));
+  }
+
+  function toggleExperiments(on: boolean) {
+    setExperiments(on);
+    void setSetting(EXPERIMENTS_KEY, on === true).catch((e: unknown) => console.error('setExperiments', e));
   }
 
   /** "Huishouden": the servings a new week slot starts with (spec §0 `household.servings`). */
@@ -305,6 +322,8 @@ export function MoreScreen() {
           <MenuRow label={t('more.sendNew')} sub={t('more.sendNewHint')} to="/share" badge={unsent > 0 ? String(unsent > 99 ? '99+' : unsent) : undefined} />
           {/* Phase 5 (docs/phase-5-spec.md A.6): suggested category + diet tags per own recipe. */}
           <MenuRow label={t('more.checkRecipes')} sub={t('more.checkRecipesHint')} to="/more/check-recipes" />
+          {/* Phase 5 block D (docs/phase-5-spec.md D.4): the English texts of the classics, for Gabi. */}
+          <MenuRow label={t('more.curator')} sub={t('more.curatorHint')} to="/more/curator" />
           <MenuRow label={t('more.storage')} to="/more/storage" badge={backupDue ? t('more.backupDue') : undefined} badgeTone="red" />
           <MenuRow label={t('more.story')} to="/story" />
           <MenuRow label={t('more.check')} to="/check" />
@@ -320,6 +339,17 @@ export function MoreScreen() {
             <dt>{t('more.build')}</dt>
             <dd>{appInfo.sha}</dd>
           </dl>
+          {/* Phase 5 block D: experiments flag — features under construction (now: QR on the share screen). */}
+          <label class="setting">
+            <div class="label">
+              {t('more.experiments')}
+              <small>{t('more.experimentsHint')}</small>
+            </div>
+            <span class="switch">
+              <input type="checkbox" checked={experiments} onChange={(e) => toggleExperiments((e.currentTarget as HTMLInputElement).checked)} />
+              <span class="track" />
+            </span>
+          </label>
           <div class="actions" style="margin-top:12px">
             <a class="btn" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
               {t('more.github')}

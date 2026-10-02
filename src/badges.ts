@@ -6,7 +6,7 @@
 import { signal } from '@preact/signals';
 import badgesData from '@data/badges.json';
 import { celebrate, celebration } from './celebrate';
-import { allRecipes, getSetting, getSharedRecipes, listCookLog, setSetting } from '@/db/repo';
+import { allRecipes, countPhotos, getSetting, getSharedRecipes, listCookLog, setSetting } from '@/db/repo';
 import { evaluateBadges, normalizeBadges, type Badge, type BadgeFacts, type BadgeStatus } from '@/domain/badges';
 import type { Recipe } from '@/domain/model';
 
@@ -50,17 +50,15 @@ let cachedBadges: Badge[] | null = null;
 /** The normalized data/badges.json (module cache; invalid entries were dropped by normalizeBadges). */
 export function badgeData(): Badge[] {
   if (!cachedBadges) {
-    // The photos table arrives in block D; until then the photo badges are unobtainable and would
-    // promise a feature the app does not have (house rule: the UI promises nothing unproven), so
-    // they are hidden everywhere (grid, counts, checks). Drop this filter when block D lands.
-    cachedBadges = normalizeBadges(badgesData as unknown).filter((b) => b.rule.kind !== 'photos');
+    // Block D landed the photos table, so the photo badges are obtainable and visible again.
+    cachedBadges = normalizeBadges(badgesData as unknown);
   }
   return cachedBadges;
 }
 
 /** BadgeFacts for one member (log filtered on profileId) or the whole household ('all'). */
 async function buildFacts(memberId: string | 'all'): Promise<BadgeFacts> {
-  const [recipes, log, shared] = await Promise.all([allRecipes(), listCookLog(), getSharedRecipes()]);
+  const [recipes, log, shared, photos] = await Promise.all([allRecipes(), listCookLog(), getSharedRecipes(), countPhotos()]);
   const byId = new Map<string, Recipe>();
   let classicsTotal = 0;
   let ownRecipes = 0;
@@ -78,8 +76,8 @@ async function buildFacts(memberId: string | 'all'): Promise<BadgeFacts> {
     ownRecipes,
     received,
     shared,
-    // The photos table arrives in block D; until then the household-wide counter is 0.
-    photos: 0,
+    // Household-wide, like shared/own/received: photos live in the `photos` table since block D.
+    photos,
   };
 }
 

@@ -9,13 +9,17 @@
 // A-bis.9: backup and export each offer "Deel het bestand" FIRST (share sheet: WhatsApp to
 // yourself, Drive, Files; falls back to a download) and "Download" second (straight to
 // Downloads); after a download the status says "Opgeslagen als <naam> in Downloads".
+// Phase 5 block D: a "Met foto's" toggle on the backup (default OFF — photos make the file many
+// times larger; the hint shows the real size once the with-photos bundle is built, ahead of the
+// tap so navigator.share still runs within the user gesture). A restore reports how many photos
+// came back (same recipeId+at = already here, not re-added).
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { reloadBadgeSettings } from '@/badges';
 import { reloadCelebrateSettings } from '@/celebrate';
 import { Header } from '@/components/Header';
 import type { BackupBundle } from '@/db/model';
 import { useLive } from '@/db/live';
-import { LAST_BACKUP_KEY, backupHealth, bundled, exportBundle, getBaseRecipe, importBundle, resetEverything, setSetting, weekCounts, type BackupHealth } from '@/db/repo';
+import { LAST_BACKUP_KEY, backupHealth, bundled, countPhotos, exportBundle, getBaseRecipe, importBundle, resetEverything, setSetting, weekCounts, type BackupHealth } from '@/db/repo';
 import { nowIso, type Text } from '@/domain/model';
 import { applyOverride } from '@/domain/overrides';
 import { buildBundleEnvelope, bundleFileName } from '@/domain/share';
@@ -81,8 +85,36 @@ export function StorageScreen() {
   const by = activeProfile.value?.name ?? '';
   // Phase 4 counters (plan / list / pantry), live: a restore updates them at once.
   const week = useLive(weekCounts, []);
+  // Phase 5 block D: "Met foto's" on the backup (default off) + the live photo counter.
+  const [withPhotos, setWithPhotos] = useState(false);
+  const [photoBundle, setPhotoBundle] = useState<{ bundle: BackupBundle; bytes: number } | null>(null);
+  const photoCount = useLive(countPhotos, []);
+  // Bumped by reload() so the with-photos bundle is rebuilt after a restore even when the photo
+  // count did not change (a restore may add recipes/notes/cook log without new photos).
+  const [reloadTick, setReloadTick] = useState(0);
+
+  // Pre-built like the photo-less bundle: the share tap must not wait for base64 encoding, or
+  // navigator.share would run outside the user gesture. Rebuilt when the photo set changes
+  // (a restore adds photos live through the countPhotos liveQuery) and on every reload().
+  useEffect(() => {
+    if (!withPhotos) {
+      setPhotoBundle(null);
+      return;
+    }
+    let gone = false;
+    setPhotoBundle(null);
+    void exportBundle({ withPhotos: true })
+      .then((b) => {
+        if (!gone) setPhotoBundle({ bundle: b, bytes: new Blob([JSON.stringify(b)]).size });
+      })
+      .catch((e: unknown) => console.error('exportBundle withPhotos', e));
+    return () => {
+      gone = true;
+    };
+  }, [withPhotos, photoCount, reloadTick]);
 
   const reload = useCallback(async () => {
+    setReloadTick((n) => n + 1);
     let persisted: boolean | null = null;
     let usage: number | null = null;
     try {
@@ -129,11 +161,14 @@ export function StorageScreen() {
 
   /** "Deel het bestand" (share sheet, download as the fallback) or "Download" (straight to Downloads). */
   async function makeBackup(how: 'share' | 'download') {
-    if (!bundle || busy) return;
+    // With the toggle on, the pre-built with-photos bundle is shared (buttons stay disabled
+    // while it is still being packed); the normal path stays photo-less.
+    const source = withPhotos ? photoBundle?.bundle : bundle;
+    if (!source || busy) return;
     setBusy(true);
     setStatus('');
     try {
-      const fresh: BackupBundle = { ...bundle, at: nowIso() };
+      const fresh: BackupBundle = { ...source, at: nowIso() };
       const name = `recepten-${fresh.at.slice(0, 10)}.json`;
       const json = JSON.stringify(fresh);
       // navigator.share runs before the first await inside shareJsonFile: still within the tap.
@@ -261,7 +296,8 @@ export function StorageScreen() {
       // Counted inside the restore transaction: rows a newer local row won against are not in it.
       const more = t('storage.restoredMore', { overrides: result.overrides, lineOverrides: result.lineOverrides, ingredients: result.userIngredients });
       const weekPart = (result.plans ?? 0) + (result.lists ?? 0) + (result.pantry ?? 0) > 0 ? ` · ${t('storage.restoredWeek', { plans: result.plans ?? 0, lists: result.lists ?? 0, pantry: result.pantry ?? 0 })}` : '';
-      setRestoreMore(more + weekPart);
+      const photosPart = (result.photos ?? 0) > 0 ? ` · ${result.photos === 1 ? t('storage.restoredPhotosOne') : t('storage.restoredPhotos', { n: result.photos ?? 0 })}` : '';
+      setRestoreMore(more + weekPart + photosPart);
     } catch (e) {
       setRestoreStatus((e as Error)?.message === 'invalid-bundle' ? t('storage.invalid') : `${t('common.error')}: ${String(e)}`);
     }
@@ -325,6 +361,8 @@ export function StorageScreen() {
             <dd>{show(week?.list)}</dd>
             <dt>{t('storage.pantry')}</dt>
             <dd>{show(week?.pantry)}</dd>
+            <dt>{t('storage.photos')}</dt>
+            <dd>{show(photoCount)}</dd>
           </dl>
         </section>
 
@@ -343,11 +381,40 @@ export function StorageScreen() {
             </p>
           )}
           {health && !health.overdue && health.unbackedChanges === 0 && <p class="ok small">{t('storage.upToDate')}</p>}
+          <label class="setting backup-photos">
+            <div class="label">
+              {t('storage.withPhotos')}
+              <small>
+                {photoCount === undefined
+                  ? '…'
+                  : photoCount === 0
+                    ? t('storage.withPhotosNone')
+                    : withPhotos
+                      ? photoBundle
+                        ? photoCount === 1
+                          ? t('storage.withPhotosSizeOne', { size: formatBytes(photoBundle.bytes) })
+                          : t('storage.withPhotosSize', { n: photoCount, size: formatBytes(photoBundle.bytes) })
+                        : t('storage.withPhotosBuilding')
+                      : photoCount === 1
+                        ? t('storage.withPhotosHintOne')
+                        : t('storage.withPhotosHint', { n: photoCount })}
+              </small>
+            </div>
+            <span class="switch">
+              <input
+                type="checkbox"
+                checked={withPhotos}
+                disabled={busy || !photoCount}
+                onChange={(e) => setWithPhotos((e.currentTarget as HTMLInputElement).checked)}
+              />
+              <span class="track" />
+            </span>
+          </label>
           <div class="actions file-actions" style="margin-bottom:0">
-            <button type="button" class="btn btn-primary" disabled={!bundle || busy} onClick={() => void makeBackup('share')}>
+            <button type="button" class="btn btn-primary" disabled={!bundle || busy || (withPhotos && !photoBundle)} onClick={() => void makeBackup('share')}>
               {t('storage.shareFile')}
             </button>
-            <button type="button" class="btn" disabled={!bundle || busy} onClick={() => void makeBackup('download')}>
+            <button type="button" class="btn" disabled={!bundle || busy || (withPhotos && !photoBundle)} onClick={() => void makeBackup('download')}>
               {t('storage.download')}
             </button>
           </div>

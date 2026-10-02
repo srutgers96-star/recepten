@@ -176,6 +176,51 @@
   margin-bottom: 6px;
 }
 
+/* ---------- Share: QR (block D.5, behind the Experimenten flag) ---------- */
+
+.share-qr {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.share-qr .btn {
+  min-height: 44px;
+}
+
+/* White card in BOTH themes: scanner contrast beats dark mode (ADR-0007). */
+.share-qr-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px;
+  width: min(70vw, 320px);
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-qr-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Keep the modules crisp when the PNG is scaled up. */
+  image-rendering: pixelated;
+}
+
+/* Fixed color: var(--muted) turns light in dark mode, unreadable on the white card. */
+.share-qr-loading {
+  color: #667;
+}
+
+.share-qr-hint {
+  text-align: center;
+  max-width: 420px;
+}
+
 /* ---------- Inbox ---------- */
 
 .inbox-hint {

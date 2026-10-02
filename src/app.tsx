@@ -2,7 +2,7 @@
 // onboarding gate, install card, update bar, confetti. Routes per docs/phase-1-spec.md §4 plus
 // phase 4 (docs/phase-4-spec.md §3): '/week' and '/shopping', and phase 5 (docs/phase-5-spec.md
 // block A): '/more/check-recipes' and '/more/household'; block A-bis: '/more/dictionary';
-// block C: '/more/badges' plus the new-badge toast next to <Confetti/>.
+// block C: '/more/badges' plus the new-badge toast next to <Confetti/>; block D: '/more/curator'.
 import { useEffect, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings } from './badges';
 import { loadCelebrateSettings } from './celebrate';
@@ -21,6 +21,7 @@ import { BadgesScreen } from './screens/BadgesScreen';
 import { CheckRecipesScreen } from './screens/CheckRecipesScreen';
 import { CheckScreen } from './screens/CheckScreen';
 import { CookScreen } from './screens/CookScreen';
+import { CuratorScreen } from './screens/CuratorScreen';
 import { DictionaryScreen } from './screens/DictionaryScreen';
 import { EditScreen } from './screens/EditScreen';
 import { HomeScreen } from './screens/HomeScreen';
@@ -137,6 +138,9 @@ function Screen(props: { r: Route }) {
         // Phase 5 (docs/phase-5-spec.md A-bis.6): the dictionary screen (own entries, merge, clean-up).
         case 'dictionary':
           return <DictionaryScreen />;
+        // Phase 5 block D (docs/phase-5-spec.md D.4): the English texts of the classics, for Gabi.
+        case 'curator':
+          return <CuratorScreen />;
         // Phase 5 (docs/phase-5-spec.md C.2): badges per member + "Samen".
         case 'badges':
           return <BadgesScreen />;

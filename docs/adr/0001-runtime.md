@@ -79,7 +79,7 @@ parser, dictionary, token, migration tools, Node tests) stays usable unchanged.
 - What she gets: the same app as Stijn, UI in British English, the 196 classics translated and
   reviewed by herself, her own recipes, planner, shopping list, cooking mode with wake lock, backup
   to Files, and receiving Stijn's recipes in ~10 s (long-press → Copy → app → Paste).
-- Later, not planned (ADR-0007): if pasting irritates after two months, €99/year buys a native iOS
+- Later, not planned (ADR-0008): if pasting irritates after two months, €99/year buys a native iOS
   shell (cloud build + TestFlight) with a Share Extension and Universal Links; the token, data files
   and `src/domain/` go along unchanged. On Android a Capacitor shell could add AlarmManager timers
   and "Open with"; neither changes the web app.

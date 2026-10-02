@@ -101,6 +101,13 @@ export const shopping: Dict = {
   'shop.copyError': { nl: 'Kopiëren mislukt', en: 'Copy failed' },
   'shop.nothingToShare': { nl: 'Niets te delen.', en: 'Nothing to share.' },
 
+  // --- Print & copy as text (docs/phase-5-spec.md block D.2) ----------------------------------
+  'shop.print': { nl: 'Print', en: 'Print' },
+  'shop.copyAsText': { nl: 'Kopieer als tekst', en: 'Copy as text' },
+  'shop.copiedFlash': { nl: 'Gekopieerd ✓', en: 'Copied ✓' },
+  // Honest iPhone hint (invariant 13): the installed app cannot print itself; the share sheet can.
+  'shop.printIOSHint': { nl: 'Printen op iPhone: tik “Deel lijst” en kies Print in het deelmenu.', en: 'Printing on iPhone: tap “Share list” and choose Print in the share sheet.' },
+
   // --- Inbox: a received week plan ----------------------------------------------------------
   'inbox.plan.title': { nl: 'Weekplan van {name}: {n} gerechten', en: 'Week plan from {name}: {n} dishes' },
   'inbox.plan.titleOne': { nl: 'Weekplan van {name}: 1 gerecht', en: 'Week plan from {name}: 1 dish' },

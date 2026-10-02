@@ -16,8 +16,9 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
+import { QrCode } from '@/components/QrCode';
 import { Segmented } from '@/components/Segmented';
-import { bumpSharedRecipes, getOverride, getRecipe, isBuiltinId, listLineOverrides, listUserIngredients } from '@/db/repo';
+import { bumpSharedRecipes, getOverride, getRecipe, getSetting, isBuiltinId, listLineOverrides, listUserIngredients } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import type { Ingredient } from '@/domain/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
@@ -98,14 +99,30 @@ function RecipeShareScreen(props: { id: string }) {
   const [status, setStatus] = useState('');
   const [textStatus, setTextStatus] = useState('');
   const [textLangs, setTextLangs] = useState<TextLangs>('nl');
+  // Phase 5 block D.5: "Toon QR" exists only while the Experimenten flag is on (flag off = no trace).
+  const [experiments, setExperiments] = useState(false);
+  const [showQr, setShowQr] = useState(false);
   const by = activeProfile.value?.name ?? '';
   const ui = lang.value;
+
+  useEffect(() => {
+    let cancelled = false;
+    getSetting<unknown>('experiments', false)
+      .then((v) => {
+        if (!cancelled) setExperiments(v === true);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
     setLoaded(undefined);
     setStatus('');
     setTextStatus('');
+    setShowQr(false);
     const id = props.id;
     // The effective recipe travels: override patch applied (getRecipe) AND the "Koppel" line
     // overrides folded into the lines, so a linked ingredient reaches the other phone.
@@ -256,6 +273,21 @@ function RecipeShareScreen(props: { id: string }) {
                 <div class="status" role="status">
                   {status || (message ? t('share.length', { n: message.length }) : '')}
                 </div>
+                {experiments && (
+                  // Block D.5 (ADR-0007, ADR-0006 flow D): QR of exactly the URL in the message
+                  // above. Behind the Experimenten flag; tapping again hides it.
+                  <div class="share-qr">
+                    <button type="button" class="btn" disabled={!url} onClick={() => setShowQr((v) => !v)}>
+                      {showQr ? t('share.qrHide') : t('share.qrShow')}
+                    </button>
+                    {showQr && url && (
+                      <>
+                        <QrCode text={url} />
+                        <p class="muted small share-qr-hint">{t('share.qrHint')}</p>
+                      </>
+                    )}
+                  </div>
+                )}
               </>
             )}
 

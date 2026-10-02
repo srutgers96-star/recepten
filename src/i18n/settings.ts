@@ -93,6 +93,14 @@ export const settings: Dict = {
   // --- Phase 5: Meer rows (docs/phase-5-spec.md A.6 + A.8) ---
   'more.checkRecipes': { nl: 'Controleer mijn recepten', en: 'Check my recipes' },
   'more.checkRecipesHint': { nl: 'Voorstel voor categorie en dieet per eigen recept', en: 'Suggested category and diet per own recipe' },
+  // --- Phase 5 block D (docs/phase-5-spec.md D.4): the curator row + experiments switch ---
+  'more.curator': { nl: 'Curator', en: 'Curator' },
+  'more.curatorHint': { nl: 'Engelse teksten nakijken', en: 'Review the English texts' },
+  'more.experiments': { nl: 'Experimenten', en: 'Experiments' },
+  'more.experimentsHint': {
+    nl: 'Functies in aanbouw. Nu: "Toon QR" op het deelscherm.',
+    en: 'Features under construction. Currently: "Show QR" on the share screen.',
+  },
   'more.householdRow': { nl: 'Huishouden', en: 'Household' },
   'more.householdRowHint': { nl: 'Naam en wie er meekookt', en: 'Name and who cooks along' },
 
@@ -237,6 +245,17 @@ export const settings: Dict = {
     en: 'Share: to WhatsApp (to yourself), Drive or Files. Download: the file lands in Downloads.',
   },
   'storage.savedDownloads': { nl: 'Opgeslagen als {name} in Downloads', en: 'Saved as {name} in Downloads' },
+  // --- Phase 5 block D.1: photos in the counters card + the "Met foto's" backup toggle ---
+  'storage.photos': { nl: 'Foto’s', en: 'Photos' },
+  'storage.withPhotos': { nl: 'Met foto’s', en: 'With photos' },
+  'storage.withPhotosHint': { nl: '{n} foto’s; maakt het bestand flink groter.', en: '{n} photos; makes the file much larger.' },
+  'storage.withPhotosHintOne': { nl: '1 foto; maakt het bestand flink groter.', en: '1 photo; makes the file much larger.' },
+  'storage.withPhotosNone': { nl: 'Nog geen foto’s op dit toestel.', en: 'No photos on this phone yet.' },
+  'storage.withPhotosBuilding': { nl: 'Foto’s inpakken…', en: 'Packing photos…' },
+  'storage.withPhotosSize': { nl: '{n} foto’s erbij — bestand wordt ±{size}.', en: '{n} photos included — file will be about {size}.' },
+  'storage.withPhotosSizeOne': { nl: '1 foto erbij — bestand wordt ±{size}.', en: '1 photo included — file will be about {size}.' },
+  'storage.restoredPhotos': { nl: '{n} foto’s teruggezet', en: '{n} photos restored' },
+  'storage.restoredPhotosOne': { nl: '1 foto teruggezet', en: '1 photo restored' },
   // --- Phase 5 (docs/phase-5-spec.md 30-09 "Reset app") ---
   'storage.reset': { nl: 'App resetten', en: 'Reset app' },
   'storage.resetHint': {
@@ -276,4 +295,49 @@ export const settings: Dict = {
   },
   'story.cooked': { nl: 'Samen al {n} van de {total} gekookt', en: 'Together we have cooked {n} of the {total}' },
   'story.cookedHint': { nl: 'Tik in de kookstand op "Gekookt!" en de teller loopt op.', en: 'Tap "Cooked!" in cooking mode and the counter goes up.' },
+  // --- Phase 5 block D (docs/phase-5-spec.md D.3): the household on the story page ---
+  'story.members': { nl: 'Wie koken er mee', en: 'Who cooks along' },
+
+  // --- Phase 5 block D (docs/phase-5-spec.md D.4): Curator — the English side of the classics ---
+  'curator.title': { nl: 'Curator', en: 'Curator' },
+  'curator.intro': {
+    nl: 'De Engelse kant van de 196 klassiekers. Nederlands is de referentie en blijft staan; je bewerkt alleen het Engels.',
+    en: 'The English side of the 196 classics. Dutch is the reference and stays put; you only edit the English.',
+  },
+  'curator.progress': { nl: '{n} van de {total} gecontroleerd', en: '{n} of {total} reviewed' },
+  'curator.filters': { nl: 'Filter', en: 'Filter' },
+  'curator.filter.all': { nl: 'Alle', en: 'All' },
+  'curator.filter.machine': { nl: 'Machine', en: 'Machine' },
+  'curator.filter.reviewed': { nl: 'Gecontroleerd', en: 'Reviewed' },
+  'curator.filter.missing': { nl: 'Ontbreekt', en: 'Missing' },
+  'curator.status.machine': { nl: 'machine', en: 'machine' },
+  'curator.status.reviewed': { nl: 'gecontroleerd', en: 'reviewed' },
+  'curator.status.missing': { nl: 'ontbreekt', en: 'missing' },
+  'curator.reviewedBy': { nl: 'Gecontroleerd door {name}', en: 'Reviewed by {name}' },
+  'curator.noEn': { nl: 'nog geen Engelse naam', en: 'no English name yet' },
+  'curator.empty': { nl: 'Niets in dit filter.', en: 'Nothing in this filter.' },
+  'curator.send': { nl: 'Stuur correcties', en: 'Send corrections' },
+  'curator.sendHint': {
+    nl: 'Deelt alle gecontroleerde klassiekers als correctiebericht; de andere telefoon neemt ze over via de Inbox.',
+    en: 'Shares every reviewed classic as a corrections message; the other phone adopts them through its Inbox.',
+  },
+  'curator.sendNone': {
+    nl: 'Nog niets te sturen — controleer eerst een recept en sla het op.',
+    en: 'Nothing to send yet — review a recipe and save it first.',
+  },
+  'curator.sendOne': { nl: '1 gecontroleerde klassieker klaar om te sturen.', en: '1 reviewed classic ready to send.' },
+  'curator.sendCount': { nl: '{n} gecontroleerde klassiekers klaar om te sturen.', en: '{n} reviewed classics ready to send.' },
+  'curator.sent': { nl: 'Correcties gedeeld', en: 'Corrections shared' },
+  'curator.backToList': { nl: 'Naar de lijst', en: 'Back to the list' },
+  'curator.name': { nl: 'Naam', en: 'Name' },
+  'curator.description': { nl: 'Omschrijving', en: 'Description' },
+  'curator.ingredients': { nl: 'Ingrediënten', en: 'Ingredients' },
+  'curator.steps': { nl: 'Stappen', en: 'Steps' },
+  'curator.enOf': { nl: 'Engels: {what}', en: 'English: {what}' },
+  'curator.save': { nl: 'Bewaar als gecontroleerd', en: 'Save as reviewed' },
+  'curator.saved': { nl: 'Bewaard — dit recept telt nu als gecontroleerd.', en: 'Saved — this recipe now counts as reviewed.' },
+  'curator.savedNoName': {
+    nl: 'Bewaard — zonder Engelse naam telt dit recept nog niet als gecontroleerd.',
+    en: 'Saved — without an English name this recipe does not count as reviewed yet.',
+  },
 };

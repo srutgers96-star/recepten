@@ -15,6 +15,7 @@
 // `?proto=1` (the Week screen's "Boodschappenlijst maken") builds the list and opens the proto step.
 // All data goes through src/db/repo.ts; the dictionary comes from the `dictionary` signal.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { isIOS } from '@/components/AppInfo';
 import { ExtraField } from '@/components/ExtraField';
 import { Header } from '@/components/Header';
 import { ListRow } from '@/components/ListRow';
@@ -42,6 +43,7 @@ import { effectiveQty, groupByAisle, isoWeekNumber, itemName, listAsText, render
 import type { Dictionary } from '@/domain/dictionary';
 import { nowIso, type Lang } from '@/domain/model';
 import { lang, t, tIn } from '@/i18n';
+import { printPage } from '@/print';
 import { navigate, route } from '@/router';
 import { copyText, shareText } from '@/share-actions';
 
@@ -152,9 +154,13 @@ export function ShoppingScreen() {
   const [shareHideChecked, setShareHideChecked] = useState(true);
   const [shareStatus, setShareStatus] = useState('');
   const [snack, setSnack] = useState<Snack | null>(null);
+  // "Gekopieerd ✓" flash on the "Kopieer als tekst" button (block D.2).
+  const [copiedFlash, setCopiedFlash] = useState(false);
+  const flashTimer = useRef<number | null>(null);
   const snackTimer = useRef<number | null>(null);
   const autoProto = useRef(false);
   const wake = useWakeLock(storeMode);
+  const ios = isIOS();
 
   const plan = useLive(getPlan, []);
   // `undefined` = not read yet, `null` = there is no list row.
@@ -176,6 +182,7 @@ export function ShoppingScreen() {
   useEffect(
     () => () => {
       if (snackTimer.current !== null) window.clearTimeout(snackTimer.current);
+      if (flashTimer.current !== null) window.clearTimeout(flashTimer.current);
     },
     [],
   );
@@ -326,6 +333,24 @@ export function ShoppingScreen() {
     });
   }
 
+  /** "Kopieer als tekst": the same text as the share preview (title, no in-house, ticked lines
+   *  per the share option), straight to the clipboard with a short "Gekopieerd ✓" flash. */
+  function doCopyAsText() {
+    if (!shareTextValue) return;
+    void copyText(shareTextValue).then((r) => {
+      if (!r.ok) {
+        showSnack(`${t('shop.copyError')}: ${r.error ?? ''}`);
+        return;
+      }
+      setCopiedFlash(true);
+      if (flashTimer.current !== null) window.clearTimeout(flashTimer.current);
+      flashTimer.current = window.setTimeout(() => {
+        flashTimer.current = null;
+        setCopiedFlash(false);
+      }, 1500);
+    });
+  }
+
   const sharedAt = list?.sharedAt ?? null;
   // repo.markListShared stamps sharedAt and updatedAt identically, so any later save counts.
   const changedSinceShare = !!sharedAt && !!list && new Date(list.updatedAt).getTime() > new Date(sharedAt).getTime();
@@ -462,10 +487,21 @@ export function ShoppingScreen() {
         <button type="button" class={'btn' + (shareOpen ? ' on' : '')} aria-expanded={shareOpen} disabled={items.length === 0} onClick={() => setShareOpen((v) => !v)}>
           {t('shop.share')}
         </button>
+        {/* window.print() is unreliable in the installed iPhone app (invariant 13): the honest
+            hint below replaces the button there — printing goes through the share sheet. */}
+        {!ios && (
+          <button type="button" class="btn" disabled={items.length === 0} onClick={() => printPage('shopping')}>
+            {t('shop.print')}
+          </button>
+        )}
+        <button type="button" class="btn" disabled={items.length === 0} onClick={doCopyAsText}>
+          {copiedFlash ? t('shop.copiedFlash') : t('shop.copyAsText')}
+        </button>
         <button type="button" class="btn" disabled={busy || done === 0} onClick={() => void finish()}>
           {t('shop.done')}
         </button>
       </div>
+      {ios && items.length > 0 && <p class="muted small shop-print-hint">{t('shop.printIOSHint')}</p>}
       <div class="shop-status" role="status">
         {storeMode && (wake === false ? t('shop.storeModeNo') : wake ? t('shop.storeModeOn') : '')}
         {storeMode && sharedAt ? ' · ' : ''}
