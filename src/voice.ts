@@ -7,8 +7,11 @@
 // or "put the tray back in the oven" from our own speaker would navigate.
 // The grammar lives framework-free in src/domain/voice.ts (parseVoiceCommand). The setting
 // `speech.commands` (default false) follows the src/celebrate.ts pattern. Honest capability
-// (CLAUDE.md invariant 13): the UI only offers the mic when `canListen()` is true.
+// (CLAUDE.md invariant 13): the UI only offers the mic when `canListen()` is true. iPhone is
+// excluded on purpose: Safari exposes the API, but in a Home Screen app it stops after every
+// phrase and keeps asking for the microphone (Stijn, 3 Oct 2026: not worth it for now).
 import { signal } from '@preact/signals';
+import { isIOS } from '@/components/AppInfo';
 import type { Lang } from '@/domain/model';
 import { parseVoiceCommand, type VoiceCommand } from '@/domain/voice';
 import { getSetting, setSetting } from '@/db/repo';
@@ -80,9 +83,9 @@ function recognitionCtor(): RecognitionCtor | null {
   return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
 
-/** True when this browser has a speech-recognition API at all. */
+/** True when this browser has a speech-recognition API and is not an iPhone/iPad. */
 export function canListen(): boolean {
-  return recognitionCtor() !== null;
+  return recognitionCtor() !== null && !isIOS();
 }
 
 // --- Listening ------------------------------------------------------------------------------------

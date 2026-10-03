@@ -67,12 +67,12 @@ export const settings: Dict = {
   // Honest capability text (CLAUDE.md invariant 13), phrased platform-neutrally: Android recognises
   // through Google (internet required), iPhone through Apple dictation (can even work on-device).
   'more.voiceCommandsHint': {
-    nl: 'Zeg "volgende", "vorige", "timer 10 minuten", "lees voor" of "stop" in de kookstand. Herkenning loopt via de spraakdienst van je telefoon en heeft meestal internet nodig. Op iPhone experimenteel.',
-    en: 'Say "next", "previous", "timer 10 minutes", "read" or "stop" in cooking mode. Recognition uses your phone’s speech service and usually needs internet. Experimental on iPhone.',
+    nl: 'Zeg "volgende", "vorige", "timer 10 minuten", "lees voor" of "stop" in de kookstand. Herkenning loopt via de spraakdienst van je telefoon en heeft meestal internet nodig.',
+    en: 'Say "next", "previous", "timer 10 minutes", "read" or "stop" in cooking mode. Recognition uses your phone’s speech service and usually needs internet.',
   },
   'more.voiceUnavailable': {
-    nl: 'Spraakherkenning is op dit toestel niet beschikbaar',
-    en: 'Speech recognition is not available on this device',
+    nl: 'Spraakcommando’s werken alleen op Android; voorlezen werkt overal',
+    en: 'Voice commands only work on Android; reading aloud works everywhere',
   },
   'more.timerSound': { nl: 'Timergeluid', en: 'Timer sound' },
   'more.timerSound.beeps': { nl: 'Piepjes', en: 'Beeps' },

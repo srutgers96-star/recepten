@@ -123,6 +123,8 @@ export const browse: Dict = {
   'cook.prepare': { nl: 'Klaarzetten', en: 'Get ready' },
   'cook.prepareHint': { nl: 'Vink af wat je hebt klaargezet.', en: 'Tick what you have set out.' },
   'cook.ready': { nl: '{n} van {total} klaar', en: '{n} of {total} ready' },
+  'cook.tickAll': { nl: 'Alles klaar ✓', en: 'All ready ✓' },
+  'cook.untickAll': { nl: 'Alles uitvinken', en: 'Untick all' },
   'cook.stepOf': { nl: 'Stap {n} van {total}', en: 'Step {n} of {total}' },
   'cook.stepShort': { nl: 'stap {n}', en: 'step {n}' },
   'cook.prev': { nl: 'Vorige', en: 'Previous' },

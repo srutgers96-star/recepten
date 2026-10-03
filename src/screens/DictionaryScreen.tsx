@@ -4,16 +4,25 @@
 // IngredientPicker → repo.mergeIngredient rewrites every reference in one transaction and keeps a
 // snapshot; the toast offers "Ongedaan") and Verwijder. "Opruimen" lists own entries whose name
 // already exists (repo.findOwnDuplicates) and merges them one by one or all at once.
+// Block E.2 on top of that: an aisle chip strip ("Alle" + every aisle that has entries, in
+// aisles.json order) that combines with the search field — without a query it lists the whole
+// aisle alphabetically; any filtered list renders at most PAGE rows and "Toon meer" adds the next
+// page, because the dictionary grows to ±1900 entries. A tap on a row opens a read-only detail
+// (both names with plural, aliases, aisle, default unit, flags as chips); own entries keep their
+// Bewerk/Fuseer/Verwijder. "+ Nieuw ingrediënt" sits next to the counter and opens the picker's own
+// form (`startNew` + `newOnly`, incl. the "Bestaat al" check); the counter shows the totals, or the
+// count for the active search/aisle ("312 in Groente & fruit").
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { IngredientPicker, ingredientLabel } from '@/components/IngredientPicker';
 import { deleteUserIngredient, findOwnDuplicates, mergeIngredient, saveUserIngredient, undoMerge, type OwnDuplicate } from '@/db/repo';
 import { baseDictionary, dictionary, isUserIngredientId, reloadDictionary, userIngredients } from '@/dictionary';
-import type { Ingredient } from '@/domain/dictionary';
+import { normalizeKey, type Ingredient } from '@/domain/dictionary';
 import type { Lang } from '@/domain/model';
 import { lang, t } from '@/i18n';
 
-const MAX_RESULTS = 60;
+/** Rows rendered at once; "Toon meer" adds another page (block E: the list must stay fast at ±1900 entries). */
+const PAGE = 100;
 const TOAST_MS = 9000;
 
 interface Toast {
@@ -25,6 +34,102 @@ interface Toast {
 /** The entry's name in the UI language (fallback other language, then id). */
 function nameOf(ing: Ingredient, l: Lang): string {
   return ing[l]?.one || ing[l === 'nl' ? 'en' : 'nl']?.one || ing.id;
+}
+
+/** "sjalot" plus "· meervoud: sjalotten" (muted) when the entry has a plural. */
+function NamePair(props: { n: { one: string; many?: string } | undefined }) {
+  const { n } = props;
+  if (!n?.one) return <>—</>;
+  return (
+    <>
+      {n.one}
+      {n.many && n.many !== n.one && <span class="muted"> · {t('dict.pluralOf', { many: n.many })}</span>}
+    </>
+  );
+}
+
+interface Flag {
+  key: string;
+  /** Diet chips (vegetarisch/vegan/glutenvrij) get the green diet look; the rest are plain info. */
+  diet: boolean;
+}
+
+/**
+ * The entry's flags as plain-language chips. A missing flag means "unknown" and shows nothing;
+ * `gluten` means "contains gluten": false (and not unsure) = gluten-free, true = "bevat gluten",
+ * `glutenUnsure` = "misschien gluten" (the same doubt diet.ts reports as "waarschijnlijk").
+ */
+function entryFlags(ing: Ingredient): Flag[] {
+  const flags: Flag[] = [];
+  if (ing.veg === true) flags.push({ key: 'dict.flag.veg', diet: true });
+  if (ing.vegan === true) flags.push({ key: 'dict.flag.vegan', diet: true });
+  if (ing.glutenUnsure === true) flags.push({ key: 'dict.flag.glutenUnsure', diet: false });
+  else if (ing.gluten === false) flags.push({ key: 'dict.flag.glutenfree', diet: true });
+  else if (ing.gluten === true) flags.push({ key: 'dict.flag.gluten', diet: false });
+  if (ing.perishable === true) flags.push({ key: 'dict.flag.perishable', diet: false });
+  if (ing.staple === true) flags.push({ key: 'dict.flag.staple', diet: false });
+  return flags;
+}
+
+/**
+ * Read-only detail of an entry (block E.2): both names (singular + plural), aliases, aisle,
+ * default unit and the flags as chips. Built-in entries are never editable here.
+ */
+function EntryDetail(props: { ing: Ingredient }) {
+  const { ing } = props;
+  const l = lang.value;
+  const dict = dictionary.value;
+  const aisleName = dict.aisle(ing.aisle)?.[l] ?? ing.aisle;
+  // UI language first; a name that is the same in both languages ("broccolini") is shown once.
+  const seenAlias = new Set<string>();
+  const aliases = [...(ing.aliases?.[l] ?? []), ...(ing.aliases?.[l === 'nl' ? 'en' : 'nl'] ?? [])].filter((a) => {
+    const k = normalizeKey(a);
+    if (seenAlias.has(k)) return false;
+    seenAlias.add(k);
+    return true;
+  });
+  const du = ing.defaultUnit;
+  let unitLabel: string;
+  if (!du) unitLabel = t('picker.unitNone');
+  else if (du === 'stuk') unitLabel = t('picker.unitPieces');
+  else {
+    const u = dict.unit(du);
+    unitLabel = u ? (u[l].long ?? u[l].one) : du;
+  }
+  const flags = entryFlags(ing);
+  return (
+    <div class="dw-detail">
+      <dl class="dw-facts">
+        <dt>{t('picker.nl')}</dt>
+        <dd>
+          <NamePair n={ing.nl} />
+        </dd>
+        <dt>{t('picker.en')}</dt>
+        <dd>
+          <NamePair n={ing.en} />
+        </dd>
+        {aliases.length > 0 && (
+          <>
+            <dt>{t('dict.aliases')}</dt>
+            <dd>{aliases.join(', ')}</dd>
+          </>
+        )}
+        <dt>{t('dict.aisleLabel')}</dt>
+        <dd>{aisleName}</dd>
+        <dt>{t('picker.unit')}</dt>
+        <dd>{unitLabel}</dd>
+      </dl>
+      {flags.length > 0 && (
+        <ul class="dw-flags" aria-label={t('dict.flags')}>
+          {flags.map((f) => (
+            <li key={f.key} class={'dw-flag' + (f.diet ? ' dw-flag-diet' : '')}>
+              {t(f.key)}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 /** Inline form for an own entry: names in both languages and the aisle. */
@@ -109,6 +214,11 @@ interface EntryRowProps {
   ing: Ingredient;
   busy: boolean;
   editing: boolean;
+  /** Detail block open; a tap on the name toggles it (block E.2). */
+  open: boolean;
+  onToggle: () => void;
+  /** An aisle filter is on: the aisle name under every row would only repeat the chip. */
+  hideAisle: boolean;
   onEdit: () => void;
   onCancelEdit: () => void;
   onSave: (next: Ingredient) => void;
@@ -127,13 +237,17 @@ function EntryRow(props: EntryRowProps) {
   const aisleName = dict.aisle(ing.aisle)?.[l] ?? ing.aisle;
   return (
     <li class="dw-row">
-      <div class="dw-row-main">
+      <button type="button" class="dw-rowbtn" aria-expanded={props.open} onClick={props.onToggle}>
         <span class="dw-name">
           {name}
           {own && <span class="badge badge-muted">{t('dict.own')}</span>}
-          <span class="dw-sub muted small">{[alt && alt !== name ? alt : '', aisleName].filter(Boolean).join(' · ')}</span>
+          <span class="dw-sub muted small">{[alt && alt !== name ? alt : '', props.hideAisle ? '' : aisleName].filter(Boolean).join(' · ')}</span>
         </span>
-      </div>
+        <span class={'dw-caret' + (props.open ? ' open' : '')} aria-hidden="true">
+          ▸
+        </span>
+      </button>
+      {props.open && !props.editing && <EntryDetail ing={ing} />}
       {own && !props.editing && (
         <div class="dw-actions">
           <button type="button" class="btn btn-small" disabled={props.busy} onClick={props.onEdit}>
@@ -158,6 +272,12 @@ export function DictionaryScreen() {
   const own = userIngredients.value;
   const builtinCount = baseDictionary().ingredients.length;
   const [query, setQuery] = useState('');
+  // Block E.2: aisle chip filter (null = "Alle") and the one expanded detail row.
+  const [aisle, setAisle] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<string | null>(null);
+  // Rows rendered for one filter combination: a new query or aisle starts at PAGE again without
+  // an extra render (the count belongs to the key it was raised for).
+  const [paging, setPaging] = useState<{ key: string; n: number }>({ key: '', n: PAGE });
   const [editing, setEditing] = useState<string | null>(null);
   const [mergeFor, setMergeFor] = useState<Ingredient | null>(null);
   const [newOpen, setNewOpen] = useState(false);
@@ -173,13 +293,57 @@ export function DictionaryScreen() {
   }, [toast]);
 
   const q = query.trim();
-  const results = useMemo(() => {
-    if (!q) return [];
-    const hits = dict.search(q, l);
-    const ownHits = hits.filter((i) => isUserIngredientId(i.id));
-    const rest = hits.filter((i) => !isUserIngredientId(i.id));
-    return [...ownHits, ...rest].slice(0, MAX_RESULTS);
-  }, [q, dict, l]);
+
+  /** Entries per aisle id (one pass over the whole dictionary): chips only for aisles that have entries. */
+  const aisleCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const i of dict.ingredients) counts.set(i.aisle, (counts.get(i.aisle) ?? 0) + 1);
+    return counts;
+  }, [dict]);
+  // aisles.json order (Dictionary sorts by `order`); the chosen one stays even if it emptied out.
+  const aisleChips = dict.aisles.filter((a) => (aisleCounts.get(a.id) ?? 0) > 0 || a.id === aisle);
+
+  /**
+   * Everything the active filters allow, unpaged: search hits (own first, then by rank), narrowed
+   * to the chosen aisle; without a query the whole aisle alphabetically in the UI language.
+   * Empty when no filter is active (the default view: own entries + Opruimen).
+   */
+  const filtered = useMemo(() => {
+    if (q) {
+      const hits = dict.search(q, l);
+      const inAisle = aisle ? hits.filter((i) => i.aisle === aisle) : hits;
+      const ownHits = inAisle.filter((i) => isUserIngredientId(i.id));
+      const rest = inAisle.filter((i) => !isUserIngredientId(i.id));
+      return [...ownHits, ...rest];
+    }
+    if (aisle) {
+      const collator = new Intl.Collator(l, { sensitivity: 'base', numeric: true });
+      return dict.ingredients.filter((i) => i.aisle === aisle).sort((a, b) => collator.compare(nameOf(a, l), nameOf(b, l)));
+    }
+    return [];
+  }, [q, aisle, dict, l]);
+  const filterKey = `${aisle ?? ''}\u0000${q}`;
+  const shown = paging.key === filterKey ? paging.n : PAGE;
+  const visible = filtered.length > shown ? filtered.slice(0, shown) : filtered;
+  const filtering = q !== '' || aisle !== null;
+  const aisleLabel = aisle ? (dict.aisle(aisle)?.[l] ?? aisle) : '';
+  // Counter line: the totals by default, otherwise the count for the active filter(s).
+  const countText = q
+    ? aisle
+      ? t('dict.countFoundAisle', { n: filtered.length, name: aisleLabel })
+      : t('dict.countFound', { n: filtered.length })
+    : aisle
+      ? t('dict.countAisle', { n: filtered.length, name: aisleLabel })
+      : t('dict.counts', { builtin: builtinCount, own: own.length });
+
+  /** After "+ Nieuw ingrediënt" (or "Gebruik" on its "Bestaat al" banner): show that entry, opened. */
+  function showEntry(id: string) {
+    const ing = dictionary.value.get(id);
+    if (!ing) return;
+    setAisle(null);
+    setQuery(nameOf(ing, l));
+    setOpenId(id);
+  }
 
   async function saveEntry(next: Ingredient) {
     setBusy(true);
@@ -271,6 +435,9 @@ export function DictionaryScreen() {
     ing,
     busy,
     editing: editing === ing.id,
+    open: openId === ing.id,
+    onToggle: () => setOpenId((cur) => (cur === ing.id ? null : ing.id)),
+    hideAisle: aisle !== null && ing.aisle === aisle,
     onEdit: () => setEditing(ing.id),
     onCancelEdit: () => setEditing(null),
     onSave: (next) => void saveEntry(next),
@@ -292,17 +459,52 @@ export function DictionaryScreen() {
           value={query}
           onInput={(e) => setQuery((e.currentTarget as HTMLInputElement).value)}
         />
-        <p class="muted small dw-counts">{t('dict.counts', { builtin: builtinCount, own: own.length })}</p>
+        {/* Counter + "+ Nieuw ingrediënt" (block E.2: the picker's own form, incl. "Bestaat al"). */}
+        <div class="dw-head">
+          <p class="muted small dw-counts" aria-live="polite">
+            {countText}
+          </p>
+          <button type="button" class="btn btn-secondary" disabled={busy} onClick={() => setNewOpen(true)}>
+            {t('dict.new')}
+          </button>
+        </div>
 
-        {q ? (
-          results.length === 0 ? (
+        {/* Aisle filter: scrollable chip strip in aisles.json order; combines with the search field. */}
+        <div class="chips dw-aisles" role="group" aria-label={t('dict.aisleFilter')}>
+          <button type="button" class={'chip' + (aisle === null ? ' on' : '')} aria-pressed={aisle === null} onClick={() => setAisle(null)}>
+            {t('dict.aisleAll')}
+          </button>
+          {aisleChips.map((a) => (
+            <button
+              key={a.id}
+              type="button"
+              class={'chip' + (aisle === a.id ? ' on' : '')}
+              aria-pressed={aisle === a.id}
+              onClick={() => setAisle((cur) => (cur === a.id ? null : a.id))}
+            >
+              {a[l]}
+            </button>
+          ))}
+        </div>
+
+        {filtering ? (
+          filtered.length === 0 ? (
             <div class="empty">{t('dict.noResults')}</div>
           ) : (
-            <ul class="dw-list">
-              {results.map((ing) => (
-                <EntryRow key={ing.id} {...rowProps(ing)} />
-              ))}
-            </ul>
+            <>
+              <ul class="dw-list">
+                {visible.map((ing) => (
+                  <EntryRow key={ing.id} {...rowProps(ing)} />
+                ))}
+              </ul>
+              {filtered.length > visible.length && (
+                <div class="dw-more">
+                  <button type="button" class="btn" onClick={() => setPaging({ key: filterKey, n: shown + PAGE })}>
+                    {t('dict.showMore', { n: filtered.length - visible.length })}
+                  </button>
+                </div>
+              )}
+            </>
           )
         ) : (
           <>
@@ -317,11 +519,6 @@ export function DictionaryScreen() {
                   ))}
                 </ul>
               )}
-              <div class="actions">
-                <button type="button" class="btn btn-secondary btn-block" disabled={busy} onClick={() => setNewOpen(true)}>
-                  {t('dict.new')}
-                </button>
-              </div>
               <p class="muted small">{t('dict.searchHint', { n: dict.ingredients.length })}</p>
             </section>
 
@@ -391,15 +588,17 @@ export function DictionaryScreen() {
         }}
         onClose={() => setMergeFor(null)}
       />
-      {/* "+ Nieuw ingrediënt": the picker's form (with its "Bestaat al" check). */}
+      {/* "+ Nieuw ingrediënt": the picker's form (with its "Bestaat al" check); Annuleren closes it. */}
       <IngredientPicker
         open={newOpen}
         startNew
-        onPick={(id) => {
+        newOnly
+        onPick={(id, created) => {
           setNewOpen(false);
-          // "Gebruik" on the "Bestaat al" banner picks an existing entry: nothing was added then.
+          // "Gebruik" on the "Bestaat al" banner picks an entry that was there already: nothing added.
           const ing = dictionary.value.get(id);
-          if (ing && isUserIngredientId(id)) setToast({ text: t('dict.created', { name: ingredientLabel(ing, l) }) });
+          if (ing && created) setToast({ text: t('dict.created', { name: ingredientLabel(ing, l) }) });
+          showEntry(id);
         }}
         onClose={() => setNewOpen(false)}
       />

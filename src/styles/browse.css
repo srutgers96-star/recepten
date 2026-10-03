@@ -843,6 +843,25 @@ textarea.input.notes {
   margin: 16px 0 0;
 }
 
+/* Klaarzetten: the ready counter with "Alles klaar ✓" beside it, visible without scrolling. */
+.cook-ready-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0 0 12px;
+}
+
+.cook-ready-row p {
+  margin: 0;
+  flex: 1 1 180px;
+}
+
+.cook-tick-all {
+  flex: none;
+  min-height: 44px;
+}
+
 .cook-done h2 {
   font-size: 30px;
   font-weight: 700;

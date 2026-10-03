@@ -2,7 +2,7 @@
   "generatedBy": "node --experimental-strip-types tools/gen-golden.ts",
   "source": "data/source/recipes-recepten2.json",
   "dictionary": {
-    "ingredients": 378,
+    "ingredients": 1601,
     "units": 49,
     "qualifiers": 100,
     "prepPhrases": 152
@@ -18892,18 +18892,15 @@
             },
             "qty": null,
             "unit": null,
-            "ing": "gehakt",
-            "name": "gehakt",
-            "qual": [
-              "vegetarische"
-            ],
+            "ing": "vegagehakt",
+            "name": "vegetarisch gehakt",
             "confidence": 1
           }
         ],
         "altMode": "or",
         "confidence": 1
       },
-      "nl": "350 g rundergehakt (of vegetarische gehakt)",
+      "nl": "350 g rundergehakt (of vegagehakt)",
       "en": "350 g beef mince (or vegetarian mince)"
     },
     {
@@ -22984,18 +22981,15 @@
             },
             "qty": null,
             "unit": null,
-            "ing": "gehakt",
-            "name": "gehakt",
-            "qual": [
-              "vegetarische"
-            ],
+            "ing": "vegagehakt",
+            "name": "vegetarisch gehakt",
             "confidence": 1
           }
         ],
         "altMode": "or",
         "confidence": 1
       },
-      "nl": "500 g rundergehakt (of vegetarische gehakt)",
+      "nl": "500 g rundergehakt (of vegagehakt)",
       "en": "500 g beef mince (or vegetarian mince)"
     },
     {

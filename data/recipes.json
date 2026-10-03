@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "dataVersion": 3,
-  "generatedAt": "2026-10-01T15:54:05.326Z",
+  "generatedAt": "2026-10-03T00:44:27.523Z",
   "recipes": [
     {
       "schema": 2,
@@ -17144,11 +17144,8 @@
               },
               "qty": null,
               "unit": null,
-              "ing": "gehakt",
-              "name": "gehakt",
-              "qual": [
-                "vegetarische"
-              ],
+              "ing": "vegagehakt",
+              "name": "vegetarisch gehakt",
               "confidence": 1
             }
           ],
@@ -34086,11 +34083,8 @@
               },
               "qty": null,
               "unit": null,
-              "ing": "gehakt",
-              "name": "gehakt",
-              "qual": [
-                "vegetarische"
-              ],
+              "ing": "vegagehakt",
+              "name": "vegetarisch gehakt",
               "confidence": 1
             }
           ],

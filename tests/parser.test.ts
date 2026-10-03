@@ -385,7 +385,9 @@ describe('A-bis: English input with the full dictionary', () => {
     expect(full.findExisting('Cilantro', 'nl')?.id).toBe('koriander');
     expect(full.findExisting('Maïzena', 'en')?.id).toBe('maizena');
     expect(full.findExisting('mince meat')?.id).toBe('gehakt');
-    expect(full.findExisting('barbecue sauce')).toBeUndefined();
+    // A name that is new (the block-E dictionary knows "barbecue sauce" now, so use a made-up one).
+    expect(full.findExisting('barbecue sauce')?.id).toBe('barbecuesaus');
+    expect(full.findExisting('grootmoeders geheime kruidenmix')).toBeUndefined();
     expect(full.findExisting('')).toBeUndefined();
   });
 

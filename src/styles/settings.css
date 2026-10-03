@@ -731,3 +731,154 @@
   border-bottom: 0;
   margin-top: 4px;
 }
+
+/* ---------- Phase 5 block E: Woordenboek — aisle chips, entry detail, paging ----------
+   The base .dw-* styles live in edit.css (A-bis.6); these are the block-E additions only. */
+
+/* Counter + "+ Nieuw ingrediënt" side by side above the aisle chips. The counter wraps inside its
+   own column (two short lines fit the 44 px button height at 360 px), so the row never jumps when
+   the counter text changes with the filter. */
+.dw-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin: 0 0 8px;
+}
+
+.dw-head .dw-counts {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.dw-head .btn {
+  flex: none;
+  min-height: 44px;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+/* Aisle filter: horizontal chip strip (scroll + edge bleed come from .chips in browse.css). */
+.dw-aisles {
+  margin-bottom: 8px;
+}
+
+.dw-aisles .chip {
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--line);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dw-aisles .chip.on {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  box-shadow: none;
+}
+
+/* The whole name area toggles the read-only detail (44 px target). */
+.dw-rowbtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dw-rowbtn:active {
+  background: var(--press);
+}
+
+.dw-caret {
+  flex: none;
+  color: var(--muted);
+  font-size: 12px;
+  transition: transform 0.15s ease;
+}
+
+.dw-caret.open {
+  transform: rotate(90deg);
+}
+
+/* Read-only entry detail: a card with a label/value grid and the flag chips (both themes via tokens). */
+.dw-detail {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.dw-facts {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  gap: 6px 12px;
+  margin: 0;
+}
+
+.dw-facts dt {
+  margin: 0;
+  max-width: 9.5em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.dw-facts dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.dw-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Info chips (kort houdbaar, voorraadkast, bevat gluten): neutral. Not tappable, so no 44 px. */
+.dw-flag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--press);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Diet chips (vegetarisch, vegan, glutenvrij): the rosemary outline of the diet filter chips. */
+.dw-flag-diet {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--rosemary);
+  color: var(--rosemary);
+}
+
+/* "Toon meer (nog N)": one full-width page button under the list. */
+.dw-more {
+  margin: 10px 0 4px;
+}
+
+.dw-more .btn {
+  width: 100%;
+  min-height: 44px;
+}

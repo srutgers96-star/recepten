@@ -26,7 +26,14 @@ export interface IngredientPickerProps {
   excludeId?: string;
   /** False hides "+ Nieuw ingrediënt" (a merge target must exist already). Default true. */
   allowNew?: boolean;
-  onPick: (id: string) => void;
+  /**
+   * The sheet is only the "Nieuw ingrediënt" form (Woordenboek → "+ Nieuw ingrediënt", block E.2;
+   * use with `startNew`): Annuleer closes the sheet instead of going back to the link search, and
+   * the save button says "Zet in woordenboek" (nothing is linked there).
+   */
+  newOnly?: boolean;
+  /** `created` is true when the id is the entry this sheet just saved (not an existing one picked). */
+  onPick: (id: string, created?: boolean) => void;
   onClose: () => void;
 }
 
@@ -147,7 +154,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
       };
       await saveUserIngredient(entry);
       await reloadDictionary();
-      props.onPick(entry.id);
+      props.onPick(entry.id, true);
     } catch (e) {
       setError(String(e));
     } finally {
@@ -300,11 +307,11 @@ export function IngredientPicker(props: IngredientPickerProps) {
             </label>
             {error && <div class="bad small">{error}</div>}
             <div class="actions">
-              <button type="button" class="btn" disabled={busy} onClick={() => setMode('search')}>
-                {t('picker.cancel')}
+              <button type="button" class="btn" disabled={busy} onClick={() => (props.newOnly ? props.onClose() : setMode('search'))}>
+                {props.newOnly ? t('common.cancel') : t('picker.cancel')}
               </button>
               <button type="submit" class="btn btn-primary" disabled={busy || !!existingShown}>
-                {t('picker.save')}
+                {props.newOnly ? t('dict.newSave') : t('picker.save')}
               </button>
             </div>
           </form>

@@ -397,6 +397,7 @@ export function CookScreen(props: { id: string }) {
   const stepIndex = page - 1;
   const tickable = lines.map((ln, i) => (ln.kind === 'header' ? -1 : i)).filter((i) => i >= 0);
   const tickedCount = tickable.filter((i) => ticked.has(i)).length;
+  const allTicked = tickable.length > 0 && tickedCount === tickable.length;
 
   return (
     <>
@@ -439,9 +440,16 @@ export function CookScreen(props: { id: string }) {
               {isPrepare && (
                 <>
                   <div class="cook-kicker">{t('cook.prepare')}</div>
-                  <p class="muted">
-                    {t('cook.prepareHint')} {tickable.length > 0 && <strong>{t('cook.ready', { n: tickedCount, total: tickable.length })}</strong>}
-                  </p>
+                  <div class="cook-ready-row">
+                    <p class="muted">
+                      {t('cook.prepareHint')} {tickable.length > 0 && <strong>{t('cook.ready', { n: tickedCount, total: tickable.length })}</strong>}
+                    </p>
+                    {tickable.length > 0 && (
+                      <button type="button" class="btn btn-secondary cook-tick-all" onClick={() => setTicked(allTicked ? new Set() : new Set(tickable))}>
+                        {allTicked ? t('cook.untickAll') : t('cook.tickAll')}
+                      </button>
+                    )}
+                  </div>
                   <ServingsPicker compact value={servings} base={base} onChange={onServings} />
                   <IngredientList
                     recipeId={id}
