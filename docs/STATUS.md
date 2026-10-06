@@ -44,6 +44,9 @@ er was alleen een lichte eigen controle. Daarom, als eerste stap van de volgende
      elstar/jonagold → appel, philadelphia → roomkaas; qualifier "platte" → "flat-leaf peach";
      "plantaardige" als vegan in diet.ts): beoordelen;
    - DATA_VERSION staat nog op 3: de 2 verbeterde receptregels bereiken de telefoons pas na een bump.
+   - ontbrekend in het woordenboek (screenshot Stijn 6 okt): sultana's (sultanas) en dessertwijn
+     (botrytis-/sémillonwijn); zie docs/phase-6-spec.md 6A.11. De vertaal-plakbug (6A.1) mag Fable
+     meteen meenemen als die klein blijkt.
    Het merge-rapport met alle details staat in het workflow-journal van run wf_c22cac7a-4bf.
 2. Daarna pas **blok F** (raakt het deel-contract, invariant 4 — op Fable met volledige review).
 

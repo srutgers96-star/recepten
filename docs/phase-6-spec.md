@@ -6,13 +6,18 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
 
 ## Blok 6A — Snelle verbeteringen en bugs
 
-1. **Bug: importeren vult de verkeerde naamvakjes (M).** Stijn: "Als ik toevoeg, staat er alleen de
-   Engelse naam, of de Nederlandse in het vakje Engels. De Engelse vertaling kwam pas mee als ik
-   toevoegde in het Engelse scherm, terwijl die wel in het importveld geplakt was."
-   Verwachting: een tweetalig AI-antwoord (blokken `=== NL ===` en `=== EN ===`) vult altijd beide
-   kolommen (naam, regels, stappen), los van de taal waarin de app staat. Eerst reproduceren in beide
-   UI-talen (src/domain/photo-import.ts `parseBilingualPlain` → EditScreen); test erbij die het pint.
-   *Open vraag 1* hieronder (precieze route + de geplakte tekst).
+1. **Bug: vertaling plakken werkt alleen goed als de app op Engels staat (M).** Stijn (6 okt):
+   route = in de editor de **vertaalprompt** ("Kopieer voor vertaling" → AI → "Plak vertaling").
+   Met de app op **NL** plakte hij een antwoord met Nederlands én Engels, maar de app nam er maar één
+   van over; met de app op **EN** werkte het wel. Ook: "hij was wel al vertaald maar had het niet altijd
+   door, afhankelijk van welke taal geselecteerd was". Screenshot (editor, stand "beide"):
+   `NL 50 g sultana's` / `EN 50 g sultana's` (Nederlands in het Engelse vak) en
+   `NL 25 g botrytis-sémillonwijn` / `EN 25 g botrytis Semillon wine` (wel vertaald); beide regels
+   onbekend in het woordenboek (oranje "?"-chip).
+   Verwachting: plakken vult altijd beide kolommen (naam, regels, stappen, notities), los van de
+   UI-taal. Reproduceren in beide UI-talen (EditScreen → `applyTranslationAnswer` /
+   `buildTranslationPrompt`, src/domain/translate-prompt*), test erbij die het voor NL én EN pint.
+   Controleer ook de import-route (`parseBilingualPlain`) op hetzelfde UI-taal-probleem.
 2. **Curator: ingrediënten tonen de woordenboekvertaling (M).** Nu zijn de Engelse ingrediëntvakjes
    leeg (placeholder "EN"), terwijl de app de regels in het Engels toont via het woordenboek. Als Gabi
    daar zelf tekst typt, botst die met het woordenboek (schalen, eenheden). Voorstel: per regel die het
@@ -35,9 +40,8 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
    Jij & je huishouden (profiel, huishouden, badges/level) · Instellingen (taal, thema, confetti, °F,
    kookstand & timer) · Recepten & delen (Inbox, deel je nieuwe recepten, controleer mijn recepten,
    woordenboek) · Opslag & back-up · Hulp & over (handleiding, feedback, **Testen & nakijken** =
-   apparaatcheck + testlijst + curator op één plek, versie). Zie ook Stijns screenshot-idee
-   (de bijlage kwam door als thumbnail van 72×61 px, te klein om te lezen; zo nodig opnieuw sturen).
-7. **Feedback-knop "Feedback voor Stijn" (S).** Tekstvak → delen via het deelmenu (WhatsApp/mail),
+   apparaatcheck + testlijst + curator op één plek, versie).
+7. **Feedback-knop "Feedback voor Stijn" (S)** en daarnaast de **doneerknop** (zie Besluiten). Tekstvak → delen via het deelmenu (WhatsApp/mail),
    met app-versie, kanaal en toestel automatisch eronder. Geen server (invariant 14). **Geen
    telefoonnummer of e-mailadres in de code**: de repo en site zijn openbaar; de gebruiker kiest Stijn
    zelf in WhatsApp.
@@ -50,17 +54,28 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
 9. **Plak-prompt vult labels en categorie al in (S).** De importprompt vraagt al om
    "Categorie:" / "Labels:" (fase 5 A.5). Controleren dat die na plakken de chips **invullen** (niet
    alleen voorstellen), inclusief de nieuwe keuken-labels uit 6B.
+10. **Rechte haakjes in de AI-prompts (S, idee Stijn).** De klassiekers schrijven bereiding en
+    notities al tussen rechte haakjes ("1 sjalotje [gesnipperd]"). Als de parser dat betrouwbaar
+    scheidt, vragen de import- en vertaalprompt de AI om hetzelfde formaat: "hoeveelheid eenheid naam
+    [bereiding of notitie]". Eerst nagaan hoe de parser haakjes nu behandelt.
+11. **Ontbrekende woordenboekwoorden uit de screenshot (S).** sultana's (EN sultanas; eigen product
+    naast rozijn) en dessertwijn (aliassen botrytiswijn, sémillonwijn; EN dessert wine). Meenemen in de
+    Fable-review van blok E.
 
 ## Blok 6B — Nieuwe labels
 
 1. **Lactosevrij (M, data-pass).** Nieuwe vlag `lactose` op alle ±1600 ingrediënten (plus
    `lactoseUnsure`), tags `lactosevrij` / `lactosevrij-optie`, dieetchip en filter zoals glutenvrij,
-   validator-regel "alles of niets" zoals de andere dieetvlaggen, en een badge. *Open vraag 6.*
+   validator-regel "alles of niets" zoals de andere dieetvlaggen, en een badge. **Alle**
+   ingrediënten krijgen de vlag. Besluit Stijn: oude harde kazen (Parmezaan, oude Gouda) tellen als
+   lactosevrij.
 2. **Keukens / nationaliteit (M, data-pass).** Woordenlijst `data/cuisines.json` (tweetalig):
    Hollands, Italiaans, Frans, Spaans, Grieks, Midden-Oosten, Marokkaans, Indiaas, Thais, Chinees,
-   Japans, Indonesisch, Surinaams, Mexicaans, Amerikaans, Brits, … Veld op het recept (lijst van ids),
-   toegekend aan de 196 klassiekers (data-agents + validator), filterchips op Home/Recepten/Kies 7.
-   Het bestaande label "wereld" vervalt of blijft als verzamelnaam. *Open vraag 4.*
+   Japans, Indonesisch, Surinaams, Mexicaans, Amerikaans, Brits, … Besluit Stijn: **één keuken per
+   recept, en alleen als het écht uit die keuken komt** (veel Italiaans en Hollands, veel recepten
+   zonder). Veld `cuisine: id | null` op het recept, toegekend aan de 196 klassiekers (data-agents +
+   validator), filterchips op Home/Recepten/Kies 7. Het bestaande label "wereld" blijft als
+   verzamelnaam voor gerechten zonder duidelijke keuken.
 3. **Labels als laatste stap bij een nieuw recept (S).** De editor eindigt met een stap "Labels":
    aanklikbare chips voor keuken, dieet en de overige labels, voorgevuld door de suggestie of de
    geplakte AI-tekst (6A.9).
@@ -77,7 +92,9 @@ Voor wie elke week (deels) hetzelfde koopt. De bestaande "Elke week"-pin in de l
 - Bij elke nieuwe weeklijst komen de vaste producten erbij, met per regel **"heb ik al"** (overslaan
   voor deze week) en een hoeveelheid die je **alleen voor deze week** aanpast (2 l i.p.v. 3 l);
   "ook voortaan" past de vaste lijst zelf aan.
-- Werkt ook zonder recepten (PLAN §0: de lijst is ook een losse boodschappen-app). *Open vraag 5.*
+- Werkt ook zonder recepten (PLAN §0: de lijst is ook een losse boodschappen-app).
+- Voorbeeld Stijn: elke week in ieder geval 1 pot mayonaise, 1 pot pindakaas en x liter melk
+  (aanpasbaar). Besluit: **één vaste lijst per huishouden** (een huishouden van één persoon = per persoon).
 
 ## Blok 6D — XP, levels, badge-niveaus (L, meerdere sessies)
 
@@ -86,12 +103,16 @@ Confetti uit = geen animaties. **De app blijft rustig**: XP verschijnt alleen op
 (koken, beoordelen, foto, badge), nooit tijdens bladeren. Waarom XP varieert wordt in de app niet
 uitgelegd (wel in de handleiding voor Stijn, blok Z).
 
-**Ontwerpprincipe (belangrijk voor 30 jaar gebruik):** XP wordt niet opgeteld in een teller maar
-**afgeleid uit wat er al bewaard wordt** (kooklog, foto's, recepten, verdiende badges). Elke
-willekeurige uitkomst gebruikt een vaste "dobbelsteen" per gebeurtenis (seed = id van die
-gebeurtenis). Daardoor: na een back-up terugzetten of een nieuwe telefoon is je level precies
-hetzelfde, herladen geeft geen nieuwe worp, en er kan niets "uit de pas" raken. Getallen blijven
-klein (max level ≈ 1,1 miljoen XP).
+**Wat je ziet:** op je profiel je level, titel en een **XP-balk met hoeveel XP je nog nodig hebt**
+voor het volgende level ("Level 6 · Oma — 922 / 1.500 XP").
+
+**Hoe het achter de schermen werkt (onzichtbaar voor de gebruiker, belangrijk voor 30 jaar):** de app
+bewaart niet één getal "922 XP" dat steeds wordt opgehoogd, maar **rekent je XP elke keer opnieuw uit**
+uit wat er toch al bewaard wordt: kooklog, foto's, recepten en badges. Zo'n opgeteld getal kan
+kwijtraken of scheef gaan (half opgeslagen, back-up van een ouder moment, twee telefoons); een
+herberekening niet. De "dobbelsteen" voor variatie en crits ligt per gebeurtenis vast (seed = id van
+die kookbeurt/foto). Daardoor is je level na een back-up of op een nieuwe telefoon precies hetzelfde,
+en geeft opnieuw laden geen nieuwe worp. Getallen blijven klein (max level ≈ 1,1 miljoen XP).
 
 **XP-bronnen (basis, vóór variatie):**
 | Actie | XP |
@@ -122,30 +143,63 @@ Een week zonder je overslaan-dag te gebruiken geeft de bonus van +50.
 Wie twee keer per week kookt zit na een jaar rond level 14 en na drie jaar rond 22: vlot in het
 begin, daarna loont dagelijks koken.
 
-**Titels (voorstel, Stijn vult aan):** 1 Keukenpiep · 3 Aardappelschiller · 6 Oma · 10 Hulpkok ·
-15 Commis · 20 Sous-chef · 25 Chef de partie · 30 Chef · 40 Chefkok · 50 Masterchef ·
-60 Jamie Oliver · 70 Nigella · 80 Gordon Ramsay · 90 Michelinster · 100 T-rex.
+**Titels (voorstel, Stijn vult aan):** 1 Keukenpiep · 2 **T-rex** (te korte armpjes, kan nog niet
+koken — de grap van Stijn) · 3 Aardappelschiller · 6 Oma · 10 Hulpkok · 15 Commis · 20 Sous-chef ·
+25 Chef de partie · 30 Chef · 40 Chefkok · 50 Masterchef · 60 Jamie Oliver · 70 Nigella ·
+80 Gordon Ramsay · 90 Michelinster · **100 = MAX LEVEL** met een epische naam (voorstellen:
+"Keukenlegende", "Opperkok van het Fornuis", "De Grote Roerganger"; Stijn kiest).
 (Namen van echte chefs: prima voor privégebruik; vervangen als de app ooit breder gaat.)
-Profiel toont bv. **"Level 6 · Oma — 922 / 1.500 XP"** met een voortgangsbalk.
 
-**Badge-niveaus:** herhaalbare badges krijgen 8 niveaus — geel, groen, blauw, rood, brons, zilver,
-goud, platina — met drempels per soort (bv. koken: 1 · 10 · 25 · 50 · 100 · 250 · 500 · 1000).
-Eenmalige badges blijven eenmalig. **Geheime badges** (±10, bv. koken na middernacht, drie dagen
-achter elkaar hetzelfde recept, een Overcooked! gegooid) zijn onzichtbaar tot je ze hebt; de pagina
-toont alleen "3 geheime badges gevonden".
+**Badges: een eigen deelplan binnen 6D ("veel meer badges", wens Stijn).** De huidige 43 worden een
+grote catalogus (richting 120–150), gemengd zodat je ze allemaal wilt hebben:
+- **Doortellende badges met kleurniveaus:** 8 niveaus — geel, groen, blauw, rood, brons, zilver, goud,
+  platina — met drempels per soort (bv. koken: 1 · 10 · 25 · 50 · 100 · 250 · 500 · 1000). Elk volgend
+  niveau duurt **langer maar levert meer XP** op.
+- **Eenmalige badges** (bv. eerste eigen recept, eerste foto, alle 196 gekookt).
+- **Badges die aflopen** (*interpretatie, bevestigen*): tijdgebonden badges die alleen in een periode
+  te halen zijn (seizoen: "10 salades in juli", feestdagen: "Kerstdiner 2026"), en reeks-badges die je
+  kwijtraakt als de reeks breekt.
+- **Verborgen badges voor app-ontdekkers:** onzichtbaar tot je ze hebt, en je verdient ze door
+  functies te ontdekken (eerste spraakcommando, recept geprint, weekplan gedeeld, QR getoond, thema
+  gewisseld …). Plus een paar gekke geheime badges (koken na middernacht, drie dagen achter elkaar
+  hetzelfde recept, een Overcooked! gegooid). De pagina toont alleen "3 geheime badges gevonden".
+- **Badge-groepen** op de badgepagina: Koken · Ontdekken (196) · Keukens van de wereld · Seizoenen ·
+  Samen & delen · Fotografie · Reeksen · Geheim.
+Aanpak: eerst de catalogus als lijst laten goedkeuren door Stijn, dan bouwen (data/badges.json +
+validator + evaluatie-uitbreiding).
 
 **Wat je ziet:** een klein blauw **+12** in de hoek (na de confetti). Meerdere beloningen bij één
 actie: snel na elkaar **+12 +43 +11 +33**, daarna de som eronder. Cooked!: gouden letters.
 Overcooked!: het scherm schudt kort en zegt **OVERCOOKED!** (geen schudden bij "minder beweging").
 
 **Ontgrendelingen (semi-verborgen, pas zichtbaar bij level-up, "Ontgrendeld: dubbele confetti &
-koebel"):** bv. 5 koebel als timergeluid · 10 dubbele confetti · 15 groente-confetti · 25 krijtbord-
-lettertype in de kookstand · 35 gekke confetti (kippen, taartjes) · 50 gouden thema · 75 … · 100
-T-rex-confetti. Per ontgrendeling zelf aan/uit te zetten.
+koebel"):** bij elke level-up een **mooi overzicht** van wat je net vrijspeelde, en op je profiel
+een pagina "Vrijgespeeld" met alles op een rij (per stuk aan/uit). Ideeën die de functionaliteit niet
+veranderen maar wel leuk zijn om te winnen:
+- **confetti**-soorten (dubbel, groente, gekke dingen zoals kippen en taartjes, T-rex);
+- **geluiden** voor de timer (koebel, gong, keukenwekker) en voor "Gekookt!";
+- **lettertypes** voor de kookstand (krijtbord, handschrift);
+- **eigen avatar** maken (wens Stijn), met vrij te spelen spullen: koksmuts, schort, pollepel,
+  snor; plus een **avatar-rand** die meekleurt met je level;
+- **stickers** in je kooklog (een stempel per gekookt gerecht);
+- **thema's** voor gedeelde receptkaarten en prints;
+- **gouden modus** naast licht en donker (veel later);
+- **challenges** die op level 20 vrijkomen (later uitwerken, idee Stijn).
+Niet mogelijk: het app-icoon veranderen (dat staat vast na installatie op Android en iPhone).
+
+**Samen (besluiten Stijn 6 okt):** XP en levels zijn **per persoon**, en huishoudleden **mogen
+elkaars level en avatar zien**: een beetje wedstrijd, wie veel kookt stijgt harder. Nieuw:
+een **kookkalender van het huishouden**: wie heeft wat wanneer gekookt (gezellig en eerlijk).
+Eerlijk over de techniek: er is geen server (invariant 14). Profielen op dezelfde telefoon ziet de app
+meteen. Iemand op een **andere telefoon** zie je alleen als die zijn kaartje of kookbeurten deelt
+(via het ledenkaartje van blok F of een "deel mijn kookweek"-bericht). Dat is een uitbreiding van het
+deelformaat, dus ontwerpen met een nieuwe sleutel en bevroren tests (invariant 4), op Fable.
 
 **Bouwvolgorde:** (1) domein: XP-afleiding, seeded random, streak, curve + uitgebreide tests (ook een
-simulatie van 30 jaar dagelijks gebruik); (2) profiel-level + "+12"-animaties; (3) badge-niveaus en
-geheime badges; (4) ontgrendelingen. Elke stap apart online.
+simulatie van 30 jaar dagelijks gebruik); (2) profiel-level, XP-balk + "+12"-animaties;
+(3) badge-catalogus (eerst ter goedkeuring), badge-niveaus, groepen, verborgen en tijdgebonden badges;
+(4) ontgrendelingen + level-up-overzicht + avatar; (5) kookkalender huishouden en levels van
+anderen via delen; (6) later: challenges (level 20), gouden modus. Elke stap apart online.
 
 ## Blok Z — Handleiding (altijd het laatste blok; voorheen "G")
 
@@ -154,25 +208,29 @@ Zie docs/STATUS.md. Twee versies:
 2. **Handleiding voor Stijn ("achter de schermen"):** hoe XP berekend wordt, waar data staat,
    back-ups, delen, het woordenboek, de testlijst — wat gebruikers niet hoeven te weten.
 
-## Open besluiten (Stijn)
+## Besluiten van Stijn (6 okt 2026)
 
-- **Doneerknop.** Een link naar een betaalpagina (bv. bunq.me, PayPal.me of "Buy Me a Coffee") in
-  Meer → Over is technisch simpel en op een persoonlijke, niet-commerciële site gebruikelijk. GitHub
-  Pages is niet bedoeld voor commerciële sites; lees hun voorwaarden zelf even na voor je hem
-  plaatst. Geen betalingen in de app zelf; een Tikkie-link verloopt, kies dus een vaste link.
-- **Gebruik zien / aantal bezoekers.** GitHub Pages geeft geen bezoekersstatistieken, en IP-adressen
-  zijn persoonsgegevens (AVG): die verzamelen we niet. Mogelijk alternatief: een privacyvriendelijke
-  teller zonder cookies of IP-opslag (bv. GoatCounter, gratis voor niet-commercieel gebruik) die
-  alleen aantallen toont. Dat breekt invariant 14 ("geen analytics") en vraagt een ADR. Advies: nu
-  niet; eerst de feedbackknop.
+- **Doneerknop: ja (in 6A).** Een vaste link naar een betaalpagina in Meer → Over ("Steun dit
+  project ☕"), via het deelmenu/een gewone link; geen betalingen in de app zelf. Een Tikkie-link
+  verloopt, dus kies een vaste: **bunq.me** (als je bij bunq zit), **PayPal.me**, **Buy Me a Coffee**
+  (ook kaart/iDEAL, kleine fee) of **GitHub Sponsors** (vraagt een aanvraag en uitbetaling via
+  Stripe). Stijn maakt de link aan; Claude zet hem erin. GitHub Pages is niet bedoeld voor
+  commerciële sites: een fooi-link op een persoonlijk project is gebruikelijk, maar Stijn leest de
+  Pages-voorwaarden zelf even na.
+- **Bezoekers tellen: eerst de feedbackknop, daarna GoatCounter.** Stijn wil zelf de controle over
+  zijn project houden: een eigen GoatCounter-account (gratis voor niet-commercieel gebruik), alleen
+  aantallen, geen cookies, geen IP-adressen opslaan (die zijn persoonsgegevens onder de AVG). Dat
+  wijzigt invariant 14 ("geen analytics"), dus eerst een ADR met precies wat er gemeten wordt en een
+  regel in de app ("we tellen alleen het aantal bezoeken").
+- XP per persoon, elkaars level/avatar zien, kookkalender huishouden: zie 6D "Samen".
+- Keukens: één per recept, alleen echte (6B.2). Vaste lijst: per huishouden (6C). Lactose: alle
+  ingrediënten, oude harde kaas telt als lactosevrij (6B.1).
 
 ## Open vragen (bij de start van het betreffende blok beantwoorden)
 
-1. **Import-bug (6A.1):** welke route precies (Recepten → + → Nieuw recept → importvak?), stond de app
-   op NL of EN, en kun je de geplakte tekst één keer meesturen?
-2. **XP (6D):** alleen per persoon, of ook een gezamenlijk huishoud-level?
-3. **XP (6D):** mogen huishoudleden elkaars level zien (gezellig wedstrijdje), of houden we het privé?
-4. **Keukens (6B.2):** één keuken per recept, of mag een recept er meerdere hebben (Indonesisch + Hollands)?
-5. **Vaste lijst (6C):** één vaste lijst voor het hele huishouden, of per persoon?
-6. **Lactosevrij (6B.1):** tellen oude harde kazen (Parmezaan, oude Gouda, vrijwel lactosevrij) als
-   lactosevrij, of liever streng?
+1. **Doneerknop:** welke betaallink wordt het (bunq.me, PayPal.me, Buy Me a Coffee, GitHub Sponsors)?
+2. **Badges die "aflopen" (6D):** bedoel je tijdgebonden badges (seizoen, feestdagen), badges die je
+   kwijtraakt als een reeks breekt, of iets anders?
+3. **Level 100 (6D):** welke naam? (Of laat Claude er een paar voorstellen met een plaatje.)
+4. **Kookkalender (6D):** is het oké dat iemand op een andere telefoon pas in de kalender en de
+   ranglijst verschijnt nadat die zijn kookbeurten deelt (geen server)?
