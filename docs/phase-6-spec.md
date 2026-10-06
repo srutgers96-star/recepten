@@ -54,6 +54,11 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
 9. **Plak-prompt vult labels en categorie al in (S).** De importprompt vraagt al om
    "Categorie:" / "Labels:" (fase 5 A.5). Controleren dat die na plakken de chips **invullen** (niet
    alleen voorstellen), inclusief de nieuwe keuken-labels uit 6B.
+12. **Meer profielkleuren (S, wens Stijn).** Nu 6 kleuren (src/profile.ts `PROFILE_COLORS`); de
+    gekozen kleur is al de achtergrond van het avatar-rondje met je beginletter. Uitbreiden naar ±12–16
+    kleuren, elk met goed contrast voor de witte letter in licht én donker thema. In 6D blijft deze
+    kleur de achtergrond achter de getekende avatar; extra's als verloop, goud of regenboog zijn
+    vrij te spelen met levels.
 10. **Rechte haakjes in de AI-prompts (S, idee Stijn).** De klassiekers schrijven bereiding en
     notities al tussen rechte haakjes ("1 sjalotje [gesnipperd]"). Als de parser dat betrouwbaar
     scheidt, vragen de import- en vertaalprompt de AI om hetzelfde formaat: "hoeveelheid eenheid naam
@@ -198,7 +203,8 @@ veranderen maar wel leuk zijn om te winnen:
 - **geluiden** voor de timer (koebel, gong, keukenwekker) en voor "Gekookt!";
 - **lettertypes** voor de kookstand (krijtbord, handschrift);
 - **eigen avatar** maken (wens Stijn), met vrij te spelen spullen: koksmuts, schort, pollepel,
-  snor; plus een **avatar-rand** die meekleurt met je level;
+  snor, op je eigen profielkleur als achtergrond (6A.12); plus een **avatar-rand** die meekleurt
+  met je level en vrij te spelen achtergronden (verloop, goud, regenboog);
 - **stickers** in je kooklog (een stempel per gekookt gerecht);
 - **thema's** voor gedeelde receptkaarten en prints;
 - **gouden modus** naast licht en donker (veel later);
