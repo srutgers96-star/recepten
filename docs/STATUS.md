@@ -47,11 +47,21 @@ er was alleen een lichte eigen controle. Daarom, als eerste stap van de volgende
    Het merge-rapport met alle details staat in het workflow-journal van run wf_c22cac7a-4bf.
 2. Daarna pas **blok F** (raakt het deel-contract, invariant 4 — op Fable met volledige review).
 
-## Daarna, blok voor blok, elk apart online (zie docs/phase-5-spec.md en het tijdsoverzicht)
-F vrienden via link/QR + varianten → G handleiding (laatste blok).
-Stijn zegt per blok "door".
+## Daarna, blok voor blok, elk apart online — volgorde (bijgewerkt 6 okt 2026)
+1. Fable-review van het Opus-werk (zie PAUZE hierboven)
+2. F vrienden via link/QR + varianten (docs/phase-5-spec.md "Block F")
+3. **Fase 6 — Stijns wensenlijst van 6 okt**, uitgewerkt in **docs/phase-6-spec.md**:
+   6A snelle verbeteringen en bugs (import-bug naam NL/EN, curator-ingrediënten, "Gekookt" zonder
+   kookstand + later beoordelen, installeerkaart, "Stuur nieuwe naar" duidelijker, Meer opgeruimd,
+   feedbackknop, meer spraakcommando's + ?-knop, plak-prompt vult labels in) →
+   6B labels (lactosevrij, keukens/nationaliteit, labelstap in de editor, vertaalprompt ontbrekende
+   ingrediënten) → 6C vaste boodschappenlijst → 6D XP, levels, badge-niveaus, ontgrendelingen.
+   Elk blok begint met de open vragen uit dat document.
+4. **Z handleiding** (altijd als laatste; voorheen "G").
+5. Daarna testen Stijn en Gabi kritisch op de telefoons, en volgen verbeterrondes.
+Stijn zegt per blok "door". De volgorde mag hij altijd omgooien.
 
-## Blok G — Handleiding (wens Stijn 3 okt 2026; bewust als LAATSTE, "als alles helemaal goed is")
+## Blok Z — Handleiding (wens Stijn 3 okt 2026; bewust als LAATSTE, "als alles helemaal goed is")
 Eén duidelijke, zoekbare, geordende handleiding waarmee je alle functies kunt verkennen — géén
 testpagina's meer. Voorstel (bevestigen bij de start van G): in de app als Meer → Handleiding,
 tweetalig, met zoekveld en onderwerpen in een logische volgorde (eerste keer · recepten · koken ·
@@ -60,8 +70,10 @@ per functie: wat het doet, waar je tikt, en wat je dan ziet; tekst in een databe
 (bv. data/handbook.json) zodat hij los te onderhouden is. docs/DEVICE-TEST.md gaat daarin op
 (de "probeer het"-stappen). Idee Stijn: DEVICE-TEST, het Apparaatcheck-scherm en de Curator op één
 hoop (bv. Meer → "Testen & nakijken") — doen als dat handig blijkt.
-Volgorde (Stijn): eerst het originele plan incl. extra's netjes af (E, F, G); pas dán testen en
-kritisch kijken op de telefoons, daarna verbeterrondes (nu nog niet over nadenken).
+Volgorde (Stijn): eerst het plan incl. extra's netjes af (F, fase 6, Z); pas dán testen en
+kritisch kijken op de telefoons, daarna verbeterrondes.
+Tweede versie erbij (6 okt): een handleiding "achter de schermen" voor Stijn (XP-berekening, waar
+data staat, back-ups, delen), zie docs/phase-6-spec.md blok Z.
 iPhone-spraakcommando's: bewust uit (3 okt) — canListen() is false op iOS; voorlezen werkt wel.
 
 ## Praktisch
