@@ -67,8 +67,8 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
 1. **Lactosevrij (M, data-pass).** Nieuwe vlag `lactose` op alle ±1600 ingrediënten (plus
    `lactoseUnsure`), tags `lactosevrij` / `lactosevrij-optie`, dieetchip en filter zoals glutenvrij,
    validator-regel "alles of niets" zoals de andere dieetvlaggen, en een badge. **Alle**
-   ingrediënten krijgen de vlag. Besluit Stijn: oude harde kazen (Parmezaan, oude Gouda) tellen als
-   lactosevrij.
+   ingrediënten krijgen de vlag. Besluit Stijn (correctie 6 okt): **streng** — ook oude en harde
+   kazen (Parmezaan, oude Gouda) tellen als lactosehoudend.
 2. **Keukens / nationaliteit (M, data-pass).** Woordenlijst `data/cuisines.json` (tweetalig):
    Hollands, Italiaans, Frans, Spaans, Grieks, Midden-Oosten, Marokkaans, Indiaas, Thais, Chinees,
    Japans, Indonesisch, Surinaams, Mexicaans, Amerikaans, Brits, … Besluit Stijn: **één keuken per
@@ -146,8 +146,7 @@ begin, daarna loont dagelijks koken.
 **Titels (voorstel, Stijn vult aan):** 1 Keukenpiep · 2 **T-rex** (te korte armpjes, kan nog niet
 koken — de grap van Stijn) · 3 Aardappelschiller · 6 Oma · 10 Hulpkok · 15 Commis · 20 Sous-chef ·
 25 Chef de partie · 30 Chef · 40 Chefkok · 50 Masterchef · 60 Jamie Oliver · 70 Nigella ·
-80 Gordon Ramsay · 90 Michelinster · **100 = MAX LEVEL** met een epische naam (voorstellen:
-"Keukenlegende", "Opperkok van het Fornuis", "De Grote Roerganger"; Stijn kiest).
+80 Gordon Ramsay · 90 Michelinster · **100 = MAX LEVEL: "Best Chef of the Universe"** (besluit Stijn).
 (Namen van echte chefs: prima voor privégebruik; vervangen als de app ooit breder gaat.)
 
 **Badges: een eigen deelplan binnen 6D ("veel meer badges", wens Stijn).** De huidige 43 worden een
@@ -192,8 +191,9 @@ elkaars level en avatar zien**: een beetje wedstrijd, wie veel kookt stijgt hard
 een **kookkalender van het huishouden**: wie heeft wat wanneer gekookt (gezellig en eerlijk).
 Eerlijk over de techniek: er is geen server (invariant 14). Profielen op dezelfde telefoon ziet de app
 meteen. Iemand op een **andere telefoon** zie je alleen als die zijn kaartje of kookbeurten deelt
-(via het ledenkaartje van blok F of een "deel mijn kookweek"-bericht). Dat is een uitbreiding van het
-deelformaat, dus ontwerpen met een nieuwe sleutel en bevroren tests (invariant 4), op Fable.
+(via het ledenkaartje van blok F of een linkje "Sync mijn kookkalender met het huishouden";
+akkoord Stijn 6 okt). Dat is een uitbreiding van het deelformaat, dus ontwerpen met een nieuwe
+sleutel en bevroren tests (invariant 4), op Fable. Met een eventuele server later kan het automatisch.
 
 **Bouwvolgorde:** (1) domein: XP-afleiding, seeded random, streak, curve + uitgebreide tests (ook een
 simulatie van 30 jaar dagelijks gebruik); (2) profiel-level, XP-balk + "+12"-animaties;
@@ -210,13 +210,12 @@ Zie docs/STATUS.md. Twee versies:
 
 ## Besluiten van Stijn (6 okt 2026)
 
-- **Doneerknop: ja (in 6A).** Een vaste link naar een betaalpagina in Meer → Over ("Steun dit
-  project ☕"), via het deelmenu/een gewone link; geen betalingen in de app zelf. Een Tikkie-link
-  verloopt, dus kies een vaste: **bunq.me** (als je bij bunq zit), **PayPal.me**, **Buy Me a Coffee**
-  (ook kaart/iDEAL, kleine fee) of **GitHub Sponsors** (vraagt een aanvraag en uitbetaling via
-  Stripe). Stijn maakt de link aan; Claude zet hem erin. GitHub Pages is niet bedoeld voor
-  commerciële sites: een fooi-link op een persoonlijk project is gebruikelijk, maar Stijn leest de
-  Pages-voorwaarden zelf even na.
+- **Doneerknop: ja (in 6A).** Link: **https://bunq.me/StijnRutgers** (vaste link, bedoeld om
+  openbaar te zijn). Twee plekken: (1) onderaan **Het verhaal**; (2) een **aparte knop** in Meer,
+  vlak bij "Feedback voor Stijn" (bv. "Steun dit project ☕"). Een gewone link die de bunq-pagina
+  opent; geen betalingen in de app zelf. GitHub Pages is niet bedoeld voor commerciële sites: een
+  fooi-link op een persoonlijk project is gebruikelijk, maar Stijn leest de Pages-voorwaarden zelf
+  even na.
 - **Bezoekers tellen: eerst de feedbackknop, daarna GoatCounter.** Stijn wil zelf de controle over
   zijn project houden: een eigen GoatCounter-account (gratis voor niet-commercieel gebruik), alleen
   aantallen, geen cookies, geen IP-adressen opslaan (die zijn persoonsgegevens onder de AVG). Dat
@@ -224,13 +223,14 @@ Zie docs/STATUS.md. Twee versies:
   regel in de app ("we tellen alleen het aantal bezoeken").
 - XP per persoon, elkaars level/avatar zien, kookkalender huishouden: zie 6D "Samen".
 - Keukens: één per recept, alleen echte (6B.2). Vaste lijst: per huishouden (6C). Lactose: alle
-  ingrediënten, oude harde kaas telt als lactosevrij (6B.1).
+  ingrediënten, streng: ook oude en harde kaas telt als lactosehoudend (6B.1).
+- Level 100 heet **"Best Chef of the Universe"** (in beide talen hetzelfde, tenzij Stijn nog een
+  Nederlandse versie wil).
+- Kookkalender: voor nu via een **deelbaar linkje** ("Sync mijn kookkalender met het huishouden").
+  Stijn overweegt later een server; dan kan het automatisch. Dat raakt invariant 14 (geen backend) en
+  het deelformaat, dus dan eerst een ADR.
 
 ## Open vragen (bij de start van het betreffende blok beantwoorden)
 
-1. **Doneerknop:** welke betaallink wordt het (bunq.me, PayPal.me, Buy Me a Coffee, GitHub Sponsors)?
-2. **Badges die "aflopen" (6D):** bedoel je tijdgebonden badges (seizoen, feestdagen), badges die je
+1. **Badges die "aflopen" (6D):** bedoel je tijdgebonden badges (seizoen, feestdagen), badges die je
    kwijtraakt als een reeks breekt, of iets anders?
-3. **Level 100 (6D):** welke naam? (Of laat Claude er een paar voorstellen met een plaatje.)
-4. **Kookkalender (6D):** is het oké dat iemand op een andere telefoon pas in de kalender en de
-   ranglijst verschijnt nadat die zijn kookbeurten deelt (geen server)?
