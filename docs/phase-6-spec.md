@@ -54,11 +54,6 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
 9. **Plak-prompt vult labels en categorie al in (S).** De importprompt vraagt al om
    "Categorie:" / "Labels:" (fase 5 A.5). Controleren dat die na plakken de chips **invullen** (niet
    alleen voorstellen), inclusief de nieuwe keuken-labels uit 6B.
-12. **Meer profielkleuren (S, wens Stijn).** Nu 6 kleuren (src/profile.ts `PROFILE_COLORS`); de
-    gekozen kleur is al de achtergrond van het avatar-rondje met je beginletter. Uitbreiden naar ±12–16
-    kleuren, elk met goed contrast voor de witte letter in licht én donker thema. In 6D blijft deze
-    kleur de achtergrond achter de getekende avatar; extra's als verloop, goud of regenboog zijn
-    vrij te spelen met levels.
 10. **Rechte haakjes in de AI-prompts (S, idee Stijn).** De klassiekers schrijven bereiding en
     notities al tussen rechte haakjes ("1 sjalotje [gesnipperd]"). Als de parser dat betrouwbaar
     scheidt, vragen de import- en vertaalprompt de AI om hetzelfde formaat: "hoeveelheid eenheid naam
@@ -66,6 +61,11 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
 11. **Ontbrekende woordenboekwoorden uit de screenshot (S).** sultana's (EN sultanas; eigen product
     naast rozijn) en dessertwijn (aliassen botrytiswijn, sémillonwijn; EN dessert wine). Meenemen in de
     Fable-review van blok E.
+12. **Meer profielkleuren (S, wens Stijn).** Nu 6 kleuren (src/profile.ts `PROFILE_COLORS`); de
+    gekozen kleur is al de achtergrond van het avatar-rondje met je beginletter. Uitbreiden naar ±12–16
+    kleuren, elk met goed contrast voor de witte letter in licht én donker thema. In 6D blijft deze
+    kleur de achtergrond achter de getekende avatar; extra's als verloop, goud of regenboog zijn
+    vrij te spelen met levels.
 
 ## Blok 6B — Nieuwe labels
 
