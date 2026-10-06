@@ -165,8 +165,18 @@ grote catalogus (richting 120–150), gemengd zodat je ze allemaal wilt hebben:
   maar iedereen kan het aanklikken; (b) een **dank-je-code van Stijn**: Stijn maakt na een donatie
   met een klein scriptje op zijn pc een ondertekende code en stuurt die via WhatsApp; de app
   controleert de handtekening met een publieke sleutel (WebCrypto, geen server) en kent het niveau
-  toe. Niet na te maken, wel een handeling van Stijn per donatie. Advies: de doneer-badge is
-  cosmetisch (gouden hartje bij de avatar) en geeft **geen of weinig XP**, zodat level niet te koop is.
+  toe. Niet na te maken, wel een handeling van Stijn per donatie.
+  **Besluit Stijn:** de doneer-badge is cosmetisch, **een klein hartje** bij de avatar, en geeft geen
+  of weinig XP (level is niet te koop). Niveaus en drempels: later uitwerken.
+  **Hoe Stijn de donateur bereikt (idee Stijn + uitwerking, later):** de doneerknop in de app opent
+  bunq.me met een korte **referentie** in de omschrijving (bv. `bunq.me/StijnRutgers/5/RR-7K3F`;
+  bunq.me ondersteunt bedrag en omschrijving in de link: eerst testen). Daarna biedt de app
+  "Stuur Stijn een berichtje voor je hartje" aan: het deelmenu opent WhatsApp met "Ik heb
+  gedoneerd, ref RR-7K3F". Stijn ziet dezelfde ref bij de betaling, en antwoordt in datzelfde
+  WhatsApp-gesprek met de dank-je-link; de donateur tikt erop en krijgt het hartje. Zo is WhatsApp
+  het kanaal om elkaar te bereiken; er hoeven geen telefoonnummers in de betaalomschrijving
+  (die blijft voor altijd bij de bank staan). Of bunq links in een omschrijving klikbaar maakt, is
+  onbekend; daarom de ref plus WhatsApp in plaats van een link in de betaling.
 - **Verborgen badges voor app-ontdekkers:** onzichtbaar tot je ze hebt, en je verdient ze door
   functies te ontdekken (eerste spraakcommando, recept geprint, weekplan gedeeld, QR getoond, thema
   gewisseld …). Plus een paar gekke geheime badges (koken na middernacht, drie dagen achter elkaar
@@ -244,5 +254,5 @@ Zie docs/STATUS.md. Twee versies:
 
 ## Open vragen (bij de start van het betreffende blok beantwoorden)
 
-1. **Doneer-badge (6D):** op erewoord ("Ik heb gedoneerd" + bedrag) of met een dank-je-code die
-   Stijn na een donatie stuurt (niet na te maken, maar Stijn moet per donatie iets doen)?
+1. **Doneer-badge (6D, later):** de route met ref + WhatsApp + dank-je-link (hierboven) bevestigen
+   bij de start van dat deel, en de niveaus/drempels kiezen.
