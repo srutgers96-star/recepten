@@ -202,9 +202,13 @@ veranderen maar wel leuk zijn om te winnen:
 - **confetti**-soorten (dubbel, groente, gekke dingen zoals kippen en taartjes, T-rex);
 - **geluiden** voor de timer (koebel, gong, keukenwekker) en voor "Gekookt!";
 - **lettertypes** voor de kookstand (krijtbord, handschrift);
-- **eigen avatar** maken (wens Stijn), met vrij te spelen spullen: koksmuts, schort, pollepel,
-  snor, op je eigen profielkleur als achtergrond (6A.12); plus een **avatar-rand** die meekleurt
-  met je level en vrij te spelen achtergronden (verloop, goud, regenboog);
+- **eigen avatar**, en die is **helemaal vrij te spelen met XP** (wens Stijn): iedereen begint met
+  het rondje met beginletter op de eigen profielkleur (6A.12). Een paar levels verder komt de
+  avatar-maker vrij met een simpel gezichtje; elk level daarna kan nieuwe onderdelen geven
+  (kapsels, koksmuts, schort, pollepel, snor, brilletje …). Badges kunnen ook een onderdeel
+  opleveren (bv. Fishlover → visje op je schort). Plus een **avatar-rand** die meekleurt met je
+  level en vrij te spelen achtergronden (verloop, goud, regenboog). Welk onderdeel bij welk level
+  hoort: uitwerken samen met de levelcurve, zodat er in elke fase iets nieuws te halen valt;
 - **stickers** in je kooklog (een stempel per gekookt gerecht);
 - **thema's** voor gedeelde receptkaarten en prints;
 - **gouden modus** naast licht en donker (veel later);
