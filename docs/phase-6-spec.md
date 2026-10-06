@@ -154,10 +154,19 @@ grote catalogus (richting 120–150), gemengd zodat je ze allemaal wilt hebben:
 - **Doortellende badges met kleurniveaus:** 8 niveaus — geel, groen, blauw, rood, brons, zilver, goud,
   platina — met drempels per soort (bv. koken: 1 · 10 · 25 · 50 · 100 · 250 · 500 · 1000). Elk volgend
   niveau duurt **langer maar levert meer XP** op.
-- **Eenmalige badges** (bv. eerste eigen recept, eerste foto, alle 196 gekookt).
-- **Badges die aflopen** (*interpretatie, bevestigen*): tijdgebonden badges die alleen in een periode
-  te halen zijn (seizoen: "10 salades in juli", feestdagen: "Kerstdiner 2026"), en reeks-badges die je
-  kwijtraakt als de reeks breekt.
+- **Eenmalige badges**: kun je maar één keer halen (bv. eerste eigen recept, eerste foto, alle 196
+  gekookt). Dit bedoelde Stijn met "aflopen".
+- **Badges voor alle functies** van de app (koken, week, boodschappen, delen, woordenboek, curator,
+  foto's, print, spraak …) en "van alles en nog wat"; ruim aanbod, Stijn breidt later zelf uit
+  (data/badges.json is daarvoor gemaakt).
+- **Doneer-badge** met 5 niveaus, cumulatief tot € 100 (voorstel: € 5 · € 10 · € 25 · € 50 · € 100).
+  Probleem: de app kan een bunq-betaling **niet zien** (geen server, bunq.me meldt niets aan de app).
+  Twee mogelijkheden, zie open vraag 1: (a) op erewoord: knop "Ik heb gedoneerd" + bedrag; simpel,
+  maar iedereen kan het aanklikken; (b) een **dank-je-code van Stijn**: Stijn maakt na een donatie
+  met een klein scriptje op zijn pc een ondertekende code en stuurt die via WhatsApp; de app
+  controleert de handtekening met een publieke sleutel (WebCrypto, geen server) en kent het niveau
+  toe. Niet na te maken, wel een handeling van Stijn per donatie. Advies: de doneer-badge is
+  cosmetisch (gouden hartje bij de avatar) en geeft **geen of weinig XP**, zodat level niet te koop is.
 - **Verborgen badges voor app-ontdekkers:** onzichtbaar tot je ze hebt, en je verdient ze door
   functies te ontdekken (eerste spraakcommando, recept geprint, weekplan gedeeld, QR getoond, thema
   gewisseld …). Plus een paar gekke geheime badges (koken na middernacht, drie dagen achter elkaar
@@ -191,9 +200,11 @@ elkaars level en avatar zien**: een beetje wedstrijd, wie veel kookt stijgt hard
 een **kookkalender van het huishouden**: wie heeft wat wanneer gekookt (gezellig en eerlijk).
 Eerlijk over de techniek: er is geen server (invariant 14). Profielen op dezelfde telefoon ziet de app
 meteen. Iemand op een **andere telefoon** zie je alleen als die zijn kaartje of kookbeurten deelt
-(via het ledenkaartje van blok F of een linkje "Sync mijn kookkalender met het huishouden";
-akkoord Stijn 6 okt). Dat is een uitbreiding van het deelformaat, dus ontwerpen met een nieuwe
-sleutel en bevroren tests (invariant 4), op Fable. Met een eventuele server later kan het automatisch.
+(via het ledenkaartje van blok F of een linkje **"Sync mijn voortgang"**; akkoord Stijn 6 okt).
+Dat linkje werkt met het **huishouden én met vrienden**: zo kun je ook met vrienden levels en
+kookbeurten vergelijken. Dat is een uitbreiding van het deelformaat, dus ontwerpen met een nieuwe
+sleutel en bevroren tests (invariant 4), op Fable. Toekomst: met een server wordt delen automatisch
+en beter (eerst ADR; raakt invariant 14).
 
 **Bouwvolgorde:** (1) domein: XP-afleiding, seeded random, streak, curve + uitgebreide tests (ook een
 simulatie van 30 jaar dagelijks gebruik); (2) profiel-level, XP-balk + "+12"-animaties;
@@ -226,11 +237,12 @@ Zie docs/STATUS.md. Twee versies:
   ingrediënten, streng: ook oude en harde kaas telt als lactosehoudend (6B.1).
 - Level 100 heet **"Best Chef of the Universe"** (in beide talen hetzelfde, tenzij Stijn nog een
   Nederlandse versie wil).
-- Kookkalender: voor nu via een **deelbaar linkje** ("Sync mijn kookkalender met het huishouden").
-  Stijn overweegt later een server; dan kan het automatisch. Dat raakt invariant 14 (geen backend) en
-  het deelformaat, dus dan eerst een ADR.
+- Kookkalender en levels delen: voor nu via een **deelbaar linkje "Sync mijn voortgang"**, met het
+  huishouden en met vrienden. Stijn overweegt later een server; dan kan het automatisch. Dat raakt
+  invariant 14 (geen backend) en het deelformaat, dus dan eerst een ADR.
+- Badges: "aflopen" = eenmalig; badges voor alle functies; doneer-badge met 5 niveaus tot € 100.
 
 ## Open vragen (bij de start van het betreffende blok beantwoorden)
 
-1. **Badges die "aflopen" (6D):** bedoel je tijdgebonden badges (seizoen, feestdagen), badges die je
-   kwijtraakt als een reeks breekt, of iets anders?
+1. **Doneer-badge (6D):** op erewoord ("Ik heb gedoneerd" + bedrag) of met een dank-je-code die
+   Stijn na een donatie stuurt (niet na te maken, maar Stijn moet per donatie iets doen)?
