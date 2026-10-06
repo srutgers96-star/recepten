@@ -208,7 +208,17 @@ veranderen maar wel leuk zijn om te winnen:
   (kapsels, koksmuts, schort, pollepel, snor, brilletje …). Badges kunnen ook een onderdeel
   opleveren (bv. Fishlover → visje op je schort). Plus een **avatar-rand** die meekleurt met je
   level en vrij te spelen achtergronden (verloop, goud, regenboog). Welk onderdeel bij welk level
-  hoort: uitwerken samen met de levelcurve, zodat er in elke fase iets nieuws te halen valt;
+  hoort: uitwerken samen met de levelcurve, zodat er in elke fase iets nieuws te halen valt.
+  **Een flinke bibliotheek** (wens Stijn): hoedjes, brillen, baarden/snorren, kapsels, shirtjes,
+  achtergronden en accessoires, met **veel ingrediënten-thema's** (wortel achter je oor,
+  broccoli-kapsel, citroenbrilletje, stokbrood onder je arm, chilipeper-snor, kaasblokhoed,
+  aubergine-knuffel …). Vrijspelen per **level** of per **badge**; eerst eenvoudig, later steeds
+  uitgebreider (zeldzame stukken op hoge levels en bij hoge badge-niveaus).
+  Techniek: elk onderdeel is een klein stukje SVG in een databestand (bv. data/avatar-parts.json:
+  id, laag, NL/EN-naam, ontgrendeld-door level of badge), lagen op elkaar getekend, geen nieuwe
+  dependency. Je avatar is dan alleen een lijstje ids, dus klein genoeg om mee te sturen met
+  "Sync mijn voortgang" en het ledenkaartje. De onderdelen tekenen is ontwerpwerk: in rondes
+  uitbreiden, Stijn keurt per ronde goed;
 - **stickers** in je kooklog (een stempel per gekookt gerecht);
 - **thema's** voor gedeelde receptkaarten en prints;
 - **gouden modus** naast licht en donker (veel later);
