@@ -112,6 +112,26 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
       Parser: "X of Y" leest X als ingrediënt en bewaart "of Y" als notitie.
     Nu al mogelijk, maar weinig zichtbaar: de knop **Koppel/Link** naast de chip → kies "stokbrood"
     (de regeltekst blijft staan). Hoort bij 6A.10 en 6A.14; samen oppakken.
+    Aanvulling Stijn (7 okt): woorden aan- en uitzetten met kleuren is "uitstekend" (bv. oranje =
+    onbekend, groen = het ingrediënt, grijs = notitie). De **Link**-knop durfde hij niet te gebruiken:
+    bang iets fout te doen of dat "knapperig" verloren ging. Voorstel: Link vraagt eerst
+    **"Is dit een variant van gewoon stokbrood, of een heel nieuw ingrediënt?"** en zegt erbij dat
+    de tekst van de regel blijft staan. Fable ontwerpt de definitieve vorm met deze ideeën.
+17. **Plakken van een website zonder prompt slimmer maken (M–L; belangrijk voor Gabi).** Gabi vindt
+    de prompt te veel stappen en plakt recepten liever rechtstreeks; dat lukt al vaak. Doel: de gewone
+    plak-route herkent meer van de gangbare vormen: kopjes als Ingredients / Method / Instructions /
+    Directions / Preparation / Ingrediënten / Bereiding / Werkwijze / Benodigdheden, opsommingstekens,
+    genummerde stappen, "Serves 4" / "Voor 4 personen", bereidingstijden. **Principe (Gabi): liever
+    te veel dan te weinig.** Overbodige regels weghalen vindt ze niet erg; iets toevoegen wel. Dus bij
+    twijfel een regel meenemen in plaats van weglaten. Aanpak: verzamel ±10–15 echte plakteksten van
+    sites die Stijn en Gabi gebruiken (bv. BBC Good Food, Allerhande, Jamie Oliver, Leuke Recepten,
+    24Kitchen) als testbestanden, en bouw de herkenning daartegen. De prompt blijft voor foto's en
+    lastige gevallen.
+18. **Categorie en labels uit elkaar houden (S).** Stijn zag "Salade" voorgesteld bij **Adopt**
+    (Controleer mijn recepten), maar vond het niet tussen de labels. "Salade" is een **categorie**
+    (één per recept: soep, salade, pasta …), geen **label** (meerdere: vegetarisch, snel …). In het
+    voorstel en in de editor duidelijk tonen welk soort het is ("Categorie: Salade" / "Labels:
+    vegetarisch, snel"). Fable controleert of de categoriechips in de editor Salade echt laten zien.
 
 ## Blok 6B — Nieuwe labels
 
