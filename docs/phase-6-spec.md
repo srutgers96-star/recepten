@@ -85,7 +85,18 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
       "zout en peper" als twee ingrediënten lezen. Tests met de echte voorbeeldregels.
     - "Nieuw ingrediënt" vult de naam in het vak van de taal waarin de regel staat (hoort bij
       dezelfde bugfamilie als 6A.1).
-    Samen met 6A.10 (rechte haakjes) in één keer oppakken.
+    Samen met 6A.10 (rechte haakjes) in één keer oppakken. Let op: "zout en peper" bestaat al als
+    gecombineerd woordenboekitem (`zout-en-peper`, voorraadkast); het echte probleem was "naar smaak"
+    vooraan de regel.
+15. **"Voorraadkast"-vinkje duidelijker en achteraf aan te passen (S, Stijn 7 okt).** Stijn maakte
+    "koosjer zout" aan zonder het vinkje "Voorraadkast (zout, olie, kruiden …)", omdat niet duidelijk
+    was wat het betekent: een product dat je meestal al in huis hebt en dat op de boodschappenlijst
+    op 0 begint. (1) Andere tekst, bv. "Hoef je meestal niet te kopen (zout, olie, kruiden …)", met
+    één regel uitleg; (2) in Woordenboek → eigen ingrediënt ook dit vinkje, de dieetvlaggen en de
+    eenheid achteraf kunnen aanpassen (nu alleen namen en gangpad); (3) data: "koosjer zout" /
+    "kosher salt" als alias bij `zout` (meenemen in de Fable-review van blok E).
+    Tot die tijd kan Stijn zijn eigen "koosjer zout" via Meer → Woordenboek → **Fuseer met bestaand**
+    → **zout** samenvoegen; dan gedraagt het zich als voorraadkast.
 
 ## Blok 6B — Nieuwe labels
 
