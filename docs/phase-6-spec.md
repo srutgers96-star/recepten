@@ -97,6 +97,21 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
     "kosher salt" als alias bij `zout` (meenemen in de Fable-review van blok E).
     Tot die tijd kan Stijn zijn eigen "koosjer zout" via Meer → Woordenboek → **Fuseer met bestaand**
     → **zout** samenvoegen; dan gedraagt het zich als voorraadkast.
+16. **Onbekende ingrediëntnaam makkelijk inkorten (M; Fable bedenkt de beste oplossing).**
+    Voorbeeld Stijn 7 okt: "2 sneetjes knapperig stokbrood of brood [voor erbij, maakt het recept
+    glutenvrij]" wordt "2 slices **?knapperig stokbrood**": het bijvoeglijk naamwoord en het
+    alternatief ("of brood") houden de herkenning tegen; de rest van het recept ging perfect.
+    Twee kanten, allebei doen:
+    - **Betere prompt:** vraag om de kortste winkelnaam als ingrediënt; beschrijvende woorden
+      (knapperig, vers, rijp) en alternatieven ("of brood") achteraan tussen rechte haakjes:
+      "2 sneetjes stokbrood [knapperig; of brood; voor erbij]".
+    - **Gebruiksvriendelijker in de app:** Stijns neiging was op de oranje "?"-chip te tikken of
+      het vakje naar "stokbrood" te schuiven. Idee: tik op de chip → de woorden van de naam
+      verschijnen als losse knopjes; tik "knapperig" weg (wordt notitie) en de app herkent
+      "stokbrood" meteen. Eventueel onthouden: "knapperig" voortaan als beschrijving behandelen.
+      Parser: "X of Y" leest X als ingrediënt en bewaart "of Y" als notitie.
+    Nu al mogelijk, maar weinig zichtbaar: de knop **Koppel/Link** naast de chip → kies "stokbrood"
+    (de regeltekst blijft staan). Hoort bij 6A.10 en 6A.14; samen oppakken.
 
 ## Blok 6B — Nieuwe labels
 
