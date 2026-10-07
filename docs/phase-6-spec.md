@@ -66,6 +66,26 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
     kleuren, elk met goed contrast voor de witte letter in licht én donker thema. In 6D blijft deze
     kleur de achtergrond achter de getekende avatar; extra's als verloop, goud of regenboog zijn
     vrij te spelen met levels.
+13. **Toevoegen: alle keuzes meteen na de "+" (M, wens Stijn en Gabi).** Gabi plakt recepten van
+    websites meestal zonder prompt rechtstreeks in de app; dat werkt heel vaak en ze vindt het fijn.
+    De prompt zit nu te diep: Recepten → + → Nieuw recept → Importeer foto/tekst → Kopieer prompt.
+    Voorstel: na de **+** direct vier keuzes, elk met één korte regel uitleg eronder (of een
+    klein ?): **Zelf schrijven** · **Plak een recept** (tekst van een website; meestal genoeg) ·
+    **Met AI** (prompt kopiëren, met foto of tekst; als plakken niet goed lukt) · **Kies een bestand**
+    (recept, bundel of back-up). Dezelfde keuzes in de editor blijven bestaan.
+14. **Regels voor de AI-prompt en de parser (M, uit Gemini-feedback 7 okt).** Bij een recept dat
+    zonder prompt bijna lukte, maakte Gemini met de prompt toch fouten: "naar smaak"/"to taste"
+    vooraan de regel, en zout en peper op één regel. Daardoor raakte de app in de war en kwam bij
+    "Nieuw ingrediënt" het Nederlandse "koosjer zout" in het Engelse vak.
+    - Prompt: **één ingrediënt per regel** ("zout en peper" → twee regels).
+    - Prompt: een vage hoeveelheid **achteraan tussen haakjes**: "koosjer zout [naar smaak]".
+      Gemini stelde een nep-hoeveelheid voor ("1 snuf"); dat liever **niet**: dan staat er een
+      getal dat niet in het recept stond, en dat schaalt mee en komt op de boodschappenlijst.
+    - Parser robuuster: "naar smaak"/"to taste" overal in de regel herkennen (ook vooraan), en
+      "zout en peper" als twee ingrediënten lezen. Tests met de echte voorbeeldregels.
+    - "Nieuw ingrediënt" vult de naam in het vak van de taal waarin de regel staat (hoort bij
+      dezelfde bugfamilie als 6A.1).
+    Samen met 6A.10 (rechte haakjes) in één keer oppakken.
 
 ## Blok 6B — Nieuwe labels
 
