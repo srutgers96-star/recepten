@@ -79,6 +79,21 @@ Tweede versie erbij (6 okt): een handleiding "achter de schermen" voor Stijn (XP
 data staat, back-ups, delen), zie docs/phase-6-spec.md blok Z.
 iPhone-spraakcommando's: bewust uit (3 okt) — canListen() is false op iOS; voorlezen werkt wel.
 
+## Werkwijze (afgesproken 7 okt 2026, om de weeklimiet te sparen)
+- **Fable is de bouwer en de controleur.** Ontwerp, ADR's, parser, share-token-codec, migraties,
+  merge-logica en de Engelse teksten voor Gabi blijven bij Fable (invarianten 1–4).
+- **Haiku voor afgebakend sjouwwerk**, als goedkope losse sessie of als `model: 'haiku'` voor
+  mechanische stappen in een workflow: `npm run check/test/build/validate:data` draaien en fouten
+  samenvatten, zoekwerk, i18n-keys NL+EN toevoegen, hernoemen, CSS-tokens, STATUS.md/DEVICE-TEST.md
+  bijwerken, simpele batches met een duidelijk patroon. **Fable loopt daarna na** wat Haiku veranderde.
+- Workflows: geen grote review-fan-outs als het niet nodig is; per stap het lichtste model dat het
+  aankan; vertel Stijn vooraf ongeveer hoe zwaar een blok wordt. Let op: een hervatte workflow haalt
+  niets uit de cache als het eerste agent()-call mislukte (de cache werkt op een ongebroken reeks).
+- **Zichtbaar tijdens het werk (wens Stijn):** bij de start van een workflow het takenpaneel tonen
+  (daar loopt de voortgang per agent en fase live mee; in de terminal: /workflows), de tijdlijn
+  (https://claude.ai/artifact/6LXkS8KpLeqJfkXLYPrg3L) bijwerken met het blok dat loopt en welke
+  agents er per fase aan werken, en na elke deploy de live app openen in het browserpaneel.
+
 ## Praktisch
 - Git/gh niet in PATH van de tool-shell: `export PATH="/c/Program Files/Git/cmd:/c/Program Files/GitHub CLI:$PATH"` (Bash) of absolute paden.
 - Commits in het Nederlands, afsluiten met de `Co-Authored-By:`-regel van het model dat de commit maakt.
