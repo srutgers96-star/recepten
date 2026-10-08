@@ -13,7 +13,8 @@
 // tag is still suggested (true) when nothing contradicts it, and its name is listed in `unsure`
 // so the UI can say "waarschijnlijk" / "probably". Optional and garnish lines count like any
 // other line (a recipe with optional Parmesan is not vegan); alternatives ("of kabeljauw") are
-// not consulted, only the main ingredient of a line.
+// not consulted, only the main ingredient of a line. A "plantaardige" / "vegetarische" qualifier
+// on the line overrides the ingredient's veg/vegan flags (DIET_QUALIFIERS below).
 import type { Line, Recipe } from './model.ts';
 import type { Dictionary, Ingredient } from './dictionary.ts';
 
@@ -47,9 +48,32 @@ function newVerdict(): Verdict {
   return { contradicted: false, unknown: false };
 }
 
-/** The ingredient of a line as far as this dictionary knows it (an unknown id counts as unresolved). */
+/**
+ * Qualifiers that change the diet facts of a line's ingredient (data/qualifiers.json ids, kept by
+ * the parser in `line.qual`): "plantaardige room" is plant-based whatever `room` says; "vegetarische
+ * worst" is vegetarian, and whether it is also vegan is then unknown rather than contradicted.
+ */
+const DIET_QUALIFIERS: Record<string, { vegan: boolean }> = {
+  plantaardige: { vegan: true },
+  vegetarische: { vegan: false },
+};
+
+/**
+ * The ingredient of a line as far as this dictionary knows it (an unknown id counts as unresolved),
+ * with its `veg` / `vegan` flags adjusted for a diet qualifier on the line.
+ */
 function ingredientOf(line: Line, dict: Dictionary): Ingredient | undefined {
-  return line.ing ? dict.get(line.ing) : undefined;
+  const ing = line.ing ? dict.get(line.ing) : undefined;
+  if (!ing) return undefined;
+  let out = ing;
+  for (const id of line.qual ?? []) {
+    const q = DIET_QUALIFIERS[id];
+    if (!q) continue;
+    out = { ...out, veg: true };
+    if (q.vegan) out.vegan = true;
+    else if (out.vegan === false) delete out.vegan;
+  }
+  return out;
 }
 
 function lineLabel(line: Line): string {

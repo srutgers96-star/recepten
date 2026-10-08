@@ -665,7 +665,19 @@ export function EditScreen(props: { id?: string }) {
   const showPlaceholderHint = langs.length > 1 && lines.some((it) => rowHasText(it) && langs.some((l) => it[l].trim() === '') && rowResolved(it));
 
   const pickRow = pickFor ? lines.find((r) => r.key === pickFor) : undefined;
-  const pickQuery = pickRow ? lineFor(pickRow).name || pickRow[lang.value].trim() || pickRow.nl.trim() || pickRow.en.trim() : '';
+  // The picker's prefilled name and the language it is written in (6A.14): the parser's name part
+  // is in the language the parser read (Dutch when present, else English — the `srcLang` rule of
+  // `effectiveLine`); each fallback names the column it was taken from. Without the language the
+  // picker would file "koosjer zout" under the UI language and save a wrong own entry.
+  const pick = ((): { query: string; lang: Lang | undefined } => {
+    if (!pickRow) return { query: '', lang: undefined };
+    const line = lineFor(pickRow);
+    if (line.name) return { query: line.name, lang: line.raw.nl ? 'nl' : 'en' };
+    const ui = lang.value;
+    if (pickRow[ui].trim()) return { query: pickRow[ui].trim(), lang: ui };
+    return pickRow.nl.trim() ? { query: pickRow.nl.trim(), lang: 'nl' } : { query: pickRow.en.trim(), lang: 'en' };
+  })();
+  const pickQuery = pick.query;
 
   // --- language pair ---------------------------------------------------------------------------
 
@@ -716,10 +728,12 @@ export function EditScreen(props: { id?: string }) {
    * source so its structure survives; only unrecognised lines and headers get text in the other
    * column — recognised ones render from the dictionary. Name, serving tip, description and steps
    * are positional as before. Refuses when the step count does not match, and switches to "both"
-   * so the result is visible next to the original.
+   * so the result is visible next to the original. The target language goes to the parser (6A.1):
+   * an answer that repeats the original under its own heading only contributes its target block.
+   * The status line counts what was skipped because that text already existed.
    */
   function applyTranslation() {
-    const answer = parseTranslationAnswer(trText);
+    const answer = parseTranslationAnswer(trText, trTo);
     const to = trTo;
     const hasLineItems = answer.lines.length > 0 || Object.keys(answer.notes).length > 0 || Object.keys(answer.preps).length > 0;
     if (!answer.name && !hasLineItems && answer.steps.length === 0 && !answer.description && !answer.servingTip) {
@@ -758,11 +772,14 @@ export function EditScreen(props: { id?: string }) {
       );
     }
     // Existing target text is never overwritten (A-bis.2), like the lines.
+    let skipped = applied.skipped;
     const nameEmpty = (to === 'nl' ? nameNl : nameEn).trim() === '';
     const tipEmpty = (to === 'nl' ? tipNl : tipEn).trim() === '';
     const nameSet = !!answer.name && nameEmpty;
     if (nameSet) (to === 'nl' ? setNameNl : setNameEn)(answer.name as string);
+    else if (answer.name) skipped++;
     if (answer.servingTip && tipEmpty) (to === 'nl' ? setTipNl : setTipEn)(answer.servingTip);
+    else if (answer.servingTip) skipped++;
     if (answer.description) setDescTr({ ...(descTr ?? existing?.description ?? {}), [to]: answer.description });
     let stepsSet = 0;
     if (answer.steps.length) {
@@ -771,7 +788,11 @@ export function EditScreen(props: { id?: string }) {
         steps.map((r) => {
           if (!rowHasText(r)) return r;
           const v = stepsByNumber[++i];
-          if (!v || r[to].trim() !== '') return r;
+          if (!v) return r;
+          if (r[to].trim() !== '') {
+            skipped++;
+            return r;
+          }
           stepsSet++;
           return { ...r, [to]: v };
         }),
@@ -780,7 +801,10 @@ export function EditScreen(props: { id?: string }) {
     setTrText('');
     setTrOpen(false);
     setMode('both');
-    setStatus(t('edit.translateApplied', { lines: applied.changed, steps: stepsSet, name: nameSet ? t('edit.translateName') : '' }));
+    setStatus(
+      t('edit.translateApplied', { lines: applied.changed, steps: stepsSet, name: nameSet ? t('edit.translateName') : '' }) +
+        (skipped > 0 ? t('edit.translateSkipped', { n: skipped }) : ''),
+    );
   }
 
   // --- photo / text import ---------------------------------------------------------------------
@@ -1254,6 +1278,7 @@ export function EditScreen(props: { id?: string }) {
       <IngredientPicker
         open={pickFor !== null}
         initialQuery={pickQuery}
+        initialLang={pick.lang}
         startNew={pickNew}
         onPick={(id) => {
           if (pickFor) setLinks({ ...links, [pickFor]: id });

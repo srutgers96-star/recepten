@@ -80,8 +80,10 @@ function EntryDetail(props: { ing: Ingredient }) {
   const l = lang.value;
   const dict = dictionary.value;
   const aisleName = dict.aisle(ing.aisle)?.[l] ?? ing.aisle;
-  // UI language first; a name that is the same in both languages ("broccolini") is shown once.
-  const seenAlias = new Set<string>();
+  // UI language first; an alias that equals one of the names or an earlier alias is shown once.
+  // Also skip an alias that only repeats one of the entry's own names ("hagelslag" is both the NL
+  // name and an EN alias; "avocados" is the EN plural).
+  const seenAlias = new Set<string>([ing.nl?.one, ing.nl?.many, ing.en?.one, ing.en?.many].filter((n): n is string => !!n).map(normalizeKey));
   const aliases = [...(ing.aliases?.[l] ?? []), ...(ing.aliases?.[l === 'nl' ? 'en' : 'nl'] ?? [])].filter((a) => {
     const k = normalizeKey(a);
     if (seenAlias.has(k)) return false;

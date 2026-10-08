@@ -24,6 +24,8 @@ const FLAGGED: Ingredient[] = [
   ing('bouillonblokje', 'bouillonblokje', 'stock cube', { vegan: true, gluten: false, glutenUnsure: true }),
   ing('olijfolie', 'olijfolie', 'olive oil', { defaultUnit: 'el', staple: true, vegan: true, gluten: false }),
   ing('mysterieuze-saus', 'mysterieuze saus', 'mystery sauce', { defaultUnit: 'el' }),
+  ing('room', 'room', 'cream', { aisle: 'zuivel', defaultUnit: 'ml', vegan: false, gluten: false }),
+  ing('worst', 'worst', 'sausage', { aisle: 'vlees-vis', veg: false, vegan: false, gluten: false }),
 ];
 const dict = loadDictionary({ ...defaultDictionaryData(), ingredients: FLAGGED });
 const lines = (...raw: string[]): Line[] => raw.map((r) => parseLine(r, dict, 'nl'));
@@ -59,6 +61,22 @@ describe('dietTags', () => {
     expect(d.glutenvrij).toBe(true);
     expect(d.unsure).toEqual(['vegan', 'glutenvrij']);
     expect(d.unresolved).toEqual([]);
+  });
+
+  it('a "plantaardige" qualifier makes the line plant-based; "vegetarische" makes it vegetarian with vegan unknown', () => {
+    expect(dietTags(lines('200 ml room'), dict)).toMatchObject({ vegetarisch: true, vegan: false, unsure: [] });
+    const plant = lines('200 ml plantaardige room');
+    expect(plant[0]).toMatchObject({ ing: 'room', qual: ['plantaardige'] });
+    expect(dietTags(plant, dict)).toEqual({ vegetarisch: true, vegan: true, glutenvrij: true, unsure: [], unresolved: [] });
+    expect(dietTags(lines('1 ui', '200 ml plantaardige room', '50 g kaas'), dict)).toMatchObject({ vegetarisch: true, vegan: false });
+
+    expect(dietTags(lines('2 worsten'), dict)).toMatchObject({ vegetarisch: false, vegan: false });
+    const veggie = lines('2 vegetarische worsten');
+    expect(veggie[0]).toMatchObject({ ing: 'worst', qual: ['vegetarische'] });
+    expect(dietTags(veggie, dict)).toEqual({ vegetarisch: true, vegan: true, glutenvrij: true, unsure: ['vegan'], unresolved: [] });
+    // The category heuristics see the adjusted flags too: a plant-based "kip" is not a meat dish.
+    expect(suggestCategory({ name: { nl: 'Avondeten' }, lines: lines('300 g kip') }, dict)).toBe('vlees');
+    expect(suggestCategory({ name: { nl: 'Avondeten' }, lines: lines('300 g plantaardige kip') }, dict)).toBeUndefined();
   });
 
   it('ignores headers, judges nothing on an empty list, and counts an unknown id as unresolved', () => {

@@ -6,7 +6,9 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
 
 ## Blok 6A — Snelle verbeteringen en bugs
 
-1. **Bug: vertaling plakken werkt alleen goed als de app op Engels staat (M).** Stijn (6 okt):
+1. **✅ GEFIXT 8 okt (Fable-review): Bug: vertaling plakken werkt alleen goed als de app op Engels staat (M).** Oorzaak
+   was de blokvolgorde in het AI-antwoord (eerste blok won), niet de UI-taal; parseTranslationAnswer kent
+   nu taalblokken en de doeltaal (10 tests). Rest van dit punt ter info. Stijn (6 okt):
    route = in de editor de **vertaalprompt** ("Kopieer voor vertaling" → AI → "Plak vertaling").
    Met de app op **NL** plakte hij een antwoord met Nederlands én Engels, maar de app nam er maar één
    van over; met de app op **EN** werkte het wel. Ook: "hij was wel al vertaald maar had het niet altijd
@@ -58,7 +60,7 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
     notities al tussen rechte haakjes ("1 sjalotje [gesnipperd]"). Als de parser dat betrouwbaar
     scheidt, vragen de import- en vertaalprompt de AI om hetzelfde formaat: "hoeveelheid eenheid naam
     [bereiding of notitie]". Eerst nagaan hoe de parser haakjes nu behandelt.
-11. **Ontbrekende woordenboekwoorden uit de screenshot (S).** sultana's (EN sultanas; eigen product
+11. **✅ GEDAAN 8 okt. Ontbrekende woordenboekwoorden uit de screenshot (S).** sultana's (EN sultanas; eigen product
     naast rozijn) en dessertwijn (aliassen botrytiswijn, sémillonwijn; EN dessert wine). Meenemen in de
     Fable-review van blok E.
 12. **Meer profielkleuren (S, wens Stijn).** Nu 6 kleuren (src/profile.ts `PROFILE_COLORS`); de
@@ -73,7 +75,8 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
     klein ?): **Zelf schrijven** · **Plak een recept** (tekst van een website; meestal genoeg) ·
     **Met AI** (prompt kopiëren, met foto of tekst; als plakken niet goed lukt) · **Kies een bestand**
     (recept, bundel of back-up). Dezelfde keuzes in de editor blijven bestaan.
-14. **Regels voor de AI-prompt en de parser (M, uit Gemini-feedback 7 okt).** Bij een recept dat
+14. **Regels voor de AI-prompt en de parser (M, uit Gemini-feedback 7 okt).** *(Deel gedaan 8 okt:
+    "Nieuw ingrediënt" kiest nu het naamvak op de taal van de regel.)* Bij een recept dat
     zonder prompt bijna lukte, maakte Gemini met de prompt toch fouten: "naar smaak"/"to taste"
     vooraan de regel, en zout en peper op één regel. Daardoor raakte de app in de war en kwam bij
     "Nieuw ingrediënt" het Nederlandse "koosjer zout" in het Engelse vak.
@@ -88,7 +91,8 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
     Samen met 6A.10 (rechte haakjes) in één keer oppakken. Let op: "zout en peper" bestaat al als
     gecombineerd woordenboekitem (`zout-en-peper`, voorraadkast); het echte probleem was "naar smaak"
     vooraan de regel.
-15. **"Voorraadkast"-vinkje duidelijker en achteraf aan te passen (S, Stijn 7 okt).** Stijn maakte
+15. **"Voorraadkast"-vinkje duidelijker en achteraf aan te passen (S, Stijn 7 okt).** *(Deel (3)
+    gedaan 8 okt: "koosjer zout"/"kosher salt" zijn aliassen van zout.)* Stijn maakte
     "koosjer zout" aan zonder het vinkje "Voorraadkast (zout, olie, kruiden …)", omdat niet duidelijk
     was wat het betekent: een product dat je meestal al in huis hebt en dat op de boodschappenlijst
     op 0 begint. (1) Andere tekst, bv. "Hoef je meestal niet te kopen (zout, olie, kruiden …)", met

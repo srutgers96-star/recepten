@@ -10,6 +10,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { slugId } from '@/domain/recipe-source';
 import type { Ingredient } from '@/domain/dictionary';
+import type { Lang } from '@/domain/model';
 import { saveUserIngredient } from '@/db/repo';
 import { dictionary, isUserIngredientId, reloadDictionary } from '@/dictionary';
 import { lang, t } from '@/i18n';
@@ -20,6 +21,12 @@ export interface IngredientPickerProps {
   initialQuery?: string;
   /** True opens the sheet on the "Nieuw ingrediënt" form right away, with `initialQuery` as the name. */
   startNew?: boolean;
+  /**
+   * The language of the prefilled name (docs/phase-6-spec.md 6A.14): which name field `initialQuery`
+   * goes into when the form opens. The editor passes the language the line is written in (an NL line
+   * in an EN-set app must not become an English entry); default the UI language.
+   */
+  initialLang?: Lang;
   /** Sheet title (default "Koppel ingrediënt"); the dictionary screen's "Fuseer" passes its own. */
   title?: string;
   /** An id that must not be picked (the own entry being merged): shown greyed with a hint. */
@@ -82,12 +89,12 @@ export function IngredientPicker(props: IngredientPickerProps) {
     if (!props.open) return;
     const { initialQuery, startNew: openForm } = latest.current;
     const q = initialQuery ?? '';
-    const uiLang = lang.value;
+    const nameLang = latest.current.initialLang ?? lang.value;
     setQuery(q);
     setMode(openForm ? 'new' : 'search');
-    setNlOne(openForm && uiLang === 'nl' ? q : '');
+    setNlOne(openForm && nameLang === 'nl' ? q : '');
     setNlMany('');
-    setEnOne(openForm && uiLang === 'en' ? q : '');
+    setEnOne(openForm && nameLang === 'en' ? q : '');
     setEnMany('');
     setAisle('overig');
     setUnit('stuk');
@@ -124,7 +131,9 @@ export function IngredientPicker(props: IngredientPickerProps) {
   const existingShown = existing && existing.id !== ignoreExisting ? existing : undefined;
 
   const startNew = () => {
-    if (l === 'nl') setNlOne(q);
+    // The query goes into the field of the language it was written in (6A.14), like on open.
+    const nameLang = props.initialLang ?? l;
+    if (nameLang === 'nl') setNlOne(q);
     else setEnOne(q);
     setError(null);
     setIgnoreExisting(null);

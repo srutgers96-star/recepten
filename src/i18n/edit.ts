@@ -371,6 +371,7 @@ export const edit: Dict = {
     en: 'Translation filled in: {lines} lines/notes, {steps} steps{name}',
   },
   'edit.translateName': { nl: ', naam', en: ', name' },
+  'edit.translateSkipped': { nl: ' · {n} overgeslagen (stond er al)', en: ' · {n} skipped (already filled in)' },
   'edit.translateNoLines': {
     nl: 'De vertaling had {got} I-regels, maar de prompt vroeg om {expected} (regels {rows}). Kopieer de prompt opnieuw en plak het hele antwoord.',
     en: 'The translation had {got} I-lines, but the prompt asked for {expected} (rows {rows}). Copy the prompt again and paste the whole answer.',

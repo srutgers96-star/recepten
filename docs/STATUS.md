@@ -1,4 +1,4 @@
-# Status — Rutgers' Recepten (bijgewerkt 3 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 8 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 
@@ -25,33 +25,32 @@ via saveOverride + text{en:'human',reviewedBy}, "Stuur correcties" via bestaande
 Experimenten-switch; QR op het recept-deelscherm (qrcode-dependency, ADR-0007, lazy chunk);
 DEVICE-TEST rijen 46–49. Eerder: blok C badges (commit e7298d8), blok B kookstand+ (4e4519e).
 
-## PAUZE tot volgende week — pas verder als Fable weer beschikbaar is (besluit Stijn, 3 okt 2026)
-Blok E en de kleine wensen van 3 okt zijn gebouwd met Claude **Opus 5.5** (Fable-limiet bereikt).
-De gebruikelijke reviewronde van de E-workflow is bewust overgeslagen om de weeklimiet te sparen;
-er was alleen een lichte eigen controle. Daarom, als eerste stap van de volgende sessie, vóór blok F:
-1. **Fable loopt het Opus-werk na** (review + fix waar nodig):
-   - data/ingredients.json: de nieuwe supermarktproducten — Brits-Engelse vertalingen, meervouden,
-     gangpaden, dieetvlaggen (vegan/veg/gluten), perishable/staple, dubbelen met bestaande entries;
-   - tests/parser.golden.json: veranderde toewijzingen van receptregels (geen "kapingen");
-   - src/screens/DictionaryScreen.tsx (+ IngredientPicker.tsx, i18n/edit.ts, settings.css): gangpadfilter,
-     entry-weergave, Nieuw ingrediënt, prestaties bij ±2000 entries;
-   - src/screens/CookScreen.tsx "Alles klaar ✓"; src/voice.ts canListen() uit op iOS;
-   - DEVICE-TEST rij 51 (zekerheidscheck) staat erin — Stijn doet die op de telefoons;
-   - **landingsbundel**: de Safari-deelpagina voor iPhone laadt het woordenboek mee (gedeelde chunk
-     share-*.js groeide van 46 naar 107 kB gzip). Woordenboek uit de landingsbundel houden
-     (er staat een losse taak-chip voor klaar);
-   - suggesties van de data-agents die NIET zijn toegepast (aliassen op bestaande entries zoals
-     elstar/jonagold → appel, philadelphia → roomkaas; qualifier "platte" → "flat-leaf peach";
-     "plantaardige" als vegan in diet.ts): beoordelen;
-   - DATA_VERSION staat nog op 3: de 2 verbeterde receptregels bereiken de telefoons pas na een bump.
-   - ontbrekend in het woordenboek (screenshot Stijn 6 okt): sultana's (sultanas) en dessertwijn
-     (botrytis-/sémillonwijn); zie docs/phase-6-spec.md 6A.11. De vertaal-plakbug (6A.1) mag Fable
-     meteen meenemen als die klein blijkt.
-   Het merge-rapport met alle details staat in het workflow-journal van run wf_c22cac7a-4bf.
-2. Daarna pas **blok F** (raakt het deel-contract, invariant 4 — op Fable met volledige review).
+## Fable-review van het Opus-werk — afgerond 8 okt 2026 (ter info)
+Blok E en de extra's van 3 okt waren met Opus 5.5 gebouwd zonder reviewronde. Fable heeft ze
+nagelopen (workflow wf_7b8c69c0-cb4: 5 reviewers → skeptici → data-fixer + code-fixer → Haiku-gate):
+- Data: taal en vlaggen bleken netjes (alle 1223 entries gelezen); 15 geverifieerde correcties
+  (o.a. "coffee pad", "cold cuts", 3 vega-vervangers vegan→false, maïs-trema's, perishable/staple);
+  nieuw: sultana, platte-perzik (geen "flat-leaf peach" meer); aliassen koosjer zout→zout,
+  elstar/jonagold/granny smith/pink lady→appel, philadelphia→roomkaas, mie→noedels (niet eiermie:
+  supermarkt-mie bevat geen ei), botrytis-/sémillonwijn→dessertwijn. **DATA_VERSION 3 → 4** (via
+  tools/migrate-from-recepten2.ts + npm run migrate); golden hergenereerd (7 regels, allemaal beter).
+  Bump in de browser getest: profiel, kooklog, favorieten en instellingen blijven staan, alleen de
+  klassiekers worden ververst.
+- Code: **vertaal-plakbug (6A.1) gefixt** — parseTranslationAnswer kent nu taalblokken ("=== NL ===",
+  "English:", "Original/Translation" …) en krijgt de doeltaal mee; 10 nieuwe tests. Oorzaak was niet
+  de UI-taal maar de blokvolgorde in het AI-antwoord ("eerste blok wint"). Al vastgelopen recepten
+  herstellen zichzelf niet: in de editor (stand "beide") het verkeerde EN-vak leegmaken en opnieuw
+  plakken. IngredientPicker krijgt de taal van de regel mee (6A.14-deel); detail-aliassen niet meer
+  dubbel; diet.ts: qualifier "plantaardige" = veg+vegan, "vegetarische" = veg (vegan onzeker);
+  "N overgeslagen (stond er al)" in de vertaalstatus.
+- **Landingsbundel (iPhone-deelpagina):** woordenboek wordt lazy geladen ná de eerste weergave;
+  share-chunk 572 → 57 kB (gzip 107 → 20 kB), landing 12,6 kB; woordenboek apart in data-*.js.
+- DEVICE-TEST rij 42 en PLAN.md §0 "Spraak": iPhone-spraak staat bewust uit.
+- Let op voor smoke-tests: de dev-database (localhost) is tijdens de review door een testagent
+  gereset; er staat nu een profiel "Test" met één kookbeurt in.
 
-## Daarna, blok voor blok, elk apart online — volgorde (bijgewerkt 6 okt 2026)
-1. Fable-review van het Opus-werk (zie PAUZE hierboven)
+## Daarna, blok voor blok, elk apart online — volgorde (bijgewerkt 8 okt 2026)
+1. ~~Fable-review van het Opus-werk~~ (afgerond 8 okt)
 2. F vrienden via link/QR + varianten (docs/phase-5-spec.md "Block F")
 3. **Fase 6 — Stijns wensenlijst van 6 okt**, uitgewerkt in **docs/phase-6-spec.md**:
    6A snelle verbeteringen en bugs (import-bug naam NL/EN, curator-ingrediënten, "Gekookt" zonder

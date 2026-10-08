@@ -2,7 +2,7 @@
 // "Language pair", docs/phase-5-spec.md A-bis.2 and A-bis.7).
 import { describe, expect, it } from 'vitest';
 import type { Line } from '../src/domain/model';
-import { answeredSteps, applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation } from '../src/domain/translate-prompt';
+import { answeredSteps, applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation, type TranslationAnswer } from '../src/domain/translate-prompt';
 
 const recipe = {
   name: { nl: 'Uiensoep', en: '' },
@@ -162,6 +162,93 @@ describe('parseTranslationAnswer', () => {
   });
 });
 
+// docs/phase-6-spec.md 6A.1: assistants often answer with the original AND the translation, each
+// under a language heading; only the target language's block may land in the target fields.
+describe('parseTranslationAnswer with language blocks (6A.1)', () => {
+  const nlBlock = ['1. Zoete taart', 'D. Een taart met rozijnen.', "I1. 50 g sultana's", 'I2. 25 g botrytis-sémillonwijn', "S1. Week de sultana's.", 'S2. Bak 40 minuten.'];
+  const enBlock = ['1. Sweet tart', 'D. A tart with raisins.', 'I1. 50 g sultanas', 'I2. 25 g botrytis Sémillon wine', 'S1. Soak the sultanas.', 'S2. Bake for 40 minutes.'];
+  const join = (...parts: string[][]) => parts.map((p) => p.join('\n')).join('\n');
+
+  function expectEn(a: TranslationAnswer) {
+    expect(a.name).toBe('Sweet tart');
+    expect(a.description).toBe('A tart with raisins.');
+    expect(a.lines).toEqual(['50 g sultanas', '25 g botrytis Sémillon wine']);
+    expect(a.lineByNumber).toEqual({ 1: '50 g sultanas', 2: '25 g botrytis Sémillon wine' });
+    expect(a.steps).toEqual(['Soak the sultanas.', 'Bake for 40 minutes.']);
+    expect(a.stepByNumber).toEqual({ 1: 'Soak the sultanas.', 2: 'Bake for 40 minutes.' });
+  }
+  function expectNl(a: TranslationAnswer) {
+    expect(a.name).toBe('Zoete taart');
+    expect(a.description).toBe('Een taart met rozijnen.');
+    expect(a.lines).toEqual(["50 g sultana's", '25 g botrytis-sémillonwijn']);
+    expect(a.steps).toEqual(["Week de sultana's.", 'Bak 40 minuten.']);
+  }
+
+  it('original first, then the translation: NL → EN and EN → NL', () => {
+    expectEn(parseTranslationAnswer(join(['Nederlands:'], nlBlock, [''], ['English:'], enBlock), 'en'));
+    expectNl(parseTranslationAnswer(join(['**English**'], enBlock, [''], ['**Nederlands**'], nlBlock), 'nl'));
+  });
+
+  it('translation first, then the original', () => {
+    expectEn(parseTranslationAnswer(join(['## English'], enBlock, [''], ['## Dutch'], nlBlock), 'en'));
+    expectNl(parseTranslationAnswer(join(['Nederlands:'], nlBlock, [''], ['Engels:'], enBlock), 'nl'));
+  });
+
+  it('understands the "=== NL ===" / "=== EN ===" markers the import prompt teaches', () => {
+    const answer = join(['=== NL ==='], nlBlock, ['=== EN ==='], enBlock);
+    expectEn(parseTranslationAnswer(answer, 'en'));
+    expectNl(parseTranslationAnswer(answer, 'nl'));
+  });
+
+  it('a heading without a blank line above it never glues onto the last step', () => {
+    const a = parseTranslationAnswer(join(nlBlock, ['English:'], enBlock), 'en');
+    expectEn(a);
+    const b = parseTranslationAnswer(join(nlBlock, ['English:'], enBlock), 'nl');
+    expectNl(b);
+    expect(b.stepByNumber[2]).toBe('Bak 40 minuten.');
+  });
+
+  it('"Original" / "Translation" headings name the role of the block, also without the target language', () => {
+    expectEn(parseTranslationAnswer(join(['Original:'], nlBlock, [''], ['Translation:'], enBlock), 'en'));
+    expectNl(parseTranslationAnswer(join(['**Origineel**'], enBlock, [''], ['**Vertaling**'], nlBlock), 'nl'));
+    expectEn(parseTranslationAnswer(join(['Original:'], nlBlock, [''], ['Translation:'], enBlock)));
+    expectEn(parseTranslationAnswer(join(['Dutch original'], nlBlock, [''], ['English translation:'], enBlock), 'en'));
+  });
+
+  it('an original without a heading followed by a headed translation uses the translation', () => {
+    expectEn(parseTranslationAnswer(join(nlBlock, [''], ['**English translation:**'], enBlock), 'en'));
+    // Chatter plus a headed translation only.
+    expectEn(parseTranslationAnswer(join(['Sure, here it is:'], [''], ['English:'], enBlock), 'en'));
+  });
+
+  it('a target block that repeats the original but skips I1 leaves row 1 alone (the sultana screenshot)', () => {
+    const a = parseTranslationAnswer(join(['Nederlands:'], nlBlock, [''], ['English:'], ['1. Sweet tart', 'I2. 25 g botrytis Sémillon wine', 'S1. Soak the sultanas.', 'S2. Bake for 40 minutes.']), 'en');
+    expect(a.name).toBe('Sweet tart');
+    expect(a.lineByNumber).toEqual({ 2: '25 g botrytis Sémillon wine' });
+    expect(a.lines).toEqual(['25 g botrytis Sémillon wine']);
+    const lines: Line[] = [{ raw: { nl: "50 g sultana's" }, ing: null }, { raw: { nl: '25 g botrytis-sémillonwijn' }, ing: null }];
+    const r = applyTranslationAnswer(lines, a, 'en', { lineNumbers: [1, 2] });
+    expect(r.lines.map((l) => l.raw.en)).toEqual([undefined, '25 g botrytis Sémillon wine']);
+    expect(r.changed).toBe(1);
+  });
+
+  it('without the target language a two-language answer still reads as before (first block wins); one block is unchanged', () => {
+    const a = parseTranslationAnswer(join(['Nederlands:'], nlBlock, [''], ['English:'], enBlock));
+    expect(a.name).toBe('Zoete taart');
+    expect(a.lineByNumber[1]).toBe("50 g sultana's");
+    expectEn(parseTranslationAnswer(enBlock.join('\n'), 'en'));
+    expectEn(parseTranslationAnswer(join(['English:'], enBlock), 'en'));
+    expectNl(parseTranslationAnswer(join(['=== NL ==='], nlBlock), 'nl'));
+  });
+
+  it('a lone word in a step or a heading with more words is not a block heading', () => {
+    const a = parseTranslationAnswer('S1. Add the English mustard.\nS2. Translation of flavours: stir.\nS3. Serve.', 'en');
+    expect(a.steps).toEqual(['Add the English mustard.', 'Translation of flavours: stir.', 'Serve.']);
+    expect(parseTranslationAnswer('Here is the English translation of your recipe:\n\nI1. 4 onions', 'en')).toMatchObject({ lines: ['4 onions'] });
+    expect(parseTranslationAnswer('Here is the English translation of your recipe:\n\nI1. 4 onions', 'en').name).toBeUndefined();
+  });
+});
+
 describe('applyTranslationAnswer', () => {
   it('writes note/prep/raw into the target language only, never overwriting, never raw on a resolved line', () => {
     const answer = parseTranslationAnswer('1. Stew\nN1. cut into roughly 2 cm cubes\nP3. the old-fashioned way\nI4. 4 tins tuna in water\nI2. 2 tbsp olive oil');
@@ -172,10 +259,12 @@ describe('applyTranslationAnswer', () => {
     expect(r.lines[1]).toBe(parsed[1]); // resolved, no free text: untouched even though I2 was answered
     expect(r.lines[2]?.prep).toEqual({ nl: 'op de ouderwetse manier', en: 'the old-fashioned way' });
     expect(r.lines[3]?.raw).toEqual({ nl: '4 blikjes tonijn op water', en: '4 tins tuna in water' });
-    // Existing target text stays.
+    // Existing target text stays; the caller hears how many answered items were skipped for it.
     const again = applyTranslationAnswer(r.lines, parseTranslationAnswer('N1. something else\nI4. other'), 'en');
     expect(again.changed).toBe(0);
+    expect(again.skipped).toBe(2);
     expect(again.lines[0]?.note?.en).toBe('cut into roughly 2 cm cubes');
+    expect(r.skipped).toBe(0);
   });
 
   it('maps renumbered I-items positionally when the count matches the plan', () => {

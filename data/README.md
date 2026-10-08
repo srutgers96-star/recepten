@@ -30,7 +30,7 @@ glutenUnsure: true`, so a recipe with them shows "waarschijnlijk glutenvrij" ins
 ## `recipes.json`
 
 ```
-{ schema: 2, dataVersion: 3, generatedAt: "<ISO>", recipes: Recipe[] }   // sorted by name.nl
+{ schema: 2, dataVersion: 4, generatedAt: "<ISO>", recipes: Recipe[] }   // sorted by name.nl
 ```
 
 `Recipe` is the domain type in `src/domain/model.ts` (docs/phase-1-spec.md §1, phase-2-spec.md §2).
@@ -118,7 +118,8 @@ On start it compares `settings.dataVersion` with the bundled `dataVersion` and r
 file when they differ. **Bump `DATA_VERSION` in `tools/migrate-from-recepten2.ts`** whenever the
 bundled classics change in a way every phone must pick up (new translations, fixed text, added
 recipes). Version 2 = structured lines (phase 2); version 3 = diet tags derived from the ingredient flags
-(phase 5 block A). Builtins are never edited in place: "Maak eigen
+(phase 5 block A); version 4 = the block-E dictionary (1600+ products) and its review (phase 5 block E,
+October 2026). Builtins are never edited in place: "Maak eigen
 kopie" creates a `u:` recipe with `origin.basedOn` pointing at the classic.
 
 ## Validation

@@ -2,7 +2,7 @@
   "generatedBy": "node --experimental-strip-types tools/gen-golden.ts",
   "source": "data/source/recipes-recepten2.json",
   "dictionary": {
-    "ingredients": 1601,
+    "ingredients": 1602,
     "units": 49,
     "qualifiers": 100,
     "prepPhrases": 152
@@ -452,7 +452,7 @@
         "name": "mais",
         "confidence": 1
       },
-      "nl": "1 blik mais",
+      "nl": "1 blik maïs",
       "en": "1 tin sweetcorn"
     },
     {
@@ -474,7 +474,7 @@
         },
         "confidence": 1
       },
-      "nl": "1 blik mais, afgegoten",
+      "nl": "1 blik maïs, afgegoten",
       "en": "1 tin sweetcorn, drained"
     },
     {
@@ -3694,7 +3694,7 @@
         ],
         "confidence": 1
       },
-      "nl": "1 blik kleine mais",
+      "nl": "1 blik kleine maïs",
       "en": "1 tin small sweetcorn"
     },
     {
@@ -9194,7 +9194,7 @@
         "name": "mais uit blik",
         "confidence": 1
       },
-      "nl": "125 g mais",
+      "nl": "125 g maïs",
       "en": "125 g sweetcorn"
     },
     {
@@ -18377,7 +18377,7 @@
         "name": "mais uit blik",
         "confidence": 1
       },
-      "nl": "300 g mais",
+      "nl": "300 g maïs",
       "en": "300 g sweetcorn"
     },
     {
@@ -18833,7 +18833,7 @@
         "name": "mais uit blik",
         "confidence": 1
       },
-      "nl": "350 g mais",
+      "nl": "350 g maïs",
       "en": "350 g sweetcorn"
     },
     {
@@ -25327,7 +25327,7 @@
         "confidence": 1
       },
       "nl": "850 g gepelde tomaten uit blik",
-      "en": "850 g peeled plum tomatoes"
+      "en": "850 g peeled tinned plum tomatoes"
     },
     {
       "raw": "90 g pindakaas",

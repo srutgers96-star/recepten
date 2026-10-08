@@ -9,8 +9,11 @@
 //        travel by id only, so they are counted, not named)
 // Ingredient lines are rendered through the bundled dictionary (schema-2 lines carry `ing`,
 // `qty`, `unit`, `prep` and usually only a Dutch `raw`), so the EN view shows English names;
-// a line the dictionary cannot render falls back to its raw text.
-import { defaultDictionary } from './domain/data';
+// a line the dictionary cannot render falls back to its raw text. The dictionary is by far the
+// largest part of the app (±1600 products, ~60 kB gzip), so it is NOT in this bundle: the page
+// paints with the raw line text first and loads the dictionary afterwards (`import()`), which
+// only improves the ingredient lines once it is in.
+import type { Dictionary } from './domain/dictionary';
 import { pickText, type Lang, type Line, type Recipe, type Step, type Text } from './domain/model';
 import { renderLine } from './domain/render';
 import { parseEnvelope, type ParsedShare, type PatchPayload } from './domain/share';
@@ -126,6 +129,31 @@ const app = document.getElementById('app')!;
 let lang: Lang = /^en/i.test(navigator.language ?? '') ? 'en' : 'nl';
 let share: ParsedShare | null = null;
 let problem: 'invalid' | 'unsupported' | null = null;
+/** The bundled dictionary once its chunk has arrived (null until then: lines show their raw text). */
+let dict: Dictionary | null = null;
+
+/** Whether the share has ingredient lines to render (only then is the dictionary worth loading). */
+function hasLines(s: ParsedShare): boolean {
+  if (s.kind === 'recipe') return (s.recipes[0]?.lines.length ?? 0) > 0;
+  if (s.kind === 'patch') return Array.isArray(s.patches[0]?.patch?.lines) && (s.patches[0]?.patch?.lines as unknown[]).length > 0;
+  return false;
+}
+
+/**
+ * Loads the dictionary chunk after the first paint and re-renders the lines through it. Nothing
+ * else waits for it; a failed load simply leaves the raw text. The chunk holds data files and the
+ * dictionary class only (no Dexie, no storage: CLAUDE.md invariant 6 still holds).
+ */
+function loadDictionaryLater() {
+  import('./domain/data')
+    .then((m) => {
+      dict = m.defaultDictionary();
+      if (share) render(true);
+    })
+    .catch(() => {
+      /* offline or a stale precache: the raw text stays */
+    });
+}
 
 /** "<nl> · <en>" when both exist and differ, else the one that exists. */
 function bothNames(t: Text | null | undefined): string {
@@ -136,12 +164,11 @@ function bothNames(t: Text | null | undefined): string {
 }
 
 function linesHtml(lines: readonly Line[]): string {
-  const dict = defaultDictionary();
   return lines
     .map((l) => {
       const header = l.kind === 'header';
       let text = '';
-      if (!header) {
+      if (!header && dict) {
         try {
           text = renderLine(l, dict, lang);
         } catch {
@@ -264,8 +291,10 @@ function planHtml(s: ParsedShare, by: string): string[] {
   return parts;
 }
 
-function render() {
+/** `keepStatus`: the dictionary re-render must not wipe a "Gekopieerd" the person just got. */
+function render(keepStatus = false) {
   const L = S[lang];
+  const status = keepStatus ? (document.getElementById('status')?.textContent ?? '') : '';
   const parts: string[] = [];
   parts.push(`<style>${CSS}</style><main>`);
   parts.push(`<div class="top"><h1>${esc(L.title)}</h1><div class="lang"><button type="button" data-lang="nl" class="${lang === 'nl' ? 'on' : ''}">NL</button><button type="button" data-lang="en" class="${lang === 'en' ? 'on' : ''}">EN</button></div></div>`);
@@ -290,6 +319,10 @@ function render() {
   }
   parts.push('</main>');
   app.innerHTML = parts.join('');
+  if (status) {
+    const el = document.getElementById('status');
+    if (el) el.textContent = status;
+  }
 
   for (const b of app.querySelectorAll<HTMLButtonElement>('button[data-lang]')) {
     b.addEventListener('click', () => {
@@ -329,6 +362,7 @@ async function boot() {
     problem = 'invalid';
   }
   render();
+  if (share && hasLines(share)) loadDictionaryLater();
 }
 
 void boot();

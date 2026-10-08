@@ -19,8 +19,11 @@
 // `parseTranslationAnswer` is tolerant: markdown bold/bullets around the markers, "I1:" or "I1)"
 // instead of "I1.", chatter before/after the list, a missing name (or the name as "Title:" /
 // "Naam:" / the first line), and continuation lines (a step that spans several lines joins the
-// previous item). `applyTranslationAnswer` writes the answer into the target language only and never
-// overwrites text that is already there.
+// previous item). Assistants also like to answer with the original AND the translation, each under a
+// language heading ("Nederlands:", "## English", "=== EN ===", "Original:" / "Translation:"); with the
+// target language given (docs/phase-6-spec.md 6A.1) only the items of the target block are used, so a
+// Dutch original that comes first never lands in the English fields. `applyTranslationAnswer` writes
+// the answer into the target language only and never overwrites text that is already there.
 import { hasLang, type Lang, type Line, type Text } from './model.ts';
 
 const LANG_NAME: Record<Lang, string> = { nl: 'Dutch', en: 'British English' };
@@ -161,10 +164,46 @@ const NAME_LINE_RE = /^[\s*_#>-]*(?:name|naam|title|titel|recipe|recept|recipe n
 /** Chatter that must never become the recipe name. */
 const CHATTER_RE = /\b(translation|translated|translate|vertaling|vertaald|vertalen|here|hier|sure|certainly|of course)\b/iu;
 
+/**
+ * The block an item came from: a language ("=== NL ===", "English:"), or the role when the heading
+ * only says which text is which ("Origineel:" = the source, "Translation:" = the target).
+ */
+type BlockTag = Lang | 'source' | 'target';
+
+/** What a block heading is wrapped in: "=== NL ===", "## EN", "**Nederlands:**", "(NL)", "### English". */
+const BLOCK_TRIM_RE = /^[\s*_#>=[(]+|[\s*_:=\])]+$/gu;
+/**
+ * The words a heading may hold (lower-cased, after the trim): a language, or original/translation,
+ * optionally followed by one noun ("English translation", "Nederlandse versie", "Original recipe").
+ * The two-letter codes are matched separately and only in upper case ("en" alone is a Dutch word).
+ */
+const BLOCK_WORD_RE = /^(nederlands|nederlandse|dutch|engels|engelse|english|origineel|originele|original|bron|brontekst|source|vertaling|translation|vertaald|translated)(?:\s+(?:versie|version|vertaling|translation|origineel|original|tekst|text|recept|recipe))?$/u;
+
+/**
+ * A language-block heading: a line that holds nothing but the language (the same set as
+ * `markerLangOf` in photo-import.ts, which the import prompt teaches: "=== NL ===", "## EN",
+ * "**Nederlands:**", "English", "Dutch", "Engels") or the role of the block ("Origineel" /
+ * "Original" = source, "Vertaling" / "Translation" = target). Null for any other line.
+ */
+function blockTagOf(line: string): BlockTag | null {
+  const core = line.replace(BLOCK_TRIM_RE, '');
+  if (core === 'NL') return 'nl';
+  if (core === 'EN') return 'en';
+  const m = BLOCK_WORD_RE.exec(core.toLowerCase());
+  if (!m) return null;
+  const word = m[1] as string;
+  if (/^(nederlands|nederlandse|dutch)$/u.test(word)) return 'nl';
+  if (/^(engels|engelse|english)$/u.test(word)) return 'en';
+  if (/^(origineel|originele|original|bron|brontekst|source)$/u.test(word)) return 'source';
+  return 'target';
+}
+
 interface Item {
   kind: 'name' | 'description' | 'servingTip' | 'line' | 'note' | 'prep' | 'step';
   index: number;
   text: string;
+  /** The language block the item was found in; absent before the first (or without any) heading. */
+  block?: BlockTag;
 }
 
 function cleanName(s: string): string {
@@ -176,12 +215,27 @@ function cleanName(s: string): string {
  * keep the order of appearance); lines without a marker join the previous item, chatter before
  * the first marker is ignored — unless it is exactly one plain line, which is then the name
  * (A-bis.7: a missing "1." never blocks the rest).
+ *
+ * Language blocks (6A.1): a heading such as "Nederlands:", "## English", "=== EN ===" or
+ * "Translation:" starts a new block, in which the name, D. and T. may appear once more. With `to`
+ * given, an answer that has items in the target language's block (or a "Translation" block) uses
+ * ONLY those items; without a target block, items of the source block are dropped. Without `to`
+ * only the "Original"/"Translation" roles are resolved (the legacy callers and tests).
  */
-export function parseTranslationAnswer(answer: string): TranslationAnswer {
+export function parseTranslationAnswer(answer: string, to?: Lang): TranslationAnswer {
   const items: Item[] = [];
   let current: Item | null = null;
   let section: 'line' | 'step' | null = null;
   let autoIndex = 0;
+  /** The language block the parser is in (null before the first heading). */
+  let block: BlockTag | null = null;
+  /** True when the item came from the block the parser is in (one name / D. / T. per block). */
+  const inBlock = (it: Item) => (it.block ?? null) === block;
+  const push = (it: Item): Item => {
+    if (block) it.block = block;
+    items.push(it);
+    return it;
+  };
   /** Non-empty lines before the first marker or section header (a possible name). */
   const preamble: string[] = [];
   let sawMarker = false;
@@ -190,6 +244,16 @@ export function parseTranslationAnswer(answer: string): TranslationAnswer {
     if (line.trim() === '') {
       // A blank line ends a continuation: the next unmarked line is not glued on.
       current = null;
+      continue;
+    }
+    const tag = blockTagOf(line);
+    if (tag) {
+      // A language heading never glues onto the step above it, even without a blank line between.
+      block = tag;
+      current = null;
+      section = null;
+      autoIndex = 0;
+      sawMarker = true;
       continue;
     }
     const sec = SECTION_RE.exec(line);
@@ -201,9 +265,8 @@ export function parseTranslationAnswer(answer: string): TranslationAnswer {
       continue;
     }
     const named = NAME_LINE_RE.exec(line);
-    if (named && !items.some((it) => it.kind === 'name')) {
-      current = { kind: 'name', index: 0, text: cleanName(named[1] as string) };
-      items.push(current);
+    if (named && !items.some((it) => it.kind === 'name' && inBlock(it))) {
+      current = push({ kind: 'name', index: 0, text: cleanName(named[1] as string) });
       sawMarker = true;
       continue;
     }
@@ -211,26 +274,23 @@ export function parseTranslationAnswer(answer: string): TranslationAnswer {
     if (m && (m[1] !== undefined || m[2] !== undefined || m[4] !== undefined)) {
       const body = (m[5] ?? '').replace(/\*+$/u, '').trim();
       if (m[1] !== undefined && m[2] === undefined && m[4] === undefined) {
-        // "1." at the start is the name — but only once; later "1." lines are plain numbering.
-        if (!items.some((it) => it.kind === 'name') && section === null) {
-          current = { kind: 'name', index: 0, text: cleanName(body) };
-          items.push(current);
+        // "1." at the start is the name — but only once per block; later "1." lines are plain numbering.
+        if (!items.some((it) => it.kind === 'name' && inBlock(it)) && section === null) {
+          current = push({ kind: 'name', index: 0, text: cleanName(body) });
           sawMarker = true;
           continue;
         }
         if (section) {
           autoIndex = 1;
-          current = { kind: section, index: 1, text: body };
-          items.push(current);
+          current = push({ kind: section, index: 1, text: body });
           sawMarker = true;
           continue;
         }
       }
       if (m[4] !== undefined) {
         const kind = (m[4] as string).toUpperCase() === 'D' ? 'description' : 'servingTip';
-        if (!items.some((it) => it.kind === kind)) {
-          current = { kind, index: 0, text: body };
-          items.push(current);
+        if (!items.some((it) => it.kind === kind && inBlock(it))) {
+          current = push({ kind, index: 0, text: body });
           sawMarker = true;
           continue;
         }
@@ -238,8 +298,7 @@ export function parseTranslationAnswer(answer: string): TranslationAnswer {
       if (m[2] !== undefined) {
         const letter = (m[2] as string).toUpperCase();
         const kind = letter === 'I' ? 'line' : letter === 'N' ? 'note' : letter === 'P' ? 'prep' : 'step';
-        current = { kind, index: Number(m[3]), text: body };
-        items.push(current);
+        current = push({ kind, index: Number(m[3]), text: body });
         sawMarker = true;
         continue;
       }
@@ -248,8 +307,7 @@ export function parseTranslationAnswer(answer: string): TranslationAnswer {
     const plain = /^[\s*\-•]*(\d{1,3})\s*[.:)]\s+(.*)$/u.exec(line);
     if (plain && section) {
       autoIndex = Number(plain[1]);
-      current = { kind: section, index: autoIndex, text: (plain[2] ?? '').trim() };
-      items.push(current);
+      current = push({ kind: section, index: autoIndex, text: (plain[2] ?? '').trim() });
       continue;
     }
     // Unmarked line: inside a section a bullet (or the first line) starts a new item, anything
@@ -257,8 +315,7 @@ export function parseTranslationAnswer(answer: string): TranslationAnswer {
     const bullet = /^[-*•]\s+/u.test(line.trim());
     if (section && (bullet || !current)) {
       autoIndex += 1;
-      current = { kind: section, index: autoIndex, text: line.trim().replace(/^[-*•]\s+/u, '') };
-      items.push(current);
+      current = push({ kind: section, index: autoIndex, text: line.trim().replace(/^[-*•]\s+/u, '') });
     } else if (current) {
       current.text = current.text ? `${current.text}\n${line.trim()}` : line.trim();
     } else if (!sawMarker) {
@@ -266,8 +323,14 @@ export function parseTranslationAnswer(answer: string): TranslationAnswer {
     }
   }
 
+  // 6A.1: keep the target language's block when there is one, else drop the source block's items.
+  const other: Lang | undefined = to === undefined ? undefined : to === 'nl' ? 'en' : 'nl';
+  const isTarget = (it: Item) => it.block === 'target' || (to !== undefined && it.block === to);
+  const isSource = (it: Item) => it.block === 'source' || (other !== undefined && it.block === other);
+  const kept = items.some(isTarget) ? items.filter(isTarget) : items.filter((it) => !isSource(it));
+
   const ordered = (kind: Item['kind']): Item[] =>
-    items
+    kept
       .filter((it) => it.kind === kind)
       .map((it, order) => ({ it, order }))
       .sort((a, b) => a.it.index - b.it.index || a.order - b.order)
@@ -286,16 +349,17 @@ export function parseTranslationAnswer(answer: string): TranslationAnswer {
     steps: ordered('step').map((it) => it.text.trim()),
     stepByNumber: byNumber('step'),
   };
-  const name = items.find((it) => it.kind === 'name');
+  const name = kept.find((it) => it.kind === 'name');
   if (name && name.text.trim()) out.name = name.text.trim();
-  else if (preamble.length === 1) {
-    // "Uiensoep" on its own above the list: the name without its "1." (A-bis.7).
+  else if (preamble.length === 1 && !items.some((it) => it.kind === 'name')) {
+    // "Uiensoep" on its own above the list: the name without its "1." (A-bis.7). Not when the
+    // answer did name the recipe in a block that was dropped: that preamble is then chatter.
     const candidate = cleanName(preamble[0] as string);
     if (candidate && candidate.length <= 100 && !/[:!?]$/u.test(candidate) && !CHATTER_RE.test(candidate)) out.name = candidate;
   }
-  const description = items.find((it) => it.kind === 'description');
+  const description = kept.find((it) => it.kind === 'description');
   if (description && description.text.trim()) out.description = description.text.trim();
-  const tip = items.find((it) => it.kind === 'servingTip');
+  const tip = kept.find((it) => it.kind === 'servingTip');
   if (tip && tip.text.trim()) out.servingTip = tip.text.trim();
   return out;
 }
@@ -313,6 +377,8 @@ export interface ApplyResult {
   lines: Line[];
   /** How many lines were changed (raw, note or prep in `to`). */
   changed: number;
+  /** How many answered items were left out because that text already existed in `to` (the status line says so). */
+  skipped: number;
 }
 
 /**
@@ -333,28 +399,32 @@ export function applyTranslationAnswer(lines: readonly Line[], answer: Translati
     });
   }
   let changed = 0;
+  let skipped = 0;
   const out = lines.map((line, i) => {
     const n = i + 1;
     let next: Line | null = null;
     const resolved = line.kind !== 'header' && isResolved(line, i);
     const rawText = byNumber[n];
-    if (!resolved && rawText && !hasLang(line.raw, to)) {
-      next = { ...line, raw: { ...line.raw, [to]: rawText } };
+    if (!resolved && rawText) {
+      if (!hasLang(line.raw, to)) next = { ...line, raw: { ...line.raw, [to]: rawText } };
+      else skipped++;
     }
     if (resolved) {
       const note = answer.notes[n];
-      if (note && line.note && hasLang(line.note, to) === false) {
-        next = { ...(next ?? line), note: { ...line.note, [to]: note } };
+      if (note && line.note) {
+        if (!hasLang(line.note, to)) next = { ...(next ?? line), note: { ...line.note, [to]: note } };
+        else skipped++;
       }
       const prep = answer.preps[n];
-      if (prep && line.prep && hasLang(line.prep, to) === false) {
-        next = { ...(next ?? line), prep: { ...line.prep, [to]: prep } };
+      if (prep && line.prep) {
+        if (!hasLang(line.prep, to)) next = { ...(next ?? line), prep: { ...line.prep, [to]: prep } };
+        else skipped++;
       }
     }
     if (next) changed++;
     return next ?? line;
   });
-  return { lines: out, changed };
+  return { lines: out, changed, skipped };
 }
 
 /**
