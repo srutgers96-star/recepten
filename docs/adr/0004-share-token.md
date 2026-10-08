@@ -1,6 +1,6 @@
 # ADR-0004 — Share token: `#r=` deflate-raw + base64url, ≤ ~3.5 KB per message, files above that
 
-**Status:** Accepted · **Date:** 2026-09-24 · **Amended:** 2026-09-29 (phase 3: `p` and `b` kinds, dict delta, the 3.5 KB rule in code)
+**Status:** Accepted · **Date:** 2026-09-24 · **Amended:** 2026-09-29 (phase 3: `p` and `b` kinds, dict delta, the 3.5 KB rule in code) · 2026-10-08 (phase 5 block F: the `f` kind, `#f=` member card)
 
 ## Context
 
@@ -20,8 +20,8 @@ token = base64url( deflate-raw( UTF-8 JSON envelope ) )     // only [A-Za-z0-9_-
 ```
 
 - Fragment keys are the type: `#r=` one recipe, `#p=` override patch on a built-in, `#w=` week plan,
-  `#b=` bundle/backup. They are **never** hash routes (routes are `#/…`).
-- Envelope: `{ v, t, by, at, msg?, … }` with `v` the contract version, `t` ∈ `r|p|w|b`, `by` the
+  `#b=` bundle/backup, `#f=` member card (2026-10-08, below). They are **never** hash routes (routes are `#/…`).
+- Envelope: `{ v, t, by, at, msg?, … }` with `v` the contract version, `t` ∈ `r|p|w|b|f`, `by` the
   sender's profile name, `at` an ISO timestamp, plus the payload (`r` = full schema-2 recipe in both
   languages and `dict` = only the dictionary entries the receiver may lack; `p` = `{baseId, rev,
   patch}`; `w` = `{weekStart, entries[], recipes[]}`; `b` = the full backup shape).
@@ -79,6 +79,24 @@ stay the type. Every envelope is `{ v: 2, t, by?, at?, msg?, dict?, … }`.
 - A `p` envelope with an **empty patch** `{}` and `lineOverrides` carries the "Koppel ingrediënt" links of
   a classic that has no override (an `r` of a classic would be "Heb je al" on the receiver). The receiver
   writes the line overrides only and never an override row.
+
+## Phase 5, block F (2026-10-08): the `f` kind — a member card (`#f=`)
+
+A fifth kind, a new fragment key, the same v2 envelope: `{ v: 2, t: 'f', by, at, f: { id, name, color,
+lang, deviceId? } }` — the sender as a household member (`id` = their profile id `p:…`, `color` the profile
+swatch, `lang` `'nl'|'en'`, `deviceId` a stable random id of their phone from the setting `device.id`, so a
+re-sent card updates the same member instead of adding a second one). It carries no recipes and no `dict`.
+`src/domain/share.ts`: `buildMemberEnvelope(card)`, `readMemberPayload(v)` (tolerant: `id` and `name`
+required, the colour falls back to cobalt unless it is a plain CSS colour, `lang` defaults to `nl`, unknown
+keys stay) and `parseEnvelope` → `{ kind: 'member', member }`; `buildMemberShareMessage` is the one-sentence
+WhatsApp text with the `#f=` URL alone on the last line. `token.ts`, `router.ts`, `boot.ts` and
+`landing.ts` accept `f` next to `r|p|w|b`; the landing page shows "Kaartje van <name>" with the swatch and
+language, "Kopieer code" and the same hand-off card (on an iPhone the card arrives by copy → app → Inbox →
+Plak; a link never opens the installed app, CLAUDE.md invariant 5). Frozen `#f=` tokens (native and
+fflate) sit in `tests/fixtures/frozen-share-tokens.ts`. **Honest limit:** an app from before this block
+does not know `f` — its `extractTokens` skips `#f=` and its `parseEnvelope` answers `invalid-token`, so
+such a phone shows "no readable recipe" / opens Home, **not** "update the app" (that message is tied to `v`,
+which stays 2); both phones need this version before cards can be exchanged.
 
 ## Consequences
 

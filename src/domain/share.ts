@@ -8,6 +8,9 @@
 //   t: 'w'  w: { items: [{rid, srv}], recipes, note? }       a week plan (`#w=`, docs/phase-4-spec.md §1):
 //                                                            the dishes with their servings plus the own
 //                                                            recipes the partner may lack (normal import)
+//   t: 'f'  f: { id, name, color, lang, deviceId? }           a member card (`#f=`, docs/phase-5-spec.md
+//                                                            block F): who the sender is on their phone,
+//                                                            so the receiver can add them to the household
 //
 // Every envelope may carry `dict: { ing: Ingredient[] }`: the USER ingredients (ids the bundled
 // dictionary does not know) the payload references, so the receiver can add the missing ones.
@@ -71,12 +74,32 @@ export interface PlanShare {
   note?: string;
 }
 
-export type ShareKind = 'recipe' | 'patch' | 'bundle' | 'plan';
+/**
+ * A member card as it travels (`#f=`, phase 5 block F): the sender as a household member. The
+ * receiver stores it with `local: false` (src/domain/household.ts) and maps received `by` names
+ * onto it. Unknown keys are preserved.
+ */
+export interface MemberCard {
+  /** The sender's profile id ('p:…') on their phone; it is the member id on the receiver. */
+  id: string;
+  name: string;
+  /** CSS colour (the profile swatch). */
+  color: string;
+  lang: Lang;
+  /**
+   * A stable random id of the sender's phone (setting 'device.id'). Stored on the member (the UI
+   * says "via kaartje"); a re-sent card finds its member by id or name (`matchMemberForCard`).
+   */
+  deviceId?: string;
+  [k: string]: unknown;
+}
+
+export type ShareKind = 'recipe' | 'patch' | 'bundle' | 'plan' | 'member';
 
 /**
  * What parseEnvelope makes of any envelope: a flat list of recipes and patches plus the delta.
  * A plan (`kind: 'plan'`) adds `plan`; its embedded recipes sit in `recipes` and go through the
- * normal import plan.
+ * normal import plan. A member card (`kind: 'member'`) adds `member` and carries no recipes.
  */
 export interface ParsedShare {
   kind: ShareKind;
@@ -89,6 +112,8 @@ export interface ParsedShare {
   recipes: Recipe[];
   patches: PatchPayload[];
   plan?: PlanShare;
+  /** The member card of a `#f=` envelope (absent when the card was unreadable). */
+  member?: MemberCard;
 }
 
 export interface ShareContext {
@@ -134,6 +159,14 @@ function isRecord(v: unknown): v is Dict {
 function cleanString(v: unknown): string | undefined {
   return typeof v === 'string' && v.trim() !== '' ? v.trim() : undefined;
 }
+
+/** Mirrors household.DEFAULT_MEMBER_COLOR (cobalt) without importing the household module here. */
+const DEFAULT_CARD_COLOR = '#2b4fa8';
+/** A colour the UI may put in an inline style: hex, a CSS colour name, or rgb()/hsl() with plain numbers. */
+const SAFE_COLOR = /^(#[0-9a-f]{3,8}|[a-z]{3,20}|(?:rgb|hsl)a?\(\s*[\d.%\s,/]+\s*\))$/i;
+/** An id as it travels: no whitespace, at most 64 characters. */
+const SAFE_ID = /^\S{1,64}$/;
+const MAX_MEMBER_NAME = 60;
 
 /** Ingredient ids a list of lines references (`ing` and the `alt` lines). */
 export function referencedIngredientIds(lines: readonly Line[]): Set<string> {
@@ -288,7 +321,52 @@ export function buildPlanEnvelope(plan: Plan, recipes: readonly Recipe[], ctx: S
   return env;
 }
 
+/**
+ * `{v: 2, t: 'f', by, at, f: {id, name, color, lang, deviceId?}}`: the sender as a member card.
+ * `by` is the card's name so the Inbox header and the landing page can say who without looking
+ * inside. Nothing else travels: no recipes, no dictionary delta.
+ */
+export function buildMemberEnvelope(card: MemberCard): Envelope {
+  const f: MemberCard = {
+    ...card,
+    id: card.id.trim(),
+    name: card.name.trim(),
+    color: cleanString(card.color) ?? DEFAULT_CARD_COLOR,
+    lang: card.lang === 'en' ? 'en' : 'nl',
+  };
+  const deviceId = cleanString(card.deviceId);
+  if (deviceId) f.deviceId = deviceId;
+  else delete f.deviceId;
+  const env = baseEnvelope('f', f.name);
+  env.f = f;
+  return env;
+}
+
 // --- Parsing ------------------------------------------------------------------------------------
+
+/**
+ * A member card payload, tolerantly: `id` and `name` are required (trimmed; the name is cut at 60
+ * characters), `color` falls back to cobalt unless it is a plain CSS colour, `lang` is 'nl' unless
+ * it says 'en', a `deviceId` with whitespace or over 64 characters is dropped. Unknown keys stay.
+ */
+export function readMemberPayload(v: unknown): MemberCard | null {
+  if (!isRecord(v)) return null;
+  const id = cleanString(v.id);
+  const name = cleanString(v.name);
+  if (!id || !name || !SAFE_ID.test(id)) return null;
+  const color = cleanString(v.color);
+  const out: MemberCard = {
+    ...(v as object),
+    id,
+    name: name.slice(0, MAX_MEMBER_NAME).trim(),
+    color: color && SAFE_COLOR.test(color) ? color : DEFAULT_CARD_COLOR,
+    lang: v.lang === 'en' ? 'en' : 'nl',
+  } as MemberCard;
+  const deviceId = cleanString(v.deviceId);
+  if (deviceId && SAFE_ID.test(deviceId)) out.deviceId = deviceId;
+  else delete out.deviceId;
+  return out;
+}
 
 function readIngredient(v: unknown): Ingredient | null {
   if (!isRecord(v) || typeof v.id !== 'string' || !/^[a-z0-9][a-z0-9-]*$/.test(v.id)) return null;
@@ -354,10 +432,13 @@ function readRecipe(v: unknown): Recipe | null {
 }
 
 /**
- * Any envelope (`r`, `p`, `b`; also a legacy backup file with `userRecipes`) -> a ParsedShare.
- * Tolerant: phase-0/1 recipe shapes go through normalizeRecipe, unusable items are dropped,
- * unknown keys stay on the items. Throws Error('invalid-token') for anything that is not an
- * envelope and Error('unsupported-version') for a newer `v` (same as decodeToken).
+ * Any envelope (`r`, `p`, `b`, `w`, `f`; also a legacy backup file with `userRecipes`) -> a
+ * ParsedShare. Tolerant: phase-0/1 recipe shapes go through normalizeRecipe, unusable items are
+ * dropped, unknown keys stay on the items. Throws Error('invalid-token') for anything that is not
+ * an envelope and Error('unsupported-version') for a newer `v` (same as decodeToken).
+ * NB: a kind this app does not know (a future key) is 'invalid-token', not 'unsupported-version',
+ * because `v` stays 2 — so an app from before block F answers a `#f=` link with "no readable
+ * recipe", never with "update the app" (pinned in tests/token.test.ts).
  */
 export function parseEnvelope(env: unknown): ParsedShare {
   const e = validateEnvelope(env);
@@ -422,6 +503,17 @@ export function parseEnvelope(env: unknown): ParsedShare {
     }
     return out;
   }
+  if (e.t === 'f') {
+    // An `f` without a payload object is not a card (a stray "#f=" someone typed).
+    if (!isRecord(e.f)) throw new Error('invalid-token');
+    out.kind = 'member';
+    const member = readMemberPayload(e.f);
+    if (member) {
+      out.member = member;
+      if (!out.by) out.by = member.name;
+    }
+    return out;
+  }
   throw new Error('invalid-token');
 }
 
@@ -437,6 +529,7 @@ export function envelopeItemCount(env: Envelope): number {
   }
   // A plan counts its embedded recipes (what the import writes); the dishes are in planDishCount.
   if (env.t === 'w' && isRecord(env.w)) return Array.isArray(env.w.recipes) ? env.w.recipes.length : 0;
+  // A member card carries no recipes.
   return 0;
 }
 
@@ -458,6 +551,22 @@ export function buildPlanShareMessage(i: { dishes: number; by: string; url: stri
   const what = lang === 'nl' ? (n === 1 ? 'gerecht' : 'gerechten') : n === 1 ? 'dish' : 'dishes';
   const head = lang === 'nl' ? `🗓️ Weekplan${by ? ` van ${by}` : ''}: ${n} ${what}` : `🗓️ Week plan${by ? ` from ${by}` : ''}: ${n} ${what}`;
   return [head, openLine(lang), i.url].join('\n');
+}
+
+/**
+ * The WhatsApp text for a member card: one sentence and the `#f=` URL alone on the last line.
+ * It says "open the link in the app OR paste it into Inbox" because on an iPhone a link never
+ * opens the installed app (CLAUDE.md invariant 5): there the card arrives by copy → app → paste.
+ * {nl, en} literals, like the other message builders (the domain layer is framework-free).
+ */
+export function buildMemberShareMessage(i: { name: string; url: string; lang: Lang }): string {
+  const lang: Lang = i.lang === 'en' ? 'en' : 'nl';
+  const name = i.name.trim() || (lang === 'nl' ? 'iemand' : 'someone');
+  const head =
+    lang === 'nl'
+      ? `👋 Kaartje van ${name} voor Rutgers' Recepten — open de link in de app of plak hem in Inbox om ${name} aan je huishouden toe te voegen.`
+      : `👋 ${name}'s card for Rutgers' Recipes — open the link in the app or paste it into Inbox to add ${name} to your household.`;
+  return [head, i.url].join('\n');
 }
 
 /** "Stijn & co" -> "stijn-co" for the file name; empty -> "export". */
@@ -520,9 +629,10 @@ function envelopeName(env: Envelope): Text {
 /**
  * The WhatsApp text for the envelopes: a single recipe gets the four-line message from
  * message.ts, a single patch its "(aangepast)" variant, a single plan "🗓️ Weekplan van Stijn:
- * 7 gerechten", several items a compact header ("🍲 3 recepten van Stijn"), the open line and
- * one URL per line. Each URL is `#r=`/`#p=`/`#w=`/`#b=`. (A plan combined with other envelopes
- * into a bundle file keeps its recipes but loses the plan itself.)
+ * 7 gerechten", a single member card its one-sentence text, several items a compact header
+ * ("🍲 3 recepten van Stijn"), the open line and one URL per line. Each URL is
+ * `#r=`/`#p=`/`#w=`/`#b=`/`#f=`. (A plan or a card combined with other envelopes into a bundle
+ * file keeps the recipes but loses the plan / the card itself.)
  * When the text is longer than `limit` characters the result is a bundle FILE instead (pretty
  * JSON, not compressed), named "recepten-<name>-YYYY-MM-DD.json".
  */
@@ -547,6 +657,9 @@ export async function planMessages(envelopes: readonly Envelope[], appUrl: strin
     text = buildPatchShareMessage(input);
   } else if (envelopes.length === 1 && first && first.t === 'w' && urls[0]) {
     text = buildPlanShareMessage({ dishes: planDishCount(first), by, url: urls[0], lang });
+  } else if (envelopes.length === 1 && first && first.t === 'f' && urls[0]) {
+    const card = readMemberPayload(first.f);
+    text = buildMemberShareMessage({ name: card?.name ?? by, url: urls[0], lang });
   } else {
     const count = envelopes.reduce((n, e) => n + envelopeItemCount(e), 0);
     text = [buildMultiShareHeader(count, by, lang), openLine(lang), ...urls].join('\n');

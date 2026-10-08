@@ -8,7 +8,10 @@
 // repo.applyImportPlan. Below: the result line with "Maak ongedaan" (undoLastImport), the import
 // history (listImports, collapsible) and the received recipes (unseen badge via 'inbox.seenIds',
 // received patches of classics shown as "<klassieker> · aangepast door X").
-import { useEffect, useRef, useState } from 'preact/hooks';
+// Phase 5 block F: a `#f=` MEMBER CARD in the text (pasted on iPhone, or the link on Android via
+// the router) becomes a card "Voeg <naam> toe aan je huishouden" (HouseholdScreen's MemberCardRow
+// + applyMemberCard); a sender who is a household member is shown with their avatar.
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
 import { ImportPreview } from '@/components/ImportPreview';
@@ -17,6 +20,7 @@ import type { ImportSnapshot } from '@/db/model';
 import {
   addToPlan,
   applyImportPlan,
+  getHousehold,
   getPlan,
   getRecipe,
   getSetting,
@@ -31,6 +35,7 @@ import {
   type ImportResult,
 } from '@/db/repo';
 import { reloadDictionary } from '@/dictionary';
+import { memberByName, membersFrom, type HouseholdSetting, type MemberCard } from '@/domain/household';
 import { defaultChoices, planImport, type ImportChoice, type ImportChoices, type ImportPlan } from '@/domain/merge';
 import { pickText, type Recipe, type Text } from '@/domain/model';
 import { emptyPlan, newPlanItem } from '@/domain/planner';
@@ -40,8 +45,10 @@ import { planWrites } from '@/components/ImportPreview';
 import { decodeToken, extractTokens } from '@/domain/token';
 import { lang, t } from '@/i18n';
 import { INBOX_SEEN_KEY, refreshShareBadges, unsentChanges } from '@/inbox-badge';
-import { activeProfile } from '@/profile';
+import { activeProfile, profiles } from '@/profile';
 import { navigate, pendingImport, route } from '@/router';
+import { applyMemberCard, MemberCardRow, type CardOutcome } from './HouseholdScreen';
+import { Avatar } from './ProfilesScreen';
 
 // --- Seen bookkeeping (setting 'inbox.seenIds'; the Nav badge in src/inbox-badge.ts follows it) ---
 
@@ -79,6 +86,8 @@ interface Collected {
   problems: string[];
   /** A received week plan (`#w=`, phase 4): the first one in the input; its recipes are in `share`. */
   plan?: ReceivedPlan;
+  /** Member cards (`#f=`, block F), one per card id. */
+  members: MemberCard[];
 }
 
 /** A `#w=` plan as the Inbox offers it: the dishes with a name when known here or in the token. */
@@ -107,6 +116,11 @@ function problemOf(e: unknown): string {
 
 function addShare(acc: Collected, parsed: ParsedShare) {
   const s = acc.share;
+  if (parsed.kind === 'member') {
+    // A member card carries no recipes; its `by` is the card's own name, so it never becomes the import's sender.
+    if (parsed.member && !acc.members.some((m) => m.id === parsed.member?.id)) acc.members.push(parsed.member);
+    return;
+  }
   if (parsed.kind === 'plan' && parsed.plan && !acc.plan) {
     const names: Record<string, Text> = {};
     for (const r of parsed.recipes) names[r.id] = r.name;
@@ -201,9 +215,9 @@ function jsonCandidates(part: string): unknown[] {
   }
 }
 
-/** Tokens first (every `#r=`/`#p=`/`#b=` in the text), else JSON by content per part. */
+/** Tokens first (every `#r=`/`#p=`/`#w=`/`#b=`/`#f=` in the text), else JSON by content per part. */
 async function collect(text: string, parts: string[] | null): Promise<Collected> {
-  const acc: Collected = { share: emptyShare(), problems: [] };
+  const acc: Collected = { share: emptyShare(), problems: [], members: [] };
   const tokens = extractTokens(text);
   if (tokens.length) {
     for (const tk of tokens) {
@@ -286,6 +300,11 @@ export function InboxScreen() {
   const [planNames, setPlanNames] = useState<Record<string, Text>>({});
   const [planNotice, setPlanNotice] = useState('');
   const [planDone, setPlanDone] = useState(false);
+  // Block F: received member cards, what happened to each, and the household for the matching.
+  const [cards, setCards] = useState<MemberCard[]>([]);
+  const [cardDone, setCardDone] = useState<Record<string, CardOutcome>>({});
+  const [cardBusy, setCardBusy] = useState(false);
+  const [household, setHouseholdState] = useState<HouseholdSetting | null>(null);
   const seq = useRef(0);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const pending = pendingImport.value;
@@ -301,6 +320,20 @@ export function InboxScreen() {
   useEffect(() => {
     void refreshShareBadges();
   }, []);
+
+  // The household: to say "al lid" on a card and to show a sender who is a member with their avatar.
+  useEffect(() => {
+    let cancelled = false;
+    getHousehold()
+      .then((h) => {
+        if (!cancelled) setHouseholdState(h);
+      })
+      .catch((e: unknown) => console.error('getHousehold', e));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const householdMembers = useMemo(() => (household ? membersFrom(profiles.value, household) : []), [household, profiles.value]);
 
   // A share token arrived in the URL hash (at boot or later): move it into the textarea.
   useEffect(() => {
@@ -349,6 +382,8 @@ export function InboxScreen() {
       setPlanNames({});
       setPlanNotice('');
       setPlanDone(false);
+      setCards([]);
+      setCardDone({});
       return;
     }
     const handle = setTimeout(async () => {
@@ -357,13 +392,15 @@ export function InboxScreen() {
       let err: string | null = null;
       let week: ReceivedPlan | null = null;
       let names: Record<string, Text> = {};
+      let members: MemberCard[] = [];
       try {
         const got = await collect(trimmed, parts);
         probs = got.problems;
+        members = got.members;
         const share = got.share;
         if (share.recipes.length || share.patches.length || share.dict.ing.length) {
           next = planImport(share, await localStateForImport());
-        } else if (!probs.length && !got.plan) {
+        } else if (!probs.length && !got.plan && !members.length) {
           err = t('inbox.noToken');
         }
         if (got.plan) {
@@ -388,6 +425,8 @@ export function InboxScreen() {
       setPlanNames(names);
       setPlanNotice('');
       setPlanDone(false);
+      setCards(members);
+      setCardDone({});
     }, 150);
     return () => clearTimeout(handle);
   }, [text, parts, ui]);
@@ -514,6 +553,22 @@ export function InboxScreen() {
     }
   }
 
+  /** Block F: "Voeg <naam> toe aan je huishouden" on a received member card. */
+  async function addCard(card: MemberCard) {
+    if (cardBusy) return;
+    setCardBusy(true);
+    try {
+      const r = await applyMemberCard(card);
+      setHouseholdState(r.setting);
+      setCardDone((prev) => ({ ...prev, [card.id]: r.outcome }));
+    } catch (e) {
+      console.error('applyMemberCard', e);
+      setNotice(`${t('household.cardFailed')}: ${String((e as Error)?.message ?? e)}`);
+    } finally {
+      setCardBusy(false);
+    }
+  }
+
   async function doUndo() {
     if (busy) return;
     setBusy(true);
@@ -553,6 +608,9 @@ export function InboxScreen() {
   const undoable = isUndoable(rows[0]) ? rows[0] : undefined;
   const resultUndoable = !!result && result.importId !== undefined && !!undoable && undoable.id === result.importId;
   const written = result ? [...result.added, ...result.updated].filter((id) => !id.startsWith('p:')) : [];
+  // Block F: the sender of what is about to be imported, when they are a member of the household
+  // (by name: r/p/w/b envelopes carry only `by`, ADR-0004).
+  const senderMember = plan ? memberByName(householdMembers, plan.by) : undefined;
 
   return (
     <>
@@ -616,6 +674,12 @@ export function InboxScreen() {
           </div>
         ))}
 
+        {cards.map((card) => (
+          <section class="card inbox-member" key={card.id}>
+            <MemberCardRow card={card} members={householdMembers} done={cardDone[card.id]} busy={cardBusy} onAdd={(c) => void addCard(c)} onOpenHousehold={() => navigate('/more/household')} />
+          </section>
+        ))}
+
         {received && (
           <section class="card inbox-plan">
             <h3>{weekTitle}</h3>
@@ -657,6 +721,12 @@ export function InboxScreen() {
             </div>
           </section>
         )}
+        {plan && !planDone && senderMember && (
+          <p class="muted small inbox-sender">
+            <Avatar profile={senderMember} />
+            <span>{t('inbox.fromMember', { name: senderMember.name })}</span>
+          </p>
+        )}
         {plan && !planDone && <ImportPreview plan={plan} choices={choices} ui={ui} busy={busy} onChoice={choose} onImport={() => void doImport()} onOpen={open} />}
         {resultError && <div class="card bad">{resultError}</div>}
 
@@ -692,6 +762,8 @@ export function InboxScreen() {
               if (r.patch) meta.push(r.from ? t('inbox.patchBy', { name: r.from }) : t('inbox.patchAnon'));
               else if (r.from) meta.push(t('common.from', { name: r.from }));
               meta.push(fmtDate(r.at, ui));
+              // Block F: a sender who is a household member gets their colour and initial.
+              const member = memberByName(householdMembers, r.from);
               return (
                 <li key={r.key}>
                   <a
@@ -702,6 +774,7 @@ export function InboxScreen() {
                       openReceived(r);
                     }}
                   >
+                    {member && <Avatar profile={member} />}
                     <span class="name">
                       <span class="inbox-row-name">{pickText(r.name, ui)}</span>
                       <span class="muted small inbox-row-meta">{meta.join(' · ')}</span>

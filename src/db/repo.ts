@@ -497,6 +497,16 @@ export async function duplicateAsOwn(r: Recipe, profile: Profile): Promise<Recip
   return copy;
 }
 
+/**
+ * The own/received recipes that are a diet variant of `id` (docs/phase-5-spec.md block F.2,
+ * `Recipe.variantOf`, src/domain/variants.ts), oldest first. Builtins are never variants.
+ */
+export async function variantsOf(id: string): Promise<Recipe[]> {
+  if (!id) return [];
+  const rows = await db.userRecipes.filter((r) => r.variantOf === id).toArray();
+  return rows.sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id));
+}
+
 // --- Favorites ---------------------------------------------------------------------------------
 
 export async function listFavorites(profileId: string): Promise<Set<string>> {

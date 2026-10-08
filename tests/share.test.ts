@@ -1,6 +1,7 @@
 // Share envelopes (docs/phase-3-spec.md §1, src/domain/share.ts): recipe / patch / bundle
-// round-trips, the dictionary delta (user ids only), the frozen tokens of all three kinds and
-// planMessages (single recipe, single patch, several items, limit -> bundle file).
+// round-trips, the dictionary delta (user ids only), the frozen tokens of all kinds, the week plan
+// (`#w=`), the member card (`#f=`, phase 5 block F) and planMessages (single recipe, single patch,
+// several items, limit -> bundle file).
 import { describe, expect, it } from 'vitest';
 import type { Ingredient } from '../src/domain/dictionary';
 import type { Recipe } from '../src/domain/model';
@@ -9,6 +10,8 @@ import { buildShareMessageFor } from '../src/domain/message';
 import type { Plan } from '../src/domain/planner';
 import {
   buildBundleEnvelope,
+  buildMemberEnvelope,
+  buildMemberShareMessage,
   buildPatchEnvelope,
   buildPlanEnvelope,
   buildPlanShareMessage,
@@ -19,12 +22,24 @@ import {
   parseEnvelope,
   planDishCount,
   planMessages,
+  readMemberPayload,
   referencedIngredientIds,
+  type MemberCard,
   type PatchPayload,
   type PlanPayload,
 } from '../src/domain/share';
 import { decodeToken, encodeToken, extractTokens } from '../src/domain/token';
-import { FROZEN_ENVELOPE_W, FROZEN_TOKEN_B, FROZEN_TOKEN_P, FROZEN_TOKEN_P_FFLATE, FROZEN_TOKEN_W, FROZEN_TOKEN_W_FFLATE } from './fixtures/frozen-share-tokens';
+import {
+  FROZEN_ENVELOPE_F,
+  FROZEN_ENVELOPE_W,
+  FROZEN_TOKEN_B,
+  FROZEN_TOKEN_F,
+  FROZEN_TOKEN_F_FFLATE,
+  FROZEN_TOKEN_P,
+  FROZEN_TOKEN_P_FFLATE,
+  FROZEN_TOKEN_W,
+  FROZEN_TOKEN_W_FFLATE,
+} from './fixtures/frozen-share-tokens';
 
 const APP_URL = 'https://stijn.github.io/recepten/';
 
@@ -334,6 +349,110 @@ describe('buildPlanEnvelope', () => {
     expect(lines[1]).toMatch(/^Open in Rutgers' Recepten/);
     expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['w']);
     expect(buildPlanShareMessage({ dishes: 1, by: '', url: 'u', lang: 'en' }).split('\n')[0]).toBe('🗓️ Week plan: 1 dish');
+  });
+});
+
+// --- Phase 5 block F: the member card (`#f=`) ----------------------------------------------------
+
+const CARD: MemberCard = { id: 'p:k3x9w2qa', name: 'Stijn', color: '#2b4fa8', lang: 'nl', deviceId: 'd:7m4qz81c' };
+
+describe('member card (#f=)', () => {
+  it('buildMemberEnvelope: {v:2, t:"f", by, at, f} with trimmed fields; an empty deviceId is left out', () => {
+    const env = buildMemberEnvelope({ id: ' p:abc ', name: '  Gabi ', color: ' #d9402b ', lang: 'en', deviceId: '  ' });
+    expect(env.v).toBe(2);
+    expect(env.t).toBe('f');
+    expect(env.by).toBe('Gabi');
+    expect(typeof env.at).toBe('string');
+    expect(env.f).toEqual({ id: 'p:abc', name: 'Gabi', color: '#d9402b', lang: 'en' });
+    expect(buildMemberEnvelope(CARD).f).toEqual(CARD);
+    // Keeps whatever else the caller put on the card (unknown keys travel).
+    expect((buildMemberEnvelope({ ...CARD, avatar: 'cat' }).f as MemberCard).avatar).toBe('cat');
+    expect((buildMemberEnvelope({ ...CARD, color: '' }).f as MemberCard).color).toBe('#2b4fa8');
+    expect((buildMemberEnvelope({ ...CARD, lang: 'de' as 'nl' }).f as MemberCard).lang).toBe('nl');
+  });
+
+  it('round-trips through the codec as kind "member" with no recipes, patches or dictionary delta', async () => {
+    const env = buildMemberEnvelope(CARD);
+    const token = await encodeToken(env);
+    expect(extractTokens(`${APP_URL}#f=${token}`)).toEqual([{ key: 'f', token }]);
+    const parsed = parseEnvelope(await decodeToken(token));
+    expect(parsed.kind).toBe('member');
+    expect(parsed.member).toEqual(CARD);
+    expect(parsed.by).toBe('Stijn');
+    expect(parsed.recipes).toEqual([]);
+    expect(parsed.patches).toEqual([]);
+    expect(parsed.dict.ing).toEqual([]);
+    expect(parsed.plan).toBeUndefined();
+    expect(envelopeItemCount(env)).toBe(0);
+    expect(planDishCount(env)).toBe(0);
+  });
+
+  it('reads the frozen #f= token on both engines', async () => {
+    for (const token of [FROZEN_TOKEN_F, FROZEN_TOKEN_F_FFLATE]) {
+      const env = await decodeToken(token);
+      expect(env).toEqual(FROZEN_ENVELOPE_F);
+      const parsed = parseEnvelope(env);
+      expect(parsed.kind).toBe('member');
+      expect(parsed.member).toEqual(CARD);
+      expect(parsed.by).toBe('Stijn');
+      expect(parsed.at).toBe('2026-10-08T10:00:00.000Z');
+    }
+  });
+
+  it('readMemberPayload is tolerant: defaults for colour and language, unknown keys kept, bad ids dropped', () => {
+    // Unknown keys stay; an unusable colour and language fall back; the name is cut at 60 characters.
+    const long = 'A'.repeat(70);
+    const card = readMemberPayload({ id: 'p:x', name: `  ${long} `, color: 'red; background-image:url(x)', lang: 'de', deviceId: 'has space', avatar: 'cat' });
+    expect(card).toMatchObject({ id: 'p:x', name: 'A'.repeat(60), color: '#2b4fa8', lang: 'nl', avatar: 'cat' });
+    expect(card?.deviceId).toBeUndefined();
+    // Plain colours pass: hex, a name, rgb()/hsl().
+    expect(readMemberPayload({ id: 'p:x', name: 'A', color: 'tomato' })?.color).toBe('tomato');
+    expect(readMemberPayload({ id: 'p:x', name: 'A', color: 'rgb(43, 79, 168)' })?.color).toBe('rgb(43, 79, 168)');
+    expect(readMemberPayload({ id: 'p:x', name: 'A', color: 'hsl(220 60% 45% / 0.8)' })?.color).toBe('hsl(220 60% 45% / 0.8)');
+    expect(readMemberPayload({ id: 'p:x', name: 'A', lang: 'en' })?.lang).toBe('en');
+    expect(readMemberPayload({ id: 'p:x', name: 'A', deviceId: 'd:7m4qz81c' })?.deviceId).toBe('d:7m4qz81c');
+    // A card without an id or a name is no card.
+    expect(readMemberPayload({ name: 'A' })).toBeNull();
+    expect(readMemberPayload({ id: 'p:x', name: '  ' })).toBeNull();
+    expect(readMemberPayload({ id: 'p x', name: 'A' })).toBeNull();
+    expect(readMemberPayload({ id: 'p:' + 'x'.repeat(70), name: 'A' })).toBeNull();
+    expect(readMemberPayload(null)).toBeNull();
+    expect(readMemberPayload('p:x')).toBeNull();
+  });
+
+  it('a `f` without a payload object is invalid-token; an unreadable card parses as kind "member" without `member`', () => {
+    expect(() => parseEnvelope({ v: 2, t: 'f' })).toThrow('invalid-token');
+    expect(() => parseEnvelope({ v: 2, t: 'f', f: 'Stijn' })).toThrow('invalid-token');
+    const parsed = parseEnvelope({ v: 2, t: 'f', by: 'Stijn', f: {} });
+    expect(parsed.kind).toBe('member');
+    expect(parsed.member).toBeUndefined();
+    expect(parsed.by).toBe('Stijn');
+    // The envelope's own `by` wins over the card's name when both exist.
+    expect(parseEnvelope({ v: 2, t: 'f', by: 'Mama', f: { id: 'p:x', name: 'Stijn' } }).by).toBe('Mama');
+  });
+
+  it('buildMemberShareMessage: one sentence (NL/EN) and the #f= URL alone on the last line', async () => {
+    const nl = buildMemberShareMessage({ name: 'Stijn', url: 'https://x/#f=abc', lang: 'nl' }).split('\n');
+    expect(nl).toHaveLength(2);
+    expect(nl[0]).toBe("👋 Kaartje van Stijn voor Rutgers' Recepten — open de link in de app of plak hem in Inbox om Stijn aan je huishouden toe te voegen.");
+    expect(nl[1]).toBe('https://x/#f=abc');
+    const en = buildMemberShareMessage({ name: 'Gabi', url: 'u', lang: 'en' }).split('\n');
+    expect(en[0]).toBe("👋 Gabi's card for Rutgers' Recipes — open the link in the app or paste it into Inbox to add Gabi to your household.");
+    // planMessages with one card uses that text and one extractable #f= link.
+    const plan = await planMessages([buildMemberEnvelope(CARD)], APP_URL, { lang: 'nl' });
+    if (!('text' in plan)) throw new Error('expected text');
+    expect(plan.text.split('\n')[0]).toMatch(/^👋 Kaartje van Stijn/);
+    expect(plan.tokens).toBe(1);
+    expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['f']);
+    const parsed = parseEnvelope(await decodeToken(extractTokens(plan.text)[0]!.token));
+    expect(parsed.member).toEqual(CARD);
+  });
+
+  it('combineEnvelopes with a card in the mix keeps the recipes and loses the card (no recipes in it)', () => {
+    const out = combineEnvelopes([buildMemberEnvelope(CARD), buildRecipeEnvelope(recipe(), { by: 'Stijn', userIngredients: [] })]);
+    expect(out.t).toBe('b');
+    expect(envelopeItemCount(out)).toBe(1);
+    expect(parseEnvelope(out).member).toBeUndefined();
   });
 });
 

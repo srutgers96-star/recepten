@@ -533,6 +533,127 @@
   margin-top: 8px;
 }
 
+/* ---------- Phase 5 block F: member cards (#f=) ---------- */
+
+/* "Mijn kaartje": the active profile above the share panel (ProfilesScreen's MemberCardPanel). */
+.my-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.my-card-head .who {
+  flex: 1;
+  min-width: 0;
+}
+
+.my-card-head .who strong {
+  display: block;
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.my-card-head .who .small {
+  display: block;
+}
+
+.member-card-share .actions {
+  margin: 10px 0 8px;
+}
+
+.member-card-share .share-qr {
+  margin-top: 6px;
+}
+
+/* Fallback when the clipboard refuses: the message to select and copy by hand. */
+textarea.input.member-card-raw {
+  margin: 0 0 8px;
+  min-height: 88px;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+/* "Voeg lid toe via link of plak": a short paste box, then one row per card found. */
+.member-paste textarea.input {
+  min-height: 96px;
+}
+
+.member-paste .actions {
+  margin: 10px 0;
+}
+
+.member-paste .status {
+  margin-bottom: 4px;
+}
+
+.member-cards > * + * {
+  border-top: 1px solid var(--line);
+}
+
+.member-card-row {
+  padding: 10px 0 4px;
+}
+
+.member-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+}
+
+.member-card-head .who {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-card-head .who strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-card-head .who .small {
+  display: block;
+}
+
+.member-card-row p {
+  margin: 6px 0 0;
+}
+
+.member-card-row .actions {
+  margin: 10px 0 6px;
+}
+
+/* "Stuur nieuwe naar …": household members as chips with their avatar first. */
+.delta .partner-chip.member {
+  gap: 8px;
+  padding-left: 6px;
+}
+
+.delta .partner-chip .avatar {
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.delta .partner-chip.on .avatar {
+  box-shadow: 0 0 0 2px var(--on-cobalt);
+}
+
+.delta .partner-hint {
+  margin: 10px 0 0;
+}
+
+.delta .partner-hint a {
+  color: var(--cobalt);
+  font-weight: 600;
+  text-decoration: none;
+}
+
 /* ---------- Phase 5 (block B): Kookstand & timer ---------- */
 
 /* Greyed-out line when speech synthesis / recognition is missing on this device. */

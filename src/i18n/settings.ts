@@ -98,8 +98,8 @@ export const settings: Dict = {
   'more.curatorHint': { nl: 'Engelse teksten nakijken', en: 'Review the English texts' },
   'more.experiments': { nl: 'Experimenten', en: 'Experiments' },
   'more.experimentsHint': {
-    nl: 'Functies in aanbouw. Nu: "Toon QR" op het deelscherm.',
-    en: 'Features under construction. Currently: "Show QR" on the share screen.',
+    nl: 'Functies in aanbouw. Nu: "Toon QR" op het deelscherm en bij je kaartje.',
+    en: 'Features under construction. Currently: "Show QR" on the share screen and for your card.',
   },
   'more.householdRow': { nl: 'Huishouden', en: 'Household' },
   'more.householdRowHint': { nl: 'Naam en wie er meekookt', en: 'Name and who cooks along' },
@@ -107,8 +107,8 @@ export const settings: Dict = {
   // --- Phase 5: Huishouden (docs/phase-5-spec.md A.8) ---
   'household.title': { nl: 'Huishouden', en: 'Household' },
   'household.intro': {
-    nl: 'Eén huishouden per telefoon. De profielen op deze telefoon zijn automatisch lid; wie op een andere telefoon kookt voeg je hier met de hand toe (kaartjes via link of QR komen later).',
-    en: 'One household per phone. The profiles on this phone are members automatically; someone who cooks on another phone is added by hand here (member cards via link or QR come later).',
+    nl: 'Eén huishouden per telefoon. De profielen op deze telefoon zijn automatisch lid; wie op een andere telefoon kookt stuurt je een kaartje (of je typt de naam zelf).',
+    en: 'One household per phone. The profiles on this phone are members automatically; someone who cooks on another phone sends you a card (or you type the name yourself).',
   },
   'household.name': { nl: 'Naam van het huishouden', en: 'Household name' },
   // The default household name is never stored (the setting keeps ''); it is rendered in the active language.
@@ -132,6 +132,56 @@ export const settings: Dict = {
   },
   'household.nameExists': { nl: 'Er is al een lid met deze naam.', en: 'There is already a member with this name.' },
   'household.saved': { nl: 'Bewaard', en: 'Saved' },
+
+  // --- Phase 5 block F: member cards (`#f=`) — share mine, add someone else's ---
+  'household.myCard': { nl: 'Mijn kaartje', en: 'My card' },
+  'household.myCardHint': {
+    nl: 'Deel je kaartje met wie op een andere telefoon kookt. Die voegt je toe aan zijn huishouden: wat je stuurt krijgt dan jouw naam en kleur, en "Stuur nieuwe naar …" kent je al.',
+    en: 'Share your card with someone who cooks on another phone. They add you to their household: what you send then carries your name and colour, and "Send new to …" already knows you.',
+  },
+  'household.shareCard': { nl: 'Deel mijn kaartje', en: 'Share my card' },
+  'household.copyCard': { nl: 'Kopieer link', en: 'Copy link' },
+  'household.cardShared': { nl: 'Kaartje gedeeld.', en: 'Card shared.' },
+  'household.cardCopied': { nl: 'Gekopieerd — plak het in WhatsApp.', en: 'Copied — paste it into WhatsApp.' },
+  // The one-sentence WhatsApp text itself comes from the domain layer (share.ts buildMemberShareMessage).
+  'household.cardBuildFailed': { nl: 'Kaartje kon niet worden gemaakt.', en: 'Could not create the card.' },
+  // Honest (CLAUDE.md invariants 5 + 13): on an iPhone a link never opens the installed app.
+  'household.cardIosHint': {
+    nl: 'Android: de ander tikt op de link. iPhone: de link opent de app niet — de ander kopieert het bericht en plakt het in de app (Huishouden → "Voeg lid toe via link of plak", of de Inbox).',
+    en: 'Android: the other person taps the link. iPhone: the link does not open the app — they copy the message and paste it into the app (Household → "Add a member via link or paste", or the Inbox).',
+  },
+  'household.cardQrAlt': { nl: 'QR-code met mijn kaartje', en: 'QR code with my card' },
+  'household.cardQrHint': {
+    nl: 'Scan met de camera-app van de andere telefoon. Android opent de app; een iPhone opent een voorproefpagina in Safari — kopieer daar de code en plak hem in de app.',
+    en: 'Scan with the other phone’s camera app. Android opens the app; an iPhone opens a preview page in Safari — copy the code there and paste it into the app.',
+  },
+  'household.addViaLink': { nl: 'Voeg lid toe via link of plak', en: 'Add a member via link or paste' },
+  'household.addViaLinkHint': {
+    nl: 'Plak hier het kaartje-bericht (of alleen de link) dat de ander je stuurde.',
+    en: 'Paste the card message (or just the link) the other person sent you here.',
+  },
+  'household.noCard': { nl: 'Geen kaartje gevonden in deze tekst.', en: 'No card found in this text.' },
+  'household.notACard': {
+    nl: 'Dit is een recept of weekplan, geen kaartje. Plak het in de Inbox.',
+    en: 'This is a recipe or week plan, not a card. Paste it into the Inbox.',
+  },
+  'household.cardFrom': { nl: 'Kaartje van {name}', en: 'Card from {name}' },
+  'household.addCard': { nl: 'Voeg {name} toe aan je huishouden', en: 'Add {name} to your household' },
+  'household.updateCard': { nl: 'Werk {name} bij', en: 'Update {name}' },
+  'household.cardKnown': {
+    nl: '{name} is al lid; het kaartje werkt naam, kleur en taal bij.',
+    en: '{name} is already a member; the card updates name, colour and language.',
+  },
+  'household.cardLocal': { nl: '{name} is een profiel op deze telefoon — al lid.', en: '{name} is a profile on this phone — already a member.' },
+  'household.cardAdded': { nl: '{name} is toegevoegd aan je huishouden.', en: '{name} was added to your household.' },
+  'household.cardUpdated': { nl: '{name} is bijgewerkt.', en: '{name} was updated.' },
+  'household.cardFailed': { nl: 'Toevoegen mislukt', en: 'Adding failed' },
+  'household.toHousehold': { nl: 'Naar huishouden', en: 'To household' },
+  // "Stuur nieuwe naar …" (DeltaShareScreen; the other delta.* keys live in phase2.ts)
+  'delta.memberHint': {
+    nl: 'Leden van je huishouden staan vooraan. Iemand op een andere telefoon voeg je toe met een kaartje.',
+    en: 'Members of your household come first. Someone on another phone is added with a card.',
+  },
 
   // --- Profielen --------------------------------------------------------------------------------
   'profiles.title': { nl: 'Profielen', en: 'Profiles' },

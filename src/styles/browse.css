@@ -1806,3 +1806,188 @@ textarea.input.notes {
   border-color: var(--rosemary);
   color: var(--rosemary);
 }
+
+/* ---------- Phase 5 block F (2): recipe variants (glutenvrij / vegetarisch / vegan) ---------- */
+
+/* "Versie van <origineel>" under the meta line of a variant: a text link back to the original. */
+.detail-variant-of {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -8px 0 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cobalt);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.detail-variant-of:active {
+  background: var(--press);
+  border-radius: 8px;
+}
+
+/* "Ook als: [Glutenvrij] [Vegan]" on the original: 44 px chips that open the variant. */
+.detail-variants {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.detail-variants-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.detail-variants .chip {
+  border-color: var(--rosemary);
+  color: var(--rosemary);
+}
+
+/* "Maak … versie" buttons under the tools row, stacked for 360 px. */
+.detail-variant-make {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.detail-variant-make .btn {
+  min-height: 48px;
+}
+
+/* The review sheet (VariantSheet): .sheet-* from base.css; rows with a native checkbox. */
+.variant-intro {
+  margin: 4px 0 8px;
+}
+
+.variant-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.variant-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.variant-row:last-child {
+  border-bottom: 0;
+}
+
+.variant-row input[type='checkbox'] {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin: 1px 0 0;
+  accent-color: var(--cobalt);
+}
+
+/* The "controleer zelf" rows have no checkbox: an orange marker sits in its place. */
+.variant-mark {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  border-radius: 999px;
+  border: 1.5px solid var(--orange);
+  color: var(--orange);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.variant-body {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.variant-old {
+  color: var(--muted);
+  text-decoration: line-through;
+  overflow-wrap: anywhere;
+}
+
+.variant-new {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.variant-row.off .variant-old {
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.variant-row.off .variant-new {
+  color: var(--muted);
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.variant-check {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--orange);
+  color: var(--orange);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.variant-note {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.variant-foot {
+  flex: none;
+  padding: 10px max(16px, var(--sar)) 0 max(16px, var(--sal));
+  border-top: 1px solid var(--line);
+}
+
+.variant-foot .btn {
+  width: 100%;
+  min-height: 50px;
+  font-size: 17px;
+}
+
+.variant-foot-hint {
+  margin: 0 0 8px;
+}
+
+.variant-error {
+  margin: 8px 0 0;
+  color: var(--tomato);
+  font-size: 13px;
+  font-weight: 600;
+}

@@ -7,6 +7,9 @@
 // Phase 5 block D (1-2): latest own photo as hero + gallery strip with a big-view overlay and
 // "+ Foto" (photos never travel in tokens), and Print / "Kopieer als tekst" (src/print.ts +
 // src/domain/recipe-text.ts); on iOS the Print button is an honest share-sheet hint instead.
+// Phase 5 block F (2): "Maak glutenvrije / vegetarische / vegan versie" (only the diets the recipe
+// does not have yet) opens the VariantSheet; the original shows "Ook als: …" chips to its
+// variants (repo.variantsOf) and a variant shows "Versie van <origineel>" (src/domain/variants.ts).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { isIOS } from '@/components/AppInfo';
@@ -16,6 +19,7 @@ import { formatShortDate } from '@/components/RecipeRow';
 import { rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
 import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
+import { VariantSheet } from '@/components/VariantSheet';
 import { useLive } from '@/db/live';
 import type { Photo } from '@/db/model';
 import {
@@ -38,14 +42,16 @@ import {
   saveUserRecipe,
   setNote,
   toggleFavorite,
+  variantsOf,
 } from '@/db/repo';
-import { DIET_ROW_TAGS, OPTIE_TAG, tagTextLabel } from '@/components/FilterChips';
+import { DIET_ROW_TAGS, OPTIE_TAG, tagChipLabel, tagTextLabel } from '@/components/FilterChips';
 import { dictionary, lineText } from '@/dictionary';
 import { DIET_TAGS, dietTags, type DietTag } from '@/domain/diet';
 import type { Dictionary } from '@/domain/dictionary';
 import { memberById, membersFrom, type Member } from '@/domain/household';
 import { hasLang, nowIso, pickText, type Lang, type Line, type Recipe } from '@/domain/model';
 import { ingredientsAsText, recipeAsText, type RecipeTextInput } from '@/domain/recipe-text';
+import { variantDietsFor, type VariantDiet } from '@/domain/variants';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { encodePhotoFile, usePhotoUrl } from '@/photo';
@@ -103,6 +109,15 @@ export function tagLabel(tag: string): string {
   const key = 'tag.' + tag;
   const label = t(key);
   return label === key ? tag : label;
+}
+
+/**
+ * Chip label of a variant on its original (block F.2): the diet tag(s) the variant adds, e.g.
+ * "Glutenvrij" or "Vegetarisch · Vegan"; the variant's name when the tags say nothing new.
+ */
+function variantChipLabel(variant: Recipe, original: Recipe, l: Lang): string {
+  const added = DIET_TAGS.filter((tag) => variant.tags.includes(tag) && !original.tags.includes(tag));
+  return added.length ? added.map(tagChipLabel).join(' · ') : pickText(variant.name, l);
 }
 
 /** First letter of a member name for the little colour dot on a thumbnail. */
@@ -239,6 +254,10 @@ export function RecipeScreen(props: { id: string }) {
   const [toolsMenu, setToolsMenu] = useState<'print' | 'copy' | null>(null);
   const [copyFlash, setCopyFlash] = useState<'ok' | 'fail' | null>(null);
   const flashTimer = useRef<number | null>(null);
+  // Phase 5 block F (2): variants. The diets to offer come from the effective lines (a diet with
+  // nothing to swap gets no button); the variants of this recipe are live (a new one shows at once).
+  const [variantSheet, setVariantSheet] = useState<VariantDiet | null>(null);
+  const variants = useLive(() => variantsOf(id), [id]);
 
   // The delete confirmation is per recipe, in memory only.
   useEffect(() => {
@@ -247,6 +266,7 @@ export function RecipeScreen(props: { id: string }) {
     setViewPhoto(null);
     setToolsMenu(null);
     setPhotoError(false);
+    setVariantSheet(null);
   }, [id]);
 
   // The "Gekopieerd ✓" flash never outlives the screen.
@@ -327,6 +347,10 @@ export function RecipeScreen(props: { id: string }) {
   // Phase 5: diet chips under the title; the generic tag list below leaves those tags out.
   const dietChips = useMemo(() => (recipe ? dietChipsFor(recipe, lines, dict, linesAdjusted) : []), [recipe, lines, dict, linesAdjusted]);
   const otherTags = recipe ? recipe.tags.filter((tag) => !DIET_ROW_TAGS.has(tag)) : [];
+  // Block F.2: "Maak … versie" only for the diets a line of this recipe contradicts; the original
+  // of a variant (when it still exists on this phone) for the "Versie van …" link.
+  const offerDiets = useMemo(() => (recipe ? variantDietsFor(recipe, lines, dict) : []), [recipe, lines, dict]);
+  const original = recipe?.variantOf ? all?.find((r) => r.id === recipe.variantOf) : undefined;
   // Curator badge: the English edition of a classic is a machine translation until someone improves
   // it (the editor's override patch then sets text.en = 'human', src/screens/EditScreen.tsx).
   const machineEn = !!recipe && l === 'en' && recipe.text?.en === 'llm';
@@ -550,6 +574,31 @@ export function RecipeScreen(props: { id: string }) {
 
             <p class="detail-meta">{meta.join(' · ')}</p>
 
+            {/* Phase 5 block F: a variant links back to its original; the original lists its variants. */}
+            {original && (
+              <button type="button" class="detail-variant-of no-print" onClick={() => navigate('/recipe/' + original.id)}>
+                {t('recipe.variantOf', { name: pickText(original.name, l) })}
+              </button>
+            )}
+            {variants && variants.length > 0 && (
+              <div class="detail-variants no-print" role="group" aria-label={t('recipe.variants')}>
+                <span class="detail-variants-label">{t('recipe.alsoAs')}</span>
+                {variants.map((v) => (
+                  <a
+                    key={v.id}
+                    class="chip"
+                    href={'#/recipe/' + v.id}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/recipe/' + v.id);
+                    }}
+                  >
+                    {variantChipLabel(v, recipe, l)}
+                  </a>
+                ))}
+              </div>
+            )}
+
             {/* Phase 5 block D: gallery strip, newest first, with "+ Foto" at the end. No photos
                 = no empty section: only the small "+ Foto" text button remains (spec D.1). */}
             {photos && photos.length > 0 && (
@@ -637,6 +686,17 @@ export function RecipeScreen(props: { id: string }) {
               <p class={'tool-flash no-print' + (copyFlash === 'fail' ? ' fail' : '')} role="status">
                 {copyFlash === 'ok' ? t('recipe.copied') : t('recipe.copyFailed')}
               </p>
+            )}
+
+            {/* Phase 5 block F: "Maak … versie", one button per diet the recipe does not have yet. */}
+            {offerDiets.length > 0 && (
+              <div class="detail-variant-make no-print" role="group" aria-label={t('recipe.variants')}>
+                {offerDiets.map((diet) => (
+                  <button key={diet} type="button" class="btn" onClick={() => setVariantSheet(diet)}>
+                    {t('variant.make.' + diet)}
+                  </button>
+                ))}
+              </div>
             )}
 
             <section class="section">
@@ -740,6 +800,19 @@ export function RecipeScreen(props: { id: string }) {
                 busy={photoDelBusy}
                 onClose={() => setViewPhoto(null)}
                 onDelete={(p) => void onDeletePhoto(p)}
+              />
+            )}
+
+            {variantSheet && (
+              <VariantSheet
+                recipe={recipe}
+                lines={lines}
+                diet={variantSheet}
+                onClose={() => setVariantSheet(null)}
+                onSaved={(newId) => {
+                  setVariantSheet(null);
+                  navigate('/recipe/' + newId);
+                }}
               />
             )}
           </>

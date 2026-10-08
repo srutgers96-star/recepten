@@ -260,6 +260,38 @@
   flex: none;
 }
 
+/* ---------- Inbox: phase 5 block F — member cards (#f=) and the sender as a household member ---------- */
+
+/* One card per received member card; the row itself (settings.css .member-card-row) loses its padding inside the card. */
+.inbox-member .member-card-row {
+  padding: 0;
+}
+
+.inbox-member .member-card-row .actions:last-child {
+  margin-bottom: 0;
+}
+
+/* "Van Gabi, lid van je huishouden" above the import preview. */
+.inbox-sender {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 8px;
+}
+
+.inbox-sender .avatar {
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+}
+
+/* Received list: the sender's avatar before the name when they are a member. */
+.inbox-row .avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
+}
+
 /* ---------- Inbox: phase 3 — import preview, conflict card, result, history ---------- */
 
 .ip-summary {

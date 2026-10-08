@@ -4,7 +4,8 @@
 // (data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json, docs/phase-2-spec.md §1),
 // the generated schema-2 file data/recipes.json (tools/migrate-from-recepten2.ts, §2 + §4:
 // dictionary references, `name.en` and every `steps[].text.en` when `text.en` is set, categories,
-// tags, units and qualifiers) and the badge list data/badges.json (docs/phase-5-spec.md "Block C").
+// tags, units and qualifiers), the badge list data/badges.json (docs/phase-5-spec.md "Block C") and
+// the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2).
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
 // Exit:  1 when any error was found, 0 otherwise. Warnings never fail the run.
@@ -747,6 +748,109 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs): Validation
 }
 
 // ---------------------------------------------------------------------------
+// Swaps: data/swaps.json (docs/phase-5-spec.md "Block F" item 2, src/domain/variants.ts `Swap`)
+// ---------------------------------------------------------------------------
+//
+// Errors: an array of { from, to, diets, note? }; `from` and `to` are existing ingredient ids and
+// differ; `diets` is a non-empty list from SWAP_DIETS without duplicates; the same (from, diet)
+// pair occurs once (planVariant takes the first swap it finds, so a second one would be dead data);
+// `note` is { nl?, en? } with at least one language; and `to` satisfies every diet it is listed for:
+// glutenvrij -> gluten false, vegetarisch -> veg true, vegan -> vegan true. Warnings: a `to` whose
+// gluten flag is a guess (glutenUnsure) for a gluten-free swap, a `from` that does not actually
+// break the diet (the swap can never fire), stray keys.
+
+/** The diets a swap may serve (src/domain/variants.ts `VariantDiet`). */
+export const SWAP_DIETS: readonly string[] = ['glutenvrij', 'vegetarisch', 'vegan'];
+
+/** The flag on `to` that each diet needs, and the flag on `from` that makes the swap meaningful. */
+const SWAP_RULES: Readonly<Record<string, { flag: string; toValue: boolean; fromBreaks: (ing: Record<string, unknown>) => boolean }>> = {
+  glutenvrij: { flag: 'gluten', toValue: false, fromBreaks: (ing) => ing['gluten'] === true },
+  vegetarisch: { flag: 'veg', toValue: true, fromBreaks: (ing) => ing['veg'] === false },
+  vegan: { flag: 'vegan', toValue: true, fromBreaks: (ing) => ing['vegan'] === false || ing['veg'] === false },
+};
+
+const SWAP_KEYS: ReadonlySet<string> = new Set(['from', 'to', 'diets', 'note']);
+
+/**
+ * Validate data/swaps.json against the ingredient entries. Pure: takes the parsed JSON and the
+ * ingredient list (data/ingredients.json), returns errors/warnings.
+ */
+export function validateSwaps(data: unknown, ingredients: readonly Record<string, unknown>[]): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  if (!Array.isArray(data)) {
+    errors.push('swaps.json: must be an array of swaps.');
+    return { errors, warnings, stats: { recipes: 0, lines: 0 } };
+  }
+
+  const byId = new Map<string, Record<string, unknown>>();
+  for (const ing of ingredients) if (typeof ing['id'] === 'string') byId.set(ing['id'], ing);
+
+  const seenPairs = new Map<string, number>();
+  data.forEach((swap: unknown, index: number) => {
+    const where = `swaps.json[${index}]`;
+    if (!isRecord(swap)) {
+      errors.push(`${where}: not an object.`);
+      return;
+    }
+    const from = swap['from'];
+    const to = swap['to'];
+    const label = typeof from === 'string' && typeof to === 'string' ? `swaps.json ${JSON.stringify(from)} -> ${JSON.stringify(to)}` : where;
+
+    const fromIng = typeof from === 'string' ? byId.get(from) : undefined;
+    const toIng = typeof to === 'string' ? byId.get(to) : undefined;
+    if (typeof from !== 'string' || from === '') errors.push(`${where}: "from" must be an ingredient id.`);
+    else if (!fromIng) errors.push(`${label}: "from" ${JSON.stringify(from)} is not a known ingredient id.`);
+    if (typeof to !== 'string' || to === '') errors.push(`${where}: "to" must be an ingredient id.`);
+    else if (!toIng) errors.push(`${label}: "to" ${JSON.stringify(to)} is not a known ingredient id.`);
+    if (typeof from === 'string' && from === to) errors.push(`${label}: "from" and "to" are the same ingredient.`);
+
+    const diets = swap['diets'];
+    if (!isStringArray(diets) || diets.length === 0) {
+      errors.push(`${label}: "diets" must be a non-empty array of ${SWAP_DIETS.join(' | ')}.`);
+    } else {
+      const seenDiet = new Set<string>();
+      for (const diet of diets) {
+        if (!SWAP_DIETS.includes(diet)) {
+          errors.push(`${label}: diet ${JSON.stringify(diet)} is not one of ${SWAP_DIETS.join(', ')}.`);
+          continue;
+        }
+        if (seenDiet.has(diet)) errors.push(`${label}: diet ${JSON.stringify(diet)} is listed twice.`);
+        seenDiet.add(diet);
+        if (typeof from === 'string') {
+          const pairKey = `${from}\u0000${diet}`;
+          const first = seenPairs.get(pairKey);
+          if (first !== undefined) errors.push(`${label}: a ${diet} swap for ${JSON.stringify(from)} already exists (swaps.json[${first}]); planVariant would never reach this one.`);
+          else seenPairs.set(pairKey, index);
+        }
+        const rule = SWAP_RULES[diet];
+        if (!rule) continue;
+        if (toIng && toIng[rule.flag] !== rule.toValue) {
+          errors.push(`${label}: "to" must have "${rule.flag}": ${rule.toValue} for a ${diet} swap (has ${JSON.stringify(toIng[rule.flag])}).`);
+        }
+        if (toIng && diet === 'glutenvrij' && toIng['glutenUnsure'] === true) {
+          warnings.push(`${label}: "to" is only probably gluten-free (glutenUnsure); the swap note should say "controleer het etiket".`);
+        }
+        if (fromIng && !rule.fromBreaks(fromIng)) {
+          warnings.push(`${label}: "from" does not break the ${diet} diet by its flags, so this swap can never fire.`);
+        }
+      }
+    }
+
+    const note = swap['note'];
+    if (note !== undefined) {
+      if (!isTextLike(note) || !(hasText(note, 'nl') || hasText(note, 'en'))) errors.push(`${label}: "note" must be { nl?, en? } with at least one non-empty text.`);
+      else if (!(hasText(note, 'nl') && hasText(note, 'en'))) warnings.push(`${label}: "note" has only one language.`);
+    }
+
+    for (const key of Object.keys(swap)) if (!SWAP_KEYS.has(key)) warnings.push(`${label}: unexpected key ${JSON.stringify(key)}.`);
+  });
+
+  return { errors, warnings, stats: { recipes: 0, lines: data.length } };
+}
+
+// ---------------------------------------------------------------------------
 // CLI entry
 // ---------------------------------------------------------------------------
 
@@ -783,6 +887,11 @@ function main(): void {
   const badges = validateBadges(readJson(join(root, badgesRel)), refsFromData(dictData));
   print(badgesRel, badges, `${badges.stats.lines} badges`);
   if (badges.errors.length > 0) failed = true;
+
+  const swapsRel = 'data/swaps.json';
+  const swaps = validateSwaps(readJson(join(root, swapsRel)), dictData.ingredients as unknown as Record<string, unknown>[]);
+  print(swapsRel, swaps, `${swaps.stats.lines} swaps`);
+  if (swaps.errors.length > 0) failed = true;
 
   const schema2Rel = 'data/recipes.json';
   const schema2Path = join(root, schema2Rel);

@@ -3,10 +3,30 @@
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 
 ## Online (https://srutgers96-star.github.io/recepten/)
-Fase 0–4 compleet + fase 5 blok A, A-bis, B, C, D en E (3 oktober 2026). Repo: https://github.com/srutgers96-star/recepten.
+**Fase 5 compleet**: fase 0–4 + blok A, A-bis, B, C, D, E en F (8 oktober 2026). Repo: https://github.com/srutgers96-star/recepten.
 
 ## Lokaal gecommit, nog NIET gepusht
 (niets — alles staat online)
+
+## Afgerond 8 okt: blok F (drie bouwers + integrator → 3 reviewers → skeptici → fixer → Haiku-gate; 10 bevindingen gerepareerd)
+- **Ledenkaartje `#f=`** (ADR-0004, alinea 8 okt): envelop `{ v: 2, t: 'f', f: { id, name, color, lang, deviceId? } }`,
+  bevroren tokens in tests/fixtures; token.ts/router.ts/boot.ts/landing.ts kennen `f`. Meer → Huishouden:
+  "Mijn kaartje" (Deel mijn kaartje = één `{text}`, Kopieer link, Toon QR alleen achter Experimenten) en
+  "Voeg lid toe via link of plak"; de Inbox toont een `#f=` als kaart "Voeg <naam> toe aan je huishouden"
+  (Android via de link, iPhone via plakken); "Stuur nieuwe naar …" toont huishoudleden als eerste keuze.
+  Setting `device.id` = stabiel telefoon-id (ProfilesScreen `ensureDeviceId`). Eerlijke grens: een app van
+  vóór blok F zegt bij een `#f=` "geen leesbaar recept" (v blijft 2), niet "update de app" — beide telefoons
+  eerst bijwerken.
+- **Receptvarianten**: data/swaps.json (77 swaps, `npm run validate:data` controleert ids en dieetvlaggen),
+  src/domain/variants.ts (planVariant/makeVariant), `Recipe.variantOf`, repo.variantsOf, VariantSheet;
+  het recept toont "Maak glutenvrije/vegetarische/vegan versie", "Ook als: …" en "Versie van …".
+- Reviewfixes: variant zet metaManual (anders haalt "Controleer mijn recepten" het dieetlabel weer weg);
+  geteld product → gewichtsproduct via gramsPer ("4 kipfilets" → "800 g tofu"); eenheidswoord-aliassen
+  slokken de eenheid niet meer op; kooknotitie van een swap komt op de regel; kaartje van een nieuwe
+  telefoon vervangt het oude lid (zelfde naam) i.p.v. een verborgen dubbel; "sinds"-historie in
+  "Stuur nieuwe naar …" gevouwen vergeleken; afzender wordt alleen op naam herkend (eerlijk in code).
+- Groen op 8 okt: check, test (521), build, build:next, validate:data. DEVICE-TEST rijen 52 en 53.
+  CLAUDE.md invariant 7 en de "Also:"-regel noemen `#f=` nu ook.
 
 ## Afgerond (ter info)
 Blok E (gebouwd met Opus 5.5, zie PAUZE hieronder): data/ingredients.json 378 → 1601 producten
@@ -51,7 +71,7 @@ nagelopen (workflow wf_7b8c69c0-cb4: 5 reviewers → skeptici → data-fixer + c
 
 ## Daarna, blok voor blok, elk apart online — volgorde (bijgewerkt 8 okt 2026)
 1. ~~Fable-review van het Opus-werk~~ (afgerond 8 okt)
-2. F vrienden via link/QR + varianten (docs/phase-5-spec.md "Block F")
+2. ~~F vrienden via link/QR + varianten~~ (online 8 okt; telefoontest DEVICE-TEST 52–53 volgt later)
 3. **Fase 6 — Stijns wensenlijst van 6 okt**, uitgewerkt in **docs/phase-6-spec.md**:
    6A snelle verbeteringen en bugs (import-bug naam NL/EN, curator-ingrediënten, "Gekookt" zonder
    kookstand + later beoordelen, installeerkaart, "Stuur nieuwe naar" duidelijker, Meer opgeruimd,

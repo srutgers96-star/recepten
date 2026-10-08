@@ -21,9 +21,12 @@ import {
 import { normalizeSource, slugId, initialOf, foldDiacritics, type SourceRecipe } from '../src/domain/recipe-source';
 import {
   FROZEN_ENVELOPE_B,
+  FROZEN_ENVELOPE_F,
   FROZEN_ENVELOPE_P,
   FROZEN_TOKEN_B,
   FROZEN_TOKEN_B_FFLATE,
+  FROZEN_TOKEN_F,
+  FROZEN_TOKEN_F_FFLATE,
   FROZEN_TOKEN_P,
   FROZEN_TOKEN_P_FFLATE,
 } from './fixtures/frozen-share-tokens';
@@ -121,6 +124,14 @@ describe('token codec', () => {
         expect(await decodeToken(FROZEN_TOKEN_B, { engine })).toEqual(FROZEN_ENVELOPE_B);
         expect(await decodeToken(FROZEN_TOKEN_B_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_B);
       });
+
+      it('decodes the frozen phase-5 #f= member-card token (native- and fflate-produced)', async () => {
+        expect(await decodeToken(FROZEN_TOKEN_F, { engine })).toEqual(FROZEN_ENVELOPE_F);
+        expect(await decodeToken(FROZEN_TOKEN_F_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_F);
+        // The frozen token IS what this codec produces for that envelope today (byte-for-byte).
+        const expected = engine === 'native' ? FROZEN_TOKEN_F : FROZEN_TOKEN_F_FFLATE;
+        expect(await encodeToken(FROZEN_ENVELOPE_F, { engine })).toBe(expected);
+      });
     });
   }
 
@@ -166,9 +177,22 @@ describe('token codec', () => {
     await expect(decodeToken(await deflatedJson({ v: 1, t: 'r' }, 'fflate'))).rejects.toThrow('unsupported-version');
   });
 
+  // Pinned on purpose (block F): a kind the app does not know is 'invalid-token', NOT
+  // 'unsupported-version', because "update the app" hangs on `v` and `v` stays 2. That is exactly
+  // what an app from before block F says about a `#f=` card ("no readable recipe"), and what this
+  // app will say about the next new kind. Adding a kind therefore means: both phones update first.
+  it('a v2 envelope with an unknown kind is invalid-token (what a pre-block-F app makes of #f=)', async () => {
+    await expect(decodeToken(await deflatedJson({ v: 2, t: 'x', x: { id: 'p:1', name: 'A' } }, 'native'))).rejects.toThrow('invalid-token');
+    await expect(decodeToken(await deflatedJson({ v: 2, t: 'x', x: { id: 'p:1', name: 'A' } }, 'fflate'))).rejects.toThrow('invalid-token');
+    // The pre-block-F key set never matched "#f=" at all, so a pasted card was simply no token there.
+    const OLD_TOKEN_RE = /(?:^|[^A-Za-z0-9_-])#?([rpwb])=([A-Za-z0-9_-]{20,})/g;
+    expect([...`${APP_URL}#f=${FROZEN_TOKEN_F}`.matchAll(OLD_TOKEN_RE)]).toHaveLength(0);
+    expect(extractTokens(`${APP_URL}#f=${FROZEN_TOKEN_F}`)).toEqual([{ key: 'f', token: FROZEN_TOKEN_F }]);
+  });
+
   it('isTokenKey', () => {
-    expect(['r', 'p', 'w', 'b'].every(isTokenKey)).toBe(true);
-    expect(['s', 'R', '', 1, null, undefined].some(isTokenKey)).toBe(false);
+    expect(['r', 'p', 'w', 'b', 'f'].every(isTokenKey)).toBe(true);
+    expect(['s', 'R', 'F', '', 1, null, undefined].some(isTokenKey)).toBe(false);
   });
 });
 
@@ -252,7 +276,7 @@ describe('extractTokens', () => {
   });
 
   it('extracts what buildShareUrl built, for every key', () => {
-    for (const key of ['r', 'p', 'w', 'b'] as const) {
+    for (const key of ['r', 'p', 'w', 'b', 'f'] as const) {
       const url = buildShareUrl(APP_URL, key, T2);
       expect(url).toBe(`${APP_URL}#${key}=${T2}`);
       expect(extractTokens(`Hoi! ${url}`)).toEqual([{ key, token: T2 }]);

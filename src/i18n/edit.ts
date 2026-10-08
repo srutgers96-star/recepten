@@ -247,8 +247,8 @@ export const edit: Dict = {
   // --- Inbox (/inbox): import + received ---
   'inbox.title': { nl: 'Inbox', en: 'Inbox' },
   'inbox.hint': {
-    nl: 'Plak hier een WhatsApp-bericht, een link of een receptbestand.',
-    en: 'Paste a WhatsApp message, a link or a recipe file here.',
+    nl: 'Plak hier een WhatsApp-bericht, een link, een kaartje of een receptbestand.',
+    en: 'Paste a WhatsApp message, a link, a card or a recipe file here.',
   },
   'inbox.paste': { nl: 'Plak van klembord', en: 'Paste from clipboard' },
   'inbox.pasteHint': {
@@ -257,7 +257,9 @@ export const edit: Dict = {
   },
   'inbox.file': { nl: 'Kies bestand', en: 'Choose file' },
   'inbox.clear': { nl: 'Wis', en: 'Clear' },
-  'inbox.noToken': { nl: 'Geen recept gevonden in deze tekst.', en: 'No recipe found in this text.' },
+  'inbox.noToken': { nl: 'Geen recept of kaartje gevonden in deze tekst.', en: 'No recipe or card found in this text.' },
+  // Phase 5 block F: a `#f=` member card in the Inbox, and the sender shown as a household member.
+  'inbox.fromMember': { nl: 'Van {name}, lid van je huishouden', en: 'From {name}, a member of your household' },
   'inbox.invalid': { nl: 'Ongeldige receptcode.', en: 'Invalid recipe code.' },
   'inbox.unsupported': { nl: 'Update de app eerst (nieuwere versie van de code).', en: 'Update the app first (newer code version).' },
   'inbox.at': { nl: 'gedeeld op', en: 'shared on' },

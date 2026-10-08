@@ -195,6 +195,9 @@ export function normalizeRecipe(input: unknown): Recipe | null {
     else recipe.time = readTime(o.time);
     if (o.text === undefined) delete (recipe as Dict).text;
     else recipe.text = readTextMeta(o.text);
+    // Block F.2: `variantOf` (the original of a diet variant) is a recipe id or null; anything else
+    // that arrived through a token or a file is dropped rather than stored.
+    if (o.variantOf !== undefined && o.variantOf !== null && !(typeof o.variantOf === 'string' && o.variantOf.trim())) delete (recipe as Dict).variantOf;
     return recipe;
   }
 

@@ -39,7 +39,7 @@ pretends a link or the share sheet can do it.
   ≈ version 19-20 ECC L); she scans in the app. Camera/`BarcodeDetector` in an iOS standalone app is
   UNKNOWN; fallback: scan with the iPhone Camera app → Safari → flow B. Single recipes only.
 
-Boot rule (invariant): `#r=`/`#p=`/`#w=`/`#b=` **and** iOS **and** not standalone → landing bundle;
+Boot rule (invariant): `#r=`/`#p=`/`#w=`/`#b=`/`#f=` (the member card, ADR-0004) **and** iOS **and** not standalone → landing bundle;
 everything else (Android WebAPK, Android Chrome tab with shared storage, the installed iPhone app,
 desktop) → full app with the import preview open.
 

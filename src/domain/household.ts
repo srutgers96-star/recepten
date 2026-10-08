@@ -1,11 +1,14 @@
 // One household (docs/phase-5-spec.md, 30-09 additions + block A.8). Framework-free: no preact,
 // no dexie. The setting `household` holds `{ name, members }`; the profiles on this phone are
 // members automatically (`local: true`, id = profile id), other people are typed by hand here or
-// arrive as a member card (`#f=`, block F) and are stored in the setting with `local: false`.
-// Cook-log entries keep `profileId`, which IS the member id of a local member. Received recipes
-// map their `by` name to a member with `memberByName` (case-insensitive) when possible.
+// arrive as a member card (`#f=`, block F: `MemberCard`, `upsertMemberFromCard`) and are stored in
+// the setting with `local: false`. Cook-log entries keep `profileId`, which IS the member id of a
+// local member. Received recipes map their `by` name to a member with `memberByName`
+// (case-insensitive) when possible. One rule throughout: the same (folded) NAME is the same
+// person (`membersFrom`, `matchMemberForCard`, `memberByName`).
 import type { Lang, Profile } from './model.ts';
 import { randomId } from './model.ts';
+import type { MemberCard } from './share.ts';
 
 export interface Member {
   /** A profile id ('p:…') for a local member, else 'm:…' (typed by hand) or the id from a member card. */
@@ -25,6 +28,14 @@ export interface HouseholdSetting {
   /** The members that are NOT profiles on this phone (local ones are derived from the profiles). */
   members: Member[];
 }
+
+/**
+ * A member card as it travels in a `#f=` token (block F; docs/phase-5-spec.md 30-09 additions):
+ * `{ v: 2, t: 'f', f: MemberCard }`. `id` is the sender's profile id ('p:…'), `deviceId` a stable
+ * random id of the sender's phone (setting 'device.id'). The type is owned by share.ts (the
+ * token contract) and re-exported here so the household code has one name for it.
+ */
+export type { MemberCard };
 
 export const HOUSEHOLD_KEY = 'household';
 /**
@@ -132,4 +143,51 @@ export function putMember(h: HouseholdSetting, m: Member): HouseholdSetting {
 
 export function removeMember(h: HouseholdSetting, id: string): HouseholdSetting {
   return { ...h, members: h.members.filter((m) => m.id !== id) };
+}
+
+// --- Member cards (block F) ---------------------------------------------------------------------
+
+/** The card for a member of this phone (a profile): what "Deel mijn kaartje" puts in the `#f=` token. */
+export function cardFromMember(m: Pick<Member, 'id' | 'name' | 'color' | 'lang'>, deviceId?: string): MemberCard {
+  const card: MemberCard = { id: m.id, name: m.name.trim(), color: m.color || DEFAULT_MEMBER_COLOR, lang: m.lang ?? 'nl' };
+  if (deviceId && deviceId.trim()) card.deviceId = deviceId.trim();
+  return card;
+}
+
+/** A received card as a stored (non-local) member. */
+export function memberFromCard(card: MemberCard): Member {
+  const m: Member = { id: card.id, name: card.name.trim(), color: card.color && card.color.trim() ? card.color : DEFAULT_MEMBER_COLOR, local: false };
+  if (isLang(card.lang)) m.lang = card.lang;
+  if (typeof card.deviceId === 'string' && card.deviceId.trim()) m.deviceId = card.deviceId.trim();
+  return m;
+}
+
+/**
+ * The member a card is about, if any: the same id (the same profile), else the member with the
+ * same (folded) name — a hand-typed member the card completes, or an earlier card of the same
+ * person from a re-made profile, a reset phone, a new phone or the /next/ channel (new id AND new
+ * deviceId). That is the rule `membersFrom` already applies ("same name = same person"); matching
+ * narrower here would add a second entry that list can never show. Two different people on one
+ * phone (same deviceId, different names) are NOT merged. Works on the full list (`membersFrom`,
+ * local profiles first) as well as on the stored members alone.
+ */
+export function matchMemberForCard(members: readonly Member[], card: MemberCard): Member | undefined {
+  const name = foldName(card.name);
+  return members.find((m) => m.id === card.id) ?? (name ? members.find((m) => foldName(m.name) === name) : undefined);
+}
+
+/**
+ * Adds a received card to the setting, or updates the member it matches (`matchMemberForCard`):
+ * name, colour, language and deviceId follow the card, the card's id wins. Local profiles are never
+ * touched: the setting only holds non-local members, and the caller checks `matchMemberForCard`
+ * against the full list first to say "that is a profile on this phone" instead of adding.
+ */
+export function upsertMemberFromCard(h: HouseholdSetting, card: MemberCard): HouseholdSetting {
+  const member = memberFromCard(card);
+  if (!member.id.trim() || !member.name) return h;
+  const existing = matchMemberForCard(h.members, card);
+  const members = existing ? h.members.map((m) => (m === existing ? member : m)) : [...h.members, member];
+  // A card id already present under another entry (should not happen) is folded into one.
+  const seen = new Set<string>();
+  return { ...h, members: members.filter((m) => (seen.has(m.id) ? false : (seen.add(m.id), true))) };
 }

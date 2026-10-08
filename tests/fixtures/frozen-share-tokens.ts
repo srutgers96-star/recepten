@@ -1,6 +1,7 @@
 // Frozen phase-3 tokens (docs/phase-3-spec.md §1): a `#p=` patch envelope and a `#b=` bundle
 // envelope, produced ONCE on 2026-09-29 by both compression engines. They must decode forever;
 // a codec change gets a NEW fragment key, never a silent reinterpretation of these.
+// Phase 4 added a `#w=` week plan and phase 5 block F a `#f=` member card (below), same rule.
 import type { Envelope } from '../../src/domain/token';
 
 export const FROZEN_TOKEN_P =
@@ -150,6 +151,29 @@ export const FROZEN_ENVELOPE_W: Envelope = {
         updatedAt: '2026-09-15T00:00:00.000Z',
       },
     ],
+  },
+  future: { keep: true },
+};
+
+// Phase 5 block F (docs/phase-5-spec.md): a `#f=` member-card envelope, produced ONCE on
+// 2026-10-08 by both engines with encodeToken. The sender as a household member: profile id,
+// name, colour, language and the stable id of their phone. Nothing else travels in it.
+export const FROZEN_TOKEN_F =
+  'TY29DoJAEAbf5bNdzHISxX0Da63sDtgzCBw_OfCH8O7mOpOppphZsUAMIUDgQCg-EFxD_fQg2GgNm2OScsL5LWXhyJ6Z7yA4yIq6gmCQ5vA-v8xoQfC2079K2bf9BMHOFJmzOQit9Q8IfAtCpUtd6iVGKjl12fjN0xIbwc1hnjQeGtUBEqZZt-0H';
+export const FROZEN_TOKEN_F_FFLATE =
+  'TYzLDoIwEEX_ZdyCGSpRnD9wrSt3BYqplAJNi4-m_-50ZzKLe8_cnAgbkCjAA8EABbQfDlevn5aLzFSgOJYVltjcKiTMt0fEO_8HoAi659FC4-F9folVMrZyUn-Wbjaz474TbT3IhomR9sHAGs692nSnLlnS02mq129TdZBYHnxw7IkwKrUAeRdUSj8';
+
+export const FROZEN_ENVELOPE_F: Envelope = {
+  v: 2,
+  t: 'f',
+  by: 'Stijn',
+  at: '2026-10-08T10:00:00.000Z',
+  f: {
+    id: 'p:k3x9w2qa',
+    name: 'Stijn',
+    color: '#2b4fa8',
+    lang: 'nl',
+    deviceId: 'd:7m4qz81c',
   },
   future: { keep: true },
 };

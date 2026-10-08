@@ -1,17 +1,50 @@
 // '#/more/profiles' — list of profiles: add, edit, switch active, delete (confirm). `?add=1` opens
 // the add form at once ("+ profiel" in Meer). ProfileForm is reused by the onboarding screen.
+// Phase 5 block F: the ACTIVE profile has "Deel mijn kaartje" (<MemberCardPanel/>, also on the
+// Household screen): a `#f=` token with id, name, colour, language and this phone's stable id
+// (setting 'device.id', `ensureDeviceId`), shared as ONE text field (invariant 9), copied, or
+// shown as a QR behind the Experimenten flag. The panel says honestly that on an iPhone the
+// other person copies the message and pastes it into the app (invariants 5 + 13).
 import { useEffect, useState } from 'preact/hooks';
+import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
+import { QrCode } from '@/components/QrCode';
 import { Segmented } from '@/components/Segmented';
-import type { Lang, Profile } from '@/domain/model';
+import { getSetting, setSetting } from '@/db/repo';
+import { cardFromMember } from '@/domain/household';
+import { randomId, type Lang, type Profile } from '@/domain/model';
+import { buildMemberEnvelope, buildMemberShareMessage } from '@/domain/share';
+import { buildShareUrl, encodeToken } from '@/domain/token';
 import { lang, t } from '@/i18n';
 import { PROFILE_COLORS, activeProfile, createProfile, profiles, removeProfile, setActiveProfile, updateProfile } from '@/profile';
 import { route } from '@/router';
+import { copyText, shareText } from '@/share-actions';
 
 export interface ProfileValues {
   name: string;
   lang: Lang;
   color: string;
+}
+
+/** Setting with this phone's stable random id (travels in member cards as `deviceId`). */
+export const DEVICE_ID_KEY = 'device.id';
+
+/** The stable id of this phone, created on first use ('d:' + 8 chars [a-z0-9]). */
+export async function ensureDeviceId(): Promise<string> {
+  const have = await getSetting<unknown>(DEVICE_ID_KEY, null);
+  if (typeof have === 'string' && have.trim()) return have;
+  const id = randomId('d:');
+  await setSetting(DEVICE_ID_KEY, id);
+  return id;
+}
+
+/**
+ * The WhatsApp text for a card: one sentence in the SENDER's language (it says "open the link in
+ * the app OR paste it into Inbox", honest for iPhone), the `#f=` link alone on the last line.
+ * The sentence lives in the domain layer (share.ts) so the landing page and the tests share it.
+ */
+export function memberCardMessage(name: string, l: Lang, url: string): string {
+  return buildMemberShareMessage({ name, url, lang: l });
 }
 
 /** Coloured circle with the first letter of the name. */
@@ -20,6 +53,115 @@ export function Avatar(props: { profile: Pick<Profile, 'name' | 'color'>; big?: 
     <span class={'avatar' + (props.big ? ' big' : '')} style={{ background: props.profile.color }} aria-hidden="true">
       {props.profile.name.trim().charAt(0).toUpperCase() || '?'}
     </span>
+  );
+}
+
+/**
+ * "Deel mijn kaartje" for one profile: builds the `#f=` link once (device id + token), then
+ * shares it as text (navigator.share with exactly {text}, inside the tap), copies it, or shows
+ * the QR (Experimenten flag). The link is rebuilt when the profile's name/colour/language change.
+ */
+export function MemberCardPanel(props: { profile: Profile }) {
+  const p = props.profile;
+  const [url, setUrl] = useState<string | null>(null);
+  const [buildFailed, setBuildFailed] = useState(false);
+  const [status, setStatus] = useState('');
+  const [showRaw, setShowRaw] = useState(false);
+  const [experiments, setExperiments] = useState(false);
+  const [showQr, setShowQr] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setUrl(null);
+    setBuildFailed(false);
+    setStatus('');
+    setShowRaw(false);
+    (async () => {
+      const deviceId = await ensureDeviceId();
+      const token = await encodeToken(buildMemberEnvelope(cardFromMember(p, deviceId)));
+      if (!cancelled) setUrl(buildShareUrl(appInfo.appUrl, 'f', token));
+    })().catch((e: unknown) => {
+      console.error('member card', e);
+      if (!cancelled) setBuildFailed(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [p.id, p.name, p.color, p.lang]);
+
+  // "Toon QR" exists only while the Experimenten flag is on (flag off = no trace), like ShareScreen.
+  useEffect(() => {
+    let cancelled = false;
+    getSetting<unknown>('experiments', false)
+      .then((v) => {
+        if (!cancelled) setExperiments(v === true);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const message = url ? memberCardMessage(p.name, p.lang, url) : '';
+
+  function share() {
+    if (!message || busy) return;
+    setBusy(true);
+    setStatus('');
+    // navigator.share runs before the first await inside shareText: still within the tap.
+    void shareText(message)
+      .then((r) => {
+        if (r.outcome === 'shared') setStatus(t('household.cardShared'));
+        else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
+        else if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
+      })
+      .finally(() => setBusy(false));
+  }
+
+  function copy() {
+    if (!message) return;
+    void copyText(message).then((r) => {
+      if (r.ok) setStatus(t('household.cardCopied'));
+      else {
+        // The clipboard refused (http dev server, permissions): show the text to copy by hand.
+        setStatus(t('share.copyError'));
+        setShowRaw(true);
+      }
+    });
+  }
+
+  return (
+    <div class="member-card-share">
+      <p class="muted small">{t('household.myCardHint')}</p>
+      {buildFailed && <p class="bad small">{t('household.cardBuildFailed')}</p>}
+      <div class="actions">
+        <button type="button" class="btn btn-primary" disabled={!url || busy} onClick={share}>
+          {t('household.shareCard')}
+        </button>
+        <button type="button" class="btn" disabled={!url} onClick={copy}>
+          {t('household.copyCard')}
+        </button>
+      </div>
+      {showRaw && <textarea class="input member-card-raw" readOnly rows={3} value={message} onFocus={(e) => (e.currentTarget as HTMLTextAreaElement).select()} />}
+      <p class="muted small">{t('household.cardIosHint')}</p>
+      {experiments && (
+        <div class="share-qr">
+          <button type="button" class="btn" disabled={!url} onClick={() => setShowQr((v) => !v)}>
+            {showQr ? t('share.qrHide') : t('share.qrShow')}
+          </button>
+          {showQr && url && (
+            <>
+              <QrCode text={url} label={t('household.cardQrAlt')} />
+              <p class="muted small share-qr-hint">{t('household.cardQrHint')}</p>
+            </>
+          )}
+        </div>
+      )}
+      <div class="status" role="status">
+        {status}
+      </div>
+    </div>
   );
 }
 
@@ -112,6 +254,8 @@ export function ProfilesScreen() {
   const active = activeProfile.value;
   const [adding, setAdding] = useState(route.value.query.get('add') === '1');
   const [editing, setEditing] = useState<string | null>(null);
+  // Block F: "Deel mijn kaartje" unfolds the card panel under the ACTIVE profile.
+  const [sharing, setSharing] = useState(false);
 
   // "+ profiel" from Meer arrives with ?add=1; a later visit to the plain route closes the form.
   useEffect(() => {
@@ -175,7 +319,13 @@ export function ProfilesScreen() {
                   <button type="button" class="btn btn-small btn-danger" onClick={() => void remove(p)}>
                     {t('profiles.delete')}
                   </button>
+                  {active?.id === p.id && (
+                    <button type="button" class="btn btn-small" aria-expanded={sharing} onClick={() => setSharing((v) => !v)}>
+                      {t('household.shareCard')}
+                    </button>
+                  )}
                 </div>
+                {active?.id === p.id && sharing && <MemberCardPanel profile={p} />}
               </>
             )}
           </div>

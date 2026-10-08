@@ -1,4 +1,4 @@
-// Hash router (~60 lines). Routes are '#/…'; share tokens ('#r=…', '#p=…', '#w=…', '#b=…') are
+// Hash router (~60 lines). Routes are '#/…'; share tokens ('#r=…', '#p=…', '#w=…', '#b=…', '#f=…') are
 // NEVER routes: when one shows up in the hash (at boot or later) it is moved into `pendingImport`
 // and the hash is replaced by '#/inbox' (the import screen) so a reload never re-imports and the
 // token never sticks in the URL bar.
@@ -19,7 +19,7 @@ interface NavState {
   idx: number;
 }
 
-const TOKEN_RE = /^#([rpwb])=([A-Za-z0-9_-]+)/;
+const TOKEN_RE = /^#([rpwbf])=([A-Za-z0-9_-]+)/;
 
 /** Where a share token lands: the Inbox (phase 1). '/import' stays an alias (sw.ts, share/index.html). */
 export const IMPORT_ROUTE = '/inbox';

@@ -1,5 +1,7 @@
 // '#/share' (no id) — "Stuur nieuwe naar <naam>" (docs/phase-3-spec.md §3): keeps two phones in
-// step without a server. Partner = another profile on this phone or a free-text name; the
+// step without a server. Partner = a member of the household (phase 5 block F: the other profiles
+// on this phone, members from a card, hand-typed ones — shown first with their colour), a name
+// something was sent to before, or a free-text name; the
 // setting 'share.lastSentTo' remembers per name when something was last sent. Everything changed
 // since then (own recipes, received ones edited after receipt, adjusted classics, the user
 // ingredients they reference) goes as ONE WhatsApp text with several tokens when it fits in
@@ -10,15 +12,37 @@ import { useEffect, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
-import { bumpSharedRecipes, collectDeltaSince, getLastSentTo, markSentTo, type DeltaSince } from '@/db/repo';
+import { bumpSharedRecipes, collectDeltaSince, getHousehold, getLastSentTo, markSentTo, type DeltaSince } from '@/db/repo';
+import { membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
 import { pickText, type Text } from '@/domain/model';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
 import { lang, t } from '@/i18n';
 import { refreshShareBadges } from '@/inbox-badge';
 import { activeProfile, profiles } from '@/profile';
+import { navigate } from '@/router';
 import { copyText, shareJsonFile, shareText } from '@/share-actions';
+import { Avatar } from './ProfilesScreen';
 
 const OTHER = '\u0000other';
+
+function foldName(s: string): string {
+  return s.trim().toLowerCase();
+}
+
+/**
+ * When something was last sent to a partner: the newest 'share.lastSentTo' entry whose key folds
+ * to the same name. The keys keep the spelling that was typed ("gabi" via "Anders…" before her card
+ * arrived as "Gabi"), while a member chip carries the member's name; comparing folded keeps the
+ * delta, the chip and the "laatst verzonden" line on one partner. (The old key stays in the setting;
+ * it is hidden by the chip filter and harmless.)
+ */
+function lastSentFor(lastSent: Record<string, string>, name: string): string | null {
+  const wanted = foldName(name);
+  if (!wanted) return null;
+  let best: string | null = null;
+  for (const [k, v] of Object.entries(lastSent)) if (foldName(k) === wanted && (best === null || v.localeCompare(best) > 0)) best = v;
+  return best;
+}
 
 function formatWhen(iso: string): string {
   const d = new Date(iso);
@@ -60,6 +84,8 @@ export function DeltaShareScreen() {
   const me = activeProfile.value;
   const by = me?.name ?? '';
   const [lastSent, setLastSent] = useState<Record<string, string> | null>(null);
+  // Block F: the household (loaded with lastSent); its members are the first partner choices.
+  const [household, setHousehold] = useState<HouseholdSetting | null>(null);
   const [choice, setChoice] = useState<string>('');
   const [custom, setCustom] = useState('');
   /** The typed name, settled: the delta (and its compression) follows it after a short pause. */
@@ -70,11 +96,17 @@ export function DeltaShareScreen() {
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
 
-  // Partner names: the other profiles on this phone plus everyone something was sent to before.
-  const others = profiles.value.filter((p) => p.id !== me?.id).map((p) => p.name);
-  const known = [...new Set([...others, ...Object.keys(lastSent ?? {})])].filter((n) => n && n !== by);
+  // Partner choices: the household members (the other profiles on this phone, members from a card,
+  // hand-typed ones) first, then everyone else something was sent to before.
+  const members: Member[] = (household ? membersFrom(profiles.value, household) : profiles.value.map((p) => ({ id: p.id, name: p.name, color: p.color, lang: p.lang, local: true }) as Member)).filter(
+    (m) => m.id !== me?.id && foldName(m.name) !== foldName(by),
+  );
+  const memberNames = new Set(members.map((m) => foldName(m.name)));
+  const known = [...new Set(Object.keys(lastSent ?? {}))].filter((n) => n && foldName(n) !== foldName(by) && !memberNames.has(foldName(n)));
   const name = choice === OTHER ? customName : choice;
-  const since = name && lastSent ? (lastSent[name] ?? null) : null;
+  const since = name && lastSent ? lastSentFor(lastSent, name) : null;
+  /** The chip that is on: compared folded, like the member/known split above. */
+  const chosen = choice === OTHER ? OTHER : foldName(choice);
 
   useEffect(() => {
     const id = setTimeout(() => setCustomName(custom.trim()), 400);
@@ -83,16 +115,19 @@ export function DeltaShareScreen() {
 
   useEffect(() => {
     let cancelled = false;
-    getLastSentTo()
-      .then((m) => {
+    Promise.all([getLastSentTo(), getHousehold()])
+      .then(([m, h]) => {
         if (cancelled) return;
+        setHousehold(h);
         setLastSent(m);
-        // Default: the most recently used partner, else the first other profile, else free text.
+        // Default: the most recently used partner, else the first other member, else free text.
         const recent = Object.entries(m)
-          .filter(([k]) => k !== by)
+          .filter(([k]) => foldName(k) !== foldName(by))
           .sort((a, b) => b[1].localeCompare(a[1]))[0]?.[0];
-        const first = others[0];
-        setChoice(recent ?? first ?? OTHER);
+        const others = membersFrom(profiles.value, h).filter((x) => x.id !== me?.id && foldName(x.name) !== foldName(by));
+        // A name typed before that person became a member ("gabi") selects the member's chip ("Gabi").
+        const recentMember = recent ? others.find((x) => foldName(x.name) === foldName(recent))?.name : undefined;
+        setChoice(recentMember ?? recent ?? others[0]?.name ?? OTHER);
       })
       .catch((e: unknown) => {
         if (!cancelled) setError(String(e));
@@ -194,8 +229,14 @@ export function DeltaShareScreen() {
         <section class="card">
           <h2>{t('delta.partner')}</h2>
           <div class="partner-chips" role="group" aria-label={t('delta.partner')}>
+            {members.map((m) => (
+              <button key={m.id} type="button" class={'partner-chip member' + (chosen === foldName(m.name) ? ' on' : '')} onClick={() => choose(m.name)}>
+                <Avatar profile={m} />
+                {m.name}
+              </button>
+            ))}
             {known.map((n) => (
-              <button key={n} type="button" class={'partner-chip' + (choice === n ? ' on' : '')} onClick={() => choose(n)}>
+              <button key={n} type="button" class={'partner-chip' + (chosen === foldName(n) ? ' on' : '')} onClick={() => choose(n)}>
                 {n}
               </button>
             ))}
@@ -203,6 +244,20 @@ export function DeltaShareScreen() {
               {t('delta.other')}
             </button>
           </div>
+          {household && !members.some((m) => !m.local) && (
+            <p class="muted small partner-hint">
+              {t('delta.memberHint')}{' '}
+              <a
+                href="#/more/household"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/more/household');
+                }}
+              >
+                {t('household.toHousehold')} ›
+              </a>
+            </p>
+          )}
           {choice === OTHER && (
             <input
               class="input partner-input"

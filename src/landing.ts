@@ -7,6 +7,9 @@
 //   #b=  a bundle: the recipes (names in both languages) and adjustments it holds
 //   #w=  a week plan: "Weekplan van <by>: N gerechten" and the own recipes it carries (builtins
 //        travel by id only, so they are counted, not named)
+//   #f=  a member card: "Kaartje van <name>" with the colour swatch and language; "Kopieer code"
+//        and the same hand-off card (copy → app → Inbox → Plak), because on an iPhone a link
+//        never opens the installed app (CLAUDE.md invariant 5)
 // Ingredient lines are rendered through the bundled dictionary (schema-2 lines carry `ing`,
 // `qty`, `unit`, `prep` and usually only a Dutch `raw`), so the EN view shows English names;
 // a line the dictionary cannot render falls back to its raw text. The dictionary is by far the
@@ -16,7 +19,7 @@
 import type { Dictionary } from './domain/dictionary';
 import { pickText, type Lang, type Line, type Recipe, type Step, type Text } from './domain/model';
 import { renderLine } from './domain/render';
-import { parseEnvelope, type ParsedShare, type PatchPayload } from './domain/share';
+import { parseEnvelope, type MemberCard, type ParsedShare, type PatchPayload } from './domain/share';
 import { decodeToken } from './domain/token';
 
 const S = {
@@ -55,6 +58,13 @@ const S = {
     planNote: 'Notitie',
     planHint: 'In de app kies je Overnemen (vervangt je week) of Toevoegen (alleen wat ontbreekt).',
     planEmpty: 'Dit weekplan is leeg.',
+    previewMember: 'Voorproefje van een gedeeld ledenkaartje',
+    memberOf: (name: string) => `Kaartje van ${name}`,
+    memberLang: (l: Lang) => (l === 'en' ? 'Taal: Engels' : 'Taal: Nederlands'),
+    memberHint: (name: string) => `In de app voeg je ${name} toe aan je huishouden. Recepten van ${name} krijgen dan deze naam en kleur, en "Stuur nieuwe naar ${name}" staat klaar.`,
+    copyCard: 'Kopieer code',
+    copiedCard: 'Gekopieerd. Open nu de Recepten-app op je beginscherm → Inbox → Plak.',
+    stepsCard: ['Tik op "Kopieer code"', 'Open Recepten op je beginscherm', 'Tab Inbox → Plak van klembord → Voeg toe aan huishouden'],
   },
   en: {
     title: "Rutgers' Recipes",
@@ -91,6 +101,13 @@ const S = {
     planNote: 'Note',
     planHint: 'In the app choose Take over (replaces your week) or Add (only what is missing).',
     planEmpty: 'This week plan is empty.',
+    previewMember: 'Preview of a shared member card',
+    memberOf: (name: string) => `${name}'s card`,
+    memberLang: (l: Lang) => (l === 'en' ? 'Language: English' : 'Language: Dutch'),
+    memberHint: (name: string) => `In the app you add ${name} to your household. Recipes from ${name} then get this name and colour, and "Send new ones to ${name}" is ready.`,
+    copyCard: 'Copy code',
+    copiedCard: 'Copied. Now open the Recepten app on your Home Screen → Inbox → Paste.',
+    stepsCard: ['Tap "Copy code"', 'Open Recepten on your Home Screen', 'Inbox tab → Paste from clipboard → Add to household'],
   },
 } as const;
 
@@ -114,6 +131,7 @@ ol{margin:0;padding-left:24px}ol li{padding:6px 0 6px 4px;border-bottom:1px soli
 .btn.secondary{background:transparent;color:var(--cobalt);border:1px solid var(--cobalt)}
 .card{background:var(--card);border:1px solid var(--cobalt);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:14px}.card ol{margin:6px 0;padding-left:20px}.card ol li{border:0;padding:2px 0}
 .status{min-height:22px;font-size:14px;color:var(--muted)}
+.swatch{display:inline-block;width:16px;height:16px;border-radius:50%;vertical-align:-3px;margin-right:6px;border:1px solid var(--line)}
 `;
 
 /** The app itself (no token): opening it in Safari is the first step towards "Add to Home Screen". */
@@ -291,6 +309,17 @@ function planHtml(s: ParsedShare, by: string): string[] {
   return parts;
 }
 
+/** The member card: "Kaartje van <name>", the colour swatch with the language, and what the app does with it. */
+function memberHtml(card: MemberCard): string[] {
+  const L = S[lang];
+  const parts: string[] = [];
+  parts.push(`<h2>${esc(L.memberOf(card.name))}</h2>`);
+  // `color` passed readMemberPayload's plain-colour check, so it is safe in an inline style.
+  parts.push(`<p class="muted"><span class="swatch" style="background:${esc(card.color)}"></span>${esc(card.name)} · ${esc(L.memberLang(card.lang))}</p>`);
+  parts.push(`<p class="muted">${esc(L.memberHint(card.name))}</p>`);
+  return parts;
+}
+
 /** `keepStatus`: the dictionary re-render must not wipe a "Gekopieerd" the person just got. */
 function render(keepStatus = false) {
   const L = S[lang];
@@ -302,15 +331,18 @@ function render(keepStatus = false) {
   const patch = share?.kind === 'patch' ? share.patches[0] : undefined;
   const bundle = share?.kind === 'bundle' ? share : undefined;
   const plan = share?.kind === 'plan' ? share : undefined;
+  const member = share?.kind === 'member' ? share.member : undefined;
   const by = share?.by ?? '';
-  parts.push(`<p class="muted">${esc(patch ? L.previewPatch : bundle ? L.previewBundle : plan ? L.previewPlan : L.preview)}</p>`);
-  if (recipe || patch || bundle || plan) {
+  parts.push(`<p class="muted">${esc(patch ? L.previewPatch : bundle ? L.previewBundle : plan ? L.previewPlan : member ? L.previewMember : L.preview)}</p>`);
+  if (recipe || patch || bundle || plan || member) {
     if (recipe) parts.push(...recipeHtml(recipe, by));
     else if (patch) parts.push(...patchHtml(patch, by));
     else if (bundle) parts.push(...bundleHtml(bundle, by));
     else if (plan) parts.push(...planHtml(plan, by));
-    parts.push(`<button type="button" class="btn" id="copy">${esc(L.copy)}</button><div class="status" id="status"></div>`);
-    parts.push(`<div class="card"><strong>${esc(L.handoff)}</strong><ol>${L.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol><div class="muted">${esc(L.install)}</div></div>`);
+    else if (member) parts.push(...memberHtml(member));
+    const steps: readonly string[] = member ? L.stepsCard : L.steps;
+    parts.push(`<button type="button" class="btn" id="copy">${esc(member ? L.copyCard : L.copy)}</button><div class="status" id="status"></div>`);
+    parts.push(`<div class="card"><strong>${esc(L.handoff)}</strong><ol>${steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol><div class="muted">${esc(L.install)}</div></div>`);
     parts.push(`<a class="btn secondary" href="${esc(appUrl())}">${esc(L.openApp)}</a>`);
   } else {
     parts.push(`<p>${esc(problem === 'unsupported' ? L.unsupported : L.invalid)}</p>`);
@@ -334,7 +366,7 @@ function render(keepStatus = false) {
     const status = document.getElementById('status')!;
     try {
       await navigator.clipboard.writeText(location.href);
-      status.textContent = S[lang].copied;
+      status.textContent = share?.kind === 'member' ? S[lang].copiedCard : S[lang].copied;
     } catch {
       status.textContent = S[lang].copyFailed;
     }
@@ -342,7 +374,7 @@ function render(keepStatus = false) {
 }
 
 async function boot() {
-  const m = /^#([rpwb])=([A-Za-z0-9_-]+)/.exec(location.hash);
+  const m = /^#([rpwbf])=([A-Za-z0-9_-]+)/.exec(location.hash);
   if (m && m[2]) {
     try {
       const env = await decodeToken(m[2]);
@@ -352,7 +384,8 @@ async function boot() {
         (parsed.kind === 'recipe' && parsed.recipes.length > 0) ||
         (parsed.kind === 'patch' && parsed.patches.length > 0) ||
         (parsed.kind === 'bundle' && (parsed.recipes.length > 0 || parsed.patches.length > 0)) ||
-        (parsed.kind === 'plan' && (parsed.plan?.items.length ?? 0) > 0);
+        (parsed.kind === 'plan' && (parsed.plan?.items.length ?? 0) > 0) ||
+        (parsed.kind === 'member' && !!parsed.member);
       if (usable) share = parsed;
       else problem = 'invalid';
     } catch (e) {

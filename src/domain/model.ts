@@ -125,6 +125,14 @@ export interface Recipe {
    * it alone; it never travels in a share token (the receiver sets its own).
    */
   sync?: RecipeSync;
+  /**
+   * Id of the recipe this one is a diet variant of (docs/phase-5-spec.md block F.2, "Maak
+   * glutenvrije / vegetarische / vegan versie", src/domain/variants.ts). The original shows
+   * "Ook als: …" chips for its variants; the variant shows "Versie van <origineel>". Travels in
+   * share tokens like any other recipe key (`travelRecipe` / `normalizeRecipe` spread the recipe,
+   * so the key rides along and is preserved); absent or null = not a variant.
+   */
+  variantOf?: string | null;
   /** Unknown keys are preserved on round-trip (PLAN.md §5). */
   [k: string]: unknown;
 }

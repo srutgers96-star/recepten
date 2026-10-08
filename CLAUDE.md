@@ -80,7 +80,7 @@ docs/DEVICE-TEST.md plain-language phone test walkthrough (NL + EN)
 5. **iOS has no share target and no link capture.** The paste import (button **and** plain textarea) is
    never removed from the app, and no flow may pretend a link opens the installed iPhone app.
 6. **The landing bundle never writes storage.** Safari's bucket is invisible to the Home Screen app.
-7. **Boot rule** (`src/boot.ts`): hash token (`#r=`/`#p=`/`#w=`/`#b=`) **and** iOS **and** not standalone
+7. **Boot rule** (`src/boot.ts`): hash token (`#r=`/`#p=`/`#w=`/`#b=`/`#f=`) **and** iOS **and** not standalone
    → `landing.ts`; everything else → full app, with the import preview opened when a token is present.
 8. **`navigator.storage.persist()` on every start.**
 9. **`navigator.share` with exactly ONE field** (`{text}` or `{files}`); `text`+`url` or `files`+`text`
@@ -95,7 +95,7 @@ docs/DEVICE-TEST.md plain-language phone test walkthrough (NL + EN)
 14. **No backend, no accounts, no analytics.** Backup is one tap to Files/Drive/WhatsApp.
 15. **No new dependency without an ADR line.**
 
-Also: hash routes are `#/…`; share tokens are `#r=`, `#p=`, `#w=`, `#b=` and are never a route.
+Also: hash routes are `#/…`; share tokens are `#r=`, `#p=`, `#w=`, `#b=`, `#f=` (member card, block F) and are never a route.
 
 ## House rules for code
 
