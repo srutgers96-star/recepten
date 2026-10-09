@@ -690,6 +690,11 @@ button.lc-chip:disabled {
   margin-top: 0;
 }
 
+/* 6A.18 (EditScreen): the one-line explanation above the Categorie / Dieet & labels rows. */
+.edit-meta .edit-meta-intro {
+  margin: 0 0 8px;
+}
+
 .meta-rows .field {
   margin-bottom: 12px;
 }
@@ -884,6 +889,16 @@ button.lc-chip:disabled {
 
 .cr-compare .cr-suggested {
   font-weight: 600;
+}
+
+/* 6A.18 (CheckRecipesScreen): "Categorie: …" / "Labels: …" each on its own line, the kind in muted text. */
+.cr-compare .cr-meta-line + .cr-meta-line {
+  margin-top: 2px;
+}
+
+.cr-compare .cr-meta-key {
+  color: var(--muted);
+  font-weight: 500;
 }
 
 .cr-actions {

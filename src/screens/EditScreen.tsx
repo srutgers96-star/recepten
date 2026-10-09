@@ -1191,6 +1191,9 @@ export function EditScreen(props: { id?: string }) {
 
         {/* Phase-5 A.4: category + diet/labels, with the live suggestion from the lines above. */}
         <div class="edit-meta">
+          {/* 6A.18: which kind each row is — "Categorie" is one per recipe (soep, salade, pasta …),
+              "Dieet & labels" takes as many as apply — so a category is not looked for among the chips. */}
+          <p class="muted small edit-meta-intro">{t('meta.kindsHint')}</p>
           <MetaRows value={meta} suggestion={suggestion} onChange={changeMeta} disabled={busy} />
           {!props.id && !metaManual && <p class="muted small edit-hint">{t('meta.autoHint')}</p>}
         </div>

@@ -1,14 +1,22 @@
-// Voice-command grammar for cook mode (docs/phase-5-spec.md Block B). Framework-free: no preact,
-// no dexie; runs in Node (tests) and in the browser. `parseVoiceCommand` turns a speech-recognition
-// transcript — often a whole sentence with filler words and punctuation — into a command, matching
-// whole words only ("stopcontact" is not "stop"). `pickSpoken` is `pickText` (src/domain/model.ts)
-// with the language the text is actually in made explicit, so speechSynthesis picks a fitting voice.
+// Voice-command grammar for cook mode (docs/phase-5-spec.md Block B; phase 6 block 6A.8 adds
+// repeat / ingredients / timeLeft). Framework-free: no preact, no dexie; runs in Node (tests) and
+// in the browser. `parseVoiceCommand` turns a speech-recognition transcript — often a whole
+// sentence with filler words and punctuation — into a command, matching whole words only
+// ("stopcontact" is not "stop", "opnieuw" never matches inside another word). `pickSpoken` is
+// `pickText` (src/domain/model.ts) with the language the text is actually in made explicit, so
+// speechSynthesis picks a fitting voice.
 import type { Lang, Text } from './model.ts';
 
 export type VoiceCommand =
   | { kind: 'next' }
   | { kind: 'prev' }
   | { kind: 'read' }
+  /** Say the last thing the app read aloud once more ("herhaal", "wat zeg je?", "say that again"). */
+  | { kind: 'repeat' }
+  /** Read the (scaled) ingredient list ("ingrediënten", "boodschappen", "ingredients"). */
+  | { kind: 'ingredients' }
+  /** Speak the remaining time of this recipe's running timer(s) ("hoe lang nog", "how long left"). */
+  | { kind: 'timeLeft' }
   | { kind: 'stop' }
   | { kind: 'timer'; minutes: number };
 
@@ -55,10 +63,43 @@ const MINUTE_WORDS = new Set(['minuut', 'minuten', 'minuutje', 'minuutjes', 'min
 const HOUR_WORDS = new Set(['uur', 'uren', 'hour', 'hours']);
 const SECOND_WORDS = new Set(['seconde', 'seconden', 'second', 'seconds', 'sec', 'secs']);
 
+// Single-word "read the ingredient list" per language ("ingrediënten" folds to "ingredienten").
+const INGREDIENT_WORDS: Record<Lang, ReadonlySet<string>> = {
+  nl: new Set(['ingredienten', 'ingredient', 'ingredientenlijst', 'boodschappen', 'boodschappenlijst']),
+  en: new Set(['ingredients', 'ingredient']),
+};
+
+// Single-word "say that again" per language. 'herhaal', 'nogmaals' (the everyday synonym of
+// "opnieuw"), 'repeat' and 'pardon' are distinct enough to count anywhere. 'opnieuw' / 'again' and
+// the Dutch "nog eens" / "nog een keer" are everyday recipe words ("bak nog eens 30 minuten",
+// "bring back to the boil again") that kitchen talk — or the app's own read-aloud — says all the
+// time, so like 'terug'/'back' (goWordBefore) they only count as the whole transcript ("Opnieuw.",
+// "Nog eens?") or shortly after a say-/read-word ("zeg dat nog eens", "say that again"; "lees
+// opnieuw voor" goes through readKindAt). 'wat'/'what'/'sorry' are only a command when they are the
+// whole transcript ("Wat?") or part of a fixed phrase ("wat zeg je"), for the same reason.
+const REPEAT_WORDS: Record<Lang, ReadonlySet<string>> = {
+  nl: new Set(['herhaal', 'nogmaals', 'pardon']),
+  en: new Set(['repeat', 'pardon']),
+};
+const GUARDED_REPEAT_WORDS: Record<Lang, ReadonlySet<string>> = {
+  nl: new Set(['opnieuw']),
+  en: new Set(['again']),
+};
+const SAY_WORDS: Record<Lang, ReadonlySet<string>> = {
+  nl: new Set(['zeg', 'lees']),
+  en: new Set(['say', 'read']),
+};
+const ALONE_REPEAT_WORDS: Record<Lang, ReadonlySet<string>> = {
+  nl: new Set(['wat', 'sorry']),
+  en: new Set(['what', 'sorry']),
+};
+
 // All command keywords of both languages: a duration scan stops at these so
 // "timer stop" never reads "stop" as a number and falls through to the stop command.
+// The repeat words are left out on purpose: "timer opnieuw 5 minuten" is a timer, not a repeat.
 const COMMAND_WORDS = new Set([
   'volgende', 'next', 'vorige', 'terug', 'previous', 'back', 'stop', 'lees', 'voorlezen', 'read', 'timer',
+  'ingredienten', 'ingredients', 'boodschappen',
 ]);
 
 function clampMinutes(n: number): number {
@@ -181,25 +222,132 @@ function durationBefore(tokens: string[], timerIdx: number): number | null {
   return null;
 }
 
+// ---------------------------------------------------------------------------
+// Phase 6 (6A.8): repeat / ingredients / timeLeft phrases
+// ---------------------------------------------------------------------------
+
+/**
+ * Token length (2 or 3) of the Dutch "nog een keer" / "nog 'n keer" / "nog een keertje" / "nog
+ * eens" starting at `i`, 0 when there is none. A bare "nog" is never a command ("nog vijf minuten").
+ */
+function nlAgainPhraseAt(tokens: string[], i: number): number {
+  if (tokens[i] !== 'nog') return 0;
+  const a = tokens[i + 1];
+  const b = tokens[i + 2];
+  if (a === 'eens') return 2;
+  if ((a === 'een' || a === 'n' || a === '1') && (b === 'keer' || b === 'keertje')) return 3;
+  return 0;
+}
+
+/** Token length of a guarded repeat word or phrase ('opnieuw', 'again', "nog eens", …) at `i`, 0 when none. */
+function guardedRepeatAt(tokens: string[], i: number, lang: Lang): number {
+  const tok = tokens[i];
+  if (tok === undefined) return 0;
+  if (GUARDED_REPEAT_WORDS[lang].has(tok)) return 1;
+  return lang === 'nl' ? nlAgainPhraseAt(tokens, i) : 0;
+}
+
+/** A say-/read-word one or two tokens before `i` ("zeg dat nog eens", "say again"), cf. goWordBefore. */
+function sayWordBefore(tokens: string[], i: number, lang: Lang): boolean {
+  const a = tokens[i - 1];
+  const b = tokens[i - 2];
+  return (a !== undefined && SAY_WORDS[lang].has(a)) || (b !== undefined && SAY_WORDS[lang].has(b));
+}
+
+/**
+ * A "say that again" word or phrase that starts at `i`. 'herhaal' / 'repeat' / … count anywhere;
+ * 'opnieuw' / 'again' / "nog eens" / "nog een keer" only as the whole transcript or right after a
+ * say-/read-word (they are ordinary recipe words otherwise); "wat zeg je" / "wat zei je" / "what
+ * did you say" / "what was that" are fixed phrases; "wat?", "what?", "sorry?", "pardon?" count when
+ * they are the whole transcript.
+ */
+function repeatAt(tokens: string[], i: number, lang: Lang): boolean {
+  const tok = tokens[i];
+  if (tok === undefined) return false;
+  if (REPEAT_WORDS[lang].has(tok)) return true;
+  if (tokens.length === 1 && ALONE_REPEAT_WORDS[lang].has(tok)) return true;
+  const guarded = guardedRepeatAt(tokens, i, lang);
+  if (guarded > 0 && ((i === 0 && tokens.length === guarded) || sayWordBefore(tokens, i, lang))) return true;
+  if (lang === 'nl') {
+    if (tok === 'wat' && (tokens[i + 1] === 'zeg' || tokens[i + 1] === 'zei')) return true;
+  } else {
+    const a = tokens[i + 1];
+    const b = tokens[i + 2];
+    if (tok === 'what' && a === 'did' && (b === 'you' || b === 'u')) return true;
+    if (tok === 'what' && a === 'was' && b === 'that') return true;
+  }
+  return false;
+}
+
+/**
+ * "How long is left" starting at `i`: NL "hoe lang nog", "hoelang nog", "hoeveel tijd (nog)",
+ * "hoeveel minuten nog"; EN "how long left", "how long is left", "how long to go", "how much
+ * time", "how much longer". A bare "hoe lang" / "how long" is a question about the recipe, not
+ * about the timer, so it needs the "nog"/"left" part.
+ */
+function timeLeftAt(tokens: string[], i: number, lang: Lang): boolean {
+  const tok = tokens[i];
+  if (tok === undefined) return false;
+  const within = (from: number, word: string, span: number): boolean => {
+    for (let k = from; k < Math.min(tokens.length, from + span); k++) if (tokens[k] === word) return true;
+    return false;
+  };
+  if (lang === 'nl') {
+    if (tok === 'hoelang' && within(i + 1, 'nog', 3)) return true;
+    if (tok === 'hoe' && tokens[i + 1] === 'lang' && within(i + 2, 'nog', 3)) return true;
+    if (tok === 'hoeveel' && tokens[i + 1] === 'tijd') return true;
+    if (tok === 'hoeveel' && tokens[i + 1] === 'minuten' && within(i + 2, 'nog', 2)) return true;
+    return false;
+  }
+  if (tok === 'how' && tokens[i + 1] === 'long') {
+    if (within(i + 2, 'left', 4)) return true;
+    if (tokens[i + 2] === 'to' && tokens[i + 3] === 'go') return true;
+    return false;
+  }
+  if (tok === 'how' && tokens[i + 1] === 'much' && (tokens[i + 2] === 'time' || tokens[i + 2] === 'longer')) return true;
+  return false;
+}
+
+/**
+ * The read-word ("lees", "voorlezen", "read") may be the start of "lees opnieuw voor" / "read
+ * that again" (= repeat) or "lees de ingrediënten" / "read the ingredients" (= ingredients):
+ * look a few tokens ahead before settling on a plain read.
+ */
+function readKindAt(tokens: string[], i: number, lang: Lang): 'read' | 'repeat' | 'ingredients' {
+  const end = Math.min(tokens.length, i + 4);
+  for (let k = i + 1; k < end; k++) {
+    const tok = tokens[k];
+    if (tok === undefined) break;
+    if (REPEAT_WORDS[lang].has(tok) || guardedRepeatAt(tokens, k, lang) > 0) return 'repeat';
+    if (INGREDIENT_WORDS[lang].has(tok)) return 'ingredients';
+    if (COMMAND_WORDS.has(tok)) break; // "read the next step": a plain read
+  }
+  return 'read';
+}
+
 /**
  * Parse a recognition transcript ("volgende", "ga maar terug", "timer 10 minuten",
- * "set a timer for five minutes") into a command. Case-insensitive, tolerant of
- * punctuation and filler words; matches whole words only. When a transcript could
- * hold several commands the first clear one wins. Null when nothing matches.
+ * "set a timer for five minutes", "wat zeg je?", "hoe lang nog") into a command.
+ * Case-insensitive, tolerant of punctuation and filler words; matches whole words only. When a
+ * transcript could hold several commands the first clear one wins. Null when nothing matches.
  */
 export function parseVoiceCommand(transcript: string, lang: Lang): VoiceCommand | null {
   const tokens = tokenize(transcript);
   for (let i = 0; i < tokens.length; i++) {
     const tok = tokens[i];
     if (tok === undefined) continue;
+    // Multi-word questions first: "hoe lang nog" must not fall through on its "nog".
+    if (timeLeftAt(tokens, i, lang)) return { kind: 'timeLeft' };
+    if (repeatAt(tokens, i, lang)) return { kind: 'repeat' };
+    if (INGREDIENT_WORDS[lang].has(tok)) return { kind: 'ingredients' };
     if (lang === 'nl') {
       if (tok === 'volgende') return { kind: 'next' };
       if (tok === 'vorige' || (tok === 'terug' && goWordBefore(tokens, i, 'ga'))) return { kind: 'prev' };
-      if (tok === 'lees' || tok === 'voorlezen') return { kind: 'read' };
+      if (tok === 'lees' || tok === 'voorlezen') return { kind: readKindAt(tokens, i, lang) };
     } else {
       if (tok === 'next') return { kind: 'next' };
       if (tok === 'previous' || (tok === 'back' && goWordBefore(tokens, i, 'go'))) return { kind: 'prev' };
-      if (tok === 'read') return { kind: 'read' };
+      if (tok === 'read') return { kind: readKindAt(tokens, i, lang) };
     }
     if (tok === 'stop') return { kind: 'stop' };
     if (tok === 'timer') {

@@ -310,9 +310,13 @@ export function IngredientPicker(props: IngredientPickerProps) {
               <input type="checkbox" checked={veg} onChange={(e) => setVeg((e.currentTarget as HTMLInputElement).checked)} />
               {t('picker.veg')}
             </label>
+            {/* 6A.15: plain words for "staple" plus one line on what it does to the shopping list. */}
             <label class="check">
               <input type="checkbox" checked={staple} onChange={(e) => setStaple((e.currentTarget as HTMLInputElement).checked)} />
-              {t('picker.staple')}
+              <span>
+                {t('picker.staple')}
+                <span class="check-hint muted small">{t('picker.stapleHint')}</span>
+              </span>
             </label>
             {error && <div class="bad small">{error}</div>}
             <div class="actions">

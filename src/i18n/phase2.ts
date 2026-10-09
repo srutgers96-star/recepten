@@ -66,12 +66,19 @@ export const phase2: Dict = {
   'share.download': { nl: 'Download', en: 'Download' },
   'share.fileFailed': { nl: 'Bestand delen mislukt', en: 'Sharing the file failed' },
 
-  // --- Phase 3: "Stuur nieuwe naar …" (delta share) ---
-  'delta.title': { nl: 'Stuur nieuwe naar …', en: 'Send new to …' },
+  // --- Phase 3: "Deel je nieuwe recepten" (delta share; renamed in phase 6, docs/phase-6-spec.md 6A.5) ---
+  'delta.title': { nl: 'Deel je nieuwe recepten', en: 'Share your new recipes' },
   'delta.intro': {
-    nl: 'Alles wat je sinds de vorige keer maakte of aanpaste, in één WhatsApp-bericht (of één bestand als het te veel is).',
-    en: 'Everything you made or changed since last time, in one WhatsApp message (or one file when it is too much).',
+    nl: 'Alles wat je sinds de vorige keer maakte of aanpaste gaat in één WhatsApp-bericht naar de ander (of in één bestand als het te veel is).',
+    en: 'Everything you made or changed since last time goes to the other person in one WhatsApp message (or in one file when it is too much).',
   },
+  'delta.example': { nl: 'Zo ziet het bericht eruit', en: 'What the message looks like' },
+  'delta.exampleHint': {
+    nl: 'Android: de ander tikt op een link. iPhone: de ander kopieert het bericht en plakt het in de app.',
+    en: 'Android: the other person taps a link. iPhone: they copy the message and paste it into the app.',
+  },
+  'delta.exampleMore': { nl: '… en nog {n} links', en: '… and {n} more links' },
+  'delta.exampleMoreOne': { nl: '… en nog 1 link', en: '… and 1 more link' },
   'delta.partner': { nl: 'Aan wie?', en: 'To whom?' },
   'delta.other': { nl: 'Iemand anders…', en: 'Someone else…' },
   'delta.otherName': { nl: 'Naam', en: 'Name' },
@@ -110,7 +117,7 @@ export const phase2: Dict = {
   'home.backupAction': { nl: 'Back-up maken', en: 'Make a backup' },
   'home.unsent': { nl: '{n} nieuwe of aangepaste recepten nog niet gedeeld.', en: '{n} new or changed recipes not shared yet.' },
   'home.unsentOne': { nl: '1 nieuw of aangepast recept nog niet gedeeld.', en: '1 new or changed recipe not shared yet.' },
-  'home.unsentAction': { nl: 'Stuur nieuwe naar …', en: 'Send new to …' },
+  'home.unsentAction': { nl: 'Deel je nieuwe recepten', en: 'Share your new recipes' },
 
   // --- Phase 5 (docs/phase-5-spec.md A-bis.8): select mode in the recipe list ---
   'select.enter': { nl: 'Selecteer', en: 'Select' },

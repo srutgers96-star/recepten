@@ -9,16 +9,29 @@
 // "Stuur correcties" shares the reviewed overrides as `#p=` patch messages via buildPatchEnvelope
 // + planMessages, exactly like DeltaShareScreen (no new token format, invariant 4; photos never
 // travel in tokens).
+//
+// Phase 6 (docs/phase-6-spec.md 6A.2): an ingredient line the dictionary recognises (`ing` set and
+// known) is rendered in English FROM the dictionary (src/domain/render.ts: names, units, scaling);
+// `raw.en` is never read for it. The panel therefore shows that effective English in grey,
+// read-only, and offers the free English box only for headers and lines the dictionary does not
+// know. A line linked to an OWN dictionary entry gets "Verbeter in het woordenboek" (one correction
+// then applies to every recipe); a built-in entry cannot be edited in the Woordenboek (a user entry
+// never overrides a built-in id, src/domain/dictionary.ts withUserEntries), so such a line honestly
+// says "ingebouwd" and the hint points to Feedback voor Stijn instead of to a dead end. Leaving for
+// the dictionary unmounts this screen, so a draft with unsaved English asks first.
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { allRecipes, getBaseRecipe, getOverride, getRecipe, isBuiltinId, listLineOverrides, listOverrides, saveOverride } from '@/db/repo';
-import { userIngredients } from '@/dictionary';
+import { dictionary, isUserIngredientId, userIngredients, type Dictionary } from '@/dictionary';
 import { hasLang, pickText, type Line, type Recipe, type Step, type Text } from '@/domain/model';
-import { applyOverride, mergeText, type RecipePatch } from '@/domain/overrides';
+import { applyOverride, mergeText, type LineOverride, type RecipePatch } from '@/domain/overrides';
+import { renderLine } from '@/domain/render';
 import { buildPatchEnvelope, planMessages, type MessagePlan, type ShareContext } from '@/domain/share';
 import { lang, t } from '@/i18n';
+import { effectiveLines } from '@/lines';
 import { activeProfile } from '@/profile';
+import { navigate } from '@/router';
 import { shareJsonFile, shareText } from '@/share-actions';
 
 // --- Status + the EN-only patch (pure; pinned in tests/curator.test.ts) --------------------------
@@ -41,6 +54,21 @@ export interface CuratorDraft {
 
 function enOf(x: Text | null | undefined): string {
   return (x?.en ?? '').trim();
+}
+
+/**
+ * 6A.2: true when the app shows this line's English through the dictionary, so `raw.en` has no
+ * effect on it. Mirrors render.ts: a header prints its raw text; a line whose `ing` this
+ * dictionary does not know (or has none) prints `raw.en` with `raw.nl` as fallback; everything
+ * else is built from the dictionary names (name, unit, prep, note) and scaled.
+ */
+export function lineUsesDictionary(line: Pick<Line, 'kind' | 'ing'>, dict: Pick<Dictionary, 'get'>): boolean {
+  return line.kind !== 'header' && !!line.ing && !!dict.get(line.ing);
+}
+
+/** The dictionary route that opens one entry: the DictionaryScreen reads `?q=` (ingredient id or search text). */
+export function dictionaryRouteFor(ingredientId: string): string {
+  return '/more/dictionary?q=' + encodeURIComponent(ingredientId);
 }
 
 /**
@@ -115,6 +143,8 @@ interface EditState {
   base: Recipe;
   effective: Recipe;
   prev: RecipePatch | undefined;
+  /** "Koppel ingrediënt" corrections of this classic: decide per line whether the dictionary renders it. */
+  lineOverrides: LineOverride[];
   draft: CuratorDraft;
 }
 
@@ -125,6 +155,13 @@ function draftFrom(effective: Recipe): CuratorDraft {
     linesEn: effective.lines.map((l) => l.raw?.en ?? ''),
     stepsEn: effective.steps.map((s) => s.text?.en ?? ''),
   };
+}
+
+/** True when the English draft differs from what is saved (the effective recipe). */
+function draftDirty(e: EditState): boolean {
+  const saved = draftFrom(e.effective);
+  const same = (a: string[], b: string[]) => a.length === b.length && a.every((v, i) => v === b[i]);
+  return e.draft.nameEn !== saved.nameEn || e.draft.descriptionEn !== saved.descriptionEn || !same(e.draft.linesEn, saved.linesEn) || !same(e.draft.stepsEn, saved.stepsEn);
 }
 
 function badgeClass(s: CuratorStatus): string {
@@ -145,6 +182,36 @@ function Pair(props: { label: string; index?: number; nl: string; value: string;
           <textarea class="input" rows={2} value={props.value} aria-label={aria} onInput={(e) => props.onInput((e.currentTarget as HTMLTextAreaElement).value)} />
         ) : (
           <input class="input" type="text" autocomplete="off" value={props.value} aria-label={aria} placeholder="EN" onInput={(e) => props.onInput((e.currentTarget as HTMLInputElement).value)} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 6A.2: a line the dictionary renders. The Dutch raw text stays the reference; the English side
+ * is the EFFECTIVE rendering (what the recipe screen shows in EN), grey and read-only. No input,
+ * because `raw.en` would be ignored. An own entry (`own`) gets the button to the dictionary, the
+ * one place to improve it; a built-in entry is read-only there too, so it only says so.
+ */
+function DictionaryPair(props: { index: number; nl: string; en: string; own: boolean; onImprove: () => void }) {
+  const en = props.en || '—';
+  return (
+    <div class="curator-pair is-dict">
+      <div class="pair-nl">
+        <span class="pair-index">{props.index}.</span>
+        <span class="pair-text">{props.nl || '—'}</span>
+      </div>
+      <div class="pair-en pair-en-dict">
+        <span class="pair-dict-text muted" title={t('curator.fromDictionary')}>
+          {en}
+        </span>
+        {props.own ? (
+          <button type="button" class="btn btn-small pair-dict-link" aria-label={`${t('curator.improveInDictionary')}: ${en}`} onClick={props.onImprove}>
+            {t('curator.improveInDictionary')}
+          </button>
+        ) : (
+          <span class="badge badge-muted">{t('dict.builtin')}</span>
         )}
       </div>
     </div>
@@ -232,10 +299,10 @@ export function CuratorScreen() {
   async function open(id: string) {
     setStatus('');
     try {
-      const [base, override] = await Promise.all([getBaseRecipe(id), getOverride(id)]);
+      const [base, override, lineOverrides] = await Promise.all([getBaseRecipe(id), getOverride(id), listLineOverrides(id)]);
       if (!base) return;
       const effective = applyOverride(base, override ?? null);
-      setEdit({ base, effective, prev: override?.patch, draft: draftFrom(effective) });
+      setEdit({ base, effective, prev: override?.patch, lineOverrides, draft: draftFrom(effective) });
     } catch (e) {
       setError(String(e));
     }
@@ -243,6 +310,15 @@ export function CuratorScreen() {
 
   function setDraft(mut: (d: CuratorDraft) => CuratorDraft) {
     setEdit((e) => (e ? { ...e, draft: mut(e.draft) } : e));
+  }
+
+  /**
+   * 6A.2: to that entry in the Woordenboek. The route change unmounts this screen and its draft,
+   * so unsaved English first asks (the same confirm() the delete buttons use).
+   */
+  function openDictionary(ingredientId: string) {
+    if (edit && draftDirty(edit) && !confirm(t('curator.unsavedLeave'))) return;
+    navigate(dictionaryRouteFor(ingredientId));
   }
 
   async function save() {
@@ -258,7 +334,7 @@ export function CuratorScreen() {
       if (fresh) setRecipes((list) => (list ? list.map((r) => (r.id === fresh.id ? fresh : r)) : list));
       const override = await getOverride(edit.base.id);
       const effective = applyOverride(edit.base, override ?? null);
-      setEdit({ base: edit.base, effective, prev: override?.patch, draft: draftFrom(effective) });
+      setEdit({ base: edit.base, effective, prev: override?.patch, lineOverrides: edit.lineOverrides, draft: draftFrom(effective) });
       // Honest about the marker: without an English name the save kept the edits but the classic
       // still counts as 'missing', not as reviewed (buildCuratorPatch sets no 'human' marker then).
       setStatus(t(edit.draft.nameEn.trim() !== '' ? 'curator.saved' : 'curator.savedNoName'));
@@ -299,6 +375,11 @@ export function CuratorScreen() {
     const reviewedBy = edit.effective.text?.reviewedBy;
     const desc = edit.effective.description;
     const hasDesc = !!desc && ((desc.nl ?? '').trim() !== '' || (desc.en ?? '').trim() !== '');
+    // 6A.2: the lines as the recipe screen renders them (line overrides merged in, same index as
+    // `effective.lines` and the draft), against the dictionary every screen renders with.
+    const dict = dictionary.value;
+    const shownLines = effectiveLines(edit.effective, edit.lineOverrides);
+    const anyFromDictionary = shownLines.some((l) => lineUsesDictionary(l, dict));
     return (
       <>
         <Header title={t('curator.title')} back backLabel={t('common.back')} />
@@ -324,23 +405,30 @@ export function CuratorScreen() {
             )}
 
             <h3>{t('curator.ingredients')}</h3>
-            {edit.effective.lines.map((l, i) => (
-              <Pair
-                key={i}
-                label={t('curator.ingredients')}
-                index={i + 1}
-                header={l.kind === 'header'}
-                nl={l.raw?.nl ?? ''}
-                value={edit.draft.linesEn[i] ?? ''}
-                onInput={(v) =>
-                  setDraft((d) => {
-                    const linesEn = [...d.linesEn];
-                    linesEn[i] = v;
-                    return { ...d, linesEn };
-                  })
-                }
-              />
-            ))}
+            {anyFromDictionary && <p class="muted small curator-dict-hint">{t('curator.dictionaryHint')}</p>}
+            {shownLines.map((l, i) => {
+              const ing = l.ing;
+              if (ing && lineUsesDictionary(l, dict)) {
+                return <DictionaryPair key={i} index={i + 1} nl={l.raw?.nl ?? ''} en={renderLine(l, dict, 'en')} own={isUserIngredientId(ing)} onImprove={() => openDictionary(ing)} />;
+              }
+              return (
+                <Pair
+                  key={i}
+                  label={t('curator.ingredients')}
+                  index={i + 1}
+                  header={l.kind === 'header'}
+                  nl={l.raw?.nl ?? ''}
+                  value={edit.draft.linesEn[i] ?? ''}
+                  onInput={(v) =>
+                    setDraft((d) => {
+                      const linesEn = [...d.linesEn];
+                      linesEn[i] = v;
+                      return { ...d, linesEn };
+                    })
+                  }
+                />
+              );
+            })}
 
             <h3>{t('curator.steps')}</h3>
             {edit.effective.steps.map((st, i) => (

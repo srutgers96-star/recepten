@@ -1,6 +1,7 @@
 // '#/more/dictionary' — Woordenboek (docs/phase-5-spec.md A-bis.6; block E.2 extends it): search
 // over every entry (bundled + own) in both languages, own entries first with an "eigen" badge.
-// Per own entry: Bewerk (nl/en names, aisle), "Fuseer met bestaand" (pick the existing entry in the
+// Per own entry: Bewerk (nl/en names, aisle; phase 6 6A.15 adds the default unit, the staple tick
+// and the diet flags), "Fuseer met bestaand" (pick the existing entry in the
 // IngredientPicker → repo.mergeIngredient rewrites every reference in one transaction and keeps a
 // snapshot; the toast offers "Ongedaan") and Verwijder. "Opruimen" lists own entries whose name
 // already exists (repo.findOwnDuplicates) and merges them one by one or all at once.
@@ -20,6 +21,7 @@ import { baseDictionary, dictionary, isUserIngredientId, reloadDictionary, userI
 import { normalizeKey, type Ingredient } from '@/domain/dictionary';
 import type { Lang } from '@/domain/model';
 import { lang, t } from '@/i18n';
+import { navigate, route } from '@/router';
 
 /** Rows rendered at once; "Toon meer" adds another page (block E: the list must stay fast at ±1900 entries). */
 const PAGE = 100;
@@ -134,7 +136,21 @@ function EntryDetail(props: { ing: Ingredient }) {
   );
 }
 
-/** Inline form for an own entry: names in both languages and the aisle. */
+/**
+ * A three-way flag in the edit form: 'unknown' leaves the field out (diet.ts then says "unsure"),
+ * 'yes'/'no' write true/false. Keeps an own entry's "I don't know" honest instead of turning an
+ * untouched checkbox into a gluten-free claim.
+ */
+type TriFlag = 'unknown' | 'yes' | 'no';
+
+function triOf(v: boolean | undefined): TriFlag {
+  return v === true ? 'yes' : v === false ? 'no' : 'unknown';
+}
+
+/**
+ * Inline form for an own entry (6A.15 extends it): names in both languages, aisle, default unit,
+ * the staple tick and the diet flags (vegetarian; vegan and gluten as "weet ik niet / ja / nee").
+ */
 function EntryForm(props: { entry: Ingredient; busy: boolean; onSave: (next: Ingredient) => void; onCancel: () => void }) {
   const { entry } = props;
   const l = lang.value;
@@ -144,6 +160,13 @@ function EntryForm(props: { entry: Ingredient; busy: boolean; onSave: (next: Ing
   const [enOne, setEnOne] = useState(entry.en?.one ?? '');
   const [enMany, setEnMany] = useState(entry.en?.many ?? '');
   const [aisle, setAisle] = useState(entry.aisle || 'overig');
+  // '' = no unit (null in the data), 'stuk' = counted pieces, else a units.json id.
+  const [unit, setUnit] = useState<string>(entry.defaultUnit ?? '');
+  const [staple, setStaple] = useState(entry.staple === true);
+  const [veg, setVeg] = useState(entry.veg !== false);
+  const [vegan, setVegan] = useState<TriFlag>(triOf(entry.vegan));
+  // "misschien gluten" (glutenUnsure) shows as unknown; choosing yes/no clears the doubt.
+  const [gluten, setGluten] = useState<TriFlag>(entry.glutenUnsure === true ? 'unknown' : triOf(entry.gluten));
   const [error, setError] = useState('');
 
   function submit(e: Event) {
@@ -154,14 +177,36 @@ function EntryForm(props: { entry: Ingredient; busy: boolean; onSave: (next: Ing
       setError(t('dict.nameRequired'));
       return;
     }
+    // Unknown flags are removed from the entry, not written as false (see TriFlag).
+    const { vegan: _vegan, gluten: _gluten, glutenUnsure: _unsure, ...rest } = entry;
     const next: Ingredient = {
-      ...entry,
+      ...rest,
       nl: nl ? { one: nl, ...(nlMany.trim() ? { many: nlMany.trim() } : {}) } : { one: en },
       en: en ? { one: en, ...(enMany.trim() ? { many: enMany.trim() } : {}) } : { one: nl },
       aisle,
+      defaultUnit: unit === '' ? null : unit,
+      staple,
+      // Vegan implies vegetarian.
+      veg: vegan === 'yes' ? true : veg,
+      ...(vegan === 'unknown' ? {} : { vegan: vegan === 'yes' }),
+      ...(gluten === 'unknown' ? {} : { gluten: gluten === 'yes' }),
     };
     props.onSave(next);
   }
+
+  const unitOptions = (
+    <>
+      <option value="stuk">{t('picker.unitPieces')}</option>
+      <option value="">{t('picker.unitNone')}</option>
+      {dict.units
+        .filter((u) => u.id !== 'stuk')
+        .map((u) => (
+          <option key={u.id} value={u.id}>
+            {l === 'nl' ? `${u.nl.one} (${u.en.one})` : `${u.en.one} (${u.nl.one})`}
+          </option>
+        ))}
+    </>
+  );
 
   return (
     <form class="dw-form" onSubmit={submit}>
@@ -199,6 +244,42 @@ function EntryForm(props: { entry: Ingredient; busy: boolean; onSave: (next: Ing
           ))}
         </select>
       </label>
+      {/* 6A.15: default unit, staple tick and diet flags are editable afterwards too. */}
+      <label class="field">
+        <span>{t('picker.unit')}</span>
+        <select class="input" value={unit} onChange={(e) => setUnit((e.currentTarget as HTMLSelectElement).value)}>
+          {unitOptions}
+        </select>
+      </label>
+      <label class="check">
+        <input type="checkbox" checked={staple} onChange={(e) => setStaple((e.currentTarget as HTMLInputElement).checked)} />
+        <span>
+          {t('picker.staple')}
+          <span class="check-hint muted small">{t('picker.stapleHint')}</span>
+        </span>
+      </label>
+      <label class="check">
+        <input type="checkbox" checked={veg || vegan === 'yes'} disabled={vegan === 'yes'} onChange={(e) => setVeg((e.currentTarget as HTMLInputElement).checked)} />
+        {t('picker.veg')}
+      </label>
+      <div class="dw-pair">
+        <label class="field">
+          <span>{t('dict.form.vegan')}</span>
+          <select class="input" value={vegan} onChange={(e) => setVegan((e.currentTarget as HTMLSelectElement).value as TriFlag)}>
+            <option value="unknown">{t('dict.form.unknown')}</option>
+            <option value="yes">{t('dict.form.veganYes')}</option>
+            <option value="no">{t('dict.form.veganNo')}</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>{t('dict.form.gluten')}</span>
+          <select class="input" value={gluten} onChange={(e) => setGluten((e.currentTarget as HTMLSelectElement).value as TriFlag)}>
+            <option value="unknown">{t('dict.form.unknown')}</option>
+            <option value="yes">{t('dict.flag.gluten')}</option>
+            <option value="no">{t('dict.flag.glutenfree')}</option>
+          </select>
+        </label>
+      </div>
       {error && <div class="bad small">{error}</div>}
       <div class="actions">
         <button type="submit" class="btn btn-primary" disabled={props.busy}>
@@ -346,6 +427,22 @@ export function DictionaryScreen() {
     setQuery(nameOf(ing, l));
     setOpenId(id);
   }
+
+  // Phase 6 (6A.2): '#/more/dictionary?q=<ingredient-id>' — the curator's "Verbeter in het
+  // woordenboek" lands here. A known id opens that entry like showEntry; anything else becomes the
+  // search text. The query then leaves the URL (replace), so back/reload never re-apply it.
+  const qParam = route.value.query.get('q');
+  useEffect(() => {
+    if (qParam === null) return;
+    const wanted = qParam.trim();
+    if (wanted) {
+      if (dictionary.value.get(wanted)) showEntry(wanted);
+      else setQuery(wanted);
+    }
+    navigate('/more/dictionary', { replace: true });
+    // showEntry reads the live dictionary signal; re-running on every dictionary change is not wanted.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qParam]);
 
   async function saveEntry(next: Ingredient) {
     setBusy(true);

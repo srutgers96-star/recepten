@@ -27,9 +27,44 @@ export const settings: Dict = {
   },
   'more.badgesRowHint': { nl: 'Verdiend en nog te verdienen, per lid en Samen', en: 'Earned and still to earn, per member and Together' },
   'more.storage': { nl: 'Opslag & back-up', en: 'Storage & backup' },
-  'more.sendNew': { nl: 'Stuur nieuwe naar …', en: 'Send new to …' },
-  'more.sendNewHint': { nl: 'Alles wat je sinds de vorige keer maakte of aanpaste', en: 'Everything you made or changed since last time' },
+  'more.storageHint': { nl: 'Back-up maken of terugzetten, foto’s, opslagruimte', en: 'Make or restore a backup, photos, storage space' },
+  // Phase 6 (docs/phase-6-spec.md 6A.5): "Stuur nieuwe naar …" became "Deel je nieuwe recepten".
+  'more.sendNew': { nl: 'Deel je nieuwe recepten', en: 'Share your new recipes' },
+  'more.sendNewHint': {
+    nl: 'Alles wat je sinds de vorige keer maakte of aanpaste, in één bericht',
+    en: 'Everything you made or changed since last time, in one message',
+  },
   'more.backupDue': { nl: 'back-up nodig', en: 'backup due' },
+  // --- Phase 6 (docs/phase-6-spec.md 6A.6): the Meer screen in collapsible groups ---
+  'more.group.you': { nl: 'Jij & je huishouden', en: 'You & your household' },
+  'more.group.recipes': { nl: 'Recepten & delen', en: 'Recipes & sharing' },
+  'more.group.help': { nl: 'Hulp & over', en: 'Help & about' },
+  'more.testing': { nl: 'Testen & nakijken', en: 'Testing & review' },
+  // --- Phase 6 (docs/phase-6-spec.md 6A.7): feedback + the donate link ---
+  'more.feedback': { nl: 'Feedback voor Stijn', en: 'Feedback for Stijn' },
+  'more.feedbackHint': { nl: 'Een idee, een fout of een compliment', en: 'An idea, a bug or a compliment' },
+  'more.donate': { nl: '☕ Steun dit project', en: '☕ Support this project' },
+  'more.donateHint': { nl: 'Vrijwillig; de app blijft gratis.', en: 'Voluntary; the app stays free.' },
+  'feedback.intro': {
+    nl: 'Schrijf wat je kwijt wilt. De app zet er zelf de versie en je toestel onder; daarna kies je zelf Stijn in WhatsApp of mail.',
+    en: 'Write whatever you want to say. The app adds the version and your device underneath; then you pick Stijn yourself in WhatsApp or mail.',
+  },
+  'feedback.placeholder': { nl: 'Bijvoorbeeld: de timer ging niet af toen …', en: 'For example: the timer did not go off when …' },
+  'feedback.auto': { nl: 'Gaat automatisch mee', en: 'Added automatically' },
+  'feedback.header': { nl: "Feedback over Rutgers' Recepten", en: "Feedback about Rutgers' Recipes" },
+  'feedback.app': { nl: 'App', en: 'App' },
+  'feedback.device': { nl: 'Toestel', en: 'Device' },
+  'feedback.installed': { nl: 'geïnstalleerd als app', en: 'installed as an app' },
+  'feedback.inBrowser': { nl: 'in de browser', en: 'in the browser' },
+  'feedback.send': { nl: 'Verstuur via WhatsApp of mail', en: 'Send via WhatsApp or mail' },
+  'feedback.copy': { nl: 'Kopieer de tekst', en: 'Copy the text' },
+  'feedback.empty': { nl: 'Schrijf eerst iets.', en: 'Write something first.' },
+  'feedback.sent': { nl: 'Verstuurd — dank je!', en: 'Sent — thank you!' },
+  'feedback.copied': { nl: 'Gekopieerd — plak het in WhatsApp of in een mail aan Stijn.', en: 'Copied — paste it into WhatsApp or an email to Stijn.' },
+  'feedback.noShare': {
+    nl: 'Dit toestel heeft geen deelmenu: kopieer de tekst en plak hem in WhatsApp of een mail.',
+    en: 'This device has no share sheet: copy the text and paste it into WhatsApp or an email.',
+  },
   'more.story': { nl: 'Het verhaal', en: 'The story' },
   'more.check': { nl: 'Apparaatcheck', en: 'Device check' },
   'more.about': { nl: 'Over', en: 'About' },
@@ -136,8 +171,8 @@ export const settings: Dict = {
   // --- Phase 5 block F: member cards (`#f=`) — share mine, add someone else's ---
   'household.myCard': { nl: 'Mijn kaartje', en: 'My card' },
   'household.myCardHint': {
-    nl: 'Deel je kaartje met wie op een andere telefoon kookt. Die voegt je toe aan zijn huishouden: wat je stuurt krijgt dan jouw naam en kleur, en "Stuur nieuwe naar …" kent je al.',
-    en: 'Share your card with someone who cooks on another phone. They add you to their household: what you send then carries your name and colour, and "Send new to …" already knows you.',
+    nl: 'Deel je kaartje met wie op een andere telefoon kookt. Die voegt je toe aan zijn huishouden: wat je stuurt krijgt dan jouw naam en kleur, en "Deel je nieuwe recepten" kent je al.',
+    en: 'Share your card with someone who cooks on another phone. They add you to their household: what you send then carries your name and colour, and "Share your new recipes" already knows you.',
   },
   'household.shareCard': { nl: 'Deel mijn kaartje', en: 'Share my card' },
   'household.copyCard': { nl: 'Kopieer link', en: 'Copy link' },
@@ -177,7 +212,7 @@ export const settings: Dict = {
   'household.cardUpdated': { nl: '{name} is bijgewerkt.', en: '{name} was updated.' },
   'household.cardFailed': { nl: 'Toevoegen mislukt', en: 'Adding failed' },
   'household.toHousehold': { nl: 'Naar huishouden', en: 'To household' },
-  // "Stuur nieuwe naar …" (DeltaShareScreen; the other delta.* keys live in phase2.ts)
+  // "Deel je nieuwe recepten" (DeltaShareScreen; the other delta.* keys live in phase2.ts)
   'delta.memberHint': {
     nl: 'Leden van je huishouden staan vooraan. Iemand op een andere telefoon voeg je toe met een kaartje.',
     en: 'Members of your household come first. Someone on another phone is added with a card.',
@@ -389,5 +424,19 @@ export const settings: Dict = {
   'curator.savedNoName': {
     nl: 'Bewaard — zonder Engelse naam telt dit recept nog niet als gecontroleerd.',
     en: 'Saved — without an English name this recipe does not count as reviewed yet.',
+  },
+  // Phase 6 (6A.2): an ingredient line the dictionary renders is shown read-only in grey. An own
+  // entry gets a button that jumps to it in the dictionary (a fix there applies to every recipe); a
+  // built-in entry cannot be edited there either, so the line says "ingebouwd" and the hint points
+  // to Feedback voor Stijn. Leaving for the dictionary drops an unsaved draft, hence the confirm.
+  'curator.fromDictionary': { nl: 'Uit het woordenboek', en: 'From the dictionary' },
+  'curator.improveInDictionary': { nl: 'Verbeter in het woordenboek', en: 'Improve in the dictionary' },
+  'curator.dictionaryHint': {
+    nl: 'Grijze regels komen uit het woordenboek: zo toont de app ze in het Engels. Staat er "ingebouwd" bij, dan kun je het woord zelf niet aanpassen — klopt het niet, meld het via Feedback voor Stijn (Meer → Hulp & over). Een eigen ingrediënt verbeter je met de knop in het woordenboek; dat geldt dan voor alle recepten. Alleen regels die de app niet herkent, hebben hier een eigen Engels vak.',
+    en: 'Grey lines come from the dictionary: that is how the app shows them in English. A line marked "built-in" cannot be changed by you — if it is wrong, report it via Feedback for Stijn (More → Help & about). An own ingredient you improve with the button, in the dictionary; that then applies to every recipe. Only lines the app does not recognise have their own English box here.',
+  },
+  'curator.unsavedLeave': {
+    nl: 'Je Engelse wijzigingen zijn nog niet bewaard. Toch naar het woordenboek? Dan gaan ze verloren.',
+    en: 'Your English changes are not saved yet. Go to the dictionary anyway? They will be lost.',
   },
 };

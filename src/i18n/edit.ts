@@ -147,6 +147,11 @@ export const edit: Dict = {
   // --- Editor: "Categorie" + "Dieet & labels" rows (docs/phase-5-spec.md A.4; src/components/MetaRows.tsx) ---
   'meta.category': { nl: 'Categorie', en: 'Category' },
   'meta.tags': { nl: 'Dieet & labels', en: 'Diet & labels' },
+  // Phase 6 (6A.18): one line above the two rows that tells the two kinds apart.
+  'meta.kindsHint': {
+    nl: 'Categorie: één per recept (soep, salade, pasta …). Dieet & labels: meerdere mogelijk (vegetarisch, snel …).',
+    en: 'Category: one per recipe (soup, salad, pasta …). Diet & labels: as many as apply (vegetarian, quick …).',
+  },
   'meta.suggestion': { nl: 'Voorstel: {text}', en: 'Suggestion: {text}' },
   'meta.adopt': { nl: 'Overnemen', en: 'Adopt' },
   'meta.probably': { nl: 'waarschijnlijk {tag}', en: 'probably {tag}' },
@@ -186,7 +191,11 @@ export const edit: Dict = {
   'checkRecipes.count': { nl: '{n} van {m} recepten wijken af', en: '{n} of {m} recipes differ' },
   'checkRecipes.current': { nl: 'Nu', en: 'Now' },
   'checkRecipes.suggested': { nl: 'Voorstel', en: 'Suggested' },
-  'checkRecipes.none': { nl: 'geen categorie, geen labels', en: 'no category, no labels' },
+  // Phase 6 (6A.18): "Nu"/"Voorstel" show "Categorie: …" and "Labels: …" on two lines; 'noneShort'
+  // fills an empty side ("Categorie: geen"). The old 'checkRecipes.none' one-liner is gone.
+  'checkRecipes.category': { nl: 'Categorie', en: 'Category' },
+  'checkRecipes.labels': { nl: 'Labels', en: 'Labels' },
+  'checkRecipes.noneShort': { nl: 'geen', en: 'none' },
   'checkRecipes.adopt': { nl: 'Overnemen', en: 'Adopt' },
   'checkRecipes.adoptAll': { nl: 'Alles overnemen ({n})', en: 'Adopt all ({n})' },
   'checkRecipes.skip': { nl: 'Sla over', en: 'Skip' },
@@ -465,4 +474,13 @@ export const edit: Dict = {
   'dict.flag.glutenUnsure': { nl: 'misschien gluten', en: 'may contain gluten' },
   'dict.flag.perishable': { nl: 'kort houdbaar', en: 'perishable' },
   'dict.flag.staple': { nl: 'voorraadkast', en: 'pantry staple' },
+
+  // --- Dictionary, phase 6 (6A.15): the edit form of an own ingredient also saves vegan and
+  //     gluten. Both are a three-way choice (not a tick box) because "not sure" must stay
+  //     distinct from "no" (src/domain/diet.ts treats undefined as unsure). ---
+  'dict.form.vegan': { nl: 'Vegan', en: 'Vegan' },
+  'dict.form.gluten': { nl: 'Gluten', en: 'Gluten' },
+  'dict.form.unknown': { nl: 'weet ik niet', en: 'not sure' },
+  'dict.form.veganYes': { nl: 'ja, vegan', en: 'yes, vegan' },
+  'dict.form.veganNo': { nl: 'nee, niet vegan', en: 'no, not vegan' },
 };

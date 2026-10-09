@@ -140,6 +140,28 @@ export const browse: Dict = {
   'variant.noProfile': { nl: 'Kies eerst een profiel (Meer) om een versie te maken.', en: 'Choose a profile first (More) to make a version.' },
   'variant.swapLabel': { nl: '{from} wordt {to}', en: '{from} becomes {to}' },
 
+  // --- Detail + Home, phase 6 A.3: "✓ Gekookt" without cook mode and "Beoordeel" afterwards ---
+  'recipe.cooked': { nl: '✓ Gekookt', en: '✓ Cooked' },
+  'recipe.rate': { nl: 'Beoordeel', en: 'Rate' },
+  'recipe.rateHint': { nl: 'Gekookt op {date}, nog geen sterren', en: 'Cooked on {date}, no stars yet' },
+  'cooked.title': { nl: 'Gekookt', en: 'Cooked' },
+  'cooked.rateTitle': { nl: 'Beoordeel', en: 'Rate it' },
+  'cooked.intro': { nl: 'Uit het hoofd gekookt? Zet het hier in je kooklog.', en: 'Cooked from memory? Add it to your cook log here.' },
+  'cooked.rateIntro': { nl: 'Hoe was het?', en: 'How was it?' },
+  'cooked.when': { nl: 'Wanneer?', en: 'When?' },
+  'cooked.today': { nl: 'Vandaag', en: 'Today' },
+  'cooked.yesterday': { nl: 'Gisteren', en: 'Yesterday' },
+  'cooked.otherDay': { nl: 'Andere datum', en: 'Another date' },
+  'cooked.dateLabel': { nl: 'Datum', en: 'Date' },
+  'cooked.cookedOn': { nl: 'Gekookt op {date}', en: 'Cooked on {date}' },
+  'cooked.save': { nl: 'Bewaar', en: 'Save' },
+  'cooked.saveRating': { nl: 'Bewaar beoordeling', en: 'Save rating' },
+  'cooked.saving': { nl: 'Bewaren…', en: 'Saving…' },
+  'cooked.saved': { nl: 'Gekookt ✓ — staat in je kooklog', en: 'Cooked ✓ — added to your cook log' },
+  'cooked.ratedSaved': { nl: 'Beoordeling bewaard ✓', en: 'Rating saved ✓' },
+  'cooked.failed': { nl: 'Bewaren lukte niet. Probeer het nog eens.', en: 'Saving failed. Please try again.' },
+  'cooked.noProfile': { nl: 'Kies eerst een profiel (Meer) om een kookbeurt te bewaren.', en: 'Choose a profile first (More) to save a cook.' },
+
   // --- Servings scaler + ingredient lines (detail and cook mode) ---
   'servings.label': { nl: 'Aantal personen', en: 'Number of people' },
   'servings.less': { nl: 'Minder personen', en: 'Fewer people' },
@@ -189,6 +211,42 @@ export const browse: Dict = {
   'cook.micOn': { nl: 'Mic aan…', en: 'Mic on…' },
   'cook.micListening': { nl: 'Luistert…', en: 'Listening…' },
   'cook.micError': { nl: 'Mic-fout', en: 'Mic error' },
+
+  // --- Cook mode, phase 6 block A (6A.8): the "?" sheet with every voice command + example phrases
+  //     (src/components/VoiceHelp.tsx reads `${key}Say` for the examples) and the spoken answers of
+  //     the new "hoe lang nog" command. Honest about the echo guard (invariant 13). ---
+  'cook.help': { nl: 'Welke commando’s kan ik zeggen?', en: 'What can I say?' },
+  'cook.helpIntro': {
+    nl: 'Zet de mic aan en zeg één van deze woorden. De app verstaat de taal van je profiel.',
+    en: 'Turn the mic on and say one of these. The app listens in the language of your profile.',
+  },
+  'cook.helpEcho': {
+    nl: 'Tijdens het voorlezen luistert de mic even niet; wacht tot de stem klaar is en zeg het dan.',
+    en: 'While the app reads aloud the mic pauses; wait until the voice has finished, then speak.',
+  },
+  'cook.cmd.next': { nl: 'Volgende stap', en: 'Next step' },
+  'cook.cmd.nextSay': { nl: 'volgende · volgende stap', en: 'next · next step' },
+  'cook.cmd.prev': { nl: 'Vorige stap', en: 'Previous step' },
+  'cook.cmd.prevSay': { nl: 'vorige · ga terug', en: 'previous · go back' },
+  'cook.cmd.read': { nl: 'Lees deze stap voor', en: 'Read this step' },
+  'cook.cmd.readSay': { nl: 'lees voor · voorlezen', en: 'read · read aloud' },
+  'cook.cmd.repeat': { nl: 'Zeg het nog eens', en: 'Say that again' },
+  'cook.cmd.repeatSay': { nl: 'herhaal · nog een keer · wat zeg je?', en: 'repeat · again · say that again · what?' },
+  'cook.cmd.ingredients': { nl: 'Lees de ingrediënten voor', en: 'Read the ingredients' },
+  'cook.cmd.ingredientsSay': { nl: 'ingrediënten · boodschappen', en: 'ingredients · read the ingredients' },
+  'cook.cmd.timer': { nl: 'Zet een timer', en: 'Set a timer' },
+  'cook.cmd.timerSay': {
+    nl: 'timer 10 minuten · zet een timer voor een kwartier',
+    en: 'timer 10 minutes · set a timer for a quarter of an hour',
+  },
+  'cook.cmd.timeLeft': { nl: 'Hoe lang de timer nog loopt', en: 'How long the timer has left' },
+  'cook.cmd.timeLeftSay': { nl: 'hoe lang nog · hoeveel tijd nog', en: 'how long left · how much time' },
+  'cook.cmd.stop': { nl: 'Stop met voorlezen', en: 'Stop reading' },
+  'cook.cmd.stopSay': { nl: 'stop', en: 'stop' },
+  'cook.voice.noTimer': { nl: 'Er loopt geen timer voor dit recept.', en: 'No timer is running for this recipe.' },
+  'cook.voice.leftMin': { nl: 'nog {n} minuten', en: '{n} minutes left' },
+  'cook.voice.leftMin1': { nl: 'nog 1 minuut', en: '1 minute left' },
+  'cook.voice.leftSec': { nl: 'nog {n} seconden', en: '{n} seconds left' },
 
   // --- Cook mode, phase 5 block D.1: "Foto toevoegen" on the "Gekookt!" page ---
   'cook.photoAdd': { nl: 'Foto toevoegen', en: 'Add a photo' },

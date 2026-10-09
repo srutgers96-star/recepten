@@ -10,9 +10,14 @@
 // Phase 5 block F (2): "Maak glutenvrije / vegetarische / vegan versie" (only the diets the recipe
 // does not have yet) opens the VariantSheet; the original shows "Ook als: …" chips to its
 // variants (repo.variantsOf) and a variant shows "Versie van <origineel>" (src/domain/variants.ts).
+// Phase 6 (docs/phase-6-spec.md 6A.3): "✓ Gekookt" next to Koken logs a cook without cook mode
+// (CookedSheet → src/cooklog.ts recordCooked); when the active member's latest cook of this recipe
+// has no stars, a "Beoordeel" row opens the same sheet in rate mode. Home's "Recent gekookt" links
+// here with '?rate=<cook-log id>' to open that rate sheet for that one entry straight away.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { isIOS } from '@/components/AppInfo';
+import { CookedSheet, type CookedSheetMode } from '@/components/CookedSheet';
 import { Header } from '@/components/Header';
 import { IngredientList } from '@/components/LineView';
 import { formatShortDate } from '@/components/RecipeRow';
@@ -30,12 +35,14 @@ import {
   deletePhoto,
   deleteUserRecipe,
   duplicateAsOwn,
+  getCookLogEntry,
   getHousehold,
   getNote,
   getOverride,
   getPlan,
   getRecipe,
   isBuiltinId,
+  latestCookFor,
   listFavorites,
   listPhotos,
   saveOverride,
@@ -57,7 +64,7 @@ import { useRecipeLines } from '@/lines';
 import { encodePhotoFile, usePhotoUrl } from '@/photo';
 import { printPage } from '@/print';
 import { activeProfile, profiles } from '@/profile';
-import { navigate } from '@/router';
+import { navigate, route } from '@/router';
 import { copyText } from '@/share-actions';
 
 const NOTE_DEBOUNCE_MS = 600;
@@ -258,6 +265,39 @@ export function RecipeScreen(props: { id: string }) {
   // nothing to swap gets no button); the variants of this recipe are live (a new one shows at once).
   const [variantSheet, setVariantSheet] = useState<VariantDiet | null>(null);
   const variants = useLive(() => variantsOf(id), [id]);
+  // Phase 6 A.3: "✓ Gekookt" / "Beoordeel". The active member's latest cook of this recipe decides
+  // whether a rating is still missing. `undefined` = still loading, `null` = never cooked by them
+  // (useLive's own undefined would otherwise collide with "no entry").
+  const lastCook = useLive(() => (pid ? latestCookFor(id, pid).then((e) => e ?? null) : Promise.resolve(null)), [id, pid]);
+  const needsRating = !!lastCook && !lastCook.stars;
+  const [cookedSheet, setCookedSheet] = useState<CookedSheetMode | null>(null);
+  const [cookedFlash, setCookedFlash] = useState<string | null>(null);
+  const cookedFlashTimer = useRef<number | null>(null);
+  // '?rate=<cook-log id>' (Home → "★ Beoordeel" on one row of "Laatst gekookt") opens the rate sheet
+  // for THAT entry — not for the latest cook of this recipe, which may be another, already rated
+  // one — once it is checked to be this recipe's, this member's and still without stars. The query
+  // then leaves the URL, so a reload or the back gesture never reopens it. Anything else (unknown
+  // id, someone else's cook, already rated) = the query is just dropped.
+  const rateParam = route.value.query.get('rate');
+  useEffect(() => {
+    if (rateParam === null) return;
+    let cancelled = false;
+    const entryId = /^\d+$/.test(rateParam) ? Number(rateParam) : null;
+    const lookup = entryId === null || !pid ? Promise.resolve(undefined) : getCookLogEntry(entryId);
+    void lookup
+      .catch((e: unknown) => {
+        console.error('getCookLogEntry', e);
+        return undefined;
+      })
+      .then((entry) => {
+        if (cancelled) return;
+        if (entry && entry.recipeId === id && entry.profileId === pid && !entry.stars) setCookedSheet({ kind: 'rate', entry });
+        navigate('/recipe/' + id, { replace: true });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [rateParam, id, pid]);
 
   // The delete confirmation is per recipe, in memory only.
   useEffect(() => {
@@ -267,12 +307,14 @@ export function RecipeScreen(props: { id: string }) {
     setToolsMenu(null);
     setPhotoError(false);
     setVariantSheet(null);
+    setCookedSheet(null);
   }, [id]);
 
-  // The "Gekopieerd ✓" flash never outlives the screen.
+  // The "Gekopieerd ✓" and "Gekookt ✓" flashes never outlive the screen.
   useEffect(
     () => () => {
       if (flashTimer.current !== null) window.clearTimeout(flashTimer.current);
+      if (cookedFlashTimer.current !== null) window.clearTimeout(cookedFlashTimer.current);
     },
     [],
   );
@@ -493,6 +535,17 @@ export function RecipeScreen(props: { id: string }) {
     printPage(kind);
   }
 
+  /** After the CookedSheet saved: close it and show a short confirmation under the buttons. */
+  function onCookedSaved(kind: CookedSheetMode['kind']) {
+    setCookedSheet(null);
+    setCookedFlash(kind === 'log' ? t('cooked.saved') : t('cooked.ratedSaved'));
+    if (cookedFlashTimer.current !== null) window.clearTimeout(cookedFlashTimer.current);
+    cookedFlashTimer.current = window.setTimeout(() => {
+      cookedFlashTimer.current = null;
+      setCookedFlash(null);
+    }, 3000);
+  }
+
   return (
     <>
       <Header title={name || t('app.title')} back backLabel={t('common.back')} />
@@ -638,14 +691,34 @@ export function RecipeScreen(props: { id: string }) {
               </button>
             )}
 
-            <div class="detail-actions no-print">
+            <div class="detail-actions detail-actions-3 no-print">
               <button type="button" class="btn btn-primary" onClick={() => navigate(`/cook/${id}?srv=${servings}`)}>
                 {t('recipe.cook')}
+              </button>
+              {/* Phase 6 A.3: log a cook without cook mode (no profile → the sheet says so). */}
+              <button type="button" class="btn btn-cooked" onClick={() => setCookedSheet({ kind: 'log' })}>
+                {t('recipe.cooked')}
               </button>
               <button type="button" class="btn btn-secondary" onClick={() => navigate('/share/' + id)}>
                 {t('recipe.share')}
               </button>
             </div>
+            {cookedFlash !== null && (
+              <p class="tool-flash cooked-flash no-print" role="status">
+                {cookedFlash}
+              </p>
+            )}
+            {needsRating && lastCook && (
+              <button type="button" class="btn btn-block detail-rate no-print" onClick={() => setCookedSheet({ kind: 'rate', entry: lastCook })}>
+                <span class="detail-rate-star" aria-hidden="true">
+                  ★
+                </span>
+                <span class="detail-rate-text">
+                  <strong>{t('recipe.rate')}</strong>
+                  <span class="muted small">{t('recipe.rateHint', { date: formatShortDate(lastCook.at, l) })}</span>
+                </span>
+              </button>
+            )}
             <button
               type="button"
               class={'btn btn-block detail-week no-print' + (inWeek ? ' on' : '')}
@@ -815,6 +888,8 @@ export function RecipeScreen(props: { id: string }) {
                 }}
               />
             )}
+
+            {cookedSheet && <CookedSheet recipeId={id} mode={cookedSheet} onClose={() => setCookedSheet(null)} onSaved={onCookedSaved} />}
           </>
         )}
       </div>

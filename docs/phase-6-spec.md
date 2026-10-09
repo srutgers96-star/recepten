@@ -6,6 +6,13 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
 
 ## Blok 6A — Snelle verbeteringen en bugs
 
+**Stand 9 okt 2026 — 6A-1 online:** punten 1 (vertaalbug), 2 (curator-ingrediënten), 3 (✓ Gekookt +
+Beoordeel), 4 (installeerkaart), 5 ("Deel je nieuwe recepten"), 6 (Meer opgeruimd), 7 (feedback +
+doneerknop), 8 (meer spraakcommando's + ?), 11 (woorden), 12 (profielkleuren), 15 (voorraadkast-vinkje +
+eigen ingrediënt bewerken), 18 (categorie vs labels) zijn gebouwd. **Nog open = 6A-2 (de plak/prompt-
+cluster):** 9, 10, 13, 14 (rest), 16, 17 — begin met het verzamelen van 10–15 echte plakteksten van
+sites die Stijn en Gabi gebruiken (6A.17).
+
 1. **✅ GEFIXT 8 okt (Fable-review): Bug: vertaling plakken werkt alleen goed als de app op Engels staat (M).** Oorzaak
    was de blokvolgorde in het AI-antwoord (eerste blok won), niet de UI-taal; parseTranslationAnswer kent
    nu taalblokken en de doeltaal (10 tests). Rest van dit punt ter info. Stijn (6 okt):

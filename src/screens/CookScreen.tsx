@@ -9,6 +9,9 @@
 // button per step (tap = the step, long-press = the scaled ingredient list; auto-read on step
 // change with the setting speech.readAloud) and — only when the API exists and speech.commands is
 // on — a mic button for voice commands (volgende/vorige/lees voor/stop/timer N minuten).
+// Phase 6 (docs/phase-6-spec.md 6A.8): "herhaal" says the last read text again, "ingrediënten"
+// reads the list, "hoe lang nog" speaks the remaining time of this recipe's timers, and a small
+// "?" next to the mic opens <VoiceHelp/> with every command in the UI language.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
@@ -17,18 +20,19 @@ import { IngredientList } from '@/components/LineView';
 import { parseServingsParam, rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
 import { StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
+import { VoiceHelp } from '@/components/VoiceHelp';
 import { useLive } from '@/db/live';
 import { addPhoto, getRecipe, listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
 import { lineText } from '@/dictionary';
 import { nowIso, pickText, type Lang } from '@/domain/model';
 import { encodePhotoFile } from '@/photo';
 import { pickSpoken, type VoiceCommand } from '@/domain/voice';
-import { lang, t } from '@/i18n';
+import { lang, t, tIn } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
 import { goBack, route } from '@/router';
 import { canSpeak, loadSpeechSettings, readAloud, speak, speaking, stopSpeaking } from '@/speech';
-import { MINUTE_MS, startTimer } from '@/timers';
+import { MINUTE_MS, startTimer, timers } from '@/timers';
 import { canListen, commandsEnabled, loadVoiceSettings, micState, startListening, stopListening } from '@/voice';
 
 const SWIPE_PX = 60;
@@ -37,6 +41,23 @@ const LONG_PRESS_MOVE_PX = 10;
 
 /** Cook counts of one member that earn the big burst instead of the normal one (phase 5 C.4). */
 const COOK_MILESTONES = new Set([10, 25, 50]);
+
+/**
+ * The remaining time of one timer as a spoken sentence (6A.8 "hoe lang nog"): whole minutes
+ * (rounded up) from one minute on, seconds below that. "stap 3: nog 4 minuten" when the timer
+ * belongs to a step.
+ */
+function spokenTimeLeft(ms: number, stepIndex: number | null, l: Lang): string {
+  const totalSec = Math.max(0, Math.ceil(ms / 1000));
+  let left: string;
+  if (totalSec >= 60) {
+    const m = Math.ceil(totalSec / 60);
+    left = m === 1 ? tIn(l, 'cook.voice.leftMin1') : tIn(l, 'cook.voice.leftMin', { n: m });
+  } else {
+    left = tIn(l, 'cook.voice.leftSec', { n: totalSec });
+  }
+  return stepIndex === null ? left : `${tIn(l, 'cook.stepShort', { n: stepIndex + 1 })}: ${left}`;
+}
 
 /**
  * Pointer handlers for the 🔊 button: a still ~500 ms press fires `onLong` (read the ingredient
@@ -152,6 +173,8 @@ export function CookScreen(props: { id: string }) {
   // Phase 5 C.4: the FIRST time stars are picked in this visit gets the small burst — changing
   // the rating afterwards does not fire it again.
   const starsCelebrated = useRef(false);
+  // 6A.8 "herhaal": the last text this screen read aloud (step, ingredients or a timer answer).
+  const lastSpoken = useRef<{ text: string; lang: Lang } | null>(null);
 
   const card = useRef<HTMLDivElement>(null);
   const swipe = useRef<{ x: number; y: number; id: number; drag: boolean } | null>(null);
@@ -187,6 +210,7 @@ export function CookScreen(props: { id: string }) {
     setStars(0);
     setNote('');
     starsCelebrated.current = false;
+    lastSpoken.current = null;
   }, [id]);
 
   const steps = recipe?.steps ?? [];
@@ -213,6 +237,8 @@ export function CookScreen(props: { id: string }) {
   const showMic = canListen() && commandsEnabled.value;
   const mic = micState.value;
   const isSpeaking = speaking.value;
+  // 6A.8: the "?" sheet with every voice command.
+  const [helpOpen, setHelpOpen] = useState(false);
 
   useEffect(() => {
     void loadSpeechSettings();
@@ -223,12 +249,19 @@ export function CookScreen(props: { id: string }) {
     };
   }, []);
 
+  /** Every read-aloud of this screen goes through here so "herhaal" knows what to say again. */
+  function say(text: string, spokenLang: Lang) {
+    if (!text.trim()) return;
+    lastSpoken.current = { text, lang: spokenLang };
+    speak(text, spokenLang);
+  }
+
   /** Reads one step in the language it is shown in (pickSpoken makes the fallback explicit). */
   function speakStep(index: number) {
     const step = steps[index];
     if (!step) return;
     const s = pickSpoken(step.text, l);
-    speak(s.text, s.lang);
+    say(s.text, s.lang);
   }
 
   /** Reads the scaled ingredient lines as the "Klaarzetten" page shows them; headers are skipped. */
@@ -240,7 +273,26 @@ export function CookScreen(props: { id: string }) {
       const text = lineText(ln, l, factor).trim();
       if (text) parts.push(text);
     }
-    if (parts.length) speak(parts.join('. '), l);
+    if (parts.length) say(parts.join('. '), l);
+  }
+
+  /** "Hoe lang nog": the running timers of THIS recipe, earliest first; "geen timer" when none. */
+  function speakTimeLeft() {
+    const at = Date.now();
+    const mine = timers.value.filter((tm) => tm.recipeId === id && tm.endAt > at);
+    if (mine.length === 0) {
+      say(tIn(l, 'cook.voice.noTimer'), l);
+      return;
+    }
+    say(mine.map((tm) => spokenTimeLeft(tm.endAt - at, tm.stepIndex ?? null, l)).join('. '), l);
+  }
+
+  /** "Herhaal": the last thing read aloud; before anything was read it acts like "lees voor". */
+  function speakAgain(onStep: boolean) {
+    const prev = lastSpoken.current;
+    if (prev) say(prev.text, prev.lang);
+    else if (onStep) speakStep(page - 1);
+    else if (page === 0) speakIngredients();
   }
 
   const press = useLongPress(() => speakIngredients());
@@ -256,7 +308,7 @@ export function CookScreen(props: { id: string }) {
     const step = page > 0 && page <= steps.length ? steps[page - 1] : undefined;
     if (step && readAloud.value && canSpeak()) {
       const s = pickSpoken(step.text, lang.value);
-      speak(s.text, s.lang);
+      say(s.text, s.lang);
     } else {
       stopSpeaking();
     }
@@ -277,6 +329,15 @@ export function CookScreen(props: { id: string }) {
       case 'read':
         if (onStep) speakStep(page - 1);
         else if (page === 0) speakIngredients();
+        break;
+      case 'repeat':
+        speakAgain(onStep);
+        break;
+      case 'ingredients':
+        speakIngredients();
+        break;
+      case 'timeLeft':
+        speakTimeLeft();
         break;
       case 'stop':
         stopSpeaking();
@@ -567,21 +628,27 @@ export function CookScreen(props: { id: string }) {
 
           <div class="cook-nav">
             {showMic && (
-              <button
-                type="button"
-                class={'cook-mic' + (mic !== 'off' ? ' ' + mic : '')}
-                aria-pressed={mic !== 'off'}
-                aria-label={`${t('cook.mic')} — ${micLabel}`}
-                title={t('cook.mic')}
-                onClick={toggleMic}
-              >
-                <span class="mic-ico" aria-hidden="true">
-                  🎤
-                </span>
-                <span class="mic-state" aria-live="polite">
-                  {micLabel}
-                </span>
-              </button>
+              <>
+                <button
+                  type="button"
+                  class={'cook-mic' + (mic !== 'off' ? ' ' + mic : '')}
+                  aria-pressed={mic !== 'off'}
+                  aria-label={`${t('cook.mic')} — ${micLabel}`}
+                  title={t('cook.mic')}
+                  onClick={toggleMic}
+                >
+                  <span class="mic-ico" aria-hidden="true">
+                    🎤
+                  </span>
+                  <span class="mic-state" aria-live="polite">
+                    {micLabel}
+                  </span>
+                </button>
+                {/* 6A.8: "?" (44 px) opens the list of commands in the UI language. */}
+                <button type="button" class="cook-help" aria-label={t('cook.help')} title={t('cook.help')} aria-expanded={helpOpen} onClick={() => setHelpOpen(true)}>
+                  ?
+                </button>
+              </>
             )}
             <button type="button" class="btn btn-secondary" disabled={page === 0} onClick={() => go(page - 1)}>
               ‹ {isDone ? t('cook.notYet') : t('cook.prev')}
@@ -594,6 +661,7 @@ export function CookScreen(props: { id: string }) {
           </div>
         </div>
       )}
+      <VoiceHelp open={helpOpen} onClose={() => setHelpOpen(false)} />
     </>
   );
 }

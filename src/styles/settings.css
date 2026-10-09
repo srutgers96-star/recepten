@@ -832,6 +832,34 @@ textarea.input.member-card-raw {
   font-size: 15px;
 }
 
+/* 6A.2 (CuratorScreen): a line the dictionary renders — grey read-only English next to the
+   "Verbeter in het woordenboek" button (44 px); wraps under the text at 360 px. */
+.curator-dict-hint {
+  margin: 4px 0 6px;
+}
+
+.curator-pair .pair-en-dict {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  min-height: 44px;
+}
+
+.curator-pair .pair-dict-text {
+  flex: 1 1 160px;
+  min-width: 0;
+  padding: 10px 0;
+  font-size: 15px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.curator-pair .pair-dict-link {
+  flex: none;
+  padding: 0 10px;
+}
+
 /* ---------- Phase 5 (A-bis.9): "Deel het bestand" first, "Download" second ---------- */
 .file-actions {
   display: flex;
@@ -1002,4 +1030,187 @@ textarea.input.member-card-raw {
 .dw-more .btn {
   width: 100%;
   min-height: 44px;
+}
+
+/* ---------- Phase 6 (docs/phase-6-spec.md 6A.6): Meer in collapsible groups ---------- */
+
+.more .more-group {
+  margin: 8px 0;
+}
+
+/* The head is an h2 (so it stays a heading for screen readers) wrapping a 48 px button: title,
+   the badge of a closed group, chevron (turns when open). Two classes beat base.css `.section h2`. */
+.more-group .more-group-head {
+  margin: 0;
+  font-size: 17px;
+  border-bottom: 1px solid var(--line);
+}
+
+.more-group-head > button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 6px 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.more-group-head > button:active {
+  background: var(--press);
+}
+
+.more-group-head .more-group-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The lone "Opslag & back-up" row sits between the groups with the same rhythm as a group head. */
+.more .more-storage {
+  margin: 8px 0;
+}
+
+.more-group-head .menu-badge {
+  flex: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.more-group-head .chev {
+  flex: none;
+  color: var(--muted);
+  opacity: 0.6;
+  transition: transform 0.15s;
+}
+
+.more-group.open .more-group-head .chev {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .more-group-head .chev {
+    transition: none;
+  }
+}
+
+.more-group-body {
+  padding: 0 0 4px;
+}
+
+.more-group-body > .card {
+  margin: 12px 0;
+}
+
+/* Sub-heading inside a group ("Kookstand & timer", "Testen & nakijken", "Over"). */
+.more-sub {
+  margin: 18px 0 2px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.more-group-body .menu + .menu {
+  margin-top: 12px;
+}
+
+.more-group-body .about {
+  margin-top: 4px;
+}
+
+/* ---------- Phase 6 (6A.7): "☕ Steun dit project" + the feedback sheet ---------- */
+
+.donate {
+  margin: 14px 0 6px;
+}
+
+.donate .btn {
+  width: 100%;
+  min-height: 44px;
+}
+
+.donate p {
+  margin: 6px 2px 0;
+}
+
+.donate.center {
+  margin: 0;
+  text-align: center;
+}
+
+.story-donate {
+  padding: 16px;
+}
+
+.feedback-sheet .feedback-intro {
+  margin: 0 0 10px;
+}
+
+.feedback-sheet textarea.input {
+  min-height: 140px;
+}
+
+/* The lines the app adds under the text: version, channel, build, device — shown so nothing is
+   sent behind the person's back. */
+.feedback-auto {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--muted);
+  font: 13px/1.45 ui-monospace, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.feedback-auto-title {
+  display: block;
+  font: 600 12px/1.4 var(--font);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.feedback-sheet .actions {
+  margin: 14px 0 6px;
+}
+
+/* ---------- Phase 6 (6A.5): "Deel je nieuwe recepten" — the message example ---------- */
+
+.delta .delta-example {
+  margin: 12px 0 16px;
+  padding: 12px 14px;
+  border-style: dashed;
+}
+
+.delta .delta-example h2 {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+
+.delta .delta-example pre {
+  margin: 0;
+  font: 14px/1.5 var(--font);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.delta .delta-example p {
+  margin: 8px 0 0;
 }

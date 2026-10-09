@@ -1,4 +1,6 @@
-// '#/share' (no id) — "Stuur nieuwe naar <naam>" (docs/phase-3-spec.md §3): keeps two phones in
+// '#/share' (no id) — "Deel je nieuwe recepten" (docs/phase-3-spec.md §3; renamed in phase 6,
+// docs/phase-6-spec.md 6A.5, which also added the "Zo ziet het bericht eruit" example frame on
+// top): keeps two phones in
 // step without a server. Partner = a member of the household (phase 5 block F: the other profiles
 // on this phone, members from a card, hand-typed ones — shown first with their colour), a name
 // something was sent to before, or a free-text name; the
@@ -14,6 +16,7 @@ import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { bumpSharedRecipes, collectDeltaSince, getHousehold, getLastSentTo, markSentTo, type DeltaSince } from '@/db/repo';
 import { membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
+import { buildMultiShareHeader, openLine } from '@/domain/message';
 import { pickText, type Text } from '@/domain/model';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
 import { lang, t } from '@/i18n';
@@ -64,6 +67,45 @@ function summarize(d: DeltaSince): string {
 
 function ingredientName(e: { nl: { one: string }; en: { one: string }; id: string }, l: 'nl' | 'en'): string {
   return (l === 'nl' ? e.nl.one : e.en.one) || e.nl.one || e.en.one || e.id;
+}
+
+/** A share link cut after the first characters of its token: the shape is what matters here. */
+function shortUrl(u: string, keep = 44): string {
+  return u.length > keep + 1 ? u.slice(0, keep) + '…' : u;
+}
+
+/**
+ * 6A.5: the first lines of the message the other person receives. With a text plan these are the
+ * REAL lines (header, "open in the app" line, the first link shortened, "… en nog N links"); before
+ * a partner is chosen (or when nothing is new) a made-up message in the same shape, built with the
+ * same header function the real one uses.
+ */
+function MessageExample(props: { plan: MessagePlan | null; by: string; ui: 'nl' | 'en' }) {
+  const { plan, by, ui } = props;
+  // A file plan is not a message: the "gaat als bestand" line below already says what happens.
+  if (plan && 'file' in plan) return null;
+  let lines: string[];
+  let more = 0;
+  if (plan) {
+    const all = plan.text.split('\n');
+    const firstUrl = all.findIndex((l) => /^https?:\/\//.test(l));
+    const head = firstUrl < 0 ? all : all.slice(0, firstUrl);
+    lines = firstUrl < 0 ? head : [...head, shortUrl(all[firstUrl] ?? '')];
+    more = firstUrl < 0 ? 0 : all.slice(firstUrl + 1).filter((l) => /^https?:\/\//.test(l)).length;
+  } else {
+    lines = [buildMultiShareHeader(3, by, ui), openLine(ui), shortUrl(appInfo.appUrl + '#r=eJyrVkrOz0tJLSpWslIqSS0uUdJRSi4tLsnPTQUA')];
+    more = 2;
+  }
+  return (
+    <aside class="card delta-example" aria-label={t('delta.example')}>
+      <h2>{t('delta.example')}</h2>
+      <pre>
+        {lines.join('\n')}
+        {more > 0 && '\n' + (more === 1 ? t('delta.exampleMoreOne') : t('delta.exampleMore', { n: more }))}
+      </pre>
+      <p class="muted small">{t('delta.exampleHint')}</p>
+    </aside>
+  );
 }
 
 /**
@@ -225,6 +267,7 @@ export function DeltaShareScreen() {
       <Header title={t('delta.title')} back backLabel={t('common.back')} />
       <div class="screen delta">
         <p class="muted small">{t('delta.intro')}</p>
+        <MessageExample plan={plan} by={by} ui={ui} />
 
         <section class="card">
           <h2>{t('delta.partner')}</h2>

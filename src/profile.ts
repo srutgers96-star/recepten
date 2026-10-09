@@ -7,8 +7,27 @@ import { setLang } from '@/i18n';
 
 export const ACTIVE_PROFILE_KEY = 'activeProfileId';
 
-/** Six swatches from the cover palette (cobalt, tomato, rosemary, orange, plum, teal). */
-export const PROFILE_COLORS: readonly string[] = ['#2b4fa8', '#d9402b', '#3d7a3a', '#d98a2e', '#7a3d8a', '#2a8a8a'];
+/**
+ * Avatar colours: white initial on a filled circle. The first six are the original cover palette
+ * (cobalt, tomato, rosemary, orange, plum, teal) and stay in place — profiles made before phase 6
+ * keep their colour and their swatch. Phase 6 (docs/phase-6-spec.md 6A.12) adds eight more. The
+ * swatch is the avatar background in both themes, so the text contrast does not depend on the theme.
+ *
+ * WCAG contrast of white (#fff) text on each colour, computed with a small script (relative
+ * luminance per WCAG 2.x; the full list is 14 so the 44 px swatches wrap into rows of six at 360 px):
+ *   #2b4fa8 cobalt    7.54   #d9402b tomato  4.45*  #3d7a3a rosemary 5.19   #d98a2e orange 2.75*
+ *   #7a3d8a plum      7.34   #2a8a8a teal    4.12*  #1f3b73 navy    10.87   #b0246b raspberry 6.34
+ *   #a6421c rust      6.14   #8a5a00 ochre   5.93   #5a6b1f olive    5.90   #1f6b5a pine 6.35
+ *   #4a5d78 slate     6.71   #7a1f3d wine   10.04
+ * All eight new colours are ≥ 4.5:1. (*) Three of the original six fall short (orange clearly so);
+ * they are kept unchanged on purpose because existing profiles carry these exact values.
+ */
+export const PROFILE_COLORS: readonly string[] = [
+  // original six (unchanged)
+  '#2b4fa8', '#d9402b', '#3d7a3a', '#d98a2e', '#7a3d8a', '#2a8a8a',
+  // phase 6: navy, raspberry, rust, ochre, olive, pine, slate, wine
+  '#1f3b73', '#b0246b', '#a6421c', '#8a5a00', '#5a6b1f', '#1f6b5a', '#4a5d78', '#7a1f3d',
+];
 
 /** All profiles, oldest first. */
 export const profiles = signal<Profile[]>([]);

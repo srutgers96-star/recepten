@@ -139,6 +139,154 @@ describe('parseVoiceCommand — timer', () => {
   });
 });
 
+// Phase 6 block 6A.8: repeat / ingredients / timeLeft.
+describe('parseVoiceCommand — repeat', () => {
+  it('recognises the Dutch forms', () => {
+    expect(cmd('herhaal', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('Herhaal.', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('opnieuw', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('nogmaals', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('nog een keer', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd("nog 'n keer", 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('nog een keertje', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('nog eens', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('zeg dat nog eens', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('lees opnieuw', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('lees opnieuw voor', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('lees het nog een keer voor', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('wat zeg je', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('wat zei je?', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('wat?', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('Wat', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('pardon', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('sorry?', 'nl')).toEqual({ kind: 'repeat' });
+  });
+
+  it('recognises the English forms', () => {
+    expect(cmd('repeat', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('Repeat, please.', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('again', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('say that again', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('say again', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('read that again', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('could you read it again', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('what?', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('What did you say', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('what was that', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('pardon', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('Pardon?', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('sorry?', 'en')).toEqual({ kind: 'repeat' });
+  });
+
+  it('matches whole words only: "opnieuw" and friends never inside another word', () => {
+    expect(cmd('herhaaldelijk roeren', 'nl')).toBeNull();
+    expect(cmd('de opnieuwe versie', 'nl')).toBeNull();
+    expect(cmd('nogmaalsx', 'nl')).toBeNull();
+    expect(cmd('against the grain', 'en')).toBeNull();
+    expect(cmd('repeatedly', 'en')).toBeNull();
+    expect(cmd('the pardoned turkey', 'en')).toBeNull();
+  });
+
+  it('"wat"/"what"/"sorry" only count alone or in the fixed phrase (kitchen talk says them all the time)', () => {
+    expect(cmd('wat een lekker recept is dit', 'nl')).toBeNull();
+    expect(cmd('wat is de volgende stap', 'nl')).toEqual({ kind: 'next' }); // not a repeat
+    expect(cmd('sorry dat ik de pan liet vallen', 'nl')).toBeNull();
+    expect(cmd('what a lovely smell', 'en')).toBeNull();
+    expect(cmd('I wonder what this needs', 'en')).toBeNull();
+    expect(cmd('sorry I dropped the pan', 'en')).toBeNull();
+  });
+
+  it('"opnieuw"/"again"/"nog eens" mid-sentence are recipe words, not a command (like terug/back)', () => {
+    expect(cmd('doe er nog eens wat peper bij', 'nl')).toBeNull();
+    expect(cmd('roer het nog een keer door', 'nl')).toBeNull();
+    expect(cmd('even nog eens proeven', 'nl')).toBeNull();
+    expect(cmd('bak nog eens 30 minuten', 'nl')).toBeNull();
+    expect(cmd('kook het opnieuw op', 'nl')).toBeNull();
+    expect(cmd('breng het opnieuw aan de kook', 'nl')).toBeNull();
+    expect(cmd('stir it again', 'en')).toBeNull();
+    expect(cmd('add a bit more pepper again', 'en')).toBeNull();
+    expect(cmd('bring it to the boil again', 'en')).toBeNull();
+    // … but alone, or right after a say-/read-word, they still are
+    expect(cmd('Opnieuw.', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('Nog eens?', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('zeg het opnieuw', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('zeg nog eens', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('lees dat nog eens', 'nl')).toEqual({ kind: 'repeat' });
+    expect(cmd('Again?', 'en')).toEqual({ kind: 'repeat' });
+    expect(cmd('say it again', 'en')).toEqual({ kind: 'repeat' });
+  });
+
+  it('a bare "nog" is not a command', () => {
+    expect(cmd('nog vijf minuten', 'nl')).toBeNull();
+    expect(cmd('nog even wachten', 'nl')).toBeNull();
+    expect(cmd('nog een beetje zout', 'nl')).toBeNull();
+    // "nog" as filler inside a timer phrase still gives the timer
+    expect(cmd('timer nog 5 minuten', 'nl')).toEqual({ kind: 'timer', minutes: 5 });
+    expect(cmd('timer opnieuw 5 minuten', 'nl')).toEqual({ kind: 'timer', minutes: 5 });
+  });
+
+  it('is language-specific', () => {
+    expect(cmd('herhaal', 'en')).toBeNull();
+    expect(cmd('repeat', 'nl')).toBeNull();
+    expect(cmd('again', 'nl')).toBeNull();
+    expect(cmd('wat zeg je', 'en')).toBeNull();
+  });
+});
+
+describe('parseVoiceCommand — ingredients', () => {
+  it('recognises both languages', () => {
+    expect(cmd('ingrediënten', 'nl')).toEqual({ kind: 'ingredients' });
+    expect(cmd('Ingredienten!', 'nl')).toEqual({ kind: 'ingredients' });
+    expect(cmd('boodschappen', 'nl')).toEqual({ kind: 'ingredients' });
+    expect(cmd('lees de ingrediënten voor', 'nl')).toEqual({ kind: 'ingredients' });
+    expect(cmd('lees de boodschappenlijst', 'nl')).toEqual({ kind: 'ingredients' });
+    expect(cmd('ingredients', 'en')).toEqual({ kind: 'ingredients' });
+    expect(cmd('read the ingredients', 'en')).toEqual({ kind: 'ingredients' });
+    expect(cmd('what are the ingredients', 'en')).toEqual({ kind: 'ingredients' });
+  });
+
+  it('whole words only and language-specific', () => {
+    expect(cmd('ingredients', 'nl')).toBeNull();
+    expect(cmd('boodschappen', 'en')).toBeNull();
+    expect(cmd('boodschappentas', 'nl')).toBeNull();
+  });
+});
+
+describe('parseVoiceCommand — timeLeft', () => {
+  it('recognises the Dutch forms', () => {
+    expect(cmd('hoe lang nog', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('Hoelang nog?', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('hoe lang moet het nog', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('hoeveel tijd nog', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('hoeveel tijd', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('hoeveel minuten nog', 'nl')).toEqual({ kind: 'timeLeft' });
+  });
+
+  it('recognises the English forms', () => {
+    expect(cmd('how long left', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('How long is left?', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how long have I got left', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how long to go', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how much time', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how much time is left', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how much longer', 'en')).toEqual({ kind: 'timeLeft' });
+  });
+
+  it('a question about the recipe is not a timer question', () => {
+    expect(cmd('hoe lang moet de pasta koken', 'nl')).toBeNull();
+    expect(cmd('hoe lang', 'nl')).toBeNull();
+    expect(cmd('hoeveel zout', 'nl')).toBeNull();
+    expect(cmd('how long does the pasta need', 'en')).toBeNull();
+    expect(cmd('how long', 'en')).toBeNull();
+    expect(cmd('how much salt', 'en')).toBeNull();
+  });
+
+  it('is language-specific', () => {
+    expect(cmd('how long left', 'nl')).toBeNull();
+    expect(cmd('hoe lang nog', 'en')).toBeNull();
+  });
+});
+
 describe('pickSpoken', () => {
   it('prefers the asked language', () => {
     expect(pickSpoken({ nl: 'Kook de pasta.', en: 'Cook the pasta.' }, 'nl')).toEqual({

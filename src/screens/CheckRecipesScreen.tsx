@@ -4,9 +4,13 @@
 // Sla over, or Zelf kiezen (the MetaRows inline); "Alles overnemen" for the rest. Writes go through
 // repo.saveUserRecipe with `metaManual: true`, so the editor's auto-suggestion leaves them alone.
 // Classics are not listed: their category/tags are changed on the recipe page or in override mode.
+//
+// Phase 6 (docs/phase-6-spec.md 6A.18): "Nu" and "Voorstel" name the kind of each value on its
+// own line — "Categorie: Salade" (one per recipe) and "Labels: vegetarisch, snel" (any number) —
+// because a suggested category read as a label that could not be found among the chips.
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
-import { MetaRows, applySuggestion, metaEqual, metaSummary, metaTagLabel, type MetaValue } from '@/components/MetaRows';
+import { MetaRows, applySuggestion, metaCategoryLabel, metaEqual, metaTagLabel, type MetaValue } from '@/components/MetaRows';
 import { saveUserRecipe, userRecipes } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import { suggestMeta, type MetaSuggestion } from '@/domain/diet';
@@ -38,12 +42,39 @@ function rowOf(recipe: Recipe): Row {
   return { recipe, suggestion, current, proposed, differs: !metaEqual(proposed, current), probable };
 }
 
-/** "Pasta · vegetarisch, snel, waarschijnlijk glutenvrij" — the suggestion as one line. */
-function suggestedText(row: Row): string {
-  const base = metaSummary(row.proposed);
-  const more = row.probable.map((tag) => t('meta.probably', { tag: metaTagLabel(tag) })).join(', ');
-  const text = [base, more].filter(Boolean).join(base && more ? ', ' : '');
-  return text || t('checkRecipes.none');
+/**
+ * 6A.18: the two kinds of a value as text — `category` "Salade" (or "geen") and `labels`
+ * "vegetarisch, snel, waarschijnlijk glutenvrij" (or "geen"); `probable` are the unsure diet tags
+ * of a suggestion, appended as "waarschijnlijk …".
+ */
+function metaKinds(value: MetaValue, probable: readonly string[] = []): { category: string; labels: string } {
+  const none = t('checkRecipes.noneShort');
+  const labels = [...value.tags.map(metaTagLabel), ...probable.map((tag) => t('meta.probably', { tag: metaTagLabel(tag) }))];
+  return {
+    category: value.category ? metaCategoryLabel(value.category) : none,
+    labels: labels.length ? labels.join(', ') : none,
+  };
+}
+
+/** "Categorie: Salade" above "Labels: vegetarisch, snel" — the kind named in front of each line. */
+function MetaLines(props: { value: MetaValue; probable?: readonly string[] }) {
+  const k = metaKinds(props.value, props.probable);
+  return (
+    <>
+      <div class="cr-meta-line">
+        <span class="cr-meta-key">{t('checkRecipes.category')}:</span> {k.category}
+      </div>
+      <div class="cr-meta-line">
+        <span class="cr-meta-key">{t('checkRecipes.labels')}:</span> {k.labels}
+      </div>
+    </>
+  );
+}
+
+/** The same two kinds on one line, for the compact "done" list: "Categorie: Salade · Labels: vegetarisch". */
+function metaKindsText(value: MetaValue): string {
+  const k = metaKinds(value);
+  return `${t('checkRecipes.category')}: ${k.category} · ${t('checkRecipes.labels')}: ${k.labels}`;
 }
 
 export function CheckRecipesScreen() {
@@ -183,9 +214,13 @@ export function CheckRecipesScreen() {
         </div>
         <dl class="cr-compare">
           <dt>{t('checkRecipes.current')}</dt>
-          <dd>{metaSummary(row.current) || t('checkRecipes.none')}</dd>
+          <dd>
+            <MetaLines value={row.current} />
+          </dd>
           <dt>{t('checkRecipes.suggested')}</dt>
-          <dd class="cr-suggested">{suggestedText(row)}</dd>
+          <dd class="cr-suggested">
+            <MetaLines value={row.proposed} probable={row.probable} />
+          </dd>
         </dl>
         {isEditing ? (
           <div class="cr-edit">
@@ -223,6 +258,8 @@ export function CheckRecipesScreen() {
       <Header title={t('checkRecipes.title')} back backLabel={t('common.back')} />
       <div class="screen check-recipes">
         <p class="muted small cr-intro">{t('checkRecipes.intro')}</p>
+        {/* 6A.18: one category per recipe, any number of labels — said once, above the cards. */}
+        <p class="muted small cr-intro cr-kinds-hint">{t('meta.kindsHint')}</p>
 
         {recipes === null && <div class="empty">{t('common.loading')}</div>}
         {recipes !== null && recipes.length === 0 && <div class="empty">{t('checkRecipes.empty')}</div>}
@@ -268,7 +305,7 @@ export function CheckRecipesScreen() {
                       ✓
                     </span>
                     <span class="cr-done-name">{pickText(row.recipe.name, l)}</span>
-                    <span class="muted small">{metaSummary(row.current) || t('checkRecipes.none')}</span>
+                    <span class="muted small">{metaKindsText(row.current)}</span>
                   </li>
                 ))}
               </ul>

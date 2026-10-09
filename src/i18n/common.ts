@@ -90,7 +90,11 @@ export const common: Dict = {
     nl: 'Anders kan Safari je recepten na 7 dagen wissen.',
     en: 'Otherwise Safari may delete your recipes after 7 days.',
   },
-  'install.android.title': { nl: 'Installeer als app', en: 'Install as an app' },
+  // Phase 6 (docs/phase-6-spec.md 6A.4): the precache is about 2 MB.
+  'install.ios.space': { nl: 'Kost nauwelijks ruimte (± 2 MB).', en: 'Takes hardly any space (about 2 MB).' },
+  'install.ios.show': { nl: 'Toon de stappen', en: 'Show the steps' },
+  'install.ios.hide': { nl: 'Verberg de stappen', en: 'Hide the steps' },
+  'install.android.title': { nl: 'Installeer de app', en: 'Install the app' },
   'install.android.body': { nl: 'Chrome-menu (⋮) → App installeren', en: 'Chrome menu (⋮) → Install app' },
   'install.dismiss': { nl: 'Later', en: 'Later' },
 
@@ -111,7 +115,9 @@ export const common: Dict = {
   'picker.unitPieces': { nl: 'stuks (geteld)', en: 'pieces (counted)' },
   'picker.unitNone': { nl: 'geen eenheid', en: 'no unit' },
   'picker.veg': { nl: 'Vegetarisch', en: 'Vegetarian' },
-  'picker.staple': { nl: 'Voorraadkast (zout, olie, kruiden …)', en: 'Pantry staple (salt, oil, spices …)' },
+  // Phase 6 (6A.15): plain words for the pantry tick + a second line that says what it does.
+  'picker.staple': { nl: 'Hoef je meestal niet te kopen (zout, olie, kruiden …)', en: 'Usually already in the house (salt, oil, spices …)' },
+  'picker.stapleHint': { nl: 'Staat op de boodschappenlijst op 0 tot je hem aanzet.', en: 'Sits on the shopping list at 0 until you switch it on.' },
   'picker.save': { nl: 'Bewaar en koppel', en: 'Save and link' },
   'picker.cancel': { nl: 'Terug naar zoeken', en: 'Back to search' },
   'picker.none': { nl: 'Niets gevonden. Maak een nieuw ingrediënt.', en: 'Nothing found. Create a new ingredient.' },

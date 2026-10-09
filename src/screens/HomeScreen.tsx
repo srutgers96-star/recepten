@@ -325,23 +325,36 @@ export function HomeScreen() {
               {cooked.map((e) => {
                 const r = byId.get(e.recipeId);
                 const who = profileName(e.profileId);
+                // Phase 6 A.3: a cook of the active member without stars gets a small "Beoordeel"
+                // link that opens the recipe with the rate sheet for THIS entry ('?rate=<id>',
+                // RecipeScreen) — not for the latest cook of the recipe, which may be another, already
+                // rated one. Other members' cooks are theirs to rate, so those rows stay plain.
+                const canRate = !e.stars && !!pid && e.profileId === pid && e.id !== undefined;
+                const name = r ? pickText(r.name, l) : e.recipeId;
                 return (
-                  <a
-                    key={e.id ?? `${e.recipeId}|${e.at}`}
-                    class="cooked-row"
-                    href={'#/recipe/' + e.recipeId}
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                      openRecipe(e.recipeId);
-                    }}
-                  >
-                    <span class="name">{r ? pickText(r.name, l) : e.recipeId}</span>
-                    <span class="meta">
-                      {e.stars ? `★ ${e.stars} · ` : ''}
-                      {formatShortDate(e.at, l)}
-                      {who ? ` · ${who}` : ''}
-                    </span>
-                  </a>
+                  <div key={e.id ?? `${e.recipeId}|${e.at}`} class="cooked-row">
+                    <a
+                      class="cooked-main"
+                      href={'#/recipe/' + e.recipeId}
+                      onClick={(ev) => {
+                        ev.preventDefault();
+                        openRecipe(e.recipeId);
+                      }}
+                    >
+                      <span class="name">{name}</span>
+                      <span class="meta">
+                        {e.stars ? `★ ${e.stars} · ` : ''}
+                        {formatShortDate(e.at, l)}
+                        {who ? ` · ${who}` : ''}
+                      </span>
+                    </a>
+                    {canRate && (
+                      /* Up to five of these in a row: the dish name in the accessible name tells them apart. */
+                      <button type="button" class="cooked-rate" aria-label={`${t('recipe.rate')}: ${name}`} onClick={() => navigate('/recipe/' + e.recipeId + '?rate=' + e.id)}>
+                        <span aria-hidden="true">★</span> {t('recipe.rate')}
+                      </button>
+                    )}
+                  </div>
                 );
               })}
             </div>

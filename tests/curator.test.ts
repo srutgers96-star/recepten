@@ -4,10 +4,16 @@
 // `text: { en: 'human', reviewedBy }` — but only with a non-empty English name, so a save can
 // never contradict curatorStatus ('missing' wins) or sneak into "Stuur correcties". Verified
 // through applyOverride, the same merge the app and the receiving phone run.
+//
+// Phase 6 (docs/phase-6-spec.md 6A.2): `lineUsesDictionary` decides which lines the panel shows
+// grey and read-only (the dictionary renders their English; `raw.en` is ignored) and which keep
+// the free English box; pinned against render.ts so the two can never disagree.
 import { describe, expect, it } from 'vitest';
-import type { Recipe, Text } from '../src/domain/model';
-import { applyOverride, type RecipeOverride, type RecipePatch } from '../src/domain/overrides';
-import { buildCuratorPatch, curatorStatus, type CuratorDraft } from '../src/screens/CuratorScreen';
+import type { Line, Recipe, Text } from '../src/domain/model';
+import { applyLineOverrides, applyOverride, type RecipeOverride, type RecipePatch } from '../src/domain/overrides';
+import { renderLine } from '../src/domain/render';
+import { buildCuratorPatch, curatorStatus, dictionaryRouteFor, lineUsesDictionary, type CuratorDraft } from '../src/screens/CuratorScreen';
+import { testDictionary } from './fixtures/test-dictionary';
 
 function base(): Recipe {
   return {
@@ -64,6 +70,64 @@ describe('curatorStatus', () => {
 
   it("is reviewed for 'human'", () => {
     expect(curatorStatus({ name: { en: 'Onion soup' }, text: { en: 'human', reviewedBy: 'Gabi' } })).toBe('reviewed');
+  });
+});
+
+describe('lineUsesDictionary (6A.2)', () => {
+  // testDictionary knows 'ui' but not 'bouillon' (only 'kippenbouillon'), like a received recipe
+  // linked to an entry the other phone made.
+  const dict = testDictionary();
+  const lines = base().lines;
+  const header = lines[0] as Line;
+  const onions = lines[1] as Line;
+  const stock = lines[2] as Line;
+
+  it('is true only for a non-header line whose ingredient this dictionary knows', () => {
+    expect(lineUsesDictionary(header, dict)).toBe(false);
+    expect(lineUsesDictionary(onions, dict)).toBe(true);
+    expect(lineUsesDictionary(stock, dict)).toBe(false);
+    expect(lineUsesDictionary({ ...onions, ing: null }, dict)).toBe(false);
+    expect(lineUsesDictionary({ ...onions, ing: undefined }, dict)).toBe(false);
+  });
+
+  it('agrees with render.ts: a dictionary line ignores raw.en, every other line prints it', () => {
+    // The curator panel shows this rendering grey and read-only: typing English here would change nothing.
+    expect(renderLine(onions, dict, 'en')).toBe('4 onions');
+    expect(renderLine({ ...onions, raw: { nl: '4 uien', en: 'four big onions' } }, dict, 'en')).toBe('4 onions');
+    // Headers and unknown lines print raw.en (fallback raw.nl): these keep the free English box.
+    expect(renderLine({ ...header, raw: { nl: 'Soep:', en: 'Soup:' } }, dict, 'en')).toBe('Soup:');
+    expect(renderLine(stock, dict, 'en')).toBe('1 l bouillon');
+    expect(renderLine({ ...stock, raw: { nl: '1 l bouillon', en: '1 l stock' } }, dict, 'en')).toBe('1 l stock');
+  });
+
+  it('follows a "Koppel ingrediënt" line override, as the recipe screen does', () => {
+    // Stijn linked line 3 to a known entry: the panel now shows it from the dictionary.
+    const linked = applyLineOverrides(lines, [{ recipeId: 'b:uiensoep', index: 2, ing: 'kippenbouillon', updatedAt: '2026-10-02T00:00:00.000Z' }]);
+    expect(lineUsesDictionary(linked[2] as Line, dict)).toBe(true);
+    expect(renderLine(linked[2] as Line, dict, 'en')).toBe('1 l chicken stock');
+    // Unlinked explicitly (ing: null): back to the raw text and the free box.
+    const unlinked = applyLineOverrides(lines, [{ recipeId: 'b:uiensoep', index: 1, ing: null, updatedAt: '2026-10-02T00:00:00.000Z' }]);
+    expect(lineUsesDictionary(unlinked[1] as Line, dict)).toBe(false);
+  });
+
+  it('"Verbeter in het woordenboek" opens the dictionary with the ingredient id as ?q=', () => {
+    expect(dictionaryRouteFor('ui')).toBe('/more/dictionary?q=ui');
+    expect(dictionaryRouteFor('parmezaanse-kaas')).toBe('/more/dictionary?q=parmezaanse-kaas');
+    expect(dictionaryRouteFor('u:eigen ding&zo')).toBe('/more/dictionary?q=u%3Aeigen%20ding%26zo');
+  });
+
+  it('an untouched dictionary line writes no raw.en, so the patch stays free of it', () => {
+    // The panel offers no box for the onions line; the draft keeps its raw.en as-is and the
+    // patch only carries the line Gabi could edit (stock, unknown to the dictionary).
+    const b = base();
+    const draft = draftFrom(b);
+    draft.linesEn[2] = '1 l stock';
+    const patch = buildCuratorPatch(b, b, undefined, draft, 'Gabi');
+    expect(patch.lines?.[1]).toEqual({ raw: {} });
+    expect(patch.lines?.[2]?.raw).toEqual({ en: '1 l stock' });
+    const applied = applyOverride(b, overrideWith(patch));
+    expect(applied.lines[1]?.raw).toEqual({ nl: '4 uien', en: '4 onions' });
+    expect(renderLine(applied.lines[1] as Line, dict, 'en')).toBe('4 onions');
   });
 });
 

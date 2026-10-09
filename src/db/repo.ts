@@ -580,6 +580,41 @@ export async function listCookLog(): Promise<CookLogEntry[]> {
   return db.cookLog.orderBy('at').toArray();
 }
 
+/**
+ * Rates or annotates an existing cook-log entry afterwards (phase 6 A.3 "Beoordeel"). Only the
+ * keys present in `patch` change; stars are clamped to 1–5 like `logCooked`, an empty note becomes
+ * null. An unknown id is a no-op (Dexie's update returns 0).
+ */
+export async function updateCookLogEntry(id: number, patch: { stars?: number | null; note?: string | null }): Promise<void> {
+  const changes: Partial<Pick<CookLogEntry, 'stars' | 'note'>> = {};
+  if ('stars' in patch) {
+    const s = patch.stars;
+    changes.stars = s === undefined || s === null || !(s > 0) ? null : Math.min(5, Math.max(1, Math.round(s)));
+  }
+  if ('note' in patch) {
+    const n = patch.note?.trim() ?? '';
+    changes.note = n === '' ? null : n;
+  }
+  if (Object.keys(changes).length === 0) return;
+  await db.cookLog.update(id, changes);
+}
+
+/** One cook-log entry by its row id (Home's "★ Beoordeel" → '?rate=<id>'); undefined when gone. */
+export async function getCookLogEntry(id: number): Promise<CookLogEntry | undefined> {
+  return db.cookLog.get(id);
+}
+
+/** The newest cook-log entry of one recipe (`at`), optionally only by one member; undefined when none. */
+export async function latestCookFor(recipeId: string, profileId?: string): Promise<CookLogEntry | undefined> {
+  const rows = await db.cookLog.where('recipeId').equals(recipeId).toArray();
+  let best: CookLogEntry | undefined;
+  for (const r of rows) {
+    if (profileId && r.profileId !== profileId) continue;
+    if (!best || r.at > best.at) best = r;
+  }
+  return best;
+}
+
 // --- Photos (docs/phase-5-spec.md Block D item 1) -------------------------------------------------
 
 /** Stores a photo (already re-encoded by src/photo.ts encodePhotoFile). Returns the row id. */

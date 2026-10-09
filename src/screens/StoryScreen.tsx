@@ -1,13 +1,15 @@
 // '#/story' — cover hero, the About text of the first edition (NL verbatim, EN translation), the
 // edition line, "Samen al N van de 196 gekookt" (distinct builtin ids in the cook log) and — phase
 // 5 block D.3 — the household: its name and everyone who cooks along (profiles on this phone plus
-// the hand-added members, src/domain/household.ts).
+// the hand-added members, src/domain/household.ts). Phase 6 (docs/phase-6-spec.md "Besluiten"):
+// the "☕ Steun dit project" link at the bottom (DonateBlock from the Meer screen).
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { bundled, cookedRecipeIds, getHousehold, isBuiltinId } from '@/db/repo';
 import { householdName, membersFrom, type HouseholdSetting } from '@/domain/household';
 import { lang, t } from '@/i18n';
 import { profiles } from '@/profile';
+import { DonateBlock } from './MoreScreen';
 import { Avatar } from './ProfilesScreen';
 
 export function StoryScreen() {
@@ -73,6 +75,10 @@ export function StoryScreen() {
             </ul>
           </section>
         )}
+        {/* Phase 6: a plain link to the public bunq page; no payments inside the app (invariant 14). */}
+        <section class="card story-donate">
+          <DonateBlock center />
+        </section>
       </div>
     </>
   );
