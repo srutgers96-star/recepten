@@ -461,11 +461,18 @@ Voorstel: knoppen noemen wat ze doen ("Back-up voor mezelf" / "Mijn recepten aan
 → 6C (vaste lijst) → 6D (XP) → Z (handleiding).
 
 ### Open vragen ronde 13 okt
-Vragen 1–6 zijn op 13 okt beantwoord (zie de antwoorden per punt hierboven). Nog open:
-7. Stijn schreef bij de bijgerechten: "misschien kan je die in de engels-curator zetten ofzo. al die
-   engelse dingen geloof ik wel die kunnen eruit." Wat wordt daarmee bedoeld? (De Curator-pagina
-   weghalen? Iets met Engelse recepten? Of de bijgerechten in de Curator laten nakijken?)
-8. Akkoord met de aanpak voor het auteursrecht bij inbouwen (bereiding in eigen woorden, bron erbij)?
+Vragen 1–8 zijn op 13 okt beantwoord:
+7. **De Curator-pagina mag weg** (Stijn). Bij het weghalen: route `/more/curator`, de rij onder Hulp &
+   over → Testen & nakijken, DEVICE-TEST rij 48 en de curator-tests; Engelse teksten van klassiekers
+   verbeteren kan daarna nog via de editor (aanpassing van een klassieker). Code van "Stuur correcties"
+   niet zomaar weggooien: dezelfde patch-route gebruikt de editor al.
+8. **Inbouwen: de recepten gewoon overnemen**, licht versimpelen mag waar dat beter past (Stijn). Hij is
+   "niet van plan hem nu te publiceren". **Let op (door Opus gemeld):** de site
+   https://srutgers96-star.github.io/recepten/ en de GitHub-repo zijn nu al openbaar, dus inbouwen in
+   data/recipes.json zet de recepten meteen online. Vóór het inbouwen dat met Stijn bevestigen, of eerst
+   kiezen voor een alternatief: (a) de repo privé maken (GitHub Pages vanuit een privérepo vraagt een
+   betaald GitHub-abonnement), (b) de Stijnchat-recepten niet inbouwen maar als bundelbestand aan Gabi en
+   de Stijnen geven (blijft privé, werkt nu al), of (c) bewust accepteren dat ze online staan.
 
 ## Blok Z — Handleiding (altijd het laatste blok; voorheen "G")
 
