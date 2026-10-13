@@ -334,6 +334,10 @@ tekstvak + "Plak van klembord". De app herkent wat erin staat en stuurt door:
 - websiterecept of AI-antwoord → de editor met alles ingevuld.
 De Inbox wordt "Ontvangen": de geschiedenis plus wat via het deelmenu (Android) binnenkwam, onder Meer.
 iPhone: het plakvak blijft een gewone textarea (invariant 5). Samen bouwen met 6A.13 (keuzes na de +).
+**Antwoord Stijn (13 okt):** de Inbox mag een overzicht worden van **alles wat in- en uitging**
+(ontvangen én gedeeld, met datum en van/aan wie). Verder: de receptenlijst sorteert nu alleen A–Z;
+erbij: **Recent bekeken**, **Eigen**, **Eigen & ontvangen**. De Home-indeling is "al best goed maar kan
+misschien beter": Fable doet een voorstel (twee varianten met schets), Stijn kiest.
 
 ### 13B. Links openen de browser in plaats van de app; installeren duidelijker (M)
 Stijn: een deellink tikken opent de browser, "en mijn browser is niet mijn profiel, dat is de app".
@@ -348,7 +352,14 @@ echt een eigen opslag (invariant 5/6); daarom bestaat de voorproefpagina met "Ko
 Voorstel: (1) in browsermodus bij de start een duidelijke melding "Je gebruikt de app in de browser —
 installeer hem" met stappen per platform en klein "Toch in de browser"; (2) Android: in Meer → Hulp een
 stap-voor-stap "Zorg dat links in de app openen" + DEVICE-TEST-rij; (3) iPhone: de voorproefpagina nog
-duidelijker ("Kopieer → open de app → Plak"). *Open vraag 2.*
+duidelijker ("Kopieer → open de app → Plak").
+**Antwoord Stijn (13 okt):** zijn standaardbrowser was **Opera**; met Chrome als standaard werkt het.
+Verklaring: Opera heeft een eigen opslag, dus een recept dat in Opera werd bewaard stond niet in de app.
+Extra voorstel: op Android in een andere browser dan Chrome (Opera, Samsung Internet, Firefox; te zien aan
+de user-agent) een knop **"Open in Chrome"** tonen via een `intent://…;package=com.android.chrome;end`-link,
+die de link meteen in Chrome (en zo vaak in de app) opent; plus in de installatie-uitleg "zet Chrome als
+standaardbrowser". Eerst op een echte telefoon testen (DEVICE-TEST). iPhone: een link kan Safari niet
+omzeilen; daar blijft kopiëren → app → plakken de route.
 
 ### 13C. AI-antwoord plakken gaat mis met witregels en \[ \] (bug; hoort bij 6A-2) (M)
 Stijn (screenshots 13 okt): bij ChatGPT gaat het "bijna altijd" mis met witregels: óf alles komt in de
@@ -389,13 +400,25 @@ de gekozen tab. Persoonlijke versies blijven echte recepten (`variantOf`) en ver
 Notities: nieuw veld **"Tip van de maker"** ({nl,en}) dat wél meereist; de privénotitie blijft privé, met
 bij delen de vraag "notitie meesturen?". De kopie-varianten uit blok F (bv. "Franse uiensoep met Gruyère
 (glutenvrij)") worden bij de overstap omgezet naar een tab. Raakt het deelformaat (een goedgekeurde
-variant moet meereizen): nieuwe velden, bevroren tests (invariant 4). *Open vragen 3 en 4.*
+variant moet meereizen): nieuwe velden, bevroren tests (invariant 4).
+**Antwoord Stijn (13 okt):** akkoord met tabs, "zolang Fable er iets moois van maakt: niet te druk, elegant
+en functioneel". Varianten moeten **ook in de weekplanner gekozen kunnen worden**.
 
 ### 13E. Nagerechten en gebak (S–M)
 Stijn: bananenbrood tussen de weekgerechten is onhandig; misschien splitsen in gebakken en niet-gebakken.
 Nu staan "Stijn's Bananenbrood" en "Stijn's Clafoutis" in Oven en het Botrytis-dessert in Overig.
 Voorstel: nieuwe categorieën **Nagerecht** en **Gebak** (zoet uit de oven: cake, bananenbrood, koekjes);
-Kies 7 en Verras me kiezen alleen hoofdgerechten, tenzij je zelf iets anders toevoegt. *Open vraag 5.*
+Kies 7 en Verras me kiezen alleen hoofdgerechten, tenzij je zelf iets anders toevoegt.
+**Antwoord Stijn (13 okt):** categorieën **Nagerecht**, **Gebak** (taarten, cake, bananenbrood),
+**Bijgerecht** en **Ontbijt & lunch**. De bestaande bijgerechten krijgen die categorie: Aardappelpuree,
+Rucola-spinaziepesto en Tomatensalsa (alle drie "bij kabeljauw met notencrumble") en Naanbrood (bij dahl);
+nu staan ze in Overig. Een bijgerecht is geen hele maaltijd, maar handig als je er brood of een salade bij
+wilt: in de weekplanner per gerecht **"+ bijgerecht"** (sluit aan op het bestaande `goesWith`). De
+importprompt vraagt de AI ook om deze categorieën. **Fable schrijft 20 gewone bijgerechten** (eigen
+tekst, NL+EN): bv. stokbrood/kruidenboter, knoflookbrood, groene salade, komkommersalade, tomatensalade,
+coleslaw, aardappelpuree, gebakken krieltjes, ovenfrietjes, aardappelpartjes, witte rijst, couscous,
+gestoomde broccoli, sperziebonen met knoflook, gegrilde groenten, worteltjes met honing, rode kool,
+tzatziki, guacamole, naanbrood (bestaat al: dan een ander, bv. focaccia).
 
 ### 13F. Stijns toevoegingen ingebouwd voor iedereen (M)
 Bron: Stijns export van 13 okt (22 recepten: 15 van Stijn, 7 ontvangen van Gabi).
@@ -410,7 +433,16 @@ Bron: Stijns export van 13 okt (22 recepten: 15 van Stijn, 7 ontvangen van Gabi)
   Duck)", "Lièvre à la royale …"). Voorstel: alleen eigen/familierecepten inbouwen of de bereiding in
   eigen woorden herschrijven; de rest blijft een eigen recept dat je via een link deelt.
 - Opgemerkt: twee bijna gelijke recepten van Gabi ("Pittige Ndujaworst met Aubergine Ragout" en
-  "Pittige worst, aubergine en nduja ragù"). *Open vraag 6.*
+  "Pittige worst, aubergine en nduja ragù").
+**Antwoord Stijn (13 okt):** alle recepten inbouwen; de twee nduja-ragù's zijn **dubbel** (één houden, de
+ander via dezelfde id-migratie erop laten wijzen, zodat kooklog/favorieten samenkomen). Bij Stijn én Gabi
+mogen er **geen dubbelen** ontstaan (de id-migratie hierboven). Bron: veel komt van internet; de
+"Stijn's …"-gerechten zijn de favorieten van verschillende Stijnen uit de **Stijnchat** (vermelden als
+"uit de Stijnchat", ook mooi voor Het verhaal).
+Aanpak voor het auteursrecht (voorstel Opus, Fable/Stijn beslissen): ingrediëntenlijsten mogen zoals ze
+zijn; de **bereiding herschrijven in eigen woorden** (kort en duidelijk, zoals de 196) bij het inbouwen,
+met bronvermelding waar bekend. De twee uit kookboeken (Fat Duck-dessert, Lièvre à la royale) volledig
+herschrijven of als eigen recept laten staan.
 
 ### 13G. Opslag & back-up duidelijker (S)
 Stijns vraag: "Exporteer eigen recepten" en "Back-up" hebben allebei een deelbestand; verschil? En zijn
@@ -429,18 +461,11 @@ Voorstel: knoppen noemen wat ze doen ("Back-up voor mezelf" / "Mijn recepten aan
 → 6C (vaste lijst) → 6D (XP) → Z (handleiding).
 
 ### Open vragen ronde 13 okt
-1. **Plakplek**: mag de Inbox als losse plek verdwijnen (de geschiedenis wordt "Ontvangen" onder Meer),
-   met één Plak-knop als hoofdingang?
-2. **Browser (Android)**: als je een link in Chrome opent en daar het recept bewaart, staat het daarna in
-   de app? Is Chrome je standaardbrowser, en heb je de app via Chrome → "App installeren" gezet?
-3. **Varianten**: akkoord dat een dieetvariant geen apart recept meer wordt maar een tab op hetzelfde
-   recept (goedkeuren → wisselen), en dat persoonlijke versies zoals Dino's wél apart blijven maar als tab
-   verschijnen?
-4. **Weekplanner**: moet je een goedgekeurde variant ook in de week kunnen kiezen ("deze week glutenvrij")?
-5. **Categorieën**: Nagerecht en Gebak erbij; ook Bijgerecht, Ontbijt & lunch, Saus & basis? En Kies 7
-   alleen hoofdgerechten?
-6. **Inbouwen**: welke van de 22 (alle, alleen jouw 15, ook Gabi's 7)? Welke komen uit een kookboek of
-   van een website? En de twee nduja-ragù's: dubbel?
+Vragen 1–6 zijn op 13 okt beantwoord (zie de antwoorden per punt hierboven). Nog open:
+7. Stijn schreef bij de bijgerechten: "misschien kan je die in de engels-curator zetten ofzo. al die
+   engelse dingen geloof ik wel die kunnen eruit." Wat wordt daarmee bedoeld? (De Curator-pagina
+   weghalen? Iets met Engelse recepten? Of de bijgerechten in de Curator laten nakijken?)
+8. Akkoord met de aanpak voor het auteursrecht bij inbouwen (bereiding in eigen woorden, bron erbij)?
 
 ## Blok Z — Handleiding (altijd het laatste blok; voorheen "G")
 
