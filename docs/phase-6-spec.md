@@ -318,6 +318,129 @@ simulatie van 30 jaar dagelijks gebruik); (2) profiel-level, XP-balk + "+12"-ani
 (3) badge-catalogus (eerst ter goedkeuring), badge-niveaus, groepen, verborgen en tijdgebonden badges;
 (4) ontgrendelingen + level-up-overzicht + avatar; (5) kookkalender huishouden en levels van
 anderen via delen; (6) later: challenges (level 20), gouden modus. Elke stap apart online.
+**Anti-valsspeel (idee Stijn 13 okt):** maximaal 5 kookbeurten per dag leveren XP op; Fable werkt dit
+uit samen met de XP-afleiding (een kookbeurt met een datum in het verleden telt ook mee voor díe dag).
+
+## Ronde 13 okt 2026 — Stijns notities, geordend (nog niet gebouwd; geordend door Opus 5.5)
+
+### 13A. Eén plakplek voor alles; de Inbox herzien (M–L; hoort bij 6A-2)
+Stijn: "Ik wil één plakscherm voor links, recepten en kaartjes, niet verschillende plakschermen."
+Hij vond het plakvak voor links niet: dat zit alleen in de Inbox, en recepttekst plakken zit alleen in
+Toevoegen → importvak. "De Inbox is sowieso een wat vreemde functie."
+Voorstel: één **Plak**-ingang (eerste keuze na de "+" en een knop bovenaan Home/Recepten) met één
+tekstvak + "Plak van klembord". De app herkent wat erin staat en stuurt door:
+- deellink(s) `#r/#p/#w/#b` (ook meerdere) → het voorbeeld met Bewaar (wat de Inbox nu doet);
+- ledenkaartje `#f=` → "Voeg toe aan je huishouden";
+- websiterecept of AI-antwoord → de editor met alles ingevuld.
+De Inbox wordt "Ontvangen": de geschiedenis plus wat via het deelmenu (Android) binnenkwam, onder Meer.
+iPhone: het plakvak blijft een gewone textarea (invariant 5). Samen bouwen met 6A.13 (keuzes na de +).
+
+### 13B. Links openen de browser in plaats van de app; installeren duidelijker (M)
+Stijn: een deellink tikken opent de browser, "en mijn browser is niet mijn profiel, dat is de app".
+Duidelijker uitleggen hoe je installeert ("open de link die je kreeg in Chrome"); gebruik in de browser
+echt afraden; verschilt per iPhone/Android.
+Feiten: **Android**: een via Chrome geïnstalleerde app deelt zijn opslag met Chrome op dezelfde site; een
+recept dat je in een Chrome-tabblad bewaart staat dan ook in de app, tenzij de standaardbrowser geen
+Chrome is of de app niet echt via "App installeren" is geïnstalleerd. Dat links in de app openen is niet
+gegarandeerd (ADR-0001), maar kan meestal via Android-instellingen → Apps → Rutgers' Recepten →
+Standaard openen → "Ondersteunde links openen". **iPhone**: links openen altijd Safari, en Safari heeft
+echt een eigen opslag (invariant 5/6); daarom bestaat de voorproefpagina met "Kopieer code".
+Voorstel: (1) in browsermodus bij de start een duidelijke melding "Je gebruikt de app in de browser —
+installeer hem" met stappen per platform en klein "Toch in de browser"; (2) Android: in Meer → Hulp een
+stap-voor-stap "Zorg dat links in de app openen" + DEVICE-TEST-rij; (3) iPhone: de voorproefpagina nog
+duidelijker ("Kopieer → open de app → Plak"). *Open vraag 2.*
+
+### 13C. AI-antwoord plakken gaat mis met witregels en \[ \] (bug; hoort bij 6A-2) (M)
+Stijn (screenshots 13 okt): bij ChatGPT gaat het "bijna altijd" mis met witregels: óf alles komt in de
+naam ("=== NL === # Broccoli quiche Porties: 4 Categ…" in het Naam-vak), óf alle ingrediënten staan op één
+regel; rechte haakjes komen binnen als "\[in plakken\]".
+Waarschijnlijke oorzaak: ChatGPT schrijft Markdown; bij het kopiëren van de opgemaakte tekst vallen enkele
+regeleinden weg en zet hij een backslash voor [ en ].
+Allebei doen:
+- **Prompt**: vraag om het HELE antwoord in **één codeblok** (```). ChatGPT en Gemini tonen dan een knop
+  "Kopieer code" die de tekst exact kopieert, met regeleinden en zonder backslashes. Ingrediënten met
+  "- " ervoor. In de uitleg bij de prompt: "tik op Kopieer code onder het antwoord".
+- **Parser robuust**: backslash-escapes weghalen (\[ \] \* \_ \#); bekende markeringen ook midden in een
+  regel herkennen ("=== NL ===", "# ", "Porties:", "Categorie:", "## Ingrediënten", "## Bereiding");
+  een in elkaar geschoven ingrediëntenregel splitsen vóór elke hoeveelheid+eenheid en na "]".
+  De twee screenshots (Broccoli quiche, Franse uiensoep-ingrediënten) worden testgevallen.
+
+### 13D. Varianten en aanpassingen opnieuw ontwerpen (L; Fable ontwerpt)
+Stijns wensen:
+1. **Dino's notitie**: Dino (Hongaars) maakte een aangepaste goulash met een persoonlijke notitie; die kwam
+   niet mee. Feit: notities zijn bewust privé per profiel en reizen nooit mee. Wens: een variant mét de
+   notities, en een duidelijke manier om het alternatief te sturen.
+2. Na veganiseren de ingrediënten die niet vervangen konden worden **op het recept zelf** markeren (nu
+   alleen in het venster vóór opslaan).
+3. Onderscheid **"Recept bewerken"** (dit recept verandert) en **"Eigen versie maken"** (het origineel
+   blijft; jouw versie hangt eraan en is apart te delen, bv. "Dino's versie van goulash").
+4. Glutenvrij/vegan/vegetarisch (en lactosevrij) **niet meteen als nieuw recept opslaan**, maar per recept
+   één keer **goedkeuren** en daarna **wisselen**, zoals NL/EN: "kook glutenvrij" / "toon het glutenvrije
+   alternatief". Ook wisselen tussen iemands versie en het origineel.
+5. **Varianten als tabs/swipe** op het recept: vegetarisch, vegan, glutenvrij, lactosevrij altijd zichtbaar;
+   stippellijn = nog niet bevestigd, volle kleur = bevestigd; van nature al glutenvrij = meteen vol (dan
+   hoeft er niets te swipen); persoonlijke versies (Dino's) ook als tab; links/rechts swipen tussen
+   origineel en varianten. Kleurvoorstel Stijn: glutenvrij geel, vegan groen, vegetarisch lichtbruin,
+   lactosevrij wit; eventueel een kleurcodering op de achtergrond. "Een hippe oplossing."
+Richting (Fable beslist): een dieetvariant wordt **geen kopie** meer maar een **goedgekeurde set
+vervangingen bovenop het origineel** (zoals de Engelse tekst bij het recept hoort): één recept, een rij
+gekleurde tabs boven de ingrediënten, swipen wisselt de weergave, en kookstand en boodschappenlijst volgen
+de gekozen tab. Persoonlijke versies blijven echte recepten (`variantOf`) en verschijnen als extra tab.
+Notities: nieuw veld **"Tip van de maker"** ({nl,en}) dat wél meereist; de privénotitie blijft privé, met
+bij delen de vraag "notitie meesturen?". De kopie-varianten uit blok F (bv. "Franse uiensoep met Gruyère
+(glutenvrij)") worden bij de overstap omgezet naar een tab. Raakt het deelformaat (een goedgekeurde
+variant moet meereizen): nieuwe velden, bevroren tests (invariant 4). *Open vragen 3 en 4.*
+
+### 13E. Nagerechten en gebak (S–M)
+Stijn: bananenbrood tussen de weekgerechten is onhandig; misschien splitsen in gebakken en niet-gebakken.
+Nu staan "Stijn's Bananenbrood" en "Stijn's Clafoutis" in Oven en het Botrytis-dessert in Overig.
+Voorstel: nieuwe categorieën **Nagerecht** en **Gebak** (zoet uit de oven: cake, bananenbrood, koekjes);
+Kies 7 en Verras me kiezen alleen hoofdgerechten, tenzij je zelf iets anders toevoegt. *Open vraag 5.*
+
+### 13F. Stijns toevoegingen ingebouwd voor iedereen (M)
+Bron: Stijns export van 13 okt (22 recepten: 15 van Stijn, 7 ontvangen van Gabi).
+- **Geen reset nodig, juist niet doen.** Een ingebouwd recept krijgt een `b:`-id, het eigen recept heeft
+  een `u:`-id; favorieten, kooklog, foto's, weekplan en deellinks wijzen naar het oude id. Plan: een
+  migratie die per recept alles van het oude naar het nieuwe id overzet en de eigen kopie weghaalt (eigen
+  wijzigingen blijven als aanpassing). Ontvangen recepten houden op beide telefoons het id van de maker,
+  dus dit werkt ook bij Gabi. Een reset wist kooklog, badges en foto's (en later XP).
+  Belangrijk: `u:`-ids blijven als alias geldig (invariant 1), zodat oude deellinks blijven werken.
+- **Openbaar**: repo en site zijn openbaar; ingebouwde recepten staan dan online. Bereidingsteksten uit
+  kookboeken of van websites zijn auteursrechtelijk beschermd (bv. "Botrytis Cinerea-dessert (The Fat
+  Duck)", "Lièvre à la royale …"). Voorstel: alleen eigen/familierecepten inbouwen of de bereiding in
+  eigen woorden herschrijven; de rest blijft een eigen recept dat je via een link deelt.
+- Opgemerkt: twee bijna gelijke recepten van Gabi ("Pittige Ndujaworst met Aubergine Ragout" en
+  "Pittige worst, aubergine en nduja ragù"). *Open vraag 6.*
+
+### 13G. Opslag & back-up duidelijker (S)
+Stijns vraag: "Exporteer eigen recepten" en "Back-up" hebben allebei een deelbestand; verschil? En zijn
+"Download" en "Deel het bestand" niet hetzelfde?
+- **Back-up** = alles voor jezelf (recepten, favorieten, notities, kooklog, profielen, weekplan; foto's
+  optioneel), om je eigen app terug te zetten via Herstel.
+- **Export** = alleen je eigen en ontvangen recepten, aanpassingen en eigen ingrediënten, om aan iemand
+  anders te geven; die importeert het via de Inbox (straks: de Plak-plek).
+- **Download** zet het bestand in je Downloads-map; **Delen** laat je kiezen waarheen (WhatsApp, Drive …).
+Voorstel: knoppen noemen wat ze doen ("Back-up voor mezelf" / "Mijn recepten aan iemand geven"), één knop
+"Bewaar of deel" met de keuze daarna, en de uitleg in één zin eronder.
+
+### Volgorde-voorstel (Stijn mag omgooien)
+6A-2 + 13A + 13C (plakken en toevoegen, één plakplek) → 13B + 13G (installeren, browser, opslag) →
+6B + 13E (labels, lactosevrij, keukens, nagerecht/gebak) → 13F (inbouwen) → 13D (varianten als tabs)
+→ 6C (vaste lijst) → 6D (XP) → Z (handleiding).
+
+### Open vragen ronde 13 okt
+1. **Plakplek**: mag de Inbox als losse plek verdwijnen (de geschiedenis wordt "Ontvangen" onder Meer),
+   met één Plak-knop als hoofdingang?
+2. **Browser (Android)**: als je een link in Chrome opent en daar het recept bewaart, staat het daarna in
+   de app? Is Chrome je standaardbrowser, en heb je de app via Chrome → "App installeren" gezet?
+3. **Varianten**: akkoord dat een dieetvariant geen apart recept meer wordt maar een tab op hetzelfde
+   recept (goedkeuren → wisselen), en dat persoonlijke versies zoals Dino's wél apart blijven maar als tab
+   verschijnen?
+4. **Weekplanner**: moet je een goedgekeurde variant ook in de week kunnen kiezen ("deze week glutenvrij")?
+5. **Categorieën**: Nagerecht en Gebak erbij; ook Bijgerecht, Ontbijt & lunch, Saus & basis? En Kies 7
+   alleen hoofdgerechten?
+6. **Inbouwen**: welke van de 22 (alle, alleen jouw 15, ook Gabi's 7)? Welke komen uit een kookboek of
+   van een website? En de twee nduja-ragù's: dubbel?
 
 ## Blok Z — Handleiding (altijd het laatste blok; voorheen "G")
 

@@ -7,7 +7,17 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Repo: https://github.com/srutgers96-star/recepten.
 
 ## Lokaal gecommit, nog NIET gepusht
-(niets — alles staat online)
+- Branch **`wip/6a2-partial`** (lokaal, niet gepusht): half werk van de 6A-2-run van 9 okt die op de
+  Fable-limiet stuitte (9 plaktekst-fixtures in tests/fixtures/paste, src/domain/line-words.ts + test,
+  deels gewijzigde photo-import.ts/EditScreen.tsx/i18n). **Compileert niet** (paste-recipe.ts ontbreekt).
+  Alleen als startpunt of referentie voor de volgende 6A-2-run; `main` is schoon.
+
+## Stand 13 okt 2026 (Opus 5.5, Fable op de limiet): niets gebouwd, wel gepland
+Stijns notities van 13 okt zijn geordend in docs/phase-6-spec.md, sectie "Ronde 13 okt" (13A–13G), met
+een volgorde-voorstel en zes open vragen. Volgende Fable-sessie: eerst de antwoorden op die vragen, dan
+6A-2 + 13A + 13C (plakken en toevoegen, één plakplek, ChatGPT-witregels). De nieuwe werkwijze geldt:
+grote workflows alleen op Fable; let op dat een workflow halverwege op de limiet kan stuiten (dat
+gebeurde bij F, 6A-1 en 6A-2): hervat altijd, en kijk eerst wat er in de werkmap is achtergebleven.
 
 ## Afgerond 9 okt: blok 6A-1 (vier bouwers + integrator → 3 reviewers → skeptici → fixer → Haiku-gate; 10 bevindingen gerepareerd)
 docs/phase-6-spec.md 6A punten 2–8, 12, 15, 18. Kern: src/cooklog.ts `recordCooked` (zelfde stappen als de
