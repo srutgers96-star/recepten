@@ -334,6 +334,10 @@ tekstvak + "Plak van klembord". De app herkent wat erin staat en stuurt door:
 - websiterecept of AI-antwoord → de editor met alles ingevuld.
 De Inbox wordt "Ontvangen": de geschiedenis plus wat via het deelmenu (Android) binnenkwam, onder Meer.
 iPhone: het plakvak blijft een gewone textarea (invariant 5). Samen bouwen met 6A.13 (keuzes na de +).
+**Verduidelijking Stijn (13 okt):** er mogen **op meerdere plekken plakvakken** zijn, maar **elk plakvak
+moet alles kunnen plakken**. Dus één herbruikbaar component (bv. `UniversalPaste`) dat overal hetzelfde
+herkent en doorstuurt (links, kaartjes, websiterecept, AI-antwoord, bundelbestand-tekst), ingezet in
+Toevoegen, de Inbox/In & uit, Huishouden en waar verder nodig; de plek bepaalt alleen de standaardactie.
 **Antwoord Stijn (13 okt):** de Inbox mag een overzicht worden van **alles wat in- en uitging**
 (ontvangen én gedeeld, met datum en van/aan wie). Verder: de receptenlijst sorteert nu alleen A–Z;
 erbij: **Recent bekeken**, **Eigen**, **Eigen & ontvangen**. De Home-indeling is "al best goed maar kan
@@ -469,10 +473,10 @@ Vragen 1–8 zijn op 13 okt beantwoord:
 8. **Inbouwen: de recepten gewoon overnemen**, licht versimpelen mag waar dat beter past (Stijn). Hij is
    "niet van plan hem nu te publiceren". **Let op (door Opus gemeld):** de site
    https://srutgers96-star.github.io/recepten/ en de GitHub-repo zijn nu al openbaar, dus inbouwen in
-   data/recipes.json zet de recepten meteen online. Vóór het inbouwen dat met Stijn bevestigen, of eerst
-   kiezen voor een alternatief: (a) de repo privé maken (GitHub Pages vanuit een privérepo vraagt een
-   betaald GitHub-abonnement), (b) de Stijnchat-recepten niet inbouwen maar als bundelbestand aan Gabi en
-   de Stijnen geven (blijft privé, werkt nu al), of (c) bewust accepteren dat ze online staan.
+   data/recipes.json zet de recepten meteen online.
+   **Besluit Stijn (13 okt), na die uitleg: toch inbouwen.** Hij accepteert dat ze op de openbare site
+   staan. Fable bouwt ze dus in (blok 13F), met de id-migratie zodat er bij Stijn en Gabi geen dubbelen
+   ontstaan.
 
 ## Blok Z — Handleiding (altijd het laatste blok; voorheen "G")
 
