@@ -148,6 +148,22 @@ Tweede versie erbij (6 okt): een handleiding "achter de schermen" voor Stijn (XP
 data staat, back-ups, delen), zie docs/phase-6-spec.md blok Z.
 iPhone-spraakcommando's: bewust uit (3 okt) — canListen() is false op iOS; voorlezen werkt wel.
 
+## Werkwijze vanaf 15 okt 2026: Fable ontwerpt, Opus bouwt, Fable controleert één keer aan het eind
+Besluit Stijn (15 okt), om ±80 % Fable te besparen:
+1. **Fable schrijft bouwspecs** (één spec-ronde, na ronde 13 okt deel 1) voor alle resterende blokken behalve
+   de handleiding: Home A+ (13 okt deel 2), 6B + 13E (labels, lactosevrij, keukens, nieuwe categorieën +
+   20 bijgerechten), 13F (inbouwen met id-migratie), 13D (varianten als tabs + "Tip van de maker"), 6C (vaste
+   lijst), 6D (XP/levels/badges/avatar — **dit plan moet héél goed zijn**). Specs komen in docs/specs/<blok>.md:
+   gedrag met NL+EN-teksten, datamodel, bestandsverdeling per bouwer, contracten, invarianten, testplan +
+   acceptatiechecks, DEVICE-TEST-rijen, en een **controlelijst voor Fable**. Expliciet: wat Opus niet zelf
+   mag beslissen.
+2. **Opus 5.5 bouwt** blok voor blok volgens de specs (workflow met bouwers → integrator → Haiku-gate; de
+   review-fan-out mag Opus zelf beperkt doen), Haiku voor het sjouwwerk. Kleine blokken, want ook Opus kan
+   halverwege op een limiet stuiten: hervatten met resumeFromRunId, eerst de werkmap bekijken.
+3. **Fable controleert één keer kritisch aan het eind**, ná de handleiding (blok Z), over alles wat Opus
+   bouwde; alleen 13F (id-migratie) en 13D (deelformaat) krijgen vóór livegang een korte Fable-blik als
+   Stijn dat wil. Gevonden fouten worden dan in één verbeterronde gerepareerd.
+
 ## Werkwijze (afgesproken 7 okt 2026, om de weeklimiet te sparen)
 - **Fable is de bouwer en de controleur.** Ontwerp, ADR's, parser, share-token-codec, migraties,
   merge-logica en de Engelse teksten voor Gabi blijven bij Fable (invarianten 1–4).
