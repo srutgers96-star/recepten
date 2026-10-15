@@ -13,7 +13,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { UniversalPaste } from '@/components/UniversalPaste';
-import { getHousehold, setHousehold } from '@/db/repo';
+import { getHousehold, logShareEvent, setHousehold } from '@/db/repo';
 import {
   matchMemberForCard,
   memberFromProfile,
@@ -26,6 +26,7 @@ import {
   type Member,
   type MemberCard,
 } from '@/domain/household';
+import { nowIso } from '@/domain/model';
 import { classifyPaste } from '@/domain/paste-classify';
 import { cleanPastedText } from '@/domain/photo-import';
 import { parseEnvelope, type ParsedShare } from '@/domain/share';
@@ -357,6 +358,11 @@ export function HouseholdScreen() {
       const r = await applyMemberCard(card);
       setSettingState(r.setting);
       setCardDone((prev) => ({ ...prev, [card.id]: r.outcome }));
+      // 13A-2: a card that was added or updated came IN — one row in the "In & uit" log (same rule
+      // as InboxScreen.addCard, so the log does not depend on which screen the card was pasted in).
+      if (r.outcome === 'added' || r.outcome === 'updated') {
+        void logShareEvent({ at: nowIso(), direction: 'in', kind: 'member', who: card.name, count: 1, recipeIds: [] }).catch((err: unknown) => console.error('logShareEvent', err));
+      }
     } catch (e) {
       console.error('applyMemberCard', e);
       setPasteNotice(`${t('household.cardFailed')}: ${String((e as Error)?.message ?? e)}`);

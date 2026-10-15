@@ -12,8 +12,10 @@
 //                          Woordenboek (counts → '/more/dictionary', phase 5 A-bis.6)
 //   — Opslag & back-up —   one row → '/more/storage'
 //   "Hulp & over"          Feedback voor Stijn (sheet, 6A.7), ☕ Steun dit project (bunq link),
-//                          "Testen & nakijken" = Apparaatcheck + Curator, Het verhaal, and "Over"
-//                          (version, channel, build, GitHub)
+//                          "Links openen in de app" (sheet with the steps per phone, 13B),
+//                          Apparaatcheck, Het verhaal, and "Over" (version, channel, build, GitHub).
+//                          (The Curator page was removed in phase 6, docs/phase-6-spec.md open
+//                          question 7; a classic's English is improved via Bewerk on the recipe.)
 // A closed group shows its badge (unsent) on the group head, so nothing gets lost. The group head
 // is an <h2> wrapping the toggle button (not a heading inside a button, which screen readers drop
 // from their headings list), the standard disclosure pattern.
@@ -22,6 +24,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgesEnabled, loadBadgeSettings, setBadgesEnabled } from '@/badges';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo, isIOS } from '@/components/AppInfo';
+import { browserLabel, OpenInChrome } from '@/components/BrowserNotice';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
 import { getFahrenheit, getHouseholdServings, getSetting, setFahrenheit, setHouseholdServings, setSetting } from '@/db/repo';
@@ -30,7 +33,7 @@ import type { Lang } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { activeProfile, profiles, setActiveProfile } from '@/profile';
-import { isStandalone } from '@/pwa';
+import { browserName, isAndroid, isStandalone } from '@/pwa';
 import { navigate } from '@/router';
 import { copyText, shareText } from '@/share-actions';
 import { loadSoundSettings, previewTimerSound, setTimerSound, setTimerVibrate, timerSound, timerVibrate, type TimerSound } from '@/sounds';
@@ -274,6 +277,90 @@ function FeedbackSheet(props: { onClose: () => void }) {
   );
 }
 
+// --- "Links openen in de app" (13B) ---------------------------------------------------------------
+
+/**
+ * Bottom sheet with the steps per phone, the phone you hold first. Honest on both (CLAUDE.md
+ * invariants 5 and 13): Android can usually be told to open links in the app (default browser Chrome,
+ * "Ondersteunde links openen") but the app cannot force it; an iPhone always opens Safari, so the
+ * route there is copy → app → paste. On Android in another browser than Chrome (and not installed)
+ * the sheet also carries the "Open in Chrome" pair. Same .sheet-* shell and keyboard/focus handling
+ * as the feedback sheet.
+ */
+function LinksSheet(props: { onClose: () => void }) {
+  const { onClose } = props;
+  const ios = isIOS();
+  const browser = browserName();
+  const showChrome = isAndroid() && !isStandalone() && browser !== 'chrome';
+  const closeBtn = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  // aria-modal moves no focus by itself: put it on the close button and hand it back on close.
+  useEffect(() => {
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeBtn.current?.focus({ preventScroll: true });
+    return () => opener?.focus();
+  }, []);
+
+  const android = (
+    <section class="links-platform" aria-labelledby="links-android">
+      <h3 id="links-android">{t('links.android')}</h3>
+      <ol>
+        <li>{t('browser.android.install')}</li>
+        <li>{t('links.android.step2')}</li>
+        <li>{t('links.android.step3')}</li>
+        <li>{t('links.android.step4')}</li>
+      </ol>
+      <p class="muted small">{t('links.android.honest')}</p>
+      {showChrome && (
+        <>
+          <p class="links-now">{t('links.nowIn', { browser: browserLabel(browser) })}</p>
+          <OpenInChrome />
+        </>
+      )}
+    </section>
+  );
+  const iphone = (
+    <section class="links-platform" aria-labelledby="links-ios">
+      <h3 id="links-ios">{t('links.ios')}</h3>
+      <p>{t('links.ios.honest')}</p>
+      <ol>
+        <li>{t('links.ios.step1')}</li>
+        <li>{t('links.ios.step2')}</li>
+        <li>{t('links.ios.step3')}</li>
+        <li>{t('links.ios.step4')}</li>
+      </ol>
+      <p class="muted small">{t('links.ios.alt')}</p>
+    </section>
+  );
+
+  return (
+    <div class="sheet-backdrop no-print" onClick={onClose}>
+      <div class="sheet links-sheet" role="dialog" aria-modal="true" aria-label={t('more.links')} onClick={(e) => e.stopPropagation()}>
+        <div class="sheet-head">
+          <h2>{t('more.links')}</h2>
+          <button ref={closeBtn} type="button" class="icon-btn" aria-label={t('common.close')} onClick={onClose}>
+            ×
+          </button>
+        </div>
+        <div class="sheet-body">
+          <p class="muted small links-intro">{t('links.intro')}</p>
+          {/* The phone in hand first; the other one below for whoever reads along. */}
+          {ios ? iphone : android}
+          {ios ? android : iphone}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /** "☕ Steun dit project" — a plain external link plus its one-line explanation (6A.7 / Besluiten). */
 export function DonateBlock(props: { center?: boolean }) {
   return (
@@ -296,6 +383,7 @@ export function MoreScreen() {
   const [experiments, setExperiments] = useState(false);
   const [groups, setGroups] = useState<GroupState>(loadGroupState);
   const [feedback, setFeedback] = useState(false);
+  const [links, setLinks] = useState(false);
 
   const unsent = unsentChanges.value;
   const unseen = inboxUnseen.value;
@@ -582,13 +670,10 @@ export function MoreScreen() {
             <MenuRow label={t('more.feedback')} sub={t('more.feedbackHint')} onClick={() => setFeedback(true)} />
           </div>
           <DonateBlock />
-          <h3 class="more-sub">{t('more.testing')}</h3>
           <div class="menu">
+            {/* 13B: the steps per phone to get a share link into the app (sheet, no route). */}
+            <MenuRow label={t('more.links')} sub={t('more.linksHint')} onClick={() => setLinks(true)} />
             <MenuRow label={t('more.check')} to="/check" />
-            {/* Phase 5 block D (docs/phase-5-spec.md D.4): the English texts of the classics, for Gabi. */}
-            <MenuRow label={t('more.curator')} sub={t('more.curatorHint')} to="/more/curator" />
-          </div>
-          <div class="menu">
             <MenuRow label={t('more.story')} to="/story" />
           </div>
           <div class="about">
@@ -610,6 +695,7 @@ export function MoreScreen() {
         </Group>
       </div>
       {feedback && <FeedbackSheet onClose={() => setFeedback(false)} />}
+      {links && <LinksSheet onClose={() => setLinks(false)} />}
     </>
   );
 }

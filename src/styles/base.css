@@ -857,6 +857,75 @@ button.row {
   }
 }
 
+/* ---------- Phase 6 (13B): "Je gebruikt de app in de browser" notice + "Open in Chrome" ---------- */
+
+/* Sits above the content in the shell (flex: none; the screen scrolls underneath), same card look as
+   the install card so the two read as one family. Shown only in a browser tab, never standalone, so
+   no top safe-area inset is needed here (the browser's own chrome is above it). */
+.browser-notice {
+  flex: none;
+  margin: 8px max(16px, var(--sar)) 0 max(16px, var(--sal));
+  padding: 12px 16px 10px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 1px solid var(--cobalt);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.browser-notice p {
+  margin: 0 0 6px;
+}
+
+.browser-notice-title {
+  font-weight: 700;
+  color: var(--cobalt);
+}
+
+/* "Deze melding komt over een week terug." left, the 44 px dismiss button right; at 360 px the
+   button wraps under the line and stays right-aligned. */
+.browser-notice-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px 12px;
+  margin-top: 2px;
+}
+
+.browser-notice-foot .muted {
+  flex: 1 1 160px;
+}
+
+/* The intent link + copy fallback pair (notice, install card, "Links openen in de app" sheet):
+   two 44 px buttons side by side at 360 px, wrapping when a long label needs it. */
+.open-in-chrome {
+  margin: 8px 0 0;
+}
+
+.open-in-chrome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.open-in-chrome-actions .btn {
+  flex: 1 1 140px;
+}
+
+.open-in-chrome-hint {
+  margin: 6px 0 0;
+}
+
+.open-in-chrome.compact {
+  margin: 8px 0 2px;
+}
+
+/* Inside the install card the pair keeps its own spacing (the card's .btn rule adds a top margin). */
+.installcard .open-in-chrome .btn {
+  margin-top: 0;
+}
+
 .updatebar {
   flex: none;
   display: flex;

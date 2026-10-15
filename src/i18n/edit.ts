@@ -59,7 +59,7 @@ export const edit: Dict = {
   'edit.servingTip': { nl: 'Serveertip', en: 'Serving tip' },
   'edit.servingTipPlaceholder': { nl: 'bv. Lekker met stokbrood', en: 'e.g. Nice with crusty bread' },
 
-  // --- Editor: builtin in override mode (docs/phase-2-spec.md §5 "Curator") ---
+  // --- Editor: builtin in override mode (docs/phase-2-spec.md §5; also the place to improve a classic's English since the Curator page went, phase 6 question 7) ---
   'edit.titleOverride': { nl: 'Aanpassing van klassieker', en: 'Tweak of a classic' },
   'edit.overrideHint': {
     nl: 'De klassieker zelf blijft zoals hij is; alleen wat je hier verandert wordt bewaard als aanpassing. Personen kun je niet wijzigen (maak daarvoor een eigen kopie).',
@@ -213,7 +213,7 @@ export const edit: Dict = {
   'paste.websiteLow': { nl: 'twijfelgeval', en: 'not sure' },
   'paste.ai': { nl: 'AI-antwoord herkend', en: 'AI answer recognised' },
   'paste.unknown': { nl: 'Geen recept of link herkend — probeer de AI-opdracht.', en: 'No recipe or link recognised — try the AI instruction.' },
-  'paste.actImport': { nl: 'Open in de Inbox', en: 'Open in the Inbox' },
+  'paste.actImport': { nl: 'Open bij In & uit', en: 'Open in In & out' },
   'paste.actMember': { nl: 'Voeg toe aan je huishouden', en: 'Add to your household' },
   'paste.actFill': { nl: 'Vul in', en: 'Fill in' },
   'paste.actEditor': { nl: 'Open in de editor', en: 'Open in the editor' },
@@ -305,8 +305,8 @@ export const edit: Dict = {
   'share.title': { nl: 'Delen', en: 'Share' },
   'share.notFound': { nl: 'Recept niet gevonden', en: 'Recipe not found' },
   'share.intro': {
-    nl: 'Bericht met receptcode voor WhatsApp. De ontvanger tikt op de link of plakt het bericht in de Inbox van de app.',
-    en: 'Message with the recipe code for WhatsApp. The recipient taps the link or pastes the message into the Inbox of the app.',
+    nl: 'Bericht met receptcode voor WhatsApp. De ontvanger tikt op de link of plakt het bericht in de app bij In & uit.',
+    en: 'Message with the recipe code for WhatsApp. The recipient taps the link or pastes the message into the app under In & out.',
   },
   'share.noProfile': {
     nl: 'Kies eerst een profiel onder Meer, dan staat je naam in het bericht.',
@@ -340,13 +340,31 @@ export const edit: Dict = {
   'share.qrLoading': { nl: 'QR-code maken…', en: 'Creating QR code…' },
   'share.qrError': { nl: 'QR-code kon niet worden gemaakt.', en: 'Could not create the QR code.' },
 
-  // --- Inbox (/inbox): import + received ---
-  'inbox.title': { nl: 'Inbox', en: 'Inbox' },
-  // 13A: every paste box takes everything; the Inbox is where links, bundles and cards are handled.
+  // --- "In & uit" (/inbox; 13A-2 renamed it from "Inbox"): import + received + shared ---
+  'inbox.title': { nl: 'In & uit', en: 'In & out' },
+  // 13A: every paste box takes everything; this screen is where links, bundles and cards are handled.
   'inbox.hint': {
     nl: 'Plak hier een WhatsApp-bericht, een link, een kaartje of een receptbestand. Een recept van een website of een AI-antwoord mag ook: dat gaat door naar de editor.',
     en: 'Paste a WhatsApp message, a link, a card or a recipe file here. A recipe from a website or an AI answer works too: it goes on to the editor.',
   },
+  // 13A-2: the two tabs under the paste box and the "Gedeeld" list (the 'out' rows of the events log).
+  'inbox.tabReceived': { nl: 'Ontvangen', en: 'Received' },
+  'inbox.tabShared': { nl: 'Gedeeld', en: 'Shared' },
+  'inbox.sharedHint': {
+    nl: 'Wat vanaf deze telefoon is verstuurd: via het deelmenu, als bestand of als download. Tik op een rij om het recept te openen.',
+    en: 'What was sent from this phone: through the share sheet, as a file or as a download. Tap a row to open the recipe.',
+  },
+  'inbox.sharedEmpty': {
+    nl: 'Nog niets gedeeld. Wat je via Deel of "Deel je nieuwe recepten" verstuurt, komt hier te staan.',
+    en: 'Nothing shared yet. Whatever you send through Share or "Share your new recipes" shows up here.',
+  },
+  'inbox.sharedTo': { nl: 'aan {name}', en: 'to {name}' },
+  'inbox.ev.bundleOne': { nl: 'Bestand met 1 recept', en: 'File with 1 recipe' },
+  'inbox.ev.bundle': { nl: 'Bestand met {n} recepten', en: 'File with {n} recipes' },
+  'inbox.ev.member': { nl: 'Je kaartje', en: 'Your card' },
+  'inbox.ev.plan': { nl: 'Weekplan', en: 'Week plan' },
+  'inbox.ev.list': { nl: 'Boodschappenlijst', en: 'Shopping list' },
+  'inbox.ev.deleted': { nl: '(verwijderd recept)', en: '(deleted recipe)' },
   'inbox.paste': { nl: 'Plak van klembord', en: 'Paste from clipboard' },
   'inbox.pasteHint': {
     nl: 'iPhone: tik op "Plak" als dat verschijnt, of houd het tekstvak ingedrukt → Plak.',
@@ -495,7 +513,6 @@ export const edit: Dict = {
   },
   'dict.noResults': { nl: 'Niets gevonden.', en: 'Nothing found.' },
   'dict.own': { nl: 'eigen', en: 'own' },
-  'dict.builtin': { nl: 'ingebouwd', en: 'built-in' },
   'dict.edit': { nl: 'Bewerk', en: 'Edit' },
   'dict.merge': { nl: 'Fuseer met bestaand', en: 'Merge into existing' },
   'dict.mergeTitle': { nl: 'Fuseer {name} met …', en: 'Merge {name} into …' },

@@ -10,7 +10,7 @@ export const common: Dict = {
   'nav.home': { nl: 'Home', en: 'Home' },
   'nav.recipes': { nl: 'Recepten', en: 'Recipes' },
   'nav.add': { nl: 'Toevoegen', en: 'Add' },
-  'nav.inbox': { nl: 'Inbox', en: 'Inbox' },
+  'nav.inbox': { nl: 'In & uit', en: 'In & out' },
   'nav.more': { nl: 'Meer', en: 'More' },
   'nav.main': { nl: 'Hoofdmenu', en: 'Main' },
   'header.lang': { nl: 'Taal: NL of EN', en: 'Language: NL or EN' },
@@ -95,8 +95,36 @@ export const common: Dict = {
   'install.ios.show': { nl: 'Toon de stappen', en: 'Show the steps' },
   'install.ios.hide': { nl: 'Verberg de stappen', en: 'Hide the steps' },
   'install.android.title': { nl: 'Installeer de app', en: 'Install the app' },
-  'install.android.body': { nl: 'Chrome-menu (⋮) → App installeren', en: 'Chrome menu (⋮) → Install app' },
   'install.dismiss': { nl: 'Later', en: 'Later' },
+
+  // Phase 6 (docs/phase-6-spec.md 13B): the "you are in the browser" notice (BrowserNotice.tsx) at
+  // the top of the shell; the install card reuses the install lines so Home never explains it twice.
+  // Honest per phone (CLAUDE.md invariant 5/13): on an iPhone a link always opens Safari; on Android
+  // the app cannot force link capture, and another browser than Chrome has storage of its own.
+  'browser.title': { nl: "Je gebruikt Rutgers' Recepten in de browser.", en: "You are using Rutgers' Recipes in the browser." },
+  'browser.android.install': { nl: 'Installeer de app via Chrome: menu ⋮ → App installeren.', en: 'Install the app through Chrome: menu ⋮ → Install app.' },
+  'browser.android.default': {
+    nl: 'Zet Chrome als standaardbrowser, anders opent een link een andere browser met een eigen opslag.',
+    en: 'Make Chrome your default browser; otherwise a link opens another browser with storage of its own.',
+  },
+  'browser.android.other': { nl: 'Je zit nu in {browser}: wat je hier bewaart, komt niet in de app.', en: 'You are in {browser} right now: what you save here does not reach the app.' },
+  // Chrome itself (also a Custom Tab from WhatsApp): the app is often installed already and shares this storage.
+  'browser.android.chrome': {
+    nl: 'Dit is Chrome: wat je hier bewaart, komt ook in de app. Open de app via het icoon in je app-lade; nog niet geïnstalleerd? Menu ⋮ → App installeren.',
+    en: 'This is Chrome: what you save here reaches the app too. Open the app from the icon in your app drawer; not installed yet? Menu ⋮ → Install app.',
+  },
+  'browser.otherBrowser': { nl: 'een andere browser', en: 'another browser' },
+  'browser.openChrome': { nl: 'Open in Chrome', en: 'Open in Chrome' },
+  'browser.copyLink': { nl: 'Kopieer de link', en: 'Copy the link' },
+  'browser.copyHint': { nl: 'Werkt de knop niet? Kopieer de link en plak hem in Chrome.', en: 'Button not working? Copy the link and paste it into Chrome.' },
+  'browser.copied': { nl: 'Gekopieerd — open Chrome en plak de link in de adresbalk.', en: 'Copied — open Chrome and paste the link into the address bar.' },
+  'browser.copyFailed': { nl: 'Kopiëren mislukt — kopieer de link uit de adresbalk.', en: 'Copy failed — copy the link from the address bar.' },
+  'browser.ios.install': { nl: 'Zet de app op je beginscherm: in Safari tik je op Deel → Zet op beginscherm.', en: 'Add the app to your Home Screen: in Safari tap Share → Add to Home Screen.' },
+  'browser.ios.links': { nl: 'Links openen altijd Safari; kopieer dan de code en plak hem in de app.', en: 'Links always open Safari; copy the code there and paste it into the app.' },
+  'browser.dismiss': { nl: 'Toch in de browser', en: 'Stay in the browser' },
+  'browser.dismissHint': { nl: 'Deze melding komt over een week terug.', en: 'This notice comes back in a week.' },
+  // Another browser than Chrome: never snoozed across starts (the recipe would land in the wrong storage).
+  'browser.dismissHintOnce': { nl: 'Deze melding komt bij de volgende start terug.', en: 'This notice comes back the next time you open this page.' },
 
   'update.new': { nl: 'Nieuwe versie', en: 'New version' },
   'update.reload': { nl: 'Vernieuwen', en: 'Reload' },

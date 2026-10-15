@@ -49,6 +49,15 @@ export const browse: Dict = {
   },
   'list.addFileChoice': { nl: 'Kies een bestand', en: 'Choose a file' },
   'list.addFileChoiceHint': { nl: 'Een recept, bundel of back-up; of een tekstbestand.', en: 'A recipe, bundle or backup; or a text file.' },
+  // Phase 6 (13A-2): the sort row above the list (src/recent.ts). Short labels: four pills at 360 px.
+  'list.sort': { nl: 'Sorteer', en: 'Sort' },
+  'list.sortAz': { nl: 'A–Z', en: 'A–Z' },
+  'list.sortRecent': { nl: 'Recent bekeken', en: 'Recently viewed' },
+  'list.sortOwn': { nl: 'Eigen', en: 'Own' },
+  'list.sortOwnReceived': { nl: 'Eigen & ontvangen', en: 'Own & received' },
+  'list.emptyRecent': { nl: 'Nog niets bekeken. Open een recept en het staat hier.', en: 'Nothing viewed yet. Open a recipe and it shows up here.' },
+  'list.emptyOwn': { nl: 'Nog geen eigen recepten. Tik op + om er een te maken.', en: 'No own recipes yet. Tap + to make one.' },
+  'list.emptyOwnReceived': { nl: 'Nog geen eigen of ontvangen recepten.', en: 'No own or received recipes yet.' },
 
   // --- Detail ---
   'recipe.cook': { nl: 'Koken', en: 'Cook' },
@@ -80,7 +89,7 @@ export const browse: Dict = {
   'recipe.copyNoProfile': { nl: 'Kies eerst een profiel (Meer) om een kopie te maken.', en: 'Choose a profile first (More) to make a copy.' },
   'recipe.notFound': { nl: 'Recept niet gevonden', en: 'Recipe not found' },
 
-  // --- Detail, phase 2: category, tags, time, curator badge ---
+  // --- Detail, phase 2: category, tags, time, machine-translation badge (opens the editor) ---
   'recipe.category': { nl: 'Categorie', en: 'Category' },
   'recipe.noCategory': { nl: 'geen categorie', en: 'no category' },
   'recipe.changeCategory': { nl: 'wijzig', en: 'change' },

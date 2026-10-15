@@ -3,20 +3,36 @@
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 
 ## Online (https://srutgers96-star.github.io/recepten/)
-**Fase 5 compleet** (fase 0–4 + blok A t/m F, 8 oktober 2026) **+ fase 6 blok 6A** (6A-1 9 okt, 6A-2 15 okt).
-Repo: https://github.com/srutgers96-star/recepten.
+**Fase 5 compleet** (fase 0–4 + blok A t/m F, 8 oktober 2026) **+ fase 6 blok 6A** (6A-1 9 okt, 6A-2 15 okt)
+**+ ronde 13 okt deel 1** (15 okt). Repo: https://github.com/srutgers96-star/recepten.
 
 ## Lokaal gecommit, nog NIET gepusht
 (niets — alles staat online; de tijdelijke branch wip/6a2-partial is na 6A-2 verwijderd)
 
-## LET OP — werkmap bevat half werk (15 okt, 15:10): ronde 13 okt deel 1, workflow wf_d39e68a1-007
-De run (In & uit + sorteren, browser/installatie + Curator weg, opslag, Home-voorstel) stuitte op de
-sessielimiet (reset 18:30): bouwers in-uit-sorteren en opslag mislukten, browser-installatie is
-afgebroken, alleen het Home-voorstel (docs/home-voorstel.md) is klaar. Ongecommit in de werkmap:
-db.ts, model.ts, repo.ts, pwa.ts, RecipesScreen.tsx, StorageScreen.tsx, src/recent.ts, tests/pwa.test.ts.
-**Hervatten** met Workflow({ scriptPath: ".../workflows/scripts/recepten-phase6-ronde13okt-deel1-wf_d39e68a1-007.js",
-resumeFromRunId: "wf_d39e68a1-007" }); de mislukte bouwers draaien dan opnieuw en bouwen voort op wat er
-staat. Niet handmatig committen vóór de integratie groen is.
+## PAUZE (15 okt, avond) — volgende stap: de spec-ronde door Fable (zie "Werkwijze vanaf 15 okt")
+Ronde 13 okt deel 1 staat online. Stijn koos Home-variant **A+** (docs/home-voorstel.md). Op zijn "door"
+schrijft Fable eerst de bouwspecs in docs/specs/ voor: Home A+, 6B + 13E, 13F, 13D, 6C, 6D; daarna bouwt
+Opus 5.5 ze blok voor blok. Niets in de werkmap; `main` is schoon.
+
+## Afgerond 15 okt (avond): ronde 13 okt deel 1 (vier bouwers + integrator → 3 reviewers → skeptici → fixer → Haiku-gate; 8 bevindingen gerepareerd)
+- **In & uit** (voorheen Inbox, route /inbox): Dexie v7 met tabel `events` (ShareEvent: in/uit, wat, aan/van
+  wie, aantal, recept-ids); 'in' bij elke import en bij een kaartje, 'uit' bij elke geslaagde recept-/
+  kaartje-/bundel-share (niet bij lijst/weekplan/back-up); tabs **Ontvangen** (met datum en van wie) en
+  **Gedeeld** (datum, aan wie, wat; tik → recept(en)); plakvak bovenaan; events mee in de back-up (dedupe).
+- **Sorteren** in Recepten: A–Z · Recent bekeken (src/recent.ts, localStorage) · Eigen · Eigen & ontvangen
+  (onthouden); zoeken en chips werken in elke stand, letterrail alleen bij A–Z.
+- **Browser-melding** (src/components/BrowserNotice.tsx, alleen op een telefoon in een browsertab): per
+  platform eerlijke installatie-uitleg; Android buiten Chrome: "Je zit nu in Opera …" + **Open in Chrome**
+  (intent-link met fallback "Kopieer de link") — die waarschuwing wordt niet weggesnoozed; in Chrome:
+  "wat je hier bewaart komt ook in de app". Meer → Hulp & over → **Links openen in de app** (stappen per
+  platform). Landingspagina (iPhone): 1 Kopieer · 2 Open de app → Meer → In & uit · 3 Plak van klembord.
+  **Nog te bevestigen op een echte Android-telefoon**: of de intent-link met een #r=-fragment echt Chrome
+  opent (DEVICE-TEST rij 62).
+- **Opslag**: twee kaarten "Back-up voor mezelf" en "Mijn recepten aan iemand geven", elk met "Bewaar of
+  deel" → Delen / Download met één zin uitleg; Herstel met uitleg; eerlijke teksten per telefoon.
+- **Curator-pagina verwijderd** (CuratorScreen.tsx, route, Meer-rij, tests, 33 i18n-keys, CSS; CLAUDE.md
+  mappenlijst bijgewerkt; DEVICE-TEST rij 48 vervallen). Engels van een klassieker verbeteren = editor.
+- docs/home-voorstel.md (twee varianten; Stijn koos A+). DEVICE-TEST rijen 61–63. 659 tests.
 
 ## Afgerond 15 okt: blok 6A-2 + 13A(1) + 13C (drie bouwers + integrator → 3 reviewers → skeptici → fixer → Haiku-gate; 14 bevindingen gerepareerd)
 docs/phase-6-spec.md 6A punten 9, 10, 13, 14, 16, 17 + ronde 13 okt 13A (deel 1) en 13C. Kern:
@@ -36,13 +52,9 @@ docs/phase-6-spec.md 6A punten 9, 10, 13, 14, 16, 17 + ronde 13 okt 13A (deel 1)
   (groen = ingrediënt, grijs = opmerking), "Koppel zo" via de bestaande override-API (raw blijft),
   Link-vraag "variant van X of nieuw ingrediënt?" in IngredientPicker.
 - DEVICE-TEST rijen 58–60. 646 tests.
-**Volgende (volgorde-voorstel docs/phase-6-spec.md):** 13A deel 2 (Inbox → "In & uit"-overzicht, sorteren op
-recent bekeken/eigen/eigen & ontvangen, Home-voorstel) + 13B ("Open in Chrome", installatie-uitleg) + 13G
-(opslag duidelijker) + Curator weghalen (vraag 7) → 6B + 13E (labels, lactosevrij, keukens, nagerecht/
-gebak/bijgerecht/ontbijt & lunch, 20 bijgerechten) → 13F (inbouwen met id-migratie) → 13D (varianten als
-tabs) → 6C → 6D → Z.
-Werkwijze blijft: grote workflows alleen op Fable; een workflow kan halverwege op de limiet stuiten
-(gebeurde bij F, 6A-1, 6A-2): hervatten met resumeFromRunId, en eerst kijken wat er in de werkmap staat.
+**Daarna gebouwd:** ronde 13 okt deel 1 (zie boven). **Resterende volgorde:** specs door Fable → Home A+
+→ 6B + 13E (labels, lactosevrij, keukens, nagerecht/gebak/bijgerecht/ontbijt & lunch, 20 bijgerechten) →
+13F (inbouwen met id-migratie) → 13D (varianten als tabs) → 6C → 6D → Z → Fable-eindcontrole.
 
 ## Afgerond 9 okt: blok 6A-1 (vier bouwers + integrator → 3 reviewers → skeptici → fixer → Haiku-gate; 10 bevindingen gerepareerd)
 docs/phase-6-spec.md 6A punten 2–8, 12, 15, 18. Kern: src/cooklog.ts `recordCooked` (zelfde stappen als de

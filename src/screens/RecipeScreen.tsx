@@ -64,6 +64,7 @@ import { useRecipeLines } from '@/lines';
 import { encodePhotoFile, usePhotoUrl } from '@/photo';
 import { printPage } from '@/print';
 import { activeProfile, profiles } from '@/profile';
+import { noteViewed } from '@/recent';
 import { navigate, route } from '@/router';
 import { copyText } from '@/share-actions';
 
@@ -299,6 +300,12 @@ export function RecipeScreen(props: { id: string }) {
     };
   }, [rateParam, id, pid]);
 
+  // Phase 6 (13A-2): "Recent bekeken" in the recipe list — opening a recipe moves it to the front
+  // (src/recent.ts, per phone, never in a backup). Only for a recipe that exists.
+  useEffect(() => {
+    if (recipe) noteViewed(recipe.id);
+  }, [recipe?.id]);
+
   // The delete confirmation is per recipe, in memory only.
   useEffect(() => {
     setConfirmDelete(false);
@@ -393,8 +400,9 @@ export function RecipeScreen(props: { id: string }) {
   // of a variant (when it still exists on this phone) for the "Versie van …" link.
   const offerDiets = useMemo(() => (recipe ? variantDietsFor(recipe, lines, dict) : []), [recipe, lines, dict]);
   const original = recipe?.variantOf ? all?.find((r) => r.id === recipe.variantOf) : undefined;
-  // Curator badge: the English edition of a classic is a machine translation until someone improves
-  // it (the editor's override patch then sets text.en = 'human', src/screens/EditScreen.tsx).
+  // Machine-translation badge: the English edition of a classic is a machine translation until someone
+  // improves it in the editor (its override patch then sets text.en = 'human', src/screens/EditScreen.tsx).
+  // The badge opens the editor; the separate Curator page was removed in phase 6 (open question 7).
   const machineEn = !!recipe && l === 'en' && recipe.text?.en === 'llm';
   // PLAN §0 "Vertaling eigen recepten" (3): an own/received recipe that lacks the other language's
   // name or steps gets a line that jumps to the editor's translation section. Classics never.
@@ -686,7 +694,7 @@ export function RecipeScreen(props: { id: string }) {
             )}
 
             {machineEn && (
-              <button type="button" class="curator-badge no-print" onClick={() => navigate('/edit/' + id)}>
+              <button type="button" class="translation-badge no-print" onClick={() => navigate('/edit/' + id)}>
                 {t('recipe.machineTranslation')}
               </button>
             )}

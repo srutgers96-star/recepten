@@ -24,7 +24,7 @@ import { aggregate, type ListItem } from '@/domain/aggregate';
 import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, normalizeServings, planHash, planHashAll, type Plan, type PlanItem } from '@/domain/planner';
 import { HOUSEHOLD_KEY, normalizeHousehold, type HouseholdSetting } from '@/domain/household';
 import { db, getSetting, setSetting } from './db';
-import type { BackupBundle, BundledPhoto, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Photo, Setting } from './model';
+import type { BackupBundle, BundledPhoto, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Photo, Setting, ShareEvent } from './model';
 
 export { getSetting, setSetting };
 
@@ -418,7 +418,7 @@ export async function findOwnDuplicates(base: Dictionary): Promise<OwnDuplicate[
   return out;
 }
 
-// --- Recipe overrides (curator patches on builtins) -----------------------------------------------
+// --- Recipe overrides (patches on builtins: the editor's override mode, shared as '#p=') ----------
 
 export async function getOverride(baseId: string): Promise<RecipeOverride | undefined> {
   return db.overrides.get(baseId);
@@ -759,7 +759,7 @@ export async function applyImportPlan(plan: ImportPlan, choices: ImportChoices, 
   const nothing = !w.recipes.length && !w.overrides.length && !w.lineOverrides.length && !w.userIngredients.length;
   if (nothing) return result;
 
-  await db.transaction('rw', [db.userRecipes, db.overrides, db.lineOverrides, db.userIngredients, db.imports, db.settings], async () => {
+  await db.transaction('rw', [db.userRecipes, db.overrides, db.lineOverrides, db.userIngredients, db.imports, db.settings, db.events], async () => {
     const before: ImportBefore = { recipes: [], overrides: [], lineOverrides: [], userIngredients: [] };
     const wrote: ImportWrote = { recipes: [], overrides: [], lineOverrides: [], userIngredients: [] };
 
@@ -820,8 +820,106 @@ export async function applyImportPlan(plan: ImportPlan, choices: ImportChoices, 
       wrote,
     };
     result.importId = (await db.imports.add(snapshot)) as number;
+
+    // The "In & uit" log (13A-2): ONE 'in' row per import — recipes and adjusted classics that were
+    // actually written (skipped items are not "received"). Recipes first; a patch-only import is
+    // kind 'patches'. The classic's id goes in `recipeIds` so the row can open it.
+    const writtenRecipes = w.recipes.map((r) => r.id);
+    const writtenPatches = w.overrides.map((o) => o.baseId);
+    const recipeIds = [...new Set([...writtenRecipes, ...writtenPatches])];
+    if (recipeIds.length) {
+      await db.events.add(
+        normalizeShareEvent({
+          at: now,
+          direction: 'in',
+          kind: writtenRecipes.length ? 'recipes' : 'patches',
+          who: sender || null,
+          count: recipeIds.length,
+          recipeIds,
+        }),
+      );
+    }
   });
   return result;
+}
+
+// --- "In & uit" log (phase 6, docs/phase-6-spec.md 13A-2) ----------------------------------------
+
+const SHARE_EVENT_KINDS: ReadonlySet<ShareEvent['kind']> = new Set(['recipes', 'patches', 'plan', 'bundle', 'member', 'list']);
+
+/** A clean row (no id; strings trimmed, count ≥ 1, duplicate ids dropped). Throws on a malformed one. */
+function normalizeShareEvent(e: Omit<ShareEvent, 'id'>): Omit<ShareEvent, 'id'> {
+  if (!e || (e.direction !== 'in' && e.direction !== 'out') || !SHARE_EVENT_KINDS.has(e.kind)) throw new Error('invalid-share-event');
+  const who = typeof e.who === 'string' ? e.who.trim() : '';
+  const recipeIds = [...new Set((Array.isArray(e.recipeIds) ? e.recipeIds : []).filter((id): id is string => typeof id === 'string' && id !== ''))];
+  const count = Number.isFinite(e.count) && e.count > 0 ? Math.floor(e.count) : Math.max(1, recipeIds.length);
+  const row: Omit<ShareEvent, 'id'> = { at: typeof e.at === 'string' && e.at ? e.at : nowIso(), direction: e.direction, kind: e.kind, who: who || null, count, recipeIds };
+  const note = typeof e.note === 'string' ? e.note.trim() : '';
+  if (note) row.note = note;
+  return row;
+}
+
+/**
+ * Appends a row to the log: 'in' when something arrived (an import logs itself in
+ * `applyImportPlan`; a card added is logged by the screen), 'out' after a share sheet reported
+ * 'shared' or a file was downloaded. Never for shopping lists, week plans or backups.
+ */
+export async function logShareEvent(e: Omit<ShareEvent, 'id'>): Promise<void> {
+  await db.events.add(normalizeShareEvent(e));
+}
+
+/**
+ * The rows of one direction, newest first (default the last 200 of THAT direction, through the
+ * `direction` index: an 'in' row written by every import never eats into the "Gedeeld" window).
+ */
+export async function listShareEvents(direction: ShareEvent['direction'], limit = 200): Promise<ShareEvent[]> {
+  const rows = await db.events.where('direction').equals(direction).reverse().sortBy('at');
+  return rows.slice(0, limit);
+}
+
+/** The identity of a row across backups: the same moment, direction and partner is the same event. */
+export function shareEventKey(e: Pick<ShareEvent, 'at' | 'direction' | 'who'>): string {
+  return `${e.at}|${e.direction}|${(e.who ?? '').trim()}`;
+}
+
+/**
+ * The rows of `incoming` that are not in `existing` (by `shareEventKey`), ids stripped, in their
+ * incoming order; a key that appears twice in `incoming` is kept once. Pure: the restore uses it,
+ * and tests/share-events.test.ts pins it.
+ */
+export function dedupeShareEvents(existing: readonly Pick<ShareEvent, 'at' | 'direction' | 'who'>[], incoming: readonly ShareEvent[]): Array<Omit<ShareEvent, 'id'>> {
+  const have = new Set(existing.map(shareEventKey));
+  const out: Array<Omit<ShareEvent, 'id'>> = [];
+  for (const e of incoming) {
+    const k = shareEventKey(e);
+    if (have.has(k)) continue;
+    have.add(k);
+    const { id: _id, ...rest } = e;
+    out.push(rest);
+  }
+  return out;
+}
+
+/** A backup-file row -> a storable one; null for anything malformed (a restore never writes garbage). */
+export function decodeShareEvent(v: unknown): Omit<ShareEvent, 'id'> | null {
+  const o = v as Partial<ShareEvent> | null;
+  if (!o || typeof o !== 'object' || typeof o.at !== 'string' || !o.at || Number.isNaN(new Date(o.at).getTime())) return null;
+  if (o.direction !== 'in' && o.direction !== 'out') return null;
+  if (typeof o.kind !== 'string' || !SHARE_EVENT_KINDS.has(o.kind as ShareEvent['kind'])) return null;
+  if (o.who !== null && o.who !== undefined && typeof o.who !== 'string') return null;
+  try {
+    return normalizeShareEvent({
+      at: o.at,
+      direction: o.direction,
+      kind: o.kind as ShareEvent['kind'],
+      who: typeof o.who === 'string' ? o.who : null,
+      count: typeof o.count === 'number' ? o.count : 0,
+      recipeIds: Array.isArray(o.recipeIds) ? (o.recipeIds as unknown[]).filter((x): x is string => typeof x === 'string') : [],
+      note: typeof o.note === 'string' ? o.note : null,
+    });
+  } catch {
+    return null;
+  }
 }
 
 /** True for the snapshot "Maak ongedaan" may restore: the NEWEST import, not undone, with a phase-3 snapshot. */
@@ -1066,7 +1164,7 @@ export async function backupHealth(now: number = Date.now()): Promise<BackupHeal
  * "Met foto's" toggle is on.
  */
 export async function exportBundle(opts?: { withPhotos?: boolean }): Promise<BackupBundle> {
-  const [profiles, userRecipes, favorites, notes, cookLog, settings, lineOverrides, userIngredients, overrides, plans, lists, pantry] = await Promise.all([
+  const [profiles, userRecipes, favorites, notes, cookLog, settings, lineOverrides, userIngredients, overrides, plans, lists, pantry, events] = await Promise.all([
     listProfiles(),
     db.userRecipes.toArray(),
     db.favorites.toArray(),
@@ -1079,6 +1177,7 @@ export async function exportBundle(opts?: { withPhotos?: boolean }): Promise<Bac
     db.plans.toArray(),
     db.lists.toArray(),
     db.pantry.toArray(),
+    db.events.orderBy('at').toArray(),
   ]);
   const bundle: BackupBundle = {
     v: 2,
@@ -1097,6 +1196,7 @@ export async function exportBundle(opts?: { withPhotos?: boolean }): Promise<Bac
     plans,
     lists,
     pantry,
+    events,
   };
   if (opts?.withPhotos) {
     const rows = await db.photos.orderBy('at').toArray();
@@ -1121,6 +1221,8 @@ export interface RestoreResult {
   pantry?: number;
   /** Phase 5 block D: photos written (a photo already here — same recipeId+at — is not re-added). */
   photos?: number;
+  /** Phase 6 (13A-2): "In & uit" rows written (a row already here — same at+direction+who — is not re-added). */
+  events?: number;
 }
 
 /** Settings that belong to this phone, not to the person: a restore never overwrites them. */
@@ -1171,6 +1273,9 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
   // entries dropped. Deduped on recipeId+at inside the transaction, so a double restore of the
   // same file never duplicates a photo.
   const photos = Array.isArray(b.photos) ? b.photos.map(decodeBundledPhoto).filter((p): p is Omit<Photo, 'id'> => p !== null) : [];
+  // Phase 6 (13A-2, absent in older backups): the "In & uit" rows, malformed ones dropped; deduped
+  // on at+direction+who inside the transaction, so a double restore never doubles the log.
+  const events = Array.isArray(b.events) ? b.events.map(decodeShareEvent).filter((e): e is Omit<ShareEvent, 'id'> => e !== null) : [];
 
   let addedLog = 0;
   let wroteLineOverrides = 0;
@@ -1178,7 +1283,8 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
   let wrotePlan = 0;
   let wroteList = 0;
   let wrotePhotos = 0;
-  await db.transaction('rw', [db.profiles, db.userRecipes, db.favorites, db.notes, db.cookLog, db.settings, db.lineOverrides, db.userIngredients, db.overrides, db.plans, db.lists, db.pantry, db.photos], async () => {
+  let wroteEvents = 0;
+  await db.transaction('rw', [db.profiles, db.userRecipes, db.favorites, db.notes, db.cookLog, db.settings, db.lineOverrides, db.userIngredients, db.overrides, db.plans, db.lists, db.pantry, db.photos, db.events], async () => {
     const hadProfiles = (await db.profiles.count()) > 0;
     await db.profiles.bulkPut(profiles);
     await db.userRecipes.bulkPut(recipes);
@@ -1243,6 +1349,11 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
       if (freshPhotos.length) await db.photos.bulkAdd(freshPhotos as Photo[]);
       wrotePhotos = freshPhotos.length;
     }
+    if (events.length) {
+      const freshEvents = dedupeShareEvents(await db.events.toArray(), events);
+      if (freshEvents.length) await db.events.bulkAdd(freshEvents as ShareEvent[]);
+      wroteEvents = freshEvents.length;
+    }
     for (const s of settings) {
       if (s.key === ACTIVE_PROFILE_SETTING && hadProfiles) continue;
       if (s.key === INBOX_SEEN_SETTING) {
@@ -1266,6 +1377,7 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
     lists: wroteList,
     pantry: pantry.length,
     photos: wrotePhotos,
+    events: wroteEvents,
   };
 }
 

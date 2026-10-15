@@ -83,6 +83,29 @@ export interface BundledPhoto {
   data: string;
 }
 
+/**
+ * One row of `events` (phase 6, docs/phase-6-spec.md 13A-2): something that came IN (an import,
+ * a member card added) or went OUT (a share through the share sheet, a file shared or downloaded,
+ * a card sent) — the "In & uit" log. Shopping lists, week plans and backups are NOT logged (the
+ * kinds 'list' / 'plan' exist for later). `who` is the sender (in) or the partner (out) by name;
+ * null when nobody was named (the one-recipe share screen, a card). `recipeIds` holds the recipe
+ * ids (patches: the classic's id) so a row can open the recipe(s). A backup carries the rows
+ * (`BackupBundle.events`); a restore dedupes on at+direction+who.
+ */
+export interface ShareEvent {
+  id?: number;
+  /** ISO timestamp. */
+  at: string;
+  direction: 'in' | 'out';
+  kind: 'recipes' | 'patches' | 'plan' | 'bundle' | 'member' | 'list';
+  /** From whom (in) or to whom (out): a name, or null. */
+  who: string | null;
+  /** How many things: recipes + adjusted classics, or 1 for a card. */
+  count: number;
+  recipeIds: string[];
+  note?: string | null;
+}
+
 /** The rows an import replaced, as they were before it (phase 3 undo). Absent rows were added. */
 export interface ImportBefore {
   recipes: Recipe[];
@@ -142,6 +165,8 @@ export interface BackupBundle {
   pantry?: PantryItem[];
   /** Phase 5 block D: only present when the backup was made WITH photos (default is without). */
   photos?: BundledPhoto[];
+  /** Phase 6 (13A-2, schema v7): the "In & uit" log; absent in older backups. */
+  events?: ShareEvent[];
 }
 
 // --- Phase-0 shape, only read by the v1 -> v2 upgrade in db.ts ---------------------------------

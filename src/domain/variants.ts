@@ -500,9 +500,9 @@ export function makeVariant(recipe: Recipe, plan: VariantPlan, diet: VariantDiet
     aliases: [],
   };
   // A builtin read through getRecipe() carries the applied-override marker and a received recipe
-  // its receiver-side `sync`; the variant is a plain own recipe. `text.en: 'llm'` is the curator
-  // marker of a CLASSIC (the "Machine translation" badge opens the curator for that builtin); an own
-  // recipe has no curator path, so the marker would stick forever.
+  // its receiver-side `sync`; the variant is a plain own recipe. `text.en: 'llm'` is the
+  // machine-translation marker of a CLASSIC (the "Machine translation" badge opens the editor's
+  // override mode for that builtin); an own recipe has no such path, so the marker would stick forever.
   delete (out as Record<string, unknown>).override;
   delete (out as Record<string, unknown>).sync;
   delete (out as Record<string, unknown>).text;

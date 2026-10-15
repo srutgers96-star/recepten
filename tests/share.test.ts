@@ -434,10 +434,10 @@ describe('member card (#f=)', () => {
   it('buildMemberShareMessage: one sentence (NL/EN) and the #f= URL alone on the last line', async () => {
     const nl = buildMemberShareMessage({ name: 'Stijn', url: 'https://x/#f=abc', lang: 'nl' }).split('\n');
     expect(nl).toHaveLength(2);
-    expect(nl[0]).toBe("👋 Kaartje van Stijn voor Rutgers' Recepten — open de link in de app of plak hem in Inbox om Stijn aan je huishouden toe te voegen.");
+    expect(nl[0]).toBe("👋 Kaartje van Stijn voor Rutgers' Recepten — open de link in de app of plak hem bij In & uit om Stijn aan je huishouden toe te voegen.");
     expect(nl[1]).toBe('https://x/#f=abc');
     const en = buildMemberShareMessage({ name: 'Gabi', url: 'u', lang: 'en' }).split('\n');
-    expect(en[0]).toBe("👋 Gabi's card for Rutgers' Recipes — open the link in the app or paste it into Inbox to add Gabi to your household.");
+    expect(en[0]).toBe("👋 Gabi's card for Rutgers' Recipes — open the link in the app or paste it into In & out to add Gabi to your household.");
     // planMessages with one card uses that text and one extractable #f= link.
     const plan = await planMessages([buildMemberEnvelope(CARD)], APP_URL, { lang: 'nl' });
     if (!('text' in plan)) throw new Error('expected text');

@@ -1,5 +1,5 @@
 // Strings of phase 4 "Week" (docs/phase-4-spec.md §3): the Week tab, the Kies-N sheet, the Home
-// "Deze week" card, "+ Deze week" on the detail page, the 5-tab nav and the Inbox row under Meer.
+// "Deze week" card, "+ Deze week" on the detail page, the 5-tab nav and the "In & uit" row under Meer.
 // Owned by the week agent. Every key needs both nl and en; merged in ./index.ts after phase2.
 // Keep strings short: 360 px phones.
 import type { Dict } from './index';
@@ -9,9 +9,9 @@ export const week: Dict = {
   'nav.week': { nl: 'Week', en: 'Week' },
   'nav.shopping': { nl: 'Boodschappen', en: 'Shopping' },
 
-  // --- Meer: Inbox row ---
-  'more.inbox': { nl: 'Inbox', en: 'Inbox' },
-  'more.inboxHint': { nl: 'Ontvangen recepten en aanpassingen', en: 'Received recipes and adjustments' },
+  // --- Meer: "In & uit" row (the Inbox, renamed in phase 6 13A-2: received AND shared, with date and who) ---
+  'more.inbox': { nl: 'In & uit', en: 'In & out' },
+  'more.inboxHint': { nl: 'Ontvangen en gedeeld, met datum en van/aan wie', en: 'Received and shared, with date and from/to whom' },
 
   // --- Meer: household size (spec §0 "household.servings") ---
   'more.household': { nl: 'Aantal personen', en: 'Number of people' },
@@ -23,10 +23,10 @@ export const week: Dict = {
   // --- Recipes list: + button (the four rows of its menu are `list.addWrite` … in browse.ts, phase 6) ---
   'list.add': { nl: 'Recept toevoegen', en: 'Add recipe' },
 
-  // --- Home: Inbox reminder card (shown while something is unseen; the Inbox tab moved under Meer) ---
-  'home.inboxUnseen': { nl: '{n} nieuwe dingen in je inbox.', en: '{n} new things in your inbox.' },
-  'home.inboxUnseenOne': { nl: '1 nieuw ding in je inbox.', en: '1 new thing in your inbox.' },
-  'home.inboxAction': { nl: 'Bekijk inbox', en: 'Open inbox' },
+  // --- Home: "In & uit" reminder card (shown while something is unseen; the row lives under Meer) ---
+  'home.inboxUnseen': { nl: '{n} nieuwe dingen bij In & uit.', en: '{n} new things in In & out.' },
+  'home.inboxUnseenOne': { nl: '1 nieuw ding bij In & uit.', en: '1 new thing in In & out.' },
+  'home.inboxAction': { nl: 'Bekijk In & uit', en: 'Open In & out' },
 
   // --- Home: "Deze week" card ---
   'home.week': { nl: 'Deze week', en: 'This week' },

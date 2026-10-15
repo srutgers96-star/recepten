@@ -10,9 +10,9 @@ import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { QrCode } from '@/components/QrCode';
 import { Segmented } from '@/components/Segmented';
-import { getSetting, setSetting } from '@/db/repo';
+import { getSetting, logShareEvent, setSetting } from '@/db/repo';
 import { cardFromMember } from '@/domain/household';
-import { randomId, type Lang, type Profile } from '@/domain/model';
+import { nowIso, randomId, type Lang, type Profile } from '@/domain/model';
 import { buildMemberEnvelope, buildMemberShareMessage } from '@/domain/share';
 import { buildShareUrl, encodeToken } from '@/domain/token';
 import { lang, t } from '@/i18n';
@@ -112,8 +112,11 @@ export function MemberCardPanel(props: { profile: Profile }) {
     // navigator.share runs before the first await inside shareText: still within the tap.
     void shareText(message)
       .then((r) => {
-        if (r.outcome === 'shared') setStatus(t('household.cardShared'));
-        else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
+        if (r.outcome === 'shared') {
+          setStatus(t('household.cardShared'));
+          // 13A-2: the card went out — an 'out' row in the "In & uit" log (no partner is named here).
+          void logShareEvent({ at: nowIso(), direction: 'out', kind: 'member', who: null, count: 1, recipeIds: [], note: p.name }).catch((e: unknown) => console.error('logShareEvent', e));
+        } else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
         else if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
       })
       .finally(() => setBusy(false));

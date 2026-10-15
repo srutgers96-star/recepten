@@ -564,8 +564,8 @@ export function buildMemberShareMessage(i: { name: string; url: string; lang: La
   const name = i.name.trim() || (lang === 'nl' ? 'iemand' : 'someone');
   const head =
     lang === 'nl'
-      ? `👋 Kaartje van ${name} voor Rutgers' Recepten — open de link in de app of plak hem in Inbox om ${name} aan je huishouden toe te voegen.`
-      : `👋 ${name}'s card for Rutgers' Recipes — open the link in the app or paste it into Inbox to add ${name} to your household.`;
+      ? `👋 Kaartje van ${name} voor Rutgers' Recepten — open de link in de app of plak hem bij In & uit om ${name} aan je huishouden toe te voegen.`
+      : `👋 ${name}'s card for Rutgers' Recipes — open the link in the app or paste it into In & out to add ${name} to your household.`;
   return [head, i.url].join('\n');
 }
 

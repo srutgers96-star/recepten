@@ -260,6 +260,101 @@
   flex: none;
 }
 
+/* ---------- "In & uit" (13A-2): the Ontvangen | Gedeeld tabs and the shared log ---------- */
+
+/* Two equal 44 px tabs with an underline on the chosen one (role=tablist). */
+.inbox-tabs {
+  display: flex;
+  margin: 12px 0 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.inbox-tab {
+  flex: 1 1 0;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-bottom: -1px;
+  padding: 0 8px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 8px 8px 0 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.inbox-tab:active {
+  background: var(--press);
+}
+
+.inbox-tab[aria-selected='true'] {
+  color: var(--cobalt);
+  border-bottom-color: var(--cobalt);
+}
+
+.inbox-tab .badge {
+  flex: none;
+}
+
+.inbox-shared-hint {
+  margin: 8px 0 4px;
+}
+
+/* A shared row: the 📤 icon, name / what / to whom + when, chevron. As a <button> (one recipe
+   opens, several unfold) or a plain <div> (a card). */
+.inbox-shared-row {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+div.inbox-shared-row {
+  cursor: default;
+}
+
+div.inbox-shared-row:active {
+  background: transparent;
+}
+
+.inbox-shared-icon {
+  flex: none;
+  width: 32px;
+  font-size: 20px;
+  line-height: 1;
+  text-align: center;
+}
+
+/* The unfolded names under a multi-recipe row: 44 px chips, wrapping. */
+.inbox-shared-names {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0 10px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.inbox-shared-names .chip {
+  max-width: 100%;
+}
+
 /* ---------- Inbox: phase 5 block F — member cards (#f=) and the sender as a household member ---------- */
 
 /* One card per received member card; the row itself (settings.css .member-card-row) loses its padding inside the card. */

@@ -257,7 +257,7 @@ describe('makeVariant', () => {
     expect(v.goesWith).toEqual(['b:salade']);
     expect(v.steps).toEqual(src.steps);
     expect(v.steps).not.toBe(src.steps);
-    // the classic's curator marker does not travel: an own recipe has no "Machine translation" path
+    // the classic's machine-translation marker does not travel: an own recipe has no "Machine translation" path
     expect(v.text).toBeUndefined();
     // the "controleer zelf" lines (mince, egg) are copied as they were: the facts still say no,
     // the stored tag says what the user asked for, and the detail page shows the stored tag —

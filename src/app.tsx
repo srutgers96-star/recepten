@@ -1,11 +1,16 @@
 // Root of the full app: boot (builtins, profiles, theme), shell (header/screen/nav), hash routing,
-// onboarding gate, install card, update bar, confetti. Routes per docs/phase-1-spec.md §4 plus
-// phase 4 (docs/phase-4-spec.md §3): '/week' and '/shopping', and phase 5 (docs/phase-5-spec.md
-// block A): '/more/check-recipes' and '/more/household'; block A-bis: '/more/dictionary';
-// block C: '/more/badges' plus the new-badge toast next to <Confetti/>; block D: '/more/curator'.
+// onboarding gate, browser notice + install card, update bar, confetti. Routes per
+// docs/phase-1-spec.md §4 plus phase 4 (docs/phase-4-spec.md §3): '/week' and '/shopping', and
+// phase 5 (docs/phase-5-spec.md block A): '/more/check-recipes' and '/more/household'; block A-bis:
+// '/more/dictionary'; block C: '/more/badges' plus the new-badge toast next to <Confetti/>. The
+// block-D Curator page ('/more/curator') was removed in phase 6 (docs/phase-6-spec.md open question
+// 7, 15 Oct 2026): the English texts of a classic are edited in the editor, which shares the patch
+// route ('#p=').
+// Phase 6 (13B): <BrowserNotice/> sits above the content whenever the app runs in a browser tab.
 import { useEffect, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings } from './badges';
 import { loadCelebrateSettings } from './celebrate';
+import { BrowserNotice } from './components/BrowserNotice';
 import { Confetti } from './components/Confetti';
 import { InstallCard } from './components/InstallCard';
 import { Nav } from './components/Nav';
@@ -21,7 +26,6 @@ import { BadgesScreen } from './screens/BadgesScreen';
 import { CheckRecipesScreen } from './screens/CheckRecipesScreen';
 import { CheckScreen } from './screens/CheckScreen';
 import { CookScreen } from './screens/CookScreen';
-import { CuratorScreen } from './screens/CuratorScreen';
 import { DictionaryScreen } from './screens/DictionaryScreen';
 import { EditScreen } from './screens/EditScreen';
 import { HomeScreen } from './screens/HomeScreen';
@@ -138,9 +142,6 @@ function Screen(props: { r: Route }) {
         // Phase 5 (docs/phase-5-spec.md A-bis.6): the dictionary screen (own entries, merge, clean-up).
         case 'dictionary':
           return <DictionaryScreen />;
-        // Phase 5 block D (docs/phase-5-spec.md D.4): the English texts of the classics, for Gabi.
-        case 'curator':
-          return <CuratorScreen />;
         // Phase 5 (docs/phase-5-spec.md C.2): badges per member + "Samen".
         case 'badges':
           return <BadgesScreen />;
@@ -226,6 +227,9 @@ export function App(props: { openImportFromHash: boolean }) {
           {t('common.error')}: {bootError}
         </div>
       )}
+      {/* 13B: in a browser tab on a phone this says so first, also during onboarding (the moment
+          to install is before the first recipe is saved in the wrong storage). */}
+      <BrowserNotice />
       <div class="screen-wrap">{onboarding ? <OnboardingScreen /> : <Screen r={r} />}</div>
       <UpdateBar />
       <InstallCard />

@@ -1,8 +1,8 @@
 // User corrections on top of the bundled classics (docs/phase-2-spec.md §5). Framework-free.
 //
 // Two kinds of override, both keyed by the builtin's id (ids never change, invariant 1):
-//   - a RecipeOverride (table `overrides`): a schema-2 patch from the curator / language-pair
-//     editor (name, description, steps, lines, category, tags, servingTip) rendered on top of the
+//   - a RecipeOverride (table `overrides`): a schema-2 patch from the editor's override mode
+//     (name, description, steps, lines, category, tags, servingTip) rendered on top of the
 //     builtin by `applyOverride`. The builtin itself is never modified, so a data-version bump
 //     keeps the user's edits.
 //   - a LineOverride (table `lineOverrides`): "Koppel ingrediënt" on one line of a builtin
@@ -25,7 +25,7 @@ export interface RecipeOverride {
   patch: RecipePatch;
   /** ISO timestamp of the last save. */
   updatedAt: string;
-  /** Name of the profile that made the edit (curator credit), or null. */
+  /** Name of the profile that made the edit (reviewer credit), or null. */
   by?: string | null;
   /**
    * Receiver-side bookkeeping of an override that came in through a share (phase 3, like
@@ -76,7 +76,7 @@ export function mergeText(base: Text | null | undefined, patch: Text | null | un
 }
 
 /**
- * Whether a patch row carries content of its own. The curator's filler rows for untouched
+ * Whether a patch row carries content of its own. The editor's filler rows for untouched
  * entries (`{ text: {} }` / `{ raw: {} }`) carry none: on a length mismatch — the classic
  * changed upstream — such a row falls back to the base entry per index instead of going blank,
  * while a row with own content keeps today's replace semantics.

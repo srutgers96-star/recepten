@@ -14,10 +14,10 @@ import { useEffect, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
-import { bumpSharedRecipes, collectDeltaSince, getHousehold, getLastSentTo, markSentTo, type DeltaSince } from '@/db/repo';
+import { bumpSharedRecipes, collectDeltaSince, getHousehold, getLastSentTo, logShareEvent, markSentTo, type DeltaSince } from '@/db/repo';
 import { membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
 import { buildMultiShareHeader, openLine } from '@/domain/message';
-import { pickText, type Text } from '@/domain/model';
+import { nowIso, pickText, type Text } from '@/domain/model';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
 import { lang, t } from '@/i18n';
 import { refreshShareBadges } from '@/inbox-badge';
@@ -119,6 +119,18 @@ function countShared(n: number) {
       return pid ? checkNewBadges(pid) : undefined;
     })
     .catch((e: unknown) => console.error('bumpSharedRecipes', e));
+}
+
+/**
+ * Phase 6 (13A-2): the delta went out to `name` — one 'out' row in the "In & uit" log with the
+ * recipe ids (patched classics by their own id). Fire-and-forget; never blocks the status line.
+ */
+function logDeltaShared(d: DeltaSince, name: string) {
+  const recipeIds = [...d.recipes.map((r) => r.id), ...d.patches.map((o) => o.baseId)];
+  if (!recipeIds.length) return;
+  void logShareEvent({ at: nowIso(), direction: 'out', kind: d.recipes.length ? 'recipes' : 'patches', who: name, count: recipeIds.length, recipeIds }).catch((e: unknown) =>
+    console.error('logShareEvent', e),
+  );
 }
 
 export function DeltaShareScreen() {
@@ -227,6 +239,7 @@ export function DeltaShareScreen() {
         if (r.outcome === 'shared') {
           await markSent(true);
           countShared(shared);
+          if (delta) logDeltaShared(delta, name);
         } else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
         else if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
       })
@@ -248,8 +261,12 @@ export function DeltaShareScreen() {
         if (r.outcome === 'shared') {
           await markSent(true);
           countShared(shared);
-        } else if (r.outcome === 'downloaded') setStatus(t('share.fileDownloaded', { name: r.name }));
-        else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
+          if (delta) logDeltaShared(delta, name);
+        } else if (r.outcome === 'downloaded') {
+          // A file in Downloads left this phone too (the person hands it over themselves).
+          setStatus(t('share.fileDownloaded', { name: r.name }));
+          if (delta) logDeltaShared(delta, name);
+        } else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
       })
       .finally(() => setBusy(false));
   }

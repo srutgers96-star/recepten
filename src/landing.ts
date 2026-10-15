@@ -8,7 +8,7 @@
 //   #w=  a week plan: "Weekplan van <by>: N gerechten" and the own recipes it carries (builtins
 //        travel by id only, so they are counted, not named)
 //   #f=  a member card: "Kaartje van <name>" with the colour swatch and language; "Kopieer code"
-//        and the same hand-off card (copy → app → Inbox → Plak), because on an iPhone a link
+//        and the same hand-off card (copy → app → Meer → In & uit → Plak), because on an iPhone a link
 //        never opens the installed app (CLAUDE.md invariant 5)
 // Ingredient lines are rendered through the bundled dictionary (schema-2 lines carry `ing`,
 // `qty`, `unit`, `prep` and usually only a Dutch `raw`), so the EN view shows English names;
@@ -33,12 +33,18 @@ const S = {
     method: 'Bereiding',
     tip: 'Serveertip',
     copy: 'Kopieer receptcode',
-    copied: 'Gekopieerd. Open nu de Recepten-app op je beginscherm → Inbox → Plak.',
+    copied: 'Gekopieerd. Open nu de Recepten-app op je beginscherm → Meer → In & uit → Plak van klembord.',
     copyFailed: 'Kopiëren mislukt — houd de link in WhatsApp ingedrukt en kies Kopieer.',
-    handoff: 'Bewaren in je app',
-    steps: ['Tik op "Kopieer receptcode"', 'Open Recepten op je beginscherm', 'Tab Inbox → Plak van klembord → Importeer'],
-    install: 'Nog geen app? Deel → Zet op beginscherm.',
+    handoff: 'Zo bewaar je het in je app',
+    steps: [
+      { h: 'Kopieer', b: 'Tik hierboven op de blauwe knop Kopieer receptcode.' },
+      { h: 'Open de app', b: "Open Rutgers' Recepten via het icoon op je beginscherm — niet hier in Safari." },
+      { h: 'Plak', b: 'Tik onderaan op Meer → In & uit → Plak van klembord. Je ziet het recept en bewaart het met één tik.' },
+    ],
+    install: 'Nog geen app op je beginscherm? In Safari: Deel → Zet op beginscherm.',
     openApp: "Open Rutgers' Recepten (hele app)",
+    openChrome: 'Open in Chrome',
+    openChromeHint: 'Je zit in een andere browser dan Chrome; die heeft een eigen opslag. Werkt de knop niet? Kopieer de link en plak hem in Chrome.',
     invalid: 'Deze link bevat geen leesbaar recept.',
     unsupported: 'Deze code is nieuwer dan deze pagina. Update de app.',
     by: 'van',
@@ -63,8 +69,12 @@ const S = {
     memberLang: (l: Lang) => (l === 'en' ? 'Taal: Engels' : 'Taal: Nederlands'),
     memberHint: (name: string) => `In de app voeg je ${name} toe aan je huishouden. Recepten van ${name} krijgen dan deze naam en kleur, en "Deel je nieuwe recepten" kent ${name} al.`,
     copyCard: 'Kopieer code',
-    copiedCard: 'Gekopieerd. Open nu de Recepten-app op je beginscherm → Inbox → Plak.',
-    stepsCard: ['Tik op "Kopieer code"', 'Open Recepten op je beginscherm', 'Tab Inbox → Plak van klembord → Voeg toe aan huishouden'],
+    copiedCard: 'Gekopieerd. Open nu de Recepten-app op je beginscherm → Meer → In & uit → Plak van klembord.',
+    stepsCard: [
+      { h: 'Kopieer', b: 'Tik hierboven op de blauwe knop Kopieer code.' },
+      { h: 'Open de app', b: "Open Rutgers' Recepten via het icoon op je beginscherm — niet hier in Safari." },
+      { h: 'Plak', b: 'Tik onderaan op Meer → In & uit → Plak van klembord en daarna op Voeg toe aan je huishouden.' },
+    ],
   },
   en: {
     title: "Rutgers' Recipes",
@@ -76,12 +86,18 @@ const S = {
     method: 'Method',
     tip: 'Serving tip',
     copy: 'Copy recipe code',
-    copied: 'Copied. Now open the Recepten app on your Home Screen → Inbox → Paste.',
+    copied: 'Copied. Now open the Recepten app on your Home Screen → More → In & out → Paste from clipboard.',
     copyFailed: 'Copy failed — long-press the link in WhatsApp and choose Copy.',
-    handoff: 'Save it in your app',
-    steps: ['Tap "Copy recipe code"', 'Open Recepten on your Home Screen', 'Inbox tab → Paste from clipboard → Import'],
-    install: 'No app yet? Share → Add to Home Screen.',
+    handoff: 'How to save it in your app',
+    steps: [
+      { h: 'Copy', b: 'Tap the blue Copy recipe code button above.' },
+      { h: 'Open the app', b: "Open Rutgers' Recipes from the icon on your Home Screen — not here in Safari." },
+      { h: 'Paste', b: 'Tap More at the bottom → In & out → Paste from clipboard. You see the recipe and save it with one tap.' },
+    ],
+    install: 'No app on your Home Screen yet? In Safari: Share → Add to Home Screen.',
     openApp: "Open Rutgers' Recipes (the whole app)",
+    openChrome: 'Open in Chrome',
+    openChromeHint: 'You are in a browser other than Chrome, which has storage of its own. Button not working? Copy the link and paste it into Chrome.',
     invalid: 'This link does not contain a readable recipe.',
     unsupported: 'This code is newer than this page. Update the app.',
     by: 'from',
@@ -106,10 +122,17 @@ const S = {
     memberLang: (l: Lang) => (l === 'en' ? 'Language: English' : 'Language: Dutch'),
     memberHint: (name: string) => `In the app you add ${name} to your household. Recipes from ${name} then get this name and colour, and "Share your new recipes" already knows ${name}.`,
     copyCard: 'Copy code',
-    copiedCard: 'Copied. Now open the Recepten app on your Home Screen → Inbox → Paste.',
-    stepsCard: ['Tap "Copy code"', 'Open Recepten on your Home Screen', 'Inbox tab → Paste from clipboard → Add to household'],
+    copiedCard: 'Copied. Now open the Recepten app on your Home Screen → More → In & out → Paste from clipboard.',
+    stepsCard: [
+      { h: 'Copy', b: 'Tap the blue Copy code button above.' },
+      { h: 'Open the app', b: "Open Rutgers' Recipes from the icon on your Home Screen — not here in Safari." },
+      { h: 'Paste', b: 'Tap More at the bottom → In & out → Paste from clipboard, then Add to your household.' },
+    ],
   },
 } as const;
+
+/** One hand-off step: a bold verb ("Kopieer") and the one sentence that says where to tap. */
+type HandoffStep = { readonly h: string; readonly b: string };
 
 const CSS = `
 :root{color-scheme:light dark;--paper:#eaf3fb;--card:#fff;--ink:#1f2733;--muted:#5b6775;--cobalt:#2b4fa8;--line:rgba(31,39,51,.12);--on:#fff}
@@ -130,6 +153,10 @@ ol{margin:0;padding-left:24px}ol li{padding:6px 0 6px 4px;border-bottom:1px soli
 .btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;margin:20px 0 8px;border:0;border-radius:12px;background:var(--cobalt);color:var(--on);font:inherit;font-weight:600;text-decoration:none;box-sizing:border-box}
 .btn.secondary{background:transparent;color:var(--cobalt);border:1px solid var(--cobalt)}
 .card{background:var(--card);border:1px solid var(--cobalt);border-radius:14px;padding:14px 16px;margin:16px 0;font-size:14px}.card ol{margin:6px 0;padding-left:20px}.card ol li{border:0;padding:2px 0}
+/* The hand-off in three big steps: a numbered circle, the verb in bold, one sentence under it. */
+.card ol.steps{list-style:none;margin:10px 0 12px;padding:0}.card .steps li{display:flex;gap:12px;align-items:flex-start;padding:6px 0;font-size:15px;line-height:1.4}
+.steps .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--cobalt);color:var(--on);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.steps b{display:block;font-size:16px}
 .status{min-height:22px;font-size:14px;color:var(--muted)}
 .swatch{display:inline-block;width:16px;height:16px;border-radius:50%;vertical-align:-3px;margin-right:6px;border:1px solid var(--line)}
 `;
@@ -149,6 +176,12 @@ let share: ParsedShare | null = null;
 let problem: 'invalid' | 'unsupported' | null = null;
 /** The bundled dictionary once its chunk has arrived (null until then: lines show their raw text). */
 let dict: Dictionary | null = null;
+/**
+ * Android in another browser than Chrome: the intent URL of "Open in Chrome" (phase 6, 13B), set
+ * once src/pwa.ts has been loaded lazily (see boot). Null on an iPhone, which is this page's real
+ * audience: a link there always opens Safari and no button can change that (CLAUDE.md invariant 5).
+ */
+let chromeUrl: string | null = null;
 
 /** Whether the share has ingredient lines to render (only then is the dictionary worth loading). */
 function hasLines(s: ParsedShare): boolean {
@@ -340,13 +373,17 @@ function render(keepStatus = false) {
     else if (bundle) parts.push(...bundleHtml(bundle, by));
     else if (plan) parts.push(...planHtml(plan, by));
     else if (member) parts.push(...memberHtml(member));
-    const steps: readonly string[] = member ? L.stepsCard : L.steps;
-    parts.push(`<button type="button" class="btn" id="copy">${esc(member ? L.copyCard : L.copy)}</button><div class="status" id="status"></div>`);
-    parts.push(`<div class="card"><strong>${esc(L.handoff)}</strong><ol>${steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol><div class="muted">${esc(L.install)}</div></div>`);
+    const steps: readonly HandoffStep[] = member ? L.stepsCard : L.steps;
+    // Android outside Chrome: the real fix comes first; the copy button then steps back to secondary.
+    if (chromeUrl) parts.push(`<a class="btn" href="${esc(chromeUrl)}">${esc(L.openChrome)}</a><p class="muted">${esc(L.openChromeHint)}</p>`);
+    parts.push(`<button type="button" class="btn${chromeUrl ? ' secondary' : ''}" id="copy">${esc(member ? L.copyCard : L.copy)}</button><div class="status" id="status"></div>`);
+    const stepsHtml = steps.map((s, i) => `<li><span class="n" aria-hidden="true">${i + 1}</span><span><b>${esc(s.h)}</b>${esc(s.b)}</span></li>`).join('');
+    parts.push(`<div class="card"><strong>${esc(L.handoff)}</strong><ol class="steps">${stepsHtml}</ol><div class="muted">${esc(L.install)}</div></div>`);
     parts.push(`<a class="btn secondary" href="${esc(appUrl())}">${esc(L.openApp)}</a>`);
   } else {
     parts.push(`<p>${esc(problem === 'unsupported' ? L.unsupported : L.invalid)}</p>`);
-    parts.push(`<a class="btn" href="${esc(appUrl())}">${esc(L.openApp)}</a>`);
+    if (chromeUrl) parts.push(`<a class="btn" href="${esc(chromeUrl)}">${esc(L.openChrome)}</a><p class="muted">${esc(L.openChromeHint)}</p>`);
+    parts.push(`<a class="btn${chromeUrl ? ' secondary' : ''}" href="${esc(appUrl())}">${esc(L.openApp)}</a>`);
     parts.push(`<div class="card"><div class="muted">${esc(L.install)}</div></div>`);
   }
   parts.push('</main>');
@@ -396,6 +433,22 @@ async function boot() {
   }
   render();
   if (share && hasLines(share)) loadDictionaryLater();
+  // Android in another browser than Chrome (Opera, Samsung Internet, Firefox, a WebView): offer
+  // "Open in Chrome". Today src/boot.ts sends only iOS here, so this is for the day the boot rule
+  // changes; the helpers live in src/pwa.ts (single source of truth, pinned in tests/pwa.test.ts)
+  // and are loaded lazily so an iPhone never downloads them. pwa.ts writes no storage when it loads
+  // (invariant 6 still holds); the intent URL carries the share token (fragment before "#Intent;").
+  if (/Android/i.test(navigator.userAgent)) {
+    import('./pwa')
+      .then((m) => {
+        if (m.browserName() === 'chrome') return;
+        chromeUrl = m.chromeIntentUrl(location.href);
+        render(true);
+      })
+      .catch(() => {
+        /* offline or a stale precache: the copy route stays */
+      });
+  }
 }
 
 void boot();

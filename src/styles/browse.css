@@ -248,6 +248,55 @@
   padding-top: 8px;
 }
 
+/* Phase 6 (13A-2): the sort row above the list — A–Z · Recent bekeken · Eigen · Eigen & ontvangen.
+   Four 44 px pills in a full-bleed strip that scrolls sideways on a 360 px phone (like .chips). */
+.list-sort {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 10px calc(-1 * max(16px, var(--sar))) 0 calc(-1 * max(16px, var(--sal)));
+  padding: 2px max(16px, var(--sar)) 2px max(16px, var(--sal));
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.list-sort::-webkit-scrollbar {
+  display: none;
+}
+
+.list-sort-pill {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.list-sort-pill:active {
+  background: var(--press);
+}
+
+.list-sort-pill.on {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  border-color: transparent;
+}
+
 .az-rail {
   position: absolute;
   right: var(--sar);
@@ -958,7 +1007,7 @@ textarea.input.notes {
   flex: 1.4;
 }
 
-/* ---------- Phase 2: detail — category, tags, curator badge ---------- */
+/* ---------- Phase 2: detail — category, tags, machine-translation badge (opens the editor) ---------- */
 
 .detail-cat {
   display: flex;
@@ -1029,7 +1078,7 @@ textarea.input.notes {
   white-space: nowrap;
 }
 
-.curator-badge {
+.translation-badge {
   display: block;
   width: 100%;
   min-height: 44px;
@@ -1049,7 +1098,7 @@ textarea.input.notes {
   touch-action: manipulation;
 }
 
-.curator-badge:active {
+.translation-badge:active {
   background: var(--press);
 }
 

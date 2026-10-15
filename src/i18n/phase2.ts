@@ -55,8 +55,8 @@ export const phase2: Dict = {
   'share.dictNote': { nl: 'Reist mee: {n} eigen ingrediënten', en: 'Travels along: {n} own ingredients' },
   'share.dictNoteOne': { nl: 'Reist mee: 1 eigen ingrediënt', en: 'Travels along: 1 own ingredient' },
   'share.tooLarge': {
-    nl: 'Te groot voor één WhatsApp-bericht ({n} tekens). Deel het als bestand; de ander importeert het via de Inbox.',
-    en: 'Too large for one WhatsApp message ({n} characters). Share it as a file; the other person imports it via the Inbox.',
+    nl: 'Te groot voor één WhatsApp-bericht ({n} tekens). Deel het als bestand; de ander importeert het via In & uit.',
+    en: 'Too large for one WhatsApp message ({n} characters). Share it as a file; the other person imports it via In & out.',
   },
   'share.file': { nl: 'Deel als bestand', en: 'Share as a file' },
   'share.fileShared': { nl: 'Bestand gedeeld', en: 'File shared' },

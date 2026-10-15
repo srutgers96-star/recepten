@@ -1,25 +1,35 @@
-// '#/more/storage' — status (installed, persisted, usage), counters per table, backup health
-// (last backup date, changes since then, a RED line when > 30 days of unbacked-up changes),
-// "Back-up maken" (navigator.share({files}) with .json, then the same bytes as .txt, then an
-// <a download>), "Herstel" (<input type=file> → importBundle → counters per table) and
-// "Exporteer eigen recepten" (a share bundle of own + received recipes, adjusted classics and
-// own ingredients, importable on the other phone via the Inbox). Invariant 9: share ONE field.
+// '#/more/storage' — status (installed, persisted, usage), counters per table, and two clearly
+// named blocks (phase 6, docs/phase-6-spec.md 13G — "knoppen zeggen wat ze doen"):
+//   1. "Back-up voor mezelf": ONE file with everything on this phone (own + received recipes,
+//      favourites, notes, cook log, profiles, week plan; photos optional via the "Met foto's"
+//      toggle) with backup health (last backup date, changes since then, a RED line when > 30
+//      days of unbacked-up changes). "Terugzetten" (Herstel: <input type=file> → importBundle →
+//      counters per table) sits inside this block, since it is the way back.
+//   2. "Mijn recepten aan iemand geven": a share bundle of own + received recipes, adjusted
+//      classics and own ingredients; the other phone imports it through the paste box (In & uit).
+// Each block has one primary button "Bewaar of deel" that opens a small choice sheet (the same
+// .sheet-* / .add-menu-row shell as the "+" menu of Recipes): "Delen" (share sheet: WhatsApp to
+// yourself, Drive, Files; falls back to a download) or "Download" (straight to Downloads, after
+// which the status says "Opgeslagen als <naam> in Downloads"), one sentence of explanation each.
+// Both bundles are pre-built so navigator.share still runs inside the tap on a choice row
+// (invariant 9: share ONE field; user activation is short-lived). Honest per phone (invariant
+// 13): on Android a download lands in Downloads (verified, A-bis.9); on the iPhone Safari asks
+// first and the file should turn up in Files → Downloads, so the hint and the status say so.
+// Nothing to give yet (no own recipes or adjustments) → the give-away says so up front and its
+// button is disabled; the backup is always possible.
 // Phase 5 (docs/phase-5-spec.md 30-09 "Reset app"): "App resetten" with Ja / Nee / "Ja, maar
-// exporteer eerst mijn recepten" (the export share first; the reset only after it succeeded).
-// A-bis.9: backup and export each offer "Deel het bestand" FIRST (share sheet: WhatsApp to
-// yourself, Drive, Files; falls back to a download) and "Download" second (straight to
-// Downloads); after a download the status says "Opgeslagen als <naam> in Downloads".
-// Phase 5 block D: a "Met foto's" toggle on the backup (default OFF — photos make the file many
-// times larger; the hint shows the real size once the with-photos bundle is built, ahead of the
-// tap so navigator.share still runs within the user gesture). A restore reports how many photos
-// came back (same recipeId+at = already here, not re-added).
+// deel eerst mijn recepten" (the give-away share first; the reset only after it succeeded).
+// Phase 5 block D: the with-photos bundle is built ahead of the tap (default OFF — photos make
+// the file many times larger; the hint shows the real size once it is packed). A restore reports
+// how many photos came back (same recipeId+at = already here, not re-added).
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { reloadBadgeSettings } from '@/badges';
 import { reloadCelebrateSettings } from '@/celebrate';
+import { isIOS } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import type { BackupBundle } from '@/db/model';
 import { useLive } from '@/db/live';
-import { LAST_BACKUP_KEY, backupHealth, bundled, countPhotos, exportBundle, getBaseRecipe, importBundle, resetEverything, setSetting, weekCounts, type BackupHealth } from '@/db/repo';
+import { LAST_BACKUP_KEY, backupHealth, bundled, countPhotos, exportBundle, getBaseRecipe, importBundle, logShareEvent, resetEverything, setSetting, weekCounts, type BackupHealth } from '@/db/repo';
 import { nowIso, type Text } from '@/domain/model';
 import { applyOverride } from '@/domain/overrides';
 import { buildBundleEnvelope, bundleFileName } from '@/domain/share';
@@ -39,6 +49,9 @@ interface Facts {
   persisted: boolean | null;
   usage: number | null;
 }
+
+/** Which "Bewaar of deel" choice sheet is open: the backup's or the give-away's. */
+type Menu = 'backup' | 'give' | null;
 
 function formatBytes(n: number): string {
   if (n < 1024 * 1024) return `${Math.max(1, Math.round(n / 1024))} kB`;
@@ -68,10 +81,22 @@ function downloadJson(name: string, json: string): { outcome: 'downloaded' | 'fa
   }
 }
 
+/** The backup file name for today (the same stem makeBackup() uses, so the sheet shows the real name). */
+function backupFileName(): string {
+  return `recepten-${nowIso().slice(0, 10)}.json`;
+}
+
+/** After a download: where the file went, honest per phone (Android: Downloads; iPhone: Files → Downloads, if accepted). */
+function savedLine(name: string): string {
+  return isIOS() ? t('storage.savedDownloadsIos', { name }) : t('storage.savedDownloads', { name });
+}
+
 export function StorageScreen() {
   const [facts, setFacts] = useState<Facts | null>(null);
   const [bundle, setBundle] = useState<BackupBundle | null>(null);
+  const [bundleBytes, setBundleBytes] = useState<number | null>(null);
   const [exportEnv, setExportEnv] = useState<Envelope | null>(null);
+  const [exportBytes, setExportBytes] = useState<number | null>(null);
   const [health, setHealth] = useState<BackupHealth | null>(null);
   const [status, setStatus] = useState('');
   const [restoreStatus, setRestoreStatus] = useState('');
@@ -81,6 +106,8 @@ export function StorageScreen() {
   const [busy, setBusy] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
   const [resetStatus, setResetStatus] = useState('');
+  // 13G: the "Bewaar of deel" choice sheet (Delen / Download) of one of the two blocks.
+  const [menu, setMenu] = useState<Menu>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const by = activeProfile.value?.name ?? '';
   // Phase 4 counters (plan / list / pantry), live: a restore updates them at once.
@@ -113,6 +140,16 @@ export function StorageScreen() {
     };
   }, [withPhotos, photoCount, reloadTick]);
 
+  // Escape closes the choice sheet (the backdrop tap and the × do the same).
+  useEffect(() => {
+    if (!menu) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenu(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menu]);
+
   const reload = useCallback(async () => {
     setReloadTick((n) => n + 1);
     let persisted: boolean | null = null;
@@ -128,9 +165,11 @@ export function StorageScreen() {
       usage = null;
     }
     setFacts({ standalone: isStandalone(), persisted, usage });
-    // Pre-built so the "Back-up maken" / "Exporteer" taps share at once (user activation is short-lived).
+    // Pre-built so a choice in the "Bewaar of deel" sheet shares at once (user activation is short-lived).
     const [b, h] = await Promise.all([exportBundle(), backupHealth()]);
     setBundle(b);
+    // The size shown in the sheet (photo-less; the with-photos size comes from photoBundle).
+    setBundleBytes(new Blob([JSON.stringify(b)]).size);
     setHealth(h);
     const overrides = b.overrides ?? [];
     const names: Record<string, Text> = {};
@@ -142,10 +181,11 @@ export function StorageScreen() {
     const opts = by ? { title: `${t('storage.ownRecipes')} · ${by}` } : {};
     const userIngredients = b.userIngredients ?? [];
     const env = buildBundleEnvelope(items, { by, userIngredients }, opts);
-    // The export promises ALL own ingredients, not only the referenced ones a share carries
+    // The give-away promises ALL own ingredients, not only the referenced ones a share carries
     // (the receiver's dictionary delta dedupes by id and skips older entries anyway).
     if (userIngredients.length) env.dict = { ing: [...userIngredients].sort((a, c) => a.id.localeCompare(c.id)) };
     setExportEnv(env);
+    setExportBytes(new Blob([JSON.stringify(env, null, 2)]).size);
   }, [by]);
 
   useEffect(() => {
@@ -159,9 +199,9 @@ export function StorageScreen() {
     void refreshShareBadges();
   }
 
-  /** "Deel het bestand" (share sheet, download as the fallback) or "Download" (straight to Downloads). */
+  /** "Delen" (share sheet, download as the fallback) or "Download" (straight to Downloads). */
   async function makeBackup(how: 'share' | 'download') {
-    // With the toggle on, the pre-built with-photos bundle is shared (buttons stay disabled
+    // With the toggle on, the pre-built with-photos bundle is shared (the button stays disabled
     // while it is still being packed); the normal path stays photo-less.
     const source = withPhotos ? photoBundle?.bundle : bundle;
     if (!source || busy) return;
@@ -169,7 +209,7 @@ export function StorageScreen() {
     setStatus('');
     try {
       const fresh: BackupBundle = { ...source, at: nowIso() };
-      const name = `recepten-${fresh.at.slice(0, 10)}.json`;
+      const name = backupFileName();
       const json = JSON.stringify(fresh);
       // navigator.share runs before the first await inside shareJsonFile: still within the tap.
       const r = how === 'share' ? await shareJsonFile(name, json) : downloadJson(name, json);
@@ -178,7 +218,7 @@ export function StorageScreen() {
         setStatus(t('storage.backupShared'));
       } else if (r.outcome === 'downloaded') {
         await markBackedUp();
-        setStatus(t('storage.savedDownloads', { name: r.name }));
+        setStatus(savedLine(r.name));
       } else if (r.outcome === 'failed') {
         setStatus(`${t('storage.backupFailed')}: ${r.error ?? ''}`);
       }
@@ -189,13 +229,24 @@ export function StorageScreen() {
     }
   }
 
-  /** Own recipes + adjusted classics in the export bundle (0 = nothing to export). */
+  /** Own recipes + adjusted classics in the give-away bundle (0 = nothing to give). */
   function exportCount(env: Envelope): number {
     const b = env.b as { recipes?: unknown[]; patches?: unknown[] } | undefined;
     return (b?.recipes?.length ?? 0) + (b?.patches?.length ?? 0);
   }
 
-  /** The export share itself (also the first step of "Ja, maar exporteer eerst"). Call within the tap. */
+  /** The recipe ids in the give-away bundle (adjusted classics by their own id) for the "In & uit" log. */
+  function exportIds(env: Envelope): string[] {
+    const b = env.b as { recipes?: Array<{ id?: unknown }>; patches?: Array<{ baseId?: unknown }> } | undefined;
+    return [...(b?.recipes ?? []).map((r) => r.id), ...(b?.patches ?? []).map((p) => p.baseId)].filter((id): id is string => typeof id === 'string' && id !== '');
+  }
+
+  /** 13A-2: the give-away went out (share sheet 'shared', or the file landed in Downloads) — one 'bundle' row, like Recepten → Selecteer → Exporteer. */
+  function logExportShared(env: Envelope) {
+    void logShareEvent({ at: nowIso(), direction: 'out', kind: 'bundle', who: null, count: exportCount(env), recipeIds: exportIds(env) }).catch((e: unknown) => console.error('logShareEvent', e));
+  }
+
+  /** The give-away share itself (also the first step of "Ja, maar deel eerst mijn recepten"). Call within the tap. */
   function shareExport(env: Envelope, how: 'share' | 'download' = 'share') {
     const fresh: Envelope = { ...env, at: nowIso() };
     const name = bundleFileName(by || 'export');
@@ -213,14 +264,42 @@ export function StorageScreen() {
     setExportStatus('');
     try {
       const r = await shareExport(exportEnv, how);
-      if (r.outcome === 'shared') setExportStatus(t('storage.exportShared'));
-      else if (r.outcome === 'downloaded') setExportStatus(t('storage.savedDownloads', { name: r.name }));
-      else if (r.outcome === 'failed') setExportStatus(`${t('storage.exportFailed')}: ${r.error ?? ''}`);
+      if (r.outcome === 'shared') {
+        logExportShared(exportEnv);
+        setExportStatus(t('storage.giveShared'));
+      } else if (r.outcome === 'downloaded') {
+        logExportShared(exportEnv);
+        setExportStatus(savedLine(r.name));
+      } else if (r.outcome === 'failed') setExportStatus(`${t('storage.exportFailed')}: ${r.error ?? ''}`);
     } catch (e) {
       setExportStatus(`${t('storage.exportFailed')}: ${String(e)}`);
     } finally {
       setBusy(false);
     }
+  }
+
+  /** "Bewaar of deel" tapped: open the choice sheet of that block (nothing to give → say so, no sheet). */
+  function openMenu(which: Exclude<Menu, null>) {
+    if (busy) return;
+    if (which === 'give') {
+      if (!exportEnv) return;
+      if (exportCount(exportEnv) === 0) {
+        setExportStatus(t('storage.exportEmpty'));
+        return;
+      }
+    }
+    setMenu(which);
+  }
+
+  /**
+   * A row in the choice sheet. The sheet closes and the action runs in the SAME click handler,
+   * so navigator.share (inside shareJsonFile, before its first await) still sits in the tap.
+   */
+  function choose(how: 'share' | 'download') {
+    const which = menu;
+    setMenu(null);
+    if (which === 'backup') void makeBackup(how);
+    else if (which === 'give') void exportOwn(how);
   }
 
   /** Wipes everything and reloads to '#/' (onboarding takes over; the service worker stays). */
@@ -232,11 +311,11 @@ export function StorageScreen() {
   }
 
   /**
-   * "App resetten" → Ja / "Ja, maar exporteer eerst mijn recepten". With `exportFirst` the
-   * own-recipes export share runs first and the reset waits for its promise: only a share that
+   * "App resetten" → Ja / "Ja, maar deel eerst mijn recepten". With `exportFirst` the
+   * give-away share runs first and the reset waits for its promise: only a share that
    * went through (shared or downloaded) is followed by the wipe; cancelled or failed → nothing
-   * is wiped. Nothing to export → the button is disabled; should it fire anyway, the person is
-   * told nothing was exported and nothing is wiped.
+   * is wiped. Nothing to share → the button is disabled; should it fire anyway, the person is
+   * told nothing was shared and nothing is wiped.
    */
   async function reset(exportFirst: boolean) {
     if (busy) return;
@@ -308,6 +387,22 @@ export function StorageScreen() {
   const own = bundle ? bundle.userRecipes.filter((r) => r.origin.kind !== 'received').length : null;
   const received = bundle ? bundle.userRecipes.filter((r) => r.origin.kind === 'received').length : null;
   const show = (n: number | null | undefined) => (n === null || n === undefined ? '…' : String(n));
+  const backupReady = !!bundle && !busy && !(withPhotos && !photoBundle);
+  // Nothing to give yet: said up front under the sentence, and the button stays disabled.
+  const giveEmpty = !!exportEnv && exportCount(exportEnv) === 0;
+  const giveReady = !!exportEnv && !busy && !giveEmpty;
+
+  // What the open sheet is about: its title and the file it will save or share (name + size).
+  const menuTitle = menu === 'backup' ? t('storage.backupTitle') : menu === 'give' ? t('storage.giveTitle') : '';
+  const menuFile =
+    menu === 'backup'
+      ? { name: backupFileName(), bytes: withPhotos ? (photoBundle?.bytes ?? null) : bundleBytes }
+      : menu === 'give'
+        ? { name: bundleFileName(by || 'export'), bytes: exportBytes }
+        : null;
+  // Honest per phone (invariant 13): Android lands the file in Downloads (verified, A-bis.9); on the
+  // iPhone the phone asks first and the file should appear in Files → Downloads (DEVICE-TEST verifies).
+  const downloadHint = isIOS() ? t('storage.chooseDownloadHintIos') : t('storage.chooseDownloadHint');
 
   return (
     <>
@@ -366,9 +461,10 @@ export function StorageScreen() {
           </dl>
         </section>
 
-        <section class={'card' + (health?.overdue ? ' backup-overdue' : '')}>
-          <h2>{t('storage.backup')}</h2>
-          <p class="muted small">{t('storage.backupHint')}</p>
+        {/* Block 1 — "Back-up voor mezelf": everything, for this phone (or a new one) via Herstel. */}
+        <section class={'card storage-block' + (health?.overdue ? ' backup-overdue' : '')}>
+          <h2>{t('storage.backupTitle')}</h2>
+          <p class="muted small">{t('storage.backupWhat')}</p>
           <dl class="counts">
             <dt>{t('storage.lastBackup')}</dt>
             <dd>{health ? formatWhen(health.lastBackupAt) : '…'}</dd>
@@ -410,64 +506,59 @@ export function StorageScreen() {
               <span class="track" />
             </span>
           </label>
-          <div class="actions file-actions" style="margin-bottom:0">
-            <button type="button" class="btn btn-primary" disabled={!bundle || busy || (withPhotos && !photoBundle)} onClick={() => void makeBackup('share')}>
-              {t('storage.shareFile')}
-            </button>
-            <button type="button" class="btn" disabled={!bundle || busy || (withPhotos && !photoBundle)} onClick={() => void makeBackup('download')}>
-              {t('storage.download')}
+          <div class="actions" style="margin-bottom:0">
+            <button type="button" class="btn btn-primary" aria-haspopup="dialog" disabled={!backupReady} onClick={() => openMenu('backup')}>
+              {t('storage.saveOrShare')}
             </button>
           </div>
-          <p class="muted small file-hint">{t('storage.fileHint')}</p>
           <div class="status" role="status">
             {status}
           </div>
-        </section>
 
-        <section class="card">
-          <h2>{t('storage.restore')}</h2>
-          <p class="muted small">{t('storage.restoreHint')}</p>
-          <input
-            ref={fileInput}
-            class="file-input"
-            type="file"
-            accept=".json,.txt,application/json,text/plain"
-            tabIndex={-1}
-            onChange={(e) => {
-              const input = e.currentTarget as HTMLInputElement;
-              const f = input.files?.[0];
-              input.value = '';
-              if (f) void restore(f);
-            }}
-          />
-          <div class="actions" style="margin-bottom:0">
-            <button type="button" class="btn" onClick={() => fileInput.current?.click()}>
-              {t('storage.restore')}
-            </button>
-            {restoreIsShare && (
-              <button type="button" class="btn btn-primary" onClick={() => navigate('/inbox')}>
-                {t('storage.goInbox')}
+          {/* The way back: Herstel, one sentence, inside the backup block. */}
+          <div class="storage-sub">
+            <h3>{t('storage.restoreTitle')}</h3>
+            <p class="muted small">{t('storage.restoreWhat')}</p>
+            <input
+              ref={fileInput}
+              class="file-input"
+              type="file"
+              accept=".json,.txt,application/json,text/plain"
+              tabIndex={-1}
+              onChange={(e) => {
+                const input = e.currentTarget as HTMLInputElement;
+                const f = input.files?.[0];
+                input.value = '';
+                if (f) void restore(f);
+              }}
+            />
+            <div class="actions" style="margin-bottom:0">
+              <button type="button" class="btn" disabled={busy} onClick={() => fileInput.current?.click()}>
+                {t('storage.restore')}
               </button>
-            )}
-          </div>
-          <div class="status" role="status">
-            {restoreStatus}
-            {restoreMore && <span class="restore-more">{restoreMore}</span>}
+              {restoreIsShare && (
+                <button type="button" class="btn btn-primary" onClick={() => navigate('/inbox')}>
+                  {t('storage.goInbox')}
+                </button>
+              )}
+            </div>
+            <div class="status" role="status">
+              {restoreStatus}
+              {restoreMore && <span class="restore-more">{restoreMore}</span>}
+            </div>
           </div>
         </section>
 
-        <section class="card">
-          <h2>{t('storage.export')}</h2>
-          <p class="muted small">{t('storage.exportHint')}</p>
-          <div class="actions file-actions" style="margin-bottom:0">
-            <button type="button" class="btn btn-primary" disabled={!exportEnv || busy} onClick={() => void exportOwn('share')}>
-              {t('storage.shareFile')}
-            </button>
-            <button type="button" class="btn" disabled={!exportEnv || busy} onClick={() => void exportOwn('download')}>
-              {t('storage.download')}
+        {/* Block 2 — "Mijn recepten aan iemand geven": only recipes and adjustments, for another phone. */}
+        <section class="card storage-block">
+          <h2>{t('storage.giveTitle')}</h2>
+          <p class="muted small">{t('storage.giveWhat')}</p>
+          {giveEmpty && <p class="muted small storage-empty">{t('storage.exportEmpty')}</p>}
+          <div class="actions" style="margin-bottom:0">
+            <button type="button" class="btn btn-primary" aria-haspopup="dialog" disabled={!giveReady} onClick={() => openMenu('give')}>
+              {t('storage.saveOrShare')}
             </button>
           </div>
-          <p class="muted small file-hint">{t('storage.fileHint')}</p>
           <div class="status" role="status">
             {exportStatus}
           </div>
@@ -504,6 +595,33 @@ export function StorageScreen() {
           </div>
         </section>
       </div>
+
+      {/* 13G: the "Bewaar of deel" choice — Delen / Download, one sentence each; same shell as the "+" menu. */}
+      {menu && menuFile && (
+        <div class="sheet-backdrop" onClick={() => setMenu(null)}>
+          <div class="sheet" role="dialog" aria-modal="true" aria-label={menuTitle} onClick={(e) => e.stopPropagation()}>
+            <div class="sheet-head">
+              <h2>{menuTitle}</h2>
+              <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={() => setMenu(null)}>
+                ×
+              </button>
+            </div>
+            <div class="sheet-body add-menu save-menu">
+              <p class="muted small save-menu-file">
+                {menuFile.bytes === null ? t('storage.fileLineNoSize', { name: menuFile.name }) : t('storage.fileLine', { name: menuFile.name, size: formatBytes(menuFile.bytes) })}
+              </p>
+              <button type="button" class="add-menu-row" onClick={() => choose('share')}>
+                <strong>{t('storage.chooseShare')}</strong>
+                <span class="muted small">{t('storage.chooseShareHint')}</span>
+              </button>
+              <button type="button" class="add-menu-row" onClick={() => choose('download')}>
+                <strong>{t('storage.download')}</strong>
+                <span class="muted small">{downloadHint}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

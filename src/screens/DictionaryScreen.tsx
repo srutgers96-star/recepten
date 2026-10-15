@@ -428,9 +428,10 @@ export function DictionaryScreen() {
     setOpenId(id);
   }
 
-  // Phase 6 (6A.2): '#/more/dictionary?q=<ingredient-id>' — the curator's "Verbeter in het
-  // woordenboek" lands here. A known id opens that entry like showEntry; anything else becomes the
-  // search text. The query then leaves the URL (replace), so back/reload never re-apply it.
+  // Phase 6 (6A.2): '#/more/dictionary?q=<ingredient-id>' — a deep link to one entry (first used by
+  // the Curator page, which went in phase 6 question 7; the route stays for links and the editor).
+  // A known id opens that entry like showEntry; anything else becomes the search text. The query
+  // then leaves the URL (replace), so back/reload never re-apply it.
   const qParam = route.value.query.get('q');
   useEffect(() => {
     if (qParam === null) return;

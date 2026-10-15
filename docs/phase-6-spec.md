@@ -323,7 +323,12 @@ anderen via delen; (6) later: challenges (level 20), gouden modus. Elke stap apa
 **Anti-valsspeel (idee Stijn 13 okt):** maximaal 5 kookbeurten per dag leveren XP op; Fable werkt dit
 uit samen met de XP-afleiding (een kookbeurt met een datum in het verleden telt ook mee voor díe dag).
 
-## Ronde 13 okt 2026 — Stijns notities, geordend (nog niet gebouwd; geordend door Opus 5.5)
+## Ronde 13 okt 2026 — Stijns notities, geordend (door Opus 5.5)
+
+**Stand 15 okt:** deel 1 is online — 13A deel 1 (universeel plakvak) en deel 2 (In & uit-overzicht,
+sorteren Recent/Eigen/Eigen & ontvangen), 13B (browser-melding, "Open in Chrome", installatie-uitleg,
+landingspagina), 13C (ChatGPT-witregels, codeblok-prompt), 13G (opslag duidelijker) en vraag 7 (Curator
+weg). Home-variant A+ gekozen (docs/home-voorstel.md) → te bouwen. Nog te bouwen: 13D, 13E, 13F.
 
 ### 13A. Eén plakplek voor alles; de Inbox herzien (M–L; hoort bij 6A-2)
 Stijn: "Ik wil één plakscherm voor links, recepten en kaartjes, niet verschillende plakschermen."

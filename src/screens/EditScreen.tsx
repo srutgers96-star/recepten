@@ -205,7 +205,7 @@ function sameTags(a: readonly string[], b: readonly string[]): boolean {
  * category / tags set when they differ from the shipped recipe and removed when they are equal
  * again (repo.saveOverride replaces the stored patch, and an empty patch removes the override).
  * When the English text of a machine-translated classic (`text.en === 'llm'`) was changed, the
- * patch also marks it `text.en = 'human'` (with the curator's name), which turns the "Machine
+ * patch also marks it `text.en = 'human'` (with the reviewer's name), which turns the "Machine
  * translation" badge off. `metaManual` (the person chose category/tags by hand, phase-5 A.4)
  * rides along as an unknown key that `applyOverride` copies onto the recipe.
  */

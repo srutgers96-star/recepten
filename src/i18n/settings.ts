@@ -39,7 +39,6 @@ export const settings: Dict = {
   'more.group.you': { nl: 'Jij & je huishouden', en: 'You & your household' },
   'more.group.recipes': { nl: 'Recepten & delen', en: 'Recipes & sharing' },
   'more.group.help': { nl: 'Hulp & over', en: 'Help & about' },
-  'more.testing': { nl: 'Testen & nakijken', en: 'Testing & review' },
   // --- Phase 6 (docs/phase-6-spec.md 6A.7): feedback + the donate link ---
   'more.feedback': { nl: 'Feedback voor Stijn', en: 'Feedback for Stijn' },
   'more.feedbackHint': { nl: 'Een idee, een fout of een compliment', en: 'An idea, a bug or a compliment' },
@@ -67,6 +66,44 @@ export const settings: Dict = {
   },
   'more.story': { nl: 'Het verhaal', en: 'The story' },
   'more.check': { nl: 'Apparaatcheck', en: 'Device check' },
+  // --- Phase 6 (docs/phase-6-spec.md 13B): "Links openen in de app" — a sheet with the steps per phone ---
+  'more.links': { nl: 'Links openen in de app', en: 'Opening links in the app' },
+  'more.linksHint': { nl: 'Wat op Android kan en wat op een iPhone niet', en: 'What Android can do and what an iPhone cannot' },
+  'links.intro': {
+    nl: 'Een deellink uit WhatsApp hoort in de app te openen, niet in een browser. Dat werkt per telefoon anders.',
+    en: 'A share link from WhatsApp should open in the app, not in a browser. That works differently per phone.',
+  },
+  'links.android': { nl: 'Android', en: 'Android' },
+  'links.android.step2': {
+    nl: 'Zet Chrome als standaardbrowser: Instellingen → Apps → Standaard-apps → Browser-app → Chrome.',
+    en: 'Make Chrome the default browser: Settings → Apps → Default apps → Browser app → Chrome.',
+  },
+  'links.android.step3': {
+    nl: "Instellingen → Apps → Rutgers' Recepten → Standaard openen → zet 'Ondersteunde links openen' aan.",
+    en: "Settings → Apps → Rutgers' Recipes → Open by default → switch 'Open supported links' on.",
+  },
+  'links.android.step4': {
+    nl: 'Tik in WhatsApp op een deellink. Opent hij toch in Chrome? Geen ramp: Chrome en de app delen dezelfde opslag, dus het recept komt ook in de app.',
+    en: 'Tap a share link in WhatsApp. Does it still open in Chrome? No harm done: Chrome and the app share the same storage, so the recipe reaches the app too.',
+  },
+  'links.android.honest': {
+    nl: 'Android beslist zelf of een link de app opent; de app kan dat niet afdwingen. Een andere browser (Opera, Samsung Internet, Firefox) heeft een eigen opslag: wat je daar bewaart, komt niet in de app.',
+    en: 'Android itself decides whether a link opens the app; the app cannot force it. Another browser (Opera, Samsung Internet, Firefox) has storage of its own: what you save there does not reach the app.',
+  },
+  'links.ios': { nl: 'iPhone', en: 'iPhone' },
+  'links.ios.honest': {
+    nl: 'Op een iPhone opent een link altijd Safari. Dat kan de app niet veranderen, en Safari heeft een eigen opslag. Zo komt een recept toch in de app:',
+    en: 'On an iPhone a link always opens Safari. The app cannot change that, and Safari has storage of its own. This is how a recipe still reaches the app:',
+  },
+  'links.ios.step1': { nl: 'Tik op de link. Je ziet een voorproefje van het recept.', en: 'Tap the link. You see a preview of the recipe.' },
+  'links.ios.step2': { nl: 'Tik op Kopieer receptcode.', en: 'Tap Copy recipe code.' },
+  'links.ios.step3': { nl: 'Open de app via het icoon op je beginscherm.', en: 'Open the app from the icon on your Home Screen.' },
+  'links.ios.step4': { nl: 'Tik onderaan op Meer → In & uit → Plak van klembord en bewaar het recept.', en: 'Tap More at the bottom → In & out → Paste from clipboard and save the recipe.' },
+  'links.ios.alt': {
+    nl: 'Sneller: houd het bericht in WhatsApp ingedrukt → Kopieer, open de app en plak.',
+    en: 'Quicker: long-press the message in WhatsApp → Copy, open the app and paste.',
+  },
+  'links.nowIn': { nl: 'Je zit nu in {browser}.', en: 'You are in {browser} right now.' },
   'more.about': { nl: 'Over', en: 'About' },
   'more.version': { nl: 'Versie', en: 'Version' },
   'more.channel': { nl: 'Kanaal', en: 'Channel' },
@@ -128,9 +165,7 @@ export const settings: Dict = {
   // --- Phase 5: Meer rows (docs/phase-5-spec.md A.6 + A.8) ---
   'more.checkRecipes': { nl: 'Controleer mijn recepten', en: 'Check my recipes' },
   'more.checkRecipesHint': { nl: 'Voorstel voor categorie en dieet per eigen recept', en: 'Suggested category and diet per own recipe' },
-  // --- Phase 5 block D (docs/phase-5-spec.md D.4): the curator row + experiments switch ---
-  'more.curator': { nl: 'Curator', en: 'Curator' },
-  'more.curatorHint': { nl: 'Engelse teksten nakijken', en: 'Review the English texts' },
+  // --- Phase 5 block D (docs/phase-5-spec.md D.4): the experiments switch ---
   'more.experiments': { nl: 'Experimenten', en: 'Experiments' },
   'more.experimentsHint': {
     nl: 'Functies in aanbouw. Nu: "Toon QR" op het deelscherm en bij je kaartje.',
@@ -182,8 +217,8 @@ export const settings: Dict = {
   'household.cardBuildFailed': { nl: 'Kaartje kon niet worden gemaakt.', en: 'Could not create the card.' },
   // Honest (CLAUDE.md invariants 5 + 13): on an iPhone a link never opens the installed app.
   'household.cardIosHint': {
-    nl: 'Android: de ander tikt op de link. iPhone: de link opent de app niet — de ander kopieert het bericht en plakt het in de app (Huishouden → "Voeg lid toe via link of plak", of de Inbox).',
-    en: 'Android: the other person taps the link. iPhone: the link does not open the app — they copy the message and paste it into the app (Household → "Add a member via link or paste", or the Inbox).',
+    nl: 'Android: de ander tikt op de link. iPhone: de link opent de app niet — de ander kopieert het bericht en plakt het in de app (Huishouden → "Voeg lid toe via link of plak", of In & uit).',
+    en: 'Android: the other person taps the link. iPhone: the link does not open the app — they copy the message and paste it into the app (Household → "Add a member via link or paste", or In & out).',
   },
   'household.cardQrAlt': { nl: 'QR-code met mijn kaartje', en: 'QR code with my card' },
   'household.cardQrHint': {
@@ -263,21 +298,24 @@ export const settings: Dict = {
   'storage.notes': { nl: 'Notities', en: 'Notes' },
   'storage.cookLog': { nl: 'Keer gekookt', en: 'Times cooked' },
   'storage.profiles': { nl: 'Profielen', en: 'Profiles' },
-  'storage.backup': { nl: 'Back-up', en: 'Backup' },
+  // Phase 6 (docs/phase-6-spec.md 13G): two named blocks — "Back-up voor mezelf" and "Mijn recepten
+  // aan iemand geven" — each with ONE primary "Bewaar of deel" that opens a Delen / Download sheet.
+  // The words "exporteer/export" left the UI: every button says what it does.
+  'storage.backupTitle': { nl: 'Back-up voor mezelf', en: 'Backup for myself' },
+  'storage.backupWhat': {
+    nl: 'Eén bestand met alles op deze telefoon: eigen en ontvangen recepten, favorieten, notities, kooklog, profielen en weekplan (foto’s alleen met de schakelaar hieronder aan). Zet het terug met Herstel, hier of op een nieuwe telefoon.',
+    en: 'One file with everything on this phone: own and received recipes, favourites, notes, cook log, profiles and week plan (photos only with the switch below on). Put it back with Restore, here or on a new phone.',
+  },
+  'storage.saveOrShare': { nl: 'Bewaar of deel', en: 'Save or share' },
   'storage.lastBackup': { nl: 'Laatste back-up', en: 'Last backup' },
   'storage.never': { nl: 'nog nooit', en: 'never yet' },
-  'storage.makeBackup': { nl: 'Back-up maken', en: 'Make a backup' },
-  'storage.backupHint': {
-    nl: 'Eén bestand met je eigen en ontvangen recepten, favorieten, notities, kooklog en profielen. Deel het naar Bestanden, Drive of WhatsApp.',
-    en: 'One file with your own and received recipes, favourites, notes, cook log and profiles. Share it to Files, Drive or WhatsApp.',
-  },
   'storage.backupShared': { nl: 'Back-up gedeeld', en: 'Backup shared' },
-  'storage.backupDownloaded': { nl: 'Back-up gedownload', en: 'Backup downloaded' },
   'storage.backupFailed': { nl: 'Back-up mislukt', en: 'Backup failed' },
   'storage.restore': { nl: 'Herstel', en: 'Restore' },
-  'storage.restoreHint': {
-    nl: 'Kies een back-upbestand (recepten-….json). Bestaande gegevens blijven; wat in het bestand staat wordt toegevoegd of bijgewerkt.',
-    en: 'Choose a backup file (recepten-….json). Existing data stays; what is in the file is added or updated.',
+  'storage.restoreTitle': { nl: 'Een back-up terugzetten', en: 'Put a backup back' },
+  'storage.restoreWhat': {
+    nl: 'Kies een back-upbestand (recepten-….json): wat erin staat wordt toegevoegd of bijgewerkt, wat al op deze telefoon staat blijft.',
+    en: 'Choose a backup file (recepten-….json): what is in it is added or updated, what is already on this phone stays.',
   },
   'storage.restoring': { nl: 'Bezig met herstellen…', en: 'Restoring…' },
   'storage.restored': {
@@ -306,27 +344,32 @@ export const settings: Dict = {
     en: 'Also restored: {overrides} adjusted classics, {lineOverrides} linked lines, {ingredients} own ingredients.',
   },
   'storage.shareBundle': {
-    nl: 'Dit is een deelbundel (recepten van iemand anders), geen back-up. Importeer hem via de Inbox.',
-    en: 'This is a share bundle (recipes from someone else), not a backup. Import it via the Inbox.',
+    nl: 'Dit is een receptenbestand van iemand anders ("Mijn recepten aan iemand geven"), geen back-up. Zet het in het plakvak (In & uit).',
+    en: 'This is someone else’s recipes file ("Give my recipes to someone"), not a backup. Put it in the paste box (In & out).',
   },
-  'storage.goInbox': { nl: 'Naar Inbox', en: 'Go to Inbox' },
-  'storage.export': { nl: 'Exporteer eigen recepten', en: 'Export own recipes' },
-  'storage.exportHint': {
-    nl: 'Eén bestand met je eigen en ontvangen recepten, aangepaste klassiekers en eigen ingrediënten. Op de andere telefoon importeer je het via de Inbox (niet via Herstel): daar zie je per recept wat nieuw is.',
-    en: 'One file with your own and received recipes, adjusted classics and own ingredients. On the other phone import it via the Inbox (not via Restore): it shows per recipe what is new.',
+  'storage.goInbox': { nl: 'Naar In & uit', en: 'Go to In & out' },
+  // "Mijn recepten aan iemand geven" (the former "Exporteer eigen recepten")
+  'storage.giveTitle': { nl: 'Mijn recepten aan iemand geven', en: 'Give my recipes to someone' },
+  'storage.giveWhat': {
+    nl: 'Alleen je eigen en ontvangen recepten, aangepaste klassiekers en eigen ingrediënten; geen favorieten of geschiedenis. De ander zet het bestand in het plakvak van de app (In & uit) en ziet per recept wat nieuw is.',
+    en: 'Only your own and received recipes, adjusted classics and own ingredients; no favourites or history. The other person puts the file in the app’s paste box (In & out) and sees per recipe what is new.',
   },
-  'storage.exportShared': { nl: 'Export gedeeld', en: 'Export shared' },
-  'storage.exportDownloaded': { nl: 'Export gedownload', en: 'Export downloaded' },
-  'storage.exportFailed': { nl: 'Exporteren mislukt', en: 'Export failed' },
-  'storage.exportEmpty': { nl: 'Niets te exporteren: nog geen eigen recepten of aanpassingen.', en: 'Nothing to export: no own recipes or adjustments yet.' },
-  // --- Phase 5 (docs/phase-5-spec.md A-bis.9): "Deel het bestand" first, "Download" second ---
-  'storage.shareFile': { nl: 'Deel het bestand', en: 'Share the file' },
+  'storage.giveShared': { nl: 'Recepten gedeeld', en: 'Recipes shared' },
+  'storage.exportFailed': { nl: 'Bewaren of delen mislukt', en: 'Saving or sharing failed' },
+  'storage.exportEmpty': { nl: 'Nog niets te geven: je hebt nog geen eigen recepten of aanpassingen.', en: 'Nothing to give yet: you have no own recipes or adjustments yet.' },
+  // The "Bewaar of deel" sheet: file line + the two rows "Delen" and "Download", honest per phone.
+  'storage.fileLine': { nl: 'Bestand: {name} (±{size})', en: 'File: {name} (about {size})' },
+  'storage.fileLineNoSize': { nl: 'Bestand: {name}', en: 'File: {name}' },
+  'storage.chooseShare': { nl: 'Delen', en: 'Share' },
+  'storage.chooseShareHint': { nl: 'Jij kiest waarheen: WhatsApp (aan jezelf), Drive, Bestanden …', en: 'You choose where it goes: WhatsApp (to yourself), Drive, Files …' },
   'storage.download': { nl: 'Download', en: 'Download' },
-  'storage.fileHint': {
-    nl: 'Delen: naar WhatsApp (aan jezelf), Drive of Bestanden. Download: het bestand komt in Downloads.',
-    en: 'Share: to WhatsApp (to yourself), Drive or Files. Download: the file lands in Downloads.',
+  'storage.chooseDownloadHint': { nl: 'Het bestand komt in de map Downloads van deze telefoon.', en: 'The file lands in this phone’s Downloads folder.' },
+  'storage.chooseDownloadHintIos': {
+    nl: 'De iPhone vraagt eerst of je wilt downloaden; daarna staat het bestand in Bestanden → Downloads.',
+    en: 'The iPhone first asks whether to download; the file is then in Files → Downloads.',
   },
   'storage.savedDownloads': { nl: 'Opgeslagen als {name} in Downloads', en: 'Saved as {name} in Downloads' },
+  'storage.savedDownloadsIos': { nl: 'Heb je Download gekozen? Dan staat {name} in Bestanden → Downloads.', en: 'Did you choose Download? Then {name} is in Files → Downloads.' },
   // --- Phase 5 block D.1: photos in the counters card + the "Met foto's" backup toggle ---
   'storage.photos': { nl: 'Foto’s', en: 'Photos' },
   'storage.withPhotos': { nl: 'Met foto’s', en: 'With photos' },
@@ -347,15 +390,15 @@ export const settings: Dict = {
   'storage.resetConfirm': { nl: 'Weet je het zeker? Je verliest je geschiedenis en eigen recepten.', en: 'Are you sure? You will lose your history and your own recipes.' },
   'storage.resetYes': { nl: 'Ja', en: 'Yes' },
   'storage.resetNo': { nl: 'Nee', en: 'No' },
-  'storage.resetExportFirst': { nl: 'Ja, maar exporteer eerst mijn recepten', en: 'Yes, but export my recipes first' },
+  'storage.resetExportFirst': { nl: 'Ja, maar deel eerst mijn recepten', en: 'Yes, but share my recipes first' },
   'storage.resetHistoryHint': {
-    nl: 'De export bevat alleen eigen recepten en aanpassingen. Geschiedenis (kooklog, favorieten, notities) zit alleen in een back-up.',
-    en: 'The export holds only your own recipes and adjustments. History (cook log, favourites, notes) is only in a backup.',
+    nl: 'Dat delen is hetzelfde als "Mijn recepten aan iemand geven": alleen eigen recepten en aanpassingen. Geschiedenis (kooklog, favorieten, notities) zit alleen in een back-up.',
+    en: 'That share is the same as "Give my recipes to someone": only own recipes and adjustments. History (cook log, favourites, notes) is only in a backup.',
   },
   'storage.resetting': { nl: 'Bezig met resetten…', en: 'Resetting…' },
-  'storage.resetExporting': { nl: 'Eerst exporteren…', en: 'Exporting first…' },
-  'storage.resetExportAborted': { nl: 'Export afgebroken — er is niets gewist.', en: 'Export cancelled — nothing was wiped.' },
-  'storage.resetExportFailed': { nl: 'Exporteren mislukt — er is niets gewist.', en: 'Export failed — nothing was wiped.' },
+  'storage.resetExporting': { nl: 'Eerst je recepten delen…', en: 'Sharing your recipes first…' },
+  'storage.resetExportAborted': { nl: 'Delen afgebroken — er is niets gewist.', en: 'Sharing cancelled — nothing was wiped.' },
+  'storage.resetExportFailed': { nl: 'Delen mislukt — er is niets gewist.', en: 'Sharing failed — nothing was wiped.' },
   'storage.resetFailed': { nl: 'Resetten mislukt', en: 'Reset failed' },
 
   // --- Het verhaal ------------------------------------------------------------------------------
@@ -379,61 +422,4 @@ export const settings: Dict = {
   'story.cookedHint': { nl: 'Tik in de kookstand op "Gekookt!" en de teller loopt op.', en: 'Tap "Cooked!" in cooking mode and the counter goes up.' },
   // --- Phase 5 block D (docs/phase-5-spec.md D.3): the household on the story page ---
   'story.members': { nl: 'Wie koken er mee', en: 'Who cooks along' },
-
-  // --- Phase 5 block D (docs/phase-5-spec.md D.4): Curator — the English side of the classics ---
-  'curator.title': { nl: 'Curator', en: 'Curator' },
-  'curator.intro': {
-    nl: 'De Engelse kant van de 196 klassiekers. Nederlands is de referentie en blijft staan; je bewerkt alleen het Engels.',
-    en: 'The English side of the 196 classics. Dutch is the reference and stays put; you only edit the English.',
-  },
-  'curator.progress': { nl: '{n} van de {total} gecontroleerd', en: '{n} of {total} reviewed' },
-  'curator.filters': { nl: 'Filter', en: 'Filter' },
-  'curator.filter.all': { nl: 'Alle', en: 'All' },
-  'curator.filter.machine': { nl: 'Machine', en: 'Machine' },
-  'curator.filter.reviewed': { nl: 'Gecontroleerd', en: 'Reviewed' },
-  'curator.filter.missing': { nl: 'Ontbreekt', en: 'Missing' },
-  'curator.status.machine': { nl: 'machine', en: 'machine' },
-  'curator.status.reviewed': { nl: 'gecontroleerd', en: 'reviewed' },
-  'curator.status.missing': { nl: 'ontbreekt', en: 'missing' },
-  'curator.reviewedBy': { nl: 'Gecontroleerd door {name}', en: 'Reviewed by {name}' },
-  'curator.noEn': { nl: 'nog geen Engelse naam', en: 'no English name yet' },
-  'curator.empty': { nl: 'Niets in dit filter.', en: 'Nothing in this filter.' },
-  'curator.send': { nl: 'Stuur correcties', en: 'Send corrections' },
-  'curator.sendHint': {
-    nl: 'Deelt alle gecontroleerde klassiekers als correctiebericht; de andere telefoon neemt ze over via de Inbox.',
-    en: 'Shares every reviewed classic as a corrections message; the other phone adopts them through its Inbox.',
-  },
-  'curator.sendNone': {
-    nl: 'Nog niets te sturen — controleer eerst een recept en sla het op.',
-    en: 'Nothing to send yet — review a recipe and save it first.',
-  },
-  'curator.sendOne': { nl: '1 gecontroleerde klassieker klaar om te sturen.', en: '1 reviewed classic ready to send.' },
-  'curator.sendCount': { nl: '{n} gecontroleerde klassiekers klaar om te sturen.', en: '{n} reviewed classics ready to send.' },
-  'curator.sent': { nl: 'Correcties gedeeld', en: 'Corrections shared' },
-  'curator.backToList': { nl: 'Naar de lijst', en: 'Back to the list' },
-  'curator.name': { nl: 'Naam', en: 'Name' },
-  'curator.description': { nl: 'Omschrijving', en: 'Description' },
-  'curator.ingredients': { nl: 'Ingrediënten', en: 'Ingredients' },
-  'curator.steps': { nl: 'Stappen', en: 'Steps' },
-  'curator.enOf': { nl: 'Engels: {what}', en: 'English: {what}' },
-  'curator.save': { nl: 'Bewaar als gecontroleerd', en: 'Save as reviewed' },
-  'curator.saved': { nl: 'Bewaard — dit recept telt nu als gecontroleerd.', en: 'Saved — this recipe now counts as reviewed.' },
-  'curator.savedNoName': {
-    nl: 'Bewaard — zonder Engelse naam telt dit recept nog niet als gecontroleerd.',
-    en: 'Saved — without an English name this recipe does not count as reviewed yet.',
-  },
-  // Phase 6 (6A.2): an ingredient line the dictionary renders is shown read-only in grey. An own
-  // entry gets a button that jumps to it in the dictionary (a fix there applies to every recipe); a
-  // built-in entry cannot be edited there either, so the line says "ingebouwd" and the hint points
-  // to Feedback voor Stijn. Leaving for the dictionary drops an unsaved draft, hence the confirm.
-  'curator.fromDictionary': { nl: 'Uit het woordenboek', en: 'From the dictionary' },
-  'curator.improveInDictionary': { nl: 'Verbeter in het woordenboek', en: 'Improve in the dictionary' },
-  'curator.dictionaryHint': {
-    nl: 'Grijze regels komen uit het woordenboek: zo toont de app ze in het Engels. Staat er "ingebouwd" bij, dan kun je het woord zelf niet aanpassen — klopt het niet, meld het via Feedback voor Stijn (Meer → Hulp & over). Een eigen ingrediënt verbeter je met de knop in het woordenboek; dat geldt dan voor alle recepten. Alleen regels die de app niet herkent, hebben hier een eigen Engels vak.',
-    en: 'Grey lines come from the dictionary: that is how the app shows them in English. A line marked "built-in" cannot be changed by you — if it is wrong, report it via Feedback for Stijn (More → Help & about). An own ingredient you improve with the button, in the dictionary; that then applies to every recipe. Only lines the app does not recognise have their own English box here.',
-  },
-  'curator.unsavedLeave': {
-    nl: 'Je Engelse wijzigingen zijn nog niet bewaard. Toch naar het woordenboek? Dan gaan ze verloren.',
-    en: 'Your English changes are not saved yet. Go to the dictionary anyway? They will be lost.',
-  },
 };

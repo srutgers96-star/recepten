@@ -76,6 +76,16 @@ parser, dictionary, token, migration tools, Node tests) stays usable unchanged.
   scanning on the iPhone uncertain.
 - The invariant "timers promise nothing phase 0 did not prove on that device" (CLAUDE.md 13) is
   fed by row 11 and the iPhone row of this table.
+- Phase 6, 13B (15 Oct 2026): Stijn's share links opened Opera (his default browser then), whose
+  storage the Chrome-installed WebAPK never sees. In a browser tab on a phone the app now shows a
+  notice (install via Chrome, make Chrome the default; iPhone: Home Screen + copy/paste) and, on
+  Android outside Chrome, an "Open in Chrome" link of the form
+  `intent://<host><path><fragment>#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=…;end`
+  (src/pwa.ts `chromeIntentUrl`). **UNKNOWN** until DEVICE-TEST rows 62/64 are run: whether Opera,
+  Samsung Internet and Firefox honour such an intent link at all, and whether Chrome then hands the
+  page to the WebAPK (link capture stays "not guaranteed", above). The UI therefore always offers
+  "copy the link and paste it in Chrome" next to the button and promises nothing. On iPhone a link
+  always opens Safari (invariant 5); the notice says so and never claims otherwise.
 - What she gets: the same app as Stijn, UI in British English, the 196 classics translated and
   reviewed by herself, her own recipes, planner, shopping list, cooking mode with wake lock, backup
   to Files, and receiving Stijn's recipes in ~10 s (long-press → Copy → app → Paste).

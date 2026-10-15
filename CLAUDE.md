@@ -57,7 +57,7 @@ src/domain/         FRAMEWORK-FREE (no preact, no dexie; runs in Node): model, p
 src/db/             Dexie schema, numbered migrations, one repository module (repo.ts, the ONLY module
                     the UI talks to for data); dbName derived from BASE_URL
 src/screens/        home · recipes · recipe · cook · edit · share · inbox · more · profiles · storage ·
-                    story · onboarding · check … (week · shopping · curator · book come later)
+                    story · onboarding · check · week · shopping · dictionary · household … (no Curator page since 15 Oct 2026: a classic's English is improved via the editor)
 src/components/     header, nav, rows, step view, timer bar, line editor, confetti, install card …
 data/               SOURCE OF TRUTH: recipes.json (schema 2, bilingual), ingredients/units/categories/…, i18n/
 data/source/        recipes-recepten2.json: the 196 originals from Recepten2 (read-only, never edited by hand)

@@ -18,10 +18,10 @@ import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { QrCode } from '@/components/QrCode';
 import { Segmented } from '@/components/Segmented';
-import { bumpSharedRecipes, getOverride, getRecipe, getSetting, isBuiltinId, listLineOverrides, listUserIngredients } from '@/db/repo';
+import { bumpSharedRecipes, getOverride, getRecipe, getSetting, isBuiltinId, listLineOverrides, listUserIngredients, logShareEvent } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import type { Ingredient } from '@/domain/dictionary';
-import { pickText, type Lang, type Recipe } from '@/domain/model';
+import { nowIso, pickText, type Lang, type Recipe } from '@/domain/model';
 import { applyLineOverrides, type LineOverride, type RecipeOverride } from '@/domain/overrides';
 import { buildReadableRecipe, countIngredientLines, recipeHasLang } from '@/domain/message';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
@@ -71,6 +71,15 @@ function countRecipeShared() {
       return pid ? checkNewBadges(pid) : undefined;
     })
     .catch((e: unknown) => console.error('bumpSharedRecipes', e));
+}
+
+/**
+ * Phase 6 (13A-2): this recipe left the phone (share sheet, readable text, file or download) —
+ * one 'out' row in the "In & uit" log; an adjusted classic is a 'patches' row with the classic's
+ * id. No partner is named on this screen (who = null). Fire-and-forget.
+ */
+function logRecipeShared(id: string, asPatch: boolean) {
+  void logShareEvent({ at: nowIso(), direction: 'out', kind: asPatch ? 'patches' : 'recipes', who: null, count: 1, recipeIds: [id] }).catch((e: unknown) => console.error('logShareEvent', e));
 }
 
 /** Share plain text: the share sheet when there is one, else WhatsApp's web intent. */
@@ -190,6 +199,14 @@ function RecipeShareScreen(props: { id: string }) {
   }, [recipe, ui]);
 
   const name = recipe ? pickText(recipe.name, ui) : '';
+  // 13A-2: what the log calls this share — an adjusted (or link-only) classic travels as a patch.
+  const asPatch = !!loaded && (!!loaded.override || loaded.linksOnly);
+
+  /** The share sheet reported 'shared': count it for the badge and write the "In & uit" row. */
+  function onRecipeShared() {
+    countRecipeShared();
+    logRecipeShared(props.id, asPatch);
+  }
 
   /** A-bis.9: "Deel het bestand" first (share sheet, download as the fallback), "Download" second. */
   function shareFile() {
@@ -198,9 +215,11 @@ function RecipeShareScreen(props: { id: string }) {
     void shareJsonFile(file.name, file.json).then((r) => {
       if (r.outcome === 'shared') {
         setStatus(t('share.fileShared'));
-        countRecipeShared();
-      } else if (r.outcome === 'downloaded') setStatus(t('share.fileDownloaded', { name: r.name }));
-      else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
+        onRecipeShared();
+      } else if (r.outcome === 'downloaded') {
+        setStatus(t('share.fileDownloaded', { name: r.name }));
+        logRecipeShared(props.id, asPatch);
+      } else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
     });
   }
 
@@ -210,6 +229,7 @@ function RecipeShareScreen(props: { id: string }) {
     try {
       downloadBlob(file.name, new Blob([file.json], { type: 'application/json' }));
       setStatus(t('share.fileDownloaded', { name: file.name }));
+      logRecipeShared(props.id, asPatch);
     } catch (e) {
       setStatus(`${t('share.fileFailed')}: ${String(e)}`);
     }
@@ -263,7 +283,7 @@ function RecipeShareScreen(props: { id: string }) {
               <>
                 <pre class="report share-preview">{message || error || t('share.encoding')}</pre>
                 <div class="actions">
-                  <button type="button" class="btn btn-primary btn-block" disabled={!message} onClick={() => doShareText(message, setStatus, countRecipeShared)}>
+                  <button type="button" class="btn btn-primary btn-block" disabled={!message} onClick={() => doShareText(message, setStatus, onRecipeShared)}>
                     {t('share.whatsapp')}
                   </button>
                   <button type="button" class="btn" disabled={!message} onClick={() => doCopy(message, setStatus)}>
@@ -302,7 +322,7 @@ function RecipeShareScreen(props: { id: string }) {
               )}
               <pre class="report share-preview share-readable">{readable || t('share.encoding')}</pre>
               <div class="actions">
-                <button type="button" class="btn btn-primary btn-block" disabled={!readable} onClick={() => doShareText(readable, setTextStatus, countRecipeShared)}>
+                <button type="button" class="btn btn-primary btn-block" disabled={!readable} onClick={() => doShareText(readable, setTextStatus, onRecipeShared)}>
                   {t('share.asText')}
                 </button>
                 <button type="button" class="btn" disabled={!readable} onClick={() => doCopy(readable, setTextStatus)}>

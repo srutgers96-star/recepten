@@ -18,6 +18,13 @@
 // tap), + Deze week, Categorie/labels (own recipes in the recipe, classics as an override patch),
 // Verwijder (own and received only, confirm) and Exporteer (a bundle file). Escape or "Klaar"
 // leaves select mode.
+// Phase 6 (docs/phase-6-spec.md 13A-2): a sort row above the list — A–Z (groups + rail, the
+// default) · Recent bekeken (src/recent.ts, newest viewed first) · Eigen · Eigen & ontvangen (newest
+// change first). The choice is remembered per phone ('recepten.recipes.sort'); the chips keep
+// working inside the chosen mode, a search always looks through every recipe (the mode only orders
+// and filters the unsearched list: "Eigen" remembered a week ago must not hide the classic soups
+// from a search for "soep"), and the letter rail exists only in A–Z. A share or export from select
+// mode is logged in the "In & uit" log (repo.logShareEvent).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
@@ -27,7 +34,7 @@ import { RecipeRow } from '@/components/RecipeRow';
 import { SelectBar, type MetaChange } from '@/components/SelectBar';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
-import { addToPlan, allRecipes, bumpSharedRecipes, deleteUserRecipe, getOverride, isBuiltinId, listFavorites, listLineOverrides, listUserIngredients, saveOverride, saveUserRecipe } from '@/db/repo';
+import { addToPlan, allRecipes, bumpSharedRecipes, deleteUserRecipe, getOverride, isBuiltinId, listFavorites, listLineOverrides, listUserIngredients, logShareEvent, saveOverride, saveUserRecipe } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
 import { type LineOverride, type RecipeOverride } from '@/domain/overrides';
@@ -38,6 +45,7 @@ import type { Envelope } from '@/domain/token';
 import { lang, t } from '@/i18n';
 import { openPastedText, PASTE_FILE_ACCEPT } from '@/paste';
 import { activeProfile } from '@/profile';
+import { LIST_SORTS, loadListSort, orderRecipes, recentIds, saveListSort, type ListSort } from '@/recent';
 import { navigate, route } from '@/router';
 import { shareJsonFile, shareText } from '@/share-actions';
 
@@ -80,6 +88,22 @@ function linksOnlyOverride(baseId: string, lineOverrides: LineOverride[]): Recip
 interface ShareData {
   plan: MessagePlan;
   bundle: Envelope;
+  /** Ids of the selected recipes (patched classics by their own id) for the "In & uit" log. */
+  ids: string[];
+}
+
+/** The i18n key of each sort mode's label (browse.ts). */
+const SORT_LABEL: Record<ListSort, string> = { az: 'list.sortAz', recent: 'list.sortRecent', own: 'list.sortOwn', ownReceived: 'list.sortOwnReceived' };
+
+/** The empty-state text of a non-A–Z mode that has nothing to show (no search, no chips). */
+const SORT_EMPTY: Record<ListSort, string> = { az: 'list.empty', recent: 'list.emptyRecent', own: 'list.emptyOwn', ownReceived: 'list.emptyOwnReceived' };
+
+/**
+ * 13A-2: a share or export from select mode went out (share sheet 'shared', or a file landed in
+ * Downloads). Fire-and-forget; the log never blocks the status line.
+ */
+function logSelectionShared(kind: 'recipes' | 'bundle', ids: readonly string[]) {
+  void logShareEvent({ at: nowIso(), direction: 'out', kind, who: null, count: ids.length, recipeIds: [...ids] }).catch((e: unknown) => console.error('logShareEvent', e));
 }
 
 /**
@@ -103,6 +127,10 @@ export function RecipesScreen() {
   const favs = useLive(() => (pid ? listFavorites(pid) : Promise.resolve(new Set<string>())), [pid]);
   const [query, setQuery] = useState(savedQuery);
   const [filters, setFilters] = useState<PickFilter>(() => loadPickFilter(LIST_FILTERS_KEY));
+  // 13A-2: the sort mode (remembered per phone) and, for "Recent bekeken", the viewed ids — read
+  // when the mode is chosen and again when the list data changes (a return from a recipe page
+  // remounts the screen, so the id just viewed is at the front).
+  const [sortMode, setSortMode] = useState<ListSort>(() => loadListSort());
   const queryRef = useRef(query);
   queryRef.current = query;
   const scroller = useRef<HTMLDivElement>(null);
@@ -166,20 +194,35 @@ export function RecipesScreen() {
     savePickFilter(LIST_FILTERS_KEY, next);
   }
 
+  function changeSort(next: ListSort) {
+    setSortMode(next);
+    saveListSort(next);
+    setRailLetter(null);
+    // A mode switch starts at the top: the old offset belongs to the old order.
+    if (scroller.current) scroller.current.scrollTop = 0;
+  }
+
   // The search box is the screen's own (grouped results); the chip filter carries no query.
   const filtering = pickFilterActive(filters);
   const q = query.trim();
   const searching = q !== '';
+  const az = sortMode === 'az';
 
   const tags = useMemo(() => tagIdsIn(all ?? []), [all]);
   const base = useMemo(() => applyPickFilter(all ?? [], filters, dict, l), [all, filters, dict, l]);
+  // The chip-filtered recipes in the mode's own order (A–Z: unchanged; the groups sort by name).
+  const recent = useMemo(() => (sortMode === 'recent' ? recentIds() : []), [sortMode, all]);
+  const ordered = useMemo(() => (az ? base : orderRecipes(base, sortMode, recent)), [base, az, sortMode, recent]);
+  // A search looks through every (chip-filtered) recipe, whatever the sort mode: "Eigen" or "Recent
+  // bekeken" is a filter, and a remembered one must not silently turn "soep" into "Geen recepten gevonden".
   const searchGroups = useMemo<SearchGroup[]>(
     () => (searching ? searchRecipes(base, q, dict, l).map((g) => ({ kind: g.kind, recipes: sortByName(g.recipes, l) })) : []),
     [base, q, dict, l, searching],
   );
-  const groups = useMemo(() => (searching || filtering ? [] : groupRecipes(base, l)), [base, l, searching, filtering]);
-  const plain = useMemo(() => (!searching && filtering ? sortByName(base, l) : []), [base, l, searching, filtering]);
-  const count = searching ? searchGroups.reduce((n, g) => n + g.recipes.length, 0) : base.length;
+  const groups = useMemo(() => (searching || filtering || !az ? [] : groupRecipes(base, l)), [base, l, searching, filtering, az]);
+  // Flat list: chips on in A–Z (by name), or any other mode (in its own order).
+  const plain = useMemo(() => (searching ? [] : az ? (filtering ? sortByName(base, l) : []) : ordered), [base, ordered, l, searching, filtering, az]);
+  const count = searching ? searchGroups.reduce((n, g) => n + g.recipes.length, 0) : ordered.length;
 
   // Remember the position on leave …
   useEffect(() => {
@@ -297,7 +340,7 @@ export function RecipesScreen() {
       const plan = await planMessages(envs, appInfo.appUrl, { lang: l, by, name: by });
       const title = by ? t('select.exportTitle', { name: by }) : undefined;
       const bundle = buildBundleEnvelope({ recipes, patches, lineOverrides, names }, ctx, title ? { title } : {});
-      if (!cancelled) setShareData({ plan, bundle });
+      if (!cancelled) setShareData({ plan, bundle, ids: selectedList.map((r) => r.id) });
     })()
       .catch((e: unknown) => {
         console.error('select share', e);
@@ -318,12 +361,14 @@ export function RecipesScreen() {
     setSelectStatus('');
     // Count what is in the share sheet now, not what is selected when the sheet closes.
     const shared = selectedList.length;
+    const ids = shareData.ids;
     const plan = shareData.plan;
     const done = 'text' in plan
       ? shareText(plan.text).then((r) => {
           if (r.outcome === 'shared') {
             setSelectStatus(t('select.shared'));
             countShared(shared);
+            logSelectionShared('recipes', ids);
           } else if (r.outcome === 'no-share-api') setSelectStatus(t('share.noShareApi'));
           else if (r.outcome === 'failed') setSelectStatus(`${t('share.error')}: ${r.error ?? ''}`);
         })
@@ -331,8 +376,11 @@ export function RecipesScreen() {
           if (r.outcome === 'shared') {
             setSelectStatus(t('share.fileShared'));
             countShared(shared);
-          } else if (r.outcome === 'downloaded') setSelectStatus(t('share.fileDownloaded', { name: r.name }));
-          else if (r.outcome === 'failed') setSelectStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
+            logSelectionShared('recipes', ids);
+          } else if (r.outcome === 'downloaded') {
+            setSelectStatus(t('share.fileDownloaded', { name: r.name }));
+            logSelectionShared('recipes', ids);
+          } else if (r.outcome === 'failed') setSelectStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
         });
     void done.finally(() => setSelectBusy(false));
   }
@@ -342,12 +390,17 @@ export function RecipesScreen() {
     if (!shareData || selectBusy) return;
     setSelectBusy(true);
     setSelectStatus('');
+    const ids = shareData.ids;
     const fresh: Envelope = { ...shareData.bundle, at: nowIso() };
     void shareJsonFile(bundleFileName(by || 'selectie'), JSON.stringify(fresh, null, 2))
       .then((r) => {
-        if (r.outcome === 'shared') setSelectStatus(t('share.fileShared'));
-        else if (r.outcome === 'downloaded') setSelectStatus(t('share.fileDownloaded', { name: r.name }));
-        else if (r.outcome === 'failed') setSelectStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
+        if (r.outcome === 'shared') {
+          setSelectStatus(t('share.fileShared'));
+          logSelectionShared('bundle', ids);
+        } else if (r.outcome === 'downloaded') {
+          setSelectStatus(t('share.fileDownloaded', { name: r.name }));
+          logSelectionShared('bundle', ids);
+        } else if (r.outcome === 'failed') setSelectStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
       })
       .finally(() => setSelectBusy(false));
   }
@@ -424,10 +477,12 @@ export function RecipesScreen() {
 
   const countLabel = !all
     ? t('common.loading')
-    : searching || filtering
+    : searching || filtering || !az
       ? t('list.filtered', { n: count, total: all.length })
       : t('list.count', { n: count });
   const empty = all && count === 0;
+  // A mode with nothing in it says why ("Nog niets bekeken"); with a search or chips on it is the plain "Geen recepten gevonden".
+  const emptyText = t(searching || filtering ? 'list.empty' : SORT_EMPTY[sortMode]);
 
   function row(r: Recipe) {
     return (
@@ -482,8 +537,16 @@ export function RecipesScreen() {
       {/* The rail is positioned inside .az-area (list only), so it never overlays the header. */}
       <div class="az-area">
         <div class={'screen' + (groups.length > 1 ? ' has-az' : '') + (selectMode ? ' selecting' : '')} ref={scroller}>
+          {/* 13A-2: the sort row. Radios in a horizontally scrolling strip (44 px pills, 360 px wide phones). */}
+          <div class="list-sort" role="radiogroup" aria-label={t('list.sort')}>
+            {LIST_SORTS.map((m) => (
+              <button key={m} type="button" role="radio" aria-checked={sortMode === m} class={'list-sort-pill' + (sortMode === m ? ' on' : '')} onClick={() => changeSort(m)}>
+                {t(SORT_LABEL[m])}
+              </button>
+            ))}
+          </div>
           <div class="muted small list-count">{countLabel}</div>
-          {empty && <div class="empty">{t('list.empty')}</div>}
+          {empty && <div class="empty">{emptyText}</div>}
           {searching &&
             searchGroups.map((g) => (
               <section key={g.kind}>
@@ -495,7 +558,8 @@ export function RecipesScreen() {
                 </ul>
               </section>
             ))}
-          {!searching && filtering && (
+          {/* Flat list: chips on in A–Z, or any other sort mode (its own order, no letter groups). */}
+          {!searching && (filtering || !az) && (
             <ul class="list">
               {plain.map((r) => (
                 <li key={r.id}>{row(r)}</li>

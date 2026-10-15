@@ -15,15 +15,22 @@
 // Phase 6 (docs/phase-6-spec.md 13A): the paste box is the universal one (<UniversalPaste>): a
 // website recipe or an AI answer pasted (or shared via the Android share sheet) here is recognised
 // and travels to the editor with "Open in de editor"; links, bundles and cards stay here as before.
+// Phase 6 (13A-2, Stijn 13 okt): the screen is "In & uit" — everything that came in AND went out.
+// Under the paste box two tabs: "Ontvangen" (the received list with date + sender, the import
+// history and undo, as before) and "Gedeeld" (the 'out' rows of the `events` log, repo.listShareEvents:
+// date, to whom, what, how many; a tap opens the recipe, or unfolds the names when there are
+// several). A member card added here is logged as an 'in' row. The route stays '#/inbox'; the
+// badge stays "unseen received" (src/inbox-badge.ts).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
 import { ImportPreview } from '@/components/ImportPreview';
 import { UniversalPaste } from '@/components/UniversalPaste';
 import { useLive } from '@/db/live';
-import type { ImportSnapshot } from '@/db/model';
+import type { ImportSnapshot, ShareEvent } from '@/db/model';
 import {
   addToPlan,
+  allRecipes,
   applyImportPlan,
   getHousehold,
   getPlan,
@@ -31,7 +38,9 @@ import {
   getSetting,
   isUndoable,
   listImports,
+  listShareEvents,
   localStateForImport,
+  logShareEvent,
   receivedPatches,
   savePlan,
   setSetting,
@@ -42,7 +51,7 @@ import {
 import { reloadDictionary } from '@/dictionary';
 import { memberByName, membersFrom, type HouseholdSetting, type MemberCard } from '@/domain/household';
 import { defaultChoices, planImport, type ImportChoice, type ImportChoices, type ImportPlan } from '@/domain/merge';
-import { pickText, type Recipe, type Text } from '@/domain/model';
+import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
 import { classifyPaste } from '@/domain/paste-classify';
 import { emptyPlan, newPlanItem } from '@/domain/planner';
 import type { PlanShare } from '@/domain/share';
@@ -126,6 +135,104 @@ async function receivedRows(): Promise<ReceivedRow[]> {
   return rows.sort((a, b) => b.at.localeCompare(a.at));
 }
 
+// --- "Gedeeld" tab (13A-2): the 'out' rows of the events log ------------------------------------
+
+type InboxTab = 'received' | 'shared';
+
+/** What a row stands for: "3 recepten", "1 aangepaste klassieker", "Bestand met 4 recepten", "Je kaartje". */
+function eventWhat(e: ShareEvent): string {
+  switch (e.kind) {
+    case 'recipes':
+      return e.count === 1 ? t('inbox.foundRecipe') : t('inbox.foundRecipes', { n: e.count });
+    case 'patches':
+      return e.count === 1 ? t('inbox.foundPatch') : t('inbox.foundPatches', { n: e.count });
+    case 'bundle':
+      return e.count === 1 ? t('inbox.ev.bundleOne') : t('inbox.ev.bundle', { n: e.count });
+    case 'member':
+      return t('inbox.ev.member');
+    case 'plan':
+      return t('inbox.ev.plan');
+    case 'list':
+      return t('inbox.ev.list');
+  }
+}
+
+/** The recipe name behind an id in a log row; a recipe that is gone says so instead of showing its id. */
+function eventRecipeName(id: string, byId: Map<string, Recipe>, ui: Lang): string {
+  const r = byId.get(id);
+  return r ? pickText(r.name, ui) || id : t('inbox.ev.deleted');
+}
+
+/**
+ * One row of the "Gedeeld" tab. One recipe: the name is the title and a tap opens it. Several: the
+ * count is the title, the first names are the subtitle, a tap unfolds every name as a link. A card
+ * (no recipe ids) or a single recipe that has since been deleted is a plain row (nothing to open);
+ * in an unfolded list a deleted one is plain text. The meta line says to whom and when.
+ */
+function SharedRow(props: { event: ShareEvent; byId: Map<string, Recipe>; ui: Lang; onOpen: (id: string) => void }) {
+  const { event: e, byId, ui } = props;
+  const [open, setOpen] = useState(false);
+  const ids = e.recipeIds;
+  const many = ids.length > 1;
+  const single = ids.length === 1 ? ids[0] : undefined;
+  const singleGone = single !== undefined && !byId.has(single);
+  const title = single ? eventRecipeName(single, byId, ui) : eventWhat(e);
+  // A single plain recipe needs no "1 recept" under its name; a patch or a bundle does say what it was.
+  const preview = many ? ids.slice(0, 3).map((id) => eventRecipeName(id, byId, ui)).join(', ') + (ids.length > 3 ? ` +${ids.length - 3}` : '') : single && e.kind !== 'recipes' ? eventWhat(e) : '';
+  const meta = [e.who ? t('inbox.sharedTo', { name: e.who }) : '', fmtDate(e.at, ui)].filter((s) => s !== '').join(' · ');
+  const body = (
+    <>
+      <span class="inbox-shared-icon" aria-hidden="true">
+        📤
+      </span>
+      <span class="name">
+        <span class="inbox-row-name">{title}</span>
+        {preview && <span class="muted small inbox-row-meta">{preview}</span>}
+        <span class="muted small inbox-row-meta">{meta}</span>
+      </span>
+    </>
+  );
+  if (!ids.length || singleGone) {
+    return (
+      <li>
+        <div class="row inbox-row inbox-shared-row">{body}</div>
+      </li>
+    );
+  }
+  return (
+    <li>
+      <button type="button" class="row inbox-row inbox-shared-row" aria-expanded={many ? open : undefined} onClick={() => (single ? props.onOpen(single) : setOpen((v) => !v))}>
+        {body}
+        <span class="chev" aria-hidden="true">
+          {many ? (open ? '▴' : '▾') : '›'}
+        </span>
+      </button>
+      {many && open && (
+        <ul class="inbox-shared-names">
+          {ids.map((id) => (
+            <li key={id}>
+              {byId.has(id) ? (
+                <a
+                  class="chip"
+                  href={'#/recipe/' + id}
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    props.onOpen(id);
+                  }}
+                >
+                  {eventRecipeName(id, byId, ui)}
+                </a>
+              ) : (
+                <span class="chip muted">{eventRecipeName(id, byId, ui)}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
+
 // --- Screen --------------------------------------------------------------------------------------
 
 export function InboxScreen() {
@@ -162,6 +269,13 @@ export function InboxScreen() {
   const receivedList = useLive(receivedRows, []);
   const seen = useLive(seenIds, []);
   const history = useLive(() => listImports(10), []);
+  // 13A-2: the two tabs under the paste box, and what the "Gedeeld" tab lists (live: a share made
+  // elsewhere shows up on return). Recipe names come from the full list; a deleted one says so.
+  const [tab, setTab] = useState<InboxTab>('received');
+  const events = useLive(() => listShareEvents('out', 200), []);
+  const all = useLive(allRecipes, []);
+  const byId = useMemo(() => new Map((all ?? []).map((r) => [r.id, r] as const)), [all]);
+  const outEvents = events ?? [];
 
   // The "unsent changes" card (spec §3: Inbox → top card when there is something unsent).
   useEffect(() => {
@@ -395,6 +509,10 @@ export function InboxScreen() {
       const r = await applyMemberCard(card);
       setHouseholdState(r.setting);
       setCardDone((prev) => ({ ...prev, [card.id]: r.outcome }));
+      // 13A-2: a card that was added or updated came IN — one row in the "In & uit" log.
+      if (r.outcome === 'added' || r.outcome === 'updated') {
+        void logShareEvent({ at: nowIso(), direction: 'in', kind: 'member', who: card.name, count: 1, recipeIds: [] }).catch((err: unknown) => console.error('logShareEvent', err));
+      }
     } catch (e) {
       console.error('applyMemberCard', e);
       setNotice(`${t('household.cardFailed')}: ${String((e as Error)?.message ?? e)}`);
@@ -430,6 +548,8 @@ export function InboxScreen() {
 
   const list = receivedList ?? [];
   const rows: ImportSnapshot[] = history ?? [];
+  // The small count on the "Ontvangen" tab: the same "unseen" the Meer row and Home show.
+  const unseenCount = seen ? list.filter((r) => !seen.has(r.key)).length : 0;
   const weekDishes = received?.share.items.length ?? 0;
   const weekTitle = received
     ? received.by
@@ -580,82 +700,111 @@ export function InboxScreen() {
           </div>
         )}
 
-        <section class="section inbox-received">
-          <h2>{t('inbox.received')}</h2>
-          {receivedList && list.length === 0 && <div class="empty">{t('inbox.empty')}</div>}
-          <ul class="list">
-            {list.map((r) => {
-              const unseen = seen ? !seen.has(r.key) : false;
-              const meta: string[] = [];
-              if (r.patch) meta.push(r.from ? t('inbox.patchBy', { name: r.from }) : t('inbox.patchAnon'));
-              else if (r.from) meta.push(t('common.from', { name: r.from }));
-              meta.push(fmtDate(r.at, ui));
-              // Block F: a sender who is a household member gets their colour and initial.
-              const member = memberByName(householdMembers, r.from);
-              return (
-                <li key={r.key}>
-                  <a
-                    class="row inbox-row"
-                    href={'#/recipe/' + r.recipeId}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openReceived(r);
-                    }}
-                  >
-                    {member && <Avatar profile={member} />}
-                    <span class="name">
-                      <span class="inbox-row-name">{pickText(r.name, ui)}</span>
-                      <span class="muted small inbox-row-meta">{meta.join(' · ')}</span>
-                    </span>
-                    {unseen && <span class="badge badge-green">{t('inbox.unseen')}</span>}
-                    <span class="chev">›</span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-
-        <section class="section inbox-history">
-          <button type="button" class="inbox-history-toggle" aria-expanded={showHistory} onClick={() => setShowHistory((v) => !v)}>
-            <span class="inbox-history-title">
-              {t('inbox.history')}
-              {rows.length > 0 ? ` (${rows.length})` : ''}
-            </span>
-            <span class="muted small">{showHistory ? t('inbox.hide') : t('inbox.show')}</span>
+        {/* 13A-2: "Ontvangen" | "Gedeeld". The paste box and the import preview above stay on both tabs. */}
+        <div class="inbox-tabs" role="tablist" aria-label={t('inbox.title')}>
+          <button type="button" role="tab" id="inbox-tab-received" class="inbox-tab" aria-selected={tab === 'received'} aria-controls="inbox-panel-received" onClick={() => setTab('received')}>
+            {t('inbox.tabReceived')}
+            {unseenCount > 0 && <span class="badge badge-green">{unseenCount > 99 ? '99+' : unseenCount}</span>}
           </button>
-          {showHistory && (
-            <ul class="list inbox-history-list">
-              {history && rows.length === 0 && <li class="muted small inbox-history-empty">{t('inbox.historyEmpty')}</li>}
-              {rows.map((s) => (
-                <li class="inbox-history-row" key={s.id ?? s.at}>
-                  <div class="inbox-history-main">
-                    <div class="inbox-history-when">
-                      {fmtDate(s.at, ui)}
-                      {' · '}
-                      {s.from ? t('common.from', { name: s.from }) : t('inbox.senderUnknown')}
-                      {s.undone && (
-                        <>
-                          {' '}
-                          <span class="badge badge-muted">{t('inbox.historyUndone')}</span>
-                        </>
-                      )}
-                    </div>
-                    <div class="muted small">
-                      {t('inbox.result', { added: s.added.length, updated: s.updated.length, skipped: s.skipped.length })}
-                      {s.copies && s.copies.length > 0 ? ` · ${t('inbox.resultCopies', { n: s.copies.length })}` : ''}
-                    </div>
-                  </div>
-                  {undoable && undoable.id === s.id && (
-                    <button type="button" class="btn btn-small btn-danger" disabled={busy} onClick={() => void doUndo()}>
-                      {t('inbox.undo')}
-                    </button>
-                  )}
-                </li>
-              ))}
+          <button type="button" role="tab" id="inbox-tab-shared" class="inbox-tab" aria-selected={tab === 'shared'} aria-controls="inbox-panel-shared" onClick={() => setTab('shared')}>
+            {t('inbox.tabShared')}
+          </button>
+        </div>
+
+        {tab === 'shared' && (
+          <section class="section inbox-shared" id="inbox-panel-shared" role="tabpanel" aria-labelledby="inbox-tab-shared">
+            <p class="muted small inbox-shared-hint">{t('inbox.sharedHint')}</p>
+            {events && outEvents.length === 0 && <div class="empty">{t('inbox.sharedEmpty')}</div>}
+            {/* Rows wait for the recipe list: before `all` is in, every name would read "(verwijderd recept)". */}
+            <ul class="list inbox-shared-list">
+              {all &&
+                outEvents.map((e) => (
+                  <SharedRow key={e.id ?? e.at + e.kind} event={e} byId={byId} ui={ui} onOpen={open} />
+                ))}
             </ul>
-          )}
-        </section>
+          </section>
+        )}
+
+        {tab === 'received' && (
+          <>
+            <section class="section inbox-received" id="inbox-panel-received" role="tabpanel" aria-labelledby="inbox-tab-received">
+              <h2>{t('inbox.received')}</h2>
+              {receivedList && list.length === 0 && <div class="empty">{t('inbox.empty')}</div>}
+              <ul class="list">
+                {list.map((r) => {
+                  const unseen = seen ? !seen.has(r.key) : false;
+                  const meta: string[] = [];
+                  if (r.patch) meta.push(r.from ? t('inbox.patchBy', { name: r.from }) : t('inbox.patchAnon'));
+                  else if (r.from) meta.push(t('common.from', { name: r.from }));
+                  meta.push(fmtDate(r.at, ui));
+                  // Block F: a sender who is a household member gets their colour and initial.
+                  const member = memberByName(householdMembers, r.from);
+                  return (
+                    <li key={r.key}>
+                      <a
+                        class="row inbox-row"
+                        href={'#/recipe/' + r.recipeId}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openReceived(r);
+                        }}
+                      >
+                        {member && <Avatar profile={member} />}
+                        <span class="name">
+                          <span class="inbox-row-name">{pickText(r.name, ui)}</span>
+                          <span class="muted small inbox-row-meta">{meta.join(' · ')}</span>
+                        </span>
+                        {unseen && <span class="badge badge-green">{t('inbox.unseen')}</span>}
+                        <span class="chev">›</span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+
+            <section class="section inbox-history">
+              <button type="button" class="inbox-history-toggle" aria-expanded={showHistory} onClick={() => setShowHistory((v) => !v)}>
+                <span class="inbox-history-title">
+                  {t('inbox.history')}
+                  {rows.length > 0 ? ` (${rows.length})` : ''}
+                </span>
+                <span class="muted small">{showHistory ? t('inbox.hide') : t('inbox.show')}</span>
+              </button>
+              {showHistory && (
+                <ul class="list inbox-history-list">
+                  {history && rows.length === 0 && <li class="muted small inbox-history-empty">{t('inbox.historyEmpty')}</li>}
+                  {rows.map((s) => (
+                    <li class="inbox-history-row" key={s.id ?? s.at}>
+                      <div class="inbox-history-main">
+                        <div class="inbox-history-when">
+                          {fmtDate(s.at, ui)}
+                          {' · '}
+                          {s.from ? t('common.from', { name: s.from }) : t('inbox.senderUnknown')}
+                          {s.undone && (
+                            <>
+                              {' '}
+                              <span class="badge badge-muted">{t('inbox.historyUndone')}</span>
+                            </>
+                          )}
+                        </div>
+                        <div class="muted small">
+                          {t('inbox.result', { added: s.added.length, updated: s.updated.length, skipped: s.skipped.length })}
+                          {s.copies && s.copies.length > 0 ? ` · ${t('inbox.resultCopies', { n: s.copies.length })}` : ''}
+                        </div>
+                      </div>
+                      {undoable && undoable.id === s.id && (
+                        <button type="button" class="btn btn-small btn-danger" disabled={busy} onClick={() => void doUndo()}>
+                          {t('inbox.undo')}
+                        </button>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </>
+        )}
       </div>
     </>
   );

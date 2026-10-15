@@ -1,6 +1,8 @@
-// Unseen count for the Inbox tab badge: received recipes (key = recipe id) and classics adjusted
-// by someone else (key = 'p:' + baseId, repo.receivedPatches) whose key is not in the setting
-// `inbox.seenIds` (a string[] the Inbox screen maintains) — the same rows the Inbox lists.
+// Unseen count for the "In & uit" badge (Meer row, Home reminder, the "Ontvangen" tab): received
+// recipes (key = recipe id) and classics adjusted by someone else (key = 'p:' + baseId,
+// repo.receivedPatches) whose key is not in the setting `inbox.seenIds` (a string[] the In & uit
+// screen maintains) — the same rows its "Ontvangen" tab lists. Phase 6 (13A-2): the screen also
+// shows what went OUT (the `events` log), but the badge deliberately stays "unseen received".
 // `startInboxBadge()` keeps the signal live through Dexie's liveQuery; `refreshInboxUnseen()` is
 // a one-shot recount.
 //
