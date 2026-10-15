@@ -252,6 +252,118 @@ describe('parseLine: corpus lines', () => {
   });
 });
 
+// --- Phase 6 (docs/phase-6-spec.md 6A.14, 6A.10, 6A.16): "naar smaak" anywhere, "zout peper", the prompt's brackets ---
+
+describe('6A.14: "naar smaak" / "to taste" anywhere in the line', () => {
+  const full = fullDictionary();
+  const nlFull = (raw: string) => parseLine(raw, full, 'nl');
+  const enFull = (raw: string) => parseLine(raw, full, 'en');
+  const tasted = { optional: true, note: { nl: 'naar smaak', en: 'to taste' } };
+
+  it('in front, in the middle and at the end give the same result', () => {
+    const end = nl('zout en peper naar smaak');
+    expect(end).toMatchObject({ ing: 'zout-en-peper', ...tasted });
+    expect(nl('naar smaak zout en peper')).toMatchObject({ ing: 'zout-en-peper', ...tasted });
+    expect(nl('naar smaak: zout en peper')).toMatchObject({ ing: 'zout-en-peper', ...tasted });
+    expect(nl('zout en peper naar smaak toevoegen')).toMatchObject({ ing: 'zout-en-peper', ...tasted });
+    expect(nl('zout en peper, naar smaak')).toMatchObject({ ing: 'zout-en-peper', ...tasted });
+    expect(en('to taste: salt and pepper')).toMatchObject({ ing: 'zout-en-peper', ...tasted });
+    expect(en('salt and pepper to taste')).toMatchObject({ ing: 'zout-en-peper', ...tasted });
+    expect(en('to taste salt and pepper')).toMatchObject({ ing: 'zout-en-peper', ...tasted });
+  });
+
+  it("Gemini's lines (7 Oct): the vague amount in front of kosher salt", () => {
+    expect(enFull('to taste: kosher salt')).toMatchObject({ ing: 'zout', name: 'kosher salt', qty: null, ...tasted });
+    expect(nlFull('naar smaak koosjer zout')).toMatchObject({ ing: 'zout', qty: null, ...tasted });
+    expect(nlFull('koosjer zout naar smaak')).toMatchObject({ ing: 'zout', qty: null, ...tasted });
+    // No invented quantity: nothing to scale, nothing on the shopping list.
+    expect(enFull('to taste: kosher salt').qty).toBeNull();
+  });
+
+  it('"naar wens" / "to your liking" keep their own words; a quantity in front stays', () => {
+    expect(nlFull('zout naar wens')).toMatchObject({ ing: 'zout', optional: true, note: { nl: 'naar wens', en: 'to your liking' } });
+    expect(enFull('to your liking: chilli flakes')).toMatchObject({ ing: 'chilivlokken', optional: true, note: { nl: 'naar wens', en: 'to your liking' } });
+    expect(nlFull('1 tl zout naar smaak')).toMatchObject({ ing: 'zout', qty: { min: 1 }, unit: 'tl', ...tasted });
+  });
+
+  it('the phrase alone, or inside a word, changes nothing', () => {
+    expect(nl('naar smaak').optional).toBeUndefined();
+    expect(nlFull('smaakmaker').ing).not.toBe('zout');
+  });
+
+  it('a comma tail after the phrase stays the prep/note of the name, also without a quantity', () => {
+    expect(nlFull('kaas naar smaak, geraspt')).toMatchObject({ ing: 'kaas', name: 'kaas', prep: { nl: 'geraspt', en: 'grated' }, ...tasted });
+    expect(nlFull('ui naar smaak, gesnipperd')).toMatchObject({ ing: 'ui', prep: { nl: 'gesnipperd' }, ...tasted });
+    expect(nlFull('kaas naar wens, geraspt')).toMatchObject({ ing: 'kaas', prep: { nl: 'geraspt' }, note: { nl: 'naar wens', en: 'to your liking' } });
+    expect(nlFull('zout, naar smaak, versgemalen')).toMatchObject({ ing: 'zout', prep: { nl: 'versgemalen', en: 'freshly ground' }, ...tasted });
+    expect(nlFull('100 g kaas naar smaak, geraspt')).toMatchObject({ ing: 'kaas', qty: { min: 100 }, unit: 'g', prep: { nl: 'geraspt' }, ...tasted });
+    expect(enFull('Parmesan to taste, grated')).toMatchObject({ ing: 'parmezaanse-kaas', prep: { nl: 'geraspt', en: 'grated' }, ...tasted });
+    expect(enFull('parsley to taste, chopped')).toMatchObject({ ing: 'peterselie', prep: { en: 'chopped' }, ...tasted });
+    // An unknown tail is a note in the source language, and the name part never holds a double comma.
+    expect(enFull('salt, to taste, plus more for the water')).toMatchObject({ ing: 'zout', name: 'salt', note: { en: 'to taste; plus more for the water' } });
+    expect(nlFull('1 tl zout naar smaak, plus extra voor het water')).toMatchObject({ ing: 'zout', unit: 'tl', note: { nl: 'naar smaak; plus extra voor het water' } });
+    // Without the phrase a line without a quantity keeps its commas (a product name may hold one).
+    expect(nlFull('kroepoek, atjar en seroendeng').ing).toBe('kroepoek-atjar-en-seroendeng');
+  });
+});
+
+describe('6A.14: "zout peper" without "en" is salt and pepper', () => {
+  it('Dutch and English, name kept as written', () => {
+    expect(nl('zout peper')).toMatchObject({ ing: 'zout-en-peper', name: 'zout peper', qty: null });
+    expect(en('salt pepper')).toMatchObject({ ing: 'zout-en-peper', name: 'salt pepper' });
+    expect(nl('zout peper naar smaak')).toMatchObject({ ing: 'zout-en-peper', optional: true });
+    expect(parseLine('peper zout', fullDictionary(), 'nl')).toMatchObject({ ing: 'zout-en-peper' });
+  });
+
+  it('two words that are not a known pair stay unresolved', () => {
+    expect(nl('zout suiker').ing).toBeNull();
+  });
+});
+
+describe('6A.10 / 6A.16: the brackets the import prompt asks for', () => {
+  const full = fullDictionary();
+  const nlFull = (raw: string) => parseLine(raw, full, 'nl');
+  const enFull = (raw: string) => parseLine(raw, full, 'en');
+
+  it('"[naar smaak]" is the taste note, not a preparation', () => {
+    const line = nlFull('koosjer zout [naar smaak]');
+    expect(line).toMatchObject({ ing: 'zout', qty: null, optional: true, note: { nl: 'naar smaak', en: 'to taste' } });
+    expect(line.prep).toBeUndefined();
+    expect(line.confidence).toBe(1);
+    expect(enFull('kosher salt [to taste]')).toMatchObject({ ing: 'zout', optional: true, note: { nl: 'naar smaak', en: 'to taste' } });
+  });
+
+  it('"[knapperig; of brood; voor erbij]": the alternative becomes an alternative, the rest the prep', () => {
+    const line = nlFull('2 sneetjes stokbrood [knapperig; of brood; voor erbij]');
+    expect(line).toMatchObject({ qty: { min: 2 }, unit: 'snee', ing: 'stokbrood', altMode: 'or', prep: { nl: 'knapperig; voor erbij' } });
+    expect(line.alt?.[0]).toMatchObject({ ing: 'brood' });
+    const enLine = enFull('2 slices baguette [crusty; or bread; to serve]');
+    expect(enLine).toMatchObject({ ing: 'stokbrood', altMode: 'or', prep: { en: 'crusty; to serve' } });
+    expect(enLine.alt?.[0]).toMatchObject({ ing: 'brood' });
+  });
+
+  it('a plain preparation in brackets is unchanged', () => {
+    expect(nlFull('1 sjalotje [gesnipperd]')).toMatchObject({ ing: 'sjalot', prep: { nl: 'gesnipperd', en: 'finely diced' } });
+    expect(nl('4 grote, rijpe tomaten [ontveld; blokjes]')).toMatchObject({ ing: 'tomaat', prep: { nl: 'ontveld; blokjes', en: 'skinned; diced' } });
+    expect(nl('4 grote, rijpe tomaten [ontveld; blokjes]').alt).toBeUndefined();
+  });
+
+  it('"[een snufje]" / "[a pinch]" (the vague amount the prompt sends to the brackets) is a bilingual note, no quantity', () => {
+    const pinch = { nl: 'een snufje', en: 'a pinch' };
+    expect(nlFull('zout [een snufje]')).toMatchObject({ ing: 'zout', qty: null, unit: null, note: pinch, confidence: 1 });
+    expect(nlFull('zout [een snufje]').prep).toBeUndefined();
+    expect(nlFull('zout [snufje]')).toMatchObject({ ing: 'zout', note: pinch });
+    expect(enFull('salt [a pinch]')).toMatchObject({ ing: 'zout', qty: null, note: pinch, confidence: 1 });
+    expect(nlFull('zout [een beetje]')).toMatchObject({ ing: 'zout', note: { nl: 'een beetje', en: 'a little' } });
+    expect(enFull('olive oil [a splash]')).toMatchObject({ ing: 'olijfolie', note: { nl: 'een scheutje', en: 'a splash' } });
+    expect(nlFull('zout (een snufje)')).toMatchObject({ ing: 'zout', note: pinch, confidence: 1 });
+    // Not "optional": a pinch of salt is still needed.
+    expect(nlFull('zout [een snufje]').optional).toBeUndefined();
+    // In front it is still the pinch unit.
+    expect(nlFull('een snufje zout')).toMatchObject({ ing: 'zout', qty: { min: 1 }, unit: 'snuf' });
+  });
+});
+
 describe('parseLineAuto (language of the text, not of the column)', () => {
   it('reads Dutch typed in the EN column', () => {
     const dict = testDictionary();

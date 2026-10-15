@@ -8,14 +8,23 @@
 // greyed and in quotes (`noteForeign` / `prepForeign` from `renderLineParts`) — never half
 // translated. The inline editor reports whether the prep field was touched (`prepChanged`), so
 // an untouched foreign prep is kept as it is instead of being re-read in the wrong language.
+//
+// 6A.16: when the screen can take a word link (`onLinkWords`), the orange "? knapperig stokbrood"
+// chip is a button that opens the WordPicker sheet: tap the words that are NOT the ingredient
+// away, "Koppel zo" links the rest (the grey words become a note, the raw text stays). Without
+// `onLinkWords` the chip is the plain label it always was and "Koppel" / "Nieuw ingrediënt" work
+// as before.
 import { useState } from 'preact/hooks';
+import { lineLang, type WordLink } from '@/domain/line-words';
 import type { Lang, Line, Qty } from '@/domain/model';
 import { parseQty } from '@/domain/parser';
 import { dictionary, lineParts } from '@/dictionary';
 import { t } from '@/i18n';
 import { rawFromLine, seedQty } from './line-raw';
+import { WordPicker } from './WordPicker';
 
 export { rawFromLine };
+export type { WordLink };
 
 /** What the inline editor hands back; the screen turns it into a raw line per language. */
 export interface LineEdit {
@@ -37,11 +46,23 @@ export interface LineChipsProps {
   editing: boolean;
   onOpenEdit: () => void;
   onCloseEdit: () => void;
-  /** "Koppel": open the ingredient picker for this row. */
-  onLink: () => void;
-  /** "Nieuw ingrediënt": open the picker (its "+ Nieuw ingrediënt" form) for this row. */
-  onNew: () => void;
+  /**
+   * "Koppel": open the ingredient picker for this row. The WordPicker's "Zelf zoeken" passes the
+   * green words and the line's language as the search to start from (the chips' own button passes nothing).
+   */
+  onLink: (query?: string, lang?: Lang) => void;
+  /**
+   * "Nieuw ingrediënt": open the picker (its "+ Nieuw ingrediënt" form) for this row. From the
+   * WordPicker the green words and the line's language come along as the name to prefill.
+   */
+  onNew: (query?: string, lang?: Lang) => void;
   onApply: (edit: LineEdit) => void;
+  /**
+   * 6A.16 "Koppel zo" from the WordPicker: store the link as a line correction — `ing` plus the
+   * grey words as the prep note, raw untouched (`applyWordLink` / `wordLinkOverride` in
+   * src/domain/line-words.ts build it). When absent the "?" chip is not tappable.
+   */
+  onLinkWords?: (link: WordLink) => void;
 }
 
 /** Prep text of a line in a language, falling back to the other language ('' when none). */
@@ -153,6 +174,8 @@ function LineChipEditor(props: { line: Line; lang: Lang; onApply: (edit: LineEdi
 
 export function LineChips(props: LineChipsProps) {
   const { line, lang } = props;
+  // The WordPicker sheet of this row (6A.16); a hook, so it sits before the header return.
+  const [wordsOpen, setWordsOpen] = useState(false);
   if (line.kind === 'header') {
     return (
       <div class="lc">
@@ -164,6 +187,8 @@ export function LineChips(props: LineChipsProps) {
   // `resolved` is false for an unlinked line AND for an `ing` this dictionary does not know.
   const resolved = p.resolved;
   const open = props.editing ? props.onCloseEdit : props.onOpenEdit;
+  const canPickWords = !!props.onLinkWords;
+  const ll = lineLang(line);
   return (
     <div class="lc-wrap">
       <div class="lc">
@@ -188,13 +213,19 @@ export function LineChips(props: LineChipsProps) {
           </button>
         ) : (
           <>
-            <span class="lc-chip lc-unresolved" title={t('edit.unresolved')}>
-              ? {line.name || p.text}
-            </span>
-            <button type="button" class="btn btn-small lc-btn" onClick={props.onLink}>
+            {canPickWords ? (
+              <button type="button" class="lc-chip lc-unresolved lc-tap" title={t('edit.wordsOpen')} aria-label={`${t('edit.unresolved')}: ${line.name || p.text}. ${t('edit.wordsOpen')}`} onClick={() => setWordsOpen(true)}>
+                ? {line.name || p.text}
+              </button>
+            ) : (
+              <span class="lc-chip lc-unresolved" title={t('edit.unresolved')}>
+                ? {line.name || p.text}
+              </span>
+            )}
+            <button type="button" class="btn btn-small lc-btn" onClick={() => props.onLink()}>
               {t('edit.link')}
             </button>
-            <button type="button" class="btn btn-small lc-btn" onClick={props.onNew}>
+            <button type="button" class="btn btn-small lc-btn" onClick={() => props.onNew()}>
               {t('edit.newIngredient')}
             </button>
           </>
@@ -216,7 +247,27 @@ export function LineChips(props: LineChipsProps) {
         )}
       </div>
       {props.editing && resolved && (
-        <LineChipEditor line={line} lang={lang} onApply={props.onApply} onCancel={props.onCloseEdit} onLink={props.onLink} />
+        <LineChipEditor line={line} lang={lang} onApply={props.onApply} onCancel={props.onCloseEdit} onLink={() => props.onLink()} />
+      )}
+      {canPickWords && !resolved && (
+        <WordPicker
+          open={wordsOpen}
+          line={line}
+          lineLang={ll}
+          onLink={(link) => {
+            setWordsOpen(false);
+            props.onLinkWords?.(link);
+          }}
+          onNew={(query, l) => {
+            setWordsOpen(false);
+            props.onNew(query, l);
+          }}
+          onSearch={(query, l) => {
+            setWordsOpen(false);
+            props.onLink(query, l);
+          }}
+          onClose={() => setWordsOpen(false)}
+        />
       )}
     </div>
   );

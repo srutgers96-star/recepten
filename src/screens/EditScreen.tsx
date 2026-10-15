@@ -16,6 +16,18 @@
 // writes only those parts into the target language; in "both" mode a recognised line shows its
 // dictionary rendering as the other column's grey placeholder (nothing stored unless typed);
 // "Kies bestand" reads a recipe/bundle/backup file and hands it to the Inbox for the merge UI.
+//
+// Phase 6 block 6A-2 (docs/phase-6-spec.md 6A.13, 6A.17, 6A.9, 13A): on the add screen the import
+// card offers "Plak een recept" (website text straight in, parsed by src/domain/paste-recipe.ts —
+// Gabi's rule: better too much than too little, so what the parser could not place lands in a
+// "Controleer" box with "→ ingrediënt / → stap / weg" per line), "Met AI" (the prompt route, parsed
+// by photo-import.ts) and "Kies een bestand". Both tools share the universal paste box
+// (<UniversalPaste>): links, bundles and cards pasted here travel to the Inbox / Household.
+// '/add?mode=paste' / '/add?mode=ai' from the Recepten "+" menu open the matching tool and the
+// query is then dropped from the hash; a text another paste box handed over (`pendingImportText`
+// + `pendingImportKind`) is filled in on arrival. An AI answer's "Categorie:" / "Labels:" lines
+// fill the chips for real (`metaManual`, also when the AI put them after the method); a website
+// paste without them leaves the live suggestion at work.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
@@ -24,24 +36,30 @@ import { LineChips, rawFromLine, type LineEdit } from '@/components/LineChips';
 import { LineEditor, editTextHasContent, newEditText, type EditText } from '@/components/LineEditor';
 import { MetaRows, applySuggestion, metaEqual, type MetaValue } from '@/components/MetaRows';
 import { Segmented } from '@/components/Segmented';
+import { UniversalPaste } from '@/components/UniversalPaste';
 import { celebrate } from '@/celebrate';
 import { clearOverride, deleteUserRecipe, duplicateAsOwn, getBaseRecipe, getOverride, getRecipe, isBuiltinId, listLineOverrides, saveOverride, saveUserRecipe, userRecipes } from '@/db/repo';
 import { dictionary, lineText, type Dictionary } from '@/dictionary';
 import { suggestMeta } from '@/domain/diet';
+import { applyWordLink, type WordLink } from '@/domain/line-words';
 import { hasLang, newUserId, nowIso, type Lang, type Line, type Recipe, type Step, type Text } from '@/domain/model';
 import { applyLineOverrides, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
 import { parseLineAuto } from '@/domain/parser';
-import { buildImportPrompt, parseBilingualPlain, type PlainRecipe } from '@/domain/photo-import';
+import { classifyPaste } from '@/domain/paste-classify';
+import { detectRecipeLang, parseWebsiteRecipe, type WebsiteRecipe } from '@/domain/paste-recipe';
+import { buildImportPrompt, categoryIdFromWord, parseBilingualPlain, tagIdsFromText, type PlainRecipe } from '@/domain/photo-import';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { splitSteps } from '@/domain/steps';
 import { answeredSteps, applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation, type TranslatableLine } from '@/domain/translate-prompt';
 import { lang, t, tIn } from '@/i18n';
+import { isRecipeKind, openPasteIn, openPastedText, PASTE_FILE_ACCEPT } from '@/paste';
 import { activeProfile } from '@/profile';
-import { fileHasRecipes } from '@/file-import';
-import { navigate, pendingImport, pendingImportText, route } from '@/router';
+import { navigate, pendingImportKind, pendingImportText, route } from '@/router';
 
 type Mode = 'nl' | 'en' | 'both';
 type LoadState = 'loading' | 'ready' | 'missing';
+/** The open tool of the import card on the add screen (6A.13): none, "Plak een recept" or "Met AI". */
+type ImportTool = '' | 'paste' | 'ai';
 
 const MODE_LANGS: Record<Mode, Lang[]> = { nl: ['nl'], en: ['en'], both: ['nl', 'en'] };
 
@@ -213,6 +231,58 @@ export function buildOverridePatch(draft: Recipe, base: Recipe, prev: RecipePatc
   return patch;
 }
 
+// --- "Categorie:" / "Labels:" that ended up among the steps ----------------------------------------
+
+/** A "Categorie: pasta" / "Labels: vegetarisch, snel" (nl/en) at the start of a text. */
+const META_LINE_RE = /^\s*\**\s*(categorie|category|soort|type|labels?|tags?|dieet|diet|kenmerken)\s*\**\s*:\s*\**\s*(.*?)\s*\**\s*$/iu;
+/** Where a second meta line starts inside the same paragraph ("Categorie: pasta Labels: snel"). */
+const META_SPLIT_RE = /\s+(?=(?:categorie|category|soort|type|labels?|tags?|dieet|diet|kenmerken)\s*\**\s*:)/iu;
+
+/**
+ * 6A.9: `parsePlainRecipe` only reads the "Categorie:" / "Labels:" lines outside the method; an
+ * assistant that writes them after the steps turns them into a last "step". Lift them out of the
+ * steps here so the chips get filled all the same. The first value per kind wins, as in the parser.
+ */
+export function liftMetaFromSteps(block: PlainRecipe | undefined): PlainRecipe | undefined {
+  if (!block) return block;
+  let category = block.category;
+  let tags = block.tags;
+  let changed = false;
+  const steps: string[] = [];
+  for (const step of block.steps) {
+    const parts = step.split(META_SPLIT_RE);
+    if (!parts.every((p) => META_LINE_RE.test(p))) {
+      steps.push(step);
+      continue;
+    }
+    changed = true;
+    for (const p of parts) {
+      const m = META_LINE_RE.exec(p);
+      if (!m) continue;
+      const key = (m[1] as string).toLowerCase();
+      const value = m[2] as string;
+      if (/^(categorie|category|soort|type)$/.test(key)) {
+        if (category === undefined) category = categoryIdFromWord(value);
+      } else if (tags === undefined) tags = tagIdsFromText(value);
+    }
+  }
+  if (!changed) return block;
+  const out: PlainRecipe = { ...block, steps };
+  if (category !== undefined) out.category = category;
+  else delete out.category;
+  if (tags !== undefined) out.tags = tags;
+  else delete out.tags;
+  return out;
+}
+
+/** Line / step counts of the two blocks when they differ: [nl count, en count] per part (as parseBilingualPlain reports it). */
+function countMismatch(nl: PlainRecipe, en: PlainRecipe): { lines?: [number, number]; steps?: [number, number] } | undefined {
+  const out: { lines?: [number, number]; steps?: [number, number] } = {};
+  if (nl.lines.length !== en.lines.length) out.lines = [nl.lines.length, en.lines.length];
+  if (nl.steps.length !== en.steps.length) out.steps = [nl.steps.length, en.steps.length];
+  return out.lines || out.steps ? out : undefined;
+}
+
 /** Short local date for "Aangepast op …". */
 function shortDate(iso: string | undefined): string {
   if (!iso) return '';
@@ -249,15 +319,33 @@ export function EditScreen(props: { id?: string }) {
   const [pickFor, setPickFor] = useState<string | null>(null);
   // "Nieuw ingrediënt": the picker opens on its form instead of the search.
   const [pickNew, setPickNew] = useState(false);
+  // 6A.16: the WordPicker's "Zelf zoeken" / "Nieuw ingrediënt" hand the green words (and the
+  // line's language) to the picker as the text to start from; null = the row's own name part.
+  const [pickOverride, setPickOverride] = useState<{ query: string; lang: Lang } | null>(null);
   // Language pair.
   const [trFrom, setTrFrom] = useState<Lang>('nl');
   const [trOpen, setTrOpen] = useState(false);
   const [trText, setTrText] = useState('');
-  // Photo/text import (add screen).
-  const [importOpen, setImportOpen] = useState(false);
+  // Import card (add screen): the open tool and the pasted text, shared by both tools.
+  const [importTool, setImportTool] = useState<ImportTool>('');
   const [importText, setImportText] = useState('');
-  // "Kies bestand": the text of a chosen file that holds recipes (offered to the Inbox).
-  const [fileRecipes, setFileRecipes] = useState<string | null>(null);
+  // The feedback line of the import card ("12 ingrediënten, 6 stappen herkend"), shown at the
+  // top where the card is — the form's own status line sits at the bottom.
+  const [importNote, setImportNote] = useState('');
+  // "Gekopieerd — plak in ChatGPT …" right under the Kopieer opdracht button (the paste box and its
+  // hints sit between that button and the import note, a screen height away on a phone).
+  const [copyNote, setCopyNote] = useState('');
+  // 6A.17: lines of a pasted website text the parser could not place, and the language they are
+  // in (the column "→ ingrediënt" / "→ stap" writes into).
+  const [leftovers, setLeftovers] = useState<string[]>([]);
+  const [leftoverLang, setLeftoverLang] = useState<Lang>('nl');
+  // 6A.17: "Bereiding 15 min, totaal 45 min" from a pasted website text (the form has no time
+  // field); stored on a NEW recipe by `build`.
+  const [importTime, setImportTime] = useState<Recipe['time']>(null);
+  // A text handed over by another paste box (13A), filled in once the form is ready.
+  const [autoApply, setAutoApply] = useState<string | null>(null);
+  // '/add?mode=paste' wants the cursor in the paste box as soon as it is open.
+  const [focusPaste, setFocusPaste] = useState(false);
   // The description with a pasted translation added (the editor has no description field).
   const [descTr, setDescTr] = useState<Text | null>(null);
   // Which section's collapsible prompt was opened because the clipboard refused (iOS without a
@@ -284,11 +372,17 @@ export function EditScreen(props: { id?: string }) {
     setLinks({});
     setChipRow(null);
     setPickFor(null);
+    setPickOverride(null);
     setTrOpen(false);
     setTrText('');
-    setImportOpen(false);
+    setImportTool('');
     setImportText('');
-    setFileRecipes(null);
+    setImportNote('');
+    setCopyNote('');
+    setLeftovers([]);
+    setImportTime(null);
+    setAutoApply(null);
+    setFocusPaste(false);
     setDescTr(null);
     setPromptOpen('');
     lineCache.current.clear();
@@ -311,13 +405,27 @@ export function EditScreen(props: { id?: string }) {
       setSteps([newEditText()]);
       setMeta({ category: null, tags: [] });
       setMetaManual(false);
-      // Plain text from "Kies bestand" in the Recipes "+" menu (A-bis.9) lands in the import box.
-      const fromFile = pendingImportText.value;
-      if (fromFile) {
+      // Text from "Kies een bestand" (A-bis.9) or from another paste box (13A): a recognised
+      // website recipe / AI answer is filled in once the form is ready, anything else waits in
+      // the box for "Vul in".
+      const handed = pendingImportText.value;
+      const handedKind = pendingImportKind.value;
+      if (handed) {
         pendingImportText.value = null;
-        setImportOpen(true);
-        setImportText(fromFile);
-        setStatus(t('edit.fileText'));
+        pendingImportKind.value = null;
+        setImportTool(handedKind === 'ai' ? 'ai' : 'paste');
+        setImportText(handed);
+        if (handedKind === 'website' || handedKind === 'ai') setAutoApply(handed);
+        else setImportNote(t('edit.fileText'));
+      }
+      // 6A.13: '/add?mode=paste' ("+" → Plak een recept) opens the paste box with the cursor in it,
+      // '/add?mode=ai' ("+" → Met AI) the prompt section. The query then leaves the hash (the
+      // '?rate=' pattern of RecipeScreen), so a reload or the back gesture never reopens it.
+      const wanted = route.value.query.get('mode');
+      if (wanted === 'paste' || wanted === 'ai') {
+        if (!handed) setImportTool(wanted);
+        setFocusPaste(wanted === 'paste');
+        navigate('/add', { replace: true });
       }
       setState('ready');
       return;
@@ -373,6 +481,14 @@ export function EditScreen(props: { id?: string }) {
     const el = trRef.current;
     if (el && typeof el.scrollIntoView === 'function') el.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }, [state]);
+
+  // 13A: a recognised text from another paste box is filled in as soon as the empty form is up
+  // (in an effect, so `applyImportText` sees the initialised rows and mode, not the first render).
+  useEffect(() => {
+    if (state !== 'ready' || autoApply === null) return;
+    setAutoApply(null);
+    applyImportText(autoApply);
+  }, [state, autoApply]);
 
   const langs = MODE_LANGS[mode];
   const servings = Math.max(1, Math.min(99, parseInt(servingsText, 10) || 0)) || 4;
@@ -498,6 +614,8 @@ export function EditScreen(props: { id?: string }) {
     if (metaManual) draft.metaManual = true;
     else delete draft.metaManual;
     if (descTr) draft.description = descTr;
+    // 6A.17: the times a pasted website text carried (new recipe only; an existing recipe keeps its own).
+    if (!existing && importTime) draft.time = importTime;
     return normalizeRecipe(draft);
   }
 
@@ -639,10 +757,28 @@ export function EditScreen(props: { id?: string }) {
     setChipRow(null);
   }
 
-  function openPicker(rowKey: string, startNew = false) {
+  function openPicker(rowKey: string, startNew = false, query?: string, l?: Lang) {
     setChipRow(null);
     setPickNew(startNew);
+    setPickOverride(query ? { query, lang: l ?? lang.value } : null);
     setPickFor(rowKey);
+  }
+
+  /**
+   * 6A.16 "Koppel zo" (WordPicker) / "Variant van …" (IngredientPicker): the link is stored as a
+   * correction of the row's structured line — `ing` plus the grey words as the prep note
+   * (`applyWordLink`) — while the raw text stays exactly as typed (invariant 2). `effectiveLine`
+   * reuses the stored line as long as the source-language text is unchanged; `links` keeps the
+   * manual link consistent with the chips. Typing in the line later re-parses it as always.
+   */
+  function applyWordLinkRow(rowKey: string, link: WordLink) {
+    const row = lines.find((r) => r.key === rowKey);
+    if (!row) return;
+    const edited = applyWordLink(lineFor(row), link, dictionary.value);
+    lineSrc.current.set(rowKey, edited);
+    lineCache.current.delete(rowKey);
+    setLinks({ ...links, [rowKey]: link.ing });
+    setChipRow(null);
   }
 
   /** True when the row's line is linked to an ingredient this dictionary knows. */
@@ -681,19 +817,23 @@ export function EditScreen(props: { id?: string }) {
 
   // --- language pair ---------------------------------------------------------------------------
 
-  /** Puts `text` on the clipboard inside the tap; opens that section's prompt when the clipboard refuses. */
+  /**
+   * Puts `text` on the clipboard inside the tap; opens that section's prompt when the clipboard
+   * refuses. The import card reports right under its button (it sits at the top of the form).
+   */
   function copyToClipboard(text: string, which: 'tr' | 'import') {
     setPromptOpen('');
+    const say = which === 'import' ? setCopyNote : setStatus;
     const clip = typeof navigator !== 'undefined' ? navigator.clipboard : undefined;
     if (!clip || typeof clip.writeText !== 'function') {
-      setStatus(t('edit.copyFailed'));
+      say(t('edit.copyFailed'));
       setPromptOpen(which);
       return;
     }
     clip.writeText(text).then(
-      () => setStatus(t('edit.promptCopied')),
+      () => say(t('edit.promptCopied')),
       () => {
-        setStatus(t('edit.copyFailed'));
+        say(t('edit.copyFailed'));
         setPromptOpen(which);
       },
     );
@@ -813,25 +953,61 @@ export function EditScreen(props: { id?: string }) {
   const importLang: Lang = mode === 'both' ? lang.value : mode;
   const importPrompt = buildImportPrompt(importLang);
 
+  /** Closes the import card after a successful fill (the text was used up); the feedback line stays. */
+  function finishImport() {
+    setImportText('');
+    setImportTool('');
+    setPromptOpen('');
+    setFocusPaste(false);
+  }
+
+  function openTool(tool: ImportTool) {
+    setImportTool(tool);
+    setImportNote('');
+    setCopyNote('');
+    setPromptOpen('');
+  }
+
+  function closeImport() {
+    setImportTool('');
+    setImportText('');
+    setImportNote('');
+    setCopyNote('');
+    setPromptOpen('');
+    setFocusPaste(false);
+  }
+
   /**
-   * "Vul in": both blocks fill both columns (mode → both); a single block fills its language;
-   * on a count mismatch only the first block is used and the message says so.
+   * "Vul in" (the paste box's button, or a text filled in on arrival): what the text is decides
+   * the route (src/domain/paste-classify.ts). A website recipe goes through `parseWebsiteRecipe`
+   * (6A.17) and fills the column of the language it recognised; an AI answer — and anything else
+   * — is read as the AI format: both blocks fill both columns (mode → both), a single block fills
+   * its language, on a count mismatch only the first block is used and the message says so. Each
+   * route is the other's fallback, so a text that is "nearly" one of them still lands somewhere
+   * (Gabi: better too much than too little).
    */
-  function applyImport() {
-    const r = parseBilingualPlain(importText);
+  function applyImportText(text: string) {
+    const c = classifyPaste(text);
+    if (c.kind === 'website' && applyWebsiteText(c.normalized)) return;
+    const r = parseBilingualPlain(text);
     const first: Lang = r.first ?? 'nl';
-    if (!r.nl && !r.en) {
-      setStatus(t('edit.importNone'));
+    // A block with only a name (the plain parser takes the first line for it) has read nothing:
+    // the website route gets a go, then every line waits in the Controleer box.
+    const filled = (b: PlainRecipe | undefined) => !!b && (b.lines.length > 0 || b.steps.length > 0);
+    if (!filled(r.nl) && !filled(r.en)) {
+      if (c.kind !== 'website' && applyWebsiteText(c.normalized)) return;
+      if (applyLinesToCheck(c.normalized, (r[first] ?? r.nl ?? r.en)?.name ?? '')) return;
+      setImportNote(t('edit.importNone'));
       return;
     }
-    const finish = () => {
-      setImportText('');
-      setImportOpen(false);
-      setPromptOpen('');
-    };
-    if (r.nl && r.en && !r.mismatch) {
-      const nl = r.nl;
-      const en = r.en;
+    // 6A.9: "Categorie:" / "Labels:" written after the method still fill the chips. The counts are
+    // compared after lifting them out (a meta line in one block only must not count as a mismatch).
+    const nlBlock = liftMetaFromSteps(r.nl);
+    const enBlock = liftMetaFromSteps(r.en);
+    const mismatch = nlBlock && enBlock ? countMismatch(nlBlock, enBlock) : undefined;
+    if (nlBlock && enBlock && !mismatch) {
+      const nl = nlBlock;
+      const en = enBlock;
       if (nl.name) setNameNl(nl.name);
       if (en.name) setNameEn(en.name);
       const srv = nl.servings ?? en.servings;
@@ -840,39 +1016,112 @@ export function EditScreen(props: { id?: string }) {
       if (nl.steps.length) setSteps([...steps.filter(rowHasText), ...nl.steps.map((s, i) => newEditText(s, en.steps[i] ?? ''))]);
       const metaTaken = importMeta([nl, en]);
       setMode('both');
-      finish();
-      setStatus(t('edit.importDoneBoth', { lines: nl.lines.length, steps: nl.steps.length }) + (metaTaken ? ' · ' + t('edit.importMeta') : ''));
+      finishImport();
+      setImportNote(t('edit.importDoneBoth', { lines: nl.lines.length, steps: nl.steps.length }) + (metaTaken ? ' · ' + t('edit.importMeta') : ''));
       return;
     }
-    const only: PlainRecipe = (r[first] ?? r.nl ?? r.en) as PlainRecipe;
+    const blocks: Record<Lang, PlainRecipe | undefined> = { nl: nlBlock, en: enBlock };
+    const only: PlainRecipe = (blocks[first] ?? nlBlock ?? enBlock) as PlainRecipe;
     const mk = (s: string) => (first === 'nl' ? newEditText(s, '') : newEditText('', s));
     if (only.name) (first === 'nl' ? setNameNl : setNameEn)(only.name);
     if (only.servings) setServings(only.servings);
     if (only.lines.length) setLines([...lines.filter(rowHasText), ...only.lines.map(mk)]);
     if (only.steps.length) setSteps([...steps.filter(rowHasText), ...only.steps.map(mk)]);
     // On a mismatch the other block may still carry the Categorie/Labels lines (nl first).
-    const metaTaken = importMeta(first === 'nl' ? [r.nl, r.en] : [r.en, r.nl]);
+    const metaTaken = importMeta(first === 'nl' ? [nlBlock, enBlock] : [enBlock, nlBlock]);
     const nextMode: Mode = mode === 'both' ? 'both' : first;
     if (nextMode !== mode) setMode(nextMode);
-    finish();
-    if (r.mismatch) {
+    finishImport();
+    if (mismatch) {
       const detail = [
-        r.mismatch.lines ? t('edit.importMismatchLines', { nl: r.mismatch.lines[0], en: r.mismatch.lines[1] }) : '',
-        r.mismatch.steps ? t('edit.importMismatchSteps', { nl: r.mismatch.steps[0], en: r.mismatch.steps[1] }) : '',
+        mismatch.lines ? t('edit.importMismatchLines', { nl: mismatch.lines[0], en: mismatch.lines[1] }) : '',
+        mismatch.steps ? t('edit.importMismatchSteps', { nl: mismatch.steps[0], en: mismatch.steps[1] }) : '',
       ]
         .filter(Boolean)
         .join(', ');
       // The section to point at carries the title it will have after the mode switch below.
       const section = nextMode === 'both' ? t('edit.translate') : first === 'nl' ? t('edit.addEnglish') : t('edit.addDutch');
-      setStatus(t('edit.importMismatch', { detail, lang: first.toUpperCase(), section }));
+      setImportNote(t('edit.importMismatch', { detail, lang: first.toUpperCase(), section }));
     } else {
-      setStatus(t('edit.importDone', { lines: only.lines.length, steps: only.steps.length }) + (metaTaken ? ' · ' + t('edit.importMeta') : ''));
+      setImportNote(t('edit.importDone', { lines: only.lines.length, steps: only.steps.length }) + (metaTaken ? ' · ' + t('edit.importMeta') : ''));
     }
   }
 
   /**
-   * "Kies bestand" (A-bis.9): a file with recipes (share tokens, a recipe/bundle/backup JSON) is
-   * offered to the Inbox — the merge UI lives there; plain text goes into the import box.
+   * "Toch proberen" on a text neither parser could read (a WhatsApp recipe without headings and
+   * with few quantities): the name goes in, every other line waits in the Controleer box with
+   * "→ ingrediënt / → stap / weg" — nothing is thrown away and nothing has to be pasted twice
+   * (Gabi: better too much than too little). False when there is nothing beyond the name.
+   */
+  function applyLinesToCheck(text: string, name: string): boolean {
+    const rows = text.split('\n').map((s) => s.trim()).filter(Boolean);
+    // The row the plain parser took the name from ("# Naam", "**Naam**", "Naam: …" or the first line).
+    const bare = (s: string) => s.replace(/^\s*#+\s*|\*+/gu, '').replace(/^(?:naam|name|titel|title)\s*:\s*/iu, '').trim();
+    const rest = name ? rows.filter((row) => bare(row) !== name) : rows;
+    if (!rest.length) return false;
+    const l: Lang = detectRecipeLang(text) ?? lang.value;
+    if (name) (l === 'nl' ? setNameNl : setNameEn)(name);
+    setLeftovers(rest);
+    setLeftoverLang(l);
+    const nextMode: Mode = mode === 'both' ? 'both' : l;
+    if (nextMode !== mode) setMode(nextMode);
+    finishImport();
+    setImportNote(t('edit.importToCheck', { n: rest.length }));
+    return true;
+  }
+
+  /** The website route on a text; false when the parser found nothing to fill in. */
+  function applyWebsiteText(text: string): boolean {
+    const w = parseWebsiteRecipe(text);
+    if (!w || (!w.name && w.ingredients.length === 0 && w.steps.length === 0)) return false;
+    applyWebsite(w);
+    return true;
+  }
+
+  /**
+   * A pasted website text (6A.17): name, servings, times, ingredient lines and steps go into the
+   * column of the recognised language (the UI language when the parser could not tell); the
+   * leftovers go to the "Controleer" box. Category and labels are NOT touched: the live suggestion
+   * keeps working from the lines (6A.9). One line of feedback says what was recognised.
+   */
+  function applyWebsite(w: WebsiteRecipe) {
+    const l: Lang = w.lang ?? lang.value;
+    const mk = (s: string) => (l === 'nl' ? newEditText(s, '') : newEditText('', s));
+    if (w.name) (l === 'nl' ? setNameNl : setNameEn)(w.name);
+    if (w.servings) setServings(w.servings);
+    if (w.time && (w.time.active || w.time.total)) setImportTime({ ...w.time });
+    if (w.ingredients.length) setLines([...lines.filter(rowHasText), ...w.ingredients.map(mk)]);
+    if (w.steps.length) setSteps([...steps.filter(rowHasText), ...w.steps.map(mk)]);
+    setLeftovers(w.leftovers);
+    setLeftoverLang(l);
+    const nextMode: Mode = mode === 'both' ? 'both' : l;
+    if (nextMode !== mode) setMode(nextMode);
+    finishImport();
+    const parts = [t('edit.pasteDone', { lines: w.ingredients.length, steps: w.steps.length })];
+    if (w.leftovers.length) parts.push(t('edit.pasteLeftovers', { n: w.leftovers.length }));
+    if (w.confidence === 'low') parts.push(t('edit.pasteLow'));
+    setImportNote(parts.join(' · '));
+  }
+
+  /** "→ ingrediënt" / "→ stap" in the Controleer box: the line becomes a row in its language; the column is shown if it was hidden. */
+  function placeLeftover(i: number, where: 'line' | 'step') {
+    const text = leftovers[i];
+    if (text === undefined) return;
+    const row = leftoverLang === 'nl' ? newEditText(text, '') : newEditText('', text);
+    if (where === 'line') setLines([...lines.filter(rowHasText), row]);
+    else setSteps([...steps.filter(rowHasText), row]);
+    if (!MODE_LANGS[mode].includes(leftoverLang)) setMode('both');
+    setLeftovers(leftovers.filter((_, k) => k !== i));
+  }
+
+  function dropLeftover(i: number) {
+    setLeftovers(leftovers.filter((_, k) => k !== i));
+  }
+
+  /**
+   * "Kies een bestand" (A-bis.9): a file with recipes, links or cards goes to the Inbox (the
+   * merge UI lives there, src/paste.ts); a website recipe or AI answer is filled in here, other
+   * text waits in the paste box.
    */
   function onFile(e: Event) {
     const input = e.currentTarget as HTMLInputElement;
@@ -882,27 +1131,27 @@ export function EditScreen(props: { id?: string }) {
     file.text().then(
       (s) => {
         if (!s.trim()) {
-          setStatus(t('edit.fileEmpty'));
+          setImportNote(t('edit.fileEmpty'));
           return;
         }
-        if (fileHasRecipes(s)) {
-          setFileRecipes(s);
-          setStatus('');
+        const c = classifyPaste(s);
+        if (isRecipeKind(c.kind)) {
+          setImportTool(importTool || 'paste');
+          setImportText(s);
+          applyImportText(s);
           return;
         }
-        setFileRecipes(null);
-        setImportOpen(true);
-        setImportText(s);
-        setStatus(t('edit.fileText'));
+        if (c.kind === 'unknown') {
+          setImportTool(importTool || 'paste');
+          setImportText(s);
+          setImportNote(t('edit.fileText'));
+          return;
+        }
+        // Links, a bundle, cards: the Inbox (its preview with statuses, Importeer, Maak ongedaan).
+        openPastedText(s);
       },
-      () => setStatus(t('edit.fileFailed')),
+      () => setImportNote(t('edit.fileFailed')),
     );
-  }
-
-  function openFileInInbox() {
-    if (!fileRecipes) return;
-    pendingImport.value = fileRecipes;
-    navigate('/inbox');
   }
 
   // --- render ----------------------------------------------------------------------------------
@@ -979,57 +1228,102 @@ export function EditScreen(props: { id?: string }) {
 
         {!props.id && (
           <div class="edit-import">
-            {!importOpen ? (
-              <button type="button" class="btn btn-secondary btn-block" onClick={() => setImportOpen(true)}>
-                {t('edit.import')}
-              </button>
+            {importTool === '' ? (
+              <div class="edit-import-choices">
+                <button type="button" class="btn btn-secondary" onClick={() => openTool('paste')}>
+                  {t('edit.toolPaste')}
+                </button>
+                <button type="button" class="btn btn-secondary" onClick={() => openTool('ai')}>
+                  {t('edit.import')}
+                </button>
+                <label class="btn">
+                  {t('edit.chooseFile')}
+                  <input type="file" accept={PASTE_FILE_ACCEPT} style="display:none" onChange={onFile} />
+                </label>
+              </div>
             ) : (
               <div class="card edit-tools">
-                <h2>{t('edit.import')}</h2>
-                <p class="muted small">{t('edit.importHint')}</p>
-                <div class="actions">
-                  <button type="button" class="btn btn-secondary" onClick={() => copyToClipboard(importPrompt, 'import')}>
-                    {t('edit.copyImportPrompt')}
-                  </button>
-                  <label class="btn">
-                    {t('edit.chooseFile')}
-                    <input type="file" accept=".json,.txt,application/json,text/plain" style="display:none" onChange={onFile} />
-                  </label>
-                </div>
-                <p class="muted small">{t('edit.fileHint')}</p>
-                {fileRecipes && (
-                  <div class="edit-file-card" role="status">
-                    <p>{t('edit.fileHasRecipes')}</p>
+                <h2>{importTool === 'paste' ? t('edit.toolPaste') : t('edit.import')}</h2>
+                {importTool === 'paste' ? (
+                  <p class="muted small">{t('edit.pasteRecipeHint')}</p>
+                ) : (
+                  <>
+                    <p class="muted small">{t('edit.importHint')}</p>
                     <div class="actions">
-                      <button type="button" class="btn btn-primary" onClick={openFileInInbox}>
-                        {t('edit.openInInbox')}
-                      </button>
-                      <button type="button" class="btn" onClick={() => setFileRecipes(null)}>
-                        {t('common.cancel')}
+                      <button type="button" class="btn btn-primary" onClick={() => copyToClipboard(importPrompt, 'import')}>
+                        {t('edit.copyImportPrompt')}
                       </button>
                     </div>
-                  </div>
+                    {copyNote && (
+                      <div class="status" role="status">
+                        {copyNote}
+                      </div>
+                    )}
+                    <p class="muted small">{t('edit.importPhotoHint')}</p>
+                    {promptBox(importPrompt, 'import')}
+                    <p class="edit-import-answer">{t('edit.importAnswerHint')}</p>
+                  </>
                 )}
-                {promptBox(importPrompt, 'import')}
-                <label class="field">
-                  <span>{t('edit.importPaste')}</span>
-                  <textarea class="input" rows={8} value={importText} autocomplete="off" onInput={(e) => setImportText((e.currentTarget as HTMLTextAreaElement).value)} />
-                </label>
-                <div class="actions">
-                  <button type="button" class="btn btn-primary" disabled={!importText.trim()} onClick={applyImport}>
-                    {t('edit.importApply')}
+                {/* 13A: the universal paste box; "Vul in" fills the form, links/cards travel on. */}
+                <UniversalPaste
+                  defaultAction="recipe"
+                  value={importText}
+                  onChange={setImportText}
+                  rows={importTool === 'ai' ? 8 : 6}
+                  autoFocus={focusPaste}
+                  label={importTool === 'paste' ? t('edit.pasteRecipeLabel') : t('edit.importPaste')}
+                  onRecipe={(s) => applyImportText(s)}
+                  onImport={(s, kind) => openPasteIn('inbox', s, kind)}
+                  onMember={(s, kind) => openPasteIn('household', s, kind)}
+                  onAi={importTool === 'paste' ? () => openTool('ai') : undefined}
+                />
+                <div class="actions edit-import-foot">
+                  {importTool === 'paste' && (
+                    <button type="button" class="btn btn-small" onClick={() => openTool('ai')}>
+                      {t('edit.switchToAi')}
+                    </button>
+                  )}
+                  <label class="btn btn-small">
+                    {t('edit.chooseFile')}
+                    <input type="file" accept={PASTE_FILE_ACCEPT} style="display:none" onChange={onFile} />
+                  </label>
+                  <button type="button" class="btn btn-small" onClick={closeImport}>
+                    {t('common.close')}
                   </button>
-                  <button
-                    type="button"
-                    class="btn"
-                    onClick={() => {
-                      setImportOpen(false);
-                      setImportText('');
-                      setFileRecipes(null);
-                      setPromptOpen('');
-                    }}
-                  >
-                    {t('common.cancel')}
+                </div>
+              </div>
+            )}
+            {importNote && (
+              <div class="status edit-import-note" role="status">
+                {importNote}
+              </div>
+            )}
+            {/* 6A.17 "Controleer": lines of a pasted website text the app could not place. */}
+            {leftovers.length > 0 && (
+              <div class="card edit-leftovers">
+                <h2>{t('edit.leftoverTitle')}</h2>
+                <p class="muted small">{t('edit.leftoverHint')}</p>
+                <ul class="edit-leftover-list">
+                  {leftovers.map((line, i) => (
+                    <li class="edit-leftover-row" key={i + ':' + line}>
+                      <span class="edit-leftover-text">{line}</span>
+                      <div class="actions">
+                        <button type="button" class="btn btn-small" onClick={() => placeLeftover(i, 'line')}>
+                          {t('edit.leftoverToLine')}
+                        </button>
+                        <button type="button" class="btn btn-small" onClick={() => placeLeftover(i, 'step')}>
+                          {t('edit.leftoverToStep')}
+                        </button>
+                        <button type="button" class="btn btn-small btn-danger" onClick={() => dropLeftover(i)}>
+                          {t('edit.leftoverDrop')}
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <div class="actions">
+                  <button type="button" class="btn btn-small" onClick={() => setLeftovers([])}>
+                    {t('edit.leftoverDropAll')}
                   </button>
                 </div>
               </div>
@@ -1102,9 +1396,10 @@ export function EditScreen(props: { id?: string }) {
                   editing={chipRow === it.key}
                   onOpenEdit={() => setChipRow(it.key)}
                   onCloseEdit={() => setChipRow(null)}
-                  onLink={() => openPicker(it.key)}
-                  onNew={() => openPicker(it.key, true)}
+                  onLink={(q, l) => openPicker(it.key, false, q, l)}
+                  onNew={(q, l) => openPicker(it.key, true, q, l)}
                   onApply={(edit) => applyChipEdit(it.key, edit)}
+                  onLinkWords={(link) => applyWordLinkRow(it.key, link)}
                 />
               ) : null
             }
@@ -1280,11 +1575,15 @@ export function EditScreen(props: { id?: string }) {
 
       <IngredientPicker
         open={pickFor !== null}
-        initialQuery={pickQuery}
-        initialLang={pick.lang}
+        initialQuery={pickOverride?.query ?? pickQuery}
+        initialLang={pickOverride?.lang ?? pick.lang}
         startNew={pickNew}
-        onPick={(id) => {
-          if (pickFor) setLinks({ ...links, [pickFor]: id });
+        onPick={(id, _created, link) => {
+          // "Variant van …" (6A.16) comes with the grey words as a note; a plain pick links only the ingredient.
+          if (pickFor) {
+            if (link) applyWordLinkRow(pickFor, link);
+            else setLinks({ ...links, [pickFor]: id });
+          }
           setPickFor(null);
         }}
         onClose={() => setPickFor(null)}

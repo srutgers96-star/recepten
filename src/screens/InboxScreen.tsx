@@ -2,19 +2,24 @@
 // several tokens (`#r=` recipes, `#p=` patches of classics, `#b=` bundles), bundle files (.json/.txt
 // with a bundle envelope, the old backup format or a single recipe/envelope), the share-target
 // inbox from the 'share-inbox' cache (?from=share, src/sw.ts) and a token the router parked in
-// pendingImport. Everything is parsed with share.parseEnvelope, merged into ONE ParsedShare and
-// classified by merge.planImport against repo.localStateForImport(); <ImportPreview> shows every
-// item with its status and the choices (<ConflictCard>), ONE "Importeer" calls
-// repo.applyImportPlan. Below: the result line with "Maak ongedaan" (undoLastImport), the import
-// history (listImports, collapsible) and the received recipes (unseen badge via 'inbox.seenIds',
-// received patches of classics shown as "<klassieker> · aangepast door X").
+// pendingImport. Everything is parsed with share.parseEnvelope, merged into ONE ParsedShare
+// (src/paste.ts `collectPaste`) and classified by merge.planImport against
+// repo.localStateForImport(); <ImportPreview> shows every item with its status and the choices
+// (<ConflictCard>), ONE "Importeer" calls repo.applyImportPlan. Below: the result line with "Maak
+// ongedaan" (undoLastImport), the import history (listImports, collapsible) and the received
+// recipes (unseen badge via 'inbox.seenIds', received patches of classics shown as
+// "<klassieker> · aangepast door X").
 // Phase 5 block F: a `#f=` MEMBER CARD in the text (pasted on iPhone, or the link on Android via
 // the router) becomes a card "Voeg <naam> toe aan je huishouden" (HouseholdScreen's MemberCardRow
 // + applyMemberCard); a sender who is a household member is shown with their avatar.
+// Phase 6 (docs/phase-6-spec.md 13A): the paste box is the universal one (<UniversalPaste>): a
+// website recipe or an AI answer pasted (or shared via the Android share sheet) here is recognised
+// and travels to the editor with "Open in de editor"; links, bundles and cards stay here as before.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
 import { ImportPreview } from '@/components/ImportPreview';
+import { UniversalPaste } from '@/components/UniversalPaste';
 import { useLive } from '@/db/live';
 import type { ImportSnapshot } from '@/db/model';
 import {
@@ -38,13 +43,13 @@ import { reloadDictionary } from '@/dictionary';
 import { memberByName, membersFrom, type HouseholdSetting, type MemberCard } from '@/domain/household';
 import { defaultChoices, planImport, type ImportChoice, type ImportChoices, type ImportPlan } from '@/domain/merge';
 import { pickText, type Recipe, type Text } from '@/domain/model';
+import { classifyPaste } from '@/domain/paste-classify';
 import { emptyPlan, newPlanItem } from '@/domain/planner';
-import { normalizeRecipe } from '@/domain/recipe-io';
-import { parseEnvelope, readPatchPayload, type ParsedShare, type PatchPayload, type PlanShare } from '@/domain/share';
+import type { PlanShare } from '@/domain/share';
 import { planWrites } from '@/components/ImportPreview';
-import { decodeToken, extractTokens } from '@/domain/token';
 import { lang, t } from '@/i18n';
 import { INBOX_SEEN_KEY, refreshShareBadges, unsentChanges } from '@/inbox-badge';
+import { collectPaste, isInboxKind, looksLikeJson, openPasteIn, PASTE_FILE_ACCEPT, type ReceivedPlan } from '@/paste';
 import { activeProfile, profiles } from '@/profile';
 import { navigate, pendingImport, route } from '@/router';
 import { applyMemberCard, MemberCardRow, type CardOutcome } from './HouseholdScreen';
@@ -71,170 +76,12 @@ function checkBadgesAfterImport() {
   if (pid) void checkNewBadges(pid).catch((e: unknown) => console.error('checkNewBadges', e));
 }
 
-// --- Input -> one ParsedShare -------------------------------------------------------------------
+// --- Input -> one ParsedShare: src/paste.ts `collectPaste` -------------------------------------
 
 interface ShareInboxPayload {
   at: number;
   text: string;
   files: Array<{ name: string; type: string; text: string }>;
-}
-
-/** Everything the input held, merged: recipes and patches concatenated, dictionary entries by id. */
-interface Collected {
-  share: ParsedShare;
-  /** Human-readable problems per part (invalid code, newer version …). */
-  problems: string[];
-  /** A received week plan (`#w=`, phase 4): the first one in the input; its recipes are in `share`. */
-  plan?: ReceivedPlan;
-  /** Member cards (`#f=`, block F), one per card id. */
-  members: MemberCard[];
-}
-
-/** A `#w=` plan as the Inbox offers it: the dishes with a name when known here or in the token. */
-interface ReceivedPlan {
-  share: PlanShare;
-  by?: string;
-  /** Names of the embedded recipes by id (the receiver may not have them yet). */
-  names: Record<string, Text>;
-}
-
-function emptyShare(): ParsedShare {
-  return { kind: 'bundle', dict: { ing: [] }, recipes: [], patches: [] };
-}
-
-function usable(r: Recipe | null): r is Recipe {
-  return !!r && (r.lines.length > 0 || r.steps.length > 0);
-}
-
-function senderOf(r: Recipe): string | undefined {
-  return r.origin.receivedFrom || r.origin.author || undefined;
-}
-
-function problemOf(e: unknown): string {
-  return (e as Error)?.message === 'unsupported-version' ? t('inbox.unsupported') : t('inbox.invalid');
-}
-
-function addShare(acc: Collected, parsed: ParsedShare) {
-  const s = acc.share;
-  if (parsed.kind === 'member') {
-    // A member card carries no recipes; its `by` is the card's own name, so it never becomes the import's sender.
-    if (parsed.member && !acc.members.some((m) => m.id === parsed.member?.id)) acc.members.push(parsed.member);
-    return;
-  }
-  if (parsed.kind === 'plan' && parsed.plan && !acc.plan) {
-    const names: Record<string, Text> = {};
-    for (const r of parsed.recipes) names[r.id] = r.name;
-    acc.plan = { share: parsed.plan, names, ...(parsed.by ? { by: parsed.by } : {}) };
-  }
-  if (!s.by && parsed.by) s.by = parsed.by;
-  if (!s.at && parsed.at) s.at = parsed.at;
-  if (!s.title && parsed.title) s.title = parsed.title;
-  s.recipes.push(...parsed.recipes.filter(usable));
-  s.patches.push(...parsed.patches);
-  const have = new Set(s.dict.ing.map((e) => e.id));
-  for (const e of parsed.dict.ing) {
-    if (have.has(e.id)) continue;
-    have.add(e.id);
-    s.dict.ing.push(e);
-  }
-}
-
-function addRecipe(acc: Collected, r: Recipe) {
-  if (!usable(r)) return;
-  acc.share.recipes.push(r);
-  if (!acc.share.by) {
-    const by = senderOf(r);
-    if (by) acc.share.by = by;
-  }
-}
-
-function isRecord(v: unknown): v is Record<string, unknown> {
-  return typeof v === 'object' && v !== null && !Array.isArray(v);
-}
-
-/**
- * Recognise JSON by content: an envelope (r/p/b, also the backup format), an array, an export
- * with `recipes` / `userRecipes`, a bare patch, a recipe in any shape. A v3 envelope says
- * "update the app" (parseEnvelope checks the version like decodeToken does).
- */
-function collectJson(value: unknown, acc: Collected, depth = 0) {
-  if (depth > 3) return;
-  if (Array.isArray(value)) {
-    for (const v of value) collectJson(v, acc, depth + 1);
-    return;
-  }
-  if (!isRecord(value)) return;
-  if (typeof value.v === 'number' && typeof value.t === 'string') {
-    try {
-      addShare(acc, parseEnvelope(value));
-    } catch (e) {
-      acc.problems.push(problemOf(e));
-    }
-    return;
-  }
-  if (Array.isArray(value.userRecipes) || Array.isArray(value.recipes)) {
-    collectJson(value.userRecipes ?? value.recipes, acc, depth + 1);
-    if (Array.isArray(value.overrides)) collectJson(value.overrides, acc, depth + 1);
-    if (Array.isArray(value.userIngredients)) {
-      // Legacy export without an envelope: run its ingredients through the tolerant reader.
-      try {
-        addShare(acc, parseEnvelope({ v: 2, t: 'b', b: { recipes: [], patches: [] }, dict: { ing: value.userIngredients } }));
-      } catch {
-        /* ignore an unreadable dictionary part */
-      }
-    }
-    return;
-  }
-  if (typeof value.baseId === 'string' && isRecord(value.patch)) {
-    const p: PatchPayload | null = readPatchPayload(value);
-    if (p) acc.share.patches.push(p);
-    return;
-  }
-  const recipe = normalizeRecipe(value);
-  if (recipe) addRecipe(acc, recipe);
-}
-
-/**
- * JSON-by-content on one part of the input. A share-target part may carry a title/subject line
- * before the document body, so when the whole part is not JSON we retry from the first '{' / '['.
- */
-function jsonCandidates(part: string): unknown[] {
-  const s = part.trim();
-  if (!s) return [];
-  try {
-    return [JSON.parse(s)];
-  } catch {
-    /* not JSON as a whole */
-  }
-  const idx = [s.indexOf('{'), s.indexOf('[')].filter((i) => i >= 0).sort((a, b) => a - b)[0];
-  if (idx === undefined || idx === 0) return [];
-  try {
-    return [JSON.parse(s.slice(idx))];
-  } catch {
-    return [];
-  }
-}
-
-/** Tokens first (every `#r=`/`#p=`/`#w=`/`#b=`/`#f=` in the text), else JSON by content per part. */
-async function collect(text: string, parts: string[] | null): Promise<Collected> {
-  const acc: Collected = { share: emptyShare(), problems: [], members: [] };
-  const tokens = extractTokens(text);
-  if (tokens.length) {
-    for (const tk of tokens) {
-      try {
-        const env = await decodeToken(tk.token);
-        // The fragment key is part of the contract: "#r=" must carry a t:'r' envelope.
-        if (env.t !== tk.key) throw new Error('invalid-token');
-        addShare(acc, parseEnvelope(env));
-      } catch (e) {
-        acc.problems.push(problemOf(e));
-      }
-    }
-    return acc;
-  }
-  const candidates = parts && parts.length > 1 ? parts : [text];
-  for (const part of candidates) for (const value of jsonCandidates(part)) collectJson(value, acc);
-  return acc;
 }
 
 // --- Received list ------------------------------------------------------------------------------
@@ -370,10 +217,19 @@ export function InboxScreen() {
   }, [fromShare]);
 
   // Analyse the text (debounced): tokens first, else JSON by content; then plan against the db.
+  // A website recipe, an AI answer or plain prose is not analysed here: the paste box says what
+  // it is and offers "Open in de editor" (13A); only links, bundles, cards and JSON come through.
   useEffect(() => {
     const my = ++seq.current;
     const trimmed = text.trim();
-    if (!trimmed) {
+    const wanted = (s: string) => {
+      const kind = classifyPaste(s).kind;
+      return isInboxKind(kind) || (kind === 'unknown' && looksLikeJson(s));
+    };
+    // Share-target parts (several files at once) are judged one by one, as `collectPaste` reads them:
+    // two bundle files joined are not JSON as a whole.
+    const perPart = parts !== null && parts.length > 1 && parts.some((p) => wanted(p.trim()));
+    if (!trimmed || !(wanted(trimmed) || perPart)) {
       setPlan(null);
       setChoices({});
       setProblems([]);
@@ -394,7 +250,7 @@ export function InboxScreen() {
       let names: Record<string, Text> = {};
       let members: MemberCard[] = [];
       try {
-        const got = await collect(trimmed, parts);
+        const got = await collectPaste(trimmed, parts);
         probs = got.problems;
         members = got.members;
         const share = got.share;
@@ -430,28 +286,6 @@ export function InboxScreen() {
     }, 150);
     return () => clearTimeout(handle);
   }, [text, parts, ui]);
-
-  // readText() must run inside the tap (iOS shows its Paste callout only then).
-  function pasteFromClipboard() {
-    setNotice('');
-    if (!navigator.clipboard?.readText) {
-      setNotice(t('inbox.pasteFailed'));
-      textarea.current?.focus();
-      return;
-    }
-    navigator.clipboard
-      .readText()
-      .then((s) => {
-        if (s) {
-          setParts(null);
-          setText(s);
-        } else setNotice(t('inbox.pasteFailed'));
-      })
-      .catch(() => {
-        setNotice(t('inbox.pasteFailed'));
-        textarea.current?.focus();
-      });
-  }
 
   function onFile(e: Event) {
     const input = e.currentTarget as HTMLInputElement;
@@ -636,33 +470,27 @@ export function InboxScreen() {
           </a>
         )}
         <p class="muted inbox-hint">{t('inbox.hint')}</p>
-        <textarea
-          class="input"
-          ref={textarea}
-          rows={4}
+        {/* 13A: the universal paste box. Links, bundles and cards are handled right here (no
+            callback = the preview and card rows below); a website recipe or AI answer travels to
+            the editor. The share-target parts are kept until the person edits the text. */}
+        <UniversalPaste
+          defaultAction="import"
           value={text}
-          autocomplete="off"
-          spellcheck={false}
-          onInput={(e) => {
+          onChange={(s) => {
             setParts(null);
-            setText((e.currentTarget as HTMLTextAreaElement).value);
+            setText(s);
           }}
+          textareaRef={textarea}
+          showProblems={false}
+          extra={
+            <label class="btn">
+              {t('inbox.file')}
+              <input type="file" accept={PASTE_FILE_ACCEPT} style="display:none" onChange={onFile} />
+            </label>
+          }
+          onRecipe={(s, kind) => openPasteIn('add', s, kind)}
+          onAi={() => navigate('/add?mode=ai')}
         />
-        <div class="actions">
-          <button type="button" class="btn btn-primary" onClick={pasteFromClipboard}>
-            {t('inbox.paste')}
-          </button>
-          <label class="btn">
-            {t('inbox.file')}
-            <input type="file" accept=".json,.txt,application/json,text/plain" style="display:none" onChange={onFile} />
-          </label>
-          {text && (
-            <button type="button" class="btn btn-small" onClick={clearText}>
-              {t('inbox.clear')}
-            </button>
-          )}
-        </div>
-        <p class="muted small">{t('inbox.pasteHint')}</p>
         <div class="status" role="status">
           {notice}
         </div>

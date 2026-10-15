@@ -10,7 +10,7 @@
 // Unresolved lines (ing null) render their raw text, scaled only when the quantity was parsed.
 // Pinches never scale. A note or prep that exists only in the other language is shown in that
 // language and flagged (`noteForeign` / `prepForeign`) so the UI can grey it (A-bis.1).
-import { hasLang, pickText, type Lang, type Line, type LinePart, type Qty } from './model.ts';
+import { hasLang, pickText, type Lang, type Line, type LinePart, type Qty, type Text } from './model.ts';
 import type { Dictionary, Ingredient, Unit } from './dictionary.ts';
 import { parseQty } from './parser.ts';
 import { roundScaled, scaleKindOf, scaleQty } from './scale.ts';
@@ -299,6 +299,17 @@ function rawText(line: Line, dict: Dictionary, lang: Lang, factor: number): stri
   return raw.slice(0, start) + qtyText(q, lang, unit) + trailing + raw.slice(start + m.length);
 }
 
+/** The taste notes the parser sets together with `optional` (parser.ts `tasteNote`): "naar smaak", "naar wens". */
+const TASTE_NOTES: ReadonlySet<string> = new Set(['naar smaak', 'naar wens']);
+
+/**
+ * True for a note that already says the line is to taste ("zout naar smaak", "Tabasco naar wens"):
+ * it stands in for the "(optioneel)" label, which would otherwise show twice.
+ */
+export function isTasteNote(note: Text | null | undefined): boolean {
+  return !!note && TASTE_NOTES.has(note.nl ?? '');
+}
+
 /**
  * The pieces of a rendered line for the UI chips: `[2] [el] [olijfolie ✓]`. `text` is the full
  * line. Unresolved lines return `resolved: false` with the raw text in `text` and whatever was
@@ -323,7 +334,7 @@ export function renderLineParts(line: Line, dict: Dictionary, lang: Lang, factor
   const noteForeign = note !== '' && !hasLang(line.note, lang);
   const optional = line.role === 'garnish'
     ? lang === 'nl' ? '(garnering)' : '(garnish)'
-    : line.optional && !(line.note && line.note.nl === 'naar smaak')
+    : line.optional && !isTasteNote(line.note)
       ? lang === 'nl' ? '(optioneel)' : '(optional)'
       : '';
 

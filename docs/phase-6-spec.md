@@ -9,9 +9,11 @@ Alles NL + EN, CLAUDE.md-invarianten gelden; "eerlijk" = geen belofte die een te
 **Stand 9 okt 2026 — 6A-1 online:** punten 1 (vertaalbug), 2 (curator-ingrediënten), 3 (✓ Gekookt +
 Beoordeel), 4 (installeerkaart), 5 ("Deel je nieuwe recepten"), 6 (Meer opgeruimd), 7 (feedback +
 doneerknop), 8 (meer spraakcommando's + ?), 11 (woorden), 12 (profielkleuren), 15 (voorraadkast-vinkje +
-eigen ingrediënt bewerken), 18 (categorie vs labels) zijn gebouwd. **Nog open = 6A-2 (de plak/prompt-
-cluster):** 9, 10, 13, 14 (rest), 16, 17 — begin met het verzamelen van 10–15 echte plakteksten van
-sites die Stijn en Gabi gebruiken (6A.17).
+eigen ingrediënt bewerken), 18 (categorie vs labels) zijn gebouwd. **6A-2 online 15 okt** (punten 9, 10,
+13, 14, 16, 17 + 13A deel 1 + 13C): universeel plakvak in Toevoegen/Inbox/Huishouden, vier keuzes na de
+"+", websiteherkenning met 17 fixtures (9 NL + 8 EN; tests/fixtures/paste), AI-prompt in codeblok en
+normalizePastedAnswer voor ChatGPT-witregels en \[ \], "naar smaak" overal, WordPicker + Link-vraag.
+Gabi's echte plakteksten kunnen later als extra fixtures erbij. **Blok 6A is daarmee af.**
 
 1. **✅ GEFIXT 8 okt (Fable-review): Bug: vertaling plakken werkt alleen goed als de app op Engels staat (M).** Oorzaak
    was de blokvolgorde in het AI-antwoord (eerste blok won), niet de UI-taal; parseTranslationAnswer kent

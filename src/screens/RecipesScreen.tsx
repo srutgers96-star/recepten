@@ -5,9 +5,12 @@
 // Searching: `searchRecipes` groups (name → ingredient → category → tag) with a small header each,
 // so typing "onion" finds the recipes that contain `ui`. '#/recipes?cat=<id>' opens the list
 // pre-filtered on that category (Home shelf); the query is then dropped from the hash.
-// Phase 4: the "+" in the header opens a small menu: Nieuw recept ('/add') or Kies bestand (A-bis.9:
-// a recipe/bundle/backup file goes to the Inbox, plain text to the Add screen's import box); the chips
-// are the generic `PickChips` (every tag in the data + the categories, spec §0).
+// Phase 4: the "+" in the header opens a small menu; phase 6 (docs/phase-6-spec.md 6A.13) it shows
+// all four ways in at once, each with one line of explanation: Zelf schrijven ('/add'), Plak een
+// recept ('/add?mode=paste': the paste box open with the cursor in it), Met AI ('/add?mode=ai': the
+// prompt section open) and Kies een bestand (A-bis.9: a recipe/bundle/backup file goes to the
+// Inbox, text to the Add screen's paste box, src/paste.ts `openPastedText`); the chips are the
+// generic `PickChips` (every tag in the data + the categories, spec §0).
 // Phase 5 (docs/phase-5-spec.md A-bis.8): select mode. "Selecteer" in the header, a long-press on
 // a row, or '#/recipes?select=1[&id=<id>]' (Home) turns the rows into checkboxes and shows the
 // `SelectBar` above the nav: Deel (one message with one token per recipe, or a bundle file when
@@ -33,9 +36,9 @@ import { searchRecipes, type SearchGroup } from '@/domain/search';
 import { buildBundleEnvelope, buildPatchEnvelope, buildRecipeEnvelope, bundleFileName, planMessages, type MessagePlan } from '@/domain/share';
 import type { Envelope } from '@/domain/token';
 import { lang, t } from '@/i18n';
+import { openPastedText, PASTE_FILE_ACCEPT } from '@/paste';
 import { activeProfile } from '@/profile';
-import { fileHasRecipes } from '@/file-import';
-import { navigate, pendingImport, pendingImportText, route } from '@/router';
+import { navigate, route } from '@/router';
 import { shareJsonFile, shareText } from '@/share-actions';
 
 interface Group {
@@ -117,7 +120,11 @@ export function RecipesScreen() {
   const [addMenu, setAddMenu] = useState(false);
   const [addStatus, setAddStatus] = useState('');
 
-  /** "Kies bestand" in the "+" menu: recipes go to the Inbox, plain text to the Add screen's import box. */
+  /**
+   * "Kies een bestand" in the "+" menu: routed like a paste (src/paste.ts) — recipes, links and
+   * cards to the Inbox, a website recipe or AI answer to the Add screen (filled in on arrival),
+   * other text to its paste box.
+   */
   function onAddFile(e: Event) {
     const input = e.currentTarget as HTMLInputElement;
     const file = input.files?.[0];
@@ -125,18 +132,11 @@ export function RecipesScreen() {
     if (!file) return;
     file.text().then(
       (text) => {
-        if (!text.trim()) {
+        if (!openPastedText(text)) {
           setAddStatus(t('edit.fileEmpty'));
           return;
         }
         setAddMenu(false);
-        if (fileHasRecipes(text)) {
-          pendingImport.value = text;
-          navigate('/inbox');
-        } else {
-          pendingImportText.value = text;
-          navigate('/add');
-        }
       },
       () => setAddStatus(t('edit.fileFailed')),
     );
@@ -553,14 +553,23 @@ export function RecipesScreen() {
               </button>
             </div>
             <div class="sheet-body add-menu">
+              {/* 6A.13: the four ways in, each with one line of explanation; the same choices stay in the editor. */}
               <button type="button" class="add-menu-row" onClick={() => navigate('/add')}>
-                <strong>{t('list.addNew')}</strong>
-                <span class="muted small">{t('list.addNewHint')}</span>
+                <strong>{t('list.addWrite')}</strong>
+                <span class="muted small">{t('list.addWriteHint')}</span>
+              </button>
+              <button type="button" class="add-menu-row" onClick={() => navigate('/add?mode=paste')}>
+                <strong>{t('list.addPaste')}</strong>
+                <span class="muted small">{t('list.addPasteHint')}</span>
+              </button>
+              <button type="button" class="add-menu-row" onClick={() => navigate('/add?mode=ai')}>
+                <strong>{t('list.addAi')}</strong>
+                <span class="muted small">{t('list.addAiHint')}</span>
               </button>
               <label class="add-menu-row">
-                <strong>{t('list.addFile')}</strong>
-                <span class="muted small">{t('list.addFileHint')}</span>
-                <input type="file" accept=".json,.txt,application/json,text/plain" style="display:none" onChange={onAddFile} />
+                <strong>{t('list.addFileChoice')}</strong>
+                <span class="muted small">{t('list.addFileChoiceHint')}</span>
+                <input type="file" accept={PASTE_FILE_ACCEPT} style="display:none" onChange={onAddFile} />
               </label>
               {addStatus && (
                 <p class="muted small" role="status">

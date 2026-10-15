@@ -42,10 +42,24 @@ export const route = signal<Route>(parseHash('#/'));
 export const pendingImport = signal<string | null>(null);
 
 /**
- * Plain text of a file chosen in the Recipes "+" menu (A-bis.9), waiting for the Add screen's
- * import box. The Add screen reads and clears it.
+ * Plain text for the Add screen's paste box: a file chosen in the Recipes "+" menu (A-bis.9) or
+ * a website recipe / AI answer another paste box handed over (phase 6, 13A; src/paste.ts
+ * `openPasteIn`). The Add screen reads and clears it.
  */
 export const pendingImportText = signal<string | null>(null);
+
+/**
+ * What `pendingImportText` was recognised as by the paste box that handed it over ('website' or
+ * 'ai': the Add screen fills the form in straight away; anything else: the text waits in the box
+ * for "Vul in"). Cleared together with the text.
+ */
+export const pendingImportKind = signal<string | null>(null);
+
+/**
+ * A pasted text with member cards (`#f=`) handed to the Household screen by another paste box
+ * (phase 6, 13A). The Household screen reads and clears it.
+ */
+export const pendingMemberText = signal<string | null>(null);
 
 function stateIdx(): number {
   const s = history.state as NavState | null;

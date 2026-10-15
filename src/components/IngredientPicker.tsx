@@ -7,9 +7,18 @@
 // name is checked against the dictionary in both languages (aliases and plurals included,
 // `Dictionary.findExisting`); a hit shows "Bestaat al: aubergine (eggplant) — die gebruiken?"
 // with one tap to pick that entry instead ("Gebruik") or to create the new one anyway.
+//
+// The "Koppel" question (docs/phase-6-spec.md 6A.16): opened from a line whose name the dictionary
+// knows a PART of ("knapperig stokbrood" -> stokbrood, `partialMatch`), the sheet first asks "Is
+// dit een variant van stokbrood, of een heel nieuw ingrediënt?" — "Variant van stokbrood" picks
+// that entry and hands the other words along as a `WordLink` note (the line text stays as it is),
+// "Nieuw ingrediënt" opens the form with the whole name, "Anders zoeken" the search. When nothing
+// in the name is known (or on the form/merge paths) the sheet opens as before. `askVariant={false}`
+// turns the question off.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { slugId } from '@/domain/recipe-source';
 import type { Ingredient } from '@/domain/dictionary';
+import { partialMatch, type PartialMatch, type WordLink } from '@/domain/line-words';
 import type { Lang } from '@/domain/model';
 import { saveUserIngredient } from '@/db/repo';
 import { dictionary, isUserIngredientId, reloadDictionary } from '@/dictionary';
@@ -39,8 +48,19 @@ export interface IngredientPickerProps {
    * the save button says "Zet in woordenboek" (nothing is linked there).
    */
   newOnly?: boolean;
-  /** `created` is true when the id is the entry this sheet just saved (not an existing one picked). */
-  onPick: (id: string, created?: boolean) => void;
+  /**
+   * 6A.16: ask "Variant van <known word>, of nieuw?" first when the dictionary knows part of
+   * `initialQuery` (search path only, never with `startNew`, `excludeId` or `allowNew: false`).
+   * Default true.
+   */
+  askVariant?: boolean;
+  /**
+   * `created` is true when the id is the entry this sheet just saved (not an existing one picked).
+   * `link` comes with "Variant van …" (6A.16): the words of the line that are NOT the ingredient,
+   * to store as the line's note (`applyWordLink` / `wordLinkOverride`); callers that ignore it
+   * still link the ingredient.
+   */
+  onPick: (id: string, created?: boolean, link?: WordLink) => void;
   onClose: () => void;
 }
 
@@ -64,7 +84,10 @@ export function ingredientLabel(ing: Ingredient, l: 'nl' | 'en'): string {
 
 export function IngredientPicker(props: IngredientPickerProps) {
   const [query, setQuery] = useState('');
-  const [mode, setMode] = useState<'search' | 'new'>('search');
+  const [mode, setMode] = useState<'search' | 'new' | 'ask'>('search');
+  // The "Variant van …" question (6A.16): the known part of the prefilled name, found on open.
+  const [ask, setAsk] = useState<PartialMatch | null>(null);
+  const askRef = useRef<HTMLButtonElement>(null);
   const [nlOne, setNlOne] = useState('');
   const [nlMany, setNlMany] = useState('');
   const [enOne, setEnOne] = useState('');
@@ -87,11 +110,13 @@ export function IngredientPicker(props: IngredientPickerProps) {
   // Reset on the OPEN transition only: fresh query, search mode (or the form when asked), empty form.
   useEffect(() => {
     if (!props.open) return;
-    const { initialQuery, startNew: openForm } = latest.current;
+    const { initialQuery, startNew: openForm, excludeId, allowNew: mayCreate, askVariant } = latest.current;
     const q = initialQuery ?? '';
     const nameLang = latest.current.initialLang ?? lang.value;
+    const match = !openForm && askVariant !== false && mayCreate !== false && !excludeId ? partialMatch(q, dictionary.value, nameLang) : undefined;
+    setAsk(match ?? null);
     setQuery(q);
-    setMode(openForm ? 'new' : 'search');
+    setMode(openForm ? 'new' : match ? 'ask' : 'search');
     setNlOne(openForm && nameLang === 'nl' ? q : '');
     setNlMany('');
     setEnOne(openForm && nameLang === 'en' ? q : '');
@@ -103,7 +128,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
     setError(null);
     setBusy(false);
     setIgnoreExisting(null);
-    const id = window.setTimeout(() => searchRef.current?.focus(), 50);
+    const id = window.setTimeout(() => (match ? askRef.current?.focus({ preventScroll: true }) : searchRef.current?.focus()), 50);
     return () => window.clearTimeout(id);
   }, [props.open]);
 
@@ -140,6 +165,19 @@ export function IngredientPicker(props: IngredientPickerProps) {
     setMode('new');
   };
 
+  /** "Anders zoeken" on the question: the plain search, with the name prefilled. */
+  const startSearch = () => {
+    setMode('search');
+    window.setTimeout(() => searchRef.current?.focus(), 50);
+  };
+
+  /** "Variant van stokbrood": pick the known part; the other words travel along as the note. */
+  const pickVariant = () => {
+    if (!ask) return;
+    const nameLang = props.initialLang ?? l;
+    props.onPick(ask.found.id, false, { ing: ask.found.id, query: ask.query, note: ask.note, lang: nameLang });
+  };
+
   const save = async () => {
     const nl = nlOne.trim();
     const en = enOne.trim();
@@ -172,6 +210,8 @@ export function IngredientPicker(props: IngredientPickerProps) {
   };
 
   const title = props.title ?? t('picker.title');
+  // The question only exists while there is a match to ask about; otherwise the plain search.
+  const view: 'search' | 'new' | 'ask' = mode === 'ask' && !ask ? 'search' : mode;
 
   return (
     <div class="sheet-backdrop" onClick={props.onClose}>
@@ -183,7 +223,25 @@ export function IngredientPicker(props: IngredientPickerProps) {
           </button>
         </div>
 
-        {mode === 'search' ? (
+        {view === 'ask' && ask ? (
+          <div class="sheet-body picker-ask">
+            <div class="picker-ask-name">“{q}”</div>
+            <p class="picker-ask-q">{t('picker.ask', { word: ask.query })}</p>
+            <div class="actions">
+              <button type="button" ref={askRef} class="btn btn-primary btn-block" onClick={pickVariant}>
+                <span>{t('picker.askVariant', { name: ingredientLabel(ask.found, l) })}</span>
+                <span class="btn-sub">{ask.note ? `${t('picker.askVariantSub')} · ${t('picker.askNote', { note: ask.note })}` : t('picker.askVariantSub')}</span>
+              </button>
+              <button type="button" class="btn btn-secondary btn-block" onClick={startNew}>
+                + {t('picker.new')}
+              </button>
+              <button type="button" class="btn btn-block" onClick={startSearch}>
+                {t('picker.askSearch')}
+              </button>
+            </div>
+            <p class="muted small picker-ask-stays">{t('words.rawStays')}</p>
+          </div>
+        ) : view === 'search' ? (
           <div class="sheet-body">
             <input
               ref={searchRef}

@@ -966,17 +966,160 @@ button.lc-chip:disabled {
   opacity: 0.85;
 }
 
-/* "Kies bestand" found recipes: hand the file to the Inbox (A-bis.9). */
-.edit-file-card {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--card);
-  padding: 12px;
-  margin-top: 10px;
+/* ---------- Editor: import card, phase 6 (6A.13 / 6A.17 / 13A) ---------- */
+
+/* Collapsed: the three ways in, side by side (wrap on 360 px). */
+.edit-import-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.edit-file-card p {
-  margin: 0 0 8px;
+.edit-import-choices > * {
+  flex: 1 1 140px;
+  min-height: 44px;
+}
+
+/* "Plak het antwoord hieronder — tik op Kopieer code …" above the AI tool's paste box. */
+.edit-import-answer {
+  margin: 10px 0 6px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.edit-import-foot {
+  margin: 12px 0 0;
+}
+
+.edit-import-foot .btn {
+  flex: 1 1 auto;
+}
+
+/* The feedback line of the import card ("12 ingrediënten, 6 stappen herkend"). */
+.edit-import-note {
+  margin-top: 8px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* "Controleer": lines of a pasted website text the app could not place; a row per line, 44 px buttons. */
+.edit-leftovers {
+  margin-top: 12px;
+}
+
+.edit-leftovers h2 {
+  margin-bottom: 4px;
+}
+
+.edit-leftover-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.edit-leftover-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+
+.edit-leftover-text {
+  font-size: 15px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.edit-leftover-row .actions {
+  margin: 0;
+}
+
+.edit-leftover-row .actions .btn {
+  min-height: 44px;
+}
+
+.edit-leftovers > .actions {
+  margin: 8px 0 0;
+}
+
+/* ---------- Universal paste box (src/components/UniversalPaste.tsx; editor, Inbox, Household) ---------- */
+
+.upaste {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* "Plak van klembord" (+ the host's extra button) above the box, as the first thing to tap. */
+.upaste-actions {
+  margin: 0;
+}
+
+.upaste textarea.input.upaste-box {
+  min-height: 110px;
+  resize: vertical;
+  font-size: 16px;
+}
+
+.upaste-hint {
+  margin: 0;
+}
+
+.upaste .status {
+  margin: 0;
+}
+
+/* The line that says what was pasted, with its button(s); the colour bar names the kind. */
+.upaste-found {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--cobalt);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.upaste-found.is-website,
+.upaste-found.is-ai {
+  border-left-color: var(--rosemary);
+}
+
+.upaste-found.is-member {
+  border-left-color: var(--orange);
+}
+
+.upaste-found.is-unknown {
+  border-left-color: var(--muted);
+}
+
+.upaste-found-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.upaste-icon {
+  flex: none;
+}
+
+.upaste-problem {
+  margin: 0;
+  color: var(--tomato);
+  font-size: 13px;
+}
+
+.upaste-found-actions {
+  margin: 0;
+}
+
+.upaste-found-actions .btn {
+  min-height: 44px;
 }
 
 /* ---------- Woordenboek screen (/more/dictionary, src/screens/DictionaryScreen.tsx) ---------- */
@@ -1102,4 +1245,153 @@ button.lc-chip:disabled {
   background: var(--paper);
   color: var(--ink);
   border-color: transparent;
+}
+
+/* --- 6A.16 "woorden wegtikken": the orange "?" chip is a button when the editor can take a word
+   link (it opens the WordPicker sheet, src/components/WordPicker.tsx). --- */
+button.lc-unresolved.lc-tap {
+  cursor: pointer;
+}
+
+button.lc-unresolved.lc-tap:active {
+  background: var(--press);
+}
+
+/* WordPicker sheet: the words as toggles, green = ingredient, grey = note. */
+.wp-hint {
+  margin: 4px 0 6px;
+}
+
+.wp-words {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 12px;
+}
+
+.wp-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wp-lead {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.wp-word {
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wp-word:active {
+  background: var(--press);
+}
+
+.wp-word.wp-on {
+  background: var(--rosemary);
+  border-color: var(--rosemary);
+  color: var(--on-rosemary);
+}
+
+.wp-word.wp-on:active {
+  opacity: 0.85;
+  background: var(--rosemary);
+}
+
+.wp-status {
+  min-height: 44px;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.wp-status .wp-ok {
+  color: var(--rosemary);
+  font-weight: 700;
+}
+
+.wp-status .wp-bad {
+  color: var(--orange);
+  font-weight: 700;
+}
+
+.wp-preview {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+
+.wp-stays {
+  margin: 0 0 4px;
+}
+
+.wp-actions {
+  margin: 8px 0 0;
+}
+
+.wp-actions .btn {
+  flex: 1 1 100%;
+}
+
+/* IngredientPicker "Variant van … of nieuw?" question (6A.16), shown before the search. */
+.picker-ask {
+  padding-top: 8px;
+}
+
+.picker-ask-name {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.picker-ask-q {
+  font-size: 17px;
+  line-height: 1.35;
+  margin: 0 0 12px;
+}
+
+.picker-ask .actions {
+  flex-direction: column;
+  margin: 0 0 10px;
+}
+
+.picker-ask .btn-block {
+  flex-direction: column;
+  gap: 2px;
+  min-height: 52px;
+  padding: 8px 18px;
+  text-align: center;
+}
+
+.picker-ask .btn-sub {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.85;
+  white-space: normal;
+  line-height: 1.3;
+}
+
+.picker-ask-stays {
+  margin: 0;
 }

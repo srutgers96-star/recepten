@@ -11,6 +11,7 @@ import {
   type Profile,
   type Recipe,
   type RunningTimer,
+  type Text,
 } from '@/domain/model';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { applyLineOverrides, applyOverride, RECIPE_PATCH_KEYS, type LineOverride, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
@@ -127,10 +128,12 @@ export async function saveUserRecipe(r: Recipe): Promise<void> {
 
 /**
  * "Koppel ingrediënt" on one line of an own/received recipe: written into the line itself
- * (`ing`, confidence 1), never as a line override. Throws Error('builtin-readonly') for a
- * builtin (use `setLineOverride`) and Error('not-found') / Error('no-such-line') otherwise.
+ * (`ing`, confidence 1), never as a line override. `prep` (6A.16 "Variant van …": the words of
+ * the line that are not the ingredient, as a note) replaces the line's prep when given; the raw
+ * text is never touched. Throws Error('builtin-readonly') for a builtin (use `setLineOverride`)
+ * and Error('not-found') / Error('no-such-line') otherwise.
  */
-export async function linkUserRecipeLine(recipeId: string, index: number, ing: string | null): Promise<void> {
+export async function linkUserRecipeLine(recipeId: string, index: number, ing: string | null, prep?: Text): Promise<void> {
   if (isBuiltinId(recipeId)) throw new Error('builtin-readonly');
   const r = await db.userRecipes.get(recipeId);
   if (!r) throw new Error('not-found');
@@ -138,7 +141,7 @@ export async function linkUserRecipeLine(recipeId: string, index: number, ing: s
   const lines = applyLineOverrides(r.lines, overrides);
   const line = lines[index];
   if (!line || line.kind === 'header') throw new Error('no-such-line');
-  lines[index] = ing ? { ...line, ing, confidence: 1 } : { ...line, ing: null };
+  lines[index] = ing ? { ...line, ing, confidence: 1, ...(prep ? { prep: { ...prep } } : {}) } : { ...line, ing: null };
   await saveUserRecipe({ ...r, lines });
 }
 

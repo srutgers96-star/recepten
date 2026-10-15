@@ -2,7 +2,7 @@
 // Framework-free so it can be tested in Node; used by LineChips / EditScreen.
 import type { Dictionary } from '@/domain/dictionary';
 import type { Lang, Line } from '@/domain/model';
-import { formatQty, renderLineParts, unitName } from '@/domain/render';
+import { formatQty, isTasteNote, renderLineParts, unitName } from '@/domain/render';
 
 /** The stored quantity as typed text ("½", "2-3", "ca. 400") for the chip editor's amount field. */
 export function seedQty(line: Line, lang: Lang): string {
@@ -24,11 +24,12 @@ export function rawFromLine(line: Line, dict: Dictionary, lang: Lang): string {
   const qty = seedQty(line, lang);
   const unitDef = line.unit ? dict.unit(line.unit) : undefined;
   const unit = unitDef ? unitName(unitDef, lang, line.qty) : '';
-  const toTaste = !!line.note && line.note.nl === 'naar smaak';
+  // "naar smaak" / "naar wens" is written as the bare phrase ("zout naar smaak"), in the line's language.
+  const toTaste = isTasteNote(line.note);
   let s = [p.part, qty, unit, p.name, p.packSize ? `(${p.packSize})` : '', p.alt].filter(Boolean).join(' ');
   if (p.prep) s += ` [${p.prep}]`;
   if (p.note && !toTaste) s += ` (${p.note})`;
-  if (toTaste) s += lang === 'nl' ? ' naar smaak' : ' to taste';
+  if (toTaste) s += ` ${p.note}`;
   if (p.optional) s += ` ${p.optional}`;
   return s.replace(/\s+/g, ' ').trim();
 }

@@ -1,23 +1,39 @@
-# Status — Rutgers' Recepten (bijgewerkt 9 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 15 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 
 ## Online (https://srutgers96-star.github.io/recepten/)
-**Fase 5 compleet** (fase 0–4 + blok A t/m F, 8 oktober 2026) **+ fase 6 blok 6A-1** (9 oktober 2026).
+**Fase 5 compleet** (fase 0–4 + blok A t/m F, 8 oktober 2026) **+ fase 6 blok 6A** (6A-1 9 okt, 6A-2 15 okt).
 Repo: https://github.com/srutgers96-star/recepten.
 
 ## Lokaal gecommit, nog NIET gepusht
-- Branch **`wip/6a2-partial`** (lokaal, niet gepusht): half werk van de 6A-2-run van 9 okt die op de
-  Fable-limiet stuitte (9 plaktekst-fixtures in tests/fixtures/paste, src/domain/line-words.ts + test,
-  deels gewijzigde photo-import.ts/EditScreen.tsx/i18n). **Compileert niet** (paste-recipe.ts ontbreekt).
-  Alleen als startpunt of referentie voor de volgende 6A-2-run; `main` is schoon.
+(niets — alles staat online; de tijdelijke branch wip/6a2-partial is na 6A-2 verwijderd)
 
-## Stand 13 okt 2026 (Opus 5.5, Fable op de limiet): niets gebouwd, wel gepland
-Stijns notities van 13 okt zijn geordend in docs/phase-6-spec.md, sectie "Ronde 13 okt" (13A–13G), met
-een volgorde-voorstel en zes open vragen. Volgende Fable-sessie: eerst de antwoorden op die vragen, dan
-6A-2 + 13A + 13C (plakken en toevoegen, één plakplek, ChatGPT-witregels). De nieuwe werkwijze geldt:
-grote workflows alleen op Fable; let op dat een workflow halverwege op de limiet kan stuiten (dat
-gebeurde bij F, 6A-1 en 6A-2): hervat altijd, en kijk eerst wat er in de werkmap is achtergebleven.
+## Afgerond 15 okt: blok 6A-2 + 13A(1) + 13C (drie bouwers + integrator → 3 reviewers → skeptici → fixer → Haiku-gate; 14 bevindingen gerepareerd)
+docs/phase-6-spec.md 6A punten 9, 10, 13, 14, 16, 17 + ronde 13 okt 13A (deel 1) en 13C. Kern:
+- **Plak-domein**: src/domain/paste-recipe.ts (websiterecept → naam/porties/tijd/regels/stappen/taal/
+  confidence/leftovers; 17 fixtures in tests/fixtures/paste, 9 NL + 8 EN, bereiding ingekort), src/domain/
+  paste-classify.ts (classifyPaste: empty → tokens → member → bundle → ai → website → unknown), photo-import.ts
+  normalizePastedAnswer (markdown-escapes, code-fences, markers midden in een regel, in elkaar geschoven
+  ingrediëntregels; Stijns uiensoep-voorbeeld → 13 regels) en de prompt in één codeblok ("tik op Kopieer
+  code"); parser.ts: "naar smaak/naar wens/to taste" overal in de regel, "zout peper" → zout-en-peper,
+  vage hoeveelheid in haken ("[een snufje]") = notitie. Golden byte-identiek.
+- **Universeel plakvak**: src/components/UniversalPaste.tsx + src/paste.ts (classificatie → actie), in
+  Toevoegen (defaultAction 'recipe'), Inbox ('import') en Huishouden ('member'); oude losse plakvakken weg.
+  "+"-menu: Zelf schrijven · Plak een recept (/add?mode=paste) · Met AI (/add?mode=ai) · Kies een bestand.
+  Editor: websiteroute met "Controleer"-kader (→ ingrediënt / → stap / weg), feedbackregel, labels/categorie
+  uit een AI-antwoord gevuld (metaManual).
+- **WordPicker** (src/components/WordPicker.tsx, src/domain/line-words.ts): woorden van een ?-chip aan/uit
+  (groen = ingrediënt, grijs = opmerking), "Koppel zo" via de bestaande override-API (raw blijft),
+  Link-vraag "variant van X of nieuw ingrediënt?" in IngredientPicker.
+- DEVICE-TEST rijen 58–60. 646 tests.
+**Volgende (volgorde-voorstel docs/phase-6-spec.md):** 13A deel 2 (Inbox → "In & uit"-overzicht, sorteren op
+recent bekeken/eigen/eigen & ontvangen, Home-voorstel) + 13B ("Open in Chrome", installatie-uitleg) + 13G
+(opslag duidelijker) + Curator weghalen (vraag 7) → 6B + 13E (labels, lactosevrij, keukens, nagerecht/
+gebak/bijgerecht/ontbijt & lunch, 20 bijgerechten) → 13F (inbouwen met id-migratie) → 13D (varianten als
+tabs) → 6C → 6D → Z.
+Werkwijze blijft: grote workflows alleen op Fable; een workflow kan halverwege op de limiet stuiten
+(gebeurde bij F, 6A-1, 6A-2): hervatten met resumeFromRunId, en eerst kijken wat er in de werkmap staat.
 
 ## Afgerond 9 okt: blok 6A-1 (vier bouwers + integrator → 3 reviewers → skeptici → fixer → Haiku-gate; 10 bevindingen gerepareerd)
 docs/phase-6-spec.md 6A punten 2–8, 12, 15, 18. Kern: src/cooklog.ts `recordCooked` (zelfde stappen als de
@@ -32,8 +48,6 @@ profielkleuren (contrast ≥ 4,5:1); voorraadkast-vinkje in gewone taal + eigen 
 bewerken (vlaggen, eenheid); curator toont de effectieve EN-weergave, "Verbeter in het woordenboek" alleen
 bij eigen ingrediënten (ingebouwd = via Feedback); CheckRecipes "Categorie: …" / "Labels: …".
 DEVICE-TEST rijen 54–57 + oudere rijen die naar de oude Meer-indeling wezen bijgewerkt. 539 tests.
-**Volgende: 6A-2** (plak/prompt-cluster: 9, 10, 13, 14-rest, 16, 17) — vraag Stijn/Gabi eerst om 10–15
-echte plakteksten van hun receptensites als testmateriaal.
 
 ## Afgerond 8 okt: blok F (drie bouwers + integrator → 3 reviewers → skeptici → fixer → Haiku-gate; 10 bevindingen gerepareerd)
 - **Ledenkaartje `#f=`** (ADR-0004, alinea 8 okt): envelop `{ v: 2, t: 'f', f: { id, name, color, lang, deviceId? } }`,

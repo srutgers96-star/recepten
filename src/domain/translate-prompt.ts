@@ -24,7 +24,10 @@
 // target language given (docs/phase-6-spec.md 6A.1) only the items of the target block are used, so a
 // Dutch original that comes first never lands in the English fields. `applyTranslationAnswer` writes
 // the answer into the target language only and never overwrites text that is already there.
+// Phase 6 (13C): an answer copied out of ChatGPT arrives with markdown escapes ("\[voor erbij\]") and
+// zero-width characters; `cleanPastedText` (photo-import.ts) strips them before parsing.
 import { hasLang, type Lang, type Line, type Text } from './model.ts';
+import { cleanPastedText } from './photo-import.ts';
 
 const LANG_NAME: Record<Lang, string> = { nl: 'Dutch', en: 'British English' };
 
@@ -239,7 +242,7 @@ export function parseTranslationAnswer(answer: string, to?: Lang): TranslationAn
   /** Non-empty lines before the first marker or section header (a possible name). */
   const preamble: string[] = [];
   let sawMarker = false;
-  for (const rawLine of (answer ?? '').replace(/\r\n?/g, '\n').split('\n')) {
+  for (const rawLine of cleanPastedText(answer ?? '').split('\n')) {
     const line = rawLine.replace(/\s+$/u, '');
     if (line.trim() === '') {
       // A blank line ends a continuation: the next unmarked line is not glued on.

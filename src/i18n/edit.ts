@@ -88,6 +88,36 @@ export const edit: Dict = {
   'edit.apply': { nl: 'Pas toe', en: 'Apply' },
   'edit.relink': { nl: 'Ander ingrediënt', en: 'Other ingredient' },
 
+  // --- Editor: "woorden wegtikken" (phase 6, 6A.16; src/components/WordPicker.tsx) — the orange
+  //     "?" chip opens a sheet with the words of the name as toggles: green = ingredient, grey = note.
+  //     The raw line is never changed (invariant 2); only the link and the note are stored. ---
+  'edit.wordsOpen': { nl: 'Tik: welk woord is het ingrediënt?', en: 'Tap: which word is the ingredient?' },
+  'words.title': { nl: 'Welk woord is het ingrediënt?', en: 'Which word is the ingredient?' },
+  'words.hint': { nl: 'Groen = ingrediënt, grijs = opmerking. Tik op een woord om te wisselen.', en: 'Green = ingredient, grey = note. Tap a word to switch.' },
+  'words.none': { nl: 'Kies minstens één woord.', en: 'Pick at least one word.' },
+  'words.ingredient': { nl: 'Ingrediënt: {query}', en: 'Ingredient: {query}' },
+  'words.found': { nl: '→ gevonden ✓: {name}', en: '→ found ✓: {name}' },
+  'words.notFound': { nl: '→ niet gevonden', en: '→ not found' },
+  'words.notFoundHint': {
+    nl: 'Tik woorden weg tot er één overblijft dat de app kent, of maak een nieuw ingrediënt.',
+    en: 'Tap words away until one is left that the app knows, or create a new ingredient.',
+  },
+  'words.note': { nl: 'Opmerking: {note}', en: 'Note: {note}' },
+  'words.becomes': { nl: 'Wordt:', en: 'Becomes:' },
+  'words.rawStays': {
+    nl: 'Je tekst verandert niet; alleen de koppeling voor de boodschappenlijst en vertaling.',
+    en: 'Your text stays as it is; only the link for the shopping list and translation changes.',
+  },
+  'words.link': { nl: 'Koppel zo', en: 'Link like this' },
+  'words.search': { nl: 'Zelf zoeken', en: 'Search instead' },
+  // The "Koppel" question (6A.16; src/components/IngredientPicker.tsx): the dictionary knows a PART
+  // of the name ("knapperig stokbrood" -> stokbrood) — variant of that, or something new?
+  'picker.ask': { nl: 'Is dit een variant van {word}, of een heel nieuw ingrediënt?', en: 'Is this a variant of {word}, or a completely new ingredient?' },
+  'picker.askVariant': { nl: 'Variant van {name}', en: 'Variant of {name}' },
+  'picker.askVariantSub': { nl: 'de regeltekst blijft staan', en: 'the line text stays as it is' },
+  'picker.askNote': { nl: '“{note}” wordt een opmerking', en: '“{note}” becomes a note' },
+  'picker.askSearch': { nl: 'Anders zoeken', en: 'Search for something else' },
+
   // --- Editor: language pair (translate via an external AI) ---
   'edit.translate': { nl: 'Vertaling', en: 'Translation' },
   'edit.translateHint': {
@@ -123,16 +153,73 @@ export const edit: Dict = {
   },
   'edit.promptShow': { nl: 'Toon de opdracht (om zelf te kopiëren)', en: 'Show the prompt (to copy by hand)' },
 
-  // --- Editor: import from a photo / text via an external AI ---
-  'edit.import': { nl: 'Importeer van foto/tekst', en: 'Import from photo/text' },
+  // --- Editor: import card (phase 6, 6A.13 / 6A.17 / 13A): "Plak een recept" (website text
+  //     straight in), "Met AI" (the prompt route) and "Kies een bestand"; both tools share the
+  //     universal paste box (src/components/UniversalPaste.tsx, keys `paste.*` below) ---
+  'edit.import': { nl: 'Met AI (foto of tekst)', en: 'With AI (photo or text)' },
   'edit.importHint': {
-    nl: 'Kopieer de instructie, plak hem met de foto (of de tekst) van het recept in ChatGPT of Claude, en plak het resultaat hieronder. Het recept komt in het Nederlands én het Engels terug.',
-    en: 'Copy the instruction, paste it together with the photo (or the text) of the recipe into ChatGPT or Claude, and paste the result below. The recipe comes back in Dutch and in English.',
+    nl: 'Kopieer de opdracht, plak hem met de foto (of de tekst) van het recept in ChatGPT, Gemini of Claude, en plak het antwoord hieronder. Het recept komt in het Nederlands én het Engels terug, met categorie en labels.',
+    en: 'Copy the instruction, paste it together with the photo (or the text) of the recipe into ChatGPT, Gemini or Claude, and paste the answer below. The recipe comes back in Dutch and in English, with category and labels.',
   },
-  'edit.copyImportPrompt': { nl: 'Kopieer instructie-prompt', en: 'Copy instruction prompt' },
-  'edit.importPaste': { nl: 'Plak het resultaat', en: 'Paste the result' },
-  'edit.importApply': { nl: 'Vul in', en: 'Fill in' },
+  'edit.importPhotoHint': {
+    nl: 'Foto: voeg de foto van het recept toe aan het bericht met de opdracht. Tekst: plak de tekst van het recept onder de opdracht.',
+    en: 'Photo: add the photo of the recipe to the message with the instruction. Text: paste the text of the recipe under the instruction.',
+  },
+  'edit.copyImportPrompt': { nl: 'Kopieer opdracht', en: 'Copy instruction' },
+  // 13C: ChatGPT drops blank lines and escapes brackets when the formatted answer is copied; the
+  // "Kopieer code" button under a code block copies it exactly.
+  'edit.importAnswerHint': {
+    nl: 'Plak het antwoord hieronder — tik op "Kopieer code" onder het AI-antwoord, dan blijven de regels en haakjes heel.',
+    en: 'Paste the answer below — tap "Copy code" under the AI answer, so the lines and brackets stay intact.',
+  },
+  'edit.toolPaste': { nl: 'Plak een recept', en: 'Paste a recipe' },
+  'edit.pasteRecipeHint': {
+    nl: 'Plak de tekst van een website of een bericht; de app zoekt zelf de naam, de personen, de ingrediënten en de stappen. Liever te veel dan te weinig: wat niet past, komt onder "Controleer" en haal je met één tik weg.',
+    en: 'Paste the text of a website or a message; the app finds the name, servings, ingredients and steps itself. Better too much than too little: whatever does not fit lands under "Check" and goes with one tap.',
+  },
+  'edit.pasteRecipeLabel': { nl: 'Tekst van het recept', en: 'Text of the recipe' },
+  'edit.switchToAi': { nl: 'Lukt plakken niet goed? Met AI →', en: 'Pasting not working well? With AI →' },
+  'edit.pasteDone': { nl: '{lines} ingrediënten, {steps} stappen herkend', en: '{lines} ingredients, {steps} steps recognised' },
+  'edit.pasteLeftovers': { nl: '{n} regels om te controleren', en: '{n} lines to check' },
+  'edit.pasteLow': { nl: 'twijfelgeval, kijk alles even na', en: 'not sure about this one, check everything' },
+  // The "Controleer" box: lines of a pasted website text the app could not place (6A.17, "liever te veel dan te weinig").
+  'edit.leftoverTitle': { nl: 'Controleer', en: 'Check' },
+  'edit.leftoverHint': {
+    nl: 'Deze regels wist de app niet te plaatsen. Zet ze bij de ingrediënten of de bereiding, of haal ze weg.',
+    en: 'The app could not place these lines. Put them with the ingredients or the method, or remove them.',
+  },
+  'edit.leftoverToLine': { nl: '→ ingrediënt', en: '→ ingredient' },
+  'edit.leftoverToStep': { nl: '→ stap', en: '→ step' },
+  'edit.leftoverDrop': { nl: 'weg', en: 'remove' },
+  'edit.leftoverDropAll': { nl: 'Alles weg', en: 'Remove all' },
+  'edit.importPaste': { nl: 'Plak het antwoord', en: 'Paste the answer' },
   'edit.importNone': { nl: 'Geen recept herkend in de tekst.', en: 'No recipe recognised in the text.' },
+  // "Toch proberen" on a text without ingredients or steps the app could read: the lines wait under "Controleer".
+  'edit.importToCheck': { nl: 'Geen ingrediënten of stappen herkend — {n} regels staan onder "Controleer".', en: 'No ingredients or steps recognised — {n} lines are under "Check".' },
+
+  // --- Universal paste box (src/components/UniversalPaste.tsx; src/paste.ts `summarizePaste`) ---
+  'paste.label': { nl: 'Plakvak', en: 'Paste box' },
+  'paste.placeholder': {
+    nl: 'Plak hier: een link, een kaartje, een recept van een website, een AI-antwoord …',
+    en: 'Paste here: a link, a card, a recipe from a website, an AI answer …',
+  },
+  'paste.link': { nl: '1 deellink herkend', en: '1 share link recognised' },
+  'paste.links': { nl: '{n} deellinks herkend', en: '{n} share links recognised' },
+  'paste.card': { nl: 'Kaartje van {name}', en: 'Card from {name}' },
+  'paste.cards': { nl: '{n} kaartjes', en: '{n} cards' },
+  'paste.plan': { nl: 'een weekplan', en: 'a week plan' },
+  'paste.bundle': { nl: 'Receptbestand: {what}', en: 'Recipe file: {what}' },
+  'paste.website': { nl: 'Recept van een website: {lines} ingrediënten, {steps} stappen', en: 'Recipe from a website: {lines} ingredients, {steps} steps' },
+  'paste.websiteLow': { nl: 'twijfelgeval', en: 'not sure' },
+  'paste.ai': { nl: 'AI-antwoord herkend', en: 'AI answer recognised' },
+  'paste.unknown': { nl: 'Geen recept of link herkend — probeer de AI-opdracht.', en: 'No recipe or link recognised — try the AI instruction.' },
+  'paste.actImport': { nl: 'Open in de Inbox', en: 'Open in the Inbox' },
+  'paste.actMember': { nl: 'Voeg toe aan je huishouden', en: 'Add to your household' },
+  'paste.actFill': { nl: 'Vul in', en: 'Fill in' },
+  'paste.actEditor': { nl: 'Open in de editor', en: 'Open in the editor' },
+  'paste.actTryAnyway': { nl: 'Toch proberen', en: 'Try anyway' },
+  'paste.actEditorAnyway': { nl: 'Toch naar de editor', en: 'To the editor anyway' },
+  'paste.actAi': { nl: 'Met AI', en: 'With AI' },
   'edit.importDone': { nl: 'Ingevuld: {lines} ingrediënten, {steps} stappen', en: 'Filled in: {lines} ingredients, {steps} steps' },
   'edit.importDoneBoth': { nl: 'Ingevuld in NL en EN: {lines} ingrediënten, {steps} stappen', en: 'Filled in NL and EN: {lines} ingredients, {steps} steps' },
   'edit.importMismatch': {
@@ -255,9 +342,10 @@ export const edit: Dict = {
 
   // --- Inbox (/inbox): import + received ---
   'inbox.title': { nl: 'Inbox', en: 'Inbox' },
+  // 13A: every paste box takes everything; the Inbox is where links, bundles and cards are handled.
   'inbox.hint': {
-    nl: 'Plak hier een WhatsApp-bericht, een link, een kaartje of een receptbestand.',
-    en: 'Paste a WhatsApp message, a link, a card or a recipe file here.',
+    nl: 'Plak hier een WhatsApp-bericht, een link, een kaartje of een receptbestand. Een recept van een website of een AI-antwoord mag ook: dat gaat door naar de editor.',
+    en: 'Paste a WhatsApp message, a link, a card or a recipe file here. A recipe from a website or an AI answer works too: it goes on to the editor.',
   },
   'inbox.paste': { nl: 'Plak van klembord', en: 'Paste from clipboard' },
   'inbox.pasteHint': {
@@ -387,17 +475,8 @@ export const edit: Dict = {
     nl: 'De vertaling had {got} I-regels, maar de prompt vroeg om {expected} (regels {rows}). Kopieer de prompt opnieuw en plak het hele antwoord.',
     en: 'The translation had {got} I-lines, but the prompt asked for {expected} (rows {rows}). Copy the prompt again and paste the whole answer.',
   },
-  'edit.chooseFile': { nl: 'Kies bestand', en: 'Choose file' },
-  'edit.fileHint': {
-    nl: 'Een recept-, bundel- of back-upbestand (.json) of een tekstbestand met een recept.',
-    en: 'A recipe, bundle or backup file (.json) or a text file with a recipe.',
-  },
-  'edit.fileHasRecipes': {
-    nl: 'Dit bestand bevat recepten. Importeren gaat via de Inbox (daar kies je per recept: nieuw, vervang, beide).',
-    en: 'This file contains recipes. Importing goes through the Inbox (there you choose per recipe: new, replace, both).',
-  },
-  'edit.openInInbox': { nl: 'Open in Inbox om te importeren', en: 'Open in Inbox to import' },
-  'edit.fileText': { nl: 'Tekst uit het bestand staat in het vak hieronder — druk op "Vul in".', en: 'The text of the file is in the box below — press "Fill in".' },
+  'edit.chooseFile': { nl: 'Kies een bestand', en: 'Choose a file' },
+  'edit.fileText': { nl: 'De tekst staat in het plakvak — kijk wat de app ervan herkent en tik op "Vul in" of "Toch proberen".', en: 'The text is in the paste box — see what the app recognises and tap "Fill in" or "Try anyway".' },
   'edit.fileFailed': { nl: 'Het bestand kon niet gelezen worden.', en: 'The file could not be read.' },
   'edit.fileEmpty': { nl: 'Het bestand is leeg.', en: 'The file is empty.' },
 

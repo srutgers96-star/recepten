@@ -7,9 +7,12 @@
 //   - "Voeg lid toe via link of plak": a paste box; every `#f=` in the text becomes a card row with
 //     "Voeg <naam> toe aan je huishouden" (`readMemberCards`, `MemberCardRow`, `applyMemberCard`;
 //     the Inbox reuses the last two). Works by pasting (iPhone, invariant 5) and by link (Android
-//     → Inbox).
+//     → Inbox). Phase 6 (docs/phase-6-spec.md 13A): the box is the universal one (<UniversalPaste>):
+//     a recipe link pasted here offers "Open in de Inbox", a website recipe "Open in de editor"; a
+//     text another paste box handed over arrives through `pendingMemberText`.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
+import { UniversalPaste } from '@/components/UniversalPaste';
 import { getHousehold, setHousehold } from '@/db/repo';
 import {
   matchMemberForCard,
@@ -23,11 +26,14 @@ import {
   type Member,
   type MemberCard,
 } from '@/domain/household';
+import { classifyPaste } from '@/domain/paste-classify';
+import { cleanPastedText } from '@/domain/photo-import';
 import { parseEnvelope, type ParsedShare } from '@/domain/share';
 import { decodeToken, extractTokens } from '@/domain/token';
 import { t } from '@/i18n';
+import { openPasteIn } from '@/paste';
 import { PROFILE_COLORS, activeProfile, profiles } from '@/profile';
-import { navigate } from '@/router';
+import { navigate, pendingMemberText } from '@/router';
 import { Avatar, MemberCardPanel } from './ProfilesScreen';
 
 const NAME_DEBOUNCE_MS = 500;
@@ -75,9 +81,15 @@ function problemOf(e: unknown): string {
   return (e as Error)?.message === 'unsupported-version' ? t('inbox.unsupported') : t('inbox.invalid');
 }
 
+/** A share envelope (`v` + `t`), as opposed to a bundle/export/recipe JSON the Inbox reads by content. */
+function isEnvelope(v: unknown): boolean {
+  return typeof v === 'object' && v !== null && typeof (v as { v?: unknown }).v === 'number' && typeof (v as { t?: unknown }).t === 'string';
+}
+
 /**
  * Every member card in a pasted text: the `#f=` tokens (a WhatsApp message, a bare link), else one
- * raw JSON envelope. Other kinds of token are counted in `others`; the same card twice counts once.
+ * raw JSON envelope. Other kinds of token, and other JSON (a bundle, an export, a recipe — the paste
+ * box offers "Open in de Inbox" for those), are counted in `others`; the same card twice counts once.
  */
 export async function readMemberCards(text: string): Promise<FoundCards> {
   const out: FoundCards = { cards: [], problems: [], others: 0 };
@@ -89,7 +101,8 @@ export async function readMemberCards(text: string): Promise<FoundCards> {
       out.cards.push(parsed.member);
     } else out.others++;
   };
-  const tokens = extractTokens(text);
+  // Tokens from the cleaned text, as the paste box classifies them (a rendered chat may escape a "_" inside the token).
+  const tokens = extractTokens(cleanPastedText(text));
   if (tokens.length) {
     for (const tk of tokens) {
       try {
@@ -103,19 +116,24 @@ export async function readMemberCards(text: string): Promise<FoundCards> {
     }
     return out;
   }
+  // Raw JSON, also after a title line (a shared document): an envelope gives the card, anything else is "something else".
   const s = text.trim();
-  if (s.startsWith('{')) {
-    let value: unknown;
-    try {
-      value = JSON.parse(s);
-    } catch {
-      return out; // not JSON: "geen kaartje gevonden"
-    }
-    try {
-      take(parseEnvelope(value));
-    } catch (e) {
-      out.problems.push(problemOf(e));
-    }
+  const idx = s.search(/[{[]/u);
+  if (idx < 0) return out;
+  let value: unknown;
+  try {
+    value = JSON.parse(s.slice(idx));
+  } catch {
+    return out; // not JSON: "geen kaartje gevonden"
+  }
+  if (!isEnvelope(value)) {
+    out.others++;
+    return out;
+  }
+  try {
+    take(parseEnvelope(value));
+  } catch (e) {
+    out.problems.push(problemOf(e));
   }
   return out;
 }
@@ -230,6 +248,12 @@ export function HouseholdScreen() {
 
   useEffect(() => {
     let cancelled = false;
+    // 13A: a text with cards that another paste box (editor, Inbox) handed over.
+    const handed = pendingMemberText.value;
+    if (handed) {
+      pendingMemberText.value = null;
+      setPasteText(handed);
+    }
     void getHousehold().then(
       (h) => {
         if (cancelled) return;
@@ -288,11 +312,13 @@ export function HouseholdScreen() {
 
   // Analyse the pasted text (debounced): every `#f=` becomes a card row. A new text starts with
   // fresh rows: the "is toegevoegd" outcome of an earlier paste never sticks to a re-pasted card
-  // (it then says "al lid" + "Werk bij", like the Inbox).
+  // (it then says "al lid" + "Werk bij", like the Inbox). Anything that is not a token or a raw
+  // envelope (a website recipe, prose) is left to the paste box's own line and buttons (13A).
   useEffect(() => {
     const my = ++pasteSeq.current;
     const trimmed = pasteText.trim();
-    if (!trimmed) {
+    const kind = trimmed ? classifyPaste(trimmed).kind : 'empty';
+    if (!trimmed || !(kind === 'member' || kind === 'tokens' || kind === 'bundle')) {
       setFound(null);
       setCardDone({});
       return;
@@ -312,28 +338,15 @@ export function HouseholdScreen() {
     return () => window.clearTimeout(handle);
   }, [pasteText]);
 
-  // readText() must run inside the tap (iOS shows its Paste callout only then).
-  function pasteFromClipboard() {
+  /**
+   * The paste box's text changed (typed, pasted, cleared). The same message pasted again changes
+   * no text (so the effect above does not run): reset the outcomes here too, so the card row
+   * shows its current status again.
+   */
+  function onPasteText(s: string) {
     setPasteNotice('');
-    if (!navigator.clipboard?.readText) {
-      setPasteNotice(t('inbox.pasteFailed'));
-      pasteBox.current?.focus();
-      return;
-    }
-    navigator.clipboard
-      .readText()
-      .then((s) => {
-        if (s) {
-          // The same message pasted again changes no text (so the effect above does not run):
-          // reset the outcomes here too, so the card row shows its current status again.
-          setCardDone({});
-          setPasteText(s);
-        } else setPasteNotice(t('inbox.pasteFailed'));
-      })
-      .catch(() => {
-        setPasteNotice(t('inbox.pasteFailed'));
-        pasteBox.current?.focus();
-      });
+    setCardDone({});
+    setPasteText(s);
   }
 
   async function addCard(card: MemberCard) {
@@ -354,7 +367,9 @@ export function HouseholdScreen() {
 
   const takenFor = (except?: string) => members.filter((m) => m.id !== except).map((m) => m.name);
   const count = members.length === 1 ? t('household.memberOne') : t('household.memberCount', { n: members.length });
-  const nothingFound = found !== null && found.cards.length === 0 && found.problems.length === 0;
+  // Tokens that were something else (a recipe, a plan) are not "nothing": the paste box names them
+  // and offers "Open in de Inbox".
+  const nothingFound = found !== null && found.cards.length === 0 && found.problems.length === 0 && found.others === 0;
 
   return (
     <>
@@ -430,18 +445,19 @@ export function HouseholdScreen() {
         <section class="card member-paste">
           <h2>{t('household.addViaLink')}</h2>
           <p class="muted small">{t('household.addViaLinkHint')}</p>
-          <textarea class="input" ref={pasteBox} rows={3} value={pasteText} autocomplete="off" spellcheck={false} aria-label={t('household.addViaLink')} onInput={(e) => setPasteText((e.currentTarget as HTMLTextAreaElement).value)} />
-          <div class="actions">
-            <button type="button" class="btn btn-primary" onClick={pasteFromClipboard}>
-              {t('inbox.paste')}
-            </button>
-            {pasteText && (
-              <button type="button" class="btn btn-small" onClick={() => setPasteText('')}>
-                {t('inbox.clear')}
-              </button>
-            )}
-          </div>
-          <p class="muted small">{t('inbox.pasteHint')}</p>
+          {/* 13A: the universal paste box; cards are handled right here (no onMember = the rows below). */}
+          <UniversalPaste
+            defaultAction="member"
+            value={pasteText}
+            onChange={onPasteText}
+            textareaRef={pasteBox}
+            rows={3}
+            label={t('household.addViaLink')}
+            showProblems={false}
+            onImport={(s, kind) => openPasteIn('inbox', s, kind)}
+            onRecipe={(s, kind) => openPasteIn('add', s, kind)}
+            onAi={() => navigate('/add?mode=ai')}
+          />
           <div class="status" role="status">
             {pasteNotice}
           </div>
@@ -450,7 +466,7 @@ export function HouseholdScreen() {
               {p}
             </p>
           ))}
-          {nothingFound && <p class="bad small">{found && found.others > 0 ? t('household.notACard') : t('household.noCard')}</p>}
+          {nothingFound && <p class="bad small">{t('household.noCard')}</p>}
           {found && found.cards.length > 0 && (
             <div class="member-cards">
               {found.cards.map((card) => (

@@ -53,10 +53,15 @@ describe('rawFromLine', () => {
     expect(renderLine(nl('1 dl kippenbouillon'), dict, 'en')).toBe('100 ml chicken stock');
   });
 
-  it('keeps prep, notes and "naar smaak" in the app notation', () => {
+  it('keeps prep, notes and "naar smaak" / "naar wens" in the app notation', () => {
     expect(rawFromLine(nl('2 el olijfolie [voor het bakken]'), dict, 'nl')).toBe('2 el olijfolie [voor het bakken]');
     expect(rawFromLine(nl('1 rode ui [gesnipperd]'), dict, 'en')).toBe('1 red onion [finely diced]');
     expect(rawFromLine(nl('zout en peper naar smaak'), dict, 'nl')).toBe('zout en peper naar smaak');
+    expect(rawFromLine(nl('zout en peper naar smaak'), dict, 'en')).toBe('salt and pepper to taste');
+    // "naar wens" is written back as the phrase, without a second "(optioneel)".
+    expect(rawFromLine(nl('zout en peper naar wens'), dict, 'nl')).toBe('zout en peper naar wens');
+    expect(rawFromLine(nl('zout en peper naar wens'), dict, 'en')).toBe('salt and pepper to your liking');
+    expect(nl(rawFromLine(nl('zout en peper naar wens'), dict, 'nl'))).toMatchObject({ ing: 'zout-en-peper', optional: true, note: { nl: 'naar wens' } });
   });
 
   it('applying the untouched chip editor is a no-op for dl and l lines in both languages', () => {

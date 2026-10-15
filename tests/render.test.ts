@@ -61,6 +61,9 @@ describe('renderLine: the worked examples', () => {
     expect(both('Rookworst en/of braadworst')).toEqual(['Rookworst en/of braadworst', 'Smoked sausage and/or frying sausage']);
     expect(both('zout en peper')).toEqual(['zout en peper', 'salt and pepper']);
     expect(both('zout en peper naar smaak')).toEqual(['zout en peper (naar smaak)', 'salt and pepper (to taste)']);
+    // "naar wens" is a taste note too: it stands in for "(optioneel)", never next to it.
+    expect(both('zout en peper naar wens')).toEqual(['zout en peper (naar wens)', 'salt and pepper (to your liking)']);
+    expect(both('naar wens: zout en peper')).toEqual(['zout en peper (naar wens)', 'salt and pepper (to your liking)']);
   });
 
   it('renders parts, plurals, packs, garnish and unit names', () => {

@@ -162,19 +162,56 @@ const PART_ID: Record<string, LinePart> = {
 };
 
 const OPTIONAL_PREFIX_RE = /^(?:optioneel|optional|evt\.?|eventueel|optionally)\s*:?\s+/iu;
-const TO_TASTE_RE = /\s*,?\s*(naar smaak|to taste)$/iu;
+/**
+ * "naar smaak" / "to taste" (and "naar wens" / "to your liking") anywhere in the line (6A.14): at
+ * the end ("zout naar smaak"), in front ("naar smaak zout", "to taste: kosher salt") or in the
+ * middle ("zout en peper naar smaak toevoegen"). The phrase must stand on its own words.
+ */
+const TO_TASTE_ANY_RE = /(?:^|[\s,;:]+)(naar smaak|naar wens|to taste|to your liking)(?=$|[\s,;:.])/iu;
+/** A verb left dangling once the taste phrase is gone: "zout en peper [naar smaak] toevoegen". */
+const TASTE_VERB_RE = /\s+(?:toevoegen|toe te voegen|erbij doen|erbij|erdoor|erover|eroverheen|to add|added|to season|to finish)$/iu;
 const OF_CHOICE_RE = /\s*,?\s*(naar keuze|of your choice|of choice)$/iu;
 const PURPOSE_RE = /\s+(om (?:in )?te bakken|voor het bakken|om (?:in )?te frituren|om in te vetten|for frying|to fry in|for greasing)$/iu;
 const GARNISH_RE = /^(?:garnering|als garnering|ter garnering|garnish|for garnish|to garnish|for garnishing|for decoration)$/iu;
 const OPTIONAL_RE = /^(?:optioneel|optional|evt\.?|eventueel|naar wens)$/iu;
-const TO_TASTE_PAREN_RE = /^(?:naar smaak|to taste)$/iu;
+const TO_TASTE_PAREN_RE = /^(?:naar smaak|to taste|naar wens|to your liking)$/iu;
 const ALT_PAREN_RE = /^(?:of|or)\s+(.+)$/iu;
 
-const NOTE_TEXT: Record<'naar smaak' | 'naar keuze' | 'om in te bakken', Text> = {
+const NOTE_TEXT: Record<'naar smaak' | 'naar wens' | 'naar keuze' | 'om in te bakken', Text> = {
   'naar smaak': { nl: 'naar smaak', en: 'to taste' },
+  'naar wens': { nl: 'naar wens', en: 'to your liking' },
   'naar keuze': { nl: 'naar keuze', en: 'of your choice' },
   'om in te bakken': { nl: 'om in te bakken', en: 'for frying' },
 };
+
+/** The note for a taste phrase as written ("naar wens" keeps its own words). */
+function tasteNote(phrase: string): Text {
+  const p = phrase.toLowerCase();
+  return p === 'naar wens' || p === 'to your liking' ? NOTE_TEXT['naar wens'] : NOTE_TEXT['naar smaak'];
+}
+
+/**
+ * A vague amount the import prompt puts in the brackets ("zout [een snufje]", "salt [a pinch]"):
+ * a note in both languages, never an invented quantity (6A.10 rule 2).
+ */
+const VAGUE_AMOUNT_RE = /^(?:een\s+|a\s+)?(snufje|snuf|beetje|scheutje|scheut|pinch|little|splash|dash)$/iu;
+const VAGUE_NOTE: Record<string, Text> = {
+  snufje: { nl: 'een snufje', en: 'a pinch' },
+  snuf: { nl: 'een snufje', en: 'a pinch' },
+  pinch: { nl: 'een snufje', en: 'a pinch' },
+  beetje: { nl: 'een beetje', en: 'a little' },
+  little: { nl: 'een beetje', en: 'a little' },
+  scheutje: { nl: 'een scheutje', en: 'a splash' },
+  scheut: { nl: 'een scheutje', en: 'a splash' },
+  splash: { nl: 'een scheutje', en: 'a splash' },
+  dash: { nl: 'een scheutje', en: 'a splash' },
+};
+
+/** The bilingual note for a vague amount on its own ("een snufje", "a pinch"); undefined otherwise. */
+function vagueNote(text: string): Text | undefined {
+  const m = VAGUE_AMOUNT_RE.exec(text);
+  return m ? VAGUE_NOTE[(m[1] as string).toLowerCase()] : undefined;
+}
 
 function normalisePackSize(s: string): string {
   const m = PACK_SIZE_RE.exec(collapse(s));
@@ -201,6 +238,11 @@ interface Body {
   altMode: 'or' | 'and-or' | null;
   optional: boolean;
   garnish: boolean;
+  /**
+   * "kaas naar smaak, geraspt": the taste phrase stood in front of a comma, so what follows the
+   * comma is a prep/note tail of the name, also on a line without a quantity or unit.
+   */
+  commaTail: boolean;
   /** Unresolved [brackets] / free-text notes lower the confidence. */
   prepOk: boolean;
   parenOk: number;
@@ -223,6 +265,7 @@ function emptyBody(): Body {
     altMode: null,
     optional: false,
     garnish: false,
+    commaTail: false,
     prepOk: true,
     parenOk: 1,
     hadBrackets: false,
@@ -460,8 +503,9 @@ function parseNamePart(text: string, dict: Dictionary, lang: Lang, body: Body, q
 
   let name = tidyName(rest);
   // A comma tail after the name is a prep note when we know it ("kidneybonen, afgegoten"), else a
-  // note. Lines without any quantity or unit keep their commas ("kroepoek, atjar en seroendeng").
-  if ((body.qty !== null || unit !== null) && name.includes(',')) {
+  // note. Lines without any quantity or unit keep their commas ("kroepoek, atjar en seroendeng"),
+  // unless a taste phrase was cut out in front of the comma ("kaas naar smaak, geraspt").
+  if ((body.qty !== null || unit !== null || body.commaTail) && name.includes(',')) {
     const idx = name.indexOf(',');
     const head = tidyName(name.slice(0, idx));
     const tail = tidyName(name.slice(idx + 1));
@@ -537,6 +581,15 @@ function parseNamePart(text: string, dict: Dictionary, lang: Lang, body: Body, q
     return false;
   };
   let resolved = resolveWith(name);
+
+  // "zout peper", "salt pepper" (6A.14: the "en"/"and" dropped): the pair the dictionary knows.
+  if (!resolved) {
+    const pair = /^(\S+)\s+(\S+)$/u.exec(name);
+    if (pair && resolveWith(`${pair[1]} ${lang === 'nl' ? 'en' : 'and'} ${pair[2]}`)) {
+      resolved = true;
+      body.name = name;
+    }
+  }
 
   // "pinda's/cashewnoten", "witte/rode wijn": the first side is the product, the others alternatives.
   if (!resolved && name.includes('/')) {
@@ -645,6 +698,12 @@ function classifyParen(text: string, dict: Dictionary, lang: Lang, body: Body): 
     body.note = joinText(body.note, NOTE_TEXT['naar smaak'], '; ', lang);
     return;
   }
+  // "(een snufje)", "(a pinch)": the vague amount as a bilingual note (the chip editor writes it back this way).
+  const vague = vagueNote(t);
+  if (vague) {
+    body.note = joinText(body.note, vague, '; ', lang);
+    return;
+  }
   if (body.ing) {
     const ing = dict.get(body.ing);
     // "1 kippenbouillon (blokje)": the counted item is the stock cube when the dictionary has one.
@@ -739,11 +798,23 @@ function parseBody(input: string, dict: Dictionary, lang: Lang): Body {
     body.optional = true;
     text = tidyName(text.slice(opt[0].length));
   }
-  const taste = TO_TASTE_RE.exec(text);
-  if (taste && taste.index > 0) {
-    body.optional = true;
-    body.note = joinText(body.note, NOTE_TEXT['naar smaak'], '; ', lang);
-    text = tidyName(text.slice(0, taste.index));
+  const taste = TO_TASTE_ANY_RE.exec(text);
+  if (taste) {
+    const head = text.slice(0, taste.index);
+    const after = text.slice(taste.index + taste[0].length);
+    const sep = /^[\s:,;]+/u.exec(after)?.[0] ?? '';
+    const tail = after.slice(sep.length);
+    // "kaas naar smaak, geraspt": the comma after the phrase keeps its job, the rest is a comma
+    // tail of the name (parseNamePart); "zout en peper naar smaak toevoegen" simply closes up.
+    const comma = head !== '' && tail !== '' && /[,;]/u.test(sep);
+    const without = tidyName(comma ? `${head}, ${tail}` : `${head} ${tail}`);
+    // The phrase alone is no ingredient: leave such a line as it is.
+    if (without) {
+      body.optional = true;
+      body.commaTail = comma;
+      body.note = joinText(body.note, tasteNote(taste[1] as string), '; ', lang);
+      text = tidyName(without.replace(TASTE_VERB_RE, ''));
+    }
   }
   const choice = OF_CHOICE_RE.exec(text);
   if (choice && choice.index > 0) {
@@ -815,9 +886,34 @@ function parseBody(input: string, dict: Dictionary, lang: Lang): Body {
     body.alt.push(alt);
   }
 
-  // 9. prep from brackets (ingredient-aware: "fijngesneden" is chopped for herbs, sliced for onion)
+  // 9. prep from brackets (ingredient-aware: "fijngesneden" is chopped for herbs, sliced for onion).
+  //    The import prompt (6A.10/6A.14/6A.16) puts everything but the shop name in the brackets,
+  //    ";"-separated: "[naar smaak]" is the taste note, "[een snufje]" a vague-amount note,
+  //    "[of brood]" an alternative, the rest a prep.
   if (brackets.length) body.hadBrackets = true;
-  for (const b of brackets) addPrep(body, prepText(b, dict, lang, body), lang);
+  for (const b of brackets) {
+    const preps: string[] = [];
+    for (const part of b.split(';').map((p) => collapse(p)).filter(Boolean)) {
+      if (TO_TASTE_PAREN_RE.test(part)) {
+        body.optional = true;
+        body.note = joinText(body.note, tasteNote(part), '; ', lang);
+        continue;
+      }
+      const vague = vagueNote(part);
+      if (vague) {
+        body.note = joinText(body.note, vague, '; ', lang);
+        continue;
+      }
+      const alt = ALT_PAREN_RE.exec(part);
+      if (alt && !bilingual(noteText(part, dict, lang, body))) {
+        body.alt.push(parseAlt(alt[1] as string, dict, lang));
+        if (body.altMode === null) body.altMode = 'or';
+        continue;
+      }
+      preps.push(part);
+    }
+    if (preps.length) addPrep(body, prepText(preps.join('; '), dict, lang, body), lang);
+  }
 
   // 10. parentheses
   for (const p of parens) classifyParen(p, dict, lang, body);

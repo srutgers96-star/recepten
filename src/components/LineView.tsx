@@ -13,6 +13,7 @@ import { useRef, useState } from 'preact/hooks';
 import { IngredientPicker } from '@/components/IngredientPicker';
 import { isBuiltinId, linkUserRecipeLine, setLineOverride } from '@/db/repo';
 import { dictionary, lineParts } from '@/dictionary';
+import { wordLinkOverride, type WordLink } from '@/domain/line-words';
 import { pickText, type Lang, type Line } from '@/domain/model';
 import { lang, t } from '@/i18n';
 
@@ -195,13 +196,19 @@ export function IngredientList(props: IngredientListProps) {
   const linkable = props.linkable !== false;
   const onLink = linkable ? (index: number, query: string) => setPick({ index, query }) : undefined;
 
-  async function onPick(id: string) {
+  /**
+   * Stores the pick. "Variant van …" (6A.16) comes with a `WordLink`: the words that are not the
+   * ingredient become the prep note next to the link (`wordLinkOverride`); the raw line stays.
+   */
+  async function onPick(id: string, link?: WordLink) {
     const target = pick;
     setPick(null);
     if (!target) return;
     try {
-      if (isBuiltinId(recipeId)) await setLineOverride({ recipeId, index: target.index, ing: id });
-      else await linkUserRecipeLine(recipeId, target.index, id);
+      const line = lines[target.index];
+      const fields = link && line ? wordLinkOverride(line, link, dictionary.value) : { ing: id };
+      if (isBuiltinId(recipeId)) await setLineOverride({ recipeId, index: target.index, ...fields });
+      else await linkUserRecipeLine(recipeId, target.index, fields.ing, fields.prep);
     } catch (e) {
       console.error('link line', e);
     }
@@ -226,7 +233,7 @@ export function IngredientList(props: IngredientListProps) {
           />
         ))}
       </ul>
-      <IngredientPicker open={pick !== null} initialQuery={pick?.query ?? ''} onPick={(id) => void onPick(id)} onClose={() => setPick(null)} />
+      <IngredientPicker open={pick !== null} initialQuery={pick?.query ?? ''} onPick={(id, _created, link) => void onPick(id, link)} onClose={() => setPick(null)} />
     </>
   );
 }

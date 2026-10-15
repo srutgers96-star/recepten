@@ -576,15 +576,7 @@ textarea.input.member-card-raw {
   word-break: break-all;
 }
 
-/* "Voeg lid toe via link of plak": a short paste box, then one row per card found. */
-.member-paste textarea.input {
-  min-height: 96px;
-}
-
-.member-paste .actions {
-  margin: 10px 0;
-}
-
+/* "Voeg lid toe via link of plak": the universal paste box (edit.css .upaste), then one row per card found. */
 .member-paste .status {
   margin-bottom: 4px;
 }

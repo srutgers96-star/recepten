@@ -191,15 +191,12 @@ export const settings: Dict = {
     en: 'Scan with the other phone’s camera app. Android opens the app; an iPhone opens a preview page in Safari — copy the code there and paste it into the app.',
   },
   'household.addViaLink': { nl: 'Voeg lid toe via link of plak', en: 'Add a member via link or paste' },
+  // 13A: the box is the universal one; a recipe link or website text pasted here is named and sent on.
   'household.addViaLinkHint': {
-    nl: 'Plak hier het kaartje-bericht (of alleen de link) dat de ander je stuurde.',
-    en: 'Paste the card message (or just the link) the other person sent you here.',
+    nl: 'Plak hier het kaartje-bericht (of alleen de link) dat de ander je stuurde. Iets anders geplakt? De app zegt wat het is en waar het heen kan.',
+    en: 'Paste the card message (or just the link) the other person sent you here. Pasted something else? The app says what it is and where it can go.',
   },
   'household.noCard': { nl: 'Geen kaartje gevonden in deze tekst.', en: 'No card found in this text.' },
-  'household.notACard': {
-    nl: 'Dit is een recept of weekplan, geen kaartje. Plak het in de Inbox.',
-    en: 'This is a recipe or week plan, not a card. Paste it into the Inbox.',
-  },
   'household.cardFrom': { nl: 'Kaartje van {name}', en: 'Card from {name}' },
   'household.addCard': { nl: 'Voeg {name} toe aan je huishouden', en: 'Add {name} to your household' },
   'household.updateCard': { nl: 'Werk {name} bij', en: 'Update {name}' },

@@ -91,6 +91,14 @@ describe('parseTranslationAnswer', () => {
     });
   });
 
+  it('strips the markdown escapes and zero-width characters ChatGPT adds when the answer is copied (13C)', () => {
+    const a = parseTranslationAnswer('1. Onion soup\r\nI1. 2 slices crusty baguette \\[for serving\\]\r\nN2. cut into 2\\-cm cubes​\r\nS1. Cook.');
+    expect(a.name).toBe('Onion soup');
+    expect(a.lines).toEqual(['2 slices crusty baguette [for serving]']);
+    expect(a.notes).toEqual({ 2: 'cut into 2-cm cubes' });
+    expect(a.steps).toEqual(['Cook.']);
+  });
+
   it('reads D/T/N/P items and sparse I numbers', () => {
     const a = parseTranslationAnswer('1. Stew\nD. Nice in autumn.\nT. With bread.\nN1. cut into roughly 2 cm cubes\nP3. the old-fashioned way\nI4. 4 tins tuna in water\nS1. Cook.');
     expect(a.name).toBe('Stew');

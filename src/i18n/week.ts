@@ -20,12 +20,8 @@ export const week: Dict = {
   'more.householdLess': { nl: 'Minder personen', en: 'Fewer people' },
   'more.householdMore': { nl: 'Meer personen', en: 'More people' },
 
-  // --- Recipes list: + button ---
+  // --- Recipes list: + button (the four rows of its menu are `list.addWrite` … in browse.ts, phase 6) ---
   'list.add': { nl: 'Recept toevoegen', en: 'Add recipe' },
-  'list.addNew': { nl: 'Nieuw recept', en: 'New recipe' },
-  'list.addNewHint': { nl: 'Typ, plak of fotografeer een recept.', en: 'Type, paste or photograph a recipe.' },
-  'list.addFile': { nl: 'Kies bestand', en: 'Choose file' },
-  'list.addFileHint': { nl: 'Een recept-, bundel- of back-upbestand gaat naar de inbox; tekst naar het importvak.', en: 'A recipe, bundle or backup file goes to the Inbox; text goes to the import box.' },
 
   // --- Home: Inbox reminder card (shown while something is unseen; the Inbox tab moved under Meer) ---
   'home.inboxUnseen': { nl: '{n} nieuwe dingen in je inbox.', en: '{n} new things in your inbox.' },

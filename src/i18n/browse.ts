@@ -36,6 +36,19 @@ export const browse: Dict = {
   'list.received': { nl: 'ontvangen', en: 'received' },
   'list.favorite': { nl: 'favoriet', en: 'favourite' },
   'list.count': { nl: '{n} recepten', en: '{n} recipes' },
+  // Phase 6 (6A.13): the "+" menu shows all four ways in at once, each with one line of explanation
+  // (the menu title 'list.add' stays in week.ts).
+  'list.addWrite': { nl: 'Zelf schrijven', en: 'Write it yourself' },
+  'list.addWriteHint': { nl: 'Typ het recept zelf in.', en: 'Type the recipe in yourself.' },
+  'list.addPaste': { nl: 'Plak een recept', en: 'Paste a recipe' },
+  'list.addPasteHint': { nl: 'Tekst van een website; meestal genoeg.', en: 'Text from a website; usually enough.' },
+  'list.addAi': { nl: 'Met AI', en: 'With AI' },
+  'list.addAiHint': {
+    nl: 'Kopieer een opdracht voor je AI, met foto of tekst; als plakken niet goed lukt.',
+    en: 'Copy an instruction for your AI, with a photo or text; when pasting does not work well.',
+  },
+  'list.addFileChoice': { nl: 'Kies een bestand', en: 'Choose a file' },
+  'list.addFileChoiceHint': { nl: 'Een recept, bundel of back-up; of een tekstbestand.', en: 'A recipe, bundle or backup; or a text file.' },
 
   // --- Detail ---
   'recipe.cook': { nl: 'Koken', en: 'Cook' },
