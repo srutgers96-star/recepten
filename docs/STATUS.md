@@ -9,6 +9,15 @@ Repo: https://github.com/srutgers96-star/recepten.
 ## Lokaal gecommit, nog NIET gepusht
 (niets — alles staat online; de tijdelijke branch wip/6a2-partial is na 6A-2 verwijderd)
 
+## LET OP — werkmap bevat half werk (15 okt, 15:10): ronde 13 okt deel 1, workflow wf_d39e68a1-007
+De run (In & uit + sorteren, browser/installatie + Curator weg, opslag, Home-voorstel) stuitte op de
+sessielimiet (reset 18:30): bouwers in-uit-sorteren en opslag mislukten, browser-installatie is
+afgebroken, alleen het Home-voorstel (docs/home-voorstel.md) is klaar. Ongecommit in de werkmap:
+db.ts, model.ts, repo.ts, pwa.ts, RecipesScreen.tsx, StorageScreen.tsx, src/recent.ts, tests/pwa.test.ts.
+**Hervatten** met Workflow({ scriptPath: ".../workflows/scripts/recepten-phase6-ronde13okt-deel1-wf_d39e68a1-007.js",
+resumeFromRunId: "wf_d39e68a1-007" }); de mislukte bouwers draaien dan opnieuw en bouwen voort op wat er
+staat. Niet handmatig committen vóór de integratie groen is.
+
 ## Afgerond 15 okt: blok 6A-2 + 13A(1) + 13C (drie bouwers + integrator → 3 reviewers → skeptici → fixer → Haiku-gate; 14 bevindingen gerepareerd)
 docs/phase-6-spec.md 6A punten 9, 10, 13, 14, 16, 17 + ronde 13 okt 13A (deel 1) en 13C. Kern:
 - **Plak-domein**: src/domain/paste-recipe.ts (websiterecept → naam/porties/tijd/regels/stappen/taal/
