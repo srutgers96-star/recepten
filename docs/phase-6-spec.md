@@ -344,6 +344,12 @@ Toevoegen, de Inbox/In & uit, Huishouden en waar verder nodig; de plek bepaalt a
 (ontvangen én gedeeld, met datum en van/aan wie). Verder: de receptenlijst sorteert nu alleen A–Z;
 erbij: **Recent bekeken**, **Eigen**, **Eigen & ontvangen**. De Home-indeling is "al best goed maar kan
 misschien beter": Fable doet een voorstel (twee varianten met schets), Stijn kiest.
+**Besluit Stijn (15 okt): Home-variant A+** (docs/home-voorstel.md): variant A (begroeting → blok
+**Vanavond** → compacte Deze week + Boodschappenlijst → rij In & uit → Favorieten → Laatst gekookt →
+Categorieën → rij "Mijn recepten N ›" → Het verhaal; de **+** in de kop van Home) mét de twee dingen uit B:
+de rij **In & uit** met tellingen en **Plak** als eerste keuze onder de +. Opbouw: eerst de rijen en de +,
+dan het Vanavond-blok; elke stap op beide telefoons bekijken. Dit wordt **ronde 13 okt deel 2 (Home)**,
+direct na deel 1.
 
 ### 13B. Links openen de browser in plaats van de app; installeren duidelijker (M)
 Stijn: een deellink tikken opent de browser, "en mijn browser is niet mijn profiel, dat is de app".
