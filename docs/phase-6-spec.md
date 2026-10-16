@@ -472,6 +472,12 @@ Stijns vraag: "Exporteer eigen recepten" en "Back-up" hebben allebei een deelbes
 Voorstel: knoppen noemen wat ze doen ("Back-up voor mezelf" / "Mijn recepten aan iemand geven"), één knop
 "Bewaar of deel" met de keuze daarna, en de uitleg in één zin eronder.
 
+### 13H. Zoeken met filters aan: laat het zien (S; Stijn 16 okt)
+Stijn vond "Dino's Gulyás" niet, omdat er per ongeluk filterlabels aan stonden; de zoekresultaten werden
+stilletjes beperkt. Voorstel: staan er filterchips aan terwijl je zoekt, toon dan boven de resultaten één
+regel "N filters aan · **Zoek in alle recepten**" (één tik zet de filters uit), en bij nul resultaten met
+filters aan "Niets gevonden met deze filters — **zoek in alle recepten**". Zelfde in Kies 7/Verras me.
+
 ### Volgorde-voorstel (Stijn mag omgooien)
 6A-2 + 13A + 13C (plakken en toevoegen, één plakplek) → 13B + 13G (installeren, browser, opslag) →
 6B + 13E (labels, lactosevrij, keukens, nagerecht/gebak) → 13F (inbouwen) → 13D (varianten als tabs)
