@@ -20,6 +20,7 @@ const ROWS: readonly HelpRow[] = [
   { kind: 'read', name: 'cook.cmd.read' },
   { kind: 'repeat', name: 'cook.cmd.repeat' },
   { kind: 'ingredients', name: 'cook.cmd.ingredients' },
+  { kind: 'quantities', name: 'cook.cmd.quantities' },
   { kind: 'timer', name: 'cook.cmd.timer' },
   { kind: 'timeLeft', name: 'cook.cmd.timeLeft' },
   { kind: 'stop', name: 'cook.cmd.stop' },

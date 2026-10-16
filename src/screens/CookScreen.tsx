@@ -15,26 +15,31 @@
 // 16 Oct 2026 (Stijn): 🔊 is an on/off switch for the speech.readAloud setting, so reading stays on
 // (or off) on the next and previous step; `?step=N` (a tap on a timer in the timer bar or on its
 // notification) opens step N once and is then dropped from the URL.
-import { useEffect, useRef, useState } from 'preact/hooks';
+// 13I (docs/phase-6-spec.md): the step's ingredients are green (StepView gets the lines and the
+// servings factor); "Toon hoeveelheden" next to 🔊 shows all their amounts (setting
+// cook.showAmounts, src/step-amounts.ts) and the voice command "hoeveel?" reads them aloud.
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
 import { Header } from '@/components/Header';
 import { IngredientList } from '@/components/LineView';
 import { parseServingsParam, rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
-import { StepView, useFahrenheit } from '@/components/StepView';
+import { hasAmountsToShow, shownStep, StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { VoiceHelp } from '@/components/VoiceHelp';
 import { useLive } from '@/db/live';
 import { addPhoto, getRecipe, listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
-import { lineText } from '@/dictionary';
+import { dictionary, lineText } from '@/dictionary';
 import { nowIso, pickText, type Lang } from '@/domain/model';
 import { encodePhotoFile } from '@/photo';
+import { spokenStepQuantities } from '@/domain/stepingredients';
 import { pickSpoken, type VoiceCommand } from '@/domain/voice';
 import { lang, t, tIn } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
 import { goBack, navigate, route } from '@/router';
 import { canSpeak, loadSpeechSettings, readAloud, setReadAloud, speak, speaking, stopSpeaking } from '@/speech';
+import { loadShowAmounts, setShowAmounts, showAmounts } from '@/step-amounts';
 import { MINUTE_MS, startTimer, timers } from '@/timers';
 import { canListen, commandsEnabled, loadVoiceSettings, micState, startListening, stopListening } from '@/voice';
 
@@ -236,6 +241,15 @@ export function CookScreen(props: { id: string }) {
   const name = recipe ? pickText(recipe.name, l) : '';
   const base = recipe && recipe.servings > 0 ? recipe.servings : 4;
   const servings = chosen ?? base;
+  /** Scale of the amounts (ingredient list, green words in the steps, "hoeveel?"). */
+  const factor = base > 0 && servings > 0 ? servings / base : 1;
+  // 13I: the current step as StepView shows it, with the ingredients it names. The same words feed
+  // the "Toon hoeveelheden" button and the voice command "hoeveel?".
+  const dict = dictionary.value;
+  const currentStep = page > 0 && page <= steps.length ? steps[page - 1] : undefined;
+  const shown = useMemo(() => (currentStep ? shownStep(currentStep, l, fahrenheit, lines, dict) : null), [currentStep, l, fahrenheit, lines, dict]);
+  const amountsOffered = !!shown && hasAmountsToShow(shown, lines, dict);
+  const amountsOn = showAmounts.value;
 
   function onServings(n: number) {
     setChosen(n);
@@ -263,6 +277,7 @@ export function CookScreen(props: { id: string }) {
   useEffect(() => {
     void loadSpeechSettings();
     void loadVoiceSettings();
+    void loadShowAmounts();
     return () => {
       stopSpeaking();
       stopListening();
@@ -286,7 +301,6 @@ export function CookScreen(props: { id: string }) {
 
   /** Reads the scaled ingredient lines as the "Klaarzetten" page shows them; headers are skipped. */
   function speakIngredients() {
-    const factor = base > 0 && servings > 0 ? servings / base : 1;
     const parts: string[] = [];
     for (const ln of lines) {
       if (ln.kind === 'header') continue; // the sentence break between lines is pause enough
@@ -294,6 +308,21 @@ export function CookScreen(props: { id: string }) {
       if (text) parts.push(text);
     }
     if (parts.length) say(parts.join('. '), l);
+  }
+
+  /**
+   * 13I "hoeveel?": the scaled amounts of the ingredients the current step names, in the order they
+   * appear ("paprikapoeder 15 gram, karwijzaad 1 theelepel"), in the language of the step text; an
+   * honest line when the step names none. Off a step page it reads the whole list instead.
+   */
+  function speakQuantities() {
+    if (!shown) {
+      speakIngredients();
+      return;
+    }
+    const pieces = spokenStepQuantities(shown.matches, lines, dict, shown.lang, factor);
+    if (pieces.length) say(pieces.join(', '), shown.lang);
+    else say(tIn(l, 'cook.voice.noQuantities'), l);
   }
 
   /** "Hoe lang nog": the running timers of THIS recipe, earliest first; "geen timer" when none. */
@@ -365,6 +394,9 @@ export function CookScreen(props: { id: string }) {
         break;
       case 'ingredients':
         speakIngredients();
+        break;
+      case 'quantities':
+        speakQuantities();
         break;
       case 'timeLeft':
         speakTimeLeft();
@@ -563,22 +595,31 @@ export function CookScreen(props: { id: string }) {
               {!isPrepare && !isDone && steps[stepIndex] && (
                 <>
                   <div class="cook-kicker">{t('cook.stepOf', { n: stepIndex + 1, total: steps.length })}</div>
-                  <StepView big recipeId={id} recipeName={name} index={stepIndex} step={steps[stepIndex]!} fahrenheit={fahrenheit} />
-                  {speechOk && (
+                  <StepView big recipeId={id} recipeName={name} index={stepIndex} step={steps[stepIndex]!} fahrenheit={fahrenheit} lines={lines} factor={factor} />
+                  {(speechOk || amountsOffered) && (
                     <div class="cook-speak">
-                      <button
-                        type="button"
-                        class={'btn-speak' + (readAloudOn || isSpeaking ? ' on' : '')}
-                        title={t('cook.readAloudHint')}
-                        aria-pressed={readAloudOn}
-                        aria-label={stopOnly ? t('cook.readAloudStop') : `${t('cook.readAloud')} — ${t('cook.readAloudHint')}`}
-                        onClick={onReadTap}
-                        {...press}
-                      >
-                        <span aria-hidden="true">{stopOnly ? '■' : '🔊'}</span>
-                        {stopOnly ? t('cook.readAloudStop') : readAloudOn ? t('cook.readAloudOn') : t('cook.readAloud')}
-                      </button>
-                      {readAloudOn && <p class="muted small cook-speak-note">{t('cook.readAloudOnNote')}</p>}
+                      {speechOk && (
+                        <button
+                          type="button"
+                          class={'btn-speak' + (readAloudOn || isSpeaking ? ' on' : '')}
+                          title={t('cook.readAloudHint')}
+                          aria-pressed={readAloudOn}
+                          aria-label={stopOnly ? t('cook.readAloudStop') : `${t('cook.readAloud')} — ${t('cook.readAloudHint')}`}
+                          onClick={onReadTap}
+                          {...press}
+                        >
+                          <span aria-hidden="true">{stopOnly ? '■' : '🔊'}</span>
+                          {stopOnly ? t('cook.readAloudStop') : readAloudOn ? t('cook.readAloudOn') : t('cook.readAloud')}
+                        </button>
+                      )}
+                      {/* 13I: only when a green word of this step has an amount to show. */}
+                      {amountsOffered && (
+                        <button type="button" class={'btn-speak' + (amountsOn ? ' on' : '')} onClick={() => void setShowAmounts(!showAmounts.value)}>
+                          <span aria-hidden="true">⚖️</span>
+                          {amountsOn ? t('cook.hideAmounts') : t('cook.showAmounts')}
+                        </button>
+                      )}
+                      {speechOk && readAloudOn && <p class="muted small cook-speak-note">{t('cook.readAloudOnNote')}</p>}
                     </div>
                   )}
                 </>

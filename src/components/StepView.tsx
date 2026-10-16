@@ -6,11 +6,26 @@
 // Phase 2: with the setting "°F erbij" (units.fahrenheit) on, oven temperatures in the text render
 // as "200 °C (400 °F)" (docs/phase-2-spec.md §5). The step text itself is never rewritten; the
 // conversion is applied at render time only.
+//
+// 13I (docs/phase-6-spec.md): given the recipe's `lines`, the ingredients the step names are green
+// (src/domain/stepingredients.ts, matched on the DISPLAYED text). A green word whose amount is not
+// already in the text is a button: a tap shows the amount behind it, scaled by `factor`
+// ("karwijzaad (1 tl)"), a second tap hides it. The device setting cook.showAmounts
+// (src/step-amounts.ts, the "Toon hoeveelheden" button in cook mode) shows them all; a tap then
+// hides that one word. A green word that has nothing to add (the text says "2 el olie", or the
+// line has no amount, like "zout") is plain green text, not a button, so no tap ever does nothing.
+import { Fragment } from 'preact';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import { useLive } from '@/db/live';
 import { getFahrenheit } from '@/db/repo';
-import { pickText, type Step, type TimerSpec } from '@/domain/model';
+import { dictionary } from '@/dictionary';
+import type { Dictionary } from '@/domain/dictionary';
+import type { Lang, Line, Step, TimerSpec } from '@/domain/model';
+import { findStepIngredients, matchQuantityText, stepSegments, type StepIngredientMatch } from '@/domain/stepingredients';
 import { findTimers, formatTimer, timerMs } from '@/domain/timers';
+import { pickSpoken } from '@/domain/voice';
 import { lang, t } from '@/i18n';
+import { loadShowAmounts, showAmounts } from '@/step-amounts';
 import { findRunningTimer, formatRemaining, now, remainingMs, startTimer } from '@/timers';
 
 /** The oven table (docs/phase-2-spec.md §5); other values fall back to the formula, rounded to 5. */
@@ -59,6 +74,38 @@ export interface StepViewProps {
   big?: boolean;
   /** Append °F to oven temperatures (setting units.fahrenheit). */
   fahrenheit?: boolean;
+  /** The recipe's (effective) ingredient lines: when given, the ingredients the step names are green (13I). */
+  lines?: readonly Line[];
+  /** Servings factor for the amounts behind a green word (chosen servings / recipe servings; default 1). */
+  factor?: number;
+}
+
+/** A step as it is shown: the text (with °F when that is on), the stored text and the language it is in. */
+export interface ShownStep {
+  /** The step text in the active language, or the other one when that is empty (`pickText`). */
+  source: string;
+  /** `source` as displayed: with "(400 °F)" after oven temperatures when that setting is on. */
+  text: string;
+  /** The language `text` is written in (the fallback made explicit, as `pickSpoken` does). */
+  lang: Lang;
+  /** The recipe's ingredients named in `text`; offsets are into `text`. */
+  matches: StepIngredientMatch[];
+}
+
+/**
+ * The displayed text of a step and the ingredients it names (13I). Cook mode uses the same call for
+ * the "Toon hoeveelheden" button and the voice command "hoeveel?", so all three agree on the words.
+ */
+export function shownStep(step: Step, l: Lang, fahrenheit: boolean, lines: readonly Line[] | undefined, dict: Dictionary): ShownStep {
+  const picked = pickSpoken(step.text, l);
+  const text = fahrenheit ? addFahrenheit(picked.text) : picked.text;
+  const matches = lines && lines.length ? findStepIngredients(text, lines, dict, picked.lang) : [];
+  return { source: picked.text, text, lang: picked.lang, matches };
+}
+
+/** True when a tap on one of the step's green words has an amount to show (the "Toon hoeveelheden" button). */
+export function hasAmountsToShow(shown: ShownStep, lines: readonly Line[], dict: Dictionary): boolean {
+  return shown.matches.some((m) => matchQuantityText(m, lines, dict, shown.lang) !== '');
 }
 
 /** Timer specs of a step: as stored, else derived from the displayed text. */
@@ -102,14 +149,79 @@ export function TimerChips(props: { recipeId: string; recipeName: string; index:
   );
 }
 
+const NO_KEYS: ReadonlySet<number> = new Set();
+
+/**
+ * The step text with its green ingredients (13I). `flip` holds the words tapped since the "show
+ * all" setting last changed (keyed by their offset in this text): those show the opposite of the
+ * setting. A change of the setting or of the text starts over with none flipped.
+ */
+function StepText(props: { cls: string; shown: ShownStep; lines: readonly Line[] | undefined; factor: number }) {
+  const { shown, lines } = props;
+  const all = showAmounts.value;
+  const dict = dictionary.value;
+  const [flip, setFlip] = useState<{ all: boolean; text: string; keys: ReadonlySet<number> }>(() => ({ all, text: shown.text, keys: NO_KEYS }));
+  useEffect(() => {
+    if (lines) void loadShowAmounts();
+  }, [!!lines]);
+  if (!lines || shown.matches.length === 0) return <p class={props.cls}>{shown.text}</p>;
+  const flipped = flip.all === all && flip.text === shown.text ? flip.keys : NO_KEYS;
+  const toggle = (key: number) =>
+    setFlip((prev) => {
+      const keys = new Set(prev.all === all && prev.text === shown.text ? prev.keys : NO_KEYS);
+      if (keys.has(key)) keys.delete(key);
+      else keys.add(key);
+      return { all, text: shown.text, keys };
+    });
+  return (
+    <p class={props.cls}>
+      {stepSegments(shown.text, shown.matches).map((seg, i) => {
+        const m = seg.match;
+        if (!m) return <Fragment key={i}>{seg.text}</Fragment>;
+        const qty = matchQuantityText(m, lines, dict, shown.lang, props.factor);
+        // Nothing to add (the amount is in the text, or the line has none): green, but no button.
+        if (!qty) {
+          return (
+            <span key={i} class="step-ing-plain">
+              {seg.text}
+            </span>
+          );
+        }
+        const open = all !== flipped.has(m.start);
+        return (
+          // .step-ing-wrap keeps the word and the "(" of its amount together (no break after the
+          // inline button; the amount starts with a no-break space). The amount itself may wrap at its
+          // inner spaces (.step-qty), so a long one ("kaas (50 g geraspte jonge + 3 el geraspte
+          // oude)") never runs off a 360 px screen.
+          <span key={i} class="step-ing-wrap">
+            <button type="button" class="step-ing" aria-pressed={open} aria-label={`${seg.text}, ${qty}`} onClick={() => toggle(m.start)}>
+              {seg.text}
+            </button>
+            {open && (
+              // The button's label already carries the amount for a screen reader.
+              <span class="step-qty" aria-hidden="true">
+                {' '}({qty})
+              </span>
+            )}
+          </span>
+        );
+      })}
+    </p>
+  );
+}
+
 export function StepView(props: StepViewProps) {
-  const source = pickText(props.step.text, lang.value);
-  const specs = stepTimers(props.step, source);
-  const text = props.fahrenheit ? addFahrenheit(source) : source;
+  const l = lang.value;
+  const dict = dictionary.value;
+  const { step, lines } = props;
+  const fahrenheit = !!props.fahrenheit;
+  const shown = useMemo(() => shownStep(step, l, fahrenheit, lines, dict), [step, l, fahrenheit, lines, dict]);
+  const specs = stepTimers(step, shown.source);
+  const factor = props.factor && props.factor > 0 ? props.factor : 1;
   if (props.big) {
     return (
       <div class="step-big">
-        <p class="cook-text">{text}</p>
+        <StepText cls="cook-text" shown={shown} lines={lines} factor={factor} />
         <TimerChips recipeId={props.recipeId} recipeName={props.recipeName} index={props.index} specs={specs} />
       </div>
     );
@@ -120,7 +232,7 @@ export function StepView(props: StepViewProps) {
         {props.index + 1}
       </span>
       <div class="step-body">
-        <p class="step-text">{text}</p>
+        <StepText cls="step-text" shown={shown} lines={lines} factor={factor} />
         <TimerChips recipeId={props.recipeId} recipeName={props.recipeName} index={props.index} specs={specs} />
       </div>
     </li>

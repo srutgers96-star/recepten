@@ -493,7 +493,7 @@ Stijns vraag: "Exporteer eigen recepten" en "Back-up" hebben allebei een deelbes
 Voorstel: knoppen noemen wat ze doen ("Back-up voor mezelf" / "Mijn recepten aan iemand geven"), één knop
 "Bewaar of deel" met de keuze daarna, en de uitleg in één zin eronder.
 
-### 13I. Ingrediënten herkennen in de stappen, hoeveelheid met één tik, "hoeveel?" (M; Stijn 16 okt)
+### 13I. Ingrediënten herkennen in de stappen, hoeveelheid met één tik, "hoeveel?" (M; Stijn 16 okt) — GEBOUWD 16 okt (Opus; zie STATUS.md, DEVICE-TEST rij 68)
 Stijn tijdens het koken (Dino's Gulyás, stap 2): hij moest steeds terugbladeren om te zien welke
 ingrediënten het waren én hoeveel (15 g paprikapoeder, 1 tl karwijzaad …).
 - **Herkennen**: in elke stap worden de ingrediënten van het recept gemarkeerd (groen en onderstreept,

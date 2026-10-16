@@ -183,6 +183,9 @@ export const browse: Dict = {
     nl: 'Alleen Bewaar bewaart. Naar beneden vegen of ernaast tikken sluit zonder te bewaren.',
     en: 'Only Save saves. Swiping down or tapping beside this closes without saving.',
   },
+  'cooked.photoHint': { nl: 'Deze foto wordt bewaard als je op Bewaar tikt.', en: 'This photo is saved when you tap Save.' },
+  'cooked.photoRemove': { nl: 'Foto weghalen', en: 'Remove photo' },
+  'cooked.photoAlt': { nl: 'De gekozen foto', en: 'The chosen photo' },
   'cooked.saved': { nl: 'Gekookt ✓ — staat in je kooklog', en: 'Cooked ✓ — added to your cook log' },
   'cooked.ratedSaved': { nl: 'Beoordeling bewaard ✓', en: 'Rating saved ✓' },
   'cooked.failed': { nl: 'Bewaren lukte niet. Probeer het nog eens.', en: 'Saving failed. Please try again.' },
@@ -267,6 +270,8 @@ export const browse: Dict = {
     nl: 'timer 10 minuten · zet een timer voor een kwartier',
     en: 'timer 10 minutes · set a timer for a quarter of an hour',
   },
+  'cook.cmd.quantities': { nl: 'Hoeveel van elk ingrediënt in deze stap', en: 'How much of each ingredient this step uses' },
+  'cook.cmd.quantitiesSay': { nl: 'hoeveel? · hoeveel heb ik nodig?', en: 'how much? · how many? · how much do I need?' },
   'cook.cmd.timeLeft': { nl: 'Hoe lang de timer nog loopt', en: 'How long the timer has left' },
   'cook.cmd.timeLeftSay': { nl: 'hoe lang nog · hoeveel tijd nog', en: 'how long left · how much time' },
   'cook.cmd.stop': { nl: 'Stop met voorlezen', en: 'Stop reading' },
@@ -275,6 +280,16 @@ export const browse: Dict = {
   'cook.voice.leftMin': { nl: 'nog {n} minuten', en: '{n} minutes left' },
   'cook.voice.leftMin1': { nl: 'nog 1 minuut', en: '1 minute left' },
   'cook.voice.leftSec': { nl: 'nog {n} seconden', en: '{n} seconds left' },
+
+  // --- 13I: the ingredients a step names are green; a tap shows the amount, "Toon hoeveelheden"
+  //     shows them all (remembered per device), "hoeveel?" reads them aloud. ---
+  'cook.showAmounts': { nl: 'Toon hoeveelheden', en: 'Show amounts' },
+  'cook.hideAmounts': { nl: 'Verberg hoeveelheden', en: 'Hide amounts' },
+  // Spoken by the app while the mic listens: no voice command word in it ("ingrediënten" would
+  // make the app read the whole list to itself; tests/voice.test.ts checks every cook.voice.* line).
+  'cook.voice.noQuantities': { nl: 'In deze stap staat niets uit de lijst.', en: 'This step uses nothing from the list.' },
+  // Only underlined green words are buttons; shown only while "Toon hoeveelheden" is off.
+  'recipe.amountsHint': { nl: 'Tik op een onderstreept ingrediënt voor de hoeveelheid.', en: 'Tap an underlined ingredient to see how much.' },
 
   // --- Cook mode, phase 5 block D.1: "Foto toevoegen" on the "Gekookt!" page ---
   'cook.photoAdd': { nl: 'Foto toevoegen', en: 'Add a photo' },

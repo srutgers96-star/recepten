@@ -27,6 +27,22 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
   Meer → Voorlezen zelf, dus die blijft ook bij de volgende keer koken staan. Op de pc getest (375 px);
   op de telefoon DEVICE-TEST rij 66. De grotere wens, een **"Nu aan het koken"-balk** (ook zonder timer,
   meerdere recepten tegelijk), staat als 13K in docs/phase-6-spec.md voor Fable.
+- **13I gebouwd (Opus, workflow: domein → UI+spraak → 3 reviewers → verifier → fixer → gate; 8 van 10
+  bevindingen bevestigd en gerepareerd):** src/domain/stepingredients.ts herkent de ingrediënten van het
+  recept in de staptekst (hele woorden, langste eerst, precisie boven volledigheid; 89% van de stappen
+  heeft minstens één groen woord). Groen + onderstreept = tikbaar: de geschaalde hoeveelheid verschijnt
+  erachter. Groen zonder streep = de hoeveelheid staat al in de tekst of de regel heeft er geen.
+  "⚖️ Toon hoeveelheden" in de kookstand (instelling cook.showAmounts, src/step-amounts.ts); de
+  receptpagina markeert ook. Spraak (Android): "hoeveel?" / "how much?" leest de hoeveelheden van de
+  stap voor; tijdvragen ("hoeveel tijd nog") blijven timeLeft, praatzinnen ("hoeveel mensen eten er
+  mee") doen niets. Bekend en geaccepteerd: "selderij" in een kipkarbonades-stap en "the onion and pepper
+  mixture" tonen de volle hoeveelheid. DEVICE-TEST rij 68. 703 tests.
+- **Foto bij ✓ Gekookt (wens Gabi):** 📷 Foto toevoegen in het Gekookt-venster (zonder `capture`, dus
+  ook uit de fotobibliotheek). De foto wacht in het venster tot Bewaar, en krijgt de datum van de
+  kookbeurt; wegvegen bewaart niets. DEVICE-TEST rij 67.
+- **Vraag Gabi over de glutenvrij-badge:** geen bug. De badge telt kookbeurten van glutenvrije
+  recepten (5 nodig), niet het maken van een versie; in de browser nagespeeld: versie maken 0/5,
+  één keer gekookt 1/5.
 
 ## PAUZE (15 okt, avond) — volgende stap: de spec-ronde door Fable (zie "Werkwijze vanaf 15 okt")
 Ronde 13 okt deel 1 staat online. Stijn koos Home-variant **A+** (docs/home-voorstel.md). Op zijn "door"

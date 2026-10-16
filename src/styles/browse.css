@@ -561,6 +561,66 @@
   overflow-wrap: anywhere;
 }
 
+/* 13I: the recipe's ingredients inside a step are green (tokens cover dark mode). A green word with
+   an amount to show is an inline button (underlined = tappable); the amount appears behind it in a
+   quieter style. The vertical padding enlarges the tap area and the equal negative margin keeps it
+   out of the line box, so the text does not move. */
+.step-ing,
+.step-ing-plain {
+  color: var(--rosemary);
+  font-weight: 600;
+}
+
+.step-ing {
+  display: inline-block;
+  margin: -10px -2px;
+  padding: 10px 2px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  line-height: inherit;
+  text-align: inherit;
+  white-space: normal;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  vertical-align: baseline;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.step-ing:active {
+  background: var(--press);
+}
+
+.step-ing:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 0;
+}
+
+/* The word and the no-break space + "(" after it stay together; the amount wraps inside. */
+.step-ing-wrap {
+  white-space: nowrap;
+}
+
+.step-qty {
+  color: var(--muted);
+  font-size: 0.88em;
+  white-space: normal;
+}
+
+@media print {
+  .step-ing,
+  .step-ing-plain {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+}
+
 .chips-inline {
   display: flex;
   flex-wrap: wrap;
@@ -1548,11 +1608,16 @@ textarea.input.notes {
 /* ---------- Phase 5 (B.1-2): read-aloud + voice commands in cook mode ---------- */
 
 .cook-speak {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
   margin: 4px 0 0;
 }
 
 .cook-speak-note {
-  margin: 6px 0 0;
+  flex-basis: 100%;
+  margin: 0;
 }
 
 /* 🔊 "Lees voor" under the step text: a switch for reading every step (.on), a long press reads the ingredients. */
@@ -2270,6 +2335,40 @@ textarea.input.notes {
 
 .cooked-sheet .stars {
   margin: 4px 0 12px;
+}
+
+/* "📷 Foto toevoegen" in the sheet; the picked photo waits here (thumbnail + hint + remove) until Bewaar. */
+.cooked-photo-add {
+  margin-top: 12px;
+  min-height: 44px;
+}
+
+.cooked-photo {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  row-gap: 6px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.cooked-photo-img {
+  grid-row: 1 / span 2;
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+
+.cooked-photo-hint {
+  margin: 0;
+}
+
+.cooked-photo-remove {
+  justify-self: start;
+  min-height: 44px;
 }
 
 .cooked-foot {

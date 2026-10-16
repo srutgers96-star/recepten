@@ -1,6 +1,7 @@
 // Voice-command grammar + pickSpoken (docs/phase-5-spec.md Block B).
 import { describe, expect, it } from 'vitest';
 import { parseVoiceCommand, pickSpoken, type VoiceCommand } from '../src/domain/voice';
+import { browse } from '../src/i18n/browse';
 
 function cmd(transcript: string, lang: 'nl' | 'en'): VoiceCommand | null {
   return parseVoiceCommand(transcript, lang);
@@ -272,18 +273,120 @@ describe('parseVoiceCommand — timeLeft', () => {
     expect(cmd('how much longer', 'en')).toEqual({ kind: 'timeLeft' });
   });
 
+  it('recognises "how many minutes left" (the twin of "hoeveel minuten nog")', () => {
+    expect(cmd('how many minutes left', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how many minutes are left?', 'en')).toEqual({ kind: 'timeLeft' });
+  });
+
   it('a question about the recipe is not a timer question', () => {
     expect(cmd('hoe lang moet de pasta koken', 'nl')).toBeNull();
     expect(cmd('hoe lang', 'nl')).toBeNull();
-    expect(cmd('hoeveel zout', 'nl')).toBeNull();
     expect(cmd('how long does the pasta need', 'en')).toBeNull();
     expect(cmd('how long', 'en')).toBeNull();
-    expect(cmd('how much salt', 'en')).toBeNull();
+    // 13I: "how much salt" asks for an amount (quantities), never for the timer.
+    expect(cmd('hoeveel zout', 'nl')).toEqual({ kind: 'quantities' });
+    expect(cmd('how much salt', 'en')).toEqual({ kind: 'quantities' });
   });
 
   it('is language-specific', () => {
     expect(cmd('how long left', 'nl')).toBeNull();
     expect(cmd('hoe lang nog', 'en')).toBeNull();
+  });
+});
+
+// 13I: "hoeveel?" reads the amounts of the ingredients named in this step.
+describe('parseVoiceCommand — quantities', () => {
+  it('recognises the Dutch forms', () => {
+    expect(cmd('hoeveel', 'nl')).toEqual({ kind: 'quantities' });
+    expect(cmd('Hoeveel?', 'nl')).toEqual({ kind: 'quantities' });
+    expect(cmd('hoeveel heb ik nodig', 'nl')).toEqual({ kind: 'quantities' });
+    expect(cmd('Hoeveel heb ik nodig?', 'nl')).toEqual({ kind: 'quantities' });
+    expect(cmd('en hoeveel paprikapoeder', 'nl')).toEqual({ kind: 'quantities' });
+    expect(cmd('hoeveelheden', 'nl')).toEqual({ kind: 'quantities' });
+    expect(cmd('lees de hoeveelheden voor', 'nl')).toEqual({ kind: 'quantities' });
+  });
+
+  it('recognises the English forms', () => {
+    expect(cmd('how much', 'en')).toEqual({ kind: 'quantities' });
+    expect(cmd('How much?', 'en')).toEqual({ kind: 'quantities' });
+    expect(cmd('how many?', 'en')).toEqual({ kind: 'quantities' });
+    expect(cmd('how much do I need', 'en')).toEqual({ kind: 'quantities' });
+    expect(cmd('How many do I need?', 'en')).toEqual({ kind: 'quantities' });
+    expect(cmd('amounts', 'en')).toEqual({ kind: 'quantities' });
+    expect(cmd('read the quantities', 'en')).toEqual({ kind: 'quantities' });
+  });
+
+  it('time questions stay timeLeft', () => {
+    expect(cmd('hoeveel tijd', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('hoeveel tijd nog', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('hoeveel minuten nog', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how much time', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how much time is left', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how much longer', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how many minutes left', 'en')).toEqual({ kind: 'timeLeft' });
+    // short forms and diminutives of the timer grammar (review 13I)
+    expect(cmd('Hoeveel minuutjes nog?', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('hoeveel min nog', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('hoeveel seconden nog', 'nl')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how many mins left', 'en')).toEqual({ kind: 'timeLeft' });
+    expect(cmd('how many seconds left?', 'en')).toEqual({ kind: 'timeLeft' });
+  });
+
+  it('a time word after it is never an amount question', () => {
+    expect(cmd('hoeveel minuten moet het koken', 'nl')).toBeNull();
+    expect(cmd('hoeveel seconden', 'nl')).toBeNull();
+    expect(cmd('hoeveel minuutjes', 'nl')).toBeNull();
+    expect(cmd('how many minutes does it need', 'en')).toBeNull();
+    expect(cmd('how much is left on the timer', 'en')).toBeNull();
+    expect(cmd('how much is left?', 'en')).toBeNull();
+    expect(cmd('how many mins', 'en')).toBeNull();
+  });
+
+  it('ordinary kitchen talk with "hoeveel" / "how much" is no command', () => {
+    expect(cmd('hoeveel mensen eten er mee', 'nl')).toBeNull();
+    expect(cmd('hoeveel kost dat eigenlijk', 'nl')).toBeNull();
+    expect(cmd('hoeveel graden moet de oven', 'nl')).toBeNull();
+    expect(cmd('hoeveel porties zijn het', 'nl')).toBeNull();
+    expect(cmd('how many people are coming tonight', 'en')).toBeNull();
+    expect(cmd('how much did that cost', 'en')).toBeNull();
+    // only at the start (or after one word), and only a short question
+    expect(cmd('ik weet niet hoeveel we nog hebben', 'nl')).toBeNull();
+    expect(cmd('I wonder how much is in the cupboard', 'en')).toBeNull();
+    expect(cmd('hoeveel moet je daar nou eigenlijk van hebben', 'nl')).toBeNull();
+    // the asked-for forms keep working
+    expect(cmd('hoeveel zout heb ik nodig', 'nl')).toEqual({ kind: 'quantities' });
+    expect(cmd('how much salt do I need', 'en')).toEqual({ kind: 'quantities' });
+    expect(cmd('oké, hoeveel?', 'nl')).toEqual({ kind: 'quantities' });
+  });
+
+  it('whole words only and language-specific', () => {
+    expect(cmd('hoeveelste stap is dit', 'nl')).toBeNull();
+    expect(cmd('hoeveelheid', 'nl')).toBeNull();
+    expect(cmd('how much', 'nl')).toBeNull();
+    expect(cmd('hoeveel', 'en')).toBeNull();
+    expect(cmd('much', 'en')).toBeNull();
+    expect(cmd('how are you', 'en')).toBeNull();
+  });
+
+  it('the other commands still win where they come first', () => {
+    expect(cmd('volgende, hoeveel', 'nl')).toEqual({ kind: 'next' });
+    expect(cmd('lees voor', 'nl')).toEqual({ kind: 'read' });
+    expect(cmd('ingrediënten', 'nl')).toEqual({ kind: 'ingredients' });
+  });
+});
+
+// The app speaks these lines itself while the mic listens: a command word in one of them would make
+// the app answer itself once the echo outlasts ECHO_GRACE_MS (src/speech.ts).
+describe('the lines the app speaks', () => {
+  it('no cook.voice.* line parses as a command in its own language', () => {
+    const keys = Object.keys(browse).filter((k) => k.startsWith('cook.voice.'));
+    expect(keys).toContain('cook.voice.noQuantities');
+    for (const key of keys) {
+      for (const l of ['nl', 'en'] as const) {
+        const text = browse[key]![l].replace(/\{n\}/g, '5');
+        expect(cmd(text, l), `${key} (${l}): ${text}`).toBeNull();
+      }
+    }
   });
 });
 

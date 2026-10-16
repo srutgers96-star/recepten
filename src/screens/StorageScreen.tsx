@@ -42,6 +42,7 @@ import { navigate } from '@/router';
 import { downloadBlob, shareJsonFile } from '@/share-actions';
 import { reloadSoundSettings } from '@/sounds';
 import { reloadSpeechSettings } from '@/speech';
+import { reloadShowAmounts } from '@/step-amounts';
 import { reloadVoiceSettings } from '@/voice';
 
 interface Facts {
@@ -366,9 +367,9 @@ export function StorageScreen() {
     try {
       const result = await importBundle(parsed as BackupBundle);
       // Refresh the in-memory mirrors of what the restore may have changed: profiles, confetti,
-      // timer sound/vibrate, read-aloud, voice commands and badges (the active profile is kept
+      // timer sound/vibrate, read-aloud, voice commands, "Toon hoeveelheden" and badges (the active profile is kept
       // when this phone already had one; theme and last-backup date are never restored).
-      await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadBadgeSettings()]);
+      await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadShowAmounts(), reloadBadgeSettings()]);
       await reload();
       void refreshShareBadges();
       setRestoreStatus(t('storage.restored', { ...result }));

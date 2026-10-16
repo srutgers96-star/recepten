@@ -8,6 +8,10 @@
 // Dismissal (Gabi's bug + Stijn's decision, 16 Oct 2026): Bewaar sits at the top as well as under the
 // form, so it is always in view on an iPhone. Swiping the sheet down (grab bar/head), tapping beside
 // it, Annuleer and Escape all close WITHOUT saving; only Bewaar saves. The line under the form says so.
+// Photo (Gabi, 16 Oct 2026: "the cooked button should also have the add photo function"): the same
+// "Foto toevoegen" as the Gekookt! page of cook mode, but held in the sheet until Bewaar (so a swipe
+// away saves nothing, photo included). Bewaar stores the cook first, then the photo with the cook's
+// date; a failed photo save keeps the sheet open and a second Bewaar retries only the photo.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
@@ -15,9 +19,10 @@ import { formatShortDate } from '@/components/RecipeRow';
 import { Segmented } from '@/components/Segmented';
 import { SheetPortal } from '@/components/SheetPortal';
 import { cookedAtForDay, daysAgo, localDay, recordCooked } from '@/cooklog';
-import { updateCookLogEntry } from '@/db/repo';
+import { addPhoto, updateCookLogEntry } from '@/db/repo';
 import { nowIso, type CookLogEntry } from '@/domain/model';
 import { lang, t } from '@/i18n';
+import { encodePhotoFile } from '@/photo';
 import { activeProfile } from '@/profile';
 
 type When = 'today' | 'yesterday' | 'other';
@@ -49,7 +54,34 @@ export function CookedSheet(props: CookedSheetProps) {
   const [note, setNote] = useState(entry?.note ?? '');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
+  // The picked photo, re-encoded (max 1024 px) but NOT stored yet; `url` is its preview.
+  const [photo, setPhoto] = useState<{ blob: Blob; url: string } | null>(null);
+  const [photoState, setPhotoState] = useState<'idle' | 'busy' | 'error'>('idle');
+  const photoInput = useRef<HTMLInputElement>(null);
+  // Bewaar in two parts: once the cook (or rating) is stored, a retry after a failed photo save
+  // must not log the cook a second time. Holds the date the photo gets.
+  const cookSaved = useRef<string | null>(null);
   const { onClose } = props;
+
+  // Free the preview URL when the photo changes and when the sheet closes.
+  useEffect(() => {
+    if (!photo) return;
+    const url = photo.url;
+    return () => URL.revokeObjectURL(url);
+  }, [photo]);
+
+  async function onPhotoPicked(file: File) {
+    if (busy || photoState === 'busy') return;
+    setPhotoState('busy');
+    try {
+      const blob = await encodePhotoFile(file);
+      setPhoto({ blob, url: URL.createObjectURL(blob) });
+      setPhotoState('idle');
+    } catch (e) {
+      console.error('encodePhotoFile', e);
+      setPhotoState('error');
+    }
+  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -79,7 +111,8 @@ export function CookedSheet(props: CookedSheetProps) {
     return cookedAtForDay(day);
   }
 
-  const canSave = !!profile && !busy && (entry ? entry.id !== undefined : cookedAt() !== null);
+  const canSave =
+    !!profile && !busy && photoState !== 'busy' && (cookSaved.current !== null || (entry ? entry.id !== undefined : cookedAt() !== null));
 
   /** Swipe down / tap beside the sheet: close without saving (only Bewaar saves). */
   function dismiss() {
@@ -122,23 +155,40 @@ export function CookedSheet(props: CookedSheetProps) {
     setBusy(true);
     setError(false);
     try {
-      if (entry) {
-        if (entry.id === undefined) throw new Error('cook-log entry without id');
-        await updateCookLogEntry(entry.id, { stars: stars > 0 ? stars : null, note });
-        // The small stars burst (C.4) only once the rating is really saved (Stijn, 16 Oct 2026:
-        // confetti on the tap itself was premature when the sheet was then closed unsaved).
-        if (stars > 0) celebrate('stars');
-        // Stars given afterwards count for the review badges (data/badges.json "reviews", "oneStar")
-        // just like stars in cook mode: start the check, never make the save wait for it (same
-        // pattern as recordCooked).
-        void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
-        props.onSaved('rate');
-      } else {
-        const at = cookedAt();
-        if (at === null) throw new Error('no date');
-        await recordCooked({ recipeId: props.recipeId, profileId: profile.id, at, stars: stars > 0 ? stars : null, note });
-        props.onSaved('log');
+      // Part 1: the cook (or the rating), once.
+      if (cookSaved.current === null) {
+        if (entry) {
+          if (entry.id === undefined) throw new Error('cook-log entry without id');
+          await updateCookLogEntry(entry.id, { stars: stars > 0 ? stars : null, note });
+          // The small stars burst (C.4) only once the rating is really saved (Stijn, 16 Oct 2026:
+          // confetti on the tap itself was premature when the sheet was then closed unsaved).
+          if (stars > 0) celebrate('stars');
+          // Stars given afterwards count for the review badges (data/badges.json "reviews", "oneStar")
+          // just like stars in cook mode: start the check, never make the save wait for it (same
+          // pattern as recordCooked).
+          void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
+          cookSaved.current = entry.at;
+        } else {
+          const at = cookedAt();
+          if (at === null) throw new Error('no date');
+          await recordCooked({ recipeId: props.recipeId, profileId: profile.id, at, stars: stars > 0 ? stars : null, note });
+          cookSaved.current = at;
+        }
       }
+      // Part 2: the photo, with the cook's date. The photo badges count household-wide; check again
+      // now that the photo is in (recordCooked's own check ran before it was stored).
+      if (photo) {
+        try {
+          await addPhoto({ recipeId: props.recipeId, memberId: profile.id, blob: photo.blob, at: cookSaved.current });
+        } catch (e) {
+          console.error('addPhoto', e);
+          setPhotoState('error');
+          setBusy(false);
+          return;
+        }
+        void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
+      }
+      props.onSaved(entry ? 'rate' : 'log');
     } catch (e) {
       console.error('CookedSheet', e);
       setError(true);
@@ -241,6 +291,46 @@ export function CookedSheet(props: CookedSheetProps) {
                   onInput={(e) => setNote((e.currentTarget as HTMLTextAreaElement).value)}
                 />
               </label>
+              <input
+                ref={photoInput}
+                type="file"
+                accept="image/*"
+                style="display:none"
+                onChange={(e) => {
+                  const input = e.currentTarget as HTMLInputElement;
+                  const f = input.files?.[0];
+                  input.value = '';
+                  if (f) void onPhotoPicked(f);
+                }}
+              />
+              {/* No capture attribute: the phone offers its photo library as well as the camera (the dish was often cooked earlier). */}
+              {photo ? (
+                <div class="cooked-photo">
+                  <img class="cooked-photo-img" src={photo.url} alt={t('cooked.photoAlt')} />
+                  <p class="muted small cooked-photo-hint">{photoState === 'error' ? t('cook.photoFailed') : t('cooked.photoHint')}</p>
+                  <button
+                    type="button"
+                    class="btn btn-small cooked-photo-remove"
+                    disabled={busy}
+                    onClick={() => {
+                      setPhoto(null);
+                      setPhotoState('idle');
+                    }}
+                  >
+                    {t('cooked.photoRemove')}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  class="btn btn-block cooked-photo-add"
+                  disabled={busy || photoState === 'busy'}
+                  onClick={() => photoInput.current?.click()}
+                >
+                  <span aria-hidden="true">📷</span>{' '}
+                  {photoState === 'busy' ? t('cook.photoBusy') : photoState === 'error' ? t('cook.photoFailed') : t('cook.photoAdd')}
+                </button>
+              )}
             </>
           )}
         </div>

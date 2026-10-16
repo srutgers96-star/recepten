@@ -1,5 +1,5 @@
 // Voice-command grammar for cook mode (docs/phase-5-spec.md Block B; phase 6 block 6A.8 adds
-// repeat / ingredients / timeLeft). Framework-free: no preact, no dexie; runs in Node (tests) and
+// repeat / ingredients / timeLeft, 13I adds quantities). Framework-free: no preact, no dexie; runs in Node (tests) and
 // in the browser. `parseVoiceCommand` turns a speech-recognition transcript — often a whole
 // sentence with filler words and punctuation — into a command, matching whole words only
 // ("stopcontact" is not "stop", "opnieuw" never matches inside another word). `pickSpoken` is
@@ -17,6 +17,8 @@ export type VoiceCommand =
   | { kind: 'ingredients' }
   /** Speak the remaining time of this recipe's running timer(s) ("hoe lang nog", "how long left"). */
   | { kind: 'timeLeft' }
+  /** 13I: the amounts of the ingredients named in this step ("hoeveel?", "how much do I need?"). */
+  | { kind: 'quantities' }
   | { kind: 'stop' }
   | { kind: 'timer'; minutes: number };
 
@@ -93,6 +95,36 @@ const ALONE_REPEAT_WORDS: Record<Lang, ReadonlySet<string>> = {
   nl: new Set(['wat', 'sorry']),
   en: new Set(['what', 'sorry']),
 };
+
+// 13I: single-word "how much of each ingredient in this step" ("lees de hoeveelheden voor").
+const QUANTITY_WORDS: Record<Lang, ReadonlySet<string>> = {
+  nl: new Set(['hoeveelheden']),
+  en: new Set(['amounts', 'quantities']),
+};
+
+/**
+ * Words that make "hoeveel" / "how much" / "how many" a question about time, not about amounts:
+ * "hoeveel minuten" (without "nog": a question about the recipe), "hoeveel minuutjes", "how many
+ * mins", "how much is left (on the timer)". Every minute, hour and second word the timer grammar
+ * knows (short forms and diminutives too), plus "left": a question about what is left is never
+ * read as the step's amounts. Checked up to five tokens ahead; timeLeftAt already took the timer
+ * questions.
+ */
+const TIME_WORDS: ReadonlySet<string> = new Set([
+  ...MINUTE_WORDS, ...HOUR_WORDS, ...SECOND_WORDS,
+  'tijd', 'lang', 'langer', 'kwartier', 'timer', 'wekker',
+  'time', 'long', 'longer', 'left',
+]);
+
+/**
+ * "Hoeveel mensen eten er mee", "hoeveel kost dat", "how many people are coming": everyday questions
+ * in the kitchen, not about this step's amounts. A "hoeveel" / "how much|many" followed by one of
+ * these is no command.
+ */
+const NOT_AMOUNT_WORDS: ReadonlySet<string> = new Set([
+  'mensen', 'personen', 'porties', 'graden', 'kost', 'kosten', 'keer', 'euro',
+  'people', 'persons', 'servings', 'portions', 'degrees', 'cost', 'costs', 'times', 'euros', 'did', 'does',
+]);
 
 // All command keywords of both languages: a duration scan stops at these so
 // "timer stop" never reads "stop" as a number and falls through to the stop command.
@@ -281,9 +313,10 @@ function repeatAt(tokens: string[], i: number, lang: Lang): boolean {
 
 /**
  * "How long is left" starting at `i`: NL "hoe lang nog", "hoelang nog", "hoeveel tijd (nog)",
- * "hoeveel minuten nog"; EN "how long left", "how long is left", "how long to go", "how much
- * time", "how much longer". A bare "hoe lang" / "how long" is a question about the recipe, not
- * about the timer, so it needs the "nog"/"left" part.
+ * "hoeveel minuten nog" (also "minuutjes", "min", "seconden"); EN "how long left", "how long is
+ * left", "how long to go", "how much time", "how much longer", "how many minutes (mins, seconds)
+ * left". A bare "hoe lang" / "how long" is a question about the recipe, not about the timer, so it
+ * needs the "nog"/"left" part.
  */
 function timeLeftAt(tokens: string[], i: number, lang: Lang): boolean {
   const tok = tokens[i];
@@ -296,7 +329,7 @@ function timeLeftAt(tokens: string[], i: number, lang: Lang): boolean {
     if (tok === 'hoelang' && within(i + 1, 'nog', 3)) return true;
     if (tok === 'hoe' && tokens[i + 1] === 'lang' && within(i + 2, 'nog', 3)) return true;
     if (tok === 'hoeveel' && tokens[i + 1] === 'tijd') return true;
-    if (tok === 'hoeveel' && tokens[i + 1] === 'minuten' && within(i + 2, 'nog', 2)) return true;
+    if (tok === 'hoeveel' && clockWord(tokens[i + 1]) && within(i + 2, 'nog', 2)) return true;
     return false;
   }
   if (tok === 'how' && tokens[i + 1] === 'long') {
@@ -305,7 +338,39 @@ function timeLeftAt(tokens: string[], i: number, lang: Lang): boolean {
     return false;
   }
   if (tok === 'how' && tokens[i + 1] === 'much' && (tokens[i + 2] === 'time' || tokens[i + 2] === 'longer')) return true;
+  // "how many minutes left", the English twin of "hoeveel minuten nog"
+  if (tok === 'how' && tokens[i + 1] === 'many' && clockWord(tokens[i + 2]) && within(i + 3, 'left', 3)) return true;
   return false;
+}
+
+/** A minute or second word of the timer grammar ("minuten", "minuutjes", "min", "seconds", "secs"). */
+function clockWord(tok: string | undefined): boolean {
+  return tok !== undefined && (MINUTE_WORDS.has(tok) || SECOND_WORDS.has(tok));
+}
+
+/**
+ * 13I "how much of this step's ingredients" starting at `i`: NL "hoeveel?", "hoeveel heb ik
+ * nodig", "hoeveel zout"; EN "how much?", "how many?", "how much do I need"; and the plural nouns
+ * ("hoeveelheden", "amounts"). "Hoeveel" / "how much|many" is everyday kitchen talk, so like
+ * 'terug'/'back' it is guarded: it must open the transcript (or follow one word: "en hoeveel?"),
+ * at most four words may follow it, and none of them may be a time word ("hoeveel minuten", "how
+ * much is left": timeLeftAt, checked first, answers the timer ones) or a word that makes it another
+ * question ("hoeveel mensen eten er mee", "how much did that cost").
+ */
+function quantitiesAt(tokens: string[], i: number, lang: Lang): boolean {
+  const tok = tokens[i];
+  if (tok === undefined) return false;
+  if (QUANTITY_WORDS[lang].has(tok)) return true;
+  let next: number;
+  if (lang === 'nl' && tok === 'hoeveel') next = i + 1;
+  else if (lang === 'en' && tok === 'how' && (tokens[i + 1] === 'much' || tokens[i + 1] === 'many')) next = i + 2;
+  else return false;
+  if (i > 1 || tokens.length - next > 4) return false;
+  for (let k = next; k < tokens.length; k++) {
+    const w = tokens[k] as string;
+    if (TIME_WORDS.has(w) || NOT_AMOUNT_WORDS.has(w)) return false;
+  }
+  return true;
 }
 
 /**
@@ -313,13 +378,14 @@ function timeLeftAt(tokens: string[], i: number, lang: Lang): boolean {
  * that again" (= repeat) or "lees de ingrediënten" / "read the ingredients" (= ingredients):
  * look a few tokens ahead before settling on a plain read.
  */
-function readKindAt(tokens: string[], i: number, lang: Lang): 'read' | 'repeat' | 'ingredients' {
+function readKindAt(tokens: string[], i: number, lang: Lang): 'read' | 'repeat' | 'ingredients' | 'quantities' {
   const end = Math.min(tokens.length, i + 4);
   for (let k = i + 1; k < end; k++) {
     const tok = tokens[k];
     if (tok === undefined) break;
     if (REPEAT_WORDS[lang].has(tok) || guardedRepeatAt(tokens, k, lang) > 0) return 'repeat';
     if (INGREDIENT_WORDS[lang].has(tok)) return 'ingredients';
+    if (QUANTITY_WORDS[lang].has(tok)) return 'quantities';
     if (COMMAND_WORDS.has(tok)) break; // "read the next step": a plain read
   }
   return 'read';
@@ -327,7 +393,7 @@ function readKindAt(tokens: string[], i: number, lang: Lang): 'read' | 'repeat' 
 
 /**
  * Parse a recognition transcript ("volgende", "ga maar terug", "timer 10 minuten",
- * "set a timer for five minutes", "wat zeg je?", "hoe lang nog") into a command.
+ * "set a timer for five minutes", "wat zeg je?", "hoe lang nog", "hoeveel?") into a command.
  * Case-insensitive, tolerant of punctuation and filler words; matches whole words only. When a
  * transcript could hold several commands the first clear one wins. Null when nothing matches.
  */
@@ -340,6 +406,7 @@ export function parseVoiceCommand(transcript: string, lang: Lang): VoiceCommand 
     if (timeLeftAt(tokens, i, lang)) return { kind: 'timeLeft' };
     if (repeatAt(tokens, i, lang)) return { kind: 'repeat' };
     if (INGREDIENT_WORDS[lang].has(tok)) return { kind: 'ingredients' };
+    if (quantitiesAt(tokens, i, lang)) return { kind: 'quantities' };
     if (lang === 'nl') {
       if (tok === 'volgende') return { kind: 'next' };
       if (tok === 'vorige' || (tok === 'terug' && goWordBefore(tokens, i, 'ga'))) return { kind: 'prev' };

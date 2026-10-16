@@ -14,6 +14,9 @@
 // (CookedSheet → src/cooklog.ts recordCooked); when the active member's latest cook of this recipe
 // has no stars, a "Beoordeel" row opens the same sheet in rate mode. Home's "Recent gekookt" links
 // here with '?rate=<cook-log id>' to open that rate sheet for that one entry straight away.
+// 13I (docs/phase-6-spec.md): the steps get the effective lines and the chosen-servings factor, so
+// the ingredients they name are green and a tap shows the scaled amount (the cook-mode setting
+// "Toon hoeveelheden" applies here too; this page has no button of its own).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { isIOS } from '@/components/AppInfo';
@@ -22,7 +25,7 @@ import { Header } from '@/components/Header';
 import { IngredientList } from '@/components/LineView';
 import { formatShortDate } from '@/components/RecipeRow';
 import { rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
-import { StepView, useFahrenheit } from '@/components/StepView';
+import { hasAmountsToShow, shownStep, StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { VariantSheet } from '@/components/VariantSheet';
 import { useLive } from '@/db/live';
@@ -67,6 +70,7 @@ import { activeProfile, profiles } from '@/profile';
 import { noteViewed } from '@/recent';
 import { navigate, route } from '@/router';
 import { copyText } from '@/share-actions';
+import { showAmounts } from '@/step-amounts';
 
 const NOTE_DEBOUNCE_MS = 600;
 
@@ -365,6 +369,8 @@ export function RecipeScreen(props: { id: string }) {
   const editable = !!recipe && recipe.origin.kind !== 'builtin';
   const base = recipe && recipe.servings > 0 ? recipe.servings : 4;
   const servings = chosen ?? base;
+  /** Scale of the amounts: the ingredient list, the green words in the steps, the plain-text copy. */
+  const factor = base > 0 && servings > 0 ? servings / base : 1;
 
   function onServings(n: number) {
     setChosen(n);
@@ -396,6 +402,15 @@ export function RecipeScreen(props: { id: string }) {
   // Phase 5: diet chips under the title; the generic tag list below leaves those tags out.
   const dietChips = useMemo(() => (recipe ? dietChipsFor(recipe, lines, dict, linesAdjusted) : []), [recipe, lines, dict, linesAdjusted]);
   const otherTags = recipe ? recipe.tags.filter((tag) => !DIET_ROW_TAGS.has(tag)) : [];
+  // The tap hints under "Bereiding": timer chips, and (13I) underlined green words with an amount to
+  // show. The amounts hint only while "Toon hoeveelheden" is off: with it on every amount is already
+  // there and a tap hides one (reading the signal here re-renders when it changes).
+  const timersTappable = !!recipe && recipe.steps.some((s) => !!s.timers && s.timers.length > 0);
+  const amountsTappable = useMemo(
+    () => !!recipe && recipe.steps.some((s) => hasAmountsToShow(shownStep(s, l, fahrenheit, lines, dict), lines, dict)),
+    [recipe, l, fahrenheit, lines, dict],
+  );
+  const amountsHint = amountsTappable && !showAmounts.value;
   // Block F.2: "Maak … versie" only for the diets a line of this recipe contradicts; the original
   // of a variant (when it still exists on this phone) for the "Versie van …" link.
   const offerDiets = useMemo(() => (recipe ? variantDietsFor(recipe, lines, dict) : []), [recipe, lines, dict]);
@@ -506,7 +521,6 @@ export function RecipeScreen(props: { id: string }) {
    * the screen shows (lineText over the effective lines, scaled to the chosen servings).
    */
   function asTextInput(r: Recipe): RecipeTextInput {
-    const factor = base > 0 && servings > 0 ? servings / base : 1;
     const timeParts: string[] = [];
     if (r.time?.active) timeParts.push(t('recipe.timeActive', { n: r.time.active }));
     if (r.time?.total && r.time.total !== r.time.active) timeParts.push(t('recipe.timeTotal', { n: r.time.total }));
@@ -790,10 +804,14 @@ export function RecipeScreen(props: { id: string }) {
             <section class="section">
               <h2>{t('recipe.steps')}</h2>
               {/* a tap instruction has no business on paper */}
-              {recipe.steps.some((s) => s.timers && s.timers.length) && <p class="muted small no-print">{t('recipe.timerHint')}</p>}
+              {(timersTappable || amountsHint) && (
+                <p class="muted small no-print">
+                  {[timersTappable ? t('recipe.timerHint') : '', amountsHint ? t('recipe.amountsHint') : ''].filter(Boolean).join(' ')}
+                </p>
+              )}
               <ol class="steps">
                 {recipe.steps.map((s, i) => (
-                  <StepView key={i} recipeId={id} recipeName={name} index={i} step={s} fahrenheit={fahrenheit} />
+                  <StepView key={i} recipeId={id} recipeName={name} index={i} step={s} fahrenheit={fahrenheit} lines={lines} factor={factor} />
                 ))}
               </ol>
               {recipe.servingTip && pickText(recipe.servingTip, l) && <p class="serving-tip">{pickText(recipe.servingTip, l)}</p>}
