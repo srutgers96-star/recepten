@@ -320,8 +320,28 @@ simulatie van 30 jaar dagelijks gebruik); (2) profiel-level, XP-balk + "+12"-ani
 (3) badge-catalogus (eerst ter goedkeuring), badge-niveaus, groepen, verborgen en tijdgebonden badges;
 (4) ontgrendelingen + level-up-overzicht + avatar; (5) kookkalender huishouden en levels van
 anderen via delen; (6) later: challenges (level 20), gouden modus. Elke stap apart online.
-**Anti-valsspeel (idee Stijn 13 okt):** maximaal 5 kookbeurten per dag leveren XP op; Fable werkt dit
-uit samen met de XP-afleiding (een kookbeurt met een datum in het verleden telt ook mee voor díe dag).
+**Anti-valsspeel (Stijn 13 + 16 okt; Fable denkt het uit in de XP-spec):** je mag niet oneindig XP
+vangen door extra veel te koken. Stijn: "niet meer dan 5 dingen koken op een dag, of daar in ieder geval
+geen XP meer voor krijgen", en "als er 3 dagen op rij 5 keer gekookt wordt, is dat wel heel verdacht".
+Ideeën uit andere spellen, voor Fable om af te wegen (Opus beslist hier niets zelf):
+- **Dagplafond met afnemende opbrengst**: 1e–3e kookbeurt volle XP, 4e–5e de helft, vanaf de 6e niets.
+- **Per recept één keer per dag** XP; hetzelfde recept vaker op één dag telt niet.
+- **Terugdateren begrensd**: kookbeurten meer dan 7 dagen terug geven geen XP, en een teruggedateerde
+  kookbeurt telt mee voor het plafond van díe dag.
+- **Verdacht patroon** (bv. 3 dagen op rij het plafond): de dagen erna geen extra XP tot er weer een
+  gewone dag is geweest, vriendelijk gemeld ("Drukke keukenweek! Morgen weer XP"), nooit beschuldigend
+  en nooit al verdiende XP afpakken.
+- **Streak en badges** tellen dagen en verschillende recepten, niet het ruwe aantal kookbeurten, zodat
+  spammen op één dag niets oplevert.
+- Geen server: valsspelen werkt alleen op je eigen telefoon; bij "Sync mijn voortgang" zien vrienden je
+  level, dus de regels houden het eerlijk zonder politie te spelen.
+Technisch belangrijk: XP wordt **afgeleid** (herberekend), dus regels werken met terugwerkende kracht.
+Leg de regels daarom vóór 6D-1 vast, met een **regelversie** in de afleiding, zodat een latere wijziging
+niemands level ongemerkt verandert.
+
+**Level en avatar op Home (Stijn 16 okt):** de begroeting op Home toont je **avatar** en
+"**Level 6 · Oma**" met een klein XP-balkje (tik → profiel/badges). Tot 6D er is: het bestaande
+avatar-rondje bij de begroeting. Badges uit = geen level op Home.
 
 ## Ronde 13 okt 2026 — Stijns notities, geordend (door Opus 5.5)
 
@@ -354,7 +374,8 @@ misschien beter": Fable doet een voorstel (twee varianten met schets), Stijn kie
 Categorieën → rij "Mijn recepten N ›" → Het verhaal; de **+** in de kop van Home) mét de twee dingen uit B:
 de rij **In & uit** met tellingen en **Plak** als eerste keuze onder de +. Opbouw: eerst de rijen en de +,
 dan het Vanavond-blok; elke stap op beide telefoons bekijken. Dit wordt **ronde 13 okt deel 2 (Home)**,
-direct na deel 1.
+direct na deel 1. **Aanvulling 16 okt:** je **avatar en level** horen in de begroeting op Home (zie 6D,
+"Level en avatar op Home").
 
 ### 13B. Links openen de browser in plaats van de app; installeren duidelijker (M)
 Stijn: een deellink tikken opent de browser, "en mijn browser is niet mijn profiel, dat is de app".

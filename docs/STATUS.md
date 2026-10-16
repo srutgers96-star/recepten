@@ -14,7 +14,7 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
   Alleen docs/specs/vaste-lijst.md (38 KB) staat er van de eerste poging, **niet nagekeken en mogelijk
   onvolledig**; niet gecommit. Bij de volgende Fable-sessie de spec-ronde hervatten
   (resumeFromRunId wf_09446677-12f) of opnieuw starten.
-- **Gekookt-venster (bug Gabi):** Bewaar staat nu ook bovenaan (naast Annuleer); wegvegen (greepbalkje)
+- **Gekookt-venster (bug Gabi):** Bewaar staat nu ook bovenaan (naast Annuleer). Besluit Stijn 16 okt: **alleen Bewaar bewaart**; wegvegen (greepbalkje), ernaast tikken, Annuleer en Escape sluiten zonder te bewaren (eerdere variant "wegvegen bewaart" teruggedraaid). Oud:
   of ernaast tikken **bewaart** als er iets is ingevuld, anders sluit hij gewoon; Annuleer/Escape gooit weg;
   "Andere datum" zonder dag houdt het venster open met een melding. Confetti bij sterren pas ná het
   bewaren (ook in de kookstand). Op de pc getest; op Gabi's iPhone nog te bevestigen (DEVICE-TEST rij 65).

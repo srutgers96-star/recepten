@@ -179,11 +179,10 @@ export const browse: Dict = {
   'cooked.save': { nl: 'Bewaar', en: 'Save' },
   'cooked.saveRating': { nl: 'Bewaar beoordeling', en: 'Save rating' },
   'cooked.saving': { nl: 'Bewaren…', en: 'Saving…' },
-  'cooked.dismissSaves': {
-    nl: 'Naar beneden vegen of ernaast tikken bewaart ook wat je invulde. Annuleer gooit het weg.',
-    en: 'Swiping down or tapping beside this also saves what you entered. Cancel throws it away.',
+  'cooked.dismissHint': {
+    nl: 'Alleen Bewaar bewaart. Naar beneden vegen of ernaast tikken sluit zonder te bewaren.',
+    en: 'Only Save saves. Swiping down or tapping beside this closes without saving.',
   },
-  'cooked.pickDate': { nl: 'Kies eerst een datum, dan bewaar ik het.', en: 'Choose a date first, then it is saved.' },
   'cooked.saved': { nl: 'Gekookt ✓ — staat in je kooklog', en: 'Cooked ✓ — added to your cook log' },
   'cooked.ratedSaved': { nl: 'Beoordeling bewaard ✓', en: 'Rating saved ✓' },
   'cooked.failed': { nl: 'Bewaren lukte niet. Probeer het nog eens.', en: 'Saving failed. Please try again.' },

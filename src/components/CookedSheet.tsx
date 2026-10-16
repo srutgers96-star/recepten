@@ -5,10 +5,9 @@
 // sheet, without the date part, gives an existing entry its stars afterwards → `updateCookLogEntry`.
 // Uses the .sheet-* shell of base.css (same as VariantSheet / IngredientPicker); without a profile
 // it says so honestly instead of saving to nobody.
-// Dismissal (Gabi, 16 Oct 2026): an iPhone sheet is closed by swiping it down or tapping beside it,
-// and people expect what they typed to stay. So a swipe down on the grab bar/head or a tap on the
-// backdrop SAVES when something was entered, and only closes when nothing was; "Annuleer" (and
-// Escape) is the one way to throw input away. Save is also at the top, not only under the form.
+// Dismissal (Gabi's bug + Stijn's decision, 16 Oct 2026): Bewaar sits at the top as well as under the
+// form, so it is always in view on an iPhone. Swiping the sheet down (grab bar/head), tapping beside
+// it, Annuleer and Escape all close WITHOUT saving; only Bewaar saves. The line under the form says so.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
@@ -49,7 +48,6 @@ export function CookedSheet(props: CookedSheetProps) {
   const [note, setNote] = useState(entry?.note ?? '');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
-  const [needDate, setNeedDate] = useState(false);
   const { onClose } = props;
 
   useEffect(() => {
@@ -82,31 +80,21 @@ export function CookedSheet(props: CookedSheetProps) {
 
   const canSave = !!profile && !busy && (entry ? entry.id !== undefined : cookedAt() !== null);
 
-  /** Something the user would lose by closing: a different day, stars or a note (rate: a change). */
-  const dirty = entry
-    ? (stars || 0) !== (entry.stars || 0) || note.trim() !== (entry.note ?? '').trim()
-    : when !== 'today' || stars > 0 || note.trim() !== '';
-
-  /** Swipe down / tap beside the sheet: save what was entered, otherwise just close. */
+  /** Swipe down / tap beside the sheet: close without saving (only Bewaar saves). */
   function dismiss() {
     if (busy) return;
-    if (!dirty || !profile) {
-      onClose();
-      return;
-    }
-    if (canSave) {
-      void onSave();
-      return;
-    }
-    // "Andere datum" without a day: keep the sheet open rather than dropping the stars and note.
-    setNeedDate(true);
+    onClose();
   }
 
   // Swipe down on the grab bar / head: the sheet follows the finger; far enough = dismiss().
   function onDragStart(e: PointerEvent) {
     if ((e.target as HTMLElement | null)?.closest('button')) return;
     drag.current = { y: e.clientY, id: e.pointerId, dy: 0 };
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+    } catch {
+      // The pointer is already gone (e.g. a very short tap): the drag simply works without capture.
+    }
   }
   function onDragMove(e: PointerEvent) {
     const d = drag.current;
@@ -132,7 +120,6 @@ export function CookedSheet(props: CookedSheetProps) {
     if (!canSave || !profile) return;
     setBusy(true);
     setError(false);
-    setNeedDate(false);
     try {
       if (entry) {
         if (entry.id === undefined) throw new Error('cook-log entry without id');
@@ -219,17 +206,9 @@ export function CookedSheet(props: CookedSheetProps) {
                         value={day}
                         max={today}
                         disabled={busy}
-                        onInput={(e) => {
-                          setDay((e.currentTarget as HTMLInputElement).value);
-                          setNeedDate(false);
-                        }}
+                        onInput={(e) => setDay((e.currentTarget as HTMLInputElement).value)}
                       />
                     </label>
-                  )}
-                  {needDate && (
-                    <p class="cooked-error" role="alert">
-                      {t('cooked.pickDate')}
-                    </p>
                   )}
                 </>
               )}
@@ -267,7 +246,7 @@ export function CookedSheet(props: CookedSheetProps) {
           <button type="button" class="btn btn-primary" disabled={!canSave} onClick={() => void onSave()}>
             {busy ? t('cooked.saving') : entry ? t('cooked.saveRating') : t('cooked.save')}
           </button>
-          {profile && <p class="muted small cooked-dismiss-hint">{t('cooked.dismissSaves')}</p>}
+          {profile && <p class="muted small cooked-dismiss-hint">{t('cooked.dismissHint')}</p>}
           {error && (
             <p class="cooked-error" role="alert">
               {t('cooked.failed')}
