@@ -9,6 +9,19 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 ## Lokaal gecommit, nog NIET gepusht
 (niets — alles staat online; de tijdelijke branch wip/6a2-partial is na 6A-2 verwijderd)
 
+## 16 okt (Opus 5.5): bugfixes van Gabi; de spec-ronde van Fable is NIET gelukt
+- De spec-ronde (workflow wf_09446677-12f) stuitte twee keer op de Fable-limiet: geen enkele spec af.
+  Alleen docs/specs/vaste-lijst.md (38 KB) staat er van de eerste poging, **niet nagekeken en mogelijk
+  onvolledig**; niet gecommit. Bij de volgende Fable-sessie de spec-ronde hervatten
+  (resumeFromRunId wf_09446677-12f) of opnieuw starten.
+- **Gekookt-venster (bug Gabi):** Bewaar staat nu ook bovenaan (naast Annuleer); wegvegen (greepbalkje)
+  of ernaast tikken **bewaart** als er iets is ingevuld, anders sluit hij gewoon; Annuleer/Escape gooit weg;
+  "Andere datum" zonder dag houdt het venster open met een melding. Confetti bij sterren pas ná het
+  bewaren (ook in de kookstand). Op de pc getest; op Gabi's iPhone nog te bevestigen (DEVICE-TEST rij 65).
+- **Zoeken:** spellingvarianten van gerechtnamen (goulash = gulyás = gulasch, shoarma = shawarma,
+  saté = satay …) in src/domain/search.ts + tests/search.test.ts. "Dino's Gulyás" verschijnt nu bij
+  "goulash". (Hij staat niet in In & uit omdat Stijn hem zelf opsloeg, niet ontving.)
+
 ## PAUZE (15 okt, avond) — volgende stap: de spec-ronde door Fable (zie "Werkwijze vanaf 15 okt")
 Ronde 13 okt deel 1 staat online. Stijn koos Home-variant **A+** (docs/home-voorstel.md). Op zijn "door"
 schrijft Fable eerst de bouwspecs in docs/specs/ voor: Home A+, 6B + 13E, 13F, 13D, 6C, 6D; daarna bouwt

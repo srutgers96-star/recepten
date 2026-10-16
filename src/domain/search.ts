@@ -24,11 +24,44 @@ function textHas(text: string | undefined, term: string): boolean {
   return !!text && normalizeKey(text).includes(term);
 }
 
-/** Every term matches the recipe name (nl or en) or one of its aliases. */
+/**
+ * Spelling variants of dish names (normalised: lower case, no diacritics). A recipe named
+ * "Dino's Gulyás" must turn up for "goulash", and "shawarma" must find "Shoarma".
+ */
+const SPELLING_VARIANTS: readonly (readonly string[])[] = [
+  ['goulash', 'gulyas', 'goulasch', 'gulasch', 'gulas'],
+  ['shoarma', 'shawarma', 'shwarma'],
+  ['lasagne', 'lasagna'],
+  ['bolognese', 'bolognaise'],
+  ['stroganoff', 'stroganov'],
+  ['tagine', 'tajine'],
+  ['hummus', 'houmous', 'humus', 'hoemoes'],
+  ['tzatziki', 'tsatsiki', 'tzaziki'],
+  ['chili', 'chilli'],
+  ['curry', 'kerrie'],
+  ['sate', 'satay', 'satee'],
+  ['bami', 'bahmi'],
+  ['nasi', 'nassi'],
+  ['couscous', 'koeskoes'],
+  ['kebab', 'kebap', 'kabab'],
+  ['ketjap', 'kecap'],
+  ['yoghurt', 'yogurt'],
+  ['pannenkoek', 'pannekoek'],
+];
+
+/** A term plus its spelling variants. A term of 4+ letters that starts a variant also counts ("goul"). */
+export function termVariants(term: string): string[] {
+  for (const group of SPELLING_VARIANTS) {
+    if (group.some((v) => v === term || (term.length >= 4 && v.startsWith(term)))) return [term, ...group.filter((v) => v !== term)];
+  }
+  return [term];
+}
+
+/** Every term (or one of its spelling variants) matches the recipe name (nl or en) or one of its aliases. */
 export function matchesName(recipe: Recipe, terms: readonly string[]): boolean {
   if (terms.length === 0) return true;
   const haystack = [recipe.name.nl, recipe.name.en, ...recipe.aliases].filter((s): s is string => !!s).map(normalizeKey).join(' | ');
-  return terms.every((t) => haystack.includes(t));
+  return terms.every((t) => termVariants(t).some((v) => haystack.includes(v)));
 }
 
 /** Ingredient ids in the dictionary that match a term (both languages). */

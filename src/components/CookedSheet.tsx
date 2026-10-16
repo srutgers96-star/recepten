@@ -5,6 +5,10 @@
 // sheet, without the date part, gives an existing entry its stars afterwards → `updateCookLogEntry`.
 // Uses the .sheet-* shell of base.css (same as VariantSheet / IngredientPicker); without a profile
 // it says so honestly instead of saving to nobody.
+// Dismissal (Gabi, 16 Oct 2026): an iPhone sheet is closed by swiping it down or tapping beside it,
+// and people expect what they typed to stay. So a swipe down on the grab bar/head or a tap on the
+// backdrop SAVES when something was entered, and only closes when nothing was; "Annuleer" (and
+// Escape) is the one way to throw input away. Save is also at the top, not only under the form.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
@@ -37,13 +41,15 @@ export function CookedSheet(props: CookedSheetProps) {
   const title = entry ? t('cooked.rateTitle') : t('cooked.title');
   const today = localDay();
   const closeBtn = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ y: number; id: number; dy: number } | null>(null);
   const [when, setWhen] = useState<When>('today');
   const [day, setDay] = useState('');
   const [stars, setStars] = useState(entry?.stars ?? 0);
   const [note, setNote] = useState(entry?.note ?? '');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
-  const starsCelebrated = useRef(false);
+  const [needDate, setNeedDate] = useState(false);
   const { onClose } = props;
 
   useEffect(() => {
@@ -61,14 +67,9 @@ export function CookedSheet(props: CookedSheetProps) {
     return () => opener?.focus();
   }, []);
 
-  /** A tap on star n: toggle off when it was the rating already; first pick = small burst (C.4). */
+  /** A tap on star n: toggle off when it was the rating already. No confetti yet: nothing is saved. */
   function chooseStars(n: number) {
-    const next = stars === n ? 0 : n;
-    setStars(next);
-    if (next > 0 && !starsCelebrated.current) {
-      starsCelebrated.current = true;
-      celebrate('stars');
-    }
+    setStars(stars === n ? 0 : n);
   }
 
   /** The timestamp this cook gets, or null while "Andere datum" has no valid day yet. */
@@ -81,14 +82,64 @@ export function CookedSheet(props: CookedSheetProps) {
 
   const canSave = !!profile && !busy && (entry ? entry.id !== undefined : cookedAt() !== null);
 
+  /** Something the user would lose by closing: a different day, stars or a note (rate: a change). */
+  const dirty = entry
+    ? (stars || 0) !== (entry.stars || 0) || note.trim() !== (entry.note ?? '').trim()
+    : when !== 'today' || stars > 0 || note.trim() !== '';
+
+  /** Swipe down / tap beside the sheet: save what was entered, otherwise just close. */
+  function dismiss() {
+    if (busy) return;
+    if (!dirty || !profile) {
+      onClose();
+      return;
+    }
+    if (canSave) {
+      void onSave();
+      return;
+    }
+    // "Andere datum" without a day: keep the sheet open rather than dropping the stars and note.
+    setNeedDate(true);
+  }
+
+  // Swipe down on the grab bar / head: the sheet follows the finger; far enough = dismiss().
+  function onDragStart(e: PointerEvent) {
+    if ((e.target as HTMLElement | null)?.closest('button')) return;
+    drag.current = { y: e.clientY, id: e.pointerId, dy: 0 };
+    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+  }
+  function onDragMove(e: PointerEvent) {
+    const d = drag.current;
+    if (!d || e.pointerId !== d.id) return;
+    d.dy = Math.max(0, e.clientY - d.y);
+    if (sheetRef.current) {
+      sheetRef.current.style.transition = 'none';
+      sheetRef.current.style.transform = d.dy > 0 ? `translateY(${d.dy}px)` : '';
+    }
+  }
+  function onDragEnd(e: PointerEvent, cancelled: boolean) {
+    const d = drag.current;
+    if (!d || e.pointerId !== d.id) return;
+    drag.current = null;
+    if (sheetRef.current) {
+      sheetRef.current.style.transition = 'transform .18s ease-out';
+      sheetRef.current.style.transform = '';
+    }
+    if (!cancelled && d.dy > 80) dismiss();
+  }
+
   async function onSave() {
     if (!canSave || !profile) return;
     setBusy(true);
     setError(false);
+    setNeedDate(false);
     try {
       if (entry) {
         if (entry.id === undefined) throw new Error('cook-log entry without id');
         await updateCookLogEntry(entry.id, { stars: stars > 0 ? stars : null, note });
+        // The small stars burst (C.4) only once the rating is really saved (Stijn, 16 Oct 2026:
+        // confetti on the tap itself was premature when the sheet was then closed unsaved).
+        if (stars > 0) celebrate('stars');
         // Stars given afterwards count for the review badges (data/badges.json "reviews", "oneStar")
         // just like stars in cook mode: start the check, never make the save wait for it (same
         // pattern as recordCooked).
@@ -114,13 +165,25 @@ export function CookedSheet(props: CookedSheetProps) {
   ];
 
   return (
-    <div class="sheet-backdrop no-print" onClick={onClose}>
-      <div class="sheet cooked-sheet" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
-        <div class="sheet-head">
-          <h2>{title}</h2>
-          <button ref={closeBtn} type="button" class="icon-btn" aria-label={t('common.close')} onClick={onClose}>
-            ×
-          </button>
+    <div class="sheet-backdrop no-print" onClick={dismiss}>
+      <div ref={sheetRef} class="sheet cooked-sheet" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
+        <div
+          class="cooked-drag"
+          onPointerDown={onDragStart}
+          onPointerMove={onDragMove}
+          onPointerUp={(e) => onDragEnd(e, false)}
+          onPointerCancel={(e) => onDragEnd(e, true)}
+        >
+          <div class="sheet-grab" aria-hidden="true" />
+          <div class="sheet-head cooked-head">
+            <button ref={closeBtn} type="button" class="cooked-head-btn" onClick={onClose}>
+              {t('common.cancel')}
+            </button>
+            <h2>{title}</h2>
+            <button type="button" class="cooked-head-btn save" disabled={!canSave} onClick={() => void onSave()}>
+              {t('common.save')}
+            </button>
+          </div>
         </div>
         <div class="sheet-body">
           {!profile ? (
@@ -156,9 +219,17 @@ export function CookedSheet(props: CookedSheetProps) {
                         value={day}
                         max={today}
                         disabled={busy}
-                        onInput={(e) => setDay((e.currentTarget as HTMLInputElement).value)}
+                        onInput={(e) => {
+                          setDay((e.currentTarget as HTMLInputElement).value);
+                          setNeedDate(false);
+                        }}
                       />
                     </label>
+                  )}
+                  {needDate && (
+                    <p class="cooked-error" role="alert">
+                      {t('cooked.pickDate')}
+                    </p>
                   )}
                 </>
               )}
@@ -196,6 +267,7 @@ export function CookedSheet(props: CookedSheetProps) {
           <button type="button" class="btn btn-primary" disabled={!canSave} onClick={() => void onSave()}>
             {busy ? t('cooked.saving') : entry ? t('cooked.saveRating') : t('cooked.save')}
           </button>
+          {profile && <p class="muted small cooked-dismiss-hint">{t('cooked.dismissSaves')}</p>}
           {error && (
             <p class="cooked-error" role="alert">
               {t('cooked.failed')}

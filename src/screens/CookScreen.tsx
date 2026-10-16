@@ -170,9 +170,6 @@ export function CookScreen(props: { id: string }) {
   const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
   const wake = useWakeLock();
-  // Phase 5 C.4: the FIRST time stars are picked in this visit gets the small burst — changing
-  // the rating afterwards does not fire it again.
-  const starsCelebrated = useRef(false);
   // 6A.8 "herhaal": the last text this screen read aloud (step, ingredients or a timer answer).
   const lastSpoken = useRef<{ text: string; lang: Lang } | null>(null);
 
@@ -209,7 +206,6 @@ export function CookScreen(props: { id: string }) {
     setTicked(new Set());
     setStars(0);
     setNote('');
-    starsCelebrated.current = false;
     lastSpoken.current = null;
   }, [id]);
 
@@ -403,14 +399,10 @@ export function CookScreen(props: { id: string }) {
     }
   }
 
-  /** A tap on star n: toggle off when it was the rating already; first pick = small burst (C.4). */
+  /** A tap on star n: toggle off when it was the rating already. No confetti here: nothing is saved
+   *  until "Gekookt!", which celebrates the cook itself (Stijn, 16 Oct 2026). */
   function chooseStars(n: number) {
-    const next = stars === n ? 0 : n;
-    setStars(next);
-    if (next > 0 && !starsCelebrated.current) {
-      starsCelebrated.current = true;
-      celebrate('stars');
-    }
+    setStars(stars === n ? 0 : n);
   }
 
   async function onCooked() {

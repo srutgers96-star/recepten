@@ -2246,3 +2246,54 @@ textarea.input.notes {
   font-size: 13px;
   font-weight: 600;
 }
+
+/* Grab bar + head: swipe down here to dismiss (saves when something was entered). */
+.cooked-drag {
+  flex: none;
+  touch-action: none;
+  cursor: grab;
+}
+
+.sheet-grab {
+  width: 40px;
+  height: 5px;
+  margin: 8px auto 0;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.cooked-head {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.cooked-head h2 {
+  text-align: center;
+}
+
+.cooked-head-btn {
+  flex: none;
+  min-width: 72px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  background: none;
+  color: var(--cobalt);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.cooked-head-btn.save {
+  font-weight: 700;
+}
+
+.cooked-head-btn:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+
+.cooked-dismiss-hint {
+  margin: 6px 0 0;
+  text-align: center;
+}
