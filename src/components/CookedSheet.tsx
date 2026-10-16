@@ -13,6 +13,7 @@ import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
 import { formatShortDate } from '@/components/RecipeRow';
 import { Segmented } from '@/components/Segmented';
+import { SheetPortal } from '@/components/SheetPortal';
 import { cookedAtForDay, daysAgo, localDay, recordCooked } from '@/cooklog';
 import { updateCookLogEntry } from '@/db/repo';
 import { nowIso, type CookLogEntry } from '@/domain/model';
@@ -152,6 +153,7 @@ export function CookedSheet(props: CookedSheetProps) {
   ];
 
   return (
+    <SheetPortal>
     <div class="sheet-backdrop no-print" onClick={dismiss}>
       <div ref={sheetRef} class="sheet cooked-sheet" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
         <div
@@ -162,12 +164,12 @@ export function CookedSheet(props: CookedSheetProps) {
           onPointerCancel={(e) => onDragEnd(e, true)}
         >
           <div class="sheet-grab" aria-hidden="true" />
-          <div class="sheet-head cooked-head">
-            <button ref={closeBtn} type="button" class="cooked-head-btn" onClick={onClose}>
+          <div class="sheet-head with-actions">
+            <button ref={closeBtn} type="button" class="sheet-head-btn" onClick={onClose}>
               {t('common.cancel')}
             </button>
             <h2>{title}</h2>
-            <button type="button" class="cooked-head-btn save" disabled={!canSave} onClick={() => void onSave()}>
+            <button type="button" class="sheet-head-btn save" disabled={!canSave} onClick={() => void onSave()}>
               {t('common.save')}
             </button>
           </div>
@@ -255,5 +257,6 @@ export function CookedSheet(props: CookedSheetProps) {
         </div>
       </div>
     </div>
+    </SheetPortal>
   );
 }

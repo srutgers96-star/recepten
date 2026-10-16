@@ -7,6 +7,7 @@
 // original is never touched. Uses the .sheet-* shell of base.css (same as IngredientPicker).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import swapsJson from '../../data/swaps.json';
+import { SheetPortal } from '@/components/SheetPortal';
 import { saveUserRecipe } from '@/db/repo';
 import { dictionary, lineText } from '@/dictionary';
 import { pickText, type Line, type Recipe } from '@/domain/model';
@@ -108,12 +109,17 @@ export function VariantSheet(props: VariantSheetProps) {
   }
 
   return (
+    <SheetPortal>
     <div class="sheet-backdrop no-print" onClick={onClose}>
       <div class="sheet" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
-        <div class="sheet-head">
+        {/* Save at the top as well: on the iPhone the foot of this sheet fell out of view (Gabi, 16 Oct). */}
+        <div class="sheet-head with-actions">
+          <button ref={closeBtn} type="button" class="sheet-head-btn" onClick={onClose}>
+            {t('common.cancel')}
+          </button>
           <h2>{title}</h2>
-          <button ref={closeBtn} type="button" class="icon-btn" aria-label={t('common.close')} onClick={onClose}>
-            ×
+          <button type="button" class="sheet-head-btn save" disabled={busy || !profile} onClick={() => void onSave()}>
+            {t('common.save')}
           </button>
         </div>
         <div class="sheet-body">
@@ -176,5 +182,6 @@ export function VariantSheet(props: VariantSheetProps) {
         </div>
       </div>
     </div>
+    </SheetPortal>
   );
 }

@@ -2262,37 +2262,6 @@ textarea.input.notes {
   background: var(--line);
 }
 
-.cooked-head {
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-.cooked-head h2 {
-  text-align: center;
-}
-
-.cooked-head-btn {
-  flex: none;
-  min-width: 72px;
-  min-height: 44px;
-  padding: 0 12px;
-  border: 0;
-  background: none;
-  color: var(--cobalt);
-  font: inherit;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.cooked-head-btn.save {
-  font-weight: 700;
-}
-
-.cooked-head-btn:disabled {
-  color: var(--muted);
-  cursor: default;
-}
-
 .cooked-dismiss-hint {
   margin: 6px 0 0;
   text-align: center;

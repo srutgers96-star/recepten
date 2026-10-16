@@ -493,6 +493,32 @@ Stijns vraag: "Exporteer eigen recepten" en "Back-up" hebben allebei een deelbes
 Voorstel: knoppen noemen wat ze doen ("Back-up voor mezelf" / "Mijn recepten aan iemand geven"), één knop
 "Bewaar of deel" met de keuze daarna, en de uitleg in één zin eronder.
 
+### 13I. Ingrediënten herkennen in de stappen, hoeveelheid met één tik, "hoeveel?" (M; Stijn 16 okt)
+Stijn tijdens het koken (Dino's Gulyás, stap 2): hij moest steeds terugbladeren om te zien welke
+ingrediënten het waren én hoeveel (15 g paprikapoeder, 1 tl karwijzaad …).
+- **Herkennen**: in elke stap worden de ingrediënten van het recept gemarkeerd (groen en onderstreept,
+  via tokens, ook in donker thema). Pure domeinfunctie `findStepIngredients(stepText, lines, dict, lang)`
+  → posities + regelindex; zoekt de namen van elke regel in de taal van de stap (enkelvoud, meervoud,
+  aliassen uit het woordenboek; bij niet-herkende regels `line.name`), hele woorden, langste eerst
+  ("paprikapoeder" vóór "paprika"), geen treffer binnen een ander woord ("olie" niet in "olijfolie" tenzij
+  dat zelf een regel is). Tests met echte stappen uit data/recipes.json (precisie: geen valse treffers).
+- **Tik op een groen woord** → de hoeveelheid verschijnt erachter, geschaald naar de gekozen porties:
+  "karwijzaad (1 tl)"; nog een tik haalt hem weg. Staat de hoeveelheid al in de staptekst, dan niets
+  extra. Een knop "Toon hoeveelheden" zet ze in één keer allemaal aan (onthouden per toestel).
+- **Spraak (Android)**: "hoeveel?" / "how much?" leest de hoeveelheden van de ingrediënten in déze stap
+  voor ("paprikapoeder 15 gram, karwijzaad 1 theelepel, knoflook 2 teentjes"); in de ?-hulp erbij.
+- Kookstand eerst; de receptpagina mag dezelfde markering krijgen.
+Opus kan dit bouwen als één blok (domein + tests, dan UI + spraak), of Fable neemt het mee in de specs.
+
+### 13J. iPhone-sheets: Bewaar bovenaan en buiten de scrollende pagina (S–M; Gabi 16 okt)
+De Gekookt- en de glutenvrij-sheet (16 okt gefixt) verloren op Gabi's iPhone hun onderkant met de
+Bewaar-knop; op Android niet. Fix: `SheetPortal` (src/components/SheetPortal.tsx, tekent de sheet direct
+onder `<body>`) + Annuleer/Bewaar in de kop (`.sheet-head.with-actions`, `.sheet-head-btn`). **Eerst op
+Gabi's iPhone bevestigen** (DEVICE-TEST rij 65), dan dezelfde behandeling voor de andere sheets met een
+hoofdactie onderaan: WordPicker, PickSheet (Kies 7), IngredientPicker (Nieuw ingrediënt), het
+feedbackvenster en de keuzepanelen in Opslag/Recepten/Boodschappen. Let op: events in een portal bubbelen
+via de DOM, niet via de Preact-ouder; per sheet controleren.
+
 ### 13H. ~~Zoeken met filters aan zichtbaar maken~~ — vervallen (Stijn 16 okt: niet nodig, er is al een
 kruisje om de filters te wissen).
 

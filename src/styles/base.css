@@ -1022,6 +1022,39 @@ button.row {
   line-height: 1;
 }
 
+/* iPhone-style sheet head: "Annuleer" left, the primary action right, so Save is always in view
+   (on the iPhone the bottom of a sheet could fall out of view; Gabi, 16 Oct 2026). */
+.sheet-head-btn {
+  flex: none;
+  min-width: 72px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  background: none;
+  color: var(--cobalt);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.sheet-head-btn.save {
+  font-weight: 700;
+}
+
+.sheet-head-btn:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+
+.sheet-head.with-actions {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.sheet-head.with-actions h2 {
+  text-align: center;
+}
+
 .sheet-body {
   flex: 1;
   min-height: 0;
