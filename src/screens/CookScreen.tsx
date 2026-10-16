@@ -12,6 +12,9 @@
 // Phase 6 (docs/phase-6-spec.md 6A.8): "herhaal" says the last read text again, "ingrediënten"
 // reads the list, "hoe lang nog" speaks the remaining time of this recipe's timers, and a small
 // "?" next to the mic opens <VoiceHelp/> with every command in the UI language.
+// 16 Oct 2026 (Stijn): 🔊 is an on/off switch for the speech.readAloud setting, so reading stays on
+// (or off) on the next and previous step; `?step=N` (a tap on a timer in the timer bar or on its
+// notification) opens step N once and is then dropped from the URL.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
@@ -30,8 +33,8 @@ import { pickSpoken, type VoiceCommand } from '@/domain/voice';
 import { lang, t, tIn } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
-import { goBack, route } from '@/router';
-import { canSpeak, loadSpeechSettings, readAloud, speak, speaking, stopSpeaking } from '@/speech';
+import { goBack, navigate, route } from '@/router';
+import { canSpeak, loadSpeechSettings, readAloud, setReadAloud, speak, speaking, stopSpeaking } from '@/speech';
 import { MINUTE_MS, startTimer, timers } from '@/timers';
 import { canListen, commandsEnabled, loadVoiceSettings, micState, startListening, stopListening } from '@/voice';
 
@@ -212,6 +215,24 @@ export function CookScreen(props: { id: string }) {
   const steps = recipe?.steps ?? [];
   const total = steps.length + 2; // prepare + steps + done
   const last = total - 1;
+
+  // `?step=N` (1-based): a tap on a timer opens its step. Applied once the recipe is loaded, then
+  // dropped from the URL so a reload or "back" does not jump there again; ?srv= stays.
+  const stepParam = route.value.query.get('step');
+  const loadedId = recipe && recipe.id === id ? recipe.id : null;
+  useEffect(() => {
+    if (stepParam === null || loadedId === null) return;
+    const n = Number.parseInt(stepParam, 10);
+    if (Number.isFinite(n) && n >= 1 && n <= steps.length && n !== page) {
+      setDir(n > page ? 'next' : 'prev');
+      setPage(n);
+      if (card.current) card.current.scrollTop = 0;
+    }
+    const q = new URLSearchParams(route.value.query);
+    q.delete('step');
+    const rest = q.toString();
+    navigate('/cook/' + id + (rest ? '?' + rest : ''), { replace: true });
+  }, [stepParam, loadedId]);
   const name = recipe ? pickText(recipe.name, l) : '';
   const base = recipe && recipe.servings > 0 ? recipe.servings : 4;
   const servings = chosen ?? base;
@@ -233,6 +254,9 @@ export function CookScreen(props: { id: string }) {
   const showMic = canListen() && commandsEnabled.value;
   const mic = micState.value;
   const isSpeaking = speaking.value;
+  const readAloudOn = readAloud.value;
+  /** Speaking with the switch off (the long-press ingredient list): the button is just "stop". */
+  const stopOnly = isSpeaking && !readAloudOn;
   // 6A.8: the "?" sheet with every voice command.
   const [helpOpen, setHelpOpen] = useState(false);
 
@@ -293,9 +317,19 @@ export function CookScreen(props: { id: string }) {
 
   const press = useLongPress(() => speakIngredients());
 
+  /** 🔊 is a switch (Stijn, 16 Oct 2026): on = read this step and every next/previous one, off =
+   *  stop and stay quiet. It is the speech.readAloud setting itself (also under Meer). While a long
+   *  press reads the ingredients with the switch off, a tap only stops that. */
   function onReadTap() {
-    if (speaking.value) stopSpeaking();
-    else speakStep(page - 1);
+    if (readAloud.value) {
+      void setReadAloud(false);
+      stopSpeaking();
+    } else if (speaking.value) {
+      stopSpeaking();
+    } else {
+      void setReadAloud(true);
+      speakStep(page - 1);
+    }
   }
 
   // Auto-read on a page change onto a step (setting speech.readAloud); every other page change
@@ -534,15 +568,17 @@ export function CookScreen(props: { id: string }) {
                     <div class="cook-speak">
                       <button
                         type="button"
-                        class={'btn-speak' + (isSpeaking ? ' on' : '')}
+                        class={'btn-speak' + (readAloudOn || isSpeaking ? ' on' : '')}
                         title={t('cook.readAloudHint')}
-                        aria-label={isSpeaking ? t('cook.readAloudStop') : `${t('cook.readAloud')} — ${t('cook.readAloudHint')}`}
+                        aria-pressed={readAloudOn}
+                        aria-label={stopOnly ? t('cook.readAloudStop') : `${t('cook.readAloud')} — ${t('cook.readAloudHint')}`}
                         onClick={onReadTap}
                         {...press}
                       >
-                        <span aria-hidden="true">{isSpeaking ? '■' : '🔊'}</span>
-                        {isSpeaking ? t('cook.readAloudStop') : t('cook.readAloud')}
+                        <span aria-hidden="true">{stopOnly ? '■' : '🔊'}</span>
+                        {stopOnly ? t('cook.readAloudStop') : readAloudOn ? t('cook.readAloudOn') : t('cook.readAloud')}
                       </button>
+                      {readAloudOn && <p class="muted small cook-speak-note">{t('cook.readAloudOnNote')}</p>}
                     </div>
                   )}
                 </>

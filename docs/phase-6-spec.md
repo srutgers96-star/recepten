@@ -518,6 +518,24 @@ Gabi's iPhone bevestigen** (DEVICE-TEST rij 65), dan dezelfde behandeling voor d
 hoofdactie onderaan: WordPicker, PickSheet (Kies 7), IngredientPicker (Nieuw ingrediënt), het
 feedbackvenster en de keuzepanelen in Opslag/Recepten/Boodschappen. Let op: events in een portal bubbelen
 via de DOM, niet via de Preact-ouder; per sheet controleren.
+Het glutenvrij/vegan-venster zelf wordt in 13D (punt 4 en 5: één keer goedkeuren, daarna wisselen met
+tabs) opnieuw ontworpen; de kop met Bewaar blijft dan de goedkeur-stap.
+
+### 13K. "Nu aan het koken"-balk in plaats van alleen een timerbalk (M; Stijn 16 okt; Fable ontwerpt)
+Stijns wens: "nu zie ik een timer maar lijkt het alsof ik helemaal niet aan het koken ben; ik moet dat
+recept weer fysiek zoeken als ik met andere dingen in de app bezig ben." Je kunt ook twee recepten
+tegelijk koken.
+- **Al gebouwd (16 okt, Opus):** tik op de naam van een timer in de timerbalk (of op de melding) → de
+  kookstand van dat recept, op de stap van die timer (`timerPath` in src/timers.ts, `?step=N` in
+  CookScreen). DEVICE-TEST rij 66.
+- **Nog te ontwerpen:** een kookbalk die er ook is zónder timer: per recept dat je aan het koken bent één
+  rij "Afwasmachinezalm · stap 3 van 7", met de timers van dat recept eronder (of erin). Tik = terug naar
+  die stap. Meerdere recepten = meerdere rijen.
+- **Ontwerpvragen voor Fable:** wanneer begint en eindigt "aan het koken" (Begin in de kookstand; Gekookt!,
+  een × op de rij, of vanzelf na een paar uur)? Waar onthoud je de stap (de kookstand begint nu bij elk
+  openen op Klaarzetten; de stap moet dus per recept bewaard worden, ook na herstarten van de app)?
+  Hoeveel ruimte mag de balk innemen op 360 px (nu is de timernaam al krap naast −1/+1/↻/×)? Op welke
+  schermen staat hij (nu: Home, Recepten, recept, Week, kookstand)?
 
 ### 13H. ~~Zoeken met filters aan zichtbaar maken~~ — vervallen (Stijn 16 okt: niet nodig, er is al een
 kruisje om de filters te wissen).

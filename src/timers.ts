@@ -150,8 +150,24 @@ async function closeNotification(id: string): Promise<void> {
   }
 }
 
+/**
+ * Where a timer leads: its recipe's cook mode, on its own step when it has one (`?step=` is
+ * 1-based, read once by CookScreen). Used by the timer bar (tap the label) and the notification.
+ */
+export function timerPath(t: Pick<RunningTimer, 'recipeId' | 'stepIndex'>): string | undefined {
+  if (!t.recipeId) return undefined;
+  const step = typeof t.stepIndex === 'number' && t.stepIndex >= 0 ? '?step=' + (t.stepIndex + 1) : '';
+  return '/cook/' + t.recipeId + step;
+}
+
+/** Opens a timer's path: on that same cook screen it replaces (no extra "back" step), else it pushes. */
+export function openTimerPath(path: string): void {
+  const bare = path.split('?')[0];
+  navigate(path, { replace: route.value.path === bare });
+}
+
 function pathFor(t: RunningTimer): string | undefined {
-  return t.recipeId ? '/cook/' + t.recipeId : undefined;
+  return timerPath(t);
 }
 
 /** Remaining minutes as last shown per timer, so the silent notification updates once per minute. */
@@ -283,7 +299,7 @@ export function startTimerEngine(): Promise<void> {
       navigator.serviceWorker.addEventListener('message', (event: MessageEvent) => {
         const data = event.data as { type?: string; path?: string } | null;
         if (data && data.type === 'NAVIGATE' && typeof data.path === 'string' && data.path.startsWith('/')) {
-          if (route.value.path !== data.path) navigate(data.path);
+          openTimerPath(data.path);
         }
       });
     }

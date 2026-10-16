@@ -671,6 +671,43 @@ textarea.input.notes {
   font-weight: 600;
 }
 
+/* A recipe timer's label is a button to its step: same look, a chevron, a 44 px tap target. */
+.timerbar-open {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  margin: 0;
+  padding: 0 4px 0 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.timerbar-open:active {
+  background: var(--press);
+}
+
+.timerbar-label-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timerbar-chev {
+  flex: none;
+  color: var(--cobalt);
+  font-size: 18px;
+  line-height: 1;
+}
+
 .timerbar-time {
   flex: none;
   min-width: 62px;
@@ -849,6 +886,9 @@ textarea.input.notes {
   inset: 0 max(18px, var(--sar)) 12px max(18px, var(--sal));
   display: flex;
   flex-direction: column;
+  /* The card scrolls vertically; without this a phone browser takes a horizontal swipe over itself
+     (pointercancel) and the step never changes. pan-y leaves horizontal swipes to cook mode. */
+  touch-action: pan-y;
   padding: 20px 18px 24px;
   border-radius: 18px;
   border: 1px solid var(--line);
@@ -1511,7 +1551,11 @@ textarea.input.notes {
   margin: 4px 0 0;
 }
 
-/* 🔊 "Lees voor" under the step text; tap reads the step, a long press reads the ingredients. */
+.cook-speak-note {
+  margin: 6px 0 0;
+}
+
+/* 🔊 "Lees voor" under the step text: a switch for reading every step (.on), a long press reads the ingredients. */
 .btn-speak {
   display: inline-flex;
   align-items: center;

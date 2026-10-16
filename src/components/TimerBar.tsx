@@ -3,6 +3,8 @@
 // left the label ~18 px at 360 px width) that mirrors the `timer.sound` setting off/on.
 // Renders nothing while no timer exists. Also hosts the one-time "Meldingen aanzetten" prompt.
 // Mount it on any screen that should show the timers; the engine itself lives in src/timers.ts.
+// A timer that belongs to a recipe has a tappable label: it opens that recipe's cook mode on the
+// timer's own step (Stijn, 16 Oct 2026: "nu moet ik dat recept weer fysiek zoeken").
 import { useEffect } from 'preact/hooks';
 import { t } from '@/i18n';
 import { loadSoundSettings, timerSound, toggleTimerSound } from '@/sounds';
@@ -14,11 +16,13 @@ import {
   isDone,
   notifPrompt,
   now,
+  openTimerPath,
   remainingMs,
   requestNotifications,
   resetTimer,
   startTimerEngine,
   stopTimer,
+  timerPath,
   timers,
   unlockAudio,
 } from '@/timers';
@@ -73,9 +77,19 @@ export function TimerBar() {
       )}
       {list.map((tm) => {
         const done = isDone(tm, at);
+        const path = timerPath(tm);
         return (
           <div key={tm.id} class={'timerbar-row' + (done ? ' done' : '')}>
-            <span class="timerbar-label">{tm.label}</span>
+            {path ? (
+              <button type="button" class="timerbar-label timerbar-open" aria-label={t('timer.openStep', { label: tm.label })} onClick={() => openTimerPath(path)}>
+                <span class="timerbar-label-text">{tm.label}</span>
+                <span class="timerbar-chev" aria-hidden="true">
+                  ›
+                </span>
+              </button>
+            ) : (
+              <span class="timerbar-label">{tm.label}</span>
+            )}
             <span class="timerbar-time" aria-live={done ? 'assertive' : 'off'}>
               {done ? t('timer.done') : formatRemaining(remainingMs(tm, at))}
             </span>

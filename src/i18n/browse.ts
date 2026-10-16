@@ -230,6 +230,8 @@ export const browse: Dict = {
   // --- Cook mode, phase 5 B.1-2: read-aloud + voice commands ---
   'cook.readAloud': { nl: 'Lees voor', en: 'Read aloud' },
   'cook.readAloudStop': { nl: 'Stop voorlezen', en: 'Stop reading' },
+  'cook.readAloudOn': { nl: 'Voorlezen staat aan', en: 'Reading aloud is on' },
+  'cook.readAloudOnNote': { nl: 'Elke volgende stap wordt ook voorgelezen. Tik nog eens om het uit te zetten.', en: 'Every next step is read aloud too. Tap again to turn it off.' },
   'cook.readAloudList': { nl: 'Ingrediënten voorlezen', en: 'Read the ingredients' },
   'cook.readAloudHint': { nl: 'Houd ingedrukt voor de ingrediënten', en: 'Hold to hear the ingredients' },
   'cook.mic': { nl: 'Spraakcommando’s', en: 'Voice commands' },
@@ -286,6 +288,7 @@ export const browse: Dict = {
   'timer.minus': { nl: '1 minuut korter', en: '1 minute less' },
   'timer.plus': { nl: '1 minuut langer', en: '1 minute more' },
   'timer.stop': { nl: 'Timer stoppen', en: 'Stop timer' },
+  'timer.openStep': { nl: '{label} — naar deze stap', en: '{label} — go to this step' },
   'timer.reset': { nl: 'Opnieuw vanaf {d}', en: 'Restart from {d}' },
   'timer.start': { nl: 'Start timer {d}', en: 'Start {d} timer' },
   'timer.running': { nl: 'Timer loopt', en: 'Timer running' },
