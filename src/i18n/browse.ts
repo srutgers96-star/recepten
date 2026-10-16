@@ -270,7 +270,10 @@ export const browse: Dict = {
     nl: 'timer 10 minuten · zet een timer voor een kwartier',
     en: 'timer 10 minutes · set a timer for a quarter of an hour',
   },
-  'cook.cmd.quantities': { nl: 'Hoeveel van elk ingrediënt in deze stap', en: 'How much of each ingredient this step uses' },
+  'cook.cmd.quantities': {
+    nl: 'Hoeveel van elk ingrediënt in deze stap (en zet Toon hoeveelheden aan)',
+    en: 'How much of each ingredient this step uses (and turns on Show amounts)',
+  },
   'cook.cmd.quantitiesSay': { nl: 'hoeveel? · hoeveel heb ik nodig?', en: 'how much? · how many? · how much do I need?' },
   'cook.cmd.timeLeft': { nl: 'Hoe lang de timer nog loopt', en: 'How long the timer has left' },
   'cook.cmd.timeLeftSay': { nl: 'hoe lang nog · hoeveel tijd nog', en: 'how long left · how much time' },

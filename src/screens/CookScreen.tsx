@@ -314,6 +314,9 @@ export function CookScreen(props: { id: string }) {
    * 13I "hoeveel?": the scaled amounts of the ingredients the current step names, in the order they
    * appear ("paprikapoeder 15 gram, karwijzaad 1 theelepel"), in the language of the step text; an
    * honest line when the step names none. Off a step page it reads the whole list instead.
+   * It also switches "Toon hoeveelheden" on, so the amounts stay visible behind the green words on
+   * this and the next steps (Stijn, 16 Oct 2026: "ook uitklappen is wel zo handig"); the button
+   * under the step switches it off again.
    */
   function speakQuantities() {
     if (!shown) {
@@ -321,8 +324,12 @@ export function CookScreen(props: { id: string }) {
       return;
     }
     const pieces = spokenStepQuantities(shown.matches, lines, dict, shown.lang, factor);
-    if (pieces.length) say(pieces.join(', '), shown.lang);
-    else say(tIn(l, 'cook.voice.noQuantities'), l);
+    if (pieces.length) {
+      if (!showAmounts.value) void setShowAmounts(true);
+      say(pieces.join(', '), shown.lang);
+    } else {
+      say(tIn(l, 'cook.voice.noQuantities'), l);
+    }
   }
 
   /** "Hoe lang nog": the running timers of THIS recipe, earliest first; "geen timer" when none. */
