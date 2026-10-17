@@ -511,3 +511,20 @@ describe('listAsText (PLAN.md §8 "Delen van de lijst")', () => {
     expect(isoWeekNumber(new Date(2024, 11, 30))).toBe(1); // Mon 30 Dec 2024 is 2025-W01
   });
 });
+
+// Typed extras with a unit (src/domain/shopinput.ts, 17 Oct 2026): rendered like generated items.
+describe('typed extras with a unit', () => {
+  const extra = (over: Partial<ListItem>): ListItem => ({ key: 'x|t', aisle: 'zuivel-eieren', section: 'main', sources: [], manual: true, ...over });
+
+  it('"200 gram boter" -> "200 g boter" / "200 g butter"', () => {
+    const it = extra({ ing: 'boter', qty: 200, unit: 'g' });
+    expect(nl(it)).toBe('200 g boter');
+    expect(en(it)).toBe('200 g butter');
+  });
+
+  it('a unit English shows as another one converts the number too: 2 dl -> 200 ml', () => {
+    const it = extra({ ing: 'room', qty: 2, unit: 'dl' });
+    expect(nl(it)).toMatch(/^2 dl /u);
+    expect(en(it)).toMatch(/^200 ml /u);
+  });
+});

@@ -40,6 +40,15 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 - **Foto bij ✓ Gekookt (wens Gabi):** 📷 Foto toevoegen in het Gekookt-venster (zonder `capture`, dus
   ook uit de fotobibliotheek). De foto wacht in het venster tot Bewaar, en krijgt de datum van de
   kookbeurt; wegvegen bewaart niets. DEVICE-TEST rij 67.
+- **Boodschappen zelf typen (bug Stijn, 17 okt):** "200 gram boter" kwam als "gram boter" onder Overig:
+  het vak las alleen een los getal. Nieuw: src/domain/shopinput.ts (`parseShopInput`, `splitShopList`)
+  leest getal + eenheid + naam (parseQty van de parser; eenheden alleen in de typtaal; "ons"/"pond" als
+  gram; "3 x 200 gram"; Engels "2 cans of chickpeas"; "een paar bananen" blijft tekst; "2 blik tomaten",
+  "pak choi", "hand cream" houden hun eigen naam); "1,5 liter melk" blijft één regel. Engelse weergave van
+  "2 dl" werd "2 ml": amountText rekent nu om. Nieuw ingrediënt "bloemen" (bos bloemen ≠ bloem).
+  Review-workflow (2 reviewers + verifier): 15 van 20 bevindingen bevestigd en gerepareerd. Nog niet:
+  verpakkingswoorden zonder eenheid in units.json (doos, tube, net, krat) — die gaan als tekst naar de
+  afdeling van het product. DEVICE-TEST rij 69.
 - **Vraag Gabi over de glutenvrij-badge:** geen bug. De badge telt kookbeurten van glutenvrije
   recepten (5 nodig), niet het maken van een versie; in de browser nagespeeld: versie maken 0/5,
   één keer gekookt 1/5.

@@ -1,13 +1,15 @@
 // The "+ wc-papier, melk …" field of the shopping list (docs/phase-4-spec.md §3): autocomplete
 // over the dictionary (`dictionary.value.search`, both languages) and over the extras of the
-// previous list, a leading number as the quantity ("3 melk"), commas for several plain-text items
-// at once; an unknown name can go on as plain text or become a user ingredient through the
-// IngredientPicker ("Nieuw ingrediënt"). The caller persists the item (repo.addExtra).
+// previous list, a leading amount as the quantity ("3 melk", "200 gram boter", "2 pakken melk":
+// src/domain/shopinput.ts), commas for several plain-text items at once; an unknown name can go on
+// as plain text or become a user ingredient through the IngredientPicker ("Nieuw ingrediënt").
+// The caller persists the item (repo.addExtra).
 import { useMemo, useRef, useState } from 'preact/hooks';
 import { IngredientPicker } from '@/components/IngredientPicker';
-import { dictionary } from '@/dictionary';
+import { dictionary, type Dictionary } from '@/dictionary';
 import type { ListItem } from '@/domain/aggregate';
-import { pickText } from '@/domain/model';
+import { pickText, type Lang } from '@/domain/model';
+import { isShopList, parseShopInput, splitShopList } from '@/domain/shopinput';
 import { lang, t } from '@/i18n';
 
 const MAX_DICT = 6;
@@ -19,12 +21,13 @@ export interface ExtraFieldProps {
   onAdd: (item: Partial<ListItem>) => void | Promise<void>;
 }
 
-/** "3 melk" -> { qty: 3, name: 'melk' }; "melk" -> { qty: null, name: 'melk' }. */
-export function splitLeadingQty(text: string): { qty: number | null; name: string } {
-  const m = /^\s*(\d+(?:[.,]\d+)?)\s*[x×]?\s+(.+)$/u.exec(text);
-  if (!m) return { qty: null, name: text.trim() };
-  const qty = Number(m[1]!.replace(',', '.'));
-  return Number.isFinite(qty) && qty > 0 ? { qty, name: m[2]!.trim() } : { qty: null, name: text.trim() };
+/** "200 g " / "3 " in front of a suggestion; '' without an amount. */
+function amountPrefix(qty: number | null, unit: string | null, dict: Dictionary, l: Lang): string {
+  if (qty === null) return '';
+  const n = l === 'nl' ? String(qty).replace('.', ',') : String(qty);
+  const u = unit ? dict.unit(unit) : undefined;
+  const label = u ? (qty > 1 && u[l].many ? u[l].many : u[l].one) : '';
+  return label ? `${n} ${label} ` : `${n} `;
 }
 
 function normalize(s: string): string {
@@ -42,8 +45,9 @@ export function ExtraField(props: ExtraFieldProps) {
   const input = useRef<HTMLInputElement>(null);
   const dict = dictionary.value;
   const l = lang.value;
-  const { qty, name } = splitLeadingQty(text);
+  const { qty, unit, name } = parseShopInput(text, dict, l);
   const q = name.trim();
+  const prefix = amountPrefix(qty, unit, dict, l);
 
   const dictHits = useMemo(() => (q ? dict.search(q, l).slice(0, MAX_DICT) : []), [q, dict, l]);
   const prevHits = useMemo(() => {
@@ -79,27 +83,27 @@ export function ExtraField(props: ExtraFieldProps) {
 
   function addIngredient(id: string) {
     const ing = dict.get(id);
-    const item: Partial<ListItem> = { ing: id, aisle: ing?.aisle ?? 'overig', qty: qty ?? null, unit: null };
+    const item: Partial<ListItem> = { ing: id, aisle: ing?.aisle ?? 'overig', qty: qty ?? null, unit: qty !== null ? unit : null };
     void submit(item);
   }
 
-  /** Plain text, one item per comma ("wc-papier, melk"); each keeps its own leading number. */
+  /** Plain text, one item per comma ("wc-papier, melk"; "1,5 l melk" is one); each keeps its own amount. */
   async function addText(raw: string) {
-    const parts = raw
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
+    const parts = splitShopList(raw);
     if (!parts.length) return;
     if (busy) return;
     setBusy(true);
     try {
       for (const part of parts) {
-        const p = splitLeadingQty(part);
+        const p = parseShopInput(part, dict, l);
         if (!p.name) continue;
         const hit = dict.ingredientByName(p.name, l);
+        // Not in the dictionary as typed, but without its first word it is ("doos eieren", "rode
+        // uien"): keep the words as typed, file it under that product's aisle instead of Overig.
+        const near = hit ? undefined : dict.ingredientByName(p.name.replace(/^\S+\s+/u, ''), l);
         const item: Partial<ListItem> = hit
-          ? { ing: hit.id, aisle: hit.aisle, qty: p.qty, unit: null }
-          : { ing: null, aisle: 'overig', qty: p.qty, unit: null, label: { nl: l === 'nl' ? p.name : '', en: l === 'en' ? p.name : '' } };
+          ? { ing: hit.id, aisle: hit.aisle, qty: p.qty, unit: p.unit }
+          : { ing: null, aisle: near?.aisle ?? 'overig', qty: p.qty, unit: p.unit, label: { nl: l === 'nl' ? p.name : '', en: l === 'en' ? p.name : '' } };
         await props.onAdd(item);
       }
       setText('');
@@ -111,7 +115,7 @@ export function ExtraField(props: ExtraFieldProps) {
 
   function onEnter() {
     if (!q) return;
-    if (text.includes(',')) {
+    if (isShopList(text)) {
       void addText(text);
       return;
     }
@@ -120,7 +124,7 @@ export function ExtraField(props: ExtraFieldProps) {
     else void addText(text);
   }
 
-  const showList = q.length > 0 && !text.includes(',');
+  const showList = q.length > 0 && !isShopList(text);
   const other = l === 'nl' ? 'en' : 'nl';
 
   return (
@@ -159,7 +163,7 @@ export function ExtraField(props: ExtraFieldProps) {
               <li key={ing.id}>
                 <button type="button" class="xf-item" onClick={() => addIngredient(ing.id)}>
                   <span class="name">
-                    {qty !== null ? `${qty} ` : ''}
+                    {prefix}
                     {own}
                     {alt && alt !== own ? <span class="muted"> · {alt}</span> : null}
                   </span>
@@ -172,9 +176,9 @@ export function ExtraField(props: ExtraFieldProps) {
             const label = pickText(it.label, l) || pickText(it.label, other);
             return (
               <li key={it.key}>
-                <button type="button" class="xf-item" onClick={() => void submit({ ing: null, aisle: it.aisle, qty: qty ?? null, unit: null, label: { ...it.label } })}>
+                <button type="button" class="xf-item" onClick={() => void submit({ ing: null, aisle: it.aisle, qty: qty ?? null, unit: qty !== null ? unit : null, label: { ...it.label } })}>
                   <span class="name">
-                    {qty !== null ? `${qty} ` : ''}
+                    {prefix}
                     {label}
                   </span>
                   <span class="sub">{t('shop.recent')}</span>

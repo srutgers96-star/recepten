@@ -2,7 +2,7 @@
   "generatedBy": "node --experimental-strip-types tools/gen-golden.ts",
   "source": "data/source/recipes-recepten2.json",
   "dictionary": {
-    "ingredients": 1602,
+    "ingredients": 1603,
     "units": 49,
     "qualifiers": 100,
     "prepPhrases": 152

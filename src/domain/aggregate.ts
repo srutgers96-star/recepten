@@ -662,6 +662,9 @@ function amountText(qty: number, unit: string | null, dict: Dictionary, lang: La
   if (unit === 'ml' && qty >= 1000) return `${numberText(qty / 1000, lang, dict.unit('l'))} l`;
   const u = dict.unit(unit);
   if (!u) return `${numberText(qty, lang)} ${unit}`;
+  // A unit English shows as another one ("2 dl" -> "200 ml"): convert the number too. Generated
+  // items never carry such a unit (displayOf normalises), a typed extra can ("2 dl room").
+  if (lang === 'en' && u.en.render && u.en.scale && u.en.render !== unit) return amountText(qty * u.en.scale, u.en.render, dict, lang, ing);
   return `${numberText(qty, lang, u)} ${unitLabel(u, lang, { min: qty }, ing)}`;
 }
 
