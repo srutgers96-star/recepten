@@ -116,6 +116,8 @@ a line in `docs/DEVICE-TEST.md` or ADR-0001, not a promise in the UI.
 
 `PLAN.md §0` — the decisions table (28 Sep 2026), which overrides the rest of the plan. `PLAN.md §3` —
 platform facts with VERIFIED / LIKELY / UNKNOWN status. `docs/adr/` — the numbered decision records.
+`docs/IDEAS.md` — Stijn's loose ideas for later (not planned); a "nice for later" idea goes there, not
+into the plan, until Stijn says to build it.
 
 ## Yearly task: re-check WebKit/Chrome facts
 

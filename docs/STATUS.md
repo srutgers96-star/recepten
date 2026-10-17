@@ -1,6 +1,8 @@
-# Status — Rutgers' Recepten (bijgewerkt 15 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 17 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
+Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
+(17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
 ## Online (https://srutgers96-star.github.io/recepten/)
 **Fase 5 compleet** (fase 0–4 + blok A t/m F, 8 oktober 2026) **+ fase 6 blok 6A** (6A-1 9 okt, 6A-2 15 okt)
