@@ -1,8 +1,21 @@
-# Status — Rutgers' Recepten (bijgewerkt 17 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 23 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
+
+## 22–23 okt (Fable): de spec-ronde is af — Opus kan bouwen
+**docs/specs/README.md is nu het startpunt voor elk bouwblok** (bouwvolgorde, register van velden/keys,
+werkwijze + Workflow-sjabloon voor Opus, "Opus mag niet zelf beslissen", master-controlelijst voor Fable,
+vragen aan Stijn). Negen specs, samen ±9.200 regels, elk met status "compleet (Fable, 22 okt 2026)" plus een
+feitencheck (Opus, tegen de code van 22 okt) en een blok "Kritische lezer (Fable)" met de besluiten over
+specs heen: home-a-plus · kookbalk (13K) · labels-categorieen (6B+13E) · bijgerechten (20 recepten) ·
+inbouwen (13F, Dexie v8 = de enige nieuwe versie) · varianten-tabs (13D) · vaste-lijst (6C) · xp-levels (6D)
+· badges-avatar (6D-2/6D-3). Bouwvolgorde: Home A+ → 13K → 6B+13E → bijgerechten → 13F → 13D → 6C → 6D-1 →
+6D-2 → 6D-3 → 6D-4 → 13J (zonder spec) → Z → Fable-eindcontrole. DEVICE-TEST-rijen 70–101 zijn in de specs
+al genummerd. **Twee vragen blokkeren** (README §6): Stijn keurt de badge-catalogus en avatar-bibliotheek goed
+(vóór 6D-2), en beslist over namen/credits en de twee kookboekrecepten bij het inbouwen (vóór 13F blok 1).
+De run kostte twee pogingen (sessielimiet na de schrijvers; hervat met resumeFromRunId, schrijvers uit cache).
 
 ## Online (https://srutgers96-star.github.io/recepten/)
 **Fase 5 compleet** (fase 0–4 + blok A t/m F, 8 oktober 2026) **+ fase 6 blok 6A** (6A-1 9 okt, 6A-2 15 okt)
