@@ -854,6 +854,56 @@ textarea.input.notes {
   flex: 1;
 }
 
+/* 13K cooking bar (docs/specs/kookbalk.md §1b): one 44 px row per recipe you are cooking, its timers
+   nested under it with a short label, timers without a session under "Losse timers". Must come after
+   .timerbar-open (same specificity: .timerbar-recipe-btn's font-size has to win). */
+.timerbar-recipe {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+}
+
+.timerbar-recipe + .timerbar-recipe,
+.timerbar-row + .timerbar-recipe {
+  border-top: 1px solid var(--line);
+}
+
+.timerbar-recipe-btn {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+}
+
+/* The name is cut with … ; "· stap 3 van 7" always stays whole; the › sits at the right edge. */
+.timerbar-recipe-step {
+  flex: none;
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.timerbar-recipe-btn .timerbar-chev {
+  margin-left: auto;
+}
+
+.timerbar-row.nested {
+  padding-left: 12px;
+}
+
+.timerbar-row.nested .timerbar-label,
+.timerbar-row.nested .timerbar-open {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.timerbar-loose {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 6px 0 0;
+}
+
 /* ---------- Cook mode ---------- */
 
 .cook {

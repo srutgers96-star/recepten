@@ -18,6 +18,10 @@
 // 13I (docs/phase-6-spec.md): the step's ingredients are green (StepView gets the lines and the
 // servings factor); "Toon hoeveelheden" next to 🔊 shows all their amounts (setting
 // cook.showAmounts, src/step-amounts.ts) and the voice command "hoeveel?" reads them aloud.
+// 13K (docs/specs/kookbalk.md): every step change writes the "Nu aan het koken" session of this
+// recipe (src/cooking.ts; Klaarzetten and the Gekookt page write nothing), a timer started here keeps
+// it alive, Koken without ?step= opens once on the step the session remembers, "Gekookt!" ends it,
+// and the bar on top hides this recipe's own row (`current`) but keeps its timers.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
@@ -27,6 +31,7 @@ import { parseServingsParam, rememberServings, rememberedServings, ServingsPicke
 import { hasAmountsToShow, shownStep, StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { VoiceHelp } from '@/components/VoiceHelp';
+import { cookingLoaded, endCooking, sessionFor, touchCooking } from '@/cooking';
 import { useLive } from '@/db/live';
 import { addPhoto, getRecipe, listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
 import { dictionary, lineText } from '@/dictionary';
@@ -161,7 +166,8 @@ export function CookScreen(props: { id: string }) {
   const recipe = useLive(async () => (await getRecipe(id)) ?? null, [id]);
   const lines = useRecipeLines(recipe);
   const fahrenheit = useFahrenheit();
-  // Servings: the detail page passes its choice as ?srv=; else the session memory; else the recipe's.
+  // Servings: the detail page passes its choice as ?srv=; else the session memory; else (13K) the
+  // servings of the cooking session when the store is already loaded; else the recipe's.
   const [chosen, setChosen] = useState<number | null>(() => {
     const fromQuery = parseServingsParam(route.value.query.get('srv'));
     if (fromQuery) {
@@ -169,7 +175,9 @@ export function CookScreen(props: { id: string }) {
       return fromQuery;
     }
     const n = rememberedServings(id, 0);
-    return n > 0 ? n : null;
+    if (n > 0) return n;
+    const s = sessionFor(id);
+    return s && s.servings ? s.servings : null;
   });
   const [page, setPage] = useState(0);
   const [dir, setDir] = useState<'next' | 'prev'>('next');
@@ -180,6 +188,8 @@ export function CookScreen(props: { id: string }) {
   const wake = useWakeLock();
   // 6A.8 "herhaal": the last text this screen read aloud (step, ingredients or a timer answer).
   const lastSpoken = useRef<{ text: string; lang: Lang } | null>(null);
+  // 13K §1d: the remembered step of the cooking session is applied at most once per visit.
+  const applied = useRef(false);
 
   const card = useRef<HTMLDivElement>(null);
   const swipe = useRef<{ x: number; y: number; id: number; drag: boolean } | null>(null);
@@ -215,6 +225,7 @@ export function CookScreen(props: { id: string }) {
     setStars(0);
     setNote('');
     lastSpoken.current = null;
+    applied.current = false;
   }, [id]);
 
   const steps = recipe?.steps ?? [];
@@ -227,6 +238,8 @@ export function CookScreen(props: { id: string }) {
   const loadedId = recipe && recipe.id === id ? recipe.id : null;
   useEffect(() => {
     if (stepParam === null || loadedId === null) return;
+    // 13K: an explicit ?step= wins over the step the cooking session remembers.
+    applied.current = true;
     const n = Number.parseInt(stepParam, 10);
     if (Number.isFinite(n) && n >= 1 && n <= steps.length && n !== page) {
       setDir(n > page ? 'next' : 'prev');
@@ -243,6 +256,30 @@ export function CookScreen(props: { id: string }) {
   const servings = chosen ?? base;
   /** Scale of the amounts (ingredient list, green words in the steps, "hoeveel?"). */
   const factor = base > 0 && servings > 0 ? servings / base : 1;
+
+  // 13K §1d: without ?step= (Koken on the recipe page) cook mode opens directly on the step the
+  // cooking session remembers — once, and only while still on Klaarzetten. A session on Klaarzetten
+  // has nothing to apply. Reading cookingLoaded re-runs this when the store finishes loading.
+  const sessionsLoaded = cookingLoaded.value;
+  useEffect(() => {
+    if (!recipe || stepParam !== null || applied.current || page !== 0) return;
+    const s = sessionFor(id);
+    if (!s) return;
+    if (s.page > 0 && s.page <= steps.length) {
+      applied.current = true;
+      setPage(s.page);
+    } else if (s.page === 0) {
+      applied.current = true;
+    }
+  }, [loadedId, sessionsLoaded]);
+
+  // 13K §1d: every step change (tap, swipe, voice, ?step=, the remembered step) moves the session to
+  // that step; Klaarzetten (page 0) and the Gekookt page write nothing. `chosen` is null when this
+  // visit knows no choice (e.g. a cold start before the store loaded): touchCooking then keeps the
+  // session's own servings instead of wiping them.
+  useEffect(() => {
+    if (recipe && page >= 1 && page <= steps.length) void touchCooking(recipe, page, chosen);
+  }, [page, loadedId, servings]);
   // 13I: the current step as StepView shows it, with the ingredients it names. The same words feed
   // the "Toon hoeveelheden" button and the voice command "hoeveel?".
   const dict = dictionary.value;
@@ -412,6 +449,9 @@ export function CookScreen(props: { id: string }) {
         stopSpeaking();
         break;
       case 'timer':
+        // 13K §1a: a timer means you are cooking: start or keep alive the session (on Klaarzetten at
+        // page 0, on the Gekookt page at the last step).
+        void touchCooking(recipe, page <= steps.length ? page : steps.length, chosen);
         void startTimer({
           durationMs: cmd.minutes * MINUTE_MS,
           label: onStep ? `${name} · ${t('cook.stepShort', { n: page })}` : name,
@@ -509,6 +549,13 @@ export function CookScreen(props: { id: string }) {
       } catch (e) {
         console.error('markRecipeCookedInPlan', e);
       }
+      // 13K §1a: "Gekookt!" ends the cooking session of this recipe and stops its timers (never
+      // blocks going back).
+      try {
+        await endCooking(id);
+      } catch (e) {
+        console.error('endCooking', e);
+      }
       // Phase 5 block C: start the badge check, but never make goBack wait for it — the toast
       // signal survives the navigation (the shell renders it).
       if (profile) void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
@@ -528,7 +575,7 @@ export function CookScreen(props: { id: string }) {
   return (
     <>
       <Header title={name || t('cook.title')} back backLabel={t('common.back')} />
-      <TimerBar />
+      <TimerBar current={id} />
       {recipe === null && (
         <div class="screen">
           <div class="empty">{t('recipe.notFound')}</div>
@@ -602,7 +649,18 @@ export function CookScreen(props: { id: string }) {
               {!isPrepare && !isDone && steps[stepIndex] && (
                 <>
                   <div class="cook-kicker">{t('cook.stepOf', { n: stepIndex + 1, total: steps.length })}</div>
-                  <StepView big recipeId={id} recipeName={name} index={stepIndex} step={steps[stepIndex]!} fahrenheit={fahrenheit} lines={lines} factor={factor} />
+                  <StepView
+                    big
+                    recipeId={id}
+                    recipeName={name}
+                    index={stepIndex}
+                    step={steps[stepIndex]!}
+                    fahrenheit={fahrenheit}
+                    lines={lines}
+                    factor={factor}
+                    // 13K: a timer chip keeps the session alive (same page; only lastActiveAt moves).
+                    onTimerStart={() => void touchCooking(recipe, page, chosen)}
+                  />
                   {(speechOk || amountsOffered) && (
                     <div class="cook-speak">
                       {speechOk && (

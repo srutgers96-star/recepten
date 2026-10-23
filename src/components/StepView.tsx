@@ -14,6 +14,9 @@
 // (src/step-amounts.ts, the "Toon hoeveelheden" button in cook mode) shows them all; a tap then
 // hides that one word. A green word that has nothing to add (the text says "2 el olie", or the
 // line has no amount, like "zout") is plain green text, not a button, so no tap ever does nothing.
+//
+// 13K (docs/specs/kookbalk.md): an optional `onTimerStart(stepIndex)` is called right after a chip
+// started its timer, so the caller can start or keep alive the "Nu aan het koken" session.
 import { Fragment } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { useLive } from '@/db/live';
@@ -78,6 +81,8 @@ export interface StepViewProps {
   lines?: readonly Line[];
   /** Servings factor for the amounts behind a green word (chosen servings / recipe servings; default 1). */
   factor?: number;
+  /** 13K: called with the zero-based step index right after a timer chip of this step started its timer. */
+  onTimerStart?: (stepIndex: number) => void;
 }
 
 /** A step as it is shown: the text (with °F when that is on), the stored text and the language it is in. */
@@ -113,7 +118,14 @@ export function stepTimers(step: Step, text: string): TimerSpec[] {
   return step.timers && step.timers.length ? step.timers : findTimers(text);
 }
 
-export function TimerChips(props: { recipeId: string; recipeName: string; index: number; specs: TimerSpec[] }) {
+export function TimerChips(props: {
+  recipeId: string;
+  recipeName: string;
+  index: number;
+  specs: TimerSpec[];
+  /** 13K: called with `index` right after a chip started its timer. */
+  onTimerStart?: (stepIndex: number) => void;
+}) {
   if (!props.specs.length) return null;
   const l = lang.value;
   // Reading `now` subscribes this component to the 500 ms tick — only for steps that have chips.
@@ -138,6 +150,7 @@ export function TimerChips(props: { recipeId: string; recipeName: string; index:
                 recipeId: props.recipeId,
                 stepIndex: props.index,
               });
+              props.onTimerStart?.(props.index);
             }}
           >
             <span aria-hidden="true">⏱</span>
@@ -222,7 +235,7 @@ export function StepView(props: StepViewProps) {
     return (
       <div class="step-big">
         <StepText cls="cook-text" shown={shown} lines={lines} factor={factor} />
-        <TimerChips recipeId={props.recipeId} recipeName={props.recipeName} index={props.index} specs={specs} />
+        <TimerChips recipeId={props.recipeId} recipeName={props.recipeName} index={props.index} specs={specs} onTimerStart={props.onTimerStart} />
       </div>
     );
   }
@@ -233,7 +246,7 @@ export function StepView(props: StepViewProps) {
       </span>
       <div class="step-body">
         <StepText cls="step-text" shown={shown} lines={lines} factor={factor} />
-        <TimerChips recipeId={props.recipeId} recipeName={props.recipeName} index={props.index} specs={specs} />
+        <TimerChips recipeId={props.recipeId} recipeName={props.recipeName} index={props.index} specs={specs} onTimerStart={props.onTimerStart} />
       </div>
     </li>
   );

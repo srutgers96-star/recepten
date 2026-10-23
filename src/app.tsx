@@ -15,6 +15,7 @@ import { Confetti } from './components/Confetti';
 import { InstallCard } from './components/InstallCard';
 import { Nav } from './components/Nav';
 import { UpdateBar } from './components/UpdateBar';
+import { loadCooking } from './cooking';
 import { ensureBuiltins } from './db/repo';
 import { loadDictionary } from './dictionary';
 import { lang, t } from './i18n';
@@ -199,6 +200,9 @@ export function App(props: { openImportFromHash: boolean }) {
       startInboxBadge();
       // Cooking timers tick app-wide (persisted in the db), also on screens without a <TimerBar/>.
       void startTimerEngine();
+      // 13K: the "Nu aan het koken" sessions (settings row cook.sessions), pruned on every return
+      // to the app; the bar and cook mode read them.
+      void loadCooking();
     })();
     return () => {
       cancelled = true;

@@ -1225,8 +1225,9 @@ export interface RestoreResult {
   events?: number;
 }
 
-/** Settings that belong to this phone, not to the person: a restore never overwrites them. */
-const DEVICE_LOCAL_SETTINGS = new Set(['theme', 'backup.lastAt']);
+/** Settings that belong to this phone, not to the person: a restore never overwrites them.
+ *  13K: `cook.sessions` (what is cooking on this phone right now) is one of them. */
+const DEVICE_LOCAL_SETTINGS = new Set(['theme', 'backup.lastAt', 'cook.sessions']);
 /** Only restored when this phone had no profile yet (a fresh install), never on a merge. */
 const ACTIVE_PROFILE_SETTING = 'activeProfileId';
 /** Merged (union) instead of replaced, so a restore never re-badges recipes already seen here. */
@@ -1238,12 +1239,12 @@ function stringArray(v: unknown): string[] {
 
 /**
  * Merges a backup into the database (put by key; cook-log entries deduplicated on
- * recipeId+profileId+at). Device-local settings (theme, last backup date, and the active profile
- * when a profile already exists) are left alone, so restoring the other person's backup on this
- * phone adds their recipes/favourites without switching who this phone is. Throws
- * Error('invalid-bundle') for anything that is not a v2 backup. The caller refreshes the in-memory
- * mirrors afterwards (loadProfiles, reloadCelebrateSettings, reloadSoundSettings,
- * reloadSpeechSettings, reloadVoiceSettings).
+ * recipeId+profileId+at). Device-local settings (theme, last backup date, the cooking sessions,
+ * and the active profile when a profile already exists) are left alone, so restoring the other
+ * person's backup on this phone adds their recipes/favourites without switching who this phone is.
+ * Throws Error('invalid-bundle') for anything that is not a v2 backup. The caller refreshes the
+ * in-memory mirrors afterwards (loadProfiles, reloadCelebrateSettings, reloadSoundSettings,
+ * reloadSpeechSettings, reloadVoiceSettings, reloadCooking).
  */
 export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
   if (!b || typeof b !== 'object' || b.v !== 2 || b.t !== 'b') throw new Error('invalid-bundle');

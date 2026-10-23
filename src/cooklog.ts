@@ -9,8 +9,12 @@
 // The date helpers speak <input type="date"> (`yyyy-mm-dd`, local). A past day is stored as 12:00
 // local time, so the entry stays on that day in every time zone the log is ever viewed in (midnight
 // would slip a day in a westward zone).
+//
+// 13K (docs/specs/kookbalk.md §1a): a cook of today also ends the "Nu aan het koken" session of that
+// recipe (its row and its timers leave the bar); a cook logged for another day leaves it alone.
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
+import { endCooking } from '@/cooking';
 import { listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
 
 /** This member's Nth cook that gets the big burst (phase 5 C.4; the same set as CookScreen). */
@@ -51,6 +55,12 @@ export async function recordCooked(input: RecordCookedInput): Promise<void> {
       await markRecipeCookedInPlan(input.recipeId);
     } catch (e) {
       console.error('markRecipeCookedInPlan', e);
+    }
+    // 13K: cooked today = done with this dish; the session and its timers go (never fatal).
+    try {
+      await endCooking(input.recipeId);
+    } catch (e) {
+      console.error('endCooking', e);
     }
   }
   // Phase 5 block C: start the badge check, never make the caller wait for it (the toast signal

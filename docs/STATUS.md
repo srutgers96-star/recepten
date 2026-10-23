@@ -4,6 +4,53 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 23 okt (Opus): 13K kookbalk blok 1
+Gebouwd volgens docs/specs/kookbalk.md §3/§4 blok 1 (bouwer 1 domein + store, bouwer 2 de balk, van bouwer 3
+alleen app.tsx, repo.ts, CookScreen.tsx, StepView.tsx en cooklog.ts; integrator). Staat in de werkmap op `next`;
+eerst op **/next/** (telefoonronde DEVICE-TEST rij 72–73 en de aangepaste rij 66), daarna `main`. Wat er nu staat:
+de timerbalk is de **kookbalk** "Nu aan het koken": per recept dat je kookt één rij "Afwasmachinezalm · stap 3 van 7
+›" (tik = kookstand op die stap met de porties, `cookPath`), de timers van dat recept eronder met het korte label
+"stap 3", een × op de rij alleen zolang geen timer van dat recept loopt, en timers zonder sessie onder "Losse timers"
+met hun volledige label. In de kookstand ontbreekt de rij van het recept zelf; zijn timers staan direct onder de kop.
+Een sessie begint bij Begin/elke stapwissel in de kookstand (en een spraaktimer), een ⏱-chip in de kookstand houdt
+hem levend, Koken zonder `?step=` opent direct op de onthouden stap, en hij eindigt bij Gekookt!, bij ✓ Gekookt met
+vandaag, bij de × of na 8 uur zonder activiteit (nooit zolang een timer van dat recept loopt). Opslag: settings-rij
+`cook.sessions` (toestel-lokaal in `DEVICE_LOCAL_SETTINGS`; Dexie blijft v7). Nieuw: src/domain/cooking.ts (puur),
+src/cooking.ts (store), tests/cooking.test.ts (29 tests, alle gevallen van §6a). Zonder sessie ziet de balk eruit
+als vóór 13K ("Timers", volle labels). Check, test (794), build en build:next groen; geen nieuwe dependency.
+**Keuzes en afwijkingen (ter controle door Fable):** (1) src/cooking.ts importeert naast `timers`/`now`/`stopTimer`
+ook `startTimerEngine` en wacht daarop vóór het eerste opschonen; anders kan een sessie met een lopende lange timer
+verdwijnen voordat de opgeslagen timers geladen zijn (importrichting blijft cooking → timers). (2) De kop "Losse
+timers" staat er alleen als er ook een sessie is; zonder sessie is het "Timers" zonder tussenkop (§4: "zonder sessie
+gedraagt de balk zich precies als vandaag"). (3) Kleine bouwkeuzes: `endCooking` wacht ook op `loadCooking`;
+`sessionFor` leest de levende sessies; een verlopen sessie opnieuw aanraken begint een nieuwe; een harde spatie vóór
+" · "; één extra CSS-regel `.timerbar-recipe-btn .timerbar-chev { margin-left: auto }` zodat het › rechts staat; het
+korte timerlabel houdt als aria-label het volle "Afwasmachinezalm · stap 3 — naar deze stap". (4) **Rij 66** is
+aangepast met de teksten van de kritische lezer, maar "Tik onderaan op **Home**." staat nu aan het eind van stap 3 in
+plaats van aan het begin van stap 4: in de kookstand toont de balk de rij van het recept zelf niet (§1b), dus "goed 3"
+("met de rij Afwasmachinezalm · stap 3 van 7") klopt pas op Home. Zelfde in het Engels.
+**Dev-app (375 en 360 px, NL en EN, donker en licht):** §6b check 1–5 en 8 nagelopen (check 6 en Boodschappen zijn
+blok 2, check 7 vervalt), plus ✓ Gekookt met Vandaag (sessie én timer weg), een losse timer onder "Losse timers"
+naast een sessie, en F5 rechtstreeks op de kookstand (opent op stap 3). Op 360 px: timerrij zonder overloop (label 56
+px, "step 3" 39 px), een lange naam wordt afgekapt en "· stap 3 van 7" blijft heel. Print: alleen in de CSS
+nagekeken (`html[data-print] .timerbar` in print.css); een printvoorbeeld kan het browserpaneel niet. De
+testdatabase van het browserpaneel heeft twee kookbeurten erbij (Afwasmachinezalm, Spaghetti Bolognese), geen
+sessies en geen timers.
+**Tip voor de telefoonronde:** rij 72 begint met Koken → **Begin**. Staat er van rij 66 nog een zalm-rij in de balk,
+dan opent Koken meteen op die stap (zo hoort het) en is er geen Begin; ga dan met ‹ Vorige naar stap 3.
+**Blok 2 (nog niet gebouwd):** ⏱-chip op de receptpagina maakt/bumpt de sessie, de balk op Boodschappen, `endCooking`
+bij de drie verwijderplekken, `reloadCooking` na herstel, rij 74. Tot dan: een timer vanaf de receptpagina staat
+zonder sessie in de balk ("Timers"), en een verwijderd eigen recept laat zijn rij staan tot de volgende start van
+de app (het vangnet `getRecipe` in `loadCooking` ruimt hem dan op). **Open vragen voor Stijn** (spec §8, standaard
+zoals gebouwd): Gekookt stopt ook de lopende timers van dat recept; 8 uur als vervaltijd.
+**Besluit Fable (23 okt), alle keuzes van bouwers en integrator geaccepteerd:** rij 66 met "Tik onderaan op Home"
+aan het eind van stap 3 (in de kookstand verbergt de balk de eigen rij, dus de controle hoort op Home);
+`src/cooking.ts` wacht op `startTimerEngine()` vóór het opruimen (anders verdwijnt een sessie met een lange
+timer vóór de timers geladen zijn; richting cooking → timers blijft); het kopje "Losse timers" alleen als er een
+sessie is; `touchCooking(…, servings: null)` behoudt de bewaarde porties (de koude start via een melding gaf
+anders null); `endCooking` wacht ook op `loadCooking`. Review: 1 bevinding bevestigd en gerepareerd; gate groen
+(794 tests). Uitrol: `next` 23 okt; na de telefoonronde met rij 72–73 volgt `main`.
+
 ## 23 okt (Opus): Home A+ blok 2
 Gebouwd volgens docs/specs/home-a-plus.md §3 blok 2 (bouwers A en B + integrator). **Live op `main` sinds
 23 okt** (eerst op `next`; telefoonronde rij 70 en 71 door Stijn: "alles lukt"). Wat er nu

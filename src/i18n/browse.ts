@@ -335,4 +335,14 @@ export const browse: Dict = {
   'timer.sound': { nl: 'Timergeluid', en: 'Timer sound' },
   'timer.soundOn': { nl: 'Timergeluid aan', en: 'Timer sound on' },
   'timer.soundOff': { nl: 'Timergeluid uit', en: 'Timer sound off' },
+  // 13K cooking bar (docs/specs/kookbalk.md §1f): head label, the recipe row "Afwasmachinezalm ·
+  // stap 3 van 7 ›" with its aria-labels, the × that ends a session, and the "Losse timers" sub-head.
+  'cooking.title': { nl: 'Nu aan het koken', en: 'Cooking now' },
+  'cooking.stepOf': { nl: 'stap {n} van {total}', en: 'step {n} of {total}' },
+  'cooking.prepare': { nl: 'klaarzetten', en: 'getting ready' },
+  'cooking.open': { nl: '{name} — verder bij stap {n}', en: '{name} — continue at step {n}' },
+  'cooking.openPrepare': { nl: '{name} — naar klaarzetten', en: '{name} — back to getting ready' },
+  'cooking.stop': { nl: 'Klaar met {name}', en: 'Done with {name}' },
+  'cooking.loose': { nl: 'Losse timers', en: 'Other timers' },
+  'cooking.timerNoStep': { nl: 'timer', en: 'timer' },
 };
