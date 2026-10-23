@@ -1126,3 +1126,108 @@ textarea.input.member-card-raw {
 .delta .delta-example p {
   margin: 8px 0 0;
 }
+
+/* ---------- 6B blok 5 (docs/specs/labels-categorieen.md §1f): Woordenboek — "Ontbrekende gegevens
+   aanvullen met AI" card (DictionaryScreen) and its review sheet (src/components/MissingSheet.tsx) ---------- */
+
+.dw-missing {
+  margin-top: 16px;
+}
+
+.dw-missing h2 {
+  margin-bottom: 4px;
+}
+
+.dw-missing .dw-missing-count {
+  margin: 10px 0 0;
+  font-weight: 600;
+}
+
+.dw-missing .actions {
+  margin: 12px 0 8px;
+}
+
+/* The prompt stays visible (the iPhone fallback: select it by hand); 16 px so iOS does not zoom on focus. */
+.dw-missing textarea.dw-missing-prompt {
+  min-height: 120px;
+  line-height: 1.35;
+  resize: vertical;
+  margin-top: 4px;
+}
+
+.dw-missing textarea.dw-missing-answer {
+  min-height: 140px;
+  line-height: 1.35;
+  resize: vertical;
+  margin-top: 12px;
+}
+
+/* MissingSheet: Annuleer and "Zet in woordenboek" leave little room at 360 px; a smaller title keeps the head low. */
+.missing-sheet .sheet-head.with-actions h2 {
+  font-size: 16px;
+}
+
+.missing-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.missing-list > li {
+  border-bottom: 1px solid var(--line);
+}
+
+.missing-list > li:last-child {
+  border-bottom: 0;
+}
+
+/* One proposal line: tick box + text, the whole row is the label (44 px target). */
+.missing-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 0;
+  line-height: 1.35;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.missing-row input[type='checkbox'] {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--cobalt);
+}
+
+.missing-row .missing-text {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+  overflow-wrap: anywhere;
+}
+
+.missing-row.off .missing-text {
+  color: var(--muted);
+}
+
+/* "M3: niet te lezen, overgeslagen": no tick box, a muted dash in its place. */
+.missing-row.skipped {
+  cursor: default;
+}
+
+.missing-mark {
+  flex: none;
+  width: 24px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.missing-fail {
+  margin: 12px 0;
+  color: var(--tomato);
+  line-height: 1.4;
+}

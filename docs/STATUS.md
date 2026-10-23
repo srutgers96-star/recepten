@@ -4,6 +4,102 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 23 okt (Opus): 6B blok 5 — editor Labels en prompt ontbrekende ingrediënten
+**Besluit Fable (23 okt) over de restpunten:** (1) een nieuwe entry uit het AI-antwoord is vegetarisch tenzij het schap `vlees-vis` is, en altijd vegetarisch bij "vegan: ja" (geen nieuw promptveld); (2) een eigen entry met dezelfde Nederlandse en Engelse naam (csipetke, pesto) telt als compleet zodra schap én de drie vlaggen zijn ingevuld, zodat de kaart "Niets aan te vullen" kan bereiken; een lege Engelse naam blijft ontbreken; (3) een niet-gekoppelde regel waarvan de naam inmiddels bekend is, blijft buiten telling en prompt (geen dubbele entries; koppelen gebeurt bij het eerstvolgende bewerken van het recept); (4) de M-nummers zijn vastgelegd op het moment van kopiëren (fixer) en een twijfelantwoord ("no idea", "n.v.t.") telt nooit als nee. Keuzes van bouwers en integrator akkoord (rij 79–80 aangepast aan de echte app). Besluit 1 en 2 doorgevoerd in een aparte fixer-run; gate groen. Uitrol: direct naar `main`. **Hiermee is 6B+13E (labels-categorieen.md) helemaal gebouwd.**
+Gebouwd volgens docs/specs/labels-categorieen.md §1e, §1f en §3 blok 5 (bouwer A domein, bouwer B editor, bouwer C
+woordenboek, integrator). Niet gecommit. Volgens §4 mag dit blok direct naar `main` (geen deelformaat, geen data).
+Wat er nu staat:
+- **Editor:** categorie, keuken en dieet & labels staan in een eigen laatste kaart **Labels** (`meta.title`), na de
+  vertaalkaart en direct boven de onderste Bewaar. Bovenaan de kaart staat de nieuwe uitlegregel `meta.kindsHint`
+  (Categorie · Keuken · Dieet & labels; die regel staat ook in Controleer mijn recepten). Voorstel en Overnemen werken
+  als voorheen; een keuken wordt nooit voorgesteld. De bestaande regel "Voorstel op basis van naam …" staat onder de
+  rijen in de kaart. Nog steeds één formulier, geen wizard, geen route.
+- **Woordenboek:** in de standaardweergave (geen zoekterm, geen schapfilter), onder Opruimen, de kaart **Ontbrekende
+  gegevens aanvullen met AI**: telregel, "Eerst deze 40 …" boven 40, de prompt in een zichtbaar vak (iPhone: zelf
+  selecteren) plus Kopieer, **Plak antwoord** → gewoon tekstvak → **Bekijk voorstel** → MissingSheet (SheetPortal,
+  Annuleer en Zet in woordenboek bovenaan, wegvegen/Escape/ernaast tikken bewaart niets). Bij 0 alleen "Niets aan te
+  vullen …". Bewaren schrijft via `saveUserIngredient` en `linkUserRecipeLine` (alleen `ing`; raw blijft staan), daarna
+  `reloadDictionary()` en de snack "{updated} aangevuld, {created} nieuw, {linked} regels gekoppeld".
+- **Domein:** het nieuwe src/domain/dictionary-prompt.ts (`collectMissing`, `buildMissingPrompt`,
+  `parseMissingAnswer`, `planMissingAnswer`) volgt de besluiten van de kritische lezer: `en` ontbreekt als `en.one`
+  gelijk is aan `nl.one` (hoofdletterongevoelig), `nl` nooit; schap `overig` telt als ontbrekend; een vlag ontbreekt
+  alleen als hij afwezig is. "misschien" = `false` + `…Unsure`; een onbekend schap laat het schap staan; een ingevuld
+  veld wordt nooit overschreven; een nieuwe entry alleen met nl én en. Lactose streng met regel H1 (vegan ⇒ lactose
+  false zonder twijfel; vegan ja + lactose ja houdt de lactose en laat vegan leeg). 28 tests in
+  tests/dictionary-prompt.test.ts (alle gevallen van §6a); de prompt van het voorbeeld in §1f komt er letterlijk uit.
+
+**Integrator:** de twee keys van bouwer B toegevoegd in src/i18n/edit.ts, letterlijk uit §1e: `meta.title`
+("Labels" / "Labels") en de nieuwe tekst van `meta.kindsHint` (NL en EN). Verder geen code gerepareerd.
+**Gedraaid:** check, test (1046 in 47 bestanden), build, build:next en validate:data groen (0 errors, alleen de
+bekende swap-warnings). Geen nieuwe dependency; Dexie blijft v7; `DATA_VERSION` blijft 7; landing.ts, sw.ts en
+token.ts niet aangeraakt.
+
+**Dev-app (375 px, NL en EN, ook donker), §6c 10–11 nagelopen:** #/add: volgorde naam … serveertip, vertaalkaart,
+Labels, Bewaar; in de kaart de uitlegregel, Categorie (met de vier nieuwe), Keuken (geen + 18) en Dieet & labels.
+Met AI: de prompt heeft `Keuken:`, lactosevrij en bijgerecht; een geplakt antwoord met "Keuken: italiaans" zette
+pasta, 🇮🇹 Italiaans en de labels aan, met "Categorie, keuken en labels overgenomen uit de tekst.". In het Engels
+"Labels" en "Category: one per recipe … Cuisine: one …". Woordenboek: eigen ingrediënt "csipetke" gemaakt via
++ Nieuw ingrediënt (Engels werd ook "csipetke", zoals de ⚠ zegt) → telregel 2 (er stond al een eigen "testzuivel"),
+prompt met `M1. nl: csipetke | en: ? | schap: ? …`, Kopieer → "Gekopieerd ✓", één met de hand geschreven M-regel in
+een codeblok → venster met Annuleer / Bekijk voorstel / Zet in woordenboek en "csipetke: Engels, schap, vegan,
+gluten, lactose aanvullen" (aangevinkt) → snack **"1 aangevuld, 0 nieuw, 0 regels gekoppeld"**; csipetke heeft daarna
+Engels "pinched noodle", schap Pasta, rijst & granen, bevat gluten, lactosevrij; telregel 1. Rommel plakken (EN) →
+"I cannot read the answer …" met Add to dictionary uit; Escape sluit zonder bewaren, het geplakte blijft staan.
+Geen horizontale scroll, geen consolefouten. Het testingrediënt "csipetke" staat nog in de dev-database van het
+browserpaneel (Verwijder vraagt om een bevestigingsvenster dat ik daar niet kan beantwoorden); "testzuivel" stond er al.
+
+DEVICE-TEST rijen 79 en 80 staan in beide tabellen (NL en EN), na rij 78. Aanvullingen op de tekst van §6d, omdat de
+app zo werkt: rij 79 stap 4 noemt **Plak van klembord**, dan **Vul in** (de melding komt pas na Vul in); rij 80 stap 2
+zegt het zoekvak eerst leeg te maken (na + Nieuw ingrediënt staat de naam in het zoekvak en is de kaart verborgen);
+de ⚠-feitencheck staat als "Goed 1" in gewone taal; bij de snack staat dat de getallen hoger zijn als er meer regels
+waren; en de open vraag hieronder (punt 1) staat er als waarschuwing bij.
+
+**Review (fixer, 23 okt):** gerepareerd zijn ja/nee lezen (alleen het hele woord telt; "no idea", "N/B", "n.v.t.",
+"nee/misschien" en losse letters j/n/y blijven "?", dus nooit een zekere glutenvrij- of lactosevrij-claim op
+twijfel), Engelse regels (punt 5) en de nummers (punt 4). Punten 2 en 3 hieronder zijn bevestigd maar vragen een
+keuze. tests/dictionary-prompt.test.ts heeft nu 34 tests.
+
+**Open (niet door de spec beslist; vraag voor Stijn of Fable):**
+1. Een Engelse naam die gelijk is aan de Nederlandse (csipetke, pesto, pizza …) telt door het besluit van de kritische
+   lezer nooit als ingevuld: zo'n eigen ingrediënt komt bij elke prompt terug met `en: ?` en de kaart haalt nooit
+   "Niets aan te vullen". Een AI-antwoord met dezelfde naam telt ook niet als aanvulling. Er is geen veld om "zelfde
+   naam, bevestigd" vast te leggen (en een nieuw veld mag niet, README §4.2). Keuze nodig.
+2. **Onware dieetclaim (review bevestigd, niet gerepareerd: keuze nodig).** Een nieuwe entry uit het AI-antwoord
+   krijgt de standaardwaarden van het formulier "Nieuw ingrediënt": eenheid `stuk`, geen basisvoorraad en
+   **`veg: true`**, ook bij "vegan: nee" en schap `vlees-vis`. Een recept met zo'n regel was "vegetarisch, onzeker" en
+   wordt na het koppelen zeker vegetarisch (de chip Vegetarisch toont het). In het formulier ziet de gebruiker het
+   vinkje, hier niet. Een veld `vega:` in de prompt mag niet (vast formaat, §5 punt 9) en "vegetarisch onbekend" kan
+   het model niet uitdrukken (`veg` is verplicht, diet.ts kent geen onbekend). Twee opties: **(a)** `veg` volgt het
+   antwoord: alleen `true` bij "vegan: ja", anders `false` (nooit een vegetarisch-claim op een gok; kaas, ei en melk
+   heten dan niet-vegetarisch tot iemand het vinkje zet); **(b)** standaard vegetarisch houden, maar het voorstelvenster
+   toont "vegetarisch" per nieuwe regel zodat je het ziet en kunt uitzetten (nieuwe UI-tekst, staat niet in §1f).
+3. **Regel blijft onherkend (review bevestigd, niet gerepareerd: keuze nodig).** Een niet-gekoppelde regel waarvan het
+   woordenboek de naam al kent (bv. een eigen ingrediënt dat na het recept is gemaakt, of een woordenboek-update) komt
+   niet in de telling en niet in de prompt. Het contract van §3 noemt maar twee soorten regels om over te slaan
+   (≤ 2 tekens en kopregels), en bij 0 zegt de kaart "alle regels zijn herkend", wat dan niet klopt. Twee opties:
+   **(a)** letterlijk het contract: de regel komt in telling en prompt en wordt een nieuwe entry (een dubbele, die
+   Opruimen daarna voorstelt samen te voegen); **(b)** de regel komt in de telling en wordt bij "Zet in woordenboek"
+   gekoppeld aan de bestaande entry, zonder AI (een rijtekst daarvoor staat niet in §1f).
+4. ~~De nummers worden live berekend~~ **Gerepareerd na de review:** kopiëren (of het promptvak selecteren) legt de
+   items van die prompt vast. Het antwoord wordt daartegen gelezen, bijgewerkt naar het woordenboek van nu
+   (`refreshMissingItems`): een eigen ingrediënt dat tussendoor is aangevuld wordt niet overschreven, en een gewist
+   ingrediënt of een regel die intussen bekend is, wordt overgeslagen. Daarnaast is het antwoord zelf een controle.
+   Een regel waarvan de ingevulde naam (`nl:`, bij een Engelse regel `en:`) een ander ingrediënt noemt, wordt
+   overgeslagen met "M{n}: niet te lezen, overgeslagen". Het enkelvoud van de naam telt als dezelfde naam
+   ("sultana" bij "sultana's").
+5. Geeft de AI een Engelse naam die al een andere entry is, dan komt er toch een nieuwe entry; Opruimen toont de
+   dubbele daarna. **Gerepareerd na de review:** een regel met alleen Engelse tekst houdt zijn naam als Engelse naam;
+   de prompt vraagt dan `nl: ? | en: <naam>`, en de Nederlandse naam komt uit het antwoord (invariant 3). Nog een
+   kleine keuze: de ingevulde naam van een regel blijft zoals hij er staat, ook als de AI hem naar het enkelvoud
+   zet ("chorizo sausages" blijft de Engelse naam; zo staat het in "Verander niets wat al is ingevuld").
+6. Keuzes van de bouwers: niet-herkende regels alfabetisch; een eigen entry met een onbekend schap-id (niet
+   `overig`) telt als ingevuld; de Engelse prompttekst is van bouwer A ("EN analoog"); zes extra keys
+   `dict.missingField.*` voor de {fields}-woorden (teksten uit §1f); de kop van het venster is "Bekijk voorstel"
+   (`dict.missingReview`), op 360 px over twee regels; kopiëren mislukt → `edit.copyFailed`, aria van het promptvak →
+   `edit.promptText`; "niet te lezen" staat in het venster; na Annuleer blijft het antwoord in het vak; vlak voor het
+   koppelen worden de regels opnieuw gelezen (een regel die intussen gekoppeld of weg is, telt niet mee in {linked});
+   `edit.invalidHint` staat (alleen bij een ongeldig formulier) tussen de kaart Labels en Bewaar.
+
 ## 23 okt (Opus): 6B blok 4 — categorieën en + bijgerecht
 **Besluit Fable (23 okt) over de restpunten:** Boodschappen telt voortaan alleen hoofdgerechten ("Weekplan: N gerechten" en de titel van de gedeelde lijst), zoals Week, de #w=-melding en In & uit; de bijgerechtregels tellen gewoon mee in de lijst zelf. Keuzes van bouwers A, B en C akkoord: SideSheet met Sluit in de kop; pick.all telt niet mee in "filters (n)"; een `of` naar het eigen recept wordt genegeerd; een bijgerecht zonder hoofdgerecht reist als los gerecht; een ontvangen bijgerecht onder een hoofdgerecht dat al in het plan staat wordt een los gerecht; In & uit toont een bijgerecht ingesprongen zonder eigen personen; precies vijf hercategorisaties (geen klassieker naar nagerecht/gebak/ontbijt-lunch tot Stijn dat wil). Nog open voor later (geen bug): "+ Deze week" op een recept dat al als bijgerecht in de week staat voegt niets toe. Review: 4 echte bevindingen, alle verwerkt (Gekookt vinkt bijgerechten mee; Vanavond-kaart alleen hoofdgerechten; In & uit ingesprongen; telling Boodschappen). Gate groen (1018 tests). Uitrol: direct naar `main` (besluit Stijn 23 okt: geen telefoonronde; de spec wilde dit blok eerst op /next/).
 Gebouwd volgens docs/specs/labels-categorieen.md §1c, §1d, §2d, §2e en §3 blok 4 (bouwer A data + domein,

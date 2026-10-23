@@ -237,10 +237,13 @@ export const edit: Dict = {
   // 6B blok 3 (docs/specs/labels-categorieen.md §1e): the "Keuken" row — "geen" + the 18 cuisines.
   'meta.cuisine': { nl: 'Keuken', en: 'Cuisine' },
   'meta.cuisineNone': { nl: 'geen', en: 'none' },
-  // Phase 6 (6A.18): one line above the two rows that tells the two kinds apart.
+  // 6B blok 5 (docs/specs/labels-categorieen.md §1e): the heading of the editor's last card "Labels".
+  'meta.title': { nl: 'Labels', en: 'Labels' },
+  // Phase 6 (6A.18), new text in 6B blok 5 (§1e): one line above the three rows (Categorie, Keuken,
+  // Dieet & labels) that tells the kinds apart. Also used by CheckRecipesScreen.
   'meta.kindsHint': {
-    nl: 'Categorie: één per recept (soep, salade, pasta …). Dieet & labels: meerdere mogelijk (vegetarisch, snel …).',
-    en: 'Category: one per recipe (soup, salad, pasta …). Diet & labels: as many as apply (vegetarian, quick …).',
+    nl: 'Categorie: één per recept (soep, salade, pasta …). Keuken: één, alleen als het gerecht er echt vandaan komt. Dieet & labels: meerdere mogelijk (vegetarisch, snel …).',
+    en: 'Category: one per recipe (soup, salad, pasta …). Cuisine: one, only when the dish really comes from there. Diet & labels: as many as apply (vegetarian, quick …).',
   },
   'meta.suggestion': { nl: 'Voorstel: {text}', en: 'Suggestion: {text}' },
   'meta.adopt': { nl: 'Overnemen', en: 'Adopt' },
@@ -591,4 +594,38 @@ export const edit: Dict = {
   'dict.form.lactose': { nl: 'Lactose', en: 'Lactose' },
   'dict.form.lactoseYes': { nl: 'ja, bevat lactose', en: 'yes, contains lactose' },
   'dict.form.lactoseNo': { nl: 'nee, lactosevrij', en: 'no, lactose-free' },
+
+  // --- Dictionary, phase 6 (docs/specs/labels-categorieen.md §1f, block 5): the card "Ontbrekende
+  //     gegevens aanvullen met AI" in the default view and its review sheet (MissingSheet). ---
+  'dict.missingTitle': { nl: 'Ontbrekende gegevens aanvullen met AI', en: 'Fill in missing details with AI' },
+  'dict.missingHint': {
+    nl: 'Eigen ingrediënten zonder Engelse of Nederlandse naam, zonder schap of zonder dieetvlaggen, plus niet-herkende regels uit je eigen en ontvangen recepten. Kopieer de opdracht, plak hem in je AI en plak het antwoord hier terug.',
+    en: 'Own ingredients without an English or Dutch name, without an aisle or without diet flags, plus unrecognised lines from your own and received recipes. Copy the instruction, paste it into your AI and paste the answer back here.',
+  },
+  'dict.missingCount': { nl: '{n} om aan te vullen', en: '{n} to fill in' },
+  'dict.missingNone': {
+    nl: 'Niets aan te vullen: je eigen ingrediënten zijn compleet en alle regels zijn herkend.',
+    en: 'Nothing to fill in: your own ingredients are complete and every line is recognised.',
+  },
+  'dict.missingMore': { nl: 'Eerst deze 40; daarna verschijnen de volgende.', en: 'These 40 first; the next ones appear afterwards.' },
+  'dict.missingCopy': { nl: 'Kopieer prompt voor ontbrekende ingrediënten', en: 'Copy prompt for missing ingredients' },
+  'dict.missingPaste': { nl: 'Plak antwoord', en: 'Paste answer' },
+  'dict.missingReview': { nl: 'Bekijk voorstel', en: 'Review' },
+  'dict.missingSave': { nl: 'Zet in woordenboek', en: 'Add to dictionary' },
+  'dict.missingRowUpdate': { nl: '{name}: {fields} aanvullen', en: '{name}: fill in {fields}' },
+  'dict.missingRowNew': { nl: 'Nieuw: {nl} / {en} · {aisle} · in {n} recept(en) gekoppeld', en: 'New: {nl} / {en} · {aisle} · linked in {n} recipe(s)' },
+  'dict.missingRowSkipped': { nl: 'M{n}: niet te lezen, overgeslagen', en: 'M{n}: unreadable, skipped' },
+  'dict.missingParseFail': {
+    nl: 'Ik herken het antwoord niet. Plak het hele antwoord, met de nummers M1, M2 …',
+    en: 'I cannot read the answer. Paste the whole answer, with the numbers M1, M2 …',
+  },
+  'dict.missingDone': { nl: '{updated} aangevuld, {created} nieuw, {linked} regels gekoppeld', en: '{updated} filled in, {created} new, {linked} lines linked' },
+  // The {fields} of dict.missingRowUpdate, in this order (§1f: "Engels", "Nederlands", "schap",
+  // "vegan", "gluten", "lactose" in the UI language).
+  'dict.missingField.en': { nl: 'Engels', en: 'English' },
+  'dict.missingField.nl': { nl: 'Nederlands', en: 'Dutch' },
+  'dict.missingField.aisle': { nl: 'schap', en: 'aisle' },
+  'dict.missingField.vegan': { nl: 'vegan', en: 'vegan' },
+  'dict.missingField.gluten': { nl: 'gluten', en: 'gluten' },
+  'dict.missingField.lactose': { nl: 'lactose', en: 'lactose' },
 };

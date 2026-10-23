@@ -30,6 +30,8 @@
 // paste without them leaves the live suggestion at work.
 // 6B blok 3 (docs/specs/labels-categorieen.md §1b, §1e): the meta rows carry a cuisine too
 // (`Recipe.cuisine`); an AI answer's "Keuken:" / "Cuisine:" line fills it, nothing ever guesses one.
+// 6B blok 5 (§1e): those rows are the last card "Labels", after the translation card and directly
+// above the bottom Bewaar.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
@@ -1500,15 +1502,6 @@ export function EditScreen(props: { id?: string }) {
           ))}
         </div>
 
-        {/* Phase-5 A.4: category + diet/labels, with the live suggestion from the lines above. */}
-        <div class="edit-meta">
-          {/* 6A.18: which kind each row is — "Categorie" is one per recipe (soep, salade, pasta …),
-              "Dieet & labels" takes as many as apply — so a category is not looked for among the chips. */}
-          <p class="muted small edit-meta-intro">{t('meta.kindsHint')}</p>
-          <MetaRows value={meta} suggestion={suggestion} onChange={changeMeta} disabled={busy} />
-          {!props.id && !metaManual && <p class="muted small edit-hint">{t('meta.autoHint')}</p>}
-        </div>
-
         {/* PLAN §0 "Vertaling eigen recepten" (1): in every column mode; NL mode adds English, EN mode adds Dutch. */}
         <div class="card edit-tools" ref={trRef}>
           <h2>{mode === 'nl' ? t('edit.addEnglish') : mode === 'en' ? t('edit.addDutch') : t('edit.translate')}</h2>
@@ -1557,6 +1550,18 @@ export function EditScreen(props: { id?: string }) {
               </div>
             </>
           )}
+        </div>
+
+        {/* 6B blok 5 (docs/specs/labels-categorieen.md §1e): the last card, directly above Bewaar —
+            "Labels": the hint that tells the kinds apart (Categorie one per recipe, Keuken one and only
+            when the dish really comes from there, Dieet & labels as many as apply), then the rows
+            Categorie · Keuken · Dieet & labels (MetaRows) with the live suggestion from the lines above
+            (phase-5 A.4; a cuisine is never suggested). Still one form: no wizard, no own route. */}
+        <div class="card edit-meta">
+          <h2>{t('meta.title')}</h2>
+          <p class="muted small edit-meta-intro">{t('meta.kindsHint')}</p>
+          <MetaRows value={meta} suggestion={suggestion} onChange={changeMeta} disabled={busy} />
+          {!props.id && !metaManual && <p class="muted small edit-hint">{t('meta.autoHint')}</p>}
         </div>
 
         {!valid && <p class="muted small">{t('edit.invalidHint')}</p>}

@@ -777,17 +777,28 @@ button.lc-chip:disabled {
 
 /* ---------- Editor: "Categorie" + "Dieet & labels" rows (phase 5 A.4, src/components/MetaRows.tsx) ---------- */
 
-.edit-meta {
+/* 6B blok 5 (docs/specs/labels-categorieen.md §1e): the rows live in the last card "Labels",
+   after the translation card and directly above the bottom Bewaar. */
+.card.edit-meta {
   margin: 0 0 16px;
 }
 
-.edit-meta .edit-hint {
-  margin-top: 0;
+.edit-meta h2 {
+  margin-bottom: 4px;
 }
 
-/* 6A.18 (EditScreen): the one-line explanation above the Categorie / Dieet & labels rows. */
+/* 6A.18 (EditScreen): the one-line explanation above the Categorie / Keuken / Dieet & labels rows. */
 .edit-meta .edit-meta-intro {
-  margin: 0 0 8px;
+  margin: 0 0 12px;
+}
+
+/* Inside the card the last row (or the suggestion) ends on the card's own padding. */
+.edit-meta .meta-rows > :last-child {
+  margin-bottom: 0;
+}
+
+.edit-meta .meta-rows + .edit-hint {
+  margin-top: 12px;
 }
 
 .meta-rows .field {

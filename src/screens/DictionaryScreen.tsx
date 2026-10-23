@@ -13,15 +13,24 @@
 // Bewerk/Fuseer/Verwijder. "+ Nieuw ingrediënt" sits next to the counter and opens the picker's own
 // form (`startNew` + `newOnly`, incl. the "Bestaat al" check); the counter shows the totals, or the
 // count for the active search/aisle ("312 in Groente & fruit").
-import { useEffect, useMemo, useState } from 'preact/hooks';
+// 6B blok 5 (docs/specs/labels-categorieen.md §1f): under Opruimen the card "Ontbrekende gegevens
+// aanvullen met AI" — own entries with a missing name/aisle/diet flag plus the unrecognised lines of
+// own and received recipes (`collectMissing`, src/domain/dictionary-prompt.ts) as a numbered prompt
+// (copy button + a visible box to select by hand on the iPhone), a plain paste box for the answer and
+// "Bekijk voorstel" → MissingSheet. Saving writes through saveUserIngredient / linkUserRecipeLine
+// (only `ing` of a line; raw is never touched) and reloads the dictionary.
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
-import { IngredientPicker, ingredientLabel } from '@/components/IngredientPicker';
-import { deleteUserIngredient, findOwnDuplicates, mergeIngredient, saveUserIngredient, undoMerge, type OwnDuplicate } from '@/db/repo';
+import { IngredientPicker, ingredientLabel, uniqueIngredientId } from '@/components/IngredientPicker';
+import { MissingSheet, type MissingSheetRow } from '@/components/MissingSheet';
+import { deleteUserIngredient, findOwnDuplicates, linkUserRecipeLine, mergeIngredient, saveUserIngredient, undoMerge, userRecipes, type OwnDuplicate } from '@/db/repo';
 import { baseDictionary, dictionary, isUserIngredientId, reloadDictionary, userIngredients } from '@/dictionary';
-import { normalizeKey, type Ingredient } from '@/domain/dictionary';
-import type { Lang } from '@/domain/model';
+import { normalizeKey, type Dictionary, type Ingredient } from '@/domain/dictionary';
+import { buildMissingPrompt, collectMissing, parseMissingAnswer, planMissingAnswer, refreshMissingItems, type MissingCreate, type MissingItem, type MissingPlan, type MissingUpdate } from '@/domain/dictionary-prompt';
+import type { Lang, Recipe } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { navigate, route } from '@/router';
+import { copyText } from '@/share-actions';
 
 /** Rows rendered at once; "Toon meer" adds another page (block E: the list must stay fast at ±1900 entries). */
 const PAGE = 100;
@@ -371,6 +380,233 @@ function EntryRow(props: EntryRowProps) {
   );
 }
 
+/** One reviewed answer: the sheet rows and, per row key, the update or new entry it stands for. */
+interface MissingReview {
+  rows: MissingSheetRow[];
+  updates: Map<string, MissingUpdate>;
+  creates: Map<string, MissingCreate>;
+}
+
+/** Sheet row key of answer line M{n}: each line is one update, one new entry or skipped. */
+function missingKey(n: number): string {
+  return 'M' + n;
+}
+
+/**
+ * The sheet rows of a plan, ordered by M-number: every update ("{name}: {fields} aanvullen"), every
+ * new entry ("Nieuw: …") and every skipped answer line ("M{n}: niet te lezen, overgeslagen"; the
+ * plan also skips a new entry without both names, §5 punt 3). An empty list = nothing readable (the
+ * sheet then says "Ik herken het antwoord niet …").
+ */
+function missingReview(plan: MissingPlan, dict: Dictionary, l: Lang): MissingReview {
+  const updates = new Map<string, MissingUpdate>();
+  const creates = new Map<string, MissingCreate>();
+  const rows: { n: number; row: MissingSheetRow }[] = [];
+  for (const u of plan.updates) {
+    const key = missingKey(u.n);
+    updates.set(key, u);
+    // The name as the dictionary shows it now (before the update fills in the other language).
+    rows.push({ n: u.n, row: { kind: 'update', key, name: nameOf(dict.get(u.id) ?? u.entry, l), fields: u.fields } });
+  }
+  for (const c of plan.creates) {
+    const key = missingKey(c.n);
+    creates.set(key, c);
+    const aisle = dict.aisle(c.entry.aisle)?.[l] ?? c.entry.aisle;
+    rows.push({ n: c.n, row: { kind: 'new', key, nl: c.entry.nl.one, en: c.entry.en.one, aisle, recipes: c.recipes } });
+  }
+  for (const n of plan.skipped) rows.push({ n, row: { kind: 'skipped', key: missingKey(n), n } });
+  rows.sort((a, b) => a.n - b.n);
+  return { rows: rows.map((r) => r.row), updates, creates };
+}
+
+/**
+ * The card "Ontbrekende gegevens aanvullen met AI" (§1f), in the default view under Opruimen. The
+ * count covers everything there is to fill in; the prompt asks for the first batch (collectMissing's
+ * limit, 40) and says so above 40. The prompt is copied with copyText and also stands in a visible,
+ * read-only box (the iPhone fallback: select it by hand). "Plak antwoord" opens a plain textarea
+ * (invariant 5: pasting by hand always works) with "Bekijk voorstel" → MissingSheet. After saving,
+ * the next batch appears by itself (the items are recomputed from the reloaded dictionary).
+ * The numbers M1, M2 … belong to the prompt the person copied: copying (or selecting the box) keeps
+ * that prompt's items, and the answer is planned against them (refreshMissingItems), even when an
+ * own entry was added or completed in between and the live prompt has shifted.
+ */
+function MissingCard(props: { own: readonly Ingredient[]; onDone: (text: string) => void }) {
+  const { own, onDone } = props;
+  const l = lang.value;
+  const dict = dictionary.value;
+  // Own and received recipes (their unrecognised lines); null = not read yet, so the count never flashes "0".
+  const [recipes, setRecipes] = useState<Recipe[] | null>(null);
+  const [note, setNote] = useState('');
+  const [pasteOpen, setPasteOpen] = useState(false);
+  const [answer, setAnswer] = useState('');
+  const [review, setReview] = useState<MissingReview | null>(null);
+  const [busy, setBusy] = useState(false);
+  // The items of the prompt that was copied (or selected in the box): the answer's M-numbers point there.
+  const [asked, setAsked] = useState<readonly MissingItem[] | null>(null);
+  const answerRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    let live = true;
+    userRecipes().then(
+      (list) => {
+        if (live) setRecipes(list);
+      },
+      (e) => {
+        console.error('userRecipes', e);
+        if (live) setRecipes([]);
+      },
+    );
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  // "Plak antwoord": the box takes the focus, so a long-press → Plakken is the next step.
+  useEffect(() => {
+    if (pasteOpen) answerRef.current?.focus();
+  }, [pasteOpen]);
+
+  /** total = everything to fill in (the count line); items = the batch the prompt numbers M1, M2 … */
+  const missing = useMemo(() => {
+    if (!recipes) return null;
+    return { total: collectMissing(own, recipes, dict, Infinity).length, items: collectMissing(own, recipes, dict) };
+  }, [own, recipes, dict]);
+  const prompt = useMemo(() => (missing && missing.items.length > 0 ? buildMissingPrompt(missing.items, l) : ''), [missing, l]);
+
+  /** The prompt as it stands now is the one being copied: its items are what the answer numbers. */
+  function rememberPrompt() {
+    if (missing) setAsked(missing.items);
+  }
+
+  async function copyPrompt() {
+    rememberPrompt();
+    const r = await copyText(prompt);
+    setNote(r.ok ? t('recipe.copied') : t('edit.copyFailed'));
+  }
+
+  function reviewAnswer() {
+    if (!missing || !answer.trim()) return;
+    // The copied prompt's items, held against the dictionary as it is now; never copied = the live ones.
+    const items = asked ? refreshMissingItems(asked, own, dict) : missing.items;
+    const plan = planMissingAnswer(items, parseMissingAnswer(answer), dict, uniqueIngredientId);
+    setReview(missingReview(plan, dict, l));
+  }
+
+  /** "Zet in woordenboek": the ticked updates and new entries, then the links of the new ones. */
+  async function save(keys: ReadonlySet<string>) {
+    if (!review || busy) return;
+    setBusy(true);
+    let updated = 0;
+    let created = 0;
+    let linked = 0;
+    let failed = '';
+    try {
+      for (const [key, u] of review.updates) {
+        if (!keys.has(key)) continue;
+        // The entry as it was with only the missing fields filled in (planMissingAnswer).
+        await saveUserIngredient(u.entry);
+        updated++;
+      }
+      // The lines as they are now: a line that was linked (or removed) since the prompt stays alone.
+      const fresh = new Map((await userRecipes()).map((r) => [r.id, r]));
+      const known = dictionary.value;
+      for (const [key, c] of review.creates) {
+        if (!keys.has(key)) continue;
+        await saveUserIngredient(c.entry);
+        created++;
+        for (const p of c.links) {
+          const line = fresh.get(p.recipeId)?.lines[p.index];
+          if (!line || line.kind === 'header' || (line.ing && known.get(line.ing))) continue;
+          try {
+            await linkUserRecipeLine(p.recipeId, p.index, c.entry.id);
+            linked++;
+          } catch (e) {
+            console.warn('linkUserRecipeLine', p, e);
+          }
+        }
+      }
+    } catch (e) {
+      failed = String((e as Error)?.message ?? e);
+    }
+    try {
+      await reloadDictionary();
+      setRecipes(await userRecipes());
+    } catch (e) {
+      console.error('reload after missing', e);
+    }
+    setBusy(false);
+    setReview(null);
+    setAnswer('');
+    setPasteOpen(false);
+    setNote('');
+    setAsked(null);
+    onDone(failed ? `${t('common.error')}: ${failed}` : t('dict.missingDone', { updated, created, linked }));
+  }
+
+  return (
+    <section class="card dw-missing">
+      <h2>{t('dict.missingTitle')}</h2>
+      <p class="muted small">{t('dict.missingHint')}</p>
+      {missing &&
+        (missing.total === 0 ? (
+          <p class="ok">{t('dict.missingNone')}</p>
+        ) : (
+          <>
+            <p class="dw-missing-count">{t('dict.missingCount', { n: missing.total })}</p>
+            {missing.total > missing.items.length && <p class="muted small">{t('dict.missingMore')}</p>}
+            <div class="actions">
+              <button type="button" class="btn btn-primary" disabled={busy} onClick={() => void copyPrompt()}>
+                {t('dict.missingCopy')}
+              </button>
+            </div>
+            {note && (
+              <div class="status" role="status">
+                {note}
+              </div>
+            )}
+            <textarea
+              class="input dw-missing-prompt"
+              readOnly
+              rows={6}
+              value={prompt}
+              aria-label={t('edit.promptText')}
+              onFocus={(e) => {
+                rememberPrompt();
+                (e.currentTarget as HTMLTextAreaElement).select();
+              }}
+            />
+            {pasteOpen ? (
+              <>
+                <textarea
+                  ref={answerRef}
+                  class="input dw-missing-answer"
+                  rows={6}
+                  value={answer}
+                  autocapitalize="off"
+                  spellcheck={false}
+                  aria-label={t('dict.missingPaste')}
+                  onInput={(e) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
+                />
+                <div class="actions">
+                  <button type="button" class="btn btn-primary" disabled={busy || !answer.trim()} onClick={reviewAnswer}>
+                    {t('dict.missingReview')}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div class="actions">
+                <button type="button" class="btn" disabled={busy} onClick={() => setPasteOpen(true)}>
+                  {t('dict.missingPaste')}
+                </button>
+              </div>
+            )}
+          </>
+        ))}
+      <MissingSheet rows={review?.rows ?? null} busy={busy} onCancel={() => setReview(null)} onSave={(keys) => void save(keys)} />
+    </section>
+  );
+}
+
 export function DictionaryScreen() {
   const l = lang.value;
   const dict = dictionary.value;
@@ -681,6 +917,9 @@ export function DictionaryScreen() {
                 </>
               )}
             </section>
+
+            {/* 6B blok 5 (§1f): fill in missing details with AI — own entries + unrecognised lines. */}
+            <MissingCard own={own} onDone={(text) => setToast({ text })} />
           </>
         )}
       </div>
