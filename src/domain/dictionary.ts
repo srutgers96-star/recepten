@@ -1,7 +1,7 @@
 // The bilingual dictionary (docs/phase-2-spec.md §1 data files, §3 `dictionary.ts`). Framework-free.
 //
 // `loadDictionary(data)` builds lookup indexes over the JSON vocab files (units, qualifiers,
-// prep-phrases, note-phrases, ingredients, aisles, categories); the result is memoised per data object.
+// prep-phrases, note-phrases, ingredients, aisles, categories, cuisines); the result is memoised per data object.
 // Lookups are diacritic- and case-insensitive and understand Dutch plurals/diminutives and
 // English plurals heuristically, so "sjalotjes" finds `sjalot` even without an alias.
 // `withUserEntries(dict, entries)` layers user-created ingredients on top (builtins always win).
@@ -107,6 +107,15 @@ export interface Category {
   order: number;
 }
 
+/** data/cuisines.json (docs/phase-6-spec.md 6B.2): one cuisine with its flag emoji; `order` = chip order. */
+export interface Cuisine {
+  id: string;
+  nl: string;
+  en: string;
+  flag: string;
+  order: number;
+}
+
 export interface DictionaryData {
   units: Unit[];
   qualifiers: Qualifier[];
@@ -116,6 +125,8 @@ export interface DictionaryData {
   ingredients: Ingredient[];
   aisles: Aisle[];
   categories: Category[];
+  /** data/cuisines.json; optional so older callers and tests keep working (no cuisines then). */
+  cuisines?: Cuisine[];
 }
 
 /** One search hit: the ingredient plus a rank (lower = better) for sorting. */
@@ -243,6 +254,8 @@ export class Dictionary {
   readonly ingredients: readonly Ingredient[];
   readonly aisles: readonly Aisle[];
   readonly categories: readonly Category[];
+  /** Sorted by `order`; empty without cuisine data. */
+  readonly cuisines: readonly Cuisine[];
 
   private readonly ingById = new Map<string, Ingredient>();
   private readonly ingByName: Record<Lang, Map<string, Ingredient>> = { nl: new Map(), en: new Map() };
@@ -262,6 +275,7 @@ export class Dictionary {
   private readonly noteTemplates: Record<Lang, PrepTemplate[]> = { nl: [], en: [] };
   private readonly aisleById = new Map<string, Aisle>();
   private readonly categoryById = new Map<string, Category>();
+  private readonly cuisineById = new Map<string, Cuisine>();
 
   constructor(data: DictionaryData) {
     this.units = [...data.units];
@@ -271,6 +285,7 @@ export class Dictionary {
     this.ingredients = [...data.ingredients];
     this.aisles = [...data.aisles].sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
     this.categories = [...data.categories].sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
+    this.cuisines = [...(data.cuisines ?? [])].sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
 
     for (const u of this.units) {
       this.unitById.set(u.id, u);
@@ -318,6 +333,7 @@ export class Dictionary {
     for (const ing of this.ingredients) this.indexIngredient(ing);
     for (const a of this.aisles) this.aisleById.set(a.id, a);
     for (const c of this.categories) this.categoryById.set(c.id, c);
+    for (const c of this.cuisines) this.cuisineById.set(c.id, c);
   }
 
   private setFirst<T>(map: Map<string, T>, key: string, value: T): void {
@@ -355,6 +371,10 @@ export class Dictionary {
 
   category(id: string): Category | undefined {
     return this.categoryById.get(id);
+  }
+
+  cuisine(id: string): Cuisine | undefined {
+    return this.cuisineById.get(id);
   }
 
   // --- names ----------------------------------------------------------------------------------
@@ -598,6 +618,7 @@ export class Dictionary {
       ingredients: [...this.ingredients],
       aisles: [...this.aisles],
       categories: [...this.categories],
+      cuisines: [...this.cuisines],
     };
   }
 }

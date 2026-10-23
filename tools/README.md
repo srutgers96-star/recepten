@@ -16,8 +16,9 @@ Type-stripping rules: type-only syntax only (interfaces, type aliases, `as`, `sa
 | `measure-parse.ts` | `npm run measure-parse` | Regex-only measurement of the ingredient-line corpus in `data/source/recipes-recepten2.json`. Prints the report and writes `docs/measure-parse.md`. Exports `classifyLine()` (unit-tested in `tests/measure-parse.test.ts`). |
 | `validate-data.ts` | `npm run validate:data` | Data guard. Validates the schema-1 source export today; schema-2 (`data/recipes.json`) rules are stubbed with a TODO. Exit 1 on errors, 0 otherwise; warnings never fail. |
 | `make-icons.py` | `npm run icons` | Renders the PWA icons from `assets/cover.png` (Python + Pillow). |
-| `apply-llm-batch.ts` | — | Validates and merges the LLM batches `data/llm/batch-*.json` (`--check <file>`, `--apply <file|all>`); `--apply all` also applies the review layer. |
+| `apply-llm-batch.ts` | — | Validates and merges the LLM batches `data/llm/batch-*.json` (`--check <file>`, `--apply <file|all>`); `--apply all` also applies the review layer and then the recipe labels (`apply-meta.ts`). |
 | `apply-review.ts` | — | The human review layer `data/review/lines.json` (`readReview`, `checkReview`, `applyReview`); used by `migrate` and `apply-llm-batch --apply all`, no CLI of its own. |
+| `apply-meta.ts` | — | The hand-kept recipe labels of the classics `data/review/meta.json` (`category`, `goesWith`, `cuisine`; `readMeta`, `checkMeta`, `applyMeta`); used by `migrate` (after the review layer, before the derived diet tags) and `apply-llm-batch --apply all`, no CLI of its own (tested in `tests/apply-meta.test.ts`). |
 | `apply-flag-slices.ts` | — | Validates and merges the lactose slices `data/work/lactose/slice-NN-*.json` into `data/ingredients.json` (`--check`: covered / missing / double per slice, exit 1 on errors; `--apply`: writes `lactose` (+ `lactoseUnsure`) right after `gluten`, file style unchanged). Exports `readSlices`, `checkSlices`, `applySlices` (tested in `tests/apply-flag-slices.test.ts`). |
 | `gen-golden.ts` | — | Regenerates `tests/parser.golden.json` (every unique corpus line parsed + rendered NL/EN). |
 

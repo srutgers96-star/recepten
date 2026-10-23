@@ -1,10 +1,10 @@
 // tools/validate-data.ts — data guard for CI and for the local dev loop.
 //
 // Validates the schema-1 source corpus (data/source/recipes-recepten2.json), the dictionary files
-// (data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json, docs/phase-2-spec.md §1),
-// the generated schema-2 file data/recipes.json (tools/migrate-from-recepten2.ts, §2 + §4:
-// dictionary references, `name.en` and every `steps[].text.en` when `text.en` is set, categories,
-// tags, units and qualifiers), the badge list data/badges.json (docs/phase-5-spec.md "Block C") and
+// (data/{units,qualifiers,prep-phrases,ingredients,aisles,categories,cuisines}.json, docs/phase-2-spec.md §1,
+// cuisines: docs/specs/labels-categorieen.md §2c), the generated schema-2 file data/recipes.json
+// (tools/migrate-from-recepten2.ts, §2 + §4: dictionary references, `name.en` and every
+// `steps[].text.en` when `text.en` is set, categories, cuisines, tags, units and qualifiers), the badge list data/badges.json (docs/phase-5-spec.md "Block C") and
 // the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2).
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
@@ -72,6 +72,8 @@ export interface DictionaryRefs {
   units: ReadonlySet<string>;
   qualifiers: ReadonlySet<string>;
   categories: ReadonlySet<string>;
+  /** data/cuisines.json ids (docs/specs/labels-categorieen.md §2c); empty when the data has none. */
+  cuisines: ReadonlySet<string>;
   aisles: ReadonlySet<string>;
   tags: ReadonlySet<string>;
 }
@@ -82,6 +84,7 @@ export function refsFromData(data: DictionaryData): DictionaryRefs {
     units: new Set(data.units.map((u) => u.id)),
     qualifiers: new Set(data.qualifiers.map((q) => q.id)),
     categories: new Set(data.categories.map((c) => c.id)),
+    cuisines: new Set((data.cuisines ?? []).map((c) => c.id)),
     aisles: new Set(data.aisles.map((a) => a.id)),
     tags: new Set(RECIPE_TAGS),
   };
@@ -179,7 +182,8 @@ export function validateSource(data: unknown): ValidationResult {
 // Phase-2 rules (docs/phase-2-spec.md §2 + §4), errors: the structured line fields have the right
 // shape (qty {min, max?, approx?} | null, unit/ing/qual ids, part, prep/note texts, packSize, alt[]
 // lines, altMode, optional, role, confidence 0-1); with `refs` every unit, ingredient (also in
-// alt[]), qualifier and category id exists and tags are a subset of RECIPE_TAGS; when `text.en` is
+// alt[]), qualifier, category and cuisine id exists and tags are a subset of RECIPE_TAGS; `cuisine`
+// is absent, null or a cuisine id (docs/specs/labels-categorieen.md §2c); when `text.en` is
 // 'llm' or 'human' the recipe has `name.en` and every step has `text.en` (equal step counts per
 // language). Warnings: unresolved lines (ing null) as one count, a Dutch servingTip without English.
 
@@ -352,6 +356,12 @@ export function validateSchema2(data: unknown, refs?: DictionaryRefs): Validatio
       if (typeof category !== 'string' || category === '') errors.push(`${label}: "category" must be null or a category id.`);
       else if (refs && !refs.categories.has(category)) errors.push(`${label}: category ${JSON.stringify(category)} does not exist.`);
     }
+    // docs/specs/labels-categorieen.md §2c: ONE cuisine id (data/cuisines.json) or null/absent = none.
+    const cuisine = recipe['cuisine'];
+    if (cuisine !== undefined && cuisine !== null) {
+      if (typeof cuisine !== 'string' || cuisine === '') errors.push(`${label}: "cuisine" must be null or a cuisine id.`);
+      else if (refs && !refs.cuisines.has(cuisine)) errors.push(`${label}: cuisine ${JSON.stringify(cuisine)} does not exist.`);
+    }
     const time = recipe['time'];
     if (time !== undefined && time !== null) {
       if (!isRecord(time)) errors.push(`${label}: "time" must be null or { active?, total? }.`);
@@ -444,7 +454,7 @@ export function validateSchema2(data: unknown, refs?: DictionaryRefs): Validatio
 }
 
 // ---------------------------------------------------------------------------
-// Dictionary: data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json (spec §1)
+// Dictionary: data/{units,qualifiers,prep-phrases,ingredients,aisles,categories,cuisines}.json (spec §1)
 // ---------------------------------------------------------------------------
 //
 // Errors: unique slug ids per file, required names, unit groups / qualifier kinds known, `{n}`
@@ -452,7 +462,8 @@ export function validateSchema2(data: unknown, refs?: DictionaryRefs): Validatio
 // staple/veg booleans, vegan/gluten/lactose booleans on every entry once any entry has them
 // (phase 5; lactose: docs/specs/labels-categorieen.md §2a), `…Unsure` only next to a `false` flag,
 // no vegan entry with lactose (or unsure about it), a Dutch name or alias claimed by two
-// ingredients (the parser could only pick one). Warnings:
+// ingredients (the parser could only pick one), cuisines (when present) with the category checks
+// plus a non-empty `flag` (docs/specs/labels-categorieen.md §2c). Warnings:
 // an English name claimed twice (English input is best effort), no diet flags at all yet.
 
 function checkIds(items: unknown, file: string, errors: string[]): Record<string, unknown>[] {
@@ -480,7 +491,7 @@ function hasName(v: unknown): boolean {
   return isRecord(v) && typeof v['one'] === 'string' && (v['one'] as string).trim() !== '';
 }
 
-/** Validate the six dictionary files together. Pure: takes the loaded data, returns errors/warnings. */
+/** Validate the dictionary files together. Pure: takes the loaded data, returns errors/warnings. */
 export function validateDictionary(data: DictionaryData): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -555,6 +566,14 @@ export function validateDictionary(data: DictionaryData): ValidationResult {
     for (const item of checkIds(items, file, errors)) {
       const label = `${file} ${JSON.stringify(item['id'])}`;
       for (const k of ['nl', 'en']) if (typeof item[k] !== 'string' || (item[k] as string).trim() === '') errors.push(`${label}: "${k}" must be a non-empty string.`);
+      if (typeof item['order'] !== 'number') errors.push(`${label}: "order" must be a number.`);
+    }
+  }
+  // data/cuisines.json (docs/specs/labels-categorieen.md §2c): the category checks plus a flag emoji.
+  if (data.cuisines !== undefined) {
+    for (const item of checkIds(data.cuisines, 'cuisines.json', errors)) {
+      const label = `cuisines.json ${JSON.stringify(item['id'])}`;
+      for (const k of ['nl', 'en', 'flag']) if (typeof item[k] !== 'string' || (item[k] as string).trim() === '') errors.push(`${label}: "${k}" must be a non-empty string.`);
       if (typeof item['order'] !== 'number') errors.push(`${label}: "order" must be a number.`);
     }
   }
@@ -894,9 +913,9 @@ function main(): void {
   const dictData = readDictionaryData(root);
   const dictionary = validateDictionary(dictData);
   print(
-    'data/{units,qualifiers,prep-phrases,note-phrases,ingredients,aisles,categories}.json',
+    'data/{units,qualifiers,prep-phrases,note-phrases,ingredients,aisles,categories,cuisines}.json',
     dictionary,
-    `${dictData.units.length} units, ${dictData.qualifiers.length} qualifiers, ${dictData.prepPhrases.length} prep phrases, ${dictData.notePhrases?.length ?? 0} note phrases, ${dictData.ingredients.length} ingredients`,
+    `${dictData.units.length} units, ${dictData.qualifiers.length} qualifiers, ${dictData.prepPhrases.length} prep phrases, ${dictData.notePhrases?.length ?? 0} note phrases, ${dictData.ingredients.length} ingredients, ${dictData.cuisines?.length ?? 0} cuisines`,
   );
   if (dictionary.errors.length > 0) failed = true;
 

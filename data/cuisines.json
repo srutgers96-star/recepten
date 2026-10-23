@@ -1,0 +1,20 @@
+[
+  { "id": "hollands",      "nl": "Hollands",      "en": "Dutch",          "flag": "🇳🇱", "order": 1 },
+  { "id": "italiaans",     "nl": "Italiaans",     "en": "Italian",        "flag": "🇮🇹", "order": 2 },
+  { "id": "frans",         "nl": "Frans",         "en": "French",         "flag": "🇫🇷", "order": 3 },
+  { "id": "spaans",        "nl": "Spaans",        "en": "Spanish",        "flag": "🇪🇸", "order": 4 },
+  { "id": "portugees",     "nl": "Portugees",     "en": "Portuguese",     "flag": "🇵🇹", "order": 5 },
+  { "id": "grieks",        "nl": "Grieks",        "en": "Greek",          "flag": "🇬🇷", "order": 6 },
+  { "id": "hongaars",      "nl": "Hongaars",      "en": "Hungarian",      "flag": "🇭🇺", "order": 7 },
+  { "id": "brits",         "nl": "Brits",         "en": "British",        "flag": "🇬🇧", "order": 8 },
+  { "id": "midden-oosten", "nl": "Midden-Oosters","en": "Middle Eastern", "flag": "🧆", "order": 9 },
+  { "id": "marokkaans",    "nl": "Marokkaans",    "en": "Moroccan",       "flag": "🇲🇦", "order": 10 },
+  { "id": "indiaas",       "nl": "Indiaas",       "en": "Indian",         "flag": "🇮🇳", "order": 11 },
+  { "id": "thais",         "nl": "Thais",         "en": "Thai",           "flag": "🇹🇭", "order": 12 },
+  { "id": "chinees",       "nl": "Chinees",       "en": "Chinese",        "flag": "🇨🇳", "order": 13 },
+  { "id": "japans",        "nl": "Japans",        "en": "Japanese",       "flag": "🇯🇵", "order": 14 },
+  { "id": "indonesisch",   "nl": "Indonesisch",   "en": "Indonesian",     "flag": "🇮🇩", "order": 15 },
+  { "id": "surinaams",     "nl": "Surinaams",     "en": "Surinamese",     "flag": "🇸🇷", "order": 16 },
+  { "id": "mexicaans",     "nl": "Mexicaans",     "en": "Mexican",        "flag": "🇲🇽", "order": 17 },
+  { "id": "amerikaans",    "nl": "Amerikaans",    "en": "American",       "flag": "🇺🇸", "order": 18 }
+]

@@ -848,6 +848,14 @@ button.lc-chip:disabled {
   color: #fff;
 }
 
+/* 6B blok 3 (docs/specs/labels-categorieen.md §1e): the "Keuken" row — "geen" + the 18 cuisines,
+   one at a time; the chosen chip is green (DEVICE-TEST 76/79). */
+.meta-cuisine-chips .meta-chip.on {
+  background: var(--rosemary);
+  color: #fff;
+  border-color: transparent;
+}
+
 .meta-chip.maybe {
   border-style: dashed;
   border-color: var(--rosemary);

@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "dataVersion": 5,
-  "generatedAt": "2026-10-23T18:37:57.823Z",
+  "dataVersion": 6,
+  "generatedAt": "2026-10-23T19:14:27.666Z",
   "recipes": [
     {
       "schema": 2,
@@ -821,6 +821,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "hartige-taart",
+      "cuisine": "spaans",
       "text": {
         "en": "llm"
       },
@@ -1206,6 +1207,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -1571,6 +1573,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -1876,6 +1879,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -2061,6 +2065,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "overig",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -2704,6 +2709,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -2872,6 +2878,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "chinees",
       "text": {
         "en": "llm"
       },
@@ -3095,6 +3102,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -3490,6 +3498,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -3688,6 +3697,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "rijst",
+      "cuisine": "marokkaans",
       "text": {
         "en": "llm"
       },
@@ -3851,6 +3861,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "rijst",
+      "cuisine": "marokkaans",
       "text": {
         "en": "llm"
       },
@@ -4422,6 +4433,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "overig",
+      "cuisine": "indiaas",
       "text": {
         "en": "llm"
       },
@@ -4838,6 +4850,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "soep",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -5085,6 +5098,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -6241,6 +6255,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -6953,6 +6968,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "salade",
+      "cuisine": "indonesisch",
       "text": {
         "en": "llm"
       },
@@ -7419,6 +7435,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "rijst",
+      "cuisine": "chinees",
       "text": {
         "en": "llm"
       },
@@ -8710,6 +8727,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -10500,6 +10518,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -10855,6 +10874,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "soep",
+      "cuisine": "hongaars",
       "text": {
         "en": "llm"
       },
@@ -11071,6 +11091,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "salade",
+      "cuisine": "grieks",
       "text": {
         "en": "llm"
       },
@@ -11281,6 +11302,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "wok-noedels",
+      "cuisine": "thais",
       "text": {
         "en": "llm"
       },
@@ -12024,6 +12046,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "amerikaans",
       "text": {
         "en": "llm"
       },
@@ -12229,6 +12252,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -12492,6 +12516,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "hongaars",
       "text": {
         "en": "llm"
       },
@@ -12698,6 +12723,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "oven",
+      "cuisine": "spaans",
       "text": {
         "en": "llm"
       },
@@ -12911,6 +12937,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -13078,6 +13105,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -13385,6 +13413,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -14444,6 +14473,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "hartige-taart",
+      "cuisine": "brits",
       "text": {
         "en": "llm"
       },
@@ -17362,6 +17392,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -17589,6 +17620,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -17782,6 +17814,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -20833,6 +20866,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "oven",
+      "cuisine": "mexicaans",
       "text": {
         "en": "llm"
       },
@@ -21155,6 +21189,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "oven",
+      "cuisine": "mexicaans",
       "text": {
         "en": "llm"
       },
@@ -21836,6 +21871,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "oven",
+      "cuisine": "grieks",
       "text": {
         "en": "llm"
       },
@@ -22071,6 +22107,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "soep",
+      "cuisine": "indiaas",
       "text": {
         "en": "llm"
       },
@@ -22234,6 +22271,7 @@
       ],
       "aliases": [],
       "category": "overig",
+      "cuisine": "indiaas",
       "text": {
         "en": "llm"
       },
@@ -22366,6 +22404,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "rijst",
+      "cuisine": "indonesisch",
       "text": {
         "en": "llm"
       },
@@ -23222,6 +23261,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -23342,6 +23382,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -23493,6 +23534,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "spaans",
       "text": {
         "en": "llm"
       },
@@ -24700,6 +24742,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -24964,6 +25007,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -25775,6 +25819,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vis",
+      "cuisine": "portugees",
       "text": {
         "en": "llm"
       },
@@ -25971,6 +26016,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "hartige-taart",
+      "cuisine": "frans",
       "text": {
         "en": "llm"
       },
@@ -26428,6 +26474,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "overig",
+      "cuisine": "frans",
       "text": {
         "en": "llm"
       },
@@ -26733,6 +26780,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "indonesisch",
       "text": {
         "en": "llm"
       },
@@ -26974,6 +27022,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -27162,6 +27211,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -28125,6 +28175,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "rijst",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -28299,6 +28350,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -31942,6 +31994,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "rijst",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -32171,6 +32224,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "salade",
+      "cuisine": "frans",
       "text": {
         "en": "llm"
       },
@@ -32564,6 +32618,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "overig",
+      "cuisine": "indonesisch",
       "text": {
         "en": "llm"
       },
@@ -33360,6 +33415,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "spaans",
       "text": {
         "en": "llm"
       },
@@ -33541,6 +33597,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "overig",
+      "cuisine": "spaans",
       "text": {
         "en": "llm"
       },
@@ -33757,6 +33814,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "overig",
+      "cuisine": "spaans",
       "text": {
         "en": "llm"
       },
@@ -33968,6 +34026,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -34248,6 +34307,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -34525,6 +34585,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -34699,6 +34760,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -35991,6 +36053,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -36692,6 +36755,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "overig",
+      "cuisine": "mexicaans",
       "text": {
         "en": "llm"
       },
@@ -36828,6 +36892,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -37018,6 +37083,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -38265,6 +38331,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "pasta",
+      "cuisine": "italiaans",
       "text": {
         "en": "llm"
       },
@@ -39250,6 +39317,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "wok-noedels",
+      "cuisine": "japans",
       "text": {
         "en": "llm"
       },
@@ -39657,6 +39725,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "stamppot",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -40407,6 +40476,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "oven",
+      "cuisine": "hollands",
       "text": {
         "en": "llm"
       },
@@ -41229,6 +41299,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vis",
+      "cuisine": "japans",
       "text": {
         "en": "llm"
       },

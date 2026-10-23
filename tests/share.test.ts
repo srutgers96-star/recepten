@@ -173,6 +173,28 @@ describe('parseEnvelope', () => {
     expect(parsed.dict.ing.map((i) => i.id)).toEqual(['bergkaas', 'pesto-huis']);
   });
 
+  // docs/specs/labels-categorieen.md §2f + §6a: `cuisine` rides along as an ordinary recipe key in
+  // #r= / #b= (and as a patch key in #p=); the share token contract (v 2, `#r=`) is unchanged.
+  it('round-trips cuisine and the lactosevrij tag in #r=, #b= and #p=', async () => {
+    const r = recipe({ cuisine: 'italiaans', category: 'pasta', tags: ['snel', 'lactosevrij'] });
+    const parsed = parseEnvelope(await decodeToken(await encodeToken(buildRecipeEnvelope(r, { by: 'Stijn', userIngredients: [] }))));
+    expect(parsed.kind).toBe('recipe');
+    expect(parsed.recipes[0]?.cuisine).toBe('italiaans');
+    expect(parsed.recipes[0]?.tags).toEqual(['snel', 'lactosevrij']);
+    expect(parsed.recipes[0]).toEqual(r);
+    // "geen keuken" chosen in the editor (null) stays null; a recipe without the key gets none.
+    const none = parseEnvelope(await decodeToken(await encodeToken(buildRecipeEnvelope(recipe({ cuisine: null }), { by: '', userIngredients: [] }))));
+    expect(none.recipes[0]?.cuisine).toBeNull();
+    const absent = parseEnvelope(await decodeToken(await encodeToken(buildRecipeEnvelope(recipe(), { by: '', userIngredients: [] }))));
+    expect(absent.recipes[0]).not.toHaveProperty('cuisine');
+    // In a bundle, and as a patch key on a classic.
+    const bundle = parseEnvelope(await decodeToken(await encodeToken(buildBundleEnvelope({ recipes: [r], patches: [] }, { by: 'Stijn', userIngredients: [] }))));
+    expect(bundle.recipes[0]?.cuisine).toBe('italiaans');
+    const patched: RecipeOverride = { ...OVERRIDE, patch: { ...OVERRIDE.patch, cuisine: 'frans' } };
+    const patch = parseEnvelope(await decodeToken(await encodeToken(buildPatchEnvelope(patched, { by: 'Stijn', userIngredients: [] }))));
+    expect((patch.patches[0]?.patch as Record<string, unknown> | undefined)?.['cuisine']).toBe('frans');
+  });
+
   it('round-trips a patch envelope', async () => {
     const env = buildPatchEnvelope(OVERRIDE, { by: 'Stijn', userIngredients: [], lineOverrides: LINE_OVERRIDES, name: { nl: 'Uiensoep' } });
     const parsed = parseEnvelope(await decodeToken(await encodeToken(env)));

@@ -28,6 +28,8 @@
 // + `pendingImportKind`) is filled in on arrival. An AI answer's "Categorie:" / "Labels:" lines
 // fill the chips for real (`metaManual`, also when the AI put them after the method); a website
 // paste without them leaves the live suggestion at work.
+// 6B blok 3 (docs/specs/labels-categorieen.md §1b, §1e): the meta rows carry a cuisine too
+// (`Recipe.cuisine`); an AI answer's "Keuken:" / "Cuisine:" line fills it, nothing ever guesses one.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
@@ -48,7 +50,7 @@ import { applyLineOverrides, type RecipeOverride, type RecipePatch } from '@/dom
 import { parseLineAuto } from '@/domain/parser';
 import { classifyPaste } from '@/domain/paste-classify';
 import { detectRecipeLang, parseWebsiteRecipe, type WebsiteRecipe } from '@/domain/paste-recipe';
-import { buildImportPrompt, categoryIdFromWord, parseBilingualPlain, tagIdsFromText, type PlainRecipe } from '@/domain/photo-import';
+import { buildImportPrompt, categoryIdFromWord, cuisineIdFromWord, parseBilingualPlain, tagIdsFromText, type PlainRecipe } from '@/domain/photo-import';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { splitSteps } from '@/domain/steps';
 import { answeredSteps, applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation, type TranslatableLine } from '@/domain/translate-prompt';
@@ -203,7 +205,7 @@ function sameTags(a: readonly string[], b: readonly string[]): boolean {
 
 /**
  * The override patch for a builtin: the previous patch with name / servingTip / lines / steps /
- * category / tags set when they differ from the shipped recipe and removed when they are equal
+ * category / cuisine / tags set when they differ from the shipped recipe and removed when they are equal
  * again (repo.saveOverride replaces the stored patch, and an empty patch removes the override).
  * When the English text of a machine-translated classic (`text.en === 'llm'`) was changed, the
  * patch also marks it `text.en = 'human'` (with the reviewer's name), which turns the "Machine
@@ -212,13 +214,16 @@ function sameTags(a: readonly string[], b: readonly string[]): boolean {
  */
 export function buildOverridePatch(draft: Recipe, base: Recipe, prev: RecipePatch | undefined, by?: string | null): RecipePatch {
   const patch: RecipePatch = { ...(prev ?? {}) };
-  const put = (k: 'name' | 'servingTip' | 'lines' | 'steps' | 'text' | 'category' | 'tags' | 'metaManual', changed: boolean, v: unknown) => {
+  const put = (k: 'name' | 'servingTip' | 'lines' | 'steps' | 'text' | 'category' | 'cuisine' | 'tags' | 'metaManual', changed: boolean, v: unknown) => {
     if (changed) (patch as Record<string, unknown>)[k] = v;
     else delete patch[k];
   };
   put('name', textKey(draft.name) !== textKey(base.name), draft.name);
   put('servingTip', textKey(draft.servingTip) !== textKey(base.servingTip), draft.servingTip ?? null);
   put('category', (draft.category ?? null) !== (base.category ?? null), draft.category ?? null);
+  // 6B blok 3: the cuisine chosen in the Keuken row rides along as a patch key (like metaManual,
+  // `applyOverride` copies an unknown key onto the recipe).
+  put('cuisine', (draft.cuisine ?? null) !== (base.cuisine ?? null), draft.cuisine ?? null);
   put('tags', !sameTags(draft.tags, base.tags), draft.tags);
   put('metaManual', draft.metaManual === true, true);
   const stepsChanged = draft.steps.length !== base.steps.length || draft.steps.some((s, i) => textKey(s.text) !== textKey(base.steps[i]?.text));
@@ -232,21 +237,22 @@ export function buildOverridePatch(draft: Recipe, base: Recipe, prev: RecipePatc
   return patch;
 }
 
-// --- "Categorie:" / "Labels:" that ended up among the steps ----------------------------------------
+// --- "Categorie:" / "Keuken:" / "Labels:" that ended up among the steps ----------------------------
 
-/** A "Categorie: pasta" / "Labels: vegetarisch, snel" (nl/en) at the start of a text. */
-const META_LINE_RE = /^\s*\**\s*(categorie|category|soort|type|labels?|tags?|dieet|diet|kenmerken)\s*\**\s*:\s*\**\s*(.*?)\s*\**\s*$/iu;
-/** Where a second meta line starts inside the same paragraph ("Categorie: pasta Labels: snel"). */
-const META_SPLIT_RE = /\s+(?=(?:categorie|category|soort|type|labels?|tags?|dieet|diet|kenmerken)\s*\**\s*:)/iu;
+/** A "Categorie: pasta" / "Keuken: italiaans" / "Labels: vegetarisch, snel" (nl/en) at the start of a text. */
+const META_LINE_RE = /^\s*\**\s*(categorie|category|soort|type|keuken|cuisine|labels?|tags?|dieet|diet|kenmerken)\s*\**\s*:\s*\**\s*(.*?)\s*\**\s*$/iu;
+/** Where a second meta line starts inside the same paragraph ("Categorie: pasta Keuken: italiaans Labels: snel"). */
+const META_SPLIT_RE = /\s+(?=(?:categorie|category|soort|type|keuken|cuisine|labels?|tags?|dieet|diet|kenmerken)\s*\**\s*:)/iu;
 
 /**
- * 6A.9: `parsePlainRecipe` only reads the "Categorie:" / "Labels:" lines outside the method; an
+ * 6A.9: `parsePlainRecipe` only reads the "Categorie:" / "Keuken:" / "Labels:" lines outside the method; an
  * assistant that writes them after the steps turns them into a last "step". Lift them out of the
  * steps here so the chips get filled all the same. The first value per kind wins, as in the parser.
  */
 export function liftMetaFromSteps(block: PlainRecipe | undefined): PlainRecipe | undefined {
   if (!block) return block;
   let category = block.category;
+  let cuisine = block.cuisine;
   let tags = block.tags;
   let changed = false;
   const steps: string[] = [];
@@ -264,6 +270,8 @@ export function liftMetaFromSteps(block: PlainRecipe | undefined): PlainRecipe |
       const value = m[2] as string;
       if (/^(categorie|category|soort|type)$/.test(key)) {
         if (category === undefined) category = categoryIdFromWord(value);
+      } else if (/^(keuken|cuisine)$/.test(key)) {
+        if (cuisine === undefined) cuisine = cuisineIdFromWord(value);
       } else if (tags === undefined) tags = tagIdsFromText(value);
     }
   }
@@ -271,6 +279,8 @@ export function liftMetaFromSteps(block: PlainRecipe | undefined): PlainRecipe |
   const out: PlainRecipe = { ...block, steps };
   if (category !== undefined) out.category = category;
   else delete out.category;
+  if (cuisine !== undefined) out.cuisine = cuisine;
+  else delete out.cuisine;
   if (tags !== undefined) out.tags = tags;
   else delete out.tags;
   return out;
@@ -305,9 +315,10 @@ export function EditScreen(props: { id?: string }) {
   const [servingsText, setServingsText] = useState('4');
   const [lines, setLines] = useState<EditText[]>([]);
   const [steps, setSteps] = useState<EditText[]>([]);
-  // Category + diet/labels (phase-5 A.4). `metaManual`: the person chose them (or an import
-  // supplied them); until then a NEW recipe follows the live suggestion. Stored on the recipe.
-  const [meta, setMeta] = useState<MetaValue>({ category: null, tags: [] });
+  // Category + cuisine + diet/labels (phase-5 A.4, 6B blok 3). `metaManual`: the person chose them
+  // (or an import supplied them); until then a NEW recipe follows the live suggestion (which never
+  // names a cuisine). Stored on the recipe.
+  const [meta, setMeta] = useState<MetaValue>({ category: null, cuisine: null, tags: [] });
   const [metaManual, setMetaManual] = useState(false);
   const [pasteOpen, setPasteOpen] = useState(false);
   const [pasteText, setPasteText] = useState('');
@@ -404,7 +415,7 @@ export function EditScreen(props: { id?: string }) {
       setServingsText('4');
       setLines([newEditText(), newEditText(), newEditText()]);
       setSteps([newEditText()]);
-      setMeta({ category: null, tags: [] });
+      setMeta({ category: null, cuisine: null, tags: [] });
       setMetaManual(false);
       // Text from "Kies een bestand" (A-bis.9) or from another paste box (13A): a recognised
       // website recipe / AI answer is filled in once the form is ready, anything else waits in
@@ -466,7 +477,7 @@ export function EditScreen(props: { id?: string }) {
       setServingsText(String(r.servings || 4));
       setLines(rowsOf(r.lines, (x) => x.raw, lineSrc.current));
       setSteps(rowsOf(r.steps, (s) => s.text, stepSrc.current));
-      setMeta({ category: r.category ?? null, tags: [...r.tags] });
+      setMeta({ category: r.category ?? null, cuisine: r.cuisine ?? null, tags: [...r.tags] });
       setMetaManual(r.metaManual === true);
       setState('ready');
     });
@@ -558,17 +569,18 @@ export function EditScreen(props: { id?: string }) {
   }
 
   /**
-   * Category / labels from an import ("Categorie:" / "Labels:" lines): the first block that has
-   * them wins (nl before en). Counts as a manual choice; the suggestion hint still offers the
-   * ingredient facts. A `Labels:` line whose words were all unknown parses to `[]`
+   * Category / cuisine / labels from an import ("Categorie:" / "Keuken:" / "Labels:" lines): the
+   * first block that has them wins (nl before en). Counts as a manual choice; the suggestion hint
+   * still offers the ingredient facts. A `Labels:` line whose words were all unknown parses to `[]`
    * (photo-import.ts `tagIdsFromText`) and counts as "no labels line": it must not wipe the live
    * diet suggestion of a new recipe. Returns true when anything was actually taken over.
    */
   function importMeta(blocks: (PlainRecipe | undefined)[]): boolean {
     const category = blocks.find((b) => b?.category !== undefined)?.category;
+    const cuisine = blocks.find((b) => b?.cuisine !== undefined)?.cuisine;
     const tags = blocks.find((b) => b?.tags !== undefined && b.tags.length > 0)?.tags;
-    if (category === undefined && tags === undefined) return false;
-    setMeta((m) => ({ category: category ?? m.category, tags: tags ? [...new Set(tags)] : m.tags }));
+    if (category === undefined && cuisine === undefined && tags === undefined) return false;
+    setMeta((m) => ({ category: category ?? m.category, cuisine: cuisine ?? m.cuisine, tags: tags ? [...new Set(tags)] : m.tags }));
     setMetaManual(true);
     return true;
   }
@@ -603,6 +615,7 @@ export function EditScreen(props: { id?: string }) {
       servings,
       servingTip: tip.nl || tip.en ? tip : null,
       category: meta.category,
+      cuisine: meta.cuisine,
       tags: [...meta.tags],
       lines: lines.filter(rowHasText).map((x) => lineFor(x)),
       steps: steps.filter(rowHasText).map((x) => {

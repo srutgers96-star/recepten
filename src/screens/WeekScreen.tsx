@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
-import { EMPTY_PICK_FILTER, PickChips, PickSheet, applyPickFilter, pickFilterActive, tagIdsIn, type PickFilter } from '@/components/PickSheet';
+import { EMPTY_PICK_FILTER, PickChips, PickSheet, applyPickFilter, cuisineIdsIn, pickFilterActive, tagIdsIn, type PickFilter } from '@/components/PickSheet';
 import { otherLanguageName } from '@/components/RecipeRow';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
@@ -280,7 +280,7 @@ export function WeekScreen() {
                 <span aria-hidden="true">🎲</span> {t('week.surprise')}
               </button>
             </div>
-            <PickChips filter={filter} onChange={setFilter} tags={tags} />
+            <PickChips filter={filter} onChange={setFilter} tags={tags} cuisines={cuisineIdsIn(all ?? [])} />
             {filtering && <p class="muted small week-filter-note">{t('week.filterOn', { n: pool.length })}</p>}
           </section>
         )}
@@ -371,7 +371,7 @@ export function WeekScreen() {
 
             <section class="section week-filter">
               <h2>{t('week.filterEdit')}</h2>
-              <PickChips filter={filter} onChange={setFilter} tags={tags} />
+              <PickChips filter={filter} onChange={setFilter} tags={tags} cuisines={cuisineIdsIn(all ?? [])} />
               <p class="muted small week-filter-note">{filtering ? t('week.filterOn', { n: pool.length }) : t('pick.sortHint')}</p>
             </section>
 

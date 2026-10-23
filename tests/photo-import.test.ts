@@ -2,10 +2,13 @@
 // 6A.14, 6A.16, 13C): the code-block prompt with the ingredient-line rules, and the repair of a
 // copied answer (`normalizePastedAnswer`) with Stijn's two broken copies of 13 October as test cases.
 import { describe, expect, it } from 'vitest';
+import cuisinesJson from '../data/cuisines.json';
 import {
   buildImportPrompt,
   categoryIdFromWord,
   cleanPastedText,
+  cuisineIdFromWord,
+  IMPORT_CUISINE_IDS,
   LINE_RULES,
   normalizePastedAnswer,
   parseBilingualPlain,
@@ -461,5 +464,83 @@ describe('lactosevrij in the tag vocabulary (6B blok 2)', () => {
       }
     }
     expect(buildImportPrompt('nl')).toContain('glutenvrij-optie, lactosevrij, lactosevrij-optie');
+  });
+});
+
+// docs/specs/labels-categorieen.md §1b, §3 blok 3 (bouwer A) and §6a: the "Keuken:" / "Cuisine:" line.
+describe('cuisines in the import (6B blok 3)', () => {
+  it('maps cuisine words to data/cuisines.json ids (contract of §3)', () => {
+    expect(cuisineIdFromWord('Italian')).toBe('italiaans');
+    expect(cuisineIdFromWord('Hollands')).toBe('hollands');
+    for (const w of ['italiaans', 'Italiaans', 'italiaanse', 'Italian', 'Italië', 'italie', 'Italy', 'ITALIAN']) expect(cuisineIdFromWord(w)).toBe('italiaans');
+    for (const w of ['Dutch', 'hollands', 'Hollandse', 'Nederlands', 'nederlandse', 'Holland', 'Nederland']) expect(cuisineIdFromWord(w)).toBe('hollands');
+    expect(cuisineIdFromWord('Middle Eastern')).toBe('midden-oosten');
+    expect(cuisineIdFromWord('midden-oosten')).toBe('midden-oosten');
+    expect(cuisineIdFromWord('Midden-Oosters')).toBe('midden-oosten');
+    expect(cuisineIdFromWord('Surinamese')).toBe('surinaams');
+    expect(cuisineIdFromWord('Italiaanse keuken')).toBe('italiaans');
+    expect(cuisineIdFromWord('Italian (Sicilian)')).toBe('italiaans');
+    // Unknown, empty or a cuisine that is not in the list: undefined, never a guess.
+    for (const w of ['Zuid-Afrikaans', 'Russisch', 'Noors', 'geen', 'none', '-', '', 'pasta', 'indisch']) expect(cuisineIdFromWord(w)).toBeUndefined();
+  });
+
+  it('knows every cuisine by its id, Dutch and English name, in the data order', () => {
+    const cuisines = cuisinesJson as { id: string; nl: string; en: string; order: number }[];
+    expect(IMPORT_CUISINE_IDS).toEqual([...cuisines].sort((a, b) => a.order - b.order).map((c) => c.id));
+    for (const c of cuisines) {
+      expect(cuisineIdFromWord(c.id)).toBe(c.id);
+      expect(cuisineIdFromWord(c.nl)).toBe(c.id);
+      expect(cuisineIdFromWord(c.en)).toBe(c.id);
+    }
+  });
+
+  it('reads a Keuken:/Cuisine: line into cuisine; no line or an unknown word gives no key', () => {
+    const nl = parsePlainRecipe('# Lasagne\nPorties: 4\nCategorie: pasta\nKeuken: italiaans\nLabels: oven\n## Ingrediënten\n1 pak lasagnebladen\n## Bereiding\nBak.');
+    expect(nl).toEqual({ name: 'Lasagne', servings: 4, category: 'pasta', cuisine: 'italiaans', tags: ['oven'], lines: ['1 pak lasagnebladen'], steps: ['Bak.'] });
+    const en = parsePlainRecipe('# Lasagne\n**Cuisine:** Italian\n## Ingredients\n1 pack lasagne sheets\n## Method\nBake.');
+    expect(en?.cuisine).toBe('italiaans');
+    expect(en?.name).toBe('Lasagne');
+    const unknown = parsePlainRecipe('# Bobotie\nKeuken: Zuid-Afrikaans\n## Ingrediënten\n500 g gehakt\n## Bereiding\nBak.');
+    expect(unknown).not.toHaveProperty('cuisine');
+    expect(unknown?.lines).toEqual(['500 g gehakt']);
+    // Website text without the line: no cuisine is guessed, also not from an "Italiaanse" name.
+    const plain = parsePlainRecipe('Italiaanse gehaktballetjes\nIngrediënten:\n500 g gehakt\nBereiding:\nDraai balletjes.');
+    expect(plain).not.toHaveProperty('cuisine');
+    // A Keuken: line inside the method stays a step.
+    const inSteps = parsePlainRecipe('# X\n## Ingrediënten\n1 ei\n## Bereiding\nKeuken: dit is een stap.');
+    expect(inSteps).not.toHaveProperty('cuisine');
+  });
+
+  it('parseBilingualPlain carries the cuisine per block', () => {
+    const r = parseBilingualPlain(`=== NL ===\n# Lasagne\nCategorie: pasta\nKeuken: italiaans\n## Ingrediënten\n1 ui\n## Bereiding\nBak.\n=== EN ===\n# Lasagne\nCategory: pasta\nCuisine: Italian\n## Ingredients\n1 onion\n## Method\nBake.`);
+    expect(r.mismatch).toBeUndefined();
+    expect(r.nl?.cuisine).toBe('italiaans');
+    expect(r.en?.cuisine).toBe('italiaans');
+    expect(r.nl?.category).toBe('pasta');
+    // Collapsed onto one line ("Porties: 4 Categorie: pasta Keuken: italiaans Labels: snel"): split again.
+    const collapsed = parseBilingualPlain('=== NL === # Pasta Porties: 4 Categorie: pasta Keuken: italiaans Labels: snel ## Ingrediënten - 1 ui ## Bereiding 1. Kook. === EN === # Pasta Servings: 4 Category: pasta Cuisine: Italian Tags: quick ## Ingredients - 1 onion ## Method 1. Boil.');
+    expect(collapsed.nl?.cuisine).toBe('italiaans');
+    expect(collapsed.nl?.tags).toEqual(['snel']);
+    expect(collapsed.en?.cuisine).toBe('italiaans');
+    expect(collapsed.en?.tags).toEqual(['snel']);
+    expect(collapsed.nl?.servings).toBe(4);
+  });
+
+  it('the import prompt asks for the Keuken:/Cuisine: line with the 18 ids and the honesty rule', () => {
+    for (const bilingual of [true, false]) {
+      const nl = buildImportPrompt('nl', { bilingual });
+      expect(nl).toContain('Categorie: pasta\nKeuken: italiaans\n');
+      expect(nl).toContain(
+        '"Keuken:" is één van: hollands, italiaans, frans, spaans, portugees, grieks, hongaars, brits, midden-oosten, marokkaans, indiaas, thais, chinees, japans, indonesisch, surinaams, mexicaans, amerikaans — alleen als het gerecht echt uit die keuken komt, anders de regel weglaten',
+      );
+      expect(nl).toContain('lactosevrij');
+      const en = buildImportPrompt('en', { bilingual });
+      expect(en).toContain('Category: pasta\nCuisine: italian\n');
+      expect(en).toContain('"Cuisine:" is one of: hollands, italiaans, frans');
+      expect(en).toContain('— only when the dish really comes from that cuisine, otherwise leave the line out');
+    }
+    // The bilingual prompt shows both example blocks.
+    expect(buildImportPrompt('nl')).toContain('Keuken: italiaans');
+    expect(buildImportPrompt('nl')).toContain('Cuisine: italian');
   });
 });

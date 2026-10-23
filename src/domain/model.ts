@@ -107,6 +107,10 @@ export interface Recipe {
   name: Text;
   description?: Text | null;
   category?: string | null;
+  /** data/cuisines.json id (docs/phase-6-spec.md 6B.2): ONE cuisine, only when the dish really comes
+   *  from it; null/absent = none (the 'wereld' tag stays the loose label). Travels in share tokens like
+   *  any other key. */
+  cuisine?: string | null;
   tags: string[];
   /** Classics: 4. */
   servings: number;

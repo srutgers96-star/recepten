@@ -4,6 +4,89 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 23 okt (Opus): 6B blok 3 — keukens
+**Besluit Fable (23 okt) over de restpunten:** de keuken van een klassieker gaat in de aanpassingslaag (override-patch), zoals de categorie — akkoord; rij 76 herschreven naar het Home A+-scherm — akkoord; `inbox.field.metaHint` noemt nu ook "keuken" / "cuisine"; een wijziging van alleen de keuken (of alleen categorie/labels) telt bij ontvangst niet als nieuwe versie — dat blijft zo (de vingerafdruk is bevroren, README §5 punt 8; de keuken komt mee met de eerstvolgende inhoudelijke wijziging); de fixer raakte src/domain/merge.ts en tests/merge.test.ts buiten de blokverdeling, terecht (keuken reist mee in 'meta'). Voor de eindcontrole: het doc-commentaar bij `mergeRecipeFields` belooft dat onbekende sleutels van de ander met 'meta' meekomen, de code kopieert alleen de genoemde velden. Review: 3 bevindingen bevestigd en verwerkt; gate groen (963 tests). Uitrol: direct naar `main`.
+Gebouwd volgens docs/specs/labels-categorieen.md §1b, §2c, §2e en §3 blok 3 (bouwer A data + domein + tools,
+bouwer B UI, integrator). Volgens §4 mag het direct naar `main`. Niet gecommit. Wat er nu staat:
+- **Data:** data/cuisines.json bevat precies de 18 keukens van §2c (teken voor teken gelijk aan het specblok).
+  data/review/meta.json heeft alleen het deel `cuisine`, met precies de 71 toewijzingen van §2c: italiaans 22,
+  hollands 16, spaans 6, indonesisch 4, frans 3, indiaas 3, mexicaans 3, grieks 2, hongaars 2, marokkaans 2,
+  chinees 2, japans 2 en portugees, brits, thais, amerikaans elk 1. Midden-Oosters en Surinaams hebben er 0. De
+  bewuste nulls (Boeuf Stroganoff, de Nederlands-Italiaanse pasta's …) hebben geen keuken.
+- **Migratie:** het nieuwe tools/apply-meta.ts draait in `migrate()` na `applyReview` en vóór `applyDerivedTags`,
+  en ook in `apply-llm-batch --apply all`. Een onbekend id stopt de migratie. `DATA_VERSION` is 6. recipes.json
+  verschilt alleen in 71 regels `"cuisine"` (direct na `category`), plus `dataVersion`/`generatedAt`.
+- **Woordenboek en validator:** `Dictionary.cuisines` (op volgorde) en `dict.cuisine(id)`. `toData()` en
+  `refsFromData` kennen de keukens, dus ze verdwijnen niet bij eigen ingrediënten. De validator controleert
+  cuisines.json (id, nl, en, vlag, volgorde) en `cuisine` per recept (leeg, null of een bekend id).
+- **Filter:** de rij **Keuken** staat tussen Dieet en de gewone chips op Home (Vanavond-filters), Recepten, beide
+  Week-filters en in het Kies-venster. Je ziet alleen keukens die in de lijst voorkomen, in de volgorde van de data.
+  Meerdere aan = OF, samen met de rest = EN. Het × wist ze mee. Het bewaarde filter krijgt `cuisines` alleen als
+  er een aan staat.
+- **Receptpagina:** naast de categorie staat "🇮🇹 Italiaans" (met een verborgen label "Keuken"). Bij een eigen of
+  ontvangen recept opent een tik de editor; bij een klassieker is het gewone tekst.
+- **Editor en "Controleer mijn recepten":** een rij **Keuken** met "geen" plus de 18 keukens, één tegelijk. Nog
+  een keer tikken zet "geen" terug. Een keuken wordt nooit voorgesteld.
+- **Importprompt:** de voorbeeldblokken hebben `Keuken: italiaans` / `Cuisine: italian`, plus de regel "alleen als
+  het gerecht echt uit die keuken komt". Een geplakt AI-antwoord vult de keukenchip in, met de melding "Categorie,
+  keuken en labels overgenomen uit de tekst." Plakken van websitetekst raadt geen keuken.
+- **Zoeken:** een recept waarvan de keuken op de zoekterm past, komt onder **Categorie**, ook als een ingrediënt
+  ook past. Zo staat Spaghetti Bolognese bij "italiaans" onder Categorie. "pasta" geeft precies dezelfde groepen
+  als voor dit blok (test).
+- **Delen:** `cuisine` reist mee in `#r=`, `#b=` en als patch-sleutel in `#p=` (test). De bevroren tokens zijn
+  niet veranderd.
+
+**Gedraaid:** check, test (959 in 44 bestanden), build, build:next en validate:data zijn groen (0 errors, 18
+cuisines; alleen de bekende warnings). gen-golden is ongewijzigd. Geen nieuwe dependency; Dexie blijft v7.
+
+**Dev-app (375 px, NL en EN, donker; de receptpagina ook licht), §6c 4–6 en het keukendeel van 10 nagelopen:**
+- **Home:** de rij Keuken toont 16 keukens (zonder Midden-Oosters en Surinaams). Met Italiaans aan gaf
+  "🎲 Nog een" zes keer achter elkaar een Italiaans gerecht. Het × wiste alles en haalde het bewaarde filter weg.
+- **Recepten, filter:** Italiaans geeft "22 van 198", Italiaans + Hollands geeft 38.
+- **Recepten, zoeken:** bij "italiaans" en "italian" staan 21 Italiaanse gerechten onder Categorie; het Italiaans
+  gehaktbrood staat onder Op naam. Daarboven staan 33 onder "Met dit ingrediënt". Bij "hollands" en "dutch" staat
+  Hutspot onder Categorie.
+- **Receptpagina:** Spaghetti Bolognese toont "Pasta · 🇮🇹 Italiaans" (EN "🇮🇹 Italian") als tekst. Boeuf
+  Stroganoff toont geen keuken. Hutspot toont in het lichte thema "🇳🇱 Dutch".
+- **Editor:** de rij Keuken heeft 19 chips van 44 px. De prompt bij Met AI bevat `Keuken: italiaans` en de regel.
+  Een geplakt antwoord zet 🇮🇹 Italiaans groen aan en toont de nieuwe melding. Hollands twee keer tikken geeft
+  "geen" terug.
+- **Week:** de rij staat er. Het Kies-venster toont 16 keukens; met Grieks blijven Griekse salade en Moussaka over.
+- Geen consolefouten. Niets bewaard; het Home-filter en de taal van de dev-browser staan weer zoals ze waren.
+
+**Door de integrator gerepareerd:**
+- src/screens/RecipesScreen.tsx: de sprong vanaf de Home-plank (`#/recipes?cat=…`) bouwde een filter zonder
+  `cuisines`. Dat was de enige fout van `npm run check`; nu staat er `cuisines: []`.
+- src/components/TonightCard.tsx: "filters (n)" telde de keukenchips niet mee. Een dichtgeklapt filter met alleen
+  Italiaans heette dus "filters ▾", terwijl er wel gefilterd werd. Nu telt de keuken mee.
+- tools/README.md: een regel voor tools/apply-meta.ts.
+
+DEVICE-TEST rij 76 staat in beide tabellen (NL en EN), met de feitencheck erin verwerkt:
+- Op Home is er geen "Verras me". Stap 1 zegt nu: kaart **Vanavond**, zo nodig eerst **Iets buiten je week ›**,
+  dan **filters ▾** (zoals rij 71). De knop is "🎲 Nog een".
+- Goed 4 noemt het kopje **Categorie**, met daarboven de langere lijst onder "Met dit ingrediënt".
+
+**Open (niet door de spec beslist; vraag voor Stijn of Fable):**
+1. Een keuken die je in de editor bij een **klassieker** kiest, gaat in de override-patch, net als de categorie
+   (`buildOverridePatch`, keuze van bouwer B). Zonder dat zou die keuze bij Bewaar stil verdwijnen. Die sleutel
+   reist mee in `#p=`; een oudere app neemt een onbekende patch-sleutel gewoon over (`applyOverride`).
+2. De synoniemen in `CUISINE_WORDS` zijn gekozen door bouwer A. Engels/English/Engeland/UK worden brits.
+   "Indisch" staat er bewust niet in, omdat het Nederlands-Indonesisch betekent.
+3. De Engelse importprompt noemt de keuken-ids (hollands, italiaans …), zoals hij dat ook bij categorieën en
+   labels doet. De voorbeeldregel is `Cuisine: italian` (§1b).
+4. `matchesCategory` kijkt ook naar de keukennaam, dus "italiaans pasta" vindt Italiaanse pasta's onder Categorie.
+   "pasta" alleen is ongewijzigd.
+5. Al van vóór dit blok: `apply-llm-batch --apply all` draait `applyDerivedTags` niet. Daardoor wijken de tags van
+   84 recepten af van `npm run migrate`; de keukens kloppen wel.
+6. De getallen in §1b/§6c/DT 76 (42 en 48 recepten in de ingrediëntgroep) zijn gemeten vóór dit blok. Nu staan er
+   bij "italiaans" 32 onder het ingrediëntkopje (33 met de eigen recepten in de dev-database), omdat de Italiaanse
+   gerechten naar Categorie zijn verhuisd.
+7. Voor blok 4 klaargezet:
+   - In tests/validate-data.test.ts schakelt het geval `category: 'bijgerecht'` vanzelf om zodra
+     categories.json bijgerecht kent.
+   - Het deel `category`/`goesWith` van meta.json en de bijgerecht-gevallen van tests/apply-meta.test.ts zijn
+     werk van blok 4.
+
 ## 23 okt (Opus): 6B blok 2 — lactosevrij in de app
 **Besluit Fable (23 okt) over de restpunten:** de tooltip `filter.dietOptieHint` wordt algemeen ("Ook recepten die dit als optie aanbieden." / "Also recipes that offer it as an option."), zonder opsomming die bij elk nieuw dieet veroudert; een vegan kopie krijgt voorlopig géén `lactosevrij`-tag (13D leidt de tags van een variant straks uit de regels af, dan komt hij vanzelf); regel H1 geldt in het formulier (Vegan ja ⇒ Lactose nee, vergrendeld) en in de validator, niet in `saveUserIngredient`; de knopvolgorde glutenvrij · vegetarisch · vegan · lactosevrij is definitief (README §2b). Review: 2 bevindingen bevestigd en verwerkt; gate groen (919 tests). Uitrol: direct naar `main`.
 Gebouwd volgens docs/specs/labels-categorieen.md §1a, §2b en §3 blok 2 (bouwer A domein + data, bouwer B UI + i18n,

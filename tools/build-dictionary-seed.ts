@@ -43,11 +43,13 @@ function readJson(path: string): unknown {
 
 /**
  * The dictionary data as the Node tools see it: the six vocab files (incl. note-phrases.json) plus data/ingredients.json
- * when it exists (empty list otherwise). `withIngredients: false` forces the empty list.
+ * when it exists (empty list otherwise) and data/cuisines.json when it exists (empty list otherwise;
+ * docs/specs/labels-categorieen.md §2c). `withIngredients: false` forces the empty ingredient list.
  */
 export function readDictionaryData(root: string, withIngredients = true): DictionaryData {
   const d = (name: string) => join(root, 'data', name);
   const ingredientsPath = d('ingredients.json');
+  const cuisinesPath = d('cuisines.json');
   return {
     units: readJson(d('units.json')) as DictionaryData['units'],
     qualifiers: readJson(d('qualifiers.json')) as DictionaryData['qualifiers'],
@@ -56,6 +58,7 @@ export function readDictionaryData(root: string, withIngredients = true): Dictio
     aisles: readJson(d('aisles.json')) as DictionaryData['aisles'],
     categories: readJson(d('categories.json')) as DictionaryData['categories'],
     notePhrases: readJson(d('note-phrases.json')) as DictionaryData['notePhrases'],
+    cuisines: existsSync(cuisinesPath) ? (readJson(cuisinesPath) as NonNullable<DictionaryData['cuisines']>) : [],
   };
 }
 

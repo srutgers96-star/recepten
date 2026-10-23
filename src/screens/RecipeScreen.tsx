@@ -20,6 +20,9 @@
 // 13K block 2 (docs/specs/kookbalk.md): a ⏱ chip here starts the "Nu aan het koken" session at that
 // step, or moves a session on an earlier step up to it; a chip on an earlier step only keeps the
 // session alive (never back from step 5 to step 2). Deleting an own recipe ends its session.
+// 6B blok 3 (docs/specs/labels-categorieen.md §1b): next to the category a chip "🇮🇹 Italiaans" for
+// the recipe's cuisine (nothing without one); on an own/received recipe it opens the editor, on a
+// classic it is plain text.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { isIOS } from '@/components/AppInfo';
@@ -58,7 +61,7 @@ import {
   toggleFavorite,
   variantsOf,
 } from '@/db/repo';
-import { DIET_ROW_TAGS, OPTIE_TAG, tagChipLabel, tagTextLabel } from '@/components/FilterChips';
+import { DIET_ROW_TAGS, OPTIE_TAG, cuisineLabel, tagChipLabel, tagTextLabel } from '@/components/FilterChips';
 import { dictionary, lineText } from '@/dictionary';
 import { DIET_TAGS, dietTags, type DietTag } from '@/domain/diet';
 import type { Dictionary } from '@/domain/dictionary';
@@ -403,6 +406,8 @@ export function RecipeScreen(props: { id: string }) {
 
   const category = recipe?.category ? dict.category(recipe.category) : undefined;
   const categoryName = category ? category[l] : recipe?.category ?? '';
+  // 6B blok 3: no cuisine (or an id this app does not know) = no chip.
+  const cuisine = recipe?.cuisine ? dict.cuisine(recipe.cuisine) : undefined;
   // Phase 5: diet chips under the title; the generic tag list below leaves those tags out.
   const dietChips = useMemo(() => (recipe ? dietChipsFor(recipe, lines, dict, linesAdjusted) : []), [recipe, lines, dict, linesAdjusted]);
   const otherTags = recipe ? recipe.tags.filter((tag) => !DIET_ROW_TAGS.has(tag)) : [];
@@ -647,6 +652,18 @@ export function RecipeScreen(props: { id: string }) {
               ) : (
                 <>
                   <span class="detail-cat-name">{categoryName || t('recipe.noCategory')}</span>
+                  {cuisine &&
+                    (editable ? (
+                      <button type="button" class="recipe-cuisine" onClick={() => navigate('/edit/' + id)}>
+                        <span class="visually-hidden">{t('recipe.cuisine')}: </span>
+                        {cuisineLabel(cuisine, cuisine.id)}
+                      </button>
+                    ) : (
+                      <span class="recipe-cuisine">
+                        <span class="visually-hidden">{t('recipe.cuisine')}: </span>
+                        {cuisineLabel(cuisine, cuisine.id)}
+                      </span>
+                    ))}
                   <button type="button" class="link-btn" onClick={() => setEditCat(true)}>
                     {t('recipe.changeCategory')}
                   </button>

@@ -30,7 +30,7 @@ import { checkNewBadges } from '@/badges';
 import { AddMenu } from '@/components/AddMenu';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
-import { PickChips, applyPickFilter, loadPickFilter, pickFilterActive, savePickFilter, tagIdsIn, type PickFilter } from '@/components/PickSheet';
+import { PickChips, applyPickFilter, cuisineIdsIn, loadPickFilter, pickFilterActive, savePickFilter, tagIdsIn, type PickFilter } from '@/components/PickSheet';
 import { RecipeRow } from '@/components/RecipeRow';
 import { SelectBar, type MetaChange } from '@/components/SelectBar';
 import { TimerBar } from '@/components/TimerBar';
@@ -160,7 +160,7 @@ export function RecipesScreen() {
   const sortQuery = onList ? route.value.query.get('sort') : null;
   useEffect(() => {
     if (!cat) return;
-    changeFilters({ tags: [], cats: [cat], query: '' });
+    changeFilters({ tags: [], cats: [cat], cuisines: [], query: '' });
     setQuery('');
     navigate('/recipes', { replace: true });
   }, [cat]);
@@ -529,7 +529,7 @@ export function RecipesScreen() {
           value={query}
           onInput={(e) => setQuery((e.currentTarget as HTMLInputElement).value)}
         />
-        <PickChips filter={filters} onChange={changeFilters} tags={tags} noQuery />
+        <PickChips filter={filters} onChange={changeFilters} tags={tags} cuisines={cuisineIdsIn(all ?? [])} noQuery />
       </Header>
       <TimerBar />
       {/* The rail is positioned inside .az-area (list only), so it never overlays the header. */}

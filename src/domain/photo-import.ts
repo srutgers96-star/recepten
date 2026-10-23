@@ -24,6 +24,11 @@
 // categories.json ids and the tag vocabulary through the synonyms tables below (ids, Dutch and
 // English labels, tolerant of case and diacritics); unknown words are dropped.
 //
+// 6B blok 3 (docs/specs/labels-categorieen.md §1b, §2f): an optional "Keuken: italiaans" /
+// "Cuisine: italian" line under the category line, mapped to a data/cuisines.json id through
+// CUISINE_WORDS (`cuisineIdFromWord`). The prompt asks for it only when the dish really comes from
+// that cuisine; a pasted text without such a line never gets a cuisine guessed.
+//
 // Phase 6 (docs/phase-6-spec.md 6A.10, 6A.14, 6A.16, 13C):
 //  - The prompt asks for the WHOLE answer in one code block, so ChatGPT/Gemini show "Copy code"
 //    and the text arrives with its line breaks and without markdown escapes. It also teaches the
@@ -47,6 +52,8 @@ export interface PlainRecipe {
   steps: string[];
   /** A categories.json id from a "Categorie:" / "Category:" line; absent when none or unknown. */
   category?: string;
+  /** A data/cuisines.json id from a "Keuken:" / "Cuisine:" line; absent when none or unknown (never guessed). */
+  cuisine?: string;
   /** Tag ids from a "Labels:" / "Tags:" line, unknown words dropped; absent when there was no such line. */
   tags?: string[];
 }
@@ -66,6 +73,33 @@ const CATEGORY_WORDS: Record<string, string[]> = {
   oven: ['oven', 'ovenschotel', 'ovengerecht', 'oven dish', 'bake', 'casserole', 'gratin', 'uit de oven'],
   'wok-noedels': ['wok & noedels', 'wok & noodles', 'wok', 'noedels', 'noodles', 'wok en noedels', 'wok and noodles', 'wok-noedels', 'wok noedels', 'wok noodles', 'roerbak', 'stir-fry', 'stir fry'],
   overig: ['overig', 'other', 'overige', 'anders', 'misc', 'miscellaneous', 'diversen'],
+};
+
+/**
+ * data/cuisines.json ids (in its `order`) with the words that mean them: the Dutch and English
+ * name, the adjective in both languages and the country or region (docs/specs/labels-categorieen.md
+ * §3 blok 3). The id itself always counts. "indisch" is deliberately absent: in Dutch it means the
+ * Dutch-Indonesian kitchen, not the Indian one.
+ */
+const CUISINE_WORDS: Record<string, string[]> = {
+  hollands: ['hollands', 'hollandse', 'dutch', 'nederlands', 'nederlandse', 'holland', 'nederland', 'netherlands', 'the netherlands'],
+  italiaans: ['italiaans', 'italiaanse', 'italian', 'italië', 'italy'],
+  frans: ['frans', 'franse', 'french', 'frankrijk', 'france'],
+  spaans: ['spaans', 'spaanse', 'spanish', 'spanje', 'spain'],
+  portugees: ['portugees', 'portugese', 'portuguese', 'portugal'],
+  grieks: ['grieks', 'griekse', 'greek', 'griekenland', 'greece'],
+  hongaars: ['hongaars', 'hongaarse', 'hungarian', 'hongarije', 'hungary'],
+  brits: ['brits', 'britse', 'british', 'groot-brittannië', 'great britain', 'britain', 'engels', 'engelse', 'english', 'engeland', 'england', 'uk'],
+  'midden-oosten': ['midden-oosters', 'midden-oosterse', 'midden oosters', 'midden oosterse', 'middle eastern', 'middle-eastern', 'middle east'],
+  marokkaans: ['marokkaans', 'marokkaanse', 'moroccan', 'marokko', 'morocco'],
+  indiaas: ['indiaas', 'indiase', 'indian', 'india'],
+  thais: ['thais', 'thaise', 'thai', 'thailand'],
+  chinees: ['chinees', 'chinese', 'china'],
+  japans: ['japans', 'japanse', 'japanese', 'japan'],
+  indonesisch: ['indonesisch', 'indonesische', 'indonesian', 'indonesië', 'indonesia'],
+  surinaams: ['surinaams', 'surinaamse', 'surinamese', 'suriname', 'surinam'],
+  mexicaans: ['mexicaans', 'mexicaanse', 'mexican', 'mexico'],
+  amerikaans: ['amerikaans', 'amerikaanse', 'american', 'amerika', 'america', 'verenigde staten', 'united states', 'usa'],
 };
 
 /** The tag vocabulary (tools/validate-data.ts RECIPE_TAGS) with the words that mean each tag. */
@@ -112,6 +146,7 @@ function buildIndex(table: Record<string, string[]>): Map<string, string> {
 }
 
 const CATEGORY_INDEX = buildIndex(CATEGORY_WORDS);
+const CUISINE_INDEX = buildIndex(CUISINE_WORDS);
 const TAG_INDEX = buildIndex(TAG_WORDS);
 
 /** A categories.json id for a word as written ("Pasta", "savoury pie", "hartige-taart"); undefined when unknown. */
@@ -123,6 +158,24 @@ export function categoryIdFromWord(word: string): string | undefined {
   // "Categorie: Pasta (vegetarisch)" or "pasta / oven": the first known word wins.
   for (const part of key.split(/[,;/()|]+/)) {
     const hit = CATEGORY_INDEX.get(part.trim());
+    if (hit) return hit;
+  }
+  return undefined;
+}
+
+/**
+ * A data/cuisines.json id for a word as written ("Italian", "italiaanse", "Italië", "Dutch",
+ * "Hollands", "midden-oosten"); undefined when unknown ("Zuid-Afrikaans", "-", "geen"). Tolerant of
+ * case and diacritics, of a trailing "keuken" / "cuisine" ("Italiaanse keuken") and of extras after a
+ * separator ("Italiaans (Siciliaans)": the first known word wins). Never guesses from anything else.
+ */
+export function cuisineIdFromWord(word: string): string | undefined {
+  const key = foldWord(word ?? '');
+  if (!key) return undefined;
+  for (const candidate of [key, ...key.split(/[,;/()|]+/)]) {
+    const part = candidate.trim();
+    if (!part) continue;
+    const hit = CUISINE_INDEX.get(part) ?? CUISINE_INDEX.get(part.replace(/\s+(?:keuken|kitchen|cuisine|food)$/u, ''));
     if (hit) return hit;
   }
   return undefined;
@@ -143,8 +196,9 @@ export function tagIdsFromText(text: string): string[] {
   return out;
 }
 
-/** The category and tag vocabularies as the import prompt lists them (ids in data order). */
+/** The category, cuisine and tag vocabularies as the import prompt lists them (ids in data order). */
 export const IMPORT_CATEGORY_IDS: readonly string[] = Object.keys(CATEGORY_WORDS);
+export const IMPORT_CUISINE_IDS: readonly string[] = Object.keys(CUISINE_WORDS);
 export const IMPORT_TAG_IDS: readonly string[] = Object.keys(TAG_WORDS);
 
 // --- the prompt -----------------------------------------------------------------------------------
@@ -156,6 +210,7 @@ function formatBlock(lang: Lang): string[] {
         '# Naam van het gerecht',
         'Porties: 4',
         'Categorie: pasta',
+        'Keuken: italiaans',
         'Labels: vegetarisch, snel',
         '## Ingrediënten',
         '- 400 g aardappelen',
@@ -172,6 +227,7 @@ function formatBlock(lang: Lang): string[] {
         '# Name of the dish',
         'Servings: 4',
         'Category: pasta',
+        'Cuisine: italian',
         'Tags: vegetarian, quick',
         '## Ingredients',
         '- 400 g potatoes',
@@ -187,12 +243,20 @@ function formatBlock(lang: Lang): string[] {
 }
 
 const CATEGORY_LIST = IMPORT_CATEGORY_IDS.join(', ');
+const CUISINE_LIST = IMPORT_CUISINE_IDS.join(', ');
 const TAG_LIST = IMPORT_TAG_IDS.join(', ');
 
-/** The meta rule: which words the "Categorie:" / "Labels:" lines may hold. */
+/**
+ * The meta rule: which words the "Categorie:" / "Labels:" lines may hold, then the "Keuken:" /
+ * "Cuisine:" line (docs/specs/labels-categorieen.md §1b: only when the dish really comes from there).
+ */
 const META_RULE: Record<Lang, string> = {
-  nl: `"Categorie:" is één van: ${CATEGORY_LIST}; "Labels:" is een kommagescheiden keuze uit: ${TAG_LIST} (beide regels mogen weggelaten worden als je het niet weet).`,
-  en: `"Category:" is one of: ${CATEGORY_LIST}; "Tags:" is a comma-separated choice from: ${TAG_LIST} (leave either line out when unsure).`,
+  nl:
+    `"Categorie:" is één van: ${CATEGORY_LIST}; "Labels:" is een kommagescheiden keuze uit: ${TAG_LIST} (beide regels mogen weggelaten worden als je het niet weet). ` +
+    `"Keuken:" is één van: ${CUISINE_LIST} — alleen als het gerecht echt uit die keuken komt, anders de regel weglaten.`,
+  en:
+    `"Category:" is one of: ${CATEGORY_LIST}; "Tags:" is a comma-separated choice from: ${TAG_LIST} (leave either line out when unsure). ` +
+    `"Cuisine:" is one of: ${CUISINE_LIST} — only when the dish really comes from that cuisine, otherwise leave the line out.`,
 };
 
 /**
@@ -355,7 +419,7 @@ function stripInlineFence(row: string): string {
 const ING_WORDS = String.raw`(?:Ingrediënten|Ingredienten|Ingredients)`;
 const METHOD_WORDS = String.raw`(?:Bereiding|Bereidingswijze|Werkwijze|Method|Instructions|Directions)`;
 const HEAD_WORDS = String.raw`(?:${ING_WORDS}|${METHOD_WORDS})`;
-const META_WORDS = String.raw`(?:Porties|Servings|Categorie|Category|Labels?|Tags)`;
+const META_WORDS = String.raw`(?:Porties|Servings|Categorie|Category|Keuken|Cuisine|Labels?|Tags)`;
 
 /** Markers that a copied answer may have pulled into the middle of a line, back on their own line. */
 function resplitMarkers(text: string): string {
@@ -376,7 +440,7 @@ function resplitMarkers(text: string): string {
   t = t.replace(new RegExp(String.raw`${before}(?=${ING_WORDS}\s*:?[ \t]+(?:[-•*][ \t]|\d|[½¼¾⅓⅔⅛]))`, 'gu'), '$1\n');
   t = t.replace(new RegExp(String.raw`${before}(?=${METHOD_WORDS}\s*:?[ \t]+(?:\d{1,2}[.)][ \t]|\p{Lu}))`, 'gu'), '$1\n');
   t = t.replace(new RegExp(String.raw`^(${HEAD_WORDS}\s*:?)[ \t]+(?=\S)`, 'gm'), '$1\n');
-  // "Porties: 4 Categorie: pasta Labels: snel": each meta key on its own line.
+  // "Porties: 4 Categorie: pasta Keuken: italiaans Labels: snel": each meta key on its own line.
   t = t.replace(new RegExp(String.raw`${before}(?=\*{0,2}${META_WORDS}\*{0,2}\s*:)`, 'g'), '$1\n');
   // The translation format (src/domain/translate-prompt.ts): "I1. … I2. …" / "S1. … S2. …" on one line.
   if (/^\s*[IS]1\s*[.:)]/m.test(t)) t = t.replace(/[ \t]+(?=[IS]\d{1,3}\s*[.:)]\s)/g, '\n');
@@ -500,7 +564,7 @@ function splitCollapsedSteps(line: string): string[] {
 /**
  * A pasted AI answer with the damage of copying a rendered answer undone (13C): escapes and zero-width
  * characters removed, only the text inside code fences kept (chatter outside dropped), markers that
- * landed in the middle of a line ("=== NL ===", "# Naam", "Porties:", "Categorie:", "Labels:",
+ * landed in the middle of a line ("=== NL ===", "# Naam", "Porties:", "Categorie:", "Keuken:", "Labels:",
  * "## Ingrediënten", "## Bereiding", "I1.", "S1.") back on their own line, an ingredient list that
  * collapsed into one line split before every quantity and after every "]", and numbered steps that
  * ran together split again. A clean answer comes back unchanged. `parsePlainRecipe` and
@@ -534,11 +598,12 @@ const SERVINGS_RE = /^\s*\**\s*(?:porties|personen|voor|servings?|serves|yield)\
 const BULLET_RE = /^\s*(?:[-*•–]\s+|\d{1,3}\s*[.)]\s+)/u;
 const KEY_VALUE_RE = /^\s*\**\s*(?:naam|name|titel|title)\s*\**\s*:\s*(.+)$/iu;
 const CATEGORY_LINE_RE = /^\s*\**\s*(?:categorie|category|soort|type)\s*\**\s*:\s*\**\s*(.*?)\s*\**\s*$/iu;
+const CUISINE_LINE_RE = /^\s*\**\s*(?:keuken|cuisine)\s*\**\s*:\s*\**\s*(.*?)\s*\**\s*$/iu;
 const TAGS_LINE_RE = /^\s*\**\s*(?:labels?|tags?|dieet|diet|kenmerken)\s*\**\s*:\s*\**\s*(.*?)\s*\**\s*$/iu;
 
 /**
- * The plain format back into name, servings, ingredient lines and steps (plus category and tags
- * when the text has those lines). Returns null when the text holds neither a name, nor
+ * The plain format back into name, servings, ingredient lines and steps (plus category, cuisine and
+ * tags when the text has those lines). Returns null when the text holds neither a name, nor
  * ingredients, nor steps. The text is repaired first (`normalizePastedAnswer`).
  */
 export function parsePlainRecipe(input: string): PlainRecipe | null {
@@ -548,6 +613,7 @@ export function parsePlainRecipe(input: string): PlainRecipe | null {
   let nameExplicit = false;
   let servings: number | null = null;
   let category: string | undefined;
+  let cuisine: string | undefined;
   let tags: string[] | undefined;
   const lines: string[] = [];
   const stepBlock: string[] = [];
@@ -564,11 +630,17 @@ export function parsePlainRecipe(input: string): PlainRecipe | null {
       section = 'steps';
       continue;
     }
-    // "Categorie: pasta" / "Labels: vegetarisch, snel" anywhere outside the method (first one wins).
+    // "Categorie: pasta" / "Keuken: italiaans" / "Labels: vegetarisch, snel" anywhere outside the
+    // method (first one wins).
     if (section !== 'steps') {
       const cat = CATEGORY_LINE_RE.exec(trimmed);
       if (cat) {
         if (category === undefined) category = categoryIdFromWord(cat[1] as string);
+        continue;
+      }
+      const cu = CUISINE_LINE_RE.exec(trimmed);
+      if (cu) {
+        if (cuisine === undefined) cuisine = cuisineIdFromWord(cu[1] as string);
         continue;
       }
       const tg = TAGS_LINE_RE.exec(trimmed);
@@ -615,6 +687,7 @@ export function parsePlainRecipe(input: string): PlainRecipe | null {
   if (!name && !sawContent) return null;
   const out: PlainRecipe = { name, servings, lines: lines.filter(Boolean), steps };
   if (category !== undefined) out.category = category;
+  if (cuisine !== undefined) out.cuisine = cuisine;
   if (tags !== undefined) out.tags = tags;
   return out;
 }
@@ -674,7 +747,8 @@ const EN_HEADER_RE = /^\s*(?:#{1,3}\s*)?\**\s*(ingredients?|method|instructions|
 const NL_HEADER_RE = /^\s*(?:#{1,3}\s*)?\**\s*(ingredi[eë]nten|bereiding|bereidingswijze|werkwijze|porties|personen)\s*\**\s*:?/imu;
 
 /**
- * The bilingual answer back into one PlainRecipe per language. Accepts the two-block form (markers
+ * The bilingual answer back into one PlainRecipe per language (each with its own category, cuisine
+ * and tags when its block has those lines). Accepts the two-block form (markers
  * as in `markerLangOf`; prose before the first marker, outside the code block and after a horizontal
  * rule is ignored) and a single block without markers, whose language is guessed from its headers
  * ("## Ingredients" → en; default nl). When both blocks exist but their line or step counts differ,

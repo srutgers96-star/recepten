@@ -19,7 +19,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { JSX } from 'preact';
 import { categoryLabel } from '@/components/FilterChips';
-import { PickChips, applyPickFilter, loadPickFilter, pickFilterActive, savePickFilter, tagIdsIn, type PickFilter } from '@/components/PickSheet';
+import { PickChips, applyPickFilter, cuisineIdsIn, loadPickFilter, pickFilterActive, savePickFilter, tagIdsIn, type PickFilter } from '@/components/PickSheet';
 import { otherLanguageName } from '@/components/RecipeRow';
 import { dictionary } from '@/dictionary';
 import type { Dictionary } from '@/domain/dictionary';
@@ -188,7 +188,8 @@ export function TonightCard(props: TonightCardProps): JSX.Element {
       </>
     );
   } else {
-    const chipCount = filters.tags.length + filters.cats.length;
+    // "filters (n)": every chip that is on, the cuisines of 6B blok 3 included.
+    const chipCount = filters.tags.length + filters.cats.length + filters.cuisines.length;
     const meta = shown ? tonightMeta([timePart(shown), categoryPart(shown, dict)]) : '';
     body = (
       <>
@@ -225,7 +226,7 @@ export function TonightCard(props: TonightCardProps): JSX.Element {
             </button>
           )}
         </div>
-        {filtersOpen && <PickChips filter={filters} onChange={changeFilters} tags={tags} noQuery />}
+        {filtersOpen && <PickChips filter={filters} onChange={changeFilters} tags={tags} cuisines={cuisineIdsIn(recipes ?? [])} noQuery />}
       </>
     );
   }

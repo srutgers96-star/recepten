@@ -229,11 +229,14 @@ export const edit: Dict = {
   'edit.importMismatchLines': { nl: '{nl} ingrediëntregels in NL, {en} in EN', en: '{nl} ingredient lines in NL, {en} in EN' },
   'edit.importMismatchSteps': { nl: '{nl} stappen in NL, {en} in EN', en: '{nl} steps in NL, {en} in EN' },
   'edit.promptText': { nl: 'Tekst om te kopiëren', en: 'Text to copy' },
-  'edit.importMeta': { nl: 'Categorie en labels overgenomen uit de tekst.', en: 'Category and labels taken from the text.' },
+  'edit.importMeta': { nl: 'Categorie, keuken en labels overgenomen uit de tekst.', en: 'Category, cuisine and labels taken from the text.' },
 
   // --- Editor: "Categorie" + "Dieet & labels" rows (docs/phase-5-spec.md A.4; src/components/MetaRows.tsx) ---
   'meta.category': { nl: 'Categorie', en: 'Category' },
   'meta.tags': { nl: 'Dieet & labels', en: 'Diet & labels' },
+  // 6B blok 3 (docs/specs/labels-categorieen.md §1e): the "Keuken" row — "geen" + the 18 cuisines.
+  'meta.cuisine': { nl: 'Keuken', en: 'Cuisine' },
+  'meta.cuisineNone': { nl: 'geen', en: 'none' },
   // Phase 6 (6A.18): one line above the two rows that tells the two kinds apart.
   'meta.kindsHint': {
     nl: 'Categorie: één per recept (soep, salade, pasta …). Dieet & labels: meerdere mogelijk (vegetarisch, snel …).',
@@ -446,8 +449,8 @@ export const edit: Dict = {
   'inbox.field.steps': { nl: 'Bereiding', en: 'Method' },
   'inbox.field.meta': { nl: 'Overige', en: 'Other' },
   'inbox.field.metaHint': {
-    nl: 'omschrijving, serveertip, categorie, kenmerken, personen, tijd',
-    en: 'description, serving tip, category, tags, servings, time',
+    nl: 'omschrijving, serveertip, categorie, keuken, kenmerken, personen, tijd',
+    en: 'description, serving tip, category, cuisine, tags, servings, time',
   },
   'inbox.allMine': { nl: 'Alles van mij', en: 'All mine' },
   'inbox.allTheirs': { nl: 'Alles van {name}', en: 'All {name}\'s' },

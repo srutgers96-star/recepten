@@ -1,8 +1,9 @@
 // tools/migrate-from-recepten2.ts — the 196 classics from Recepten2 -> data/recipes.json (schema 2).
 //
 // Reads:  data/source/recipes-recepten2.json (read-only, never edited by hand)
-//         data/{units,qualifiers,prep-phrases,ingredients,aisles,categories}.json (the dictionary)
+//         data/{units,qualifiers,prep-phrases,ingredients,aisles,categories,cuisines}.json (the dictionary)
 //         data/llm/batch-*.json (the committed LLM translation/structuring batches, when present)
+//         data/review/lines.json + data/review/meta.json (the human review layers, when present)
 // Writes: data/recipes.json = { schema: 2, dataVersion, generatedAt, recipes: Recipe[] } sorted by name.
 //
 // Per recipe: id = builtinId(name) ('b:' + slug), origin builtin, servings 4, lines = every raw
@@ -14,10 +15,11 @@
 // can be found by name. A first "step" that only states the servings becomes `servingTip`
 // (splitServingNote). Then the committed batches are replayed with `applyBatch`
 // (tools/apply-llm-batch.ts) and the human review layer (data/review/lines.json,
-// tools/apply-review.ts) and, last, the fact-based diet tags (tools/derive-tags.ts
-// `applyDerivedTags`: vegetarisch/vegan/glutenvrij from the dictionary flags, docs/phase-5-spec.md
-// A.3): recipes.json = parse(raw) ⊕ llm enrichment ⊕ review ⊕ diet facts, so the file is
-// reproducible from scratch. Output is deterministic except `generatedAt`.
+// tools/apply-review.ts), then the hand-kept recipe labels (data/review/meta.json, tools/apply-meta.ts:
+// category, goesWith, cuisine; docs/specs/labels-categorieen.md §2e) and, last, the fact-based diet
+// tags (tools/derive-tags.ts `applyDerivedTags`: vegetarisch/vegan/glutenvrij/lactosevrij from the
+// dictionary flags, docs/phase-5-spec.md A.3): recipes.json = parse(raw) ⊕ llm enrichment ⊕ review ⊕
+// meta ⊕ diet facts, so the file is reproducible from scratch. Output is deterministic except `generatedAt`.
 //
 // Run:   node --experimental-strip-types tools/migrate-from-recepten2.ts   (or: npm run migrate)
 // Node 22 type-stripping rules apply: type-only syntax only, plain ESM, no enums/namespaces.
@@ -33,12 +35,14 @@ import { foldDiacritics, normalizeSource } from '../src/domain/recipe-source.ts'
 import { splitSteps } from '../src/domain/steps.ts';
 import { findTimers } from '../src/domain/timers.ts';
 import { applyBatch, batchPaths, checkBatch, readJson, type BatchFile } from './apply-llm-batch.ts';
+import { applyMeta, checkMeta, readMeta, type MetaReview } from './apply-meta.ts';
 import { applyReview, checkReview, readReview, type ReviewFile } from './apply-review.ts';
 import { readDictionaryData } from './build-dictionary-seed.ts';
 import { applyDerivedTags } from './derive-tags.ts';
+import { refsFromData } from './validate-data.ts';
 
 /** Bump when the bundled classics change in a way the app must re-import (repo.ensureBuiltins). */
-export const DATA_VERSION = 5;
+export const DATA_VERSION = 6;
 
 /** First edition of the book: the "creation" date of every classic (deterministic output). */
 export const BUILTIN_TIMESTAMP = '2025-12-01T00:00:00.000Z';
@@ -55,8 +59,10 @@ export interface MigrationInputs {
   dict: Dictionary;
   /** Batch files in replay order (file-name order); each is `{ path, batch }` for error messages. */
   batches: { path: string; batch: unknown }[];
-  /** data/review/lines.json (human corrections, applied last), null when absent. */
+  /** data/review/lines.json (human corrections, applied after the batches), null when absent. */
   review?: ReviewFile | null;
+  /** data/review/meta.json (category / goesWith / cuisine of the classics, applied after the review), null when absent. */
+  meta?: MetaReview | null;
   /** Set the fact-based diet tags as the last step (default true); tools/derive-tags.ts measures with false. */
   deriveTags?: boolean;
 }
@@ -148,6 +154,13 @@ export function migrate(raw: unknown, generatedAt: string, inputs: MigrationInpu
     recipes = applyReview(recipes, inputs.review).recipes;
   }
 
+  // Recipe-level labels (docs/specs/labels-categorieen.md §2e): after the review, before the diet facts.
+  if (inputs.meta) {
+    const errors = checkMeta(inputs.meta, recipes, refsFromData(dict.toData()));
+    if (errors.length > 0) throw new Error(`data/review/meta.json: ${errors.length} error(s):\n  ${errors.join('\n  ')}`);
+    recipes = applyMeta(recipes, inputs.meta).recipes;
+  }
+
   // Diet facts last: the dictionary, not the LLM, decides vegetarisch / vegan / glutenvrij.
   if (inputs.deriveTags !== false) recipes = recipes.map((r) => applyDerivedTags(r, dict));
 
@@ -157,12 +170,13 @@ export function migrate(raw: unknown, generatedAt: string, inputs: MigrationInpu
   return { schema: 2, dataVersion: DATA_VERSION, generatedAt, recipes };
 }
 
-/** The dictionary and batches as they are on disk under `root` (the project folder). */
+/** The dictionary, batches and review layers as they are on disk under `root` (the project folder). */
 export function loadMigrationInputs(root: string): MigrationInputs {
   return {
     dict: loadDictionary(readDictionaryData(root)),
     batches: batchPaths(root).map((path) => ({ path: path.slice(root.length + 1).replace(/\\/g, '/'), batch: readJson(path) })),
     review: readReview(root),
+    meta: readMeta(root),
   };
 }
 
@@ -216,6 +230,7 @@ function main(): void {
       `dictionary ${inputs.dict.ingredients.length} ingredients, dataVersion ${file.dataVersion}`,
   );
   for (const l of linked) console.log(`  goesWith: ${l}`);
+  console.log(`  cuisine: ${file.recipes.filter((r) => typeof r.cuisine === 'string').length} recipe(s) with a cuisine (data/review/meta.json)`);
   if (ids.size !== file.recipes.length) {
     console.error('ERROR: duplicate ids');
     process.exit(1);

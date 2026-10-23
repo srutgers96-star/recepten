@@ -8,15 +8,21 @@
 // dictionary could only guess at (`unsure`) is shown as "waarschijnlijk" on its chip and in the
 // hint, and the person confirms it with a tap — the same policy as tools/derive-tags.ts, which
 // never writes an unsure tag.
-import { categoryLabel } from '@/components/FilterChips';
+//
+// 6B blok 3 (docs/specs/labels-categorieen.md §1b, §1e): a third row "Keuken" between the two —
+// "geen" plus every cuisine with its flag, one at a time (a second tap on the chosen one = geen).
+// A cuisine is never suggested (no reliable heuristic): `applySuggestion` leaves it as it is.
+import { categoryLabel, cuisineLabel } from '@/components/FilterChips';
 import { dictionary } from '@/dictionary';
 import { DIET_TAGS, SUGGESTED_TAGS, type DietTag, type MetaSuggestion } from '@/domain/diet';
 import { IMPORT_TAG_IDS } from '@/domain/photo-import';
 import { hasKey, t } from '@/i18n';
 
-/** Category (null = none) and tags as the recipe stores them. */
+/** Category (null = none), cuisine (null = none) and tags as the recipe stores them. */
 export interface MetaValue {
   category: string | null;
+  /** data/cuisines.json id; null = no cuisine. */
+  cuisine: string | null;
   tags: string[];
 }
 
@@ -36,6 +42,11 @@ export function metaCategoryLabel(id: string | null | undefined): string {
   return categoryLabel(dictionary.value.category(id), id);
 }
 
+/** "🇮🇹 Italiaans": flag + name of a cuisine id in the active language (falls back to the id). */
+export function metaCuisineLabel(id: string): string {
+  return cuisineLabel(dictionary.value.cuisine(id), id);
+}
+
 /** The tags of a suggestion the dictionary is sure about (the ones "Overnemen" applies). */
 export function sureTags(s: MetaSuggestion): string[] {
   return s.tags.filter((tag) => !s.unsure.includes(tag as DietTag));
@@ -45,28 +56,30 @@ export function sureTags(s: MetaSuggestion): string[] {
  * `value` with the sure part of `suggestion` applied: the category when the heuristic has one,
  * the tags the heuristic decides about (SUGGESTED_TAGS) set to its answer, every other tag
  * ("kids", "-optie", …) kept. Unsure diet tags are left as they are on the value. Order: the
- * value's tags in their order, new ones appended.
+ * value's tags in their order, new ones appended. The cuisine is never suggested and stays as it is.
  */
 export function applySuggestion(value: MetaValue, suggestion: MetaSuggestion): MetaValue {
   const sure = sureTags(suggestion);
   const decided = (tag: string) => SUGGESTED_TAGS.includes(tag) && !suggestion.unsure.includes(tag as DietTag);
   const tags = value.tags.filter((tag) => !decided(tag) || sure.includes(tag));
   for (const tag of sure) if (!tags.includes(tag)) tags.push(tag);
-  return { category: suggestion.category ?? value.category, tags };
+  return { category: suggestion.category ?? value.category, cuisine: value.cuisine ?? null, tags };
 }
 
 /** True when applying the suggestion would change nothing. */
 export function metaEqual(a: MetaValue, b: MetaValue): boolean {
   if ((a.category ?? null) !== (b.category ?? null)) return false;
+  if ((a.cuisine ?? null) !== (b.cuisine ?? null)) return false;
   if (a.tags.length !== b.tags.length) return false;
   const set = new Set(a.tags);
   return b.tags.every((tag) => set.has(tag));
 }
 
-/** "Pasta · vegetarisch, snel" — the one-line summary of a value (or of a suggestion, with "waarschijnlijk"). */
+/** "Pasta · 🇮🇹 Italiaans · vegetarisch, snel" — the one-line summary of a value (or of a suggestion, with "waarschijnlijk"). */
 export function metaSummary(value: MetaValue, unsure: readonly string[] = []): string {
   const parts: string[] = [];
   if (value.category) parts.push(metaCategoryLabel(value.category));
+  if (value.cuisine) parts.push(metaCuisineLabel(value.cuisine));
   const tags = value.tags.map((tag) => (unsure.includes(tag) ? t('meta.probably', { tag: metaTagLabel(tag) }) : metaTagLabel(tag)));
   if (tags.length) parts.push(tags.join(', '));
   return parts.join(' · ');
@@ -97,6 +110,11 @@ export function MetaRows(props: MetaRowsProps) {
     props.onChange({ ...value, tags: on ? value.tags.filter((x) => x !== tag) : [...value.tags, tag] });
   }
 
+  /** One cuisine at a time: a tap on the chosen one (or on "geen") leaves none. */
+  function pickCuisine(id: string | null) {
+    props.onChange({ ...value, cuisine: id === null || value.cuisine === id ? null : id });
+  }
+
   function adopt() {
     if (!proposed) return;
     (props.onAdopt ?? props.onChange)(proposed);
@@ -124,6 +142,23 @@ export function MetaRows(props: MetaRowsProps) {
           ))}
         </select>
       </label>
+
+      <div class="field meta-cuisine">
+        <span>{t('meta.cuisine')}</span>
+        <div class="meta-chips meta-cuisine-chips" role="group" aria-label={t('meta.cuisine')}>
+          <button type="button" class={'meta-chip' + (!value.cuisine ? ' on' : '')} aria-pressed={!value.cuisine} disabled={props.disabled} onClick={() => pickCuisine(null)}>
+            {t('meta.cuisineNone')}
+          </button>
+          {dict.cuisines.map((c) => {
+            const on = value.cuisine === c.id;
+            return (
+              <button key={c.id} type="button" class={'meta-chip' + (on ? ' on' : '')} aria-pressed={on} disabled={props.disabled} onClick={() => pickCuisine(c.id)}>
+                {cuisineLabel(c, c.id)}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       <div class="field meta-tags">
         <span>{t('meta.tags')}</span>

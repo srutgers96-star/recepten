@@ -102,6 +102,8 @@ export const browse: Dict = {
   'recipe.category': { nl: 'Categorie', en: 'Category' },
   'recipe.noCategory': { nl: 'geen categorie', en: 'no category' },
   'recipe.changeCategory': { nl: 'wijzig', en: 'change' },
+  // 6B blok 3: visually hidden label of the cuisine chip next to the category.
+  'recipe.cuisine': { nl: 'Keuken', en: 'Cuisine' },
   'recipe.timeActive': { nl: '{n} min bezig', en: '{n} min hands-on' },
   'recipe.timeTotal': { nl: '{n} min totaal', en: '{n} min total' },
   'recipe.machineTranslation': { nl: 'Automatische vertaling — tik om te verbeteren', en: 'Machine translation — tap to improve' },

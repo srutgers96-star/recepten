@@ -17,9 +17,10 @@
 // index is out of range or points at a header, a `raw` echo differs from the recipe's raw line, an
 // `ing` id does not exist, a NEW entry collides with a different existing entry, or the category /
 // a tag / a qualifier id is unknown. With `--apply all` the human review layer
-// (data/review/lines.json, tools/apply-review.ts) is applied last.
+// (data/review/lines.json, tools/apply-review.ts) and then the recipe labels (data/review/meta.json,
+// tools/apply-meta.ts: category, goesWith, cuisine) are applied last, as `npm run migrate` does.
 //
-// `npm run migrate` replays the same merge (`applyBatch` + `applyReview`) over the committed
+// `npm run migrate` replays the same merge (`applyBatch` + `applyReview` + `applyMeta`) over the committed
 // batches, so data/recipes.json = parse(raw) ⊕ data/llm/*.json ⊕ data/review is reproducible.
 //
 // Node 22 type-stripping rules apply: type-only syntax only, plain ESM, no enums/namespaces.
@@ -31,9 +32,10 @@ import process from 'node:process';
 import { loadDictionary, withUserEntries, type Dictionary, type Ingredient } from '../src/domain/dictionary.ts';
 import type { Line, Recipe, Text } from '../src/domain/model.ts';
 import { parseLine } from '../src/domain/parser.ts';
+import { applyMeta, checkMeta, readMeta } from './apply-meta.ts';
 import { applyReview, checkReview, readReview } from './apply-review.ts';
 import { readDictionaryData } from './build-dictionary-seed.ts';
-import { RECIPE_TAGS } from './validate-data.ts';
+import { RECIPE_TAGS, refsFromData } from './validate-data.ts';
 
 // ---------------------------------------------------------------------------
 // Batch schema (spec §4)
@@ -539,6 +541,21 @@ function main(argv: string[]): void {
         const r = applyReview(recipes, review);
         recipes = r.recipes;
         console.log(`data/review/lines.json: ${r.applied} reviewed line(s) applied`);
+      }
+    }
+  }
+
+  // Parity with `npm run migrate`: the recipe labels (data/review/meta.json) after the review layer.
+  if (mode === '--apply' && !failed && target === 'all') {
+    const meta = readMeta(root);
+    if (meta) {
+      const errors = checkMeta(meta, recipes, refsFromData(dict.toData()));
+      for (const e of errors) console.log(`  ERROR: data/review/meta.json: ${e}`);
+      if (errors.length) failed = true;
+      else {
+        const r = applyMeta(recipes, meta);
+        recipes = r.recipes;
+        console.log(`data/review/meta.json: ${r.applied} label(s) applied`);
       }
     }
   }

@@ -7,7 +7,8 @@
 //     `i` is the index into recipe.lines (headers count but are not listed), so the answer's
 //     `lines[].i` maps straight back (docs/phase-2-spec.md §4 batch schema, data/README.md).
 //   data/work/dictionary-ids.json  [{ id, nl, en, aisle }] sorted by id — the ids an answer may use.
-//   data/work/vocab.json           { categories, tags, aisles, units } — the closed vocabularies.
+//   data/work/vocab.json           { categories, cuisines, tags, aisles, units } — the closed vocabularies
+//                                  (cuisines: data/cuisines.json ids, docs/specs/labels-categorieen.md §2c).
 // The answers go to data/llm/batch-NN.json and are merged with tools/apply-llm-batch.ts.
 //
 // Run:   node --experimental-strip-types tools/make-batch-inputs.ts
@@ -104,10 +105,11 @@ export function buildDictionaryIds(data: DictionaryData): { id: string; nl: stri
     .map((i) => ({ id: i.id, nl: i.nl.one, en: i.en.one, aisle: i.aisle }));
 }
 
-export function buildVocab(data: DictionaryData): { categories: string[]; tags: string[]; aisles: string[]; units: string[] } {
+export function buildVocab(data: DictionaryData): { categories: string[]; cuisines: string[]; tags: string[]; aisles: string[]; units: string[] } {
   const byOrder = <T extends { id: string; order: number }>(items: readonly T[]) => [...items].sort((a, b) => a.order - b.order || a.id.localeCompare(b.id)).map((x) => x.id);
   return {
     categories: byOrder(data.categories),
+    cuisines: byOrder(data.cuisines ?? []),
     tags: [...RECIPE_TAGS],
     aisles: byOrder(data.aisles),
     units: [...data.units].map((u) => u.id).sort(),
@@ -133,7 +135,7 @@ function main(): void {
   const sizes = batches.map((b) => b.recipes.length);
   const lines = batches.reduce((n, b) => n + b.recipes.reduce((m, r) => m + r.lines.length, 0), 0);
   console.log(`data/work/batches/: ${batches.length} files, ${sizes.join('/')} recipes (${lines} ingredient lines)`);
-  console.log(`data/work/dictionary-ids.json: ${data.ingredients.length} ids; data/work/vocab.json: ${data.categories.length} categories, ${RECIPE_TAGS.length} tags, ${data.aisles.length} aisles, ${data.units.length} units`);
+  console.log(`data/work/dictionary-ids.json: ${data.ingredients.length} ids; data/work/vocab.json: ${data.categories.length} categories, ${data.cuisines?.length ?? 0} cuisines, ${RECIPE_TAGS.length} tags, ${data.aisles.length} aisles, ${data.units.length} units`);
 }
 
 const invokedDirectly =

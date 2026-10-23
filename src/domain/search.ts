@@ -1,9 +1,13 @@
 // Bilingual recipe search (docs/phase-2-spec.md §3 `search.ts`). Framework-free.
 //
 // Matches the recipe name in both languages, ingredient ids through the dictionary (typing
-// "onion" finds recipes with `ui`), the raw ingredient text of unresolved lines, categories and
-// tags. Diacritic-insensitive. Results come grouped: name matches first, then ingredient matches,
-// then category/tag matches; a recipe appears in one group only.
+// "onion" finds recipes with `ui`), the raw ingredient text of unresolved lines, categories,
+// cuisines (data/cuisines.json, docs/specs/labels-categorieen.md §1b) and tags. Diacritic-insensitive.
+// Results come grouped: name matches first, then ingredient matches, then category/tag matches; a
+// recipe appears in one group only. One exception to that order: a recipe whose CUISINE matches goes
+// to the category group even when an ingredient matches too ("italiaans" puts Spaghetti Bolognese
+// under the cuisine heading, not under Italiaanse peterselie); plain category and tag hits keep
+// their place after the ingredient group, so "pasta" is unchanged.
 import type { Lang, Recipe } from './model.ts';
 import type { Dictionary } from './dictionary.ts';
 import { normalizeKey } from './dictionary.ts';
@@ -87,11 +91,30 @@ export function matchesIngredient(recipe: Recipe, terms: readonly string[], dict
   });
 }
 
-function matchesCategory(recipe: Recipe, terms: readonly string[], dict: Dictionary): boolean {
-  if (!recipe.category || terms.length === 0) return false;
-  const cat = dict.category(recipe.category);
-  const names = [recipe.category, cat?.nl, cat?.en].filter((s): s is string => !!s).map(normalizeKey).join(' | ');
-  return terms.every((t) => names.includes(t));
+/** The cuisine id plus its Dutch and English name (normalised), empty without a cuisine. */
+function cuisineNames(recipe: Recipe, dict: Dictionary): string[] {
+  if (typeof recipe.cuisine !== 'string' || !recipe.cuisine) return [];
+  const c = dict.cuisine(recipe.cuisine);
+  return [recipe.cuisine, c?.nl, c?.en].filter((s): s is string => !!s).map(normalizeKey);
+}
+
+/** Every term matches the recipe's cuisine (id, nl or en name; "italiaans", "italian", "dutch"). No emoji search. */
+export function matchesCuisine(recipe: Recipe, terms: readonly string[], dict: Dictionary): boolean {
+  if (terms.length === 0) return false;
+  const names = cuisineNames(recipe, dict).join(' | ');
+  return !!names && terms.every((t) => names.includes(t));
+}
+
+/** Every term matches the category (id, nl or en name) or the cuisine ("italiaans pasta"). */
+export function matchesCategory(recipe: Recipe, terms: readonly string[], dict: Dictionary): boolean {
+  if (terms.length === 0) return false;
+  const cat = recipe.category ? dict.category(recipe.category) : undefined;
+  const names = [recipe.category, cat?.nl, cat?.en]
+    .filter((s): s is string => !!s)
+    .map(normalizeKey)
+    .concat(cuisineNames(recipe, dict))
+    .join(' | ');
+  return !!names && terms.every((t) => names.includes(t));
 }
 
 function matchesTag(recipe: Recipe, terms: readonly string[]): boolean {
@@ -112,6 +135,8 @@ export function searchRecipes(recipes: readonly Recipe[], query: string, dict: D
   const idsPerTerm = terms.map((term) => ingredientIds(term, dict, lang));
   for (const r of recipes) {
     if (matchesName(r, terms)) groups.name.push(r);
+    // The cuisine jumps ahead of the ingredients (docs/specs/labels-categorieen.md §1b, decision of the critical reader).
+    else if (matchesCuisine(r, terms, dict)) groups.category.push(r);
     else if (matchesIngredient(r, terms, dict, lang, idsPerTerm)) groups.ingredient.push(r);
     else if (matchesCategory(r, terms, dict)) groups.category.push(r);
     else if (matchesTag(r, terms)) groups.tag.push(r);

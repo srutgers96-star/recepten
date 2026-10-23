@@ -46,7 +46,7 @@ export interface LocalState {
 
 export type ImportStatus = 'new' | 'present' | 'update' | 'conflict' | 'similar';
 
-/** The fields of a conflict card. `meta` = description, serving tip, category, tags, servings, time. */
+/** The fields of a conflict card. `meta` = description, serving tip, category, cuisine, tags, servings, time. */
 export type ConflictField = 'name' | 'lines' | 'steps' | 'meta';
 
 export const CONFLICT_FIELDS: readonly ConflictField[] = ['name', 'lines', 'steps', 'meta'];
@@ -153,7 +153,9 @@ function stepsKey(steps: readonly Step[]): string {
 }
 
 function metaKey(r: Recipe): string {
-  return JSON.stringify([textKey(r.description), textKey(r.servingTip), r.category ?? null, [...r.tags].sort(), r.servings, r.time ?? null]);
+  // `cuisine` (docs/specs/labels-categorieen.md §2f) travels like any other recipe key, so a changed
+  // cuisine is a `meta` difference too.
+  return JSON.stringify([textKey(r.description), textKey(r.servingTip), r.category ?? null, r.cuisine ?? null, [...r.tags].sort(), r.servings, r.time ?? null]);
 }
 
 /** 32-bit FNV-1a as 8 hex chars. */
@@ -232,6 +234,9 @@ export function mergeRecipeFields(mine: Recipe, theirs: Recipe, fields: readonly
     if (tip) out.servingTip = tip;
     else delete (out as Dict).servingTip;
     out.category = theirs.category ?? null;
+    // Their cuisine (or none): a recipe without the key stays without it ("geen keuken").
+    if (theirs.cuisine !== undefined) out.cuisine = theirs.cuisine;
+    else delete (out as Dict).cuisine;
     out.tags = [...theirs.tags];
     out.servings = theirs.servings;
     if (theirs.time !== undefined) out.time = theirs.time;

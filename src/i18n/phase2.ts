@@ -33,6 +33,8 @@ export const phase2: Dict = {
   // Recipe detail: the diet chips under the title.
   'recipe.diet': { nl: 'Dieet', en: 'Diet' },
   'recipe.dietProbably': { nl: 'waarschijnlijk', en: 'probably' },
+  // 6B blok 3 (docs/specs/labels-categorieen.md §1b): the "Keuken" chip row (label + aria-label).
+  'filter.cuisine': { nl: 'Keuken', en: 'Cuisine' },
 
   // --- Recipes list: search placeholder (bilingual now), groups + filtered count ---
   'list.search': { nl: 'Zoek op naam of ingrediënt', en: 'Search by name or ingredient' },

@@ -9,10 +9,12 @@ import categoriesJson from '../../data/categories.json';
 import aislesJson from '../../data/aisles.json';
 import ingredientsJson from '../../data/ingredients.json';
 import notePhrasesJson from '../../data/note-phrases.json';
+import cuisinesJson from '../../data/cuisines.json';
 import {
   loadDictionary,
   type Aisle,
   type Category,
+  type Cuisine,
   type Dictionary,
   type DictionaryData,
   type Ingredient,
@@ -27,6 +29,8 @@ export const qualifiersData: Qualifier[] = qualifiersJson as Qualifier[];
 export const prepPhrasesData: PrepPhrase[] = prepPhrasesJson as PrepPhrase[];
 export const categoriesData: Category[] = categoriesJson as Category[];
 export const aislesData: Aisle[] = aislesJson as Aisle[];
+/** data/cuisines.json (docs/specs/labels-categorieen.md §2c): the 18 cuisines with their flags. */
+export const cuisinesData: Cuisine[] = cuisinesJson as Cuisine[];
 
 /** data/ingredients.json (docs/phase-2-spec.md §1): the ~380 bundled ingredients. Tests that need
  * a dictionary WITHOUT ingredients build one with `loadDictionary({ ...defaultDictionaryData(), ingredients: [] })`. */
@@ -48,6 +52,7 @@ export function defaultDictionaryData(): DictionaryData {
       aisles: aislesData,
       categories: categoriesData,
       notePhrases: notePhrasesData,
+      cuisines: cuisinesData,
     };
   }
   return data;

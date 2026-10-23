@@ -237,6 +237,54 @@ describe('row: same id, both changed -> conflict', () => {
   });
 });
 
+// docs/specs/labels-categorieen.md §2f: `cuisine` travels like any other recipe key, so an update and
+// a conflict card carry it in `meta` (it is no part of the "same version" fingerprint).
+describe('cuisine rides along in meta (6B blok 3)', () => {
+  const changedSteps = [{ text: { nl: 'Kook de pasta beetgaar.', en: 'Boil the pasta until just tender.' } }];
+
+  it('an update takes over their new cuisine together with the new lines and category', () => {
+    const mine = received(recipe());
+    const theirs = recipe({ rev: 4, lines: [{ raw: { nl: '500 g pasta', en: '500 g pasta' }, ing: 'pasta' }], category: 'pasta', cuisine: 'italiaans', updatedAt: NOW });
+    const plan = planImport(share({ recipes: [theirs] }), local({ recipes: [BUILTIN, mine] }));
+    expect(item(plan).status).toBe('update');
+    expect(item(plan).fields).toEqual(['lines', 'meta']);
+    const out = resolveImport(plan, defaultChoices(plan), { now: NOW }).recipes[0] as Recipe;
+    expect(out.category).toBe('pasta');
+    expect(out.cuisine).toBe('italiaans');
+  });
+
+  it('a changed cuisine is a meta difference; their cuisine, their null or no key replaces mine', () => {
+    const mine = received(recipe({ cuisine: 'italiaans' }));
+    const resolved = (theirs: Recipe) => {
+      const plan = planImport(share({ recipes: [theirs] }), local({ recipes: [BUILTIN, mine] }));
+      expect(item(plan).status).toBe('update');
+      expect(item(plan).fields).toEqual(['steps', 'meta']);
+      return resolveImport(plan, defaultChoices(plan), { now: NOW }).recipes[0] as Recipe;
+    };
+    expect(resolved(recipe({ rev: 4, steps: changedSteps, cuisine: 'frans' })).cuisine).toBe('frans');
+    expect(resolved(recipe({ rev: 4, steps: changedSteps, cuisine: null })).cuisine).toBeNull();
+    expect(resolved(recipe({ rev: 4, steps: changedSteps }))).not.toHaveProperty('cuisine');
+  });
+
+  it('the same cuisine on both sides is no meta difference', () => {
+    const mine = received(recipe({ cuisine: 'italiaans' }));
+    const plan = planImport(share({ recipes: [recipe({ rev: 4, steps: changedSteps, cuisine: 'italiaans' })] }), local({ recipes: [BUILTIN, mine] }));
+    expect(item(plan).fields).toEqual(['steps']);
+  });
+
+  it('a conflict card lists the cuisine difference under meta and "theirs" takes it over', () => {
+    const mine = { ...received(recipe()), rev: 4, name: { nl: 'Mijn pasta', en: 'Pesto pasta' } };
+    const theirs = recipe({ rev: 4, steps: changedSteps, cuisine: 'italiaans', updatedAt: NOW });
+    const plan = planImport(share({ recipes: [theirs] }), local({ recipes: [BUILTIN, mine] }));
+    expect(item(plan).status).toBe('conflict');
+    expect(item(plan).fields).toEqual(['name', 'steps', 'meta']);
+    const w = resolveImport(plan, { 'u:abc12345': { action: 'fields', fields: { name: 'mine', steps: 'mine', meta: 'theirs' } } }, { now: NOW });
+    const out = w.recipes[0] as Recipe;
+    expect(out.name).toEqual(mine.name);
+    expect(out.cuisine).toBe('italiaans');
+  });
+});
+
 describe('row: different id, same fingerprint -> similar', () => {
   const twin = received(recipe({ id: 'u:twin0000' }));
   const incoming = recipe({ id: 'u:fresh000', rev: 1, steps: [{ text: { nl: 'Andere stappen.' } }] }); // fingerprint ignores steps

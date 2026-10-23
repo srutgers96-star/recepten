@@ -8,6 +8,8 @@
 // Phase 6 (docs/phase-6-spec.md 6A.18): "Nu" and "Voorstel" name the kind of each value on its
 // own line — "Categorie: Salade" (one per recipe) and "Labels: vegetarisch, snel" (any number) —
 // because a suggested category read as a label that could not be found among the chips.
+// 6B blok 3 (docs/specs/labels-categorieen.md §1e): "Zelf kiezen" shows the Keuken row of MetaRows
+// too (never suggested); a cuisine chosen there is written with the rest.
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { MetaRows, applySuggestion, metaCategoryLabel, metaEqual, metaTagLabel, type MetaValue } from '@/components/MetaRows';
@@ -31,7 +33,7 @@ interface Row {
 }
 
 function metaOf(r: Recipe): MetaValue {
-  return { category: r.category ?? null, tags: [...(r.tags ?? [])] };
+  return { category: r.category ?? null, cuisine: r.cuisine ?? null, tags: [...(r.tags ?? [])] };
 }
 
 function rowOf(recipe: Recipe): Row {
@@ -85,7 +87,7 @@ export function CheckRecipesScreen() {
   const [showSkipped, setShowSkipped] = useState(false);
   const [showManual, setShowManual] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
-  const [editValue, setEditValue] = useState<MetaValue>({ category: null, tags: [] });
+  const [editValue, setEditValue] = useState<MetaValue>({ category: null, cuisine: null, tags: [] });
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
 
@@ -122,7 +124,7 @@ export function CheckRecipesScreen() {
 
   /** Writes `value` on the recipe (metaManual) and updates the local copy so the row re-renders. */
   async function write(row: Row, value: MetaValue): Promise<boolean> {
-    const next: Recipe = { ...row.recipe, category: value.category, tags: [...value.tags], metaManual: true };
+    const next: Recipe = { ...row.recipe, category: value.category, cuisine: value.cuisine, tags: [...value.tags], metaManual: true };
     try {
       await saveUserRecipe(next);
     } catch (e) {

@@ -5,7 +5,9 @@
 // that tag (vega-optie, vegan-optie, glutenvrij-optie, lactosevrij-optie).
 // The phase-2 chip row that lived here (a hard-coded quick-filter list) was replaced by the generic
 // `PickChips` in PickSheet.tsx (spec §0: chips follow the tags present in the data).
-import type { Category } from '@/domain/dictionary';
+// 6B blok 3 (docs/specs/labels-categorieen.md §1b): the "Keuken" row (`CuisineChips`) between the
+// diet row and the generic row — flag + name per cuisine present in the list, several on = OR.
+import type { Category, Cuisine } from '@/domain/dictionary';
 import { DIET_TAGS, type DietTag } from '@/domain/diet';
 import { hasKey, lang, t } from '@/i18n';
 
@@ -13,6 +15,13 @@ import { hasKey, lang, t } from '@/i18n';
 export function categoryLabel(c: Category | undefined, id: string): string {
   if (!c) return id;
   return (lang.value === 'nl' ? c.nl : c.en) || c.nl || id;
+}
+
+/** Cuisine label "🇮🇹 Italiaans": the flag + the name in the active language (falls back to the id). */
+export function cuisineLabel(c: Cuisine | undefined, id: string): string {
+  if (!c) return id;
+  const name = (lang.value === 'nl' ? c.nl : c.en) || c.nl || id;
+  return c.flag ? `${c.flag} ${name}` : name;
 }
 
 /** The "-optie" tag of a diet tag (data/recipes.json: vega-optie, vegan-optie, glutenvrij-optie, lactosevrij-optie). */
@@ -80,6 +89,38 @@ export function DietChips(props: DietChipsProps) {
       >
         {t('filter.dietOptie')}
       </button>
+    </div>
+  );
+}
+
+export interface CuisineChipsProps {
+  /** The cuisines to offer, in data `order` (only the ones present in the list; empty = no row). */
+  cuisines: readonly Cuisine[];
+  /** The cuisine ids that are on (OR among themselves). */
+  selected: readonly string[];
+  onToggle: (id: string) => void;
+}
+
+/**
+ * The "Keuken" row: [Keuken] 🇮🇹 Italiaans · 🇳🇱 Hollands · …, multi-select (OR). Renders nothing
+ * when no recipe in the list has a cuisine. It borrows the diet row's layout classes (`diet-chips`,
+ * `diet-label`) so both rows line up on every screen (also the Home dice bleed).
+ */
+export function CuisineChips(props: CuisineChipsProps) {
+  if (props.cuisines.length === 0) return null;
+  return (
+    <div class="chips filter-chips diet-chips cuisine-chips" role="group" aria-label={t('filter.cuisine')}>
+      <span class="diet-label" aria-hidden="true">
+        {t('filter.cuisine')}
+      </span>
+      {props.cuisines.map((c) => {
+        const on = props.selected.includes(c.id);
+        return (
+          <button key={c.id} type="button" class={'chip chip-cuisine' + (on ? ' on' : '')} aria-pressed={on} onClick={() => props.onToggle(c.id)}>
+            {cuisineLabel(c, c.id)}
+          </button>
+        );
+      })}
     </div>
   );
 }

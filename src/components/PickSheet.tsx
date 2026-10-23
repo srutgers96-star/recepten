@@ -10,9 +10,13 @@
 // Phase 5 (docs/phase-5-spec.md A.3): a prominent "Dieet" row (vegetarisch · vegan · glutenvrij,
 // src/components/FilterChips.tsx `DietChips`) sits above the generic row; its "ook als optie"
 // toggle (`PickFilter.optie`) lets a chosen diet tag also match the `-optie` variant.
+// 6B blok 3 (docs/specs/labels-categorieen.md §1b): a "Keuken" row (`CuisineChips`) sits between
+// the diet row and the generic row, only when a recipe in the list has a cuisine; the caller hands
+// the ids present (`cuisineIdsIn`, like `tagIdsIn`). `PickFilter.cuisines` is an OR group, ANDed
+// with the rest; the × clears it too.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { formatShortDate } from '@/components/RecipeRow';
-import { DIET_ROW_TAGS, DietChips, OPTIE_TAG, categoryLabel, isDietTag, tagChipLabel } from '@/components/FilterChips';
+import { CuisineChips, DIET_ROW_TAGS, DietChips, OPTIE_TAG, categoryLabel, isDietTag, tagChipLabel } from '@/components/FilterChips';
 import { dictionary } from '@/dictionary';
 import type { Dictionary } from '@/domain/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
@@ -27,16 +31,18 @@ export interface PickFilter {
   tags: string[];
   /** Category ids; OR among themselves (a recipe has one category; a tag with the same id counts too, "oven"). */
   cats: string[];
+  /** Cuisine ids (data/cuisines.json); OR among themselves (a recipe has at most one), AND with the rest. */
+  cuisines: string[];
   /** Free-text search over name, ingredient, category and tag (src/domain/search.ts). */
   query: string;
   /** "Ook als optie": a diet tag in `tags` also matches its -optie variant (vegetarisch → vega-optie). */
   optie?: boolean;
 }
 
-export const EMPTY_PICK_FILTER: PickFilter = { tags: [], cats: [], query: '' };
+export const EMPTY_PICK_FILTER: PickFilter = { tags: [], cats: [], cuisines: [], query: '' };
 
 export function pickFilterActive(f: PickFilter): boolean {
-  return f.tags.length > 0 || f.cats.length > 0 || f.query.trim() !== '';
+  return f.tags.length > 0 || f.cats.length > 0 || f.cuisines.length > 0 || f.query.trim() !== '';
 }
 
 /** Chicken-like ingredient ids: kip, kipfilet, kipdijfilet, braadkip, kippenbout … but not the stock/spices. */
@@ -74,8 +80,18 @@ export function tagIdsIn(recipes: readonly Recipe[]): string[] {
   return out;
 }
 
+/**
+ * Every cuisine id present in the recipes (`Recipe.cuisine`), sorted by id. The chip row shows them
+ * in data `order` and leaves out an id the dictionary does not know.
+ */
+export function cuisineIdsIn(recipes: readonly Recipe[]): string[] {
+  const ids = new Set<string>();
+  for (const r of recipes) if (typeof r.cuisine === 'string' && r.cuisine) ids.add(r.cuisine);
+  return [...ids].sort();
+}
+
 function sanitizePickFilter(v: unknown): PickFilter {
-  const o = (v && typeof v === 'object' ? v : {}) as { tags?: unknown; cats?: unknown; query?: unknown; quick?: unknown; optie?: unknown };
+  const o = (v && typeof v === 'object' ? v : {}) as { tags?: unknown; cats?: unknown; cuisines?: unknown; query?: unknown; quick?: unknown; optie?: unknown };
   const strings = (list: unknown): string[] => (Array.isArray(list) ? list.filter((x): x is string => typeof x === 'string' && x !== '') : []);
   const tags = strings(o.tags);
   const cats = strings(o.cats);
@@ -84,7 +100,8 @@ function sanitizePickFilter(v: unknown): PickFilter {
     if (q === 'vis') cats.push(q);
     else tags.push(q);
   }
-  const out: PickFilter = { tags: [...new Set(tags)], cats: [...new Set(cats)], query: typeof o.query === 'string' ? o.query : '' };
+  // Before 6B blok 3 there were no cuisines: an older stored value gets `cuisines: []`.
+  const out: PickFilter = { tags: [...new Set(tags)], cats: [...new Set(cats)], cuisines: [...new Set(strings(o.cuisines))], query: typeof o.query === 'string' ? o.query : '' };
   if (o.optie === true) out.optie = true;
   return out;
 }
@@ -101,8 +118,10 @@ export function loadPickFilter(key: string): PickFilter {
 
 export function savePickFilter(key: string, f: PickFilter): void {
   try {
-    if (f.tags.length || f.cats.length || f.optie) localStorage.setItem(key, JSON.stringify({ tags: f.tags, cats: f.cats, ...(f.optie ? { optie: true } : {}) }));
-    else localStorage.removeItem(key);
+    // `cuisines` (and `optie`) only when set, so an unchanged filter keeps its old stored shape.
+    if (f.tags.length || f.cats.length || f.cuisines.length || f.optie) {
+      localStorage.setItem(key, JSON.stringify({ tags: f.tags, cats: f.cats, ...(f.cuisines.length ? { cuisines: f.cuisines } : {}), ...(f.optie ? { optie: true } : {}) }));
+    } else localStorage.removeItem(key);
   } catch {
     /* storage may be unavailable (private mode) */
   }
@@ -113,6 +132,8 @@ export function applyPickFilter(recipes: readonly Recipe[], f: PickFilter, dict:
   const optie = f.optie === true;
   let out = recipes.filter((r) => {
     if (f.cats.length && !f.cats.some((c) => r.category === c || r.tags.includes(c))) return false;
+    // Cuisines: OR among themselves; a recipe without a cuisine never matches a chosen one.
+    if (f.cuisines.length && !(typeof r.cuisine === 'string' && f.cuisines.includes(r.cuisine))) return false;
     return f.tags.every((tag) => hasTag(r, tag, optie));
   });
   const q = f.query.trim();
@@ -129,13 +150,19 @@ export interface PickChipsProps {
   onChange: (next: PickFilter) => void;
   /** The tag ids to offer (from `tagIdsIn`). */
   tags: readonly string[];
+  /**
+   * The cuisine ids present in the list (from `cuisineIdsIn`); empty = no "Keuken" row. A chosen
+   * cuisine that is no longer present still shows (on), so it can be switched off.
+   */
+  cuisines: readonly string[];
   /** Hide the query chip (the sheet shows the search box itself). */
   noQuery?: boolean;
 }
 
 /**
- * The chip rows: first the diet row (vegetarisch · vegan · glutenvrij + "ook als optie",
- * docs/phase-5-spec.md A.3), then the generic row: [×] query · tags … · categories …,
+ * The chip rows: first the diet row (vegetarisch · vegan · glutenvrij · lactosevrij + "ook als
+ * optie", docs/phase-5-spec.md A.3), then the "Keuken" row when the list has cuisines (6B blok 3),
+ * then the generic row: [×] query · tags … · categories …,
  * multi-select. A tag that shares its id with a category ("oven") is folded into that category
  * chip; the diet tags and their -optie variants live in the diet row only.
  */
@@ -146,6 +173,10 @@ export function PickChips(props: PickChipsProps) {
   const q = f.query.trim();
   const catIds = new Set(dict.categories.map((c) => c.id));
   const tags = props.tags.filter((id) => !catIds.has(id) && !DIET_ROW_TAGS.has(id));
+  // A chosen cuisine stays visible even when no recipe has it any more (edited or deleted): it
+  // still filters, so its chip must be there to switch it off.
+  const present = new Set([...props.cuisines, ...f.cuisines]);
+  const cuisines = dict.cuisines.filter((c) => present.has(c.id));
   return (
     <div class="pick-rows">
       <DietChips
@@ -159,6 +190,7 @@ export function PickChips(props: PickChipsProps) {
           props.onChange(next);
         }}
       />
+      <CuisineChips cuisines={cuisines} selected={f.cuisines} onToggle={(id) => props.onChange({ ...f, cuisines: toggle(f.cuisines, id) })} />
       <div class="chips filter-chips pick-chips" role="group" aria-label={t('pick.filters')}>
         {active && (
           <button type="button" class="chip chip-clear" onClick={() => props.onChange(EMPTY_PICK_FILTER)} aria-label={t('pick.clear')}>
@@ -247,6 +279,7 @@ export function PickSheet(props: PickSheetProps) {
   const l = lang.value;
   const dict = dictionary.value;
   const tags = useMemo(() => tagIdsIn(props.recipes), [props.recipes]);
+  const cuisines = useMemo(() => cuisineIdsIn(props.recipes), [props.recipes]);
   const existingIds = useMemo(() => new Set(props.existing.map((p) => p.recipeId)), [props.existing]);
   const pool = useMemo(() => applyPickFilter(props.recipes, props.filter, dict, l), [props.recipes, props.filter, dict, l]);
   const rows = useMemo(() => sortLongestNotEaten(pool, props.lastCooked, l), [pool, props.lastCooked, l]);
@@ -293,7 +326,7 @@ export function PickSheet(props: PickSheetProps) {
             value={props.filter.query}
             onInput={(e) => props.onFilter({ ...props.filter, query: (e.currentTarget as HTMLInputElement).value })}
           />
-          <PickChips filter={props.filter} onChange={props.onFilter} tags={tags} noQuery />
+          <PickChips filter={props.filter} onChange={props.onFilter} tags={tags} cuisines={cuisines} noQuery />
           <div class="pick-sub muted small">
             <span>{t('pick.sortHint')}</span>
             <button type="button" class="btn btn-small btn-secondary" disabled={remaining === 0 || pool.length === 0} onClick={surprise}>
