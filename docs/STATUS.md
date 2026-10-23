@@ -56,6 +56,9 @@ De run kostte twee pogingen (sessielimiet na de schrijvers; hervat met resumeFro
 `main` = https://srutgers96-star.github.io/recepten/ (beide telefoons). `next` = …/recepten/next/ (testkanaal,
 eigen database en icoon): sinds 23 okt staat daar **Home A+ blok 1**, dat na de telefoonronde (DEVICE-TEST
 rij 70) in `main` gemerged wordt. Elk volgend bouwblok gaat eerst naar `next`.
+Eenmalig geregeld (23 okt): de GitHub Pages-omgeving `github-pages` stond alleen `main` toe als uitrolbranch;
+`next` is toegevoegd (Settings → Environments → github-pages → Deployment branches). Zonder die regel faalt
+de deploy-job van een push naar `next` met een environment-protection-fout.
 
 ## 16 okt (Opus 5.5): bugfixes van Gabi; de spec-ronde van Fable is NIET gelukt
 - De spec-ronde (workflow wf_09446677-12f) stuitte twee keer op de Fable-limiet: geen enkele spec af.
