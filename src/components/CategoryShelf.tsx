@@ -1,6 +1,8 @@
 // Categories shelf on Home (docs/phase-2-spec.md §5): one tile per category from categories.json
 // with the translated name and the number of recipes in it; a tap opens the Recipes list
 // pre-filtered ('#/recipes?cat=<id>'). Categories without recipes are skipped.
+// Home A+ (docs/specs/home-a-plus.md §1f): ONE row of 148 px tiles that scrolls sideways (the row
+// count lives in .cat-shelf, src/styles/home.css), under "Laatst gekookt". Only Home uses it.
 import { useMemo } from 'preact/hooks';
 import { categoryLabel } from '@/components/FilterChips';
 import { dictionary } from '@/dictionary';

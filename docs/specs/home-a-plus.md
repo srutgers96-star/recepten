@@ -1,6 +1,7 @@
 # Spec Home A+ — Home opnieuw ingedeeld: Vanavond, compacte week, rijen en de + in de kop
 
 Status: compleet (Fable, 22 okt 2026)
+Gebouwd: 23 okt 2026 (blok 1, workflow wf_664e3cc7-a9d)
 
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (docs/specs/README.md §2 heeft
 de besluiten die over specs heen gelden; bij tegenspraak wint README.md). Voor deze spec:

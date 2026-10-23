@@ -7,7 +7,6 @@ import type { Dict } from './index';
 export const phase2: Dict = {
   // --- Home: categories shelf + dice filters ---
   'home.categories': { nl: 'Categorieën', en: 'Categories' },
-  'home.surpriseFilters': { nl: 'Filters voor de dobbelsteen', en: 'Filters for the dice' },
   'home.noMatch': { nl: 'Geen recept past bij deze filters.', en: 'No recipe matches these filters.' },
 
   // --- Filter chips (list + dice) ---

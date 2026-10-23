@@ -15,19 +15,17 @@ export const browse: Dict = {
   'home.noFavorites': { nl: 'Nog geen favorieten — tik op ★ bij een recept.', en: 'No favourites yet — tap ★ on a recipe.' },
   'home.recentCooked': { nl: 'Laatst gekookt', en: 'Recently cooked' },
   'home.noCooked': { nl: 'Nog niets gekookt. Open een recept en tik op Koken.', en: 'Nothing cooked yet. Open a recipe and tap Cook.' },
-  'home.ownReceived': { nl: 'Eigen & ontvangen', en: 'Own & received' },
-  'home.noOwn': { nl: 'Nog geen eigen recepten.', en: 'No own recipes yet.' },
-  'home.addFirst': { nl: 'Voeg je eerste recept toe', en: 'Add your first recipe' },
-  'home.allRecipes': { nl: 'Alle recepten', en: 'All recipes' },
-  'home.story': { nl: 'Het verhaal', en: 'The story' },
-  'home.storyHint': { nl: 'Waar dit boek vandaan komt', en: 'Where this book comes from' },
-  // Phase 5 block C: the "Badges 7/40" link-card (names/descriptions live in data/badges.json).
+  // Phase 5 block C: "Badges 7/40" (names/descriptions live in data/badges.json); since Home A+ the
+  // line "🏆 Badges 7/40 ›" under the greeting (src/components/HomeLevelRow.tsx).
   'home.badges': { nl: 'Badges', en: 'Badges' },
-  'home.badgesHint': { nl: 'Wat heb je al verdiend?', en: 'What have you earned so far?' },
-  'home.teaser': {
-    nl: 'Weekplanner en boodschappenlijst komen in een volgende versie.',
-    en: 'The weekly planner and shopping list are coming in a later version.',
-  },
+  // Home A+ block 1 (docs/specs/home-a-plus.md §1d–1e): the rows In & uit, Mijn recepten, Het verhaal.
+  'home.inOut': { nl: 'In & uit', en: 'In & out' },
+  'home.inOutReceived': { nl: '{n} ontvangen', en: '{n} received' },
+  'home.inOutToShare': { nl: '{n} te delen', en: '{n} to share' },
+  'home.inOutNothing': { nl: 'niets nieuws', en: 'nothing new' },
+  'home.myRecipes': { nl: 'Mijn recepten', en: 'My recipes' },
+  'home.myRecipesNone': { nl: 'nog geen', en: 'none yet' },
+  'home.storyRow': { nl: 'Het verhaal van dit boek', en: 'The story of this book' },
 
   // --- A-Z list ---
   'list.title': { nl: 'Recepten', en: 'Recipes' },

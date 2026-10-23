@@ -23,11 +23,6 @@ export const week: Dict = {
   // --- Recipes list: + button (the four rows of its menu are `list.addWrite` … in browse.ts, phase 6) ---
   'list.add': { nl: 'Recept toevoegen', en: 'Add recipe' },
 
-  // --- Home: "In & uit" reminder card (shown while something is unseen; the row lives under Meer) ---
-  'home.inboxUnseen': { nl: '{n} nieuwe dingen bij In & uit.', en: '{n} new things in In & out.' },
-  'home.inboxUnseenOne': { nl: '1 nieuw ding bij In & uit.', en: '1 new thing in In & out.' },
-  'home.inboxAction': { nl: 'Bekijk In & uit', en: 'Open In & out' },
-
   // --- Home: "Deze week" card ---
   'home.week': { nl: 'Deze week', en: 'This week' },
   'home.weekMore': { nl: '+{n}', en: '+{n}' },

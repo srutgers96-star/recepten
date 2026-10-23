@@ -4,6 +4,37 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 23 okt (Opus): Home A+ blok 1
+Gebouwd volgens docs/specs/home-a-plus.md §3 blok 1 (bouwers A en B + integrator). Het werk staat **in de
+werkmap, nog niet gecommit en nog niet online**. Wat er nu staat: Home heeft in de kop een **+** met het nieuwe
+`AddMenu` (src/components/AddMenu.tsx, ook op Recepten; volgorde Plak · Zelf · AI · Bestand; via SheetPortal;
+sluit met ×, ernaast tikken, Escape of wegvegen; de veegcode is die van CookedSheet). De begroeting heeft het
+avatar-rondje en daaronder het slot `HomeLevelRow` (tot 6D "🏆 Badges x/y ›", null bij badges uit/geen
+profiel). De herinneringskaarten "nog niet gedeeld" en "In & uit" zijn de rij **📥 In & uit** ("1 ontvangen · 2
+te delen" / "niets nieuws", cobalt bij ontvangen); de sectie Eigen & ontvangen is de rij **📒 Mijn recepten N**
+(→ `#/recipes?sort=ownReceived`; RecipesScreen leest `?sort=`, onthoudt de keuze en haalt de query uit de hash);
+de badges-kaart en de verhaal-kaart zijn weg (Het verhaal is nu een rij). Laatst gekookt toont 3 rijen,
+Categorieën is één rij tegels van 148 px. Verras me en de oude weekkaart staan nog op plek 2 en 4 (blok 2
+vervangt ze). Ongebruikte keys weggehaald na Grep: `home.ownReceived`, `noOwn`, `addFirst`, `allRecipes`,
+`story`, `storyHint`, `badgesHint`, `teaser` (browse.ts), `home.inboxUnseen`, `inboxUnseenOne`, `inboxAction`
+(week.ts) en `home.surpriseFilters` (phase2.ts); `home.weekOpen` (ook ongebruikt) blijft voor blok 2 volgens
+§2c. DEVICE-TEST rij 58 (nieuwe volgorde) aangepast en rij 70 toegevoegd, NL en EN; na de review ook rij 15 (op Home
+verdwijnt nu "n te delen" uit de rij In & uit, niet meer een kaart) en rij 44 (Home toont de regel "🏆 Badges
+N/M ›" onder de begroeting, niet meer een kaart) bijgewerkt, NL en EN. Check, test (722),
+build en build:next groen; geen nieuwe dependency; Dexie blijft v7. In de dev-app (375 en 360 px, NL en EN)
+§6b checks 1–5 en 7 nagelopen; check 6 alleen in de code (de testdatabase heeft geen kookbeurten). In de
+dev-database staat nu een ontvangen testrecept "Testsoep van Gabi" (`u:hometst1`) van check 4.
+Twee kleine keuzes van bouwer A, buiten de letterlijke spec-code: een ongeldige `?sort=foo` verandert niets
+maar verdwijnt wel uit de hash (§7 punt 3 "blijft niet hangen"), en een sorteerwissel vergeet ook de bewaarde
+scrollpositie (anders zou de nieuwe volgorde na laden naar de oude plek springen; "scrolt naar boven").
+**Besluit Fable (23 okt):** via de rij Mijn recepten wordt een oude zoekterm uit Recepten gewist
+(`setQuery('')` in het `?sort=`-effect); de rij belooft "alleen je eigen en ontvangen recepten" (rij 70
+stap 4). Een tik op de sorteerpil zelf laat de zoekterm staan, zoals voorheen. Review (2 lenzen + verifier):
+4 bevindingen bevestigd, alle verwerkt. Haiku-gate groen.
+**Uitrol:** blok 1 staat op de nieuwe branch `next` → https://srutgers96-star.github.io/recepten/next/ (eigen
+database, eigen icoon). `main` is ongewijzigd tot de telefoonronde met rij 70 (beide telefoons) goed is;
+daarna `next` in `main` mergen. Dan blok 2 (Vanavond-kaart en compacte week).
+
 ## 22–23 okt (Fable): de spec-ronde is af — Opus kan bouwen
 **docs/specs/README.md is nu het startpunt voor elk bouwblok** (bouwvolgorde, register van velden/keys,
 werkwijze + Workflow-sjabloon voor Opus, "Opus mag niet zelf beslissen", master-controlelijst voor Fable,
@@ -21,8 +52,10 @@ De run kostte twee pogingen (sessielimiet na de schrijvers; hervat met resumeFro
 **Fase 5 compleet** (fase 0–4 + blok A t/m F, 8 oktober 2026) **+ fase 6 blok 6A** (6A-1 9 okt, 6A-2 15 okt)
 **+ ronde 13 okt deel 1** (15 okt). Repo: https://github.com/srutgers96-star/recepten.
 
-## Lokaal gecommit, nog NIET gepusht
-(niets — alles staat online; de tijdelijke branch wip/6a2-partial is na 6A-2 verwijderd)
+## Branches
+`main` = https://srutgers96-star.github.io/recepten/ (beide telefoons). `next` = …/recepten/next/ (testkanaal,
+eigen database en icoon): sinds 23 okt staat daar **Home A+ blok 1**, dat na de telefoonronde (DEVICE-TEST
+rij 70) in `main` gemerged wordt. Elk volgend bouwblok gaat eerst naar `next`.
 
 ## 16 okt (Opus 5.5): bugfixes van Gabi; de spec-ronde van Fable is NIET gelukt
 - De spec-ronde (workflow wf_09446677-12f) stuitte twee keer op de Fable-limiet: geen enkele spec af.

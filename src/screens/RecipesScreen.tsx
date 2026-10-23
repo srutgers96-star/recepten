@@ -4,13 +4,13 @@
 // repository (schema 2). Unfiltered: letter groups + rail. Filtering (chips): a plain sorted list.
 // Searching: `searchRecipes` groups (name → ingredient → category → tag) with a small header each,
 // so typing "onion" finds the recipes that contain `ui`. '#/recipes?cat=<id>' opens the list
-// pre-filtered on that category (Home shelf); the query is then dropped from the hash.
-// Phase 4: the "+" in the header opens a small menu; phase 6 (docs/phase-6-spec.md 6A.13) it shows
-// all four ways in at once, each with one line of explanation: Zelf schrijven ('/add'), Plak een
-// recept ('/add?mode=paste': the paste box open with the cursor in it), Met AI ('/add?mode=ai': the
-// prompt section open) and Kies een bestand (A-bis.9: a recipe/bundle/backup file goes to the
-// Inbox, text to the Add screen's paste box, src/paste.ts `openPastedText`); the chips are the
-// generic `PickChips` (every tag in the data + the categories, spec §0).
+// pre-filtered on that category (Home shelf); '#/recipes?sort=<ListSort>' (Home row "Mijn recepten",
+// docs/specs/home-a-plus.md §1e) picks that sort mode exactly as a tap on its pill would (and
+// remembers it); either query is then dropped from the hash.
+// The "+" in the header opens `AddMenu` (src/components/AddMenu.tsx, Home A+ §1b: the same sheet as
+// the "+" on Home): Plak een recept · Zelf schrijven · Met AI · Kies een bestand, each with one line
+// of explanation. The chips are the generic `PickChips` (every tag in the data + the categories,
+// spec §0).
 // Phase 5 (docs/phase-5-spec.md A-bis.8): select mode. "Selecteer" in the header, a long-press on
 // a row, or '#/recipes?select=1[&id=<id>]' (Home) turns the rows into checkboxes and shows the
 // `SelectBar` above the nav: Deel (one message with one token per recipe, or a bundle file when
@@ -27,6 +27,7 @@
 // mode is logged in the "In & uit" log (repo.logShareEvent).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
+import { AddMenu } from '@/components/AddMenu';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { PickChips, applyPickFilter, loadPickFilter, pickFilterActive, savePickFilter, tagIdsIn, type PickFilter } from '@/components/PickSheet';
@@ -43,9 +44,8 @@ import { searchRecipes, type SearchGroup } from '@/domain/search';
 import { buildBundleEnvelope, buildPatchEnvelope, buildRecipeEnvelope, bundleFileName, planMessages, type MessagePlan } from '@/domain/share';
 import type { Envelope } from '@/domain/token';
 import { lang, t } from '@/i18n';
-import { openPastedText, PASTE_FILE_ACCEPT } from '@/paste';
 import { activeProfile } from '@/profile';
-import { LIST_SORTS, loadListSort, orderRecipes, recentIds, saveListSort, type ListSort } from '@/recent';
+import { LIST_SORTS, isListSort, loadListSort, orderRecipes, recentIds, saveListSort, type ListSort } from '@/recent';
 import { navigate, route } from '@/router';
 import { shareJsonFile, shareText } from '@/share-actions';
 
@@ -146,37 +146,17 @@ export function RecipesScreen() {
   const [shareData, setShareData] = useState<ShareData | null>(null);
   const [building, setBuilding] = useState(false);
   const [addMenu, setAddMenu] = useState(false);
-  const [addStatus, setAddStatus] = useState('');
-
-  /**
-   * "Kies een bestand" in the "+" menu: routed like a paste (src/paste.ts) — recipes, links and
-   * cards to the Inbox, a website recipe or AI answer to the Add screen (filled in on arrival),
-   * other text to its paste box.
-   */
-  function onAddFile(e: Event) {
-    const input = e.currentTarget as HTMLInputElement;
-    const file = input.files?.[0];
-    input.value = '';
-    if (!file) return;
-    file.text().then(
-      (text) => {
-        if (!openPastedText(text)) {
-          setAddStatus(t('edit.fileEmpty'));
-          return;
-        }
-        setAddMenu(false);
-      },
-      () => setAddStatus(t('edit.fileFailed')),
-    );
-  }
 
   // '#/recipes?cat=<id>' from the Home shelf: replace the selection, then drop the query from the
   // hash so a reload or a tab switch does not re-apply it. '?select=1[&id=<id>]' (Home "Selecteer"
-  // / long-press) enters select mode the same way.
+  // / long-press) enters select mode the same way. '?sort=<ListSort>' (Home row "Mijn recepten")
+  // chooses that sort mode and remembers it, like a tap on the pill; an unknown value ('?sort=foo')
+  // changes nothing but is dropped from the hash all the same, so it never lingers (spec §7 check 3).
   const onList = route.value.path === '/recipes';
   const cat = onList ? route.value.query.get('cat') : null;
   const selectQuery = onList ? route.value.query.get('select') : null;
   const preselect = onList ? route.value.query.get('id') : null;
+  const sortQuery = onList ? route.value.query.get('sort') : null;
   useEffect(() => {
     if (!cat) return;
     changeFilters({ tags: [], cats: [cat], query: '' });
@@ -188,6 +168,16 @@ export function RecipesScreen() {
     enterSelect(preselect);
     navigate('/recipes', { replace: true });
   }, [selectQuery, preselect]);
+  useEffect(() => {
+    if (sortQuery === null) return;
+    if (isListSort(sortQuery)) {
+      changeSort(sortQuery); // chooses and remembers (saveListSort), scrolls to the top
+      // Arriving from Home ("Mijn recepten N ›") promises that list, not an old search over all recipes
+      // (decision Fable, 23 Oct 2026; DEVICE-TEST row 70 step 4). A tap on the sort pill keeps the search.
+      setQuery('');
+    }
+    navigate('/recipes', { replace: true });
+  }, [sortQuery]);
 
   function changeFilters(next: PickFilter) {
     setFilters(next);
@@ -198,7 +188,10 @@ export function RecipesScreen() {
     setSortMode(next);
     saveListSort(next);
     setRailLetter(null);
-    // A mode switch starts at the top: the old offset belongs to the old order.
+    // A mode switch starts at the top: the old offset belongs to the old order. Forget the saved
+    // offset too: on arrival via '?sort=' the list is still empty here, and the restore effect below
+    // would otherwise scroll the new order to the old position once the recipes load.
+    savedScroll = 0;
     if (scroller.current) scroller.current.scrollTop = 0;
   }
 
@@ -607,43 +600,7 @@ export function RecipesScreen() {
         )}
         {railLetter && <div class="az-bubble">{railLetter}</div>}
       </div>
-      {addMenu && (
-        <div class="sheet-backdrop" onClick={() => setAddMenu(false)}>
-          <div class="sheet" role="dialog" aria-modal="true" aria-label={t('list.add')} onClick={(e) => e.stopPropagation()}>
-            <div class="sheet-head">
-              <h2>{t('list.add')}</h2>
-              <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={() => setAddMenu(false)}>
-                ×
-              </button>
-            </div>
-            <div class="sheet-body add-menu">
-              {/* 6A.13: the four ways in, each with one line of explanation; the same choices stay in the editor. */}
-              <button type="button" class="add-menu-row" onClick={() => navigate('/add')}>
-                <strong>{t('list.addWrite')}</strong>
-                <span class="muted small">{t('list.addWriteHint')}</span>
-              </button>
-              <button type="button" class="add-menu-row" onClick={() => navigate('/add?mode=paste')}>
-                <strong>{t('list.addPaste')}</strong>
-                <span class="muted small">{t('list.addPasteHint')}</span>
-              </button>
-              <button type="button" class="add-menu-row" onClick={() => navigate('/add?mode=ai')}>
-                <strong>{t('list.addAi')}</strong>
-                <span class="muted small">{t('list.addAiHint')}</span>
-              </button>
-              <label class="add-menu-row">
-                <strong>{t('list.addFileChoice')}</strong>
-                <span class="muted small">{t('list.addFileChoiceHint')}</span>
-                <input type="file" accept={PASTE_FILE_ACCEPT} style="display:none" onChange={onAddFile} />
-              </label>
-              {addStatus && (
-                <p class="muted small" role="status">
-                  {addStatus}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <AddMenu open={addMenu} onClose={() => setAddMenu(false)} />
       {selectMode && (
         <SelectBar
           selected={selectedList}

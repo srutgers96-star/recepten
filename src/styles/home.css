@@ -78,12 +78,12 @@
 
 /* ---------- Categories shelf (Home) ---------- */
 
-/* Two rows of tiles, scrolling sideways; edge-to-edge like the favourites strip. */
+/* One row of tiles (Home A+ §1f), scrolling sideways; edge-to-edge like the favourites strip. */
 .cat-shelf {
   display: grid;
   grid-auto-flow: column;
-  grid-template-rows: repeat(2, auto);
-  grid-auto-columns: 128px;
+  grid-template-rows: auto;
+  grid-auto-columns: 148px;
   gap: 8px;
   overflow-x: auto;
   margin: 0 calc(-1 * max(16px, var(--sar))) 0 calc(-1 * max(16px, var(--sal)));
@@ -153,24 +153,6 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   padding: 14px 0 4px;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-/* "+" in the "Eigen & ontvangen" section header (spec §3: add lives here and on the Recipes
-   header). The title takes the free width so the "+" and "Alle recepten" sit together on the right. */
-.home-section h2 .home-section-title {
-  flex: 1;
-  min-width: 0;
-}
-
-.home-section h2 .home-add {
-  min-width: 44px;
-  justify-content: center;
-  font-size: 26px;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--cobalt);
   user-select: none;
   -webkit-user-select: none;
 }
@@ -327,19 +309,107 @@
   font-style: italic;
 }
 
-/* ---------- Phase 5 (block C): the "Badges 7/40" link-card ---------- */
+/* ---------- Home A+ block 1 (docs/specs/home-a-plus.md §1c–1e) ---------- */
 
-/* The counter next to the title, cobalt like the other link accents; tabular so 7/40 never jumps. */
-.badges-card .badges-card-count {
+/* Greeting row: the avatar circle (decoration) left, the greeting right. The row carries the
+   greeting's own margins (browse.css), so the h2 inside it has none. */
+.home-hello {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 12px;
+}
+
+.home-hello .home-greeting {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+/* The level-row slot (HomeLevelRow; until 6D "🏆 Badges 7/40 ›"): one thin cobalt line, a full
+   44 px tap target. Directly under the greeting it lines up with the greeting text (40 px avatar +
+   12 px gap) and pulls up into the greeting row's bottom margin. */
+.home-level {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
   color: var(--cobalt);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.home-hello + .home-level {
+  margin: -12px 0 0 52px;
+}
+
+.home-level:active {
+  opacity: 0.6;
+}
+
+/* A card of tappable rows (In & uit; Mijn recepten + Het verhaal): no card padding, the rows carry
+   it; rows separated by a hairline. */
+.card.home-rows {
+  padding: 0;
+  overflow: hidden; /* keeps the :active background inside the rounded corners */
+}
+
+.home-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 14px;
+  color: inherit;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.home-row + .home-row {
+  border-top: 1px solid var(--line);
+}
+
+.home-row:active {
+  background: var(--press);
+}
+
+.home-row-icon {
+  flex: none;
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* The title takes the free width (never shrinks); a long detail ellipsizes instead. */
+.home-row-title {
+  flex: 1 0 auto;
+  font-weight: 600;
+}
+
+.home-row .detail {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Phase 5 (A-bis.8): "Selecteer" next to the "Eigen & ontvangen" title ---------- */
-.home-section h2 .home-select {
-  min-height: 44px;
-  padding: 0 6px;
+/* Something received and not yet seen: the detail stands out (like the badge on the Meer tab). */
+.home-row.has-new .detail {
   color: var(--cobalt);
-  user-select: none;
-  -webkit-user-select: none;
+}
+
+.home-row .chev {
+  flex: none;
+  color: var(--muted);
+  opacity: 0.6;
 }
