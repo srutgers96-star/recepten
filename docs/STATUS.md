@@ -13,8 +13,8 @@ specs heen: home-a-plus · kookbalk (13K) · labels-categorieen (6B+13E) · bijg
 inbouwen (13F, Dexie v8 = de enige nieuwe versie) · varianten-tabs (13D) · vaste-lijst (6C) · xp-levels (6D)
 · badges-avatar (6D-2/6D-3). Bouwvolgorde: Home A+ → 13K → 6B+13E → bijgerechten → 13F → 13D → 6C → 6D-1 →
 6D-2 → 6D-3 → 6D-4 → 13J (zonder spec) → Z → Fable-eindcontrole. DEVICE-TEST-rijen 70–101 zijn in de specs
-al genummerd. **Twee vragen blokkeren** (README §6): Stijn keurt de badge-catalogus en avatar-bibliotheek goed
-(vóór 6D-2), en beslist over namen/credits en de twee kookboekrecepten bij het inbouwen (vóór 13F blok 1).
+al genummerd. De twee blokkerende vragen (README §6) zijn op 23 okt beantwoord: catalogus en avatar-bibliotheek
+goedgekeurd; voornamen in de credits mogen genoemd worden; de rest standaard. **Niets blokkeert meer.**
 De run kostte twee pogingen (sessielimiet na de schrijvers; hervat met resumeFromRunId, schrijvers uit cache).
 
 ## Online (https://srutgers96-star.github.io/recepten/)

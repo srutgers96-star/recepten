@@ -1374,6 +1374,11 @@ English:
 
 ## 8. Open vragen voor Stijn
 
+**Beantwoord door Stijn, 23 okt 2026:** vraag 1 → **catalogus en avatar-bibliotheek goedgekeurd** zoals ze
+in §2d en §2f staan (Engelse namen als "Fishlover"/"Cuppa" blijven; drempelreeksen en de zes `retired`
+badges akkoord). Vragen 2 en 3 kregen geen ander antwoord: de standaard geldt (hartje als eigen klein blok
+ná 6D-3, één hartje tot Stijn niveaus wil; avatar-maker vanaf level 3). 6D-2 en 6D-3 zijn vrij om te bouwen.
+
 1. **Goedkeuring van de catalogus (§2d) en de avatar-bibliotheek (§2f)** — dit is de afgesproken stap vóór de
    bouw. Vooral: de namen (mag Engels als "Fishlover"/"Cuppa" blijven staan in de NL-editie?), de
    drempelreeksen (COOK begint op 5 zodat "Eerste hap" het eerste-kookbeurt-moment houdt), en de zes

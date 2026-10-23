@@ -918,6 +918,11 @@ origineel; 13D's rijen 86–88 nemen het over en de integrator van 13D blok 2 pa
 
 ## 8. Open vragen voor Stijn
 
+**Beantwoord door Stijn, 23 okt 2026:** vraag 3 → **ja, de voornamen mogen genoemd worden** ("Van Gabi",
+"Van Dino, via Stijn"; de vervangende teksten vervallen). Vragen 1 en 2 kregen geen ander antwoord: de
+standaard geldt ("Griekse salade van Stijn" / "Stijn's Greek salad"; de twee kookboekrecepten inbouwen met
+volledig herschreven bereiding). Blok 1 is hiermee vrij om te bouwen.
+
 1. **Naam van jouw Griekse salade.** De naam botst met de klassieker "Griekse salade" uit het boek (ander
    recept: lollo rosso, radijs, 60 g feta). Standaard hier: **"Griekse salade van Stijn"** /
    **"Stijn's Greek salad"** (id `b:griekse-salade-van-stijn`). Liever iets anders (bv. "Griekse salade van de

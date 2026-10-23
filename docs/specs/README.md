@@ -363,7 +363,12 @@ Gegroepeerd en ontdubbeld over de negen specs (de nummers verwijzen naar §7 van
 
 ## 6. Vragen aan Stijn vóór de bouw
 
-**De twee die het meest blokkeren:**
+**De twee die het meest blokkeerden — beantwoord door Stijn op 23 okt 2026:** (1) de badge-catalogus en
+de avatar-bibliotheek zijn **goedgekeurd** zoals ze staan; avatar-maker vanaf level 3 (standaard).
+(2) de voornamen **mogen genoemd worden** ("Van Gabi", "Van Dino, via Stijn"); Griekse salade heet
+"Griekse salade van Stijn" (standaard); de twee kookboekrecepten worden ingebouwd met herschreven bereiding
+(standaard). Niets blokkeert meer; de antwoorden staan ook in §8 van inbouwen.md en badges-avatar.md.
+
 1. **6D (blokkeert 6D-2 en 6D-3):** keur de badge-catalogus (badges-avatar.md §2d: namen — mag Engels als
    "Fishlover"/"Cuppa" in de NL-editie? — drempelreeksen, de zes `retired` badges) en de avatar-bibliotheek
    (§2f) goed, of noem wat anders moet. Ook: avatar-maker vanaf level 3 (standaard) of 5?
