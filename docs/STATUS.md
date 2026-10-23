@@ -5,8 +5,9 @@ Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee:
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
 ## 23 okt (Opus): Home A+ blok 2
-Gebouwd volgens docs/specs/home-a-plus.md §3 blok 2 (bouwers A en B + integrator). Het werk staat **in de
-werkmap, nog niet gecommit en nog niet online**. Wat er nu staat: Home heeft op plek 2 de kaart **VANAVOND**
+Gebouwd volgens docs/specs/home-a-plus.md §3 blok 2 (bouwers A en B + integrator). **Staat op `next`
+(commit a3396e5) en online op /recepten/next/; `main` volgt na de telefoonronde met rij 70 en 71.** Wat er nu
+staat: Home heeft op plek 2 de kaart **VANAVOND**
 (src/components/TonightCard.tsx) met drie standen uit het pure `tonightMode` (src/domain/tonight.ts): laden;
 **plan** (het eerste niet-gekookte gerecht van de week, metaregel "45 min · Vlees · nog 3 te gaan" / "de laatste
 van je week", **🎲 Iets anders** bladert rond door de week en is grijs bij één, voetregel **Iets buiten je week ›**);
@@ -38,16 +39,17 @@ beeld, het kaartgerecht herhaalt; het 250 ms-gordijn is weg, de regel wacht alle
 naar je week, een plan-wijziging): nul foute beelden, met `useEffect` als tegenproef één. **3.** De "+N" van de
 weekregel staat in een eigen span met `flex: none` en wordt nooit afgekapt; alleen de namen krimpen met een ellipsis
 (360 en 375 px: "Spaanse groenten · Roergebakken… · +4").
-**Nog open voor Fable/Stijn (niet zelf beslist):** (1) Op 360 px breekt "🎲 Iets anders" en "🎲
-Something else" over twee regels binnen de knop (48 px hoog, niets valt weg); op 375 px alleen het Engels. Teksten
-niet ingekort. (2) "n van 7 gekookt" telt ook slots waarvan het recept weg is; de namenregel slaat die over.
+**Twee restpunten, door Fable geaccepteerd (23 okt):** (1) Op 360 px breekt "🎲 Iets anders" / "🎲
+Something else" over twee regels binnen de knop (48 px hoog, niets valt weg); de tekst blijft, want een korter
+woord zegt minder. (2) "n van 7 gekookt" telt ook slots waarvan het recept weg is; de namenregel slaat die over.
+Dat volgt de spec-signatuur en is zeldzaam (alleen na het verwijderen van een eigen recept uit een lopende week).
 Kleine keuzes van bouwer B: kopregel VANAVOND 13 px (niet 12, §5b), Verder met in cobalt, een tijd van 0 minuten
 valt weg uit de metaregel.
-**Uitrol:** na de commit eerst `next` (samen met blok 1), dan de telefoonronde met rij 70 én 71, daarna `main`.
+**Uitrol:** staat op `next` (23 okt); na de telefoonronde met rij 70 én 71 volgt `main`.
 
 ## 23 okt (Opus): Home A+ blok 1
-Gebouwd volgens docs/specs/home-a-plus.md §3 blok 1 (bouwers A en B + integrator). Het werk staat **in de
-werkmap, nog niet gecommit en nog niet online**. Wat er nu staat: Home heeft in de kop een **+** met het nieuwe
+Gebouwd volgens docs/specs/home-a-plus.md §3 blok 1 (bouwers A en B + integrator). **Live op `main` sinds
+23 okt** (eerst op `next`, door Stijn gecheckt). Wat er nu staat: Home heeft in de kop een **+** met het nieuwe
 `AddMenu` (src/components/AddMenu.tsx, ook op Recepten; volgorde Plak · Zelf · AI · Bestand; via SheetPortal;
 sluit met ×, ernaast tikken, Escape of wegvegen; de veegcode is die van CookedSheet). De begroeting heeft het
 avatar-rondje en daaronder het slot `HomeLevelRow` (tot 6D "🏆 Badges x/y ›", null bij badges uit/geen
@@ -95,8 +97,9 @@ De run kostte twee pogingen (sessielimiet na de schrijvers; hervat met resumeFro
 
 ## Branches
 `main` = https://srutgers96-star.github.io/recepten/ (beide telefoons). `next` = …/recepten/next/ (testkanaal,
-eigen database en icoon): sinds 23 okt staat daar **Home A+ blok 1**, dat na de telefoonronde (DEVICE-TEST
-rij 70) in `main` gemerged wordt. Elk volgend bouwblok gaat eerst naar `next`.
+eigen database en icoon). 23 okt: **Home A+ blok 1** stond eerst op `next`, is na Stijns check in `main`
+gemerged en staat live; **blok 2** staat op `next` en wacht op de telefoonronde (DEVICE-TEST rij 70 en 71),
+daarna `next` → `main` (fast-forward). Elk volgend bouwblok gaat eerst naar `next`.
 Eenmalig geregeld (23 okt): de GitHub Pages-omgeving `github-pages` stond alleen `main` toe als uitrolbranch;
 `next` is toegevoegd (Settings → Environments → github-pages → Deployment branches). Zonder die regel faalt
 de deploy-job van een push naar `next` met een environment-protection-fout.
