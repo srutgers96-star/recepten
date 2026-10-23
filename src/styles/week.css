@@ -63,7 +63,7 @@
   font-size: 18px;
 }
 
-/* The chip row inside the hero card bleeds to the card's 16 px padding (like .surprise). */
+/* The chip row inside the hero card bleeds to the card's 16 px padding (like .tonight). */
 .week-hero .filter-chips {
   margin: 0 -16px;
   padding: 6px 16px;

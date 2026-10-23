@@ -27,7 +27,6 @@ export const week: Dict = {
   'home.week': { nl: 'Deze week', en: 'This week' },
   'home.weekMore': { nl: '+{n}', en: '+{n}' },
   'home.weekList': { nl: 'Boodschappenlijst', en: 'Shopping list' },
-  'home.weekOpen': { nl: 'Bekijk de week', en: 'Open the week' },
   'home.weekEmpty': { nl: 'Kies 7 voor deze week', en: 'Pick 7 for this week' },
   'home.weekEmptyHint': { nl: 'Geen dagen, gewoon een lijstje gerechten en één boodschappenlijst.', en: 'No days, just a list of dishes and one shopping list.' },
   'home.weekAllCooked': { nl: 'Alles gekookt — kies nieuwe?', en: 'All cooked — pick new ones?' },

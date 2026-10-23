@@ -2,6 +2,7 @@
 
 Status: compleet (Fable, 22 okt 2026)
 Gebouwd: 23 okt 2026 (blok 1, workflow wf_664e3cc7-a9d)
+Gebouwd: 23 okt 2026 (blok 2, workflow wf_bab78a20-f76)
 
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (docs/specs/README.md §2 heeft
 de besluiten die over specs heen gelden; bij tegenspraak wint README.md). Voor deze spec:
@@ -22,6 +23,10 @@ de besluiten die over specs heen gelden; bij tegenspraak wint README.md). Voor d
 - §6b check 4 en rij 70 stap 3: "1 ontvangen" verschijnt alleen voor een recept dat deze telefoon nog
   niet heeft (plak een link van een ander profiel/kanaal, niet van je eigen recept).
 - Open vraag 1 (regel "🏆 Badges x/y ›" tot 6D) blijft staan; standaard = tonen.
+- Na de bouw (Fable, 23 okt): blok 1 — via de rij Mijn recepten wordt een oude zoekterm gewist. Blok 2 —
+  de dobbelsteen van "Iets buiten je week" sluit de weekgerechten uit (`outsideWeekIds` in tonight.ts);
+  `onShown` via `useLayoutEffect`; de "+N" op de weekregel in een eigen span met `flex: none`. §1g, §3 en
+  §7.8 zijn daarop aangepast.
 
 Feitencheck Opus, 22 okt 2026: 17 correcties
 - §1b ⚠: het huidige +-menu kent geen veeggebaar; vegen-om-te-sluiten zit alleen in CookedSheet.tsx.
@@ -178,7 +183,9 @@ src/domain/tonight.ts `tonightMode`):
   `home.tonightOutside` — NL **Iets buiten je week ›** · EN **Something outside your week ›** → zet de
   module-variabele `freeMode = true` (geldt tot de app opnieuw start).
 - **free** — geen plan, alles gekookt, of `freeMode`. Dit is de huidige Verras me: een willekeurig recept
-  uit de pool (`applyPickFilter(recipes, filters, dict, l)`), onthouden in `diceId`; knoppen **Open** en
+  uit de pool (`outsideWeekIds(applyPickFilter(recipes, filters, dict, l)-ids, plan)`: de gerechten van het
+  weekplan doen niet mee, tenzij er dan niets overblijft — besluit Fable 23 okt; een onthouden `diceId`
+  buiten die pool wordt losgelaten), onthouden in `diceId`; knoppen **Open** en
   **🎲 Nog een** (`home.reroll`, bestaat); metaregel met alleen tijd en categorie. Pool leeg door chips →
   `home.noMatch` (bestaat); pool leeg zonder chips → `common.loading`.
   Voetregel: links de schakelaar **filters ▾** (`home.filters` — NL **filters** · EN **filters**;
@@ -406,7 +413,9 @@ export function TonightCard(props: TonightCardProps): JSX.Element;
 // src/components/WeekCard.tsx — §1i; rendert zelf de lege kaart bij 0 slots.
 export function WeekCard(props: { plan: Plan; byId: ReadonlyMap<string, Recipe> }): JSX.Element;
 ```
-`onShown` wordt in een `useEffect` aangeroepen als het getoonde id verandert (niet tijdens de render).
+`onShown` wordt in een `useLayoutEffect` aangeroepen als het getoonde id verandert (niet tijdens de render;
+vóór de paint, zodat "Verder met" nooit één beeld lang het kaartgerecht herhaalt — besluit Fable 23 okt, was
+`useEffect`).
 
 ### Blok 2 — integrator
 HomeScreen: vervangt de kaart Verras me door `<TonightCard recipes={all} plan={plan} onShown={setShownId} />`,
@@ -582,7 +591,7 @@ bestand het wil) en daarom de enige lange regels in deze spec.
 7. [ ] TonightCard: plan-stand toont het eerste niet-gekookte slot, "Iets anders" is rond en `disabled` bij
        één slot, de metaregel heeft geen losse " · " bij ontbrekende delen, de free-stand behoudt de oude
        chips (`recepten.surpriseFilters`) en `recepten.tonightFiltersOpen` wordt alleen in try/catch gelezen.
-8. [ ] `onShown` loopt via useEffect; "Verder met" verdwijnt bij een kookbeurt van vandaag en herhaalt
+8. [ ] `onShown` loopt via useLayoutEffect; "Verder met" verdwijnt bij een kookbeurt van vandaag en herhaalt
        nooit het kaartgerecht; `noteViewed` schrijft `recepten.recent.last` zonder `recepten.recent` te breken.
 9. [ ] WeekCard: lege kaart ongewijzigd; "0 van 7 gekookt"; weekregel max 3 + "+N", gekookte achteraan en
        doorgestreept; knoppen zoals voorheen.

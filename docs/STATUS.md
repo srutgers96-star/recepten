@@ -4,6 +4,47 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 23 okt (Opus): Home A+ blok 2
+Gebouwd volgens docs/specs/home-a-plus.md §3 blok 2 (bouwers A en B + integrator). Het werk staat **in de
+werkmap, nog niet gecommit en nog niet online**. Wat er nu staat: Home heeft op plek 2 de kaart **VANAVOND**
+(src/components/TonightCard.tsx) met drie standen uit het pure `tonightMode` (src/domain/tonight.ts): laden;
+**plan** (het eerste niet-gekookte gerecht van de week, metaregel "45 min · Vlees · nog 3 te gaan" / "de laatste
+van je week", **🎲 Iets anders** bladert rond door de week en is grijs bij één, voetregel **Iets buiten je week ›**);
+**free** (de oude Verras me: dobbelsteen met **🎲 Nog een**, voetregel **filters ▾** / **filters (n) ▾** met de
+chips eronder, open/dicht onthouden in `recepten.tonightFiltersOpen`, en **Terug naar je week ›** zolang de week
+nog iets open heeft). De chips blijven onder `recepten.surpriseFilters`. Op plek 3 de regel **Verder met: … ›**
+(alleen vandaag bekeken, niet vandaag gekookt, niet het gerecht van de kaart; `noteViewed` schrijft nu ook
+`recepten.recent.last`). Op plek 4 de compacte **Deze week** (src/components/WeekCard.tsx: "n van 7 gekookt", één
+regel met max 3 namen + "+N", niet-gekookt eerst, gekookt doorgestreept achteraan; lege kaart ongewijzigd).
+HomeScreen bevat geen dobbelsteen-logica meer. tests/tonight.test.ts dekt alle gevallen van §6a (43 nieuwe tests,
+ook in andere tijdzones groen). **Afwijking van de letter van §3:** `LastViewed` staat in src/domain/tonight.ts en
+src/recent.ts geeft hem door als type (zo importeert src/domain niets uit de app-laag, de ⚠ van de feitencheck).
+**Keuze van de integrator** (vervangen door besluit 2 hieronder): de regel Verder met verscheen pas als de kaart
+haar gerecht had gemeld (of 250 ms na het laden als de kaart niets toonde); anders flitste in de dev-app één beeld
+lang "Verder met: <het kaartgerecht>" bij terugkomen op Home. Ongebruikte keys weggehaald na Grep:
+`home.surprise` (browse.ts) en `home.weekOpen` (week.ts); dode CSS van de oude kaart weg (`.surprise` in browse.css, `.surprise .filter-chips` en
+`.surprise .diet-chips` in home.css; `.surprise-name/-alt/-actions` blijven, de kaart gebruikt ze). DEVICE-TEST rij
+71 toegevoegd, NL en EN, letterlijk uit de spec, op één plek na (review-ronde): stap 4 verwacht **filters (1) ▾**
+in plaats van **filters ▾**, want Vegetarisch uit stap 2 staat dan nog aan (§1g; stap 2 van de rij zegt zelf al
+"filters (1) ▾"). Check, test (765), build en build:next groen; geen nieuwe
+dependency; Dexie blijft v7. In de dev-app (375 en 360 px, NL en EN) §6b checks 8–13 nagelopen; de testdatabase
+van het browserpaneel heeft nu profiel "Stijn", een week van 7 (5 gekookt) en één kookbeurt Afwasmachinezalm.
+**Besluit Fable (23 okt):** **1.** "Iets buiten je week" betekent echt buiten de week: in de free-stand rolt
+de dobbelsteen over `outsideWeekIds(...)` (de chip-pool zonder de gerechten van het weekplan, de hele pool als dat
+niets overlaat) en een onthouden worp buiten die pool wordt losgelaten, ook een van vóór Kies 7; rij 71 stap 4 blijft
+zoals hij staat. **2.** `onShown` meldt via `useLayoutEffect` (vóór het tekenen), zodat Verder met nooit, ook niet één
+beeld, het kaartgerecht herhaalt; het 250 ms-gordijn is weg, de regel wacht alleen op de eerste melding van de kaart
+(null telt mee). In de dev-app nagelopen met een frame-monitor (🎲 Iets anders, Nog een, Iets buiten je week, Terug
+naar je week, een plan-wijziging): nul foute beelden, met `useEffect` als tegenproef één. **3.** De "+N" van de
+weekregel staat in een eigen span met `flex: none` en wordt nooit afgekapt; alleen de namen krimpen met een ellipsis
+(360 en 375 px: "Spaanse groenten · Roergebakken… · +4").
+**Nog open voor Fable/Stijn (niet zelf beslist):** (1) Op 360 px breekt "🎲 Iets anders" en "🎲
+Something else" over twee regels binnen de knop (48 px hoog, niets valt weg); op 375 px alleen het Engels. Teksten
+niet ingekort. (2) "n van 7 gekookt" telt ook slots waarvan het recept weg is; de namenregel slaat die over.
+Kleine keuzes van bouwer B: kopregel VANAVOND 13 px (niet 12, §5b), Verder met in cobalt, een tijd van 0 minuten
+valt weg uit de metaregel.
+**Uitrol:** na de commit eerst `next` (samen met blok 1), dan de telefoonronde met rij 70 én 71, daarna `main`.
+
 ## 23 okt (Opus): Home A+ blok 1
 Gebouwd volgens docs/specs/home-a-plus.md §3 blok 1 (bouwers A en B + integrator). Het werk staat **in de
 werkmap, nog niet gecommit en nog niet online**. Wat er nu staat: Home heeft in de kop een **+** met het nieuwe

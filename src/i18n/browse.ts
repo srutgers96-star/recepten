@@ -8,7 +8,6 @@ export const browse: Dict = {
   'home.title': { nl: 'Vanavond?', en: 'Tonight?' },
   'home.greeting': { nl: 'Hoi {name}, wat eten we vanavond?', en: 'Hi {name}, what shall we cook tonight?' },
   'home.greetingAnon': { nl: 'Wat eten we vanavond?', en: 'What shall we cook tonight?' },
-  'home.surprise': { nl: 'Verras me', en: 'Surprise me' },
   'home.reroll': { nl: 'Nog een', en: 'Another' },
   'home.open': { nl: 'Open', en: 'Open' },
   'home.favorites': { nl: 'Favorieten', en: 'Favourites' },
@@ -26,6 +25,18 @@ export const browse: Dict = {
   'home.myRecipes': { nl: 'Mijn recepten', en: 'My recipes' },
   'home.myRecipesNone': { nl: 'nog geen', en: 'none yet' },
   'home.storyRow': { nl: 'Het verhaal van dit boek', en: 'The story of this book' },
+  // Home A+ block 2 (§1g–1h): the Tonight card (src/components/TonightCard.tsx) and the line
+  // "Verder met" under it. The ▾/▴ after "filters" is added by the card, not part of the text.
+  'home.tonight': { nl: 'Vanavond', en: 'Tonight' },
+  'home.tonightOther': { nl: 'Iets anders', en: 'Something else' },
+  'home.tonightMin': { nl: '{n} min', en: '{n} min' },
+  'home.tonightLeft': { nl: 'nog {n} te gaan', en: '{n} to go' },
+  'home.tonightLast': { nl: 'de laatste van je week', en: 'the last of your week' },
+  'home.tonightOutside': { nl: 'Iets buiten je week ›', en: 'Something outside your week ›' },
+  'home.tonightBack': { nl: 'Terug naar je week ›', en: 'Back to your week ›' },
+  'home.filters': { nl: 'filters', en: 'filters' },
+  'home.filtersActive': { nl: 'filters ({n})', en: 'filters ({n})' },
+  'home.continueWith': { nl: 'Verder met: {name} ›', en: 'Continue with: {name} ›' },
 
   // --- A-Z list ---
   'list.title': { nl: 'Recepten', en: 'Recipes' },

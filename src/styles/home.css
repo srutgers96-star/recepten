@@ -13,7 +13,8 @@
   white-space: nowrap;
 }
 
-/* "Verras me": the name button stacks the other language's name underneath. */
+/* The dish name on the Tonight card (TonightCard): the name button stacks the other language's
+   name underneath. */
 .surprise-name {
   flex-direction: column;
   align-items: flex-start;
@@ -33,12 +34,6 @@
 .filter-chips {
   padding-top: 8px;
   padding-bottom: 4px;
-}
-
-/* Inside the card the strip bleeds to the card's own 16 px padding, not the safe-area gutter. */
-.surprise .filter-chips {
-  margin: 0 -16px;
-  padding: 6px 16px;
 }
 
 .filter-chips .chip {
@@ -217,12 +212,6 @@
   align-items: center;
   padding-top: 8px;
   padding-bottom: 0;
-}
-
-/* Inside the surprise card both rows bleed to the card's own padding, like .surprise .filter-chips. */
-.surprise .diet-chips {
-  margin: 0 -16px;
-  padding: 6px 16px 0;
 }
 
 .diet-label {
@@ -412,4 +401,159 @@
   flex: none;
   color: var(--muted);
   opacity: 0.6;
+}
+
+/* ---------- Home A+ block 2 (docs/specs/home-a-plus.md §1g–1i) ---------- */
+
+/* The Tonight card (TonightCard). The name button and the two buttons reuse the unscoped
+   .surprise-name / .surprise-alt / .surprise-actions (browse.css and above) of the former
+   "Verras me" card. */
+.tonight {
+  margin: 0 0 8px;
+}
+
+/* "VANAVOND": a small head line in capitals (like .diet-label, but never under 13 px, §5b). */
+.tonight-head {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* "45 min · Vlees · nog 3 te gaan": grey, tucked under the name button (its 12 px bottom margin). */
+.tonight-meta {
+  margin: -6px 0 12px;
+  color: var(--muted);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* The foot under the buttons: small grey text buttons, left (filters / Iets buiten je week) and,
+   in free mode, right (Terug naar je week). The tap height comes from min-height, not the font. */
+.tonight-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 12px;
+  margin-top: 6px;
+}
+
+.tonight-foot button {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.tonight-foot button:active {
+  opacity: 0.6;
+}
+
+.tonight-filters-toggle {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The dice chips (open under the foot) bleed to the card's own 16 px padding, not the safe-area
+   gutter — the same sizes the chips had inside the former "Verras me" card. */
+.tonight .filter-chips {
+  margin: 0 -16px;
+  padding: 6px 16px;
+}
+
+.tonight .diet-chips {
+  margin: 0 -16px;
+  padding: 6px 16px 0;
+}
+
+/* "Verder met: Goulash ›" under the Tonight card: one thin cobalt line, a full 44 px tap target
+   (like .home-level); a long name ellipsizes. */
+.home-continue {
+  display: block;
+  min-height: 44px;
+  margin: 0 0 4px;
+  line-height: 44px;
+  color: var(--cobalt);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.home-continue:active {
+  opacity: 0.6;
+}
+
+/* "Deze week", compact (WeekCard): title row with "3 van 7 gekookt" on the right, one line of
+   names, the button. */
+.week-card.compact .week-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -6px 0 0; /* the 44 px title link carries the space above and below */
+}
+
+.week-card.compact .week-card-title .muted {
+  flex: none;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* One line: the names shrink with an ellipsis, the " · +N" part never does (it stays visible). */
+.week-line {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin: 0 0 10px;
+  padding: 10px 0;
+  line-height: 24px;
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.week-line-names {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.week-line-more {
+  flex: none;
+  white-space: pre; /* keeps the leading space of " · +N" at the start of its flex item */
+}
+
+.week-line:active {
+  opacity: 0.6;
+}
+
+.week-line .cooked {
+  color: var(--muted);
+  font-weight: 500;
+  text-decoration: line-through;
 }

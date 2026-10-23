@@ -4,10 +4,17 @@
 // a reset wipes them with every other `recepten.*` key. Every storage access sits in try/catch
 // (private mode, blocked site data) and the pure helpers (`pushRecent`, `orderRecipes`) run in
 // Node, so tests/share-events.test.ts pins them without a browser.
+// Home A+ block 2 (docs/specs/home-a-plus.md §1h, §2b): next to the list, 'recepten.recent.last' holds
+// the last viewed recipe with its time ({id, at}) for the "Continue with" line on Home.
 import { type Recipe } from '@/domain/model';
+import type { LastViewed } from '@/domain/tonight';
+
+export type { LastViewed };
 
 export const RECENT_KEY = 'recepten.recent';
 export const RECENT_MAX = 50;
+/** localStorage key of the last viewed recipe: JSON {"id": …, "at": ISO}. */
+export const RECENT_LAST_KEY = 'recepten.recent.last';
 
 /** The list with `id` moved (or added) to the front, trimmed to `max`. Pure. */
 export function pushRecent(ids: readonly string[], id: string, max = RECENT_MAX): string[] {
@@ -36,13 +43,48 @@ export function recentIds(): string[] {
   return readIds();
 }
 
-/** The recipe page calls this when it opens a recipe: the id moves to the front of the list. */
+/** Pure: JSON {id, at} → LastViewed; null for junk, an empty id or an invalid date. Extra fields are dropped. */
+export function parseLastViewed(raw: string | null): LastViewed | null {
+  if (!raw) return null;
+  let v: unknown;
+  try {
+    v = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return null;
+  const { id, at } = v as { id?: unknown; at?: unknown };
+  if (typeof id !== 'string' || !id) return null;
+  if (typeof at !== 'string' || !at || Number.isNaN(new Date(at).getTime())) return null;
+  return { id, at };
+}
+
+/** The last viewed recipe and when (reads RECENT_LAST_KEY; null when absent, junk or storage unavailable). */
+export function lastViewed(): LastViewed | null {
+  try {
+    return parseLastViewed(localStorage.getItem(RECENT_LAST_KEY));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The recipe page calls this when it opens a recipe: the id moves to the front of the list, and
+ * RECENT_LAST_KEY records it with the current time. Two separate writes, so a failure of one never
+ * breaks the other.
+ */
 export function noteViewed(recipeId: string): void {
   if (!recipeId) return;
   try {
     localStorage.setItem(RECENT_KEY, JSON.stringify(pushRecent(readIds(), recipeId)));
   } catch {
     /* storage may be unavailable (private mode): the list is a convenience only */
+  }
+  try {
+    const last: LastViewed = { id: recipeId, at: new Date().toISOString() };
+    localStorage.setItem(RECENT_LAST_KEY, JSON.stringify(last));
+  } catch {
+    /* same: "Continue with" simply does not show */
   }
 }
 
