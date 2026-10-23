@@ -70,7 +70,7 @@ integrator; DEVICE-TEST-rij 101.
 - **Dexie:** v7 nu → **v8 = 13F** (upgrade zonder schemawijziging, `runAliasMigration`). 13D, 6C en 6D
   voegen géén versie toe (alles settings of velden zonder index); de eerstvolgende vrije versie is v9.
 - **`DATA_VERSION`** (tools/migrate-from-recepten2.ts): 4 nu → 6B blok 2 **5** → blok 3 **6** → blok 4
-  **7** → bijgerechten **8** → 13F **9**. Elke bump neemt `tests/migrate.test.ts` (`toBe(n)`) mee.
+  **7** → bijgerechten **8** → keukens-toewijzing 24 okt **9** → 13F **10**. Elke bump neemt `tests/migrate.test.ts` (`toBe(n)`) mee.
 - **Klassiekers:** 196 → 216 (bijgerechten) → **236** (13F). `classicsTotal` volgt de bundel; badges
   "Het hele boek"/"Halverwege het boek" worden 236/118. Tests die over "de 196" gaan filteren op
   `createdAt === BUILTIN_TIMESTAMP` (import uit tools/migrate-from-recepten2.ts).
@@ -282,7 +282,7 @@ de gate, dan één extra fixer-ronde met dezelfde `resumeFromRunId`; daarna stop
 
 Zo doen als het in de spec staat; anders vragen aan Stijn/Fable. De volledige lijsten staan in §5 van elke
 spec; dit is de ontdubbelde kern.
-1. Volgorde, Dexie-versie (alleen 13F → v8), `DATA_VERSION`-reeks 5/6/7/8/9 en de tellingen 216/236 (§2a).
+1. Volgorde, Dexie-versie (alleen 13F → v8), `DATA_VERSION`-reeks 5/6/7/8/9/10 en de tellingen 216/236 (§2a).
 2. Geen nieuwe tabel, setting, localStorage-key, route, fragmentsleutel of veld buiten het register §2b.
 3. Deelformaat: `v` blijft 2; nieuwe velden alleen zoals genoemd (`cuisine`, `credit`, `variants`, `tip`,
    `of`, `vr`, `avatar` op `#f=`, sleutel `x`); elk nieuw bevroren token één keer maken en nooit meer
@@ -318,8 +318,8 @@ Gegroepeerd en ontdubbeld over de negen specs (de nummers verwijzen naar §7 van
 
 **Hygiëne en invarianten**
 1. [ ] `src/db/db.ts` eindigt op `version(8)` (13F) zonder `.stores()`-wijziging; geen andere spec voegde
-       een versie toe. `DATA_VERSION === 9`, `data/recipes.json` 236 recepten, `npm run migrate` tweemaal
-       → alleen `generatedAt` verschilt; tests/migrate.test.ts op 9/236.
+       een versie toe. `DATA_VERSION === 10`, `data/recipes.json` 236 recepten, `npm run migrate` tweemaal
+       → alleen `generatedAt` verschilt; tests/migrate.test.ts op 10/236.
 2. [ ] package.json ongewijzigd (geen nieuwe dependency); `src/landing.ts` kent alleen de `x`-regex als
        wijziging en schrijft niets; `sw.ts` onaangeraakt; share-chunk niet gegroeid door id-aliases.json.
 3. [ ] CLAUDE.md: invariant 7 en de tokenregel noemen `#x=`; ADR-0004 heeft de `x`-regel; de fonts hebben

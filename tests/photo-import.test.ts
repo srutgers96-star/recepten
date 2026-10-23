@@ -483,17 +483,41 @@ describe('cuisines in the import (6B blok 3)', () => {
     expect(cuisineIdFromWord('Surinamese')).toBe('surinaams');
     expect(cuisineIdFromWord('Italiaanse keuken')).toBe('italiaans');
     expect(cuisineIdFromWord('Italian (Sicilian)')).toBe('italiaans');
-    // Unknown, empty or a cuisine that is not in the list: undefined, never a guess.
-    for (const w of ['Zuid-Afrikaans', 'Russisch', 'Noors', 'geen', 'none', '-', '', 'pasta', 'indisch']) expect(cuisineIdFromWord(w)).toBeUndefined();
+    // Unknown, empty or a cuisine that is not in data/cuisines.json: undefined, never a guess.
+    for (const w of ['Mongools', 'Georgian', 'geen', 'none', '-', '', 'pasta', 'indisch']) expect(cuisineIdFromWord(w)).toBeUndefined();
   });
 
-  it('knows every cuisine by its id, Dutch and English name, in the data order', () => {
-    const cuisines = cuisinesJson as { id: string; nl: string; en: string; order: number }[];
+  // docs/specs/labels-categorieen.md "Blok 6 — keukens wereldwijd": the 43 reserve cuisines parse too.
+  it('maps the reserve cuisines (blok 6): name, adjective with -e, English adjective and country', () => {
+    expect(cuisineIdFromWord('Lithuanian')).toBe('litouws');
+    expect(cuisineIdFromWord('Litouwse')).toBe('litouws');
+    expect(cuisineIdFromWord('Peruvian')).toBe('peruaans');
+    for (const w of ['litouws', 'Litouws', 'litouwse', 'lithuanian', 'Litouwen', 'Lithuania', 'Litouwse keuken']) expect(cuisineIdFromWord(w)).toBe('litouws');
+    for (const w of ['peruaans', 'Peruaanse', 'peruvian', 'Peru']) expect(cuisineIdFromWord(w)).toBe('peruaans');
+    expect(cuisineIdFromWord('Zuid-Afrikaans')).toBe('zuid-afrikaans');
+    expect(cuisineIdFromWord('South African')).toBe('zuid-afrikaans');
+    expect(cuisineIdFromWord('Russisch')).toBe('russisch');
+    expect(cuisineIdFromWord('Noors')).toBe('noors');
+    expect(cuisineIdFromWord('Oekraïens')).toBe('oekraiens');
+    expect(cuisineIdFromWord('oekraiense')).toBe('oekraiens');
+    expect(cuisineIdFromWord('Israeli')).toBe('israelisch');
+    expect(cuisineIdFromWord('Sri Lankan')).toBe('sri-lankaans');
+    expect(cuisineIdFromWord('Korean')).toBe('koreaans');
+    expect(cuisineIdFromWord('Jamaica')).toBeUndefined();
+  });
+
+  it('knows every cuisine (all 61, regular and reserve) by its id, Dutch and English name, in the data order', () => {
+    const cuisines = cuisinesJson as { id: string; nl: string; en: string; order: number; rare?: boolean }[];
+    expect(cuisines).toHaveLength(61);
     expect(IMPORT_CUISINE_IDS).toEqual([...cuisines].sort((a, b) => a.order - b.order).map((c) => c.id));
     for (const c of cuisines) {
       expect(cuisineIdFromWord(c.id)).toBe(c.id);
       expect(cuisineIdFromWord(c.nl)).toBe(c.id);
       expect(cuisineIdFromWord(c.en)).toBe(c.id);
+      // The lower-case adjective the prompt asks for ("lithuanian", "litouws") and "<name> keuken".
+      expect(cuisineIdFromWord(c.en.toLowerCase())).toBe(c.id);
+      expect(cuisineIdFromWord(c.nl.toLowerCase())).toBe(c.id);
+      expect(cuisineIdFromWord(`${c.nl} keuken`)).toBe(c.id);
     }
   });
 
@@ -503,9 +527,14 @@ describe('cuisines in the import (6B blok 3)', () => {
     const en = parsePlainRecipe('# Lasagne\n**Cuisine:** Italian\n## Ingredients\n1 pack lasagne sheets\n## Method\nBake.');
     expect(en?.cuisine).toBe('italiaans');
     expect(en?.name).toBe('Lasagne');
-    const unknown = parsePlainRecipe('# Bobotie\nKeuken: Zuid-Afrikaans\n## Ingrediënten\n500 g gehakt\n## Bereiding\nBak.');
+    const unknown = parsePlainRecipe('# Buuz\nKeuken: Mongools\n## Ingrediënten\n500 g gehakt\n## Bereiding\nStoom.');
     expect(unknown).not.toHaveProperty('cuisine');
     expect(unknown?.lines).toEqual(['500 g gehakt']);
+    // A reserve cuisine (blok 6) is read like a regular one.
+    const bobotie = parsePlainRecipe('# Bobotie\nKeuken: Zuid-Afrikaans\n## Ingrediënten\n500 g gehakt\n## Bereiding\nBak.');
+    expect(bobotie?.cuisine).toBe('zuid-afrikaans');
+    expect(bobotie?.lines).toEqual(['500 g gehakt']);
+    expect(parsePlainRecipe('# Cepelinai\nCuisine: lithuanian\n## Ingredients\n1 kg potatoes\n## Method\nBoil.')?.cuisine).toBe('litouws');
     // Website text without the line: no cuisine is guessed, also not from an "Italiaanse" name.
     const plain = parsePlainRecipe('Italiaanse gehaktballetjes\nIngrediënten:\n500 g gehakt\nBereiding:\nDraai balletjes.');
     expect(plain).not.toHaveProperty('cuisine');
@@ -529,18 +558,38 @@ describe('cuisines in the import (6B blok 3)', () => {
     expect(collapsed.nl?.servings).toBe(4);
   });
 
-  it('the import prompt asks for the Keuken:/Cuisine: line with the 18 ids and the honesty rule', () => {
+  it('the import prompt asks for the Keuken:/Cuisine: line with the 18 regular ids, another country as an adjective, and the honesty rule', () => {
+    const REGULAR = 'hollands, italiaans, frans, spaans, portugees, grieks, hongaars, brits, midden-oosten, marokkaans, indiaas, thais, chinees, japans, indonesisch, surinaams, mexicaans, amerikaans';
+    // The regular ids in data/cuisines.json (no "rare") are exactly the 18 the prompt lists.
+    expect((cuisinesJson as { id: string; rare?: boolean }[]).filter((c) => !c.rare).map((c) => c.id).join(', ')).toBe(REGULAR);
+    /** The enumeration after "één van:" / "one of:", up to the "another country" sentence. */
+    const listIn = (prompt: string, start: string, end: string): string => {
+      const from = prompt.indexOf(start);
+      expect(from).toBeGreaterThan(-1);
+      const to = prompt.indexOf(end, from);
+      expect(to).toBeGreaterThan(from);
+      return prompt.slice(from + start.length, to);
+    };
     for (const bilingual of [true, false]) {
       const nl = buildImportPrompt('nl', { bilingual });
       expect(nl).toContain('Categorie: pasta\nKeuken: italiaans\n');
       expect(nl).toContain(
-        '"Keuken:" is één van: hollands, italiaans, frans, spaans, portugees, grieks, hongaars, brits, midden-oosten, marokkaans, indiaas, thais, chinees, japans, indonesisch, surinaams, mexicaans, amerikaans — alleen als het gerecht echt uit die keuken komt, anders de regel weglaten',
+        `"Keuken:" is één van: ${REGULAR} of een ander land als bijvoeglijk naamwoord in kleine letters (bijvoorbeeld litouws, peruaans) — alleen als het gerecht echt uit die keuken komt, anders de regel weglaten`,
       );
+      const nlList = listIn(nl, '"Keuken:" is één van: ', ' of een ander land');
+      expect(nlList).toBe(REGULAR);
+      expect(nlList.split(', ')).not.toContain('litouws');
+      expect(nlList.split(', ')).not.toContain('peruaans');
       expect(nl).toContain('lactosevrij');
       const en = buildImportPrompt('en', { bilingual });
       expect(en).toContain('Category: pasta\nCuisine: italian\n');
-      expect(en).toContain('"Cuisine:" is one of: hollands, italiaans, frans');
+      expect(en).toContain(`"Cuisine:" is one of: ${REGULAR} or another country as a lower-case adjective (for example lithuanian, peruvian)`);
       expect(en).toContain('— only when the dish really comes from that cuisine, otherwise leave the line out');
+      const enList = listIn(en, '"Cuisine:" is one of: ', ' or another country');
+      expect(enList).toBe(REGULAR);
+      expect(enList.split(', ')).not.toContain('litouws');
+      // No reserve id is enumerated anywhere in the prompt ("…, belgisch, duits, …").
+      for (const p of [nl, en]) expect(p).not.toContain('amerikaans, belgisch');
     }
     // The bilingual prompt shows both example blocks.
     expect(buildImportPrompt('nl')).toContain('Keuken: italiaans');

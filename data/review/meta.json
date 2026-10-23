@@ -7,7 +7,9 @@
     "b:polenta-voor-ratatouille": "bijgerecht"
   },
   "goesWith": {
-    "b:polenta-voor-ratatouille": ["b:ratatouille"]
+    "b:polenta-voor-ratatouille": [
+      "b:ratatouille"
+    ]
   },
   "cuisine": {
     "b:bavette-met-gerookte-pancetta": "italiaans",
@@ -84,6 +86,9 @@
     "b:mexicaanse-ovenschotel-met-zoete-aardappel": "mexicaans",
     "b:taco-schotel": "mexicaans",
     "b:guacamole": "mexicaans",
-    "b:hamburgers-voor-op-de-bbq": "amerikaans"
+    "b:hamburgers-voor-op-de-bbq": "amerikaans",
+    "b:boeuf-stroganoff": "russisch",
+    "b:noorse-visschotel": "noors",
+    "b:zuid-afrikaanse-gehaktschotel": "zuid-afrikaans"
   }
 }

@@ -7,6 +7,27 @@ Gebouwd: 23 okt 2026 (blok 3 keukens, workflow wf_02fdfd90-55a)
 Gebouwd: 23 okt 2026 (blok 4 categorieën + bijgerecht, workflow wf_7dbd3c18-eb9)
 Gebouwd: 23 okt 2026 (blok 5 editor Labels + prompt, workflow wf_df319ceb-56f)
 
+**Blok 6 — keukens wereldwijd (besluit Stijn 24 okt, wens Gabi: Litouws; "alvast een placeholder voor alle
+landen"; Fable ontwerpt, lichte modus).** data/cuisines.json houdt de 18 van §2c als **gewone** keukens en
+krijgt er 43 **reservekeukens** bij met `"rare": true` (order 19+): Europa belgisch, duits, oostenrijks,
+zwitsers, pools, tsjechisch, **litouws**, lets, ests, fins, zweeds, noors, deens, iers, russisch, oekraiens,
+roemeens, bulgaars, servisch, kroatisch, turks; Midden-Oosten/Afrika libanees, israelisch, perzisch,
+egyptisch, ethiopisch, zuid-afrikaans, nigeriaans, tunesisch; Azië koreaans, vietnamees, maleisisch, filipijns,
+sri-lankaans, pakistaans, nepalees; Amerika braziliaans, argentijns, peruaans, caribisch, cubaans, canadees;
+Oceanië australisch. Ids zijn kleine letters/ASCII (oekraiens, israelisch), nl/en met hoofdletter, vlag-emoji
+van het land (caribisch 🇯🇲). Gedrag: filterchips ongewijzigd (alleen keukens die in recepten voorkomen,
+`cuisineIdsIn`); de **editor** toont als chips "geen" + de gewone 18 + elke reservekeuken die gekozen is of in
+een bestaand recept voorkomt, en daaronder een `<select>` **`meta.cuisineOther`** NL "Andere keuken…" · EN
+"Other cuisine…" (16 px, 44 px hoog) met alle reservekeukens alfabetisch in de UI-taal met vlag; kiezen = die
+keuken actief (verschijnt als chip). De **importprompt** noemt alleen de 18 gewone ids en zegt daarna NL "of een
+ander land als bijvoeglijk naamwoord in kleine letters (bijvoorbeeld litouws, peruaans)" · EN "or another
+country as a lower-case adjective (for example lithuanian, peruvian)"; `CUISINE_WORDS` kent alle 61 ids met
+nl/en-naam, bijvoeglijk naamwoord en landnaam. Validator: `rare?: boolean`; tests tellen 18 gewone + 43 reserve
+= 61. Geen DATA_VERSION-bump (recipes.json verandert niet). DEVICE-TEST: rij 76 krijgt een stap 7 (editor →
+Andere keuken… → Litouws → chip 🇱🇹 Litouws actief; na Bewaar staat 🇱🇹 Litouws in de filterrij van Recepten).
+
+Gebouwd: 24 okt 2026 (blok 6 keukens wereldwijd, workflow wf_13773e72-527; daarna door Fable: Boeuf Stroganoff → russisch, Noorse visschotel → noors, Zuid-Afrikaanse gehaktschotel → zuid-afrikaans, DATA_VERSION 9)
+
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (besluiten over specs heen in
 docs/specs/README.md §2; bij tegenspraak wint README.md). Voor deze spec:
 - Bouwvolgorde: Home A+ → 13K → **deze spec (5 blokken)** → bijgerechten → 13F → 13D → 6C → 6D.

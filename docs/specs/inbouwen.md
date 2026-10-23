@@ -2,10 +2,12 @@
 
 Status: compleet (Fable, 22 okt 2026)
 
+**Let op (Fable, 24 okt 2026):** DATA_VERSION 9 is op 24 okt al gebruikt (drie keukens toegewezen); 13F bumpt daarom naar **10** (hieronder aangepast). tests/migrate.test.ts pint nu 9.
+
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (besluiten over specs heen in
 docs/specs/README.md §2; bij tegenspraak wint README.md). Voor deze spec:
 - Bouwvolgorde: Home A+ → 13K → 6B+13E → bijgerechten → **13F (deze spec)** → 13D → 6C → 6D. Gevolgen,
-  overal in de tekst verwerkt: `DATA_VERSION` **8 → 9** (niet 4 → 5); de bundel telt daarna **236**
+  overal in de tekst verwerkt: `DATA_VERSION` **9 → 10** (niet 4 → 5); de bundel telt daarna **236**
   klassiekers (196 + 20 bijgerechten + 20 van 13F; `takenIds` = de 216 vóór 13F); `data/cuisines.json`
   (met `hongaars`) en de categorieën `gebak`, `nagerecht`, `bijgerecht` bestaan (6B); de `lactose`-vlag is
   verplicht op de 8 nieuwe woordenboek-entries (6B blok 1). Volgorde in `migrate()`: bron → batches →
@@ -241,7 +243,7 @@ export interface StijnchatMetaEntry {
 ```
 
 **Uitvoer van `npm run migrate`** (de bestaande `migrate()` krijgt de bron + meta als extra input, §3):
-- `data/recipes.json`: 216 + 20 = **236** klassiekers (196 originelen + 20 bijgerechten + 20 van 13F), `dataVersion` **9** (`DATA_VERSION` in
+- `data/recipes.json`: 216 + 20 = **236** klassiekers (196 originelen + 20 bijgerechten + 20 van 13F), `dataVersion` **10** (`DATA_VERSION` in
   tools/migrate-from-recepten2.ts 8 → 9; 6B nam 5/6/7, de bijgerechten 8), gesorteerd op naam zoals nu.
 - **`data/id-aliases.json`** (gegenereerd, alleen groeiend):
 ```json
@@ -538,7 +540,7 @@ export function readStijnchatInputs(root: string): { source: StijnchatSource; me
 `into`; 'classic' zonder credit/source/category; web/book zonder `steps` of met een ander aantal dan de
 bron; `lines`-index buiten bereik; onbekende categorie/keuken; een credit met een lege kant.
 In migrate-from-recepten2.ts: `MigrationInputs.extras?: { source: StijnchatSource; meta: StijnchatMeta }`
-(gevuld door `loadMigrationInputs` via `readStijnchatInputs`), `DATA_VERSION = 9`, en in `migrate()` ná
+(gevuld door `loadMigrationInputs` via `readStijnchatInputs`), `DATA_VERSION = 10`, en in `migrate()` ná
 review én ná de sides van bijgerechten.md, vóór `applyMeta`/`applyDerivedTags`/sorteren: `convertStijnchat(...)` met `takenIds` = de 216 ids (originelen + bijgerechten); de
 recepten komen erbij, `RecipesFile` krijgt géén nieuw veld. `main()` schrijft ook `data/id-aliases.json`
 (sleutels gesorteerd, 2 spaties inspringen, newline aan het eind) en print "20 extra recipes, 21 aliases".
@@ -634,7 +636,7 @@ deploy; blok 4 mag apart.
 
 1. **Blok 1 — tool en data** (`/next/` alleen). Af als: `data/source/stijnchat-2026-10-13.json`,
    `data/stijnchat-meta.json`, `tools/import-stijnchat.ts`, 8 woordenboek-entries, herschreven stappen voor
-   11 recepten, `DATA_VERSION 9`, `data/recipes.json` met 236, `data/id-aliases.json` met 21, `credit` in
+   11 recepten, `DATA_VERSION 10`, `data/recipes.json` met 236, `data/id-aliases.json` met 21, `credit` in
    model/recipe-io/validator, `fieldFingerprints` in merge.ts, tests §6a (import-stijnchat, migrate) groen,
    `npm run validate:data` groen, data/README.md bijgewerkt. Op `/next/` zichtbaar: 236 recepten met credit
    op de pagina nog als "klassieker uit het boek" (blok 4 verandert dat).
@@ -739,7 +741,7 @@ Hervatten na een afgebroken workflow: eerst `git status` en `npm test`; blok 1 i
    bezet → `-3`.
 8. `checkMeta` weigert: onbekende `from`, web zonder `steps`, verkeerd aantal stappen, `lines`-index 999,
    lege credit-kant, 'merge' naar een niet-bestaande `into`.
-**tests/migrate.test.ts** (blok 1, aanpassen): `DATA_VERSION` 9; 236 recepten; 216 + extras unieke ids;
+**tests/migrate.test.ts** (blok 1, aanpassen): `DATA_VERSION` 10; 236 recepten; 216 + extras unieke ids;
 dekkingsgrens 0,95 alleen over de 196 (filter op ids uit de bron-export); byte-vergelijking met het
 gecommitte bestand blijft; `data/id-aliases.json` = `aliases` uit dezelfde run.
 **tests/token.test.ts** (blok 2): decodeert `FROZEN_TOKEN_R_ALIAS` en `_FFLATE` op beide engines tot
@@ -911,7 +913,7 @@ origineel; 13D's rijen 86–88 nemen het over en de integrator van 13D blok 2 pa
     nagaan dat het onveranderd is); geen andere badge-logica aangeraakt.
 12. `src/landing.ts` en de share-chunk niet gegroeid door de aliasimport (id-aliases.json alleen in de app-
     bundel; controleer `npm run build`-output).
-13. STATUS.md noemt: Dexie v8, DATA_VERSION 9, 236 klassiekers, de servings-beperking, de volgorde "eerst
+13. STATUS.md noemt: Dexie v8, DATA_VERSION 10, 236 klassiekers, de servings-beperking, de volgorde "eerst
     back-up, dan updaten" voor Stijn, DEVICE-TEST 82–85.
 14. Geen nieuwe dependency; `npm run check`, `npm test`, `npm run build`, `npm run build:next`,
     `npm run validate:data` groen.

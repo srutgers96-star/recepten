@@ -13,6 +13,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { MetaRows, applySuggestion, metaCategoryLabel, metaEqual, metaTagLabel, type MetaValue } from '@/components/MetaRows';
+import { cuisineIdsIn } from '@/components/PickSheet';
 import { saveUserRecipe, userRecipes } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import { suggestMeta, type MetaSuggestion } from '@/domain/diet';
@@ -112,6 +113,8 @@ export function CheckRecipesScreen() {
 
   const dict = dictionary.value;
   const rows = useMemo(() => (recipes ?? []).map(rowOf), [recipes, dict]);
+  // 6B blok 6: the cuisines this list uses, so a reserve cuisine already in use is a chip in MetaRows.
+  const usedCuisines = useMemo(() => cuisineIdsIn(recipes ?? []), [recipes]);
   const differing = rows.filter((r) => r.differs);
   // A recipe whose category/labels were chosen by hand before (`metaManual`, in the editor, on
   // the recipe page or here) is never part of "Alles overnemen": it sits in its own collapsed
@@ -226,7 +229,7 @@ export function CheckRecipesScreen() {
         </dl>
         {isEditing ? (
           <div class="cr-edit">
-            <MetaRows name={'cr-' + r.id} value={editValue} suggestion={row.suggestion} onChange={setEditValue} disabled={busy} />
+            <MetaRows name={'cr-' + r.id} value={editValue} suggestion={row.suggestion} onChange={setEditValue} disabled={busy} usedCuisines={usedCuisines} />
             <div class="actions cr-actions">
               <button type="button" class="btn btn-primary" disabled={busy} onClick={() => void saveEdit(row)}>
                 {t('checkRecipes.save')}

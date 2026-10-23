@@ -1,7 +1,7 @@
 // tools/apply-meta.ts (docs/specs/labels-categorieen.md §2e, §6a): the hand-kept labels of the
 // classics in data/review/meta.json (blok 3: the 71 cuisines of §2c; blok 4: the five side dishes
 // in 'bijgerecht' and the goesWith of the polenta; docs/specs/bijgerechten.md: four of the 20 new side
-// dishes get a cuisine too, 75 in all). `checkMeta` refuses unknown ids, `applyMeta`
+// dishes get a cuisine too, 78 in all). `checkMeta` refuses unknown ids, `applyMeta`
 // sets the fields and is idempotent, and `migrate()` replays the real file.
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -64,7 +64,7 @@ describe('checkMeta', () => {
 
   it('refuses an unknown recipe id, cuisine, category or goesWith id', () => {
     expect(checkMeta({ cuisine: { 'b:zz': 'italiaans' } }, RECIPES, refs)).toEqual(['cuisine: recipe id "b:zz" does not exist.']);
-    expect(checkMeta({ cuisine: { 'b:a': 'zuid-afrikaans' } }, RECIPES, refs)).toEqual(['cuisine: b:a -> "zuid-afrikaans" is not a cuisine id.']);
+    expect(checkMeta({ cuisine: { 'b:a': 'mongools' } }, RECIPES, refs)).toEqual(['cuisine: b:a -> "mongools" is not a cuisine id.']);
     expect(checkMeta({ category: { 'b:a': 'toetje' } }, RECIPES, refs)).toEqual(['category: b:a -> "toetje" is not a category id.']);
     expect(checkMeta({ category: { 'b:zz': 'soep' } }, RECIPES, refs)).toEqual(['category: recipe id "b:zz" does not exist.']);
     expect(checkMeta({ goesWith: { 'b:a': ['b:zz'] } }, RECIPES, refs)).toEqual(['goesWith: b:a -> recipe id "b:zz" does not exist.']);
@@ -128,9 +128,9 @@ describe('migrate() with the real data/review/meta.json', () => {
   const classics = file.recipes.filter((r) => r.createdAt === BUILTIN_TIMESTAMP);
   const byId = new Map(classics.map((r) => [r.id, r]));
 
-  it('gives exactly 75 recipes a cuisine: 71 classics per cuisine as in §2c and four side dishes', () => {
+  it('gives exactly 78 recipes a cuisine: 74 classics per cuisine (§2c plus three reserve cuisines of 24 Oct) and four side dishes', () => {
     const all = file.recipes.filter((r) => typeof r.cuisine === 'string');
-    expect(all).toHaveLength(75);
+    expect(all).toHaveLength(78);
     expect(Object.fromEntries(all.filter((r) => r.createdAt !== BUILTIN_TIMESTAMP).map((r) => [r.id, r.cuisine]))).toEqual({
       'b:couscous': 'marokkaans',
       'b:focaccia-met-rozemarijn': 'italiaans',
@@ -138,21 +138,26 @@ describe('migrate() with the real data/review/meta.json', () => {
       'b:tzatziki': 'grieks',
     });
     const withCuisine = classics.filter((r) => typeof r.cuisine === 'string');
-    expect(withCuisine).toHaveLength(71);
+    expect(withCuisine).toHaveLength(74);
     const counts: Record<string, number> = {};
     for (const r of withCuisine) counts[r.cuisine as string] = (counts[r.cuisine as string] ?? 0) + 1;
     expect(counts).toEqual({
       italiaans: 22, hollands: 16, frans: 3, spaans: 6, portugees: 1, grieks: 2, hongaars: 2, brits: 1,
       marokkaans: 2, indiaas: 3, thais: 1, chinees: 2, japans: 2, indonesisch: 4, mexicaans: 3, amerikaans: 1,
+      russisch: 1, noors: 1, 'zuid-afrikaans': 1,
     });
     for (const r of withCuisine) expect(refs.cuisines.has(r.cuisine as string)).toBe(true);
   });
 
-  it('Spaghetti Bolognese is Italian, Hutspot Dutch, Boeuf Stroganoff and the other deliberate nulls have none', () => {
+  it('Spaghetti Bolognese is Italian, Hutspot Dutch, Boeuf Stroganoff is Russian since 24 Oct, the other deliberate nulls have none', () => {
     expect(byId.get('b:spaghetti-bolognese')?.cuisine).toBe('italiaans');
     expect(byId.get('b:hutspot')?.cuisine).toBe('hollands');
     expect(byId.get('b:naanbrood-voor-bij-dahl')?.cuisine).toBe('indiaas');
-    for (const id of ['b:boeuf-stroganoff', 'b:zuid-afrikaanse-gehaktschotel', 'b:noorse-visschotel', 'b:groentecurry', 'b:kipkerrie-met-rijst', 'b:sticky-chicken', 'b:chorizo-met-tomatengnocchi', 'b:quiche-met-kip']) {
+    // Fable, 24 Oct 2026: with the reserve cuisines of blok 6 these three got theirs after all.
+    expect(byId.get('b:boeuf-stroganoff')?.cuisine).toBe('russisch');
+    expect(byId.get('b:noorse-visschotel')?.cuisine).toBe('noors');
+    expect(byId.get('b:zuid-afrikaanse-gehaktschotel')?.cuisine).toBe('zuid-afrikaans');
+    for (const id of ['b:groentecurry', 'b:kipkerrie-met-rijst', 'b:sticky-chicken', 'b:chorizo-met-tomatengnocchi', 'b:quiche-met-kip']) {
       expect(byId.has(id)).toBe(true);
       expect(byId.get(id)).not.toHaveProperty('cuisine');
     }

@@ -1,5 +1,6 @@
 // tools/validate-data.ts (docs/specs/labels-categorieen.md §6a): the lactose rules of the dictionary
-// (blok 1), the cuisines (data/cuisines.json, blok 3), `cuisine` on a schema-2 recipe, the lactose-free
+// (blok 1), the cuisines (data/cuisines.json, blok 3; the 43 reserve cuisines with `rare`, blok 6),
+// `cuisine` on a schema-2 recipe, the lactose-free
 // swaps and the lactosevrij badge rule. Pure validator calls on small inputs, plus the real files.
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -73,15 +74,44 @@ describe('validateDictionary: cuisines (labels-categorieen.md §2c)', () => {
     expect(validateDictionary(data([ing('ui')], [{ ...ITALIAANS, id: 'Italiaans' }])).errors.some((e) => e.startsWith('cuisines.json[0]: "id" must be a slug'))).toBe(true);
   });
 
-  it('the real data/cuisines.json: the 18 cuisines of §2c, valid, in order 1–18', () => {
+  it('"rare" is optional and a boolean when present (blok 6, reserve cuisines)', () => {
+    const LITOUWS: Cuisine = { id: 'litouws', nl: 'Litouws', en: 'Lithuanian', flag: '🇱🇹', order: 25, rare: true };
+    expect(validateDictionary(data([ing('ui')], [HOLLANDS, ITALIAANS, LITOUWS])).errors).toEqual([]);
+    expect(validateDictionary(data([ing('ui')], [{ ...LITOUWS, rare: false }])).errors).toEqual([]);
+    for (const bad of ['true', 1, null]) {
+      expect(validateDictionary(data([ing('ui')], [{ ...LITOUWS, rare: bad }])).errors).toContain('cuisines.json "litouws": "rare" must be true or false when present.');
+    }
+  });
+
+  it('the real data/cuisines.json: the 18 regular cuisines of §2c and the 43 reserve ones of blok 6, valid, in order 1–61', () => {
     const cuisines = REAL.cuisines ?? [];
-    expect(cuisines.map((c) => c.id)).toEqual([
+    const regular = cuisines.filter((c) => c.rare === undefined);
+    const rare = cuisines.filter((c) => c.rare !== undefined);
+    expect(regular.map((c) => c.id)).toEqual([
       'hollands', 'italiaans', 'frans', 'spaans', 'portugees', 'grieks', 'hongaars', 'brits', 'midden-oosten',
       'marokkaans', 'indiaas', 'thais', 'chinees', 'japans', 'indonesisch', 'surinaams', 'mexicaans', 'amerikaans',
     ]);
-    expect(cuisines.map((c) => c.order)).toEqual(Array.from({ length: 18 }, (_v, i) => i + 1));
+    expect(regular.map((c) => c.order)).toEqual(Array.from({ length: 18 }, (_v, i) => i + 1));
+    // Every regular cuisine has no "rare" key at all; every reserve cuisine has rare: true.
+    for (const c of regular) expect(c).not.toHaveProperty('rare');
+    for (const c of rare) expect(c.rare).toBe(true);
+    // The reserve cuisines in the order of the decision block (Europe, Middle East/Africa, Asia, the Americas, Oceania).
+    expect(rare.map((c) => c.id)).toEqual([
+      'belgisch', 'duits', 'oostenrijks', 'zwitsers', 'pools', 'tsjechisch', 'litouws', 'lets', 'ests', 'fins', 'zweeds',
+      'noors', 'deens', 'iers', 'russisch', 'oekraiens', 'roemeens', 'bulgaars', 'servisch', 'kroatisch', 'turks',
+      'libanees', 'israelisch', 'perzisch', 'egyptisch', 'ethiopisch', 'zuid-afrikaans', 'nigeriaans', 'tunesisch',
+      'koreaans', 'vietnamees', 'maleisisch', 'filipijns', 'sri-lankaans', 'pakistaans', 'nepalees',
+      'braziliaans', 'argentijns', 'peruaans', 'caribisch', 'cubaans', 'canadees',
+      'australisch',
+    ]);
+    expect(regular.length + rare.length).toBe(61);
+    expect(cuisines.map((c) => c.order)).toEqual(Array.from({ length: 61 }, (_v, i) => i + 1));
+    // Names start with a capital in both languages; the flag of Gabi's wish and of the Caribbean.
+    for (const c of cuisines) for (const name of [c.nl, c.en]) expect(name.charAt(0)).toBe(name.charAt(0).toUpperCase());
+    expect(cuisines.find((c) => c.id === 'litouws')).toEqual({ id: 'litouws', nl: 'Litouws', en: 'Lithuanian', flag: '🇱🇹', order: 25, rare: true });
+    expect(cuisines.find((c) => c.id === 'caribisch')?.flag).toBe('🇯🇲');
     expect(validateDictionary(REAL).errors).toEqual([]);
-    expect(refsFromData(REAL).cuisines.size).toBe(18);
+    expect(refsFromData(REAL).cuisines.size).toBe(61);
     // Without cuisine data the ref set is empty (not undefined).
     expect(refsFromData({ ...REAL, cuisines: undefined }).cuisines.size).toBe(0);
   });

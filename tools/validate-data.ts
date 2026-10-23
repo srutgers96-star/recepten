@@ -466,7 +466,8 @@ export function validateSchema2(data: unknown, refs?: DictionaryRefs): Validatio
 // (phase 5; lactose: docs/specs/labels-categorieen.md §2a), `…Unsure` only next to a `false` flag,
 // no vegan entry with lactose (or unsure about it), a Dutch name or alias claimed by two
 // ingredients (the parser could only pick one), cuisines (when present) with the category checks
-// plus a non-empty `flag` (docs/specs/labels-categorieen.md §2c). Warnings:
+// plus a non-empty `flag` and an optional boolean `rare` (docs/specs/labels-categorieen.md §2c and
+// "Blok 6 — keukens wereldwijd"). Warnings:
 // an English name claimed twice (English input is best effort), no diet flags at all yet.
 
 function checkIds(items: unknown, file: string, errors: string[]): Record<string, unknown>[] {
@@ -572,12 +573,14 @@ export function validateDictionary(data: DictionaryData): ValidationResult {
       if (typeof item['order'] !== 'number') errors.push(`${label}: "order" must be a number.`);
     }
   }
-  // data/cuisines.json (docs/specs/labels-categorieen.md §2c): the category checks plus a flag emoji.
+  // data/cuisines.json (docs/specs/labels-categorieen.md §2c): the category checks plus a flag emoji;
+  // `rare` (a reserve cuisine, "Blok 6 — keukens wereldwijd") is optional and a boolean when present.
   if (data.cuisines !== undefined) {
     for (const item of checkIds(data.cuisines, 'cuisines.json', errors)) {
       const label = `cuisines.json ${JSON.stringify(item['id'])}`;
       for (const k of ['nl', 'en', 'flag']) if (typeof item[k] !== 'string' || (item[k] as string).trim() === '') errors.push(`${label}: "${k}" must be a non-empty string.`);
       if (typeof item['order'] !== 'number') errors.push(`${label}: "order" must be a number.`);
+      if (item['rare'] !== undefined && typeof item['rare'] !== 'boolean') errors.push(`${label}: "rare" must be true or false when present.`);
     }
   }
   const aisleIds = new Set((Array.isArray(data.aisles) ? data.aisles : []).map((a) => a.id));

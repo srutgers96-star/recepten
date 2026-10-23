@@ -237,6 +237,9 @@ export const edit: Dict = {
   // 6B blok 3 (docs/specs/labels-categorieen.md §1e): the "Keuken" row — "geen" + the 18 cuisines.
   'meta.cuisine': { nl: 'Keuken', en: 'Cuisine' },
   'meta.cuisineNone': { nl: 'geen', en: 'none' },
+  // 6B blok 6 (docs/specs/labels-categorieen.md, "Blok 6 — keukens wereldwijd"): the select under the
+  // cuisine chips with every reserve cuisine; also its aria-label.
+  'meta.cuisineOther': { nl: 'Andere keuken…', en: 'Other cuisine…' },
   // 6B blok 5 (docs/specs/labels-categorieen.md §1e): the heading of the editor's last card "Labels".
   'meta.title': { nl: 'Labels', en: 'Labels' },
   // Phase 6 (6A.18), new text in 6B blok 5 (§1e): one line above the three rows (Categorie, Keuken,

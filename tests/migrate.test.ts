@@ -19,7 +19,7 @@ describe('migrate', () => {
   it('produces 216 recipes (196 classics + 20 side dishes) with unique builtin ids, sorted by name', () => {
     expect(file.schema).toBe(2);
     expect(file.dataVersion).toBe(DATA_VERSION);
-    expect(DATA_VERSION).toBe(8);
+    expect(DATA_VERSION).toBe(9); // 9 = three cuisines added by Fable on 24 Oct 2026 (Russian, Norwegian, South African)
     expect(file.generatedAt).toBe(GENERATED_AT);
     expect(file.recipes).toHaveLength(216);
     const ids = new Set(file.recipes.map((r) => r.id));

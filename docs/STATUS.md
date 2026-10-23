@@ -4,15 +4,73 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 24 okt (Opus): 6B blok 6 — keukens wereldwijd (61 keukens, Litouws voor Gabi)
+Gebouwd volgens het besluitblok "Blok 6 — keukens wereldwijd" bovenaan docs/specs/labels-categorieen.md (bouwer A
+data + domein + import, bouwer B editor, integrator). Niet gecommit. Wat er nu staat:
+- **Data:** data/cuisines.json houdt de 18 gewone keukens van §2c ongewijzigd (order 1–18, zonder `rare`) en krijgt
+  er 43 **reservekeukens** bij met `"rare": true`, order 19–61, in de volgorde van het besluitblok (Europa,
+  Midden-Oosten/Afrika, Azië, Amerika, Oceanië). Ids zijn kleine letters/ASCII (`oekraiens`, `israelisch`), de
+  namen hebben een hoofdletter (Oekraïens, Israëlisch), elk land zijn eigen vlag, Caribisch 🇯🇲. Litouws =
+  `{ id: "litouws", nl: "Litouws", en: "Lithuanian", flag: "🇱🇹", order: 25, rare: true }`. recipes.json en
+  data/review/meta.json zijn niet veranderd: **geen DATA_VERSION-bump**, geen migrate, Dexie blijft v7.
+- **Type en validator:** `Cuisine.rare?: boolean`; validate-data meldt een `rare` dat geen true/false is.
+- **Filterchips** (Home, Recepten, Week, Kies 7) zijn ongewijzigd: alleen keukens die in recepten voorkomen. Een
+  reservekeuken verschijnt daar dus pas als een recept hem heeft.
+- **Editor en "Controleer mijn recepten":** de rij Keuken toont "geen", de 18 gewone keukens en elke reservekeuken
+  die gekozen is of in een bestaand recept voorkomt. Daaronder een gewone keuzelijst **Andere keuken…** / **Other
+  cuisine…** (16 px, 44 px hoog, volle breedte) met alle 43 reservekeukens met vlag, alfabetisch in de UI-taal.
+  Kiezen zet die keuken aan (hij verschijnt als groene chip) en de lijst springt terug naar "Andere keuken…".
+- **Importprompt:** noemt alleen de 18 gewone ids en zegt daarna "of een ander land als bijvoeglijk naamwoord in
+  kleine letters (bijvoorbeeld litouws, peruaans)" / "or another country as a lower-case adjective (for example
+  lithuanian, peruvian)". Het plakken kent alle 61: "Lithuanian", "Litouwse", "Litouwen", "Peruvian",
+  "Zuid-Afrikaans" … worden de juiste id.
+
+**Keuzes van de bouwers die de spec open liet (graag even bevestigen):** Engelse namen Filipino, Nepalese,
+Argentinian, Israeli, Persian; Nederlandse Oekraïens, Israëlisch, Sri Lankaans. Extra woorden bij het plakken:
+iraans/iranian/iran → Perzisch, caraïbisch/caraïben → Caribisch, zuid-korea → Koreaans; "jamaica" bewust niets. De
+promptzin staat zonder komma achter de lijst ("…, amerikaans of een ander land …"). De keuzelijst verschijnt niet
+als er geen reservekeukens zijn. In "Controleer mijn recepten" telt alleen de eigen lijst (eigen en ontvangen) als
+"in gebruik"; de editor kijkt naar alle recepten, ook klassiekers met een eigen keuken in hun aanpassing.
+
+**Integrator:** tests/apply-meta.test.ts gebruikte `zuid-afrikaans` als voorbeeld van een onbekende keuken; dat is
+nu een echte keuken, dus het voorbeeld is `mongools` geworden. De commentaarregel in src/domain/data.ts en de rij
+cuisines.json in data/README.md noemen nu 61 keukens en `rare`. Niet veranderd (de spec zegt er niets over):
+`tools/make-batch-inputs.ts buildVocab` zet nu alle 61 keukens in `vocab.cuisines` (het zijn geldige ids).
+
+**Open voor Stijn/Fable:** (1) de bewuste nulls van §2c (Boeuf Stroganoff, Zuid-Afrikaanse gehaktschotel, Noorse
+visschotel) hebben nog steeds geen keuken, al bestaan Russisch, Zuid-Afrikaans en Noors nu; de spec wijst ze niet
+toe, dus niets toegevoegd. (2) Uitrol: het besluitblok zegt niet of dit direct naar `main` mag; standaard (README
+§3a punt 11) eerst `/next/`.
+
+**Gedraaid:** check, test (1084 in 48 bestanden), build, build:next en validate:data zijn groen (0 errors, 61
+cuisines; alleen de bekende warnings). Geen nieuwe dependency, geen nieuwe route of setting; één nieuwe i18n-key
+`meta.cuisineOther` (NL "Andere keuken…", EN "Other cuisine…").
+
+**Dev-app (375 px, NL en EN, licht en donker):** Recepten toont in de rij Keuken dezelfde 16 keukens als voorheen.
+De editor van een eigen recept toont "geen" + 18 chips en de keuzelijst met 43 keukens (NL Argentijns … Zwitsers,
+EN Argentinian … Vietnamese). Litouws kiezen → chip "🇱🇹 Litouws" groen; na Bewaar staat "Keuken: 🇱🇹 Litouws" op
+de receptpagina en "🇱🇹 Litouws" als laatste chip in de rij Keuken van Recepten (tik → "1 van 218 recepten"). In
+een nieuw recept stond Lithuanian toen ook als chip (in gebruik). Terug op "geen" en bewaard → de chip verdwijnt
+weer uit de filterrij. Geen horizontaal scrollen, geen consolefouten. Op Windows toont Chrome de vlaggen als twee
+letters ("LT"); op telefoons zijn het vlaggen. **DEVICE-TEST:** rij 76 heeft in beide tabellen een stap 7 (editor
+→ Andere keuken… → Litouws → chip actief; na Bewaar staat 🇱🇹 Litouws in de rij Keuken van Recepten).
+
 ## PAUZE (24 okt) — volgende stap: 6D-1 XP-kern, in lichte modus
 Stijn wil op woensdagavond 28 okt kijken wat er van de weeklimiet over is. Stand: Home A+, kookbalk (13K), labels en
-categorieën (6B + 13E, vijf blokken) en de 20 bijgerechten staan allemaal op `main`; 216 klassiekers, DATA_VERSION 8,
-1082 tests. Besluiten van 24 okt (docs/specs/README.md §1 en §3b): **lichte bouwmodus** (bouwers → integrator → één
+categorieën (6B + 13E, zes blokken) en de 20 bijgerechten staan allemaal op `main`; 216 klassiekers, DATA_VERSION 9,
+1084 tests. Besluiten van 24 okt (docs/specs/README.md §1 en §3b): **lichte bouwmodus** (bouwers → integrator → één
 Opus-correctness-lens → fixer alleen bij bevindingen → Haiku-gate; data-blokken alleen de gate), **XP eerst** (6D-1 →
 6D-2 → 6D-3 → 6D-4, daarna 13F, 13D, 6C, 13J, Z), **ambitie 6D omhoog** (avatar zeven lagen × 40–70 onderdelen in
 rondes, rijke ontgrendelingen, gouden modus, challenges op level 20 — zie de besluitblokken bovenaan
 badges-avatar.md en xp-levels.md), en Stijn reviewt zelf bij het testen (de Fable-eindcontrole kan kleiner; woensdag
-bespreken). Werkmap: branch `next` = `main`, schoon. Tijdlijn: https://claude.ai/artifact/6LXkS8KpLeqJfkXLYPrg3L.
+bespreken). Later op 24 okt nog gebouwd (lichte modus, 19 min, 0,7 M tokens): **6B blok 6 — keukens wereldwijd**: 61 keukens (18 gewone
++ 43 reserve met `rare: true`, waaronder Litouws voor Gabi), editor met "Andere keuken…", prompt met "of een ander land",
+en door Fable drie toewijzingen (Boeuf Stroganoff russisch, Noorse visschotel noors, Zuid-Afrikaanse gehaktschotel
+zuid-afrikaans) → **DATA_VERSION 9** (13F wordt 10; README en inbouwen.md aangepast). 1084 tests.
+**Vragen voor woensdag:** (1) meerdere keukens per recept? Besluit van 6 okt is één; meer vraagt een lijstveld en raakt
+validator, migratie en deellink. (2) Het label `wereld`: 43 recepten dragen het, 28 daarvan hebben nu een keuken; weghalen
+raakt data, filters en teksten. (3) Hoe klein mag de Fable-eindcontrole nu Stijn zelf test.
+Werkmap: branch `next` = `main`, schoon. Tijdlijn: https://claude.ai/artifact/6LXkS8KpLeqJfkXLYPrg3L.
 
 ## 23 okt (Opus): de 20 bijgerechten (13E) — 216 klassiekers
 **Besluit Fable (24 okt) over de restpunten:** rij 81 noemt nu "25 bijgerechten" (de twintig nieuwe en de vijf uit 6B); de botsingscontrole in validate-data filtert op `createdAt === SIDES_TIMESTAMP` zodat hij echt kan afgaan — akkoord; `lactosevrij` op de twaalf plantaardige bijgerechten is juist (geen zuivel, dus geen lactose; de dieettabel van §2g was van vóór 6B blok 2); de Kies-sheet toont bijgerechten pas met de chip Bijgerecht of "ook bijgerechten & zoet" — dat is het bedoelde 6B-gedrag. Review: 3 bevindingen (2 echte), alle verwerkt; gate groen (1082 tests). Uitrol: direct naar `main`.

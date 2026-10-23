@@ -27,7 +27,9 @@
 // 6B blok 3 (docs/specs/labels-categorieen.md §1b, §2f): an optional "Keuken: italiaans" /
 // "Cuisine: italian" line under the category line, mapped to a data/cuisines.json id through
 // CUISINE_WORDS (`cuisineIdFromWord`). The prompt asks for it only when the dish really comes from
-// that cuisine; a pasted text without such a line never gets a cuisine guessed.
+// that cuisine; a pasted text without such a line never gets a cuisine guessed. Blok 6 ("keukens
+// wereldwijd"): CUISINE_WORDS also knows the 43 reserve cuisines (`rare` in data/cuisines.json), but
+// the prompt lists only the 18 regular ids and asks for any other country as a lower-case adjective.
 //
 // Phase 6 (docs/phase-6-spec.md 6A.10, 6A.14, 6A.16, 13C):
 //  - The prompt asks for the WHOLE answer in one code block, so ChatGPT/Gemini show "Copy code"
@@ -86,12 +88,12 @@ const CATEGORY_WORDS: Record<string, string[]> = {
 };
 
 /**
- * data/cuisines.json ids (in its `order`) with the words that mean them: the Dutch and English
- * name, the adjective in both languages and the country or region (docs/specs/labels-categorieen.md
+ * The 18 regular data/cuisines.json ids (in its `order`) with the words that mean them: the Dutch and
+ * English name, the adjective in both languages and the country or region (docs/specs/labels-categorieen.md
  * §3 blok 3). The id itself always counts. "indisch" is deliberately absent: in Dutch it means the
- * Dutch-Indonesian kitchen, not the Indian one.
+ * Dutch-Indonesian kitchen, not the Indian one. These are the ids the import prompt lists.
  */
-const CUISINE_WORDS: Record<string, string[]> = {
+const REGULAR_CUISINE_WORDS: Record<string, string[]> = {
   hollands: ['hollands', 'hollandse', 'dutch', 'nederlands', 'nederlandse', 'holland', 'nederland', 'netherlands', 'the netherlands'],
   italiaans: ['italiaans', 'italiaanse', 'italian', 'italië', 'italy'],
   frans: ['frans', 'franse', 'french', 'frankrijk', 'france'],
@@ -111,6 +113,67 @@ const CUISINE_WORDS: Record<string, string[]> = {
   mexicaans: ['mexicaans', 'mexicaanse', 'mexican', 'mexico'],
   amerikaans: ['amerikaans', 'amerikaanse', 'american', 'amerika', 'america', 'verenigde staten', 'united states', 'usa'],
 };
+
+/**
+ * The 43 reserve cuisines of data/cuisines.json (`"rare": true`, order 19–61; docs/specs/labels-categorieen.md
+ * "Blok 6 — keukens wereldwijd"), same shape: Dutch and English name, the adjective in both languages
+ * (lower case, also with -e), the country (or region) in Dutch and English, and the id itself. Parsed
+ * like the regular ones, but not listed in the prompt: it says "or another country as a lower-case
+ * adjective" instead, and these words turn that adjective back into the id.
+ */
+const RARE_CUISINE_WORDS: Record<string, string[]> = {
+  // Europe
+  belgisch: ['belgisch', 'belgische', 'belgian', 'belgië', 'belgium'],
+  duits: ['duits', 'duitse', 'german', 'duitsland', 'germany'],
+  oostenrijks: ['oostenrijks', 'oostenrijkse', 'austrian', 'oostenrijk', 'austria'],
+  zwitsers: ['zwitsers', 'zwitserse', 'swiss', 'zwitserland', 'switzerland'],
+  pools: ['pools', 'poolse', 'polish', 'polen', 'poland'],
+  tsjechisch: ['tsjechisch', 'tsjechische', 'czech', 'tsjechië', 'czechia', 'czech republic'],
+  litouws: ['litouws', 'litouwse', 'lithuanian', 'litouwen', 'lithuania'],
+  lets: ['lets', 'letse', 'latvian', 'letland', 'latvia'],
+  ests: ['ests', 'estse', 'estonian', 'estland', 'estonia'],
+  fins: ['fins', 'finse', 'finnish', 'finland'],
+  zweeds: ['zweeds', 'zweedse', 'swedish', 'zweden', 'sweden'],
+  noors: ['noors', 'noorse', 'norwegian', 'noorwegen', 'norway'],
+  deens: ['deens', 'deense', 'danish', 'denemarken', 'denmark'],
+  iers: ['iers', 'ierse', 'irish', 'ierland', 'ireland'],
+  russisch: ['russisch', 'russische', 'russian', 'rusland', 'russia'],
+  oekraiens: ['oekraïens', 'oekraïense', 'ukrainian', 'oekraïne', 'ukraine'],
+  roemeens: ['roemeens', 'roemeense', 'romanian', 'roemenië', 'romania'],
+  bulgaars: ['bulgaars', 'bulgaarse', 'bulgarian', 'bulgarije', 'bulgaria'],
+  servisch: ['servisch', 'servische', 'serbian', 'servië', 'serbia'],
+  kroatisch: ['kroatisch', 'kroatische', 'croatian', 'kroatië', 'croatia'],
+  turks: ['turks', 'turkse', 'turkish', 'turkije', 'turkey'],
+  // Middle East and Africa
+  libanees: ['libanees', 'libanese', 'lebanese', 'libanon', 'lebanon'],
+  israelisch: ['israëlisch', 'israëlische', 'israeli', 'israël', 'israel'],
+  perzisch: ['perzisch', 'perzische', 'persian', 'perzië', 'persia', 'iraans', 'iraanse', 'iranian', 'iran'],
+  egyptisch: ['egyptisch', 'egyptische', 'egyptian', 'egypte', 'egypt'],
+  ethiopisch: ['ethiopisch', 'ethiopische', 'ethiopian', 'ethiopië', 'ethiopia'],
+  'zuid-afrikaans': ['zuid-afrikaans', 'zuid-afrikaanse', 'zuid afrikaanse', 'south african', 'south-african', 'zuid-afrika', 'zuid afrika', 'south africa'],
+  nigeriaans: ['nigeriaans', 'nigeriaanse', 'nigerian', 'nigeria'],
+  tunesisch: ['tunesisch', 'tunesische', 'tunisian', 'tunesië', 'tunisia'],
+  // Asia
+  koreaans: ['koreaans', 'koreaanse', 'korean', 'korea', 'zuid-korea', 'south korea'],
+  vietnamees: ['vietnamees', 'vietnamese', 'vietnam'],
+  maleisisch: ['maleisisch', 'maleisische', 'malaysian', 'maleisië', 'malaysia'],
+  filipijns: ['filipijns', 'filipijnse', 'filipino', 'philippine', 'filipijnen', 'de filipijnen', 'philippines', 'the philippines'],
+  'sri-lankaans': ['sri lankaans', 'sri lankaanse', 'sri-lankaanse', 'sri lankan', 'sri-lankan', 'sri lanka'],
+  pakistaans: ['pakistaans', 'pakistaanse', 'pakistani', 'pakistan'],
+  nepalees: ['nepalees', 'nepalese', 'nepali', 'nepal'],
+  // The Americas
+  braziliaans: ['braziliaans', 'braziliaanse', 'brazilian', 'brazilië', 'brazil'],
+  argentijns: ['argentijns', 'argentijnse', 'argentinian', 'argentine', 'argentinië', 'argentina'],
+  peruaans: ['peruaans', 'peruaanse', 'peruvian', 'peru'],
+  caribisch: ['caribisch', 'caribische', 'caraïbisch', 'caraïbische', 'caribbean', 'cariben', 'caraïben', 'the caribbean'],
+  cubaans: ['cubaans', 'cubaanse', 'cuban', 'cuba'],
+  canadees: ['canadees', 'canadese', 'canadian', 'canada'],
+  // Oceania
+  australisch: ['australisch', 'australische', 'australian', 'australië', 'australia'],
+};
+
+/** Every data/cuisines.json id (the regular 18, then the reserve ones; data order) with its words. */
+const CUISINE_WORDS: Record<string, string[]> = { ...REGULAR_CUISINE_WORDS, ...RARE_CUISINE_WORDS };
 
 /** The tag vocabulary (tools/validate-data.ts RECIPE_TAGS) with the words that mean each tag. */
 const TAG_WORDS: Record<string, string[]> = {
@@ -175,7 +238,8 @@ export function categoryIdFromWord(word: string): string | undefined {
 
 /**
  * A data/cuisines.json id for a word as written ("Italian", "italiaanse", "Italië", "Dutch",
- * "Hollands", "midden-oosten"); undefined when unknown ("Zuid-Afrikaans", "-", "geen"). Tolerant of
+ * "Hollands", "midden-oosten", "Lithuanian", "Litouwse"); undefined when unknown ("Mongools", "-",
+ * "geen"). Reserve cuisines count like the regular ones. Tolerant of
  * case and diacritics, of a trailing "keuken" / "cuisine" ("Italiaanse keuken") and of extras after a
  * separator ("Italiaans (Siciliaans)": the first known word wins). Never guesses from anything else.
  */
@@ -206,10 +270,15 @@ export function tagIdsFromText(text: string): string[] {
   return out;
 }
 
-/** The category, cuisine and tag vocabularies as the import prompt lists them (ids in data order). */
+/**
+ * The category, cuisine and tag vocabularies the import knows (ids in data order). IMPORT_CUISINE_IDS
+ * holds all 61 cuisines (regular and reserve) for parsing; the prompt lists only the regular 18.
+ */
 export const IMPORT_CATEGORY_IDS: readonly string[] = Object.keys(CATEGORY_WORDS);
 export const IMPORT_CUISINE_IDS: readonly string[] = Object.keys(CUISINE_WORDS);
 export const IMPORT_TAG_IDS: readonly string[] = Object.keys(TAG_WORDS);
+/** The cuisines the prompt names: the 18 regular ones (Blok 6: a reserve one is "another country"). */
+const PROMPT_CUISINE_IDS: readonly string[] = Object.keys(REGULAR_CUISINE_WORDS);
 
 // --- the prompt -----------------------------------------------------------------------------------
 
@@ -253,20 +322,21 @@ function formatBlock(lang: Lang): string[] {
 }
 
 const CATEGORY_LIST = IMPORT_CATEGORY_IDS.join(', ');
-const CUISINE_LIST = IMPORT_CUISINE_IDS.join(', ');
+const CUISINE_LIST = PROMPT_CUISINE_IDS.join(', ');
 const TAG_LIST = IMPORT_TAG_IDS.join(', ');
 
 /**
  * The meta rule: which words the "Categorie:" / "Labels:" lines may hold, then the "Keuken:" /
- * "Cuisine:" line (docs/specs/labels-categorieen.md §1b: only when the dish really comes from there).
+ * "Cuisine:" line (docs/specs/labels-categorieen.md §1b: only when the dish really comes from there;
+ * Blok 6: the 18 regular ids, or another country as a lower-case adjective).
  */
 const META_RULE: Record<Lang, string> = {
   nl:
     `"Categorie:" is één van: ${CATEGORY_LIST}; "Labels:" is een kommagescheiden keuze uit: ${TAG_LIST} (beide regels mogen weggelaten worden als je het niet weet). ` +
-    `"Keuken:" is één van: ${CUISINE_LIST} — alleen als het gerecht echt uit die keuken komt, anders de regel weglaten.`,
+    `"Keuken:" is één van: ${CUISINE_LIST} of een ander land als bijvoeglijk naamwoord in kleine letters (bijvoorbeeld litouws, peruaans) — alleen als het gerecht echt uit die keuken komt, anders de regel weglaten.`,
   en:
     `"Category:" is one of: ${CATEGORY_LIST}; "Tags:" is a comma-separated choice from: ${TAG_LIST} (leave either line out when unsure). ` +
-    `"Cuisine:" is one of: ${CUISINE_LIST} — only when the dish really comes from that cuisine, otherwise leave the line out.`,
+    `"Cuisine:" is one of: ${CUISINE_LIST} or another country as a lower-case adjective (for example lithuanian, peruvian) — only when the dish really comes from that cuisine, otherwise leave the line out.`,
 };
 
 /**

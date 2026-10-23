@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "dataVersion": 8,
-  "generatedAt": "2026-10-23T21:53:54.758Z",
+  "dataVersion": 9,
+  "generatedAt": "2026-10-23T22:58:25.251Z",
   "recipes": [
     {
       "schema": 2,
@@ -2446,6 +2446,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vlees",
+      "cuisine": "russisch",
       "text": {
         "en": "llm"
       },
@@ -24880,6 +24881,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "vis",
+      "cuisine": "noors",
       "text": {
         "en": "llm"
       },
@@ -45519,6 +45521,7 @@
       "goesWith": [],
       "aliases": [],
       "category": "oven",
+      "cuisine": "zuid-afrikaans",
       "text": {
         "en": "llm"
       },

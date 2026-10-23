@@ -12,11 +12,20 @@
 // 6B blok 3 (docs/specs/labels-categorieen.md §1b, §1e): a third row "Keuken" between the two —
 // "geen" plus every cuisine with its flag, one at a time (a second tap on the chosen one = geen).
 // A cuisine is never suggested (no reliable heuristic): `applySuggestion` leaves it as it is.
+//
+// 6B blok 6 (docs/specs/labels-categorieen.md, "Blok 6 — keukens wereldwijd"): data/cuisines.json
+// also holds reserve cuisines (`rare: true`, order 19+). The chips show "geen" + every ordinary
+// cuisine + each reserve cuisine that is chosen or used by an existing recipe (`usedCuisines`, filled
+// by the caller); under the chips a native select "Andere keuken…" lists every reserve cuisine
+// alphabetically in the UI language. Picking one makes it the cuisine (it then shows as a chip) and
+// the select jumps back to its first option.
 import { categoryLabel, cuisineLabel } from '@/components/FilterChips';
 import { dictionary } from '@/dictionary';
 import { DIET_TAGS, SUGGESTED_TAGS, type DietTag, type MetaSuggestion } from '@/domain/diet';
+import type { Cuisine } from '@/domain/dictionary';
+import type { Lang } from '@/domain/model';
 import { IMPORT_TAG_IDS } from '@/domain/photo-import';
-import { hasKey, t } from '@/i18n';
+import { hasKey, lang, t } from '@/i18n';
 
 /** Category (null = none), cuisine (null = none) and tags as the recipe stores them. */
 export interface MetaValue {
@@ -45,6 +54,27 @@ export function metaCategoryLabel(id: string | null | undefined): string {
 /** "🇮🇹 Italiaans": flag + name of a cuisine id in the active language (falls back to the id). */
 export function metaCuisineLabel(id: string): string {
   return cuisineLabel(dictionary.value.cuisine(id), id);
+}
+
+/** A reserve cuisine (`rare: true` in data/cuisines.json): offered in the "Andere keuken…" select. */
+function isRareCuisine(c: Cuisine): boolean {
+  return c.rare === true;
+}
+
+/**
+ * The cuisines the Keuken row shows as chips, in `order`: every ordinary one, plus each reserve
+ * cuisine that is `chosen` or occurs in `used` (the cuisine ids of the existing recipes).
+ */
+export function cuisineChipList(cuisines: readonly Cuisine[], chosen: string | null, used: readonly string[]): Cuisine[] {
+  const shown = new Set(used);
+  if (chosen) shown.add(chosen);
+  return cuisines.filter((c) => !isRareCuisine(c) || shown.has(c.id));
+}
+
+/** Every reserve cuisine for the "Andere keuken…" select, alphabetical on its name in `l`. */
+export function rareCuisineOptions(cuisines: readonly Cuisine[], l: Lang): Cuisine[] {
+  const name = (c: Cuisine) => (l === 'nl' ? c.nl : c.en) || c.nl || c.id;
+  return cuisines.filter(isRareCuisine).sort((a, b) => name(a).localeCompare(name(b), l === 'nl' ? 'nl' : 'en'));
 }
 
 /** The tags of a suggestion the dictionary is sure about (the ones "Overnemen" applies). */
@@ -95,11 +125,18 @@ export interface MetaRowsProps {
   disabled?: boolean;
   /** Distinguishes the radio/select names when two instances are on one page. */
   name?: string;
+  /**
+   * 6B blok 6: the cuisine ids that occur in the recipe list (PickSheet `cuisineIdsIn`); a reserve
+   * cuisine among them is shown as a chip, the others only in the "Andere keuken…" select.
+   */
+  usedCuisines: readonly string[];
 }
 
 export function MetaRows(props: MetaRowsProps) {
   const { value, suggestion } = props;
   const dict = dictionary.value;
+  const cuisineChips = cuisineChipList(dict.cuisines, value.cuisine ?? null, props.usedCuisines);
+  const rareOptions = rareCuisineOptions(dict.cuisines, lang.value);
   const proposed = suggestion ? applySuggestion(value, suggestion) : null;
   const differs = !!proposed && !metaEqual(proposed, value);
   // Unsure diet tags the value does not carry yet: offered on the chip as "waarschijnlijk".
@@ -149,7 +186,7 @@ export function MetaRows(props: MetaRowsProps) {
           <button type="button" class={'meta-chip' + (!value.cuisine ? ' on' : '')} aria-pressed={!value.cuisine} disabled={props.disabled} onClick={() => pickCuisine(null)}>
             {t('meta.cuisineNone')}
           </button>
-          {dict.cuisines.map((c) => {
+          {cuisineChips.map((c) => {
             const on = value.cuisine === c.id;
             return (
               <button key={c.id} type="button" class={'meta-chip' + (on ? ' on' : '')} aria-pressed={on} disabled={props.disabled} onClick={() => pickCuisine(c.id)}>
@@ -158,6 +195,29 @@ export function MetaRows(props: MetaRowsProps) {
             );
           })}
         </div>
+        {rareOptions.length > 0 && (
+          <select
+            class="input meta-cuisine-select"
+            name={(props.name ?? 'meta') + '-cuisine-other'}
+            aria-label={t('meta.cuisineOther')}
+            value=""
+            disabled={props.disabled}
+            onChange={(e) => {
+              // Picking sets the cuisine (no toggle); the select itself always shows its first option again.
+              const el = e.currentTarget as HTMLSelectElement;
+              const id = el.value;
+              el.value = '';
+              if (id) props.onChange({ ...value, cuisine: id });
+            }}
+          >
+            <option value="">{t('meta.cuisineOther')}</option>
+            {rareOptions.map((c) => (
+              <option key={c.id} value={c.id}>
+                {cuisineLabel(c, c.id)}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       <div class="field meta-tags">

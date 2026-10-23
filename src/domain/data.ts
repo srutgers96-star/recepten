@@ -29,7 +29,7 @@ export const qualifiersData: Qualifier[] = qualifiersJson as Qualifier[];
 export const prepPhrasesData: PrepPhrase[] = prepPhrasesJson as PrepPhrase[];
 export const categoriesData: Category[] = categoriesJson as Category[];
 export const aislesData: Aisle[] = aislesJson as Aisle[];
-/** data/cuisines.json (docs/specs/labels-categorieen.md §2c): the 18 cuisines with their flags. */
+/** data/cuisines.json (docs/specs/labels-categorieen.md §2c): the 18 regular cuisines with their flags, then the 43 reserve ones (`rare: true`, "Blok 6 — keukens wereldwijd"). */
 export const cuisinesData: Cuisine[] = cuisinesJson as Cuisine[];
 
 /** data/ingredients.json (docs/phase-2-spec.md §1): the ~380 bundled ingredients. Tests that need

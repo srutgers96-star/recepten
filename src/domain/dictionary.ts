@@ -114,6 +114,12 @@ export interface Cuisine {
   en: string;
   flag: string;
   order: number;
+  /**
+   * A reserve cuisine (docs/specs/labels-categorieen.md "Blok 6 — keukens wereldwijd"): it exists so a
+   * recipe can carry it, but the editor offers it under "Other cuisine…" instead of as a chip and the
+   * import prompt does not list it. Absent = one of the 18 regular cuisines of §2c.
+   */
+  rare?: boolean;
 }
 
 export interface DictionaryData {

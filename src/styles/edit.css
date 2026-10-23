@@ -867,6 +867,19 @@ button.lc-chip:disabled {
   border-color: transparent;
 }
 
+/* 6B blok 6 (docs/specs/labels-categorieen.md, "Blok 6 — keukens wereldwijd"): "Andere keuken…",
+   the native select with the reserve cuisines, full width under the cuisine chips. */
+.meta-cuisine-select {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  font-size: 16px;
+  background: var(--card);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
 .meta-chip.maybe {
   border-style: dashed;
   border-color: var(--rosemary);

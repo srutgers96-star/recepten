@@ -39,11 +39,13 @@ import { IngredientPicker } from '@/components/IngredientPicker';
 import { LineChips, rawFromLine, type LineEdit } from '@/components/LineChips';
 import { LineEditor, editTextHasContent, newEditText, type EditText } from '@/components/LineEditor';
 import { MetaRows, applySuggestion, metaEqual, type MetaValue } from '@/components/MetaRows';
+import { cuisineIdsIn } from '@/components/PickSheet';
 import { Segmented } from '@/components/Segmented';
 import { UniversalPaste } from '@/components/UniversalPaste';
 import { celebrate } from '@/celebrate';
 import { endCooking } from '@/cooking';
-import { clearOverride, deleteUserRecipe, duplicateAsOwn, getBaseRecipe, getOverride, getRecipe, isBuiltinId, listLineOverrides, saveOverride, saveUserRecipe, userRecipes } from '@/db/repo';
+import { useLiveQuery } from '@/db/live';
+import { allRecipes, clearOverride, deleteUserRecipe, duplicateAsOwn, getBaseRecipe, getOverride, getRecipe, isBuiltinId, listLineOverrides, saveOverride, saveUserRecipe, userRecipes } from '@/db/repo';
 import { dictionary, lineText, type Dictionary } from '@/dictionary';
 import { suggestMeta } from '@/domain/diet';
 import { applyWordLink, type WordLink } from '@/domain/line-words';
@@ -322,6 +324,8 @@ export function EditScreen(props: { id?: string }) {
   // names a cuisine). Stored on the recipe.
   const [meta, setMeta] = useState<MetaValue>({ category: null, cuisine: null, tags: [] });
   const [metaManual, setMetaManual] = useState(false);
+  // 6B blok 6: the cuisines the recipe list uses, so a reserve cuisine already in use is a chip in MetaRows.
+  const usedCuisines = useLiveQuery(() => allRecipes().then(cuisineIdsIn), [], [] as string[]);
   const [pasteOpen, setPasteOpen] = useState(false);
   const [pasteText, setPasteText] = useState('');
   const [pasteLang, setPasteLang] = useState<Lang>('nl');
@@ -1560,7 +1564,7 @@ export function EditScreen(props: { id?: string }) {
         <div class="card edit-meta">
           <h2>{t('meta.title')}</h2>
           <p class="muted small edit-meta-intro">{t('meta.kindsHint')}</p>
-          <MetaRows value={meta} suggestion={suggestion} onChange={changeMeta} disabled={busy} />
+          <MetaRows value={meta} suggestion={suggestion} onChange={changeMeta} disabled={busy} usedCuisines={usedCuisines} />
           {!props.id && !metaManual && <p class="muted small edit-hint">{t('meta.autoHint')}</p>}
         </div>
 
