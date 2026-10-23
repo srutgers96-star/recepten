@@ -5,8 +5,8 @@ Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee:
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
 ## 23 okt (Opus): Home A+ blok 2
-Gebouwd volgens docs/specs/home-a-plus.md §3 blok 2 (bouwers A en B + integrator). **Staat op `next`
-(commit a3396e5) en online op /recepten/next/; `main` volgt na de telefoonronde met rij 70 en 71.** Wat er nu
+Gebouwd volgens docs/specs/home-a-plus.md §3 blok 2 (bouwers A en B + integrator). **Live op `main` sinds
+23 okt** (eerst op `next`; telefoonronde rij 70 en 71 door Stijn: "alles lukt"). Wat er nu
 staat: Home heeft op plek 2 de kaart **VANAVOND**
 (src/components/TonightCard.tsx) met drie standen uit het pure `tonightMode` (src/domain/tonight.ts): laden;
 **plan** (het eerste niet-gekookte gerecht van de week, metaregel "45 min · Vlees · nog 3 te gaan" / "de laatste
@@ -45,7 +45,7 @@ woord zegt minder. (2) "n van 7 gekookt" telt ook slots waarvan het recept weg i
 Dat volgt de spec-signatuur en is zeldzaam (alleen na het verwijderen van een eigen recept uit een lopende week).
 Kleine keuzes van bouwer B: kopregel VANAVOND 13 px (niet 12, §5b), Verder met in cobalt, een tijd van 0 minuten
 valt weg uit de metaregel.
-**Uitrol:** staat op `next` (23 okt); na de telefoonronde met rij 70 én 71 volgt `main`.
+**Uitrol:** `next` 23 okt, `main` 23 okt na de telefoonronde. Home A+ is daarmee af; volgende blok: 13K kookbalk.
 
 ## 23 okt (Opus): Home A+ blok 1
 Gebouwd volgens docs/specs/home-a-plus.md §3 blok 1 (bouwers A en B + integrator). **Live op `main` sinds
@@ -97,9 +97,8 @@ De run kostte twee pogingen (sessielimiet na de schrijvers; hervat met resumeFro
 
 ## Branches
 `main` = https://srutgers96-star.github.io/recepten/ (beide telefoons). `next` = …/recepten/next/ (testkanaal,
-eigen database en icoon). 23 okt: **Home A+ blok 1** stond eerst op `next`, is na Stijns check in `main`
-gemerged en staat live; **blok 2** staat op `next` en wacht op de telefoonronde (DEVICE-TEST rij 70 en 71),
-daarna `next` → `main` (fast-forward). Elk volgend bouwblok gaat eerst naar `next`.
+eigen database en icoon). Werkwijze per blok: bouwen op `next` → telefoonronde → `next` in `main` mergen
+(fast-forward), zodat beide branches daarna gelijk staan. 23 okt: Home A+ blok 1 en 2 zo naar `main` gegaan.
 Eenmalig geregeld (23 okt): de GitHub Pages-omgeving `github-pages` stond alleen `main` toe als uitrolbranch;
 `next` is toegevoegd (Settings → Environments → github-pages → Deployment branches). Zonder die regel faalt
 de deploy-job van een push naar `next` met een environment-protection-fout.
