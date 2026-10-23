@@ -16,6 +16,19 @@ eronder wint het blok.**
 Elk blok gaat apart online: eerst `/next/` (eigen database), dan `main` na een telefoonronde, tenzij de
 spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
 
+**Bijgewerkt 23 okt 2026 (besluiten Stijn tijdens het bouwen):**
+- **Geen telefoonronde meer vóór `main`:** een blok gaat na de groene gate meteen `next` → `main`
+  (fast-forward). De DEVICE-TEST-rijen blijven voor later. Uitzondering blijft: 13F (id-migratie) en
+  6D-4/13D (deelformaat) krijgen vóór `main` een korte Fable-blik.
+- **Volgorde omgegooid:** na de bijgerechten komt eerst **6D (XP)**: 6D-1 → 6D-2a/2b → 6D-3 → 6D-4a → 6D-4b.
+  Daarna 13F → 13D → 6C → 13J → Z. 6D-1 hangt niet van 13F af (XP wordt afgeleid uit wat in de kooklog
+  staat; 13F's alias-migratie zet de kooklog-ids om, de afleiding rekent daarna gewoon opnieuw).
+- **Gebouwd tot nu toe:** Home A+ (1–2), 13K (1–2), 6B+13E (1–5), bijgerechten (in aanbouw).
+- **Ambitie 6D omhoog (Stijn 24 okt):** avatar met zeven lagen × 40–70 onderdelen, gebouwd in rondes (6D-3 =
+  raamwerk + ronde 1; daarna data-rondes door Fable); ontgrendelingen rijk (confetti, geluiden, lettertypes, gouden
+  modus); challenges vrij op level 20 als eigen blok ná 6D-4. Zie de besluitblokken bovenaan badges-avatar.md en
+  xp-levels.md. Lichte bouwmodus (§3b) geldt wel: één Opus-lens, Stijn reviewt zelf bij het testen.
+
 | # | Blok | Spec | Blokken | Status |
 |---|---|---|---|---|
 | 1 | Home A+ (13A deel 2) | home-a-plus.md | 2 | compleet |
@@ -183,6 +196,18 @@ Geen enkele nieuwe key bestaat nu al (gecontroleerd 22 okt); geen prefix wordt d
     de live app in het browserpaneel openen.
 
 ### 3b. Workflow-scriptsjabloon (zoals de 13I-run: bouwers → integrator → review-lenzen + verifier → fixer → Haiku-gate)
+
+**Lichte modus (besluit Stijn, 24 okt 2026; geldt vanaf de eerstvolgende bouw):** twee reviewlenzen plus een
+verifier per bevinding is te duur; Stijn doet de kritische blik zelf bij het testen. Per blok dus:
+bouwers (Opus) → integrator (Opus) → **één** reviewlens "correctness" (Opus) die een bevinding zelf
+reproduceert vóór hij hem meldt (geen aparte verifier) → fixer alleen als er bevindingen zijn → Haiku-gate.
+Blokken zonder app-logica (alleen data, zoals de lactose-slices of een bronbestand) slaan de reviewlens over
+en houden alleen de gate. In het sjabloon hieronder: `lenses: ['correctness']` en de verifier-stap
+weglaten. Waarom één Opus-lens en niet twee Haiku-lenzen: de echte fouten van 23 okt (bijgerecht als
+"Vanavond", keuken weg bij een update, porties gewist bij een koude start, dobbelsteen in de eigen week)
+vond de Opus-lens door de code te lezen en te reproduceren; Haiku vangt vooral oppervlakte (ontbrekende
+i18n, een vergeten regel), en dat doet de gate al. De ambitie in 6D blijft volledig (±120 badges, ±60
+avatar-onderdelen): die is het spel.
 Aanroepen met `Workflow({ script, args: { spec: 'docs/specs/<spec>.md', block: 'Blok 2', builders: [
 { name: 'A', brief: '…' }, { name: 'B', brief: '…' }, { name: 'C', brief: '…' } ], lenses:
 ['correctness', 'spec-conformance'] } })`. De `builders`-lijst komt letterlijk uit §3 van de spec (naam

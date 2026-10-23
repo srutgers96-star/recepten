@@ -2,6 +2,18 @@
 
 Status: compleet (Fable, 22 okt 2026)
 
+**Besluit Stijn (24 okt 2026) — de ambitie gaat omhoog, niet omlaag.** De avatar wordt een echte garderobe:
+**zeven lagen** die je apart kiest (voorstel: achtergrond · lichaam/shirt · gezicht · haar · hoofddeksel · attribuut in
+de hand · iets in de lucht/erbij; Fable mag de zeven definitief maken) met per laag **40–70 onderdelen**, veel met
+ingrediënten-thema. Dat is te veel voor één blok: **6D-3 bouwt het raamwerk met ronde 1** (de ±60 onderdelen uit §2f,
+verdeeld over de zeven lagen, zodat elke laag al keuze heeft en er bij vrijwel elk level iets vrijkomt), en daarna
+**uitbreidingsrondes** van telkens ±60–100 onderdelen (alleen data/avatar-parts.json + SVG; geen code), tot elke laag
+40–70 heeft. Het tekenen van de onderdelen is ontwerpwerk voor Fable (Stijn: "iets wat Fable goed zou doen"); Opus
+zet ze in de data. Het datamodel (§2f: id, laag, nl/en, unlock, svg) is daarvoor al gemaakt; de validator eist dat elk
+level 1–100 minstens één ontgrendeling heeft (onderdeel, confetti, geluid, lettertype of achtergrond) zodra de
+bibliotheek groot genoeg is. Zie ook xp-levels.md §2e (ontgrendelingen) voor confetti-stijlen, timergeluiden,
+lettertypes, gouden modus en challenges op level 20.
+
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs, vooral docs/specs/xp-levels.md
 (besluiten over specs heen in docs/specs/README.md §2; bij tegenspraak wint README.md). De twee
 6D-specs zijn op elkaar afgestemd; dit model wint waar ze botsten:

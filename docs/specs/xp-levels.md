@@ -2,6 +2,15 @@
 
 Status: compleet (Fable, 22 okt 2026)
 
+**Besluit Stijn (24 okt 2026) — ontgrendelingen rijk, niet spaarzaam.** Het level-up-overzicht en de pagina
+Vrijgespeeld moeten een "rijk scala" tonen: bij elke level-up minstens één ding, liefst meer. Daarom groeit
+data/unlocks.json mee met de avatar-rondes (badges-avatar.md, besluit 24 okt): confetti-stijlen (dubbel, groente,
+kippen en taartjes, T-rex …), timergeluiden en het Gekookt!-geluid, kookstand-lettertypes (krijtbord, handschrift …),
+avatar-achtergronden en -randen, en **gouden modus** (naast licht en donker) op een hoog level; **challenges komen
+vrij op level 20** (eigen klein blok ná 6D-4, Fable ontwerpt de eerste set). 6D-3/6D-4a bouwen het raamwerk met de
+eerste set uit §2e; uitbreidingsrondes zijn alleen data. Klein beginnen mag, kaal mag niet: Stijn wil "gewoon veel
+opties daar".
+
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs, vooral docs/specs/badges-avatar.md
 (besluiten over specs heen in docs/specs/README.md §2; bij tegenspraak wint README.md). De pins (hash32,
 94/505, curve, uitgewerkt voorbeeld 491/level 5, 273, 54/83/164) zijn opnieuw nagerekend en kloppen. Voor
