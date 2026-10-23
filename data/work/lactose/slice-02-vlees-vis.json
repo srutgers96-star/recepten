@@ -1,0 +1,666 @@
+{
+  "aardappelsalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "bacon": {
+    "lactose": false
+  },
+  "bakkeljauw": {
+    "lactose": false
+  },
+  "beenham": {
+    "lactose": false
+  },
+  "biefstuk": {
+    "lactose": false
+  },
+  "blinde-vink": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "bloedworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "bokking": {
+    "lactose": false
+  },
+  "boterhamworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "braadkip": {
+    "lactose": false
+  },
+  "braadworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "buikspek": {
+    "lactose": false
+  },
+  "carpaccio": {
+    "lactose": false
+  },
+  "casselerrib": {
+    "lactose": false
+  },
+  "cervelaatworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "chipolata": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "chorizo": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "cordon-bleu": {
+    "lactose": true
+  },
+  "cote-de-boeuf": {
+    "lactose": false
+  },
+  "dorade": {
+    "lactose": false
+  },
+  "drumstick": {
+    "lactose": false
+  },
+  "eendenborst": {
+    "lactose": false
+  },
+  "eendenbout": {
+    "lactose": false
+  },
+  "eiersalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "entrecote": {
+    "lactose": false
+  },
+  "falafel": {
+    "lactose": false
+  },
+  "filet-americain": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "forel": {
+    "lactose": false
+  },
+  "gamba": {
+    "lactose": false
+  },
+  "garnaal": {
+    "lactose": false
+  },
+  "gebraden-fricandeau": {
+    "lactose": false
+  },
+  "gebraden-gehakt": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "gehakt": {
+    "lactose": false
+  },
+  "gehaktbal": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "gehaktballetje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "gourmetschotel": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "gravad-lax": {
+    "lactose": false
+  },
+  "guanciale": {
+    "lactose": false
+  },
+  "gyros": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "hacheevlees": {
+    "lactose": false
+  },
+  "ham": {
+    "lactose": false
+  },
+  "ham-preisalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "hamblokjes": {
+    "lactose": false
+  },
+  "hamburger": {
+    "lactose": false
+  },
+  "hamschijf": {
+    "lactose": false
+  },
+  "hamworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "haring": {
+    "lactose": false
+  },
+  "heek": {
+    "lactose": false
+  },
+  "heilbot": {
+    "lactose": false
+  },
+  "hertenvlees": {
+    "lactose": false
+  },
+  "hollandse-garnaal": {
+    "lactose": false
+  },
+  "huzarensalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "inktvis": {
+    "lactose": false
+  },
+  "kaasschnitzel": {
+    "lactose": true
+  },
+  "kabeljauwfilet": {
+    "lactose": false
+  },
+  "kalfsfilet": {
+    "lactose": false
+  },
+  "kalfslever": {
+    "lactose": false
+  },
+  "kalfsschenkel": {
+    "lactose": false
+  },
+  "kalkoenfilet": {
+    "lactose": false
+  },
+  "kalkoenrollade": {
+    "lactose": false
+  },
+  "karbonade": {
+    "lactose": false
+  },
+  "katenspek": {
+    "lactose": false
+  },
+  "kaviaar": {
+    "lactose": false
+  },
+  "kip": {
+    "lactose": false
+  },
+  "kip-kerriesalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kipblokjes": {
+    "lactose": false
+  },
+  "kipburger": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kipdijfilet": {
+    "lactose": false
+  },
+  "kipfilet": {
+    "lactose": false
+  },
+  "kipgehakt": {
+    "lactose": false
+  },
+  "kipgyros": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kiphaasje": {
+    "lactose": false
+  },
+  "kipkarbonade": {
+    "lactose": false
+  },
+  "kippenbout": {
+    "lactose": false
+  },
+  "kippenlever": {
+    "lactose": false
+  },
+  "kippenvleugel": {
+    "lactose": false
+  },
+  "kipreepjes": {
+    "lactose": false
+  },
+  "kipsate": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kipschnitzel": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kipshoarma": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kipspiesje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kipworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "klapstuk": {
+    "lactose": false
+  },
+  "komkommersalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "konijn": {
+    "lactose": false
+  },
+  "krabsalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kreeft": {
+    "lactose": false
+  },
+  "lamsbout": {
+    "lactose": false
+  },
+  "lamsfilet": {
+    "lactose": false
+  },
+  "lamsgehakt": {
+    "lactose": false
+  },
+  "lamskotelet": {
+    "lactose": false
+  },
+  "lamsrack": {
+    "lactose": false
+  },
+  "lamsschenkel": {
+    "lactose": false
+  },
+  "lamsschouder": {
+    "lactose": false
+  },
+  "lamsvlees": {
+    "lactose": false
+  },
+  "langoustine": {
+    "lactose": false
+  },
+  "leverpastei": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "leverworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "makreel": {
+    "lactose": false
+  },
+  "mergpijp": {
+    "lactose": false
+  },
+  "merguez": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "metworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "mortadella": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "mossel": {
+    "lactose": false
+  },
+  "noorse-garnaal": {
+    "lactose": false
+  },
+  "octopus": {
+    "lactose": false
+  },
+  "oester": {
+    "lactose": false
+  },
+  "ontbijtspek": {
+    "lactose": false
+  },
+  "ossenhaas": {
+    "lactose": false
+  },
+  "ossenstaart": {
+    "lactose": false
+  },
+  "ossenworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "paling": {
+    "lactose": false
+  },
+  "pancetta": {
+    "lactose": false
+  },
+  "parelhoen": {
+    "lactose": false
+  },
+  "parmaham": {
+    "lactose": false
+  },
+  "pastrami": {
+    "lactose": false
+  },
+  "pate": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "pekelvlees": {
+    "lactose": false
+  },
+  "pepperoni": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "picanha": {
+    "lactose": false
+  },
+  "procureur": {
+    "lactose": false
+  },
+  "pulled-pork": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "ribeye": {
+    "lactose": false
+  },
+  "riblap": {
+    "lactose": false
+  },
+  "rivierkreeft": {
+    "lactose": false
+  },
+  "rolmops": {
+    "lactose": false
+  },
+  "rookvlees": {
+    "lactose": false
+  },
+  "rookworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "rosbief": {
+    "lactose": false
+  },
+  "rundergehakt": {
+    "lactose": false
+  },
+  "runderlap": {
+    "lactose": false
+  },
+  "runderpoulet": {
+    "lactose": false
+  },
+  "runderreepjes": {
+    "lactose": false
+  },
+  "runderrollade": {
+    "lactose": false
+  },
+  "runderschenkel": {
+    "lactose": false
+  },
+  "rundvlees": {
+    "lactose": false
+  },
+  "salami": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "saucijs": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "schelvisfilet": {
+    "lactose": false
+  },
+  "schnitzel": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "schol": {
+    "lactose": false
+  },
+  "schouderham": {
+    "lactose": false
+  },
+  "seitan": {
+    "lactose": false
+  },
+  "selderijsalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "serranoham": {
+    "lactose": false
+  },
+  "shoarmavlees": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "sint-jakobsschelp": {
+    "lactose": false
+  },
+  "slavink": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "smeerleverworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "snackworstje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "snoekbaars": {
+    "lactose": false
+  },
+  "soepvlees": {
+    "lactose": false
+  },
+  "spareribs": {
+    "lactose": false
+  },
+  "spekblokjes": {
+    "lactose": false
+  },
+  "speklap": {
+    "lactose": false
+  },
+  "spekreepjes": {
+    "lactose": false
+  },
+  "stoofvlees": {
+    "lactose": false
+  },
+  "sukadelap": {
+    "lactose": false
+  },
+  "surimi": {
+    "lactose": false
+  },
+  "sushi": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "t-bone-steak": {
+    "lactose": false
+  },
+  "tarbot": {
+    "lactose": false
+  },
+  "tartaar": {
+    "lactose": false
+  },
+  "tempe": {
+    "lactose": false
+  },
+  "tilapia": {
+    "lactose": false
+  },
+  "tofu": {
+    "lactose": false
+  },
+  "tong": {
+    "lactose": false
+  },
+  "tonijnfilet": {
+    "lactose": false
+  },
+  "tonijnsalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "varkensfilet": {
+    "lactose": false
+  },
+  "varkenshaas": {
+    "lactose": false
+  },
+  "varkenslap": {
+    "lactose": false
+  },
+  "varkenspoulet": {
+    "lactose": false
+  },
+  "varkensrollade": {
+    "lactose": false
+  },
+  "varkenssate": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "varkensvlees": {
+    "lactose": false
+  },
+  "varkenswang": {
+    "lactose": false
+  },
+  "vega-kipstukjes": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "vega-nugget": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "vega-rookworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "vega-shoarma": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "vega-spekjes": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "vegaballetje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "vegagehakt": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "vegaschnitzel": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "vegaworstje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "venusschelp": {
+    "lactose": false
+  },
+  "vis": {
+    "lactose": false
+  },
+  "vlees": {
+    "lactose": false
+  },
+  "vleesvervanger": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "vleeswaren": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "witvis": {
+    "lactose": false
+  },
+  "wokvlees": {
+    "lactose": false
+  },
+  "zalm": {
+    "lactose": false
+  },
+  "zalmfilet": {
+    "lactose": false
+  },
+  "zalmsalade": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "zalmsnippers": {
+    "lactose": false
+  },
+  "zeebaars": {
+    "lactose": false
+  },
+  "zeeduivel": {
+    "lactose": false
+  },
+  "zeewiersalade": {
+    "lactose": false
+  },
+  "zwaardvis": {
+    "lactose": false
+  }
+}

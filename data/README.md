@@ -18,6 +18,16 @@ animal rennet (`parmezaanse-kaas`, `blauwe-kaas`, …) and `pesto` count as `veg
 Dutch supermarket labels; a strict vegetarian reads the ingredient list. Products that come in a
 gluten-free and a wheat variant (`taco`, `tomatensoep`, stock cubes) are `gluten: false,
 glutenUnsure: true`, so a recipe with them shows "waarschijnlijk glutenvrij" instead of a sure tag.
+
+`lactose` follows the STRICT reading (docs/specs/labels-categorieen.md §2a): every dairy product
+counts, also aged and hard cheese (Parmesan, Gruyère) and ghee. Lactose-free products
+(`lactosevrije-melk`), plant-based dairy and eggs are `false`. Products that sometimes contain milk
+ingredients (margarine, stock cube, crisps, puff pastry, sausage) are `lactose: false,
+lactoseUnsure: true` — unless the entry is plant-based: `vegan: true` already says there is no milk
+in it, so it is plain `lactose: false` (the stock cube and crisps in this file are). `validate:data`
+rejects `lactoseUnsure` next to `lactose: true` and `lactose: true` or `lactoseUnsure` on a vegan
+entry. The flags were set in one pass over ten aisle slices (`work/lactose/slice-NN-*.json`, merged by
+`tools/apply-flag-slices.ts`).
 | `categories.json`, `aisles.json` | Recipe categories and the fixed supermarket aisle order. | hand |
 | `llm/batch-NN.json` | The answers of the translation/structuring sessions (schema: docs/phase-2-spec.md §4 "Batch file schema"). Committed as provenance; merged by `tools/apply-llm-batch.ts` and replayed by `npm run migrate`. | Claude Code sessions |
 | `review/lines.json` | Human-reviewed corrections for single ingredient lines (`{ id, i, raw, ing?, qual?, note?, prep?, optional?, why }`), applied **last** by `npm run migrate` and `--apply all` (`tools/apply-review.ts`). For what neither the parser nor a batch can express (a batch never overrides a parser hit). Never quantities. | hand (review sessions) |

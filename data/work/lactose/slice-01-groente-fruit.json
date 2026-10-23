@@ -1,0 +1,587 @@
+{
+  "aardappel": {
+    "lactose": false
+  },
+  "aardbei": {
+    "lactose": false
+  },
+  "aardpeer": {
+    "lactose": false
+  },
+  "abrikoos": {
+    "lactose": false
+  },
+  "alfalfa": {
+    "lactose": false
+  },
+  "ananas": {
+    "lactose": false
+  },
+  "andijvie": {
+    "lactose": false
+  },
+  "appel": {
+    "lactose": false
+  },
+  "artisjok": {
+    "lactose": false
+  },
+  "asperge": {
+    "lactose": false
+  },
+  "aubergine": {
+    "lactose": false
+  },
+  "avocado": {
+    "lactose": false
+  },
+  "bakbanaan": {
+    "lactose": false
+  },
+  "banaan": {
+    "lactose": false
+  },
+  "bananensjalot": {
+    "lactose": false
+  },
+  "basilicum": {
+    "lactose": false
+  },
+  "bieslook": {
+    "lactose": false
+  },
+  "biet": {
+    "lactose": false
+  },
+  "bimi": {
+    "lactose": false
+  },
+  "blauwe-bes": {
+    "lactose": false
+  },
+  "bleekselderij": {
+    "lactose": false
+  },
+  "bloedsinaasappel": {
+    "lactose": false
+  },
+  "bloemkool": {
+    "lactose": false
+  },
+  "bloemkoolrijst": {
+    "lactose": false
+  },
+  "boerenkool": {
+    "lactose": false
+  },
+  "bospeen": {
+    "lactose": false
+  },
+  "bosui": {
+    "lactose": false
+  },
+  "botersla": {
+    "lactose": false
+  },
+  "braam": {
+    "lactose": false
+  },
+  "broccoli": {
+    "lactose": false
+  },
+  "cantharel": {
+    "lactose": false
+  },
+  "cassave": {
+    "lactose": false
+  },
+  "champignon": {
+    "lactose": false
+  },
+  "cherimoya": {
+    "lactose": false
+  },
+  "chinese-kool": {
+    "lactose": false
+  },
+  "citroen": {
+    "lactose": false
+  },
+  "citroengras": {
+    "lactose": false
+  },
+  "citroenmelisse": {
+    "lactose": false
+  },
+  "citroensap": {
+    "lactose": false
+  },
+  "citroenschil": {
+    "lactose": false
+  },
+  "courgette": {
+    "lactose": false
+  },
+  "courgetti": {
+    "lactose": false
+  },
+  "dadel": {
+    "lactose": false
+  },
+  "daslook": {
+    "lactose": false
+  },
+  "dille": {
+    "lactose": false
+  },
+  "drakenvrucht": {
+    "lactose": false
+  },
+  "druif": {
+    "lactose": false
+  },
+  "eetbare-bloem": {
+    "lactose": false
+  },
+  "eikenbladsla": {
+    "lactose": false
+  },
+  "enoki": {
+    "lactose": false
+  },
+  "framboos": {
+    "lactose": false
+  },
+  "fruit": {
+    "lactose": false
+  },
+  "fruitsalade": {
+    "lactose": false
+  },
+  "gember": {
+    "lactose": false
+  },
+  "gembershot": {
+    "lactose": false
+  },
+  "granaatappel": {
+    "lactose": false
+  },
+  "granadilla": {
+    "lactose": false
+  },
+  "grapefruit": {
+    "lactose": false
+  },
+  "groente": {
+    "lactose": false
+  },
+  "guacamole": {
+    "lactose": false
+  },
+  "guave": {
+    "lactose": false
+  },
+  "haricots-verts": {
+    "lactose": false
+  },
+  "hummus": {
+    "lactose": false
+  },
+  "hutspotgroente": {
+    "lactose": false
+  },
+  "ijsbergsla": {
+    "lactose": false
+  },
+  "kaki": {
+    "lactose": false
+  },
+  "kastanje": {
+    "lactose": false
+  },
+  "kastanjechampignon": {
+    "lactose": false
+  },
+  "kers": {
+    "lactose": false
+  },
+  "kerstomaat": {
+    "lactose": false
+  },
+  "kiwano": {
+    "lactose": false
+  },
+  "kiwi": {
+    "lactose": false
+  },
+  "kiwibes": {
+    "lactose": false
+  },
+  "knoflook": {
+    "lactose": false
+  },
+  "knolselderij": {
+    "lactose": false
+  },
+  "kokosnoot": {
+    "lactose": false
+  },
+  "komkommer": {
+    "lactose": false
+  },
+  "koningsoesterzwam": {
+    "lactose": false
+  },
+  "kool": {
+    "lactose": false
+  },
+  "koolraap": {
+    "lactose": false
+  },
+  "koolrabi": {
+    "lactose": false
+  },
+  "koriander": {
+    "lactose": false
+  },
+  "kousenband": {
+    "lactose": false
+  },
+  "krieltjes": {
+    "lactose": false
+  },
+  "kruisbes": {
+    "lactose": false
+  },
+  "kumquat": {
+    "lactose": false
+  },
+  "kweepeer": {
+    "lactose": false
+  },
+  "lavas": {
+    "lactose": false
+  },
+  "limoen": {
+    "lactose": false
+  },
+  "limoensap": {
+    "lactose": false
+  },
+  "limoenschil": {
+    "lactose": false
+  },
+  "lollo-rosso": {
+    "lactose": false
+  },
+  "lychee": {
+    "lactose": false
+  },
+  "madame-jeanette": {
+    "lactose": false
+  },
+  "maiskolf": {
+    "lactose": false
+  },
+  "mandarijn": {
+    "lactose": false
+  },
+  "mango": {
+    "lactose": false
+  },
+  "mangosteen": {
+    "lactose": false
+  },
+  "meloen": {
+    "lactose": false
+  },
+  "mierikswortel": {
+    "lactose": false
+  },
+  "munt": {
+    "lactose": false
+  },
+  "nashipeer": {
+    "lactose": false
+  },
+  "nasigroente": {
+    "lactose": false
+  },
+  "nectarine": {
+    "lactose": false
+  },
+  "oesterzwam": {
+    "lactose": false
+  },
+  "okra": {
+    "lactose": false
+  },
+  "ovengroente": {
+    "lactose": false
+  },
+  "paddenstoelenmix": {
+    "lactose": false
+  },
+  "padronpeper": {
+    "lactose": false
+  },
+  "paksoi": {
+    "lactose": false
+  },
+  "palmkool": {
+    "lactose": false
+  },
+  "papaja": {
+    "lactose": false
+  },
+  "paprika": {
+    "lactose": false
+  },
+  "passievrucht": {
+    "lactose": false
+  },
+  "pastinaak": {
+    "lactose": false
+  },
+  "peer": {
+    "lactose": false
+  },
+  "perzik": {
+    "lactose": false
+  },
+  "peterselie": {
+    "lactose": false
+  },
+  "peterseliewortel": {
+    "lactose": false
+  },
+  "peultjes": {
+    "lactose": false
+  },
+  "physalis": {
+    "lactose": false
+  },
+  "pied-de-mouton": {
+    "lactose": false
+  },
+  "platte-perzik": {
+    "lactose": false
+  },
+  "pomelo": {
+    "lactose": false
+  },
+  "pompoen": {
+    "lactose": false
+  },
+  "portobello": {
+    "lactose": false
+  },
+  "postelein": {
+    "lactose": false
+  },
+  "prei": {
+    "lactose": false
+  },
+  "pruim": {
+    "lactose": false
+  },
+  "pruimtomaat": {
+    "lactose": false
+  },
+  "raap": {
+    "lactose": false
+  },
+  "raapstelen": {
+    "lactose": false
+  },
+  "rabarber": {
+    "lactose": false
+  },
+  "radicchio": {
+    "lactose": false
+  },
+  "radijs": {
+    "lactose": false
+  },
+  "rambutan": {
+    "lactose": false
+  },
+  "rammenas": {
+    "lactose": false
+  },
+  "rauwkost": {
+    "lactose": false
+  },
+  "rawit": {
+    "lactose": false
+  },
+  "reine-claude": {
+    "lactose": false
+  },
+  "rode-bes": {
+    "lactose": false
+  },
+  "rode-peper": {
+    "lactose": false
+  },
+  "romanesco": {
+    "lactose": false
+  },
+  "romeinse-sla": {
+    "lactose": false
+  },
+  "rozemarijn": {
+    "lactose": false
+  },
+  "rucola": {
+    "lactose": false
+  },
+  "salie": {
+    "lactose": false
+  },
+  "savooienkool": {
+    "lactose": false
+  },
+  "schorseneer": {
+    "lactose": false
+  },
+  "selderij": {
+    "lactose": false
+  },
+  "shiitake": {
+    "lactose": false
+  },
+  "shimeji": {
+    "lactose": false
+  },
+  "sinaasappel": {
+    "lactose": false
+  },
+  "sinaasappelschil": {
+    "lactose": false
+  },
+  "sjalot": {
+    "lactose": false
+  },
+  "sla": {
+    "lactose": false
+  },
+  "slamelange": {
+    "lactose": false
+  },
+  "smoothie": {
+    "lactose": false
+  },
+  "snijbiet": {
+    "lactose": false
+  },
+  "snijboon": {
+    "lactose": false
+  },
+  "soepgroenten": {
+    "lactose": false
+  },
+  "soffritto": {
+    "lactose": false
+  },
+  "sopropo": {
+    "lactose": false
+  },
+  "spaanse-peper": {
+    "lactose": false
+  },
+  "spaghettipompoen": {
+    "lactose": false
+  },
+  "sperzieboon": {
+    "lactose": false
+  },
+  "spinazie": {
+    "lactose": false
+  },
+  "spitskool": {
+    "lactose": false
+  },
+  "spruitje": {
+    "lactose": false
+  },
+  "stervrucht": {
+    "lactose": false
+  },
+  "stoofpeer": {
+    "lactose": false
+  },
+  "suikererwt": {
+    "lactose": false
+  },
+  "tamarillo": {
+    "lactose": false
+  },
+  "tauge": {
+    "lactose": false
+  },
+  "thaise-basilicum": {
+    "lactose": false
+  },
+  "tomaat": {
+    "lactose": false
+  },
+  "trostomaat": {
+    "lactose": false
+  },
+  "tuinboon": {
+    "lactose": false
+  },
+  "tuinkers": {
+    "lactose": false
+  },
+  "tzatziki": {
+    "lactose": true
+  },
+  "ui": {
+    "lactose": false
+  },
+  "veldsla": {
+    "lactose": false
+  },
+  "venkel": {
+    "lactose": false
+  },
+  "vleestomaat": {
+    "lactose": false
+  },
+  "waspeen": {
+    "lactose": false
+  },
+  "waterkers": {
+    "lactose": false
+  },
+  "watermeloen": {
+    "lactose": false
+  },
+  "winterpeen": {
+    "lactose": false
+  },
+  "witlof": {
+    "lactose": false
+  },
+  "wokgroente": {
+    "lactose": false
+  },
+  "wortel": {
+    "lactose": false
+  },
+  "zeekraal": {
+    "lactose": false
+  },
+  "zoete-aardappel": {
+    "lactose": false
+  },
+  "zuurkool": {
+    "lactose": false
+  },
+  "zwarte-bes": {
+    "lactose": false
+  }
+}

@@ -1,0 +1,376 @@
+{
+  "apenootje": {
+    "lactose": false
+  },
+  "appelchips": {
+    "lactose": false
+  },
+  "appelring": {
+    "lactose": false
+  },
+  "arretjescake": {
+    "lactose": true
+  },
+  "bananenchips": {
+    "lactose": false
+  },
+  "banketstaaf": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "bastognekoek": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "beef-jerky": {
+    "lactose": false
+  },
+  "bitterkoekje": {
+    "lactose": false
+  },
+  "bokkenpootje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "bonbon": {
+    "lactose": true
+  },
+  "borrelnootje": {
+    "lactose": false
+  },
+  "borstplaat": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "boterkoek": {
+    "lactose": true
+  },
+  "brownie": {
+    "lactose": true
+  },
+  "cake": {
+    "lactose": true
+  },
+  "cantuccini": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "cashewnoot": {
+    "lactose": false
+  },
+  "cassavechips": {
+    "lactose": false
+  },
+  "chips": {
+    "lactose": false
+  },
+  "chocolade": {
+    "lactose": true
+  },
+  "chocoladebiscuit": {
+    "lactose": true
+  },
+  "chocoladeflik": {
+    "lactose": true
+  },
+  "chocoladekruidnoot": {
+    "lactose": true
+  },
+  "chocoladeletter": {
+    "lactose": true
+  },
+  "chocolademunt": {
+    "lactose": true
+  },
+  "chocoladepinda": {
+    "lactose": true
+  },
+  "chocoladereep": {
+    "lactose": true
+  },
+  "chocoladerozijn": {
+    "lactose": true
+  },
+  "chocoladezoen": {
+    "lactose": true
+  },
+  "chocolate-chip-cookie": {
+    "lactose": true
+  },
+  "digestive": {
+    "lactose": false
+  },
+  "dipsaus": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "drop": {
+    "lactose": false
+  },
+  "eiwitreep": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "engelse-drop": {
+    "lactose": false
+  },
+  "florentine": {
+    "lactose": true
+  },
+  "fruitbiscuit": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "fruitreep": {
+    "lactose": false
+  },
+  "gebrande-amandel": {
+    "lactose": false
+  },
+  "gemberkoekje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "gevulde-koek": {
+    "lactose": true
+  },
+  "gevulde-speculaas": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "groentechips": {
+    "lactose": false
+  },
+  "gummibeer": {
+    "lactose": false
+  },
+  "havermoutkoekje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "hopje": {
+    "lactose": true
+  },
+  "ijshoorntje": {
+    "lactose": false
+  },
+  "japanse-mix": {
+    "lactose": false
+  },
+  "jelly-beans": {
+    "lactose": false
+  },
+  "jodenkoek": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kaaskoekje": {
+    "lactose": true
+  },
+  "kaasstengel": {
+    "lactose": true
+  },
+  "kauwgom": {
+    "lactose": false
+  },
+  "kerstkransje": {
+    "lactose": true
+  },
+  "kletskop": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "knijpfruit": {
+    "lactose": false
+  },
+  "koekje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kokoschips": {
+    "lactose": false
+  },
+  "kokosmakroon": {
+    "lactose": false
+  },
+  "krakeling": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kruidnoot": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "lange-vinger": {
+    "lactose": false
+  },
+  "linzenchips": {
+    "lactose": false
+  },
+  "lolly": {
+    "lactose": false
+  },
+  "macadamianoot": {
+    "lactose": false
+  },
+  "madeleine": {
+    "lactose": true
+  },
+  "mariakaakje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "marmercake": {
+    "lactose": true
+  },
+  "marsepein": {
+    "lactose": false
+  },
+  "marshmallow": {
+    "lactose": false
+  },
+  "melkchocolade": {
+    "lactose": true
+  },
+  "mergpijpje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "meringue": {
+    "lactose": false
+  },
+  "muffin": {
+    "lactose": true
+  },
+  "noot": {
+    "lactose": false
+  },
+  "notenreep": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "nougat": {
+    "lactose": false
+  },
+  "ontbijtbiscuit": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "paaseitje": {
+    "lactose": true
+  },
+  "paranoot": {
+    "lactose": false
+  },
+  "pecannoot": {
+    "lactose": false
+  },
+  "pepermunt": {
+    "lactose": false
+  },
+  "pinda": {
+    "lactose": false
+  },
+  "pindarotsje": {
+    "lactose": true
+  },
+  "pistachenoot": {
+    "lactose": false
+  },
+  "popcorn": {
+    "lactose": false
+  },
+  "pure-chocolade": {
+    "lactose": false
+  },
+  "rijstcracker": {
+    "lactose": false
+  },
+  "rolcake": {
+    "lactose": true
+  },
+  "roze-koek": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "snoepje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "speculaas": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "spekkoek": {
+    "lactose": true
+  },
+  "sprits": {
+    "lactose": true
+  },
+  "stapelchips": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "stroopwafel": {
+    "lactose": true
+  },
+  "studentenhaver": {
+    "lactose": false
+  },
+  "taai-taai": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "toffee": {
+    "lactose": true
+  },
+  "tortilla-chips": {
+    "lactose": false
+  },
+  "turks-fruit": {
+    "lactose": false
+  },
+  "tutti-frutti": {
+    "lactose": false
+  },
+  "vanillewafel": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "wafel": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "walnoot": {
+    "lactose": false
+  },
+  "wasabinootje": {
+    "lactose": false
+  },
+  "winegum": {
+    "lactose": false
+  },
+  "yoghurtrozijn": {
+    "lactose": true
+  },
+  "zandkoekje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "zeewiersnack": {
+    "lactose": false
+  },
+  "zoutje": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "zoutstengel": {
+    "lactose": false
+  },
+  "zuurstok": {
+    "lactose": false
+  },
+  "zuurtje": {
+    "lactose": false
+  }
+}

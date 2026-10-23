@@ -1,0 +1,370 @@
+{
+ "abdijbier": {
+  "lactose": false
+ },
+ "advocaat": {
+  "lactose": false,
+  "lactoseUnsure": true
+ },
+ "alcoholvrij-bier": {
+  "lactose": false
+ },
+ "alcoholvrije-wijn": {
+  "lactose": false
+ },
+ "aloe-vera-drank": {
+  "lactose": false
+ },
+ "amaretto": {
+  "lactose": false
+ },
+ "ananassap": {
+  "lactose": false
+ },
+ "aperol": {
+  "lactose": false
+ },
+ "appelsap": {
+  "lactose": false
+ },
+ "berenburg": {
+  "lactose": false
+ },
+ "bier": {
+  "lactose": false
+ },
+ "bietensap": {
+  "lactose": false
+ },
+ "bitter-lemon": {
+  "lactose": false
+ },
+ "bokbier": {
+  "lactose": false
+ },
+ "bruiswater": {
+  "lactose": false
+ },
+ "cafeinevrije-koffie": {
+  "lactose": false
+ },
+ "calvados": {
+  "lactose": false
+ },
+ "campari": {
+  "lactose": false
+ },
+ "cassis": {
+  "lactose": false
+ },
+ "chai": {
+  "lactose": false
+ },
+ "champagne": {
+  "lactose": false
+ },
+ "chocolademelkpoeder": {
+  "lactose": true
+ },
+ "cider": {
+  "lactose": false
+ },
+ "cognac": {
+  "lactose": false
+ },
+ "cola": {
+  "lactose": false
+ },
+ "cola-zero": {
+  "lactose": false
+ },
+ "cranberrysap": {
+  "lactose": false
+ },
+ "creme-de-cassis": {
+  "lactose": false
+ },
+ "dessertwijn": {
+  "lactose": false
+ },
+ "diksap": {
+  "lactose": false
+ },
+ "donker-bier": {
+  "lactose": false
+ },
+ "drinkpakje": {
+  "lactose": false
+ },
+ "druivensap": {
+  "lactose": false
+ },
+ "dubbeldrank": {
+  "lactose": false
+ },
+ "earl-grey": {
+  "lactose": false
+ },
+ "energiedrank": {
+  "lactose": false
+ },
+ "espresso": {
+  "lactose": false
+ },
+ "frisdrank": {
+  "lactose": false
+ },
+ "gemberthee": {
+  "lactose": false
+ },
+ "gin": {
+  "lactose": false
+ },
+ "ginger-ale": {
+  "lactose": false
+ },
+ "ginger-beer": {
+  "lactose": false
+ },
+ "gluhwein": {
+  "lactose": false
+ },
+ "granaatappelsap": {
+  "lactose": false
+ },
+ "grapefruitsap": {
+  "lactose": false
+ },
+ "grappa": {
+  "lactose": false
+ },
+ "grenadine": {
+  "lactose": false
+ },
+ "groentesap": {
+  "lactose": false
+ },
+ "ijsthee": {
+  "lactose": false
+ },
+ "ipa": {
+  "lactose": false
+ },
+ "jasmijnthee": {
+  "lactose": false
+ },
+ "jenever": {
+  "lactose": false
+ },
+ "kamillethee": {
+  "lactose": false
+ },
+ "kinderchampagne": {
+  "lactose": false
+ },
+ "kirsch": {
+  "lactose": false
+ },
+ "koffie": {
+  "lactose": false
+ },
+ "koffieboon": {
+  "lactose": false
+ },
+ "koffiecreamer": {
+  "lactose": false,
+  "lactoseUnsure": true
+ },
+ "koffiecup": {
+  "lactose": false
+ },
+ "koffiefilter": {
+  "lactose": false
+ },
+ "koffielikeur": {
+  "lactose": false
+ },
+ "koffiemelk": {
+  "lactose": true
+ },
+ "koffiepad": {
+  "lactose": false
+ },
+ "koffiesiroop": {
+  "lactose": false
+ },
+ "kokoslikeur": {
+  "lactose": false
+ },
+ "kokoswater": {
+  "lactose": false
+ },
+ "kombucha": {
+  "lactose": false
+ },
+ "kriek": {
+  "lactose": false
+ },
+ "kruidenlikeur": {
+  "lactose": false
+ },
+ "kruidenthee": {
+  "lactose": false
+ },
+ "lemon-lime": {
+  "lactose": false
+ },
+ "likeur": {
+  "lactose": false
+ },
+ "limonadesiroop": {
+  "lactose": false
+ },
+ "limoncello": {
+  "lactose": false
+ },
+ "madeira": {
+  "lactose": false
+ },
+ "mangosap": {
+  "lactose": false
+ },
+ "marsala": {
+  "lactose": false
+ },
+ "matcha": {
+  "lactose": false
+ },
+ "mineraalwater": {
+  "lactose": false
+ },
+ "mixdrank": {
+  "lactose": false
+ },
+ "mousserende-wijn": {
+  "lactose": false
+ },
+ "multivitaminesap": {
+  "lactose": false
+ },
+ "muntthee": {
+  "lactose": false
+ },
+ "oploscappuccino": {
+  "lactose": true
+ },
+ "oploskoffie": {
+  "lactose": false
+ },
+ "ouzo": {
+  "lactose": false
+ },
+ "pastis": {
+  "lactose": false
+ },
+ "perensap": {
+  "lactose": false
+ },
+ "port": {
+  "lactose": false
+ },
+ "prosecco": {
+  "lactose": false
+ },
+ "radler": {
+  "lactose": false
+ },
+ "rooibosthee": {
+  "lactose": false
+ },
+ "roomlikeur": {
+  "lactose": true
+ },
+ "rose": {
+  "lactose": false
+ },
+ "rum": {
+  "lactose": false
+ },
+ "sangria": {
+  "lactose": false
+ },
+ "sherry": {
+  "lactose": false
+ },
+ "sinaasappellikeur": {
+  "lactose": false
+ },
+ "sinaasappelsap": {
+  "lactose": false
+ },
+ "sinas": {
+  "lactose": false
+ },
+ "smaakwater": {
+  "lactose": false
+ },
+ "speciaalbier": {
+  "lactose": false
+ },
+ "sportdrank": {
+  "lactose": false
+ },
+ "stout": {
+  "lactose": false
+ },
+ "tequila": {
+  "lactose": false
+ },
+ "thee": {
+  "lactose": false
+ },
+ "tomatensap": {
+  "lactose": false
+ },
+ "tonic": {
+  "lactose": false
+ },
+ "trappist": {
+  "lactose": false
+ },
+ "venkelthee": {
+  "lactose": false
+ },
+ "vermout": {
+  "lactose": false
+ },
+ "vieux": {
+  "lactose": false
+ },
+ "vitaminewater": {
+  "lactose": false
+ },
+ "vlierbloesemsiroop": {
+  "lactose": false
+ },
+ "vruchtensap": {
+  "lactose": false
+ },
+ "vruchtenthee": {
+  "lactose": false
+ },
+ "whisky": {
+  "lactose": false
+ },
+ "wijn": {
+  "lactose": false
+ },
+ "witbier": {
+  "lactose": false
+ },
+ "wodka": {
+  "lactose": false
+ },
+ "wortelsap": {
+  "lactose": false
+ },
+ "zoethoutthee": {
+  "lactose": false
+ }
+}

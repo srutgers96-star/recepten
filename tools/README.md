@@ -18,6 +18,7 @@ Type-stripping rules: type-only syntax only (interfaces, type aliases, `as`, `sa
 | `make-icons.py` | `npm run icons` | Renders the PWA icons from `assets/cover.png` (Python + Pillow). |
 | `apply-llm-batch.ts` | — | Validates and merges the LLM batches `data/llm/batch-*.json` (`--check <file>`, `--apply <file|all>`); `--apply all` also applies the review layer. |
 | `apply-review.ts` | — | The human review layer `data/review/lines.json` (`readReview`, `checkReview`, `applyReview`); used by `migrate` and `apply-llm-batch --apply all`, no CLI of its own. |
+| `apply-flag-slices.ts` | — | Validates and merges the lactose slices `data/work/lactose/slice-NN-*.json` into `data/ingredients.json` (`--check`: covered / missing / double per slice, exit 1 on errors; `--apply`: writes `lactose` (+ `lactoseUnsure`) right after `gluten`, file style unchanged). Exports `readSlices`, `checkSlices`, `applySlices` (tested in `tests/apply-flag-slices.test.ts`). |
 | `gen-golden.ts` | — | Regenerates `tests/parser.golden.json` (every unique corpus line parsed + rendered NL/EN). |
 
 ## measure-parse.ts

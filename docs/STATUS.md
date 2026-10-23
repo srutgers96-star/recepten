@@ -4,6 +4,46 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 23 okt (Opus): 6B blok 1 — lactose-datapass
+**Besluit Fable (23 okt) over de randgevallen uit de review:** `oploscappuccino` → `lactose: true` (melkpoeder is een vast bestanddeel; streng, zoals chocolademelkpoeder); `koffiecreamer` en `advocaat` blijven `false` + unsure (wisselt per merk); `flesvoeding` blijft `false` (regel H2, non-food; komt in geen recept voor); `berlinerbol`, `pannenkoek`, `flensje`, `drinkontbijt` → `true` zoals de reviewer vond. Review: 5 bevindingen bevestigd, alle verwerkt; gate groen (901 tests). Uitrol: direct naar `main` (§4: blok 1 verandert niets zichtbaars).
+Gebouwd volgens docs/specs/labels-categorieen.md §2a en §3 blok 1 (bouwer D1 tool + validator, tien slice-agents,
+integrator). Onzichtbaar: geen UI, geen tag, geen `DATA_VERSION`-bump; recipes.json is ongewijzigd (`npm run migrate`
+gaf alleen een nieuw `generatedAt`, teruggezet). Mag volgens §4 direct naar `main`. Alle **1603** entries van
+data/ingredients.json hebben nu `lactose`: **186 true, 1206 false, 211 false + `lactoseUnsure`**. Per gangpad
+(true/false/unsure): bakken 7/77/13 · blik-pot 5/58/14 · brood-ontbijt 16/80/26 · diepvries 7/18/23 · dranken 3/116/3 ·
+drogisterij 0/70/0 · droog 1/62/4 · groente-fruit 1/194/0 · huishoudelijk 0/94/0 · kaas 43/1/0 · kruiden-specerijen
+0/89/10 · overig 0/2/0 · sauzen-olie-azijn 5/38/19 · snacks-zoet 34/52/29 · vlees-vis 2/138/61 · wereld 2/94/3 ·
+zuivel-eieren 60/23/6. In de 196 klassiekers komen 371 woordenboek-ids voor: 32 true, 14 unsure (kippenfond,
+lamsfond, kippen-/runderbouillon(blokje), rookworst, chorizo, salami, margarine, bladerdeeg, burgerbroodje,
+tortellini, visstick). Ruwe voorproef voor blok 2 (zonder qualifiers en onopgeloste regels): ±44 recepten zonder
+zuivel en zonder twijfel, 6 alleen met twijfel; diet.ts in blok 2 telt het echt. Nieuw: tools/apply-flag-slices.ts
+(`--check`/`--apply`), tests/apply-flag-slices.test.ts (18), tests/lactose.test.ts (89: elke entry een boolean, H1,
+`lactoseUnsure` alleen naast false, en de steekproef van §2a: alle 85 ids bestaan; rood vóór de merge, groen erna),
+de tien slices in data/work/lactose/ als herkomst; tools/validate-data.ts kent `lactose` in `INGREDIENT_DIET_FLAGS`
+plus de lactoseregels (ook H1: `vegan: true` met `lactose: true` of `lactoseUnsure` is een error). validate:data (0
+errors; de lactose-warning is weg), gen-golden (ongewijzigd), test (901), check, build en build:next groen; geen
+nieuwe dependency; niet gecommit.
+**Correcties door de integrator (twee):** `bavarois` (bakken, "bavarois mix") true → false + unsure (bakmix-regel en
+H3: de agent zette true zonder de mix te kennen); `blinde-vink` (vlees-vis, stond niet op een twijfellijst) false →
+false + unsure, net als `slavink` en "gehaktbal kant-en-klaar".
+**Ter controle (keuzes van de slice-agents, zo gelaten; geen van deze ids staat in een klassieker):** (1) Twee
+feitenchecks van de spec zijn niet beslist en zo ingevuld: `advocaat`, `koffiecreamer`, `oploscappuccino` →
+false + unsure (H3 boven "al het andere → false"; `oploscappuccino` is met melkpoeder eigenlijk true);
+`flesvoeding` → false (H2), terwijl het meestal op melkbasis is: vraag voor Stijn. (2) true zonder letterlijke regel
+(zuivel als vast bestanddeel volgens de agent): carbonarasaus, aspergesoep en champignonsoep (als roomsoep),
+butter-chicken-saus, chocopasta, sandwich (melkbroodje), lemon-curd, stol, suikerbrood, koffiebroodje, moorkop,
+soes, tompouce, cordon-bleu, proteineshake, vanillesaus, chocolademousse, en kerstkransje/sprits/gevulde-koek
+("koekjes met boter"; in de winkel vaak margarine, `zandkoekje` staat via de zanddeegregel op unsure). (3) unsure
+waar true te verdedigen is: pannenkoek, flensje en american-pancake (de agent las de bakmixregel als regel voor de
+pannenkoek zelf), bokkenpootje en mergpijpje (chocoladeranden), drinkontbijt. (4) false waar unsure te verdedigen
+is: hamburger (als vers vlees; kipburger is unsure), aioli, halvanaise en japanse-mayonaise (zoals mayonaise).
+**Verder:** de rule sheet noemt `witte-chocolade`, maar dat id bestaat niet (niets toegevoegd). De lactose-alinea in
+data/README.md is Engels (de taal van dat bestand) en zegt er één zin over H1 bij (de spectekst noemt bouillonblokje
+en chips als unsure, wat H1 voor deze data tegenspreekt). Al eerder zo: in data/README.md breken de dieet-alinea's
+de bestandstabel (de rijen erna renderen als tekst); niet opgelost. D1's exports: `checkSlices` krijgt de slices per
+bestandsnaam (anders bestaat "id in twee slices" niet), `readSlices` geeft de samengevoegde map voor `applySlices`,
+`readSliceFiles` is een extra export.
+
 ## 23 okt (Opus): 13K kookbalk blok 1
 Gebouwd volgens docs/specs/kookbalk.md §3/§4 blok 1 (bouwer 1 domein + store, bouwer 2 de balk, van bouwer 3
 alleen app.tsx, repo.ts, CookScreen.tsx, StepView.tsx en cooklog.ts; integrator). Staat in de werkmap op `next`;

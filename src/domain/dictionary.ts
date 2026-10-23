@@ -76,6 +76,12 @@ export interface Ingredient {
   gluten?: boolean;
   /** `gluten` is a best guess (a stock cube, a sauce): diet.ts treats the line as unsure. */
   glutenUnsure?: boolean;
+  /** Contains lactose (docs/phase-6-spec.md 6B.1, STRICT: every dairy product, also hard cheese and
+   *  ghee). Missing = unknown (diet.ts says "unsure"). Plant-based entries (vegan: true) are always false. */
+  lactose?: boolean;
+  /** `lactose: false` is a best guess (margarine, a stock cube, crisps): diet.ts treats the line as
+   *  unsure. Only next to `lactose: false`; `lactose: true` is a fact. */
+  lactoseUnsure?: boolean;
   perishable?: boolean;
   gloss?: { en: string };
   /** 'slice' = "fijngesneden" means finely sliced (onion, leek, chicken); default = finely chopped. */

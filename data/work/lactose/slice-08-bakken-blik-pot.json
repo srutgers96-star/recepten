@@ -1,0 +1,551 @@
+{
+  "aardappelzetmeel": {
+    "lactose": false
+  },
+  "abrikozen-op-siroop": {
+    "lactose": false
+  },
+  "agar-agar": {
+    "lactose": false
+  },
+  "allesbinder": {
+    "lactose": false
+  },
+  "amandel": {
+    "lactose": false
+  },
+  "amandelaroma": {
+    "lactose": false
+  },
+  "amandelmeel": {
+    "lactose": false
+  },
+  "amandelspijs": {
+    "lactose": false
+  },
+  "amsterdamse-uitjes": {
+    "lactose": false
+  },
+  "ananas-op-sap": {
+    "lactose": false
+  },
+  "ansjovis": {
+    "lactose": false
+  },
+  "appelmoes": {
+    "lactose": false
+  },
+  "appeltaartmix": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "artisjokhart": {
+    "lactose": false
+  },
+  "aspergesoep": {
+    "lactose": true
+  },
+  "augurk": {
+    "lactose": false
+  },
+  "augurkennat": {
+    "lactose": false
+  },
+  "bakgember": {
+    "lactose": false
+  },
+  "bakpoeder": {
+    "lactose": false
+  },
+  "baksoda": {
+    "lactose": false
+  },
+  "bakspray": {
+    "lactose": false
+  },
+  "banketbakkersroom": {
+    "lactose": true
+  },
+  "basterdsuiker": {
+    "lactose": false
+  },
+  "bavarois": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "bechamelsaus": {
+    "lactose": true
+  },
+  "bigarreaux": {
+    "lactose": false
+  },
+  "bloem": {
+    "lactose": false
+  },
+  "bloem-tipo-00": {
+    "lactose": false
+  },
+  "boekweitmeel": {
+    "lactose": false
+  },
+  "boon": {
+    "lactose": false
+  },
+  "boterkoekmix": {
+    "lactose": true
+  },
+  "broodmix": {
+    "lactose": false
+  },
+  "browniemix": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "bruine-bonensoep": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "bruine-boon": {
+    "lactose": false
+  },
+  "cacaonibs": {
+    "lactose": false
+  },
+  "cacaopoeder": {
+    "lactose": false
+  },
+  "cakemix": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "cannelliniboon": {
+    "lactose": false
+  },
+  "carbonarasaus": {
+    "lactose": true
+  },
+  "champignonsoep": {
+    "lactose": true
+  },
+  "chiazaad": {
+    "lactose": false
+  },
+  "chilibonen": {
+    "lactose": false
+  },
+  "chocoladedrops": {
+    "lactose": true
+  },
+  "chocoladeglazuur": {
+    "lactose": true
+  },
+  "citroenaroma": {
+    "lactose": false
+  },
+  "corned-beef": {
+    "lactose": false
+  },
+  "cranberry": {
+    "lactose": false
+  },
+  "cranberrysaus": {
+    "lactose": false
+  },
+  "crouton": {
+    "lactose": false
+  },
+  "cupcakevormpje": {
+    "lactose": false
+  },
+  "doperwten-en-wortelen": {
+    "lactose": false
+  },
+  "eivervanger": {
+    "lactose": false
+  },
+  "erwtensoep": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "flageolet": {
+    "lactose": false
+  },
+  "fruitcocktail": {
+    "lactose": false
+  },
+  "gecondenseerde-melk": {
+    "lactose": true
+  },
+  "gedroogde-vijg": {
+    "lactose": false
+  },
+  "gelatine": {
+    "lactose": false
+  },
+  "geleisuiker": {
+    "lactose": false
+  },
+  "gist": {
+    "lactose": false
+  },
+  "glucosestroop": {
+    "lactose": false
+  },
+  "glutenvrij-paneermeel": {
+    "lactose": false
+  },
+  "glutenvrije-bloem": {
+    "lactose": false
+  },
+  "glutenvrije-broodmix": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "gojibes": {
+    "lactose": false
+  },
+  "goulashsoep": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "griesmeel": {
+    "lactose": false
+  },
+  "groentefond": {
+    "lactose": false
+  },
+  "groentesoep": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "hazelnoot": {
+    "lactose": false
+  },
+  "kalamata-olijf": {
+    "lactose": false
+  },
+  "kalfsfond": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kandijsuiker": {
+    "lactose": false
+  },
+  "kaneelsuiker": {
+    "lactose": false
+  },
+  "kappertjes": {
+    "lactose": false
+  },
+  "kapucijners": {
+    "lactose": false
+  },
+  "kersenvlaaivulling": {
+    "lactose": false
+  },
+  "kidneybonen": {
+    "lactose": false
+  },
+  "kikkererwt": {
+    "lactose": false
+  },
+  "kippenfond": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kippensoep": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kleurstof": {
+    "lactose": false
+  },
+  "knakworst": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kokos": {
+    "lactose": false
+  },
+  "kokosbloesemsuiker": {
+    "lactose": false
+  },
+  "kokosmeel": {
+    "lactose": false
+  },
+  "krabvlees": {
+    "lactose": false
+  },
+  "krent": {
+    "lactose": false
+  },
+  "kruidnotenmix": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "kwarktaartmix": {
+    "lactose": true
+  },
+  "lamsfond": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "lijnzaad": {
+    "lactose": false
+  },
+  "maanzaad": {
+    "lactose": false
+  },
+  "mais": {
+    "lactose": false
+  },
+  "maismeel": {
+    "lactose": false
+  },
+  "maizena": {
+    "lactose": false
+  },
+  "makreel-in-tomatensaus": {
+    "lactose": false
+  },
+  "mandarijnen-op-siroop": {
+    "lactose": false
+  },
+  "melkpoeder": {
+    "lactose": true
+  },
+  "morel": {
+    "lactose": false
+  },
+  "muffinmix": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "muscovadosuiker": {
+    "lactose": false
+  },
+  "oliebollenmix": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "olijf": {
+    "lactose": false
+  },
+  "olijven-gevuld-met-citroen": {
+    "lactose": false
+  },
+  "olijven-gevuld-met-paprika": {
+    "lactose": false
+  },
+  "ossenstaartsoep": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "paneermeel": {
+    "lactose": false
+  },
+  "pannenkoekenmix": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "parelsuiker": {
+    "lactose": false
+  },
+  "pastasaus": {
+    "lactose": false
+  },
+  "peppadew": {
+    "lactose": false
+  },
+  "peren-op-siroop": {
+    "lactose": false
+  },
+  "perziken-op-siroop": {
+    "lactose": false
+  },
+  "pesto": {
+    "lactose": true
+  },
+  "piccalilly": {
+    "lactose": false
+  },
+  "pijnboompit": {
+    "lactose": false
+  },
+  "pizzadeegmix": {
+    "lactose": false
+  },
+  "pizzasaus": {
+    "lactose": false
+  },
+  "poedersuiker": {
+    "lactose": false
+  },
+  "poffertjesmix": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "pompoenpit": {
+    "lactose": false
+  },
+  "pruimedant": {
+    "lactose": false
+  },
+  "ragout": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "rietsuiker": {
+    "lactose": false
+  },
+  "rode-kool-met-appel": {
+    "lactose": false
+  },
+  "roggemeel": {
+    "lactose": false
+  },
+  "rolfondant": {
+    "lactose": false
+  },
+  "rozijn": {
+    "lactose": false
+  },
+  "rumaroma": {
+    "lactose": false
+  },
+  "runderfond": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "sardine": {
+    "lactose": false
+  },
+  "schrijfglazuur": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "slagroomversteviger": {
+    "lactose": false
+  },
+  "speculaaskruiden": {
+    "lactose": false
+  },
+  "speltmeel": {
+    "lactose": false
+  },
+  "sprinkles": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "spuitzak": {
+    "lactose": false
+  },
+  "suiker": {
+    "lactose": false
+  },
+  "suikerklontje": {
+    "lactose": false
+  },
+  "sukade": {
+    "lactose": false
+  },
+  "sultana": {
+    "lactose": false
+  },
+  "taartbodem": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "taartgelei": {
+    "lactose": false
+  },
+  "tafelzuur": {
+    "lactose": false
+  },
+  "tapenade": {
+    "lactose": false
+  },
+  "tomaten-uit-blik": {
+    "lactose": false
+  },
+  "tomatenblokjes": {
+    "lactose": false
+  },
+  "tomatenpuree": {
+    "lactose": false
+  },
+  "tomatensaus": {
+    "lactose": false
+  },
+  "tomatensoep": {
+    "lactose": false
+  },
+  "tomatentapenade": {
+    "lactose": false
+  },
+  "tonijn": {
+    "lactose": false
+  },
+  "tonijn-in-olie": {
+    "lactose": false
+  },
+  "tonijn-in-water": {
+    "lactose": false
+  },
+  "uienchutney": {
+    "lactose": false
+  },
+  "vanille-extract": {
+    "lactose": false
+  },
+  "vanillepasta": {
+    "lactose": false
+  },
+  "vanillestokje": {
+    "lactose": false
+  },
+  "vanillesuiker": {
+    "lactose": false
+  },
+  "visfond": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "volkorenmeel": {
+    "lactose": false
+  },
+  "wildfond": {
+    "lactose": false,
+    "lactoseUnsure": true
+  },
+  "witte-bonen-in-tomatensaus": {
+    "lactose": false
+  },
+  "zadenmix": {
+    "lactose": false
+  },
+  "zalm-uit-blik": {
+    "lactose": false
+  },
+  "zelfrijzend-bakmeel": {
+    "lactose": false
+  },
+  "zilveruitje": {
+    "lactose": false
+  },
+  "zoetstof": {
+    "lactose": false
+  },
+  "zongedroogde-tomaat": {
+    "lactose": false
+  },
+  "zonnebloempit": {
+    "lactose": false
+  },
+  "zure-bom": {
+    "lactose": false
+  },
+  "zwarte-boon": {
+    "lactose": false
+  }
+}
