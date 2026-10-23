@@ -55,6 +55,26 @@ describe('spelling variants of dish names', () => {
   });
 });
 
+// docs/specs/bijgerechten.md §1 + §6b: the side dishes are found under their everyday names.
+describe('spelling variants for the side dishes', () => {
+  it('"patat", "friet" and "frietjes" find Ovenfrietjes', () => {
+    const chips = recipe('Ovenfrietjes', 'Oven chips');
+    expect(matchesName(chips, queryTerms('patat'))).toBe(true);
+    expect(matchesName(chips, queryTerms('friet'))).toBe(true);
+    expect(matchesName(chips, queryTerms('frietjes'))).toBe(true);
+  });
+
+  it('"koolsalade" (and "koolsla") find Coleslaw', () => {
+    expect(matchesName(recipe('Coleslaw'), queryTerms('koolsalade'))).toBe(true);
+    expect(matchesName(recipe('Coleslaw'), queryTerms('koolsla'))).toBe(true);
+  });
+
+  it('leaves the existing groups unchanged', () => {
+    expect(termVariants('goulash')).toEqual(['goulash', 'gulyas', 'goulasch', 'gulasch', 'gulas']);
+    expect(termVariants('pasta')).toEqual(['pasta']);
+  });
+});
+
 // docs/specs/labels-categorieen.md §1b + §6a: the cuisine (data/cuisines.json) is searchable by id and
 // by its Dutch/English name; a cuisine hit goes to the category group BEFORE the ingredient check
 // (decision of the critical reader), plain category and tag hits keep their place.

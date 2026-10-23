@@ -23,7 +23,7 @@ spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
 - **Volgorde omgegooid:** na de bijgerechten komt eerst **6D (XP)**: 6D-1 → 6D-2a/2b → 6D-3 → 6D-4a → 6D-4b.
   Daarna 13F → 13D → 6C → 13J → Z. 6D-1 hangt niet van 13F af (XP wordt afgeleid uit wat in de kooklog
   staat; 13F's alias-migratie zet de kooklog-ids om, de afleiding rekent daarna gewoon opnieuw).
-- **Gebouwd tot nu toe:** Home A+ (1–2), 13K (1–2), 6B+13E (1–5), bijgerechten (in aanbouw).
+- **Gebouwd tot nu toe:** Home A+ (1–2), 13K (1–2), 6B+13E (1–5), bijgerechten (24 okt). Volgende: 6D-1 in lichte modus.
 - **Ambitie 6D omhoog (Stijn 24 okt):** avatar met zeven lagen × 40–70 onderdelen, gebouwd in rondes (6D-3 =
   raamwerk + ronde 1; daarna data-rondes door Fable); ontgrendelingen rijk (confetti, geluiden, lettertypes, gouden
   modus); challenges vrij op level 20 als eigen blok ná 6D-4. Zie de besluitblokken bovenaan badges-avatar.md en

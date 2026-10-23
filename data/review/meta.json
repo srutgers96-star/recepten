@@ -32,6 +32,7 @@
     "b:tagliatelle-alle-noci": "italiaans",
     "b:tagliatelle-carbonara": "italiaans",
     "b:tortellini-al-gratin": "italiaans",
+    "b:focaccia-met-rozemarijn": "italiaans",
     "b:andijviestamp-met-danish-blue": "hollands",
     "b:boerenkool": "hollands",
     "b:hutspot": "hollands",
@@ -60,11 +61,13 @@
     "b:portugese-visschotel": "portugees",
     "b:griekse-salade": "grieks",
     "b:moussaka": "grieks",
+    "b:tzatziki": "grieks",
     "b:hongaarse-goulash": "hongaars",
     "b:goulash-maaltijdsoep": "hongaars",
     "b:kalkoenpie": "brits",
     "b:couscous-met-kip-en-courgette": "marokkaans",
     "b:couscous-met-runderreepjes": "marokkaans",
+    "b:couscous": "marokkaans",
     "b:dahl-van-rode-linzen-boerenkool": "indiaas",
     "b:naanbrood-voor-bij-dahl": "indiaas",
     "b:mulligatawny": "indiaas",
@@ -80,6 +83,7 @@
     "b:mexicaanse-bonenschotel": "mexicaans",
     "b:mexicaanse-ovenschotel-met-zoete-aardappel": "mexicaans",
     "b:taco-schotel": "mexicaans",
+    "b:guacamole": "mexicaans",
     "b:hamburgers-voor-op-de-bbq": "amerikaans"
   }
 }

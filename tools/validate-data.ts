@@ -1,6 +1,7 @@
 // tools/validate-data.ts — data guard for CI and for the local dev loop.
 //
-// Validates the schema-1 source corpus (data/source/recipes-recepten2.json), the dictionary files
+// Validates the schema-1 source corpus (data/source/recipes-recepten2.json), the 20 side dishes
+// (data/source/bijgerechten.json, tools/sides.ts `checkSides`, docs/specs/bijgerechten.md §2d), the dictionary files
 // (data/{units,qualifiers,prep-phrases,ingredients,aisles,categories,cuisines}.json, docs/phase-2-spec.md §1,
 // cuisines: docs/specs/labels-categorieen.md §2c), the generated schema-2 file data/recipes.json
 // (tools/migrate-from-recepten2.ts, §2 + §4: dictionary references, `name.en` and every
@@ -16,8 +17,10 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import process from 'node:process';
-import { normalizeKey, type DictionaryData } from '../src/domain/dictionary.ts';
+import { loadDictionary, normalizeKey, type DictionaryData } from '../src/domain/dictionary.ts';
+import type { Recipe } from '../src/domain/model.ts';
 import { readDictionaryData } from './build-dictionary-seed.ts';
+import { checkSides, readSides, SIDES_TIMESTAMP } from './sides.ts';
 
 export interface ValidationResult {
   /** Human-readable problems that must fail CI. */
@@ -911,6 +914,30 @@ function main(): void {
   if (source.errors.length > 0) failed = true;
 
   const dictData = readDictionaryData(root);
+  const schema2Rel = 'data/recipes.json';
+  const schema2Path = join(root, schema2Rel);
+
+  // The side dishes (docs/specs/bijgerechten.md §2d). The committed recipes.json already holds the 20
+  // after `npm run migrate`, so they are left out of the classics (else every id would "collide").
+  // Only the generated side dishes (createdAt SIDES_TIMESTAMP) are dropped, not every recipe whose id is
+  // in the sides file: a classic that shares an id with a side dish must stay, so the collision rule fires.
+  const sidesRel = 'data/source/bijgerechten.json';
+  const sides = readSides(root);
+  if (!sides) {
+    console.log(`${sidesRel}: not present (side-dish checks skipped).`);
+  } else if (!existsSync(schema2Path)) {
+    console.log(`${sidesRel}: ${schema2Rel} not present yet (side-dish checks skipped).`);
+  } else {
+    // Unchecked JSON: count defensively, `checkSides` reports the shape problems.
+    const sideList = Array.isArray(sides.recipes) ? sides.recipes : [];
+    const committed = (readJson(schema2Path) as { recipes?: Recipe[] }).recipes ?? [];
+    const classics = committed.filter((r) => r.createdAt !== SIDES_TIMESTAMP);
+    const errors = checkSides(sides, classics, loadDictionary(dictData));
+    const lineCount = sideList.reduce((n, s) => n + (Array.isArray(s?.lines) ? s.lines.length : 0), 0);
+    print(sidesRel, { errors, warnings: [], stats: { recipes: sideList.length, lines: lineCount } }, `${sideList.length} side dishes, ${lineCount} lines`);
+    if (errors.length > 0) failed = true;
+  }
+
   const dictionary = validateDictionary(dictData);
   print(
     'data/{units,qualifiers,prep-phrases,note-phrases,ingredients,aisles,categories,cuisines}.json',
@@ -929,8 +956,6 @@ function main(): void {
   print(swapsRel, swaps, `${swaps.stats.lines} swaps`);
   if (swaps.errors.length > 0) failed = true;
 
-  const schema2Rel = 'data/recipes.json';
-  const schema2Path = join(root, schema2Rel);
   if (existsSync(schema2Path)) {
     const schema2 = validateSchema2(readJson(schema2Path), refsFromData(dictData));
     const s = schema2.stats;

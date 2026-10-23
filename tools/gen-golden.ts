@@ -1,6 +1,7 @@
 // tools/gen-golden.ts — regenerates the parser golden fixture (docs/phase-2-spec.md §4).
 //
-// Every unique raw ingredient line of data/source/recipes-recepten2.json is parsed with the
+// Every unique raw ingredient line of data/source/recipes-recepten2.json and of the 20 side dishes
+// (the Dutch lines of data/source/bijgerechten.json, `sourceLines`) is parsed with the
 // dictionary in data/*.json and rendered in both languages; tests/parser.golden.json stores
 // `{ raw, line, nl, en }` per line, sorted by raw text (code-point order, so the file is stable on
 // every machine). tests/parser.golden.test.ts compares the current parser + dictionary against it:
@@ -66,7 +67,7 @@ export function buildGolden(lines: readonly string[], dict: Dictionary, source: 
 function main(): void {
   const root = join(dirname(fileURLToPath(import.meta.url)), '..');
   const dict = loadDictionary(readDictionaryData(root));
-  const golden = buildGolden(sourceLines(root), dict, 'data/source/recipes-recepten2.json');
+  const golden = buildGolden(sourceLines(root), dict, 'data/source/recipes-recepten2.json + data/source/bijgerechten.json');
   const outPath = join(root, 'tests', 'parser.golden.json');
   writeFileSync(outPath, JSON.stringify(golden, null, 2) + '\n', 'utf8');
   const headers = golden.lines.filter((e) => e.line.kind === 'header').length;

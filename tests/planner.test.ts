@@ -1,7 +1,10 @@
 // The week plan (docs/phase-4-spec.md §1, src/domain/planner.ts): "Verras me" variation rules,
 // locks / existing dishes, small pools, the plan hash and the 6-week window; phase 6 (13E,
-// docs/specs/labels-categorieen.md §1c/§2d): main dishes, the pickers' pool and side dishes.
+// docs/specs/labels-categorieen.md §1c/§2d): main dishes, the pickers' pool and side dishes;
+// the 20 built-in side dishes (docs/specs/bijgerechten.md §6b) stay out of the pickers' pool.
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { defaultDictionary } from '../src/domain/data';
 import type { Recipe } from '../src/domain/model';
 import {
   excludeNonMain,
@@ -20,6 +23,7 @@ import {
   type Plan,
   type PlanItem,
 } from '../src/domain/planner';
+import { sidesToRecipes, type SidesFile } from '../tools/sides.ts';
 
 function rec(id: string, category: string, tags: string[] = []): Recipe {
   return {
@@ -242,6 +246,46 @@ describe('main dishes and the pickers pool', () => {
     const copy = [...mixed];
     excludeNonMain(mixed, {});
     expect(mixed).toEqual(copy);
+  });
+});
+
+// docs/specs/bijgerechten.md §3 builder C + §6b: the 20 built-in side dishes (data/source/bijgerechten.json,
+// turned into recipes by tools/sides.ts) fall under the existing non-main filter of 6B block 4.
+describe('the 20 built-in side dishes stay out of the pickers pool', () => {
+  const file = JSON.parse(readFileSync(new URL('../data/source/bijgerechten.json', import.meta.url), 'utf8')) as SidesFile;
+  const sides = sidesToRecipes(file, defaultDictionary());
+  const sideIds = new Set(sides.map((r) => r.id));
+  const ids = (list: readonly Recipe[]) => list.map((r) => r.id);
+
+  it('bijgerecht is one of the NON_MAIN_CATEGORIES', () => {
+    expect(NON_MAIN_CATEGORIES.has('bijgerecht')).toBe(true);
+  });
+
+  it('all 20 ids of the source file become recipes and none of them is a main dish', () => {
+    expect(sides).toHaveLength(20);
+    expect(ids(sides)).toEqual(file.recipes.map((s) => s.id));
+    for (const r of sides) {
+      expect(r.category, r.id).toBe('bijgerecht');
+      expect(isMainDish(r), r.id).toBe(false);
+    }
+  });
+
+  it('excludeNonMain drops them without a chip and keeps them with "all" or the Bijgerecht chip', () => {
+    const pool = [...sides, rec('a', 'pasta')];
+    expect(ids(excludeNonMain(pool, {}))).toEqual(['a']);
+    expect(ids(excludeNonMain(pool))).toEqual(['a']);
+    expect(ids(excludeNonMain(pool, { all: true }))).toEqual(ids(pool));
+    expect(ids(excludeNonMain(pool, { cats: ['bijgerecht'] }))).toEqual(ids(pool));
+  });
+
+  it('pickRecipes over the filtered pool never picks a side dish (seeded, 50 runs)', () => {
+    const pool = excludeNonMain([...sides, ...POOL], {});
+    expect(pool.some((r) => sideIds.has(r.id))).toBe(false);
+    for (let seed = 1; seed <= 50; seed++) {
+      const picked = pickRecipes({ count: 7, pool, recentIds: new Set(), existing: [], rng: seeded(seed) });
+      expect(picked).toHaveLength(7);
+      expect(picked.some((r) => sideIds.has(r.id) || !isMainDish(r))).toBe(false);
+    }
   });
 });
 

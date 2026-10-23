@@ -1,6 +1,7 @@
 # Spec 13E-bijgerechten — De 20 bijgerechten, volledig uitgeschreven
 
 Status: compleet (Fable, 22 okt 2026)
+Gebouwd: 24 okt 2026 (hele blok, workflow wf_2b4c710c-ff5)
 
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (besluiten over specs heen in
 docs/specs/README.md §2; bij tegenspraak wint README.md). Voor deze spec:

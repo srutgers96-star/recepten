@@ -1,14 +1,14 @@
 {
   "generatedBy": "node --experimental-strip-types tools/gen-golden.ts",
-  "source": "data/source/recipes-recepten2.json",
+  "source": "data/source/recipes-recepten2.json + data/source/bijgerechten.json",
   "dictionary": {
     "ingredients": 1603,
     "units": 49,
     "qualifiers": 100,
     "prepPhrases": 152
   },
-  "count": 1377,
-  "resolved": 1366,
+  "count": 1443,
+  "resolved": 1432,
   "lines": [
     {
       "raw": "1 1/2 el mayonaise",
@@ -199,6 +199,28 @@
       },
       "nl": "1 aubergine, halve plakken",
       "en": "1 aubergine, half slices"
+    },
+    {
+      "raw": "1 aubergine [plakken]",
+      "line": {
+        "raw": {
+          "nl": "1 aubergine [plakken]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "aubergine",
+        "name": "aubergine",
+        "prep": {
+          "nl": "plakken",
+          "en": "slices"
+        },
+        "confidence": 1
+      },
+      "nl": "1 aubergine, plakken",
+      "en": "1 aubergine, slices"
     },
     {
       "raw": "1 aubergine [stukjes]",
@@ -844,6 +866,24 @@
       "en": "1 chorizo, diced"
     },
     {
+      "raw": "1 ciabatta",
+      "line": {
+        "raw": {
+          "nl": "1 ciabatta"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "ciabatta",
+        "name": "ciabatta",
+        "confidence": 1
+      },
+      "nl": "1 ciabatta",
+      "en": "1 ciabatta"
+    },
+    {
       "raw": "1 citroen [dunne schijfjes] (garnering)",
       "line": {
         "raw": {
@@ -888,6 +928,28 @@
       },
       "nl": "1 courgette, blokken van ca. 3 cm",
       "en": "1 courgette, roughly 3 cm chunks"
+    },
+    {
+      "raw": "1 courgette [plakken]",
+      "line": {
+        "raw": {
+          "nl": "1 courgette [plakken]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "courgette",
+        "name": "courgette",
+        "prep": {
+          "nl": "plakken",
+          "en": "slices"
+        },
+        "confidence": 1
+      },
+      "nl": "1 courgette, plakken",
+      "en": "1 courgette, slices"
     },
     {
       "raw": "1 courgette [stukjes]",
@@ -1298,6 +1360,24 @@
       },
       "nl": "1 el allesbinder",
       "en": "1 tbsp instant thickener"
+    },
+    {
+      "raw": "1 el appelazijn",
+      "line": {
+        "raw": {
+          "nl": "1 el appelazijn"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "el",
+        "ing": "appelazijn",
+        "name": "appelazijn",
+        "confidence": 1
+      },
+      "nl": "1 el appelazijn",
+      "en": "1 tbsp cider vinegar"
     },
     {
       "raw": "1 el arachideolie",
@@ -1846,6 +1926,24 @@
       "en": "1 tbsp coarse mustard"
     },
     {
+      "raw": "1 el honing",
+      "line": {
+        "raw": {
+          "nl": "1 el honing"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "el",
+        "ing": "honing",
+        "name": "honing",
+        "confidence": 1
+      },
+      "nl": "1 el honing",
+      "en": "1 tbsp honey"
+    },
+    {
       "raw": "1 el kappertjes",
       "line": {
         "raw": {
@@ -2297,6 +2395,29 @@
       "en": "1 tbsp sesame oil"
     },
     {
+      "raw": "1 el sesamzaad [geroosterd] (optioneel)",
+      "line": {
+        "raw": {
+          "nl": "1 el sesamzaad [geroosterd] (optioneel)"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "el",
+        "ing": "sesamzaad",
+        "name": "sesamzaad",
+        "prep": {
+          "nl": "geroosterd",
+          "en": "toasted"
+        },
+        "optional": true,
+        "confidence": 1
+      },
+      "nl": "1 el sesamzaad, geroosterd (optioneel)",
+      "en": "1 tbsp sesame seeds, toasted (optional)"
+    },
+    {
       "raw": "1 el sesamzaadjes [gebrand]",
       "line": {
         "raw": {
@@ -2335,6 +2456,24 @@
       },
       "nl": "1 el sherry",
       "en": "1 tbsp sherry"
+    },
+    {
+      "raw": "1 el suiker",
+      "line": {
+        "raw": {
+          "nl": "1 el suiker"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "el",
+        "ing": "suiker",
+        "name": "suiker",
+        "confidence": 1
+      },
+      "nl": "1 el suiker",
+      "en": "1 tbsp sugar"
     },
     {
       "raw": "1 el tomatenpuree",
@@ -3279,6 +3418,24 @@
       "en": "1 large carrot, finely chopped"
     },
     {
+      "raw": "1 handje basilicum",
+      "line": {
+        "raw": {
+          "nl": "1 handje basilicum"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "hand",
+        "ing": "basilicum",
+        "name": "basilicum",
+        "confidence": 1
+      },
+      "nl": "1 handje basilicum",
+      "en": "1 handful basil"
+    },
+    {
       "raw": "1 handje peterselie",
       "line": {
         "raw": {
@@ -3376,6 +3533,28 @@
       "en": "1 kg potatoes, peeled and cut into pieces"
     },
     {
+      "raw": "1 kg aardappelen [partjes]",
+      "line": {
+        "raw": {
+          "nl": "1 kg aardappelen [partjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "kg",
+        "ing": "aardappel",
+        "name": "aardappelen",
+        "prep": {
+          "nl": "partjes",
+          "en": "wedges"
+        },
+        "confidence": 1
+      },
+      "nl": "1 kg aardappelen, partjes",
+      "en": "1 kg potatoes, wedges"
+    },
+    {
       "raw": "1 kg aardappelen [schijfjes]",
       "line": {
         "raw": {
@@ -3457,6 +3636,31 @@
       },
       "nl": "1 kg kruimige aardappelen, blokjes van 2 cm",
       "en": "1 kg floury potatoes, 2 cm dice"
+    },
+    {
+      "raw": "1 kg kruimige aardappelen [geschild in stukken]",
+      "line": {
+        "raw": {
+          "nl": "1 kg kruimige aardappelen [geschild in stukken]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "kg",
+        "ing": "aardappel",
+        "name": "aardappelen",
+        "qual": [
+          "kruimige"
+        ],
+        "prep": {
+          "nl": "geschild in stukken",
+          "en": "peeled and cut into pieces"
+        },
+        "confidence": 1
+      },
+      "nl": "1 kg kruimige aardappelen, geschild in stukken",
+      "en": "1 kg floury potatoes, peeled and cut into pieces"
     },
     {
       "raw": "1 kg kruimige aardappels [geschild in blokjes]",
@@ -4012,6 +4216,28 @@
       "en": "1 cucumber, diced"
     },
     {
+      "raw": "1 komkommer [dunne plakjes]",
+      "line": {
+        "raw": {
+          "nl": "1 komkommer [dunne plakjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "komkommer",
+        "name": "komkommer",
+        "prep": {
+          "nl": "dunne plakjes",
+          "en": "thinly sliced"
+        },
+        "confidence": 1
+      },
+      "nl": "1 komkommer, dunne plakjes",
+      "en": "1 cucumber, thinly sliced"
+    },
+    {
       "raw": "1 kop geraspte kaas",
       "line": {
         "raw": {
@@ -4088,6 +4314,24 @@
       },
       "nl": "1 krop lollo rosso",
       "en": "1 head lollo rosso lettuce"
+    },
+    {
+      "raw": "1 krop sla",
+      "line": {
+        "raw": {
+          "nl": "1 krop sla"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "krop",
+        "ing": "sla",
+        "name": "sla",
+        "confidence": 1
+      },
+      "nl": "1 krop sla",
+      "en": "1 head lettuce"
     },
     {
       "raw": "1 kruidenbouillon (blokje)",
@@ -4749,6 +4993,31 @@
       "en": "1 red apple, diced"
     },
     {
+      "raw": "1 rode kool [fijngesneden]",
+      "line": {
+        "raw": {
+          "nl": "1 rode kool [fijngesneden]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "kool",
+        "name": "kool",
+        "qual": [
+          "rode"
+        ],
+        "prep": {
+          "nl": "fijngesneden",
+          "en": "finely sliced"
+        },
+        "confidence": 1
+      },
+      "nl": "1 rode kool, fijngesneden",
+      "en": "1 red cabbage, finely sliced"
+    },
+    {
       "raw": "1 rode of gele paprika [reepjes]",
       "line": {
         "raw": {
@@ -4936,6 +5205,28 @@
       "en": "1 red pepper, small pieces"
     },
     {
+      "raw": "1 rode peper [fijngehakt]",
+      "line": {
+        "raw": {
+          "nl": "1 rode peper [fijngehakt]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "rode-peper",
+        "name": "rode peper",
+        "prep": {
+          "nl": "fijngehakt",
+          "en": "finely chopped"
+        },
+        "confidence": 1
+      },
+      "nl": "1 rode peper, fijngehakt",
+      "en": "1 red chilli, finely chopped"
+    },
+    {
       "raw": "1 rode peper [zonder zaadjes in reepjes]",
       "line": {
         "raw": {
@@ -5058,6 +5349,31 @@
       "en": "1 red onion, thin rings"
     },
     {
+      "raw": "1 rode ui [fijngesnipperd]",
+      "line": {
+        "raw": {
+          "nl": "1 rode ui [fijngesnipperd]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "ui",
+        "name": "ui",
+        "qual": [
+          "rode"
+        ],
+        "prep": {
+          "nl": "fijngesnipperd",
+          "en": "very finely diced"
+        },
+        "confidence": 1
+      },
+      "nl": "1 rode ui, fijngesnipperd",
+      "en": "1 red onion, very finely diced"
+    },
+    {
       "raw": "1 rode ui [gesnipperd]",
       "line": {
         "raw": {
@@ -5081,6 +5397,56 @@
       },
       "nl": "1 rode ui, gesnipperd",
       "en": "1 red onion, finely diced"
+    },
+    {
+      "raw": "1 rode ui [in halve ringen]",
+      "line": {
+        "raw": {
+          "nl": "1 rode ui [in halve ringen]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "ui",
+        "name": "ui",
+        "qual": [
+          "rode"
+        ],
+        "prep": {
+          "nl": "in halve ringen",
+          "en": "in half rings"
+        },
+        "confidence": 1
+      },
+      "nl": "1 rode ui, in halve ringen",
+      "en": "1 red onion, in half rings"
+    },
+    {
+      "raw": "1 rode ui [partjes]",
+      "line": {
+        "raw": {
+          "nl": "1 rode ui [partjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "ui",
+        "name": "ui",
+        "qual": [
+          "rode"
+        ],
+        "prep": {
+          "nl": "partjes",
+          "en": "wedges"
+        },
+        "confidence": 1
+      },
+      "nl": "1 rode ui, partjes",
+      "en": "1 red onion, wedges"
     },
     {
       "raw": "1 rode ui [ringen]",
@@ -5328,6 +5694,42 @@
       "en": "1 pinch allspice"
     },
     {
+      "raw": "1 snufje nootmuskaat",
+      "line": {
+        "raw": {
+          "nl": "1 snufje nootmuskaat"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "snuf",
+        "ing": "nootmuskaat",
+        "name": "nootmuskaat",
+        "confidence": 1
+      },
+      "nl": "1 snufje nootmuskaat",
+      "en": "1 pinch nutmeg"
+    },
+    {
+      "raw": "1 snufje zout",
+      "line": {
+        "raw": {
+          "nl": "1 snufje zout"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "snuf",
+        "ing": "zout",
+        "name": "zout",
+        "confidence": 1
+      },
+      "nl": "1 snufje zout",
+      "en": "1 pinch salt"
+    },
+    {
       "raw": "1 stengel bleekselderij [fijngehakt]",
       "line": {
         "raw": {
@@ -5388,6 +5790,24 @@
       },
       "nl": "1 stengel citroengras",
       "en": "1 stalk lemongrass"
+    },
+    {
+      "raw": "1 stokbrood",
+      "line": {
+        "raw": {
+          "nl": "1 stokbrood"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "stokbrood",
+        "name": "stokbrood",
+        "confidence": 1
+      },
+      "nl": "1 stokbrood",
+      "en": "1 baguette"
     },
     {
       "raw": "1 struik andijvie [repen van ca. 3 cm]",
@@ -5946,6 +6366,27 @@
       "en": "1 tsp tarragon"
     },
     {
+      "raw": "1 tl gedroogde oregano",
+      "line": {
+        "raw": {
+          "nl": "1 tl gedroogde oregano"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "tl",
+        "ing": "oregano",
+        "name": "oregano",
+        "qual": [
+          "gedroogde"
+        ],
+        "confidence": 1
+      },
+      "nl": "1 tl gedroogde oregano",
+      "en": "1 tsp dried oregano"
+    },
+    {
       "raw": "1 tl geelwortel/koenjit",
       "line": {
         "raw": {
@@ -6283,6 +6724,24 @@
       "en": "1 tsp sesame oil"
     },
     {
+      "raw": "1 tl suiker",
+      "line": {
+        "raw": {
+          "nl": "1 tl suiker"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "tl",
+        "ing": "suiker",
+        "name": "suiker",
+        "confidence": 1
+      },
+      "nl": "1 tl suiker",
+      "en": "1 tsp sugar"
+    },
+    {
       "raw": "1 tl tijm",
       "line": {
         "raw": {
@@ -6326,6 +6785,27 @@
       "en": "1 tsp fresh ginger, grated"
     },
     {
+      "raw": "1 tl witte wijnazijn",
+      "line": {
+        "raw": {
+          "nl": "1 tl witte wijnazijn"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "tl",
+        "ing": "wijnazijn",
+        "name": "wijnazijn",
+        "qual": [
+          "witte"
+        ],
+        "confidence": 1
+      },
+      "nl": "1 tl witte wijnazijn",
+      "en": "1 tsp white wine vinegar"
+    },
+    {
       "raw": "1 tl worcestersaus",
       "line": {
         "raw": {
@@ -6342,6 +6822,64 @@
       },
       "nl": "1 tl worcestersaus",
       "en": "1 tsp Worcestershire sauce"
+    },
+    {
+      "raw": "1 tl zeezoutvlokken",
+      "line": {
+        "raw": {
+          "nl": "1 tl zeezoutvlokken"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "tl",
+        "ing": "zeezoutvlokken",
+        "name": "zeezoutvlokken",
+        "confidence": 1
+      },
+      "nl": "1 tl zeezoutvlokken",
+      "en": "1 tsp sea salt flakes"
+    },
+    {
+      "raw": "1 tl zout",
+      "line": {
+        "raw": {
+          "nl": "1 tl zout"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": "tl",
+        "ing": "zout",
+        "name": "zout",
+        "confidence": 1
+      },
+      "nl": "1 tl zout",
+      "en": "1 tsp salt"
+    },
+    {
+      "raw": "1 tomaat [blokjes]",
+      "line": {
+        "raw": {
+          "nl": "1 tomaat [blokjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 1
+        },
+        "unit": null,
+        "ing": "tomaat",
+        "name": "tomaat",
+        "prep": {
+          "nl": "blokjes",
+          "en": "diced"
+        },
+        "confidence": 1
+      },
+      "nl": "1 tomaat, blokjes",
+      "en": "1 tomato, diced"
     },
     {
       "raw": "1 tomaat [plakjes]",
@@ -7591,6 +8129,28 @@
       },
       "nl": "100 g boter",
       "en": "100 g butter"
+    },
+    {
+      "raw": "100 g boter [op kamertemperatuur]",
+      "line": {
+        "raw": {
+          "nl": "100 g boter [op kamertemperatuur]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 100
+        },
+        "unit": "g",
+        "ing": "boter",
+        "name": "boter",
+        "prep": {
+          "nl": "op kamertemperatuur",
+          "en": "at room temperature"
+        },
+        "confidence": 1
+      },
+      "nl": "100 g boter, op kamertemperatuur",
+      "en": "100 g butter, at room temperature"
     },
     {
       "raw": "100 g boter of 100 g spekblokjes",
@@ -8924,6 +9484,28 @@
       },
       "nl": "125 g bloem",
       "en": "125 g plain flour"
+    },
+    {
+      "raw": "125 g boter [op kamertemperatuur]",
+      "line": {
+        "raw": {
+          "nl": "125 g boter [op kamertemperatuur]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 125
+        },
+        "unit": "g",
+        "ing": "boter",
+        "name": "boter",
+        "prep": {
+          "nl": "op kamertemperatuur",
+          "en": "at room temperature"
+        },
+        "confidence": 1
+      },
+      "nl": "125 g boter, op kamertemperatuur",
+      "en": "125 g butter, at room temperature"
     },
     {
       "raw": "125 g broccoli [kleine roosjes]",
@@ -10774,6 +11356,28 @@
       "en": "2 potatoes, slices"
     },
     {
+      "raw": "2 appels [geschild in blokjes]",
+      "line": {
+        "raw": {
+          "nl": "2 appels [geschild in blokjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": null,
+        "ing": "appel",
+        "name": "appels",
+        "prep": {
+          "nl": "geschild in blokjes",
+          "en": "peeled and diced"
+        },
+        "confidence": 1
+      },
+      "nl": "2 appels, geschild in blokjes",
+      "en": "2 apples, peeled and diced"
+    },
+    {
       "raw": "2 appels [geschild; grof geraspt]",
       "line": {
         "raw": {
@@ -11297,6 +11901,24 @@
       "en": "2 tbsp instant thickener"
     },
     {
+      "raw": "2 el appelstroop",
+      "line": {
+        "raw": {
+          "nl": "2 el appelstroop"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": "el",
+        "ing": "appelstroop",
+        "name": "appelstroop",
+        "confidence": 1
+      },
+      "nl": "2 el appelstroop",
+      "en": "2 tbsp apple syrup"
+    },
+    {
       "raw": "2 el arachideolie",
       "line": {
         "raw": {
@@ -11469,6 +12091,28 @@
       },
       "nl": "2 el citroensap",
       "en": "2 tbsp lemon juice"
+    },
+    {
+      "raw": "2 el dille [fijngehakt]",
+      "line": {
+        "raw": {
+          "nl": "2 el dille [fijngehakt]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": "el",
+        "ing": "dille",
+        "name": "dille",
+        "prep": {
+          "nl": "fijngehakt",
+          "en": "finely chopped"
+        },
+        "confidence": 1
+      },
+      "nl": "2 el dille, fijngehakt",
+      "en": "2 tbsp dill, finely chopped"
     },
     {
       "raw": "2 el dille [fijngeknipt]",
@@ -12388,6 +13032,24 @@
       "en": "2 tbsp vodka"
     },
     {
+      "raw": "2 el yoghurt",
+      "line": {
+        "raw": {
+          "nl": "2 el yoghurt"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": "el",
+        "ing": "yoghurt",
+        "name": "yoghurt",
+        "confidence": 1
+      },
+      "nl": "2 el yoghurt",
+      "en": "2 tbsp yoghurt"
+    },
+    {
       "raw": "2 el zonnebloemolie",
       "line": {
         "raw": {
@@ -13070,6 +13732,31 @@
       "en": "2 ripe avocados"
     },
     {
+      "raw": "2 rode paprika's [repen]",
+      "line": {
+        "raw": {
+          "nl": "2 rode paprika's [repen]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": null,
+        "ing": "paprika",
+        "name": "paprika's",
+        "qual": [
+          "rode"
+        ],
+        "prep": {
+          "nl": "repen",
+          "en": "strips"
+        },
+        "confidence": 1
+      },
+      "nl": "2 rode paprika's, repen",
+      "en": "2 red peppers, strips"
+    },
+    {
       "raw": "2 rode uien [dunne partjes]",
       "line": {
         "raw": {
@@ -13215,6 +13902,24 @@
       "en": "2 stalks celery, thin crescents"
     },
     {
+      "raw": "2 takjes rozemarijn",
+      "line": {
+        "raw": {
+          "nl": "2 takjes rozemarijn"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": "takje",
+        "ing": "rozemarijn",
+        "name": "rozemarijn",
+        "confidence": 1
+      },
+      "nl": "2 takjes rozemarijn",
+      "en": "2 sprigs rosemary"
+    },
+    {
       "raw": "2 takjes rozemarijn [in stukjes geknipt]",
       "line": {
         "raw": {
@@ -13339,6 +14044,28 @@
       "en": "2 cloves garlic, finely chopped"
     },
     {
+      "raw": "2 teentjes knoflook [gekneusd]",
+      "line": {
+        "raw": {
+          "nl": "2 teentjes knoflook [gekneusd]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": "teen",
+        "ing": "knoflook",
+        "name": "knoflook",
+        "prep": {
+          "nl": "gekneusd",
+          "en": "bruised"
+        },
+        "confidence": 1
+      },
+      "nl": "2 teentjes knoflook, gekneusd",
+      "en": "2 cloves garlic, bruised"
+    },
+    {
       "raw": "2 teentjes knoflook [geperst]",
       "line": {
         "raw": {
@@ -13381,6 +14108,28 @@
       },
       "nl": "2 teentjes knoflook, gesnipperd",
       "en": "2 cloves garlic, finely diced"
+    },
+    {
+      "raw": "2 teentjes knoflook [in dunne plakjes]",
+      "line": {
+        "raw": {
+          "nl": "2 teentjes knoflook [in dunne plakjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": "teen",
+        "ing": "knoflook",
+        "name": "knoflook",
+        "prep": {
+          "nl": "in dunne plakjes",
+          "en": "thinly sliced"
+        },
+        "confidence": 1
+      },
+      "nl": "2 teentjes knoflook, in dunne plakjes",
+      "en": "2 cloves garlic, thinly sliced"
     },
     {
       "raw": "2 teentjes knoflook [stiftjes]",
@@ -13969,6 +14718,24 @@
       "en": "2 tsp freshly grated ginger"
     },
     {
+      "raw": "2 tl zout",
+      "line": {
+        "raw": {
+          "nl": "2 tl zout"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": "tl",
+        "ing": "zout",
+        "name": "zout",
+        "confidence": 1
+      },
+      "nl": "2 tl zout",
+      "en": "2 tsp salt"
+    },
+    {
       "raw": "2 tomaten",
       "line": {
         "raw": {
@@ -14087,6 +14854,28 @@
       },
       "nl": "2 vleestomaten",
       "en": "2 beef tomatoes"
+    },
+    {
+      "raw": "2 wortelen [geraspt]",
+      "line": {
+        "raw": {
+          "nl": "2 wortelen [geraspt]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 2
+        },
+        "unit": null,
+        "ing": "wortel",
+        "name": "wortelen",
+        "prep": {
+          "nl": "geraspt",
+          "en": "grated"
+        },
+        "confidence": 1
+      },
+      "nl": "2 wortels, geraspt",
+      "en": "2 carrots, grated"
     },
     {
       "raw": "2 wortels [fijngehakt]",
@@ -16779,6 +17568,24 @@
       "en": "3 eggs, beaten"
     },
     {
+      "raw": "3 el azijn",
+      "line": {
+        "raw": {
+          "nl": "3 el azijn"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 3
+        },
+        "unit": "el",
+        "ing": "azijn",
+        "name": "azijn",
+        "confidence": 1
+      },
+      "nl": "3 el azijn",
+      "en": "3 tbsp vinegar"
+    },
+    {
       "raw": "3 el bieslook [fijngehakt]",
       "line": {
         "raw": {
@@ -17218,6 +18025,52 @@
       "en": "3 tbsp tomato purée"
     },
     {
+      "raw": "3 el verse koriander [fijngehakt]",
+      "line": {
+        "raw": {
+          "nl": "3 el verse koriander [fijngehakt]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 3
+        },
+        "unit": "el",
+        "ing": "koriander",
+        "name": "koriander",
+        "qual": [
+          "verse"
+        ],
+        "prep": {
+          "nl": "fijngehakt",
+          "en": "finely chopped"
+        },
+        "confidence": 1
+      },
+      "nl": "3 el verse koriander, fijngehakt",
+      "en": "3 tbsp fresh coriander, finely chopped"
+    },
+    {
+      "raw": "3 el witte wijnazijn",
+      "line": {
+        "raw": {
+          "nl": "3 el witte wijnazijn"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 3
+        },
+        "unit": "el",
+        "ing": "wijnazijn",
+        "name": "wijnazijn",
+        "qual": [
+          "witte"
+        ],
+        "confidence": 1
+      },
+      "nl": "3 el witte wijnazijn",
+      "en": "3 tbsp white wine vinegar"
+    },
+    {
       "raw": "3 el yoghurt",
       "line": {
         "raw": {
@@ -17433,6 +18286,27 @@
       "en": "3 leeks, rings"
     },
     {
+      "raw": "3 rijpe avocado's",
+      "line": {
+        "raw": {
+          "nl": "3 rijpe avocado's"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 3
+        },
+        "unit": null,
+        "ing": "avocado",
+        "name": "avocado's",
+        "qual": [
+          "rijpe"
+        ],
+        "confidence": 1
+      },
+      "nl": "3 rijpe avocado's",
+      "en": "3 ripe avocados"
+    },
+    {
       "raw": "3 rode uien [dunne plakjes]",
       "line": {
         "raw": {
@@ -17589,6 +18463,24 @@
       "en": "3 stalks celery, thin crescents"
     },
     {
+      "raw": "3 takjes rozemarijn",
+      "line": {
+        "raw": {
+          "nl": "3 takjes rozemarijn"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 3
+        },
+        "unit": "takje",
+        "ing": "rozemarijn",
+        "name": "rozemarijn",
+        "confidence": 1
+      },
+      "nl": "3 takjes rozemarijn",
+      "en": "3 sprigs rosemary"
+    },
+    {
       "raw": "3 takjes selderij",
       "line": {
         "raw": {
@@ -17605,6 +18497,28 @@
       },
       "nl": "3 takjes selderij",
       "en": "3 sprigs celery leaf"
+    },
+    {
+      "raw": "3 teentjes knoflook [geperst]",
+      "line": {
+        "raw": {
+          "nl": "3 teentjes knoflook [geperst]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 3
+        },
+        "unit": "teen",
+        "ing": "knoflook",
+        "name": "knoflook",
+        "prep": {
+          "nl": "geperst",
+          "en": "crushed"
+        },
+        "confidence": 1
+      },
+      "nl": "3 teentjes knoflook, geperst",
+      "en": "3 cloves garlic, crushed"
     },
     {
       "raw": "3 teentjes knoflook [gesnipperd]",
@@ -18024,6 +18938,24 @@
       "en": "300 g risotto rice"
     },
     {
+      "raw": "300 g basmatirijst",
+      "line": {
+        "raw": {
+          "nl": "300 g basmatirijst"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 300
+        },
+        "unit": "g",
+        "ing": "basmatirijst",
+        "name": "basmatirijst",
+        "confidence": 1
+      },
+      "nl": "300 g basmatirijst",
+      "en": "300 g basmati rice"
+    },
+    {
       "raw": "300 g broccoli [kleine stukjes]",
       "line": {
         "raw": {
@@ -18066,6 +18998,24 @@
       },
       "nl": "300 g broccoli, roosjes",
       "en": "300 g broccoli, florets"
+    },
+    {
+      "raw": "300 g couscous",
+      "line": {
+        "raw": {
+          "nl": "300 g couscous"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 300
+        },
+        "unit": "g",
+        "ing": "couscous",
+        "name": "couscous",
+        "confidence": 1
+      },
+      "nl": "300 g couscous",
+      "en": "300 g couscous"
     },
     {
       "raw": "300 g crème fraîche",
@@ -18944,6 +19894,46 @@
       "en": "350 g Brussels sprouts, halved"
     },
     {
+      "raw": "350 ml groentebouillon",
+      "line": {
+        "raw": {
+          "nl": "350 ml groentebouillon"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 350
+        },
+        "unit": "ml",
+        "ing": "groentebouillon",
+        "name": "groentebouillon",
+        "confidence": 1
+      },
+      "nl": "350 ml groentebouillon",
+      "en": "350 ml vegetable stock"
+    },
+    {
+      "raw": "350 ml water (lauwwarm)",
+      "line": {
+        "raw": {
+          "nl": "350 ml water (lauwwarm)"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 350
+        },
+        "unit": "ml",
+        "ing": "water",
+        "name": "water",
+        "note": {
+          "nl": "lauwwarm",
+          "en": "lukewarm"
+        },
+        "confidence": 1
+      },
+      "nl": "350 ml water (lauwwarm)",
+      "en": "350 ml water (lukewarm)"
+    },
+    {
       "raw": "375 g lasagnebladen",
       "line": {
         "raw": {
@@ -19080,6 +20070,28 @@
       },
       "nl": "4 bosuien, fijngesneden",
       "en": "4 spring onions, finely sliced"
+    },
+    {
+      "raw": "4 bosuitjes [ringetjes]",
+      "line": {
+        "raw": {
+          "nl": "4 bosuitjes [ringetjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 4
+        },
+        "unit": null,
+        "ing": "bosui",
+        "name": "bosuitjes",
+        "prep": {
+          "nl": "ringetjes",
+          "en": "thin rings"
+        },
+        "confidence": 1
+      },
+      "nl": "4 bosuien, ringetjes",
+      "en": "4 spring onions, thin rings"
     },
     {
       "raw": "4 burgerbroodjes",
@@ -21452,6 +22464,24 @@
       "en": "450 g thawed frozen spinach"
     },
     {
+      "raw": "450 ml water",
+      "line": {
+        "raw": {
+          "nl": "450 ml water"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 450
+        },
+        "unit": "ml",
+        "ing": "water",
+        "name": "water",
+        "confidence": 1
+      },
+      "nl": "450 ml water",
+      "en": "450 ml water"
+    },
+    {
       "raw": "5 augurken [stokjes]",
       "line": {
         "raw": {
@@ -21919,6 +22949,28 @@
       "en": "50 g grated cheese"
     },
     {
+      "raw": "50 g geraspte kaas (optioneel)",
+      "line": {
+        "raw": {
+          "nl": "50 g geraspte kaas (optioneel)"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 50
+        },
+        "unit": "g",
+        "ing": "kaas",
+        "name": "kaas",
+        "qual": [
+          "geraspte"
+        ],
+        "optional": true,
+        "confidence": 1
+      },
+      "nl": "50 g geraspte kaas (optioneel)",
+      "en": "50 g grated cheese (optional)"
+    },
+    {
       "raw": "50 g geraspte oude kaas",
       "line": {
         "raw": {
@@ -22251,6 +23303,24 @@
       "en": "50 ml white wine"
     },
     {
+      "raw": "500 g Griekse yoghurt",
+      "line": {
+        "raw": {
+          "nl": "500 g Griekse yoghurt"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 500
+        },
+        "unit": "g",
+        "ing": "griekse-yoghurt",
+        "name": "Griekse yoghurt",
+        "confidence": 1
+      },
+      "nl": "500 g Griekse yoghurt",
+      "en": "500 g Greek yoghurt"
+    },
+    {
       "raw": "500 g Hokkien mie",
       "line": {
         "raw": {
@@ -22365,6 +23435,24 @@
       },
       "nl": "500 g biefstukken",
       "en": "500 g steaks"
+    },
+    {
+      "raw": "500 g bloem",
+      "line": {
+        "raw": {
+          "nl": "500 g bloem"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 500
+        },
+        "unit": "g",
+        "ing": "bloem",
+        "name": "bloem",
+        "confidence": 1
+      },
+      "nl": "500 g bloem",
+      "en": "500 g plain flour"
     },
     {
       "raw": "500 g boerenkool [gesneden]",
@@ -23047,6 +24135,24 @@
       "en": "500 g spaghetti"
     },
     {
+      "raw": "500 g sperziebonen",
+      "line": {
+        "raw": {
+          "nl": "500 g sperziebonen"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 500
+        },
+        "unit": "g",
+        "ing": "sperzieboon",
+        "name": "sperziebonen",
+        "confidence": 1
+      },
+      "nl": "500 g sperziebonen",
+      "en": "500 g green beans"
+    },
+    {
       "raw": "500 g spruitjes [grote gehalveerd]",
       "line": {
         "raw": {
@@ -23143,6 +24249,28 @@
       },
       "nl": "500 g tomaten",
       "en": "500 g tomatoes"
+    },
+    {
+      "raw": "500 g tomaten [partjes]",
+      "line": {
+        "raw": {
+          "nl": "500 g tomaten [partjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 500
+        },
+        "unit": "g",
+        "ing": "tomaat",
+        "name": "tomaten",
+        "prep": {
+          "nl": "partjes",
+          "en": "wedges"
+        },
+        "confidence": 1
+      },
+      "nl": "500 g tomaten, partjes",
+      "en": "500 g tomatoes, wedges"
     },
     {
       "raw": "500 g tortellini",
@@ -23439,6 +24567,24 @@
       },
       "nl": "6 el magere kwark",
       "en": "6 tbsp lean quark"
+    },
+    {
+      "raw": "6 el olijfolie",
+      "line": {
+        "raw": {
+          "nl": "6 el olijfolie"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 6
+        },
+        "unit": "el",
+        "ing": "olijfolie",
+        "name": "olijfolie",
+        "confidence": 1
+      },
+      "nl": "6 el olijfolie",
+      "en": "6 tbsp olive oil"
     },
     {
       "raw": "6 el olijfolie extra vierge",
@@ -24283,6 +25429,28 @@
       "en": "600 g waxy potatoes, 2 cm dice"
     },
     {
+      "raw": "600 g wortelen [plakjes]",
+      "line": {
+        "raw": {
+          "nl": "600 g wortelen [plakjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 600
+        },
+        "unit": "g",
+        "ing": "wortel",
+        "name": "wortelen",
+        "prep": {
+          "nl": "plakjes",
+          "en": "sliced"
+        },
+        "confidence": 1
+      },
+      "nl": "600 g wortels, plakjes",
+      "en": "600 g carrots, sliced"
+    },
+    {
       "raw": "600 g zoete aardappelen [blokjes]",
       "line": {
         "raw": {
@@ -24375,6 +25543,27 @@
       },
       "nl": "7 el limoensap",
       "en": "7 tbsp lime juice"
+    },
+    {
+      "raw": "7 g gedroogde gist",
+      "line": {
+        "raw": {
+          "nl": "7 g gedroogde gist"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 7
+        },
+        "unit": "g",
+        "ing": "gist",
+        "name": "gist",
+        "qual": [
+          "gedroogde"
+        ],
+        "confidence": 1
+      },
+      "nl": "7 g gedroogde gist",
+      "en": "7 g dried yeast"
     },
     {
       "raw": "7 g peterselie [fijngehakt]",
@@ -24788,6 +25977,28 @@
       },
       "nl": "750 g hamschijven",
       "en": "750 g gammon steaks"
+    },
+    {
+      "raw": "750 g krieltjes [gehalveerd]",
+      "line": {
+        "raw": {
+          "nl": "750 g krieltjes [gehalveerd]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 750
+        },
+        "unit": "g",
+        "ing": "krieltjes",
+        "name": "krieltjes",
+        "prep": {
+          "nl": "gehalveerd",
+          "en": "halved"
+        },
+        "confidence": 1
+      },
+      "nl": "750 g krieltjes, gehalveerd",
+      "en": "750 g baby potatoes, halved"
     },
     {
       "raw": "750 g tomaten (eventueel uit blik)",
@@ -26875,6 +28086,22 @@
       "en": "fresh thyme"
     },
     {
+      "raw": "versgemalen peper",
+      "line": {
+        "raw": {
+          "nl": "versgemalen peper"
+        },
+        "kind": "line",
+        "qty": null,
+        "unit": null,
+        "ing": "peper",
+        "name": "versgemalen peper",
+        "confidence": 1
+      },
+      "nl": "peper",
+      "en": "pepper"
+    },
+    {
       "raw": "yoghurt",
       "line": {
         "raw": {
@@ -26889,6 +28116,22 @@
       },
       "nl": "yoghurt",
       "en": "yoghurt"
+    },
+    {
+      "raw": "zout",
+      "line": {
+        "raw": {
+          "nl": "zout"
+        },
+        "kind": "line",
+        "qty": null,
+        "unit": null,
+        "ing": "zout",
+        "name": "zout",
+        "confidence": 1
+      },
+      "nl": "zout",
+      "en": "salt"
     },
     {
       "raw": "zout en peper",
@@ -27064,6 +28307,24 @@
       },
       "nl": "¼ tl cayennepeper",
       "en": "¼ tsp cayenne pepper"
+    },
+    {
+      "raw": "¼ tl gemalen kruidnagel",
+      "line": {
+        "raw": {
+          "nl": "¼ tl gemalen kruidnagel"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 0.25
+        },
+        "unit": "tl",
+        "ing": "kruidnagelpoeder",
+        "name": "gemalen kruidnagel",
+        "confidence": 1
+      },
+      "nl": "¼ tl kruidnagelpoeder",
+      "en": "¼ tsp ground cloves"
     },
     {
       "raw": "¼ tl rode peper [gesnipperd]",
@@ -27583,6 +28844,25 @@
       "en": "½ tsp brown sugar"
     },
     {
+      "raw": "½ tl chilivlokken (optioneel)",
+      "line": {
+        "raw": {
+          "nl": "½ tl chilivlokken (optioneel)"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 0.5
+        },
+        "unit": "tl",
+        "ing": "chilivlokken",
+        "name": "chilivlokken",
+        "optional": true,
+        "confidence": 1
+      },
+      "nl": "½ tl chilivlokken (optioneel)",
+      "en": "½ tsp chilli flakes (optional)"
+    },
+    {
       "raw": "½ tl fijne kristalsuiker",
       "line": {
         "raw": {
@@ -27677,6 +28957,24 @@
       },
       "nl": "½ tl gemberpoeder",
       "en": "½ tsp ground ginger"
+    },
+    {
+      "raw": "½ tl honing",
+      "line": {
+        "raw": {
+          "nl": "½ tl honing"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 0.5
+        },
+        "unit": "tl",
+        "ing": "honing",
+        "name": "honing",
+        "confidence": 1
+      },
+      "nl": "½ tl honing",
+      "en": "½ tsp honey"
     },
     {
       "raw": "½ tl kaneel",
@@ -27913,6 +29211,24 @@
       "en": "½ tsp shrimp paste"
     },
     {
+      "raw": "½ tl zout",
+      "line": {
+        "raw": {
+          "nl": "½ tl zout"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 0.5
+        },
+        "unit": "tl",
+        "ing": "zout",
+        "name": "zout",
+        "confidence": 1
+      },
+      "nl": "½ tl zout",
+      "en": "½ tsp salt"
+    },
+    {
       "raw": "½ ui [gesnipperd]",
       "line": {
         "raw": {
@@ -27951,6 +29267,31 @@
       },
       "nl": "½ volkorenbrood",
       "en": "½ wholemeal bread"
+    },
+    {
+      "raw": "½ witte kool [dunne reepjes]",
+      "line": {
+        "raw": {
+          "nl": "½ witte kool [dunne reepjes]"
+        },
+        "kind": "line",
+        "qty": {
+          "min": 0.5
+        },
+        "unit": null,
+        "ing": "kool",
+        "name": "kool",
+        "qual": [
+          "witte"
+        ],
+        "prep": {
+          "nl": "dunne reepjes",
+          "en": "thin strips"
+        },
+        "confidence": 1
+      },
+      "nl": "½ witte kool, dunne reepjes",
+      "en": "½ white cabbage, thin strips"
     },
     {
       "raw": "¾ dl droge witte wijn",

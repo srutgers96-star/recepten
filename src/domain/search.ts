@@ -51,6 +51,9 @@ const SPELLING_VARIANTS: readonly (readonly string[])[] = [
   ['ketjap', 'kecap'],
   ['yoghurt', 'yogurt'],
   ['pannenkoek', 'pannekoek'],
+  // Side dishes (docs/specs/bijgerechten.md §1/§3 builder C): "patat" finds Ovenfrietjes, "koolsalade" finds Coleslaw.
+  ['friet', 'frieten', 'frietjes', 'patat', 'frites', 'chips'],
+  ['coleslaw', 'koolsalade', 'koolsla'],
 ];
 
 /** A term plus its spelling variants. A term of 4+ letters that starts a variant also counts ("goul"). */

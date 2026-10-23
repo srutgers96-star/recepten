@@ -1,10 +1,12 @@
-// The Recepten2 -> schema-2 migration, run in-process on the real source file, the real dictionary
-// and the committed LLM batches (data/llm/*.json, when present).
+// The Recepten2 -> schema-2 migration, run in-process on the real source file, the real dictionary,
+// the committed LLM batches (data/llm/*.json, when present), the review layers and the 20 side dishes
+// (data/source/bijgerechten.json, docs/specs/bijgerechten.md §6b).
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { normalizeRecipe, recipeFingerprint } from '../src/domain/recipe-io';
 import { DATA_VERSION, findMainDish, loadMigrationInputs, migrate, migrationStats, type RecipesFile } from '../tools/migrate-from-recepten2.ts';
+import { SIDES_TIMESTAMP } from '../tools/sides.ts';
 import { refsFromData, validateSchema2 } from '../tools/validate-data.ts';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -14,14 +16,14 @@ const inputs = loadMigrationInputs(ROOT);
 const file: RecipesFile = migrate(SOURCE, GENERATED_AT, inputs);
 
 describe('migrate', () => {
-  it('produces 196 recipes with unique builtin ids, sorted by name', () => {
+  it('produces 216 recipes (196 classics + 20 side dishes) with unique builtin ids, sorted by name', () => {
     expect(file.schema).toBe(2);
     expect(file.dataVersion).toBe(DATA_VERSION);
-    expect(DATA_VERSION).toBe(7);
+    expect(DATA_VERSION).toBe(8);
     expect(file.generatedAt).toBe(GENERATED_AT);
-    expect(file.recipes).toHaveLength(196);
+    expect(file.recipes).toHaveLength(216);
     const ids = new Set(file.recipes.map((r) => r.id));
-    expect(ids.size).toBe(196);
+    expect(ids.size).toBe(216);
     for (const r of file.recipes) expect(r.id).toMatch(/^b:[a-z0-9-]+$/);
     const names = file.recipes.map((r) => r.name.nl!);
     const collator = new Intl.Collator('nl', { sensitivity: 'base' });
@@ -62,7 +64,7 @@ describe('migrate', () => {
       }
     }
     const s = migrationStats(file);
-    expect(s.lines + s.headers).toBe(1900);
+    expect(s.lines + s.headers).toBe(2027);
     expect(s.resolved / s.lines).toBeGreaterThan(0.95);
   });
 
@@ -100,6 +102,34 @@ describe('migrate', () => {
     expect(findMainDish('Gewoon gerecht', [{ id: 'b:x', nameNl: 'X' }])).toBeNull();
   });
 
+  it('adds the 20 side dishes as builtins in Bijgerecht; the main dish keeps its own goesWith', () => {
+    const sides = file.recipes.filter((r) => r.createdAt === SIDES_TIMESTAMP);
+    expect(sides).toHaveLength(20);
+    for (const r of sides) {
+      expect(r.category).toBe('bijgerecht');
+      expect(r.text).toEqual({ en: 'human' });
+    }
+    const garlic = file.recipes.find((r) => r.id === 'b:knoflookbrood')!;
+    expect(garlic).toBeDefined();
+    expect(garlic.category).toBe('bijgerecht');
+    expect(garlic.text?.en).toBe('human');
+    expect(garlic.goesWith).toContain('b:spaghetti-bolognese');
+    // One-way in the data; RecipeScreen shows the link in both directions.
+    expect(file.recipes.find((r) => r.id === 'b:spaghetti-bolognese')!.goesWith).toEqual([]);
+  });
+
+  it('sorts the side dishes between the classics by name.nl', () => {
+    const names = file.recipes.map((r) => r.name.nl);
+    const i = names.indexOf('Coleslaw');
+    expect(names.slice(i - 1, i + 2)).toEqual(['Chorizo met tomatengnocchi', 'Coleslaw', 'Courgettestamppot met zalm']);
+  });
+
+  it('a broken side-dish file stops the migration', () => {
+    const sides = JSON.parse(JSON.stringify(inputs.sides)) as NonNullable<typeof inputs.sides>;
+    sides.recipes[0]!.goesWith = ['b:nope'];
+    expect(() => migrate(SOURCE, GENERATED_AT, { ...inputs, sides })).toThrow(/data\/source\/bijgerechten\.json: 1 error/);
+  });
+
   it('is deterministic', () => {
     expect(JSON.stringify(migrate(SOURCE, GENERATED_AT, inputs))).toBe(JSON.stringify(file));
   });
@@ -107,7 +137,7 @@ describe('migrate', () => {
   it('passes the schema-2 validator (with dictionary references) and normalizes to itself', () => {
     const result = validateSchema2(JSON.parse(JSON.stringify(file)), refsFromData(inputs.dict.toData()));
     expect(result.errors).toEqual([]);
-    expect(result.stats.recipes).toBe(196);
+    expect(result.stats.recipes).toBe(216);
     for (const r of file.recipes.slice(0, 20)) {
       const n = normalizeRecipe(JSON.parse(JSON.stringify(r)))!;
       expect(n).toEqual(r);

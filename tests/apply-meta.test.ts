@@ -1,6 +1,7 @@
 // tools/apply-meta.ts (docs/specs/labels-categorieen.md §2e, §6a): the hand-kept labels of the
 // classics in data/review/meta.json (blok 3: the 71 cuisines of §2c; blok 4: the five side dishes
-// in 'bijgerecht' and the goesWith of the polenta). `checkMeta` refuses unknown ids, `applyMeta`
+// in 'bijgerecht' and the goesWith of the polenta; docs/specs/bijgerechten.md: four of the 20 new side
+// dishes get a cuisine too, 75 in all). `checkMeta` refuses unknown ids, `applyMeta`
 // sets the fields and is idempotent, and `migrate()` replays the real file.
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -127,7 +128,15 @@ describe('migrate() with the real data/review/meta.json', () => {
   const classics = file.recipes.filter((r) => r.createdAt === BUILTIN_TIMESTAMP);
   const byId = new Map(classics.map((r) => [r.id, r]));
 
-  it('gives exactly 71 classics a cuisine, per cuisine as in §2c', () => {
+  it('gives exactly 75 recipes a cuisine: 71 classics per cuisine as in §2c and four side dishes', () => {
+    const all = file.recipes.filter((r) => typeof r.cuisine === 'string');
+    expect(all).toHaveLength(75);
+    expect(Object.fromEntries(all.filter((r) => r.createdAt !== BUILTIN_TIMESTAMP).map((r) => [r.id, r.cuisine]))).toEqual({
+      'b:couscous': 'marokkaans',
+      'b:focaccia-met-rozemarijn': 'italiaans',
+      'b:guacamole': 'mexicaans',
+      'b:tzatziki': 'grieks',
+    });
     const withCuisine = classics.filter((r) => typeof r.cuisine === 'string');
     expect(withCuisine).toHaveLength(71);
     const counts: Record<string, number> = {};

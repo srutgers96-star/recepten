@@ -1,8 +1,106 @@
-# Status — Rutgers' Recepten (bijgewerkt 23 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 24 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
+
+## PAUZE (24 okt) — volgende stap: 6D-1 XP-kern, in lichte modus
+Stijn wil op woensdagavond 28 okt kijken wat er van de weeklimiet over is. Stand: Home A+, kookbalk (13K), labels en
+categorieën (6B + 13E, vijf blokken) en de 20 bijgerechten staan allemaal op `main`; 216 klassiekers, DATA_VERSION 8,
+1082 tests. Besluiten van 24 okt (docs/specs/README.md §1 en §3b): **lichte bouwmodus** (bouwers → integrator → één
+Opus-correctness-lens → fixer alleen bij bevindingen → Haiku-gate; data-blokken alleen de gate), **XP eerst** (6D-1 →
+6D-2 → 6D-3 → 6D-4, daarna 13F, 13D, 6C, 13J, Z), **ambitie 6D omhoog** (avatar zeven lagen × 40–70 onderdelen in
+rondes, rijke ontgrendelingen, gouden modus, challenges op level 20 — zie de besluitblokken bovenaan
+badges-avatar.md en xp-levels.md), en Stijn reviewt zelf bij het testen (de Fable-eindcontrole kan kleiner; woensdag
+bespreken). Werkmap: branch `next` = `main`, schoon. Tijdlijn: https://claude.ai/artifact/6LXkS8KpLeqJfkXLYPrg3L.
+
+## 23 okt (Opus): de 20 bijgerechten (13E) — 216 klassiekers
+**Besluit Fable (24 okt) over de restpunten:** rij 81 noemt nu "25 bijgerechten" (de twintig nieuwe en de vijf uit 6B); de botsingscontrole in validate-data filtert op `createdAt === SIDES_TIMESTAMP` zodat hij echt kan afgaan — akkoord; `lactosevrij` op de twaalf plantaardige bijgerechten is juist (geen zuivel, dus geen lactose; de dieettabel van §2g was van vóór 6B blok 2); de Kies-sheet toont bijgerechten pas met de chip Bijgerecht of "ook bijgerechten & zoet" — dat is het bedoelde 6B-gedrag. Review: 3 bevindingen (2 echte), alle verwerkt; gate groen (1082 tests). Uitrol: direct naar `main`.
+Gebouwd volgens docs/specs/bijgerechten.md (hele blok, bouwers A data, B pijplijn en tests, C zoeken en
+planner-test, integrator). Niet gecommit. Volgens §4 en §8 vraag 2 mag dit direct naar `main` (eerst `/next/`
+mag ook). Na de commit en deploy staan er **216 klassiekers** in de app: de 196 uit Recepten2 plus 20 nieuwe,
+tweetalige bijgerechten in de categorie **Bijgerecht**, van Stokbrood met kruidenboter tot Focaccia met
+rozemarijn, met Engelse tekst die door een mens is geschreven (`text.en = 'human'`, dus geen hint
+"machinevertaling"). **`DATA_VERSION` is 8**: elke telefoon laadt de bundel één keer opnieuw, en favorieten,
+kooklog, overrides en instellingen blijven staan. Dexie blijft v7. Er zijn geen nieuwe i18n-keys, geen CSS en
+geen dependency; landing.ts, sw.ts, token.ts, planner.ts, PickSheet.tsx, WeekScreen.tsx en HomeScreen.tsx zijn
+niet aangeraakt.
+
+Hoe de 20 erin komen:
+- Bronbestand `data/source/bijgerechten.json` (schema `sides-1`, de blokken van §2g letterlijk) en
+  `tools/sides.ts` (`checkSides`, `sidesToRecipes`). `npm run migrate` zet ze na `applyReview` en vóór
+  `applyMeta` en `applyDerivedTags`. Uitvoer: `216 recipes (216 unique ids), 2010 ingredient lines + 17
+  headers`, `dataVersion 8`, 20 nieuwe `goesWith`-regels en 75 recepten met een keuken. Vier bijgerechten hebben een keuken
+  via meta.json: tzatziki grieks, guacamole mexicaans, focaccia italiaans, couscous marokkaans.
+- De 196 bestaande recepten zijn inhoudelijk ongewijzigd. `tests/parser.golden.json` ging van 1377 naar
+  **1443** regels; er zijn alleen 66 regels bijgekomen en geen bestaande veranderd. `validate:data` meldt
+  "20 side dishes, 127 lines" en 0 errors. `measure-parse` geeft identieke uitvoer.
+- **Gedraaid:** check, test (1082 tests in 48 bestanden), build, build:next, validate:data en migrate. Alles
+  is groen.
+- Badges "Het hele boek" en "Halverwege het boek" tellen nu tot **216/108**.
+- Zoeken: "patat", "friet" en "frietjes" vinden Ovenfrietjes, "koolsalade" en "koolsla" vinden Coleslaw.
+- Kies 7, Verras me, 🎲 en de Home-dobbelsteen kiezen de 20 niet. Dat komt door het bestaande filter
+  `mainOnly` van 6B.
+
+**Dev-app (375 px, NL en EN), §6d nagelopen:**
+- §6d.1: chip Bijgerecht geeft een platte A–Z-lijst met 25 recepten (20 nieuw + 5 uit 6B). In het
+  Nederlands loopt die van Aardappelpartjes tot Worteltjes, in het Engels van Baguette with herb butter tot
+  Tzatziki. "patat" vindt Ovenfrietjes, "koolsalade" vindt Coleslaw, "sesame" vindt Gestoomde broccoli onder
+  "Met dit ingrediënt".
+- §6d.2: Knoflookbrood heeft 6 regels, een timerchip ⏱ 10 min en onder "Bij dit gerecht" Klassieke lasagne,
+  Penne all’ arrabbiata en Spaghetti Bolognese. Bij de bolognese staat Knoflookbrood terug.
+- §6d.3: in Rode kool met appel is in de kookstand "rode kool" groen in stap 2 (tik geeft "(1)"), en stap 3
+  heeft ⏱ 45 min.
+- §6d.4: Witte rijst voor 2 personen geeft 150 g basmatirijst en 225 ml water.
+- §6d.5: Verras me drie keer, 🎲 vijf keer en de Home-dobbelsteen tien keer gaven nooit een bijgerecht. In
+  de Kies-sheet met chip Bijgerecht gaf Verras me · 7 alleen bijgerechten. In het Engels gaf Surprise me ook
+  geen bijgerecht.
+- §6d.8: de badges tonen …/216 en …/108.
+- §6d.9: een geplakte deellink van Knoflookbrood geeft "Heb je al".
+- §6d.6 is met `aggregate` + `groupByAisle` in Node nagerekend, niet in de app, omdat dat de
+  dev-boodschappenlijst zou overschrijven. Uitkomst: "5 teentjes knoflook" is samengevoegd, peterselie
+  blijft twee regels, en water staat onder Overig.
+- §6d.7 (back-up maken en terugzetten) is niet gedaan, want daarvoor moet een bestand worden gedownload en
+  geüpload. Volgens de code reizen builtins niet mee en zet `ensureBuiltins` ze terug.
+
+DEVICE-TEST rij 81 staat erin, in NL en EN. Eén knopnaam is aangepast (§5 punt 11): in stap 6 stond
+"**Kies 7**", nu "**+ Kies meer**" / "**+ Pick more**". Na stap 5 staan er al zeven gerechten in de week en
+dan toont de app die knop in plaats van "Kies 7".
+
+**Open voor Fable/Stijn:**
+1. De dieettabel van §2g is geschreven vóór lactosevrij (6B blok 2). `applyDerivedTags` zet nu op 12
+   bijgerechten ook `lactosevrij`: de 11 vegan bijgerechten en de groene salade. De `DERIVED`-tabel in
+   tests/sides.test.ts heeft die erbij gekregen (§5: "de tabel in de test bijwerken, niet de data").
+   Graag bevestigen.
+2. Rij 81, uitkomst 2, zegt "twintig bijgerechten" / "twenty side dishes". Met 6B toont de chip er 25. De
+   eerste en laatste naam kloppen wel. De tekst is volgens §5 punt 11 letterlijk gelaten (ook na de review).
+   Fable kiest: (a) "Je ziet 25 bijgerechten, …" / "You see 25 side dishes, …", of (b) "Je ziet 25
+   bijgerechten, waaronder de twintig nieuwe, …" / "You see 25 side dishes, the twenty new ones among
+   them, …". Tot dan kan een tester stap 2 ten onrechte als fout melden.
+3. §1 zegt dat de bijgerechten zonder chip in de lijst van de Kies-N-sheet staan. In de app van 6B gebruikt
+   die lijst ook `mainOnly`: ze verschijnen pas met de chip Bijgerecht of met "ook bijgerechten & zoet". Dat
+   is 6B-gedrag en hier niet veranderd.
+4. De chip in de Kies-sheet is hetzelfde filter als op de Week-pagina. Na rij 81 stap 6 staat Bijgerecht dus
+   nog aan, en geeft Verras me op de Week-pagina bijgerechten tot je de chip uitzet. Ook dat is bestaand
+   6B-gedrag.
+5. Bekende beperking (§1 Delen): een telefoon zonder deze update zegt bij een gedeeld bijgerecht "Nieuw" en
+   bewaart een kopie onder het `b:`-id. Na de update overschaduwt die kopie het ingebouwde recept. Dat wordt
+   opgeruimd in 13F blok 3; tot dan eerst beide telefoons bijwerken.
+6. Bijwerking van de bestaande prefixregel (`termVariants`): "kool" vindt nu ook Coleslaw, en "frie",
+   "frit", "pata" en "chip" vallen nu onder de friet-groep.
+7. Klein, en niet van dit blok:
+   - In het Engels staat achter "50 g grated cheese (optional)" de bestaande uitleg van het woordenboek over
+     kaas.
+   - Op de boodschappenlijst staat de 7 g peterselie van de bolognese als "5 g", door de afronding van
+     `roundForDisplay`.
+   - De deellink in de dev-server begint met `http://localhost:5173/#r=`, zonder `/recepten/`.
+8. Afwijking van de letterlijke code in §2d (review, fixer): `validate:data` haalt nu alleen de gegenereerde
+   bijgerechten (`createdAt === SIDES_TIMESTAMP`) uit de klassiekers, niet elk recept met een id uit het
+   sides-bestand. Met het filter op ids viel een klassieker met hetzelfde id weg en vuurde de botsingsregel
+   nooit; zo doet hij wat §2d wil ("zo blijft de botsingsregel werken").
+9. In de werkmap stond al een niet-gecommitte wijziging in docs/specs/README.md (de besluiten van Stijn van
+   23 okt). Die komt niet van deze run en is zo gelaten. Bouwer B heeft in data/README.md ook de ontbrekende
+   regel "version 7 = …" toegevoegd.
 
 ## 23 okt (Opus): 6B blok 5 — editor Labels en prompt ontbrekende ingrediënten
 **Besluit Fable (23 okt) over de restpunten:** (1) een nieuwe entry uit het AI-antwoord is vegetarisch tenzij het schap `vlees-vis` is, en altijd vegetarisch bij "vegan: ja" (geen nieuw promptveld); (2) een eigen entry met dezelfde Nederlandse en Engelse naam (csipetke, pesto) telt als compleet zodra schap én de drie vlaggen zijn ingevuld, zodat de kaart "Niets aan te vullen" kan bereiken; een lege Engelse naam blijft ontbreken; (3) een niet-gekoppelde regel waarvan de naam inmiddels bekend is, blijft buiten telling en prompt (geen dubbele entries; koppelen gebeurt bij het eerstvolgende bewerken van het recept); (4) de M-nummers zijn vastgelegd op het moment van kopiëren (fixer) en een twijfelantwoord ("no idea", "n.v.t.") telt nooit als nee. Keuzes van bouwers en integrator akkoord (rij 79–80 aangepast aan de echte app). Besluit 1 en 2 doorgevoerd in een aparte fixer-run; gate groen. Uitrol: direct naar `main`. **Hiermee is 6B+13E (labels-categorieen.md) helemaal gebouwd.**

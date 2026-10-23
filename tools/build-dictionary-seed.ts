@@ -1,6 +1,7 @@
 // tools/build-dictionary-seed.ts — the parser WITHOUT ingredient resolution over the source corpus.
 //
-// Reads:  data/source/recipes-recepten2.json + data/{units,qualifiers,prep-phrases,aisles,categories}.json
+// Reads:  data/source/recipes-recepten2.json + data/source/bijgerechten.json (the Dutch lines of the
+//         20 side dishes, when present) + data/{units,qualifiers,prep-phrases,aisles,categories}.json
 // Writes: data/work/name-parts.json = every unique name part (quantity, unit, qualifiers, part, prep
 //         and parentheses stripped) with its count, the qualifiers/units seen with it and up to 3
 //         example raw lines, sorted by count desc then name. Input for the dictionary agents who
@@ -62,10 +63,19 @@ export function readDictionaryData(root: string, withIngredients = true): Dictio
   };
 }
 
-/** All raw ingredient lines of the source corpus, in order. */
+/**
+ * All raw ingredient lines of the source corpus, in order: the Recepten2 export, then the Dutch
+ * lines of the 20 side dishes (data/source/bijgerechten.json, docs/specs/bijgerechten.md §2d) when
+ * that file exists. Feeds the golden fixture (tools/gen-golden.ts), tools/measure-resolution.ts and
+ * data/work/name-parts.json.
+ */
 export function sourceLines(root: string): string[] {
   const raw: unknown = readJson(join(root, 'data', 'source', 'recipes-recepten2.json'));
-  return normalizeSource(raw).flatMap((r) => r.ingredients);
+  const lines = normalizeSource(raw).flatMap((r) => r.ingredients);
+  const sidesPath = join(root, 'data', 'source', 'bijgerechten.json');
+  if (!existsSync(sidesPath)) return lines;
+  const sides = readJson(sidesPath) as { recipes: { lines: { nl: string }[] }[] };
+  return lines.concat(sides.recipes.flatMap((r) => r.lines.map((l) => l.nl)));
 }
 
 /** Pure: unique name parts of a list of raw lines, parsed without ingredient resolution. */
@@ -101,7 +111,7 @@ export function buildNameParts(lines: readonly string[], dict: Dictionary): Name
 
 function main(): void {
   const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-  const sourceRel = 'data/source/recipes-recepten2.json';
+  const sourceRel = 'data/source/recipes-recepten2.json + data/source/bijgerechten.json';
   const dict = loadDictionary(readDictionaryData(root, false));
   const lines = sourceLines(root);
   const unique = new Set(lines.map((l) => l.trim()));

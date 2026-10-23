@@ -195,9 +195,11 @@ describe('suggestMeta over the real recipes', () => {
   });
 
   it('agrees with the LLM category on at least three quarters of the classics', () => {
+    // Only the 196 originals: suggestMeta never guesses 'bijgerecht' (docs/specs/bijgerechten.md §6b).
+    const classics = file.recipes.filter((r) => r.createdAt === BUILTIN_TIMESTAMP);
     let agree = 0;
-    for (const r of file.recipes) if (suggestMeta(r, real).category === r.category) agree++;
-    expect(agree / file.recipes.length).toBeGreaterThan(0.75);
+    for (const r of classics) if (suggestMeta(r, real).category === r.category) agree++;
+    expect(agree / classics.length).toBeGreaterThan(0.75);
   });
 
   it('suggests diet, snel, oven and wok tags', () => {

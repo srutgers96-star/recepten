@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "dataVersion": 7,
-  "generatedAt": "2026-10-23T20:01:21.003Z",
+  "dataVersion": 8,
+  "generatedAt": "2026-10-23T21:53:54.758Z",
   "recipes": [
     {
       "schema": 2,
@@ -295,6 +295,164 @@
       "time": {
         "active": 25,
         "total": 30
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:aardappelpartjes-uit-de-oven",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Aardappelpartjes uit de oven",
+        "en": "Roast potato wedges"
+      },
+      "tags": [
+        "oven",
+        "vegetarisch",
+        "vegan",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 45
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 kg aardappelen [partjes]",
+            "en": "1 kg potatoes [in wedges]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "kg",
+          "ing": "aardappel",
+          "name": "aardappelen",
+          "prep": {
+            "nl": "partjes",
+            "en": "wedges"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 el olijfolie",
+            "en": "3 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 teentjes knoflook [fijngehakt]",
+            "en": "2 cloves garlic [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "teen",
+          "ing": "knoflook",
+          "name": "knoflook",
+          "prep": {
+            "nl": "fijngehakt",
+            "en": "finely chopped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl gedroogde oregano",
+            "en": "1 tsp dried oregano"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "oregano",
+          "name": "oregano",
+          "qual": [
+            "gedroogde"
+          ],
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl paprikapoeder",
+            "en": "1 tsp paprika"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "paprikapoeder",
+          "name": "paprikapoeder",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Verwarm de oven voor op 200 °C. Was de aardappelen en snijd ze met schil in partjes.",
+            "en": "Preheat the oven to 200°C. Wash the potatoes and cut them, skin on, into wedges."
+          }
+        },
+        {
+          "text": {
+            "nl": "Meng de partjes in een kom met de olijfolie, knoflook, oregano, paprikapoeder, zout en peper.",
+            "en": "Toss the wedges in a bowl with the olive oil, garlic, oregano, paprika, salt and pepper."
+          }
+        },
+        {
+          "text": {
+            "nl": "Verdeel ze over een bakplaat met bakpapier en bak 35 minuten in de oven; keer ze halverwege. Serveer direct.",
+            "en": "Spread them over a lined baking tray and roast for 35 minutes, turning halfway. Serve straight away."
+          },
+          "timers": [
+            {
+              "min": 35,
+              "unit": "min",
+              "label": "35 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:drumsticks-in-kruidige-roomsaus",
+        "b:gebakken-kipfilet-met-chorizo-in-romige-mosterdsaus",
+        "b:kip-met-sesamzaad"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
       }
     },
     {
@@ -3347,6 +3505,191 @@
     },
     {
       "schema": 2,
+      "id": "b:coleslaw",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Coleslaw",
+        "en": "Coleslaw"
+      },
+      "tags": [
+        "zomer",
+        "kids",
+        "vegetarisch",
+        "glutenvrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 15,
+        "total": 45
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "½ witte kool [dunne reepjes]",
+            "en": "½ white cabbage [thin strips]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": null,
+          "ing": "kool",
+          "name": "kool",
+          "qual": [
+            "witte"
+          ],
+          "prep": {
+            "nl": "dunne reepjes",
+            "en": "thin strips"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 wortelen [geraspt]",
+            "en": "2 carrots [grated]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": null,
+          "ing": "wortel",
+          "name": "wortelen",
+          "prep": {
+            "nl": "geraspt",
+            "en": "grated"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "4 el mayonaise",
+            "en": "4 tbsp mayonnaise"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 4
+          },
+          "unit": "el",
+          "ing": "mayonaise",
+          "name": "mayonaise",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 el yoghurt",
+            "en": "2 tbsp yoghurt"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "el",
+          "ing": "yoghurt",
+          "name": "yoghurt",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el appelazijn",
+            "en": "1 tbsp cider vinegar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "appelazijn",
+          "name": "appelazijn",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl mosterd",
+            "en": "1 tsp mustard"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "mosterd",
+          "name": "mosterd",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl suiker",
+            "en": "1 tsp sugar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "suiker",
+          "name": "suiker",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Snijd de kool zo fijn mogelijk en rasp de wortelen grof.",
+            "en": "Shred the cabbage as finely as you can and coarsely grate the carrots."
+          }
+        },
+        {
+          "text": {
+            "nl": "Roer de mayonaise, yoghurt, azijn, mosterd en suiker met zout en peper tot een gladde dressing.",
+            "en": "Stir the mayonnaise, yoghurt, vinegar, mustard and sugar with salt and pepper into a smooth dressing."
+          }
+        },
+        {
+          "text": {
+            "nl": "Meng de dressing door de kool en wortel. Laat minstens 30 minuten staan in de koelkast; de kool wordt dan zachter.",
+            "en": "Mix the dressing through the cabbage and carrot. Leave in the fridge for at least 30 minutes; the cabbage softens."
+          },
+          "timers": [
+            {
+              "min": 30,
+              "unit": "min",
+              "label": "30 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:hamburgers-voor-op-de-bbq",
+        "b:sticky-chicken",
+        "b:buikspek-met-5-spices"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:courgettestamppot-met-zalm",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -3509,6 +3852,159 @@
       "time": {
         "active": 20,
         "total": 35
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:couscous",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Couscous",
+        "en": "Couscous"
+      },
+      "tags": [
+        "snel",
+        "wereld",
+        "vegetarisch",
+        "vegan",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 5,
+        "total": 15
+      },
+      "category": "bijgerecht",
+      "cuisine": "marokkaans",
+      "lines": [
+        {
+          "raw": {
+            "nl": "300 g couscous",
+            "en": "300 g couscous"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 300
+          },
+          "unit": "g",
+          "ing": "couscous",
+          "name": "couscous",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "350 ml groentebouillon",
+            "en": "350 ml vegetable stock"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 350
+          },
+          "unit": "ml",
+          "ing": "groentebouillon",
+          "name": "groentebouillon",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 el olijfolie",
+            "en": "2 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "sap van ½ citroen",
+            "en": "juice of ½ lemon"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": null,
+          "ing": "citroen",
+          "name": "citroen",
+          "part": "sap",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 el peterselie [fijngehakt]",
+            "en": "3 tbsp parsley [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "el",
+          "ing": "peterselie",
+          "name": "peterselie",
+          "prep": {
+            "nl": "fijngehakt",
+            "en": "finely chopped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "versgemalen peper",
+            "en": "freshly ground pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "peper",
+          "name": "versgemalen peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Breng de bouillon aan de kook. Doe de couscous in een kom, giet de hete bouillon erover en roer de olijfolie erdoor.",
+            "en": "Bring the stock to the boil. Put the couscous in a bowl, pour the hot stock over it and stir in the olive oil."
+          }
+        },
+        {
+          "text": {
+            "nl": "Dek af met een bord en laat 5 minuten staan.",
+            "en": "Cover with a plate and leave for 5 minutes."
+          },
+          "timers": [
+            {
+              "min": 5,
+              "unit": "min",
+              "label": "5 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Roer de couscous los met een vork en meng het citroensap en de peterselie erdoor. Breng op smaak met peper.",
+            "en": "Fluff the couscous with a fork and stir in the lemon juice and parsley. Season with pepper."
+          }
+        }
+      ],
+      "goesWith": [
+        "b:ratatouille",
+        "b:lamsvlees-in-reepjes",
+        "b:rundvlees-met-uien"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
       }
     },
     {
@@ -5542,6 +6038,223 @@
     },
     {
       "schema": 2,
+      "id": "b:focaccia-met-rozemarijn",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Focaccia met rozemarijn",
+        "en": "Rosemary focaccia"
+      },
+      "tags": [
+        "oven",
+        "vegetarisch",
+        "vegan",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 20,
+        "total": 120
+      },
+      "category": "bijgerecht",
+      "cuisine": "italiaans",
+      "lines": [
+        {
+          "raw": {
+            "nl": "500 g bloem",
+            "en": "500 g flour"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 500
+          },
+          "unit": "g",
+          "ing": "bloem",
+          "name": "bloem",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "7 g gedroogde gist",
+            "en": "7 g dried yeast"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 7
+          },
+          "unit": "g",
+          "ing": "gist",
+          "name": "gist",
+          "qual": [
+            "gedroogde"
+          ],
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl suiker",
+            "en": "1 tsp sugar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "suiker",
+          "name": "suiker",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 tl zout",
+            "en": "2 tsp salt"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "tl",
+          "ing": "zout",
+          "name": "zout",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "350 ml water (lauwwarm)",
+            "en": "350 ml water (lukewarm)"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 350
+          },
+          "unit": "ml",
+          "ing": "water",
+          "name": "water",
+          "note": {
+            "nl": "lauwwarm",
+            "en": "lukewarm"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "6 el olijfolie",
+            "en": "6 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 6
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 takjes rozemarijn",
+            "en": "3 sprigs rosemary"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "takje",
+          "ing": "rozemarijn",
+          "name": "rozemarijn",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl zeezoutvlokken",
+            "en": "1 tsp sea salt flakes"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "zeezoutvlokken",
+          "name": "zeezoutvlokken",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Meng de bloem met de gist, suiker en het zout. Voeg het water en 3 el van de olijfolie toe en kneed 10 minuten tot een soepel, plakkerig deeg.",
+            "en": "Mix the flour with the yeast, sugar and salt. Add the water and 3 tbsp of the olive oil and knead for 10 minutes into a smooth, sticky dough."
+          },
+          "timers": [
+            {
+              "min": 10,
+              "unit": "min",
+              "label": "10 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Dek de kom af en laat het deeg 1 uur rijzen op een warme plek tot het verdubbeld is.",
+            "en": "Cover the bowl and leave the dough to rise in a warm place for 1 hour until doubled."
+          },
+          "timers": [
+            {
+              "min": 1,
+              "unit": "hour",
+              "label": "1 uur"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Vet een bakplaat in met olie. Druk het deeg uit tot een rechthoek van 2 cm dik en laat nog 20 minuten rijzen.",
+            "en": "Oil a baking tray. Press the dough out into a rectangle 2 cm thick and leave to rise for another 20 minutes."
+          },
+          "timers": [
+            {
+              "min": 20,
+              "unit": "min",
+              "label": "20 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Verwarm de oven voor op 220 °C. Druk met je vingers kuiltjes in het deeg, besprenkel met de rest van de olie en strooi de rozemarijnnaaldjes en het zeezout erover.",
+            "en": "Preheat the oven to 220°C. Dimple the dough with your fingers, drizzle with the remaining oil and scatter over the rosemary needles and sea salt."
+          }
+        },
+        {
+          "text": {
+            "nl": "Bak 20 minuten tot de focaccia goudbruin is. Laat even afkoelen op een rooster en snijd in stukken.",
+            "en": "Bake for 20 minutes until golden. Cool briefly on a rack and cut into pieces."
+          },
+          "timers": [
+            {
+              "min": 20,
+              "unit": "min",
+              "label": "20 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:ratatouille",
+        "b:warme-pastasalade",
+        "b:griekse-salade"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:franse-macaroni-met-romige-yoghurtsaus",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -7179,6 +7892,174 @@
     },
     {
       "schema": 2,
+      "id": "b:gebakken-krieltjes",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Gebakken krieltjes",
+        "en": "Pan-fried baby potatoes"
+      },
+      "tags": [
+        "snel",
+        "kids",
+        "vegetarisch",
+        "glutenvrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 15,
+        "total": 30
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "750 g krieltjes [gehalveerd]",
+            "en": "750 g baby potatoes [halved]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 750
+          },
+          "unit": "g",
+          "ing": "krieltjes",
+          "name": "krieltjes",
+          "prep": {
+            "nl": "gehalveerd",
+            "en": "halved"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 el olijfolie",
+            "en": "2 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "20 g boter",
+            "en": "20 g butter"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 20
+          },
+          "unit": "g",
+          "ing": "boter",
+          "name": "boter",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 teentjes knoflook [gekneusd]",
+            "en": "2 cloves garlic [bruised]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "teen",
+          "ing": "knoflook",
+          "name": "knoflook",
+          "prep": {
+            "nl": "gekneusd",
+            "en": "bruised"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 takjes rozemarijn",
+            "en": "2 sprigs rosemary"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "takje",
+          "ing": "rozemarijn",
+          "name": "rozemarijn",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Kook de krieltjes 8 minuten in water met zout. Giet af en laat uitdampen.",
+            "en": "Boil the baby potatoes in salted water for 8 minutes. Drain and let them steam dry."
+          },
+          "timers": [
+            {
+              "min": 8,
+              "unit": "min",
+              "label": "8 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Verhit de olijfolie met de boter in een grote koekenpan. Bak de krieltjes met de snijkant naar beneden 10 minuten op middelhoog vuur zonder te roeren.",
+            "en": "Heat the olive oil and butter in a large frying pan. Fry the potatoes cut side down over a medium heat for 10 minutes without stirring."
+          },
+          "timers": [
+            {
+              "min": 10,
+              "unit": "min",
+              "label": "10 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Voeg de knoflook en rozemarijn toe, schud de pan om en bak nog 5 minuten tot ze goudbruin en knapperig zijn. Bestrooi met zout en peper.",
+            "en": "Add the garlic and rosemary, shake the pan and fry for another 5 minutes until golden and crisp. Season with salt and pepper."
+          },
+          "timers": [
+            {
+              "min": 5,
+              "unit": "min",
+              "label": "5 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:afwasmachinezalm",
+        "b:lamsbout-met-rozemarijn",
+        "b:kipkarbonades-in-witte-wijn"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:gebakken-rijst-met-pikante-chinese-kool",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -7704,6 +8585,204 @@
       "time": {
         "active": 25,
         "total": 60
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:gegrilde-groenten",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Gegrilde groenten",
+        "en": "Griddled vegetables"
+      },
+      "tags": [
+        "snel",
+        "zomer",
+        "vegetarisch",
+        "vegan",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 20,
+        "total": 30
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 courgette [plakken]",
+            "en": "1 courgette [sliced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "courgette",
+          "name": "courgette",
+          "prep": {
+            "nl": "plakken",
+            "en": "slices"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 aubergine [plakken]",
+            "en": "1 aubergine [sliced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "aubergine",
+          "name": "aubergine",
+          "prep": {
+            "nl": "plakken",
+            "en": "slices"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 rode paprika's [repen]",
+            "en": "2 red peppers [in strips]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": null,
+          "ing": "paprika",
+          "name": "paprika's",
+          "qual": [
+            "rode"
+          ],
+          "prep": {
+            "nl": "repen",
+            "en": "strips"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 rode ui [partjes]",
+            "en": "1 red onion [in wedges]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "ui",
+          "name": "ui",
+          "qual": [
+            "rode"
+          ],
+          "prep": {
+            "nl": "partjes",
+            "en": "wedges"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 el olijfolie",
+            "en": "3 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el balsamicoazijn",
+            "en": "1 tbsp balsamic vinegar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "balsamicoazijn",
+          "name": "balsamicoazijn",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 takjes tijm",
+            "en": "2 sprigs thyme"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "takje",
+          "ing": "tijm",
+          "name": "tijm",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Snijd de courgette en aubergine in plakken van ½ cm, de paprika in brede repen en de ui in partjes. Meng ze met 2 el van de olijfolie, zout en peper.",
+            "en": "Slice the courgette and aubergine ½ cm thick, cut the peppers into wide strips and the onion into wedges. Toss with 2 tbsp of the olive oil, salt and pepper."
+          }
+        },
+        {
+          "text": {
+            "nl": "Verhit een grillpan heet. Gril de groenten in porties 3 minuten per kant tot ze donkere strepen hebben en zacht zijn.",
+            "en": "Heat a griddle pan until very hot. Griddle the vegetables in batches for 3 minutes per side until striped and soft."
+          },
+          "timers": [
+            {
+              "min": 3,
+              "unit": "min",
+              "label": "3 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Leg ze op een schaal, besprenkel met de rest van de olie en de balsamicoazijn en strooi de tijmblaadjes erover. Lekker warm én koud.",
+            "en": "Arrange on a platter, drizzle with the remaining oil and the balsamic vinegar and scatter over the thyme leaves. Good warm or cold."
+          }
+        }
+      ],
+      "goesWith": [
+        "b:hamburgers-voor-op-de-bbq",
+        "b:lamsbout-met-rozemarijn",
+        "b:italiaans-gehaktbrood-met-yoghurtsaus"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
       }
     },
     {
@@ -9708,6 +10787,154 @@
     },
     {
       "schema": 2,
+      "id": "b:gestoomde-broccoli",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Gestoomde broccoli",
+        "en": "Steamed broccoli"
+      },
+      "tags": [
+        "snel",
+        "vegetarisch",
+        "vegan",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 5,
+        "total": 15
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 broccoli [roosjes]",
+            "en": "1 broccoli [florets]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "broccoli",
+          "name": "broccoli",
+          "prep": {
+            "nl": "roosjes",
+            "en": "florets"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el olijfolie",
+            "en": "1 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "sap van ½ citroen",
+            "en": "juice of ½ lemon"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": null,
+          "ing": "citroen",
+          "name": "citroen",
+          "part": "sap",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el sesamzaad [geroosterd] (optioneel)",
+            "en": "1 tbsp sesame seeds [toasted] (optional)"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "sesamzaad",
+          "name": "sesamzaad",
+          "prep": {
+            "nl": "geroosterd",
+            "en": "toasted"
+          },
+          "optional": true,
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Snijd de broccoli in roosjes en de stronk in plakjes. Breng een laagje water aan de kook in een pan met een stoommandje.",
+            "en": "Cut the broccoli into florets and slice the stalk. Bring a little water to the boil in a pan with a steamer basket."
+          }
+        },
+        {
+          "text": {
+            "nl": "Stoom de broccoli 6 minuten tot hij knapperig gaar en felgroen is. Geen stoommandje? Kook hem dan 4 minuten in weinig water.",
+            "en": "Steam the broccoli for 6 minutes until just tender and bright green. No steamer? Boil it in a little water for 4 minutes instead."
+          },
+          "timers": [
+            {
+              "min": 6,
+              "unit": "min",
+              "label": "6 minuten"
+            },
+            {
+              "min": 4,
+              "unit": "min",
+              "label": "4 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Schep de broccoli in een schaal en besprenkel met de olijfolie en het citroensap. Bestrooi met zout, peper en het sesamzaad.",
+            "en": "Tip the broccoli into a dish and drizzle with the olive oil and lemon juice. Sprinkle with salt, pepper and the sesame seeds."
+          }
+        }
+      ],
+      "goesWith": [
+        "b:kip-met-sesamzaad",
+        "b:gehakttaart",
+        "b:tonijn-met-nieuwe-aardappeltjes"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:gevuld-stokbrood",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -11317,6 +12544,203 @@
     },
     {
       "schema": 2,
+      "id": "b:groene-salade",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Groene salade",
+        "en": "Green salad"
+      },
+      "tags": [
+        "snel",
+        "zomer",
+        "vegetarisch",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 10
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 krop sla",
+            "en": "1 head lettuce"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "krop",
+          "ing": "sla",
+          "name": "sla",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "½ komkommer [dunne plakjes]",
+            "en": "½ cucumber [thinly sliced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": null,
+          "ing": "komkommer",
+          "name": "komkommer",
+          "prep": {
+            "nl": "dunne plakjes",
+            "en": "thinly sliced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 avocado [blokjes]",
+            "en": "1 avocado [diced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "avocado",
+          "name": "avocado",
+          "prep": {
+            "nl": "blokjes",
+            "en": "diced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "4 bosuitjes [ringetjes]",
+            "en": "4 spring onions [sliced into rings]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 4
+          },
+          "unit": null,
+          "ing": "bosui",
+          "name": "bosuitjes",
+          "prep": {
+            "nl": "ringetjes",
+            "en": "thin rings"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 el olijfolie",
+            "en": "3 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el witte wijnazijn",
+            "en": "1 tbsp white wine vinegar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "wijnazijn",
+          "name": "wijnazijn",
+          "qual": [
+            "witte"
+          ],
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl mosterd",
+            "en": "1 tsp mustard"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "mosterd",
+          "name": "mosterd",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "½ tl honing",
+            "en": "½ tsp honey"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": "tl",
+          "ing": "honing",
+          "name": "honing",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Was de sla, slinger hem droog en scheur de bladeren in stukken.",
+            "en": "Wash the lettuce, spin it dry and tear the leaves into pieces."
+          }
+        },
+        {
+          "text": {
+            "nl": "Klop de olijfolie, azijn, mosterd en honing met zout en peper tot een dressing.",
+            "en": "Whisk the olive oil, vinegar, mustard and honey with salt and pepper into a dressing."
+          }
+        },
+        {
+          "text": {
+            "nl": "Meng de sla met de komkommer, avocado en bosui. Schep de dressing er vlak voor het serveren door.",
+            "en": "Toss the lettuce with the cucumber, avocado and spring onion. Stir in the dressing just before serving."
+          }
+        }
+      ],
+      "goesWith": [
+        "b:quiche-lorraine",
+        "b:kaastaart",
+        "b:gevuld-stokbrood"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:groentecurry",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -11640,6 +13064,189 @@
       "time": {
         "active": 25,
         "total": 40
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:guacamole",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Guacamole",
+        "en": "Guacamole"
+      },
+      "tags": [
+        "snel",
+        "zomer",
+        "wereld",
+        "vegetarisch",
+        "vegan",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 10
+      },
+      "category": "bijgerecht",
+      "cuisine": "mexicaans",
+      "lines": [
+        {
+          "raw": {
+            "nl": "3 rijpe avocado's",
+            "en": "3 ripe avocados"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": null,
+          "ing": "avocado",
+          "name": "avocado's",
+          "qual": [
+            "rijpe"
+          ],
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 rode ui [fijngesnipperd]",
+            "en": "1 red onion [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "ui",
+          "name": "ui",
+          "qual": [
+            "rode"
+          ],
+          "prep": {
+            "nl": "fijngesnipperd",
+            "en": "very finely diced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tomaat [blokjes]",
+            "en": "1 tomato [diced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "tomaat",
+          "name": "tomaat",
+          "prep": {
+            "nl": "blokjes",
+            "en": "diced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 rode peper [fijngehakt]",
+            "en": "1 red chilli [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "rode-peper",
+          "name": "rode peper",
+          "prep": {
+            "nl": "fijngehakt",
+            "en": "finely chopped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "sap van 1 limoen",
+            "en": "juice of 1 lime"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "limoen",
+          "name": "limoen",
+          "part": "sap",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 el verse koriander [fijngehakt]",
+            "en": "3 tbsp fresh coriander [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "el",
+          "ing": "koriander",
+          "name": "koriander",
+          "qual": [
+            "verse"
+          ],
+          "prep": {
+            "nl": "fijngehakt",
+            "en": "finely chopped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout",
+            "en": "salt"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout",
+          "name": "zout",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Halveer de avocado's, verwijder de pit en schep het vruchtvlees in een kom. Prak grof met een vork.",
+            "en": "Halve the avocados, remove the stones and scoop the flesh into a bowl. Mash roughly with a fork."
+          }
+        },
+        {
+          "text": {
+            "nl": "Meng de ui, tomaat, rode peper, het limoensap en de koriander erdoor.",
+            "en": "Stir in the onion, tomato, chilli, lime juice and coriander."
+          }
+        },
+        {
+          "text": {
+            "nl": "Breng op smaak met zout. Serveer meteen, of druk folie op de guacamole zodat hij niet bruin wordt.",
+            "en": "Season with salt. Serve straight away, or press cling film onto the surface so it does not brown."
+          }
+        }
+      ],
+      "goesWith": [
+        "b:taco-schotel",
+        "b:mexicaanse-bonenschotel",
+        "b:mexicaanse-ovenschotel-met-zoete-aardappel"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
       }
     },
     {
@@ -17403,6 +19010,330 @@
       "time": {
         "active": 45,
         "total": 120
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:knoflookbrood",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Knoflookbrood",
+        "en": "Garlic bread"
+      },
+      "tags": [
+        "snel",
+        "oven",
+        "kids",
+        "vegetarisch"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 20
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 ciabatta",
+            "en": "1 ciabatta"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "ciabatta",
+          "name": "ciabatta",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "100 g boter [op kamertemperatuur]",
+            "en": "100 g butter [at room temperature]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 100
+          },
+          "unit": "g",
+          "ing": "boter",
+          "name": "boter",
+          "prep": {
+            "nl": "op kamertemperatuur",
+            "en": "at room temperature"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 teentjes knoflook [geperst]",
+            "en": "3 cloves garlic [crushed]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "teen",
+          "ing": "knoflook",
+          "name": "knoflook",
+          "prep": {
+            "nl": "geperst",
+            "en": "crushed"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 el peterselie [fijngehakt]",
+            "en": "2 tbsp parsley [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "el",
+          "ing": "peterselie",
+          "name": "peterselie",
+          "prep": {
+            "nl": "fijngehakt",
+            "en": "finely chopped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 snufje zout",
+            "en": "1 pinch salt"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "snuf",
+          "ing": "zout",
+          "name": "zout",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "50 g geraspte kaas (optioneel)",
+            "en": "50 g grated cheese (optional)"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 50
+          },
+          "unit": "g",
+          "ing": "kaas",
+          "name": "kaas",
+          "qual": [
+            "geraspte"
+          ],
+          "optional": true,
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Verwarm de oven voor op 200 °C. Meng de boter met de knoflook, peterselie en het zout.",
+            "en": "Preheat the oven to 200°C. Mix the butter with the garlic, parsley and salt."
+          }
+        },
+        {
+          "text": {
+            "nl": "Snijd de ciabatta in de lengte doormidden en besmeer beide helften dik met de knoflookboter. Strooi er eventueel de kaas over.",
+            "en": "Cut the ciabatta in half lengthways and spread both halves thickly with the garlic butter. Sprinkle over the cheese if using."
+          }
+        },
+        {
+          "text": {
+            "nl": "Bak 10 minuten in de oven tot de randen goudbruin zijn. Snijd in stukken en serveer meteen.",
+            "en": "Bake for 10 minutes until the edges are golden. Cut into pieces and serve straight away."
+          },
+          "timers": [
+            {
+              "min": 10,
+              "unit": "min",
+              "label": "10 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:spaghetti-bolognese",
+        "b:klassieke-lasagne",
+        "b:penne-all-arrabbiata"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:komkommersalade",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Komkommersalade",
+        "en": "Cucumber salad"
+      },
+      "tags": [
+        "snel",
+        "zomer",
+        "kids",
+        "vegetarisch",
+        "vegan",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 25
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 komkommer [dunne plakjes]",
+            "en": "1 cucumber [thinly sliced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "komkommer",
+          "name": "komkommer",
+          "prep": {
+            "nl": "dunne plakjes",
+            "en": "thinly sliced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 el witte wijnazijn",
+            "en": "3 tbsp white wine vinegar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "el",
+          "ing": "wijnazijn",
+          "name": "wijnazijn",
+          "qual": [
+            "witte"
+          ],
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el suiker",
+            "en": "1 tbsp sugar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "suiker",
+          "name": "suiker",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "½ tl zout",
+            "en": "½ tsp salt"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": "tl",
+          "ing": "zout",
+          "name": "zout",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 el dille [fijngehakt]",
+            "en": "2 tbsp dill [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "el",
+          "ing": "dille",
+          "name": "dille",
+          "prep": {
+            "nl": "fijngehakt",
+            "en": "finely chopped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "versgemalen peper",
+            "en": "freshly ground pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "peper",
+          "name": "versgemalen peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Meng de azijn met de suiker en het zout tot de suiker is opgelost.",
+            "en": "Mix the vinegar with the sugar and salt until the sugar has dissolved."
+          }
+        },
+        {
+          "text": {
+            "nl": "Schep de komkommer en de dille erdoor en maal er wat peper over.",
+            "en": "Stir in the cucumber and dill and grind over some pepper."
+          }
+        },
+        {
+          "text": {
+            "nl": "Laat 15 minuten staan in de koelkast. Schep nog eens om en serveer koud.",
+            "en": "Leave in the fridge for 15 minutes. Toss once more and serve cold."
+          },
+          "timers": [
+            {
+              "min": 15,
+              "unit": "min",
+              "label": "15 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:hamburgers-voor-op-de-bbq",
+        "b:gehaktballetjes-in-dille-yoghurt-saus",
+        "b:afwasmachinezalm"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
       }
     },
     {
@@ -23276,6 +25207,134 @@
     },
     {
       "schema": 2,
+      "id": "b:ovenfrietjes",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Ovenfrietjes",
+        "en": "Oven chips"
+      },
+      "tags": [
+        "oven",
+        "kids",
+        "vegetarisch",
+        "vegan",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 15,
+        "total": 45
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 kg aardappelen",
+            "en": "1 kg potatoes"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "kg",
+          "ing": "aardappel",
+          "name": "aardappelen",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 el zonnebloemolie",
+            "en": "2 tbsp sunflower oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "el",
+          "ing": "zonnebloemolie",
+          "name": "zonnebloemolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl paprikapoeder",
+            "en": "1 tsp paprika"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "paprikapoeder",
+          "name": "paprikapoeder",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl zout",
+            "en": "1 tsp salt"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "zout",
+          "name": "zout",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Verwarm de oven voor op 220 °C. Schil de aardappelen (of was ze goed) en snijd ze in frietjes van 1 cm dik.",
+            "en": "Preheat the oven to 220°C. Peel the potatoes (or wash them well) and cut them into chips about 1 cm thick."
+          }
+        },
+        {
+          "text": {
+            "nl": "Spoel de frietjes af onder koud water en dep ze goed droog met een theedoek.",
+            "en": "Rinse the chips under cold water and pat them thoroughly dry with a tea towel."
+          }
+        },
+        {
+          "text": {
+            "nl": "Meng ze op een bakplaat met de olie, het paprikapoeder en het zout. Leg ze in één laag.",
+            "en": "Toss them on a baking tray with the oil, paprika and salt. Spread them out in a single layer."
+          }
+        },
+        {
+          "text": {
+            "nl": "Bak 30 minuten in de oven; schep ze halverwege om. Ze zijn klaar als ze goudbruin en knapperig zijn.",
+            "en": "Bake for 30 minutes, turning them halfway. They are done when golden and crisp."
+          },
+          "timers": [
+            {
+              "min": 30,
+              "unit": "min",
+              "label": "30 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:hamburgers-voor-op-de-bbq",
+        "b:sticky-chicken",
+        "b:gehakttaart"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:pappardelle-met-gorgonzola",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -28192,6 +30251,235 @@
     },
     {
       "schema": 2,
+      "id": "b:rode-kool-met-appel",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Rode kool met appel",
+        "en": "Red cabbage with apple"
+      },
+      "tags": [
+        "winter",
+        "vegetarisch",
+        "glutenvrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 15,
+        "total": 60
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 rode kool [fijngesneden]",
+            "en": "1 red cabbage [finely sliced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "kool",
+          "name": "kool",
+          "qual": [
+            "rode"
+          ],
+          "prep": {
+            "nl": "fijngesneden",
+            "en": "finely sliced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 appels [geschild in blokjes]",
+            "en": "2 apples [peeled and diced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": null,
+          "ing": "appel",
+          "name": "appels",
+          "prep": {
+            "nl": "geschild in blokjes",
+            "en": "peeled and diced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 ui [gesnipperd]",
+            "en": "1 onion [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "ui",
+          "name": "ui",
+          "prep": {
+            "nl": "gesnipperd",
+            "en": "finely diced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "25 g boter",
+            "en": "25 g butter"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 25
+          },
+          "unit": "g",
+          "ing": "boter",
+          "name": "boter",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 el azijn",
+            "en": "3 tbsp vinegar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "el",
+          "ing": "azijn",
+          "name": "azijn",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 el appelstroop",
+            "en": "2 tbsp apple syrup"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "el",
+          "ing": "appelstroop",
+          "name": "appelstroop",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "¼ tl gemalen kruidnagel",
+            "en": "¼ tsp ground cloves"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.25
+          },
+          "unit": "tl",
+          "ing": "kruidnagelpoeder",
+          "name": "gemalen kruidnagel",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 laurierblad",
+            "en": "1 bay leaf"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "laurierblad",
+          "name": "laurierblad",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 kaneelstokje",
+            "en": "1 cinnamon stick"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "kaneelstokje",
+          "name": "kaneelstokje",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Smelt de boter in een grote pan en fruit de ui 3 minuten.",
+            "en": "Melt the butter in a large pan and soften the onion for 3 minutes."
+          },
+          "timers": [
+            {
+              "min": 3,
+              "unit": "min",
+              "label": "3 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Voeg de rode kool, appel, azijn, appelstroop, kruidnagel, het laurierblad en het kaneelstokje toe met een scheut water en wat zout.",
+            "en": "Add the red cabbage, apple, vinegar, apple syrup, cloves, bay leaf and cinnamon stick with a splash of water and some salt."
+          }
+        },
+        {
+          "text": {
+            "nl": "Stoof met het deksel op de pan 45 minuten op laag vuur; roer af en toe en voeg water toe als het droog wordt.",
+            "en": "Cover and stew over a low heat for 45 minutes; stir now and then and add water if it looks dry."
+          },
+          "timers": [
+            {
+              "min": 45,
+              "unit": "min",
+              "label": "45 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Haal het laurierblad en kaneelstokje eruit en breng op smaak met zout, peper en eventueel nog wat azijn.",
+            "en": "Remove the bay leaf and cinnamon stick and season with salt, pepper and a little more vinegar if you like."
+          }
+        }
+      ],
+      "goesWith": [
+        "b:runderstoofpot-met-paddenstoelen",
+        "b:gehakttaart",
+        "b:lamsbout-met-rozemarijn"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:rode-kool-met-hachee",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -30314,6 +32602,151 @@
       "time": {
         "active": 20,
         "total": 90
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:romige-aardappelpuree",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Romige aardappelpuree",
+        "en": "Creamy mashed potato"
+      },
+      "tags": [
+        "snel",
+        "kids",
+        "winter",
+        "vegetarisch",
+        "glutenvrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 30
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 kg kruimige aardappelen [geschild in stukken]",
+            "en": "1 kg floury potatoes [peeled and cut into chunks]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "kg",
+          "ing": "aardappel",
+          "name": "aardappelen",
+          "qual": [
+            "kruimige"
+          ],
+          "prep": {
+            "nl": "geschild in stukken",
+            "en": "peeled and cut into pieces"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "150 ml melk",
+            "en": "150 ml milk"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 150
+          },
+          "unit": "ml",
+          "ing": "melk",
+          "name": "melk",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "50 g boter",
+            "en": "50 g butter"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 50
+          },
+          "unit": "g",
+          "ing": "boter",
+          "name": "boter",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 snufje nootmuskaat",
+            "en": "1 pinch nutmeg"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "snuf",
+          "ing": "nootmuskaat",
+          "name": "nootmuskaat",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Kook de aardappelen in ruim water met zout in 20 minuten gaar. Giet af en laat 1 minuut uitdampen.",
+            "en": "Boil the potatoes in plenty of salted water for 20 minutes until tender. Drain and let them steam dry for 1 minute."
+          },
+          "timers": [
+            {
+              "min": 20,
+              "unit": "min",
+              "label": "20 minuten"
+            },
+            {
+              "min": 1,
+              "unit": "min",
+              "label": "1 minuut"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Verwarm intussen de melk met de boter in een steelpan.",
+            "en": "Meanwhile warm the milk with the butter in a small pan."
+          }
+        },
+        {
+          "text": {
+            "nl": "Stamp de aardappelen fijn en roer de warme melk erdoor tot de puree romig is. Breng op smaak met nootmuskaat, zout en peper.",
+            "en": "Mash the potatoes and beat in the warm milk until the mash is creamy. Season with nutmeg, salt and pepper."
+          }
+        }
+      ],
+      "goesWith": [
+        "b:runderlapjes-met-tomaat",
+        "b:runderstoofpot-met-paddenstoelen",
+        "b:kip-in-dragon-roomsaus"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
       }
     },
     {
@@ -35402,6 +37835,158 @@
     },
     {
       "schema": 2,
+      "id": "b:sperziebonen-met-knoflook",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Sperziebonen met knoflook",
+        "en": "Green beans with garlic"
+      },
+      "tags": [
+        "snel",
+        "vegetarisch",
+        "vegan",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 20
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "500 g sperziebonen",
+            "en": "500 g green beans"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 500
+          },
+          "unit": "g",
+          "ing": "sperzieboon",
+          "name": "sperziebonen",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 el olijfolie",
+            "en": "2 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 teentjes knoflook [in dunne plakjes]",
+            "en": "2 cloves garlic [thinly sliced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "teen",
+          "ing": "knoflook",
+          "name": "knoflook",
+          "prep": {
+            "nl": "in dunne plakjes",
+            "en": "thinly sliced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "½ tl chilivlokken (optioneel)",
+            "en": "½ tsp chilli flakes (optional)"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": "tl",
+          "ing": "chilivlokken",
+          "name": "chilivlokken",
+          "optional": true,
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Haal de puntjes van de bonen. Kook ze 6 minuten in water met zout; ze moeten nog een beetje bite hebben. Giet af.",
+            "en": "Top and tail the beans. Boil them in salted water for 6 minutes; they should still have a little bite. Drain."
+          },
+          "timers": [
+            {
+              "min": 6,
+              "unit": "min",
+              "label": "6 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Verhit de olijfolie in een koekenpan en bak de knoflook 1 minuut op laag vuur tot hij geurt, niet bruin.",
+            "en": "Heat the olive oil in a frying pan and fry the garlic over a low heat for 1 minute until fragrant, not brown."
+          },
+          "timers": [
+            {
+              "min": 1,
+              "unit": "min",
+              "label": "1 minuut"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Schep de bonen erdoor met de chilivlokken en bak nog 2 minuten. Breng op smaak met zout en peper.",
+            "en": "Add the beans and chilli flakes and toss for another 2 minutes. Season with salt and pepper."
+          },
+          "timers": [
+            {
+              "min": 2,
+              "unit": "min",
+              "label": "2 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:gehakttaart",
+        "b:runderlapjes-met-tomaat",
+        "b:lamsbout-met-rozemarijn"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:spinaziequiche-met-zalm",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -36535,6 +39120,196 @@
       "time": {
         "active": 30,
         "total": 60
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:stokbrood-met-kruidenboter",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Stokbrood met kruidenboter",
+        "en": "Baguette with herb butter"
+      },
+      "tags": [
+        "snel",
+        "oven",
+        "zomer",
+        "vegetarisch"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 25
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "1 stokbrood",
+            "en": "1 baguette"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "stokbrood",
+          "name": "stokbrood",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "125 g boter [op kamertemperatuur]",
+            "en": "125 g butter [at room temperature]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 125
+          },
+          "unit": "g",
+          "ing": "boter",
+          "name": "boter",
+          "prep": {
+            "nl": "op kamertemperatuur",
+            "en": "at room temperature"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 teentjes knoflook [geperst]",
+            "en": "2 cloves garlic [crushed]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "teen",
+          "ing": "knoflook",
+          "name": "knoflook",
+          "prep": {
+            "nl": "geperst",
+            "en": "crushed"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 el peterselie [fijngehakt]",
+            "en": "3 tbsp parsley [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "el",
+          "ing": "peterselie",
+          "name": "peterselie",
+          "prep": {
+            "nl": "fijngehakt",
+            "en": "finely chopped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el bieslook [fijngeknipt]",
+            "en": "1 tbsp chives [finely snipped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "bieslook",
+          "name": "bieslook",
+          "prep": {
+            "nl": "fijngeknipt",
+            "en": "finely snipped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "rasp van ½ citroen",
+            "en": "zest of ½ lemon"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": null,
+          "ing": "citroen",
+          "name": "citroen",
+          "part": "rasp",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "½ tl zout",
+            "en": "½ tsp salt"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": "tl",
+          "ing": "zout",
+          "name": "zout",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Verwarm de oven voor op 180 °C. Roer de zachte boter los met de knoflook, peterselie, bieslook, citroenrasp en het zout.",
+            "en": "Preheat the oven to 180°C. Beat the soft butter with the garlic, parsley, chives, lemon zest and salt."
+          }
+        },
+        {
+          "text": {
+            "nl": "Snijd het stokbrood schuin in plakken, maar niet helemaal door. Smeer tussen elke plak een beetje kruidenboter.",
+            "en": "Cut the baguette diagonally into slices without cutting all the way through. Spread a little herb butter between the slices."
+          }
+        },
+        {
+          "text": {
+            "nl": "Wikkel het brood in aluminiumfolie en bak het 10 minuten in de oven. Vouw de folie open en bak nog 3 minuten tot de korst knapperig is.",
+            "en": "Wrap the bread in foil and bake for 10 minutes. Open the foil and bake for another 3 minutes until the crust is crisp."
+          },
+          "timers": [
+            {
+              "min": 10,
+              "unit": "min",
+              "label": "10 minuten"
+            },
+            {
+              "min": 3,
+              "unit": "min",
+              "label": "3 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Serveer warm. De kruidenboter blijft een week goed in de koelkast.",
+            "en": "Serve warm. The herb butter keeps for a week in the fridge."
+          }
+        }
+      ],
+      "goesWith": [
+        "b:goulash-maaltijdsoep",
+        "b:hamburgers-voor-op-de-bbq",
+        "b:salade-nicoise"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
       }
     },
     {
@@ -37884,6 +40659,165 @@
     },
     {
       "schema": 2,
+      "id": "b:tomatensalade",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Tomatensalade",
+        "en": "Tomato salad"
+      },
+      "tags": [
+        "snel",
+        "zomer",
+        "vegetarisch",
+        "vegan",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 20
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "500 g tomaten [partjes]",
+            "en": "500 g tomatoes [in wedges]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 500
+          },
+          "unit": "g",
+          "ing": "tomaat",
+          "name": "tomaten",
+          "prep": {
+            "nl": "partjes",
+            "en": "wedges"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 rode ui [in halve ringen]",
+            "en": "1 red onion [in half rings]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "ui",
+          "name": "ui",
+          "qual": [
+            "rode"
+          ],
+          "prep": {
+            "nl": "in halve ringen",
+            "en": "in half rings"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "3 el olijfolie",
+            "en": "3 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 3
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el balsamicoazijn",
+            "en": "1 tbsp balsamic vinegar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "balsamicoazijn",
+          "name": "balsamicoazijn",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 handje basilicum",
+            "en": "1 handful basil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "hand",
+          "ing": "basilicum",
+          "name": "basilicum",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Leg de tomaten en ui op een platte schaal.",
+            "en": "Arrange the tomatoes and onion on a flat dish."
+          }
+        },
+        {
+          "text": {
+            "nl": "Besprenkel met de olijfolie en balsamicoazijn en bestrooi met zout en peper.",
+            "en": "Drizzle with the olive oil and balsamic vinegar and season with salt and pepper."
+          }
+        },
+        {
+          "text": {
+            "nl": "Laat 10 minuten staan zodat de smaken intrekken. Scheur de basilicum erover vlak voor het serveren.",
+            "en": "Leave for 10 minutes so the flavours mingle. Tear the basil over just before serving."
+          },
+          "timers": [
+            {
+              "min": 10,
+              "unit": "min",
+              "label": "10 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:tortellini-al-gratin",
+        "b:quiche-met-kip",
+        "b:macaroni-ham-kaas"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:tomatensalsa-bij-kabeljauw-met-notencrumble",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -38526,6 +41460,186 @@
       "time": {
         "active": 15,
         "total": 20
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:tzatziki",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Tzatziki",
+        "en": "Tzatziki"
+      },
+      "tags": [
+        "snel",
+        "zomer",
+        "wereld",
+        "vegetarisch",
+        "glutenvrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 15,
+        "total": 25
+      },
+      "category": "bijgerecht",
+      "cuisine": "grieks",
+      "lines": [
+        {
+          "raw": {
+            "nl": "500 g Griekse yoghurt",
+            "en": "500 g Greek yoghurt"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 500
+          },
+          "unit": "g",
+          "ing": "griekse-yoghurt",
+          "name": "Griekse yoghurt",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 komkommer",
+            "en": "1 cucumber"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": null,
+          "ing": "komkommer",
+          "name": "komkommer",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "2 teentjes knoflook [geperst]",
+            "en": "2 cloves garlic [crushed]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 2
+          },
+          "unit": "teen",
+          "ing": "knoflook",
+          "name": "knoflook",
+          "prep": {
+            "nl": "geperst",
+            "en": "crushed"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el olijfolie",
+            "en": "1 tbsp olive oil"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "olijfolie",
+          "name": "olijfolie",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el dille [fijngehakt]",
+            "en": "1 tbsp dill [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "dille",
+          "name": "dille",
+          "prep": {
+            "nl": "fijngehakt",
+            "en": "finely chopped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 tl witte wijnazijn",
+            "en": "1 tsp white wine vinegar"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "tl",
+          "ing": "wijnazijn",
+          "name": "wijnazijn",
+          "qual": [
+            "witte"
+          ],
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Rasp de komkommer grof, bestrooi met wat zout en laat 10 minuten uitlekken in een zeef. Knijp het vocht er goed uit.",
+            "en": "Coarsely grate the cucumber, sprinkle with a little salt and leave to drain in a sieve for 10 minutes. Squeeze out the liquid well."
+          },
+          "timers": [
+            {
+              "min": 10,
+              "unit": "min",
+              "label": "10 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Meng de komkommer met de yoghurt, knoflook, olijfolie, dille en azijn.",
+            "en": "Mix the cucumber with the yoghurt, garlic, olive oil, dill and vinegar."
+          }
+        },
+        {
+          "text": {
+            "nl": "Breng op smaak met zout en peper. Laat liefst een half uur koud staan; de smaak wordt dan voller.",
+            "en": "Season with salt and pepper. Ideally chill for half an hour; the flavour deepens."
+          },
+          "timers": [
+            {
+              "min": 30,
+              "unit": "min",
+              "label": "een half uur"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:griekse-salade",
+        "b:moussaka",
+        "b:hamburgers-voor-op-de-bbq"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
       }
     },
     {
@@ -40493,6 +43607,124 @@
     },
     {
       "schema": 2,
+      "id": "b:witte-rijst",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Witte rijst",
+        "en": "Plain white rice"
+      },
+      "tags": [
+        "snel",
+        "vegetarisch",
+        "vegan",
+        "glutenvrij",
+        "lactosevrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 5,
+        "total": 20
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "300 g basmatirijst",
+            "en": "300 g basmati rice"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 300
+          },
+          "unit": "g",
+          "ing": "basmatirijst",
+          "name": "basmatirijst",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "450 ml water",
+            "en": "450 ml water"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 450
+          },
+          "unit": "ml",
+          "ing": "water",
+          "name": "water",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "½ tl zout",
+            "en": "½ tsp salt"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 0.5
+          },
+          "unit": "tl",
+          "ing": "zout",
+          "name": "zout",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Spoel de rijst in een zeef onder de kraan tot het water helder is.",
+            "en": "Rinse the rice in a sieve under the tap until the water runs clear."
+          }
+        },
+        {
+          "text": {
+            "nl": "Doe de rijst met het water en het zout in een pan met deksel en breng aan de kook.",
+            "en": "Put the rice in a lidded pan with the water and salt and bring to the boil."
+          }
+        },
+        {
+          "text": {
+            "nl": "Zet het vuur laag en kook 12 minuten met het deksel erop. Zet het vuur uit en laat 5 minuten staan zonder het deksel op te tillen.",
+            "en": "Turn the heat right down and cook with the lid on for 12 minutes. Turn off the heat and leave for 5 minutes without lifting the lid."
+          },
+          "timers": [
+            {
+              "min": 12,
+              "unit": "min",
+              "label": "12 minuten"
+            },
+            {
+              "min": 5,
+              "unit": "min",
+              "label": "5 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Roer de rijst los met een vork.",
+            "en": "Fluff the rice with a fork."
+          }
+        }
+      ],
+      "goesWith": [
+        "b:curry-met-groenten-en-kip",
+        "b:rendang-met-zelfgemaakt-boemboe",
+        "b:gesmoorde-kip-met-tomaat-en-kokos"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
+      }
+    },
+    {
+      "schema": 2,
       "id": "b:wokken",
       "rev": 1,
       "createdAt": "2025-12-01T00:00:00.000Z",
@@ -40801,6 +44033,154 @@
       "time": {
         "active": 20,
         "total": 20
+      }
+    },
+    {
+      "schema": 2,
+      "id": "b:worteltjes-met-honing",
+      "rev": 1,
+      "createdAt": "2026-10-22T00:00:00.000Z",
+      "updatedAt": "2026-10-22T00:00:00.000Z",
+      "origin": {
+        "kind": "builtin"
+      },
+      "name": {
+        "nl": "Worteltjes met honing",
+        "en": "Honey-glazed carrots"
+      },
+      "tags": [
+        "snel",
+        "kids",
+        "winter",
+        "vegetarisch",
+        "glutenvrij"
+      ],
+      "servings": 4,
+      "time": {
+        "active": 10,
+        "total": 25
+      },
+      "category": "bijgerecht",
+      "lines": [
+        {
+          "raw": {
+            "nl": "600 g wortelen [plakjes]",
+            "en": "600 g carrots [sliced]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 600
+          },
+          "unit": "g",
+          "ing": "wortel",
+          "name": "wortelen",
+          "prep": {
+            "nl": "plakjes",
+            "en": "sliced"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "25 g boter",
+            "en": "25 g butter"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 25
+          },
+          "unit": "g",
+          "ing": "boter",
+          "name": "boter",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el honing",
+            "en": "1 tbsp honey"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "honing",
+          "name": "honing",
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "1 el peterselie [fijngehakt]",
+            "en": "1 tbsp parsley [finely chopped]"
+          },
+          "kind": "line",
+          "qty": {
+            "min": 1
+          },
+          "unit": "el",
+          "ing": "peterselie",
+          "name": "peterselie",
+          "prep": {
+            "nl": "fijngehakt",
+            "en": "finely chopped"
+          },
+          "confidence": 1
+        },
+        {
+          "raw": {
+            "nl": "zout en peper",
+            "en": "salt and pepper"
+          },
+          "kind": "line",
+          "qty": null,
+          "unit": null,
+          "ing": "zout-en-peper",
+          "name": "zout en peper",
+          "confidence": 1
+        }
+      ],
+      "steps": [
+        {
+          "text": {
+            "nl": "Kook de wortelen 8 minuten in weinig water met zout tot ze bijna gaar zijn. Giet af.",
+            "en": "Boil the carrots in a little salted water for 8 minutes until almost tender. Drain."
+          },
+          "timers": [
+            {
+              "min": 8,
+              "unit": "min",
+              "label": "8 minuten"
+            }
+          ]
+        },
+        {
+          "text": {
+            "nl": "Smelt de boter in dezelfde pan, roer de honing erdoor en voeg de wortelen toe.",
+            "en": "Melt the butter in the same pan, stir in the honey and add the carrots."
+          }
+        },
+        {
+          "text": {
+            "nl": "Bak 5 minuten op middelhoog vuur, af en toe omscheppend, tot ze glanzen. Bestrooi met peterselie, zout en peper.",
+            "en": "Cook over a medium heat for 5 minutes, stirring now and then, until glossy. Sprinkle with parsley, salt and pepper."
+          },
+          "timers": [
+            {
+              "min": 5,
+              "unit": "min",
+              "label": "5 minuten"
+            }
+          ]
+        }
+      ],
+      "goesWith": [
+        "b:gehakttaart",
+        "b:kip-in-dragon-roomsaus",
+        "b:runderstoofpot-met-paddenstoelen"
+      ],
+      "aliases": [],
+      "text": {
+        "en": "human"
       }
     },
     {
