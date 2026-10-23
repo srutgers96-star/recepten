@@ -105,4 +105,10 @@ export const week: Dict = {
   'filter.winter': { nl: 'Winter', en: 'Winter' },
   'filter.glutenvrij': { nl: 'Glutenvrij', en: 'Gluten-free' },
   'filter.vegan': { nl: 'Vegan', en: 'Vegan' },
+  // Lactose-free, the fourth diet (docs/specs/labels-categorieen.md §1a). The -optie pair sits here
+  // too (the spec puts all four in week.ts; the gluten/vegan -optie keys live in phase2.ts).
+  'filter.lactosevrij': { nl: 'Lactosevrij', en: 'Lactose-free' },
+  'tag.lactosevrij': { nl: 'lactosevrij', en: 'lactose-free' },
+  'filter.lactosevrij-optie': { nl: 'Lactosevrij-optie', en: 'Lactose-free option' },
+  'tag.lactosevrij-optie': { nl: 'lactosevrij-optie', en: 'lactose-free option' },
 };

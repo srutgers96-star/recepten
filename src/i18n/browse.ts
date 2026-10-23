@@ -143,9 +143,12 @@ export const browse: Dict = {
   'variant.make.glutenvrij': { nl: 'Maak glutenvrije versie', en: 'Make gluten-free version' },
   'variant.make.vegetarisch': { nl: 'Maak vegetarische versie', en: 'Make vegetarian version' },
   'variant.make.vegan': { nl: 'Maak vegan versie', en: 'Make vegan version' },
+  // docs/specs/labels-categorieen.md §1a; temporary: 13D block 2 replaces these buttons with tabs.
+  'variant.make.lactosevrij': { nl: 'Maak lactosevrije versie', en: 'Make lactose-free version' },
   'variant.title.glutenvrij': { nl: 'Glutenvrije versie', en: 'Gluten-free version' },
   'variant.title.vegetarisch': { nl: 'Vegetarische versie', en: 'Vegetarian version' },
   'variant.title.vegan': { nl: 'Vegan versie', en: 'Vegan version' },
+  'variant.title.lactosevrij': { nl: 'Lactosevrije versie', en: 'Lactose-free version' },
   'variant.intro': {
     nl: 'Deze ingrediënten worden vervangen. Haal het vinkje weg bij wat je liever zelf oplost.',
     en: 'These ingredients get replaced. Untick anything you would rather solve yourself.',

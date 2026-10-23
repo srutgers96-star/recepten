@@ -23,8 +23,8 @@ export const phase2: Dict = {
   'filter.diet': { nl: 'Dieet', en: 'Diet' },
   'filter.dietOptie': { nl: 'ook als optie', en: 'options too' },
   'filter.dietOptieHint': {
-    nl: 'Ook recepten die dit als optie aanbieden (vega-optie, vegan-optie, glutenvrij-optie).',
-    en: 'Also recipes that offer it as an option (veggie, vegan or gluten-free option).',
+    nl: 'Ook recepten die dit als optie aanbieden.',
+    en: 'Also recipes that offer it as an option.',
   },
   'filter.vegan-optie': { nl: 'Vegan-optie', en: 'Vegan option' },
   'filter.glutenvrij-optie': { nl: 'Glutenvrij-optie', en: 'Gluten-free option' },

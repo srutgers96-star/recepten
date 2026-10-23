@@ -4,6 +4,71 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 23 okt (Opus): 6B blok 2 — lactosevrij in de app
+**Besluit Fable (23 okt) over de restpunten:** de tooltip `filter.dietOptieHint` wordt algemeen ("Ook recepten die dit als optie aanbieden." / "Also recipes that offer it as an option."), zonder opsomming die bij elk nieuw dieet veroudert; een vegan kopie krijgt voorlopig géén `lactosevrij`-tag (13D leidt de tags van een variant straks uit de regels af, dan komt hij vanzelf); regel H1 geldt in het formulier (Vegan ja ⇒ Lactose nee, vergrendeld) en in de validator, niet in `saveUserIngredient`; de knopvolgorde glutenvrij · vegetarisch · vegan · lactosevrij is definitief (README §2b). Review: 2 bevindingen bevestigd en verwerkt; gate groen (919 tests). Uitrol: direct naar `main`.
+Gebouwd volgens docs/specs/labels-categorieen.md §1a, §2b en §3 blok 2 (bouwer A domein + data, bouwer B UI + i18n,
+integrator). Volgens §4 mag het direct naar `main`. Niet gecommit. Wat er nu staat:
+- **Vierde dieet:** `DIET_TAGS` = vegetarisch · vegan · glutenvrij · lactosevrij (chipvolgorde). De dieetrij toont
+  vier chips plus "ook als optie" op Home (Vanavond-filters), Recepten, Kies 7 en het Week-filter, overal via
+  `DietChips`. De rij schuift op 375 px opzij en de pagina zelf schuift niet.
+- **Ook als optie** dekt nu ook `lactosevrij-optie` (`OPTIE_TAG`).
+- **Feiten uit het woordenboek:** diet.ts kopieert de glutenregel voor lactose. `lactose: true` spreekt de tag
+  tegen; een ontbrekende vlag of `lactoseUnsure` maakt hem "waarschijnlijk". De qualifier "plantaardige" zet
+  `lactose: false`.
+- **Varianten:** `VARIANT_DIETS` = glutenvrij · vegetarisch · vegan · lactosevrij. De knop "Maak lactosevrije
+  versie" staat dus als laatste. De kritische lezer wint van §6c.2/§7.4, die hem tussen glutenvrij en vegetarisch
+  zetten.
+- **Swaps:** 14 zuivelswaps hebben er `lactosevrij` bij, en ghee→kokosolie, roomkaas→sojayoghurt en
+  kwark→sojayoghurt zijn nieuw. Margarine→vegan-boter blijft alleen vegan.
+- **Woordenboek:** de kenmerken "lactosevrij" (groen), "bevat lactose" en "misschien lactose". Het formulier van een
+  eigen ingrediënt heeft een driewegkeuze **Lactose** onder Gluten.
+- **Import:** `TAG_WORDS` kent lactosevrij en lactosevrij-optie, dus de importprompt noemt ze vanzelf.
+- **Badge:** "Zuivelvrije ziel" (🥥, 5×) is badge 44.
+- **Data:** `DATA_VERSION` 5. `npm run migrate` zette `lactosevrij` op **44** klassiekers (Ratatouille wel; Kaastaart
+  en Tagliatelle Carbonara niet) en op geen enkele `lactosevrij-optie`. docs/measure-diet.md is hergenereerd:
+  44 zeker ja, 146 zeker nee, 6 twijfel.
+
+**Gedraaid:** check, test (919 in 42 bestanden), build, build:next en validate:data zijn groen (0 errors; alleen de
+4 bekende tamari-warnings). Geen nieuwe dependency; Dexie blijft v7.
+
+**Dev-app (375 px, NL en EN), §6c 1–3 nagelopen:**
+- Lactosevrij aan geeft "44 van 196": Ratatouille erin, Kaastaart eruit.
+- Een eigen recept met alleen `lactosevrij-optie` verschijnt pas met "ook als optie" erbij.
+- Tagliatelle Carbonara heeft geen lactosevrij-chipje. De vier variantknoppen staan in de volgorde van
+  `VARIANT_DIETS`.
+- De sheet toont Annuleer/Bewaar bovenaan, met boter → vegan boter, slagroom → sojaroom en kaas → vegan kaas
+  (EN: butter, double cream, cheese). Bewaar maakt "Tagliatelle Carbonara (lactosevrij)" / "(lactose-free)" met
+  de tag.
+- Woordenboek: Parmezaanse kaas "bevat lactose" / "contains lactose", margarine "misschien lactose" / "may contain
+  lactose", sojamelk "lactosevrij" (groen). De driewegkeuze werkt in beide talen.
+- De badge staat op de badgepagina. Geen consolefouten.
+
+Licht thema niet apart bekeken: er is geen CSS veranderd. In de testdatabase van localhost staan nu twee eigen
+testrecepten (Carbonara lactosevrij/vegetarisch) en het eigen ingrediënt "testzuivel".
+DEVICE-TEST rij 75 staat in beide tabellen (NL en EN).
+
+**Na de review gerepareerd (twee bevestigde bevindingen):**
+- Regel H1 (§2a) geldt nu ook in het formulier van een eigen ingrediënt. Met "Vegan: ja" staat Lactose vast op
+  "nee, lactosevrij" (uitgegrijsd) en bewaart het formulier `lactose: false` zonder unsure. Dat werkt net zo als
+  het vinkje Vegetarisch, dat bij "Vegan: ja" al vaststond.
+- De uitleg bij "ook als optie" (`filter.dietOptieHint`, src/i18n/phase2.ts) noemt nu ook lactosevrij-optie:
+  NL "… (vega-optie, vegan-optie, glutenvrij-optie, lactosevrij-optie)." · EN "… (veggie, vegan, gluten-free or
+  lactose-free option)." Dit is alleen het vierde woord in de bestaande opsomming; de spec gaf geen nieuwe tekst.
+
+**Open (niet door de spec beslist; vraag voor Stijn of Fable):**
+1. Krijgt een vegan variant ook de tag `lactosevrij`? Nu niet: `DIET_TAGS_FOR.vegan` blijft zoals §2b zegt.
+   De receptpagina toont het chipje "lactosevrij" bij een eigen recept wel als de feiten het zeggen
+   (`dietChipsFor`), maar de filterchip Lactosevrij vindt hem niet, want die kijkt alleen naar de bewaarde tag.
+   Dat is hetzelfde gedrag als bij glutenvrij.
+2. tests/fixtures/test-dictionary.ts (§6b: lactosevlaggen volgens de rule sheet) hoort in §3 bij geen enkel blok.
+   Hij heeft ook geen vegan- of glutenvlaggen. Niet aangeraakt.
+3. data/README.md noemt in een voorbeeld nog `dataVersion: 4`. Dat bestand hoort bij blok 3 bouwer A.
+4. De `validateSwaps`-gevallen voor lactosevrij staan in tests/variants.test.ts (daar staan de bestaande ook) en
+   niet in het nieuwe tests/validate-data.test.ts van §6a (blok 3).
+5. H1 wordt alleen in het formulier en in de validator voor data/ingredients.json bewaakt, niet in
+   `saveUserIngredient` zelf. Een eigen ingrediënt dat al `vegan: true` + `lactose: true` had, of dat via een
+   ontvangen woordenboekdelta binnenkomt, blijft zo tot iemand het formulier opslaat.
+
 ## 23 okt (Opus): 6B blok 1 — lactose-datapass
 **Besluit Fable (23 okt) over de randgevallen uit de review:** `oploscappuccino` → `lactose: true` (melkpoeder is een vast bestanddeel; streng, zoals chocolademelkpoeder); `koffiecreamer` en `advocaat` blijven `false` + unsure (wisselt per merk); `flesvoeding` blijft `false` (regel H2, non-food; komt in geen recept voor); `berlinerbol`, `pannenkoek`, `flensje`, `drinkontbijt` → `true` zoals de reviewer vond. Review: 5 bevindingen bevestigd, alle verwerkt; gate groen (901 tests). Uitrol: direct naar `main` (§4: blok 1 verandert niets zichtbaars).
 Gebouwd volgens docs/specs/labels-categorieen.md §2a en §3 blok 1 (bouwer D1 tool + validator, tien slice-agents,

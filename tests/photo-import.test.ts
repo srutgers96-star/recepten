@@ -428,3 +428,38 @@ describe('parseBilingualPlain', () => {
     expect(parseBilingualPlain('=== NL ===\n\n=== EN ===\n')).toEqual({});
   });
 });
+
+// docs/specs/labels-categorieen.md §3 blok 2 (bouwer B) and §6a: the fourth diet, lactosevrij, in the
+// tag vocabulary of the import (TAG_WORDS), so the prompt lists it and a pasted "Labels:" line sets it.
+describe('lactosevrij in the tag vocabulary (6B blok 2)', () => {
+  it('maps the lactose-free words to lactosevrij and the option words to lactosevrij-optie', () => {
+    expect(tagIdsFromText('lactosevrij, snel')).toEqual(['lactosevrij', 'snel']);
+    expect(tagIdsFromText('dairy-free')).toEqual(['lactosevrij']);
+    for (const w of ['lactosevrij', 'lactose-free', 'lactose free', 'lactosefree', 'zuivelvrij', 'dairy-free', 'dairy free', 'Lactose-Free', 'Zuivelvrij']) {
+      expect(tagIdsFromText(w)).toEqual(['lactosevrij']);
+    }
+    for (const w of ['lactosevrij-optie', 'lactosevrij optie', 'lactose-free option', 'lactosevrije optie', 'lactosevrij mogelijk']) {
+      expect(tagIdsFromText(w)).toEqual(['lactosevrij-optie']);
+    }
+    // The other diets keep their words.
+    expect(tagIdsFromText('gluten-free; dairy free; vegan')).toEqual(['glutenvrij', 'lactosevrij', 'vegan']);
+  });
+
+  it('reads lactosevrij from a pasted Labels:/Tags: line', () => {
+    const nl = parsePlainRecipe('# Soep\nLabels: vegetarisch, lactosevrij\n## Ingrediënten\n4 uien\n## Bereiding\nKook.');
+    expect(nl?.tags).toEqual(['vegetarisch', 'lactosevrij']);
+    const en = parsePlainRecipe('# Soup\nTags: dairy-free, lactose-free option\n## Ingredients\n4 onions\n## Method\nSimmer.');
+    expect(en?.tags).toEqual(['lactosevrij', 'lactosevrij-optie']);
+  });
+
+  it('the import prompt lists lactosevrij and lactosevrij-optie in both languages and both forms', () => {
+    for (const l of ['nl', 'en'] as const) {
+      for (const bilingual of [true, false]) {
+        const p = buildImportPrompt(l, { bilingual });
+        expect(p).toContain('lactosevrij');
+        expect(p).toContain('lactosevrij-optie');
+      }
+    }
+    expect(buildImportPrompt('nl')).toContain('glutenvrij-optie, lactosevrij, lactosevrij-optie');
+  });
+});

@@ -52,7 +52,7 @@ function NamePair(props: { n: { one: string; many?: string } | undefined }) {
 
 interface Flag {
   key: string;
-  /** Diet chips (vegetarisch/vegan/glutenvrij) get the green diet look; the rest are plain info. */
+  /** Diet chips (vegetarisch/vegan/glutenvrij/lactosevrij) get the green diet look; the rest are plain info. */
   diet: boolean;
 }
 
@@ -60,6 +60,8 @@ interface Flag {
  * The entry's flags as plain-language chips. A missing flag means "unknown" and shows nothing;
  * `gluten` means "contains gluten": false (and not unsure) = gluten-free, true = "bevat gluten",
  * `glutenUnsure` = "misschien gluten" (the same doubt diet.ts reports as "waarschijnlijk").
+ * `lactose` reads the same way (docs/specs/labels-categorieen.md §1a): false = "lactosevrij",
+ * true = "bevat lactose", `lactoseUnsure` = "misschien lactose".
  */
 function entryFlags(ing: Ingredient): Flag[] {
   const flags: Flag[] = [];
@@ -68,6 +70,9 @@ function entryFlags(ing: Ingredient): Flag[] {
   if (ing.glutenUnsure === true) flags.push({ key: 'dict.flag.glutenUnsure', diet: false });
   else if (ing.gluten === false) flags.push({ key: 'dict.flag.glutenfree', diet: true });
   else if (ing.gluten === true) flags.push({ key: 'dict.flag.gluten', diet: false });
+  if (ing.lactoseUnsure === true) flags.push({ key: 'dict.flag.lactoseUnsure', diet: false });
+  else if (ing.lactose === false) flags.push({ key: 'dict.flag.lactosefree', diet: true });
+  else if (ing.lactose === true) flags.push({ key: 'dict.flag.lactose', diet: false });
   if (ing.perishable === true) flags.push({ key: 'dict.flag.perishable', diet: false });
   if (ing.staple === true) flags.push({ key: 'dict.flag.staple', diet: false });
   return flags;
@@ -149,7 +154,7 @@ function triOf(v: boolean | undefined): TriFlag {
 
 /**
  * Inline form for an own entry (6A.15 extends it): names in both languages, aisle, default unit,
- * the staple tick and the diet flags (vegetarian; vegan and gluten as "weet ik niet / ja / nee").
+ * the staple tick and the diet flags (vegetarian; vegan, gluten and lactose as "weet ik niet / ja / nee").
  */
 function EntryForm(props: { entry: Ingredient; busy: boolean; onSave: (next: Ingredient) => void; onCancel: () => void }) {
   const { entry } = props;
@@ -167,6 +172,8 @@ function EntryForm(props: { entry: Ingredient; busy: boolean; onSave: (next: Ing
   const [vegan, setVegan] = useState<TriFlag>(triOf(entry.vegan));
   // "misschien gluten" (glutenUnsure) shows as unknown; choosing yes/no clears the doubt.
   const [gluten, setGluten] = useState<TriFlag>(entry.glutenUnsure === true ? 'unknown' : triOf(entry.gluten));
+  // The same for "misschien lactose" (lactoseUnsure).
+  const [lactose, setLactose] = useState<TriFlag>(entry.lactoseUnsure === true ? 'unknown' : triOf(entry.lactose));
   const [error, setError] = useState('');
 
   function submit(e: Event) {
@@ -178,7 +185,7 @@ function EntryForm(props: { entry: Ingredient; busy: boolean; onSave: (next: Ing
       return;
     }
     // Unknown flags are removed from the entry, not written as false (see TriFlag).
-    const { vegan: _vegan, gluten: _gluten, glutenUnsure: _unsure, ...rest } = entry;
+    const { vegan: _vegan, gluten: _gluten, glutenUnsure: _unsure, lactose: _lactose, lactoseUnsure: _lactoseUnsure, ...rest } = entry;
     const next: Ingredient = {
       ...rest,
       nl: nl ? { one: nl, ...(nlMany.trim() ? { many: nlMany.trim() } : {}) } : { one: en },
@@ -190,6 +197,8 @@ function EntryForm(props: { entry: Ingredient; busy: boolean; onSave: (next: Ing
       veg: vegan === 'yes' ? true : veg,
       ...(vegan === 'unknown' ? {} : { vegan: vegan === 'yes' }),
       ...(gluten === 'unknown' ? {} : { gluten: gluten === 'yes' }),
+      // Vegan implies lactose-free, never "unsure" (rule H1, docs/specs/labels-categorieen.md §2a).
+      ...(vegan === 'yes' ? { lactose: false } : lactose === 'unknown' ? {} : { lactose: lactose === 'yes' }),
     };
     props.onSave(next);
   }
@@ -280,6 +289,19 @@ function EntryForm(props: { entry: Ingredient; busy: boolean; onSave: (next: Ing
           </select>
         </label>
       </div>
+      <label class="field">
+        <span>{t('dict.form.lactose')}</span>
+        <select
+          class="input"
+          value={vegan === 'yes' ? 'no' : lactose}
+          disabled={vegan === 'yes'}
+          onChange={(e) => setLactose((e.currentTarget as HTMLSelectElement).value as TriFlag)}
+        >
+          <option value="unknown">{t('dict.form.unknown')}</option>
+          <option value="yes">{t('dict.form.lactoseYes')}</option>
+          <option value="no">{t('dict.form.lactoseNo')}</option>
+        </select>
+      </label>
       {error && <div class="bad small">{error}</div>}
       <div class="actions">
         <button type="submit" class="btn btn-primary" disabled={props.busy}>

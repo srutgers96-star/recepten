@@ -2,6 +2,7 @@
 
 Status: compleet (Fable, 22 okt 2026)
 Gebouwd: 23 okt 2026 (blok 1 lactose-data, workflow wf_7fcf0fb3-698)
+Gebouwd: 23 okt 2026 (blok 2 lactose-UI, workflow wf_1d108e95-3cf)
 
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (besluiten over specs heen in
 docs/specs/README.md §2; bij tegenspraak wint README.md). Voor deze spec:

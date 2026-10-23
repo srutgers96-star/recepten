@@ -76,6 +76,9 @@ const TAG_WORDS: Record<string, string[]> = {
   'vegan-optie': ['vegan-optie', 'vegan optie', 'vegan option', 'veganistische optie', 'vegan mogelijk'],
   glutenvrij: ['glutenvrij', 'gluten-free', 'gluten free', 'glutenfree', 'zonder gluten'],
   'glutenvrij-optie': ['glutenvrij-optie', 'glutenvrij optie', 'gluten-free option', 'gluten free option', 'glutenvrije optie', 'glutenvrij mogelijk'],
+  // docs/specs/labels-categorieen.md §3 blok 2 (lactose STRICT: no dairy product at all).
+  lactosevrij: ['lactosevrij', 'lactose-free', 'lactose free', 'lactosefree', 'zuivelvrij', 'dairy-free', 'dairy free'],
+  'lactosevrij-optie': ['lactosevrij-optie', 'lactosevrij optie', 'lactose-free option', 'lactosevrije optie', 'lactosevrij mogelijk'],
   snel: ['snel', 'quick', 'fast', 'snelle', 'easy', 'makkelijk', 'simpel', 'simple', '30 minuten', '30 minutes'],
   oven: ['oven', 'ovenschotel', 'baked', 'uit de oven', 'oven dish'],
   wok: ['wok', 'roerbak', 'stir-fry', 'stir fry', 'wokgerecht'],

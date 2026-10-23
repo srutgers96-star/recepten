@@ -1,10 +1,11 @@
 // tools/derive-tags.ts — fact-based diet tags for the 196 classics (docs/phase-5-spec.md A.3).
 //
 // `applyDerivedTags(recipe, dict)` is the last composition step of tools/migrate-from-recepten2.ts:
-// 'vegetarisch', 'vegan' and 'glutenvrij' are set or removed from what the dictionary says about
-// the recipe's resolved lines (src/domain/diet.ts `dietTags`); an unsure dimension (an unresolved
-// line, a missing vegan/gluten flag) keeps whatever tag the recipe had; '-optie' tags and every
-// other tag stay as the LLM batches / the review set them.
+// 'vegetarisch', 'vegan', 'glutenvrij' and 'lactosevrij' (docs/specs/labels-categorieen.md §2b) are
+// set or removed from what the dictionary says about the recipe's resolved lines
+// (src/domain/diet.ts `dietTags`); an unsure dimension (an unresolved line, a missing or unsure
+// vegan/gluten/lactose flag) keeps whatever tag the recipe had; '-optie' tags and every other tag
+// stay as the LLM batches / the review set them.
 //
 // Run directly it rebuilds the classics WITHOUT that step, computes the changes and writes
 // docs/measure-diet.md: counts per tag before/after, sure/unsure per dimension, and the recipes
@@ -29,11 +30,11 @@ export interface TagChange {
   added: string[];
   removed: string[];
   facts: DietTags;
-  /** Ingredient ids (as the dictionary knows them) that contradict a diet tag: "kip (veg)", "spaghetti (gluten)". */
+  /** Ingredient ids (as the dictionary knows them) that contradict a diet tag: "kip (veg)", "spaghetti (gluten)", "kaas (lactose)". */
   contradictions: string[];
 }
 
-/** The recipe with its three diet tags set/removed fact-based; the same object when nothing changes. */
+/** The recipe with its four diet tags set/removed fact-based; the same object when nothing changes. */
 export function applyDerivedTags<T extends Pick<Recipe, 'lines' | 'tags'>>(recipe: T, dict: Dictionary): T {
   const tags = applyDietTags(recipe, dict);
   if (tags.length === recipe.tags.length && tags.every((t, i) => t === recipe.tags[i])) return recipe;
@@ -53,6 +54,7 @@ export function deriveTagChange(recipe: Recipe, dict: Dictionary): TagChange {
     if (ing.veg === false) contradictions.push(`${ing.id} (veg)`);
     else if (ing.vegan === false) contradictions.push(`${ing.id} (vegan)`);
     if (ing.gluten === true) contradictions.push(`${ing.id} (gluten)`);
+    if (ing.lactose === true) contradictions.push(`${ing.id} (lactose)`);
   }
   return {
     id: recipe.id,
@@ -74,7 +76,7 @@ export interface DietMeasure {
   contradicted: TagChange[];
   /** Recipes with at least one line the dictionary could not judge. */
   unresolved: TagChange[];
-  dictionary: { ingredients: number; vegan: number; gluten: number; glutenUnsure: number };
+  dictionary: { ingredients: number; vegan: number; gluten: number; glutenUnsure: number; lactose: number; lactoseUnsure: number };
 }
 
 /** Measure the derivation over recipes that do NOT have it applied yet (migrate with deriveTags false). */
@@ -101,6 +103,8 @@ export function measureDiet(recipes: readonly Recipe[], dict: Dictionary): DietM
       vegan: dict.ingredients.filter((i) => typeof i.vegan === 'boolean').length,
       gluten: dict.ingredients.filter((i) => typeof i.gluten === 'boolean').length,
       glutenUnsure: dict.ingredients.filter((i) => i.glutenUnsure === true).length,
+      lactose: dict.ingredients.filter((i) => typeof i.lactose === 'boolean').length,
+      lactoseUnsure: dict.ingredients.filter((i) => i.lactoseUnsure === true).length,
     },
   };
 }
@@ -116,9 +120,9 @@ export function dietReport(m: DietMeasure): string {
   lines.push('## Dictionary');
   lines.push('');
   const d = m.dictionary;
-  lines.push(`- Ingredients: **${d.ingredients}**; with a \`vegan\` flag: ${d.vegan}; with a \`gluten\` flag: ${d.gluten} (of which \`glutenUnsure\`: ${d.glutenUnsure})`);
-  if (d.vegan < d.ingredients || d.gluten < d.ingredients) {
-    lines.push(`- Flags are missing on ${d.ingredients - Math.min(d.vegan, d.gluten)} entries: \`vegan\` / \`glutenvrij\` stay "unsure" for recipes that use them (the tag is never set or removed then).`);
+  lines.push(`- Ingredients: **${d.ingredients}**; with a \`vegan\` flag: ${d.vegan}; with a \`gluten\` flag: ${d.gluten} (of which \`glutenUnsure\`: ${d.glutenUnsure}); with a \`lactose\` flag: ${d.lactose} (of which \`lactoseUnsure\`: ${d.lactoseUnsure})`);
+  if (d.vegan < d.ingredients || d.gluten < d.ingredients || d.lactose < d.ingredients) {
+    lines.push(`- Flags are missing on ${d.ingredients - Math.min(d.vegan, d.gluten, d.lactose)} entries: \`vegan\` / \`glutenvrij\` / \`lactosevrij\` stay "unsure" for recipes that use them (the tag is never set or removed then).`);
   }
   lines.push('');
   lines.push('## Tags before / after');

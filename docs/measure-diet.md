@@ -5,7 +5,7 @@ without its last step) with the dictionary in `data/*.json`. Re-run to reproduce
 
 ## Dictionary
 
-- Ingredients: **376**; with a `vegan` flag: 376; with a `gluten` flag: 376 (of which `glutenUnsure`: 22)
+- Ingredients: **1603**; with a `vegan` flag: 1603; with a `gluten` flag: 1603 (of which `glutenUnsure`: 169); with a `lactose` flag: 1603 (of which `lactoseUnsure`: 206)
 
 ## Tags before / after
 
@@ -14,74 +14,97 @@ without its last step) with the dictionary in `data/*.json`. Re-run to reproduce
 | vegetarisch | 40 | 41 | 41 | 155 | 0 | 0 |
 | vegan | 0 | 8 | 8 | 188 | 0 | 0 |
 | glutenvrij | 0 | 57 | 57 | 113 | 26 | 0 |
+| lactosevrij | 0 | 44 | 44 | 146 | 6 | 0 |
 
-Recipes with a changed tag list: **62** (62 gained a tag, 0 lost one).
+Recipes with a changed tag list: **84** (84 gained a tag, 0 lost one).
 
 ## LLM 'vegetarisch' contradicted by the facts (0)
 
 None: every recipe the LLM tagged vegetarisch has only vegetarian ingredients.
 
-## Tags added (62)
+## Tags added (84)
 
 - Aardappel-broccoli gratin (`b:aardappel-broccoli-gratin`): +glutenvrij
 - Aardappel-camembert-spek schotel (`b:aardappel-camembert-spek-schotel`): +glutenvrij
 - Aardappelpuree (bij kabeljauw met notencrumble) (`b:aardappelpuree-bij-kabeljauw-met-notencrumble`): +glutenvrij
 - Aardappelsalade (`b:aardappelsalade`): +glutenvrij
 - Aardappeltortillataart met tonijn (`b:aardappeltortillataart-met-tonijn`): +glutenvrij
-- Avocadosalade met pecannoten (`b:avocadosalade-met-pecannoten`): +vegan, +glutenvrij
+- Avocadosalade met pecannoten (`b:avocadosalade-met-pecannoten`): +vegan, +glutenvrij, +lactosevrij
 - Bloemkoolschotel uit de oven (`b:bloemkoolschotel-uit-de-oven`): +glutenvrij
 - Broccolistamppot met noten en geitenkaas (`b:broccolistamppot-met-noten-en-geitenkaas`): +glutenvrij
+- Buikspek met 5 spices (`b:buikspek-met-5-spices`): +lactosevrij
 - Courgettestamppot met zalm (`b:courgettestamppot-met-zalm`): +glutenvrij
-- Dahl van rode linzen & boerenkool (`b:dahl-van-rode-linzen-boerenkool`): +vegan
-- Erwtensoep (`b:erwtensoep`): +glutenvrij
+- Couscous met runderreepjes (`b:couscous-met-runderreepjes`): +lactosevrij
+- Curry met groenten en kip (`b:curry-met-groenten-en-kip`): +lactosevrij
+- Dahl van rode linzen & boerenkool (`b:dahl-van-rode-linzen-boerenkool`): +vegan, +lactosevrij
+- Erwtensoep (`b:erwtensoep`): +glutenvrij, +lactosevrij
 - Frisse tonijnsalade (`b:frisse-tonijnsalade`): +glutenvrij
+- Gado-gado (`b:gado-gado`): +lactosevrij
 - Gebakken kipfilet met chorizo in romige mosterdsaus (`b:gebakken-kipfilet-met-chorizo-in-romige-mosterdsaus`): +glutenvrij
 - Gehakt-salami ovenschotel (`b:gehakt-salami-ovenschotel`): +glutenvrij
+- Gehakttaart (`b:gehakttaart`): +lactosevrij
 - Gemarineerde kipfilet met cashewnoten (`b:gemarineerde-kipfilet-met-cashewnoten`): +glutenvrij
-- Gesmoorde kip met tomaat en kokos (`b:gesmoorde-kip-met-tomaat-en-kokos`): +glutenvrij
+- Gemarineerde speklapjes met mie (`b:gemarineerde-speklapjes-met-mie`): +lactosevrij
+- Gesmoorde kip met tomaat en kokos (`b:gesmoorde-kip-met-tomaat-en-kokos`): +glutenvrij, +lactosevrij
 - Gevulde courgette met groente en kwark (`b:gevulde-courgette-met-groente-en-kwark`): +glutenvrij
 - Griekse salade (`b:griekse-salade`): +glutenvrij
-- Groene kalkoencurry (`b:groene-kalkoencurry`): +glutenvrij
-- Groentecurry (`b:groentecurry`): +glutenvrij
+- Groene kalkoencurry (`b:groene-kalkoencurry`): +glutenvrij, +lactosevrij
+- Groentecurry (`b:groentecurry`): +glutenvrij, +lactosevrij
 - Hete bliksem met speklapjes en mosterdsaus (`b:hete-bliksem-met-speklapjes-en-mosterdsaus`): +glutenvrij
 - Husselpot (`b:husselpot`): +glutenvrij
+- Kabeljauw met notencrumble (`b:kabeljauw-met-notencrumble`): +lactosevrij
 - Kalfsvlees met spinazie (`b:kalfsvlees-met-spinazie`): +glutenvrij
 - Kalkoen-sperziebooncocktail met yoghurtsaus (`b:kalkoen-sperziebooncocktail-met-yoghurtsaus`): +glutenvrij
-- Kip met sesamzaad (`b:kip-met-sesamzaad`): +glutenvrij
+- Kip met sesamzaad (`b:kip-met-sesamzaad`): +glutenvrij, +lactosevrij
 - Kip-courgette salade met pesto (`b:kip-courgette-salade-met-pesto`): +glutenvrij
-- Kip, ham en gedroogde tomaten salade (`b:kip-ham-en-gedroogde-tomaten-salade`): +glutenvrij
+- Kip, ham en gedroogde tomaten salade (`b:kip-ham-en-gedroogde-tomaten-salade`): +glutenvrij, +lactosevrij
 - Kipsalade met bleekselderij (`b:kipsalade-met-bleekselderij`): +glutenvrij
 - Koolraapstamppot met gekarameliseerde rode uien en feta (`b:koolraapstamppot-met-gekarameliseerde-rode-uien-en-feta`): +glutenvrij
 - Lamsvlees in reepjes (`b:lamsvlees-in-reepjes`): +glutenvrij
+- Linguine met gerookte zalm en rucola (`b:linguine-met-gerookte-zalm-en-rucola`): +lactosevrij
 - Mais-gehakt-salami met gebakken aardappeltjes (`b:mais-gehakt-salami-met-gebakken-aardappeltjes`): +glutenvrij
-- Maispannenkoekjes met pinda’s (`b:maispannenkoekjes-met-pinda-s`): +glutenvrij
+- Maispannenkoekjes met pinda’s (`b:maispannenkoekjes-met-pinda-s`): +glutenvrij, +lactosevrij
 - Makreelsalade (`b:makreelsalade`): +glutenvrij
 - Mexicaanse ovenschotel met zoete aardappel (`b:mexicaanse-ovenschotel-met-zoete-aardappel`): +glutenvrij
+- Miesalade met rundvlees (`b:miesalade-met-rundvlees`): +lactosevrij
+- Nasi saté met kip en shiitake (`b:nasi-sate-met-kip-en-shiitake`): +lactosevrij
+- Noodles (`b:noodles`): +lactosevrij
+- Ossobuco met gremolata (`b:ossobuco-met-gremolata`): +lactosevrij
 - Peersalade met rucola en blauwe kaas (`b:peersalade-met-rucola-en-blauwe-kaas`): +glutenvrij
-- Ratatouille (`b:ratatouille`): +vegan, +glutenvrij
+- Pittige gehaktballen met pindasaus (`b:pittige-gehaktballen-met-pindasaus`): +lactosevrij
+- Ratatouille (`b:ratatouille`): +vegan, +glutenvrij, +lactosevrij
+- Rendang met zelfgemaakt boemboe (`b:rendang-met-zelfgemaakt-boemboe`): +lactosevrij
+- Rigatoni met tonijncarbonara (`b:rigatoni-met-tonijncarbonara`): +lactosevrij
+- Rijst met kapucijners en spek (`b:rijst-met-kapucijners-en-spek`): +lactosevrij
 - Rijst-tonijn-prei-prut (`b:rijst-tonijn-prei-prut`): +glutenvrij
-- Risotto met bacon en lente-ui (`b:risotto-met-bacon-en-lente-ui`): +glutenvrij
-- Roerbakschotel met tofu, pindasaus en mie (`b:roerbakschotel-met-tofu-pindasaus-en-mie`): +vegan
-- Roerei met courgette (`b:roerei-met-courgette`): +glutenvrij
-- Roergebakken andijvie met cashewnoten (`b:roergebakken-andijvie-met-cashewnoten`): +vegan
+- Risotto met bacon en lente-ui (`b:risotto-met-bacon-en-lente-ui`): +glutenvrij, +lactosevrij
+- Rode kool met hachée (`b:rode-kool-met-hachee`): +lactosevrij
+- Roerbakschotel met tofu, pindasaus en mie (`b:roerbakschotel-met-tofu-pindasaus-en-mie`): +vegan, +lactosevrij
+- Roerei met courgette (`b:roerei-met-courgette`): +glutenvrij, +lactosevrij
+- Roergebakken andijvie met cashewnoten (`b:roergebakken-andijvie-met-cashewnoten`): +vegan, +lactosevrij
 - Roergebakken kalkoen met peultjes en rijst (`b:roergebakken-kalkoen-met-peultjes-en-rijst`): +glutenvrij
 - Roergebakken kip met tomaat en olijven (`b:roergebakken-kip-met-tomaat-en-olijven`): +glutenvrij
 - Roergebakken rijst met prei en cashewnoten (`b:roergebakken-rijst-met-prei-en-cashewnoten`): +glutenvrij
 - Roergebakken rijst met spekjes en groenten (`b:roergebakken-rijst-met-spekjes-en-groenten`): +glutenvrij
-- Roergebakken tofu met paksoi (`b:roergebakken-tofu-met-paksoi`): +vegan
-- Rollade met groenten uit de oven (`b:rollade-met-groenten-uit-de-oven`): +glutenvrij
+- Roergebakken tofu met paksoi (`b:roergebakken-tofu-met-paksoi`): +vegan, +lactosevrij
+- Rollade met groenten uit de oven (`b:rollade-met-groenten-uit-de-oven`): +glutenvrij, +lactosevrij
 - Romige vissaus met spekjes en rijst (`b:romige-vissaus-met-spekjes-en-rijst`): +glutenvrij
-- Rucola-spinazie pesto (bij kabeljauw met notencrumble) (`b:rucola-spinazie-pesto-bij-kabeljauw-met-notencrumble`): +glutenvrij
-- Rundvlees met uien (`b:rundvlees-met-uien`): +glutenvrij
-- Salade Niçoise (`b:salade-nicoise`): +glutenvrij
+- Rucola-spinazie pesto (bij kabeljauw met notencrumble) (`b:rucola-spinazie-pesto-bij-kabeljauw-met-notencrumble`): +glutenvrij, +lactosevrij
+- Rundvlees met uien (`b:rundvlees-met-uien`): +glutenvrij, +lactosevrij
+- Salade Niçoise (`b:salade-nicoise`): +glutenvrij, +lactosevrij
 - Salade Prinsejagt - meloensalade (`b:salade-prinsejagt-meloensalade`): +glutenvrij
-- Spaanse groenten (`b:spaanse-groenten`): +vegan, +glutenvrij
+- Spaanse groenten (`b:spaanse-groenten`): +vegan, +glutenvrij, +lactosevrij
 - Spaanse rösti met spinazie (`b:spaanse-rosti-met-spinazie`): +glutenvrij
+- Spaghetti con peperoni e pomodori (`b:spaghetti-con-peperoni-e-pomodori`): +lactosevrij
+- Spaghetti Mediterranei (`b:spaghetti-mediterranei`): +lactosevrij
 - Spruitjestortilla (`b:spruitjestortilla`): +glutenvrij
-- Tomatensalsa (bij kabeljauw met notencrumble) (`b:tomatensalsa-bij-kabeljauw-met-notencrumble`): +vegan, +glutenvrij
+- Sticky chicken (`b:sticky-chicken`): +lactosevrij
+- Tomatensalsa (bij kabeljauw met notencrumble) (`b:tomatensalsa-bij-kabeljauw-met-notencrumble`): +vegan, +glutenvrij, +lactosevrij
 - Tonijn met nieuwe aardappeltjes (`b:tonijn-met-nieuwe-aardappeltjes`): +glutenvrij
 - Tortellini al gratin (`b:tortellini-al-gratin`): +vegetarisch
-- Visje bij de thee (`b:visje-bij-de-thee`): +glutenvrij
+- Vegetarische ramen (`b:vegetarische-ramen`): +lactosevrij
+- Visje bij de thee (`b:visje-bij-de-thee`): +glutenvrij, +lactosevrij
+- Wokken (`b:wokken`): +lactosevrij
 - Wortel met salami en rozijnen (`b:wortel-met-salami-en-rozijnen`): +glutenvrij
 - Zalmovenschotel met mais (`b:zalmovenschotel-met-mais`): +glutenvrij
 - Zoete aardappel-spinazietaart (`b:zoete-aardappel-spinazietaart`): +glutenvrij

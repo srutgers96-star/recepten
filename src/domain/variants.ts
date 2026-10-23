@@ -1,5 +1,6 @@
-// Recipe variants (docs/phase-5-spec.md block F.2): "Maak glutenvrije / vegetarische / vegan
-// versie". Framework-free: no preact, no dexie; runs in Node (tests).
+// Recipe variants (docs/phase-5-spec.md block F.2): "Maak glutenvrije / vegetarische / vegan /
+// lactosevrije versie" (lactosevrij: docs/specs/labels-categorieen.md §2b). Framework-free: no
+// preact, no dexie; runs in Node (tests).
 //
 //   variantDietsFor(recipe, lines, dict)      -> the diets a recipe does not have yet (a line contradicts it)
 //   planVariant(recipe, diet, swaps, dict)    -> VariantPlan: per line that breaks the diet the swap from
@@ -31,8 +32,11 @@ import { hasLang, newUserId, nowIso, type Lang, type Line, type Qty, type Recipe
 
 export type VariantDiet = DietTag;
 
-/** The diets a variant can be made for, in the order the UI offers them. */
-export const VARIANT_DIETS: readonly VariantDiet[] = ['glutenvrij', 'vegetarisch', 'vegan'];
+/**
+ * The diets a variant can be made for, in the order the UI offers them (the tab order of the
+ * variants spec 13D; docs/specs/README.md §2b). Not the chip order of `DIET_TAGS`.
+ */
+export const VARIANT_DIETS: readonly VariantDiet[] = ['glutenvrij', 'vegetarisch', 'vegan', 'lactosevrij'];
 
 /** One entry of data/swaps.json. Unknown keys are preserved. */
 export interface Swap {
@@ -97,6 +101,7 @@ export const DIET_SUFFIX: Readonly<Record<VariantDiet, { nl: string; en: string 
   glutenvrij: { nl: 'glutenvrij', en: 'gluten-free' },
   vegetarisch: { nl: 'vegetarisch', en: 'vegetarian' },
   vegan: { nl: 'vegan', en: 'vegan' },
+  lactosevrij: { nl: 'lactosevrij', en: 'lactose-free' },
 };
 
 /** The tags a variant carries for a diet (data/recipes.json tag vocabulary: vegan implies vegetarisch). */
@@ -104,6 +109,7 @@ const DIET_TAGS_FOR: Readonly<Record<VariantDiet, readonly string[]>> = {
   glutenvrij: ['glutenvrij'],
   vegetarisch: ['vegetarisch'],
   vegan: ['vegetarisch', 'vegan'],
+  lactosevrij: ['lactosevrij'],
 };
 
 /** The "-optie" tags that stop meaning anything once the variant IS that diet. */
@@ -111,6 +117,7 @@ const OPTIE_TAGS_FOR: Readonly<Record<VariantDiet, readonly string[]>> = {
   glutenvrij: ['glutenvrij-optie'],
   vegetarisch: ['vega-optie'],
   vegan: ['vega-optie', 'vegan-optie'],
+  lactosevrij: ['lactosevrij-optie'],
 };
 
 // --- which lines break a diet -----------------------------------------------------------------

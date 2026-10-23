@@ -1,7 +1,8 @@
 // Category labels for the chips and the Home shelf, plus the "Dieet" chip row (docs/phase-5-spec.md
-// A.3): vegetarisch · vegan · glutenvrij as prominent chips above the generic chips on Home, the
-// Recipes list and the Kies-N sheet, with one secondary toggle "ook als optie" that lets a chosen
-// diet chip also match the `-optie` variant of that tag (vega-optie, vegan-optie, glutenvrij-optie).
+// A.3): vegetarisch · vegan · glutenvrij · lactosevrij (docs/specs/labels-categorieen.md §1a) as
+// prominent chips above the generic chips on Home, the Recipes list and the Kies-N sheet, with one
+// secondary toggle "ook als optie" that lets a chosen diet chip also match the `-optie` variant of
+// that tag (vega-optie, vegan-optie, glutenvrij-optie, lactosevrij-optie).
 // The phase-2 chip row that lived here (a hard-coded quick-filter list) was replaced by the generic
 // `PickChips` in PickSheet.tsx (spec §0: chips follow the tags present in the data).
 import type { Category } from '@/domain/dictionary';
@@ -14,8 +15,13 @@ export function categoryLabel(c: Category | undefined, id: string): string {
   return (lang.value === 'nl' ? c.nl : c.en) || c.nl || id;
 }
 
-/** The "-optie" tag of a diet tag (data/recipes.json: vega-optie, vegan-optie, glutenvrij-optie). */
-export const OPTIE_TAG: Readonly<Record<DietTag, string>> = { vegetarisch: 'vega-optie', vegan: 'vegan-optie', glutenvrij: 'glutenvrij-optie' };
+/** The "-optie" tag of a diet tag (data/recipes.json: vega-optie, vegan-optie, glutenvrij-optie, lactosevrij-optie). */
+export const OPTIE_TAG: Readonly<Record<DietTag, string>> = {
+  vegetarisch: 'vega-optie',
+  vegan: 'vegan-optie',
+  glutenvrij: 'glutenvrij-optie',
+  lactosevrij: 'lactosevrij-optie',
+};
 
 /** Every tag the diet row covers (the generic row leaves these out). */
 export const DIET_ROW_TAGS: ReadonlySet<string> = new Set<string>([...DIET_TAGS, ...Object.values(OPTIE_TAG)]);
@@ -48,7 +54,7 @@ export interface DietChipsProps {
   onOptie: (on: boolean) => void;
 }
 
-/** The prominent diet row: [Dieet] Vegetarisch · Vegan · Glutenvrij · (ook als optie). */
+/** The prominent diet row: [Dieet] Vegetarisch · Vegan · Glutenvrij · Lactosevrij · (ook als optie), in DIET_TAGS order. */
 export function DietChips(props: DietChipsProps) {
   const anyOn = DIET_TAGS.some((tag) => props.selected.includes(tag));
   return (

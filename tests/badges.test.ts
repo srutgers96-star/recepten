@@ -1,8 +1,10 @@
 // Badge evaluation semantics (docs/phase-5-spec.md Block C item 1). These tests PIN the semantics:
 // per rule kind one earned and one progress case, the ISO-week streak across a year boundary,
 // letter folding, unknown recipeIds in the log, normalizeBadges with garbage input and the cap of
-// `current` at `target`.
+// `current` at `target`. Plus the shipped catalogue data/badges.json (44 badges since
+// docs/specs/labels-categorieen.md §2b added "Zuivelvrije ziel").
 import { describe, expect, it } from 'vitest';
+import badgesJson from '../data/badges.json';
 import {
   evaluateBadges,
   isoWeekKey,
@@ -443,5 +445,35 @@ describe('normalizeBadges', () => {
     const vis = recipe('b:zalm', 'Zalm', { category: 'vis' });
     const f = facts({ recipes: recipeMap(vis), log: [entry(vis.id), entry(vis.id)] });
     expect(evaluateBadges([b as Badge], f)).toMatchObject([{ earned: false, current: 2, target: 10 }]);
+  });
+});
+
+// ---------------------------------------------------------------------------- data/badges.json
+
+describe('data/badges.json', () => {
+  const catalogue = normalizeBadges(badgesJson);
+
+  it('has 44 valid badges with unique ids', () => {
+    expect((badgesJson as unknown[]).length).toBe(44);
+    expect(catalogue).toHaveLength(44);
+    expect(new Set(catalogue.map((b) => b.id)).size).toBe(44);
+  });
+
+  it('"Zuivelvrije ziel" (🥥) counts cooks of recipes tagged lactosevrij, right after the gluten-free badge', () => {
+    const ids = catalogue.map((b) => b.id);
+    expect(ids.indexOf('zuivelvrije-ziel')).toBe(ids.indexOf('glutenvrijbuiter') + 1);
+    const badgeDef = catalogue.find((b) => b.id === 'zuivelvrije-ziel') as Badge;
+    expect(badgeDef).toMatchObject({
+      nl: { name: 'Zuivelvrije ziel', description: 'Kook 5 lactosevrije recepten' },
+      en: { name: 'Dairy-free soul', description: 'Cook 5 lactose-free recipes' },
+      icon: '🥥',
+      rule: { kind: 'tag', id: 'lactosevrij', n: 5 },
+      tier: 1,
+    });
+    const free = recipe('b:ratatouille', 'Ratatouille', { tags: ['vegetarisch', 'vegan', 'lactosevrij'] });
+    const optie = recipe('u:pasta', 'Pasta', { tags: ['lactosevrij-optie'] });
+    const f = facts({ recipes: recipeMap(free, optie), log: [entry(free.id), entry(free.id), entry(optie.id)] });
+    // two cooks of the tagged recipe; the "-optie" tag does not count
+    expect(evaluateBadges([badgeDef], f)).toMatchObject([{ badge: { id: 'zuivelvrije-ziel' }, earned: false, current: 2, target: 5 }]);
   });
 });

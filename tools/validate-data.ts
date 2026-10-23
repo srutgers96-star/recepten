@@ -30,7 +30,8 @@ export interface ValidationResult {
 
 /**
  * The tag vocabulary of docs/phase-2-spec.md §1 (`recipes.json` → `tags`) plus the phase-5 diet
- * tags (PLAN.md §0 "Dieet-categorieën": vegan, glutenvrij and their "-optie" variants).
+ * tags (PLAN.md §0 "Dieet-categorieën": vegan, glutenvrij and their "-optie" variants) and
+ * lactosevrij with its "-optie" (docs/specs/labels-categorieen.md §2b).
  */
 export const RECIPE_TAGS: readonly string[] = [
   'vegetarisch',
@@ -39,6 +40,8 @@ export const RECIPE_TAGS: readonly string[] = [
   'vegan-optie',
   'glutenvrij',
   'glutenvrij-optie',
+  'lactosevrij',
+  'lactosevrij-optie',
   'snel',
   'oven',
   'wok',
@@ -764,18 +767,20 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs): Validation
 // differ; `diets` is a non-empty list from SWAP_DIETS without duplicates; the same (from, diet)
 // pair occurs once (planVariant takes the first swap it finds, so a second one would be dead data);
 // `note` is { nl?, en? } with at least one language; and `to` satisfies every diet it is listed for:
-// glutenvrij -> gluten false, vegetarisch -> veg true, vegan -> vegan true. Warnings: a `to` whose
-// gluten flag is a guess (glutenUnsure) for a gluten-free swap, a `from` that does not actually
-// break the diet (the swap can never fire), stray keys.
+// glutenvrij -> gluten false, vegetarisch -> veg true, vegan -> vegan true, lactosevrij -> lactose
+// false. Warnings: a `to` whose gluten / lactose flag is a guess (glutenUnsure / lactoseUnsure) for
+// a gluten-free / lactose-free swap, a `from` that does not actually break the diet (the swap can
+// never fire), stray keys.
 
 /** The diets a swap may serve (src/domain/variants.ts `VariantDiet`). */
-export const SWAP_DIETS: readonly string[] = ['glutenvrij', 'vegetarisch', 'vegan'];
+export const SWAP_DIETS: readonly string[] = ['glutenvrij', 'vegetarisch', 'vegan', 'lactosevrij'];
 
 /** The flag on `to` that each diet needs, and the flag on `from` that makes the swap meaningful. */
 const SWAP_RULES: Readonly<Record<string, { flag: string; toValue: boolean; fromBreaks: (ing: Record<string, unknown>) => boolean }>> = {
   glutenvrij: { flag: 'gluten', toValue: false, fromBreaks: (ing) => ing['gluten'] === true },
   vegetarisch: { flag: 'veg', toValue: true, fromBreaks: (ing) => ing['veg'] === false },
   vegan: { flag: 'vegan', toValue: true, fromBreaks: (ing) => ing['vegan'] === false || ing['veg'] === false },
+  lactosevrij: { flag: 'lactose', toValue: false, fromBreaks: (ing) => ing['lactose'] === true },
 };
 
 const SWAP_KEYS: ReadonlySet<string> = new Set(['from', 'to', 'diets', 'note']);
@@ -840,6 +845,9 @@ export function validateSwaps(data: unknown, ingredients: readonly Record<string
         }
         if (toIng && diet === 'glutenvrij' && toIng['glutenUnsure'] === true) {
           warnings.push(`${label}: "to" is only probably gluten-free (glutenUnsure); the swap note should say "controleer het etiket".`);
+        }
+        if (toIng && diet === 'lactosevrij' && toIng['lactoseUnsure'] === true) {
+          warnings.push(`${label}: "to" is only probably lactose-free (lactoseUnsure); the swap note should say "controleer het etiket".`);
         }
         if (fromIng && !rule.fromBreaks(fromIng)) {
           warnings.push(`${label}: "from" does not break the ${diet} diet by its flags, so this swap can never fire.`);

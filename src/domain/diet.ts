@@ -1,32 +1,36 @@
 // Diet tags and editor meta suggestions derived from the ingredients (docs/phase-5-spec.md block
 // A.2, PLAN.md §0 "Dieet-categorieën" / "Categorie & dieet in de editor"). Framework-free.
 //
-//   dietTags(lines, dict)   -> { vegetarisch, vegan, glutenvrij, unsure, unresolved }
+//   dietTags(lines, dict)   -> { vegetarisch, vegan, glutenvrij, lactosevrij, unsure, unresolved }
 //   suggestMeta(recipe, dict) -> { category?, tags, unsure }
-//   applyDietTags(recipe, dict) -> the recipe with the three fact-based tags set/removed
+//   applyDietTags(recipe, dict) -> the recipe with the four fact-based tags set/removed
 //
-// Facts come from the dictionary flags: `veg` (vegetarian), `vegan`, `gluten` (+ `glutenUnsure`).
+// Facts come from the dictionary flags: `veg` (vegetarian), `vegan`, `gluten` (+ `glutenUnsure`),
+// `lactose` (+ `lactoseUnsure`; docs/specs/labels-categorieen.md §2b, STRICT: every dairy product).
 // A recipe is vegetarian when no resolved ingredient has veg false, vegan when every resolved
-// ingredient has vegan true, gluten-free when none has gluten true. A contradiction is a fact
-// (false, never "unsure"). A line the dictionary cannot judge — `ing` null, an id this dictionary
+// ingredient has vegan true, gluten-free when none has gluten true, lactose-free when none has
+// lactose true. A contradiction is a fact (false, never "unsure"). A line the dictionary cannot judge — `ing` null, an id this dictionary
 // does not know, or a missing / unsure flag — makes the answer for that dimension "unsure": the
 // tag is still suggested (true) when nothing contradicts it, and its name is listed in `unsure`
 // so the UI can say "waarschijnlijk" / "probably". Optional and garnish lines count like any
 // other line (a recipe with optional Parmesan is not vegan); alternatives ("of kabeljauw") are
 // not consulted, only the main ingredient of a line. A "plantaardige" / "vegetarische" qualifier
-// on the line overrides the ingredient's veg/vegan flags (DIET_QUALIFIERS below).
+// on the line overrides the ingredient's veg/vegan (and, for "plantaardige", lactose) flags
+// (DIET_QUALIFIERS below).
 import type { Line, Recipe } from './model.ts';
 import type { Dictionary, Ingredient } from './dictionary.ts';
 
-export type DietTag = 'vegetarisch' | 'vegan' | 'glutenvrij';
+export type DietTag = 'vegetarisch' | 'vegan' | 'glutenvrij' | 'lactosevrij';
 
-export const DIET_TAGS: readonly DietTag[] = ['vegetarisch', 'vegan', 'glutenvrij'];
+/** The fact-based diet tags, in the order the UI shows them (the chip row). */
+export const DIET_TAGS: readonly DietTag[] = ['vegetarisch', 'vegan', 'glutenvrij', 'lactosevrij'];
 
 export interface DietTags {
   /** True (sure or probable, see `unsure`), false (a resolved ingredient contradicts it), or absent (nothing to judge). */
   vegetarisch?: boolean;
   vegan?: boolean;
   glutenvrij?: boolean;
+  lactosevrij?: boolean;
   /** The dimensions whose true answer rests on lines the dictionary could not judge. */
   unsure: DietTag[];
   /** The lines that could not be judged (their name part or raw text), for "why unsure". */
@@ -50,17 +54,19 @@ function newVerdict(): Verdict {
 
 /**
  * Qualifiers that change the diet facts of a line's ingredient (data/qualifiers.json ids, kept by
- * the parser in `line.qual`): "plantaardige room" is plant-based whatever `room` says; "vegetarische
- * worst" is vegetarian, and whether it is also vegan is then unknown rather than contradicted.
+ * the parser in `line.qual`): "plantaardige room" is plant-based whatever `room` says, and so
+ * lactose-free (rule H1: plant-based is never lactose, never unsure); "vegetarische worst" is
+ * vegetarian, and whether it is also vegan is then unknown rather than contradicted; it says
+ * nothing about lactose.
  */
-const DIET_QUALIFIERS: Record<string, { vegan: boolean }> = {
-  plantaardige: { vegan: true },
+const DIET_QUALIFIERS: Record<string, { vegan: boolean; lactose?: false }> = {
+  plantaardige: { vegan: true, lactose: false },
   vegetarische: { vegan: false },
 };
 
 /**
  * The ingredient of a line as far as this dictionary knows it (an unknown id counts as unresolved),
- * with its `veg` / `vegan` flags adjusted for a diet qualifier on the line.
+ * with its `veg` / `vegan` / `lactose` flags adjusted for a diet qualifier on the line.
  */
 function ingredientOf(line: Line, dict: Dictionary): Ingredient | undefined {
   const ing = line.ing ? dict.get(line.ing) : undefined;
@@ -72,6 +78,10 @@ function ingredientOf(line: Line, dict: Dictionary): Ingredient | undefined {
     out = { ...out, veg: true };
     if (q.vegan) out.vegan = true;
     else if (out.vegan === false) delete out.vegan;
+    if (q.lactose === false) {
+      out.lactose = false;
+      delete out.lactoseUnsure;
+    }
   }
   return out;
 }
@@ -87,9 +97,9 @@ function ingredientLines(lines: readonly Line[]): Line[] {
   return lines.filter((l) => l.kind !== 'header');
 }
 
-/** Vegetarian / vegan / gluten-free facts over a recipe's lines. */
+/** Vegetarian / vegan / gluten-free / lactose-free facts over a recipe's lines. */
 export function dietTags(lines: readonly Line[], dict: Dictionary): DietTags {
-  const v: Record<DietTag, Verdict> = { vegetarisch: newVerdict(), vegan: newVerdict(), glutenvrij: newVerdict() };
+  const v: Record<DietTag, Verdict> = { vegetarisch: newVerdict(), vegan: newVerdict(), glutenvrij: newVerdict(), lactosevrij: newVerdict() };
   const unresolved: string[] = [];
   let judged = 0;
 
@@ -109,6 +119,8 @@ export function dietTags(lines: readonly Line[], dict: Dictionary): DietTags {
     else if (ing.vegan !== true) v.vegan.unknown = true;
     if (ing.gluten === true) v.glutenvrij.contradicted = true;
     else if (ing.gluten !== false || ing.glutenUnsure === true) v.glutenvrij.unknown = true;
+    if (ing.lactose === true) v.lactosevrij.contradicted = true;
+    else if (ing.lactose !== false || ing.lactoseUnsure === true) v.lactosevrij.unknown = true;
   }
 
   const out: DietTags = { unsure: [], unresolved };
@@ -124,7 +136,7 @@ export function dietTags(lines: readonly Line[], dict: Dictionary): DietTags {
 }
 
 /**
- * `recipe.tags` with the three fact-based diet tags set (sure true) or removed (sure false);
+ * `recipe.tags` with the four fact-based diet tags set (sure true) or removed (sure false);
  * unsure dimensions keep whatever the recipe had, and every other tag ("vega-optie", "snel", …)
  * is untouched. Order: existing tags in their order, new diet tags appended.
  */

@@ -258,6 +258,8 @@ export const edit: Dict = {
   'meta.tag.vegan-optie': { nl: 'vegan-optie', en: 'vegan option' },
   'meta.tag.glutenvrij': { nl: 'glutenvrij', en: 'gluten-free' },
   'meta.tag.glutenvrij-optie': { nl: 'glutenvrij-optie', en: 'gluten-free option' },
+  'meta.tag.lactosevrij': { nl: 'lactosevrij', en: 'lactose-free' },
+  'meta.tag.lactosevrij-optie': { nl: 'lactosevrij-optie', en: 'lactose-free option' },
   'meta.tag.snel': { nl: 'snel', en: 'quick' },
   'meta.tag.oven': { nl: 'oven', en: 'oven' },
   'meta.tag.wok': { nl: 'wok', en: 'wok' },
@@ -568,6 +570,10 @@ export const edit: Dict = {
   'dict.flag.glutenfree': { nl: 'glutenvrij', en: 'gluten-free' },
   'dict.flag.gluten': { nl: 'bevat gluten', en: 'contains gluten' },
   'dict.flag.glutenUnsure': { nl: 'misschien gluten', en: 'may contain gluten' },
+  // Lactose (docs/specs/labels-categorieen.md §1a; STRICT: every dairy product counts).
+  'dict.flag.lactosefree': { nl: 'lactosevrij', en: 'lactose-free' },
+  'dict.flag.lactose': { nl: 'bevat lactose', en: 'contains lactose' },
+  'dict.flag.lactoseUnsure': { nl: 'misschien lactose', en: 'may contain lactose' },
   'dict.flag.perishable': { nl: 'kort houdbaar', en: 'perishable' },
   'dict.flag.staple': { nl: 'voorraadkast', en: 'pantry staple' },
 
@@ -579,4 +585,7 @@ export const edit: Dict = {
   'dict.form.unknown': { nl: 'weet ik niet', en: 'not sure' },
   'dict.form.veganYes': { nl: 'ja, vegan', en: 'yes, vegan' },
   'dict.form.veganNo': { nl: 'nee, niet vegan', en: 'no, not vegan' },
+  'dict.form.lactose': { nl: 'Lactose', en: 'Lactose' },
+  'dict.form.lactoseYes': { nl: 'ja, bevat lactose', en: 'yes, contains lactose' },
+  'dict.form.lactoseNo': { nl: 'nee, lactosevrij', en: 'no, lactose-free' },
 };

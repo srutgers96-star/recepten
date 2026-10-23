@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "dataVersion": 4,
-  "generatedAt": "2026-10-08T16:43:38.881Z",
+  "dataVersion": 5,
+  "generatedAt": "2026-10-23T18:37:57.823Z",
   "recipes": [
     {
       "schema": 2,
@@ -1236,7 +1236,8 @@
         "snel",
         "zomer",
         "vegan",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -2731,7 +2732,8 @@
       "tags": [
         "oven",
         "wereld",
-        "feest"
+        "feest",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -3712,7 +3714,8 @@
         "en": "Couscous with beef strips"
       },
       "tags": [
-        "snel"
+        "snel",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -3875,7 +3878,8 @@
       },
       "tags": [
         "wereld",
-        "wok"
+        "wok",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -4129,7 +4133,8 @@
       "tags": [
         "vegetarisch",
         "wereld",
-        "vegan"
+        "vegan",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -4671,7 +4676,8 @@
       },
       "tags": [
         "winter",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -6692,7 +6698,8 @@
       },
       "tags": [
         "vega-optie",
-        "wereld"
+        "wereld",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -8567,7 +8574,8 @@
         "en": "Pan-fried meatloaf"
       },
       "tags": [
-        "kids"
+        "kids",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -8985,7 +8993,8 @@
       },
       "tags": [
         "wok",
-        "wereld"
+        "wereld",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -9450,7 +9459,8 @@
       },
       "tags": [
         "wereld",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -11090,7 +11100,8 @@
         "snel",
         "wok",
         "wereld",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -11298,7 +11309,8 @@
       "tags": [
         "vega-optie",
         "wereld",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -13588,7 +13600,8 @@
       },
       "tags": [
         "oven",
-        "snel"
+        "snel",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -15053,7 +15066,8 @@
         "en": "Chicken with sesame seeds"
       },
       "tags": [
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -15641,7 +15655,8 @@
       },
       "tags": [
         "zomer",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -18579,7 +18594,8 @@
       },
       "tags": [
         "snel",
-        "zomer"
+        "zomer",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -20179,7 +20195,8 @@
         "vegetarisch",
         "wereld",
         "snel",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -21166,7 +21183,8 @@
       "tags": [
         "wok",
         "wereld",
-        "zomer"
+        "zomer",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -22244,7 +22262,8 @@
       "tags": [
         "wereld",
         "wok",
-        "snel"
+        "snel",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -22375,7 +22394,8 @@
       "tags": [
         "wok",
         "snel",
-        "wereld"
+        "wereld",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -22917,7 +22937,8 @@
       },
       "tags": [
         "winter",
-        "feest"
+        "feest",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -24969,7 +24990,8 @@
         "en": "Spicy meatballs with peanut sauce"
       },
       "tags": [
-        "wereld"
+        "wereld",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -26236,7 +26258,8 @@
         "snel",
         "zomer",
         "vegan",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -26432,7 +26455,8 @@
       },
       "tags": [
         "wereld",
-        "winter"
+        "winter",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -26975,7 +26999,9 @@
         "nl": "Rigatoni met tonijncarbonara",
         "en": "Rigatoni with tuna carbonara"
       },
-      "tags": [],
+      "tags": [
+        "lactosevrij"
+      ],
       "servings": 4,
       "lines": [
         {
@@ -27163,7 +27189,8 @@
       },
       "tags": [
         "snel",
-        "winter"
+        "winter",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -27957,7 +27984,8 @@
       },
       "tags": [
         "snel",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -28123,7 +28151,8 @@
         "en": "Red cabbage with hachee"
       },
       "tags": [
-        "winter"
+        "winter",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -28300,7 +28329,8 @@
         "wok",
         "wereld",
         "snel",
-        "vegan"
+        "vegan",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -28533,7 +28563,8 @@
         "snel",
         "vega-optie",
         "zomer",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -28709,7 +28740,8 @@
         "vegetarisch",
         "wok",
         "snel",
-        "vegan"
+        "vegan",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -29777,7 +29809,8 @@
         "wok",
         "wereld",
         "snel",
-        "vegan"
+        "vegan",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -30038,7 +30071,8 @@
         "oven",
         "feest",
         "winter",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -30859,7 +30893,8 @@
       "tags": [
         "snel",
         "vegetarisch",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -31504,7 +31539,8 @@
       "tags": [
         "wereld",
         "winter",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -31933,7 +31969,8 @@
       },
       "tags": [
         "zomer",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -33354,7 +33391,8 @@
         "zomer",
         "wereld",
         "vegan",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -34235,7 +34273,9 @@
         "nl": "Spaghetti con peperoni e pomodori",
         "en": "Spaghetti con peperoni e pomodori"
       },
-      "tags": [],
+      "tags": [
+        "lactosevrij"
+      ],
       "servings": 4,
       "lines": [
         {
@@ -34511,7 +34551,8 @@
         "en": "Spaghetti Mediterranei"
       },
       "tags": [
-        "zomer"
+        "zomer",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -36151,7 +36192,8 @@
       "tags": [
         "oven",
         "wereld",
-        "kids"
+        "kids",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -37790,7 +37832,8 @@
         "snel",
         "zomer",
         "vegan",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -38913,7 +38956,8 @@
       "tags": [
         "vegetarisch",
         "wereld",
-        "wok"
+        "wok",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -39515,7 +39559,8 @@
       "tags": [
         "snel",
         "kids",
-        "glutenvrij"
+        "glutenvrij",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [
@@ -40390,7 +40435,8 @@
       "tags": [
         "wok",
         "snel",
-        "kids"
+        "kids",
+        "lactosevrij"
       ],
       "servings": 4,
       "lines": [

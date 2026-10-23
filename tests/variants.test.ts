@@ -1,7 +1,8 @@
 // Recipe variants (docs/phase-5-spec.md block F.2, src/domain/variants.ts): planVariant over the
 // real dictionary + data/swaps.json, the raw-text name replacement (whole word, plural, both
 // languages, capital, alternatives), makeVariant (new id, variantOf, tags, name suffix, only ticked
-// swaps, original untouched), variantOf travelling in a share token, and validateSwaps.
+// swaps, original untouched), variantOf travelling in a share token, and validateSwaps. Lactosevrij
+// (docs/specs/labels-categorieen.md §2b / §6a): the fourth variant diet with its dairy swaps.
 import { describe, expect, it } from 'vitest';
 import swapsJson from '../data/swaps.json';
 import { defaultDictionary, defaultDictionaryData, ingredientsData } from '../src/domain/data';
@@ -18,6 +19,7 @@ import {
   lineBreaksDiet,
   makeVariant,
   planVariant,
+  VARIANT_DIETS,
   variantDietsFor,
   variantName,
   variantTags,
@@ -227,11 +229,64 @@ describe('planVariant', () => {
 });
 
 describe('variantDietsFor', () => {
+  it('offers the diets in the tab order of 13D (VARIANT_DIETS)', () => {
+    expect(VARIANT_DIETS).toEqual(['glutenvrij', 'vegetarisch', 'vegan', 'lactosevrij']);
+  });
+
   it('offers only the diets a line contradicts and that are not tagged by hand', () => {
-    expect(variantDietsFor({ tags: [] }, SCHOTEL, dict)).toEqual(['glutenvrij', 'vegetarisch', 'vegan']);
-    expect(variantDietsFor({ tags: ['vegetarisch'] }, SCHOTEL, dict)).toEqual(['glutenvrij', 'vegan']);
+    // the grated cheese contradicts lactosevrij as well
+    expect(variantDietsFor({ tags: [] }, SCHOTEL, dict)).toEqual(['glutenvrij', 'vegetarisch', 'vegan', 'lactosevrij']);
+    expect(variantDietsFor({ tags: ['vegetarisch'] }, SCHOTEL, dict)).toEqual(['glutenvrij', 'vegan', 'lactosevrij']);
     expect(variantDietsFor({ tags: [] }, nl('400 g glutenvrije pasta', '1 ui', '200 ml sojaroom'), dict)).toEqual([]);
     expect(variantDietsFor({ tags: [] }, nl('1 ui', '1 el mysterieus poeder'), dict)).toEqual([]);
+  });
+
+  it('offers lactosevrij for a recipe with cheese, not for one tagged lactosevrij or without dairy', () => {
+    const cheese = nl('200 g rijst', '100 g kaas');
+    expect(variantDietsFor({ tags: [] }, cheese, dict)).toContain('lactosevrij');
+    expect(variantDietsFor({ tags: ['lactosevrij'] }, cheese, dict)).not.toContain('lactosevrij');
+    expect(variantDietsFor({ tags: [] }, nl('200 g rijst', '1 ui', '200 ml kokosmelk'), dict)).not.toContain('lactosevrij');
+  });
+});
+
+describe('lactosevrij variant', () => {
+  const LINES = nl('50 g boter', '100 g feta', '1 ui', '200 ml slagroom');
+  const plan = planVariant({ lines: LINES }, 'lactosevrij', swaps, dict);
+
+  it('swaps butter and cream; feta has no swap and is "controleer zelf"', () => {
+    expect(plan.diet).toBe('lactosevrij');
+    expect(plan.swaps.map((s) => [s.index, s.fromId, s.toId, s.raw.nl, s.applies])).toEqual([
+      [0, 'boter', 'vegan-boter', '50 g vegan boter', true],
+      [3, 'slagroom', 'sojaroom', '200 ml sojaroom', true],
+    ]);
+    expect(plan.unresolved).toEqual([1]);
+    expect(lineBreaksDiet(LINES[1] as Line, 'lactosevrij', dict)).toBe(true);
+    expect(lineBreaksDiet(LINES[2] as Line, 'lactosevrij', dict)).toBe(false);
+  });
+
+  it('the new lactose-only swaps: ghee -> kokosolie, roomkaas and kwark -> sojayoghurt', () => {
+    const p = planVariant({ lines: nl('2 el ghee', '200 g roomkaas', '250 g kwark') }, 'lactosevrij', swaps, dict);
+    expect(p.swaps.map((s) => [s.fromId, s.toId, s.applies])).toEqual([
+      ['ghee', 'kokosolie', true],
+      ['roomkaas', 'sojayoghurt', true],
+      ['kwark', 'sojayoghurt', true],
+    ]);
+    expect(p.swaps[0]!.note?.nl).toBe('Kokosolie bakt net zo heet als ghee; de smaak is iets zoeter.');
+    expect(p.unresolved).toEqual([]);
+    // margarine is only "maybe lactose" (lactose false + unsure): it never breaks the diet
+    expect(planVariant({ lines: nl('50 g margarine') }, 'lactosevrij', swaps, dict)).toMatchObject({ swaps: [], unresolved: [] });
+  });
+
+  it('makeVariant: "(lactosevrij)" / "(lactose-free)", tag lactosevrij added, lactosevrij-optie dropped', () => {
+    const src = recipe(LINES, { name: { nl: 'Ovenschotel', en: 'Bake' }, tags: ['oven', 'lactosevrij-optie', 'vega-optie'] });
+    const v = makeVariant(src, plan, 'lactosevrij', { id: 'u:lactose1', now: '2026-10-23T12:00:00.000Z' });
+    expect(v.name).toEqual({ nl: 'Ovenschotel (lactosevrij)', en: 'Bake (lactose-free)' });
+    expect(v.tags).toEqual(['oven', 'vega-optie', 'lactosevrij']);
+    expect(v.variantOf).toBe(src.id);
+    expect(v.metaManual).toBe(true);
+    expect(v.lines.map((l) => l.raw.nl)).toEqual(['50 g vegan boter', '100 g feta', '1 ui', '200 ml sojaroom (Sojaroom klopt niet op; voor opgeklopte slagroom gebruik je het vaste deel van gekoelde kokosmelk)']);
+    expect(variantName({ en: 'Soup' }, 'lactosevrij')).toEqual({ en: 'Soup (lactose-free)' });
+    expect(variantTags(['lactosevrij-optie', 'glutenvrij-optie'], 'lactosevrij')).toEqual(['glutenvrij-optie', 'lactosevrij']);
   });
 });
 
@@ -403,5 +458,28 @@ describe('validateSwaps', () => {
     expect(r.errors).toEqual([]);
     expect(r.warnings.some((w) => w.includes('glutenUnsure'))).toBe(true);
     expect(r.warnings.some((w) => w.includes('can never fire'))).toBe(true);
+  });
+
+  it('lactosevrij: the target must be lactose: false; a lactoseUnsure target or a non-dairy source warns', () => {
+    const bad = validateSwaps([{ from: 'melk', to: 'yoghurt', diets: ['lactosevrij'] }], ings);
+    expect(bad.errors.some((e) => e.includes('"yoghurt"') && e.includes('"lactose": false'))).toBe(true);
+    const r = validateSwaps([{ from: 'boter', to: 'margarine', diets: ['lactosevrij'] }, { from: 'margarine', to: 'vegan-boter', diets: ['lactosevrij'] }], ings);
+    expect(r.errors).toEqual([]);
+    expect(r.warnings.some((w) => w.includes('"margarine"') && w.includes('lactoseUnsure'))).toBe(true);
+    // margarine is lactose: false (unsure), so a lactose-free swap FROM it can never fire
+    expect(r.warnings.some((w) => w.includes('"margarine" -> "vegan-boter"') && w.includes('can never fire'))).toBe(true);
+  });
+
+  it('every lactosevrij swap in data/swaps.json has a target that is lactose: false (no guess) in the real dictionary', () => {
+    const lactose = swaps.filter((s) => s.diets.includes('lactosevrij'));
+    expect(lactose.length).toBeGreaterThanOrEqual(17);
+    for (const s of lactose) {
+      const to = dict.get(s.to);
+      expect(to?.lactose, `${s.from} -> ${s.to}`).toBe(false);
+      expect(to?.lactoseUnsure, `${s.from} -> ${s.to}`).toBeUndefined();
+      expect(dict.get(s.from)?.lactose, `${s.from} -> ${s.to}`).toBe(true);
+    }
+    // margarine -> vegan-boter stays vegan only (margarine is "maybe lactose"; the swap would never fire)
+    expect(swaps.find((s) => s.from === 'margarine')?.diets).toEqual(['vegan']);
   });
 });
