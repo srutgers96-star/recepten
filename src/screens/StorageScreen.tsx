@@ -27,6 +27,7 @@ import { reloadBadgeSettings } from '@/badges';
 import { reloadCelebrateSettings } from '@/celebrate';
 import { isIOS } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
+import { reloadCooking } from '@/cooking';
 import type { BackupBundle } from '@/db/model';
 import { useLive } from '@/db/live';
 import { LAST_BACKUP_KEY, backupHealth, bundled, countPhotos, exportBundle, getBaseRecipe, importBundle, logShareEvent, resetEverything, setSetting, weekCounts, type BackupHealth } from '@/db/repo';
@@ -367,9 +368,10 @@ export function StorageScreen() {
     try {
       const result = await importBundle(parsed as BackupBundle);
       // Refresh the in-memory mirrors of what the restore may have changed: profiles, confetti,
-      // timer sound/vibrate, read-aloud, voice commands, "Toon hoeveelheden" and badges (the active profile is kept
-      // when this phone already had one; theme and last-backup date are never restored).
-      await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadShowAmounts(), reloadBadgeSettings()]);
+      // timer sound/vibrate, read-aloud, voice commands, "Toon hoeveelheden", badges and the cooking sessions
+      // (the active profile is kept when this phone already had one; theme, last-backup date and cook.sessions
+      // are never restored).
+      await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadShowAmounts(), reloadBadgeSettings(), reloadCooking()]);
       await reload();
       void refreshShareBadges();
       setRestoreStatus(t('storage.restored', { ...result }));

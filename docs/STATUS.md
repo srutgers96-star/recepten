@@ -38,11 +38,21 @@ testdatabase van het browserpaneel heeft twee kookbeurten erbij (Afwasmachinezal
 sessies en geen timers.
 **Tip voor de telefoonronde:** rij 72 begint met Koken → **Begin**. Staat er van rij 66 nog een zalm-rij in de balk,
 dan opent Koken meteen op die stap (zo hoort het) en is er geen Begin; ga dan met ‹ Vorige naar stap 3.
-**Blok 2 (nog niet gebouwd):** ⏱-chip op de receptpagina maakt/bumpt de sessie, de balk op Boodschappen, `endCooking`
-bij de drie verwijderplekken, `reloadCooking` na herstel, rij 74. Tot dan: een timer vanaf de receptpagina staat
-zonder sessie in de balk ("Timers"), en een verwijderd eigen recept laat zijn rij staan tot de volgende start van
-de app (het vangnet `getRecipe` in `loadCooking` ruimt hem dan op). **Open vragen voor Stijn** (spec §8, standaard
-zoals gebouwd): Gekookt stopt ook de lopende timers van dat recept; 8 uur als vervaltijd.
+**Blok 2 (gebouwd 23 okt):** een ⏱-chip op de receptpagina begint de sessie op die stap of zet een sessie op een
+lagere stap omhoog; staat de sessie al op dezelfde of een hogere stap, dan schuift alleen `lastActiveAt` (een timer
+bij stap 3 zet stap 4 nooit terug). De kookbalk staat ook op Boodschappen, direct onder de kop (ook in de
+`?proto=1`-stap). Een eigen recept verwijderen (receptpagina, editor, selectie in Recepten) beëindigt meteen zijn
+sessie met zijn timers (`endCooking`); na een geslaagd herstel in Opslag worden de sessies opnieuw gelezen
+(`reloadCooking`). DEVICE-TEST rij 74 (NL en EN) staat erin. Check, test (794), build en build:next groen; geen
+nieuwe dependency. Bouwkeuze: de receptpagina wacht op `loadCooking()` vóór hij de stap vergelijkt (anders zou hij
+bij een koude start een lege lijst zien en een sessie op stap 5 naar stap 2 zetten). Dev-app (375 px, NL): ⏱ 15 min
+bij stap 4 → "Afwasmachinezalm · stap 4 van 7" met de timer eronder; daarna ⏱ 5 min bij stap 3 laat stap 4 staan,
+en omgekeerd gaat stap 3 naar 4; de balk staat op Boodschappen en niet op Meer; alle drie de verwijderplekken laten
+geen rij en geen timer achter. Opgemerkt (niet opgelost, buiten blok 2): met twee recepten en drie timers is de balk
+±280 px hoog; in de selectiestand van Recepten valt de knop "Ja, verwijder" dan onder de onderbalk. Uitrol: blok 2
+bouwt op blok 1, dat nog op `next` wacht op de telefoonronde (rij 72–73); de spec staat voor blok 2 zelf direct
+`main` toe. **Open vragen voor Stijn** (spec §8, standaard zoals gebouwd): Gekookt stopt ook de lopende timers van
+dat recept; 8 uur als vervaltijd.
 **Besluit Fable (23 okt), alle keuzes van bouwers en integrator geaccepteerd:** rij 66 met "Tik onderaan op Home"
 aan het eind van stap 3 (in de kookstand verbergt de balk de eigen rij, dus de controle hoort op Home);
 `src/cooking.ts` wacht op `startTimerEngine()` vóór het opruimen (anders verdwijnt een sessie met een lange
@@ -144,8 +154,11 @@ De run kostte twee pogingen (sessielimiet na de schrijvers; hervat met resumeFro
 
 ## Branches
 `main` = https://srutgers96-star.github.io/recepten/ (beide telefoons). `next` = …/recepten/next/ (testkanaal,
-eigen database en icoon). Werkwijze per blok: bouwen op `next` → telefoonronde → `next` in `main` mergen
-(fast-forward), zodat beide branches daarna gelijk staan. 23 okt: Home A+ blok 1 en 2 zo naar `main` gegaan.
+eigen database en icoon). Werkwijze per blok: bouwen op `next` → `next` in `main` mergen (fast-forward), zodat
+beide branches daarna gelijk staan. **Besluit Stijn (23 okt): geen telefoonronde meer vóór `main`** ("hoeft
+allemaal niet getest voor live nu, lekker door"); een blok gaat na de groene gate meteen live. De DEVICE-TEST-
+rijen blijven voor later. Uitzonderingen volgens README §1: 13F (id-migratie) en 13D (deelformaat) krijgen vóór
+`main` een korte Fable-blik. 23 okt: Home A+ blok 1–2 en 13K blok 1–2 zo naar `main` gegaan.
 Eenmalig geregeld (23 okt): de GitHub Pages-omgeving `github-pages` stond alleen `main` toe als uitrolbranch;
 `next` is toegevoegd (Settings → Environments → github-pages → Deployment branches). Zonder die regel faalt
 de deploy-job van een push naar `next` met een environment-protection-fout.

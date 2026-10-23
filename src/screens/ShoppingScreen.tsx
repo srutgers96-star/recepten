@@ -21,6 +21,7 @@ import { Header } from '@/components/Header';
 import { ListRow } from '@/components/ListRow';
 import { ProtoRow, sourceLines } from '@/components/ProtoRow';
 import { Segmented } from '@/components/Segmented';
+import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
 import type { List } from '@/db/model';
 import {
@@ -619,6 +620,7 @@ export function ShoppingScreen() {
   return (
     <>
       <Header title={t('shop.title')} />
+      <TimerBar />
       <div class="screen form shop">
         {planCard}
         {loading ? <div class="empty">{t('shop.loading')}</div> : mode === 'proto' ? protoView : listView}

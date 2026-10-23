@@ -2,6 +2,7 @@
 
 Status: compleet (Fable, 22 okt 2026)
 Gebouwd: 23 okt 2026 (blok 1, workflow wf_9aae1dc0-8e3)
+Gebouwd: 23 okt 2026 (blok 2, workflow wf_4ee57980-28c)
 
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (besluiten over specs heen in
 docs/specs/README.md §2; bij tegenspraak wint README.md). Voor deze spec:

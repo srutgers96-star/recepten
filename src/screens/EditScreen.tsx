@@ -38,6 +38,7 @@ import { MetaRows, applySuggestion, metaEqual, type MetaValue } from '@/componen
 import { Segmented } from '@/components/Segmented';
 import { UniversalPaste } from '@/components/UniversalPaste';
 import { celebrate } from '@/celebrate';
+import { endCooking } from '@/cooking';
 import { clearOverride, deleteUserRecipe, duplicateAsOwn, getBaseRecipe, getOverride, getRecipe, isBuiltinId, listLineOverrides, saveOverride, saveUserRecipe, userRecipes } from '@/db/repo';
 import { dictionary, lineText, type Dictionary } from '@/dictionary';
 import { suggestMeta } from '@/domain/diet';
@@ -669,6 +670,8 @@ export function EditScreen(props: { id?: string }) {
     setBusy(true);
     try {
       await deleteUserRecipe(existing.id);
+      // 13K: a deleted recipe leaves no "Nu aan het koken" row behind.
+      void endCooking(existing.id);
       navigate('/recipes', { replace: true });
     } catch (e) {
       setStatus(`${t('common.error')}: ${String(e)}`);

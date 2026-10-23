@@ -17,6 +17,9 @@
 // 13I (docs/phase-6-spec.md): the steps get the effective lines and the chosen-servings factor, so
 // the ingredients they name are green and a tap shows the scaled amount (the cook-mode setting
 // "Toon hoeveelheden" applies here too; this page has no button of its own).
+// 13K block 2 (docs/specs/kookbalk.md): a ⏱ chip here starts the "Nu aan het koken" session at that
+// step, or moves a session on an earlier step up to it; a chip on an earlier step only keeps the
+// session alive (never back from step 5 to step 2). Deleting an own recipe ends its session.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { isIOS } from '@/components/AppInfo';
@@ -28,6 +31,7 @@ import { rememberServings, rememberedServings, ServingsPicker } from '@/componen
 import { hasAmountsToShow, shownStep, StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { VariantSheet } from '@/components/VariantSheet';
+import { endCooking, loadCooking, sessionFor, touchCooking } from '@/cooking';
 import { useLive } from '@/db/live';
 import type { Photo } from '@/db/model';
 import {
@@ -430,7 +434,19 @@ export function RecipeScreen(props: { id: string }) {
 
   async function onDelete() {
     await deleteUserRecipe(id);
+    void endCooking(id);
     navigate('/recipes', { replace: true });
+  }
+
+  /** 13K: a ⏱ chip started a timer at step `stepIndex + 1`. New session or a later step → move the
+   *  session there; otherwise only bump lastActiveAt on the step it already has. */
+  async function onTimerStart(stepIndex: number) {
+    if (!recipe) return;
+    const page = stepIndex + 1;
+    // The store may still be loading on a cold start: decide on the stored session, not on [].
+    await loadCooking();
+    const s = sessionFor(id);
+    await touchCooking(recipe, !s || s.page < page ? page : s.page, servings);
   }
 
   async function onCopy() {
@@ -811,7 +827,7 @@ export function RecipeScreen(props: { id: string }) {
               )}
               <ol class="steps">
                 {recipe.steps.map((s, i) => (
-                  <StepView key={i} recipeId={id} recipeName={name} index={i} step={s} fahrenheit={fahrenheit} lines={lines} factor={factor} />
+                  <StepView key={i} recipeId={id} recipeName={name} index={i} step={s} fahrenheit={fahrenheit} lines={lines} factor={factor} onTimerStart={(n) => void onTimerStart(n)} />
                 ))}
               </ol>
               {recipe.servingTip && pickText(recipe.servingTip, l) && <p class="serving-tip">{pickText(recipe.servingTip, l)}</p>}

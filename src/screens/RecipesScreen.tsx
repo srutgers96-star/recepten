@@ -34,6 +34,7 @@ import { PickChips, applyPickFilter, loadPickFilter, pickFilterActive, savePickF
 import { RecipeRow } from '@/components/RecipeRow';
 import { SelectBar, type MetaChange } from '@/components/SelectBar';
 import { TimerBar } from '@/components/TimerBar';
+import { endCooking } from '@/cooking';
 import { useLive } from '@/db/live';
 import { addToPlan, allRecipes, bumpSharedRecipes, deleteUserRecipe, getOverride, isBuiltinId, listFavorites, listLineOverrides, listUserIngredients, logShareEvent, saveOverride, saveUserRecipe } from '@/db/repo';
 import { dictionary } from '@/dictionary';
@@ -451,7 +452,11 @@ export function RecipesScreen() {
     setSelectBusy(true);
     setSelectStatus('');
     try {
-      for (const r of own) await deleteUserRecipe(r.id);
+      for (const r of own) {
+        await deleteUserRecipe(r.id);
+        // 13K: a deleted recipe leaves no "Nu aan het koken" row behind.
+        void endCooking(r.id);
+      }
       setSelected((prev) => {
         const next = new Set(prev);
         for (const r of own) next.delete(r.id);
