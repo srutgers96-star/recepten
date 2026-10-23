@@ -28,10 +28,11 @@ import {
   type PatchPayload,
   type PlanPayload,
 } from '../src/domain/share';
-import { decodeToken, encodeToken, extractTokens } from '../src/domain/token';
+import { decodeToken, encodeToken, extractTokens, type Envelope } from '../src/domain/token';
 import {
   FROZEN_ENVELOPE_F,
   FROZEN_ENVELOPE_W,
+  FROZEN_ENVELOPE_W_SIDE,
   FROZEN_TOKEN_B,
   FROZEN_TOKEN_F,
   FROZEN_TOKEN_F_FFLATE,
@@ -39,6 +40,8 @@ import {
   FROZEN_TOKEN_P_FFLATE,
   FROZEN_TOKEN_W,
   FROZEN_TOKEN_W_FFLATE,
+  FROZEN_TOKEN_W_SIDE,
+  FROZEN_TOKEN_W_SIDE_FFLATE,
 } from './fixtures/frozen-share-tokens';
 
 const APP_URL = 'https://stijn.github.io/recepten/';
@@ -371,6 +374,89 @@ describe('buildPlanEnvelope', () => {
     expect(lines[1]).toMatch(/^Open in Rutgers' Recepten/);
     expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['w']);
     expect(buildPlanShareMessage({ dishes: 1, by: '', url: 'u', lang: 'en' }).split('\n')[0]).toBe('🗓️ Week plan: 1 dish');
+  });
+});
+
+// --- Phase 6 (13E): side dishes in the week plan (`of`, docs/specs/labels-categorieen.md §2d) -------
+
+const SIDE_PLAN: Plan = {
+  id: 'current',
+  updatedAt: '2026-10-22T11:00:00.000Z',
+  items: [
+    { id: 'pi:main', recipeId: 'b:kabeljauw-met-notencrumble', servings: 4, addedAt: 'x' },
+    { id: 'pi:cooked', recipeId: 'b:dahl-van-rode-linzen-boerenkool', servings: 2, cooked: true, addedAt: 'x' },
+    { id: 'pi:side1', recipeId: 'b:aardappelpuree-bij-kabeljauw-met-notencrumble', servings: 4, sideOf: 'pi:main', addedAt: 'x' },
+    // The side of a cooked main stays home, also when its own tick is not set.
+    { id: 'pi:side2', recipeId: 'b:naanbrood-voor-bij-dahl', servings: 2, sideOf: 'pi:cooked', addedAt: 'x' },
+    { id: 'pi:side3', recipeId: 'u:abc12345', servings: 4, sideOf: 'pi:main', addedAt: 'x' },
+    // A side whose main item is gone travels as a plain dish.
+    { id: 'pi:orphan', recipeId: 'b:tomatensalsa-bij-kabeljauw-met-notencrumble', servings: 3, sideOf: 'pi:gone', addedAt: 'x' },
+  ],
+};
+
+describe('week plan with side dishes (#w= of)', () => {
+  it('buildPlanEnvelope writes of = the recipe id of the main dish and leaves out the side of a cooked main', () => {
+    const env = buildPlanEnvelope(SIDE_PLAN, [recipe()], { by: 'Stijn', userIngredients: USER_INGREDIENTS });
+    const w = env.w as PlanPayload;
+    expect(w.items).toEqual([
+      { rid: 'b:kabeljauw-met-notencrumble', srv: 4 },
+      { rid: 'b:aardappelpuree-bij-kabeljauw-met-notencrumble', srv: 4, of: 'b:kabeljauw-met-notencrumble' },
+      { rid: 'u:abc12345', srv: 4, of: 'b:kabeljauw-met-notencrumble' },
+      { rid: 'b:tomatensalsa-bij-kabeljauw-met-notencrumble', srv: 3 },
+    ]);
+    // An own recipe used as a side dish is embedded like any dish of the plan.
+    expect(w.recipes.map((r) => r.id)).toEqual(['u:abc12345']);
+    // "N gerechten" counts the main dishes only (the orphan is a main dish now).
+    expect(planDishCount(env)).toBe(2);
+  });
+
+  it('parseEnvelope reads of into sideOfRecipeId; an item without of has none', async () => {
+    const env = buildPlanEnvelope(SIDE_PLAN, [], { by: 'Stijn', userIngredients: [] });
+    const parsed = parseEnvelope(await decodeToken(await encodeToken(env)));
+    expect(parsed.plan?.items).toEqual([
+      { recipeId: 'b:kabeljauw-met-notencrumble', servings: 4 },
+      { recipeId: 'b:aardappelpuree-bij-kabeljauw-met-notencrumble', servings: 4, sideOfRecipeId: 'b:kabeljauw-met-notencrumble' },
+      { recipeId: 'u:abc12345', servings: 4, sideOfRecipeId: 'b:kabeljauw-met-notencrumble' },
+      { recipeId: 'b:tomatensalsa-bij-kabeljauw-met-notencrumble', servings: 3 },
+    ]);
+    expect(parsed.plan?.items[0]).not.toHaveProperty('sideOfRecipeId');
+    expect(parsed.plan?.items[3]).not.toHaveProperty('sideOfRecipeId');
+  });
+
+  it('ignores an empty, non-string or self-referencing of (the item is then a main dish)', () => {
+    const env: Envelope = { v: 2, t: 'w', w: { items: [{ rid: 'b:a', srv: 2, of: ' ' }, { rid: 'b:b', srv: 2, of: 7 }, { rid: 'b:c', srv: 2, of: 'b:c' }, { rid: 'b:d', srv: 2, of: ' b:a ' }], recipes: [] } };
+    expect(parseEnvelope(env).plan?.items).toEqual([
+      { recipeId: 'b:a', servings: 2 },
+      { recipeId: 'b:b', servings: 2 },
+      { recipeId: 'b:c', servings: 2 },
+      { recipeId: 'b:d', servings: 2, sideOfRecipeId: 'b:a' },
+    ]);
+    expect(planDishCount(env)).toBe(3);
+  });
+
+  it('reads the frozen #w= token with a side dish on both engines', async () => {
+    for (const token of [FROZEN_TOKEN_W_SIDE, FROZEN_TOKEN_W_SIDE_FFLATE]) {
+      const env = await decodeToken(token);
+      expect(env).toEqual(FROZEN_ENVELOPE_W_SIDE);
+      const parsed = parseEnvelope(env);
+      expect(parsed.kind).toBe('plan');
+      expect(parsed.by).toBe('Stijn');
+      expect(parsed.plan).toEqual({
+        items: [
+          { recipeId: 'b:kabeljauw-met-notencrumble', servings: 4 },
+          { recipeId: 'b:aardappelpuree-bij-kabeljauw-met-notencrumble', servings: 4, sideOfRecipeId: 'b:kabeljauw-met-notencrumble' },
+        ],
+        note: 'Vrijdag',
+      });
+      expect(planDishCount(env)).toBe(1);
+    }
+  });
+
+  it('planMessages counts the main dishes: "🗓️ Weekplan van Stijn: 1 gerecht"', async () => {
+    const plan: Plan = { ...SIDE_PLAN, items: SIDE_PLAN.items.slice(0, 3) };
+    const messages = await planMessages([buildPlanEnvelope(plan, [], { by: 'Stijn', userIngredients: [] })], APP_URL, { lang: 'nl' });
+    if (!('text' in messages)) throw new Error('expected text');
+    expect(messages.text.split('\n')[0]).toBe('🗓️ Weekplan van Stijn: 1 gerecht');
   });
 });
 

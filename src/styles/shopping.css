@@ -644,6 +644,16 @@
   font-style: italic;
 }
 
+/* A received side dish (6B block 4): "↳ Aardappelpuree …" indented under its main, no servings. */
+.inbox-plan li.side {
+  padding-left: 12px;
+}
+
+.inbox-plan li .side-mark {
+  flex: none;
+  color: var(--muted);
+}
+
 .inbox-plan .actions {
   margin: 12px 0 0;
 }

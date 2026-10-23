@@ -4,6 +4,97 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 23 okt (Opus): 6B blok 4 — categorieën en + bijgerecht
+**Besluit Fable (23 okt) over de restpunten:** Boodschappen telt voortaan alleen hoofdgerechten ("Weekplan: N gerechten" en de titel van de gedeelde lijst), zoals Week, de #w=-melding en In & uit; de bijgerechtregels tellen gewoon mee in de lijst zelf. Keuzes van bouwers A, B en C akkoord: SideSheet met Sluit in de kop; pick.all telt niet mee in "filters (n)"; een `of` naar het eigen recept wordt genegeerd; een bijgerecht zonder hoofdgerecht reist als los gerecht; een ontvangen bijgerecht onder een hoofdgerecht dat al in het plan staat wordt een los gerecht; In & uit toont een bijgerecht ingesprongen zonder eigen personen; precies vijf hercategorisaties (geen klassieker naar nagerecht/gebak/ontbijt-lunch tot Stijn dat wil). Nog open voor later (geen bug): "+ Deze week" op een recept dat al als bijgerecht in de week staat voegt niets toe. Review: 4 echte bevindingen, alle verwerkt (Gekookt vinkt bijgerechten mee; Vanavond-kaart alleen hoofdgerechten; In & uit ingesprongen; telling Boodschappen). Gate groen (1018 tests). Uitrol: direct naar `main` (besluit Stijn 23 okt: geen telefoonronde; de spec wilde dit blok eerst op /next/).
+Gebouwd volgens docs/specs/labels-categorieen.md §1c, §1d, §2d, §2e en §3 blok 4 (bouwer A data + domein,
+bouwer B repo + Week-UI, bouwer C ontvangst van een weekplan, integrator). Niet gecommit. **Uitrol: eerst
+`/next/`** (`npm run build:next`); Stijn (Android) en Gabi (iPhone) lopen DEVICE-TEST 77–78, daarna `main`.
+Wat er nu staat:
+- **Data:** data/categories.json heeft Nagerecht 11, Gebak 12, Bijgerecht 13, Ontbijt & lunch 14; Overig is 15
+  (laatste). data/review/meta.json kreeg `category` (precies de vijf bijgerechten van §2e) en `goesWith`
+  (polenta → ratatouille). `DATA_VERSION` is 7; recipes.json verschilt alleen in die vijf categorieën, de goesWith
+  van de polenta en `dataVersion`/`generatedAt`. Overig houdt 12 recepten. Geen klassieker in nagerecht, gebak of
+  ontbijt-lunch. Plank-iconen 🍨 🍰 🥖 🥪.
+- **Alleen hoofdgerechten in de kiezers:** `NON_MAIN_CATEGORIES`, `isMainDish` en `excludeNonMain` in
+  src/domain/planner.ts. Kies 7, Verras me, de 🎲 per slot, Verras me in het Kies-venster en de Home-dobbelsteen
+  gebruiken `applyPickFilter(…, { mainOnly: true })`. De chip **ook bijgerechten & zoet** staat direct na het × (Week,
+  Kies-venster, Home-filters), niet op Recepten. Een aangezette categoriechip Bijgerecht/Nagerecht/… telt als "ja".
+  Onder de Week-chips staat "Alleen hoofdgerechten, tenzij …".
+- **+ bijgerecht:** een bijgerecht is een eigen PlanItem met `sideOf`. Het SideSheet (SheetPortal) heeft "Past erbij"
+  (goesWith in beide richtingen) en "Alle bijgerechten"; één tik voegt toe en sluit. In de lijst: ingesprongen
+  "↳ naam" met alleen een ×. Cascades in src/db/repo.ts: personen, gekookt (aan én uit) en × volgen de hoofd;
+  🎲 en Verras me op de hoofd halen de bijgerechten weg; `savePlan` laat een wees-`sideOf` vallen. Samenvatting
+  "N gerechten · M bijgerechten"; "n van N gekookt" en de Home-weekkaart tellen alleen hoofdgerechten.
+- **Delen `#w=`:** `of` = recept-id van de hoofd; een bijgerecht van een gekookte hoofd reist niet mee; `v` blijft 2.
+  `planDishCount` en de Inbox-kop tellen alleen hoofdgerechten. Nieuw bevroren token `FROZEN_TOKEN_W_SIDE` (+ fflate),
+  één keer gemaakt; de oude tokens zijn byte voor byte gelijk. Ontvangen: het nieuwe src/domain/plan-import.ts
+  (`planItemsFromShare`, `sharedDishCount`) hangt een bijgerecht onder het item dat in díe overname voor zijn hoofd
+  is gemaakt, anders wordt het een los gerecht (18 tests in tests/plan-import.test.ts).
+- **Importprompt:** `CATEGORY_WORDS` kent de vier; 'bake' blijft oven, 'taart' blijft hartige-taart, overig staat
+  als laatste in de prompt.
+
+**Gedraaid:** check, test (1007 in 45 bestanden), build, build:next en validate:data zijn groen (0 errors, alleen
+de bekende warnings). gen-golden ongewijzigd. Geen nieuwe dependency; Dexie blijft v7; landing.ts, sw.ts, token.ts,
+boot.ts en aggregate.ts zijn niet aangeraakt. De integrator hoefde geen code te repareren of keys toe te voegen:
+alle 11 keys van §1c/§1d staan letterlijk in src/i18n/week.ts (NL en EN).
+
+**Dev-app (375 px, NL en EN, donker en licht), §6c 7–9 nagelopen:**
+- Week leeg → Verras me, daarna nog tien keer Verras me en vijf keer 🎲: 72 verschillende gerechten, geen enkel
+  bijgerecht. Kies-venster: chip Bijgerecht geeft precies de vijf; × → "ook bijgerechten & zoet" → 198 i.p.v. 193
+  rijen, "naan" vindt Naanbrood. Home-plank: "Bijgerecht 5", Overig als laatste. Recepten: geen schakelchip,
+  Naanbrood is gewoon te vinden.
+- Kabeljauw → + bijgerecht: het venster heet "Bijgerecht bij Kabeljauw met notencrumble", Past erbij = de drie,
+  Alle bijgerechten = Naanbrood en Polenta; de onderkant zit tegen de schermrand. Aardappelpuree → "↳"-rij,
+  "1 gerecht · 1 bijgerecht"; opnieuw openen toont "staat erbij" (uitgegrijsd). Personen 4→6: het bijgerecht volgt;
+  de lijst geeft 750 g aardappelen (500 g voor 4) met als bron Aardappelpuree. Tweede bijgerecht erbij → balk
+  "Weekplan gewijzigd" → Bijwerken → de salsaregels komen erbij. Gekookt aan/uit: beide bijgerechten volgen en
+  "+ bijgerecht" verdwijnt bij een gekookt slot. 🎲 op de kabeljauw: nieuw gerecht, bijgerechten weg. × op een hoofd
+  met bijgerecht: beide weg.
+- Deel weekplan → Kopieer: "Weekplan van Stijn: 1 gerecht"; het token heeft `of` op beide bijgerechten. Geplakt in
+  In & uit: kop "1 gerecht"; na Overnemen staan in Week beide bijgerechten ingesprongen onder de kabeljauw. De live
+  app (oude versie) heb ik niet geprobeerd: die stond in het browserpaneel op het welkomstformulier en daar vul ik
+  niets in. De oude `parseEnvelope` las alleen `rid`/`srv`, dus een oudere app toont het bijgerecht als los gerecht.
+- Engels: "+ side dish", "Side dish for Cod with nut crumble", "Goes with it", "All side dishes", "1 dish · 1 side
+  dish", "sides & sweet too", de hint en de aria "Remove side dish" kloppen. Alles past op 375 px; niets ingekort.
+
+DEVICE-TEST rijen 77 en 78 staan in beide tabellen (NL en EN), na rij 76. Eén aanvulling in rij 78 stap 6: de balk
+"Weekplan gewijzigd" verschijnt alleen als er al een lijst gemaakt was; anders staat er "Nog geen lijst voor dit
+weekplan." en tik je op **Maak de lijst** (zo was het in de dev-app).
+
+**Na de review gerepareerd (fixer):** punt 1, 2 en de eerste helft van 4 hieronder, omdat §1c/§1d ze beslissen
+("gekookt volgt het hoofdgerecht", "N gerechten" = hoofdgerechten, §6c punt 9 "ingesprongen"). (a) "Gekookt!" in de
+kookstand en "✓ Gekookt" van vandaag op de receptpagina (`markRecipeCookedInPlan`) vinken nu ook de bijgerechten
+onder dat recept af (pure kern `cookRecipeInPlanItems` in src/db/repo.ts, tests/plan-cooked.test.ts); een bijgerecht
+dat je los kookt, vinkt alleen zichzelf af. (b) Vanavond op Home kijkt in plan-modus alleen naar hoofdgerechten
+(`mainItems`): geen bijgerecht als "Vanavond" of via "🎲 Iets anders", "nog N te gaan" telt hoofdgerechten; de
+dobbelsteenpool houdt het hele plan. (c) In & uit zet een ontvangen bijgerecht ingesprongen met "↳" en zonder eigen
+"N pers." onder zijn hoofdgerecht (`sharedPlanRows` in src/domain/plan-import.ts, 5 tests; CSS in
+src/styles/shopping.css bij `.inbox-plan`). Een bijgerecht waarvan de hoofd niet in het plan zit, blijft een gewone
+rij.
+
+**Open (niet door de spec beslist; vraag voor Stijn of Fable):**
+1. ~~Vanavond op Home telt bijgerechten mee~~ — gerepareerd, zie hierboven.
+2. ~~In & uit toont een ontvangen bijgerecht als gewone rij~~ — gerepareerd, zie hierboven.
+3. Boodschappen zegt "Weekplan: 3 gerechten" bij 1 hoofd + 2 bijgerechten (telt alle items), ook in de titel van de
+   gedeelde lijst. §1d: "Niets nieuws in het lijstscherm", dus zo gelaten. Keuze: (a) alleen hoofdgerechten tellen
+   (`mainItems(plan.items)` in ShoppingScreen.tsx, gelijk aan Week, `#w=` en In & uit), of (b) zo laten (elk
+   ongekookt item is een bron van de lijst).
+4. ~~"Gekookt!" in de kookstand vinkt de bijgerechten niet mee af~~ — gerepareerd, zie hierboven. Nog open: "+ Deze
+   week" op een recept dat al als bijgerecht in de week staat, voegt niets toe.
+5. Toevoegen (append) in In & uit, als het hoofdrecept al in je plan staat: het bijgerecht wordt een los gerecht
+   (of wordt overgeslagen als dat recept er al staat); het hangt niet onder het bestaande item. Dat volgt §3 ("het
+   nieuw gemaakte item"). Toevoegen leest en bewaart het plan nu zonder transactie (`updatePlan` is privé in
+   repo.ts); een gelijktijdige wijziging uit een tweede tabblad zou verloren gaan.
+6. De meldingen "Weekplan overgenomen/toegevoegd: {n} gerechten" tellen nu alleen hoofdgerechten. (Al van vóór dit
+   blok: bij één gerecht staat er "1 gerechten".)
+7. Keuzes van bouwer B: het SideSheet heeft rechts de knop **Sluit** in plaats van "×" (README §1a wint van §1d);
+   `pick.all` telt niet mee in "filters (n)" en het × wist hem ook; "+ bijgerecht" staat onder de bijgerecht-rijen;
+   de hint staat er altijd; zoeken zonder treffers geeft "Niets gevonden."; Verras me ziet bijgerechten niet als
+   eigen slot, en een vegetarisch bijgerecht telt mee voor "≥ 1 vegetarisch".
+8. Keuzes van bouwer A: een `of` gelijk aan de eigen `rid` wordt genegeerd; een bijgerecht waarvan de hoofd niet
+   meer in het plan staat, reist als los gerecht. Twee bestaande tests in tests/photo-import.test.ts zijn aangepast,
+   omdat 'Dessert' nu nagerecht is (het voorbeeld "Categorie: Toetje" werd "Categorie: Tussendoortje").
+
 ## 23 okt (Opus): 6B blok 3 — keukens
 **Besluit Fable (23 okt) over de restpunten:** de keuken van een klassieker gaat in de aanpassingslaag (override-patch), zoals de categorie — akkoord; rij 76 herschreven naar het Home A+-scherm — akkoord; `inbox.field.metaHint` noemt nu ook "keuken" / "cuisine"; een wijziging van alleen de keuken (of alleen categorie/labels) telt bij ontvangst niet als nieuwe versie — dat blijft zo (de vingerafdruk is bevroren, README §5 punt 8; de keuken komt mee met de eerstvolgende inhoudelijke wijziging); de fixer raakte src/domain/merge.ts en tests/merge.test.ts buiten de blokverdeling, terecht (keuken reist mee in 'meta'). Voor de eindcontrole: het doc-commentaar bij `mergeRecipeFields` belooft dat onbekende sleutels van de ander met 'meta' meekomen, de code kopieert alleen de genoemde velden. Review: 3 bevindingen bevestigd en verwerkt; gate groen (963 tests). Uitrol: direct naar `main`.
 Gebouwd volgens docs/specs/labels-categorieen.md §1b, §2c, §2e en §3 blok 3 (bouwer A data + domein + tools,

@@ -5,14 +5,24 @@
 // "Gekookt" tick (also set by cook mode) — and the actions Verras me (all unlocked), Boodschappenlijst
 // maken (→ '/shopping?proto=1'), Deel weekplan (`#w=` via navigator.share({text}) with exactly one
 // field inside the tap handler; wa.me fallback; own recipes travel along) and Leeg (confirm).
+// 6B blok 4 (docs/specs/labels-categorieen.md §1c/§1d): Kies N, Verras me and the 🎲 pick main
+// dishes only (the pool is `applyPickFilter(…, { mainOnly: true })`; the chip "ook bijgerechten &
+// zoet" and a chip of a non-main category lift that, `week.mainOnlyHint` says so under the chips).
+// Under every uncooked main dish whose recipe is a main dish sits "+ bijgerecht" (→ SideSheet →
+// `addSideToPlan`); a side dish (`PlanItem.sideOf`) is an indented "↳" row with only × — no tick,
+// stepper, lock or 🎲: it follows its main (servings, cooked, removed: the cascades live in
+// src/db/repo.ts). 🎲 and Verras me on a main dish give it a new dish and drop its sides (they
+// belonged to THAT dish). The summary counts main dishes as "gerechten" plus "· N bijgerechten".
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { EMPTY_PICK_FILTER, PickChips, PickSheet, applyPickFilter, cuisineIdsIn, pickFilterActive, tagIdsIn, type PickFilter } from '@/components/PickSheet';
 import { otherLanguageName } from '@/components/RecipeRow';
+import { SideSheet } from '@/components/SideSheet';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
 import {
+  addSideToPlan,
   allRecipes,
   clearPlan,
   getHouseholdServings,
@@ -30,7 +40,7 @@ import {
 import { dictionary } from '@/dictionary';
 import { pickText, type CookLogEntry, type Recipe } from '@/domain/model';
 import type { LineOverride } from '@/domain/overrides';
-import { newPlanItem, normalizeServings, pickRecipes, recentCookedIds, type PlanItem } from '@/domain/planner';
+import { isMainDish, newPlanItem, normalizeServings, pickRecipes, recentCookedIds, sidesOf, type PlanItem } from '@/domain/planner';
 import { buildPlanEnvelope, planMessages, type MessagePlan } from '@/domain/share';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
@@ -47,6 +57,15 @@ const COOK_LOG_ROWS = 2000;
 // Module-level so a trip to a recipe and back keeps the chosen N and the filter (session only).
 let savedN = DEFAULT_N;
 let savedFilter: PickFilter = EMPTY_PICK_FILTER;
+
+/**
+ * The plan as rows: every main dish (no `sideOf`) with its side dishes under it, in plan order. A
+ * side whose main is not in the plan shows as a dish of its own (savePlan drops such a `sideOf`).
+ */
+function slotGroups(items: readonly PlanItem[]): Array<{ main: PlanItem; sides: PlanItem[] }> {
+  const ids = new Set(items.map((p) => p.id));
+  return items.filter((p) => !p.sideOf || !ids.has(p.sideOf)).map((main) => ({ main, sides: sidesOf(items, main.id) }));
+}
 
 /** recipeId → ISO of the newest cook-log entry. */
 function lastCookedMap(log: readonly CookLogEntry[]): Map<string, string> {
@@ -72,6 +91,8 @@ export function WeekScreen() {
   const [status, setStatus] = useState('');
   const [message, setMessage] = useState<MessagePlan | null>(null);
   const [busy, setBusy] = useState(false);
+  /** The main slot the SideSheet is open for (null = closed). */
+  const [sideFor, setSideFor] = useState<PlanItem | null>(null);
 
   function setFilter(next: PickFilter) {
     savedFilter = next;
@@ -85,17 +106,27 @@ export function WeekScreen() {
 
   const byId = useMemo(() => new Map((all ?? []).map((r) => [r.id, r] as const)), [all]);
   const tags = useMemo(() => tagIdsIn(all ?? []), [all]);
-  const pool = useMemo(() => applyPickFilter(all ?? [], filter, dict, l), [all, filter, dict, l]);
+  // The pool of Kies N, Verras me and 🎲: main dishes only, unless the filter asks for more (§1c).
+  const pool = useMemo(() => applyPickFilter(all ?? [], filter, dict, l, { mainOnly: true }), [all, filter, dict, l]);
   const lastCooked = useMemo(() => lastCookedMap(log ?? []), [log]);
   const recentIds = useMemo(() => recentCookedIds(log ?? []), [log]);
   const items = plan?.items ?? [];
+  const groups = slotGroups(items);
+  // "gerechten" = the main dishes; the side dishes follow them (also in "n van total gekookt").
+  const mains = groups.map((g) => g.main);
+  const sideCount = items.length - mains.length;
   const uncooked = items.filter((p) => !p.cooked);
-  const cookedCount = items.length - uncooked.length;
+  const cookedCount = mains.filter((p) => p.cooked).length;
   const filtering = pickFilterActive(filter);
 
   // The share message is built ahead of the tap (encodeToken is async; navigator.share must be
-  // called synchronously inside the tap handler). Rebuilt when the uncooked dishes change.
-  const shareKey = uncooked.map((p) => `${p.recipeId}@${p.servings}`).sort().join('|');
+  // called synchronously inside the tap handler). Rebuilt when the uncooked dishes change (a side
+  // dish with the recipe of its main, as `#w=` carries it in `of`).
+  const recipeOfItem = new Map(items.map((p) => [p.id, p.recipeId] as const));
+  const shareKey = uncooked
+    .map((p) => `${p.recipeId}@${p.servings}${p.sideOf ? '<' + (recipeOfItem.get(p.sideOf) ?? '') : ''}`)
+    .sort()
+    .join('|');
   useEffect(() => {
     setMessage(null);
     if (!plan || !all || uncooked.length === 0) return;
@@ -155,55 +186,75 @@ export function WeekScreen() {
   }
 
   /**
-   * "Verras me" on a filled plan: every unlocked, uncooked slot gets a new dish; locks stay. The
-   * dishes now in the open slots are taken out of the pool, so a slot never gets "replaced" by
+   * "Verras me" on a filled plan: every unlocked, uncooked main dish gets a new dish; locks stay.
+   * The dishes now in the open slots are taken out of the pool, so a slot never gets "replaced" by
    * the same dish and dishes do not merely swap places; a slot keeps its dish only when the pool
-   * runs dry.
+   * runs dry. Side dishes are no slots of their own: those of a main that keeps its dish stay, those
+   * of a main that gets a new dish (or is dropped) go, as with 🎲 (§1d).
    */
   function surpriseUnlocked() {
     void run(async () => {
       const current = await getPlan();
-      const kept = current.items.filter((p) => p.locked || p.cooked);
-      const open = current.items.filter((p) => !p.locked && !p.cooked);
+      const ids = new Set(current.items.map((p) => p.id));
+      const isSide = (p: PlanItem) => !!p.sideOf && ids.has(p.sideOf);
+      const kept = current.items.filter((p) => !isSide(p) && (p.locked || p.cooked));
+      const open = current.items.filter((p) => !isSide(p) && !p.locked && !p.cooked);
       if (open.length === 0) return;
+      const keptIds = new Set(kept.map((p) => p.id));
+      const keptSides = current.items.filter((p) => isSide(p) && keptIds.has(p.sideOf as string));
       const openIds = new Set(open.map((p) => p.recipeId));
-      const picked = pickRecipes({ count: open.length, pool: pool.filter((r) => !openIds.has(r.id)), recentIds, existing: kept });
+      const picked = pickRecipes({ count: open.length, pool: pool.filter((r) => !openIds.has(r.id)), recentIds, existing: [...kept, ...keptSides] });
       if (picked.length === 0) {
         setStatus(t('week.noPool'));
         return;
       }
       const pickedIds = new Set(picked.map((r) => r.id));
+      /** Main slots whose dish changed or that were dropped: their side dishes go. */
+      const changed = new Set<string>();
       let i = 0;
       const next: PlanItem[] = [];
       for (const p of current.items) {
-        if (p.locked || p.cooked) {
+        if (isSide(p) || p.locked || p.cooked) {
           next.push(p);
           continue;
         }
         const r = picked[i++];
-        if (r) next.push({ ...p, recipeId: r.id });
-        else if (!pickedIds.has(p.recipeId)) next.push(p); // pool exhausted: keep the old dish
+        if (r) {
+          next.push({ ...p, recipeId: r.id });
+          changed.add(p.id);
+        } else if (!pickedIds.has(p.recipeId)) next.push(p); // pool exhausted: keep the old dish
+        else changed.add(p.id);
       }
-      await savePlan({ ...current, items: next });
+      await savePlan({ ...current, items: next.filter((p) => !(isSide(p) && changed.has(p.sideOf as string))) });
     });
   }
 
   /**
    * 🎲 on one slot: one dish from the pool that is not in the plan yet. The slot itself is left
    * out of `existing` (it is being replaced, so it must not count towards the pasta/rijst caps)
-   * and its current dish out of the pool (never the same dish again).
+   * and its current dish out of the pool (never the same dish again). Its side dishes go: they
+   * belonged to THAT dish (§1d; the slot keeps its id, so the cascade must be explicit).
    */
   function reroll(item: PlanItem) {
     void run(async () => {
       const current = await getPlan();
-      const others = current.items.filter((p) => p.id !== item.id);
+      const others = current.items.filter((p) => p.id !== item.id && p.sideOf !== item.id);
       const picked = pickRecipes({ count: 1, pool: pool.filter((r) => r.id !== item.recipeId), recentIds, existing: others })[0];
       if (!picked) {
         setStatus(t('week.noPool'));
         return;
       }
-      await savePlan({ ...current, items: current.items.map((p) => (p.id === item.id ? { ...p, recipeId: picked.id } : p)) });
+      const next = current.items.filter((p) => p.sideOf !== item.id).map((p) => (p.id === item.id ? { ...p, recipeId: picked.id } : p));
+      await savePlan({ ...current, items: next });
     });
+  }
+
+  /** SideSheet: a tap on a row adds that side dish under the main and closes the sheet. */
+  function onSidePicked(recipeId: string) {
+    const main = sideFor;
+    setSideFor(null);
+    if (!main) return;
+    void run(async () => void (await addSideToPlan(main.id, recipeId)));
   }
 
   function servings(item: PlanItem, delta: number) {
@@ -280,27 +331,31 @@ export function WeekScreen() {
                 <span aria-hidden="true">🎲</span> {t('week.surprise')}
               </button>
             </div>
-            <PickChips filter={filter} onChange={setFilter} tags={tags} cuisines={cuisineIdsIn(all ?? [])} />
+            <PickChips filter={filter} onChange={setFilter} tags={tags} cuisines={cuisineIdsIn(all ?? [])} mainOnlyToggle />
             {filtering && <p class="muted small week-filter-note">{t('week.filterOn', { n: pool.length })}</p>}
+            <p class="muted small week-main-hint">{t('week.mainOnlyHint')}</p>
           </section>
         )}
 
         {!loading && !empty && (
           <>
             <div class="week-summary muted small">
-              {items.length === 1 ? t('week.dish') : t('week.dishes', { n: items.length })}
-              {cookedCount > 0 && ` · ${t('week.cookedOf', { n: cookedCount, total: items.length })}`}
+              {mains.length === 1 ? t('week.dish') : t('week.dishes', { n: mains.length })}
+              {sideCount > 0 && ` · ${sideCount === 1 ? t('week.side') : t('week.sides', { n: sideCount })}`}
+              {cookedCount > 0 && ` · ${t('week.cookedOf', { n: cookedCount, total: mains.length })}`}
             </div>
 
             <ul class="week-slots">
-              {items.map((p) => {
+              {groups.map(({ main: p, sides }) => {
                 const r = byId.get(p.recipeId);
                 const name = r ? pickText(r.name, l) : t('week.missing');
                 const alt = r ? otherLanguageName(r, l) : null;
                 const cooked = p.cooked === true;
                 const locked = p.locked === true;
+                // "+ bijgerecht" only under an uncooked slot whose recipe is a main dish itself.
+                const canAddSide = !!r && !cooked && isMainDish(r);
                 return (
-                  <li key={p.id} class={'week-slot' + (cooked ? ' cooked' : '') + (locked ? ' locked' : '')}>
+                  <li key={p.id} class={'week-slot' + (cooked ? ' cooked' : '') + (locked ? ' locked' : '') + (sides.length > 0 ? ' has-sides' : '')}>
                     <button
                       type="button"
                       class={'week-tick' + (cooked ? ' on' : '')}
@@ -349,6 +404,37 @@ export function WeekScreen() {
                         ×
                       </button>
                     </div>
+                    {sides.length > 0 && (
+                      <ul class="week-sides">
+                        {sides.map((sp) => {
+                          const sr = byId.get(sp.recipeId);
+                          const sideAlt = sr ? otherLanguageName(sr, l) : null;
+                          return (
+                            <li key={sp.id} class={'week-slot side' + (sp.cooked ? ' cooked' : '')}>
+                              <span class="week-side-mark" aria-hidden="true">
+                                ↳
+                              </span>
+                              <button type="button" class="week-name" disabled={!sr} onClick={() => sr && navigate('/recipe/' + sr.id)}>
+                                <span class="week-name-text">{sr ? pickText(sr.name, l) : t('week.missing')}</span>
+                                {sideAlt && (
+                                  <span class="row-sub">
+                                    <span class="row-alt">{sideAlt}</span>
+                                  </span>
+                                )}
+                              </button>
+                              <button type="button" class="week-tool week-remove" aria-label={t('week.removeSide')} disabled={busy} onClick={() => void run(() => removeFromPlan(sp.id))}>
+                                ×
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                    {canAddSide && (
+                      <button type="button" class="week-add-side" disabled={busy} onClick={() => setSideFor(p)}>
+                        {t('week.addSide')}
+                      </button>
+                    )}
                   </li>
                 );
               })}
@@ -359,7 +445,7 @@ export function WeekScreen() {
                 {t('week.makeList')}
               </button>
               <div class="week-actions-row">
-                <button type="button" class="btn btn-secondary" disabled={busy || pool.length === 0 || uncooked.every((p) => p.locked)} onClick={surpriseUnlocked}>
+                <button type="button" class="btn btn-secondary" disabled={busy || pool.length === 0 || mains.every((p) => p.cooked || p.locked)} onClick={surpriseUnlocked}>
                   <span aria-hidden="true">🎲</span> {t('week.surprise')}
                 </button>
                 <button type="button" class="btn" onClick={() => setSheet(true)}>
@@ -371,8 +457,9 @@ export function WeekScreen() {
 
             <section class="section week-filter">
               <h2>{t('week.filterEdit')}</h2>
-              <PickChips filter={filter} onChange={setFilter} tags={tags} cuisines={cuisineIdsIn(all ?? [])} />
+              <PickChips filter={filter} onChange={setFilter} tags={tags} cuisines={cuisineIdsIn(all ?? [])} mainOnlyToggle />
               <p class="muted small week-filter-note">{filtering ? t('week.filterOn', { n: pool.length }) : t('pick.sortHint')}</p>
+              <p class="muted small week-main-hint">{t('week.mainOnlyHint')}</p>
             </section>
 
             <section class="section week-share">
@@ -415,6 +502,7 @@ export function WeekScreen() {
         onConfirm={onPicked}
         onClose={() => setSheet(false)}
       />
+      <SideSheet main={sideFor} recipes={all ?? []} items={items} onPick={onSidePicked} onClose={() => setSideFor(null)} />
     </>
   );
 }

@@ -23,6 +23,7 @@ import { ProtoRow, sourceLines } from '@/components/ProtoRow';
 import { Segmented } from '@/components/Segmented';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
+import { mainItems } from '@/domain/planner';
 import type { List } from '@/db/model';
 import {
   addExtra,
@@ -169,7 +170,8 @@ export function ShoppingScreen() {
   const stale = useLive(isListStale, []);
   const household = useLive(getHouseholdServings, []) ?? 4;
 
-  const dishes = plan ? plan.items.filter((p) => !p.cooked).length : 0;
+  // Main dishes only, like Week, the #w= message and In & uit (Fable, 23 Oct 2026); side dishes still feed the list.
+  const dishes = plan ? mainItems(plan.items).filter((p) => !p.cooked).length : 0;
   const items = list?.items ?? [];
   const generated = !!list && list.generatedFrom !== '';
   const loading = plan === undefined || list === undefined || stale === undefined;

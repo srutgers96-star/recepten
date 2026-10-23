@@ -5,9 +5,12 @@
 //   t: 'p'  p: { baseId, rev, patch, lineOverrides?, name? } an edited classic (`#p=`), applied as an
 //                                                            override on the receiver, never a duplicate
 //   t: 'b'  b: { title?, recipes, patches, since? }          a bundle (`#b=` token or a .json file)
-//   t: 'w'  w: { items: [{rid, srv}], recipes, note? }       a week plan (`#w=`, docs/phase-4-spec.md §1):
+//   t: 'w'  w: { items: [{rid, srv, of?}], recipes, note? }  a week plan (`#w=`, docs/phase-4-spec.md §1):
 //                                                            the dishes with their servings plus the own
-//                                                            recipes the partner may lack (normal import)
+//                                                            recipes the partner may lack (normal import);
+//                                                            `of` = recipe id of the main dish a side dish
+//                                                            belongs to (docs/specs/labels-categorieen.md
+//                                                            §2d; an older app shows it as a plain dish)
 //   t: 'f'  f: { id, name, color, lang, deviceId? }           a member card (`#f=`, docs/phase-5-spec.md
 //                                                            block F): who the sender is on their phone,
 //                                                            so the receiver can add them to the household
@@ -56,6 +59,12 @@ export interface BundlePayload {
 export interface PlanPayloadItem {
   rid: string;
   srv: number;
+  /**
+   * "+ bijgerecht" (docs/specs/labels-categorieen.md §2d): the RECIPE id of the main dish this side
+   * dish belongs to (item ids are local to a phone). Absent = a main dish. Optional key in `v: 2`:
+   * an older app ignores it and shows the side dish as a dish of its own.
+   */
+  of?: string;
   [k: string]: unknown;
 }
 
@@ -70,7 +79,12 @@ export interface PlanPayload {
 
 /** A received plan, as the Inbox offers it ("Overnemen" / "Toevoegen"). */
 export interface PlanShare {
-  items: Array<{ recipeId: string; servings: number }>;
+  /**
+   * The dishes in the sender's order. `sideOfRecipeId` (from `of`) marks a side dish: the receiver
+   * hangs it under the item it makes for that recipe, or keeps it as a plain dish when that recipe
+   * is not in the plan (docs/specs/labels-categorieen.md §2d).
+   */
+  items: Array<{ recipeId: string; servings: number; sideOfRecipeId?: string }>;
   note?: string;
 }
 
@@ -158,6 +172,15 @@ function isRecord(v: unknown): v is Dict {
 
 function cleanString(v: unknown): string | undefined {
   return typeof v === 'string' && v.trim() !== '' ? v.trim() : undefined;
+}
+
+/**
+ * The main dish's recipe id of a travelling plan item (`of`, labels-categorieen.md §2d), or
+ * undefined for a main dish. A side dish can never belong to itself: `of` equal to `rid` is ignored.
+ */
+function sideOfIn(v: Record<string, unknown>): string | undefined {
+  const of = cleanString(v.of);
+  return of && of !== cleanString(v.rid) ? of : undefined;
 }
 
 /** Mirrors household.DEFAULT_MEMBER_COLOR (cobalt) without importing the household module here. */
@@ -291,9 +314,21 @@ export function buildBundleEnvelope(items: BundleItems, ctx: ShareContext, opts:
  * left out) with their servings, plus `recipes`: the own/received recipes of the plan the partner
  * may lack (the caller passes them; builtins are dropped here). Line overrides in `ctx` are
  * folded into those recipes by id. `note` from `plan.note`.
+ * A side dish (`sideOf`, labels-categorieen.md §2d) travels with `of` = the recipe id of its main
+ * dish; the side of a cooked main stays home like the main itself. A side whose main item is gone
+ * travels as a plain dish (as `savePlan` would make it).
  */
 export function buildPlanEnvelope(plan: Plan, recipes: readonly Recipe[], ctx: ShareContext): Envelope {
-  const items: PlanPayloadItem[] = plan.items.filter((p) => !p.cooked).map((p) => ({ rid: p.recipeId, srv: normalizeServings(p.servings) }));
+  const byItemId = new Map(plan.items.map((p) => [p.id, p]));
+  const items: PlanPayloadItem[] = [];
+  for (const p of plan.items) {
+    if (p.cooked) continue;
+    const main = p.sideOf ? byItemId.get(p.sideOf) : undefined;
+    if (main?.cooked) continue;
+    const item: PlanPayloadItem = { rid: p.recipeId, srv: normalizeServings(p.servings) };
+    if (main) item.of = main.recipeId;
+    items.push(item);
+  }
   const wanted = new Set(items.map((p) => p.rid));
   const byRecipe = new Map<string, LineOverride[]>();
   for (const o of ctx.lineOverrides ?? []) {
@@ -491,7 +526,10 @@ export function parseEnvelope(env: unknown): ParsedShare {
       if (!isRecord(v)) continue;
       const recipeId = cleanString(v.rid);
       if (!recipeId) continue;
-      items.push({ recipeId, servings: normalizeServings(v.srv) });
+      const item: PlanShare['items'][number] = { recipeId, servings: normalizeServings(v.srv) };
+      const sideOfRecipeId = sideOfIn(v);
+      if (sideOfRecipeId) item.sideOfRecipeId = sideOfRecipeId;
+      items.push(item);
     }
     const plan: PlanShare = { items };
     const note = cleanString(w.note);
@@ -533,10 +571,13 @@ export function envelopeItemCount(env: Envelope): number {
   return 0;
 }
 
-/** Number of dishes a plan envelope carries (0 for other kinds). */
+/**
+ * Number of dishes a plan envelope carries (0 for other kinds): the main dishes only, so an item
+ * with `of` (a side dish, labels-categorieen.md §1d) does not count as one of the "N gerechten".
+ */
 export function planDishCount(env: Envelope): number {
   if (env.t !== 'w' || !isRecord(env.w) || !Array.isArray(env.w.items)) return 0;
-  return env.w.items.length;
+  return env.w.items.filter((v: unknown) => !isRecord(v) || !sideOfIn(v)).length;
 }
 
 /**

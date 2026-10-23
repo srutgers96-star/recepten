@@ -6,6 +6,9 @@
 //                nothing cooked in the last 6 weeks, never a dish that is already in the plan),
 //                relaxing the rules one by one when the pool is too small.
 //   planHash     the stable fingerprint of the plan the shopping list was generated from.
+//   sides        "+ bijgerecht" (docs/specs/labels-categorieen.md §1d/§2d): a side dish is its own
+//                PlanItem with `sideOf` = the id of its main item; the pools of the pickers leave
+//                the non-main categories out (NON_MAIN_CATEGORIES, isMainDish, excludeNonMain).
 import { nowIso, randomId, type CookLogEntry, type Recipe } from './model.ts';
 
 export interface PlanItem {
@@ -17,6 +20,9 @@ export interface PlanItem {
   /** Set by the "Gekookt" tick (also by cook mode's "Gekookt!"): stays in the plan, leaves the list. */
   cooked?: boolean;
   addedAt: string;
+  /** "+ bijgerecht" (13E): id of the PlanItem this side dish belongs to. Absent = a main dish. The side
+   *  follows its main dish: same servings, cooked together, removed together. */
+  sideOf?: string;
 }
 
 export interface Plan {
@@ -56,6 +62,45 @@ export function emptyPlan(): Plan {
 /** A new slot for a recipe: id 'pi:' + 8 chars. */
 export function newPlanItem(recipeId: string, servings = DEFAULT_SERVINGS): PlanItem {
   return { id: randomId('pi:'), recipeId, servings: normalizeServings(servings), addedAt: nowIso() };
+}
+
+/**
+ * A side dish under `main` (13E "+ bijgerecht"): a new 'pi:' slot for `recipeId` with the servings
+ * of the main dish and `sideOf` = the main item's id.
+ */
+export function newSideItem(main: PlanItem, recipeId: string): PlanItem {
+  return { ...newPlanItem(recipeId, main.servings), sideOf: main.id };
+}
+
+/** The side dishes that hang under the main item `mainId`, in plan order. */
+export function sidesOf(items: readonly PlanItem[], mainId: string): PlanItem[] {
+  return items.filter((p) => p.sideOf === mainId);
+}
+
+/** The items that are not a side dish (no `sideOf`): the dishes the week counts as "gerechten". */
+export function mainItems(items: readonly PlanItem[]): PlanItem[] {
+  return items.filter((p) => !p.sideOf);
+}
+
+/** Categories that are not a whole meal: Kies N, Verras me, the reroll and the Home dice skip them
+ *  unless the person asks for them (PickFilter.all or a chip of such a category). */
+export const NON_MAIN_CATEGORIES: ReadonlySet<string> = new Set(['nagerecht', 'gebak', 'bijgerecht', 'ontbijt-lunch']);
+
+/** A main dish = a recipe whose category is not one of NON_MAIN_CATEGORIES; no category counts as main. */
+export function isMainDish(r: Pick<Recipe, 'category'>): boolean {
+  return !r.category || !NON_MAIN_CATEGORIES.has(r.category);
+}
+
+/**
+ * The pool of a picker without the non-main recipes (docs/specs/labels-categorieen.md §1c), the pure
+ * helper behind `applyPickFilter(…, { mainOnly })`. `all` ("ook bijgerechten & zoet") keeps
+ * everything; a non-main category listed in `cats` (its chip is on) keeps the recipes of that
+ * category. Order is kept; the input is not mutated.
+ */
+export function excludeNonMain<R extends Pick<Recipe, 'category'>>(recipes: readonly R[], f: { all?: boolean; cats?: readonly string[] } = {}): R[] {
+  if (f.all === true) return [...recipes];
+  const asked = new Set((f.cats ?? []).filter((c) => NON_MAIN_CATEGORIES.has(c)));
+  return recipes.filter((r) => isMainDish(r) || asked.has(r.category as string));
 }
 
 /** Servings are whole numbers from 1 up; anything else becomes the default. */
@@ -170,7 +215,8 @@ function fnv1a(s: string): string {
 /**
  * Stable hash of the plan as the shopping list sees it: the (recipeId, servings) pairs of the
  * dishes that are not cooked yet, order-independent. The list stores it as `generatedFrom`; a
- * different value means "Weekplan gewijzigd — Bijwerken". An empty plan hashes to ''.
+ * different value means "Weekplan gewijzigd — Bijwerken". An empty plan hashes to ''. Side dishes
+ * (`sideOf`) count like any dish, so adding one marks the list as changed (labels-categorieen.md §2d).
  */
 export function planHash(plan: Pick<Plan, 'items'>): string {
   return hashPairs(plan.items.filter((p) => !p.cooked));

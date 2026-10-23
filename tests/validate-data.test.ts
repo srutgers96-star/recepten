@@ -127,11 +127,12 @@ describe('validateSchema2: cuisine and category (labels-categorieen.md §2c/§2d
     expect(validateSchema2(file({ cuisine: 'mars' })).errors).toEqual([]);
   });
 
-  it("category 'bijgerecht' is fine once data/categories.json has it (blok 4); until then it is unknown", () => {
-    const errors = validateSchema2(file({ category: 'bijgerecht' }), refs).errors;
-    if (refs.categories.has('bijgerecht')) expect(errors).toEqual([]);
-    else expect(errors).toEqual(['"b:test": category "bijgerecht" does not exist.']);
+  it("category 'bijgerecht' (and the other three of blok 4, §2d) is fine; an unknown category is not", () => {
+    expect(refs.categories.has('bijgerecht')).toBe(true);
+    expect(validateSchema2(file({ category: 'bijgerecht' }), refs).errors).toEqual([]);
+    for (const c of ['nagerecht', 'gebak', 'ontbijt-lunch']) expect(validateSchema2(file({ category: c }), refs).errors).toEqual([]);
     expect(validateSchema2(file({ category: 'pasta' }), refs).errors).toEqual([]);
+    expect(validateSchema2(file({ category: 'toetje' }), refs).errors).toEqual(['"b:test": category "toetje" does not exist.']);
   });
 
   it('the committed data/recipes.json passes with the cuisines', () => {

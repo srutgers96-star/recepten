@@ -21,7 +21,7 @@ import { rewriteIngredientId, rewriteLinesIngredientId } from '@/domain/merge-in
 import { legacyChoices, planImport, resolveImport, type ImportChoices, type ImportPlan, type LocalState } from '@/domain/merge';
 import type { ParsedShare } from '@/domain/share';
 import { aggregate, type ListItem } from '@/domain/aggregate';
-import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, normalizeServings, planHash, planHashAll, type Plan, type PlanItem } from '@/domain/planner';
+import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, newSideItem, normalizeServings, planHash, planHashAll, type Plan, type PlanItem } from '@/domain/planner';
 import { HOUSEHOLD_KEY, normalizeHousehold, type HouseholdSetting } from '@/domain/household';
 import { db, getSetting, setSetting } from './db';
 import type { BackupBundle, BundledPhoto, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Photo, Setting, ShareEvent } from './model';
@@ -1441,11 +1441,19 @@ export async function getPlan(): Promise<Plan> {
   return { ...row, id: PLAN_ID, items: Array.isArray(row.items) ? row.items : [] };
 }
 
-/** Stores the plan as 'current' with `updatedAt` stamped here. Returns the stored plan. */
+/**
+ * Stores the plan as 'current' with `updatedAt` stamped here. Returns the stored plan. A `sideOf`
+ * ("+ bijgerecht", 6B blok 4) that points to no item of this plan is dropped: that side dish becomes
+ * an ordinary dish (docs/specs/labels-categorieen.md §2d).
+ */
 export async function savePlan(plan: Plan): Promise<Plan> {
-  const items: PlanItem[] = (Array.isArray(plan.items) ? plan.items : [])
-    .filter((p) => p && typeof p.id === 'string' && typeof p.recipeId === 'string')
-    .map((p) => ({ ...p, servings: normalizeServings(p.servings), addedAt: p.addedAt || nowIso() }));
+  const valid = (Array.isArray(plan.items) ? plan.items : []).filter((p) => p && typeof p.id === 'string' && typeof p.recipeId === 'string');
+  const ids = new Set(valid.map((p) => p.id));
+  const items: PlanItem[] = valid.map((p) => {
+    const next: PlanItem = { ...p, servings: normalizeServings(p.servings), addedAt: p.addedAt || nowIso() };
+    if ('sideOf' in next && (typeof next.sideOf !== 'string' || next.sideOf === next.id || !ids.has(next.sideOf))) delete next.sideOf;
+    return next;
+  });
   const row: Plan = { ...plan, id: PLAN_ID, items, updatedAt: nowIso() };
   const note = typeof plan.note === 'string' ? plan.note.trim() : '';
   if (note) row.note = note;
@@ -1482,15 +1490,45 @@ export async function addToPlan(recipeId: string, servings?: number): Promise<Pl
   return item as PlanItem;
 }
 
+/**
+ * "+ bijgerecht" (6B blok 4, docs/specs/labels-categorieen.md §1d/§2d): a side dish under the main
+ * dish `mainItemId`, with the servings of that main, placed right after the main and its other
+ * sides. Undefined (nothing stored) when there is no main dish with that id (absent, or itself a
+ * side) or when this recipe already hangs under it; the same side under two mains is fine.
+ */
+export async function addSideToPlan(mainItemId: string, recipeId: string): Promise<PlanItem | undefined> {
+  let item: PlanItem | undefined;
+  await updatePlan((plan) => {
+    const main = plan.items.find((p) => p.id === mainItemId && !p.sideOf);
+    if (!main) return;
+    if (plan.items.some((p) => p.sideOf === mainItemId && p.recipeId === recipeId)) return;
+    const side = newSideItem(main, recipeId);
+    item = side;
+    let at = plan.items.indexOf(main);
+    plan.items.forEach((p, i) => {
+      if (p.sideOf === mainItemId && i > at) at = i;
+    });
+    const items = [...plan.items];
+    items.splice(at + 1, 0, side);
+    return { ...plan, items };
+  });
+  return item;
+}
+
+/** Removes a slot; the side dishes of a main dish go with it (`sideOf` = that slot). */
 export async function removeFromPlan(itemId: string): Promise<void> {
-  await updatePlan((plan) => ({ ...plan, items: plan.items.filter((p) => p.id !== itemId) }));
+  await updatePlan((plan) => ({ ...plan, items: plan.items.filter((p) => p.id !== itemId && p.sideOf !== itemId) }));
 }
 
+/** New servings for a slot; its side dishes follow (the same n). */
 export async function setPlanServings(itemId: string, n: number): Promise<void> {
-  await updatePlan((plan) => ({ ...plan, items: plan.items.map((p) => (p.id === itemId ? { ...p, servings: normalizeServings(n, p.servings) } : p)) }));
+  await updatePlan((plan) => ({
+    ...plan,
+    items: plan.items.map((p) => (p.id === itemId || p.sideOf === itemId ? { ...p, servings: normalizeServings(n, p.servings) } : p)),
+  }));
 }
 
-/** Toggles the lock and returns the new state. */
+/** Toggles the lock and returns the new state. Side dishes have no lock and are left alone. */
 export async function togglePlanLock(itemId: string): Promise<boolean> {
   let locked = false;
   await updatePlan((plan) => ({
@@ -1507,12 +1545,15 @@ export async function togglePlanLock(itemId: string): Promise<boolean> {
   return locked;
 }
 
-/** "Gekookt" on a slot: the dish stays in the plan but leaves the shopping list. */
+/**
+ * "Gekookt" on a slot: the dish stays in the plan but leaves the shopping list. Its side dishes
+ * follow (cooked together, and back together when the tick is taken off).
+ */
 export async function markPlanCooked(itemId: string, cooked: boolean): Promise<void> {
   await updatePlan((plan) => ({
     ...plan,
     items: plan.items.map((p) => {
-      if (p.id !== itemId) return p;
+      if (p.id !== itemId && p.sideOf !== itemId) return p;
       const next = { ...p };
       if (cooked) next.cooked = true;
       else delete next.cooked;
@@ -1522,15 +1563,29 @@ export async function markPlanCooked(itemId: string, cooked: boolean): Promise<v
 }
 
 /**
- * "Gekookt!" from cook mode: marks the slot(s) of that recipe cooked when the recipe is in the
- * plan (no-op otherwise). Returns true when a slot was marked.
+ * The items after "Gekookt!" for `recipeId`: every slot of that recipe is cooked, and so are the
+ * side dishes hanging under such a slot (`sideOf`; docs/specs/labels-categorieen.md §1d: cooked
+ * follows the main dish, both leave the shopping list). undefined when nothing changes. Pure (tests).
+ */
+export function cookRecipeInPlanItems(items: readonly PlanItem[], recipeId: string): PlanItem[] | undefined {
+  const slotIds = new Set(items.filter((p) => p.recipeId === recipeId).map((p) => p.id));
+  const hits = (p: PlanItem) => slotIds.has(p.id) || (p.sideOf !== undefined && slotIds.has(p.sideOf));
+  if (!items.some((p) => hits(p) && !p.cooked)) return undefined;
+  return items.map((p) => (hits(p) && !p.cooked ? { ...p, cooked: true } : p));
+}
+
+/**
+ * "Gekookt!" from cook mode (and "✓ Gekookt" for today on the recipe page): marks the slot(s) of
+ * that recipe cooked, their side dishes with them, when the recipe is in the plan (no-op otherwise).
+ * Returns true when a slot was marked.
  */
 export async function markRecipeCookedInPlan(recipeId: string): Promise<boolean> {
   let hit = false;
   await updatePlan((plan) => {
-    if (!plan.items.some((p) => p.recipeId === recipeId && !p.cooked)) return;
+    const items = cookRecipeInPlanItems(plan.items, recipeId);
+    if (!items) return;
     hit = true;
-    return { ...plan, items: plan.items.map((p) => (p.recipeId === recipeId ? { ...p, cooked: true } : p)) };
+    return { ...plan, items };
   });
   return hit;
 }

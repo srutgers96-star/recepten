@@ -1,4 +1,14 @@
 {
+  "category": {
+    "b:aardappelpuree-bij-kabeljauw-met-notencrumble": "bijgerecht",
+    "b:rucola-spinazie-pesto-bij-kabeljauw-met-notencrumble": "bijgerecht",
+    "b:tomatensalsa-bij-kabeljauw-met-notencrumble": "bijgerecht",
+    "b:naanbrood-voor-bij-dahl": "bijgerecht",
+    "b:polenta-voor-ratatouille": "bijgerecht"
+  },
+  "goesWith": {
+    "b:polenta-voor-ratatouille": ["b:ratatouille"]
+  },
   "cuisine": {
     "b:bavette-met-gerookte-pancetta": "italiaans",
     "b:cannelloni-met-gehakt-salie-en-walnoten": "italiaans",

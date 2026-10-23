@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "dataVersion": 6,
-  "generatedAt": "2026-10-23T19:14:27.666Z",
+  "dataVersion": 7,
+  "generatedAt": "2026-10-23T20:01:21.003Z",
   "recipes": [
     {
       "schema": 2,
@@ -394,7 +394,7 @@
         "b:kabeljauw-met-notencrumble"
       ],
       "aliases": [],
-      "category": "overig",
+      "category": "bijgerecht",
       "text": {
         "en": "llm"
       },
@@ -22270,7 +22270,7 @@
         "b:dahl-van-rode-linzen-boerenkool"
       ],
       "aliases": [],
-      "category": "overig",
+      "category": "bijgerecht",
       "cuisine": "indiaas",
       "text": {
         "en": "llm"
@@ -25577,9 +25577,11 @@
           ]
         }
       ],
-      "goesWith": [],
+      "goesWith": [
+        "b:ratatouille"
+      ],
       "aliases": [],
-      "category": "overig",
+      "category": "bijgerecht",
       "text": {
         "en": "llm"
       },
@@ -31068,7 +31070,7 @@
         "b:kabeljauw-met-notencrumble"
       ],
       "aliases": [],
-      "category": "overig",
+      "category": "bijgerecht",
       "text": {
         "en": "llm"
       },
@@ -37964,7 +37966,7 @@
         "b:kabeljauw-met-notencrumble"
       ],
       "aliases": [],
-      "category": "overig",
+      "category": "bijgerecht",
       "text": {
         "en": "llm"
       },

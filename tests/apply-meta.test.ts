@@ -1,6 +1,7 @@
 // tools/apply-meta.ts (docs/specs/labels-categorieen.md §2e, §6a): the hand-kept labels of the
-// classics in data/review/meta.json (blok 3: the 71 cuisines of §2c). `checkMeta` refuses unknown
-// ids, `applyMeta` sets the fields and is idempotent, and `migrate()` replays the real file.
+// classics in data/review/meta.json (blok 3: the 71 cuisines of §2c; blok 4: the five side dishes
+// in 'bijgerecht' and the goesWith of the polenta). `checkMeta` refuses unknown ids, `applyMeta`
+// sets the fields and is idempotent, and `migrate()` replays the real file.
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -44,6 +45,20 @@ describe('checkMeta', () => {
     const meta: MetaReview = { category: { 'b:a': 'soep' }, goesWith: { 'b:b': ['b:a'] }, cuisine: { 'b:a': 'italiaans', 'b:c': 'hollands' } };
     expect(checkMeta(meta, RECIPES, refs)).toEqual([]);
     expect(checkMeta({}, RECIPES, refs)).toEqual([]);
+  });
+
+  it('knows the four categories of blok 4 (data/categories.json §2d)', () => {
+    for (const c of ['nagerecht', 'gebak', 'bijgerecht', 'ontbijt-lunch']) expect(checkMeta({ category: { 'b:a': c } }, RECIPES, refs)).toEqual([]);
+  });
+
+  it('applies a side-dish category with its goesWith (the polenta case)', () => {
+    const meta: MetaReview = { category: { 'b:c': 'bijgerecht' }, goesWith: { 'b:c': ['b:a'] } };
+    expect(checkMeta(meta, RECIPES, refs)).toEqual([]);
+    const { recipes, applied } = applyMeta(RECIPES, meta);
+    expect(applied).toBe(2);
+    expect(recipes[2]?.category).toBe('bijgerecht');
+    expect(recipes[2]?.goesWith).toEqual(['b:a']);
+    expect(recipes[0]).toBe(RECIPES[0]);
   });
 
   it('refuses an unknown recipe id, cuisine, category or goesWith id', () => {
@@ -132,6 +147,46 @@ describe('migrate() with the real data/review/meta.json', () => {
       expect(byId.has(id)).toBe(true);
       expect(byId.get(id)).not.toHaveProperty('cuisine');
     }
+  });
+
+  // Blok 4 (§2e, §5 punt 5): exactly five recategorisations and the goesWith of the polenta.
+  const SIDES = [
+    'b:aardappelpuree-bij-kabeljauw-met-notencrumble',
+    'b:rucola-spinazie-pesto-bij-kabeljauw-met-notencrumble',
+    'b:tomatensalsa-bij-kabeljauw-met-notencrumble',
+    'b:naanbrood-voor-bij-dahl',
+    'b:polenta-voor-ratatouille',
+  ];
+
+  it("puts exactly the five side dishes in 'bijgerecht'; no classic is in nagerecht, gebak or ontbijt-lunch", () => {
+    expect(inputs.meta?.category).toEqual(Object.fromEntries(SIDES.map((id) => [id, 'bijgerecht'])));
+    for (const id of SIDES) expect(byId.get(id)?.category).toBe('bijgerecht');
+    expect(classics.filter((r) => r.category === 'bijgerecht').map((r) => r.id).sort()).toEqual([...SIDES].sort());
+    for (const c of ['nagerecht', 'gebak', 'ontbijt-lunch']) expect(classics.filter((r) => r.category === c)).toEqual([]);
+  });
+
+  it('the other twelve in Overig stay there (Boerenomelet, Roerei met courgette …)', () => {
+    const overig = classics.filter((r) => r.category === 'overig').map((r) => r.id);
+    expect(overig).toHaveLength(12);
+    expect(overig).toContain('b:boerenomelet');
+    expect(overig).toContain('b:roerei-met-courgette');
+    expect(overig).toContain('b:ratatouille');
+    for (const id of SIDES) expect(overig).not.toContain(id);
+  });
+
+  it("the polenta goes with the ratatouille; the other side dishes keep their main dish from the name", () => {
+    expect(inputs.meta?.goesWith).toEqual({ 'b:polenta-voor-ratatouille': ['b:ratatouille'] });
+    expect(byId.get('b:polenta-voor-ratatouille')?.goesWith).toEqual(['b:ratatouille']);
+    expect(byId.get('b:ratatouille')?.goesWith).toEqual([]);
+    for (const id of SIDES.slice(0, 3)) expect(byId.get(id)?.goesWith).toEqual(['b:kabeljauw-met-notencrumble']);
+    expect(byId.get('b:naanbrood-voor-bij-dahl')?.goesWith).toEqual(['b:dahl-van-rode-linzen-boerenkool']);
+  });
+
+  it('without the meta step the five side dishes are back in Overig and the polenta has no goesWith', () => {
+    const without = migrate(SOURCE, '2026-10-23T00:00:00.000Z', { ...inputs, meta: null });
+    const plain = new Map(without.recipes.map((r) => [r.id, r]));
+    for (const id of SIDES) expect(plain.get(id)?.category).toBe('overig');
+    expect(plain.get('b:polenta-voor-ratatouille')?.goesWith).toEqual([]);
   });
 
   it('the meta step is optional, and a broken meta file stops the migration', () => {

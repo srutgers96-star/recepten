@@ -1,7 +1,8 @@
 // Frozen phase-3 tokens (docs/phase-3-spec.md §1): a `#p=` patch envelope and a `#b=` bundle
 // envelope, produced ONCE on 2026-09-29 by both compression engines. They must decode forever;
 // a codec change gets a NEW fragment key, never a silent reinterpretation of these.
-// Phase 4 added a `#w=` week plan and phase 5 block F a `#f=` member card (below), same rule.
+// Phase 4 added a `#w=` week plan, phase 5 block F a `#f=` member card and phase 6 (13E) a `#w=`
+// plan with a side dish (below), same rule.
 import type { Envelope } from '../../src/domain/token';
 
 export const FROZEN_TOKEN_P =
@@ -174,6 +175,30 @@ export const FROZEN_ENVELOPE_F: Envelope = {
     color: '#2b4fa8',
     lang: 'nl',
     deviceId: 'd:7m4qz81c',
+  },
+  future: { keep: true },
+};
+
+// Phase 6 (docs/specs/labels-categorieen.md §2d, 13E "+ bijgerecht"): a `#w=` week plan with a side
+// dish, produced ONCE on 2026-10-23 by both engines with encodeToken. The side travels as an item
+// with `of` = the RECIPE id of its main dish; `v` stays 2 (an older app shows it as a plain dish).
+export const FROZEN_TOKEN_W_SIDE =
+  'jY-9bsMwEIPfhfMpuAhFhnuNFB1aZJDicyD_RbhIMQpD7x54ytiuJPGR3PCEeEKBYAUh_kJwLmlYQAi76tmf3JGd959HL8zCfGDmbxBWyIZUdH5AfjZY6iCIMoao0xDq6mYtbrkXXa5W5zgpCA97Qj4aveMhWBdy1ilXU3UxDe4fBMK9_6utXQim15R1H3gh7C4EX5aGLtzQCH0t1XT_MapmSLGqrb0A';
+export const FROZEN_TOKEN_W_SIDE_FFLATE =
+  'jU-7DsIwDPwXzwlKI8SQ3wAxgBiS1kVJX5GbUKEq_44zMYLkwee789k7vMBoAQkMbCDAvbk5Jx9mBrZOtdIn2Sip9aXRRimug1LqxvwGZgefcFrB3Hcg37HemcE6HIPNm5wwyXlJOLeUJzcie1biwGMRX7m11NkYcYyZEKXzQf6xQcDS_0orDwGErY9YD2RQWTZdyYfOPqEI6HPi1PrHgBjBJMpYygc';
+
+export const FROZEN_ENVELOPE_W_SIDE: Envelope = {
+  v: 2,
+  t: 'w',
+  by: 'Stijn',
+  at: '2026-10-22T12:00:00.000Z',
+  w: {
+    items: [
+      { rid: 'b:kabeljauw-met-notencrumble', srv: 4 },
+      { rid: 'b:aardappelpuree-bij-kabeljauw-met-notencrumble', srv: 4, of: 'b:kabeljauw-met-notencrumble' },
+    ],
+    recipes: [],
+    note: 'Vrijdag',
   },
   future: { keep: true },
 };

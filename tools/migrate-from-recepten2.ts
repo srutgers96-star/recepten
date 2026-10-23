@@ -42,7 +42,7 @@ import { applyDerivedTags } from './derive-tags.ts';
 import { refsFromData } from './validate-data.ts';
 
 /** Bump when the bundled classics change in a way the app must re-import (repo.ensureBuiltins). */
-export const DATA_VERSION = 6;
+export const DATA_VERSION = 7;
 
 /** First edition of the book: the "creation" date of every classic (deterministic output). */
 export const BUILTIN_TIMESTAMP = '2025-12-01T00:00:00.000Z';

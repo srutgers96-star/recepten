@@ -60,7 +60,13 @@ export interface PlainRecipe {
 
 // --- category and tag words ---------------------------------------------------------------------
 
-/** categories.json ids with the words (nl, en, common variants) that mean them. The id itself always counts. */
+/**
+ * categories.json ids with the words (nl, en, common variants) that mean them. The id itself always
+ * counts. The key order is the order the import prompt lists the categories in (`overig` last).
+ * A word listed twice belongs to the FIRST id (`buildIndex`): 'bake' stays `oven` and 'taart' /
+ * 'pie' / 'tart' stay `hartige-taart`, also now that `gebak` exists (docs/specs/labels-categorieen.md
+ * §3 blok 4: nagerecht, gebak, bijgerecht and ontbijt-lunch).
+ */
 const CATEGORY_WORDS: Record<string, string[]> = {
   soep: ['soep', 'soup', 'soepen', 'soups', 'maaltijdsoep'],
   salade: ['salade', 'salad', 'salades', 'salads', 'sla'],
@@ -72,6 +78,10 @@ const CATEGORY_WORDS: Record<string, string[]> = {
   stamppot: ['stamppot', 'stamppot (dutch mash)', 'dutch mash', 'mash', 'stamp', 'stampot', 'hutspot'],
   oven: ['oven', 'ovenschotel', 'ovengerecht', 'oven dish', 'bake', 'casserole', 'gratin', 'uit de oven'],
   'wok-noedels': ['wok & noedels', 'wok & noodles', 'wok', 'noedels', 'noodles', 'wok en noedels', 'wok and noodles', 'wok-noedels', 'wok noedels', 'wok noodles', 'roerbak', 'stir-fry', 'stir fry'],
+  nagerecht: ['nagerecht', 'dessert', 'toetje', 'desserts', 'pudding'],
+  gebak: ['gebak', 'baking', 'bakken', 'cake', 'taart zoet', 'koek', 'koekjes', 'cookies', 'bake'],
+  bijgerecht: ['bijgerecht', 'side dish', 'side', 'sides', 'bijgerechten', 'side dishes'],
+  'ontbijt-lunch': ['ontbijt & lunch', 'ontbijt', 'lunch', 'breakfast & lunch', 'breakfast', 'brunch', 'ontbijt en lunch', 'breakfast and lunch'],
   overig: ['overig', 'other', 'overige', 'anders', 'misc', 'miscellaneous', 'diversen'],
 };
 

@@ -21,6 +21,10 @@ const ICONS: Record<string, string> = {
   stamppot: '🥔',
   oven: '🔥',
   'wok-noedels': '🍜',
+  nagerecht: '🍨',
+  gebak: '🍰',
+  bijgerecht: '🥖',
+  'ontbijt-lunch': '🥪',
   overig: '🍽️',
 };
 

@@ -10,7 +10,10 @@
 //   that leaves nothing: decision Fable 23 Oct, "Iets buiten je week" means really outside the week),
 //   Open and 🎲 Nog een. The foot has the toggle "filters ▾" (the chips open under it; open/closed
 //   remembered per phone) and, while the plan still has an uncooked dish, "Terug naar je week ›".
-//   The chips only ever apply to the dice, never to the plan.
+//   The chips only ever apply to the dice, never to the plan. The dice is a picker (6B blok 4,
+//   docs/specs/labels-categorieen.md §1c): it rolls over main dishes only (`mainOnly`), unless the
+//   chip "ook bijgerechten & zoet" (`pick.all`) or a chip of such a category is on. The plan mode
+//   skips side dishes (`PlanItem.sideOf`, §1d): they follow their main and are never "Vanavond".
 // Like `surpriseId` before, the shown dish lives in module variables (diceId, planItemId, freeMode)
 // so Home shows the same one when you come back. `onShown` reports the shown recipe id (null while
 // loading or empty) from a LAYOUT effect, never during render: it runs before the browser paints, so
@@ -24,7 +27,7 @@ import { otherLanguageName } from '@/components/RecipeRow';
 import { dictionary } from '@/dictionary';
 import type { Dictionary } from '@/domain/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
-import type { Plan, PlanItem } from '@/domain/planner';
+import { mainItems, type Plan, type PlanItem } from '@/domain/planner';
 import { currentPlanItem, nextPlanItem, outsideWeekIds, pickRandomId, tonightMeta, tonightMode, uncookedItems } from '@/domain/tonight';
 import { lang, t } from '@/i18n';
 import { navigate } from '@/router';
@@ -107,15 +110,19 @@ export function TonightCard(props: TonightCardProps): JSX.Element {
   onShownRef.current = props.onShown;
 
   const byId = useMemo(() => new Map((recipes ?? []).map((r) => [r.id, r] as const)), [recipes]);
-  const uncooked = useMemo(() => (plan ? uncookedItems(plan, byId) : []), [plan, byId]);
+  // The plan mode is about main dishes only (docs/specs/labels-categorieen.md §1d: a side dish follows
+  // its main and is not a dish of its own; "N gerechten" = main dishes): no side as "Vanavond", none
+  // in "🎲 Iets anders", none counted in "nog N te gaan". The dice pool below keeps the whole plan.
+  const mains = useMemo(() => (plan ? { ...plan, items: mainItems(plan.items) } : undefined), [plan]);
+  const uncooked = useMemo(() => (mains ? uncookedItems(mains, byId) : []), [mains, byId]);
   const tags = useMemo(() => tagIdsIn(recipes ?? []), [recipes]);
   // The dice only rolls over recipes that match the chips and are not in the week plan (the whole
   // filtered pool when every match is in the week); the pick is re-rolled when it drops out, also a
   // pick from before Kies 7 that is a week dish now.
-  const filteredIds = useMemo(() => applyPickFilter(recipes ?? [], filters, dict, l).map((r) => r.id), [recipes, filters, dict, l]);
+  const filteredIds = useMemo(() => applyPickFilter(recipes ?? [], filters, dict, l, { mainOnly: true }).map((r) => r.id), [recipes, filters, dict, l]);
   const poolIds = useMemo(() => outsideWeekIds(filteredIds, plan), [filteredIds, plan]);
   const poolSet = useMemo(() => new Set(poolIds), [poolIds]);
-  const mode = tonightMode(plan, recipes, freeMode);
+  const mode = tonightMode(mains, recipes, freeMode);
 
   let item: PlanItem | undefined;
   let shown: Recipe | undefined;
@@ -226,7 +233,7 @@ export function TonightCard(props: TonightCardProps): JSX.Element {
             </button>
           )}
         </div>
-        {filtersOpen && <PickChips filter={filters} onChange={changeFilters} tags={tags} cuisines={cuisineIdsIn(recipes ?? [])} noQuery />}
+        {filtersOpen && <PickChips filter={filters} onChange={changeFilters} tags={tags} cuisines={cuisineIdsIn(recipes ?? [])} noQuery mainOnlyToggle />}
       </>
     );
   }

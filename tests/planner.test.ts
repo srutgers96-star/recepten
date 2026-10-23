@@ -1,8 +1,25 @@
 // The week plan (docs/phase-4-spec.md §1, src/domain/planner.ts): "Verras me" variation rules,
-// locks / existing dishes, small pools, the plan hash and the 6-week window.
+// locks / existing dishes, small pools, the plan hash and the 6-week window; phase 6 (13E,
+// docs/specs/labels-categorieen.md §1c/§2d): main dishes, the pickers' pool and side dishes.
 import { describe, expect, it } from 'vitest';
 import type { Recipe } from '../src/domain/model';
-import { isVegetarian, newPlanItem, normalizeServings, pickRecipes, planHash, planHashAll, recentCookedIds, type Plan, type PlanItem } from '../src/domain/planner';
+import {
+  excludeNonMain,
+  isMainDish,
+  isVegetarian,
+  mainItems,
+  newPlanItem,
+  newSideItem,
+  NON_MAIN_CATEGORIES,
+  normalizeServings,
+  pickRecipes,
+  planHash,
+  planHashAll,
+  recentCookedIds,
+  sidesOf,
+  type Plan,
+  type PlanItem,
+} from '../src/domain/planner';
 
 function rec(id: string, category: string, tags: string[] = []): Recipe {
   return {
@@ -180,5 +197,89 @@ describe('helpers', () => {
     expect(normalizeServings('6')).toBe(4);
     expect(normalizeServings(6)).toBe(6);
     expect(normalizeServings(undefined, 2)).toBe(2);
+  });
+});
+
+// docs/specs/labels-categorieen.md §1c/§1d/§2d (13E): main dishes, the pickers' pool, side dishes.
+describe('main dishes and the pickers pool', () => {
+  it('NON_MAIN_CATEGORIES are exactly nagerecht, gebak, bijgerecht and ontbijt-lunch', () => {
+    expect([...NON_MAIN_CATEGORIES].sort()).toEqual(['bijgerecht', 'gebak', 'nagerecht', 'ontbijt-lunch']);
+  });
+
+  it('isMainDish: no category counts as a main dish; the four non-main categories do not', () => {
+    expect(isMainDish({})).toBe(true);
+    expect(isMainDish({ category: null })).toBe(true);
+    expect(isMainDish({ category: 'pasta' })).toBe(true);
+    expect(isMainDish({ category: 'overig' })).toBe(true);
+    for (const c of ['bijgerecht', 'nagerecht', 'gebak', 'ontbijt-lunch']) expect(isMainDish({ category: c })).toBe(false);
+  });
+
+  const mixed: Recipe[] = [
+    rec('b:pasta', 'pasta'),
+    rec('b:puree', 'bijgerecht'),
+    rec('b:taart', 'gebak'),
+    rec('b:toetje', 'nagerecht'),
+    rec('b:roerei', 'ontbijt-lunch'),
+    { ...rec('b:zonder', 'x'), category: null },
+  ];
+  const ids = (list: readonly Recipe[]) => list.map((r) => r.id);
+
+  it('excludeNonMain drops the non-main recipes by default and keeps the order', () => {
+    expect(ids(excludeNonMain(mixed, {}))).toEqual(['b:pasta', 'b:zonder']);
+    expect(ids(excludeNonMain(mixed))).toEqual(['b:pasta', 'b:zonder']);
+  });
+
+  it('"ook bijgerechten & zoet" (all) keeps everything; a chosen non-main category chip keeps that category', () => {
+    expect(ids(excludeNonMain(mixed, { all: true }))).toEqual(ids(mixed));
+    expect(ids(excludeNonMain(mixed, { cats: ['bijgerecht'] }))).toEqual(['b:pasta', 'b:puree', 'b:zonder']);
+    expect(ids(excludeNonMain(mixed, { cats: ['nagerecht', 'gebak'] }))).toEqual(['b:pasta', 'b:taart', 'b:toetje', 'b:zonder']);
+    // A main-dish chip changes nothing about the non-main recipes.
+    expect(ids(excludeNonMain(mixed, { cats: ['pasta'] }))).toEqual(['b:pasta', 'b:zonder']);
+    expect(ids(excludeNonMain(mixed, { all: false, cats: [] }))).toEqual(['b:pasta', 'b:zonder']);
+  });
+
+  it('does not mutate its input', () => {
+    const copy = [...mixed];
+    excludeNonMain(mixed, {});
+    expect(mixed).toEqual(copy);
+  });
+});
+
+describe('side dishes in the plan (sideOf)', () => {
+  const main = slot('b:kabeljauw', { servings: 6 });
+  const other = slot('b:dahl', { servings: 2 });
+
+  it('newSideItem: a new pi: slot with the servings of the main dish and sideOf = the main id', () => {
+    const side = newSideItem(main, 'b:puree');
+    expect(side.id).toMatch(/^pi:[a-z0-9]{8}$/);
+    expect(side.id).not.toBe(main.id);
+    expect(side.recipeId).toBe('b:puree');
+    expect(side.servings).toBe(6);
+    expect(side.sideOf).toBe(main.id);
+    expect(side).not.toHaveProperty('cooked');
+    expect(side).not.toHaveProperty('locked');
+    expect(typeof side.addedAt).toBe('string');
+  });
+
+  it('sidesOf and mainItems split the plan; the same side may hang under two mains', () => {
+    const puree = newSideItem(main, 'b:puree');
+    const salsa = newSideItem(main, 'b:salsa');
+    const brood = newSideItem(other, 'b:stokbrood');
+    const brood2 = newSideItem(main, 'b:stokbrood');
+    const items = [main, puree, other, salsa, brood, brood2];
+    expect(sidesOf(items, main.id)).toEqual([puree, salsa, brood2]);
+    expect(sidesOf(items, other.id)).toEqual([brood]);
+    expect(sidesOf(items, 'pi:none')).toEqual([]);
+    expect(mainItems(items)).toEqual([main, other]);
+    expect(mainItems([])).toEqual([]);
+  });
+
+  it('planHash changes when a side dish is added (the list then says "Weekplan gewijzigd")', () => {
+    const plan = (items: PlanItem[]): Plan => ({ id: 'current', items, updatedAt: 'x' });
+    const before = plan([main, other]);
+    const after = plan([main, other, newSideItem(main, 'b:puree')]);
+    expect(planHash(after)).not.toBe(planHash(before));
+    expect(planHashAll(after)).not.toBe(planHashAll(before));
+    expect(planHash(after)).toMatch(/^3:[0-9a-f]{8}$/);
   });
 });

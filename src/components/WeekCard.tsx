@@ -7,9 +7,11 @@
 //   CSS ellipsizes the names as a safety net, never the "+N" (own span, decision Fable 23 Oct);
 // - the button as before: all cooked → secondary "Alles gekookt — kies nieuwe?" (→ Week), else
 //   primary "Boodschappenlijst" (→ Shopping).
+// 6B blok 4 (docs/specs/labels-categorieen.md §1d): the card names only the main dishes; a side dish
+// ("+ bijgerecht", `PlanItem.sideOf`) follows its main and is neither named nor counted here.
 import { Fragment, type JSX } from 'preact';
 import { pickText, type Recipe } from '@/domain/model';
-import type { Plan } from '@/domain/planner';
+import { mainItems, type Plan } from '@/domain/planner';
 import { weekLine, weekNames, weekProgress } from '@/domain/tonight';
 import { lang, t } from '@/i18n';
 import { navigateTab } from '@/router';
@@ -40,9 +42,11 @@ export function WeekCard(props: { plan: Plan; byId: ReadonlyMap<string, Recipe> 
     );
   }
 
-  const { total, cooked } = weekProgress(plan);
+  // Main dishes only: the line and "n van total gekookt" leave the side dishes out.
+  const mains: Plan = { ...plan, items: mainItems(plan.items) };
+  const { total, cooked } = weekProgress(mains);
   const allCooked = total > 0 && cooked === total;
-  const { shown, more } = weekLine(weekNames(plan, byId, (r) => pickText(r.name, l)));
+  const { shown, more } = weekLine(weekNames(mains, byId, (r) => pickText(r.name, l)));
 
   return (
     <section class="card week-card compact">

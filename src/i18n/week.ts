@@ -76,6 +76,21 @@ export const week: Dict = {
   'week.copied': { nl: 'Gekopieerd', en: 'Copied' },
   'week.copy': { nl: 'Kopieer', en: 'Copy' },
 
+  // --- Main dishes only + "+ bijgerecht" (docs/specs/labels-categorieen.md §1c/§1d, 6B blok 4) ---
+  'week.mainOnlyHint': { nl: "Alleen hoofdgerechten, tenzij je 'ook bijgerechten & zoet' aanzet.", en: "Main dishes only, unless you switch on 'sides & sweet too'." },
+  'week.addSide': { nl: '+ bijgerecht', en: '+ side dish' },
+  'week.sideTitle': { nl: 'Bijgerecht bij {name}', en: 'Side dish for {name}' },
+  'week.sideSuggested': { nl: 'Past erbij', en: 'Goes with it' },
+  'week.sideAll': { nl: 'Alle bijgerechten', en: 'All side dishes' },
+  'week.sideAdded': { nl: 'staat erbij', en: 'added' },
+  'week.sideNone': {
+    nl: 'Nog geen bijgerechten. Geef een recept de categorie Bijgerecht, dan staat het hier.',
+    en: 'No side dishes yet. Give a recipe the category Side dish and it shows up here.',
+  },
+  'week.removeSide': { nl: 'Bijgerecht weghalen', en: 'Remove side dish' },
+  'week.sides': { nl: '{n} bijgerechten', en: '{n} side dishes' },
+  'week.side': { nl: '1 bijgerecht', en: '1 side dish' },
+
   // --- Kies-N sheet ---
   'pick.title': { nl: 'Kies gerechten', en: 'Pick dishes' },
   'pick.search': { nl: 'Zoek recept of ingrediënt…', en: 'Search recipe or ingredient…' },
@@ -93,6 +108,8 @@ export const week: Dict = {
   'pick.sortHint': { nl: 'Langst niet gegeten bovenaan', en: 'Longest not eaten first' },
   'pick.select': { nl: 'Kies', en: 'Pick' },
   'pick.deselect': { nl: 'Haal weg', en: 'Remove' },
+  // The toggle chip right after the × (6B blok 4 §1c): the pickers also offer the non-main categories.
+  'pick.all': { nl: 'ook bijgerechten & zoet', en: 'sides & sweet too' },
 
   // --- Tag labels for tags that are planned in the data (generic chips fall back to the id) ---
   'tag.glutenvrij': { nl: 'glutenvrij', en: 'gluten-free' },

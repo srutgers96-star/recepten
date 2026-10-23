@@ -23,12 +23,15 @@ import {
   FROZEN_ENVELOPE_B,
   FROZEN_ENVELOPE_F,
   FROZEN_ENVELOPE_P,
+  FROZEN_ENVELOPE_W_SIDE,
   FROZEN_TOKEN_B,
   FROZEN_TOKEN_B_FFLATE,
   FROZEN_TOKEN_F,
   FROZEN_TOKEN_F_FFLATE,
   FROZEN_TOKEN_P,
   FROZEN_TOKEN_P_FFLATE,
+  FROZEN_TOKEN_W_SIDE,
+  FROZEN_TOKEN_W_SIDE_FFLATE,
 } from './fixtures/frozen-share-tokens';
 
 const SOURCE = fileURLToPath(new URL('../data/source/recipes-recepten2.json', import.meta.url));
@@ -131,6 +134,15 @@ describe('token codec', () => {
         // The frozen token IS what this codec produces for that envelope today (byte-for-byte).
         const expected = engine === 'native' ? FROZEN_TOKEN_F : FROZEN_TOKEN_F_FFLATE;
         expect(await encodeToken(FROZEN_ENVELOPE_F, { engine })).toBe(expected);
+      });
+
+      // docs/specs/labels-categorieen.md §2d/§6a: a week plan with a side dish (`of` on the item).
+      it('decodes the frozen phase-6 #w= token with a side dish (native- and fflate-produced)', async () => {
+        expect(await decodeToken(FROZEN_TOKEN_W_SIDE, { engine })).toEqual(FROZEN_ENVELOPE_W_SIDE);
+        expect(await decodeToken(FROZEN_TOKEN_W_SIDE_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_W_SIDE);
+        // The frozen token IS what this codec produces for that envelope today (byte-for-byte).
+        const expected = engine === 'native' ? FROZEN_TOKEN_W_SIDE : FROZEN_TOKEN_W_SIDE_FFLATE;
+        expect(await encodeToken(FROZEN_ENVELOPE_W_SIDE, { engine })).toBe(expected);
       });
     });
   }

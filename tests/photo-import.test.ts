@@ -2,12 +2,14 @@
 // 6A.14, 6A.16, 13C): the code-block prompt with the ingredient-line rules, and the repair of a
 // copied answer (`normalizePastedAnswer`) with Stijn's two broken copies of 13 October as test cases.
 import { describe, expect, it } from 'vitest';
+import categoriesJson from '../data/categories.json';
 import cuisinesJson from '../data/cuisines.json';
 import {
   buildImportPrompt,
   categoryIdFromWord,
   cleanPastedText,
   cuisineIdFromWord,
+  IMPORT_CATEGORY_IDS,
   IMPORT_CUISINE_IDS,
   LINE_RULES,
   normalizePastedAnswer,
@@ -136,7 +138,7 @@ describe('parsePlainRecipe', () => {
     expect(en?.category).toBe('hartige-taart');
     expect(en?.tags).toEqual(['vegetarisch', 'snel', 'oven']);
     // Unknown category: no key at all; no lines: no keys at all (the editor keeps its own values).
-    const odd = parsePlainRecipe('# X\nCategorie: Toetje\nLabels: -\n## Ingrediënten\n1 ei\n## Bereiding\nRoer.');
+    const odd = parsePlainRecipe('# X\nCategorie: Tussendoortje\nLabels: -\n## Ingrediënten\n1 ei\n## Bereiding\nRoer.');
     expect(odd).not.toHaveProperty('category');
     expect(odd?.tags).toEqual([]);
     const none = parsePlainRecipe('# X\n## Ingrediënten\n1 ei\n## Bereiding\nLabels: dit is een stap.');
@@ -151,7 +153,8 @@ describe('parsePlainRecipe', () => {
     expect(categoryIdFromWord('Pasta (vegetarisch)')).toBe('pasta');
     expect(categoryIdFromWord('hartige-taart')).toBe('hartige-taart');
     expect(categoryIdFromWord('Stamppot (Dutch mash)')).toBe('stamppot');
-    expect(categoryIdFromWord('Dessert')).toBeUndefined();
+    expect(categoryIdFromWord('Dessert')).toBe('nagerecht');
+    expect(categoryIdFromWord('Dinner')).toBeUndefined();
     expect(tagIdsFromText('gluten-free, plant-based, kids')).toEqual(['glutenvrij', 'vegan', 'kids']);
     expect(tagIdsFromText('Vegetarisch · Zomer · vegetarisch')).toEqual(['vegetarisch', 'zomer']);
     expect(tagIdsFromText('veggie option / world')).toEqual(['vega-optie', 'wereld']);
@@ -542,5 +545,57 @@ describe('cuisines in the import (6B blok 3)', () => {
     // The bilingual prompt shows both example blocks.
     expect(buildImportPrompt('nl')).toContain('Keuken: italiaans');
     expect(buildImportPrompt('nl')).toContain('Cuisine: italian');
+  });
+});
+
+describe('the four new categories in the import (6B blok 4)', () => {
+  it('maps the words of §3 blok 4 to nagerecht, gebak, bijgerecht and ontbijt-lunch', () => {
+    expect(categoryIdFromWord('side dish')).toBe('bijgerecht');
+    expect(categoryIdFromWord('Dessert')).toBe('nagerecht');
+    expect(categoryIdFromWord('Breakfast')).toBe('ontbijt-lunch');
+    expect(categoryIdFromWord('Baking')).toBe('gebak');
+    for (const w of ['nagerecht', 'Toetje', 'desserts', 'pudding']) expect(categoryIdFromWord(w)).toBe('nagerecht');
+    for (const w of ['Gebak', 'bakken', 'cake', 'taart zoet', 'koek', 'koekjes', 'Cookies']) expect(categoryIdFromWord(w)).toBe('gebak');
+    for (const w of ['Bijgerecht', 'side', 'Sides', 'bijgerechten', 'Side dishes']) expect(categoryIdFromWord(w)).toBe('bijgerecht');
+    for (const w of ['Ontbijt & lunch', 'ontbijt', 'Lunch', 'Breakfast & lunch', 'brunch', 'ontbijt en lunch', 'breakfast and lunch', 'ontbijt-lunch']) {
+      expect(categoryIdFromWord(w)).toBe('ontbijt-lunch');
+    }
+  });
+
+  it("keeps 'taart' / 'pie' / 'tart' at hartige-taart and 'bake' at oven (the first id of a word wins)", () => {
+    for (const w of ['Taart', 'pie', 'tart']) expect(categoryIdFromWord(w)).toBe('hartige-taart');
+    expect(categoryIdFromWord('bake')).toBe('oven');
+  });
+
+  it('knows every category of data/categories.json by id, Dutch and English name, in the data order (overig last)', () => {
+    const categories = categoriesJson as { id: string; nl: string; en: string; order: number }[];
+    expect(IMPORT_CATEGORY_IDS).toEqual([...categories].sort((a, b) => a.order - b.order).map((c) => c.id));
+    expect(IMPORT_CATEGORY_IDS[IMPORT_CATEGORY_IDS.length - 1]).toBe('overig');
+    for (const c of categories) {
+      expect(categoryIdFromWord(c.id)).toBe(c.id);
+      expect(categoryIdFromWord(c.nl)).toBe(c.id);
+      expect(categoryIdFromWord(c.en)).toBe(c.id);
+    }
+  });
+
+  it('the import prompt lists the new categories before overig, next to Keuken: and lactosevrij', () => {
+    for (const bilingual of [true, false]) {
+      const nl = buildImportPrompt('nl', { bilingual });
+      expect(nl).toContain('Keuken: italiaans');
+      expect(nl).toContain('bijgerecht');
+      expect(nl).toContain('lactosevrij');
+      expect(nl).toContain('wok-noedels, nagerecht, gebak, bijgerecht, ontbijt-lunch, overig;');
+      expect(buildImportPrompt('en', { bilingual })).toContain('wok-noedels, nagerecht, gebak, bijgerecht, ontbijt-lunch, overig;');
+    }
+  });
+
+  it('a Categorie: line with a new category is read into category', () => {
+    const nl = ['=== NL ===', '# Tiramisu', 'Categorie: nagerecht', '## Ingrediënten', '250 g mascarpone', '## Bereiding', 'Roer.'];
+    const en = ['=== EN ===', '# Tiramisu', 'Category: dessert', '## Ingredients', '250 g mascarpone', '## Method', 'Stir.'];
+    const r = parseBilingualPlain([...nl, ...en].join('\n'));
+    expect(r.nl?.category).toBe('nagerecht');
+    expect(r.en?.category).toBe('nagerecht');
+    const side = parsePlainRecipe(['# Stokbrood', 'Categorie: bijgerecht', '## Ingrediënten', '500 g bloem', '## Bereiding', 'Bak.'].join('\n'));
+    expect(side?.category).toBe('bijgerecht');
   });
 });

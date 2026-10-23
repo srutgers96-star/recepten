@@ -1,7 +1,11 @@
 [
+  { "id": "bijgerecht", "nl": "Bijgerecht", "en": "Side dish", "order": 13 },
+  { "id": "gebak", "nl": "Gebak", "en": "Baking", "order": 12 },
   { "id": "hartige-taart", "nl": "Hartige taart", "en": "Savoury pie", "order": 3 },
+  { "id": "nagerecht", "nl": "Nagerecht", "en": "Dessert", "order": 11 },
+  { "id": "ontbijt-lunch", "nl": "Ontbijt & lunch", "en": "Breakfast & lunch", "order": 14 },
   { "id": "oven", "nl": "Oven", "en": "Oven", "order": 9 },
-  { "id": "overig", "nl": "Overig", "en": "Other", "order": 11 },
+  { "id": "overig", "nl": "Overig", "en": "Other", "order": 15 },
   { "id": "pasta", "nl": "Pasta", "en": "Pasta", "order": 4 },
   { "id": "rijst", "nl": "Rijst", "en": "Rice", "order": 5 },
   { "id": "salade", "nl": "Salade", "en": "Salad", "order": 2 },

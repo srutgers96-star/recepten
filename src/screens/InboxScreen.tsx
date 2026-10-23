@@ -29,7 +29,6 @@ import { UniversalPaste } from '@/components/UniversalPaste';
 import { useLive } from '@/db/live';
 import type { ImportSnapshot, ShareEvent } from '@/db/model';
 import {
-  addToPlan,
   allRecipes,
   applyImportPlan,
   getHousehold,
@@ -53,7 +52,8 @@ import { memberByName, membersFrom, type HouseholdSetting, type MemberCard } fro
 import { defaultChoices, planImport, type ImportChoice, type ImportChoices, type ImportPlan } from '@/domain/merge';
 import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
 import { classifyPaste } from '@/domain/paste-classify';
-import { emptyPlan, newPlanItem } from '@/domain/planner';
+import { emptyPlan, mainItems } from '@/domain/planner';
+import { planItemsFromShare, sharedDishCount, sharedPlanRows } from '@/domain/plan-import';
 import type { PlanShare } from '@/domain/share';
 import { planWrites } from '@/components/ImportPreview';
 import { lang, t } from '@/i18n';
@@ -450,7 +450,9 @@ export function InboxScreen() {
   /**
    * "Overnemen" / "Toevoegen" on a received week plan (docs/phase-4-spec.md §1): the embedded
    * recipes go through the normal import first (so their ids exist here), then the dishes we
-   * know become plan slots; unknown ids (recipes the sender did not include) are skipped.
+   * know become plan slots; unknown ids (recipes the sender did not include) are skipped. A side
+   * dish (6B block 4) hangs under the slot just made for its main recipe, else it is a plain dish
+   * (src/domain/plan-import.ts). The counts in the notice are main dishes only.
    */
   async function takePlan(mode: 'replace' | 'append') {
     if (!received || busy) return;
@@ -474,19 +476,15 @@ export function InboxScreen() {
       const parts: string[] = [];
       if (mode === 'replace') {
         const fresh = emptyPlan();
-        fresh.items = known.map((it) => newPlanItem(it.recipeId, it.servings));
+        fresh.items = planItemsFromShare(known, 'replace');
         if (received.share.note) fresh.note = received.share.note;
         await savePlan(fresh);
-        parts.push(t('inbox.plan.taken', { n: known.length }));
+        parts.push(t('inbox.plan.taken', { n: mainItems(fresh.items).length }));
       } else {
         const current = await getPlan();
-        const have = new Set(current.items.map((p) => p.recipeId));
-        let added = 0;
-        for (const it of known) {
-          if (have.has(it.recipeId)) continue;
-          await addToPlan(it.recipeId, it.servings);
-          added++;
-        }
+        const fresh = planItemsFromShare(known, 'append', current.items);
+        if (fresh.length > 0) await savePlan({ ...current, items: [...current.items, ...fresh] });
+        const added = mainItems(fresh).length;
         parts.push(added > 0 ? t('inbox.plan.added', { n: added }) : t('inbox.plan.nothing'));
       }
       if (unknown === 1) parts.push(t('inbox.plan.unknownOne'));
@@ -550,7 +548,9 @@ export function InboxScreen() {
   const rows: ImportSnapshot[] = history ?? [];
   // The small count on the "Ontvangen" tab: the same "unseen" the Meer row and Home show.
   const unseenCount = seen ? list.filter((r) => !seen.has(r.key)).length : 0;
-  const weekDishes = received?.share.items.length ?? 0;
+  // The heading counts main dishes only (6B §1d); the buttons need any item at all.
+  const weekItems = received?.share.items.length ?? 0;
+  const weekDishes = received ? sharedDishCount(received.share.items) : 0;
   const weekTitle = received
     ? received.by
       ? weekDishes === 1
@@ -637,12 +637,20 @@ export function InboxScreen() {
               </p>
             )}
             <ul>
-              {received.share.items.map((it, i) => {
+              {/* A side dish (6B §1d) sits indented under its main with "↳" and no servings of its own
+                  (it follows the main, as in Week). */}
+              {sharedPlanRows(received.share.items).map(({ item: it, side }, i) => {
                 const name = pickText(planNames[it.recipeId], ui);
+                const cls = [side ? 'side' : '', name ? '' : 'unknown'].filter(Boolean).join(' ');
                 return (
-                  <li key={it.recipeId + i} class={name ? '' : 'unknown'}>
+                  <li key={it.recipeId + i} class={cls}>
+                    {side && (
+                      <span class="side-mark" aria-hidden="true">
+                        ↳
+                      </span>
+                    )}
                     <span class="name">{name || t('inbox.plan.unknownDish')}</span>
-                    <span class="srv">{t('inbox.plan.servings', { n: it.servings })}</span>
+                    {!side && <span class="srv">{t('inbox.plan.servings', { n: it.servings })}</span>}
                   </li>
                 );
               })}
@@ -650,10 +658,10 @@ export function InboxScreen() {
             {!planDone && <p class="muted small">{t('inbox.plan.hint')}</p>}
             {!planDone ? (
               <div class="actions">
-                <button type="button" class="btn btn-primary" disabled={busy || weekDishes === 0} onClick={() => void takePlan('replace')}>
+                <button type="button" class="btn btn-primary" disabled={busy || weekItems === 0} onClick={() => void takePlan('replace')}>
                   {t('inbox.plan.take')}
                 </button>
-                <button type="button" class="btn" disabled={busy || weekDishes === 0} onClick={() => void takePlan('append')}>
+                <button type="button" class="btn" disabled={busy || weekItems === 0} onClick={() => void takePlan('append')}>
                   {t('inbox.plan.add')}
                 </button>
               </div>
