@@ -1,8 +1,28 @@
-# Status — Rutgers' Recepten (bijgewerkt 24 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 25 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
+
+## 25 okt (Opus): Boodschappen — Leeg de lijst
+**Besluit Fable (25 okt):** ook "Elke week"-regels (pins) gaan mee weg bij Leeg de lijst, Ongedaan zet ze terug; de vaste
+lijst van 6C wordt de plek voor wat elke week terugkomt en blijft bij een leging staan. Archief van afgevinkte dingen:
+docs/IDEAS.md idee 2. Gebouwd in lichte modus (één bouwer + gate, 10 min, 0,26 M tokens). Direct naar `main`.
+Stijn wilde tussendoor snel een nieuw lijstje kunnen maken (er stonden nog testdingen op; één voor één inhouden →
+Verwijder duurde te lang). Niet gecommit.
+- **Knop Leeg de lijst / Clear the list** in de knoppenrij van Boodschappen, direct na **Klaar**; zichtbaar zodra er
+  iets op de lijst staat, niet in de winkelstand. In de controlestap (na "Maak de lijst") staat hij onder **Bevestig lijst**.
+- **Eén tik, geen vraag vooraf:** alle regels en zelf toegevoegde dingen weg, en de lijst vergeet voor welk weekplan hij
+  gemaakt was (`generatedFrom` '', geen `generatedFromAll`, `sharedAt` null). Met een weekplan staat daarna weer de kaart
+  met **Maak de lijst**, zonder weekplan de lege tekst. Weekplan, "Heb ik al"-geheugen en instellingen blijven staan.
+- **Ongedaan** in de bestaande melding (5 s, "Lijst geleegd" / "List cleared") zet de oude lijst exact terug: regels,
+  vinkjes, hashes, "gedeeld om" en `updatedAt`. Wie vanuit de controlestap leegde, komt ook weer in de controlestap.
+- Code: `emptiedList` (puur), `clearShoppingList` en `restoreShoppingList` in src/db/repo.ts; knop en `clearAll` in
+  src/screens/ShoppingScreen.tsx; `shop.clear` / `shop.cleared` in src/i18n/shopping.ts; test
+  tests/shopping-clear.test.ts. Telefoontest: docs/DEVICE-TEST.md rij 102. Het archief van afgevinkte dingen staat
+  als idee in docs/IDEAS.md (§2), niet gepland.
+- **Graag bevestigen (Stijn):** "elke week"-regels gaan mee weg (ze staan in dezelfde lijst); de "eerder"-suggesties
+  in het +-vak komen uit de zelf toegevoegde dingen en zijn na het legen ook weg.
 
 ## 24 okt (Opus): 6B blok 6 — keukens wereldwijd (61 keukens, Litouws voor Gabi)
 Gebouwd volgens het besluitblok "Blok 6 — keukens wereldwijd" bovenaan docs/specs/labels-categorieen.md (bouwer A

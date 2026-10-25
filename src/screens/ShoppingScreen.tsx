@@ -11,7 +11,8 @@
 //      (regenerate through the repo, checks survive; never automatic), "Deel lijst" (plain text
 //      NL/EN titled "🛒 Boodschappen wk 39 · 7 gerechten · 4 pers.", "Zonder afgevinkt" on by
 //      default → navigator.share({text}) with exactly one field, "Kopieer" fallback; "gedeeld om
-//      hh:mm" / "gewijzigd sinds delen"), "Klaar" (clear the ticks) and "winkelstand" (wake lock).
+//      hh:mm" / "gewijzigd sinds delen"), "Klaar" (clear the ticks), "Leeg de lijst" (empty items
+//      and extras, undo via the snack; also in the proto step) and "winkelstand" (wake lock).
 // `?proto=1` (the Week screen's "Boodschappenlijst maken") builds the list and opens the proto step.
 // All data goes through src/db/repo.ts; the dictionary comes from the `dictionary` signal.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
@@ -28,6 +29,7 @@ import type { List } from '@/db/model';
 import {
   addExtra,
   clearChecks,
+  clearShoppingList,
   generateList,
   getHouseholdServings,
   getList,
@@ -36,6 +38,7 @@ import {
   markListShared,
   removeExtra,
   restoreListItem,
+  restoreShoppingList,
   setInHouse,
   setListItem,
   togglePinned,
@@ -296,6 +299,36 @@ export function ShoppingScreen() {
     });
   }
 
+  /** "Leeg de lijst": empties items and extras at once (no confirm dialog; "Ongedaan" brings the
+   *  list back exactly, ticks included). Afterwards the existing empty state shows: with a plan the
+   *  "Maak de lijst" card, without one the empty text. */
+  async function clearAll() {
+    if (busy) return;
+    const wasMode = mode;
+    setBusy(true);
+    let prev: List | null = null;
+    try {
+      prev = await clearShoppingList();
+    } catch (e) {
+      console.error('clearShoppingList', e);
+      showSnack(`${t('common.error')}: ${String((e as Error)?.message ?? e)}`);
+      return;
+    } finally {
+      setBusy(false);
+    }
+    setMode('list');
+    setOpen({});
+    setMenu(null);
+    // Like confirmProto: drop ?proto=1 so a reload does not rebuild the list just cleared.
+    if (protoRequested) navigate('/shopping', { replace: true });
+    if (!prev) return;
+    const back = prev;
+    showSnack(t('shop.cleared'), async () => {
+      await restoreShoppingList(back);
+      setMode(wasMode);
+    });
+  }
+
   // --- Sharing (invariant 9: navigator.share with exactly ONE field, inside the tap) --------------
 
   // "🛒 Boodschappen wk 39 · 7 gerechten · 4 pers." (PLAN.md §8 "Delen van de lijst"); a plain
@@ -366,6 +399,8 @@ export function ShoppingScreen() {
   const done = split.main.filter((it) => it.checked).length + split.check.filter((it) => it.checked).length;
   const allDone = total > 0 && done === total;
   const menuLines = menuItem ? sourceLines(menuItem, l) : [];
+  // "Leeg de lijst" shows as soon as there is anything to clear (never in shop mode).
+  const canClear = items.length > 0 || (list?.extras.length ?? 0) > 0;
 
   // --- Render ---------------------------------------------------------------------------------------
 
@@ -474,6 +509,11 @@ export function ShoppingScreen() {
         <button type="button" class="btn btn-primary btn-block" onClick={confirmProto}>
           {t('shop.confirm')}
         </button>
+        {canClear && (
+          <button type="button" class="btn btn-small" disabled={busy} onClick={() => void clearAll()}>
+            {t('shop.clear')}
+          </button>
+        )}
       </div>
     </>
   );
@@ -503,6 +543,11 @@ export function ShoppingScreen() {
         <button type="button" class="btn" disabled={busy || done === 0} onClick={() => void finish()}>
           {t('shop.done')}
         </button>
+        {canClear && !storeMode && (
+          <button type="button" class="btn" disabled={busy} onClick={() => void clearAll()}>
+            {t('shop.clear')}
+          </button>
+        )}
       </div>
       {ios && items.length > 0 && <p class="muted small shop-print-hint">{t('shop.printIOSHint')}</p>}
       <div class="shop-status" role="status">

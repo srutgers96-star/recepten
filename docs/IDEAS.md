@@ -62,3 +62,18 @@ Eigen ingrediënten hebben geen waarden, tot iemand ze invult.
 
 **Hangt af van.** XP/badges (6D) voor de badges. Het omrekenen naar grammen kan los en eerder, bijvoorbeeld
 als sjouwwerk voor Haiku, omdat het ook de boodschappenlijst helpt.
+
+## 2. Archief van afgevinkte boodschappen (Stijn, 25 okt 2026)
+
+**Wens.** Wat ooit is afgevinkt mag "een soort archief" in, in plaats van voorgoed weg. Nu kost permanent verwijderen
+twee stappen (inhouden → verwijder); daarom is er sinds 25 okt de knop **Leeg de lijst** (met Ongedaan) om snel opnieuw
+te beginnen.
+
+**Prioriteit.** Later; eerst XP (6D).
+
+**Aanpak in grote lijnen.** Bij "Klaar" en bij "Leeg de lijst" de afgevinkte regels (naam, hoeveelheid, datum) in een
+klein archief bewaren (settings-key of tabel, toestel-lokaal, mee in de back-up); een rij "Eerder gekocht" onder
+Boodschappen met zoeken en "zet terug"; automatisch opschonen na bv. 90 dagen. Kan samen met de vaste lijst (6C): wat je
+vaak terugzet, is een kandidaat voor "elke week".
+
+**Open vragen.** Alleen afgevinkt of alles wat van de lijst ging? Per huishouden of per persoon? Hangt af van 6C.

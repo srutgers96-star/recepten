@@ -1790,6 +1790,43 @@ export async function clearChecks(): Promise<void> {
   });
 }
 
+/**
+ * The list as "Leeg de lijst" leaves it: no items, no extras (so no pins), and no trace of the plan
+ * it was made for (`generatedFrom` '' and no `generatedFromAll`, exactly like a list that was never
+ * generated), so with dishes in the plan the screen offers "Maak de lijst" again. `sharedAt` goes
+ * too: "gedeeld om hh:mm" belonged to the old list. Unknown fields survive. Pure (tests).
+ */
+export function emptiedList(list: List, now: string = nowIso()): List {
+  const next: List = { ...list, id: LIST_ID, items: [], extras: [], pinned: [], generatedFrom: '', generatedAt: now, sharedAt: null, updatedAt: now };
+  delete next.generatedFromAll;
+  return next;
+}
+
+/**
+ * "Leeg de lijst": empties the current list (see `emptiedList`). The plan, the pantry ("Heb ik al")
+ * and the settings are not touched. Returns the PREVIOUS list for "Ongedaan"
+ * (`restoreShoppingList`), or null when there was no list row.
+ */
+export async function clearShoppingList(): Promise<List | null> {
+  return db.transaction('rw', db.lists, async () => {
+    const prev = await getList();
+    if (!prev) return null;
+    await saveList(emptiedList(prev));
+    return prev;
+  });
+}
+
+/**
+ * Undo of "Leeg de lijst": puts the previous list back exactly (same id, items, extras, hashes,
+ * `sharedAt` and `updatedAt`, so "gewijzigd sinds delen" reads as before). Written directly rather
+ * than through saveList, which would stamp a new `updatedAt`.
+ */
+export async function restoreShoppingList(prev: List): Promise<void> {
+  await db.transaction('rw', db.lists, async () => {
+    await db.lists.put({ ...prev, id: LIST_ID });
+  });
+}
+
 /** "Deel lijst" happened: remembers the moment for "gedeeld om hh:mm" / "gewijzigd sinds delen". */
 export async function markListShared(atIso: string = nowIso()): Promise<void> {
   // `sharedAt` and `updatedAt` get the SAME stamp: "gewijzigd sinds delen" is then exactly

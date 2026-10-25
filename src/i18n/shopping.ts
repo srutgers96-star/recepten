@@ -47,6 +47,9 @@ export const shopping: Dict = {
   'shop.done': { nl: 'Klaar', en: 'Done' },
   'shop.doneSnack': { nl: 'Lijst afgerond, vinkjes gewist', en: 'List finished, ticks cleared' },
   'shop.undo': { nl: 'Ongedaan', en: 'Undo' },
+  // "Leeg de lijst" (25 Oct 2026): empties items and extras in one tap, undo via the snack.
+  'shop.clear': { nl: 'Leeg de lijst', en: 'Clear the list' },
+  'shop.cleared': { nl: 'Lijst geleegd', en: 'List cleared' },
   'shop.checkedSnack': { nl: 'Afgevinkt', en: 'Ticked' },
   'shop.uncheckedSnack': { nl: 'Vinkje weg', en: 'Untick' },
   'shop.removedSnack': { nl: 'Verwijderd', en: 'Removed' },
