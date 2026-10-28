@@ -77,3 +77,27 @@ Boodschappen met zoeken en "zet terug"; automatisch opschonen na bv. 90 dagen. K
 vaak terugzet, is een kandidaat voor "elke week".
 
 **Open vragen.** Alleen afgevinkt of alles wat van de lijst ging? Per huishouden of per persoon? Hangt af van 6C.
+
+## 3. Challenges, vrij op level 20 (Stijn, 6 en 28 okt 2026) — GEPLAND, verzamelplek voor de inhoud
+
+**Status.** Dit wordt gebouwd: eigen klein blok ná 6D-4 (zie docs/specs/xp-levels.md besluitblok 24 okt en
+docs/specs/README.md §1). Fable ontwerpt de eerste set; hier verzamelen we de ideeën tot het zover is.
+
+**Wat het is.** Vanaf level 20 krijg je opdrachten met een eigen beloning (XP, een badge of een avatar-onderdeel):
+een doel, een termijn en een voortgangsbalk op je profiel; nooit verplicht, nooit een straf bij niet halen.
+
+**Eerste ideeën (vrij aan te vullen).**
+- Weekchallenges: "kook deze week drie keer vegetarisch", "twee recepten uit een keuken die je nog nooit kookte",
+  "een nagerecht en een bijgerecht in één week".
+- Maandchallenges: "vijf nieuwe klassiekers", "elke dag van de week één keer gekookt", "een foto bij elk gerecht".
+- Seizoen en feest: "december: vier feestgerechten", "zomer: drie salades".
+- Samen: dezelfde challenge voor het huishouden, met een gezamenlijke teller (pas na Sync mijn voortgang, 6D-4b).
+- Verrassing: "de dobbelsteen kiest, jij kookt" (het eerste gerecht dat de dobbelsteen geeft).
+- Zeldzaam: "kook alle 20 bijgerechten" (lang), "een recept uit elke keuken die je in huis hebt".
+
+**Aanpak in grote lijnen.** data/challenges.json (id, nl/en, soort, doel, termijn, beloning, unlock-level), pure
+evaluatie uit kooklog/foto's zoals badges (`src/domain/challenges.ts`), een kaart op het profiel en in het
+level-up-overzicht; lopende challenge in `settings`, afgeronde in een lijstje dat mee gaat in de back-up.
+
+**Open vragen.** Hoeveel tegelijk (één lopende, of twee)? Zelf kiezen uit een aanbod of toegewezen? Beloning in
+XP alleen, of ook een avatar-onderdeel per challenge?
