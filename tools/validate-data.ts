@@ -785,6 +785,66 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs): Validation
 }
 
 // ---------------------------------------------------------------------------
+// Levels: data/levels.json (docs/specs/xp-levels.md §2d, src/domain/levels.ts `LevelTitle`)
+// ---------------------------------------------------------------------------
+//
+// Errors: an array of exactly 100 objects { level, nl: { title, note? }, en: { title, note? } };
+// levels 1…100 contiguous and in order; every title a non-empty string, unique per language; a
+// `note` when present a non-empty string. Warnings: stray keys.
+
+/** Mirrors MAX_LEVEL in src/domain/levels.ts (not imported: that module imports the JSON itself). */
+const LEVELS_COUNT = 100;
+const LEVEL_KEYS: ReadonlySet<string> = new Set(['level', 'nl', 'en']);
+const LEVEL_TEXT_KEYS: ReadonlySet<string> = new Set(['title', 'note']);
+
+/** Validate data/levels.json. Pure: takes the parsed JSON, returns errors/warnings. */
+export function validateLevels(data: unknown): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  if (!Array.isArray(data)) {
+    errors.push('levels.json: must be an array of levels.');
+    return { errors, warnings, stats: { recipes: 0, lines: 0 } };
+  }
+  if (data.length !== LEVELS_COUNT) errors.push(`levels.json: must hold exactly ${LEVELS_COUNT} levels, got ${data.length}.`);
+
+  const seenTitles = { nl: new Map<string, number>(), en: new Map<string, number>() };
+  data.forEach((item: unknown, index: number) => {
+    const where = `levels.json[${index}]`;
+    if (!isRecord(item)) {
+      errors.push(`${where}: not an object.`);
+      return;
+    }
+    const level = item['level'];
+    const label = typeof level === 'number' ? `levels.json level ${level}` : where;
+    if (level !== index + 1) errors.push(`${where}: "level" must be ${index + 1} (levels 1…${LEVELS_COUNT} in order), got ${JSON.stringify(level)}.`);
+
+    for (const lang of ['nl', 'en'] as const) {
+      const text = item[lang];
+      if (!isRecord(text)) {
+        errors.push(`${label}: "${lang}" must be { title, note? }.`);
+        continue;
+      }
+      const title = text['title'];
+      if (typeof title !== 'string' || title.trim() === '') {
+        errors.push(`${label}: "${lang}.title" must be a non-empty string.`);
+      } else {
+        const first = seenTitles[lang].get(title.trim());
+        if (first !== undefined) errors.push(`${label}: "${lang}.title" ${JSON.stringify(title)} is also the title of level ${first}.`);
+        else seenTitles[lang].set(title.trim(), typeof level === 'number' ? level : index + 1);
+      }
+      const note = text['note'];
+      if (note !== undefined && (typeof note !== 'string' || note.trim() === '')) errors.push(`${label}: "${lang}.note" must be a non-empty string when present.`);
+      for (const key of Object.keys(text)) if (!LEVEL_TEXT_KEYS.has(key)) warnings.push(`${label}: unexpected key ${JSON.stringify(`${lang}.${key}`)}.`);
+    }
+
+    for (const key of Object.keys(item)) if (!LEVEL_KEYS.has(key)) warnings.push(`${label}: unexpected key ${JSON.stringify(key)}.`);
+  });
+
+  return { errors, warnings, stats: { recipes: 0, lines: data.length } };
+}
+
+// ---------------------------------------------------------------------------
 // Swaps: data/swaps.json (docs/phase-5-spec.md "Block F" item 2, src/domain/variants.ts `Swap`)
 // ---------------------------------------------------------------------------
 //
@@ -953,6 +1013,11 @@ function main(): void {
   const badges = validateBadges(readJson(join(root, badgesRel)), refsFromData(dictData));
   print(badgesRel, badges, `${badges.stats.lines} badges`);
   if (badges.errors.length > 0) failed = true;
+
+  const levelsRel = 'data/levels.json';
+  const levels = validateLevels(readJson(join(root, levelsRel)));
+  print(levelsRel, levels, `${levels.stats.lines} levels`);
+  if (levels.errors.length > 0) failed = true;
 
   const swapsRel = 'data/swaps.json';
   const swaps = validateSwaps(readJson(join(root, swapsRel)), dictData.ingredients as unknown as Record<string, unknown>[]);
