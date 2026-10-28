@@ -12,18 +12,24 @@
 // "Foto toevoegen" as the Gekookt! page of cook mode, but held in the sheet until Bewaar (so a swipe
 // away saves nothing, photo included). Bewaar stores the cook first, then the photo with the cook's
 // date; a failed photo save keeps the sheet open and a second Bewaar retries only the photo.
+// 6D-1 (docs/specs/xp-levels.md §1e, §3): a rating and a photo are reward moments (settleXp; the cook
+// itself settles in recordCooked), and "Andere datum" more than 7 days back says honestly, with
+// badges on, that it counts for badges and the calendar but not for XP.
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { checkNewBadges } from '@/badges';
+import { badgesEnabled, checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
 import { formatShortDate } from '@/components/RecipeRow';
 import { Segmented } from '@/components/Segmented';
 import { SheetPortal } from '@/components/SheetPortal';
 import { cookedAtForDay, daysAgo, localDay, recordCooked } from '@/cooklog';
 import { addPhoto, updateCookLogEntry } from '@/db/repo';
+import { dayFromKey, localDayIndex } from '@/domain/days';
 import { nowIso, type CookLogEntry } from '@/domain/model';
+import { XP_RULES } from '@/domain/xp';
 import { lang, t } from '@/i18n';
 import { encodePhotoFile } from '@/photo';
 import { activeProfile } from '@/profile';
+import { markXpDirty, settleXp } from '@/xp';
 
 type When = 'today' | 'yesterday' | 'other';
 
@@ -114,6 +120,11 @@ export function CookedSheet(props: CookedSheetProps) {
   const canSave =
     !!profile && !busy && photoState !== 'busy' && (cookSaved.current !== null || (entry ? entry.id !== undefined : cookedAt() !== null));
 
+  // §1e: the chosen day lies more than `backdateDays` calendar days before today (the same rule as
+  // deriveXp: entered today, cooked on that day) → no XP for this cook. Only said with badges on.
+  const pickedDay = when === 'other' && day && day <= today ? dayFromKey(day) : null;
+  const backdated = badgesEnabled.value && pickedDay !== null && localDayIndex(new Date()) - pickedDay > XP_RULES.backdateDays;
+
   /** Swipe down / tap beside the sheet: close without saving (only Bewaar saves). */
   function dismiss() {
     if (busy) return;
@@ -160,6 +171,7 @@ export function CookedSheet(props: CookedSheetProps) {
         if (entry) {
           if (entry.id === undefined) throw new Error('cook-log entry without id');
           await updateCookLogEntry(entry.id, { stars: stars > 0 ? stars : null, note });
+          markXpDirty(profile.id);
           // The small stars burst (C.4) only once the rating is really saved (Stijn, 16 Oct 2026:
           // confetti on the tap itself was premature when the sheet was then closed unsaved).
           if (stars > 0) celebrate('stars');
@@ -167,6 +179,8 @@ export function CookedSheet(props: CookedSheetProps) {
           // just like stars in cook mode: start the check, never make the save wait for it (same
           // pattern as recordCooked).
           void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
+          // 6D-1: stars afterwards change that cook's base (+5): a small pop, never a new roll.
+          void settleXp(profile.id).catch((e: unknown) => console.error('settleXp', e));
           cookSaved.current = entry.at;
         } else {
           const at = cookedAt();
@@ -186,7 +200,10 @@ export function CookedSheet(props: CookedSheetProps) {
           setBusy(false);
           return;
         }
+        markXpDirty(profile.id);
         void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
+        // 6D-1: the photo is a reward moment of its own (it pops in the same series as the cook).
+        void settleXp(profile.id).catch((e: unknown) => console.error('settleXp', e));
       }
       props.onSaved(entry ? 'rate' : 'log');
     } catch (e) {
@@ -262,6 +279,7 @@ export function CookedSheet(props: CookedSheetProps) {
                       />
                     </label>
                   )}
+                  {backdated && <p class="muted small cooked-backdated">{t('xp.backdated')}</p>}
                 </>
               )}
               <div class="muted small">{t('cook.stars')}</div>

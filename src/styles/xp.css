@@ -1,0 +1,308 @@
+/* Block 6D-1 XP (docs/specs/xp-levels.md §1a–§1e): the XP bar on the profile cards, the level line
+   on Home, the "+12" pop with its crits and sum line, the Overcooked! shake, the honest 0-XP toast and
+   the level-up sheet. Imported by src/main.tsx after badges.css and before print.css. Colour tokens
+   from base.css (dark mode included) plus the gold token below. Mobile first: 360 px, 44 px targets.
+   Nothing here animates XP "counting up": the bar has no width transition (§1 "Rustig"). */
+
+/* ---------- Tokens: gold for the Cooked! pop (light #c9a227, dark #f2d16b) ---------- */
+
+:root {
+  --gold: #c9a227;
+  --on-gold: #1f2733;
+}
+
+/* System dark, unless the user forced light (same pattern as base.css). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --gold: #f2d16b;
+    --on-gold: #0f1a2b;
+  }
+}
+
+/* Forced dark (keep identical to the block above). */
+:root[data-theme='dark'] {
+  --gold: #f2d16b;
+  --on-gold: #0f1a2b;
+}
+
+/* ---------- XP bar (profile card, §1a) ---------- */
+
+.xp-block {
+  margin-top: 12px;
+}
+
+.xp-block.compact {
+  margin-top: 6px;
+}
+
+.xp-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.xp-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.xp-of {
+  flex: none;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.xp-bar {
+  display: block;
+  height: 8px;
+  margin: 6px 0 4px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.xp-block.compact .xp-bar {
+  height: 6px;
+  margin: 4px 0 2px;
+}
+
+.xp-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cobalt);
+}
+
+.xp-bar.thin {
+  height: 4px;
+  margin: 0;
+}
+
+.xp-sub {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Level line on Home (§1b; inside HomeLevelRow, on top of home.css .home-level) ---------- */
+
+.xp-line .avatar {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+
+.xp-line-text {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.xp-line .xp-bar.thin {
+  flex: 1 1 40px;
+  min-width: 32px;
+  max-width: 120px;
+}
+
+.xp-line .chev {
+  flex: none;
+}
+
+/* ---------- The "+12" pop (§1c): top right under the header ---------- */
+
+/* The aria-live wrapper is always mounted (empty = invisible); taps fall through it. */
+.xp-pop-wrap {
+  position: fixed;
+  top: calc(var(--sat) + var(--header-h) + 8px);
+  right: max(12px, var(--sar));
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.xp-pop {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(15, 26, 43, 0.28);
+  opacity: 0;
+  animation: xp-pop-life 1.4s ease-out forwards;
+}
+
+/* Cooked! (×2): gold. */
+.xp-pop.cooked {
+  background: var(--gold);
+  color: var(--on-gold);
+}
+
+/* Overcooked! (×5): tomato red. */
+.xp-pop.overcooked {
+  background: var(--tomato);
+  color: var(--on-cobalt);
+}
+
+/* "samen +66 XP" under a series of pops, muted. */
+.xp-pop-sum {
+  padding: 2px 6px;
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  opacity: 0;
+  animation: xp-pop-life 1.4s ease-out forwards;
+}
+
+@keyframes xp-pop-life {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.92);
+  }
+  12% {
+    opacity: 1;
+    transform: none;
+  }
+  75% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+
+@keyframes xp-pop-fade {
+  0% {
+    opacity: 0;
+  }
+  12%,
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Overcooked!: the shell shakes 400 ms, 4 px left-right (src/components/XpPop.tsx adds .shake only
+   with Confetti on and without reduced motion; the media query below is the second guard). */
+.shell.shake {
+  animation: xp-shake 400ms ease-in-out;
+}
+
+@keyframes xp-shake {
+  0%,
+  100% {
+    transform: none;
+  }
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-pop,
+  .xp-pop-sum {
+    animation-name: xp-pop-fade;
+  }
+
+  .shell.shake {
+    animation: none;
+  }
+}
+
+/* ---------- The honest 0-XP toast (§1e): same look as the badge toast, not tappable ---------- */
+
+.xp-toast-wrap {
+  position: fixed;
+  left: max(16px, var(--sal));
+  right: max(16px, var(--sar));
+  bottom: calc(var(--nav-h) + var(--sab) + 12px);
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* A badge toast at the same moment: sit right above it instead of on top of it. */
+.shell:has(.badge-toast) .xp-toast-wrap {
+  bottom: calc(var(--nav-h) + var(--sab) + 72px);
+}
+
+/* Select mode (Recipes): lift above the action bar, as the badge toast does. */
+.shell:has(.select-bar) .xp-toast-wrap {
+  bottom: calc(var(--nav-h) + var(--sab) + 101px);
+}
+
+.xp-toast {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  max-width: 100%;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(15, 26, 43, 0.3);
+  user-select: none;
+  -webkit-user-select: none;
+  animation: badge-toast-in 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-toast {
+    animation: none;
+  }
+}
+
+/* ---------- Level-up sheet (§1d) ---------- */
+
+/* Only Sluit on the right: an equal spacer on the left keeps "🎉 Level 3!" centred. */
+.levelup-sheet .sheet-head.with-actions::before {
+  content: '';
+  flex: none;
+  width: 72px;
+}
+
+.levelup-body {
+  text-align: center;
+}
+
+.levelup-name {
+  margin: 12px 0 6px;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.levelup-note {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.levelup-actions {
+  margin-top: 16px;
+}

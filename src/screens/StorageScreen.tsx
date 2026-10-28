@@ -45,6 +45,7 @@ import { reloadSoundSettings } from '@/sounds';
 import { reloadSpeechSettings } from '@/speech';
 import { reloadShowAmounts } from '@/step-amounts';
 import { reloadVoiceSettings } from '@/voice';
+import { reloadXp } from '@/xp';
 
 interface Facts {
   standalone: boolean;
@@ -370,8 +371,8 @@ export function StorageScreen() {
       // Refresh the in-memory mirrors of what the restore may have changed: profiles, confetti,
       // timer sound/vibrate, read-aloud, voice commands, "Toon hoeveelheden", badges and the cooking sessions
       // (the active profile is kept when this phone already had one; theme, last-backup date and cook.sessions
-      // are never restored).
-      await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadShowAmounts(), reloadBadgeSettings(), reloadCooking()]);
+      // are never restored). 6D-1: XP is recomputed silently from the restored facts (no pops, no sheet).
+      await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadShowAmounts(), reloadBadgeSettings(), reloadCooking(), reloadXp()]);
       await reload();
       void refreshShareBadges();
       setRestoreStatus(t('storage.restored', { ...result }));

@@ -9,6 +9,7 @@ import { celebrate, celebration } from './celebrate';
 import { allRecipes, countPhotos, getSetting, getSharedRecipes, listCookLog, setSetting } from '@/db/repo';
 import { evaluateBadges, normalizeBadges, type Badge, type BadgeFacts, type BadgeStatus } from '@/domain/badges';
 import type { Recipe } from '@/domain/model';
+import { markXpDirty, settleXp } from '@/xp';
 
 /** Setting `badges.enabled` (boolean, default true). */
 export const BADGES_SETTING = 'badges.enabled';
@@ -163,6 +164,10 @@ async function doCheckNewBadges(memberId: string): Promise<void> {
     if (!fresh.length) return;
     // Persist before toasting: a crash between the two means a missed toast, never a double one.
     await setSetting(BADGES_EARNED_SETTING, earned);
+    // 6D-1 (docs/specs/xp-levels.md §3): the badge XP pops in the same series as the action's own
+    // pops (settleXp is serialized and merges pops within 2 s). Never awaited: the toast comes first.
+    markXpDirty(memberId);
+    void settleXp(memberId).catch((e: unknown) => console.error('settleXp', e));
     // Queue every fresh badge; (auto-)dismiss shows the next, so none is swallowed silently.
     toastQueue.push(...fresh);
     if (badgeToast.value === null) dismissBadgeToast();

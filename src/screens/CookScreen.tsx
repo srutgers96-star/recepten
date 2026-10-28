@@ -47,6 +47,7 @@ import { canSpeak, loadSpeechSettings, readAloud, setReadAloud, speak, speaking,
 import { loadShowAmounts, setShowAmounts, showAmounts } from '@/step-amounts';
 import { MINUTE_MS, startTimer, timers } from '@/timers';
 import { canListen, commandsEnabled, loadVoiceSettings, micState, startListening, stopListening } from '@/voice';
+import { markXpDirty, settleXp } from '@/xp';
 
 const SWIPE_PX = 60;
 const LONG_PRESS_MS = 500;
@@ -210,9 +211,12 @@ export function CookScreen(props: { id: string }) {
     try {
       const blob = await encodePhotoFile(file);
       await addPhoto({ recipeId: id, memberId: profile.id, blob, at: nowIso() });
+      markXpDirty(profile.id);
       setPhotoState('done');
       // The photo badges count household-wide; never block the UI on the check.
       void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
+      // 6D-1: a photo is a reward moment (docs/specs/xp-levels.md §3).
+      void settleXp(profile.id).catch((e: unknown) => console.error('settleXp', e));
     } catch (e) {
       console.error('addPhoto', e);
       setPhotoState('error');
@@ -533,6 +537,7 @@ export function CookScreen(props: { id: string }) {
           stars: stars > 0 ? stars : null,
           note: note.trim() ? note.trim() : null,
         });
+        markXpDirty(profile.id);
         // Phase 5 C.4: this member's 10th/25th/50th cook gets the big burst instead of the normal one.
         let kind: 'cooked' | 'milestone' = 'cooked';
         try {
@@ -559,6 +564,8 @@ export function CookScreen(props: { id: string }) {
       // Phase 5 block C: start the badge check, but never make goBack wait for it — the toast
       // signal survives the navigation (the shell renders it).
       if (profile) void checkNewBadges(profile.id).catch((e: unknown) => console.error('checkNewBadges', e));
+      // 6D-1: the reward moment; the pops survive goBack (the shell renders them).
+      if (profile) void settleXp(profile.id).catch((e: unknown) => console.error('settleXp', e));
     } finally {
       setBusy(false);
     }

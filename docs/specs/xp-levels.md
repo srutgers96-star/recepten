@@ -1,6 +1,7 @@
 # Spec 6D — XP, levels, streak, titels, ontgrendelingen en "Sync mijn voortgang"
 
 Status: compleet (Fable, 22 okt 2026)
+Gebouwd: 28 okt 2026 (blok 6D-1; domein wf_a65d1ec4-750, app-laag + UI wf_04bdbbc2-d81)
 
 **Besluit Stijn (24 okt 2026) — ontgrendelingen rijk, niet spaarzaam.** Het level-up-overzicht en de pagina
 Vrijgespeeld moeten een "rijk scala" tonen: bij elke level-up minstens één ding, liefst meer. Daarom groeit

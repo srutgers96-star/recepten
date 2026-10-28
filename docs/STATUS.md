@@ -1,8 +1,64 @@
-# Status — Rutgers' Recepten (bijgewerkt 25 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 28 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
+
+## 28 okt (Opus): 6D-1 — XP, levels, pops en level-up
+**Besluit Fable (28 okt), zonder reviewlens (weeklimiet 91%; Stijn test zelf):** geaccepteerd: stil bijwerken van `xp.lastSeen`
+bij badges uit en het stil voorbereiden bij de start (anders popt de hele historie bij de eerste actie); somregel 600 ms na
+de laatste pop, 1,4 s zichtbaar; geen streaktekst bij een streak van 1 met de laatste kookbeurt gisteren; `--gold` in xp.css;
+placeholder-type `Unlock` tot 6D-3; de timing-test meet nu de beste van vijf runs in plaats van de mediaan (de limiet van 50 ms blijft).
+**Voor de volgende lichte fixer-ronde (morgen):** (a) Home toont twee avatars (begroeting + LevelLine): de LevelLine op Home
+krijgt géén eigen avatar; (b) het level-up-venster heeft Sluit twee keer (kop en onderaan): alleen in de kop; (c) **k-verschuiving
+bij terugdateren**: een later teruggedatéérde kookbeurt verlaagt de k (hoeveelste keer dit recept) van latere kookbeurten en
+daarmee hun XP — dat botst met "nooit iets afpakken". Besluit: k volgt de volgorde van invoer (`loggedAt`, anders `at`), niet
+de kookdatum; pins in tests/xp.test.ts die hierdoor verschuiven bijwerken; regelversie blijft 1 (nog niet live geweest).
+Live op `main` achter de schakelaar Badges.
+Gebouwd volgens docs/specs/xp-levels.md blok 6D-1 (deel A, het domein, staat al in e2ec454; nu bouwer B app-laag,
+bouwer C UI, integrator). Niet gecommit. Alles valt onder de bestaande schakelaar **Badges**: uit = nergens XP, level,
+pop of melding. Geen Dexie-versie, geen nieuwe dependency; gate groen (check, 1132 tests, build, build:next, validate:data).
+- **XP wordt afgeleid, nooit opgeteld.** src/xp.ts bouwt per lid de feiten (eigen kooklog, eigen foto's via het nieuwe
+  `listAllPhotosMeta()` zonder blobs, ingrediëntregels per recept, eigen recepten, verdiende badges als base 50) en
+  memoiseert `deriveXp`. Nieuw veld `CookLogEntry.loggedAt` (logCooked vult het); settings `xp.lastSeen` en
+  `xp.seenRulesVersion`. `settleXp` draait alleen op de zeven beloningsmomenten (recordCooked, CookScreen.onCooked,
+  CookedSheet beoordelen/foto, CookScreen.onPhotoPicked, RecipeScreen.onPhotoFile, EditScreen eigen recept,
+  checkNewBadges na een nieuwe badge). Bij het opstarten (`checkRulesVersion`) en na een herstel (`reloadXp`) rekent de
+  app stil opnieuw: geen pops, geen venster.
+- **Zichtbaar:** op elke profielkaart (Meer → Profielen beheren) "Level 4 · Afwasser", "304 / 352 XP", een kobalt balk en
+  "🔥 vandaag gekookt · nog 48 XP tot level 5"; op Home onder de begroeting dezelfde levelregel met avatar en ›
+  (vervangt "🏆 Badges x/y"; tik → Profielen). Pops rechtsboven: blauw "+136", goud "+216 · Cooked!", tomaatrood
+  "+… · OVERCOOKED!" met schudden (niet bij Confetti uit of minder beweging), bij twee of meer "samen +… XP". Na de
+  laatste pop het venster "🎉 Level N!" met de titel (en de note, bv. Oma). Toasts "Genoeg gekookt voor vandaag — morgen
+  weer XP.", "Drukke keukenweek! Morgen weer XP." en (eenmalig na een regelwijziging) "De XP-regels zijn vernieuwd…";
+  in Gekookt bij **Andere datum** meer dan 7 dagen terug de regel "Langer dan een week geleden: …".
+- **Integrator:** `markXpDirty` ook na het hernoemen van een profiel (eigen recepten tellen op auteursnaam) en na het
+  weghalen van een foto (RecipeScreen); beide stil, geen beloningsmoment. Alle i18n-keys van §1a–§1e stonden er al.
+- **Dev-app (375 px, badges aan, NL en EN), §6b:** 1. nieuw testprofiel, één kook van Afwasmachinezalm: "+216 · Cooked!"
+  op 0,9 s, "+52" (badge Eerste hap) 350 ms later, "samen +268 XP", daarna "🎉 Level 4!" Afwasser. 2. kaart en Home als
+  hierboven; tik op de Home-regel opent Profielen. 3. hetzelfde recept nog eens: stil; kookbeurt 4 en 5 van de dag half
+  (48, 54); de zesde andere: toast dagplafond. 4. de regel verschijnt vanaf 8 dagen terug (7 niet); na Bewaar geen
+  kook-pop, wél "+53" omdat die kookbeurt de badge Glutenvrijbuiter gaf (klopt: telt voor badges). 5. sterren achteraf:
+  "+5". 6. badges uit: geen balk, geen Home-regel, geen pops, geen badge-rij; weer aan: zelfde stand, geen pops.
+  7. alleen `reloadXp()` gedraaid (geen reset): geen pops, zelfde totalen. Regelmelding getest met
+  `xp.seenRulesVersion` = 0: toast, setting weer 1, weg na 5 s. EN: "Level 6 · Grandma", "+159 XP in total", "That's
+  plenty for today …". 8–10 horen bij 6D-3/6D-4. Geen consolefouten van de app. Testprofiel, zijn elf kookbeurten en de settings
+  weer weg/terug zoals ze waren (Stijn: 3 kookbeurten, level 4, 304 XP).
+- **Telefoontest:** docs/DEVICE-TEST.md rij 92 (XP en levels) en 93 (eerlijk over 0 XP), NL en EN, na rij 102. Eerlijk
+  erbij gezet: wie al eerder kookte, staat meteen hoger (oude kookbeurten tellen mee, stil berekend); een teruggedateerde
+  kook kan wél een badge-blokje geven.
+- **Graag beslissen (Stijn/Fable):** (1) badges uit: `settleXp` legt de stand toch stil vast en de opstart rekent alle
+  profielen stil door (anders popt bij weer aanzetten of na de update ineens de hele geschiedenis); de regelmelding wacht
+  tot badges aan staan. (2) de somregel staat 600 ms ná de laatste pop en blijft 1,4 s (andere lezing: hij staat maar
+  600 ms). (3) streak 1 met de laatste kookdag gisteren: geen streaktekst ("vandaag gekookt" zou niet kloppen); een eigen
+  tekst? (4) Home toont nu twee avatars onder elkaar (begroeting + levelregel, zoals §1b zegt). (5) `--gold` staat in
+  xp.css, niet in base.css. (6) het level-up-venster heeft Sluit boven én onder (§1d letterlijk). (7) in een browsertab
+  vallen de pops over de browsermelding heen (de app zelf niet). (8) domein (deel A): een teruggedateerde kook van een
+  recept dat je daarna nog kookte, schuift de telling k op, dus die latere kookbeurt zakt 10 base (in de test 110 → 99
+  XP): XP kan zo een beetje dalen, terwijl §5 zegt "nooit iets afpakken". (9) een XP-wijziging zonder beloningsmoment
+  (bv. een klassieker met extra regels via de editor) komt als kleine pop bij het volgende beloningsmoment.
+  (10) de 50 ms-test van de 30-jaarrun (tests/xp.test.ts) haalde bij de bouwers één keer 56–69 ms op een drukke pc;
+  bij mij twee keer groen.
 
 ## 25 okt (Opus): Boodschappen — Leeg de lijst
 **Besluit Fable (25 okt):** ook "Elke week"-regels (pins) gaan mee weg bij Leeg de lijst, Ongedaan zet ze terug; de vaste

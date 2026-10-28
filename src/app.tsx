@@ -7,14 +7,19 @@
 // 7, 15 Oct 2026): the English texts of a classic are edited in the editor, which shares the patch
 // route ('#p=').
 // Phase 6 (13B): <BrowserNotice/> sits above the content whenever the app runs in a browser tab.
+// 6D-1 (docs/specs/xp-levels.md §1c–§1e): <XpPop/> (the "+12" pops), <XpToast/> (the honest 0-XP
+// toast) and <LevelUpSheet/> next to <BadgeToast/>; checkRulesVersion() once at boot after the
+// badges setting is known (badges off = no trace of XP).
 import { useEffect, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings } from './badges';
 import { loadCelebrateSettings } from './celebrate';
 import { BrowserNotice } from './components/BrowserNotice';
 import { Confetti } from './components/Confetti';
 import { InstallCard } from './components/InstallCard';
+import { LevelUpSheet } from './components/LevelUpSheet';
 import { Nav } from './components/Nav';
 import { UpdateBar } from './components/UpdateBar';
+import { XpPop, XpToast } from './components/XpPop';
 import { loadCooking } from './cooking';
 import { ensureBuiltins } from './db/repo';
 import { loadDictionary } from './dictionary';
@@ -45,6 +50,7 @@ import { WeekScreen } from './screens/WeekScreen';
 import { startTestTimerTicker } from './testtimer';
 import { initTheme } from './theme';
 import { startTimerEngine } from './timers';
+import { checkRulesVersion } from './xp';
 
 startRouter();
 // Theme first: the mirrored choice is applied before the first paint, then reconciled with the db.
@@ -203,6 +209,11 @@ export function App(props: { openImportFromHash: boolean }) {
       // 13K: the "Nu aan het koken" sessions (settings row cook.sessions), pruned on every return
       // to the app; the bar and cook mode read them.
       void loadCooking();
+      // 6D-1 §1e: a newer XP rules version → one honest toast; first start → only the setting.
+      // After loadBadgeSettings() (memoised, started above) and after the profiles are loaded.
+      void loadBadgeSettings()
+        .then(() => checkRulesVersion())
+        .catch((e: unknown) => console.error('checkRulesVersion', e));
     })();
     return () => {
       cancelled = true;
@@ -240,6 +251,9 @@ export function App(props: { openImportFromHash: boolean }) {
       {!onboarding && <Nav />}
       <Confetti />
       <BadgeToast />
+      <XpPop />
+      <XpToast />
+      <LevelUpSheet />
     </div>
   );
 }

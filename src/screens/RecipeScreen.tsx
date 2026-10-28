@@ -78,6 +78,7 @@ import { noteViewed } from '@/recent';
 import { navigate, route } from '@/router';
 import { copyText } from '@/share-actions';
 import { showAmounts } from '@/step-amounts';
+import { markXpDirty, settleXp } from '@/xp';
 
 const NOTE_DEBOUNCE_MS = 600;
 
@@ -515,7 +516,10 @@ export function RecipeScreen(props: { id: string }) {
     try {
       const blob = await encodePhotoFile(file);
       await addPhoto({ recipeId: id, memberId: pid, blob, at: nowIso() });
+      markXpDirty(pid);
       void checkNewBadges(pid).catch((err: unknown) => console.error('checkNewBadges', err));
+      // 6D-1: a photo is a reward moment (docs/specs/xp-levels.md §3).
+      void settleXp(pid).catch((err: unknown) => console.error('settleXp', err));
     } catch (err) {
       console.error('addPhoto', err);
       setPhotoError(true);
@@ -529,6 +533,8 @@ export function RecipeScreen(props: { id: string }) {
     setPhotoDelBusy(true);
     try {
       await deletePhoto(p.id);
+      // 6D-1: a photo feeds its maker's XP; recomputed silently (never a pop, no reward moment).
+      markXpDirty(p.memberId);
       setViewPhoto(null);
     } catch (e) {
       console.error('deletePhoto', e);

@@ -12,10 +12,15 @@
 //
 // 13K (docs/specs/kookbalk.md §1a): a cook of today also ends the "Nu aan het koken" session of that
 // recipe (its row and its timers leave the bar); a cook logged for another day leaves it alone.
+//
+// 6D-1 (docs/specs/xp-levels.md §3): logCooked → markXpDirty → confetti/plan → checkNewBadges →
+// settleXp, both started without waiting. The badge check settles again after a new badge; settleXp
+// is serialized and merges pops within 2 s into one series, so cook and badge XP pop together.
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
 import { endCooking } from '@/cooking';
 import { listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
+import { markXpDirty, settleXp } from '@/xp';
 
 /** This member's Nth cook that gets the big burst (phase 5 C.4; the same set as CookScreen). */
 export const COOK_MILESTONES: ReadonlySet<number> = new Set([10, 25, 50]);
@@ -40,6 +45,7 @@ export async function recordCooked(input: RecordCookedInput): Promise<void> {
     stars: input.stars !== null && input.stars > 0 ? input.stars : null,
     note,
   });
+  markXpDirty(input.profileId);
   // Phase 5 C.4: this member's 10th/25th/50th cook gets the big burst instead of the normal one.
   let kind: 'cooked' | 'milestone' = 'cooked';
   try {
@@ -66,6 +72,8 @@ export async function recordCooked(input: RecordCookedInput): Promise<void> {
   // Phase 5 block C: start the badge check, never make the caller wait for it (the toast signal
   // survives navigation; the shell renders it).
   void checkNewBadges(input.profileId).catch((e: unknown) => console.error('checkNewBadges', e));
+  // 6D-1: the reward moment (a no-op on screen while badges are off).
+  void settleXp(input.profileId).catch((e: unknown) => console.error('settleXp', e));
 }
 
 /** `yyyy-mm-dd` of a Date in the phone's local time zone (the value format of <input type="date">). */

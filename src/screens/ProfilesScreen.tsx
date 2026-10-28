@@ -5,11 +5,13 @@
 // (setting 'device.id', `ensureDeviceId`), shared as ONE text field (invariant 9), copied, or
 // shown as a QR behind the Experimenten flag. The panel says honestly that on an iPhone the
 // other person copies the message and pastes it into the app (invariants 5 + 13).
+// 6D-1: every profile card shows <XpBar/> (level, XP, streak) under name + language.
 import { useEffect, useState } from 'preact/hooks';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { QrCode } from '@/components/QrCode';
 import { Segmented } from '@/components/Segmented';
+import { XpBar } from '@/components/XpBar';
 import { getSetting, logShareEvent, setSetting } from '@/db/repo';
 import { cardFromMember } from '@/domain/household';
 import { nowIso, randomId, type Lang, type Profile } from '@/domain/model';
@@ -19,6 +21,7 @@ import { lang, t } from '@/i18n';
 import { PROFILE_COLORS, activeProfile, createProfile, profiles, removeProfile, setActiveProfile, updateProfile } from '@/profile';
 import { route } from '@/router';
 import { copyText, shareText } from '@/share-actions';
+import { markXpDirty } from '@/xp';
 
 export interface ProfileValues {
   name: string;
@@ -289,6 +292,8 @@ export function ProfilesScreen() {
                 submitLabel={t('common.save')}
                 onSubmit={async (v) => {
                   await updateProfile({ ...p, ...v });
+                  // 6D-1: own recipes count by author = profile name, so a rename changes XP (recomputed silently).
+                  markXpDirty(p.id);
                   setEditing(null);
                 }}
                 onCancel={() => setEditing(null)}
@@ -310,6 +315,8 @@ export function ProfilesScreen() {
                     </span>
                   </div>
                 </div>
+                {/* 6D-1 (docs/specs/xp-levels.md §1a): level, XP and streak; null with badges off. */}
+                <XpBar memberId={p.id} />
                 <div class="actions" style="margin-bottom:0">
                   {active?.id !== p.id && (
                     <button type="button" class="btn btn-primary btn-small" onClick={() => void setActiveProfile(p.id)}>

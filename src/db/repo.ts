@@ -553,7 +553,8 @@ export async function setNote(recipeId: string, profileId: string, text: string)
 // --- Cook log ----------------------------------------------------------------------------------
 
 export async function logCooked(entry: Omit<CookLogEntry, 'id'>): Promise<void> {
-  const row: CookLogEntry = { ...entry, at: entry.at || nowIso() };
+  // 6D-1 (docs/specs/xp-levels.md §2g): `loggedAt` = the moment of entering, for the backdating rule.
+  const row: CookLogEntry = { ...entry, at: entry.at || nowIso(), loggedAt: entry.loggedAt || nowIso() };
   if (row.stars !== undefined && row.stars !== null) row.stars = Math.min(5, Math.max(1, Math.round(row.stars)));
   await db.cookLog.add(row);
 }
@@ -638,6 +639,18 @@ export async function latestPhoto(recipeId: string): Promise<Photo | undefined> 
 
 export async function deletePhoto(id: number): Promise<void> {
   await db.photos.delete(id);
+}
+
+/**
+ * Who took which photo of which recipe when, for every photo, WITHOUT the blobs in the result
+ * (the XP facts, src/xp.ts; docs/specs/xp-levels.md §3 block 6D-1).
+ */
+export async function listAllPhotosMeta(): Promise<Array<Pick<Photo, 'recipeId' | 'memberId' | 'at'>>> {
+  const out: Array<Pick<Photo, 'recipeId' | 'memberId' | 'at'>> = [];
+  await db.photos.each((p) => {
+    out.push({ recipeId: p.recipeId, memberId: p.memberId, at: p.at });
+  });
+  return out;
 }
 
 /** Household-wide photo count (badge facts and the Storage counters). */

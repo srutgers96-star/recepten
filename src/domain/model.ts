@@ -181,6 +181,9 @@ export interface CookLogEntry {
   at: string;
   stars?: number | null;
   note?: string | null;
+  /** 6D-1: ISO moment the cook was ENTERED (`logCooked` fills it); cooks older than 6D have none.
+   *  More than 7 days after `at` = no XP (docs/specs/xp-levels.md §2b rule 3). Not an id. */
+  loggedAt?: string;
 }
 
 /** A timer that is running right now; persisted so it survives a reload. Times are epoch ms. */

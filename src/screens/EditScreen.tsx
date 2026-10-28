@@ -62,6 +62,7 @@ import { lang, t, tIn } from '@/i18n';
 import { isRecipeKind, openPasteIn, openPastedText, PASTE_FILE_ACCEPT } from '@/paste';
 import { activeProfile } from '@/profile';
 import { navigate, pendingImportKind, pendingImportText, route } from '@/router';
+import { markXpDirty, settleXp } from '@/xp';
 
 type Mode = 'nl' | 'en' | 'both';
 type LoadState = 'loading' | 'ready' | 'missing';
@@ -653,6 +654,8 @@ export function EditScreen(props: { id?: string }) {
         const by = activeProfile.value?.name ?? null;
         const patch = buildOverridePatch(recipe, base, override?.patch, by);
         await saveOverride({ baseId: base.id, patch, by });
+        // 6D-1: the line count of a classic feeds every member's difficulty bonus (no reward moment).
+        markXpDirty();
         navigate('/recipe/' + base.id, { replace: true });
         return;
       }
@@ -663,6 +666,11 @@ export function EditScreen(props: { id?: string }) {
       // it is saved; never make the navigation wait for it (the shell renders the toast).
       const pid = activeProfile.value?.id;
       if (pid) void checkNewBadges(pid).catch((e: unknown) => console.error('checkNewBadges', e));
+      // 6D-1: saving an own recipe is a reward moment (docs/specs/xp-levels.md §3); a builtin's
+      // override (returned above) and an edited received recipe are not. The line count feeds
+      // everyone's cooks of it, so every member's memo is stale. The pops survive the navigation.
+      markXpDirty();
+      if (pid && recipe.origin.kind === 'user') void settleXp(pid).catch((e: unknown) => console.error('settleXp', e));
       navigate('/recipe/' + recipe.id, { replace: true });
     } catch (e) {
       setStatus(`${t('edit.saveError')}: ${String(e)}`);
@@ -689,6 +697,8 @@ export function EditScreen(props: { id?: string }) {
     setBusy(true);
     try {
       await deleteUserRecipe(existing.id);
+      // 6D-1: an own recipe (and its line count) feeds XP; recomputed silently, never a pop.
+      markXpDirty();
       // 13K: a deleted recipe leaves no "Nu aan het koken" row behind.
       void endCooking(existing.id);
       navigate('/recipes', { replace: true });
