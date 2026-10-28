@@ -10,7 +10,7 @@
     "build:next": "cross-env NEXT_CHANNEL=1 vite build --base=/recepten/next/ --outDir dist-next",
     "preview": "vite preview --host",
     "check": "tsc --noEmit -p tsconfig.json",
-    "test": "vitest run",
+    "test": "vitest run --maxWorkers=4",
     "test:watch": "vitest",
     "validate:data": "node --experimental-strip-types tools/validate-data.ts",
     "migrate": "node --experimental-strip-types tools/migrate-from-recepten2.ts",

@@ -103,6 +103,11 @@ export function rollReward(base: number, seed: string, r: XpRules = XP_RULES): {
 
 // ---------------------------------------------------------------------------- types
 
+/**
+ * One cook of this member. `at` = when it was cooked (the cook day: cap, streak, week bonus);
+ * `loggedAt` = when it was entered (backdating, the entry-day cap, and the order that numbers the
+ * cooks of one recipe, k); missing on cooks from before 6D, which then count as entered at `at`.
+ */
 export interface XpCookFact { id?: number; recipeId: string; at: string; stars?: number | null; loggedAt?: string }
 export interface XpRecipeFact { lines: number }                 // ingredient lines without kind 'header'
 export interface XpPhotoFact { recipeId: string; at: string }
@@ -222,9 +227,12 @@ export function longestDayStreak(cookDays: readonly number[], rules: XpRules = X
 
 // ---------------------------------------------------------------------------- derivation
 
-interface CookRow { c: XpCookFact; day: number }
+interface CookRow { c: XpCookFact; day: number; t: number } // t = Date.parse(c.at)
 
-/** Cook order: local day, then `at`, then `id` (§2b rule 1); recipeId only breaks exact ties. */
+/**
+ * Cook-day order: local day, then `at`, then `id` (§2b rule 1, the day cap); recipeId only breaks
+ * exact ties. Not the order of k: that follows the order of entry (see numberCooks).
+ */
 function compareCookRows(a: CookRow, b: CookRow): number {
   if (a.day !== b.day) return a.day - b.day;
   if (a.c.at !== b.c.at) return a.c.at < b.c.at ? -1 : 1;
@@ -248,11 +256,58 @@ const SAME = 1;      // same recipe again on this day → 0 XP, no slot (still c
 const BACKDATED = 2; // logged more than backdateDays after the cook → 0 XP, no slot
 const DUPLICATE = 3; // identical recipeId + at = the same cook identity (seed) → ignored
 
+/** Moment of entry in ms: `loggedAt`, else (a cook from before 6D, or an unreadable loggedAt) `at`. */
+function entryMs(row: CookRow): number {
+  if (row.c.loggedAt !== undefined) {
+    const t = Date.parse(row.c.loggedAt);
+    if (Number.isFinite(t)) return t;
+  }
+  return row.t;
+}
+
+/**
+ * k per row (§2b rule 1: "k = hoeveelste kookbeurt van dit recept"), in the ORDER OF ENTRY: the cooks
+ * of one recipe sorted on `loggedAt` (missing → `at`), then `id`, then cook-day order. A cook that is
+ * backdated later therefore never lowers the k (and so the XP) of cooks that were already rewarded
+ * ("nooit iets afpakken", §5); it gets the next k itself. Rows marked DUPLICATE get no k (0) and do
+ * not count. `rows` must already be in cook-day order (compareCookRows).
+ */
+function numberCooks(rows: readonly CookRow[], status: Uint8Array): Int32Array {
+  const ks = new Int32Array(rows.length);
+  const ms = new Float64Array(rows.length);
+  const byRecipe = new Map<string, number[]>(); // recipeId → row indexes, in cook-day order
+  for (let x = 0; x < rows.length; x++) {
+    if (status[x] === DUPLICATE) continue;
+    const row = rows[x]!;
+    ms[x] = entryMs(row);
+    const list = byRecipe.get(row.c.recipeId);
+    if (list) list.push(x);
+    else byRecipe.set(row.c.recipeId, [x]);
+  }
+  const byEntry = (a: number, b: number): number => {
+    const d = ms[a]! - ms[b]!;
+    if (d !== 0) return d;
+    const ai = rows[a]!.c.id ?? Number.MAX_SAFE_INTEGER;
+    const bi = rows[b]!.c.id ?? Number.MAX_SAFE_INTEGER;
+    if (ai !== bi) return ai - bi;
+    return a - b; // cook-day order: deterministic whatever the input order
+  };
+  for (const list of byRecipe.values()) {
+    if (list.length > 1) list.sort(byEntry); // usually already in order: one linear pass
+    for (let k = 0; k < list.length; k++) ks[list[k]!] = k + 1;
+  }
+  return ks;
+}
+
 function capFactor(rank: number, rules: XpRules): number {
   return rank <= rules.capFull ? 1 : rank <= rules.capHalf ? 0.5 : 0;
 }
 
-/** Recompute the complete XP state from the facts (§2a). Deterministic; input order does not matter. */
+/**
+ * Recompute the complete XP state from the facts (§2a). Deterministic; input order does not matter.
+ * Cook day (`at`): day cap, same recipe, streak, rest rule, week bonus. Entry (`loggedAt`, else
+ * `at`): backdating, the entry-day cap (rule 1b) and k, the number of the cook of this recipe.
+ */
 export function deriveXp(facts: XpFacts, rules: XpRules = XP_RULES, today: number = localDayIndex(new Date())): XpState {
   const events: XpEvent[] = [];
   const byKey = new Map<string, XpEvent>();
@@ -266,8 +321,8 @@ export function deriveXp(facts: XpFacts, rules: XpRules = XP_RULES, today: numbe
   // ---- cooks: one sort, then day by day (streak, cap, rest rule).
   const rows: CookRow[] = [];
   for (const c of facts.log) {
-    const day = dayIndexOfIso(c.at);
-    if (day !== null) rows.push({ c, day });
+    const t = Date.parse(c.at); // = dayIndexOfIso, keeping the ms for numberCooks
+    if (Number.isFinite(t)) rows.push({ c, day: localDayIndex(new Date(t)), t });
   }
   rows.sort(compareCookRows);
 
@@ -277,9 +332,21 @@ export function deriveXp(facts: XpFacts, rules: XpRules = XP_RULES, today: numbe
   const entryDay = new Float64Array(n);
   const bases = new Float64Array(n);
   const keys = new Array<string>(n);
-  const cookCount = new Map<string, number>();  // recipeId → cooks so far (k)
+  // The cook identity (seed) is recipeId + at; a repeat of it is the same cook and is ignored (the
+  // first one in cook-day order stays). Marked first, because k (numberCooks) must skip it. Equal
+  // `at` strings sit next to each other after the sort, so only that run is looked at.
+  for (let x = 1; x < n; x++) {
+    const c = rows[x]!.c;
+    for (let y = x - 1; y >= 0 && rows[y]!.c.at === c.at; y--) {
+      if (rows[y]!.c.recipeId === c.recipeId) {
+        status[x] = DUPLICATE;
+        break;
+      }
+    }
+  }
+  const ks = numberCooks(rows, status);
   const entrySlots = new Map<number, number>(); // entry day (loggedAt, else at) → slots taken so far
-  const dayRecipes = new Map<string, string>(); // this day: recipeId → last `at` (one Map, cleared per day)
+  const dayRecipes = new Set<string>();         // recipes already cooked on this day (cleared per day)
   const cookDays: number[] = [];
   const walk = newWalk();
   let busyRun = 0;
@@ -295,29 +362,24 @@ export function deriveXp(facts: XpFacts, rules: XpRules = XP_RULES, today: numbe
     cookDays.push(day);
     const mult = streakMultiplier(walk.streak, rules);
 
-    // Pass 1: k, base, same recipe, backdated, cap rank on the cook day.
+    // Pass 1: base (with k from numberCooks), same recipe, backdated, cap rank on the cook day.
     dayRecipes.clear();
     let slots = 0;
     for (let x = i; x < j; x++) {
+      if (status[x] === DUPLICATE) continue;
       const c = rows[x]!.c;
-      const prevAt = dayRecipes.get(c.recipeId);
-      if (prevAt === c.at) {
-        status[x] = DUPLICATE;
-        continue;
-      }
-      dayRecipes.set(c.recipeId, c.at);
-      const k = (cookCount.get(c.recipeId) ?? 0) + 1;
-      cookCount.set(c.recipeId, k);
+      const k = ks[x]!;
       const lines = facts.recipes.get(c.recipeId)?.lines ?? 0;
       bases[x] =
         Math.max(rules.cookFloor, rules.cookFirst - rules.cookStep * (k - 1)) +
         Math.min(rules.difficultyMax, rules.difficultyPer * Math.max(0, lines - rules.difficultyFromLines)) +
         (c.stars ? rules.starsBonus : 0);
       keys[x] = 'cook:' + c.recipeId + '|' + c.at;
-      if (prevAt !== undefined) {
+      if (dayRecipes.has(c.recipeId)) {
         status[x] = SAME;
         continue;
       }
+      dayRecipes.add(c.recipeId);
       const logged = c.loggedAt !== undefined ? dayIndexOfIso(c.loggedAt) : null;
       if (logged !== null && logged - day > rules.backdateDays) {
         status[x] = BACKDATED;

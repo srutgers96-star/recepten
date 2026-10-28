@@ -140,9 +140,10 @@ export function XpBar(props: XpBarProps): JSX.Element | null {
 /**
  * The level line on Home (§1b; the content of HomeLevelRow): the profile's avatar circle,
  * "Level 3 · Aardappelschiller", a thin bar and a ›; a tap opens Meer → Profielen. Badges off, no
- * profile or no state loaded yet → null (the slot takes no space).
+ * profile or no state loaded yet → null (the slot takes no space). `avatar={false}` leaves the
+ * circle out where the screen already shows one right above it (Home: the greeting, Fable 28 Oct).
  */
-export function LevelLine(props: { memberId: string }): JSX.Element | null {
+export function LevelLine(props: { memberId: string; avatar?: boolean }): JSX.Element | null {
   const profile = profiles.value.find((p) => p.id === props.memberId) ?? null;
   const { ready, state } = useXpState(props.memberId, profile !== null);
   if (!badgesEnabled.value || !ready || !profile || !state) return null;
@@ -156,7 +157,7 @@ export function LevelLine(props: { memberId: string }): JSX.Element | null {
         navigate('/more/profiles');
       }}
     >
-      <Avatar profile={profile} />
+      {props.avatar !== false && <Avatar profile={profile} />}
       <span class="xp-line-text">{levelTitleText(state.level)}</span>
       <span class="xp-bar thin" aria-hidden="true">
         <span class="xp-bar-fill" style={{ width: `${pct}%` }} />

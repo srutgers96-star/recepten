@@ -323,6 +323,37 @@ describe('deriveXp — anti-cheat (§2b)', () => {
     expect(seven.events[0]!.xp).toBeGreaterThan(0);
   });
 
+  it('k follows the order of entry: a cook backdated later never lowers k (or XP) of a rewarded cook', () => {
+    // Fable, 28 Oct 2026 ("nooit iets afpakken", §5): R cooked on day 10 (k = 1, rewarded); on day 11
+    // a cook of R with at = day 5 is entered (loggedAt day 11, 6 days back: still within 7).
+    nextId = 1;
+    const lines = { 'b:r': 5 };
+    const day10 = entry('b:r', janIso(10, 18), null, janIso(10, 19));
+    const back5 = entry('b:r', janIso(5, 18), null, janIso(11, 20));
+    const key10 = 'cook:b:r|' + janIso(10, 18);
+    const key5 = 'cook:b:r|' + janIso(5, 18);
+    const prev = deriveXp(facts({ lines, log: [day10] }), XP_RULES, 20458 + 10);
+    const next = deriveXp(facts({ lines, log: [day10, back5] }), XP_RULES, 20458 + 11);
+    const before = prev.byKey.get(key10)!;
+    const after = next.byKey.get(key10)!;
+    expect(before).toMatchObject({ base: 100, reason: null }); // k = 1
+    expect(after.base).toBe(100); // still k = 1
+    expect(after.xp).toBe(before.xp);
+    expect(after.xp).toBeGreaterThan(0);
+    expect(next.byKey.get(key5)).toMatchObject({ base: 90, reason: null }); // k = 2
+    expect(next.byKey.get(key5)!.xp).toBeGreaterThan(0);
+    const delta = diffXp(prev, next);
+    expect(delta.pops).toHaveLength(1); // only the new cook pops; nothing is lowered
+    expect(delta.pops[0]!.xp).toBe(next.byKey.get(key5)!.xp);
+    expect(next.total).toBe(prev.total + next.byKey.get(key5)!.xp);
+    // The same two cooks without loggedAt (a log from before 6D) count as entered at `at`: the
+    // day-5 cook is then k = 1 and the day-10 cook k = 2.
+    nextId = 1;
+    const old = deriveXp(facts({ lines, log: [entry('b:r', janIso(10, 18)), entry('b:r', janIso(5, 18))] }), XP_RULES, 20458 + 11);
+    expect(old.byKey.get(key5)!.base).toBe(100);
+    expect(old.byKey.get(key10)!.base).toBe(90);
+  });
+
   it('entry-day cap (rule 1b): seven days logged in one evening → 3 full + 2 half', () => {
     nextId = 1;
     const lines: Record<string, number> = {};

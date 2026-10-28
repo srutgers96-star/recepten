@@ -1,6 +1,8 @@
 # Spec 6D — XP, levels, streak, titels, ontgrendelingen en "Sync mijn voortgang"
 
 Status: compleet (Fable, 22 okt 2026)
+
+**Stijn, 28 okt 2026:** Oma kookt beter dan level 6 → Oma staat nu op **level 39** (was Tafelheld); level 6 heet **Tosti-tovenaar** / Toastie wizard. data/levels.json en tests/levels.test.ts zijn aangepast.
 Gebouwd: 28 okt 2026 (blok 6D-1; domein wf_a65d1ec4-750, app-laag + UI wf_04bdbbc2-d81)
 
 **Besluit Stijn (24 okt 2026) — ontgrendelingen rijk, niet spaarzaam.** Het level-up-overzicht en de pagina
@@ -563,7 +565,7 @@ ontbrekende levels krijgen `{ title: 'Level N' }`), `titleFor(level: number, lan
 | 3 | Aardappelschiller | Potato Peeler |
 | 4 | Afwasser | Dishwasher |
 | 5 | Boterhamsmeerder | Sandwich Spreader |
-| 6 | Oma | Grandma |
+| 6 | Tosti-tovenaar | Toastie wizard |
 | 7 | Uiensnipperaar | Onion Chopper |
 | 8 | Eierbakker | Egg Flipper |
 | 9 | Pastakoker | Pasta Boiler |
@@ -596,7 +598,7 @@ ontbrekende levels krijgen `{ title: 'Level N' }`), `titleFor(level: number, lan
 | 36 | Rôtisseur | Rôtisseur |
 | 37 | Pâtissier | Pâtissier |
 | 38 | Keukengeneraal | Kitchen General |
-| 39 | Tafelheld | Table Hero |
+| 39 | Oma | Grandma |
 | 40 | Chefkok | Head Chef |
 | 41 | Brigadeleider | Brigade Leader |
 | 42 | Menu-architect | Menu Architect |

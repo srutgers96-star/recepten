@@ -27,8 +27,11 @@ describe('data/levels.json', () => {
     expect(titleFor(1, 'en')).toBe('Kitchen Chick');
     expect(titleFor(2, 'nl')).toBe('T-rex');
     expect(titleFor(2, 'en')).toBe('T-rex');
-    expect(titleFor(6, 'nl')).toBe('Oma');
-    expect(titleFor(6, 'en')).toBe('Grandma');
+    // Stijn, 28 Oct 2026: Grandma cooks better than level 6, so she moved up to 39.
+    expect(titleFor(6, 'nl')).toBe('Tosti-tovenaar');
+    expect(titleFor(6, 'en')).toBe('Toastie wizard');
+    expect(titleFor(39, 'nl')).toBe('Oma');
+    expect(titleFor(39, 'en')).toBe('Grandma');
     expect(titleFor(100, 'nl')).toBe('Best Chef of the Universe');
     expect(titleFor(100, 'en')).toBe('Best Chef of the Universe');
     expect(noteFor(2, 'nl')).toBe('Te korte armpjes: kan nog niet bij het fornuis.');
@@ -36,7 +39,7 @@ describe('data/levels.json', () => {
     expect(noteFor(100, 'en')).toBe('Maximum level. There is nothing above this.');
     expect(noteFor(3, 'nl')).toBeNull();
     const withNotes = levelsJson.filter((l) => 'note' in l.nl || 'note' in l.en).map((l) => l.level);
-    expect(withNotes).toEqual([2, 6, 61, 72, 81, 100]);
+    expect(withNotes).toEqual([2, 6, 39, 61, 72, 81, 100]); // 39 = Oma since 28 Oct 2026
   });
 
   it('passes the validator', () => {

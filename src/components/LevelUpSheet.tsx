@@ -3,11 +3,12 @@
 // opens AFTER the last pop (it waits until the pop queue is empty and <XpPop/> has nothing scheduled
 // or on screen). Several levels at once (first cook: 1 → 3) = one sheet for the highest level.
 // Through SheetPortal with the existing .sheet classes; the head `.sheet-head.with-actions` has only
-// Sluit on the right (13J). Content: "🎉 Level {level}!" (head), the title from data/levels.json
-// big, the note muted when there is one, and Sluit at the bottom. The "Ontgrendeld" list and
-// "Bekijk Vrijgespeeld" come in 6D-3 (`LevelUpInfo.unlocked` is empty in 6D-1). Swiping it down,
-// tapping beside it, Escape and Sluit close it (clearLevelUp); there is nothing to keep. Never for a
-// quiet recompute (settleXp sets no levelUp then); badges off → nothing.
+// Sluit on the right (13J), and Sluit appears only there (no second one at the bottom; Fable,
+// 28 Oct). Content: "🎉 Level {level}!" (head), the title from data/levels.json big, the note
+// muted when there is one. The "Ontgrendeld" list and "Bekijk Vrijgespeeld" come in 6D-3
+// (`LevelUpInfo.unlocked` is empty in 6D-1). Swiping it down, tapping beside it, Escape and Sluit
+// close it (clearLevelUp); there is nothing to keep. Never for a quiet recompute (settleXp sets
+// no levelUp then); badges off → nothing.
 import type { JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgesEnabled } from '@/badges';
@@ -129,11 +130,6 @@ function LevelUpBody(props: { info: LevelUpInfo; onClose: () => void }) {
           <div class="sheet-body levelup-body">
             <p class="levelup-name">{title}</p>
             {note && <p class="levelup-note muted">{note}</p>}
-            <div class="actions levelup-actions">
-              <button type="button" class="btn btn-block" onClick={onClose}>
-                {t('common.close')}
-              </button>
-            </div>
           </div>
         </div>
       </div>

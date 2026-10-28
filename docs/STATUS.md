@@ -15,6 +15,11 @@ bij terugdateren**: een later teruggedatéérde kookbeurt verlaagt de k (hoeveel
 daarmee hun XP — dat botst met "nooit iets afpakken". Besluit: k volgt de volgorde van invoer (`loggedAt`, anders `at`), niet
 de kookdatum; pins in tests/xp.test.ts die hierdoor verschuiven bijwerken; regelversie blijft 1 (nog niet live geweest).
 Live op `main` achter de schakelaar Badges.
+**Fixer-ronde 28 okt:** (a), (b), (c) gedaan; pins in tests/xp.test.ts: geen enkele verschoven (geen bestaande test en de 30-jaar-simulatie hebben `loggedAt`, dus invoervolgorde = `at`-volgorde; 1.259.039 XP, 13.430 events, 967.012 XP, levels 100/95/24/29 ongewijzigd), plus nieuwe test "k follows the order of entry" (1133 tests); 30 jaar los 26–35 ms (HEAD 25–33 ms), maar in de volle `npm test` (20 workers) haalt de timing-test de 50 ms niet, op HEAD evenmin (62–87 ms; met `--maxWorkers=4` groen, 38,6 ms).
+**Besluit Fable (28 okt):** `npm test` draait met `--maxWorkers=4`: de 50 ms-test van de 30-jaar-simulatie faalde alleen bij
+twintig parallelle workers (ook op de oude code), met vier workers 38 ms; de limiet van 50 ms blijft. Nog niet waterdicht bij
+terugdateren met een vroegere `at` op een dag die al beloond was (zelfde recept op één dag, dagplafond, rustregel): voor de
+Fable-eindcontrole; k zelf volgt nu de invoervolgorde. **Oma** verhuisd naar level 39, level 6 = Tosti-tovenaar (Stijn).
 Gebouwd volgens docs/specs/xp-levels.md blok 6D-1 (deel A, het domein, staat al in e2ec454; nu bouwer B app-laag,
 bouwer C UI, integrator). Niet gecommit. Alles valt onder de bestaande schakelaar **Badges**: uit = nergens XP, level,
 pop of melding. Geen Dexie-versie, geen nieuwe dependency; gate groen (check, 1132 tests, build, build:next, validate:data).
