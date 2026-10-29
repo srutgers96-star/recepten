@@ -9,7 +9,8 @@
 // Phase 6 (13B): <BrowserNotice/> sits above the content whenever the app runs in a browser tab.
 // 6D-1 (docs/specs/xp-levels.md §1c–§1e): <XpPop/> (the "+12" pops), <XpToast/> (the honest 0-XP
 // toast) and <LevelUpSheet/> next to <BadgeToast/>; checkRulesVersion() once at boot after the
-// badges setting is known (badges off = no trace of XP).
+// badges setting is known (badges off = no trace of XP). 6D-3 unlocks (= 6D-4a, §1f): the route
+// '/more/unlocks' (Vrijgespeeld); checkRulesVersion also refreshes the phone-wide unlocks at boot.
 import { useEffect, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, type NewBadge } from './badges';
 import { loadCelebrateSettings } from './celebrate';
@@ -47,6 +48,7 @@ import { ShareScreen } from './screens/ShareScreen';
 import { ShoppingScreen } from './screens/ShoppingScreen';
 import { StorageScreen } from './screens/StorageScreen';
 import { StoryScreen } from './screens/StoryScreen';
+import { UnlocksScreen } from './screens/UnlocksScreen';
 import { WeekScreen } from './screens/WeekScreen';
 import { startTestTimerTicker } from './testtimer';
 import { initTheme } from './theme';
@@ -176,6 +178,9 @@ function Screen(props: { r: Route }) {
         // Phase 5 (docs/phase-5-spec.md C.2): badges per member + "Samen".
         case 'badges':
           return <BadgesScreen />;
+        // 6D-3 unlocks (docs/specs/xp-levels.md §1f): what this phone has unlocked, per kind.
+        case 'unlocks':
+          return <UnlocksScreen />;
         default:
           return <NotFound />;
       }
@@ -238,6 +243,7 @@ export function App(props: { openImportFromHash: boolean }) {
       void loadCooking();
       // 6D-1 §1e: a newer XP rules version → one honest toast; first start → only the setting.
       // After loadBadgeSettings() (memoised, started above) and after the profiles are loaded.
+      // 6D-3: it ends with refreshUnlocks() (the phone-wide unlocks, §3 "bij boot").
       void loadBadgeSettings()
         .then(() => checkRulesVersion())
         .catch((e: unknown) => console.error('checkRulesVersion', e));

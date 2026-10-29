@@ -32,8 +32,9 @@ import { hasAmountsToShow, shownStep, StepView, useFahrenheit } from '@/componen
 import { TimerBar } from '@/components/TimerBar';
 import { VoiceHelp } from '@/components/VoiceHelp';
 import { cookingLoaded, endCooking, sessionFor, touchCooking } from '@/cooking';
+import { wakeCookedSound } from '@/cooklog';
 import { useLive } from '@/db/live';
-import { addPhoto, getRecipe, listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
+import { addPhoto, getRecipe, getSetting, listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
 import { dictionary, lineText } from '@/dictionary';
 import { nowIso, pickText, type Lang } from '@/domain/model';
 import { encodePhotoFile } from '@/photo';
@@ -44,9 +45,11 @@ import { lang, t, tIn } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
 import { goBack, navigate, route } from '@/router';
+import { playCookedSound } from '@/sounds';
 import { canSpeak, loadSpeechSettings, readAloud, setReadAloud, speak, speaking, stopSpeaking } from '@/speech';
 import { loadShowAmounts, setShowAmounts, showAmounts } from '@/step-amounts';
 import { MINUTE_MS, startTimer, timers } from '@/timers';
+import { COOK_FONT_SETTING, type CookFont } from '@/unlocks';
 import { canListen, commandsEnabled, loadVoiceSettings, micState, startListening, stopListening } from '@/voice';
 import { markXpDirty, settleXp } from '@/xp';
 
@@ -56,6 +59,16 @@ const LONG_PRESS_MOVE_PX = 10;
 
 /** Cook counts of one member that earn the big burst instead of the normal one (phase 5 C.4). */
 const COOK_MILESTONES = new Set([10, 25, 50]);
+
+/**
+ * The typeface the cook card shows: the `cook.font` setting itself (live). Meer only offers unlocked
+ * typefaces, and switching one off on Vrijgespeeld sets the setting back to 'default'
+ * (src/unlocks.ts `setUnlockEnabled`); a typeface already chosen keeps working with badges off (§1g).
+ */
+function useCookFont(): CookFont {
+  const chosen = useLive(() => getSetting<unknown>(COOK_FONT_SETTING, 'default'), []);
+  return chosen === 'chalk' || chosen === 'hand' ? chosen : 'default';
+}
 
 /**
  * The remaining time of one timer as a spoken sentence (6A.8 "hoe lang nog"): whole minutes
@@ -168,6 +181,7 @@ export function CookScreen(props: { id: string }) {
   const recipe = useLive(async () => (await getRecipe(id)) ?? null, [id]);
   const lines = useRecipeLines(recipe);
   const fahrenheit = useFahrenheit();
+  const font = useCookFont();
   // Servings: the detail page passes its choice as ?srv=; else the session memory; else (13K) the
   // servings of the cooking session when the store is already loaded; else the recipe's.
   const [chosen, setChosen] = useState<number | null>(() => {
@@ -530,6 +544,8 @@ export function CookScreen(props: { id: string }) {
     setBusy(true);
     try {
       if (profile) {
+        // 6D-4a: wake the audio context for the ta-da while still inside the tap (iOS).
+        const tada = wakeCookedSound();
         // Phase 5 (docs/phase-5-spec.md A.8): the cook-log entry is attributed to a household
         // member; a local member's id IS the profile id (src/domain/household.ts), so `profileId`
         // stays the field and no migration is needed.
@@ -549,6 +565,8 @@ export function CookScreen(props: { id: string }) {
         } catch (e) {
           console.error('listCookLog', e);
         }
+        // 6D-4a: the ta-da once the cook is saved (only when on and unlocked; see wakeCookedSound).
+        if (tada) playCookedSound(tada);
         celebrate(kind);
       }
       // Phase 4: a dish in the week plan gets its "Gekookt" tick (no-op when it is not in the plan).
@@ -619,7 +637,7 @@ export function CookScreen(props: { id: string }) {
           >
             {page > 0 && <div class="cook-ghost prev" aria-hidden="true" />}
             {page < last && <div class="cook-ghost next" aria-hidden="true" />}
-            <div key={page} class={'cook-card enter-' + dir} ref={card}>
+            <div key={page} class={'cook-card enter-' + dir} ref={card} data-font={font}>
               {isPrepare && (
                 <>
                   <div class="cook-kicker">{t('cook.prepare')}</div>

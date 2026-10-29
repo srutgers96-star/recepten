@@ -16,12 +16,31 @@
 // 6D-1 (docs/specs/xp-levels.md §3): logCooked → markXpDirty → confetti/plan → checkNewBadges →
 // settleXp, both started without waiting. The badge check settles again after a new badge; settleXp
 // is serialized and merges pops within 2 s into one series, so cook and badge XP pop together.
-import { checkNewBadges } from '@/badges';
+//
+// 6D-4a (docs/specs/xp-levels.md §1g): with `cooked.sound` on and `sound-cooked-tada` unlocked, a
+// short ta-da plays once the cook is saved, together with the confetti. The audio context is woken
+// before the first await — still inside the tap, which iOS needs — and played after the save.
+import { badgesEnabled, checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
 import { endCooking } from '@/cooking';
 import { listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
 import { recordFeature } from '@/features';
+import { cookedSound, playCookedSound, tapAudioContext } from '@/sounds';
+import { isActive } from '@/unlocks';
 import { markXpDirty, settleXp } from '@/xp';
+
+/** The unlock that lets the ta-da on Cooked! play (data/unlocks.json). */
+export const COOKED_SOUND_UNLOCK = 'sound-cooked-tada';
+
+/**
+ * Call inside the tap, before the first await: wakes the audio context when the ta-da will play
+ * (setting on, unlock active) and returns it; null otherwise. Play it with `playCookedSound` once
+ * the cook is saved.
+ */
+export function wakeCookedSound(): AudioContext | null {
+  // Badges off = no ta-da either (decision Fable 29 Oct): the sound plays by default, not by a choice.
+  return badgesEnabled.value && cookedSound.value && isActive(COOKED_SOUND_UNLOCK) ? tapAudioContext() : null;
+}
 
 /** This member's Nth cook that gets the big burst (phase 5 C.4; the same set as CookScreen). */
 export const COOK_MILESTONES: ReadonlySet<number> = new Set([10, 25, 50]);
@@ -39,6 +58,8 @@ export interface RecordCookedInput {
 /** Logs a cook and does everything that goes with it (see the header comment). Throws when the log write fails. */
 export async function recordCooked(input: RecordCookedInput): Promise<void> {
   const note = input.note?.trim() ? input.note.trim() : null;
+  // 6D-4a: still inside the tap (nothing awaited yet), so iOS lets the context wake.
+  const tada = wakeCookedSound();
   await logCooked({
     recipeId: input.recipeId,
     profileId: input.profileId,
@@ -55,6 +76,7 @@ export async function recordCooked(input: RecordCookedInput): Promise<void> {
   } catch (e) {
     console.error('listCookLog', e);
   }
+  if (tada) playCookedSound(tada);
   celebrate(kind);
   // Phase 4: a dish in the week plan gets its "Gekookt" tick — only for a cook of today.
   if (isToday(input.at)) {

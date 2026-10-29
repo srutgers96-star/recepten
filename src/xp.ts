@@ -17,6 +17,11 @@
 // Badges off (`badges.enabled` false): nothing here is visible. A settle then still records the new
 // state quietly (no pops, no sheet, no toast), so turning badges back on shows the same level and
 // the next action pops only that action — nothing "lost", nothing flooding in.
+//
+// 6D-3 unlocks (docs/specs/xp-levels.md §1d, §2e, §3 "Blok 6D-3" = 6D-4a): a level-up asks
+// `announceUnlocks` (src/unlocks.ts) for what came free between the two levels and is not yet in
+// `unlocks.announced`; those fill `LevelUpInfo.unlocked`. After settles the phone-wide union of
+// unlocks is refreshed (`refreshUnlocks`), once per burst, and once at boot (checkRulesVersion).
 import { signal, type Signal } from '@preact/signals';
 import { badgesEnabled, badgeStatuses, loadBadgeSettings } from '@/badges';
 import { allRecipes, getSetting, listAllPhotosMeta, listCookLog, listProfiles, setSetting } from '@/db/repo';
@@ -26,6 +31,7 @@ import {
   diffXp,
   XP_RULES_VERSION,
   type Crit,
+  type XpBadgeFact,
   type XpDelta,
   type XpEventKind,
   type XpFacts,
@@ -33,26 +39,15 @@ import {
   type XpState,
 } from '@/domain/xp';
 import { localDayIndex } from '@/domain/days';
+import type { Unlock } from '@/domain/unlocks';
+import { announceUnlocks, refreshUnlocks } from '@/unlocks';
+
+export type { Unlock };
 
 /** Setting `xp.seenRulesVersion` (number): the rules version the user was last told about (§1e). */
 export const XP_SEEN_RULES_SETTING = 'xp.seenRulesVersion';
 /** Setting `xp.lastSeen`: Record<memberId, { total, level }> as last shown (§2g). */
 export const XP_LAST_SEEN_SETTING = 'xp.lastSeen';
-
-/**
- * Placeholder for the unlock type of block 6D-3 (src/domain/unlocks.ts, docs/specs/xp-levels.md
- * §2e; same shape). 6D-1 announces no unlocks, so `LevelUpInfo.unlocked` is always empty here;
- * 6D-3 replaces this with an import from '@/domain/unlocks'.
- */
-export interface Unlock {
-  id: string;
-  kind: 'confetti' | 'timerSound' | 'cookedSound' | 'cookFont' | 'feature';
-  by: { level: number } | { badge: string; level?: number };
-  icon: string;
-  value: string;
-  nl: { name: string; description: string };
-  en: { name: string; description: string };
-}
 
 /** One "+12" chip in the queue of <XpPop/>; `sumAfter` = the series' total, on its last pop only (≥ 2 pops). */
 export interface XpPopItem {
@@ -68,7 +63,7 @@ export interface LevelUpInfo {
   memberId: string;
   from: number;
   to: number;
-  /** Empty in 6D-1; 6D-3 fills it via announceUnlocks. */
+  /** What came free between `from` and `to` and was not announced before (announceUnlocks, 6D-3). */
   unlocked: Unlock[];
 }
 
@@ -141,6 +136,8 @@ const memoDay = new Map<string, number>();
 /** Latest computation per member; an older one finishing later never overwrites a newer result. */
 const generation = new Map<string, number>();
 const inflight = new Map<string, Promise<XpState>>();
+/** The badge facts of each member's latest derivation (what `announceUnlocks` checks badge unlocks against). */
+const badgeFacts = new Map<string, XpBadgeFact[]>();
 
 function recompute(memberId: string): Promise<XpState> {
   dirty.delete(memberId);
@@ -151,6 +148,7 @@ function recompute(memberId: string): Promise<XpState> {
     .then((facts) => {
       const state = deriveXp(facts, undefined, today);
       if (generation.get(memberId) === gen) {
+        badgeFacts.set(memberId, facts.badges);
         memoDay.set(memberId, today);
         const next = new Map(xpStates.value);
         next.set(memberId, state);
@@ -231,15 +229,56 @@ function queuePops(pops: XpDelta['pops']): void {
   xpPops.value = [...queue, ...items];
 }
 
-function announceLevelUp(memberId: string, from: number, to: number): void {
+/**
+ * What a level-up from → to announces (§1d): the unlocks of the levels in between and of the
+ * member's badges that are not in `unlocks.announced` yet (announceUnlocks writes that setting, so
+ * they are never announced twice). A failure there never costs the sheet: it then lists nothing.
+ */
+async function unlocksFor(memberId: string, from: number, to: number): Promise<Unlock[]> {
+  if (to <= from) return [];
+  try {
+    return await announceUnlocks(memberId, from, to, badgeFacts.get(memberId) ?? []);
+  } catch (e) {
+    console.warn('announceUnlocks', e);
+    return [];
+  }
+}
+
+function announceLevelUp(memberId: string, from: number, to: number, unlocked: readonly Unlock[]): void {
   if (to <= from) return;
   const open = levelUp.value;
-  // Several level-ups before the sheet was closed = one sheet for the highest level (§1d).
+  // Several level-ups before the sheet was closed = one sheet for the highest level, with the
+  // unlocks of all levels in between (§1d).
   if (open && open.memberId === memberId) {
-    levelUp.value = { memberId, from: Math.min(open.from, from), to: Math.max(open.to, to), unlocked: [...open.unlocked] };
+    const merged = [...open.unlocked];
+    for (const u of unlocked) if (!merged.some((m) => m.id === u.id)) merged.push(u);
+    levelUp.value = { memberId, from: Math.min(open.from, from), to: Math.max(open.to, to), unlocked: merged };
   } else {
-    levelUp.value = { memberId, from, to, unlocked: [] };
+    levelUp.value = { memberId, from, to, unlocked: [...unlocked] };
   }
+}
+
+// ---------------------------------------------------------------------------- unlocks refresh
+
+let unlockRefreshQueued = false;
+
+/**
+ * Refreshes the phone-wide union of unlocks (src/unlocks.ts `refreshUnlocks`, §2e) once the settle
+ * chain has drained: a burst of settles (boot, a restore, a silent badge registration, a cook plus
+ * its badge) gives one refresh after the last of them. Never throws.
+ */
+function queueUnlockRefresh(): void {
+  if (unlockRefreshQueued) return;
+  unlockRefreshQueued = true;
+  void settling
+    .then(() => {
+      unlockRefreshQueued = false;
+      return refreshUnlocks();
+    })
+    .catch((e: unknown) => {
+      unlockRefreshQueued = false;
+      console.warn('refreshUnlocks', e);
+    });
 }
 
 // Serialized like checkNewBadges: two quick reward moments never read the same old baseline.
@@ -268,6 +307,8 @@ async function doSettle(memberId: string, quietAsked: boolean): Promise<XpDelta 
     lastSeen[memberId] = { total: next.total, level: next.level };
     await setSetting(XP_LAST_SEEN_SETTING, lastSeen);
   }
+  // §2e/§3: every settle (also a quiet one) may change what this phone has unlocked.
+  queueUnlockRefresh();
   if (quiet) return null;
   let delta: XpDelta;
   if (prev !== null || seen === undefined) {
@@ -282,7 +323,7 @@ async function doSettle(memberId: string, quietAsked: boolean): Promise<XpDelta 
     delta = { amount, pops: amount > 0 ? [{ xp: amount, crit: null, kind }] : [], levelFrom: seen.level, levelTo: next.level, zeroReasons: [] };
   }
   queuePops(delta.pops);
-  announceLevelUp(memberId, delta.levelFrom, delta.levelTo);
+  announceLevelUp(memberId, delta.levelFrom, delta.levelTo, await unlocksFor(memberId, delta.levelFrom, delta.levelTo));
   // §1e: a cook that got 0 XP from the busy-week rule or the day cap says so; sameRecipe and
   // backdated stay silent (the sheet said it already).
   if (delta.zeroReasons.includes('busyWeek')) xpToast.value = 'xp.busyWeek';
@@ -298,6 +339,8 @@ export async function reloadXp(): Promise<void> {
   xpStates.value = new Map();
   const profiles = await listProfiles();
   await Promise.all(profiles.map((p) => settleXp(p.id, { quiet: true })));
+  // The restored settings (`unlocks.disabled` stays device-local) and levels: one refresh.
+  queueUnlockRefresh();
 }
 
 /**
@@ -305,7 +348,7 @@ export async function reloadXp(): Promise<void> {
  * XP_RULES_VERSION toasts `xp.rulesChanged` once; the setting is then brought up to date (first
  * start: only the setting). With badges off nothing is said and the setting waits, so the note
  * comes the first start with badges on. Then every local profile is settled quietly, so the
- * recalculation itself never pops.
+ * recalculation itself never pops, and the phone-wide unlocks are refreshed (6D-3).
  */
 export async function checkRulesVersion(): Promise<void> {
   try {
@@ -320,6 +363,9 @@ export async function checkRulesVersion(): Promise<void> {
   } catch (e) {
     console.warn('checkRulesVersion', e);
   }
+  // §3 "bij boot": the phone-wide unlocks, also on a phone without profiles yet (coalesced with
+  // the refresh the quiet settles above already queued).
+  queueUnlockRefresh();
 }
 
 /** <XpPop/> is done with this pop: drop it from the queue. */

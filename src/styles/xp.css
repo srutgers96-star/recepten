@@ -302,3 +302,45 @@
   margin: 0 0 8px;
   font-size: 15px;
 }
+
+/* ---------- Unlocks (6D-4a = "Blok 6D-3" in docs/specs/xp-levels.md; §1d, §1f) ---------- */
+
+/* Level-up sheet: the "Ontgrendeld" list reads left-aligned under the centred title. */
+.levelup-unlocks {
+  margin-top: 12px;
+  text-align: left;
+}
+
+.levelup-actions {
+  margin-top: 12px;
+}
+
+/* One unlock row (Vrijgespeeld and the level-up sheet): icon · name + description · switch or lock. */
+.unlock-icon {
+  flex: none;
+  width: 32px;
+  font-size: 24px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.unlock-row.locked .unlock-icon {
+  opacity: 0.5;
+}
+
+.unlock-action {
+  margin-top: 6px;
+}
+
+.unlock-note {
+  display: block;
+}
+
+.unlock-lock {
+  flex: none;
+  text-align: right;
+}
+
+.unlocks-phone-wide {
+  margin: 4px 0 16px;
+}

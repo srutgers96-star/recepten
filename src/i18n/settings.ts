@@ -26,6 +26,9 @@ export const settings: Dict = {
     en: 'Badge page and a toast for a new badge. Badges and Confetti both off = no gamification anywhere.',
   },
   'more.badgesRowHint': { nl: 'Verdiend en nog te verdienen, per lid en Samen', en: 'Earned and still to earn, per member and Together' },
+  // --- 6D (docs/specs/xp-levels.md §1f, block 6D-3 = 6D-4a): the Vrijgespeeld row under Badges ---
+  'more.unlocks': { nl: 'Vrijgespeeld', en: 'Unlocked' },
+  'more.unlocksHint': { nl: 'Confetti, geluiden en lettertypes die je hebt verdiend', en: 'Confetti, sounds and typefaces you have earned' },
   'more.storage': { nl: 'Opslag & back-up', en: 'Storage & backup' },
   'more.storageHint': { nl: 'Back-up maken of terugzetten, foto’s, opslagruimte', en: 'Make or restore a backup, photos, storage space' },
   // Phase 6 (docs/phase-6-spec.md 6A.5): "Stuur nieuwe naar …" became "Deel je nieuwe recepten".
@@ -151,6 +154,18 @@ export const settings: Dict = {
   'more.timerSound.bell': { nl: 'Belletje', en: 'Bell' },
   'more.timerSound.melody': { nl: 'Melodietje', en: 'Melody' },
   'more.timerSound.off': { nl: 'Uit', en: 'Off' },
+  // 6D (docs/specs/xp-levels.md §1g): the unlockable timer sounds, the cook-mode typeface and the
+  // sound on Cooked! (each only shown once unlocked on this phone and switched on).
+  'more.timerSound.cowbell': { nl: 'Koebel', en: 'Cowbell' },
+  'more.timerSound.gong': { nl: 'Gong', en: 'Gong' },
+  'more.timerSound.kitchen': { nl: 'Keukenwekker', en: 'Kitchen timer' },
+  'more.timerSound.fanfare': { nl: 'Fanfare', en: 'Fanfare' },
+  'more.cookFont': { nl: 'Lettertype kookstand', en: 'Cook-mode typeface' },
+  'more.cookFont.default': { nl: 'Standaard', en: 'Default' },
+  'more.cookFont.chalk': { nl: 'Krijtbord', en: 'Chalkboard' },
+  'more.cookFont.hand': { nl: 'Handschrift', en: 'Handwriting' },
+  'more.cookedSound': { nl: 'Geluid bij Gekookt!', en: 'Sound on Cooked!' },
+  'more.cookedSoundHint': { nl: 'Een kort tadaa als je een kookbeurt opslaat', en: 'A short ta-da when you save a cook' },
   'more.timerSoundPreview': { nl: 'Luister', en: 'Listen' },
   'more.timerSoundIOSHint': {
     nl: 'iPhone: staat de stil-schakelaar aan de zijkant aan, dan is er geen geluid uit de app — de melding is dan de enige weg.',

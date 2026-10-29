@@ -1021,6 +1021,50 @@ textarea.input.notes {
   will-change: transform;
 }
 
+/* 6D-4a (docs/specs/xp-levels.md §1g): the unlockable cook-mode typefaces. Local woff2 files (OFL,
+   latin subset from Google Fonts) in public/fonts/, precached by the service worker; never a Google
+   Fonts link (offline-first). CookScreen sets data-font on the card ('default' | 'chalk' | 'hand'). */
+@font-face {
+  font-family: 'Cabin Sketch';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/cabin-sketch.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Patrick Hand';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/patrick-hand.woff2') format('woff2');
+}
+
+/* Chalkboard: board green with off-white letters in both themes. The card's own tokens follow, so
+   muted text, lines and the stacked-card edges stay readable on the green; the cobalt accents
+   (kicker, secondary buttons, the chosen servings pill) turn off-white too (cobalt on #2f4f3a is
+   about 1.5:1), and the other accents take their dark-theme tones, which are made for a dark card. */
+.cook-card[data-font='chalk'] {
+  color-scheme: dark;
+  --card: #2f4f3a;
+  --ink: #f3efe4;
+  --muted: rgba(243, 239, 228, 0.75);
+  --line: rgba(243, 239, 228, 0.22);
+  --press: rgba(243, 239, 228, 0.12);
+  --cobalt: #f3efe4;
+  --on-cobalt: #2f4f3a;
+  --tomato: #ef6a55;
+  --rosemary: #6fb06a;
+  --orange: #e9a852;
+  background: var(--card);
+  color: var(--ink);
+  font-family: 'Cabin Sketch', var(--font);
+}
+
+.cook-card[data-font='hand'] {
+  font-family: 'Patrick Hand', var(--font);
+}
+
 .cook-card.enter-next {
   animation: cook-in-next 0.22s ease-out;
 }

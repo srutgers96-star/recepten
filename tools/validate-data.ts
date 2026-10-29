@@ -7,8 +7,8 @@
 // (tools/migrate-from-recepten2.ts, §2 + §4: dictionary references, `name.en` and every
 // `steps[].text.en` when `text.en` is set, categories, cuisines, tags, units and qualifiers), the badge catalogue
 // data/badges.json (docs/phase-5-spec.md "Block C", docs/specs/badges-avatar.md §2e), the avatar library
-// data/avatar-parts.json (docs/specs/badges-avatar.md §2f), the level titles data/levels.json and
-// the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2).
+// data/avatar-parts.json (docs/specs/badges-avatar.md §2f), the level titles data/levels.json, the
+// unlocks data/unlocks.json (docs/specs/xp-levels.md §2e) and the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2).
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
 // Exit:  1 when any error was found, 0 otherwise. Warnings never fail the run.
@@ -1204,6 +1204,105 @@ export function validateLevels(data: unknown): ValidationResult {
 }
 
 // ---------------------------------------------------------------------------
+// Unlocks: data/unlocks.json (docs/specs/xp-levels.md §2e, src/domain/unlocks.ts `Unlock`)
+// ---------------------------------------------------------------------------
+//
+// Errors: an array of { id, kind, by, icon, value, nl: { name, description }, en: { name,
+// description } }; ids kebab-case and unique; `kind` from UNLOCK_KIND_IDS; `by` either
+// { level: integer 2…100 } or { badge: an id from data/badges.json, level?: tier 1…8 }; `icon` and
+// `value` non-empty strings; both languages with a non-empty name and description. Warnings: stray
+// keys, a badge unlock on a retired badge (it can not be earned any more).
+
+/** Mirrors UNLOCK_KINDS in src/domain/unlocks.ts (tests/unlocks.test.ts pins that they are equal). */
+export const UNLOCK_KIND_IDS: readonly string[] = ['confetti', 'timerSound', 'cookedSound', 'cookFont', 'feature'];
+const UNLOCK_KEYS: ReadonlySet<string> = new Set(['id', 'kind', 'by', 'icon', 'value', 'nl', 'en']);
+const UNLOCK_TEXT_KEYS: ReadonlySet<string> = new Set(['name', 'description']);
+/** A level unlock lies on 2…100: level 1 is where everyone starts, so it would set nothing free. */
+const UNLOCK_MIN_LEVEL = 2;
+
+/**
+ * Validate data/unlocks.json. Pure: takes the parsed JSON and the badge ids of data/badges.json
+ * (`retired` = the ids of retired badges, for a warning), returns errors/warnings.
+ */
+export function validateUnlocks(data: unknown, badgeIds: Iterable<string>, retired: Iterable<string> = []): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const known = new Set(badgeIds);
+  const retiredSet = new Set(retired);
+
+  if (!Array.isArray(data)) {
+    errors.push('unlocks.json: must be an array of unlocks.');
+    return { errors, warnings, stats: { recipes: 0, lines: 0 } };
+  }
+
+  const seen = new Set<string>();
+  data.forEach((item: unknown, index: number) => {
+    const where = `unlocks.json[${index}]`;
+    if (!isRecord(item)) {
+      errors.push(`${where}: not an object.`);
+      return;
+    }
+    const id = item['id'];
+    const label = typeof id === 'string' && id !== '' ? `unlocks.json "${id}"` : where;
+    if (typeof id !== 'string' || !ID_RE.test(id)) {
+      errors.push(`${where}: "id" must be a kebab-case string, got ${JSON.stringify(id)}.`);
+    } else if (seen.has(id)) {
+      errors.push(`${label}: duplicate id.`);
+    } else {
+      seen.add(id);
+    }
+
+    const kind = item['kind'];
+    if (typeof kind !== 'string' || !UNLOCK_KIND_IDS.includes(kind)) {
+      errors.push(`${label}: "kind" must be one of ${UNLOCK_KIND_IDS.join(', ')}, got ${JSON.stringify(kind)}.`);
+    }
+
+    const by = item['by'];
+    if (!isRecord(by)) {
+      errors.push(`${label}: "by" must be { level } or { badge, level? }.`);
+    } else if ('badge' in by) {
+      const badge = by['badge'];
+      if (typeof badge !== 'string' || !known.has(badge)) {
+        errors.push(`${label}: "by.badge" ${JSON.stringify(badge)} is not a badge id in data/badges.json.`);
+      } else if (retiredSet.has(badge)) {
+        warnings.push(`${label}: "by.badge" "${badge}" is a retired badge (it can not be earned any more).`);
+      }
+      if (by['level'] !== undefined && !isIntIn(by['level'], 1, BADGE_TIER_COUNT)) {
+        errors.push(`${label}: "by.level" on a badge unlock is the badge tier and must be an integer 1…${BADGE_TIER_COUNT}, got ${JSON.stringify(by['level'])}.`);
+      }
+      for (const key of Object.keys(by)) if (key !== 'badge' && key !== 'level') warnings.push(`${label}: unexpected key ${JSON.stringify(`by.${key}`)}.`);
+    } else {
+      if (!isIntIn(by['level'], UNLOCK_MIN_LEVEL, LEVELS_COUNT)) {
+        errors.push(`${label}: "by.level" must be an integer ${UNLOCK_MIN_LEVEL}…${LEVELS_COUNT}, got ${JSON.stringify(by['level'])}.`);
+      }
+      for (const key of Object.keys(by)) if (key !== 'level') warnings.push(`${label}: unexpected key ${JSON.stringify(`by.${key}`)}.`);
+    }
+
+    for (const field of ['icon', 'value'] as const) {
+      const v = item[field];
+      if (typeof v !== 'string' || v.trim() === '') errors.push(`${label}: "${field}" must be a non-empty string.`);
+    }
+
+    for (const lang of ['nl', 'en'] as const) {
+      const text = item[lang];
+      if (!isRecord(text)) {
+        errors.push(`${label}: "${lang}" must be { name, description }.`);
+        continue;
+      }
+      for (const field of ['name', 'description'] as const) {
+        const v = text[field];
+        if (typeof v !== 'string' || v.trim() === '') errors.push(`${label}: "${lang}.${field}" must be a non-empty string.`);
+      }
+      for (const key of Object.keys(text)) if (!UNLOCK_TEXT_KEYS.has(key)) warnings.push(`${label}: unexpected key ${JSON.stringify(`${lang}.${key}`)}.`);
+    }
+
+    for (const key of Object.keys(item)) if (!UNLOCK_KEYS.has(key)) warnings.push(`${label}: unexpected key ${JSON.stringify(key)}.`);
+  });
+
+  return { errors, warnings, stats: { recipes: 0, lines: data.length } };
+}
+
+// ---------------------------------------------------------------------------
 // Swaps: data/swaps.json (docs/phase-5-spec.md "Block F" item 2, src/domain/variants.ts `Swap`)
 // ---------------------------------------------------------------------------
 //
@@ -1398,6 +1497,14 @@ function main(): void {
   const levels = validateLevels(readJson(join(root, levelsRel)));
   print(levelsRel, levels, `${levels.stats.lines} levels`);
   if (levels.errors.length > 0) failed = true;
+
+  // Unlocks (docs/specs/xp-levels.md §2e): a badge unlock must name a badge of data/badges.json.
+  const unlocksRel = 'data/unlocks.json';
+  const badgeIds = badgeRows.filter(isRecord).map((b) => b['id']).filter((id): id is string => typeof id === 'string');
+  const retiredIds = badgeRows.filter((b) => isRecord(b) && b['retired'] === true).map((b) => (b as Record<string, unknown>)['id']).filter((id): id is string => typeof id === 'string');
+  const unlocks = validateUnlocks(readJson(join(root, unlocksRel)), badgeIds, retiredIds);
+  print(unlocksRel, unlocks, `${unlocks.stats.lines} unlocks`);
+  if (unlocks.errors.length > 0) failed = true;
 
   const swapsRel = 'data/swaps.json';
   const swaps = validateSwaps(readJson(join(root, swapsRel)), dictData.ingredients as unknown as Record<string, unknown>[]);

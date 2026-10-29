@@ -86,6 +86,11 @@ parser, dictionary, token, migration tools, Node tests) stays usable unchanged.
   page to the WebAPK (link capture stays "not guaranteed", above). The UI therefore always offers
   "copy the link and paste it in Chrome" next to the button and promises nothing. On iPhone a link
   always opens Safari (invariant 5); the notice says so and never claims otherwise.
+- Phase 6, 6D-4a (29 Oct 2026): the two unlockable cook-mode typefaces are local assets, not an npm
+  dependency and never a Google Fonts link (offline-first): `public/fonts/patrick-hand.woff2` (Patrick
+  Hand, 23,944 B) and `public/fonts/cabin-sketch.woff2` (Cabin Sketch, weight 400 only, 78,908 B), both
+  SIL Open Font License 1.1, the latin subset as Google Fonts serves it (fonts.gstatic.com, Patrick Hand
+  v25, Cabin Sketch v23); `@font-face` in src/styles/browse.css, precached by the service worker.
 - What she gets: the same app as Stijn, UI in British English, the 196 classics translated and
   reviewed by herself, her own recipes, planner, shopping list, cooking mode with wake lock, backup
   to Files, and receiving Stijn's recipes in ~10 s (long-press → Copy → app → Paste).

@@ -5,21 +5,43 @@
 // Through SheetPortal with the existing .sheet classes; the head `.sheet-head.with-actions` has only
 // Sluit on the right (13J), and Sluit appears only there (no second one at the bottom; Fable,
 // 28 Oct). Content: "🎉 Level {level}!" (head), the title from data/levels.json big, the note
-// muted when there is one. The "Ontgrendeld" list and "Bekijk Vrijgespeeld" come in 6D-3
-// (`LevelUpInfo.unlocked` is empty in 6D-1). Swiping it down, tapping beside it, Escape and Sluit
-// close it (clearLevelUp); there is nothing to keep. Never for a quiet recompute (settleXp sets
-// no levelUp then); badges off → nothing.
+// muted when there is one. Swiping it down, tapping beside it, Escape and Sluit close it
+// (clearLevelUp); there is nothing to keep. Never for a quiet recompute (settleXp sets no levelUp
+// then); badges off → nothing.
+// 6D-3 unlocks (= 6D-4a; §1d): under the title the head "Ontgrendeld" with one row per unlock in
+// `LevelUpInfo.unlocked` (icon, name, description; announceUnlocks already left out what
+// `unlocks.announced` held, so nothing is announced twice), then the avatar parts of every level
+// in between (`unlock.level` === that level, from avatarParts(); badges-avatar.md §3d) as one line
+// "Nieuw voor je avatar: …", and at the bottom "Bekijk Vrijgespeeld" (→ #/more/unlocks) only when
+// something in `unlocked` came free. Several levels at once: settleXp merged their unlocks.
 import type { JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { avatarParts } from '@/avatar';
 import { badgesEnabled } from '@/badges';
+import type { AvatarPart } from '@/domain/avatar';
 import { noteFor, titleFor } from '@/domain/levels';
 import { lang, t } from '@/i18n';
+import { navigate } from '@/router';
 import { clearLevelUp, levelUp, xpPops, type LevelUpInfo } from '@/xp';
 import { SheetPortal } from './SheetPortal';
 import { xpPopsActive } from './XpPop';
 
 /** How far (px) the sheet must be pulled down before letting go closes it (as CookedSheet/SideSheet). */
 const DISMISS_PX = 80;
+
+/**
+ * The avatar parts that come free on the levels from `fromExclusive` + 1 up to `toInclusive`: a level
+ * unlock equal to one of those levels (badge parts come with their badge, not with a level). In
+ * level order, within a level in file order.
+ */
+export function avatarPartsForLevels(parts: Iterable<AvatarPart>, fromExclusive: number, toInclusive: number): AvatarPart[] {
+  const list = [...parts];
+  const out: AvatarPart[] = [];
+  for (let level = fromExclusive + 1; level <= toInclusive; level++) {
+    for (const p of list) if ('level' in p.unlock && p.unlock.level === level) out.push(p);
+  }
+  return out;
+}
 
 export function LevelUpSheet(): JSX.Element | null {
   const info = levelUp.value;
@@ -57,6 +79,7 @@ function LevelUpBody(props: { info: LevelUpInfo; onClose: () => void }) {
   const heading = t('levelup.title', { level: info.to });
   const title = titleFor(info.to, l);
   const note = noteFor(info.to, l);
+  const parts = avatarPartsForLevels(avatarParts().values(), info.from, info.to);
   const closeBtn = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ y: number; id: number; dy: number } | null>(null);
@@ -130,6 +153,39 @@ function LevelUpBody(props: { info: LevelUpInfo; onClose: () => void }) {
           <div class="sheet-body levelup-body">
             <p class="levelup-name">{title}</p>
             {note && <p class="levelup-note muted">{note}</p>}
+            {(info.unlocked.length > 0 || parts.length > 0) && (
+              <section class="levelup-unlocks" aria-labelledby="levelup-unlocked">
+                <h3 id="levelup-unlocked" class="more-sub">
+                  {t('levelup.unlocked')}
+                </h3>
+                {info.unlocked.map((u) => (
+                  <div key={u.id} class="setting levelup-unlock">
+                    <span class="unlock-icon" aria-hidden="true">
+                      {u.icon}
+                    </span>
+                    <div class="label">
+                      {u[l].name}
+                      <small>{u[l].description}</small>
+                    </div>
+                  </div>
+                ))}
+                {parts.length > 0 && <p class="muted small levelup-parts">{t('badges.toastUnlock', { part: parts.map((p) => p[l]).join(', ') })}</p>}
+              </section>
+            )}
+            {info.unlocked.length > 0 && (
+              <div class="actions levelup-actions">
+                <button
+                  type="button"
+                  class="btn btn-block"
+                  onClick={() => {
+                    onClose();
+                    navigate('/more/unlocks');
+                  }}
+                >
+                  {t('levelup.seeUnlocks')}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

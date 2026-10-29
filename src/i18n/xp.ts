@@ -1,8 +1,9 @@
 // Strings of XP, levels, the "+12" pop, the level-up sheet and the honest 0-XP notes
 // (docs/specs/xp-levels.md §1a–§1e, block 6D-1; literal from the spec, NL and British English).
 // Merged in ./index.ts after badges. Level TITLES and NOTES come from data/levels.json
-// (src/domain/levels.ts), never from here. Later blocks add `unlocks.*`, `progress.*` and
-// `calendar.*` to this file. Numbers with thousands go through Intl.NumberFormat at the call site.
+// (src/domain/levels.ts), never from here. Block 6D-3 (unlocks, = 6D-4a) adds `unlocks.*`; 6D-4
+// adds `progress.*` and `calendar.*`. Numbers with thousands go through Intl.NumberFormat at the
+// call site.
 import type { Dict } from './index';
 
 export const xp: Dict = {
@@ -32,5 +33,21 @@ export const xp: Dict = {
   'xp.rulesChanged': {
     nl: 'De XP-regels zijn vernieuwd; je level is opnieuw berekend.',
     en: 'The XP rules were updated; your level has been recalculated.',
+  },
+  // §1f the Vrijgespeeld screen (#/more/unlocks, block 6D-3 = 6D-4a): one card per kind, a row per
+  // unlock; names and descriptions of the unlocks themselves come from data/unlocks.json.
+  'unlocks.title': { nl: 'Vrijgespeeld', en: 'Unlocked' },
+  'unlocks.kind.confetti': { nl: 'Confetti', en: 'Confetti' },
+  'unlocks.kind.timerSound': { nl: 'Timergeluiden', en: 'Timer sounds' },
+  'unlocks.kind.cookedSound': { nl: 'Geluid bij Gekookt!', en: 'Sound on Cooked!' },
+  'unlocks.kind.cookFont': { nl: 'Lettertype kookstand', en: 'Cook-mode typeface' },
+  'unlocks.kind.feature': { nl: "Extra's", en: 'Extras' },
+  'unlocks.try': { nl: 'Probeer', en: 'Try' },
+  'unlocks.atLevel': { nl: 'Level {level}', en: 'Level {level}' },
+  'unlocks.atBadge': { nl: 'Badge: {name}', en: 'Badge: {name}' },
+  'unlocks.soon': { nl: 'Binnenkort', en: 'Coming soon' },
+  'unlocks.phoneWide': {
+    nl: 'Wat iemand op deze telefoon vrijspeelt, kan iedereen hier gebruiken. Aan/uit geldt voor deze telefoon.',
+    en: 'Whatever anyone unlocks on this phone, everyone here can use. On/off applies to this phone.',
   },
 };

@@ -4,6 +4,17 @@ Status: compleet (Fable, 22 okt 2026)
 
 **Stijn, 28 okt 2026:** Oma kookt beter dan level 6 → Oma staat nu op **level 39** (was Tafelheld); level 6 heet **Tosti-tovenaar** / Toastie wizard. data/levels.json en tests/levels.test.ts zijn aangepast.
 Gebouwd: 28 okt 2026 (blok 6D-1; domein wf_a65d1ec4-750, app-laag + UI wf_04bdbbc2-d81)
+**Na de lens van 6D-4a (besluit Fable, 29 okt):** (1) badges uit = niets van de ontgrendelingen zichtbaar óf hoorbaar:
+de schakelaar "Geluid bij Gekookt!" en de tadaa zelf hangen ook aan `badgesEnabled` (§1/§5.9 winnen van §1g voor
+de tadaa, die standaard aan staat en geen keuze van de persoon is). (2) Iconen van data/unlocks.json akkoord zoals
+bouwer A ze koos. (3) §6a-getallen aangepast aan de avatar-maker op level 3. (4) Vrijgespeeld noemt geen
+avatar-onderdelen per level: de maker toont "Lv n" op de tegels en het level-up-venster noemt ze; genoeg. (5) De knop
+"Probeer" naast de Gekookt!-schakelaar blijft. (6) Een badge-ontgrendeling wordt pas bij de volgende level-up genoemd
+(tot dan op Vrijgespeeld); aanvaard. (7) De validatorregel "elk level minstens één ontgrendeling" gaat pas aan vanaf de
+eerste uitbreidingsronde (≥ 100 ontgrendelingen + avatar-onderdelen samen), niet nu. (8) Geluidskeuzes van bouwer B
+(pieken, uitklinktijden, Cabin Sketch alleen gewicht 400) en de fixer-fix voor het 🔔-knopje (`dropTimerSound`) akkoord.
+Challenges (level 20) en gouden modus: eigen blok, later (Stijn 29 okt: "nog niet level 20 challenges").
+Gebouwd: 29 okt 2026 (blok 6D-4a = 'Blok 6D-3 — ontgrendelingen' hier, workflow wf_cfd9a2be-d23; nabewerking (1) en (3) door Fable)
 
 **Besluit Stijn (24 okt 2026) — ontgrendelingen rijk, niet spaarzaam.** Het level-up-overzicht en de pagina
 Vrijgespeeld moeten een "rijk scala" tonen: bij elke level-up minstens één ding, liefst meer. Daarom groeit
@@ -1124,9 +1135,9 @@ stars)`; dagen via `Date.UTC`-middagen zodat de lokale dag niet verschuift op St
 per taal, level 2 = 'T-rex' (beide), 6 = 'Oma'/'Grandma', 100 = 'Best Chef of the Universe' (beide);
 `normalizeLevels([])` → 100 keer 'Level N'; `titleFor(101)` → 'Level 101' nooit een exception.
 **tests/unlocks.test.ts** (6D-3): `normalizeUnlocks` laat items zonder `by`/`value` weg; `unlockedIds` op
-level 3 → {confetti-double}; level 25 zonder badges → 11 ids; badge `op-dreef` → confetti-fire erbij;
-`unlocksForLevels(1, 3)` → [confetti-double]; `unlocksForLevels(3, 8)` → avatar-maker, sound-cowbell,
-confetti-veggies, font-chalk (in de volgorde van het bestand). Validator: dubbele id, `by.level`
+level 3 → {confetti-double, avatar-maker} (de avatar-maker staat op level 3, kritische lezer); level 25 zonder
+badges → 11 ids; badge `op-dreef` → confetti-fire erbij; `unlocksForLevels(1, 3)` → [confetti-double, avatar-maker];
+`unlocksForLevels(3, 8)` → sound-cowbell, confetti-veggies, font-chalk (in de volgorde van het bestand). Validator: dubbele id, `by.level`
 1 of 101, onbekende badge, lege `value` → fouten.
 **tests/share.test.ts** (6D-4, nieuw blok "progress (#x=)"): `buildProgressEnvelope` → `t: 'x'`, `by` =
 naam; round-trip via codec → `kind 'progress'`, `progress` toEqual; tolerantie: level 0/101/'12' → 1,

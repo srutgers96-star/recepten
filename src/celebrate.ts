@@ -3,8 +3,16 @@
 // off with the setting `confetti = false` and under `prefers-reduced-motion`. Phase 5 block C:
 // 'stars' is the small burst (rating a recipe), 'milestone' stays the big one (cook milestones,
 // new badges — src/badges.ts fires it from checkNewBadges).
+//
+// 6D-4a (docs/specs/xp-levels.md §1g): every burst carries a confetti style. 'cooked', 'milestone'
+// and 'firstRecipe' pick one from the active styles (`activeConfettiStyles()`: 'default' plus the
+// unlocked, switched-on ones), deterministically per burst (`hash32(String(at)) % n`), so it
+// alternates without feeling random; 'stars' always stays the small default burst. "Probeer" on
+// Vrijgespeeld passes the style it wants to show.
 import { signal } from '@preact/signals';
 import { getSetting, setSetting } from '@/db/repo';
+import { hash32 } from '@/domain/xp';
+import { activeConfettiStyles } from '@/unlocks';
 
 export type CelebrationKind = 'cooked' | 'firstRecipe' | 'milestone' | 'stars';
 
@@ -12,7 +20,12 @@ export interface Celebration {
   kind: CelebrationKind;
   /** Epoch ms; a new value re-triggers the burst even for the same kind. */
   at: number;
+  /** Confetti style (an unlock's `value`, e.g. 'double', 'veggies'); 'default' = the plain burst. */
+  style: string;
 }
+
+/** The plain burst: no unlock needed. */
+export const DEFAULT_CONFETTI_STYLE = 'default';
 
 export const CONFETTI_SETTING = 'confetti';
 
@@ -55,11 +68,23 @@ export function prefersReducedMotion(): boolean {
   }
 }
 
-/** Fire a celebration (no-op when confetti is off or the user prefers reduced motion). */
-export function celebrate(kind: CelebrationKind): void {
+/** The style of a burst: 'stars' stays plain; the others rotate over the active styles by `at`. */
+function pickStyle(kind: CelebrationKind, at: number): string {
+  if (kind === 'stars') return DEFAULT_CONFETTI_STYLE;
+  const styles = activeConfettiStyles();
+  if (styles.length === 0) return DEFAULT_CONFETTI_STYLE;
+  return styles[hash32(String(at)) % styles.length] ?? DEFAULT_CONFETTI_STYLE;
+}
+
+/**
+ * Fire a celebration (no-op when confetti is off or the user prefers reduced motion). `style`
+ * forces a confetti style ("Probeer" on Vrijgespeeld); without it the burst picks one itself.
+ */
+export function celebrate(kind: CelebrationKind, opts?: { style?: string }): void {
   void loadCelebrateSettings().then(() => {
     if (!confettiEnabled.value || prefersReducedMotion()) return;
-    celebration.value = { kind, at: Date.now() };
+    const at = Date.now();
+    celebration.value = { kind, at, style: opts?.style ?? pickStyle(kind, at) };
   });
 }
 

@@ -4,6 +4,105 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 29 okt (Opus): 6D-4a — ontgrendelingen: Vrijgespeeld, confetti-stijlen, geluiden, lettertypes
+Gebouwd volgens docs/specs/xp-levels.md "Blok 6D-3 — ontgrendelingen" (= 6D-4a in README §1; bouwer A domein en
+app-laag, bouwer B motoren, bouwer C schermen, integrator). Niet gecommit. Geen Dexie-versie, geen nieuwe dependency,
+geen nieuwe fragmentsleutel. Gate groen: check, 1366 tests (60 bestanden), build, build:next, validate:data
+("data/unlocks.json: OK — 15 unlocks", 0 fouten). **Niet gebouwd:** de challenges op level 20 en de gouden modus
+(Stijn: "nog niet level 20 challenges"; §2e "Gereserveerd, NIET bouwen"). Ze staan ook niet in data/unlocks.json: een
+extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids" (§6a); die rij komt in het eigen blok.
+- **Domein en data:** src/domain/unlocks.ts (framework-vrij; `normalizeUnlocks` tolerant zoals normalizeBadges,
+  `unlockedIds`, `unlocksForLevels(from, to]`, `unlocksForBadge` met optioneel badge-niveau, `UNLOCK_KINDS` als
+  kaartvolgorde). data/unlocks.json: de 15 rijen van §2e letterlijk (ids, soorten, levels, badge op-dreef, values,
+  namen, beschrijvingen); avatar-maker op level 3. `validateUnlocks` in tools/validate-data.ts (na levels, krijgt de
+  badge-ids). tests/unlocks.test.ts: 29 tests. De verwachtingen van §6a ("level 3 → {confetti-double}",
+  "(1, 3] → [confetti-double]", "(3, 8] → avatar-maker, …") zijn van vóór de avatar-maker naar level 3 ging; de tests
+  volgen de kritische lezer: level 3 → {confetti-double, avatar-maker}, (3, 8] → koebel, groente, krijtbord.
+- **App-laag (src/unlocks.ts):** de exports van §3: `unlockedOnPhone` = vereniging over de lokale profielen (level uit
+  `xpStateFor`, badges van het eigen tabblad), `disabledUnlocks` (`unlocks.disabled`), `refreshUnlocks` (samengevoegd,
+  na elke settle-reeks en bij boot via `checkRulesVersion`), `isActive`, `setUnlockEnabled` (uitgezet gekozen
+  timergeluid → 'beeps', uitgezet gekozen lettertype → `cook.font` 'default'), `active…()` (badges uit = alleen de
+  standaardkeuzes) en `announceUnlocks` (schrijft `unlocks.announced`). src/xp.ts vult `LevelUpInfo.unlocked`;
+  meerdere level-ups in één sheet voegen hun ontgrendelingen samen.
+- **Motoren:** src/sounds.ts: koebel, gong, keukenwekker, fanfare en het tadaa bij Gekookt! volgens de recepten van §3
+  (`note()` kreeg een golfvorm-parameter achteraan; beeps/bell/melody klinken als voorheen), `cooked.sound` (standaard
+  aan), `previewCookedSound()` en `tapAudioContext()` (het `previewCtx`-patroon; de context van timers.ts is privé).
+  Het tadaa wordt in `recordCooked` en CookScreen.onCooked vóór de eerste await gewekt en na het opslaan gespeeld.
+  src/celebrate.ts: `celebrate(kind, { style? })`, rotatie `hash32(String(at)) % n` over de actieve stijlen, 'stars'
+  altijd de kleine standaard. Confetti.tsx: double (160), veggies/party/trex/fire/stars als emoji-snippers (18 px),
+  gold. Lettertypes public/fonts/patrick-hand.woff2 + cabin-sketch.woff2 (samen 102.852 B, OFL, latin-subset; alleen
+  gewicht 400 van Cabin Sketch, anders over de 120 kB); beide staan in de precache van dist/ en dist-next/, de CSS wijst
+  naar /recepten/fonts/ resp. /recepten/next/fonts/. Kookstand: `data-font` op `.cook-card`, Krijtbord #2f4f3a met
+  gebroken-witte letters (#f3efe4) in beide thema's.
+- **Schermen:** `#/more/unlocks` (UnlocksScreen): XpBar, kaarten per soort, schakelaar en "Probeer" bij ontgrendeld,
+  🔒 "Level n" / "Badge: Op dreef" bij nog niet, onderaan `unlocks.phoneWide`; badges uit = alleen `badges.disabled`.
+  Meer: rij "🎁 Vrijgespeeld" onder Badges (badges aan); de timergeluidenkiezer biedt de vier + de actieve; schakelaar
+  "Geluid bij Gekookt!" zodra `sound-cooked-tada` actief is; "Lettertype kookstand" zodra ≥ 1 lettertype actief is.
+  LevelUpSheet: kop "Ontgrendeld" met de rijen, één regel "Nieuw voor je avatar: …" met de avatar-onderdelen van de
+  tussenliggende levels (badges-avatar §3d), "Bekijk Vrijgespeeld" alleen als er iets ontgrendeld werd. Alle keys van
+  §1d/§1f/§1g letterlijk in NL en EN; geen bouwer meldde een ontbrekende key.
+- **Integrator:** `unlocks.disabled` in `DEVICE_LOCAL_SETTINGS` (src/db/repo.ts; §2g, kritische lezer; geen bouwer bezat
+  repo.ts). Inline styles van UnlocksScreen en LevelUpSheet naar src/styles/xp.css. `COOK_FONT_SETTING`/`CookFont` één
+  export in src/unlocks.ts (stond drie keer los). Krijtbordkaart: de cobalt accenten (kopje "Klaarzetten"/"Stap 1 van
+  4", "Alles klaar ✓", de gekozen portiepil) stonden met ±1,5:1 contrast op het groen; in de krijtkaart is `--cobalt` nu
+  het gebroken wit (met groene tekst erop) en tomaat/rozemarijn/oranje hun donkere-thema-tint. Eén regel in
+  docs/adr/0001-runtime.md over de lettertypes (OFL, herkomst; ADR-0008 is al bezet door het iOS-pad). DEVICE-TEST rij
+  98 uit §6c, NL en EN, direct na rij 97; bij resultaat 2 één zin erbij: wie al andere confetti heeft (Groenteconfetti
+  vanaf level 7), ziet die afwisselen, maar de dubbele niet meer.
+- **Dev-app (375 px, NL en EN):** pagina zonder zijwaarts scrollen; dev-profiel level 6: Dubbele confetti, Koebel en de
+  avatar-maker vrij, de rest met slotje en "Level n" / "Badge: Op dreef" ("Badge: On a roll"). Dubbele confetti uit →
+  `celebrate('cooked')` geeft de standaardburst (80, `data-style="default"`); weer aan, "Probeer" → 160 snippers. "Probeer"
+  bij Koebel → 12 oscillatoren (stil gerenderd in een OfflineAudioContext). Meer: Koebel in de geluidenkiezer;
+  lettertype- en Gekookt!-rij pas met alles tijdelijk vrij (alleen het signaal, geen database); Krijtbord → groene kaart
+  met Cabin Sketch, Handschrift → Patrick Hand, daarna terug op Standaard. Echte kookbeurt op het dev-profiel: 6 → 7,
+  sheet "🎉 Level 7!" met Groenteconfetti en Vlammetjes (op-dreef had dit profiel al) en "Nieuw voor je avatar: Volle
+  baard, Garde"; "Bekijk Vrijgespeeld" opent `#/more/unlocks`. Badges uit (signaal): alleen de badges-uit-tekst, geen
+  rij in Meer, geen XpBar. Geen consolefouten. In de dev-database blijven: die kookbeurt, de badge Stap voor stap,
+  `unlocks.announced` van het dev-profiel, `cook.font` 'default', `unlocks.disabled` [] (kooksessie gesloten, groep
+  Instellingen weer ingeklapt).
+- **Graag beslissen (Stijn/Fable):** (1) **Iconen:** §2e heeft geen icoonkolom, `Unlock.icon` is verplicht; bouwer A
+  koos 🎊 🙂 🐄 🥕 🖍️ 🔔 🐔 ⏲️ ✍️ 🎉 🦖 🎺 🥇 ⭐ 🔥 (waar de beschrijving een emoji had, die). Alleen data. (2) **Badges uit
+  en het tadaa:** `isActive` is letterlijk "ontgrendeld én niet uitgezet"; wie met badges uit level 20 haalt, hoort
+  daarna het tadaa (standaard aan), en de schakelaar in Meer blijft zichtbaar zolang het actief is (anders kun je het
+  niet uitzetten). Een momentopname "wat actief was toen badges uitgingen" staat niet in de spec. (3) **Vrijgespeeld en
+  avatar-onderdelen:** badges-avatar §3d noemt de onderdelen per level alleen voor het level-up-overzicht; op
+  Vrijgespeeld staat alleen de rij Avatar-maker (knop "Avatar aanpassen"; de maker toont "Lv n" op vergrendelde tegels).
+  Een lijst per level daar heeft geen plek of key in de spec. (4) **Feature-rij zonder schakelaar:** de avatar-maker
+  "linkt" (§1f) en heeft dus geen aan/uit; onder level 3 voor het actieve profiel staat `avatar.lockedHint`. (5) De regel
+  in het level-up-overzicht hergebruikt `badges.toastUnlock` ("Nieuw voor je avatar: {part}"); de spec geeft er geen
+  eigen key voor. Die onderdelen worden niet in `unlocks.announced` bijgehouden (zakt het level na een herstel en klimt
+  het weer, dan worden ze opnieuw genoemd). (6) **"Probeer" naast "Geluid bij Gekookt!" in Meer** (bouwer C; §1g noemt
+  alleen schakelaar + sub). (7) Een badge-ontgrendeling (Vlammetjes) wordt pas bij de eerstvolgende level-up
+  aangekondigd; zonder level-up staat hij alleen op Vrijgespeeld. (8) **Validatorregel "elk level ≥ 1 ontgrendeling"**
+  (badges-avatar, "zodra de bibliotheek groot genoeg is"; STATUS noemde hem bij 6D-4a) niet gebouwd: §2e zegt "niet elk
+  level geeft iets, dat is aanvaard". (9) Geluidskeuzes van bouwer B waar de recepten niets zeggen: akkoorden van
+  fanfare en tadaa delen samen piek 0,5; tadaa-loopje piek 0,35, uitklinken 0,1 s; gong-boventonen klinken 3 s uit
+  (samen piek 0,54, zonder vervorming). (10) Randgeval: staat `timer.sound` op 'off' en is het uitgezette geluid het
+  onthouden laatste (`timer.soundLast`), dan brengt het 🔔-knopje dat geluid terug. (11) Of het tadaa op de iPhone
+  klinkt (gewekt vóór de eerste await, gespeeld na het opslaan) kan alleen op het toestel; rij 98 dekt het niet (het
+  komt pas op level 20).
+
+- **Besluit Fable (29 okt, na de lens; zelf aangepast, commit van 6D-4a):** badges uit = niets van de ontgrendelingen
+  zichtbaar óf hoorbaar (schakelaar "Geluid bij Gekookt!" en de tadaa hangen ook aan `badgesEnabled`; MoreScreen en
+  `wakeCookedSound` in src/cooklog.ts). Iconen akkoord; §6a-getallen aangepast (avatar-maker op level 3); Vrijgespeeld
+  noemt geen avatar-onderdelen per level (genoeg via de maker en het level-up-venster); "Probeer" blijft; de
+  validatorregel "elk level iets" pas vanaf de eerste uitbreidingsronde; geluidskeuzes en de 🔔-fix akkoord. Alles in
+  xp-levels.md onder "Na de lens van 6D-4a".
+
+## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+Vandaag gebouwd en live op main (allemaal lichte modus, Opus-bouwers, Fable-nabewerking): 6D-2b (badgepagina),
+6D-2c (?-kaartjes, Hele cirkel, boodschappenspoor, stille registratie bij start), 6D-3 (avatar ronde 1, 66
+onderdelen, elf lagen) en 6D-4a (Vrijgespeeld, confetti-stijlen, geluiden, lettertypes). Stijn (29 okt): "doe het
+unlocks block nog maar, nog niet level 20 challenges. daarna pauze."
+- **Volgende blokken in volgorde (README §1):** 6D-4b sync `#x=` + kookkalender (xp-levels.md "Blok 6D-4"; Fable kijkt
+  vóór main naar share/token, invariant 4 en 7, CLAUDE.md-regel over `#x=`) → 13F (DATA_VERSION 10, Fable-blik) → 13D
+  (Fable-blik) → 6C (vaste lijst; voegt het haakje `standingList` en de badge `vaste-klant` toe) → 13J → Z handleiding →
+  challenges-blok (level 20, Fable ontwerpt de eerste set; IDEAS 3) → Fable-eindcontrole (kleiner).
+- **Open voor Stijn bij het testen:** DEVICE-TEST 94–98 (badges, ?-kaartjes, Hele cirkel rij 103, avatar 96–97,
+  Vrijgespeeld 98). Of de tadaa op de iPhone klinkt, is alleen op het toestel te zien (vanaf level 20).
+- **Ideeën genoteerd (docs/IDEAS.md):** 4 boodschappen-badges over de 1600 ingrediënten (spoor telt al), 5 pull-down-
+  profiel met grote avatar (en Meer rustiger), 6 horizontaal swipen tussen de hoofdtabs.
+- **Budget:** weeklimiet ±17 % na vier blokken; per licht blok ±4–5 % (1,2–1,6 M subagent-tokens).
 ## 29 okt (Opus): 6D-3 — avatar-maker, 66 onderdelen (ronde 1), avatar op het kaartje en in de schermen
 Gebouwd volgens docs/specs/badges-avatar.md blok 6D-3 (bouwer A domein en contract, bouwer B maker, bouwer C schermen,
 integrator). Niet gecommit. Geen Dexie-versie, geen nieuwe dependency, geen nieuwe fragmentsleutel (`v` blijft 2). Gate
