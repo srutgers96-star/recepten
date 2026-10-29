@@ -22,12 +22,15 @@ import { normalizeSource, slugId, initialOf, foldDiacritics, type SourceRecipe }
 import {
   FROZEN_ENVELOPE_B,
   FROZEN_ENVELOPE_F,
+  FROZEN_ENVELOPE_F_AVATAR,
   FROZEN_ENVELOPE_P,
   FROZEN_ENVELOPE_W_SIDE,
   FROZEN_TOKEN_B,
   FROZEN_TOKEN_B_FFLATE,
   FROZEN_TOKEN_F,
   FROZEN_TOKEN_F_FFLATE,
+  FROZEN_TOKEN_F_AVATAR,
+  FROZEN_TOKEN_F_AVATAR_FFLATE,
   FROZEN_TOKEN_P,
   FROZEN_TOKEN_P_FFLATE,
   FROZEN_TOKEN_W_SIDE,
@@ -134,6 +137,15 @@ describe('token codec', () => {
         // The frozen token IS what this codec produces for that envelope today (byte-for-byte).
         const expected = engine === 'native' ? FROZEN_TOKEN_F : FROZEN_TOKEN_F_FFLATE;
         expect(await encodeToken(FROZEN_ENVELOPE_F, { engine })).toBe(expected);
+      });
+
+      // docs/specs/badges-avatar.md §2g/§6a (6D-3): the member card with an optional `avatar`.
+      it('decodes the frozen phase-6 #f= member-card token with an avatar (native- and fflate-produced)', async () => {
+        expect(await decodeToken(FROZEN_TOKEN_F_AVATAR, { engine })).toEqual(FROZEN_ENVELOPE_F_AVATAR);
+        expect(await decodeToken(FROZEN_TOKEN_F_AVATAR_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_F_AVATAR);
+        // The frozen token IS what this codec produces for that envelope today (byte-for-byte).
+        const expected = engine === 'native' ? FROZEN_TOKEN_F_AVATAR : FROZEN_TOKEN_F_AVATAR_FFLATE;
+        expect(await encodeToken(FROZEN_ENVELOPE_F_AVATAR, { engine })).toBe(expected);
       });
 
       // docs/specs/labels-categorieen.md §2d/§6a: a week plan with a side dish (`of` on the item).

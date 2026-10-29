@@ -7,6 +7,7 @@ import {
   matchMemberForCard,
   memberByName,
   memberFromCard,
+  memberFromProfile,
   membersFrom,
   normalizeHousehold,
   putMember,
@@ -16,6 +17,7 @@ import {
   type MemberCard,
 } from '../src/domain/household';
 import type { Profile } from '../src/domain/model';
+import type { AvatarSpec } from '../src/domain/avatar';
 
 const STIJN: Profile = { id: 'p:stijn0001', name: 'Stijn', lang: 'nl', color: '#2b4fa8', createdAt: '2026-09-01T00:00:00.000Z' };
 const GABI_CARD: MemberCard = { id: 'p:gabi00001', name: 'Gabi', color: '#d9402b', lang: 'en', deviceId: 'd:iphone01' };
@@ -105,6 +107,54 @@ describe('upsertMemberFromCard', () => {
     expect(all).toHaveLength(1);
     expect(all[0]!.local).toBe(true);
     expect(all[0]!.id).toBe(STIJN.id);
+  });
+});
+
+// --- Block 6D-3: the avatar on members and cards (docs/specs/badges-avatar.md §1c, §2f, §6a) -------
+
+const AVATAR: AvatarSpec = { v: 1, parts: ['face-round', 'eyes-happy', 'mouth-grin', 'hair-curly', 'body-apron', 'hat-toque'], tone: '#e0b08a', hair: '#8a5a2b' };
+const OTHER_AVATAR: AvatarSpec = { v: 1, parts: ['face-oval', 'eyes-dots', 'mouth-smile', 'body-tee'] };
+
+describe('avatar on members and cards', () => {
+  it('cardFromMember puts the avatar on the card only when the profile has a usable one', () => {
+    expect(cardFromMember({ ...STIJN, avatar: AVATAR }, 'd:pixel001')).toEqual({ id: 'p:stijn0001', name: 'Stijn', color: '#2b4fa8', lang: 'nl', deviceId: 'd:pixel001', avatar: AVATAR });
+    expect(cardFromMember(STIJN)).not.toHaveProperty('avatar');
+    expect(cardFromMember({ ...STIJN, avatar: null })).not.toHaveProperty('avatar');
+    expect(cardFromMember({ ...STIJN, avatar: { v: 2, parts: ['face-round'] } as unknown as AvatarSpec })).not.toHaveProperty('avatar');
+  });
+
+  it('memberFromCard keeps a usable avatar and leaves a broken one out', () => {
+    expect(memberFromCard({ ...GABI_CARD, avatar: AVATAR }).avatar).toEqual(AVATAR);
+    expect(memberFromCard({ ...GABI_CARD, avatar: 'x' as unknown as AvatarSpec })).toEqual(memberFromCard(GABI_CARD));
+    expect(memberFromCard(GABI_CARD)).not.toHaveProperty('avatar');
+  });
+
+  it('a stored member keeps its avatar through normalizeHousehold (normalizeMember); a broken one is dropped', () => {
+    const h = upsertMemberFromCard(setting(), { ...GABI_CARD, avatar: AVATAR });
+    const stored = normalizeHousehold(JSON.parse(JSON.stringify(h)));
+    expect(stored.members[0]!.avatar).toEqual(AVATAR);
+    // card -> member -> card round-trips with the avatar
+    expect(cardFromMember(stored.members[0]!, stored.members[0]!.deviceId)).toEqual({ ...GABI_CARD, avatar: AVATAR });
+    const broken = normalizeHousehold({ name: '', members: [{ id: 'p:gabi00001', name: 'Gabi', color: '#d9402b', local: false, avatar: { v: 1, parts: 'face-round' } }] });
+    expect(broken.members).toHaveLength(1);
+    expect(broken.members[0]).not.toHaveProperty('avatar');
+  });
+
+  it("upsertMemberFromCard updates an existing member's avatar (and a card without one clears it)", () => {
+    const h1 = upsertMemberFromCard(setting(), { ...GABI_CARD, avatar: AVATAR });
+    const h2 = upsertMemberFromCard(h1, { ...GABI_CARD, avatar: OTHER_AVATAR });
+    expect(h2.members).toHaveLength(1);
+    expect(h2.members[0]!.avatar).toEqual(OTHER_AVATAR);
+    const h3 = upsertMemberFromCard(h2, GABI_CARD);
+    expect(h3.members[0]).not.toHaveProperty('avatar');
+  });
+
+  it("memberFromProfile copies the profile's avatar, so local members show it (membersFrom)", () => {
+    expect(memberFromProfile({ ...STIJN, avatar: AVATAR }).avatar).toEqual(AVATAR);
+    expect(memberFromProfile(STIJN)).not.toHaveProperty('avatar');
+    expect(memberFromProfile({ ...STIJN, avatar: null })).not.toHaveProperty('avatar');
+    const all = membersFrom([{ ...STIJN, avatar: AVATAR }], upsertMemberFromCard(setting(), { ...GABI_CARD, avatar: OTHER_AVATAR }));
+    expect(all.map((m) => m.avatar)).toEqual([AVATAR, OTHER_AVATAR]);
   });
 });
 

@@ -12,6 +12,7 @@ import badgesData from '@data/badges.json';
 import avatarPartsData from '@data/avatar-parts.json';
 import { celebrate, celebration } from './celebrate';
 import { allRecipes, boughtRecipeIds, getHousehold, getSetting, getSharedRecipes, listAllPhotosMeta, listCookLog, setSetting, sharedRecipeIds } from '@/db/repo';
+import { normalizeAvatarParts, type AvatarPart } from '@/domain/avatar';
 import { evaluateBadges, isLadder, normalizeBadges, normalizeEarned, type Badge, type BadgeFacts, type BadgeStatus } from '@/domain/badges';
 import { categoriesData } from '@/domain/data';
 import { featureCounts, normalizeFeatureLog } from '@/domain/features';
@@ -86,45 +87,16 @@ export function badgeData(): Badge[] {
 
 // ---------------------------------------------------------------------------- avatar parts
 
-/**
- * Placeholder for the avatar-part type of block 6D-3 (`AvatarPart` in src/domain/avatar.ts,
- * docs/specs/badges-avatar.md §2f; same fields, `layer` typed loosely). 6D-2a only needs the
- * nl/en name for the toast's second line; 6D-3 replaces this with an import from '@/domain/avatar'.
- */
-export interface AvatarPart {
-  id: string;
-  layer: string;
-  nl: string;
-  en: string;
-  unlock: { level: number } | { badge: string };
-  svg: string;
-}
-
+// The part type and its tolerant normalisation are src/domain/avatar.ts (block 6D-3). This module
+// keeps its own small cache instead of importing `avatarParts()` from src/avatar.ts, because that
+// module imports this one (badgeData, badgeTiersFor): no import cycle. Same data, same normaliser.
 let partsById: Map<string, AvatarPart> | null = null;
 
-/** One part of data/avatar-parts.json by id (tolerant read; the validator checks the file). */
+/** One part of data/avatar-parts.json by id (normalizeAvatarParts; the validator checks the file). */
 function avatarPartById(id: string): AvatarPart | undefined {
   if (!partsById) {
     partsById = new Map();
-    const raw: unknown = avatarPartsData;
-    if (Array.isArray(raw)) {
-      for (const item of raw as unknown[]) {
-        if (!item || typeof item !== 'object') continue;
-        const p = item as Record<string, unknown>;
-        const unlock = p['unlock'];
-        if (
-          typeof p['id'] === 'string' &&
-          typeof p['layer'] === 'string' &&
-          typeof p['nl'] === 'string' &&
-          typeof p['en'] === 'string' &&
-          typeof p['svg'] === 'string' &&
-          unlock !== null &&
-          typeof unlock === 'object'
-        ) {
-          partsById.set(p['id'], { id: p['id'], layer: p['layer'], nl: p['nl'], en: p['en'], svg: p['svg'], unlock: unlock as AvatarPart['unlock'] });
-        }
-      }
-    }
+    for (const p of normalizeAvatarParts(avatarPartsData as unknown, badgeData())) partsById.set(p.id, p);
   }
   return partsById.get(id);
 }

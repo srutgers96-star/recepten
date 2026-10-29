@@ -5,7 +5,10 @@
 // the setting with `local: false`. Cook-log entries keep `profileId`, which IS the member id of a
 // local member. Received recipes map their `by` name to a member with `memberByName`
 // (case-insensitive) when possible. One rule throughout: the same (folded) NAME is the same
-// person (`membersFrom`, `matchMemberForCard`, `memberByName`).
+// person (`membersFrom`, `matchMemberForCard`, `memberByName`). A member may carry an avatar
+// (docs/specs/badges-avatar.md §2f, block 6D-3): a local one from its profile, another one from
+// their card; every avatar that comes in goes through `normalizeAvatarSpec` (unusable = left out).
+import { normalizeAvatarSpec, type AvatarSpec } from './avatar.ts';
 import type { Lang, Profile } from './model.ts';
 import { randomId } from './model.ts';
 import type { MemberCard } from './share.ts';
@@ -21,6 +24,8 @@ export interface Member {
   local: boolean;
   /** Set by a member card that came from another phone (block F). */
   deviceId?: string;
+  /** The person's avatar: a local member's from its profile, another member's from their card (6D-3). */
+  avatar?: AvatarSpec;
 }
 
 export interface HouseholdSetting {
@@ -71,6 +76,8 @@ function normalizeMember(v: unknown): Member | null {
   const m: Member = { id: o.id, name: o.name.trim(), color: typeof o.color === 'string' && o.color.trim() ? o.color : DEFAULT_MEMBER_COLOR, local: false };
   if (isLang(o.lang)) m.lang = o.lang;
   if (typeof o.deviceId === 'string' && o.deviceId.trim()) m.deviceId = o.deviceId;
+  const avatar = normalizeAvatarSpec(o.avatar);
+  if (avatar) m.avatar = avatar;
   return m;
 }
 
@@ -89,9 +96,12 @@ export function normalizeHousehold(v: unknown): HouseholdSetting {
   return { name, members };
 }
 
-/** A profile on this phone as a member (id = profile id). */
+/** A profile on this phone as a member (id = profile id), with its avatar when it has one. */
 export function memberFromProfile(p: Profile): Member {
-  return { id: p.id, name: p.name, color: p.color, lang: p.lang, local: true };
+  const m: Member = { id: p.id, name: p.name, color: p.color, lang: p.lang, local: true };
+  const avatar = normalizeAvatarSpec(p.avatar);
+  if (avatar) m.avatar = avatar;
+  return m;
 }
 
 /**
@@ -147,18 +157,29 @@ export function removeMember(h: HouseholdSetting, id: string): HouseholdSetting 
 
 // --- Member cards (block F) ---------------------------------------------------------------------
 
-/** The card for a member of this phone (a profile): what "Deel mijn kaartje" puts in the `#f=` token. */
-export function cardFromMember(m: Pick<Member, 'id' | 'name' | 'color' | 'lang'>, deviceId?: string): MemberCard {
+/**
+ * The card for a member of this phone (a profile): what "Deel mijn kaartje" puts in the `#f=` token.
+ * The avatar goes on the card only when the profile has a usable one (6D-3; an optional key, so an
+ * older app ignores it and shows the initial).
+ */
+export function cardFromMember(
+  m: Pick<Member, 'id' | 'name' | 'color' | 'lang'> & { avatar?: AvatarSpec | null },
+  deviceId?: string,
+): MemberCard {
   const card: MemberCard = { id: m.id, name: m.name.trim(), color: m.color || DEFAULT_MEMBER_COLOR, lang: m.lang ?? 'nl' };
   if (deviceId && deviceId.trim()) card.deviceId = deviceId.trim();
+  const avatar = normalizeAvatarSpec(m.avatar);
+  if (avatar) card.avatar = avatar;
   return card;
 }
 
-/** A received card as a stored (non-local) member. */
+/** A received card as a stored (non-local) member; an unusable avatar on the card is left out. */
 export function memberFromCard(card: MemberCard): Member {
   const m: Member = { id: card.id, name: card.name.trim(), color: card.color && card.color.trim() ? card.color : DEFAULT_MEMBER_COLOR, local: false };
   if (isLang(card.lang)) m.lang = card.lang;
   if (typeof card.deviceId === 'string' && card.deviceId.trim()) m.deviceId = card.deviceId.trim();
+  const avatar = normalizeAvatarSpec(card.avatar);
+  if (avatar) m.avatar = avatar;
   return m;
 }
 
@@ -178,7 +199,8 @@ export function matchMemberForCard(members: readonly Member[], card: MemberCard)
 
 /**
  * Adds a received card to the setting, or updates the member it matches (`matchMemberForCard`):
- * name, colour, language and deviceId follow the card, the card's id wins. Local profiles are never
+ * name, colour, language, deviceId and avatar follow the card (a card without an avatar clears it:
+ * the sender went back to the initial), the card's id wins. Local profiles are never
  * touched: the setting only holds non-local members, and the caller checks `matchMemberForCard`
  * against the full list first to say "that is a profile on this phone" instead of adding.
  */

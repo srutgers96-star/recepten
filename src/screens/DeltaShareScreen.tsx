@@ -153,8 +153,9 @@ export function DeltaShareScreen() {
   const [busy, setBusy] = useState(false);
 
   // Partner choices: the household members (the other profiles on this phone, members from a card,
-  // hand-typed ones) first, then everyone else something was sent to before.
-  const members: Member[] = (household ? membersFrom(profiles.value, household) : profiles.value.map((p) => ({ id: p.id, name: p.name, color: p.color, lang: p.lang, local: true }) as Member)).filter(
+  // hand-typed ones) first, then everyone else something was sent to before. 6D-3: a local profile
+  // brings its avatar along (docs/specs/badges-avatar.md §1c), also while the household loads.
+  const members: Member[] = (household ? membersFrom(profiles.value, household) : profiles.value.map((p) => ({ id: p.id, name: p.name, color: p.color, lang: p.lang, local: true, avatar: p.avatar ?? undefined }) as Member)).filter(
     (m) => m.id !== me?.id && foldName(m.name) !== foldName(by),
   );
   const memberNames = new Set(members.map((m) => foldName(m.name)));

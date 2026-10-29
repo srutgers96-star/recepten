@@ -2,6 +2,7 @@
 // Node (tools, tests), in the app and in the Safari landing bundle. Every human-readable field is a
 // `Text` ({nl, en}); either side may be empty (CLAUDE.md invariant 3). Ids never change (invariant 1).
 import { slugId } from './recipe-source.ts';
+import type { AvatarSpec } from './avatar.ts';
 
 export type Lang = 'nl' | 'en';
 
@@ -166,6 +167,12 @@ export interface Profile {
   lang: Lang;
   color: string;
   createdAt: string;
+  /**
+   * The person's own avatar (docs/specs/badges-avatar.md §2f, block 6D-3), made in the avatar maker.
+   * Absent or null = the initial circle. Kept when badges are switched off (it is the person's, not
+   * the game's); travels in the backup with the profile and on the `#f=` member card.
+   */
+  avatar?: AvatarSpec | null;
 }
 
 export interface Favorite {

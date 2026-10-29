@@ -202,3 +202,33 @@ export const FROZEN_ENVELOPE_W_SIDE: Envelope = {
   },
   future: { keep: true },
 };
+
+// Phase 6 (docs/specs/badges-avatar.md §2g, block 6D-3): the `#f=` member card WITH an avatar,
+// produced ONCE on 2026-10-29 by both engines with encodeToken. `avatar` is an optional key in the
+// existing `#f=` envelope (no new fragment key, `v` stays 2): ids and palette colours only. An older
+// app ignores it and shows the initial; FROZEN_TOKEN_F above stays the card WITHOUT an avatar.
+export const FROZEN_TOKEN_F_AVATAR =
+  'TY7BTsMwEET_ZXpdI8cUSPcPOMMJxGGTOG3axHZcOxCq_Duy4IA0pxnNvLlhARtCAqMHoVnBeEnD2YEgxTXaPKpKK3N4rTTrojut9RsIPfiGoQMj8OX-6_BpZgHByWT_rbR-9BGMnWn2vdQgjOKOYLgRhM4uQ2ufy0jHT9N-_q6rtrAXSRILYAFXhCAxXcHv6KW1KvrsOhDsaq_qJCGsIEw-p5M6xqFQTzJE1eY4lqTx3aokRP-bJJX8nC0-CMm78nVndaNr-esVo5YHMQ22jdDnlKMtVy7WBnCK2W7bDw';
+export const FROZEN_TOKEN_F_AVATAR_FFLATE =
+  'TU_NUoQwDH6X7JU6pa7K9g0860nHQ6BhqQtt6bYoMry7qV52Jod8P0m-bLCAVhUk0NBDBe3KzUuyn44BFlZJ9ShqKdTptZZalrqTUr6x3oPewBo2BX25_z59qRmZdjjRzZbOjz4yPqj22GPDzIjuzIQbuTe02I6eyxKjn6bj_NPUXbm9YEIe-wtYVxAwpivod-ixIxF9doZdtNJVDBjCymDyOQ3iHG25OqCNostxLErrzSowRP-vJJH8nAk--G_vStYDyVY2JXyZK0SDD6ha2Hd-M6cc2bXBhSiATjHTvv8C';
+
+export const FROZEN_ENVELOPE_F_AVATAR: Envelope = {
+  v: 2,
+  t: 'f',
+  by: 'Stijn',
+  at: '2026-10-29T10:00:00.000Z',
+  f: {
+    id: 'p:k3x9w2qa',
+    name: 'Stijn',
+    color: '#2b4fa8',
+    lang: 'nl',
+    deviceId: 'd:7m4qz81c',
+    avatar: {
+      v: 1,
+      parts: ['face-round', 'eyes-happy', 'mouth-grin', 'hair-curly', 'body-apron', 'hat-toque'],
+      tone: '#e0b08a',
+      hair: '#8a5a2b',
+    },
+  },
+  future: { keep: true },
+};

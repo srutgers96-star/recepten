@@ -16,6 +16,9 @@
 //                          Apparaatcheck, Het verhaal, and "Over" (version, channel, build, GitHub).
 //                          (The Curator page was removed in phase 6, docs/phase-6-spec.md open
 //                          question 7; a classic's English is improved via Bewerk on the recipe.)
+// 6D-3 (docs/specs/badges-avatar.md §1b): a tap on the big avatar circle of the profile card opens
+// the avatar maker (<AvatarSheet/>) from level 3 with badges on; below that, or with badges off, the
+// circle is not a button and a tap does nothing. The card's circle shows the level ring.
 // A closed group shows its badge (unsent) on the group head, so nothing gets lost. The group head
 // is an <h2> wrapping the toggle button (not a heading inside a button, which screen readers drop
 // from their headings list), the standard disclosure pattern.
@@ -24,11 +27,13 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgesEnabled, loadBadgeSettings, setBadgesEnabled, syncCatalogIfNeeded } from '@/badges';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo, isIOS } from '@/components/AppInfo';
+import { AvatarSheet } from '@/components/AvatarSheet';
 import { browserLabel, OpenInChrome } from '@/components/BrowserNotice';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
 import { getFahrenheit, getHouseholdServings, getSetting, setFahrenheit, setHouseholdServings, setSetting } from '@/db/repo';
 import { baseDictionary, userIngredients } from '@/dictionary';
+import { AVATAR_MAKER_LEVEL } from '@/domain/avatar';
 import type { Lang } from '@/domain/model';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
@@ -41,7 +46,7 @@ import { loadSoundSettings, previewTimerSound, setTimerSound, setTimerVibrate, t
 import { canSpeak, loadSpeechSettings, readAloud, setReadAloud } from '@/speech';
 import { setTheme, theme, type Theme } from '@/theme';
 import { canListen, commandsEnabled, loadVoiceSettings, setCommandsEnabled } from '@/voice';
-import { Avatar } from './ProfilesScreen';
+import { Avatar, useAvatarLevel } from './ProfilesScreen';
 
 const GITHUB_URL = 'https://github.com/srutgers96-star/recepten';
 /**
@@ -386,6 +391,10 @@ export function MoreScreen() {
   const [groups, setGroups] = useState<GroupState>(loadGroupState);
   const [feedback, setFeedback] = useState(false);
   const [links, setLinks] = useState(false);
+  // 6D-3: the avatar maker for the active profile (level ring + gate from the derived XP level).
+  const [avatarOpen, setAvatarOpen] = useState(false);
+  const level = useAvatarLevel(active?.id);
+  const canEditAvatar = badgesEnabled.value && level !== undefined && level >= AVATAR_MAKER_LEVEL;
 
   const unsent = unsentChanges.value;
   const unseen = inboxUnseen.value;
@@ -454,7 +463,13 @@ export function MoreScreen() {
             <h2>{t('more.profile')}</h2>
             {active ? (
               <div class="profile-card">
-                <Avatar profile={active} big />
+                {canEditAvatar ? (
+                  <button type="button" class="icon-btn avatar-open" style={{ padding: 0, borderRadius: '999px' }} aria-label={t('avatar.open')} onClick={() => setAvatarOpen(true)}>
+                    <Avatar profile={active} big level={level} />
+                  </button>
+                ) : (
+                  <Avatar profile={active} big level={level} />
+                )}
                 <div class="who">
                   <strong>{active.name}</strong>
                   <span class="muted small">{t(active.lang === 'nl' ? 'lang.nl' : 'lang.en')}</span>
@@ -711,6 +726,7 @@ export function MoreScreen() {
       </div>
       {feedback && <FeedbackSheet onClose={() => setFeedback(false)} />}
       {links && <LinksSheet onClose={() => setLinks(false)} />}
+      {avatarOpen && active && <AvatarSheet profile={active} onClose={() => setAvatarOpen(false)} />}
     </>
   );
 }

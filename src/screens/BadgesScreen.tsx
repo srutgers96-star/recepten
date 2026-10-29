@@ -16,7 +16,7 @@
 // note: gamification never in the way (PLAN.md §0).
 import type { ComponentChildren } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import avatarPartsData from '@data/avatar-parts.json';
+import { avatarParts } from '@/avatar';
 import { HOUSEHOLD_KINDS, badgeStatuses, badgesEnabled, loadBadgeSettings } from '@/badges';
 import { Header } from '@/components/Header';
 import { getHousehold } from '@/db/repo';
@@ -132,29 +132,14 @@ function dayMonth(md: [number, number], l: Lang): string {
   return new Intl.DateTimeFormat(l === 'nl' ? 'nl-NL' : 'en-GB', { day: 'numeric', month: 'short' }).format(new Date(2000, md[0] - 1, md[1]));
 }
 
-let partNames: Map<string, { nl: string; en: string }> | null = null;
-
 /**
- * The nl/en name of an avatar part (data/avatar-parts.json, checked by the validator) for the line
- * "Geeft: {part}"; null when the id is unknown (then the line is left out, never a raw id).
- * 6D-3 brings `avatarParts()` in src/avatar.ts; this tolerant read only needs the names.
+ * The nl/en name of an avatar part (`avatarParts()`, the normalized data/avatar-parts.json of block
+ * 6D-3) for the line "Geeft: {part}"; null when the id is unknown (then the line is left out, never
+ * a raw id).
  */
 function partName(id: string, l: Lang): string | null {
-  if (!partNames) {
-    partNames = new Map();
-    const raw: unknown = avatarPartsData;
-    if (Array.isArray(raw)) {
-      for (const item of raw as unknown[]) {
-        if (!item || typeof item !== 'object') continue;
-        const p = item as Record<string, unknown>;
-        if (typeof p['id'] === 'string' && typeof p['nl'] === 'string' && typeof p['en'] === 'string') {
-          partNames.set(p['id'], { nl: p['nl'], en: p['en'] });
-        }
-      }
-    }
-  }
-  const names = partNames.get(id);
-  return names ? names[l] || names.nl : null;
+  const part = avatarParts().get(id);
+  return part ? part[l] || part.nl : null;
 }
 
 function Chevron() {

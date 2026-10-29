@@ -29,13 +29,17 @@ import {
   type PlanPayload,
 } from '../src/domain/share';
 import { decodeToken, encodeToken, extractTokens, type Envelope } from '../src/domain/token';
+import type { AvatarSpec } from '../src/domain/avatar';
 import {
   FROZEN_ENVELOPE_F,
+  FROZEN_ENVELOPE_F_AVATAR,
   FROZEN_ENVELOPE_W,
   FROZEN_ENVELOPE_W_SIDE,
   FROZEN_TOKEN_B,
   FROZEN_TOKEN_F,
   FROZEN_TOKEN_F_FFLATE,
+  FROZEN_TOKEN_F_AVATAR,
+  FROZEN_TOKEN_F_AVATAR_FFLATE,
   FROZEN_TOKEN_P,
   FROZEN_TOKEN_P_FFLATE,
   FROZEN_TOKEN_W,
@@ -477,7 +481,9 @@ describe('member card (#f=)', () => {
     expect(env.f).toEqual({ id: 'p:abc', name: 'Gabi', color: '#d9402b', lang: 'en' });
     expect(buildMemberEnvelope(CARD).f).toEqual(CARD);
     // Keeps whatever else the caller put on the card (unknown keys travel).
-    expect((buildMemberEnvelope({ ...CARD, avatar: 'cat' }).f as MemberCard).avatar).toBe('cat');
+    expect((buildMemberEnvelope({ ...CARD, mood: 'cat' }).f as MemberCard)['mood']).toBe('cat');
+    // `avatar` is a known key since 6D-3: an unusable one does not travel.
+    expect(buildMemberEnvelope({ ...CARD, avatar: 'cat' as unknown as AvatarSpec }).f).toEqual(CARD);
     expect((buildMemberEnvelope({ ...CARD, color: '' }).f as MemberCard).color).toBe('#2b4fa8');
     expect((buildMemberEnvelope({ ...CARD, lang: 'de' as 'nl' }).f as MemberCard).lang).toBe('nl');
   });
@@ -513,8 +519,8 @@ describe('member card (#f=)', () => {
   it('readMemberPayload is tolerant: defaults for colour and language, unknown keys kept, bad ids dropped', () => {
     // Unknown keys stay; an unusable colour and language fall back; the name is cut at 60 characters.
     const long = 'A'.repeat(70);
-    const card = readMemberPayload({ id: 'p:x', name: `  ${long} `, color: 'red; background-image:url(x)', lang: 'de', deviceId: 'has space', avatar: 'cat' });
-    expect(card).toMatchObject({ id: 'p:x', name: 'A'.repeat(60), color: '#2b4fa8', lang: 'nl', avatar: 'cat' });
+    const card = readMemberPayload({ id: 'p:x', name: `  ${long} `, color: 'red; background-image:url(x)', lang: 'de', deviceId: 'has space', mood: 'cat' });
+    expect(card).toMatchObject({ id: 'p:x', name: 'A'.repeat(60), color: '#2b4fa8', lang: 'nl', mood: 'cat' });
     expect(card?.deviceId).toBeUndefined();
     // Plain colours pass: hex, a name, rgb()/hsl().
     expect(readMemberPayload({ id: 'p:x', name: 'A', color: 'tomato' })?.color).toBe('tomato');
@@ -564,6 +570,64 @@ describe('member card (#f=)', () => {
     expect(out.t).toBe('b');
     expect(envelopeItemCount(out)).toBe(1);
     expect(parseEnvelope(out).member).toBeUndefined();
+  });
+});
+
+// --- Phase 6 block 6D-3: the avatar on the member card (docs/specs/badges-avatar.md §2g, §6a) ----
+
+const AVATAR: AvatarSpec = {
+  v: 1,
+  parts: ['face-round', 'eyes-happy', 'mouth-grin', 'hair-curly', 'body-apron', 'hat-toque'],
+  tone: '#e0b08a',
+  hair: '#8a5a2b',
+};
+
+describe('member card with an avatar (#f=, optional key)', () => {
+  it('reads the frozen #f= token with an avatar on both engines: the member carries the spec', async () => {
+    for (const token of [FROZEN_TOKEN_F_AVATAR, FROZEN_TOKEN_F_AVATAR_FFLATE]) {
+      const env = await decodeToken(token);
+      expect(env).toEqual(FROZEN_ENVELOPE_F_AVATAR);
+      const parsed = parseEnvelope(env);
+      expect(parsed.kind).toBe('member');
+      expect(parsed.member?.avatar).toEqual(AVATAR);
+      expect(parsed.member).toEqual({ ...CARD, avatar: AVATAR });
+      expect(parsed.by).toBe('Stijn');
+      expect(parsed.at).toBe('2026-10-29T10:00:00.000Z');
+    }
+  });
+
+  it('the frozen #f= token WITHOUT an avatar still gives a member without `avatar` (invariant 4)', async () => {
+    for (const token of [FROZEN_TOKEN_F, FROZEN_TOKEN_F_FFLATE]) {
+      const parsed = parseEnvelope(await decodeToken(token));
+      expect(parsed.member).toEqual(CARD);
+      expect(parsed.member).not.toHaveProperty('avatar');
+    }
+  });
+
+  it('a broken avatar is left out; the card itself stays valid', () => {
+    for (const avatar of ['x', 42, null, [], {}, { v: 2, parts: ['face-round'] }, { v: 1 }, { v: 1, parts: [] }, { v: 1, parts: [1, null] }]) {
+      const card = readMemberPayload({ ...CARD, avatar });
+      expect(card).toEqual(CARD);
+      const parsed = parseEnvelope({ v: 2, t: 'f', by: 'Stijn', f: { ...CARD, avatar } });
+      expect(parsed.kind).toBe('member');
+      expect(parsed.member).toEqual(CARD);
+    }
+    // A usable avatar is normalized on the way in: junk parts and an unknown tone go, the rest stays.
+    const card = readMemberPayload({ ...CARD, avatar: { v: 1, parts: ['face-round', 7, 'eyes-dots'], tone: '#123456', hair: '#8a5a2b' } });
+    expect(card?.avatar).toEqual({ v: 1, parts: ['face-round', 'eyes-dots'], hair: '#8a5a2b' });
+  });
+
+  it('buildMemberEnvelope keeps a usable avatar and round-trips it through the codec', async () => {
+    const env = buildMemberEnvelope({ ...CARD, avatar: AVATAR });
+    expect(env.f).toEqual({ ...CARD, avatar: AVATAR });
+    const token = await encodeToken(env);
+    const parsed = parseEnvelope(await decodeToken(token));
+    expect(parsed.member?.avatar).toEqual(AVATAR);
+    // Still a single #f= link in the one-field share text (invariant 9: `{text}` only).
+    const plan = await planMessages([env], APP_URL, { lang: 'en' });
+    if (!('text' in plan)) throw new Error('expected text');
+    expect(plan.tokens).toBe(1);
+    expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['f']);
   });
 });
 

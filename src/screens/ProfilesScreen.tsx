@@ -6,13 +6,22 @@
 // shown as a QR behind the Experimenten flag. The panel says honestly that on an iPhone the
 // other person copies the message and pastes it into the app (invariants 5 + 13).
 // 6D-1: every profile card shows <XpBar/> (level, XP, streak) under name + language.
-import { useEffect, useState } from 'preact/hooks';
+// 6D-3 (docs/specs/badges-avatar.md §1b/§1c): <Avatar/> draws the profile's own avatar (SVG from
+// data/avatar-parts.json) when it has a complete one, else the letter circle; a card shows the
+// level ring. Editing the ACTIVE profile has a row "Avatar" under Colour that opens <AvatarSheet/>
+// from level 3 (AVATAR_MAKER_LEVEL); badges off = no row.
+import type { ComponentChildren } from 'preact';
+import { useEffect, useMemo, useState } from 'preact/hooks';
+import { avatarParts, avatarUid } from '@/avatar';
+import { badgesEnabled, loadBadgeSettings } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
+import { AvatarSheet } from '@/components/AvatarSheet';
 import { Header } from '@/components/Header';
 import { QrCode } from '@/components/QrCode';
 import { Segmented } from '@/components/Segmented';
 import { XpBar } from '@/components/XpBar';
 import { getSetting, logShareEvent, setSetting } from '@/db/repo';
+import { AVATAR_MAKER_LEVEL, isComplete, normalizeAvatarSpec, renderAvatarSvg } from '@/domain/avatar';
 import { cardFromMember } from '@/domain/household';
 import { nowIso, randomId, type Lang, type Profile } from '@/domain/model';
 import { buildMemberEnvelope, buildMemberShareMessage } from '@/domain/share';
@@ -22,7 +31,7 @@ import { lang, t } from '@/i18n';
 import { PROFILE_COLORS, activeProfile, createProfile, profiles, removeProfile, setActiveProfile, updateProfile } from '@/profile';
 import { route } from '@/router';
 import { copyText, shareText } from '@/share-actions';
-import { markXpDirty } from '@/xp';
+import { markXpDirty, xpStateFor, xpStates } from '@/xp';
 
 export interface ProfileValues {
   name: string;
@@ -51,19 +60,109 @@ export function memberCardMessage(name: string, l: Lang, url: string): string {
   return buildMemberShareMessage({ name, url, lang: l });
 }
 
-/** Coloured circle with the first letter of the name. */
-export function Avatar(props: { profile: Pick<Profile, 'name' | 'color'>; big?: boolean }) {
+/**
+ * The avatar SVG of a profile or member, or null when it has no complete avatar (§1c: then the
+ * letter circle). The stored spec is normalised again here (a restored backup or a card is never
+ * trusted blindly); unknown part ids are skipped by `renderAvatarSvg`.
+ */
+function avatarSvgFor(profile: Pick<Profile, 'color' | 'avatar'>, level: number, uid: string): string | null {
+  const spec = normalizeAvatarSpec(profile.avatar);
+  if (!spec) return null;
+  const parts = avatarParts();
+  if (!isComplete(spec, parts)) return null;
+  return renderAvatarSvg(spec, parts, { color: profile.color, level, uid });
+}
+
+/** True when the profile has a complete avatar (the maker's button then says "Pas je avatar aan"). */
+export function hasAvatar(profile: Pick<Profile, 'avatar'>): boolean {
+  const spec = normalizeAvatarSpec(profile.avatar);
+  return spec !== null && isComplete(spec, avatarParts());
+}
+
+/**
+ * The profile circle (docs/specs/badges-avatar.md §1c): a complete avatar is drawn as SVG inside the
+ * existing `.avatar` circle (same size everywhere: 40/56 px, 32 px in chips), otherwise the coloured
+ * circle with the first letter. `level` adds the ring of that level (from level 5, `ringForLevel`);
+ * only the Home greeting, the Meer profile card and Profielen pass it. A member from another phone
+ * has no level here, so no ring.
+ */
+export function Avatar(props: { profile: Pick<Profile, 'name' | 'color' | 'avatar'>; big?: boolean; level?: number }) {
+  const { profile } = props;
+  const level = props.level ?? 0;
+  // One uid per mounted circle, so two avatars on one screen never share a clipPath/gradient id.
+  const [uid] = useState(avatarUid);
+  const specKey = JSON.stringify(profile.avatar ?? null);
+  const svg = useMemo(() => avatarSvgFor(profile, level, uid), [specKey, profile.color, level, uid]);
+  const cls = 'avatar' + (props.big ? ' big' : '');
+  if (svg !== null) {
+    // The markup comes ONLY from data/avatar-parts.json (checked by validateAvatarParts: no <script,
+    // no href=, no style= except the tone/hair fills); the spec only picks part ids and palette
+    // colours, and renderAvatarSvg takes the profile colour only as a plain CSS colour. No free user
+    // input reaches the string, so innerHTML is safe here.
+    return <span class={cls + ' has-svg'} style={{ background: profile.color }} aria-hidden="true" dangerouslySetInnerHTML={{ __html: svg }} />;
+  }
   return (
-    <span class={'avatar' + (props.big ? ' big' : '')} style={{ background: props.profile.color }} aria-hidden="true">
-      {props.profile.name.trim().charAt(0).toUpperCase() || '?'}
+    <span class={cls} style={{ background: profile.color }} aria-hidden="true">
+      {profile.name.trim().charAt(0).toUpperCase() || '?'}
     </span>
+  );
+}
+
+/**
+ * The member's level for the avatar ring and the maker's gate (§1b/§1c): the derived XP level from
+ * `xpStates`, asked once with the quiet `xpStateFor` read (never a reward moment). Undefined while
+ * it is not known yet, without a member, and whenever badges are off (no trace of XP then: no ring,
+ * no maker).
+ */
+export function useAvatarLevel(memberId: string | null | undefined): number | undefined {
+  const [ready, setReady] = useState(false);
+  const on = badgesEnabled.value;
+  useEffect(() => {
+    let cancelled = false;
+    void loadBadgeSettings()
+      .then(() => {
+        if (cancelled) return null;
+        setReady(true);
+        return badgesEnabled.value && memberId ? xpStateFor(memberId) : null;
+      })
+      .catch((e: unknown) => console.error('xpStateFor', e));
+    return () => {
+      cancelled = true;
+    };
+  }, [memberId, on]);
+  if (!ready || !on || !memberId) return undefined;
+  return xpStates.value.get(memberId)?.level;
+}
+
+/** <Avatar/> with the level ring of that profile (a profile card on Profielen). */
+function LevelAvatar(props: { profile: Profile; big?: boolean }) {
+  const level = useAvatarLevel(props.profile.id);
+  return <Avatar profile={props.profile} big={props.big} level={level} />;
+}
+
+/**
+ * The row "Avatar" under Colour when editing the ACTIVE profile (§1b): "Maak je avatar" or, with an
+ * avatar, "Pas je avatar aan". Below level 3 the button is disabled with "Komt vrij op level 3, ...";
+ * while the level is still loading it is disabled without that line. The caller leaves the row out
+ * with badges off and for other profiles (the level is per person).
+ */
+function AvatarEditRow(props: { profile: Profile; level: number | undefined; onOpen: () => void }) {
+  const unlocked = props.level !== undefined && props.level >= AVATAR_MAKER_LEVEL;
+  return (
+    <div class="field avatar-edit-row">
+      <span>{t('avatar.row')}</span>
+      <button type="button" class="btn" disabled={!unlocked} onClick={props.onOpen}>
+        {t(hasAvatar(props.profile) ? 'avatar.change' : 'avatar.edit')}
+      </button>
+      {props.level !== undefined && !unlocked && <p class="muted small">{t('avatar.lockedHint')}</p>}
+    </div>
   );
 }
 
 /**
  * "Deel mijn kaartje" for one profile: builds the `#f=` link once (device id + token), then
  * shares it as text (navigator.share with exactly {text}, inside the tap), copies it, or shows
- * the QR (Experimenten flag). The link is rebuilt when the profile's name/colour/language change.
+ * the QR (Experimenten flag). The link is rebuilt when the profile's name/colour/language/avatar change.
  */
 export function MemberCardPanel(props: { profile: Profile }) {
   const p = props.profile;
@@ -92,7 +191,8 @@ export function MemberCardPanel(props: { profile: Profile }) {
     return () => {
       cancelled = true;
     };
-  }, [p.id, p.name, p.color, p.lang]);
+    // 6D-3: the card carries the avatar too (§2g), so a new avatar rebuilds the link.
+  }, [p.id, p.name, p.color, p.lang, JSON.stringify(p.avatar ?? null)]);
 
   // "Toon QR" exists only while the Experimenten flag is on (flag off = no trace), like ShareScreen.
   useEffect(() => {
@@ -181,6 +281,8 @@ export function ProfileForm(props: {
   autoFocus?: boolean;
   onSubmit: (values: ProfileValues) => void | Promise<void>;
   onCancel?: () => void;
+  /** Rendered under Colour (6D-3: the "Avatar" row when editing the active profile). */
+  afterColor?: ComponentChildren;
 }) {
   const [name, setName] = useState(props.initial?.name ?? '');
   const [l, setL] = useState<Lang>(props.initial?.lang ?? lang.value);
@@ -244,6 +346,7 @@ export function ProfileForm(props: {
           ))}
         </div>
       </div>
+      {props.afterColor}
       <div class="actions">
         <button type="submit" class="btn btn-primary" disabled={!valid || busy}>
           {props.submitLabel}
@@ -265,6 +368,11 @@ export function ProfilesScreen() {
   const [editing, setEditing] = useState<string | null>(null);
   // Block F: "Deel mijn kaartje" unfolds the card panel under the ACTIVE profile.
   const [sharing, setSharing] = useState(false);
+  // 6D-3: the avatar maker is open for this profile id (only ever the active profile).
+  const [avatarFor, setAvatarFor] = useState<string | null>(null);
+  const activeLevel = useAvatarLevel(active?.id);
+  // The profile as it is NOW (the sheet saves via updateProfile, which refreshes the signal).
+  const avatarProfile = avatarFor ? list.find((x) => x.id === avatarFor) ?? null : null;
 
   // "+ profiel" from Meer arrives with ?add=1; a later visit to the plain route closes the form.
   useEffect(() => {
@@ -300,11 +408,14 @@ export function ProfilesScreen() {
                   setEditing(null);
                 }}
                 onCancel={() => setEditing(null)}
+                afterColor={
+                  badgesEnabled.value && active?.id === p.id ? <AvatarEditRow profile={p} level={activeLevel} onOpen={() => setAvatarFor(p.id)} /> : undefined
+                }
               />
             ) : (
               <>
                 <div class="profile-card">
-                  <Avatar profile={p} />
+                  <LevelAvatar profile={p} />
                   <div class="who">
                     <strong>{p.name}</strong>
                     <span class="muted small">
@@ -363,6 +474,7 @@ export function ProfilesScreen() {
           </button>
         )}
       </div>
+      {avatarProfile && <AvatarSheet profile={avatarProfile} onClose={() => setAvatarFor(null)} />}
     </>
   );
 }

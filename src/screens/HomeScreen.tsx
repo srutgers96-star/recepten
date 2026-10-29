@@ -33,7 +33,7 @@ import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/
 import { activeProfile, profiles } from '@/profile';
 import { lastViewed } from '@/recent';
 import { navigate, navigateTab } from '@/router';
-import { Avatar } from './ProfilesScreen';
+import { Avatar, useAvatarLevel } from './ProfilesScreen';
 
 function openRecipe(id: string) {
   navigate('/recipe/' + id);
@@ -52,6 +52,8 @@ export function HomeScreen() {
   const backup = backupStatus.value;
   const unsent = unsentChanges.value;
   const unseen = inboxUnseen.value;
+  // 6D-3 (docs/specs/badges-avatar.md §1c): the greeting's avatar shows the level ring.
+  const level = useAvatarLevel(pid);
 
   useEffect(() => {
     void refreshShareBadges();
@@ -114,7 +116,7 @@ export function HomeScreen() {
       <TimerBar />
       <div class="screen home">
         <div class="home-hello">
-          {profile && <Avatar profile={profile} />}
+          {profile && <Avatar profile={profile} level={level} />}
           <h2 class="home-greeting">{profile ? t('home.greeting', { name: profile.name }) : t('home.greetingAnon')}</h2>
         </div>
         <HomeLevelRow profileId={pid} />

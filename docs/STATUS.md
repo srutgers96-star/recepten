@@ -4,6 +4,108 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 29 okt (Opus): 6D-3 — avatar-maker, 66 onderdelen (ronde 1), avatar op het kaartje en in de schermen
+Gebouwd volgens docs/specs/badges-avatar.md blok 6D-3 (bouwer A domein en contract, bouwer B maker, bouwer C schermen,
+integrator). Niet gecommit. Geen Dexie-versie, geen nieuwe dependency, geen nieuwe fragmentsleutel (`v` blijft 2). Gate
+groen: check, 1337 tests (59 bestanden), build, build:next, validate:data (0 fouten; 66 avatar-onderdelen, 144 badges).
+- **Domein (src/domain/avatar.ts, nieuw, framework-vrij):** alle exports van §2f: lagen en tekenvolgorde, verplichte
+  lagen, paletten, `AVATAR_MAKER_LEVEL = 3`, `normalizeAvatarParts`, `normalizeAvatarSpec`, `isComplete`, `isUnlocked`,
+  `ringForLevel` (rand vanaf level 5), `defaultAvatar`, `randomAvatar` (vaste seed, geen `Math.random`) en
+  `renderAvatarSvg` (precies de structuur van §2f; vervangt elke `__u`, slaat onbekende ids over, de randkleur als hex
+  van `--lvl-1` … `--lvl-8`). Een onderdeel met `<script`, `href=`, een `on…=` of een andere style dan de twee fills
+  wordt nooit getekend (bovenop de validator). `Profile.avatar?: AvatarSpec | null`, `Member.avatar`, en
+  `memberFromProfile` geeft de avatar mee (besluit kritische lezer). tests/avatar.test.ts (27 tests, alle 66 delen).
+- **Kaartje `#f=`:** `MemberCard.avatar` is optioneel; `cardFromMember` zet hem alleen als het profiel er een bruikbare
+  heeft, `buildMemberEnvelope`/`readMemberPayload`/`memberFromCard` lezen hem via `normalizeAvatarSpec`; een kapotte
+  avatar valt weg, het kaartje blijft geldig. Nieuw bevroren: `FROZEN_TOKEN_F_AVATAR`, `FROZEN_TOKEN_F_AVATAR_FFLATE`,
+  `FROZEN_ENVELOPE_F_AVATAR` (de avatar van §2g); `FROZEN_TOKEN_F` levert nog een lid zonder avatar. De Safari-landing
+  blijft 16,5 kB en het share-stuk 65 kB: data/badges.json zit er niet in (src/domain/avatar.ts importeert alleen types).
+- **Maker (src/components/AvatarSheet.tsx, src/avatar.ts, src/styles/avatar.css, src/i18n/avatar.ts):** sheet via
+  SheetPortal met Annuleer · "Jouw avatar" · Bewaar; voorbeeld 120 px op de profielkleur met de rand van je level;
+  "🎲 Verras me"; 13 rijen in de volgorde van §1b (tegels 56 px, `radiogroup`, "geen" bij de zes optionele lagen);
+  vergrendeld = grijs met 🔒 en "Lv n", het badge-icoon of ❓ (geheime badge), tik = één uitlegregel onder de rij;
+  cobalt stipje op nieuw vrijgespeelde delen tot de sheet sluit (`avatar.seen`, toestel-lokaal); onderaan "Terug naar de
+  beginletter" (Bewaar zet `avatar: null`) en "Alleen Bewaar bewaart". Een bewaard deel dat hier op slot zit blijft
+  gekozen en getekend, met de uitleg eronder. Alle `avatar.*`-keys van §1b letterlijk in NL en EN.
+- **Schermen:** `Avatar` (ProfilesScreen.tsx) tekent een complete avatar als SVG in het bestaande rondje (eigen uid per
+  rondje), anders het letterrondje; de rand alleen op de Home-begroeting, de Meer-profielkaart en Profielen. Meer: het
+  grote rondje is vanaf level 3 (badges aan) een knop "Avatar aanpassen"; daaronder geen knop. Profielen → Bewerk
+  (alleen het actieve profiel, badges aan): rij "Avatar" onder Kleur met "Maak je avatar" / "Pas je avatar aan", onder
+  level 3 uitgeschakeld met "Komt vrij op level 3, na je eerste kookbeurt." Het kaartje-paneel bouwt de link opnieuw
+  als de avatar verandert. DeltaShareScreen geeft `avatar` mee aan zijn handgebouwde leden. Badges uit: geen maker,
+  geen rij, geen rand; de getekende avatar blijft staan (§5b).
+- **Integrator:** in src/badges.ts het voorlopige `AvatarPart`-type vervangen door het type en `normalizeAvatarParts`
+  uit src/domain/avatar.ts (eigen kleine cache, want src/avatar.ts importeert src/badges.ts: geen importkring);
+  BadgesScreen "Geeft: {part}" leest nu `avatarParts()`. DEVICE-TEST rijen 96 en 97 letterlijk uit §6d, NL en EN, direct
+  na rij 95. Geen bouwer meldde een ontbrekende i18n-key.
+- **Dev-app (375 px, licht en donker, NL en EN):** Meer → rondje opent de sheet; 86 tegels, de pagina scrolt niet
+  opzij; "Kaasblokhoed" → "Komt vrij met de badge Kaaskop op niveau blauw." / "Unlocks with the badge Cheesehead at
+  level blue."; "Slaperig" → ❓ en "Komt vrij met een geheime badge."; "Hanenkam" → "Lv 12"; acht keer Verras me = acht
+  complete avatars; Escape, Annuleer en ernaast tikken bewaren niets; Bewaar → SVG op Meer (gele rand, level 6),
+  Profielen, Home (met rand) en Huishouden (zonder rand); geen dubbele ids, geen `__u` over, alle 66 delen tekenen iets
+  (alleen "Je profielkleur" is leeg, zoals bedoeld). Tijdelijk testprofiel: onder level 3 is het rondje geen knop en de
+  knop in Bewerk uitgeschakeld met de uitleg; na één kookbeurt actief. Kaartje van een tweede (verzonnen) persoon met de
+  avatar van §2g geplakt in In & uit: de kaart toont de avatar; na toevoegen staat die in Huishouden, zonder rand.
+  Badges uit: rondje geen knop, geen rij in Bewerk, avatar blijft. Daarna teruggezet: avatar weer `null`, testprofiel,
+  zijn kookbeurt en het testlid weg (in de dev-database blijven alleen wat `avatar.seen`-ids en tellers staan).
+- **Graag beslissen (Stijn/Fable):** (1) **Haar heeft geen "geen"-tegel**, maar is geen verplichte laag. De spec
+  spreekt zichzelf hier tegen: §2f "de rest mag leeg" en §1b.2 "optionele 50% kans" tegenover §1b.3, dat alleen
+  facial, glasses, hat, prop, pin en bg een "geen"-tegel geeft. Verras me laat het haar zo ongeveer de helft van de
+  keren weg (lens-probe: 95 van 200 seeds over de 13 L3-delen), en "geen haar" kun je daarna niet zelf kiezen; gekozen
+  haar weghalen kan alleen via Verras me of de beginletter. Niet zelf beslist (§5d.7). Twee opties: (a) haar krijgt
+  ook een "geen"-tegel (§1b.3 aanpassen), of (b) `randomAvatar` vult haar altijd (§2f/§1b.2 aanpassen).
+  (2) **Na de eerste kookbeurt zit een nieuw profiel op level 4, niet 3** (dev-app: 223 XP; lens-probe met `deriveXp`:
+  één kookbeurt + Eerste hap + seizoensbadge niveau 1 = 196–218 XP, en die seizoens-XP komt er altijd bij, want de
+  vier seizoensladders dekken samen elke datum; level 4 begint bij 171). Dan is Schort (L4) al vrij, terwijl
+  acceptatiecheck §6c.9 ("Schort vergrendeld met Lv 4") en DEVICE-TEST 96 stap 4 ("Komt vrij op level 4." / "Unlocks
+  at level 4.") uitgaan van level 3. Geen codefout; `avatar.lockedHint` ("… level 3, na je eerste kookbeurt") blijft
+  waar. Rij 96 staat er letterlijk uit §6d. Twee opties voor stap 4 (NL én EN) en §6c.9: (a) een vaste tegel ver boven
+  het beginlevel noemen, bv. Koksbuis ("Lv 15") → "Komt vrij op level 15." / "Unlocks at level 15."; of (b) algemeen
+  "Onder de rij verschijnt 'Komt vrij op level …' met het getal dat op de tegel stond."
+  (3) **DEVICE-TEST 97 stap 4 kan niet slagen:** In & uit bewaart geen regel voor een kaartje. De kaartjesrijen
+  bestaan alleen zolang de geplakte tekst er staat (InboxScreen `cards`, alleen gevuld door het lezen van de
+  plaktekst), dus na stap 3 (Huishouden en terug) is er niets meer om naar te kijken. In & uit toont de avatar op de
+  kaart direct na het plakken (stap 2) en bij recepten die dat lid stuurt (lijst Ontvangen, `memberByName`). Rij 97
+  staat er letterlijk uit §6d. Twee opties: (a) stap 4 en resultaat 4 schrappen (stap 2 en 3 laten de avatar al
+  zien), of (b) stap 4 wordt "stuur vanaf de eerste telefoon een recept en kijk op de andere in Meer → In & uit bij
+  dat recept", met als resultaat de avatar naast het recept (NL én EN).
+  (4) **Niveau van een badge-onderdeel:** `isUnlocked(part, {level, badgeTiers})` kan niet weten op welk niveau een
+  ladder-badge het deel geeft (dat staat alleen in data/badges.json). Daarom kreeg `AvatarUnlock` een optioneel `tier`,
+  dat `normalizeAvatarParts(data, badges)` uit de meegegeven catalogus haalt (de app geeft `badgeData()` mee). De
+  catalogus in het domein inlezen zou data/badges.json in de Safari-landing trekken (65 → 126 kB).
+  (5) **Zeven lagen of elf:** het besluit van 24 okt ("Ambitie 6D omhoog") spreekt van zeven lagen die je apart kiest,
+  en Fable mocht de zeven definitief maken. De code volgt §2f en §5d.7: LAYER_ORDER met elf lagen (de 66 delen van
+  6D-2a staan al over elf lagen verdeeld) plus de twee kleurrijen, dus 13 rijen in de maker. Niet zelf beslist. Twee
+  opties: (a) de elf lagen blijven en het besluitblok gaat "elf lagen" zeggen (geen code), of (b) de maker zet de elf
+  lagen onder zeven kopjes die Fable kiest (alleen AvatarSheet en i18n; data en LAYER_ORDER blijven).
+  (6) **Na de lens gerepareerd: het hartje noemde zichzelf.** De vergrendelde tegel van `pin-heart` had als title
+  "Hartje" en als aria-label "Hartje. Komt vrij met een geheime badge." (EN "Little heart"): precies de naam van de
+  verborgen badge `hartje`, terwijl §1b.4 en §7.10 zeggen dat zo'n tegel de badgenaam niet toont. Nu krijgt een
+  vergrendeld deel van een geheime badge geen naam als die naam de badgenaam bevat (pure helper `makerTileName` in
+  src/domain/avatar.ts, 2 tests in tests/avatar.test.ts): de tegel heet dan alleen "Komt vrij met een geheime badge.",
+  zonder title. "Slaperig" (nachtbraker) houdt zijn naam. Dat is de kleinste ingreep die §1b.4 letterlijk volgt;
+  graag bevestigen, of kiezen voor (a) geen naam op élke vergrendelde tegel van een geheime badge (dus ook niet
+  "Slaperig"), of (b) `pin-heart` een andere naam in data/avatar-parts.json (het id blijft).
+- **Keuzes die de spec niet letterlijk maakte (graag bevestigen):** (a) `normalizeAvatarSpec`: per laag wint het eerste
+  deel, ids zonder bekende laag vallen weg, onbekende ids mét bekende laag blijven (deel van een nieuwere telefoon),
+  geen deel over = `null`, onbekende sleutels blijven; (b) Verras me kiest ook huid en haarkleur; (c) een opnieuw
+  gestuurd kaartje zonder avatar wist de avatar van dat lid (zoals de rest van het kaartje het lid vervangt); (d) na
+  "Terug naar de beginletter" is in de rijen niets gekozen, en een nieuwe keuze begint bij `defaultAvatar()` plus die
+  keuze; (e) het voorbeeld blijft vast boven de scrollende rijen; (f) de tegel "Je profielkleur" ziet eruit als "geen"
+  (lege SVG op de neutrale cirkel, volgens §1b); (g) kleurrondjes heten voor schermlezers "Huid 1 … 6" en "Haarkleur
+  1 … 8"; (h) een niet-actief profiel krijgt in Bewerk géén Avatar-rij (geen uitgeschakelde); (i) met badges uit
+  krijgt niemand een rand (geen XP-spoor); (j) twee bestaande tests in tests/share.test.ts gebruikten `avatar: 'cat'` als
+  voorbeeld van een onbekende sleutel en gebruiken nu `mood: 'cat'`.
+- **Ter info:** de tijdtest in tests/xp.test.ts (30 jaar `deriveXp` onder 50 ms, 6D-1) faalt soms in de volle
+  parallelle run (53–61 ms); los draait hij in 24 ms. Niet door 6D-3 (die code is ongewijzigd); de volle run is daarna
+  weer groen.
+
+- **Besluit Fable (29 okt, na de lens; zelf aangepast, commit van 6D-3):** (1) haar krijgt een "geen"-tegel
+  (`OPTIONAL` in AvatarSheet.tsx). (2) §6c.9 en DEVICE-TEST 96 stap 4 noemen nu het level op de tegel (bv. Lv 15) in
+  plaats van Schort Lv 4. (3) DEVICE-TEST 97 stap 4 kijkt naar een recept dat die persoon stuurt (In & uit bewaart geen
+  kaartje-regel). (4) randgeval (4)/(a) en alle "bevestigen"-keuzes akkoord zoals gebouwd. (5) elf lagen definitief; het
+  24-okt-blok in de spec zegt dat nu. (6) pin-heart-fix van de fixer blijft. Extra: de tijdsgrens van de 30-jaar-XP-test
+  is 100 ms (vals rood bij parallelle bouwers). Alles in de spec onder "Na de lens van 6D-3".
 ## 29 okt (Opus): 6D-2c — ?-kaartjes, Hele cirkel, boodschappenspoor en stille registratie bij start
 Gebouwd volgens docs/specs/badges-avatar.md blok 6D-2c (bouwer 2c-A pagina en registratie, bouwer 2c-B domein, data en
 sporen, integrator). Niet gecommit. Geen Dexie-versie, geen nieuwe dependency. Gate groen: check, 1299 tests (58

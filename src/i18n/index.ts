@@ -13,6 +13,7 @@ import { settings } from './settings';
 import { week } from './week';
 import { shopping } from './shopping';
 import { badges } from './badges';
+import { avatar } from './avatar';
 import { xp } from './xp';
 
 export type { Lang };
@@ -22,8 +23,9 @@ export type Dict = Record<string, { nl: string; en: string }>;
 
 // phase2 is merged last (docs/phase-2-spec.md §5 strings; it may refine an earlier key).
 // Phase 4: week (Week tab, Kies-N sheet, nav) after phase2; shopping (the shopping agent) appends after it.
-// Phase 5 block C: badges (the Badges screen + toast) appends after shopping; 6D: xp after badges.
-const dict: Dict = { ...common, ...browse, ...edit, ...settings, ...phase2, ...week, ...shopping, ...badges, ...xp };
+// Phase 5 block C: badges (the Badges screen + toast) appends after shopping; 6D-3: avatar (the maker)
+// right after badges; 6D: xp after that.
+const dict: Dict = { ...common, ...browse, ...edit, ...settings, ...phase2, ...week, ...shopping, ...badges, ...avatar, ...xp };
 
 const STORAGE_KEY = 'recepten.lang';
 

@@ -11,13 +11,16 @@
 //                                                            `of` = recipe id of the main dish a side dish
 //                                                            belongs to (docs/specs/labels-categorieen.md
 //                                                            §2d; an older app shows it as a plain dish)
-//   t: 'f'  f: { id, name, color, lang, deviceId? }           a member card (`#f=`, docs/phase-5-spec.md
+//   t: 'f'  f: { id, name, color, lang, deviceId?, avatar? }  a member card (`#f=`, docs/phase-5-spec.md
 //                                                            block F): who the sender is on their phone,
-//                                                            so the receiver can add them to the household
+//                                                            so the receiver can add them to the household;
+//                                                            `avatar` (6D-3, docs/specs/badges-avatar.md
+//                                                            §2g) is optional: an older app ignores it
 //
 // Every envelope may carry `dict: { ing: Ingredient[] }`: the USER ingredients (ids the bundled
 // dictionary does not know) the payload references, so the receiver can add the missing ones.
 // Unknown keys are preserved everywhere; a codec change gets a NEW fragment key.
+import { normalizeAvatarSpec, type AvatarSpec } from './avatar.ts';
 import type { Ingredient } from './dictionary.ts';
 import { nowIso, type Lang, type Line, type Recipe, type Text } from './model.ts';
 import { applyLineOverrides, type LineOverride, type RecipeOverride, type RecipePatch } from './overrides.ts';
@@ -105,6 +108,12 @@ export interface MemberCard {
    * says "via kaartje"); a re-sent card finds its member by id or name (`matchMemberForCard`).
    */
   deviceId?: string;
+  /**
+   * The sender's avatar (docs/specs/badges-avatar.md §2f/§2g, block 6D-3): ids and palette colours
+   * only. Optional in `v: 2` (no new fragment key): an older app ignores it and shows the initial.
+   * Read through `normalizeAvatarSpec`; an unusable avatar is left out, the card stays valid.
+   */
+  avatar?: AvatarSpec;
   [k: string]: unknown;
 }
 
@@ -363,9 +372,10 @@ export function buildPlanEnvelope(plan: Plan, recipes: readonly Recipe[], ctx: S
 }
 
 /**
- * `{v: 2, t: 'f', by, at, f: {id, name, color, lang, deviceId?}}`: the sender as a member card.
- * `by` is the card's name so the Inbox header and the landing page can say who without looking
- * inside. Nothing else travels: no recipes, no dictionary delta.
+ * `{v: 2, t: 'f', by, at, f: {id, name, color, lang, deviceId?, avatar?}}`: the sender as a member
+ * card. `by` is the card's name so the Inbox header and the landing page can say who without
+ * looking inside. Nothing else travels: no recipes, no dictionary delta. An avatar travels only
+ * when it is usable (`normalizeAvatarSpec`); anything else under `avatar` is left out.
  */
 export function buildMemberEnvelope(card: MemberCard): Envelope {
   const f: MemberCard = {
@@ -378,6 +388,9 @@ export function buildMemberEnvelope(card: MemberCard): Envelope {
   const deviceId = cleanString(card.deviceId);
   if (deviceId) f.deviceId = deviceId;
   else delete f.deviceId;
+  const avatar = normalizeAvatarSpec(card.avatar);
+  if (avatar) f.avatar = avatar;
+  else delete f.avatar;
   const env = baseEnvelope('f', f.name);
   env.f = f;
   return env;
@@ -388,7 +401,8 @@ export function buildMemberEnvelope(card: MemberCard): Envelope {
 /**
  * A member card payload, tolerantly: `id` and `name` are required (trimmed; the name is cut at 60
  * characters), `color` falls back to cobalt unless it is a plain CSS colour, `lang` is 'nl' unless
- * it says 'en', a `deviceId` with whitespace or over 64 characters is dropped. Unknown keys stay.
+ * it says 'en', a `deviceId` with whitespace or over 64 characters is dropped, an `avatar` that
+ * `normalizeAvatarSpec` can not use is dropped (the card itself stays valid). Unknown keys stay.
  */
 export function readMemberPayload(v: unknown): MemberCard | null {
   if (!isRecord(v)) return null;
@@ -406,6 +420,9 @@ export function readMemberPayload(v: unknown): MemberCard | null {
   const deviceId = cleanString(v.deviceId);
   if (deviceId && SAFE_ID.test(deviceId)) out.deviceId = deviceId;
   else delete out.deviceId;
+  const avatar = normalizeAvatarSpec(v.avatar);
+  if (avatar) out.avatar = avatar;
+  else delete out.avatar;
   return out;
 }
 
