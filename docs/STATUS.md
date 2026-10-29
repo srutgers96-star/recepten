@@ -1,8 +1,62 @@
-# Status — Rutgers' Recepten (bijgewerkt 28 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 29 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
+
+## 29 okt (Opus): 6D-2a — badge-catalogus, regelsoorten en registratie
+**Besluit Fable (29 okt):** 6D-2a gaat alleen naar `/next/` en samen met 6D-2b naar `main` (de oude badgepagina zou de
+geheime badges bij naam tonen en "{n}" letterlijk). 6D-2b bouwt een **stille eerste registratie**: de eerste
+badgecontrole na deze update registreert alle al behaalde badges en niveaus zonder toast (setting
+`badges.catalogSynced` = 2), daarna gewoon toasts per nieuw niveau. Ontbrekende tekst §1a.7: key `badges.unlocksTier`
+NL "op niveau {colour}" · EN "at {colour} tier" (6D-2b). Cycle-guard `badgeStatuses(memberId, { xp: false })` in
+buildXpFacts akkoord (Overcooked!-badge telt in XP zodra hij geregistreerd is). Overige keuzes van bouwers A, B en C
+akkoord. `vaste-klant` komt bij 6C. Gate groen (1265 tests), geen bevindingen.
+Gebouwd volgens docs/specs/badges-avatar.md blok 6D-2a (bouwer A domein, B data en validator, C app-laag, integrator).
+Niet gecommit. Geen Dexie-versie, geen nieuwe dependency. Gate groen: check, 1265 tests, build, build:next,
+validate:data (0 fouten; 2 waarschuwingen: de keukens van Duizend-en-één en Switi staan nog in geen enkele klassieker).
+Voor de gebruiker verandert er weinig zichtbaars: de nieuwe badgepagina, toastteksten en de 32 haakjes in de schermen
+zijn blok 6D-2b.
+- **Catalogus:** data/badges.json heeft 149 regels: 143 actieve badges (115 zichtbaar, 28 verborgen = 27 in Geheim +
+  het hartje) en 6 oude die met pensioen zijn (keukenbaas, chef-kok → Huiskok; kookboekauteur → Receptenschrijver; proever,
+  culinaire-avonturier → Ontdekkingsreiziger; vaste-prik → Op dreef). Alle 44 oude ids staan er nog. **Vaste klant** is
+  weggelaten tot 6C online is (§2d); daarna 144. data/avatar-parts.json heeft de 66 onderdelen van §2f (pas zichtbaar in 6D-3).
+- **Regels:** acht groepen, ladders met acht kleurniveaus (geel → platina; de voortgang loopt naar het volgende niveau),
+  alle nieuwe regelsoorten (seizoenen, weekdagen, uur, drie dagen hetzelfde recept, vrijdag de 13e, feature-tellers,
+  tweede kans, oude liefde, Overcooked!, volle weken, foto's per lid). `recordFeature` (src/features.ts) schrijft
+  `features.log`, maar wordt nog nergens aangeroepen (6D-2b).
+- **Registratie:** `badges.earned` krijgt `id` en `id@k`; een nieuw niveau geeft één toast voor het hoogste nieuwe niveau,
+  de tussenliggende stil; een geregistreerd niveau blijft staan als de telling daalt. Back-up terugzetten voegt
+  `badges.earned` samen (unie), net als `features.log` en `donate.hearts` (hoogste per lid); `avatar.seen` blijft op de telefoon.
+- **XP:** regelversie 2. Ladders 50 × niveau per bereikt niveau, geheime badges 250, ontdekkers 100, het hartje 0. Wie de
+  app opent krijgt één keer de melding "De XP-regels zijn vernieuwd"; de stand wordt stil herberekend.
+- **Integrator:** fixture in tests/validate-data.test.ts kreeg `group: 'koken'`; nieuw tests/badges-registration.test.ts
+  (registratie, vaste niveaus, herstel-merge), tests/fixtures/badge-log.ts (§6b: 40 kookbeurten, twee leden) met
+  tests/badge-log.test.ts (hele catalogus erop); verouderd commentaar in src/domain/days.ts weg.
+- **Dev-app (375 px, NL en EN):** de oude badgepagina toont de nieuwe catalogus (eigen tab "5 van 136", Samen "7 van 143",
+  Huisgenoten alleen op Samen; Huiskok "3/5"). `recordFeature('theme')` schreef het log en gaf "Van kleur verschoten";
+  Herfstpot kreeg niveau 1 en 2 met één toast; met badges uit werd niets geschreven; herstel van een kunstmatige back-up
+  voegde samen zoals bedoeld; een geregistreerd `huiskok@4` hield Huiskok op niveau 4 bij 3 kookbeurten. Geen
+  consolefouten. Instellingen daarna teruggezet; alleen `xp.seenRulesVersion` (2) en `xp.lastSeen` (628 XP, level 6) zijn
+  bij het openen door de app zelf bijgewerkt (de stille herberekening na de regelwijziging).
+- **Graag beslissen (Stijn/Fable) — tussenstand tot 6D-2b:** de oude pagina toont ook de 28 geheime badges mét naam, de
+  uitleg toont `{n}` letterlijk ("Kook {n} keer"), en de toast zegt nog "Nieuwe badge: …". De eerste controle na de update
+  geeft elke al gehaalde nieuwe badge en elk al gehaald niveau een eigen toast van 6 s (testprofiel met 3 kookbeurten:
+  6 toasts; met veel kookbeurten veel meer; de spec kent geen stille eerste registratie). §4 zegt: 6D-2a online op
+  `/next/`. Advies: 6D-2a pas samen met 6D-2b naar `main`, ook al gaan blokken sinds 23 okt direct door.
+- **Keuzes die de spec niet maakte (graag bevestigen):** (1) XP en badges vroegen elkaar op: `buildXpFacts` vraagt de badges
+  nu zónder XP-stand, dus Overcooked! telt in de XP pas zodra hij geregistreerd is (direct na de kookbeurt). (2) tijdelijk
+  type `AvatarPart` in src/badges.ts tot 6D-3. (3) een avatar-onderdeel staat alleen in de eigen toast, nooit in een
+  Samen-toast. (4) de validator kopieert de groepen, feature-ids en avatarlagen (Node kan de domeinmodules niet laden);
+  een test bewaakt de groepen en ids, de lagen pas in 6D-3. (5) de 6 gepensioneerde badges houden hun oude regel en
+  krijgen de groep van hun §2d-kopje; het oude veld `tier` blijft. (6) de waarschuwing "meer dan 150" telt alleen actieve
+  badges; "in geen klassieker" alleen keuken-, tag- en ingrediëntladders. (7) extra validatorregels: `hidden`/`retired`
+  alleen true/false, `replacedBy` zonder `retired` en onbekende regelvelden geven een waarschuwing, een onderdeel van een
+  gepensioneerde badge is een fout, `sameRecipeDays` altijd met `n`. (8) een badge in Geheim is altijd verborgen. (9)
+  regels die alleen het log lezen tellen ook kookbeurten van een recept dat niet meer bestaat. (10) een verborgen
+  ladder zou 250 eenmalig krijgen in plaats van 50 × niveau (bestaat niet in de catalogus).
+- **Open:** §1a.7 zegt dat achter "Geeft: {part}" bij een ladder "op niveau {colour}" komt, maar noemt geen key en geen
+  Engelse tekst: niet toegevoegd, graag beslissen vóór 6D-2b. De regel "elk level 1–100 ontgrendelt iets" hoort bij 6D-4a.
 
 ## 28 okt (Opus): 6D-1 — XP, levels, pops en level-up
 **Besluit Fable (28 okt), zonder reviewlens (weeklimiet 91%; Stijn test zelf):** geaccepteerd: stil bijwerken van `xp.lastSeen`

@@ -7,7 +7,8 @@
 
 import { dayIndexOfIso, isoWeekMondayOf, localDayIndex } from './days';
 
-export const XP_RULES_VERSION = 1 as const;
+/** 1 = 6D-1; 2 = 6D-2a (badge catalogue with tiers and secret badges changes the badge XP, §2f). */
+export const XP_RULES_VERSION = 2 as const;
 
 export interface XpRules {
   version: number;

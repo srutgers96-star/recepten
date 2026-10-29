@@ -23,6 +23,8 @@ import type { ParsedShare } from '@/domain/share';
 import { aggregate, type ListItem } from '@/domain/aggregate';
 import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, newSideItem, normalizeServings, planHash, planHashAll, type Plan, type PlanItem } from '@/domain/planner';
 import { HOUSEHOLD_KEY, normalizeHousehold, type HouseholdSetting } from '@/domain/household';
+import { mergeDonateHearts, mergeEarned } from '@/domain/badges';
+import { mergeFeatureLogs, normalizeFeatureLog } from '@/domain/features';
 import { db, getSetting, setSetting } from './db';
 import type { BackupBundle, BundledPhoto, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Photo, Setting, ShareEvent } from './model';
 
@@ -1239,8 +1241,9 @@ export interface RestoreResult {
 }
 
 /** Settings that belong to this phone, not to the person: a restore never overwrites them.
- *  13K: `cook.sessions` (what is cooking on this phone right now) is one of them. */
-const DEVICE_LOCAL_SETTINGS = new Set(['theme', 'backup.lastAt', 'cook.sessions']);
+ *  13K: `cook.sessions` (what is cooking on this phone right now) is one of them; 6D-2a:
+ *  `avatar.seen` (the avatar parts this phone's maker already showed, docs/specs/badges-avatar.md §2g). */
+const DEVICE_LOCAL_SETTINGS = new Set(['theme', 'backup.lastAt', 'cook.sessions', 'avatar.seen']);
 /** Only restored when this phone had no profile yet (a fresh install), never on a merge. */
 const ACTIVE_PROFILE_SETTING = 'activeProfileId';
 /** Merged (union) instead of replaced, so a restore never re-badges recipes already seen here. */
@@ -1250,11 +1253,33 @@ function stringArray(v: unknown): string[] {
   return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [];
 }
 
+// 6D-2a (docs/specs/badges-avatar.md §2g): three settings are merged on a restore instead of
+// replaced, so an older backup never brings back toasts or lowers a count. Keys as in src/badges.ts.
+const BADGES_EARNED_SETTING = 'badges.earned';
+const FEATURES_LOG_SETTING = 'features.log';
+const DONATE_HEARTS_SETTING = 'donate.hearts';
+const MERGED_ON_RESTORE = new Set([BADGES_EARNED_SETTING, FEATURES_LOG_SETTING, DONATE_HEARTS_SETTING]);
+
+/**
+ * The value a restore writes for `key`, given what this phone has (`local`, undefined when absent)
+ * and what the file brings: `badges.earned` = union per member (mergeEarned), `features.log` =
+ * mergeFeatureLogs, `donate.hearts` = the max per member (mergeDonateHearts); any other key = the
+ * file's value. Pure (exported for tests); the merge rules themselves live in the domain.
+ */
+export function mergeRestoredSetting(key: string, local: unknown, incoming: unknown): unknown {
+  if (key === BADGES_EARNED_SETTING) return mergeEarned(local, incoming);
+  if (key === FEATURES_LOG_SETTING) return mergeFeatureLogs(normalizeFeatureLog(local), normalizeFeatureLog(incoming));
+  if (key === DONATE_HEARTS_SETTING) return mergeDonateHearts(local, incoming);
+  return incoming;
+}
+
 /**
  * Merges a backup into the database (put by key; cook-log entries deduplicated on
- * recipeId+profileId+at). Device-local settings (theme, last backup date, the cooking sessions,
- * and the active profile when a profile already exists) are left alone, so restoring the other
- * person's backup on this phone adds their recipes/favourites without switching who this phone is.
+ * recipeId+profileId+at). `inbox.seenIds`, `badges.earned`, `features.log` and `donate.hearts` are
+ * merged with what is here (mergeRestoredSetting). Device-local settings (theme, last backup date,
+ * the cooking sessions, `avatar.seen`, and the active profile when a profile already exists) are
+ * left alone, so restoring the other person's backup on this phone adds their recipes/favourites
+ * without switching who this phone is.
  * Throws Error('invalid-bundle') for anything that is not a v2 backup. The caller refreshes the
  * in-memory mirrors afterwards (loadProfiles, reloadCelebrateSettings, reloadSoundSettings,
  * reloadSpeechSettings, reloadVoiceSettings, reloadCooking).
@@ -1373,6 +1398,11 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
       if (s.key === INBOX_SEEN_SETTING) {
         const current = stringArray((await db.settings.get(s.key))?.value);
         await db.settings.put({ key: s.key, value: [...new Set([...current, ...stringArray(s.value)])] });
+        continue;
+      }
+      if (MERGED_ON_RESTORE.has(s.key)) {
+        const current = (await db.settings.get(s.key))?.value;
+        await db.settings.put({ key: s.key, value: mergeRestoredSetting(s.key, current, s.value) });
         continue;
       }
       await db.settings.put({ key: s.key, value: s.value });

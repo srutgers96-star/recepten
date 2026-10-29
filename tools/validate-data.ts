@@ -5,7 +5,9 @@
 // (data/{units,qualifiers,prep-phrases,ingredients,aisles,categories,cuisines}.json, docs/phase-2-spec.md §1,
 // cuisines: docs/specs/labels-categorieen.md §2c), the generated schema-2 file data/recipes.json
 // (tools/migrate-from-recepten2.ts, §2 + §4: dictionary references, `name.en` and every
-// `steps[].text.en` when `text.en` is set, categories, cuisines, tags, units and qualifiers), the badge list data/badges.json (docs/phase-5-spec.md "Block C") and
+// `steps[].text.en` when `text.en` is set, categories, cuisines, tags, units and qualifiers), the badge catalogue
+// data/badges.json (docs/phase-5-spec.md "Block C", docs/specs/badges-avatar.md §2e), the avatar library
+// data/avatar-parts.json (docs/specs/badges-avatar.md §2f), the level titles data/levels.json and
 // the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2).
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
@@ -670,45 +672,141 @@ export function validateDictionary(data: DictionaryData): ValidationResult {
 }
 
 // ---------------------------------------------------------------------------
-// Badges: data/badges.json (docs/phase-5-spec.md "Block C", src/domain/badges.ts `Badge`)
+// Badges: data/badges.json (docs/specs/badges-avatar.md §2a, §2b and §2e; src/domain/badges.ts `Badge`)
 // ---------------------------------------------------------------------------
 //
-// Errors: array of badges with unique kebab-case ids, `nl` and `en` each a non-empty name +
-// description, a non-empty icon, a rule whose kind is in the fixed list with an integer n >= 1
-// where applicable, category/tag/ingredient rule ids that exist in the dictionary (same ref sets
-// as validateSchema2), and tier in {1, 2, 3} when present. Warnings: stray rule fields.
+// Errors (phase 5, unchanged): an array of badges with unique kebab-case ids, `nl` and `en` each a
+// non-empty name + description, a non-empty icon, a rule whose kind is known with an integer n >= 1
+// where it has one, category/tag/ingredient rule ids that exist in the dictionary (same ref sets as
+// validateSchema2), and the old `tier` in {1, 2, 3} when present.
+// Errors (6D-2, §2e): `group` missing or not a BADGE_GROUP_IDS value · `tiers` present but not exactly
+// 8 strictly increasing integers >= 1 · a count kind with both `tiers` and `rule.n` (or neither) ·
+// `tiers` on a plain kind (letters, allClassics, halfClassics, allCategories) · a ladder whose nl or en
+// description lacks `{n}`, or a one-off badge whose description has one · group 'geheim' without
+// `hidden: true` · `season` without kind 'seasonCooks' or the other way round, `from`/`to` not a valid
+// 'MM-DD' · `unlock.part` not in data/avatar-parts.json (when the parts are passed in) · `unlock.tier`
+// missing on a ladder, present on a one-off badge, or outside 1..8 · two badges with the same
+// `unlock.part` · `xp` not an integer >= 0, or `xp` on a ladder · `retired` without `replacedBy`, or a
+// `replacedBy` that is not an existing, non-retired badge · a `cuisine` id that is not in
+// data/cuisines.json (a warning instead when that file does not exist) · a `feature` id outside
+// BADGE_FEATURE_IDS · `weekdayCooks.days` empty or outside 0..6 · `cookHour` from/to outside 0..23 or
+// from > to · an unknown `calendar.when` · `comeback.days` < 1. `sameRecipeDays` always has an `n`
+// (src/domain/badges.ts `BadgeRule`: `n: number`), so it is never a ladder.
+// Warnings: a ladder cuisine/tag/ingredient id that occurs in 0 classics (only with `classics`), more
+// than 150 badges (retired ones not counted), stray rule fields, `replacedBy` without `retired`.
 
-/** Rule kinds that carry `{ n }` only (src/domain/badges.ts `BadgeRule`). */
+/**
+ * The eight badge groups in page order. Mirrors BADGE_GROUPS in src/domain/badges.ts — not imported:
+ * the domain modules import each other without `.ts` extensions, which Node's type stripping cannot
+ * resolve (tests/validate-badges.test.ts keeps the two lists equal).
+ */
+export const BADGE_GROUP_IDS: readonly string[] = ['koken', 'ontdekken', 'keukens', 'seizoenen', 'samen', 'foto', 'reeksen', 'geheim'];
+
+/** The 32 feature-event ids (§2c). Mirrors FEATURE_IDS in src/domain/features.ts (not imported, as above). */
+export const BADGE_FEATURE_IDS: readonly string[] = [
+  'voice', 'print', 'qrShown', 'theme', 'amounts', 'readAloud', 'langToggle', 'fahrenheit', 'pasteRecipe',
+  'aiImport', 'backup', 'restore', 'story', 'pick7', 'pantry', 'wordPicker', 'scaled', 'standingList', 'sort',
+  'cookSwipe', 'cookMode', 'timer', 'planCook', 'listMade', 'surprise', 'dictEdit', 'variant', 'planShared',
+  'listShared', 'deltaShared', 'cardShared', 'feedback',
+];
+
+/** Number of thresholds on a ladder badge (yellow, green, blue, red, bronze, silver, gold, platinum). */
+export const BADGE_TIER_COUNT = 8;
+
+/** Rule kinds that carry only `{ n? }`: `n` for a one-off badge, `tiers` on the badge for a ladder (§2b `CountKind`). */
 export const BADGE_COUNT_KINDS: readonly string[] = [
   'cookCount',
   'distinctRecipes',
   'ownRecipes',
   'reviews',
   'oneStar',
+  'fiveStar',
   'photos',
+  'photoRecipes',
+  'photosOfOneRecipe',
   'shared',
   'received',
   'streakWeeks',
+  'streakDays',
+  'fullWeeks',
+  'classics',
+  'cuisines',
+  'householdMembers',
+  'cooks',
+  'donor',
 ];
-/** Rule kinds that carry `{ id, n }`, checked against the dictionary refs. */
-export const BADGE_REF_KINDS: readonly string[] = ['category', 'tag', 'ingredient'];
-/** Rule kinds without fields. */
-export const BADGE_BARE_KINDS: readonly string[] = ['letters', 'allClassics', 'halfClassics'];
+/** Rule kinds that carry `{ id, n? }`, checked against the dictionary refs. */
+export const BADGE_REF_KINDS: readonly string[] = ['category', 'tag', 'ingredient', 'cuisine'];
+/** Rule kinds without fields (and never a ladder). */
+export const BADGE_BARE_KINDS: readonly string[] = ['letters', 'allClassics', 'halfClassics', 'allCategories'];
+/** Rule kinds with their own fields next to `n?` (§2b); the fields each kind takes besides `kind` and `n`. */
+export const BADGE_FIELD_KINDS: Readonly<Record<string, readonly string[]>> = {
+  seasonCooks: [],
+  weekdayCooks: ['days'],
+  cookHour: ['from', 'to'],
+  sameRecipeDays: [],
+  calendar: ['when'],
+  feature: ['id'],
+  retryAfterOneStar: [],
+  comeback: ['days'],
+  overcooked: [],
+};
+/** `calendar.when` values. */
+export const BADGE_CALENDAR_WHEN: readonly string[] = ['friday-13', 'leap-day'];
 
-const ALL_BADGE_KINDS: readonly string[] = [...BADGE_COUNT_KINDS, ...BADGE_REF_KINDS, ...BADGE_BARE_KINDS];
+const ALL_BADGE_KINDS: readonly string[] = [...BADGE_COUNT_KINDS, ...BADGE_REF_KINDS, ...BADGE_BARE_KINDS, ...Object.keys(BADGE_FIELD_KINDS)];
 
 /** Which ref set a ref-kind rule id is checked against. */
 const BADGE_REF_SET: Readonly<Record<string, keyof DictionaryRefs>> = {
   category: 'categories',
   tag: 'tags',
   ingredient: 'ingredients',
+  cuisine: 'cuisines',
 };
+
+/** More badges than this (retired ones not counted) gives a warning (§2e). */
+const BADGE_SOFT_MAX = 150;
+
+const MONTH_DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+/** 'MM-DD' with a real month and day (29 February allowed). */
+function isMonthDay(v: unknown): boolean {
+  if (typeof v !== 'string' || !/^\d\d-\d\d$/.test(v)) return false;
+  const month = Number(v.slice(0, 2));
+  const day = Number(v.slice(3));
+  return month >= 1 && month <= 12 && day >= 1 && day <= MONTH_DAYS[month - 1]!;
+}
+
+function isIntIn(v: unknown, min: number, max = Number.POSITIVE_INFINITY): v is number {
+  return typeof v === 'number' && Number.isInteger(v) && v >= min && v <= max;
+}
+
+/** Extra inputs for validateBadges, read from other data files by `main()`. */
+export interface BadgeCheckInput {
+  /** data/avatar-parts.json as parsed; with it every `unlock.part` must name a part. */
+  avatarParts?: unknown;
+  /** The classics (builtin recipes of data/recipes.json); with them, ladder ids found in none warn. */
+  classics?: readonly unknown[];
+}
+
+/** How many classics use a cuisine / tag / ingredient id (src/domain/badges.ts counts top-level lines). */
+function classicsUsing(kind: string, id: string, classics: readonly unknown[]): number {
+  let count = 0;
+  for (const r of classics) {
+    if (!isRecord(r)) continue;
+    if (kind === 'cuisine' && r['cuisine'] === id) count++;
+    else if (kind === 'tag' && isStringArray(r['tags']) && r['tags'].includes(id)) count++;
+    else if (kind === 'ingredient' && Array.isArray(r['lines']) && r['lines'].some((l: unknown) => isRecord(l) && l['ing'] === id)) count++;
+  }
+  return count;
+}
 
 /**
  * Validate data/badges.json. Pure: takes the parsed JSON, returns errors/warnings.
- * With `refs` (see `refsFromData`) category/tag/ingredient rule ids are checked as well.
+ * With `refs` (see `refsFromData`) category/tag/ingredient/cuisine rule ids are checked as well; with
+ * `input.avatarParts` every `unlock.part`; with `input.classics` the "never reachable" warning.
  */
-export function validateBadges(data: unknown, refs?: DictionaryRefs): ValidationResult {
+export function validateBadges(data: unknown, refs?: DictionaryRefs, input: BadgeCheckInput = {}): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -716,6 +814,14 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs): Validation
     errors.push('badges.json: must be an array of badges.');
     return { errors, warnings, stats: { recipes: 0, lines: 0 } };
   }
+
+  const partIds: ReadonlySet<string> | null = Array.isArray(input.avatarParts)
+    ? new Set(input.avatarParts.filter(isRecord).map((p) => p['id']).filter((id): id is string => typeof id === 'string'))
+    : null;
+  const unlockOwners = new Map<string, string>(); // part id -> first badge label that unlocks it
+  const replacements: Array<{ label: string; replacedBy: string }> = [];
+  const retiredIds = new Set<string>();
+  let active = 0;
 
   const seen = new Map<string, number>();
   data.forEach((badge: unknown, index: number) => {
@@ -750,36 +856,287 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs): Validation
     const icon = badge['icon'];
     if (typeof icon !== 'string' || icon.trim() === '') errors.push(`${label}: "icon" must be a non-empty string.`);
 
+    // Ladder or one-off: a ladder has `tiers` (and then no `rule.n`).
+    const tiers = badge['tiers'];
+    const ladder = tiers !== undefined;
+    if (ladder) {
+      const ok = Array.isArray(tiers) && tiers.length === BADGE_TIER_COUNT && tiers.every((t: unknown, i: number) => isIntIn(t, 1) && (i === 0 || t > (tiers[i - 1] as number)));
+      if (!ok) errors.push(`${label}: "tiers" must be exactly ${BADGE_TIER_COUNT} strictly increasing integers >= 1.`);
+    }
+
     const rule = badge['rule'];
+    let kind: string | null = null;
     if (!isRecord(rule) || typeof rule['kind'] !== 'string' || !ALL_BADGE_KINDS.includes(rule['kind'])) {
       errors.push(`${label}: "rule.kind" must be one of ${ALL_BADGE_KINDS.join(' | ')}.`);
     } else {
-      const kind = rule['kind'];
-      const needsN = BADGE_COUNT_KINDS.includes(kind) || BADGE_REF_KINDS.includes(kind);
-      if (needsN) {
-        const n = rule['n'];
-        if (typeof n !== 'number' || !Number.isInteger(n) || n < 1) errors.push(`${label}: rule.n must be an integer >= 1 for kind "${kind}".`);
-      } else if (rule['n'] !== undefined || rule['id'] !== undefined) {
-        warnings.push(`${label}: rule kind "${kind}" takes no fields; "n"/"id" are ignored.`);
+      kind = rule['kind'];
+      const n = rule['n'];
+      if (BADGE_BARE_KINDS.includes(kind)) {
+        if (rule['n'] !== undefined || rule['id'] !== undefined) warnings.push(`${label}: rule kind "${kind}" takes no fields; "n"/"id" are ignored.`);
+        if (ladder) errors.push(`${label}: rule kind "${kind}" cannot be a ladder; drop "tiers".`);
+      } else {
+        if (n !== undefined && !isIntIn(n, 1)) errors.push(`${label}: rule.n must be an integer >= 1 for kind "${kind}".`);
+        if (kind === 'sameRecipeDays') {
+          if (n === undefined) errors.push(`${label}: rule.n must be an integer >= 1 for kind "${kind}".`);
+          if (ladder) errors.push(`${label}: rule kind "${kind}" cannot be a ladder; drop "tiers".`);
+        } else if (ladder && n !== undefined) {
+          errors.push(`${label}: a ladder ("tiers") has no rule.n; drop one of the two.`);
+        } else if (!ladder && n === undefined) {
+          errors.push(`${label}: rule.n must be an integer >= 1 for kind "${kind}" (or give the badge "tiers").`);
+        }
+        const allowed = new Set(['kind', 'n', ...(BADGE_REF_KINDS.includes(kind) ? ['id'] : []), ...(BADGE_FIELD_KINDS[kind] ?? [])]);
+        for (const key of Object.keys(rule)) if (!allowed.has(key)) warnings.push(`${label}: rule kind "${kind}" takes no ${JSON.stringify(key)}; it is ignored.`);
       }
+
       if (BADGE_REF_KINDS.includes(kind)) {
         const refId = rule['id'];
         if (typeof refId !== 'string' || refId === '') {
           errors.push(`${label}: rule.id must be a non-empty id string for kind "${kind}".`);
-        } else if (refs) {
+        } else {
           const refSet = BADGE_REF_SET[kind];
-          if (refSet && !refs[refSet].has(refId)) {
-            errors.push(`${label}: rule.id ${JSON.stringify(refId)} is not a known ${kind} id.`);
+          if (refs && refSet) {
+            if (kind === 'cuisine' && refs.cuisines.size === 0) {
+              warnings.push(`${label}: data/cuisines.json is not present; cuisine id ${JSON.stringify(refId)} is unchecked.`);
+            } else if (!refs[refSet].has(refId)) {
+              errors.push(`${label}: rule.id ${JSON.stringify(refId)} is not a known ${kind} id.`);
+            }
+          }
+          if (ladder && kind !== 'category' && input.classics && classicsUsing(kind, refId, input.classics) === 0) {
+            warnings.push(`${label}: ${kind} ${JSON.stringify(refId)} occurs in no classic; the ladder needs recipes of your own.`);
           }
         }
-      } else if (BADGE_COUNT_KINDS.includes(kind) && rule['id'] !== undefined) {
-        warnings.push(`${label}: rule kind "${kind}" takes no "id"; it is ignored.`);
       }
+      if (kind === 'feature' && (typeof rule['id'] !== 'string' || !BADGE_FEATURE_IDS.includes(rule['id']))) {
+        errors.push(`${label}: rule.id ${JSON.stringify(rule['id'])} is not a feature id (${BADGE_FEATURE_IDS.join(', ')}).`);
+      }
+      if (kind === 'weekdayCooks') {
+        const days = rule['days'];
+        if (!Array.isArray(days) || days.length === 0 || !days.every((d: unknown) => isIntIn(d, 0, 6))) {
+          errors.push(`${label}: rule.days must be a non-empty array of weekdays 0..6 (0 = Sunday).`);
+        }
+      }
+      if (kind === 'cookHour') {
+        const from = rule['from'];
+        const to = rule['to'];
+        if (!isIntIn(from, 0, 23) || !isIntIn(to, 0, 23)) errors.push(`${label}: rule.from and rule.to must be hours 0..23.`);
+        else if (from > to) errors.push(`${label}: rule.from (${from}) must not be after rule.to (${to}).`);
+      }
+      if (kind === 'calendar' && (typeof rule['when'] !== 'string' || !BADGE_CALENDAR_WHEN.includes(rule['when']))) {
+        errors.push(`${label}: rule.when must be one of ${BADGE_CALENDAR_WHEN.join(' | ')}.`);
+      }
+      if (kind === 'comeback' && !isIntIn(rule['days'], 1)) errors.push(`${label}: rule.days must be an integer >= 1.`);
     }
 
-    const tier = badge['tier'];
-    if (tier !== undefined && tier !== 1 && tier !== 2 && tier !== 3) errors.push(`${label}: "tier" must be 1, 2 or 3 when present.`);
+    // `{n}` in the descriptions: always on a ladder, never on a one-off badge.
+    for (const lang of ['nl', 'en'] as const) {
+      const text = badge[lang];
+      const description = isRecord(text) ? text['description'] : undefined;
+      if (typeof description !== 'string') continue;
+      const hasN = description.includes('{n}');
+      if (ladder && !hasN) errors.push(`${label}: a ladder needs "{n}" in ${lang}.description.`);
+      if (!ladder && hasN) errors.push(`${label}: a one-off badge has no "{n}" in ${lang}.description.`);
+    }
+
+    const group = badge['group'];
+    if (typeof group !== 'string' || !BADGE_GROUP_IDS.includes(group)) errors.push(`${label}: "group" must be one of ${BADGE_GROUP_IDS.join(' | ')}.`);
+    for (const flag of ['hidden', 'retired'] as const) {
+      if (badge[flag] !== undefined && typeof badge[flag] !== 'boolean') errors.push(`${label}: "${flag}" must be true or false when present.`);
+    }
+    if (group === 'geheim' && badge['hidden'] !== true) errors.push(`${label}: a badge in group "geheim" must have "hidden": true.`);
+
+    const season = badge['season'];
+    if (season !== undefined) {
+      if (kind !== null && kind !== 'seasonCooks') errors.push(`${label}: "season" belongs to rule kind "seasonCooks" only.`);
+      if (!isRecord(season) || !isMonthDay(season['from']) || !isMonthDay(season['to'])) errors.push(`${label}: "season" must be { from, to } with valid 'MM-DD' dates.`);
+    } else if (kind === 'seasonCooks') {
+      errors.push(`${label}: rule kind "seasonCooks" needs a "season" { from, to }.`);
+    }
+
+    const unlock = badge['unlock'];
+    if (unlock !== undefined) {
+      const part = isRecord(unlock) ? unlock['part'] : undefined;
+      if (typeof part !== 'string' || part === '') {
+        errors.push(`${label}: "unlock" must be { part, tier? } with a non-empty part id.`);
+      } else {
+        if (partIds && !partIds.has(part)) errors.push(`${label}: unlock.part ${JSON.stringify(part)} is not in avatar-parts.json.`);
+        const owner = unlockOwners.get(part);
+        if (owner !== undefined) errors.push(`${label}: unlock.part ${JSON.stringify(part)} is already unlocked by ${owner}.`);
+        else unlockOwners.set(part, label);
+      }
+      const tier = isRecord(unlock) ? unlock['tier'] : undefined;
+      if (ladder && tier === undefined) errors.push(`${label}: a ladder needs unlock.tier (1..${BADGE_TIER_COUNT}).`);
+      else if (!ladder && tier !== undefined) errors.push(`${label}: a one-off badge takes no unlock.tier.`);
+      else if (tier !== undefined && !isIntIn(tier, 1, BADGE_TIER_COUNT)) errors.push(`${label}: unlock.tier must be an integer 1..${BADGE_TIER_COUNT}.`);
+    }
+
+    const xp = badge['xp'];
+    if (xp !== undefined) {
+      if (!isIntIn(xp, 0)) errors.push(`${label}: "xp" must be an integer >= 0.`);
+      if (ladder) errors.push(`${label}: a ladder takes no "xp" (it earns 50 per level reached).`);
+    }
+
+    const replacedBy = badge['replacedBy'];
+    if (badge['retired'] === true) {
+      if (typeof id === 'string') retiredIds.add(id);
+      if (typeof replacedBy !== 'string' || replacedBy === '') errors.push(`${label}: a retired badge needs "replacedBy" (the badge that took over).`);
+      else replacements.push({ label, replacedBy });
+    } else {
+      active++;
+      if (replacedBy !== undefined) warnings.push(`${label}: "replacedBy" without "retired": true is ignored.`);
+    }
+
+    const oldTier = badge['tier'];
+    if (oldTier !== undefined && oldTier !== 1 && oldTier !== 2 && oldTier !== 3) errors.push(`${label}: "tier" must be 1, 2 or 3 when present.`);
   });
+
+  for (const { label, replacedBy } of replacements) {
+    if (!seen.has(replacedBy)) errors.push(`${label}: replacedBy ${JSON.stringify(replacedBy)} is not a badge id.`);
+    else if (retiredIds.has(replacedBy)) errors.push(`${label}: replacedBy ${JSON.stringify(replacedBy)} is itself retired.`);
+  }
+  if (active > BADGE_SOFT_MAX) warnings.push(`badges.json: ${active} badges (not counting retired ones); more than ${BADGE_SOFT_MAX} is a lot for one page.`);
+
+  return { errors, warnings, stats: { recipes: 0, lines: data.length } };
+}
+
+// ---------------------------------------------------------------------------
+// Avatar parts: data/avatar-parts.json (docs/specs/badges-avatar.md §2f, src/domain/avatar.ts `AvatarPart`)
+// ---------------------------------------------------------------------------
+//
+// Errors: an array of { id, layer, nl, en, unlock, svg }; ids kebab-case and unique and starting with
+// `<layer>-`; layer in AVATAR_LAYERS; nl/en non-empty; unlock exactly one of { level: 3..100 } or
+// { badge: <id> } where that badge exists, is not retired and has unlock.part === this id — and, the
+// other way round, every badge whose unlock.part names a part is named back by that part's unlock;
+// svg a string without `<script`, without `href=` and without `style=` other than the two allowed
+// `fill:var(--tone)` / `fill:var(--hair)`, every `id="…"` in it ends with `__u` and every `url(#…)`
+// points at such an id in the same svg; every layer in AVATAR_REQUIRED_LAYERS has a level-3 part.
+// Warnings: stray keys.
+
+/**
+ * The avatar layers in drawing order. Mirrors LAYER_ORDER in src/domain/avatar.ts (6D-3; not imported
+ * for the same reason as BADGE_GROUP_IDS, and that module does not exist before 6D-3).
+ */
+export const AVATAR_LAYERS: readonly string[] = ['bg', 'body', 'pin', 'face', 'facial', 'mouth', 'eyes', 'hair', 'glasses', 'hat', 'prop'];
+/** Layers an avatar must have. Mirrors REQUIRED_LAYERS in src/domain/avatar.ts (6D-3). */
+export const AVATAR_REQUIRED_LAYERS: readonly string[] = ['face', 'eyes', 'mouth', 'body'];
+/** Mirrors AVATAR_MAKER_LEVEL in src/domain/avatar.ts: the lowest level a part can unlock at. */
+const AVATAR_MIN_LEVEL = 3;
+/** Mirrors MAX_LEVEL in src/domain/levels.ts. */
+const AVATAR_MAX_LEVEL = 100;
+/** The only inline styles a part may carry (the renderer sets --tone and --hair). */
+const AVATAR_STYLES: ReadonlySet<string> = new Set(['fill:var(--tone)', 'fill:var(--hair)']);
+const AVATAR_PART_KEYS: ReadonlySet<string> = new Set(['id', 'layer', 'nl', 'en', 'unlock', 'svg']);
+/** The suffix the renderer replaces with a unique id per drawn avatar. */
+const AVATAR_UID = '__u';
+
+/** Problems in one part's SVG fragment (empty list = fine). */
+export function checkAvatarSvg(svg: string): string[] {
+  const problems: string[] = [];
+  if (/<script/i.test(svg)) problems.push('contains "<script"');
+  if (/href\s*=/i.test(svg)) problems.push('contains "href="');
+  const styles = [...svg.matchAll(/style\s*=\s*(["'])(.*?)\1/gi)];
+  const styleCount = (svg.match(/style\s*=/gi) ?? []).length;
+  for (const m of styles) if (!AVATAR_STYLES.has(m[2]!)) problems.push(`style=${JSON.stringify(m[2])} is not allowed (only fill:var(--tone) / fill:var(--hair))`);
+  if (styleCount !== styles.length) problems.push('has an unquoted style=');
+  const ids = new Set<string>();
+  for (const m of svg.matchAll(/(?:^|\s)id\s*=\s*(["'])(.*?)\1/g)) {
+    const id = m[2]!;
+    if (!id.endsWith(AVATAR_UID)) problems.push(`id=${JSON.stringify(id)} does not end with "${AVATAR_UID}"`);
+    ids.add(id);
+  }
+  for (const m of svg.matchAll(/url\(\s*#([^)\s'"]*)\s*\)/g)) {
+    const ref = m[1]!;
+    if (!ref.endsWith(AVATAR_UID) || !ids.has(ref)) problems.push(`url(#${ref}) does not point at an id="…${AVATAR_UID}" in this svg`);
+  }
+  return problems;
+}
+
+/**
+ * Validate data/avatar-parts.json against data/badges.json (both as parsed JSON). Pure: returns
+ * errors/warnings. The badge side of the cross-check is here too: a badge's unlock.part that names a
+ * part must be named back by that part.
+ */
+export function validateAvatarParts(data: unknown, badges: unknown): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+
+  if (!Array.isArray(data)) {
+    errors.push('avatar-parts.json: must be an array of parts.');
+    return { errors, warnings, stats: { recipes: 0, lines: 0 } };
+  }
+
+  const badgeList = Array.isArray(badges) ? badges.filter(isRecord) : [];
+  const badgeById = new Map<string, Record<string, unknown>>();
+  for (const b of badgeList) if (typeof b['id'] === 'string') badgeById.set(b['id'], b);
+  const unlockPart = (b: Record<string, unknown>): unknown => (isRecord(b['unlock']) ? b['unlock']['part'] : undefined);
+
+  const parts = new Map<string, Record<string, unknown>>();
+  const level3Layers = new Set<string>();
+  data.forEach((part: unknown, index: number) => {
+    const where = `avatar-parts.json[${index}]`;
+    if (!isRecord(part)) {
+      errors.push(`${where}: not an object.`);
+      return;
+    }
+    const id = part['id'];
+    const label = typeof id === 'string' && id !== '' ? `avatar-parts.json ${JSON.stringify(id)}` : where;
+    if (typeof id !== 'string' || !ID_RE.test(id)) {
+      errors.push(`${where}: "id" must be a kebab-case slug (a-z, 0-9, dashes), got ${JSON.stringify(id)}.`);
+    } else if (parts.has(id)) {
+      errors.push(`${label}: duplicate id.`);
+    } else {
+      parts.set(id, part);
+    }
+
+    const layer = part['layer'];
+    if (typeof layer !== 'string' || !AVATAR_LAYERS.includes(layer)) {
+      errors.push(`${label}: "layer" must be one of ${AVATAR_LAYERS.join(' | ')}.`);
+    } else if (typeof id === 'string' && !id.startsWith(`${layer}-`)) {
+      errors.push(`${label}: the id must start with "${layer}-" (its layer).`);
+    }
+
+    for (const lang of ['nl', 'en'] as const) {
+      const v = part[lang];
+      if (typeof v !== 'string' || v.trim() === '') errors.push(`${label}: "${lang}" must be a non-empty string.`);
+    }
+
+    const unlock = part['unlock'];
+    const hasLevel = isRecord(unlock) && unlock['level'] !== undefined;
+    const hasBadge = isRecord(unlock) && unlock['badge'] !== undefined;
+    if (!isRecord(unlock) || hasLevel === hasBadge) {
+      errors.push(`${label}: "unlock" must be { level } or { badge }.`);
+    } else if (hasLevel) {
+      const level = unlock['level'];
+      if (!isIntIn(level, AVATAR_MIN_LEVEL, AVATAR_MAX_LEVEL)) errors.push(`${label}: unlock.level must be an integer ${AVATAR_MIN_LEVEL}..${AVATAR_MAX_LEVEL}.`);
+      else if (level === AVATAR_MIN_LEVEL && typeof layer === 'string') level3Layers.add(layer);
+    } else {
+      const badgeId = unlock['badge'];
+      const badge = typeof badgeId === 'string' ? badgeById.get(badgeId) : undefined;
+      if (!badge) errors.push(`${label}: unlock.badge ${JSON.stringify(badgeId)} is not a badge in badges.json.`);
+      else if (badge['retired'] === true) errors.push(`${label}: unlock.badge ${JSON.stringify(badgeId)} is retired, so the part could never unlock.`);
+      else if (unlockPart(badge) !== id) errors.push(`${label}: badge ${JSON.stringify(badgeId)} does not point back (its unlock.part is ${JSON.stringify(unlockPart(badge))}).`);
+    }
+
+    const svg = part['svg'];
+    if (typeof svg !== 'string') errors.push(`${label}: "svg" must be a string (empty = draws nothing).`);
+    else for (const problem of checkAvatarSvg(svg)) errors.push(`${label}: svg ${problem}.`);
+
+    for (const key of Object.keys(part)) if (!AVATAR_PART_KEYS.has(key)) warnings.push(`${label}: unexpected key ${JSON.stringify(key)}.`);
+  });
+
+  // The badge side: a badge that unlocks a known part must be the badge that part names.
+  for (const b of badgeList) {
+    const partId = unlockPart(b);
+    if (typeof partId !== 'string') continue;
+    const part = parts.get(partId);
+    if (!part) continue; // reported by validateBadges (unlock.part is not in avatar-parts.json)
+    const partUnlock = part['unlock'];
+    const named = isRecord(partUnlock) ? partUnlock['badge'] : undefined;
+    if (named !== b['id']) errors.push(`badges.json ${JSON.stringify(b['id'])}: unlocks part ${JSON.stringify(partId)}, but that part's unlock is ${JSON.stringify(partUnlock)}.`);
+  }
+
+  for (const layer of AVATAR_REQUIRED_LAYERS) {
+    if (!level3Layers.has(layer)) errors.push(`avatar-parts.json: required layer "${layer}" has no part at level ${AVATAR_MIN_LEVEL}.`);
+  }
 
   return { errors, warnings, stats: { recipes: 0, lines: data.length } };
 }
@@ -979,6 +1336,8 @@ function main(): void {
   const dictData = readDictionaryData(root);
   const schema2Rel = 'data/recipes.json';
   const schema2Path = join(root, schema2Rel);
+  // Parsed once: the side dishes, the badge warnings and the schema-2 check all read it.
+  const schema2Data: unknown = existsSync(schema2Path) ? readJson(schema2Path) : undefined;
 
   // The side dishes (docs/specs/bijgerechten.md §2d). The committed recipes.json already holds the 20
   // after `npm run migrate`, so they are left out of the classics (else every id would "collide").
@@ -988,12 +1347,12 @@ function main(): void {
   const sides = readSides(root);
   if (!sides) {
     console.log(`${sidesRel}: not present (side-dish checks skipped).`);
-  } else if (!existsSync(schema2Path)) {
+  } else if (schema2Data === undefined) {
     console.log(`${sidesRel}: ${schema2Rel} not present yet (side-dish checks skipped).`);
   } else {
     // Unchecked JSON: count defensively, `checkSides` reports the shape problems.
     const sideList = Array.isArray(sides.recipes) ? sides.recipes : [];
-    const committed = (readJson(schema2Path) as { recipes?: Recipe[] }).recipes ?? [];
+    const committed = (schema2Data as { recipes?: Recipe[] }).recipes ?? [];
     const classics = committed.filter((r) => r.createdAt !== SIDES_TIMESTAMP);
     const errors = checkSides(sides, classics, loadDictionary(dictData));
     const lineCount = sideList.reduce((n, s) => n + (Array.isArray(s?.lines) ? s.lines.length : 0), 0);
@@ -1009,10 +1368,29 @@ function main(): void {
   );
   if (dictionary.errors.length > 0) failed = true;
 
+  // Badges (docs/specs/badges-avatar.md §2e) read the avatar library and the classics alongside, the
+  // avatar parts (§2f) read the badges back (the unlock cross-check runs both ways).
   const badgesRel = 'data/badges.json';
-  const badges = validateBadges(readJson(join(root, badgesRel)), refsFromData(dictData));
-  print(badgesRel, badges, `${badges.stats.lines} badges`);
+  const partsRel = 'data/avatar-parts.json';
+  const badgesData = readJson(join(root, badgesRel));
+  const partsPath = join(root, partsRel);
+  const partsData: unknown = existsSync(partsPath) ? readJson(partsPath) : undefined;
+  const recipeList = isRecord(schema2Data) && Array.isArray(schema2Data['recipes']) ? (schema2Data['recipes'] as unknown[]) : undefined;
+  const classics = recipeList?.filter((r) => isRecord(r) && typeof r['id'] === 'string' && r['id'].startsWith('b:'));
+  const badges = validateBadges(badgesData, refsFromData(dictData), { avatarParts: partsData, classics });
+  const badgeRows = Array.isArray(badgesData) ? badgesData : [];
+  const retiredCount = badgeRows.filter((b) => isRecord(b) && b['retired'] === true).length;
+  const hiddenCount = badgeRows.filter((b) => isRecord(b) && b['hidden'] === true && b['retired'] !== true).length;
+  print(badgesRel, badges, `${badgeRows.length - retiredCount} badges (${hiddenCount} hidden) + ${retiredCount} retired`);
   if (badges.errors.length > 0) failed = true;
+
+  if (partsData === undefined) {
+    console.log(`${partsRel}: not present (avatar checks skipped).`);
+  } else {
+    const parts = validateAvatarParts(partsData, badgesData);
+    print(partsRel, parts, `${parts.stats.lines} avatar parts`);
+    if (parts.errors.length > 0) failed = true;
+  }
 
   const levelsRel = 'data/levels.json';
   const levels = validateLevels(readJson(join(root, levelsRel)));
@@ -1024,8 +1402,8 @@ function main(): void {
   print(swapsRel, swaps, `${swaps.stats.lines} swaps`);
   if (swaps.errors.length > 0) failed = true;
 
-  if (existsSync(schema2Path)) {
-    const schema2 = validateSchema2(readJson(schema2Path), refsFromData(dictData));
+  if (schema2Data !== undefined) {
+    const schema2 = validateSchema2(schema2Data, refsFromData(dictData));
     const s = schema2.stats;
     print(schema2Rel, schema2, `${s.recipes} recipes (${s.translated ?? 0} with English), ${s.lines} ingredient lines (${s.resolved ?? 0} resolved)`);
     if (schema2.errors.length > 0) failed = true;

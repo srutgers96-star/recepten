@@ -1,6 +1,7 @@
 # Spec 6D-2/6D-3 — Badge-catalogus (±120) en avatar-bibliotheek (±64 onderdelen)
 
 Status: compleet (Fable, 22 okt 2026)
+Gebouwd: 29 okt 2026 (blok 6D-2a, workflow wf_6f6fb349-c5a; op /next/ tot 6D-2b)
 
 **Besluit Stijn (24 okt 2026) — de ambitie gaat omhoog, niet omlaag.** De avatar wordt een echte garderobe:
 **zeven lagen** die je apart kiest (voorstel: achtergrond · lichaam/shirt · gezicht · haar · hoofddeksel · attribuut in

@@ -60,10 +60,10 @@ const median = (xs: number[]): number => [...xs].sort((a, b) => a - b)[Math.floo
 
 // ---------------------------------------------------------------------------- rules + hash
 
-describe('XP_RULES (regelversie 1)', () => {
-  it('has version 1 and the numbers of §2b', () => {
-    expect(XP_RULES_VERSION).toBe(1);
-    expect(XP_RULES.version).toBe(1);
+describe('XP_RULES (regelversie 2)', () => {
+  it('has version 2 (6D-2a) and the numbers of §2b', () => {
+    expect(XP_RULES_VERSION).toBe(2);
+    expect(XP_RULES.version).toBe(2);
     expect(XP_RULES).toMatchObject({
       cookFirst: 100, cookStep: 10, cookFloor: 50, difficultyPer: 5, difficultyFromLines: 7, difficultyMax: 30,
       starsBonus: 5, photoFirst: 30, photoNext: 20, ownRecipe: 10, ownRecipeBilingual: 15, badgePerLevel: 50,
@@ -228,7 +228,7 @@ describe('deriveXp — worked example (§2c)', () => {
     expect(s.level).toBe(5);
     expect(s.levelStart).toBe(352);
     expect(s.nextAt).toBe(615);
-    expect(s.rulesVersion).toBe(1);
+    expect(s.rulesVersion).toBe(2);
     expect(s.cookDays).toHaveLength(3);
     expect(s.streak).toEqual({ current: 3, best: 3, lastDay: today, freeDayUsed: false });
     expect(s.byKey.get('cook:b:uiensoep|2026-10-20T17:30:00.000Z')!.xp).toBe(131);

@@ -96,8 +96,11 @@ function isBilingual(r: Recipe): boolean {
 /**
  * The XP facts of one member: their cook log and photos, every recipe's ingredient-line count
  * (headers excluded), their own recipes (origin 'user', author = this profile's name folded, no
- * `variantOf` and no `origin.basedOn`) and the badges earned on their OWN tab. Before 6D-2 every
- * earned badge is `{ id, level: 1, secret: false }` (base 50, §2f).
+ * `variantOf` and no `origin.basedOn`) and the badges earned on their OWN tab. Since 6D-2a every
+ * earned badge is `{ id, level: tier, secret: hidden, xp: Badge.xp }` (§2f: ladder 50·k per reached
+ * tier, one-off `xp ?? (hidden ? 250 : 50)`). The badges are evaluated WITHOUT this member's XP
+ * state (`{ xp: false }`): badgeStatuses would otherwise ask xpStateFor for the state being derived
+ * right here and wait for itself; a registered `overcooked` badge still counts (sticky).
  */
 export async function buildXpFacts(memberId: string): Promise<XpFacts> {
   const [recipes, log, photos, profiles, statuses] = await Promise.all([
@@ -105,7 +108,7 @@ export async function buildXpFacts(memberId: string): Promise<XpFacts> {
     listCookLog(),
     listAllPhotosMeta(),
     listProfiles(),
-    badgeStatuses(memberId),
+    badgeStatuses(memberId, { xp: false }),
   ]);
   const lines = new Map<string, XpRecipeFact>();
   for (const r of recipes) {
@@ -125,7 +128,7 @@ export async function buildXpFacts(memberId: string): Promise<XpFacts> {
     recipes: lines,
     photos: photos.filter((p) => p.memberId === memberId).map((p) => ({ recipeId: p.recipeId, at: p.at })),
     ownRecipes,
-    badges: statuses.filter((s) => s.earned).map((s) => ({ id: s.badge.id, level: 1, secret: false })),
+    badges: statuses.filter((s) => s.earned).map((s) => ({ id: s.badge.id, level: s.tier, secret: s.badge.hidden === true, xp: s.badge.xp })),
   };
 }
 

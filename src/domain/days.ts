@@ -1,8 +1,8 @@
-// Local calendar-day helpers for the XP derivation (docs/specs/xp-levels.md §2c). Framework-free.
+// Local calendar-day helpers for the XP derivation (docs/specs/xp-levels.md §2c) and the badges
+// (badges.ts imports them since 6D-2a; no private copies left). Framework-free.
 //
-// A "day index" is the LOCAL calendar day encoded as days since 1970-01-01, the same convention as
-// localDayIndex in badges.ts (which keeps its own private copy for now; to be merged later). Log
-// timestamps are UTC ISO strings, but a cook at 00:30 local Monday belongs to Monday.
+// A "day index" is the LOCAL calendar day encoded as days since 1970-01-01. Log timestamps are UTC
+// ISO strings, but a cook at 00:30 local Monday belongs to Monday.
 
 const DAY_MS = 86_400_000;
 

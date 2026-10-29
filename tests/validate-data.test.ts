@@ -195,7 +195,7 @@ describe('validateSwaps: lactosevrij (labels-categorieen.md §2b)', () => {
 describe('validateBadges: the lactosevrij tag rule', () => {
   const refs = refsFromData(REAL);
   const badge = (rule: Record<string, unknown>) => [
-    { id: 'zuivelvrije-ziel', nl: { name: 'Zuivelvrije ziel', description: 'Kook 5 lactosevrije recepten' }, en: { name: 'Dairy-free soul', description: 'Cook 5 lactose-free recipes' }, icon: '🥥', rule, tier: 1 },
+    { id: 'zuivelvrije-ziel', nl: { name: 'Zuivelvrije ziel', description: 'Kook 5 lactosevrije recepten' }, en: { name: 'Dairy-free soul', description: 'Cook 5 lactose-free recipes' }, icon: '🥥', rule, group: 'koken', tier: 1 },
   ];
 
   it("rule { kind: 'tag', id: 'lactosevrij' } is fine; an unknown tag is not", () => {
