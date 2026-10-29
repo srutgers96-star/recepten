@@ -1,15 +1,32 @@
-/* Phase-5 block C badges: the Badges screen (member tabs, badge grid, progress, tier accents)
-   and the new-badge toast in the shell. Owned by the badges agent; imported by src/main.tsx after
-   shopping.css. Colour tokens from base.css (dark mode included); the three tier accents are local
-   and chosen to read on both themes. Mobile first: 360 px, 44 px targets. */
+/* Badges: the Badges screen (member tabs, eight collapsible groups, badge grid, ladder rings,
+   tier dots) and the new-badge toast in the shell. Phase-5 block C, rebuilt for 6D-2b
+   (docs/specs/badges-avatar.md §1a, §3b); imported by src/main.tsx after shopping.css. Colour
+   tokens from base.css (dark mode included) plus the eight tier colours below. Mobile first:
+   360 px, 44 px targets. */
 
-/* ---------- Badges screen ---------- */
+/* ---------- Tokens: the eight colour tiers (§3b) ---------- */
+
+/* Tier 1 … 8 = geel, groen, blauw, rood, brons, zilver, goud, platina. On :root as well, because the
+   avatar ring (6D-3) uses them outside this screen. Mid-tones that read on light and dark cards, so
+   they stay the same in both themes (the values are fixed by the spec); everything around them
+   (grey ring, bar track, text) comes from the base.css tokens, which do switch. */
+:root,
+.badges {
+  --lvl-1: #e6b800;
+  --lvl-2: #3d9a3a;
+  --lvl-3: #2b6fd6;
+  --lvl-4: #d9402b;
+  --lvl-5: #b0712d;
+  --lvl-6: #8d9aa8;
+  --lvl-7: #c9a227;
+  --lvl-8: #7fd1d6;
+}
 
 .badges {
-  /* Tier accents (3 = gold, 2 = silver, 1 = bronze); mid-tones that work on light and dark. */
-  --tier-gold: #c9a227;
-  --tier-silver: #8d9aa8;
-  --tier-bronze: #b0712d;
+  /* Phase-5 names, kept as aliases (3 = gold, 2 = silver, 1 = bronze). */
+  --tier-gold: var(--lvl-7);
+  --tier-silver: var(--lvl-6);
+  --tier-bronze: var(--lvl-5);
 }
 
 /* Member tabs: the generic .chips strip; the active tab fills cobalt like the filter chips. */
@@ -44,12 +61,89 @@
   box-shadow: 0 0 0 1.5px var(--on-cobalt);
 }
 
-/* "N van M badges verdiend" under the tabs. */
+/* "N van M badges verdiend · n geheime gevonden" under the tabs. */
 .badges-count {
   margin: 4px 0 10px;
   color: var(--muted);
   font-size: 14px;
   font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Groups (§1a.3; the pattern of Meer's collapsible groups) ---------- */
+
+.badge-group {
+  margin: 4px 0;
+}
+
+/* The head is an h2 (a heading for screen readers) wrapping a 48 px button: "Koken · 3/33" and a
+   chevron that turns when open. */
+.badge-group .badge-group-head {
+  margin: 0;
+  font-size: 17px;
+  border-bottom: 1px solid var(--line);
+}
+
+.badge-group-head > button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 6px 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.badge-group-head > button:active {
+  background: var(--press);
+}
+
+.badge-group-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge-group-count {
+  color: var(--muted);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge-group-head .chev {
+  flex: none;
+  color: var(--muted);
+  opacity: 0.6;
+  transition: transform 0.15s;
+}
+
+.badge-group.open .badge-group-head .chev {
+  transform: rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-group-head .chev {
+    transition: none;
+  }
+}
+
+.badge-group-body {
+  padding-top: 10px;
+}
+
+/* Group "Geheim": "{n} geheime badges gevonden" or "Nog geen geheime badge gevonden …". */
+.badge-secret-note {
+  margin: 0 0 10px;
+  font-size: 14px;
 }
 
 /* ---------- Badge grid ---------- */
@@ -70,26 +164,17 @@
 }
 
 .badge-card {
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--card);
   overflow: hidden;
 }
 
-/* Earned: the tier tints the card edge (gold / silver / bronze accent). */
-.badge-card.is-earned.tier-1 {
-  border-color: var(--tier-bronze);
-  box-shadow: inset 0 0 0 1px var(--tier-bronze);
-}
-
-.badge-card.is-earned.tier-2 {
-  border-color: var(--tier-silver);
-  box-shadow: inset 0 0 0 1px var(--tier-silver);
-}
-
-.badge-card.is-earned.tier-3 {
-  border-color: var(--tier-gold);
-  box-shadow: inset 0 0 0 1px var(--tier-gold);
+/* An earned one-off badge has a gold edge (§1a.5); a ladder shows its colour in the ring instead. */
+.badge-card.is-once.is-earned {
+  border-color: var(--lvl-7);
+  box-shadow: inset 0 0 0 1px var(--lvl-7);
 }
 
 /* The whole card face is the tap target (≥ 44 px). */
@@ -121,20 +206,85 @@
   line-height: 1;
 }
 
+/* Ladder: the icon sits in a ring in the colour of the reached tier; tier 0 = grey dotted ring. */
+.badge-ring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--ring, var(--muted));
+  border-radius: 50%;
+}
+
+.badge-ring .badge-icon {
+  font-size: 26px;
+}
+
+.badge-ring.lvl-0 {
+  border-width: 2px;
+  border-style: dotted;
+  border-color: var(--muted);
+}
+
+.badges .lvl-1 {
+  --ring: var(--lvl-1);
+}
+
+.badges .lvl-2 {
+  --ring: var(--lvl-2);
+}
+
+.badges .lvl-3 {
+  --ring: var(--lvl-3);
+}
+
+.badges .lvl-4 {
+  --ring: var(--lvl-4);
+}
+
+.badges .lvl-5 {
+  --ring: var(--lvl-5);
+}
+
+.badges .lvl-6 {
+  --ring: var(--lvl-6);
+}
+
+.badges .lvl-7 {
+  --ring: var(--lvl-7);
+}
+
+.badges .lvl-8 {
+  --ring: var(--lvl-8);
+}
+
 .badge-name {
+  max-width: 100%;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.25;
   overflow-wrap: anywhere;
 }
 
-/* Locked: dimmed/grey with the "7/10" progress and a thin bar. */
+/* "Niveau 1 · geel" / "Nog geen niveau" under a ladder's name. */
+.badge-tier {
+  max-width: 100%;
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+/* Locked (one-off not earned, ladder on tier 0): the icon dimmed/grey, "7/10" and a thin bar. */
 .badge-card.is-locked .badge-icon {
   filter: grayscale(1);
   opacity: 0.45;
 }
 
-.badge-card.is-locked .badge-name {
+.badge-card.is-locked .badge-name,
+.badge-card.is-locked .badge-tier {
   color: var(--muted);
 }
 
@@ -165,15 +315,38 @@
   background: var(--cobalt);
 }
 
-/* Tap → the description (active language) expands under the card face. */
+/* Tap → the details (active language) expand under the card face. */
 .badge-detail {
   padding: 0 12px 12px;
   font-size: 14px;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .badge-detail p {
   margin: 0 0 4px;
+}
+
+/* Eight dots in the eight tier colours; reached ones filled, the rest an outline. Fits the detail
+   of a half-width card at 360 px (8 × 12 + 7 × 4 = 124 px); wraps if a phone is narrower still. */
+.badge-dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  margin: 6px 0 6px;
+}
+
+.badge-dot {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--ring, var(--muted));
+  border-radius: 50%;
+  background: transparent;
+}
+
+.badge-dot.is-on {
+  background: var(--ring, var(--muted));
 }
 
 /* ---------- New-badge toast (shell, next to <Confetti/>) ---------- */
@@ -231,6 +404,17 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* 6D-2b (§1a.10): a toast may carry a second line, "Nieuw voor je avatar: {part}" (app.tsx puts it
+   in .badge-toast-text after a <br>). Its own block, ellipsized on its own, a little smaller. */
+.badge-toast-unlock {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 @keyframes badge-toast-in {

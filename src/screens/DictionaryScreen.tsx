@@ -28,6 +28,7 @@ import { baseDictionary, dictionary, isUserIngredientId, reloadDictionary, userI
 import { normalizeKey, type Dictionary, type Ingredient } from '@/domain/dictionary';
 import { buildMissingPrompt, collectMissing, parseMissingAnswer, planMissingAnswer, refreshMissingItems, type MissingCreate, type MissingItem, type MissingPlan, type MissingUpdate } from '@/domain/dictionary-prompt';
 import type { Lang, Recipe } from '@/domain/model';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { navigate, route } from '@/router';
 import { copyText } from '@/share-actions';
@@ -707,6 +708,7 @@ export function DictionaryScreen() {
     setBusy(true);
     try {
       await saveUserIngredient(next);
+      void recordFeature('dictEdit');
       await reloadDictionary();
       setEditing(null);
       setToast({ text: t('dict.saved') });

@@ -9,6 +9,107 @@ badges tonen gewoon naam, omschrijving en niveau. De telling blijft "{n} geheime
 recept, half/heel boek) blijven zichtbaar; verrassingen blijven geheim. Mini-ronde ná 6D-2b (BadgesScreen.tsx +
 één i18n-key).
 Gebouwd: 29 okt 2026 (blok 6D-2a, workflow wf_6f6fb349-c5a)
+Gebouwd: 29 okt 2026 (blok 6D-2b, workflow wf_46a5f07f-0b7)
+
+### Blok 6D-2c — mini-ronde (Fable, 29 okt 2026): "?"-kaartjes, Hele cirkel + boodschappenspoor, stille registratie bij start
+
+Dit blok bundelt de drie besluiten hierboven plus de twee gereproduceerde bevindingen van de lens van 6D-2b. Het is
+klein; twee bouwers met strikte bestandsverdeling. Wat hier niet staat, beslist Opus niet (README §2).
+
+**2c-A — pagina en registratie.** Bezit: `src/screens/BadgesScreen.tsx`, `src/styles/badges.css`, `src/i18n/badges.ts`,
+`src/badges.ts`, `src/app.tsx` (alleen één aanroep bij het opstarten), `src/screens/StorageScreen.tsx` (alleen één aanroep
+na het herstel), `src/screens/MoreScreen.tsx` (alleen de badges-schakelaar), `tests/badges-silent-sync.test.ts`.
+1. "?"-kaartjes (besluit 29 okt hierboven): elke verborgen badge die nog niet verdiend is, staat als kaartje in zijn eigen
+   groep (Geheim, en het hartje in Samen & delen): het echte icoon, naam "???", omschrijving `badges.secretHint`
+   (NL "Nog te ontdekken." · EN "Still to discover."), geen voortgang, geen niveau, geen ring, niet uitklapbaar (tik doet
+   niets), gedempte stippelrand, het icoon op volle sterkte. Verdiend = gewone kaart. De tellingen veranderen NIET: de
+   kop van Geheim blijft zonder telling, "{n} geheime gevonden" telt alleen gevonden, groepstellingen tellen zichtbare
+   badges. Volgorde in Geheim: gevonden eerst, dan de "?"-kaartjes in catalogusvolgorde. `badges.secretNone` blijft
+   bestaan maar wordt niet meer getoond zolang er "?"-kaartjes zijn.
+2. Stille registratie verhuist (lens-bevinding 2). Exporteer in `src/badges.ts` één functie
+   `registerEarnedSilently(): Promise<void>`: registreert voor alle lokale profielen én 'all' alles wat nu behaald is
+   (id / id@k), zonder NewBadge, zonder toast, met `markXpDirty`/`settleXp` zoals na elke registratie. Aanroepen:
+   (a) bij het opstarten in `src/app.tsx` direct na `await loadProfiles()`: als badges aan staan en `badges.catalogSynced`
+   < 2 → `await registerEarnedSilently()` en zet 2 (een verse installatie registreert niets en zet alleen de vlag);
+   (b) in de badges-schakelaar (MoreScreen) op het moment uit → aan: als de vlag < 2 → eerst stil registreren, dan 2.
+   `doCheckNewBadges` doet de stille ronde niet meer zelf; houd als vangnet: staat de vlag bij een controle tóch < 2
+   (opstartsync mislukt), dan stil registreren en 2 zetten, en dat in een console.warn melden.
+3. Herstel (lens-bevinding 1): in `StorageScreen.tsx` direct na `importBundle` en vóór `recordFeature('restore')`:
+   `await registerEarnedSilently()` — altijd, ongeacht de vlag. Daarna toast de gewone controle alleen wat echt nieuw is.
+4. BadgeFacts krijgt twee velden (contract met 2c-B): `sharedRecipeIds` en `boughtRecipeIds` (`ReadonlySet<string>`),
+   gevuld in de facts-opbouw in `src/badges.ts` via `sharedRecipeIds()` en `boughtRecipeIds()` uit `src/db/repo.ts`
+   (2c-B exporteert die; tot die er zijn meld je de tsc-fout als open).
+5. Tests: pas `tests/badges-silent-sync.test.ts` aan op de nieuwe plek van de stille ronde (pure kern blijft getest).
+
+**2c-B — domein, data en sporen.** Bezit: `src/domain/badges.ts`, `src/domain/model.ts`, `src/domain/recipe-io.ts`,
+`src/domain/shopbought.ts` (nieuw), `src/db/repo.ts`, `src/screens/EditScreen.tsx`, `src/screens/DictionaryScreen.tsx`
+(één haakje), `data/badges.json`, `tools/validate-data.ts`, `tests/badges.test.ts`, `tests/shopbought.test.ts` (nieuw),
+`tests/badges-page.test.ts` (115 → 116 zichtbaar) en elke andere test die een `BadgeFacts` opbouwt.
+1. `Origin.via?: 'ai' | 'paste' | 'website' | 'manual'` in `src/domain/model.ts`; `readOrigin` in recipe-io.ts neemt
+   `via` mee (alleen die vier waarden, anders weglaten). `EditScreen.tsx` zet `via` alleen bij het AANMAKEN van een
+   nieuw recept: 'ai' als de tekst via de AI-prompt kwam (`c.kind === 'ai'`), 'website' bij een website-import, 'paste'
+   bij geplakte tekst, 'manual' bij handmatig; later bewerken verandert `via` nooit. "Maak eigen kopie" (repo.ts
+   ±490) en dieetversies (variants.ts) erven `via` NIET. Invariant 3 blijft: geen mensentekst.
+2. Boodschappenspoor: `src/domain/shopbought.ts` (framework-vrij) met `ShopBought = { recipes: Record<recipeId, iso>,
+   ings: Record<ing, { n: number; by: Record<memberId, number> }> }`, `normalizeShopBought(raw)` (tolerant zoals
+   `normalizeFeatureLog`: alles wat niet klopt wordt weggelaten, nooit een throw) en `recordBought(state, item, memberId,
+   iso)` → nieuwe state (per `item.sources[].recipeId`: eerste iso wint; `item.ing` alleen als die opgelost is: n + 1 en
+   by[memberId] + 1; zonder memberId alleen n). In `src/db/repo.ts`: setting `shop.bought`; in `setListItem` alleen op de
+   overgang niet-afgevinkt → afgevinkt (`patch.checked === true` terwijl het item nog niet afgevinkt was) → lezen,
+   `recordBought` met het actieve profiel (`activeProfile.value?.id`), schrijven. NIET bij "Heb ik al", niet bij "Leeg de
+   lijst", niet bij terugzetten, niet bij `restoreListItem`. Exporteer `boughtRecipeIds(): Promise<Set<string>>`
+   (de keys van `recipes`) en `sharedRecipeIds(): Promise<Set<string>>` (alle `recipeIds` van share-events met
+   `direction: 'out'`, welke `kind` dan ook).
+3. Regelsoort `{ kind: 'fullCycle'; n?: number }` in `src/domain/badges.ts` (geen n = ladder). Waarde = aantal recepten r
+   met: `r.origin.kind === 'user' && r.origin.via === 'ai'` én `facts.sharedRecipeIds.has(r.id)` én
+   `facts.boughtRecipeIds.has(r.id)` én minstens één `facts.log`-regel met `recipeId === r.id` én minstens één
+   `facts.photoRows`-rij met `recipeId === r.id` (log en photoRows zijn al op het lid gefilterd; op 'all' telt iedereen).
+   Normalisatie/validator: `fullCycle` hoort bij de soorten die alleen `n?` dragen.
+4. `data/badges.json`: `hele-cirkel`, groep `koken`, icoon 🔄, `tiers: [1, 2, 3, 5, 8, 12, 20, 30]`, NL naam "Hele cirkel",
+   omschrijving "Doorloop met {n} recepten de hele app: AI-prompt → delen → boodschappen → koken → foto"; EN "Full cycle",
+   "Take {n} recipes through the whole app: AI prompt → share → groceries → cook → photo". Niet verborgen. Achter
+   `boodschapper` in de volgorde van de groep. `tools/validate-data.ts` kent `fullCycle`.
+5. `dictEdit`: één regel `void recordFeature('dictEdit')` op de route "Zet in woordenboek" (MissingSheet in
+   DictionaryScreen, bij succes), zoals de andere drie plekken.
+6. Tests: `tests/badges.test.ts` — een recept met vier van de vijf sporen telt 0, met vijf telt 1, `via: 'paste'` telt 0,
+   op 'all' telt een kook+foto van verschillende leden wél; `tests/shopbought.test.ts` — normalisatie van rommel, eerste
+   iso wint, n en by tellen (pure functie: alleen `recordBought` wordt getest); `tests/badges-page.test.ts` 115 → 116.
+
+**Integrator.** DEVICE-TEST: rij 94 (resultaat 1: "bij elk kopje verdiend/totaal, behalve Geheim") en rij 95 aanvullen met de
+"?"-kaartjes (NL én EN, in beide tabellen), plus één nieuwe rij 103 "Hele cirkel" (na rij 102, NL én EN): maak via de
+AI-prompt een recept, deel het, maak een boodschappenlijst met dat recept en vink één regel af, kook het, voeg een foto
+toe → badge Hele cirkel niveau 1 (brons) met toast; zonder een van de vijf stappen geen badge. STATUS-kop
+"29 okt (Opus): 6D-2c — ?-kaartjes, Hele cirkel, boodschappenspoor en stille registratie bij start". Acceptatie in de
+dev-app: een nieuw profiel + één ✓ Gekookt → toast "Eerste hap" (bevinding 2 weg); Geheim toont "?"-kaartjes met het
+icoon; na een kunstmatig herstel van een oude back-up geen stortvloed (bevinding 1 weg).
+**Besluit Stijn + Fable (29 okt 2026) — de badge "Hele cirkel" (full cycle) en een boodschappenspoor.** Stijn: "upload een
+gerecht dmv ai prompt, deel het gerecht, koop de boodschappen van het gerecht, kook het gerecht én maak een foto —
+volledige app gebruiken voor 1 gerecht; mag doorlopen (brons, zilver, goud…)". Dus een ladder-badge `hele-cirkel`
+(groep koken, icoon 🔄, tiers [1, 2, 3, 5, 8, 12, 20, 30] recepten), NL "Hele cirkel" / "Doorloop met {n} recepten de hele
+app: AI-prompt → delen → boodschappen → koken → foto", EN "Full cycle" / "Take {n} recipes through the whole app: AI
+prompt → share → groceries → cook → photo". Een recept telt als ALLE vijf sporen er zijn:
+1. gemaakt via de AI-prompt: `origin.kind === 'user'` én nieuw veld `origin.via === 'ai'` (optioneel veld op Origin:
+   `'ai' | 'paste' | 'website' | 'manual'`, gezet bij aanmaken in EditScreen; oude recepten hebben het niet en tellen
+   dus niet — eerlijk, want het spoor bestond nog niet; "Maak eigen kopie" erft `via` NIET);
+2. gedeeld: een `ShareEvent` met `direction: 'out'` waarvan `recipeIds` het recept bevat (los, als patch, in een
+   bundel of weekplan telt allemaal);
+3. boodschappen gekocht: het recept staat in het nieuwe boodschappenspoor (hieronder);
+4. gekookt door dit lid: een kooklog-regel met dit recipeId (op 'all': door wie dan ook);
+5. foto door dit lid: een `photoRows`-rij met dit recipeId (op 'all': van wie dan ook).
+Stappen 1–3 zijn huishoud-breed (recepten, deel-events en lijsten hebben geen lid), 4–5 per lid. Nieuwe regelsoort
+`{ kind: 'fullCycle' }` in src/domain/badges.ts; BadgeFacts krijgt `sharedRecipeIds: ReadonlySet<string>` en
+`boughtRecipeIds: ReadonlySet<string>`; de validator kent de soort; tests met een recept dat vier van de vijf sporen
+heeft (telt niet) en vijf (telt). Oude ladder-niveaus blijven kleurniveaus 1–8.
+
+**Boodschappenspoor (nieuw, zelfde ronde).** Boodschappen lieten tot nu toe alleen een telling na (`listMade`,
+`listShared`), niet wélk recept of wélk ingrediënt. Nieuwe setting `shop.bought` = `{ recipes: Record<recipeId,
+iso-eerste-keer>, ings: Record<ing, { n: number; by: Record<memberId, number> }> }` (zelfde vorm als `features.log`),
+bijgewerkt in `setListItem` op de overgang NIET-afgevinkt → afgevinkt (niet bij "Heb ik al", niet bij "Leeg de
+lijst", niet bij terugzetten): elke bron (`item.sources[].recipeId`) komt in `recipes` (eerste iso wint), het
+ingrediënt (`item.ing`, alleen opgeloste) telt +1 huishoud-breed en voor het actieve lid. Tolerante normalisatie
+zoals `normalizeFeatureLog`; mee in de back-up zoals alle settings. `ings` krijgt in deze ronde nog GEEN badge: het is
+het spoor waarop docs/IDEAS.md idee 4 (boodschappen-badges over de 1600 ingrediënten) later bouwt — vanaf nu wordt
+geteld, zodat die badges straks geschiedenis hebben. Mini-ronde ná 6D-2b, samen met de "?"-kaartjes.
 
 **Besluit Stijn (24 okt 2026) — de ambitie gaat omhoog, niet omlaag.** De avatar wordt een echte garderobe:
 **zeven lagen** die je apart kiest (voorstel: achtergrond · lichaam/shirt · gezicht · haar · hoofddeksel · attribuut in

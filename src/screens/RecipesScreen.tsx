@@ -44,6 +44,7 @@ import { initialOf } from '@/domain/recipe-source';
 import { searchRecipes, type SearchGroup } from '@/domain/search';
 import { buildBundleEnvelope, buildPatchEnvelope, buildRecipeEnvelope, bundleFileName, planMessages, type MessagePlan } from '@/domain/share';
 import type { Envelope } from '@/domain/token';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { LIST_SORTS, isListSort, loadListSort, orderRecipes, recentIds, saveListSort, type ListSort } from '@/recent';
@@ -538,7 +539,7 @@ export function RecipesScreen() {
           {/* 13A-2: the sort row. Radios in a horizontally scrolling strip (44 px pills, 360 px wide phones). */}
           <div class="list-sort" role="radiogroup" aria-label={t('list.sort')}>
             {LIST_SORTS.map((m) => (
-              <button key={m} type="button" role="radio" aria-checked={sortMode === m} class={'list-sort-pill' + (sortMode === m ? ' on' : '')} onClick={() => changeSort(m)}>
+              <button key={m} type="button" role="radio" aria-checked={sortMode === m} class={'list-sort-pill' + (sortMode === m ? ' on' : '')} onClick={() => { changeSort(m); if (m !== 'az') void recordFeature('sort'); }}>
                 {t(SORT_LABEL[m])}
               </button>
             ))}

@@ -29,6 +29,7 @@ import type { Dictionary } from '@/domain/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
 import { mainItems, type Plan, type PlanItem } from '@/domain/planner';
 import { currentPlanItem, nextPlanItem, outsideWeekIds, pickRandomId, tonightMeta, tonightMode, uncookedItems } from '@/domain/tonight';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { navigate } from '@/router';
 
@@ -214,6 +215,7 @@ export function TonightCard(props: TonightCardProps): JSX.Element {
                 onClick={() => {
                   diceId = pickRandomId(poolIds, diceId);
                   bump((n) => n + 1);
+                  void recordFeature('surprise');
                 }}
               >
                 <span aria-hidden="true">🎲</span> {t('home.reroll')}

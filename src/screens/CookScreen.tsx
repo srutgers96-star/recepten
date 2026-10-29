@@ -39,6 +39,7 @@ import { nowIso, pickText, type Lang } from '@/domain/model';
 import { encodePhotoFile } from '@/photo';
 import { spokenStepQuantities } from '@/domain/stepingredients';
 import { pickSpoken, type VoiceCommand } from '@/domain/voice';
+import { recordFeature } from '@/features';
 import { lang, t, tIn } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { activeProfile } from '@/profile';
@@ -464,6 +465,7 @@ export function CookScreen(props: { id: string }) {
         });
         break;
     }
+    void recordFeature('voice');
   };
 
   function toggleMic() {
@@ -511,6 +513,7 @@ export function CookScreen(props: { id: string }) {
     const dy = e.clientY - s.y;
     if (Math.abs(dx) >= SWIPE_PX && Math.abs(dx) > Math.abs(dy)) {
       swiped.current = true;
+      if (recipe && (dx < 0 ? page < last : page > 0)) void recordFeature('cookSwipe');
       if (dx < 0) go(page + 1);
       else go(page - 1);
     }
@@ -550,7 +553,7 @@ export function CookScreen(props: { id: string }) {
       }
       // Phase 4: a dish in the week plan gets its "Gekookt" tick (no-op when it is not in the plan).
       try {
-        await markRecipeCookedInPlan(id);
+        if (await markRecipeCookedInPlan(id)) void recordFeature('planCook');
       } catch (e) {
         console.error('markRecipeCookedInPlan', e);
       }
@@ -795,7 +798,7 @@ export function CookScreen(props: { id: string }) {
               ‹ {isDone ? t('cook.notYet') : t('cook.prev')}
             </button>
             {!isDone && (
-              <button type="button" class="btn btn-primary" onClick={() => go(page + 1)}>
+              <button type="button" class="btn btn-primary" onClick={() => { if (isPrepare) void recordFeature('cookMode'); go(page + 1); }}>
                 {isPrepare ? t('cook.begin') : page === last - 1 ? t('cook.finish') : t('cook.next')} ›
               </button>
             )}

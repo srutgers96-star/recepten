@@ -47,6 +47,7 @@ import { dictionary } from '@/dictionary';
 import { effectiveQty, groupByAisle, isoWeekNumber, itemName, listAsText, renderListItem, type AisleGroup, type ListItem } from '@/domain/aggregate';
 import type { Dictionary } from '@/domain/dictionary';
 import { nowIso, type Lang } from '@/domain/model';
+import { recordFeature } from '@/features';
 import { lang, t, tIn } from '@/i18n';
 import { printPage } from '@/print';
 import { navigate, route } from '@/router';
@@ -216,6 +217,7 @@ export function ShoppingScreen() {
     setBusy(true);
     try {
       await generateList(dict);
+      if (toProto) void recordFeature('listMade');
       if (toProto) setMode('proto');
       else showSnack(t('shop.updated'));
     } catch (e) {
@@ -258,6 +260,7 @@ export function ShoppingScreen() {
     setMenu(null);
     await setListItem(it.key, on ? { inHouse: true, checked: undefined } : { inHouse: undefined });
     if (it.ing) await setInHouse(it.ing, on, { perishable: dict.get(it.ing)?.perishable === true });
+    if (it.ing && on) void recordFeature('pantry');
     const ing = it.ing;
     showSnack(on ? t('shop.inHouseSnack') : t('shop.neededSnack'), async () => {
       await setListItem(it.key, on ? { inHouse: undefined } : { inHouse: true });
@@ -353,6 +356,7 @@ export function ShoppingScreen() {
     void shareText(shareTextValue).then(async (r) => {
       if (r.outcome === 'shared' || r.outcome === 'no-share-api') {
         await markListShared(at);
+        void recordFeature('listShared');
         setShareStatus(r.outcome === 'shared' ? t('shop.shared') : t('shop.noShareApi'));
       } else if (r.outcome === 'failed') setShareStatus(`${t('shop.shareError')}: ${r.error ?? ''}`);
     });
@@ -364,6 +368,7 @@ export function ShoppingScreen() {
     void copyText(shareTextValue).then(async (r) => {
       if (r.ok) {
         await markListShared(at);
+        void recordFeature('listShared');
         setShareStatus(t('shop.copied'));
       } else setShareStatus(`${t('shop.copyError')}: ${r.error ?? ''}`);
     });
@@ -533,7 +538,7 @@ export function ShoppingScreen() {
         {/* window.print() is unreliable in the installed iPhone app (invariant 13): the honest
             hint below replaces the button there — printing goes through the share sheet. */}
         {!ios && (
-          <button type="button" class="btn" disabled={items.length === 0} onClick={() => printPage('shopping')}>
+          <button type="button" class="btn" disabled={items.length === 0} onClick={() => { printPage('shopping'); void recordFeature('print'); }}>
             {t('shop.print')}
           </button>
         )}

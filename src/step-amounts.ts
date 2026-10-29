@@ -5,6 +5,7 @@
 // mirrors speech.readAloud. The detail page follows the same setting (it has no button of its own).
 import { signal } from '@preact/signals';
 import { getSetting, setSetting } from '@/db/repo';
+import { recordFeature } from '@/features';
 
 export const SHOW_AMOUNTS_SETTING = 'cook.showAmounts';
 
@@ -36,4 +37,5 @@ export async function setShowAmounts(on: boolean): Promise<void> {
   await loadShowAmounts();
   showAmounts.value = on;
   await setSetting(SHOW_AMOUNTS_SETTING, on);
+  if (on) void recordFeature('amounts');
 }

@@ -22,6 +22,7 @@ import { partialMatch, type PartialMatch, type WordLink } from '@/domain/line-wo
 import type { Lang } from '@/domain/model';
 import { saveUserIngredient } from '@/db/repo';
 import { dictionary, isUserIngredientId, reloadDictionary } from '@/dictionary';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 
 export interface IngredientPickerProps {
@@ -200,6 +201,7 @@ export function IngredientPicker(props: IngredientPickerProps) {
         veg,
       };
       await saveUserIngredient(entry);
+      void recordFeature('dictEdit');
       await reloadDictionary();
       props.onPick(entry.id, true);
     } catch (e) {

@@ -15,6 +15,7 @@ import { isBuiltinId, linkUserRecipeLine, setLineOverride } from '@/db/repo';
 import { dictionary, lineParts } from '@/dictionary';
 import { wordLinkOverride, type WordLink } from '@/domain/line-words';
 import { pickText, type Lang, type Line } from '@/domain/model';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 
 /** Below this parser confidence a resolved line still gets a (soft) "?" chip. */
@@ -209,6 +210,7 @@ export function IngredientList(props: IngredientListProps) {
       const fields = link && line ? wordLinkOverride(line, link, dictionary.value) : { ing: id };
       if (isBuiltinId(recipeId)) await setLineOverride({ recipeId, index: target.index, ...fields });
       else await linkUserRecipeLine(recipeId, target.index, fields.ing, fields.prep);
+      void recordFeature('dictEdit');
     } catch (e) {
       console.error('link line', e);
     }

@@ -42,6 +42,7 @@ import { pickText, type CookLogEntry, type Recipe } from '@/domain/model';
 import type { LineOverride } from '@/domain/overrides';
 import { isMainDish, newPlanItem, normalizeServings, pickRecipes, recentCookedIds, sidesOf, type PlanItem } from '@/domain/planner';
 import { buildPlanEnvelope, planMessages, type MessagePlan } from '@/domain/share';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { navigate } from '@/router';
@@ -169,6 +170,7 @@ export function WeekScreen() {
       const have = new Set(current.items.map((p) => p.recipeId));
       const fresh = ids.filter((id) => !have.has(id)).map((id) => newPlanItem(id, household));
       if (fresh.length) await savePlan({ ...current, items: [...current.items, ...fresh] });
+      void recordFeature('pick7');
     });
   }
 
@@ -182,6 +184,7 @@ export function WeekScreen() {
         return;
       }
       await savePlan({ ...current, items: [...current.items, ...picked.map((r) => newPlanItem(r.id, household))] });
+      void recordFeature('surprise');
     });
   }
 
@@ -226,6 +229,7 @@ export function WeekScreen() {
         else changed.add(p.id);
       }
       await savePlan({ ...current, items: next.filter((p) => !(isSide(p) && changed.has(p.sideOf as string))) });
+      void recordFeature('surprise');
     });
   }
 
@@ -246,6 +250,7 @@ export function WeekScreen() {
       }
       const next = current.items.filter((p) => p.sideOf !== item.id).map((p) => (p.id === item.id ? { ...p, recipeId: picked.id } : p));
       await savePlan({ ...current, items: next });
+      void recordFeature('surprise');
     });
   }
 
@@ -272,11 +277,13 @@ export function WeekScreen() {
     setStatus('');
     if ('text' in message) {
       void shareText(message.text).then((r) => {
+        if (r.outcome === 'shared') void recordFeature('planShared');
         if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
         else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
       });
     } else {
       void shareJsonFile(message.file.name, message.file.json).then((r) => {
+        if (r.outcome === 'shared' || r.outcome === 'downloaded') void recordFeature('planShared');
         if (r.outcome === 'shared') setStatus(t('share.fileShared'));
         else if (r.outcome === 'downloaded') setStatus(t('share.fileDownloaded', { name: r.name }));
         else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);

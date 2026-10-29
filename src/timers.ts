@@ -13,6 +13,7 @@ import { computed, signal } from '@preact/signals';
 import type { RunningTimer, TimerSpec } from '@/domain/model';
 import { timerMs } from '@/domain/timers';
 import { deleteTimer, getSetting, listTimers, putTimer, setSetting } from '@/db/repo';
+import { recordFeature } from '@/features';
 import { lang, tIn } from '@/i18n';
 import { navigate, route } from '@/router';
 import { loadSoundSettings, playTimerSound, timerSound, timerVibrate } from '@/sounds';
@@ -359,6 +360,7 @@ export async function startTimer(opts: StartTimerOptions): Promise<RunningTimer>
   } catch (e) {
     console.warn('putTimer', e);
   }
+  void recordFeature('timer');
   void maybePromptNotifications();
   return t;
 }

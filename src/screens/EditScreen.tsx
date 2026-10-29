@@ -58,6 +58,7 @@ import { buildImportPrompt, categoryIdFromWord, cuisineIdFromWord, parseBilingua
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { splitSteps } from '@/domain/steps';
 import { answeredSteps, applyTranslationAnswer, buildTranslationPrompt, parseTranslationAnswer, planTranslation, type TranslatableLine } from '@/domain/translate-prompt';
+import { recordFeature } from '@/features';
 import { lang, t, tIn } from '@/i18n';
 import { isRecipeKind, openPasteIn, openPastedText, PASTE_FILE_ACCEPT } from '@/paste';
 import { activeProfile } from '@/profile';
@@ -1020,7 +1021,7 @@ export function EditScreen(props: { id?: string }) {
    */
   function applyImportText(text: string) {
     const c = classifyPaste(text);
-    if (c.kind === 'website' && applyWebsiteText(c.normalized)) return;
+    if (c.kind === 'website' && applyWebsiteText(c.normalized)) return void recordFeature('pasteRecipe');
     const r = parseBilingualPlain(text);
     const first: Lang = r.first ?? 'nl';
     // A block with only a name (the plain parser takes the first line for it) has read nothing:
@@ -1032,6 +1033,7 @@ export function EditScreen(props: { id?: string }) {
       setImportNote(t('edit.importNone'));
       return;
     }
+    if (c.kind === 'ai') void recordFeature('aiImport');
     // 6A.9: "Categorie:" / "Labels:" written after the method still fill the chips. The counts are
     // compared after lifting them out (a meta line in one block only must not count as a mismatch).
     const nlBlock = liftMetaFromSteps(r.nl);

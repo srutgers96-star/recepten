@@ -30,6 +30,7 @@ import { Segmented } from '@/components/Segmented';
 import { getFahrenheit, getHouseholdServings, getSetting, setFahrenheit, setHouseholdServings, setSetting } from '@/db/repo';
 import { baseDictionary, userIngredients } from '@/dictionary';
 import type { Lang } from '@/domain/model';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { activeProfile, profiles, setActiveProfile } from '@/profile';
@@ -229,6 +230,7 @@ function FeedbackSheet(props: { onClose: () => void }) {
     // navigator.share runs before the first await inside shareText: still within the tap.
     void shareText(msg)
       .then((r) => {
+        if (r.outcome === 'shared' || r.outcome === 'no-share-api') void recordFeature('feedback');
         if (r.outcome === 'shared') setStatus(t('feedback.sent'));
         else if (r.outcome === 'failed') setStatus(`${t('common.error')}: ${r.error ?? ''}`);
       })
@@ -420,6 +422,7 @@ export function MoreScreen() {
   function toggleFahrenheit(on: boolean) {
     setF(on);
     void setFahrenheit(on).catch((e: unknown) => console.error('setFahrenheit', e));
+    void recordFeature('fahrenheit');
   }
 
   function toggleExperiments(on: boolean) {
@@ -527,6 +530,7 @@ export function MoreScreen() {
               ]}
               selected={[theme.value]}
               onChange={(v) => {
+                if (v[0] && v[0] !== theme.value) void recordFeature('theme');
                 if (v[0]) void setTheme(v[0]);
               }}
             />

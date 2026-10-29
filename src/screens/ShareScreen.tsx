@@ -26,6 +26,7 @@ import { applyLineOverrides, type LineOverride, type RecipeOverride } from '@/do
 import { buildReadableRecipe, countIngredientLines, recipeHasLang } from '@/domain/message';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
 import { buildShareUrl, encodeToken, type Envelope } from '@/domain/token';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { navigate } from '@/router';
@@ -297,7 +298,7 @@ function RecipeShareScreen(props: { id: string }) {
                   // Block D.5 (ADR-0007, ADR-0006 flow D): QR of exactly the URL in the message
                   // above. Behind the Experimenten flag; tapping again hides it.
                   <div class="share-qr">
-                    <button type="button" class="btn" disabled={!url} onClick={() => setShowQr((v) => !v)}>
+                    <button type="button" class="btn" disabled={!url} onClick={() => { if (!showQr) void recordFeature('qrShown'); setShowQr((v) => !v); }}>
                       {showQr ? t('share.qrHide') : t('share.qrShow')}
                     </button>
                     {showQr && url && (

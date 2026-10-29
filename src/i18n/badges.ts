@@ -42,6 +42,9 @@ export const badges: Dict = {
   'badges.season': { nl: 'Telt van {from} tot {to}', en: 'Counts from {from} to {to}' },
   'badges.householdOnly': { nl: 'Telt voor het hele huishouden', en: 'Counts for the whole household' },
   'badges.unlocks': { nl: 'Geeft: {part}', en: 'Unlocks: {part}' },
+  // 6D-2b: appended to `badges.unlocks` on a ladder ("Geeft: Steelpan op niveau brons"); wording
+  // decided by Fable (docs/STATUS.md, 29 Oct, 6D-2a).
+  'badges.unlocksTier': { nl: 'op niveau {colour}', en: 'at {colour} tier' },
   'badges.secretCount': { nl: '{n} geheime badges gevonden', en: '{n} secret badges found' },
   'badges.secretNone': {
     nl: 'Nog geen geheime badge gevonden. Ontdek de app: sommige dingen die je doet leveren er een op.',

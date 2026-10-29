@@ -12,6 +12,7 @@ import { ingredientLabel } from '@/components/IngredientPicker';
 import { dictionary, lineText } from '@/dictionary';
 import { applyWordLink, lookupWords, splitNameWords, suggestSelection, type WordLink } from '@/domain/line-words';
 import type { Lang, Line } from '@/domain/model';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 
 export interface WordPickerProps {
@@ -117,7 +118,7 @@ export function WordPicker(props: WordPickerProps) {
           )}
           <p class="muted small wp-stays">{t('words.rawStays')}</p>
           <div class="actions wp-actions">
-            <button type="button" class="btn btn-primary" disabled={!link} onClick={() => link && props.onLink(link)}>
+            <button type="button" class="btn btn-primary" disabled={!link} onClick={() => { if (!link) return; props.onLink(link); void recordFeature('wordPicker'); }}>
               {t('words.link')}
             </button>
             <button type="button" class="btn btn-secondary" disabled={query === ''} onClick={() => props.onNew(query, ll)}>

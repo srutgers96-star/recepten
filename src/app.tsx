@@ -11,7 +11,7 @@
 // toast) and <LevelUpSheet/> next to <BadgeToast/>; checkRulesVersion() once at boot after the
 // badges setting is known (badges off = no trace of XP).
 import { useEffect, useState } from 'preact/hooks';
-import { badgeToast, dismissBadgeToast, loadBadgeSettings } from './badges';
+import { badgeToast, dismissBadgeToast, loadBadgeSettings, type NewBadge } from './badges';
 import { loadCelebrateSettings } from './celebrate';
 import { BrowserNotice } from './components/BrowserNotice';
 import { Confetti } from './components/Confetti';
@@ -23,7 +23,8 @@ import { XpPop, XpToast } from './components/XpPop';
 import { loadCooking } from './cooking';
 import { ensureBuiltins } from './db/repo';
 import { loadDictionary } from './dictionary';
-import { lang, t } from './i18n';
+import { isLadder } from './domain/badges';
+import { lang, t, type Lang } from './i18n';
 import { startInboxBadge } from './inbox-badge';
 import { loadProfiles, needsOnboarding } from './profile';
 import { requestPersistentStorage } from './pwa';
@@ -62,9 +63,23 @@ startTestTimerTicker();
 const BADGE_TOAST_MS = 6000;
 
 /**
+ * The toast's text (docs/specs/badges-avatar.md §1a.10, §3b): a secret badge → `badges.toastSecret`;
+ * a ladder tier → `badges.toastTier` with the tier's colour; otherwise `badges.toast`, or its
+ * "Samen" variant `badges.toastTogether` (as before 6D-2) when the household earned it.
+ */
+function badgeToastText(nb: NewBadge, l: Lang): string {
+  const name = nb.badge[l].name;
+  if (nb.badge.hidden) return t('badges.toastSecret', { name });
+  if (nb.tier > 1 || isLadder(nb.badge)) return t('badges.toastTier', { name, k: nb.tier, colour: t('badges.tier.' + nb.tier) });
+  return t(nb.memberId === 'all' ? 'badges.toastTogether' : 'badges.toast', { name });
+}
+
+/**
  * The "new badge" toast (docs/phase-5-spec.md C.2), mounted once in the shell next to <Confetti/>.
  * Tap → the badges screen; auto-dismisses after ~6 s. The aria-live wrapper is always mounted so
  * screen readers announce the toast when it appears. Badges off → badgeToast never fires (no trace).
+ * 6D-2b: the text per kind (badgeToastText) and, when the badge unlocked an avatar part, a second
+ * line `badges.toastUnlock` in the same toast.
  */
 function BadgeToast() {
   const nb = badgeToast.value;
@@ -73,6 +88,7 @@ function BadgeToast() {
     const handle = setTimeout(dismissBadgeToast, BADGE_TOAST_MS);
     return () => clearTimeout(handle);
   }, [nb]);
+  const l = lang.value;
   return (
     <div class="badge-toast-wrap" aria-live="polite">
       {nb && (
@@ -90,7 +106,15 @@ function BadgeToast() {
           <span class="badge-toast-icon" aria-hidden="true">
             {nb.badge.icon}
           </span>
-          <span class="badge-toast-text">{t(nb.memberId === 'all' ? 'badges.toastTogether' : 'badges.toast', { name: nb.badge[lang.value].name })}</span>
+          <span class="badge-toast-text">
+            {badgeToastText(nb, l)}
+            {nb.unlockedPart && (
+              <>
+                <br />
+                <span class="badge-toast-unlock">{t('badges.toastUnlock', { part: nb.unlockedPart[l] })}</span>
+              </>
+            )}
+          </span>
         </button>
       )}
     </div>

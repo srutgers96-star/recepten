@@ -1,4 +1,5 @@
 import type { ComponentChildren } from 'preact';
+import { recordFeature } from '@/features';
 import { lang, setLang, t, type Lang } from '@/i18n';
 import { activeProfile, updateProfile } from '@/profile';
 import { goBack } from '@/router';
@@ -6,6 +7,7 @@ import { ChannelBadge } from './AppInfo';
 
 /** The NL|EN pill: switches the UI language and remembers it on the active profile. */
 export function chooseLang(l: Lang) {
+  if (l !== lang.value) void recordFeature('langToggle');
   setLang(l);
   const p = activeProfile.value;
   if (p && p.lang !== l) void updateProfile({ ...p, lang: l });

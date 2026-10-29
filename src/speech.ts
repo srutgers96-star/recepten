@@ -6,6 +6,7 @@
 import { signal } from '@preact/signals';
 import type { Lang } from '@/domain/model';
 import { getSetting, setSetting } from '@/db/repo';
+import { recordFeature } from '@/features';
 import { route } from '@/router';
 
 export const READ_ALOUD_SETTING = 'speech.readAloud';
@@ -40,6 +41,7 @@ export async function setReadAloud(on: boolean): Promise<void> {
   await loadSpeechSettings();
   readAloud.value = on;
   await setSetting(READ_ALOUD_SETTING, on);
+  if (on) void recordFeature('readAloud');
 }
 
 // --- Echo guard -------------------------------------------------------------------------------

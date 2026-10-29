@@ -35,6 +35,7 @@ import { nowIso, type Text } from '@/domain/model';
 import { applyOverride } from '@/domain/overrides';
 import { buildBundleEnvelope, bundleFileName } from '@/domain/share';
 import type { Envelope } from '@/domain/token';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { refreshShareBadges } from '@/inbox-badge';
 import { activeProfile, loadProfiles } from '@/profile';
@@ -216,6 +217,7 @@ export function StorageScreen() {
       const json = JSON.stringify(fresh);
       // navigator.share runs before the first await inside shareJsonFile: still within the tap.
       const r = how === 'share' ? await shareJsonFile(name, json) : downloadJson(name, json);
+      if (r.outcome === 'shared' || r.outcome === 'downloaded') void recordFeature('backup');
       if (r.outcome === 'shared') {
         await markBackedUp();
         setStatus(t('storage.backupShared'));
@@ -375,6 +377,7 @@ export function StorageScreen() {
       await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadShowAmounts(), reloadBadgeSettings(), reloadCooking(), reloadXp()]);
       await reload();
       void refreshShareBadges();
+      void recordFeature('restore');
       setRestoreStatus(t('storage.restored', { ...result }));
       // Counted inside the restore transaction: rows a newer local row won against are not in it.
       const more = t('storage.restoredMore', { overrides: result.overrides, lineOverrides: result.lineOverrides, ingredients: result.userIngredients });

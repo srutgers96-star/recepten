@@ -19,6 +19,7 @@ import { membersFrom, type HouseholdSetting, type Member } from '@/domain/househ
 import { buildMultiShareHeader, openLine } from '@/domain/message';
 import { nowIso, pickText, type Text } from '@/domain/model';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { refreshShareBadges } from '@/inbox-badge';
 import { activeProfile, profiles } from '@/profile';
@@ -113,6 +114,7 @@ function MessageExample(props: { plan: MessagePlan | null; by: string; ui: 'nl' 
  * Fire-and-forget: bump the counter, then re-check badges for the active profile.
  */
 function countShared(n: number) {
+  void recordFeature('deltaShared');
   void bumpSharedRecipes(n)
     .then(() => {
       const pid = activeProfile.value?.id;

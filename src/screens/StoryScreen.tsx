@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { bundled, cookedRecipeIds, getHousehold, isBuiltinId } from '@/db/repo';
 import { householdName, membersFrom, type HouseholdSetting } from '@/domain/household';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { profiles } from '@/profile';
 import { DonateBlock } from './MoreScreen';
@@ -18,6 +19,7 @@ export function StoryScreen() {
   const total = bundled.recipes.length;
 
   useEffect(() => {
+    void recordFeature('story');
     let cancelled = false;
     cookedRecipeIds()
       .then((ids) => {

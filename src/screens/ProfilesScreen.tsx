@@ -17,6 +17,7 @@ import { cardFromMember } from '@/domain/household';
 import { nowIso, randomId, type Lang, type Profile } from '@/domain/model';
 import { buildMemberEnvelope, buildMemberShareMessage } from '@/domain/share';
 import { buildShareUrl, encodeToken } from '@/domain/token';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { PROFILE_COLORS, activeProfile, createProfile, profiles, removeProfile, setActiveProfile, updateProfile } from '@/profile';
 import { route } from '@/router';
@@ -117,6 +118,7 @@ export function MemberCardPanel(props: { profile: Profile }) {
       .then((r) => {
         if (r.outcome === 'shared') {
           setStatus(t('household.cardShared'));
+          void recordFeature('cardShared');
           // 13A-2: the card went out — an 'out' row in the "In & uit" log (no partner is named here).
           void logShareEvent({ at: nowIso(), direction: 'out', kind: 'member', who: null, count: 1, recipeIds: [], note: p.name }).catch((e: unknown) => console.error('logShareEvent', e));
         } else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
@@ -128,6 +130,7 @@ export function MemberCardPanel(props: { profile: Profile }) {
   function copy() {
     if (!message) return;
     void copyText(message).then((r) => {
+      if (r.ok) void recordFeature('cardShared');
       if (r.ok) setStatus(t('household.cardCopied'));
       else {
         // The clipboard refused (http dev server, permissions): show the text to copy by hand.
@@ -153,7 +156,7 @@ export function MemberCardPanel(props: { profile: Profile }) {
       <p class="muted small">{t('household.cardIosHint')}</p>
       {experiments && (
         <div class="share-qr">
-          <button type="button" class="btn" disabled={!url} onClick={() => setShowQr((v) => !v)}>
+          <button type="button" class="btn" disabled={!url} onClick={() => { if (!showQr) void recordFeature('qrShown'); setShowQr((v) => !v); }}>
             {showQr ? t('share.qrHide') : t('share.qrShow')}
           </button>
           {showQr && url && (

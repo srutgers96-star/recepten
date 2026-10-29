@@ -4,6 +4,74 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 29 okt (Opus): 6D-2b — badgepagina, toasts en ontdekkersbadges
+Gebouwd volgens docs/specs/badges-avatar.md blok 6D-2b (bouwer A badgepagina, bouwer B toasts en haakjes, integrator).
+Niet gecommit. Geen Dexie-versie, geen nieuwe dependency. Zoals 6D-2a direct naar `main`, niet eerst `/next/` (Stijn:
+"laat die next maar zitten"). Gate groen: check, 1275 tests (57 bestanden), build, build:next, validate:data (0 fouten).
+- **Badgepagina (Meer → Badges):** acht inklapbare groepen in vaste volgorde (Koken · Ontdekken · Keukens van de wereld ·
+  Seizoenen · Samen & delen · Fotografie · Reeksen · Geheim), kop "Koken · 2/31"; de stand per groep blijft op de
+  telefoon bewaard (`recepten.badges.groups`), standaard alles open. De regel bovenaan telt alleen zichtbare badges
+  ("12 van 108 badges verdiend · 1 geheime gevonden"). Ladderbadges: het icoon in een ring in de kleur van het niveau
+  (niveau 0 = grijze stippelring), "Niveau 1 · geel", "5/10" en een balkje naar het volgende niveau, op platina
+  "✓ Platina". Eenmalige badges zoals vroeger, verdiend met een gouden rand. Tik op een kaart: de uitleg met het getal
+  ingevuld ("Kook 10 keer"), acht gekleurde stipjes, "Volgende: 10 (groen)", bij seizoenen "Telt van 23 sep tot 20 dec",
+  bij huishoud-badges "Telt voor het hele huishouden", bij een avatar-onderdeel "Geeft: Steelpan op niveau brons".
+  Geheim toont alleen de gevonden badges ("1 geheime badges gevonden" + de kaarten) of "Nog geen geheime badge gevonden …";
+  een niet-gevonden geheime badge staat nergens in de pagina, ook niet in de DOM. Het hartje staat pas in Samen & delen
+  als het verdiend is. De acht niveaukleuren staan als `--lvl-1` … `--lvl-8` op `:root` (de avatar-rand van 6D-3).
+- **Toasts:** geheime badge "🤫 Geheime badge: Van kleur verschoten"; ladderniveau "🏆 Huiskok · niveau 1: geel"; eenmalig
+  zoals vroeger ("🏆 Nieuwe badge: Eerste hap", op Samen "… samen: …"); levert de badge een avatar-onderdeel op, dan een
+  tweede regel "Nieuw voor je avatar: Steelpan". Geen XP-getal in de toast (xp-levels.md vraagt dat niet).
+- **Stille eerste registratie (besluit Fable):** zolang setting `badges.catalogSynced` onder 2 staat, registreert de
+  eerste badgecontrole alles wat al behaald is (alle lokale profielen, het gecontroleerde lid en Samen) zonder toast of
+  confetti en zet de setting op 2; daarna gewoon toasts. Pure kern getest in tests/badges-silent-sync.test.ts.
+- **Ontdekkersbadges:** 31 van de 32 feature-haakjes staan er, elk één regel op het moment van §2c (sommige ids op
+  meer plekken omdat §2c dat zo noemt: print, qrShown, planCook, planShared, listShared, cardShared 2×, dictEdit 3×,
+  surprise 4×). `standingList` ontbreekt: de vaste lijst (6C) bestaat nog niet; dat haakje komt met 6C.
+- **Integrator:** nieuw tests/badges-page.test.ts (het paginamodel tegen de echte catalogus: 115 zichtbaar, Geheim leeg
+  zonder vondsten, het hartje pas als het verdiend is); DEVICE-TEST 94 en 95 (NL en EN, letterlijk uit §6d); de regel
+  "Gebouwd" in de spec.
+- **Dev-app (375 px en 360 px, licht en donker, NL en EN), met een tijdelijk testprofiel:** de eerste controle op de
+  bestaande testdatabase registreerde stil (geen toast, XP bleef 628); nieuw profiel + één keer ✓ Gekookt → "Eerste hap";
+  na vijf kookbeurten (andere datums via de datumkiezer) → "🏆 Huiskok · niveau 1: geel", gele ring, één gevuld stipje,
+  "Volgende: 10 (groen)"; thema wisselen → "🤫 Geheime badge: Van kleur verschoten" en Geheim "1 geheime badges gevonden";
+  Huisgenoten/Volle tafel/Gulle gever alleen op Samen; inklappen bleef na herladen; herstel van een kunstmatige back-up
+  met de oude `badges.earned` gaf geen stortvloed (alleen de echt nieuwe geheime badge voor terugzetten) en hield de oude
+  ids; badges uit → alleen "Badges staan uit …", geen toast, niets geschreven; geen horizontaal scrollen, tikdoelen
+  ≥ 48 px, geen consolefouten. Database en localStorage daarna teruggezet zoals ze waren.
+- **Graag beslissen (Stijn/Fable):** (1) **Nieuwe installatie:** de stille ronde draait bij de allereerste badgecontrole,
+  ook op een verse installatie. Daar slikt hij de eerste toasts in: "Eerste hap" (of een geheime badge als je eerst
+  het thema wisselt) komt dan zonder toast en confetti. Op een bestaande telefoon gaat het goed. Mogelijke oplossingen:
+  geen `badges.earned` = alleen de vlag zetten (bouwer B), of de stille ronde bij het opstarten draaien in plaats van
+  bij de eerste controle. Niet zelf gekozen. (2) De kop van Geheim toont geen "verdiend/totaal" (§1a.8 "nooit het
+  totaal" gaat voor §1a.3); DEVICE-TEST 94 resultaat 1 zegt "Bij elk kopje staat verdiend/totaal": Geheim is de
+  uitzondering.
+- **Keuzes die de spec niet maakte (graag bevestigen):** (a) groepstellingen tellen de kaarten die de groep toont (het
+  hartje telt pas mee als het verdiend is); "· {n} geheime gevonden" telt alleen de groep Geheim, niet het hartje;
+  (b) bij een eenmalige badge houdt het detail de oude regel ("Verdiend" / "3/5 · nog niet verdiend"), op platina geen
+  "Volgende"; (c) de niveaukleuren zijn in licht en donker gelijk (vaste hexwaarden), alleen ring, balk en tekst eromheen
+  volgen het thema; (d) de naam van een avatar-onderdeel voor "Geeft:" leest BadgesScreen zelf uit
+  data/avatar-parts.json (6D-3 kan naar `avatarParts()`); (e) toastvolgorde geheim > ladder > gewoon, dus een
+  ladderniveau op Samen zegt niet "samen"; (f) de stille ronde registreert alle lokale profielen (anders krijgt een
+  tweede profiel op dezelfde telefoon toch de stortvloed); (g) `sort` zit op de sorteerpil, niet in `changeSort` (de
+  `?sort=`-link vanaf Home zou anders kijken belonen); (h) `listMade` telt ook de automatische lijst via Week →
+  "Boodschappenlijst maken" (`?proto=1` roept `build(true)` aan); (i) `pasteRecipe`/`aiImport` tellen in
+  `applyImportText`, dus ook bij een gekozen bestand; (j) `dictEdit` niet bij de 6B-route "Zet in woordenboek"
+  (MissingSheet), die §2c niet noemt; (k) `variant` zit bij het bewaren van een dieetversie en moet met 13D naar
+  "goedgekeurd".
+- In de werkmap staan ook niet-gecommitte wijzigingen van de hoofdsessie in docs/specs/badges-avatar.md ("Hele cirkel"
+  en boodschappenspoor) en docs/IDEAS.md (idee 4); die horen niet bij deze run. De "?"-kaartjes voor geheime badges
+  (commit 7d778c5) zijn een mini-ronde ná 6D-2b en zijn hier niet gebouwd.
+
+- **Besluit Fable (29 okt, na de lens van 6D-2b) — gaat mee in de mini-ronde 6D-2c:** (1) de stille registratie
+  verhuist van "de eerste badgecontrole" naar het opstarten (na `loadProfiles`, alleen met badges aan) én naar het
+  moment dat badges worden aangezet; een verse installatie heeft dan niets te registreren en "Eerste hap" krijgt gewoon
+  zijn toast en confetti. (2) Na een herstel van een back-up registreert de app eerst stil wat de herstelde
+  geschiedenis bereikt, en pas daarna loopt de gewone controle (alleen echt nieuwe badges zoals "Terug van weggeweest"
+  krijgen een toast). (3) Alle "bevestigen"-punten van de bouwers zijn akkoord zoals gebouwd (Geheim-kop zonder
+  telling, hartje telt pas als verdiend, toastvolgorde geheim > ladder > gewoon, sorteerhaakje op de pil, listMade ook
+  bij de automatische lijst, paste/ai in applyImportText). (4) `dictEdit` krijgt alsnog een haakje op "Zet in
+  woordenboek" (één regel, 6D-2c). Zie de blokken "6D-2c" bovenaan docs/specs/badges-avatar.md.
 ## 29 okt (Opus): 6D-2a — badge-catalogus, regelsoorten en registratie
 **Besluit Stijn (29 okt): toch direct naar `main`** ("laat die next maar zitten"); tot 6D-2b toont de oude badgepagina de
 geheime badges bij naam en "{n}" letterlijk — 6D-2b volgt meteen. 6D-2b bouwt een **stille eerste registratie**: de eerste

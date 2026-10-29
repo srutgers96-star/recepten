@@ -20,6 +20,7 @@ import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
 import { endCooking } from '@/cooking';
 import { listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
+import { recordFeature } from '@/features';
 import { markXpDirty, settleXp } from '@/xp';
 
 /** This member's Nth cook that gets the big burst (phase 5 C.4; the same set as CookScreen). */
@@ -58,7 +59,7 @@ export async function recordCooked(input: RecordCookedInput): Promise<void> {
   // Phase 4: a dish in the week plan gets its "Gekookt" tick — only for a cook of today.
   if (isToday(input.at)) {
     try {
-      await markRecipeCookedInPlan(input.recipeId);
+      if (await markRecipeCookedInPlan(input.recipeId)) void recordFeature('planCook');
     } catch (e) {
       console.error('markRecipeCookedInPlan', e);
     }

@@ -69,6 +69,7 @@ import { memberById, membersFrom, type Member } from '@/domain/household';
 import { hasLang, nowIso, pickText, type Lang, type Line, type Recipe } from '@/domain/model';
 import { ingredientsAsText, recipeAsText, type RecipeTextInput } from '@/domain/recipe-text';
 import { variantDietsFor, type VariantDiet } from '@/domain/variants';
+import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
 import { encodePhotoFile, usePhotoUrl } from '@/photo';
@@ -383,6 +384,7 @@ export function RecipeScreen(props: { id: string }) {
   function onServings(n: number) {
     setChosen(n);
     rememberServings(id, n);
+    if (n !== base) void recordFeature('scaled');
   }
 
   const related = useMemo(() => {
@@ -582,6 +584,7 @@ export function RecipeScreen(props: { id: string }) {
   function onPrintAs(kind: 'recipe' | 'ingredients') {
     setToolsMenu(null);
     printPage(kind);
+    void recordFeature('print');
   }
 
   /** After the CookedSheet saved: close it and show a short confirmation under the buttons. */
@@ -949,6 +952,7 @@ export function RecipeScreen(props: { id: string }) {
                 onClose={() => setVariantSheet(null)}
                 onSaved={(newId) => {
                   setVariantSheet(null);
+                  void recordFeature('variant');
                   navigate('/recipe/' + newId);
                 }}
               />

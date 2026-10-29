@@ -101,3 +101,59 @@ level-up-overzicht; lopende challenge in `settings`, afgeronde in een lijstje da
 
 **Open vragen.** Hoeveel tegelijk (één lopende, of twee)? Zelf kiezen uit een aanbod of toegewezen? Beloning in
 XP alleen, of ook een avatar-onderdeel per challenge?
+
+## 4. Boodschappen-badges over de 1600 ingrediënten (Stijn, 29 okt 2026)
+
+**Wens.** Boodschappen laten sinds de mini-ronde na 6D-2b een spoor na: per recept "boodschappen gekocht" (voor de
+badge Hele cirkel) en per ingrediënt hoe vaak het is afgevinkt (setting `shop.bought.ings`, huishoud-breed en per lid).
+Stijn: "daar kan nog best wat creativiteit in, met 1600 verschillende ingrediënten" — dit kan later uitgebreid worden.
+
+**Prioriteit.** Later; het spoor telt vanaf nu, zodat de badges straks geschiedenis hebben.
+
+**Ideeën voor badges (nog niet gebouwd).** Ladder "Verzamelaar": {n} verschillende ingrediënten gekocht (10 … 500).
+Per categorie uit de woordenlijst: alle kruiden, alle verse kruiden, tien soorten kaas, vijf soorten rijst, vijf soorten
+noten. "Groenteboer": {n} verschillende groenten. "Vismarkt" / "Slager": {n} vis- / vleessoorten. "Zeldzaam": een
+ingrediënt gekocht dat in maar één recept voorkomt. "Vaste klant" (6C) kan hier ook naar kijken. Seizoen: in
+december speculaaskruiden, in de zomer aardbeien. Geheim: 1 kg boter in één lijst; "Alfabet": een ingrediënt met elke
+beginletter. Bronnen: `shop.bought.ings` + de woordenlijst (categorie per ingrediënt, data/ingredients.json).
+
+**Open vragen.** Telt "Heb ik al" (in huis) mee als gekocht? (Nu: nee.) Per huishouden of per lid? (Nu: beide geteld.)
+
+## 5. Swipe omlaag op Home: profiel bijna paginavullend, avatar heel groot (Stijn, 29 okt 2026)
+
+**Wens.** Op Home naar beneden swipen (of vanaf de level-regel omlaag trekken) → het profiel vult bijna de hele pagina
+en de avatar wordt heel groot, "zodat je heel de avatar met al zijn ditjes en datjes goed kan zien": alle lagen
+(huid, haar, ogen, kleding, hoofddeksel, accessoire, achtergrond) op volle grootte, met naam, level, titel en XP-balk.
+
+**Prioriteit.** Later; ná 6D-3 (avatar-garderobe) en 6D-4 (unlocks), want dan is er iets om te bekijken.
+
+**Aanpak in grote lijnen.** Geen nieuwe route: een "sheet" die vanaf de bovenkant van Home opentrekt bij een
+pull-down-gebaar (touch, drempel ±80 px, niet in conflict met de browser-pull-to-refresh: in standalone staat die uit,
+in de browser alleen tonen via een tik op de avatar). De avatar-SVG schaalt naar ±70 % van de viewportbreedte; daaronder
+naam, titel, level, XP-balk, en de knoppen "Kleedkamer" (6D-3) en "Badges". Sluiten met swipe omhoog, tik buiten of
+de Terug-knop (hash-state zodat Terug op Android werkt). Houd 60 fps: alleen transform/opacity animeren.
+
+**Open vragen.** Alleen Home of ook op de Profielen-pagina? Ook voor de andere leden (tik op een ander lid → diens
+avatar groot)? Hoort hier ook de "gouden modus" (6D-4) bij als achtergrond?
+
+**Aanvulling Stijn (29 okt).** Als dit er is, is het profiel-blok bovenaan Meer waarschijnlijk overbodig: dat kan dan
+weg of kleiner, zodat Meer rustiger wordt. Bij het bouwen van dit idee dus meteen Meer opschonen (alleen nog een
+regel "Profielen" en "Badges" als ingang, geen tweede avatar + level).
+
+## 6. Van links naar rechts swipen door de hoofdpagina's (Stijn, 29 okt 2026)
+
+**Wens.** Horizontaal swipen om naar de volgende/vorige tab van de onderbalk te gaan (Home ↔ Recepten ↔ Week ↔
+Boodschappen ↔ Meer), zoals in veel apps. "Zit vast nog wel een functionaliteit verborgen."
+
+**Prioriteit.** Later.
+
+**Aanpak in grote lijnen.** Eén touch-listener op de app-shell: horizontale beweging ≥ 60 px, duidelijk horizontaler
+dan verticaal, en niet begonnen op een element dat zelf horizontaal scrolt of swipet (filterchips-rij, kookmodus met
+`cookSwipe`, rijen met swipe-acties) → `navigate` naar de buur-tab, met een korte schuif-animatie (transform only).
+Alleen op de vijf hoofdpagina's, niet in een recept, de editor of kookmodus.
+
+**Let op.** De rand-swipe is op iPhone (Safari én Home Screen-app) en Android Chrome al "terug/vooruit": begin de
+herkenning daarom pas ≥ 24 px van de schermrand. Niet laten botsen met de pull-down van idee 5.
+
+**Open vragen.** Volgorde = volgorde van de onderbalk? Doorlopen (Meer → Home) of stoppen aan de randen?
+
