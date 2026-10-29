@@ -5,8 +5,8 @@ Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee:
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
 ## 29 okt (Opus): 6D-2a — badge-catalogus, regelsoorten en registratie
-**Besluit Fable (29 okt):** 6D-2a gaat alleen naar `/next/` en samen met 6D-2b naar `main` (de oude badgepagina zou de
-geheime badges bij naam tonen en "{n}" letterlijk). 6D-2b bouwt een **stille eerste registratie**: de eerste
+**Besluit Stijn (29 okt): toch direct naar `main`** ("laat die next maar zitten"); tot 6D-2b toont de oude badgepagina de
+geheime badges bij naam en "{n}" letterlijk — 6D-2b volgt meteen. 6D-2b bouwt een **stille eerste registratie**: de eerste
 badgecontrole na deze update registreert alle al behaalde badges en niveaus zonder toast (setting
 `badges.catalogSynced` = 2), daarna gewoon toasts per nieuw niveau. Ontbrekende tekst §1a.7: key `badges.unlocksTier`
 NL "op niveau {colour}" · EN "at {colour} tier" (6D-2b). Cycle-guard `badgeStatuses(memberId, { xp: false })` in
