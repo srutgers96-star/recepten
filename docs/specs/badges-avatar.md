@@ -1,6 +1,13 @@
 # Spec 6D-2/6D-3 — Badge-catalogus (±120) en avatar-bibliotheek (±64 onderdelen)
 
 Status: compleet (Fable, 22 okt 2026)
+
+**Besluit Stijn + Fable (29 okt 2026) — geheime badges als "?"-kaartje, het icoon is de hint.** In de groep Geheim staan
+ALLE verborgen badges, ook de nog niet gevonden: als kaartje met het echte icoon (emoji) als enige hint, naam "???",
+omschrijving `badges.secretHint` NL "Nog te ontdekken." · EN "Still to discover.", geen voortgang, geen niveau; gevonden
+badges tonen gewoon naam, omschrijving en niveau. De telling blijft "{n} geheime gevonden". Doel-badges (eerste eigen
+recept, half/heel boek) blijven zichtbaar; verrassingen blijven geheim. Mini-ronde ná 6D-2b (BadgesScreen.tsx +
+één i18n-key).
 Gebouwd: 29 okt 2026 (blok 6D-2a, workflow wf_6f6fb349-c5a)
 
 **Besluit Stijn (24 okt 2026) — de ambitie gaat omhoog, niet omlaag.** De avatar wordt een echte garderobe:
