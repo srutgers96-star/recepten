@@ -50,6 +50,8 @@ export const badges: Dict = {
     nl: 'Nog geen geheime badge gevonden. Ontdek de app: sommige dingen die je doet leveren er een op.',
     en: 'No secret badge found yet. Explore the app: some things you do earn one.',
   },
+  // 6D-2c (decision 29 Oct 2026): the description on a "?" card, a hidden badge not found yet.
+  'badges.secretHint': { nl: 'Nog te ontdekken.', en: 'Still to discover.' },
   'badges.toastTier': { nl: '🏆 {name} · niveau {k}: {colour}', en: '🏆 {name} · level {k}: {colour}' },
   'badges.toastSecret': { nl: '🤫 Geheime badge: {name}', en: '🤫 Secret badge: {name}' },
   'badges.toastUnlock': { nl: 'Nieuw voor je avatar: {part}', en: 'New for your avatar: {part}' },

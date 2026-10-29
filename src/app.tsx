@@ -11,7 +11,7 @@
 // toast) and <LevelUpSheet/> next to <BadgeToast/>; checkRulesVersion() once at boot after the
 // badges setting is known (badges off = no trace of XP).
 import { useEffect, useState } from 'preact/hooks';
-import { badgeToast, dismissBadgeToast, loadBadgeSettings, type NewBadge } from './badges';
+import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, type NewBadge } from './badges';
 import { loadCelebrateSettings } from './celebrate';
 import { BrowserNotice } from './components/BrowserNotice';
 import { Confetti } from './components/Confetti';
@@ -214,6 +214,9 @@ export function App(props: { openImportFromHash: boolean }) {
       }
       try {
         await loadProfiles();
+        // 6D-2c: with badges on and `badges.catalogSynced` below 2, register what was reached so far
+        // silently (all local profiles + Samen), then set the flag; a fresh install only sets it.
+        await syncCatalogIfNeeded();
       } catch (e) {
         errors.push(String(e));
       }

@@ -129,6 +129,10 @@ function readOrigin(v: unknown, fallback: Origin): Origin {
     else if (val === null) origin[key] = null;
     else delete (origin as unknown as Dict)[key];
   }
+  // 6D-2c: `via` only as one of its four values; anything else is dropped.
+  const via = v.via;
+  if (via === 'ai' || via === 'paste' || via === 'website' || via === 'manual') origin.via = via;
+  else delete (origin as unknown as Dict).via;
   return origin;
 }
 

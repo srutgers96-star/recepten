@@ -13,8 +13,15 @@ export interface Text {
 
 export type OriginKind = 'builtin' | 'user' | 'received';
 
+/** How an own recipe came in when it was CREATED (block 6D-2c, badge "Hele cirkel"): through the
+ *  AI prompt, a pasted text, a website text or by hand. Never human text (invariant 3). */
+export type OriginVia = 'ai' | 'paste' | 'website' | 'manual';
+
 export interface Origin {
   kind: OriginKind;
+  /** Set by the editor when the recipe is created, never changed later; older recipes, copies
+   *  ("Maak eigen kopie") and diet versions have none. */
+  via?: OriginVia;
   /** Name of the person who wrote the recipe (own recipes: the active profile). */
   author?: string | null;
   /** Sender name for received recipes. */

@@ -43,6 +43,7 @@ import {
   setListItem,
   togglePinned,
 } from '@/db/repo';
+import { recheckActiveBadges } from '@/badges';
 import { dictionary } from '@/dictionary';
 import { effectiveQty, groupByAisle, isoWeekNumber, itemName, listAsText, renderListItem, type AisleGroup, type ListItem } from '@/domain/aggregate';
 import type { Dictionary } from '@/domain/dictionary';
@@ -248,6 +249,8 @@ export function ShoppingScreen() {
   async function toggleCheck(it: ListItem) {
     const next = !it.checked;
     await setListItem(it.key, { checked: next ? true : undefined });
+    // 6D-2c: the tick is a trace of "Hele cirkel"; the row is written, so check now.
+    if (next) recheckActiveBadges();
     const name = itemName(it, dict, l);
     showSnack(`${next ? t('shop.checkedSnack') : t('shop.uncheckedSnack')}: ${name}`, () => setListItem(it.key, { checked: next ? undefined : true }));
   }

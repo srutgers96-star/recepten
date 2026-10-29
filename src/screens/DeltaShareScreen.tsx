@@ -11,7 +11,7 @@
 // is stored automatically; "Markeer als verzonden" covers Copy / wa.me (share() cannot tell
 // whether it was sent). Invariant 9: navigator.share with exactly one field, inside the tap.
 import { useEffect, useState } from 'preact/hooks';
-import { checkNewBadges } from '@/badges';
+import { checkNewBadges, recheckActiveBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { bumpSharedRecipes, collectDeltaSince, getHousehold, getLastSentTo, logShareEvent, markSentTo, type DeltaSince } from '@/db/repo';
@@ -130,7 +130,7 @@ function countShared(n: number) {
 function logDeltaShared(d: DeltaSince, name: string) {
   const recipeIds = [...d.recipes.map((r) => r.id), ...d.patches.map((o) => o.baseId)];
   if (!recipeIds.length) return;
-  void logShareEvent({ at: nowIso(), direction: 'out', kind: d.recipes.length ? 'recipes' : 'patches', who: name, count: recipeIds.length, recipeIds }).catch((e: unknown) =>
+  void logShareEvent({ at: nowIso(), direction: 'out', kind: d.recipes.length ? 'recipes' : 'patches', who: name, count: recipeIds.length, recipeIds }).then(() => recheckActiveBadges()).catch((e: unknown) =>
     console.error('logShareEvent', e),
   );
 }

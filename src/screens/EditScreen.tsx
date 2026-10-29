@@ -49,7 +49,7 @@ import { allRecipes, clearOverride, deleteUserRecipe, duplicateAsOwn, getBaseRec
 import { dictionary, lineText, type Dictionary } from '@/dictionary';
 import { suggestMeta } from '@/domain/diet';
 import { applyWordLink, type WordLink } from '@/domain/line-words';
-import { hasLang, newUserId, nowIso, type Lang, type Line, type Recipe, type Step, type Text } from '@/domain/model';
+import { hasLang, newUserId, nowIso, type Lang, type Line, type OriginVia, type Recipe, type Step, type Text } from '@/domain/model';
 import { applyLineOverrides, type RecipeOverride, type RecipePatch } from '@/domain/overrides';
 import { parseLineAuto } from '@/domain/parser';
 import { classifyPaste } from '@/domain/paste-classify';
@@ -362,6 +362,9 @@ export function EditScreen(props: { id?: string }) {
   // 6A.17: "Bereiding 15 min, totaal 45 min" from a pasted website text (the form has no time
   // field); stored on a NEW recipe by `build`.
   const [importTime, setImportTime] = useState<Recipe['time']>(null);
+  // 6D-2c: how a NEW recipe came in (origin.via, set in build() on creation only): the route of the
+  // last import that filled something in, 'manual' when nothing was imported.
+  const [importVia, setImportVia] = useState<OriginVia>('manual');
   // A text handed over by another paste box (13A), filled in once the form is ready.
   const [autoApply, setAutoApply] = useState<string | null>(null);
   // '/add?mode=paste' wants the cursor in the paste box as soon as it is open.
@@ -401,6 +404,7 @@ export function EditScreen(props: { id?: string }) {
     setCopyNote('');
     setLeftovers([]);
     setImportTime(null);
+    setImportVia('manual');
     setAutoApply(null);
     setFocusPaste(false);
     setDescTr(null);
@@ -607,7 +611,8 @@ export function EditScreen(props: { id?: string }) {
       rev: 1,
       createdAt: now,
       updatedAt: now,
-      origin: { kind: 'user', author: activeProfile.value?.name ?? null },
+      // 6D-2c: `via` only here, when the recipe is created; editing later never changes it.
+      origin: { kind: 'user', author: activeProfile.value?.name ?? null, via: importVia },
       name: {},
       tags: [],
       servings: 4,
@@ -1021,18 +1026,26 @@ export function EditScreen(props: { id?: string }) {
    */
   function applyImportText(text: string) {
     const c = classifyPaste(text);
-    if (c.kind === 'website' && applyWebsiteText(c.normalized)) return void recordFeature('pasteRecipe');
+    // 6D-2c: origin.via of a new recipe follows what the text is (c.kind 'ai' = the AI prompt).
+    const via: OriginVia = c.kind === 'ai' ? 'ai' : c.kind === 'website' ? 'website' : 'paste';
+    if (c.kind === 'website' && applyWebsiteText(c.normalized)) {
+      setImportVia(via);
+      return void recordFeature('pasteRecipe');
+    }
     const r = parseBilingualPlain(text);
     const first: Lang = r.first ?? 'nl';
     // A block with only a name (the plain parser takes the first line for it) has read nothing:
     // the website route gets a go, then every line waits in the Controleer box.
     const filled = (b: PlainRecipe | undefined) => !!b && (b.lines.length > 0 || b.steps.length > 0);
     if (!filled(r.nl) && !filled(r.en)) {
-      if (c.kind !== 'website' && applyWebsiteText(c.normalized)) return;
-      if (applyLinesToCheck(c.normalized, (r[first] ?? r.nl ?? r.en)?.name ?? '')) return;
+      if ((c.kind !== 'website' && applyWebsiteText(c.normalized)) || applyLinesToCheck(c.normalized, (r[first] ?? r.nl ?? r.en)?.name ?? '')) {
+        setImportVia(via);
+        return;
+      }
       setImportNote(t('edit.importNone'));
       return;
     }
+    setImportVia(via);
     if (c.kind === 'ai') void recordFeature('aiImport');
     // 6A.9: "Categorie:" / "Labels:" written after the method still fill the chips. The counts are
     // compared after lifting them out (a meta line in one block only must not count as a mismatch).

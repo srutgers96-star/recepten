@@ -22,6 +22,8 @@ function factsFor(memberId: string | 'all'): BadgeFacts {
     features: {},
     householdMembers: 2,
     donorLevel: 0,
+    sharedRecipeIds: new Set(),
+    boughtRecipeIds: new Set(),
   };
 }
 

@@ -526,6 +526,7 @@ function MissingCard(props: { own: readonly Ingredient[]; onDone: (text: string)
           }
         }
       }
+      void recordFeature('dictEdit');
     } catch (e) {
       failed = String((e as Error)?.message ?? e);
     }

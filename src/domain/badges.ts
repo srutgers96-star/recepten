@@ -44,6 +44,11 @@
 //   recipeIds there; photosOfOneRecipe = the most rows of one recipeId
 // - householdMembers / donor = facts.householdMembers / facts.donorLevel; cooks = distinct
 //   profileIds in the log
+// - fullCycle        = own recipes (origin.kind 'user') made through the AI prompt (origin.via 'ai')
+//                      that are in facts.sharedRecipeIds AND facts.boughtRecipeIds AND have a cook
+//                      in facts.log AND a row in facts.photoRows (block 6D-2c, "Hele cirkel"). The
+//                      first three are household-wide; log and photoRows are already filtered to the
+//                      member ('all' = everyone, so a cook and a photo by different members count)
 // A recipeId that is not in `recipes` only counts for the kinds that need nothing but the log
 // itself (counts, stars, dates, streaks, per-recipeId runs); never for the kinds that read the
 // recipe (category, tag, ingredient, cuisine(s), letters, classics, allCategories). An unparsable
@@ -112,7 +117,8 @@ export type BadgeRule =
   | { kind: 'feature'; id: FeatureId; n?: number }
   | { kind: 'retryAfterOneStar'; n?: number }
   | { kind: 'comeback'; days: number; n?: number }
-  | { kind: 'overcooked'; n?: number }; // counts facts.xp?.events with crit 'overcooked'
+  | { kind: 'overcooked'; n?: number } // counts facts.xp?.events with crit 'overcooked'
+  | { kind: 'fullCycle'; n?: number }; // AI prompt → share → groceries → cook → photo, per recipe (6D-2c)
 
 export interface Badge {
   id: string;
@@ -172,6 +178,10 @@ export interface BadgeFacts {
   donorLevel: number;
   /** XP state of this member (docs/specs/xp-levels.md), for the rule kind 'overcooked'; undefined on 'all'. */
   xp?: XpState;
+  /** Household-wide (6D-2c): every recipe id in an 'out' row of the In & uit log, any kind. */
+  sharedRecipeIds: ReadonlySet<string>;
+  /** Household-wide (6D-2c): the recipes on the shopping trail (`shop.bought`): a line of theirs was ticked off. */
+  boughtRecipeIds: ReadonlySet<string>;
 }
 
 export interface BadgeStatus {
@@ -213,7 +223,7 @@ const COUNT_KINDS: ReadonlySet<string> = new Set<CountKind>([
 const ID_KINDS: ReadonlySet<string> = new Set<IdKind>(['category', 'tag', 'ingredient', 'cuisine']);
 const PLAIN_KINDS: ReadonlySet<string> = new Set<PlainKind>(['letters', 'allClassics', 'halfClassics', 'allCategories']);
 /** Kinds whose only parameter (besides n) is nothing at all. */
-const BARE_KINDS: ReadonlySet<string> = new Set(['seasonCooks', 'retryAfterOneStar', 'overcooked']);
+const BARE_KINDS: ReadonlySet<string> = new Set(['seasonCooks', 'retryAfterOneStar', 'overcooked', 'fullCycle']);
 const CALENDAR_WHENS: ReadonlySet<string> = new Set<CalendarWhen>(['friday-13', 'leap-day']);
 const GROUP_SET: ReadonlySet<string> = new Set<string>(BADGE_GROUPS);
 
@@ -284,7 +294,7 @@ function normalizeRule(value: unknown): BadgeRule | null {
     const id = nonEmptyString(value['id']);
     return id === null ? null : { kind: kind as IdKind, id, ...withN };
   }
-  if (BARE_KINDS.has(kind)) return { kind: kind as 'seasonCooks' | 'retryAfterOneStar' | 'overcooked', ...withN };
+  if (BARE_KINDS.has(kind)) return { kind: kind as 'seasonCooks' | 'retryAfterOneStar' | 'overcooked' | 'fullCycle', ...withN };
   switch (kind) {
     case 'weekdayCooks': {
       const raw = value['days'];
@@ -720,6 +730,25 @@ function comebacks(d: Derived, days: number): number {
   return n;
 }
 
+/**
+ * Recipes that went the whole way (6D-2c): own, created through the AI prompt, shared, on the
+ * shopping trail, cooked (a log entry) and photographed (a photo row). Log and photo rows arrive
+ * filtered to the member; the shared and bought sets are household-wide.
+ */
+function fullCycles(facts: BadgeFacts): number {
+  const shared = facts.sharedRecipeIds;
+  const bought = facts.boughtRecipeIds;
+  if (!shared || !bought) return 0;
+  const cooked = new Set(facts.log.map((e) => e.recipeId));
+  const photographed = new Set(facts.photoRows.map((r) => r.recipeId));
+  let n = 0;
+  for (const r of facts.recipes.values()) {
+    if (r.origin?.kind !== 'user' || r.origin.via !== 'ai') continue;
+    if (shared.has(r.id) && bought.has(r.id) && cooked.has(r.id) && photographed.has(r.id)) n++;
+  }
+  return n;
+}
+
 /** The raw count of a badge's rule (not capped). */
 function measure(badge: Badge, facts: BadgeFacts, d: Derived): number {
   const rule = badge.rule;
@@ -805,6 +834,8 @@ function measure(badge: Badge, facts: BadgeFacts, d: Derived): number {
       return comebacks(d, rule.days);
     case 'overcooked':
       return facts.xp ? facts.xp.events.filter((e) => e.crit === 'overcooked').length : 0;
+    case 'fullCycle':
+      return fullCycles(facts);
   }
 }
 

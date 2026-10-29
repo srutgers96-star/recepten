@@ -226,6 +226,12 @@ function travelRecipe(recipe: Recipe, lineOverrides: readonly LineOverride[] | u
   const out: Recipe = { ...recipe, lines: applyLineOverrides(recipe.lines, lineOverrides) };
   delete (out as Dict).sync;
   delete (out as Dict).override;
+  // 6D-2c: how the recipe entered THIS app (`origin.via`) is local provenance, not recipe content.
+  if (out.origin && 'via' in out.origin) {
+    const origin = { ...out.origin };
+    delete (origin as Dict).via;
+    out.origin = origin;
+  }
   return out;
 }
 

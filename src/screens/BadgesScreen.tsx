@@ -7,10 +7,13 @@
 //   tier line ("Niveau 1 · geel"), then "27/50" and the bar towards the NEXT tier ("✓ Platina" on top);
 // - tap a card → the details under it: the description with {n} filled in, the eight tier dots and
 //   "Volgende: …", the season window, "whole household", and the avatar part it unlocks.
-// Secret badges: the group "Geheim" shows only how many were found plus the found cards; a hidden
-// badge that is not earned never reaches the DOM (no name, no hint, no total). The line above the
-// groups counts visible (non-hidden) badges only. Badges off (`badges.enabled`) = only a muted note:
-// gamification never in the way (PLAN.md §0).
+// Secret badges (block 6D-2c, decision 29 Oct 2026): a hidden badge that is not earned yet is a "?"
+// card in its own group (Geheim; the heart in Samen & delen): its real icon as the only hint, name
+// "???", `badges.secretHint`, no progress, no tier, no ring, not tappable. Its name and description
+// never reach the DOM. Counts do not change: the head of Geheim has no count, "{n} geheime gevonden"
+// counts found badges only, group counts count the visible cards (never a "?" card). The line above
+// the groups counts visible (non-hidden) badges only. Badges off (`badges.enabled`) = only a muted
+// note: gamification never in the way (PLAN.md §0).
 import type { ComponentChildren } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import avatarPartsData from '@data/avatar-parts.json';
@@ -33,8 +36,14 @@ const SECRET_GROUP: BadgeGroup = 'geheim';
 
 export interface BadgeGroupView {
   group: BadgeGroup;
-  /** The cards this group may show, in catalogue order. */
+  /** The cards this group may show in full, in catalogue order. */
   shown: BadgeStatus[];
+  /**
+   * 6D-2c: the "?" cards, in catalogue order, rendered after `shown` (in Geheim: found first, then
+   * the "?" cards): every status of this group that `isShown` keeps off the page, i.e. a hidden badge
+   * not earned yet. Only the icon of these reaches the DOM; they never count in `earned`/`total`.
+   */
+  mystery: BadgeStatus[];
   /** Earned among `shown` / the number of `shown` (never displayed for the secret group). */
   earned: number;
   total: number;
@@ -51,8 +60,9 @@ export interface BadgePageModel {
 }
 
 /**
- * May this status reach the page? A hidden badge only once it is earned; in the secret group only
- * found badges, whatever their `hidden` flag says. Everything else always.
+ * May this status reach the page as a full card? A hidden badge only once it is earned; in the
+ * secret group only found badges, whatever their `hidden` flag says. Everything else always. What
+ * this keeps off becomes a "?" card (`BadgeGroupView.mystery`, 6D-2c).
  */
 export function isShown(s: BadgeStatus): boolean {
   if (s.badge.group === SECRET_GROUP) return s.earned;
@@ -63,8 +73,10 @@ export function isShown(s: BadgeStatus): boolean {
 export function badgePageModel(statuses: readonly BadgeStatus[]): BadgePageModel {
   const visible = statuses.filter((s) => s.badge.hidden !== true);
   const groups = BADGE_GROUPS.map((group): BadgeGroupView => {
-    const shown = statuses.filter((s) => s.badge.group === group && isShown(s));
-    return { group, shown, earned: shown.filter((s) => s.earned).length, total: shown.length };
+    const inGroup = statuses.filter((s) => s.badge.group === group);
+    const shown = inGroup.filter(isShown);
+    const mystery = inGroup.filter((s) => !isShown(s));
+    return { group, shown, mystery, earned: shown.filter((s) => s.earned).length, total: shown.length };
   });
   return {
     earned: visible.filter((s) => s.earned).length,
@@ -252,11 +264,34 @@ function BadgeCard(props: { status: BadgeStatus; open: boolean; onToggle: () => 
   );
 }
 
-function BadgeGrid(props: { statuses: BadgeStatus[]; open: string | null; onToggle: (id: string) => void }) {
+/**
+ * A "?" card (6D-2c, decision 29 Oct 2026): a hidden badge not earned yet. Only its real icon (at
+ * full strength, the one hint), the name "???" and `badges.secretHint`; no progress, no tier, no
+ * ring, not a button (a tap does nothing). The badge's name and description are never rendered.
+ */
+function SecretCard(props: { icon: string }) {
+  return (
+    <li class="badge-card is-secret">
+      <div class="badge-card-face">
+        <span class="badge-icon" aria-hidden="true">
+          {props.icon}
+        </span>
+        <span class="badge-name">???</span>
+        <span class="badge-secret-hint">{t('badges.secretHint')}</span>
+      </div>
+    </li>
+  );
+}
+
+/** The full cards (`statuses`) first, then the "?" cards (`mystery`), each in catalogue order. */
+function BadgeGrid(props: { statuses: BadgeStatus[]; mystery: BadgeStatus[]; open: string | null; onToggle: (id: string) => void }) {
   return (
     <ul class="badge-grid">
       {props.statuses.map((s) => (
         <BadgeCard key={s.badge.id} status={s} open={props.open === s.badge.id} onToggle={() => props.onToggle(s.badge.id)} />
+      ))}
+      {props.mystery.map((s) => (
+        <SecretCard key={'?' + s.badge.id} icon={s.badge.icon} />
       ))}
     </ul>
   );
@@ -380,18 +415,20 @@ export function BadgesScreen() {
                 {model.groups.map((g) =>
                   g.group === SECRET_GROUP ? (
                     <GroupSection key={g.group} group={g.group} open={groupsOpen[g.group]} onToggle={toggleGroup}>
-                      {g.shown.length === 0 ? (
+                      {/* 6D-2c: "Nog geen geheime badge gevonden …" only while there is no card at
+                          all; with "?" cards the found count (also 0) stands above them. */}
+                      {g.shown.length === 0 && g.mystery.length === 0 ? (
                         <p class="muted badge-secret-note">{t('badges.secretNone')}</p>
                       ) : (
                         <>
                           <p class="badge-secret-note">{t('badges.secretCount', { n: g.shown.length })}</p>
-                          <BadgeGrid statuses={g.shown} open={open} onToggle={toggleCard} />
+                          <BadgeGrid statuses={g.shown} mystery={g.mystery} open={open} onToggle={toggleCard} />
                         </>
                       )}
                     </GroupSection>
                   ) : (
                     <GroupSection key={g.group} group={g.group} open={groupsOpen[g.group]} onToggle={toggleGroup} count={`${g.earned}/${g.total}`}>
-                      <BadgeGrid statuses={g.shown} open={open} onToggle={toggleCard} />
+                      <BadgeGrid statuses={g.shown} mystery={g.mystery} open={open} onToggle={toggleCard} />
                     </GroupSection>
                   ),
                 )}

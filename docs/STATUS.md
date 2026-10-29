@@ -4,6 +4,100 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 29 okt (Opus): 6D-2c — ?-kaartjes, Hele cirkel, boodschappenspoor en stille registratie bij start
+Gebouwd volgens docs/specs/badges-avatar.md blok 6D-2c (bouwer 2c-A pagina en registratie, bouwer 2c-B domein, data en
+sporen, integrator). Niet gecommit. Geen Dexie-versie, geen nieuwe dependency. Gate groen: check, 1299 tests (58
+bestanden), build, build:next, validate:data (0 fouten; 144 badges, 28 verborgen, plus 6 retired).
+- **"?"-kaartjes (besluit 29 okt):** elke geheime badge die je nog niet hebt, staat als kaartje in zijn eigen groep: in
+  Geheim alle 27, in Samen & delen het hartje (als laatste). Op het kaartje staat alleen het echte icoon (volle kleur),
+  "???" en "Nog te ontdekken." / "Still to discover.", met een gestippelde rand; geen balkje, geen niveau, tikken doet
+  niets. Naam en uitleg komen niet in de pagina (ook niet in de DOM). Tellingen ongewijzigd: Geheim-kop zonder telling,
+  "{n} geheime badges gevonden" telt alleen gevonden, de groepstellingen tellen geen "?"-kaartjes. In Geheim eerst de
+  gevonden kaarten, dan de "?"-kaartjes in catalogusvolgorde. Eén nieuwe key `badges.secretHint`.
+- **Stille registratie verhuisd (besluit Fable na de lens van 6D-2b):** `registerEarnedSilently()` in src/badges.ts
+  registreert voor alle lokale profielen en Samen wat al behaald is, zonder toast of confetti. Hij draait bij het
+  opstarten (direct na `loadProfiles`, alleen met badges aan en zolang `badges.catalogSynced` < 2; een verse installatie
+  zet alleen de vlag), bij de badges-schakelaar van uit naar aan (zelfde voorwaarde) en na elk herstel van een back-up
+  (altijd, vóór `recordFeature('restore')`). De badgecontrole zelf doet het alleen nog als vangnet (vlag toch < 2) en
+  meldt dat met een console-waarschuwing.
+- **Hele cirkel (🔄, groep Koken, achter Boodschapper):** ladder 1 · 2 · 3 · 5 · 8 · 12 · 20 · 30 recepten. Een recept telt
+  als het een eigen recept is dat via de AI-prompt is gemaakt (nieuw veld `origin.via`, alleen gezet bij het aanmaken in
+  de editor: 'ai', 'website', 'paste' of 'manual'), gedeeld is (een 'out'-regel in In & uit), op het boodschappenspoor
+  staat, gekookt is en een foto heeft (die twee per lid; op Samen van wie dan ook). Oude recepten hebben geen `via` en
+  tellen niet. Nieuwe regelsoort `fullCycle`; de validator kent hem.
+- **Boodschappenspoor:** nieuwe setting `shop.bought` (src/domain/shopbought.ts): per recept de eerste keer dat een regel
+  ervan werd afgevinkt, per ingrediënt hoe vaak (samen en per lid). Bijgewerkt in `setListItem` alleen op de overgang
+  niet-afgevinkt → afgevinkt, in dezelfde transactie als de lijst; niet bij "Heb ik al", "Leeg de lijst" of
+  `restoreListItem`. Gaat mee in de back-up. `ings` heeft nog geen badge (docs/IDEAS.md idee 4).
+- **`dictEdit`** telt nu ook bij "Zet in woordenboek" (MissingSheet in Woordenboek), na succes.
+- **Integrator:** tests/badges-page.test.ts kreeg drie tests voor de "?"-kaartjes (niets verdiend: Geheim 27 en Samen
+  alleen het hartje; één gevonden: die vooraan, de rest "?" in volgorde; hartje verdiend: geen "?" meer in Samen).
+  DEVICE-TEST: rij 94 (resultaat 1: verdiend/totaal behalve bij Geheim) en rij 95 ("?"-kaartjes, hartje) aangevuld,
+  nieuwe rij 103 "Hele cirkel" direct na rij 102, NL en EN. Bouwer 2c-B paste tests/validate-badges.test.ts aan (Koken
+  33 → 34, 143 → 144 actieve badges): akkoord, nodig door de nieuwe badge.
+- **Dev-app (375 px en 360 px, licht en donker, NL en EN), op een tijdelijk lege database:** verse installatie → nieuw
+  profiel → één keer ✓ Gekookt → toast "🏆 Nieuwe badge: Eerste hap" (bevinding 2 weg). Geheim toont 27 "?"-kaartjes met
+  icoon, "0 geheime badges gevonden"; na de taalwissel staat Taalknobbel (EN Polyglot) vooraan, daarna 26 "?"-kaartjes; Samen & delen
+  eindigt met het ❤️-kaartje; geen geheime naam in de DOM; geen horizontaal scrollen. Herstel van een kunstmatige oude
+  back-up (oude `badges.earned`, geen vlag): alleen "🤫 Geheime badge: Terug van weggeweest" als toast; elf oude
+  registraties voor Samen en die van het tweede profiel kwamen stil binnen (bevinding 1 weg). Hele cirkel: recept via
+  "Met AI" (`via: 'ai'`), regel afgevinkt (`shop.bought` gevuld, de transactie werkt in de echte app), delen nagebootst
+  met een 'out'-regel (het voorbeeldpaneel heeft geen deelvenster), gekookt, foto → "🏆 Full cycle · level 1: yellow".
+  Badges uit en weer aan met de vlag op 1: stil geregistreerd, vlag 2, geen toast. Geen consolefouten. Database en
+  localStorage daarna teruggezet zoals ze waren.
+- **Graag beslissen (Stijn/Fable):** (1) **Weekplan delen telt niet voor Hele cirkel.** Het besluit zegt dat delen via
+  een weekplan meetelt, maar WeekScreen schrijft geen 'out'-regel in In & uit (`logShareEvent`: "Never for shopping
+  lists, week plans or backups"). Dat vraagt een besluit en een wijziging in WeekScreen. (2) **"Ongedaan" telt opnieuw
+  in `ings`.** "Ongedaan" na uitvinken en "Ongedaan" na "Klaar" vinken opnieuw aan via `setListItem` en tellen dus nog
+  een keer per ingrediënt (de receptdatum blijft de eerste). Als "niet bij terugzetten" deze Ongedaan-knoppen bedoelt,
+  moet ShoppingScreen een vlag meegeven. Nu zonder gevolg, want `ings` heeft nog geen badge. (3) De spec zegt bij rij
+  103 "niveau 1 (brons)", maar niveau 1 is geel (§1a.6); de app toont "niveau 1: geel" en rij 103 zegt dat ook.
+  (4) Randgeval bij herstel: staat de vlag op deze telefoon nog onder 2 (badges stonden bij elke start uit) en zet het
+  bestand badges aan, dan slikt het vangnet "Terug van weggeweest" stil in. De spec laat de vlag bij herstel ongemoeid.
+  (5) Het register in docs/specs/README.md §2b noemt `Origin.via` en de setting `shop.bought` nog niet.
+- **Lens 6D-2c: drie bevindingen gereproduceerd, alle drie een besluit (de fixer liet de code ongemoeid):**
+  (6) **Een teruggedraaid vinkje blijft "gekocht".** Aanvinken schrijft meteen naar `shop.bought`; "Ongedaan" haalt
+  het vinkje weg maar niet het spoor (receptdatum en `ings` +1 blijven). Een per ongeluk afgevinkte regel van een
+  AI-recept kan zo Hele cirkel afmaken. Hoort bij (2). Opties: A) zo laten: het spoor legt het moment van aanvinken
+  vast en Ongedaan wist niets; B) Ongedaan draait het spoor mee terug: `setListItem` geeft de vorige `shop.bought`
+  terug, de Ongedaan-knop van een vinkje zet die terug, en de Ongedaan-knoppen die opnieuw aanvinken (na uitvinken, na
+  "Klaar") tellen niet (vlag); raakt repo.ts en ShoppingScreen.tsx, plus een test.
+  (7) **Geen badgecontrole na een vinkje en na delen als bestand of download.** Wordt Hele cirkel afgemaakt met een
+  vinkje (ShoppingScreen `toggleCheck`) of met een deelroute die alleen een 'out'-regel schrijft (ShareScreen: bestand
+  'downloaded' en Download; Recepten → Selecteer: 'downloaded' en Exporteer; de weggeef-bundel in Opslag), dan komt de
+  toast pas bij de volgende losse controle (bijv. een themawissel). Ook waar wél gecontroleerd wordt (deelvenster
+  'shared') loopt `logShareEvent` los naast de controle, dus de 'out'-regel kan te laat zijn. Opties: A) een controle
+  toevoegen na elk aanvinken en na elke 'out'-regel (de controle pas ná het wegschrijven van die regel); B) zo laten:
+  de toast komt bij het volgende beloningsmoment (koken en foto controleren al; DEVICE-TEST 103 zet het aanvinken vóór
+  koken en foto).
+  (8) **`origin.via` reist mee in elk deelformaat** (`#r=`, bundels, weekplan): `travelRecipe` haalt alleen `sync` en
+  `override` weg en `receivedOrigin` neemt `via` over, dus de ontvanger bewaart `via: 'ai'` op de 'received'-origin.
+  Geen scherm toont `via` (alleen src/domain/badges.ts leest het) en 'received' telt niet voor de badge. README §4.3
+  noemt `via` niet bij de nieuwe velden van het deelformaat. Hoort bij (5). Opties: A) meesturen (onschuldig; in
+  README §2b en §4.3 opnemen); B) in `travelRecipe` weghalen (de back-up houdt `via` wel; bevroren tokens veranderen
+  niet), plus een test.
+- **Keuzes die de spec niet letterlijk maakte (graag bevestigen):** (a) na stil registreren wordt de XP stil bijgewerkt
+  (geen "+XP"-pop bij opstarten, schakelaar of herstel); alleen het vangnet werkt het gecontroleerde lid gewoon bij;
+  (b) in StorageScreen staat de stille registratie ná het herladen van profielen, badge-instellingen en XP (anders rekent
+  hij met de oude profiellijst), nog steeds vóór `recordFeature('restore')`; (c) herstel registreert ook stil als badges
+  uit staan (alleen `badges.earned`, niets zichtbaars) en zet de vlag niet; (d) Geheim met 0 gevonden toont "0 geheime
+  badges gevonden" boven de "?"-kaartjes; (e) app.tsx en de schakelaar roepen één functie `syncCatalogIfNeeded()` aan,
+  die de vlag alleen zet als het registreren lukte; (f) "???" staat letterlijk in de code (taalneutraal, de spec noemt
+  één key); (g) `via`: de laatste import die iets invulde wint, "Plak hele bereiding" laat 'manual' staan, en een tekst
+  die als AI-antwoord herkend is maar via de website- of Controleer-route werd ingevuld, krijgt toch 'ai'; (h) bij herstel
+  vervangt `shop.bought` uit het bestand de lokale waarde (zoals elke setting zonder samenvoegregel); (i) src/db/repo.ts
+  importeert `activeProfile` uit src/profile.ts (dat repo ook importeert); werkt, want bovenaan het bestand wordt niets
+  gebruikt. Ter info: een gedeeld AI-recept komt bij de ontvanger binnen als 'received' en telt daar niet.
+
+- **Besluit Fable (29 okt, na de lens; zelf aangepast, commit van 6D-2c):** (1) weekplan delen telt niet voor Hele
+  cirkel (geen deel-regel; spec aangepast). (2) en (6) "Ongedaan" laten zoals het is: het spoor legt het aanvinken
+  vast; `ings` heeft nog geen badge, bij idee 4 opnieuw bekijken. (3) spec: niveau 1 is geel. (4) randgeval bij herstel
+  met de vlag onder 2 geaccepteerd (alleen op een telefoon die nooit met badges aan startte). (5) README §2b-register
+  aangevuld met `Origin.via`, `shop.bought` en `badges.catalogSynced`. (7) **gebouwd:** `recheckActiveBadges()` in
+  src/badges.ts, aangeroepen na een vinkje (ShoppingScreen) en na elke 'out'-regel, pas ná het wegschrijven
+  (ShareScreen, RecipesScreen, DeltaShareScreen, StorageScreen); daarmee komt de toast van Hele cirkel op het moment
+  zelf, ook na delen als bestand of download. (8) **gebouwd:** `travelRecipe` haalt `origin.via` weg (test in
+  tests/share.test.ts); de back-up houdt het. Keuzes (a)–(f) van de bouwers akkoord.
 ## 29 okt (Opus): 6D-2b — badgepagina, toasts en ontdekkersbadges
 Gebouwd volgens docs/specs/badges-avatar.md blok 6D-2b (bouwer A badgepagina, bouwer B toasts en haakjes, integrator).
 Niet gecommit. Geen Dexie-versie, geen nieuwe dependency. Zoals 6D-2a direct naar `main`, niet eerst `/next/` (Stijn:

@@ -27,6 +27,7 @@ import {
   type PhotoRow,
 } from '../src/domain/badges';
 import type { CookLogEntry, Recipe } from '../src/domain/model';
+import { normalizeRecipe } from '../src/domain/recipe-io';
 import type { XpEvent, XpState } from '../src/domain/xp';
 
 // ---------------------------------------------------------------------------- helpers
@@ -76,6 +77,8 @@ function facts(over: Partial<BadgeFacts> = {}): BadgeFacts {
     features: {},
     householdMembers: 1,
     donorLevel: 0,
+    sharedRecipeIds: new Set(),
+    boughtRecipeIds: new Set(),
     ...over,
   };
 }
@@ -1043,6 +1046,98 @@ describe('evaluateBadges: householdMembers, cooks, donor, overcooked', () => {
   });
 });
 
+describe('evaluateBadges: fullCycle ("Hele cirkel", block 6D-2c)', () => {
+  const rule: BadgeRule = { kind: 'fullCycle' };
+  const TIERS = [1, 2, 3, 5, 8, 12, 20, 30];
+  const ANNA = 'p:aaaaaaaa';
+  const BRAM = 'p:bbbbbbbb';
+  const viaAi = (id: string) => recipe(id, 'Curry', { origin: { kind: 'user', via: 'ai' } });
+  const photo = (recipeId: string, memberId = ANNA): PhotoRow => ({ recipeId, memberId, at: '2026-01-02T18:00:00.000Z' });
+  type Track = 'ai' | 'shared' | 'bought' | 'cooked' | 'photo';
+
+  /** u:curry with all five tracks, minus the one named. */
+  function tracks(without?: Track): BadgeFacts {
+    return facts({
+      recipes: recipeMap(without === 'ai' ? recipe('u:curry', 'Curry') : viaAi('u:curry')),
+      sharedRecipeIds: new Set(without === 'shared' ? [] : ['u:curry']),
+      boughtRecipeIds: new Set(without === 'bought' ? [] : ['u:curry']),
+      log: without === 'cooked' ? [] : [entry('u:curry')],
+      photoRows: without === 'photo' ? [] : [photo('u:curry')],
+    });
+  }
+
+  it('a recipe with all five tracks counts 1 (tier 1); with four of the five it counts 0', () => {
+    expect(status(rule, tracks(), { tiers: TIERS })).toMatchObject({ earned: true, tier: 1, current: 1, target: 2 });
+    for (const without of ['ai', 'shared', 'bought', 'cooked', 'photo'] as const) {
+      expect(status(rule, tracks(without), { tiers: TIERS }), without).toMatchObject({ earned: false, tier: 0, current: 0, target: 1 });
+    }
+  });
+
+  it("only an own recipe made through the AI prompt counts: via 'paste' / 'website' / 'manual', no via or a received one → 0", () => {
+    const others: Recipe[] = [
+      recipe('u:curry', 'Curry', { origin: { kind: 'user', via: 'paste' } }),
+      recipe('u:curry', 'Curry', { origin: { kind: 'user', via: 'website' } }),
+      recipe('u:curry', 'Curry', { origin: { kind: 'user', via: 'manual' } }),
+      recipe('u:curry', 'Curry', { origin: { kind: 'received', via: 'ai' } }),
+    ];
+    for (const r of others) {
+      const f = { ...tracks(), recipes: recipeMap(r) };
+      expect(status(rule, f, { tiers: TIERS }), `${r.origin.kind}/${r.origin.via}`).toMatchObject({ earned: false, current: 0 });
+    }
+  });
+
+  it('counts recipes, not cooks or photos: two complete recipes → 2, a third without a photo does not count', () => {
+    const f = facts({
+      recipes: recipeMap(viaAi('u:a'), viaAi('u:b'), viaAi('u:c')),
+      sharedRecipeIds: new Set(['u:a', 'u:b', 'u:c']),
+      boughtRecipeIds: new Set(['u:a', 'u:b', 'u:c']),
+      log: [entry('u:a'), entry('u:a'), entry('u:b'), entry('u:c')],
+      photoRows: [photo('u:a'), photo('u:a'), photo('u:b')],
+    });
+    expect(status(rule, f, { tiers: TIERS })).toMatchObject({ earned: true, tier: 2, current: 2, target: 3 });
+  });
+
+  it("on 'all' a cook by one member and a photo by another count together; per member they do not", () => {
+    const cook: CookLogEntry = { ...entry('u:curry'), profileId: ANNA };
+    const pic = photo('u:curry', BRAM);
+    const base = { recipes: recipeMap(viaAi('u:curry')), sharedRecipeIds: new Set(['u:curry']), boughtRecipeIds: new Set(['u:curry']) };
+    // The facts arrive already filtered on the member (src/badges.ts), everything on 'all'.
+    const anna = facts({ ...base, log: [cook], photoRows: [] });
+    const bram = facts({ ...base, log: [], photoRows: [pic] });
+    const all = facts({ ...base, log: [cook], photoRows: [pic] });
+    expect(status(rule, anna, { tiers: TIERS })).toMatchObject({ current: 0 });
+    expect(status(rule, bram, { tiers: TIERS })).toMatchObject({ current: 0 });
+    expect(status(rule, all, { tiers: TIERS })).toMatchObject({ earned: true, current: 1 });
+  });
+
+  it('normalizeBadges keeps fullCycle as a ladder (tiers) and as a one-off (n)', () => {
+    const raw = (extra: Record<string, unknown>) => ({
+      id: 'x',
+      nl: { name: 'X', description: 'Doe {n}' },
+      en: { name: 'X', description: 'Do {n}' },
+      icon: '🔄',
+      group: 'koken',
+      ...extra,
+    });
+    const [ladder, oneOff, broken] = normalizeBadges([
+      raw({ rule: { kind: 'fullCycle' }, tiers: TIERS }),
+      raw({ rule: { kind: 'fullCycle', n: 1 } }),
+      raw({ rule: { kind: 'fullCycle' } }),
+    ]);
+    expect(ladder).toMatchObject({ rule: { kind: 'fullCycle' }, tiers: TIERS });
+    expect(oneOff).toMatchObject({ rule: { kind: 'fullCycle', n: 1 } });
+    expect(oneOff?.tiers).toBeUndefined();
+    expect(broken).toBeUndefined(); // no n and no tiers: never evaluable, left out
+  });
+
+  it("origin.via survives normalizeRecipe as one of its four values; anything else is dropped", () => {
+    const stored = (via: unknown) => normalizeRecipe({ ...viaAi('u:curry'), origin: { kind: 'user', author: 'Anna', via } });
+    expect(stored('ai')?.origin).toEqual({ kind: 'user', author: 'Anna', via: 'ai' });
+    expect(stored('manual')?.origin.via).toBe('manual');
+    for (const junk of ['AI', 'gpt', 1, null, {}]) expect(stored(junk)?.origin, String(junk)).toEqual({ kind: 'user', author: 'Anna' });
+  });
+});
+
 // ---------------------------------------------------------------------------- restore merges (§2g)
 
 describe('mergeEarned / normalizeEarned', () => {
@@ -1131,6 +1226,20 @@ describe('data/badges.json (catalogue smoke, §2d)', () => {
     const notHidden = raws.filter((b) => b['group'] === 'geheim' && b['hidden'] !== true).map((b) => b['id']);
     expect(notHidden).toEqual([]);
     expect(catalogue.filter((b) => b.group === 'geheim').every((b) => b.hidden === true)).toBe(true);
+  });
+
+  it('"Hele cirkel" is the fullCycle ladder of 6D-2c, right after Boodschapper in Koken', () => {
+    const i = catalogue.findIndex((b) => b.id === 'hele-cirkel');
+    expect(catalogue[i]).toEqual({
+      id: 'hele-cirkel',
+      nl: { name: 'Hele cirkel', description: 'Doorloop met {n} recepten de hele app: AI-prompt → delen → boodschappen → koken → foto' },
+      en: { name: 'Full cycle', description: 'Take {n} recipes through the whole app: AI prompt → share → groceries → cook → photo' },
+      icon: '🔄',
+      rule: { kind: 'fullCycle' },
+      group: 'koken',
+      tiers: [1, 2, 3, 5, 8, 12, 20, 30],
+    });
+    expect(catalogue[i - 1]?.id).toBe('boodschapper');
   });
 
   it('evaluates as a whole on empty facts: retired ones left out, nothing earned', () => {

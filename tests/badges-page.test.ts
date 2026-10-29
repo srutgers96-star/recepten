@@ -29,7 +29,7 @@ describe('badgePageModel (§1a)', () => {
     const m = badgePageModel(none);
     expect(m.groups.map((g) => g.group)).toEqual([...BADGE_GROUPS]);
     expect(m.total).toBe(catalogue.filter((b) => b.hidden !== true).length);
-    expect(m.total).toBe(115);
+    expect(m.total).toBe(116);
     expect(m.earned).toBe(0);
     expect(m.secretFound).toBe(0);
     const secret = m.groups.find((g) => g.group === 'geheim')!;
@@ -43,7 +43,7 @@ describe('badgePageModel (§1a)', () => {
     const m = badgePageModel(none.map((s) => (s.badge.id === secretBadge.id ? status(s.badge, true) : s)));
     expect(m.secretFound).toBe(1);
     expect(m.groups.find((g) => g.group === 'geheim')!.shown.map((s) => s.badge.id)).toEqual([secretBadge.id]);
-    expect(m.total).toBe(115);
+    expect(m.total).toBe(116);
     expect(m.earned).toBe(0);
   });
 
@@ -67,5 +67,40 @@ describe('badgePageModel (§1a)', () => {
     expect(koken.total).toBe(catalogue.filter((b) => b.group === 'koken' && b.hidden !== true).length);
     expect(koken.shown.map((s) => s.badge.id)).toEqual(catalogue.filter((b) => b.group === 'koken' && b.hidden !== true).map((b) => b.id));
     expect(m.earned).toBe(2);
+  });
+});
+
+// Block 6D-2c ("?" cards, decision 29 Oct 2026): every hidden badge not earned yet becomes a "?"
+// card in its own group, after the full cards, in catalogue order; the counts do not change.
+describe('badgePageModel mystery cards (6D-2c)', () => {
+  const secretIds = catalogue.filter((b) => b.group === 'geheim').map((b) => b.id);
+
+  it('nothing earned: Geheim holds every secret badge as a "?" card, Samen only the heart', () => {
+    const m = badgePageModel(none);
+    const secret = m.groups.find((g) => g.group === 'geheim')!;
+    expect(secret.mystery.map((s) => s.badge.id)).toEqual(secretIds);
+    expect(secret.mystery.length).toBe(27);
+    expect(m.groups.find((g) => g.group === 'samen')!.mystery.map((s) => s.badge.id)).toEqual(['hartje']);
+    for (const g of m.groups) if (g.group !== 'geheim' && g.group !== 'samen') expect(g.mystery).toEqual([]);
+    // Counts unchanged: a "?" card is never shown in full and never counted.
+    expect(m.secretFound).toBe(0);
+    expect(m.total).toBe(116);
+    expect(m.groups.find((g) => g.group === 'samen')!.total).toBe(catalogue.filter((b) => b.group === 'samen' && b.hidden !== true).length);
+  });
+
+  it('one found: the found card in shown, the rest stays "?" in catalogue order', () => {
+    const found = secretIds[3]!;
+    const m = badgePageModel(none.map((s) => (s.badge.id === found ? status(s.badge, true) : s)));
+    const secret = m.groups.find((g) => g.group === 'geheim')!;
+    expect(secret.shown.map((s) => s.badge.id)).toEqual([found]);
+    expect(secret.mystery.map((s) => s.badge.id)).toEqual(secretIds.filter((id) => id !== found));
+    expect(m.secretFound).toBe(1);
+  });
+
+  it('the heart earned: a full card in Samen, no "?" card left there', () => {
+    const m = badgePageModel(none.map((s) => (s.badge.id === 'hartje' ? status(s.badge, true) : s)));
+    const samen = m.groups.find((g) => g.group === 'samen')!;
+    expect(samen.mystery).toEqual([]);
+    expect(samen.shown.some((s) => s.badge.id === 'hartje')).toBe(true);
   });
 });

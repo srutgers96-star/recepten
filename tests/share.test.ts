@@ -99,8 +99,8 @@ describe('buildRecipeEnvelope', () => {
     expect((env.dict as { ing: Ingredient[] }).ing.map((i) => i.id)).toEqual(['bergkaas', 'pesto-huis']);
   });
 
-  it('folds the line overrides in and strips receiver-side bookkeeping (sync, override)', () => {
-    const r = recipe({ sync: { receivedRev: 3 }, override: { rev: 1, updatedAt: 'x' } } as Partial<Recipe>);
+  it('folds the line overrides in and strips receiver-side bookkeeping (sync, override, origin.via)', () => {
+    const r = recipe({ sync: { receivedRev: 3 }, override: { rev: 1, updatedAt: 'x' }, origin: { kind: 'user', via: 'ai' } } as Partial<Recipe>);
     const env = buildRecipeEnvelope(r, {
       by: 'Stijn',
       userIngredients: [],
@@ -109,6 +109,9 @@ describe('buildRecipeEnvelope', () => {
     const out = env.r as Recipe;
     expect(out.sync).toBeUndefined();
     expect(out.override).toBeUndefined();
+    expect(out.origin.via).toBeUndefined();
+    expect(out.origin.kind).toBe('user');
+    expect(r.origin.via).toBe('ai');
     expect(out.lines[2]?.ing).toBe('zout');
     expect(out.lines[2]?.confidence).toBe(1);
     expect(env.dict).toBeUndefined();

@@ -288,6 +288,38 @@
   color: var(--muted);
 }
 
+/* 6D-2c "?" card (decision 29 Oct 2026): a hidden badge not found yet. A muted dotted edge, the
+   icon at full strength (not .is-locked: no grey filter), "???" and "Nog te ontdekken.". The face
+   has the button's layout but is no button: a tap does nothing. */
+.badge-card.is-secret {
+  border: 2px dotted var(--muted);
+}
+
+.badge-card-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  /* 2 px edge instead of 1 px: 2 px less height and padding keep it as tall as a normal card. */
+  min-height: 98px;
+  padding: 11px 9px;
+  color: var(--ink);
+  text-align: center;
+}
+
+.badge-card.is-secret .badge-name {
+  color: var(--muted);
+}
+
+.badge-secret-hint {
+  max-width: 100%;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
 .badge-done {
   color: var(--rosemary);
   font-size: 12px;

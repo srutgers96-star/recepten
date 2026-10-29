@@ -78,10 +78,16 @@ na het herstel), `src/screens/MoreScreen.tsx` (alleen de badges-schakelaar), `te
 **Integrator.** DEVICE-TEST: rij 94 (resultaat 1: "bij elk kopje verdiend/totaal, behalve Geheim") en rij 95 aanvullen met de
 "?"-kaartjes (NL én EN, in beide tabellen), plus één nieuwe rij 103 "Hele cirkel" (na rij 102, NL én EN): maak via de
 AI-prompt een recept, deel het, maak een boodschappenlijst met dat recept en vink één regel af, kook het, voeg een foto
-toe → badge Hele cirkel niveau 1 (brons) met toast; zonder een van de vijf stappen geen badge. STATUS-kop
+toe → badge Hele cirkel niveau 1 (geel) met toast; zonder een van de vijf stappen geen badge. STATUS-kop
 "29 okt (Opus): 6D-2c — ?-kaartjes, Hele cirkel, boodschappenspoor en stille registratie bij start". Acceptatie in de
 dev-app: een nieuw profiel + één ✓ Gekookt → toast "Eerste hap" (bevinding 2 weg); Geheim toont "?"-kaartjes met het
 icoon; na een kunstmatig herstel van een oude back-up geen stortvloed (bevinding 1 weg).
+**Na de lens (besluit Fable, 29 okt):** (6) een teruggedraaid vinkje blijft als "gekocht" staan: het spoor legt het
+aanvinken vast en "Ongedaan" wist niets (`ings` heeft nog geen badge; bij idee 4 opnieuw bekijken). (7) Na elk
+aanvinken en na elke 'out'-regel, ook bij bestand/download, volgt `recheckActiveBadges()` uit src/badges.ts, pas ná
+het wegschrijven. (8) `origin.via` reist NIET mee: `travelRecipe` haalt het weg zoals `sync` en `override`; de back-up
+houdt het. Delen via het weekplan telt niet (geen deel-regel). Keuzes (a)–(f) van de bouwers zijn akkoord.
+Gebouwd: 29 okt 2026 (blok 6D-2c, workflow wf_1415d721-e90; nabewerking (6)–(8) door Fable)
 **Besluit Stijn + Fable (29 okt 2026) — de badge "Hele cirkel" (full cycle) en een boodschappenspoor.** Stijn: "upload een
 gerecht dmv ai prompt, deel het gerecht, koop de boodschappen van het gerecht, kook het gerecht én maak een foto —
 volledige app gebruiken voor 1 gerecht; mag doorlopen (brons, zilver, goud…)". Dus een ladder-badge `hele-cirkel`
@@ -92,7 +98,7 @@ prompt → share → groceries → cook → photo". Een recept telt als ALLE vij
    `'ai' | 'paste' | 'website' | 'manual'`, gezet bij aanmaken in EditScreen; oude recepten hebben het niet en tellen
    dus niet — eerlijk, want het spoor bestond nog niet; "Maak eigen kopie" erft `via` NIET);
 2. gedeeld: een `ShareEvent` met `direction: 'out'` waarvan `recipeIds` het recept bevat (los, als patch, in een
-   bundel of weekplan telt allemaal);
+   bundel telt allemaal; delen via het weekplan schrijft geen deel-regel en telt dus niet);
 3. boodschappen gekocht: het recept staat in het nieuwe boodschappenspoor (hieronder);
 4. gekookt door dit lid: een kooklog-regel met dit recipeId (op 'all': door wie dan ook);
 5. foto door dit lid: een `photoRows`-rij met dit recipeId (op 'all': van wie dan ook).

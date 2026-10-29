@@ -13,7 +13,7 @@
 // "Deel het bestand" first, "Download" second; a download reports "Opgeslagen als … in Downloads".
 // '#/share' without an id is "Stuur nieuwe naar …" (DeltaShareScreen; no router change).
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { checkNewBadges } from '@/badges';
+import { checkNewBadges, recheckActiveBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { QrCode } from '@/components/QrCode';
@@ -80,7 +80,7 @@ function countRecipeShared() {
  * id. No partner is named on this screen (who = null). Fire-and-forget.
  */
 function logRecipeShared(id: string, asPatch: boolean) {
-  void logShareEvent({ at: nowIso(), direction: 'out', kind: asPatch ? 'patches' : 'recipes', who: null, count: 1, recipeIds: [id] }).catch((e: unknown) => console.error('logShareEvent', e));
+  void logShareEvent({ at: nowIso(), direction: 'out', kind: asPatch ? 'patches' : 'recipes', who: null, count: 1, recipeIds: [id] }).then(() => recheckActiveBadges()).catch((e: unknown) => console.error('logShareEvent', e));
 }
 
 /** Share plain text: the share sheet when there is one, else WhatsApp's web intent. */

@@ -25,6 +25,8 @@ import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, newSideItem, normalizeServing
 import { HOUSEHOLD_KEY, normalizeHousehold, type HouseholdSetting } from '@/domain/household';
 import { mergeDonateHearts, mergeEarned } from '@/domain/badges';
 import { mergeFeatureLogs, normalizeFeatureLog } from '@/domain/features';
+import { normalizeShopBought, recordBought } from '@/domain/shopbought';
+import { activeProfile } from '@/profile';
 import { db, getSetting, setSetting } from './db';
 import type { BackupBundle, BundledPhoto, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Photo, Setting, ShareEvent } from './model';
 
@@ -892,6 +894,16 @@ export async function listShareEvents(direction: ShareEvent['direction'], limit 
   return rows.slice(0, limit);
 }
 
+/** 6D-2c ("Hele cirkel"): every recipe id in an 'out' row of the In & uit log, whatever its kind. */
+export async function sharedRecipeIds(): Promise<Set<string>> {
+  const rows = await db.events.where('direction').equals('out').toArray();
+  const ids = new Set<string>();
+  for (const row of rows) {
+    for (const id of Array.isArray(row.recipeIds) ? row.recipeIds : []) if (typeof id === 'string' && id !== '') ids.add(id);
+  }
+  return ids;
+}
+
 /** The identity of a row across backups: the same moment, direction and partner is the same event. */
 export function shareEventKey(e: Pick<ShareEvent, 'at' | 'direction' | 'who'>): string {
   return `${e.at}|${e.direction}|${(e.who ?? '').trim()}`;
@@ -1748,20 +1760,45 @@ export async function isListStale(): Promise<boolean> {
 /** Fields the user may change on an item in place (everything else is the generator's). */
 export type ListItemPatch = Partial<Pick<ListItem, 'checked' | 'inHouse' | 'adjusted' | 'pinned' | 'qty' | 'unit' | 'aisle' | 'label' | 'fresh'>>;
 
-/** Merges a patch into the item with that key (also in `extras` when it is one). No-op for an unknown key. */
+/** Setting 'shop.bought' (6D-2c, src/domain/shopbought.ts): which recipes and ingredients were bought. */
+export const SHOP_BOUGHT_SETTING = 'shop.bought';
+
+/**
+ * Merges a patch into the item with that key (also in `extras` when it is one). No-op for an unknown key.
+ * 6D-2c: on the transition not-ticked → ticked (`patch.checked === true` on an item that was not
+ * checked yet) the item goes onto the shopping trail `shop.bought` for the active profile, in the
+ * same transaction. Not for "Heb ik al" (no `checked: true`), "Leeg de lijst" or restoreListItem
+ * (they do not come through here) or un-ticking.
+ */
 export async function setListItem(key: string, patch: ListItemPatch): Promise<void> {
-  await updateList((list) => {
-    const apply = (it: ListItem): ListItem => {
-      if (it.key !== key) return it;
-      const next = { ...it } as unknown as Record<string, unknown>;
-      for (const [k, v] of Object.entries(patch)) {
-        if (v === undefined) delete next[k];
-        else next[k] = v;
-      }
-      return next as unknown as ListItem;
-    };
-    return { ...list, items: list.items.map(apply), extras: list.extras.map(apply) };
+  const memberId = activeProfile.value?.id ?? null;
+  await db.transaction('rw', db.lists, db.settings, async () => {
+    let bought = null as ListItem | null; // set inside the callback (a cast, so TS does not narrow it to null)
+    await updateList((list) => {
+      const before = list.items.find((it) => it.key === key) ?? list.extras.find((it) => it.key === key);
+      if (patch.checked === true && before && before.checked !== true) bought = before;
+      const apply = (it: ListItem): ListItem => {
+        if (it.key !== key) return it;
+        const next = { ...it } as unknown as Record<string, unknown>;
+        for (const [k, v] of Object.entries(patch)) {
+          if (v === undefined) delete next[k];
+          else next[k] = v;
+        }
+        return next as unknown as ListItem;
+      };
+      return { ...list, items: list.items.map(apply), extras: list.extras.map(apply) };
+    });
+    if (bought) {
+      const trail = normalizeShopBought(await getSetting<unknown>(SHOP_BOUGHT_SETTING, null));
+      await setSetting(SHOP_BOUGHT_SETTING, recordBought(trail, bought, memberId, nowIso()));
+    }
   });
+}
+
+/** 6D-2c ("Hele cirkel"): the recipes on the shopping trail — a line of theirs was ticked off once. */
+export async function boughtRecipeIds(): Promise<Set<string>> {
+  const trail = normalizeShopBought(await getSetting<unknown>(SHOP_BOUGHT_SETTING, null));
+  return new Set(Object.keys(trail.recipes));
 }
 
 /**

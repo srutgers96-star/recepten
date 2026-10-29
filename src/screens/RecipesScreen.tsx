@@ -26,7 +26,7 @@
 // from a search for "soep"), and the letter rail exists only in A–Z. A share or export from select
 // mode is logged in the "In & uit" log (repo.logShareEvent).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { checkNewBadges } from '@/badges';
+import { checkNewBadges, recheckActiveBadges } from '@/badges';
 import { AddMenu } from '@/components/AddMenu';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
@@ -105,7 +105,7 @@ const SORT_EMPTY: Record<ListSort, string> = { az: 'list.empty', recent: 'list.e
  * Downloads). Fire-and-forget; the log never blocks the status line.
  */
 function logSelectionShared(kind: 'recipes' | 'bundle', ids: readonly string[]) {
-  void logShareEvent({ at: nowIso(), direction: 'out', kind, who: null, count: ids.length, recipeIds: [...ids] }).catch((e: unknown) => console.error('logShareEvent', e));
+  void logShareEvent({ at: nowIso(), direction: 'out', kind, who: null, count: ids.length, recipeIds: [...ids] }).then(() => recheckActiveBadges()).catch((e: unknown) => console.error('logShareEvent', e));
 }
 
 /**

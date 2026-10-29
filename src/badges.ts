@@ -3,19 +3,21 @@
 // (pattern of src/celebrate.ts / src/sounds.ts), the normalized data/badges.json cache,
 // `badgeStatuses(memberId)` that builds BadgeFacts from the repository, and the new-badge
 // bookkeeping (`badges.earned`, strings `id` and `id@k`) with the toast signal the shell renders.
-// Block 6D-2b: a silent first registration (`badges.catalogSynced`) before toasts start.
+// Block 6D-2b: a silent first registration (`badges.catalogSynced`) before toasts start; block
+// 6D-2c moved it out of the first badge check to start-up, the badges switch and a restore
+// (`registerEarnedSilently`, `syncCatalogIfNeeded`), with the check itself only as a safety net.
 // Never in the way: with badges off everything here is a no-op and no UI shows a trace of it.
 import { signal } from '@preact/signals';
 import badgesData from '@data/badges.json';
 import avatarPartsData from '@data/avatar-parts.json';
 import { celebrate, celebration } from './celebrate';
-import { allRecipes, getHousehold, getSetting, getSharedRecipes, listAllPhotosMeta, listCookLog, setSetting } from '@/db/repo';
+import { allRecipes, boughtRecipeIds, getHousehold, getSetting, getSharedRecipes, listAllPhotosMeta, listCookLog, setSetting, sharedRecipeIds } from '@/db/repo';
 import { evaluateBadges, isLadder, normalizeBadges, normalizeEarned, type Badge, type BadgeFacts, type BadgeStatus } from '@/domain/badges';
 import { categoriesData } from '@/domain/data';
 import { featureCounts, normalizeFeatureLog } from '@/domain/features';
 import { membersFrom } from '@/domain/household';
 import type { Recipe } from '@/domain/model';
-import { profiles } from '@/profile';
+import { activeProfile, profiles } from '@/profile';
 import { markXpDirty, settleXp, xpStateFor } from '@/xp';
 
 /** Setting `badges.enabled` (boolean, default true). */
@@ -32,9 +34,11 @@ export const FEATURES_LOG_SETTING = 'features.log';
 export const DONATE_HEARTS_SETTING = 'donate.hearts';
 /**
  * Setting `badges.catalogSynced` (number): the catalogue version `badges.earned` was last brought
- * up to WITHOUT toasts. Below CATALOG_SYNC_VERSION the first checkNewBadges registers every badge
- * and tier reached so far silently (6D-2b, decision Fable 29 Oct 2026 in docs/STATUS.md "6D-2a"):
- * the 6D-2 catalogue would otherwise toast every badge and tier already reached, one after another.
+ * up to WITHOUT toasts. Below CATALOG_SYNC_VERSION every badge and tier reached so far is
+ * registered silently (6D-2b, decision Fable 29 Oct 2026 in docs/STATUS.md "6D-2a"): the 6D-2
+ * catalogue would otherwise toast every badge and tier already reached, one after another. Since
+ * 6D-2c that happens at start-up and when badges are switched on (`syncCatalogIfNeeded`), so a
+ * fresh install has nothing to register and its first badge still gets its toast.
  */
 export const BADGES_CATALOG_SYNCED_SETTING = 'badges.catalogSynced';
 /** The catalogue version of block 6D-2 (143 badges, tiers `id@k`). */
@@ -159,7 +163,7 @@ function donorLevelFor(raw: unknown, memberId: string | 'all'): number {
  * the two would wait on each other forever; there a registered `overcooked` still counts (sticky).
  */
 async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<BadgeFacts> {
-  const [recipes, log, shared, photoMeta, featuresRaw, household, heartsRaw, xp] = await Promise.all([
+  const [recipes, log, shared, photoMeta, featuresRaw, household, heartsRaw, xp, sharedIds, boughtIds] = await Promise.all([
     allRecipes(),
     listCookLog(),
     getSharedRecipes(),
@@ -173,6 +177,9 @@ async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<Ba
           return undefined;
         })
       : Promise.resolve(undefined),
+    // 6D-2c (rule kind 'fullCycle'): household-wide, like the recipes and the share events.
+    sharedRecipeIds(),
+    boughtRecipeIds(),
   ]);
   const byId = new Map<string, Recipe>();
   let classicsTotal = 0;
@@ -200,6 +207,8 @@ async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<Ba
     householdMembers: membersFrom(profiles.value, household).length,
     donorLevel: donorLevelFor(heartsRaw, memberId),
     xp,
+    sharedRecipeIds: sharedIds,
+    boughtRecipeIds: boughtIds,
   };
 }
 
@@ -354,8 +363,8 @@ let checking: Promise<void> = Promise.resolve();
  * Evaluates `memberId` AND 'all', compares with the registered `badges.earned`, persists the
  * new registrations (`id` for a one-off, `id@k` for every newly reached ladder tier) and queues
  * one toast per badge for its highest new tier, plus milestone confetti. No-op when badges are off.
- * The first check with `badges.catalogSynced` below CATALOG_SYNC_VERSION registers silently instead
- * (`syncCatalogSilently`).
+ * Safety net (6D-2c): a check that still finds `badges.catalogSynced` below CATALOG_SYNC_VERSION
+ * (the start-up sync failed) registers silently instead, sets the flag and says so in a warning.
  */
 export function checkNewBadges(memberId: string): Promise<void> {
   const run = checking.then(() => doCheckNewBadges(memberId));
@@ -364,23 +373,81 @@ export function checkNewBadges(memberId: string): Promise<void> {
 }
 
 /**
- * The silent first registration (6D-2b): every local profile, the checked member (also 'anon') and
- * 'all' get everything they reached registered without a toast or confetti, then
- * `badges.catalogSynced` = CATALOG_SYNC_VERSION; from the next check on, toasts as usual. The
- * badges reached by the action that triggered this check are part of "reached so far" too.
+ * 6D-2c: re-check the active profile after a trace landed outside the cook log (a tick on the
+ * shopping list, an 'out' row of a share or download): "Hele cirkel" reads those. Call it AFTER
+ * the trace is written. Fire-and-forget; nothing when no profile is active.
  */
-async function syncCatalogSilently(memberId: string): Promise<void> {
-  const keys = [...new Set([memberId, ...profiles.value.map((p) => p.id), 'all'])];
+export function recheckActiveBadges(): void {
+  const pid = activeProfile.value?.id;
+  if (pid) void checkNewBadges(pid).catch((e: unknown) => console.error('checkNewBadges', e));
+}
+
+/**
+ * The keys of `badges.earned` a silent registration covers: every local profile and 'all', plus
+ * `extra` first when given (the checked member of the safety net, which may be 'anon'). Pure; no
+ * doubles, order kept.
+ */
+export function silentRegistrationKeys(profileIds: readonly string[], extra?: string): string[] {
+  return [...new Set([...(extra === undefined ? [] : [extra]), ...profileIds, 'all'])];
+}
+
+/**
+ * The silent registration itself (6D-2b, moved in 6D-2c): for every key, everything reached so far
+ * is registered (`id`, `id@k`) without a NewBadge, so without a toast or confetti. Then, as after
+ * any registration, the members' XP is marked dirty and settled: quietly (no pops for what is
+ * registered without a word), except `loud` (the member whose own action triggered the safety
+ * net, settled as before 6D-2c). Runs inside the `checking` chain; throws on a failed read/write.
+ */
+async function registerSilentlyFor(keys: readonly string[], loud?: string): Promise<void> {
   const statuses = await Promise.all(keys.map((k) => badgeStatuses(k)));
   const earned = normalizeEarned(await getSetting<unknown>(BADGES_EARNED_SETTING, {}));
   const { earned: next, changed } = registerSilently(earned, new Map(keys.map((k, i) => [k, statuses[i] ?? []])));
-  // Registrations first: a crash in between only means the (harmless) silent round runs again.
-  if (changed) await setSetting(BADGES_EARNED_SETTING, next);
-  await setSetting(BADGES_CATALOG_SYNCED_SETTING, CATALOG_SYNC_VERSION);
   if (!changed) return;
-  // As after any registration (below): the XP derivation may have moved; no toast, no confetti.
-  markXpDirty(memberId);
-  void settleXp(memberId).catch((e: unknown) => console.error('settleXp', e));
+  await setSetting(BADGES_EARNED_SETTING, next);
+  for (const k of keys) {
+    if (k === 'all') continue; // XP is per member; 'Samen' has none.
+    markXpDirty(k);
+    void settleXp(k, k === loud ? undefined : { quiet: true }).catch((e: unknown) => console.error('settleXp', e));
+  }
+}
+
+/**
+ * 6D-2c: registers for every local profile and 'all' everything reached right now, silently (no
+ * NewBadge, no toast, no confetti), whatever `badges.catalogSynced` says. Called right after a
+ * restore (StorageScreen), before the regular check that then toasts only what is really new.
+ * Serialized with checkNewBadges. Never rejects: a failure is a warning (the restore succeeded).
+ */
+export function registerEarnedSilently(): Promise<void> {
+  const run = checking.then(() =>
+    registerSilentlyFor(silentRegistrationKeys(profiles.value.map((p) => p.id))).catch((e: unknown) => console.warn('registerEarnedSilently', e)),
+  );
+  checking = run.catch(() => undefined);
+  return run;
+}
+
+/**
+ * 6D-2c: the silent registration at the two moments of the spec, at start-up (app.tsx, right after
+ * loadProfiles) and when badges are switched from off to on (MoreScreen). Only with badges on and
+ * while `badges.catalogSynced` is below CATALOG_SYNC_VERSION: register silently (every local
+ * profile and 'all'), then set the flag. A fresh install has nothing to register and only gets the
+ * flag. Serialized with checkNewBadges. Never rejects: a failure leaves the flag as it is, so the
+ * safety net in the next check catches it.
+ */
+export function syncCatalogIfNeeded(): Promise<void> {
+  const run = checking.then(async () => {
+    try {
+      await loadBadgeSettings();
+      if (!badgesEnabled.value) return;
+      if (!needsCatalogSync(await getSetting<unknown>(BADGES_CATALOG_SYNCED_SETTING, 0))) return;
+      // Registrations first: a crash in between only means the (harmless) silent round runs again.
+      await registerSilentlyFor(silentRegistrationKeys(profiles.value.map((p) => p.id)));
+      await setSetting(BADGES_CATALOG_SYNCED_SETTING, CATALOG_SYNC_VERSION);
+    } catch (e) {
+      console.warn('syncCatalogIfNeeded', e);
+    }
+  });
+  checking = run.catch(() => undefined);
+  return run;
 }
 
 async function doCheckNewBadges(memberId: string): Promise<void> {
@@ -388,7 +455,12 @@ async function doCheckNewBadges(memberId: string): Promise<void> {
   if (!badgesEnabled.value) return;
   try {
     if (needsCatalogSync(await getSetting<unknown>(BADGES_CATALOG_SYNCED_SETTING, 0))) {
-      await syncCatalogSilently(memberId);
+      // Safety net (6D-2c): the silent registration belongs to start-up and the badges switch
+      // (syncCatalogIfNeeded); finding the flag low here means that sync did not run or failed.
+      // The checked member (also 'anon') is registered too, and its XP settles as after any check.
+      console.warn(`checkNewBadges: badges.catalogSynced below ${CATALOG_SYNC_VERSION} at a check (start-up sync missed); registering silently`);
+      await registerSilentlyFor(silentRegistrationKeys(profiles.value.map((p) => p.id), memberId), memberId);
+      await setSetting(BADGES_CATALOG_SYNCED_SETTING, CATALOG_SYNC_VERSION);
       return;
     }
     const [mine, together] = await Promise.all([badgeStatuses(memberId), badgeStatuses('all')]);

@@ -23,7 +23,7 @@
 // the file many times larger; the hint shows the real size once it is packed). A restore reports
 // how many photos came back (same recipeId+at = already here, not re-added).
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
-import { reloadBadgeSettings } from '@/badges';
+import { recheckActiveBadges, registerEarnedSilently, reloadBadgeSettings } from '@/badges';
 import { reloadCelebrateSettings } from '@/celebrate';
 import { isIOS } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
@@ -248,7 +248,7 @@ export function StorageScreen() {
 
   /** 13A-2: the give-away went out (share sheet 'shared', or the file landed in Downloads) — one 'bundle' row, like Recepten → Selecteer → Exporteer. */
   function logExportShared(env: Envelope) {
-    void logShareEvent({ at: nowIso(), direction: 'out', kind: 'bundle', who: null, count: exportCount(env), recipeIds: exportIds(env) }).catch((e: unknown) => console.error('logShareEvent', e));
+    void logShareEvent({ at: nowIso(), direction: 'out', kind: 'bundle', who: null, count: exportCount(env), recipeIds: exportIds(env) }).then(() => recheckActiveBadges()).catch((e: unknown) => console.error('logShareEvent', e));
   }
 
   /** The give-away share itself (also the first step of "Ja, maar deel eerst mijn recepten"). Call within the tap. */
@@ -375,6 +375,10 @@ export function StorageScreen() {
       // (the active profile is kept when this phone already had one; theme, last-backup date and cook.sessions
       // are never restored). 6D-1: XP is recomputed silently from the restored facts (no pops, no sheet).
       await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadShowAmounts(), reloadBadgeSettings(), reloadCooking(), reloadXp()]);
+      // 6D-2c: first register silently what the restored history reached (all profiles + Samen, with
+      // the restored profiles loaded just above), so the check after recordFeature('restore') only
+      // toasts what is really new (e.g. "Terug van weggeweest"), never a flood of old badges.
+      await registerEarnedSilently();
       await reload();
       void refreshShareBadges();
       void recordFeature('restore');

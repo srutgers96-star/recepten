@@ -21,7 +21,7 @@
 // from their headings list), the standard disclosure pattern.
 import type { ComponentChildren } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { badgesEnabled, loadBadgeSettings, setBadgesEnabled } from '@/badges';
+import { badgesEnabled, loadBadgeSettings, setBadgesEnabled, syncCatalogIfNeeded } from '@/badges';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo, isIOS } from '@/components/AppInfo';
 import { browserLabel, OpenInChrome } from '@/components/BrowserNotice';
@@ -552,7 +552,18 @@ export function MoreScreen() {
               <small>{t('more.badgesHint')}</small>
             </div>
             <span class="switch">
-              <input type="checkbox" checked={badgesEnabled.value} onChange={(e) => void setBadgesEnabled((e.currentTarget as HTMLInputElement).checked)} />
+              <input
+                type="checkbox"
+                checked={badgesEnabled.value}
+                onChange={(e) => {
+                  const on = (e.currentTarget as HTMLInputElement).checked;
+                  // 6D-2c: off → on with `badges.catalogSynced` below 2 first registers what was reached
+                  // so far silently, then sets the flag (syncCatalogIfNeeded is a no-op otherwise).
+                  void setBadgesEnabled(on)
+                    .then(() => (on ? syncCatalogIfNeeded() : undefined))
+                    .catch((err: unknown) => console.error('setBadgesEnabled', err));
+                }}
+              />
               <span class="track" />
             </span>
           </label>

@@ -734,6 +734,8 @@ export const BADGE_COUNT_KINDS: readonly string[] = [
   'householdMembers',
   'cooks',
   'donor',
+  // 6D-2c "Hele cirkel": own AI-prompt recipes that were shared, bought, cooked and photographed.
+  'fullCycle',
 ];
 /** Rule kinds that carry `{ id, n? }`, checked against the dictionary refs. */
 export const BADGE_REF_KINDS: readonly string[] = ['category', 'tag', 'ingredient', 'cuisine'];
