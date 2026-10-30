@@ -463,10 +463,12 @@ export function ShoppingScreen() {
       <h2 class="shop-top">{t('shop.proto.title')}</h2>
       <p class="muted small">{t('shop.proto.hint')}</p>
       {groups.map((g) => (
-        <section class="shop-aisle" key={g.id}>
+        <section class="shop-aisle" data-aisle={g.id} key={g.id}>
           <div class="shop-aisle-head" role="heading" aria-level={3}>
+            <i class="rule" aria-hidden="true" />
             <span class="name">{g.aisle ? g.aisle[l] : g.id}</span>
             <span class="count">{g.items.length}</span>
+            <i class="rule" aria-hidden="true" />
           </div>
           <ul class="list">
             {g.items.map((it) => (
@@ -613,13 +615,15 @@ export function ShoppingScreen() {
         const visible = hideChecked ? g.items.filter((it) => !it.checked) : g.items;
         if (hideChecked && visible.length === 0 && !expanded) return null;
         return (
-          <section class={'shop-aisle' + (complete ? ' complete' : '')} key={g.id}>
+          <section class={'shop-aisle' + (complete ? ' complete' : '')} data-aisle={g.id} key={g.id}>
             <button type="button" class="shop-aisle-head" aria-expanded={expanded} onClick={() => setOpen((o) => ({ ...o, [g.id]: !expanded }))}>
+              <i class="rule" aria-hidden="true" />
               <span class="name">{g.aisle ? g.aisle[l] : g.id}</span>
               <span class={'count' + (complete ? ' done' : '')}>{t('shop.count', { done: d, total: n })}</span>
               <span class="chev" aria-hidden="true">
                 ▾
               </span>
+              <i class="rule" aria-hidden="true" />
             </button>
             {expanded && (
               <ul class="list">

@@ -95,6 +95,120 @@
 
 /* ---------- Aisle sections ---------- */
 
+/* ---------- Aisle colours (Stijn 30 Oct): soft, one per aisle, on the caption, its rule and the tick boxes.
+   "Overig" and unknown aisles keep --muted. Dark values are lighter so they stay readable on --paper. */
+:root {
+  --aisle-groente-fruit: #4f8f5a;
+  --aisle-vlees-vis: #b85c5c;
+  --aisle-zuivel-eieren: #a8862e;
+  --aisle-kaas: #c0892f;
+  --aisle-brood-ontbijt: #a06d3a;
+  --aisle-droog: #9a8a48;
+  --aisle-blik-pot: #4f7aa0;
+  --aisle-diepvries: #3f8fb0;
+  --aisle-dranken: #2f8a8a;
+  --aisle-sauzen-olie-azijn: #7f8a2f;
+  --aisle-kruiden-specerijen: #b86a2f;
+  --aisle-bakken: #9a7a5a;
+  --aisle-snacks-zoet: #b85a8a;
+  --aisle-wereld: #7a5aa8;
+  --aisle-drogisterij: #6a7aa8;
+  --aisle-huishoudelijk: #6a7a8a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --aisle-groente-fruit: #7fc08a;
+    --aisle-vlees-vis: #e08a8a;
+    --aisle-zuivel-eieren: #dcc060;
+    --aisle-kaas: #e8b35a;
+    --aisle-brood-ontbijt: #d4a06a;
+    --aisle-droog: #cdb878;
+    --aisle-blik-pot: #86b0d8;
+    --aisle-diepvries: #7cc6e0;
+    --aisle-dranken: #6cc0c0;
+    --aisle-sauzen-olie-azijn: #b0bd5a;
+    --aisle-kruiden-specerijen: #e09a60;
+    --aisle-bakken: #cfae8a;
+    --aisle-snacks-zoet: #e090b8;
+    --aisle-wereld: #ab93d8;
+    --aisle-drogisterij: #9eaad8;
+    --aisle-huishoudelijk: #9fb0c3;
+  }
+}
+
+:root[data-theme='dark'] {
+  --aisle-groente-fruit: #7fc08a;
+  --aisle-vlees-vis: #e08a8a;
+  --aisle-zuivel-eieren: #dcc060;
+  --aisle-kaas: #e8b35a;
+  --aisle-brood-ontbijt: #d4a06a;
+  --aisle-droog: #cdb878;
+  --aisle-blik-pot: #86b0d8;
+  --aisle-diepvries: #7cc6e0;
+  --aisle-dranken: #6cc0c0;
+  --aisle-sauzen-olie-azijn: #b0bd5a;
+  --aisle-kruiden-specerijen: #e09a60;
+  --aisle-bakken: #cfae8a;
+  --aisle-snacks-zoet: #e090b8;
+  --aisle-wereld: #ab93d8;
+  --aisle-drogisterij: #9eaad8;
+  --aisle-huishoudelijk: #9fb0c3;
+}
+
+.shop-aisle {
+  --aisle: var(--muted);
+}
+
+.shop-aisle[data-aisle='groente-fruit'] {
+  --aisle: var(--aisle-groente-fruit);
+}
+.shop-aisle[data-aisle='vlees-vis'] {
+  --aisle: var(--aisle-vlees-vis);
+}
+.shop-aisle[data-aisle='zuivel-eieren'] {
+  --aisle: var(--aisle-zuivel-eieren);
+}
+.shop-aisle[data-aisle='kaas'] {
+  --aisle: var(--aisle-kaas);
+}
+.shop-aisle[data-aisle='brood-ontbijt'] {
+  --aisle: var(--aisle-brood-ontbijt);
+}
+.shop-aisle[data-aisle='droog'] {
+  --aisle: var(--aisle-droog);
+}
+.shop-aisle[data-aisle='blik-pot'] {
+  --aisle: var(--aisle-blik-pot);
+}
+.shop-aisle[data-aisle='diepvries'] {
+  --aisle: var(--aisle-diepvries);
+}
+.shop-aisle[data-aisle='dranken'] {
+  --aisle: var(--aisle-dranken);
+}
+.shop-aisle[data-aisle='sauzen-olie-azijn'] {
+  --aisle: var(--aisle-sauzen-olie-azijn);
+}
+.shop-aisle[data-aisle='kruiden-specerijen'] {
+  --aisle: var(--aisle-kruiden-specerijen);
+}
+.shop-aisle[data-aisle='bakken'] {
+  --aisle: var(--aisle-bakken);
+}
+.shop-aisle[data-aisle='snacks-zoet'] {
+  --aisle: var(--aisle-snacks-zoet);
+}
+.shop-aisle[data-aisle='wereld'] {
+  --aisle: var(--aisle-wereld);
+}
+.shop-aisle[data-aisle='drogisterij'] {
+  --aisle: var(--aisle-drogisterij);
+}
+.shop-aisle[data-aisle='huishoudelijk'] {
+  --aisle: var(--aisle-huishoudelijk);
+}
+
 .shop-aisle {
   margin: 0;
 }
@@ -104,40 +218,39 @@
   border-bottom: 0;
 }
 
-/* Compact aisle caption (Stijn 30 Oct: "weinig compact, categorieën naar rechts, onopvallender"): a small
-   muted label on the right with a hairline to its left, 30 px high; the tap area stays 44 px through ::after. */
+/* Compact aisle caption (Stijn 30 Oct): a small label in the aisle colour, centred between two rules
+   (rule — name · count — rule), 28 px high; the tap area stays 44 px through ::after. */
 .shop-aisle-head {
   position: sticky;
   top: 0;
   z-index: 1;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
   min-height: 28px;
   padding: 4px 4px 0;
   border: 0;
   background: var(--paper);
-  color: var(--muted);
+  color: var(--aisle);
   font: inherit;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  text-align: right;
+  text-align: center;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
 
-.shop-aisle-head::before {
-  content: '';
+.shop-aisle-head .rule {
   flex: 1;
   height: 1px;
-  background: var(--line);
-  margin-right: 4px;
+  background: var(--aisle);
+  opacity: 0.45;
 }
 
 .shop-aisle-head::after {
@@ -157,7 +270,8 @@
 .shop-aisle-head .count {
   font-size: 11px;
   font-weight: 600;
-  color: var(--muted);
+  color: inherit;
+  opacity: 0.85;
   font-variant-numeric: tabular-nums;
 }
 
@@ -166,7 +280,7 @@
 }
 
 .shop-aisle-head .chev {
-  color: var(--muted);
+  color: inherit;
   opacity: 0.7;
   font-size: 10px;
   transition: transform 120ms ease-out;
@@ -256,6 +370,16 @@
 .lr.checked .lr-box {
   background: var(--rosemary);
   border-color: var(--rosemary);
+}
+
+/* Inside an aisle the box takes the aisle colour (Stijn 30 Oct), unchecked and checked. */
+.shop-aisle .lr-box {
+  border-color: var(--aisle);
+}
+
+.shop-aisle .lr.checked .lr-box {
+  background: var(--aisle);
+  border-color: var(--aisle);
 }
 
 .lr-text {

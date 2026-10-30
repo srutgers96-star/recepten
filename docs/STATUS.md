@@ -156,6 +156,9 @@ ronde hieronder.
 - Level-up-venster: de lijst avatar-onderdelen inkorten ("+13 avatar-onderdelen" met uitklappen).
 - Enkelvoud "1 badge" / "1 kookdag" (6D-4b); kalender-legenda zonder "bijgewerkt" bij badges uit; inline
   kalender-stijlen naar xp.css.
+- ✔ Gedaan 30 okt (Fable, direct): categorie-bijschrift gecentreerd tussen twee lijnen; per categorie een zachte kleur
+  (16 tokens `--aisle-*` in shopping.css, licht én donker) op bijschrift, lijn en vinkvakjes; geen onderstreep na de laatste
+  regel. Overig/onbekend blijft --muted.
 - ✔ Gedaan 30 okt (Fable, direct): boodschappenlijst compacter — de categorie is een klein grijs bijschrift rechts met
   een lijntje ervoor (30 px, tikdoel blijft 44 px via ::after), regels 44 px i.p.v. 48. Stijn: "5 categorieën, 5 dingen,
   vult bijna mijn hele pagina".
