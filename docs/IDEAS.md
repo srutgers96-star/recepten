@@ -206,3 +206,25 @@ uitbreidingsronde samen met de avatar-rondes.
 
 **Open vragen.** Alleen deze 8, of meteen een bredere ronde (Aziatische en Oost-Europese producten voor Gabi's
 Litouwse keuken)? Wie bepaalt de EN-namen?
+
+## 9. Dopamine-kick bij Gekookt!: het woord groot in de confetti en een XP-balk die oploopt (Stijn, 30 okt 2026)
+
+**Wens.** "Cooked en Overcooked mogen vóór of in de confetti pontificaal in beeld, en misschien een fractie langer; de
+dopamine-kick kan iets beter. En dan een soort XP-balkje in beeld dat je level optelt: je profiel-XP-balk waarbij je hem
+omhoog ziet gaan, zodat je ziet wat voor verschil het maakt."
+
+**Prioriteit.** Later; past bij de opschoon-/afwerkronde of als klein eigen blok na 6D-S (het raakt dezelfde
+vieringslaag: src/celebrate.ts, src/components/Confetti.tsx, XpPop.tsx, XpBar.tsx).
+
+**Aanpak in grote lijnen.** (1) Bij `celebrate('cooked' | 'overcooked')` het woord **Gekookt!** / **Overcooked!** groot en
+gecentreerd over de confetti (±48 px, de kookstand-letter als die aanstaat, goud bij Gekookt!, de schud-animatie bij
+Overcooked!), zichtbaar ±1,4 s in plaats van de huidige korte pop; `prefers-reduced-motion` respecteren. (2) Direct daarna
+glijdt onderaan een strook in met dezelfde XP-balk als op het profiel: begint op de oude stand, telt in ±1,2 s op naar de
+nieuwe ("+42 XP" ernaast), en bij een level-up loopt de balk vol, springt naar het nieuwe level en opent dan pas het
+level-up-venster. Bron van de getallen: `settleXp` kent oud en nieuw totaal; de pop van 6D-1 (+12) gaat hierin op.
+(3) Geluid: de tadaa (6D-4a) blijft op hetzelfde moment. (4) Alles alleen met badges aan (§1 xp-levels: geen spoor
+van XP als badges uit staan).
+
+**Open vragen.** Ook bij een foto of beoordeling (kleinere XP) de balk tonen, of alleen bij koken? Hoe lang mag het
+duren voordat het irritant wordt (Stijn test: 1,4 + 1,2 s)? Overslaan door te tikken?
+
