@@ -96,35 +96,53 @@
 /* ---------- Aisle sections ---------- */
 
 .shop-aisle {
-  margin: 0 0 6px;
+  margin: 0 0 2px;
 }
 
+/* Compact aisle caption (Stijn 30 Oct: "weinig compact, categorieën naar rechts, onopvallender"): a small
+   muted label on the right with a hairline to its left, 30 px high; the tap area stays 44 px through ::after. */
 .shop-aisle-head {
   position: sticky;
   top: 0;
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: flex-end;
+  gap: 6px;
   width: 100%;
-  min-height: 44px;
-  padding: 8px 4px 4px;
+  min-height: 30px;
+  padding: 6px 4px 0;
   border: 0;
   background: var(--paper);
-  color: var(--cobalt);
+  color: var(--muted);
   font: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: right;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
 
-.shop-aisle-head .name {
+.shop-aisle-head::before {
+  content: '';
   flex: 1;
+  height: 1px;
+  background: var(--line);
+  margin-right: 4px;
+}
+
+.shop-aisle-head::after {
+  content: '';
+  position: absolute;
+  inset: -7px 0;
+}
+
+.shop-aisle-head .name {
+  flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -132,8 +150,8 @@
 }
 
 .shop-aisle-head .count {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 600;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
@@ -145,6 +163,7 @@
 .shop-aisle-head .chev {
   color: var(--muted);
   opacity: 0.7;
+  font-size: 10px;
   transition: transform 120ms ease-out;
 }
 
@@ -195,8 +214,8 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  min-height: 48px;
-  padding: 6px 4px;
+  min-height: 44px;
+  padding: 4px 4px;
   border: 0;
   background: transparent;
   color: var(--ink);

@@ -1,8 +1,58 @@
-# Status — Rutgers' Recepten (bijgewerkt 29 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 30 oktober 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
+
+## 30 okt (Opus): 6D-4b — Sync mijn voortgang (#x=) en kookkalender
+Gebouwd volgens docs/specs/xp-levels.md "Blok 6D-4" (= 6D-4b in README §1; bouwer A contract, bouwer B ontvangst,
+bouwer C UI, integrator). Niet gecommit. Geen Dexie-versie, geen nieuwe dependency; wel een **nieuwe fragmentsleutel
+`x`** (invariant 4: bestaande tokens ongewijzigd, `v` blijft 2). Gate groen: check, 1395 tests (61 bestanden), build,
+build:next, validate:data. **Vóór main: korte Fable-blik op src/domain/share.ts en src/domain/token.ts** (§4 stap 4,
+README §1); daarna de 6D-UI-ronde (tabs voor badges en avatar-maker, avatar ronde 2).
+- **Contract:** `TokenKey` 'x' in token.ts (`TOKEN_KEYS`, `TOKEN_RE` `[rpwbfx]`) en op de vier andere plekken (router.ts,
+  boot.ts `(r|p|w|b|f|x)`, landing.ts, pwa.ts `urlForChrome`). share.ts: `ProgressCard`, `buildProgressEnvelope`,
+  `readProgressPayload` (tolerant volgens §2h: level 1…100, xp/streak ≥ 0, rv ≥ 1, badges `id`/`id@k` max 400,
+  cookDays geldig/oplopend/laatste 90, `r` max 5), `parseEnvelope` → `kind 'progress'` (een `x` zonder object =
+  invalid-token), `buildProgressShareMessage` (NL/EN letterlijk, URL alleen op de laatste regel), `planMessages`-tak,
+  `combineEnvelopes`/`envelopeItemCount` laten `x` vallen. src/domain/progress.ts: `progressCardFor`,
+  `normalizeSnapshots`, `calendarMonth` (lokaal wint). Bevroren `FROZEN_TOKEN_X`/`_FFLATE`/`FROZEN_ENVELOPE_X`
+  (exact de §2h-envelop, eenmalig gemaakt op 30 okt met beide engines); de "unknown kind"-tests gebruiken nu `'z'`;
+  een nieuwe pin: de oude sleutelset `[rpwbf]` ziet `#x=` helemaal niet. tests/progress.test.ts nieuw; tests/pwa.test.ts
+  neemt `x` mee in "keeps every token kind" (integrator).
+- **Ontvangst:** In & uit en de plakbox op Huishouden tonen een kaart "Voortgang van <naam>" met de drie uitkomsten
+  (lid → "Werk … bij"; profiel hier → "… is een profiel op deze telefoon"; onbekend → "Voeg … toe" / "Bewaar als
+  vriend"); opslaan schrijft `progress.snapshots` (repo.ts `getProgressSnapshots`/`putProgressSnapshot`/
+  `removeProgressSnapshot`) en logt één 'in'-rij (kind 'progress'). Huishouden: levelregel per lid (lokaal live, anders
+  uit de snapshot met "· bijgewerkt …") en een kaart Vrienden met Verwijder. Landingspagina: "Voortgang van <naam>",
+  "Level N · titel" (titels lazy, eigen chunk `levels`; de bundel schrijft niets) en de kaartjes-overdracht.
+- **UI:** "Sync mijn voortgang" op de actieve profielkaart en onder Huishouden → Mijn kaartje (paneel met Deel / Kopieer
+  link, één tekstveld; na 'shared' één 'out'-rij "Mijn voortgang"). Kookkalender `#/more/calendar` (rij "📅 Kookkalender"
+  in Meer, altijd zichtbaar): maandrooster ma–zo, max 3 stipjes, vandaag omrand, dagenlijst, legenda, eerlijke regel.
+- **Dev-app (375 px, NL en EN; 360 px zonder horizontaal scrollen):** eigen link geplakt in In & uit → "is een profiel op
+  deze telefoon", niets opgeslagen; het bevroren `#x=` als link geopend → In & uit, "Bewaar als vriend" → snapshot
+  `friend: true`, stipjes op 19/20/22 okt, Vrienden-kaart; een kaart van lid Anna in de plakbox → "Werk Anna bij" →
+  "Anna is bijgewerkt." en de levelregel met "bijgewerkt 30 okt"; Deel (navigator.share nagebootst) → precies `{text}`,
+  'out'-rij; landingspagina in NL en EN (los gemount in de dev-pagina, geen iOS-UA-emulatie beschikbaar; localStorage
+  ongemoeid). Testdata in de dev-database van het browserpaneel (Testkok, Anna, Bram) is van de bouwers; de
+  vriend-snapshot van de test is weer verwijderd.
+- **Niet gedaan, voor de hoofdsessie/Stijn:** CLAUDE.md is niet aangeraakt (een workflow-agent past geen projectinstructies
+  aan). Nodig volgens README §2c: invariant 7 "hash token (`#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`)" en de regel "share tokens
+  are `#r=`, `#p=`, `#w=`, `#b=`, `#f=` (member card, block F), `#x=` (shared progress, 6D-4b)". ADR-0004 heeft de regel
+  voor `x` (gedateerd 30 okt, de echte datum; de spec noemde 22 okt).
+- **Keuzes die de spec open liet (voor Fable):** badges op de kaart: niveau 1 als kaal `id` (ook bij een ladder, zoals
+  in de bevroren envelop), `id@k` vanaf 2; titel in `planMessages` via lazy `import('./levels.ts')`; `calendarMonth`
+  met maand 1–12, één `CalendarDay` per dag, lokaal wint per persoon én per dag; kookbeurten na vandaag tellen niet;
+  snapshots zonder geldige `receivedAt` vallen weg. "{n} kookdagen in de laatste 30 dagen" telt de 30 dagen tot en met
+  de deeldatum (`at`); "gedeeld op" komt uit `at` via `Collected.progressAt`/`FoundCards.progressAt`. Na "Bewaar als
+  vriend" staat "Bewaard", na "Voeg toe" de bestaande "… is toegevoegd aan je huishouden." Badges uit: geen
+  Sync-knop/paneel, geen regel 2 op de ontvangen kaart, geen levelregels; de kalender blijft (in de legenda staat
+  "· bijgewerkt …" dan wél, op Huishouden niet: kleine ongelijkheid). Een lid verwijderen wist ook zijn snapshot;
+  vrienden op naam gesorteerd, verwijderen zonder bevestiging; een vriend die lid werd staat niet dubbel. Een geplakte
+  `#x=` telt als kaartje in `memberNames` (in de editor biedt de plakbox dan "Voeg toe aan je huishouden"). Kalender:
+  één stip per persoon per dag, alleen te benoemen mensen krijgen stipjes, maandkop met jaartal, inline stijlen (dit
+  blok had geen stylesheet; kan later naar xp.css), `more.calendar*` in src/i18n/xp.ts. "1 badges" / "1 kookdagen":
+  de spec kent geen enkelvoud (iets voor de opschoonronde).
 
 ## 29 okt (Opus): 6D-4a — ontgrendelingen: Vrijgespeeld, confetti-stijlen, geluiden, lettertypes
 Gebouwd volgens docs/specs/xp-levels.md "Blok 6D-3 — ontgrendelingen" (= 6D-4a in README §1; bouwer A domein en
@@ -100,6 +150,9 @@ ronde hieronder.
 - Badgekaart: "Niveau 1 · geel" → alleen de gekleurde ring; de kleurnaam alleen in de detailweergave (Stijn 30 okt).
 - Meer: kortere of geen hints onder de rijen; het profiel-blok bovenaan kleiner of weg zodra IDEAS 5 er is.
 - Level-up-venster: de lijst avatar-onderdelen inkorten ("+13 avatar-onderdelen" met uitklappen).
+- ✔ Gedaan 30 okt (Fable, direct): boodschappenlijst compacter — de categorie is een klein grijs bijschrift rechts met
+  een lijntje ervoor (30 px, tikdoel blijft 44 px via ::after), regels 44 px i.p.v. 48. Stijn: "5 categorieën, 5 dingen,
+  vult bijna mijn hele pagina".
 
 Vandaag gebouwd en live op main (allemaal lichte modus, Opus-bouwers, Fable-nabewerking): 6D-2b (badgepagina),
 6D-2c (?-kaartjes, Hele cirkel, boodschappenspoor, stille registratie bij start), 6D-3 (avatar ronde 1, 66
