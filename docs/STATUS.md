@@ -269,6 +269,10 @@ extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids
   xp-levels.md onder "Na de lens van 6D-4a".
 
 ## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+**Stijn, 30 okt (avond, 4): pull-down-avatar en profielpagina samenvoegen** → ja, kan, en het ruimt op: blok 6D-S krijgt
+het scherm **Mijn profiel** (pull-down op Home of tik op je avatar; avatar groot, level, knoppen Jouw stijl · Badges · Deel
+kaartje · Sync · Naam & kleur); Profielen beheren wordt alleen de lijst, het profiel-blok in Meer verdwijnt (IDEAS 5 gaat erin op).
+
 **Stijn, 30 okt (avond, 3): elke deelknop ook als QR** (recepten, boodschappenlijsten, kaartje: "deel via link of QR"). Stand:
 QR bestaat al voor het kaartje en voor een recept (ShareScreen, achter Experimenten; ADR-0007, `qrcode` lazy, alleen
 encoderen). Een boodschappenlijst heeft nog geen link (alleen tekst) → nieuwe sleutel `#l=` nodig (invariant 4, ADR-0004).

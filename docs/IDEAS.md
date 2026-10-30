@@ -121,6 +121,9 @@ beginletter. Bronnen: `shop.bought.ings` + de woordenlijst (categorie per ingred
 
 ## 5. Swipe omlaag op Home: profiel bijna paginavullend, avatar heel groot (Stijn, 29 okt 2026)
 
+**Gepland (30 okt):** gaat op in blok 6D-S "Jouw stijl" als scherm **Mijn profiel** (badges-avatar.md, blok 6D-S punt 4):
+de pull-down én de profielpagina worden één scherm; Profielen beheren wordt alleen nog de lijst.
+
 **Wens.** Op Home naar beneden swipen (of vanaf de level-regel omlaag trekken) → het profiel vult bijna de hele pagina
 en de avatar wordt heel groot, "zodat je heel de avatar met al zijn ditjes en datjes goed kan zien": alle lagen
 (huid, haar, ogen, kleding, hoofddeksel, accessoire, achtergrond) op volle grootte, met naam, level, titel en XP-balk.

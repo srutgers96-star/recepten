@@ -223,8 +223,16 @@ goed over nadenken." Fable's ontwerp, als blok ná 13D (blok 2–4) en vóór 6C
    in Meer blijft één rij "🎨 Jouw stijl" (plus Badges). De pagina **Vrijgespeeld** gaat erin op: de aan/uit-schakelaars
    per ontgrendeling komen als "uit"-optie op de tegel (een ontgrendelde confetti die je niet wilt, zet je uit in Confetti).
    `#/more/unlocks` blijft werken als doorverwijzing naar Jouw stijl (links in oude toasts).
-4. **Later koppelen:** IDEAS 5 (pull-down op Home → groot profiel) wordt de tweede ingang naar Jouw stijl; de gouden modus
-   (6D-4a-besluit) komt als legendarische Thema-tegel.
+4. **Mijn profiel = de pull-down (Stijn 30 okt: "die avatar naar beneden slepen kan gemixt worden met profiel; zou het ook
+   opschonen"):** IDEAS 5 gaat op in dit blok. Omlaag trekken op Home (of tikken op je avatar) opent **Mijn profiel**
+   (`#/more/profile`): de avatar groot (±60 % van de breedte), naam, leveltitel, XP-balk en reeks, en daaronder de knoppen
+   🎨 Jouw stijl · 🏆 Badges · 📇 Deel mijn kaartje · 📈 Sync mijn voortgang · ✏️ Naam & kleur. Alles wat Profielen nu voor
+   het ACTIEVE profiel toont (XP-balk, avatar-rij, kaartje, sync) verhuist hierheen; **Profielen beheren** wordt alleen de
+   lijst (wisselen, toevoegen, verwijderen; tik op een ander profiel → diens Mijn profiel, zonder bewerken). In Meer blijft
+   één rij "Mijn profiel" met de kleine avatar; het profiel-blok bovenaan Meer verdwijnt. Pull-down: touch, drempel ±80 px,
+   alleen in standalone of als de browser-pull-to-refresh niet vuurt (anders alleen de tik); sluiten met omhoog vegen,
+   tik buiten, of Terug (hash-state zodat Terug op Android werkt); alleen transform/opacity animeren. De gouden modus
+   (6D-4a-besluit) komt als legendarische Thema-tegel in Jouw stijl.
 5. **Niet in dit blok:** nieuwe geluiden of lettertypes (data-rondes), challenges.
 Geen nieuwe tabel, geen nieuwe setting behalve `unlocks.disabled` die blijft; i18n `style.*` NL én EN. Spec met
 bestandsverdeling schrijft Fable bij de start (ná 13D).
