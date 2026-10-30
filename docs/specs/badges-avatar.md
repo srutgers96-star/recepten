@@ -260,8 +260,18 @@ Bezit: `src/screens/BadgesScreen.tsx`, `src/styles/badges.css`, `src/i18n/badges
    detail-stijlen verhuizen naar `.badge-sheet`. Donker thema via tokens. Geen horizontaal scrollen op 360 px.
 5. i18n: alleen `badges.tileLabel` als dat voor de aria-label nodig is (NL "{name}, niveau {k} van {max}" · EN "{name}, tier
    {k} of {max}"); verder bestaande keys.
-**Integrator/gate:** DEVICE-TEST rij 94/95 aanpassen (tegels, tik voor details; NL én EN), STATUS-kop "… 6D-B — badgepagina
-als tegels". Acceptatie op 360/375 px, licht en donker, NL en EN.
+6. **Kleur in plaats van kleurnaam (Stijn 30 okt: "je zegt nu geel erbij, dat is gek en zonde; kleur gebruiken").** Nergens
+   meer de naam van een niveaukleur in tekst. De kleur zit in de ring, de stipjes en een klein rond stipje (10 px) in de
+   niveaukleur vóór het woord "niveau": sheet "● Niveau 2" en "Volgende: 10 ●" (stipje in de kleur van het volgende
+   niveau), "Geeft: Steelpan ●" i.p.v. "op niveau brons"; toast `badges.toastTier` wordt NL "🏆 {name} · niveau {k}" · EN
+   "🏆 {name} · tier {k}" met een stipje in de niveaukleur in de toast-markup (src/app.tsx, `badgeToastText` + een
+   `<i class="tier-dot">`); `badges.unlocksTier` wordt NL "op niveau {k}" · EN "at tier {k}" (met stipje); de
+   avatar-maker-uitleg `avatar.lockedBadgeTier` wordt NL "Komt vrij met de badge {badge} op niveau {k}." · EN "Unlocks with
+   the badge {badge} at tier {k}." met het stipje ervoor (AvatarSheet.tsx hoort voor deze ene regel bij dit blok; 6D-R is dan
+   klaar). De kleurnamen `badges.tier.1`–`8` blijven alleen als aria-tekst van de stipjes. DEVICE-TEST 95/96/104 waar
+   "geel"/"blauw" in de verwachte tekst staat: aanpassen.
+**Integrator/gate:** DEVICE-TEST rij 94/95 (tegels, tik voor details) en de kleurnaam-rijen aanpassen (NL én EN), STATUS-kop
+"… 6D-B — badgepagina als tegels, kleur in plaats van kleurnaam". Acceptatie op 360/375 px, licht en donker, NL en EN.
 
 ### Blok 6D-2c — mini-ronde (Fable, 29 okt 2026): "?"-kaartjes, Hele cirkel + boodschappenspoor, stille registratie bij start
 
