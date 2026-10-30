@@ -45,6 +45,96 @@ plant dit zo (README §1, 30 okt):
    weg, één regel per instelling, Meer rustiger (zie ook IDEAS 5). Fable houdt tijdens het testen een lijst bij in
    STATUS onder "Opschoonronde". Geen functionele wijzigingen in die ronde.
 
+### Blok 6D-UI — tabs voor badges en avatar-maker, avatar ronde 2 (Fable, 30 okt 2026)
+
+Status: compleet (Fable, 30 okt 2026). Volgt direct op 6D-4b (README §1 rij 12b). Drie bouwers, strikte bestandsverdeling;
+wat hier niet staat, beslist Opus niet (README §2). Geen nieuwe dependency, geen Dexie-versie, geen nieuwe setting.
+
+**UI-A — badgepagina met tabs.** Bezit: `src/screens/BadgesScreen.tsx`, `src/styles/badges.css`, `src/i18n/badges.ts`
+(alleen toevoegen), `tests/badges-page.test.ts` (alleen als het paginamodel verandert; liefst niet).
+1. De acht inklapbare `<section>`s verdwijnen. Ervoor in de plaats, onder de regel "{n} van {m} badges verdiend · {k}
+   geheime gevonden" en onder de lid-tabs (per lid + Samen, ongewijzigd): een **horizontaal scrollende tabstrook**
+   (`role="tablist"`, 48 px hoog, geen verticale scroll van de pagina door de strook, `scroll-snap` per tab, de actieve
+   tab wordt bij openen in beeld gescrold). Elke tab (`role="tab"`, 44 px tikdoel): groepsicoon + groepsnaam + telling
+   "2/31" in een pil; Geheim: icoon + naam + "3 gevonden" (nooit een totaal). Groepsiconen (vast, in de code):
+   koken 🍳 · ontdekken 🧭 · keukens 🌍 · seizoenen 🍂 · samen 🤝 · foto 📷 · reeksen 🔥 · geheim 🤫.
+2. Eén groep tegelijk in beeld: het bestaande `.badge-grid` met de kaarten van die groep (gewone kaarten eerst, dan de
+   "?"-kaartjes, zoals nu). Een lege groep toont één gedempte regel `badges.groupEmpty` (NL "Nog niets in deze groep."
+   · EN "Nothing in this group yet.").
+3. De laatste tab wordt per telefoon onthouden in localStorage `recepten.badges.tab` (try/catch; onbekende waarde →
+   eerste tab "Koken"). De sleutel `recepten.badges.groups` vervalt: bij het laden één keer `removeItem` (try/catch).
+   README §2b-register: `recepten.badges.groups` → `recepten.badges.tab` (integrator).
+4. Het paginamodel (`badgePageModel`, `BadgeGroupView` met `shown`/`mystery`/tellingen) blijft zoals het is, zodat
+   tests/badges-page.test.ts groen blijft; alleen de weergave verandert. De `?tab=`-parameter voor het lid-tabblad
+   blijft werken; nieuw: `?group=<id>` opent die groep (de toast van een badge linkt met beide).
+5. Toegankelijkheid: pijltjes links/rechts wisselen van tab (roving tabindex), `aria-selected`, het paneel heeft
+   `role="tabpanel"` met `aria-labelledby`. Donker thema via tokens; de actieve tab krijgt `--accent` als onderrand.
+
+**UI-B — avatar-maker met tabs.** Bezit: `src/components/AvatarSheet.tsx`, `src/styles/avatar.css` (alleen het
+maker-deel), `src/i18n/avatar.ts` (alleen toevoegen).
+1. Het voorbeeld blijft vast bovenaan en wordt **160 px** (`.avatar-preview-art`), met daaronder de kleurhint en
+   🎲 Verras me zoals nu.
+2. De dertien horizontaal scrollende rijen worden een **tabstrook** (zelfde patroon als UI-A: `role="tablist"`,
+   horizontaal scrollend, 44 px tikdoelen, actieve tab met de profielkleur als onderrand) met de dertien tabs in de
+   volgorde van `ROWS` en de bestaande namen `avatar.layer.*`. Een tab krijgt een cobalt stipje als die laag nieuwe
+   vrije onderdelen heeft (`unseenParts`), zoals nu per tegel.
+3. Per tab één paneel: de tegels als **omlopend raster** (`grid-template-columns: repeat(auto-fill, minmax(64px, 1fr))`,
+   tegel 64 px, rij-afstand 8 px), "geen" eerst bij de optionele lagen, vergrendelde tegels zoals nu (🔒, "Lv n",
+   badge-icoon of ❓), de uitlegregel onder het raster. De twee kleurtabs (Huid, Haarkleur) tonen de kleurrondjes in
+   hetzelfde raster. Het paneel scrolt verticaal binnen de sheet; de strook en het voorbeeld blijven staan.
+4. De sheet opent op de tab Gezicht. "Terug naar de beginletter" blijft onderaan het paneel-gebied (buiten het raster),
+   `cooked.dismissHint` blijft. Bewaren/Annuleren ongewijzigd.
+5. Geen nieuwe i18n-keys nodig behalve eventueel `avatar.tabNew` (NL "Nieuw" · EN "New") als aria-tekst bij het stipje.
+
+**UI-C — avatar ronde 2: groter, gedetailleerder, attribuut zichtbaar.** Bezit: `data/avatar-parts.json` (alle 66
+opnieuw getekend op de nieuwe geometrie + ≥ 60 nieuwe), `tools/validate-data.ts` (alleen als een nieuwe regel hieronder
+dat vraagt), `tests/avatar.test.ts` (aantallen en de geometrie-regels), `src/styles/avatar.css` (alleen de maten
+hieronder), `src/styles/base.css`/`browse.css` (alleen de `.avatar`-maten), `tools/avatar-sheet.ts` (nieuw; zie 6).
+`src/domain/avatar.ts` en `renderAvatarSvg` veranderen NIET (viewBox 0 0 100 100, lagen, clip, ring blijven).
+1. **Geometrie (alle onderdelen, ook de bestaande):** hoofd = cirkel middelpunt (50, 42) straal 30 (was straal 26 op
+   (50, 50)); ogen op y ≈ 40, x ≈ 39 en 61; mond op y ≈ 54; gezichtshaar y 50–64; bril y 36–46; haar y 8–46 (over de
+   hoofdrand heen); hoofddeksel verankerd op y ≈ 12 (mag tot y −2 reiken, de clip knipt); lichaam van y 72 tot 100,
+   schouders x 15–85, hals x 44–56 tussen y 68 en 76; speldje op de borst (36, 84); attribuut in de rechterhand
+   verankerd op (84, 80), minstens 26 eenheden hoog, mag over de rand (x > 100) uitsteken; achtergrond vult het hele
+   vak achter alles. Zo wordt het gezicht ±33 % groter en staat het attribuut los van het lichaam.
+2. **Stijl:** zachte donkere omlijning `stroke="#2a2420" stroke-width="1.5"` op silhouetten (gezicht, lichaam,
+   hoofddeksel, attribuut, haar); twee tinten per onderdeel (basis + schaduw/hoogsel), geen gradients, geen tekst,
+   geen emoji in SVG; `style="fill:var(--tone)"` voor huid en `style="fill:var(--hair)"` voor haar (de enige
+   toegestane `style`-waarden, `isSafePartSvg`); maximaal ±14 elementen en 1,5 kB per onderdeel; alleen
+   `path/circle/ellipse/rect/line/polygon/g` met `fill/stroke/stroke-width/stroke-linecap/stroke-linejoin/opacity/
+   transform`. Elk onderdeel leesbaar op 40 px (test: op het contactblad van 6 op 40 px herkenbaar).
+3. **Referentie-onderdelen (Fable; letterlijk overnemen, de rest in deze stijl):**
+   - face-round: `<circle cx="50" cy="42" r="30" style="fill:var(--tone)" stroke="#2a2420" stroke-width="1.5"/><ellipse cx="50" cy="58" rx="9" ry="3" fill="#2a2420" opacity=".08"/>`
+   - eyes-dots: `<circle cx="39" cy="40" r="3.4" fill="#2a2420"/><circle cx="61" cy="40" r="3.4" fill="#2a2420"/><circle cx="40.2" cy="38.8" r="1.1" fill="#fff"/><circle cx="62.2" cy="38.8" r="1.1" fill="#fff"/>`
+   - mouth-smile: `<path d="M41 54q9 9 18 0" fill="none" stroke="#2a2420" stroke-width="2.4" stroke-linecap="round"/>`
+   - hair-cap (basis voor alle haar): `<path d="M19 40q-3-24 15-27 5-9 16-9t16 9q18 3 15 27-7-10-31-10T19 40z" style="fill:var(--hair)" stroke="#2a2420" stroke-width="1.5" stroke-linejoin="round"/>`
+   - body-shirt: `<path d="M44 68h12v9H44z" style="fill:var(--tone)"/><path d="M15 100V88q0-12 15-15l20 7 20-7q15 3 15 15v12z" fill="#4a5d78" stroke="#2a2420" stroke-width="1.5" stroke-linejoin="round"/><path d="M50 80l-7 9h14z" fill="#e9eef5"/>`
+   - hat-toque: `<path d="M22 22q-2-16 28-16t28 16v6H22z" fill="#fff" stroke="#2a2420" stroke-width="1.5"/><rect x="24" y="26" width="52" height="9" rx="2" fill="#efefef" stroke="#2a2420" stroke-width="1.5"/>`
+   - prop-wooden-spoon: `<path d="M82 100L94 66" stroke="#8a4a1f" stroke-width="6" stroke-linecap="round"/><ellipse cx="95" cy="59" rx="8" ry="11" fill="#c58a4a" stroke="#2a2420" stroke-width="1.5"/><ellipse cx="95" cy="58" rx="4" ry="6" fill="#a86f33"/>`
+   - bg-rays: `<circle cx="50" cy="50" r="62" fill="#fff" opacity=".16"/><path d="M50 50L8 0h18zM50 50L44 0h18zM50 50L80 0h18zM50 50L100 18v18zM50 50L100 60v18zM50 50L0 22v18zM50 50L0 58v18zM50 50L20 100h18zM50 50L62 100h18z" fill="#fff" opacity=".26"/>`
+4. **Nieuwe onderdelen (≥ 60; doel per laag na ronde 2):** hair 14 · hat 18 · body 14 · prop 18 · bg 12 · eyes 9 ·
+   mouth 8 · facial 7 · glasses 7 · pin 8 · face 5 (= 120). Ingrediënten-thema blijft (wortel achter het oor, prei als
+   staf, een pannenkoek als hoed, een tomaat-speldje, een pizzapunt-bril …). Ontgrendelingen: nieuwe onderdelen
+   gespreid over level 3–60 (elk level 3–30 minstens één nieuw onderdeel ergens) en over bestaande badge-ids
+   (laddertier erbij waar het een ladder is); namen NL én EN; de validator (`validateAvatarParts`) blijft het
+   oordeel. Bestaande ids en hun ontgrendeling blijven (invariant: een bewaarde avatar blijft geldig).
+5. **Maten in de app** (`.avatar`-cirkels, alleen CSS): Home-begroeting 72 px · Meer 64 px · Profielen-rijen 56 px ·
+   Huishouden/In & uit 48 px · chips 36 px · maker-voorbeeld 160 px · pull-down-profiel (IDEAS 5, later) 70 % breedte.
+6. **Contactblad voor de beoordeling:** `tools/avatar-sheet.ts` (Node 22, geen dependency) rendert alle onderdelen per
+   laag in een raster op 40 px én 96 px naar `scratch/avatar-sheet.html` (map in .gitignore) met `renderAvatarSvg`
+   en een neutrale basis-avatar; de integrator opent het in de browser en maakt een screenshot per laag; Fable
+   beoordeelt vóór main (Fable-blik, zoals 13F/13D).
+7. **Tests** (tests/avatar.test.ts): ≥ 120 onderdelen, per laag minimaal het doel uit 4; elk onderdeel ≤ 1,5 kB en
+   ≤ 14 elementen; geen `<text`, geen gradient, geen `style=` buiten de twee fills; de acht referentie-onderdelen
+   staan letterlijk in de data; elk level 3–30 heeft minstens één onderdeel.
+
+**Integrator.** DEVICE-TEST: rij 96 aanpassen (tabs in de maker: "Scrol naar Kleding" → "Tik op de tab Kleding"; voorbeeld
+160 px) en rij 94/95 (groepen als tabs i.p.v. kopjes; "tik op de tab Geheim"), NL én EN in beide tabellen; één nieuwe rij
+104 "Tabs en de nieuwe avatar" (badgepagina: tab wisselen, onthouden na herladen; maker: tab Attribuut, een lepel die
+buiten het lichaam uitsteekt; avatar op Home groter). STATUS-kop "… (Opus): 6D-UI — tabs voor badges en avatar-maker,
+avatar ronde 2". Acceptatie in de dev-app op 360 en 375 px, licht en donker, NL en EN: geen horizontaal scrollen van de
+pagina, tabstrook scrolt wel; contactblad (6) gemaakt en screenshots in het rapport.
+
 ### Blok 6D-2c — mini-ronde (Fable, 29 okt 2026): "?"-kaartjes, Hele cirkel + boodschappenspoor, stille registratie bij start
 
 Dit blok bundelt de drie besluiten hierboven plus de twee gereproduceerde bevindingen van de lens van 6D-2b. Het is

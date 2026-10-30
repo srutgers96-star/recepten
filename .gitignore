@@ -16,3 +16,6 @@ coverage/
 *.keystore
 *.jks
 android-twa/*.keystore
+
+# local contact sheets and probes (tools/avatar-sheet.ts)
+scratch/
