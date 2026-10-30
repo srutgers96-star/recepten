@@ -24,6 +24,27 @@ toont geen Avatar-rij, zonder badges geen ring maar wel de avatar. (7) tests/xp.
 30-jaar-simulatie is 100 ms (vals rood bij drie parallelle bouwers).
 Gebouwd: 29 okt 2026 (blok 6D-3, workflow wf_d77dc7a3-519; nabewerking (1)–(3) en (7) door Fable)
 
+**Besluit Stijn + Fable (30 okt 2026) — avatar mooier en groter, tabs per categorie, opschoonronde later.** Stijn na het
+testen van 6D-2/3/4a: "de avatar wat mooier, groter, gedetailleerder; ook valt de accessoire wat weg. Een soort
+map-systeem voor badges en een vergelijkbare voor avatar: per categorie zien wat, met tabs, het is nu een hele lange
+lijst. Later de app opschonen: vol met uitleggen en extra teksten, bv. dat geel niveau 1 is; veel te druk." Fable
+plant dit zo (README §1, 30 okt):
+1. **Blok 6D-UI (direct ná 6D-4b; spec volgt als het blok start).** (a) **Badgepagina met tabs:** boven de kaarten een
+   horizontaal scrollende tabstrook met de acht groepen (icoon + naam + "2/31"; Geheim zonder telling), één groep
+   tegelijk in beeld, de laatste tab onthouden in localStorage (`recepten.badges.tab`, vervangt `recepten.badges.groups`),
+   de regel "{n} van {m} badges verdiend" blijft bovenaan. (b) **Avatar-maker met tabs:** het voorbeeld (160 px) blijft
+   vast bovenaan, daaronder een tabstrook per laag (Gezicht · Huid · Haar · Haarkleur · Ogen · Mond · Gezichtshaar ·
+   Bril · Hoofddeksel · Kleding · Attribuut · Speldje · Achtergrond), per tab de tegels als een omlopend raster
+   (grotere tegels, 64 px) in plaats van dertien horizontaal scrollende rijen; 🎲 en "Terug naar de beginletter"
+   blijven. (c) **Avatar ronde 2 (Fable tekent):** de 66 onderdelen opnieuw op een fijner raster met schaduw/
+   lijndikte, attributen groter en buiten het silhouet (ze vallen nu weg achter het lichaam), ±60–100 nieuwe
+   onderdelen, en de avatar groter in beeld (Home/Meer 72 px, Profielen 56 px, kaartje 48 px). Alleen data +
+   SVG + maten; `renderAvatarSvg` blijft.
+2. **Opschoonronde (ná 13J en de challenges, vóór Z):** minder uitleg en labels in de app; voorbeelden: "Niveau 1 ·
+   geel" wordt alleen de gekleurde ring (kleurnaam alleen in de detailweergave), de hints onder Meer-rijen korter of
+   weg, één regel per instelling, Meer rustiger (zie ook IDEAS 5). Fable houdt tijdens het testen een lijst bij in
+   STATUS onder "Opschoonronde". Geen functionele wijzigingen in die ronde.
+
 ### Blok 6D-2c — mini-ronde (Fable, 29 okt 2026): "?"-kaartjes, Hele cirkel + boodschappenspoor, stille registratie bij start
 
 Dit blok bundelt de drie besluiten hierboven plus de twee gereproduceerde bevindingen van de lens van 6D-2b. Het is

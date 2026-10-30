@@ -157,3 +157,27 @@ herkenning daarom pas ≥ 24 px van de schermrand. Niet laten botsen met de pull
 
 **Open vragen.** Volgorde = volgorde van de onderbalk? Doorlopen (Meer → Home) of stoppen aan de randen?
 
+## 7. Gabi's WhatsApp-boodschappenlijstje plakken met voorstellen (Stijn, 30 okt 2026)
+
+**Wens.** Gabi stuurt haar boodschappen als los WhatsApp-bericht, "een beetje een rotzooi", bijvoorbeeld:
+"Coco acqua · Beetroot · Check ketchup · Pickles · Bread for breakfast". Stijn wil dat bij Boodschappen kunnen plakken
+en dat de app "gewoon de goede dingen voorstelt en dan aan kan nemen ofzo": een ingrediënten-herkenner met een
+tussenstap.
+
+**Wat er al is (25 okt, "Leeg de lijst"-ronde).** Het plakvak "+ wc-papier, melk" onder Boodschappen herkent een
+geplakte lijst met meerdere regels (`isShopList`/`splitShopList` in src/domain/shopinput.ts), haalt hoeveelheden en
+eenheden eruit (`parseShopInput`) en koppelt elke regel aan de woordenlijst (NL en EN, 1603 producten). Onbekende
+woorden komen als losse regel onder "Overig". Er is nog geen voorstel-stap: alles komt direct op de lijst.
+
+**Prioriteit.** Later (Stijn: "kan ook later natuurlijk"); past goed bij 6C (vaste lijst) of de opschoonronde.
+
+**Aanpak in grote lijnen.** Bij een geplakte tekst van ≥ 3 regels eerst een voorbeeldvenster: per regel de herkende
+koppeling ("Beetroot → bietjes ✓", "Coco acqua → kokoswater?", "Check ketchup → ketchup (controleren)", "Bread for
+breakfast → brood"), met per regel: aannemen (standaard als de koppeling zeker is), kiezen uit twee of drie
+alternatieven uit de woordenlijst, of "als tekst houden". Daarna één knop "Zet op de lijst". Bouwstenen: de bestaande
+fuzzy zoekindex (src/domain/search.ts), de aliassen in data/ingredients.json, en de IngredientPicker voor het
+kiezen. Woorden als "check" / "controleer" worden een notitie bij de regel, geen product.
+
+**Open vragen.** Alleen bij ≥ 3 regels of altijd? Ook voor de spraakinvoer? Leert hij van Gabi's keuzes (alias
+toevoegen aan de woordenlijst, zoals 6B "Zet in woordenboek")?
+

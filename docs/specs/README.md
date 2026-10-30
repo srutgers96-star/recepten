@@ -21,6 +21,11 @@ spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
   (fast-forward). De DEVICE-TEST-rijen blijven voor later. Uitzondering blijft: 13F (id-migratie) en
   6D-4/13D (deelformaat) krijgen vóór `main` een korte Fable-blik.
 - **Volgorde omgegooid:** na de bijgerechten komt eerst **6D (XP)**: 6D-1 → 6D-2a/2b → 6D-3 → 6D-4a → 6D-4b.
+- **Bijgewerkt 30 okt (Stijn):** ná 6D-4b een **6D-UI-ronde** (tabs per categorie voor de badgepagina en de
+  avatar-maker in plaats van één lange lijst; avatar mooier, groter en gedetailleerder, het attribuut valt nu weg) →
+  13F → 13D → 6C → 13J → **challenges (level 20)** → **opschoonronde** (minder uitleg en tekst in de app, bv. niet
+  overal "geel = niveau 1"; rustiger) → Z → eindcontrole. Stijn: "waarschijnlijk later in een soort opschoon-ronde
+  nadat alles er staat"; Fable: de tabs en de avatar wél meteen na 6D-4b, omdat Stijn die schermen nu test.
   Daarna 13F → 13D → 6C → 13J → Z. 6D-1 hangt niet van 13F af (XP wordt afgeleid uit wat in de kooklog
   staat; 13F's alias-migratie zet de kooklog-ids om, de afleiding rekent daarna gewoon opnieuw).
 - **Gebouwd tot nu toe:** Home A+ (1–2), 13K (1–2), 6B+13E (1–5), bijgerechten (24 okt). Volgende: 6D-1 in lichte modus.
@@ -43,7 +48,10 @@ spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
 | 10 | 6D-3 avatar | badges-avatar.md §3c | 1 | compleet |
 | 11 | 6D-4a ontgrendelingen (in xp-levels.md "Blok 6D-3") | xp-levels.md | 1 | compleet |
 | 12 | 6D-4b sync + kookkalender (in xp-levels.md "Blok 6D-4") | xp-levels.md | 1 | compleet (Fable-blik vóór main) |
+| 12b | 6D-UI tabs per categorie (badges én avatar-maker) + avatar ronde 2 (mooier, groter, gedetailleerder; attribuut zichtbaar) | badges-avatar.md "Blok 6D-UI" (Fable schrijft hem) | 1–2 | nog te schrijven (besluit 30 okt) |
 | 13 | 13J iPhone-sheets afmaken | geen spec nodig (§1a) | 1 | ontbreekt bewust |
+| 13b | Challenges (level 20) | IDEAS 3 → eigen spec (Fable ontwerpt de eerste set) | 1 | nog te schrijven |
+| 13c | Opschoonronde: minder uitleg en tekst, rustiger (Stijn 30 okt) | STATUS.md "Opschoonronde" (Fable maakt de lijst tijdens het testen) | 1 | nog te schrijven |
 | 14 | Z handleiding | nog zonder spec (STATUS.md "Blok Z") | — | ontbreekt (Fable schrijft hem na 13J) |
 | 15 | Fable-eindcontrole | §5 hieronder | — | — |
 

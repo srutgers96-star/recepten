@@ -90,6 +90,17 @@ extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids
   xp-levels.md onder "Na de lens van 6D-4a".
 
 ## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+**Stijn, 30 okt: "je mag weer even door".** 6D-4b bouwt (workflow wf_01ac42d8-28f). Nieuwe wensen van Stijn, gepland
+(README §1 "Bijgewerkt 30 okt", besluitblok 30 okt in badges-avatar.md): **6D-UI** direct ná 6D-4b (tabs per categorie
+voor de badgepagina en de avatar-maker; avatar mooier, groter, gedetailleerder; attribuut valt weg) en een
+**opschoonronde** aan het eind (minder uitleg en tekst, bv. niet overal "geel = niveau 1"; rustiger). Lijstje voor die
+ronde hieronder.
+
+### Opschoonronde — lijst (Fable vult aan tijdens het testen)
+- Badgekaart: "Niveau 1 · geel" → alleen de gekleurde ring; de kleurnaam alleen in de detailweergave (Stijn 30 okt).
+- Meer: kortere of geen hints onder de rijen; het profiel-blok bovenaan kleiner of weg zodra IDEAS 5 er is.
+- Level-up-venster: de lijst avatar-onderdelen inkorten ("+13 avatar-onderdelen" met uitklappen).
+
 Vandaag gebouwd en live op main (allemaal lichte modus, Opus-bouwers, Fable-nabewerking): 6D-2b (badgepagina),
 6D-2c (?-kaartjes, Hele cirkel, boodschappenspoor, stille registratie bij start), 6D-3 (avatar ronde 1, 66
 onderdelen, elf lagen) en 6D-4a (Vrijgespeeld, confetti-stijlen, geluiden, lettertypes). Stijn (29 okt): "doe het
