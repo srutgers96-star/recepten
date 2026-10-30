@@ -269,6 +269,12 @@ extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids
   xp-levels.md onder "Na de lens van 6D-4a".
 
 ## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+**Stijn, 30 okt (avond, 3): elke deelknop ook als QR** (recepten, boodschappenlijsten, kaartje: "deel via link of QR"). Stand:
+QR bestaat al voor het kaartje en voor een recept (ShareScreen, achter Experimenten; ADR-0007, `qrcode` lazy, alleen
+encoderen). Een boodschappenlijst heeft nog geen link (alleen tekst) → nieuwe sleutel `#l=` nodig (invariant 4, ADR-0004).
+Lange recepten passen niet in een QR (±1,2 kB praktisch) → eerlijk "te groot voor QR, deel de link". Gepland als blok
+**13Q** ná 6C (README §1 rij 13a); scannen gebeurt met de camera van de telefoon, niet in de app.
+
 **Stijn, 30 okt (avond, 2): zeldzaamheid = moeilijkheid én uitstraling** ("je mag meer uitpakken op mooiere of gekkere dingen");
 de levels zijn maar een indicatie. Spec 6D-R aangepast (handmatig veld, regel alleen terugval, tekenbudget per zeldzaamheid).
 En: de belletjes en lettertypes verdienen een betere plek, "misschien achter de avatar als algemeen customize-menu" →
