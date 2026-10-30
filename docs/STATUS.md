@@ -344,6 +344,12 @@ extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids
   xp-levels.md onder "Na de lens van 6D-4a".
 
 ## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+**Stijn, 30 okt (avond, 7): oude dieetknoppen op het recept** ("Maak glutenvrije versie" staat er nog terwijl hij die versie al
+heeft; de drie knoppen mogen compacter, groen zoals de chips, één 'Maak … versie' met keuze van wat er nog niet is; 'Eigen versie'
+erbij maar het is druk) → wordt opgelost door **13D blok 2** (tabrij vervangt de knoppen; een bestaande kopie staat als
+versie-tab) en **blok 4** (knoppenrij 'Recept bewerken' / 'Eigen versie maken' §1h). Input voor de bouwers van blok 2: de tabrij
+compact en in de groene chipstijl; geen aparte knop per dieet meer.
+
 **Stijn, 30 okt (avond, 6): frames als verzamellaag + vrije achtergronden** (profielkleur altijd ergens zichtbaar: achtergrond
 óf frame) → plan **6D-F** (badges-avatar.md), ná 6D-S. En: het dobbelsteentje 🎲 bij "Verras me" is "zo Claude-standaard" →
 vervangen door een eigen schud-icoon (SVG) op alle zes plekken (PickSheet, TonightCard, WeekScreen, AvatarSheet) — Fable doet dat
