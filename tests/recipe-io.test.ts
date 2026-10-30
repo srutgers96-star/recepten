@@ -292,3 +292,49 @@ describe('normalizeRecipe: variants and tip (13D)', () => {
     expect(back.tip).toEqual(TIP);
   });
 });
+
+// --- 13D blok 3: checkedIngs ("Besluiten Fable na blok 2", point 2) ---------------------------------
+
+describe('readVariant: checkedIngs (parallel to checked)', () => {
+  const VEGAN = { approved: true, by: 'Stijn', swaps: [{ ...VARIANT_SWAP, index: 4, fromId: 'kaas', toId: 'vegan-kaas', raw: { nl: '125 g geraspte vegan kaas' }, name: 'geraspte vegan kaas' }], checked: [3, 5] };
+
+  it('keeps valid checkedIngs exactly (strings and null), idempotent and through the share envelope', () => {
+    const v = { ...VEGAN, checkedIngs: ['gehakt', null] };
+    expect(readVariant(v)).toEqual(v);
+    const r = withVariants({ variants: { vegan: v } });
+    expect(r.variants?.vegan).toEqual(v);
+    expect(normalizeRecipe(r)).toEqual(r);
+    expect(recipeFromEnvelope(recipeToShareEnvelope(r, 'Stijn'))!.variants?.vegan).toEqual(v);
+  });
+
+  it('no checkedIngs, or one that is not an array: the key is left out (old behaviour)', () => {
+    expect(readVariant(VEGAN)).toEqual(VEGAN);
+    expect(readVariant(VEGAN)).not.toHaveProperty('checkedIngs');
+    for (const odd of ['gehakt', 3, null, { 0: 'gehakt' }]) {
+      expect(readVariant({ ...VEGAN, checkedIngs: odd }), JSON.stringify(odd)).toEqual(VEGAN);
+    }
+  });
+
+  it('cut off at the length of checked', () => {
+    expect(readVariant({ ...VEGAN, checkedIngs: ['gehakt', 'ei', 'kaas', 'extra'] })).toEqual({ ...VEGAN, checkedIngs: ['gehakt', 'ei'] });
+  });
+
+  it('only the leading run of strings/null: a value of another type cuts it off there (alignment kept)', () => {
+    expect(readVariant({ ...VEGAN, checkedIngs: ['gehakt', 42] })).toEqual({ ...VEGAN, checkedIngs: ['gehakt'] });
+    expect(readVariant({ ...VEGAN, checkedIngs: [{ id: 'gehakt' }, 'ei'] })).toEqual({ ...VEGAN, checkedIngs: [] });
+    // shorter than checked stays shorter (the indexes after it count as before)
+    expect(readVariant({ ...VEGAN, checkedIngs: ['gehakt'] })).toEqual({ ...VEGAN, checkedIngs: ['gehakt'] });
+  });
+
+  it('stays aligned when checked is cleaned: a dropped or duplicate index takes its ing with it', () => {
+    const v = readVariant({ ...VEGAN, checked: [3, 'x', -1, 3, 5], checkedIngs: ['gehakt', 'a', 'b', 'c', 'ei'] });
+    expect(v).toEqual({ ...VEGAN, checked: [3, 5], checkedIngs: ['gehakt', 'ei'] });
+    // a bad ing paired with a dropped index still ends the run (as variantView reads the raw value)
+    expect(readVariant({ ...VEGAN, checked: ['x', 3, 5], checkedIngs: [7, 'gehakt', 'ei'] })).toEqual({ ...VEGAN, checkedIngs: [] });
+  });
+
+  it('checkedIngs does not change the fingerprint', () => {
+    const plain = normalizeRecipe(SCHEMA2)!;
+    expect(recipeFingerprint(withVariants({ variants: { vegan: { ...VEGAN, checkedIngs: ['gehakt', 'ei'] } } }))).toBe(recipeFingerprint(plain));
+  });
+});

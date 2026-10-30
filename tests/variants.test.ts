@@ -16,7 +16,7 @@ import { DIET_TAGS, dietTags } from '../src/domain/diet';
 import * as diets from '../src/domain/diets';
 import type { Line, Recipe } from '../src/domain/model';
 import { parseLine } from '../src/domain/parser';
-import { normalizeRecipe } from '../src/domain/recipe-io';
+import { normalizeRecipe, readVariant } from '../src/domain/recipe-io';
 import { renderLine } from '../src/domain/render';
 import { buildRecipeEnvelope, parseEnvelope } from '../src/domain/share';
 import { decodeToken, encodeToken } from '../src/domain/token';
@@ -626,6 +626,79 @@ describe('variantView', () => {
     const onlyEgg = variantView('vegan', SCHOTEL, veganStored([5]), swaps, dict);
     expect(onlyEgg.status).toBe('stale');
     expect(onlyEgg.checked).toEqual([5]);
+  });
+
+  it('checkedIngs (Fable after blok 2, point 2): a ticked line still holding its ing counts; approved', () => {
+    const stored: RecipeVariant = { ...veganStored([3, 5]), checkedIngs: ['gehakt', 'ei'] };
+    const v = variantView('vegan', SCHOTEL, stored, swaps, dict);
+    expect(v.status).toBe('approved');
+    expect(v.checked).toEqual([3, 5]);
+    // another amount of the same product is still the line that was checked
+    const more = [...SCHOTEL.slice(0, 3), ...nl('500 g gehakt'), ...SCHOTEL.slice(4)];
+    expect(variantView('vegan', more, stored, swaps, dict).status).toBe('approved');
+  });
+
+  it('checkedIngs: a ticked "controleer zelf" line changed into another product that breaks the diet -> stale (lens finding)', () => {
+    // mince (3) becomes bacon cubes: still not vegan, no vegan swap, so index 3 is still "controleer zelf"
+    const changed = [...SCHOTEL.slice(0, 3), ...nl('200 g spekblokjes'), ...SCHOTEL.slice(4)];
+    expect(changed[3]!.ing).toBe('spekblokjes');
+    const honest = variantView('vegan', changed, { ...veganStored([3, 5]), checkedIngs: ['gehakt', 'ei'] }, swaps, dict);
+    expect(honest.status).toBe('stale');
+    expect(honest.unresolved).toEqual([3, 5]);
+    expect(honest.checked).toEqual([5]);
+    expect(honest.plan?.unresolved).toEqual([3, 5]);
+    // without checkedIngs (an approval from before blok 3) the bare index counts, as before
+    expect(variantView('vegan', changed, veganStored([3, 5]), swaps, dict).status).toBe('approved');
+  });
+
+  it('checkedIngs: a swap left as it was ("laat ik zo") whose line became another product -> stale', () => {
+    // decision (1): cheese unticked -> no swap, index 4 in checked; then the cheese becomes mozzarella
+    const plan = planVariant({ lines: SCHOTEL }, 'vegan', swaps, dict);
+    const stored: RecipeVariant = { approved: true, by: 'Stijn', swaps: storedSwapsFrom(plan, new Set([4])), checked: [3, 4, 5], checkedIngs: ['gehakt', 'kaas', 'ei'] };
+    expect(variantView('vegan', SCHOTEL, stored, swaps, dict).status).toBe('approved');
+    const changed = [...SCHOTEL.slice(0, 4), ...nl('125 g mozzarella'), ...SCHOTEL.slice(5)];
+    expect(changed[4]!.ing).toBe('mozzarella');
+    expect(variantView('vegan', changed, stored, swaps, dict).status).toBe('stale');
+  });
+
+  it('checkedIngs read tolerantly: not an array, shorter, or cut off at an odd value -> those indexes count as before', () => {
+    const changed = [...SCHOTEL.slice(0, 3), ...nl('200 g spekblokjes'), ...SCHOTEL.slice(4)];
+    const base = veganStored([3, 5]);
+    const status = (extra: Record<string, unknown>) => variantView('vegan', changed, { ...base, ...extra } as RecipeVariant, swaps, dict).status;
+    expect(status({ checkedIngs: 'gehakt' })).toBe('approved');
+    expect(status({ checkedIngs: [] })).toBe('approved');
+    // index 3 sits after the end of the array: as before
+    expect(status({ checked: [5, 3], checkedIngs: ['ei'] })).toBe('approved');
+    // an odd value ends the run: index 3 (position 1) counts as before
+    expect(status({ checked: [5, 3], checkedIngs: [42, 'gehakt'] })).toBe('approved');
+    // inside the run a mismatch counts: null means "the line had no ing"
+    expect(status({ checkedIngs: [null, 'ei'] })).toBe('stale');
+    expect(status({ checkedIngs: ['gehakt', 'ei'] })).toBe('stale');
+    // the first occurrence of a duplicate index decides
+    expect(variantView('vegan', SCHOTEL, { ...base, checked: [3, 3, 5], checkedIngs: ['spekblokjes', 'gehakt', 'ei'] }, swaps, dict).status).toBe('stale');
+  });
+
+  it('checkedIngs: variantView over the raw stored value and over readVariant(raw) agree (recipe-io normalises to the same rule)', () => {
+    const changed = [...SCHOTEL.slice(0, 3), ...nl('200 g spekblokjes'), ...SCHOTEL.slice(4)];
+    const base = veganStored([3, 5]);
+    const shapes: Array<Record<string, unknown>> = [
+      { checkedIngs: ['gehakt', 'ei'] },
+      { checkedIngs: ['spekblokjes', 'ei'] },
+      { checkedIngs: ['spekblokjes'] },
+      { checkedIngs: [42, 'gehakt'] },
+      { checkedIngs: ['spekblokjes', 42] },
+      { checked: [3, 3, 5], checkedIngs: ['spekblokjes', 'gehakt', 'ei'] },
+      { checked: ['x', 3, 5], checkedIngs: [7, 'gehakt', 'ei'] },
+      { checked: [-1, 3, 5], checkedIngs: ['a', 'spekblokjes', 'ei'] },
+      { checkedIngs: 'gehakt' },
+    ];
+    for (const lines of [SCHOTEL, changed]) {
+      for (const extra of shapes) {
+        const raw = { ...base, ...extra } as RecipeVariant;
+        const norm = readVariant(JSON.parse(JSON.stringify(raw)))!;
+        expect(variantView('vegan', lines, norm, swaps, dict).status, JSON.stringify(extra)).toBe(variantView('vegan', lines, raw, swaps, dict).status);
+      }
+    }
   });
 
   it('an unapproved or unusable stored value counts as nothing stored (overrides are not normalised on restore)', () => {

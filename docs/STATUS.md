@@ -4,6 +4,80 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 30 okt (Opus): 13D blok 3 — varianten als tabs: kookstand, lijst, week en filters volgen de tab
+Gebouwd volgens docs/specs/varianten-tabs.md "Blok 3" (bouwer A kookstand + CookedSheet + cooklog + badges + kookbalk, B week en
+In & uit, C filters en dieetchips, extra bouwer D de punten 2, 4 en 7 uit "Besluiten Fable na blok 2"; integrator). Niet
+gecommit. Geen Dexie-versie, geen setting, geen localStorage-sleutel, geen dependency. Nieuwe velden: `CookingSession.variant`
+(register README §2b) en `RecipeVariant.checkedIngs` (Fable-besluit 2; staat nog níet in het register §2b, zie open punt 9).
+Groen: check, 1528 tests (63 bestanden), build, build:next, validate:data (alleen de bekende 4 swaps-waarschuwingen). Eerst naar
+`/next/` (spec §4). Landing-chunk `share-*.js` ±24,9 kB gzip (was 24,7).
+- **Kookstand (A):** Koken vanaf een goedgekeurde dieettab (`?v=<dieet>`, één keer per bezoek gelezen zoals `?srv=`) toont
+  boven "Klaarzetten" en "stap N van M" de regel "Glutenvrije versie" en gebruikt `variantView(…).lines` voor Klaarzetten
+  (lijst, afvinken, voorlezen), de groene stapwoorden, "hoeveel?" en "Toon hoeveelheden"; vervangen regels zijn vergrendeld. Een
+  `?v=` die niet (meer) goedgekeurd is kookt stil het origineel. Gekookt! logt `variant`. Kookbalk: `CookingSession.variant`,
+  `touchCooking(recipe, page, servings, variant?)` (weggelaten = houd die van de sessie, null = origineel), `cookPath` zet
+  `&v=<dieet>` (zonder variant byte-gelijk, test). Badges: een logregel met `variant` telt ook voor de tags van dat dieet
+  (`DIET_TAGS_FOR`, vegan ook voor vegetarisch, als set); `recipe.tags` verandert niet; een niet-gekookte tab telt nooit (tests).
+- **Week en In & uit (B):** onder de naam van een slot een kleine chip met de huidige versie (alleen als het origineel ≥ 1
+  goedgekeurde dieettab of ≥ 1 persoonlijke versie heeft): "Origineel", het dieet in zijn kleur of de voornaam in de
+  persoonlijke kleur. Tik → rij keuzes (`role="radiogroup"`, "Versie voor dit gerecht") met de hint "Alleen goedgekeurde
+  versies; keur ze goed op het recept."; dieet → `setPlanVariant`, versie → `setPlanRecipe`, Origineel vanuit een versie →
+  terug naar `variantOf`. "Goedgekeurd" wordt bepaald op de effectieve regels (met regel-overrides), net als `generateList`.
+  Tik op de naam van een slot met een dieetversie → `/recipe/<id>?v=<dieet>`. De deelsleutel kent nu de variant (anders reisde
+  een oude `vr`). Overnemen/Toevoegen in In & uit: een slot krijgt de ontvangen `vr` alleen als die tab hier goedgekeurd is.
+- **Filters (C):** `hasTag`, `tagIdsIn` en `applyPickFilter` (PickSheet: Recepten, Kies N, Home-dobbelsteen) en `dietChipsFor`
+  lezen `tagsWithVariants(r)`: een goedgekeurde glutenvrije tab telt als `glutenvrij-optie`. "Waarvoor is dit?" zet
+  "(glutenvrije versie)" achter de gerechtnaam (`ListSource.diet`, `vt.version.<dieet>` in kleine letters).
+- **Fable-besluiten na blok 2 (D):** (2) `RecipeVariant.checkedIngs` parallel aan `checked`: de sheet schrijft per afgevinkte
+  index het `ing` van de getoonde regel; `variantView` telt een index alleen als die regel nog hetzelfde `ing` heeft, anders
+  `stale`; `readVariant` leest het tolerant (alleen de aaneengesloten strings/null vooraan, afgekapt op `checked`); zonder het
+  veld het oude gedrag, bevroren tokens ongewijzigd (15 nieuwe tests). (4) "+ Deze week" op een voorstel- of stale-tab zet het
+  origineel (geen `variant`). (7) `variant.checkHint` en `variant.checkSwap` hebben de nieuwe tekst ("Dit ingrediënt past niet
+  bij dit dieet. Controleer of vervang het zelf en vink het af." · EN idem) in NL en EN.
+- **Integrator:** RecipeScreen geeft ✓ Gekookt nu `variant` mee en een ⏱-chip op het recept geeft de kooksessie de versie,
+  allebei alleen op een **goedgekeurde** dieettab (zoals de kookstand en besluit 4); op andere tabs laat de ⏱-chip de variant
+  weg (de sessie houdt de hare). Geen bouwer meldde een ontbrekende i18n-key.
+- **Dev-app (375 px, NL en EN, profiel Testkok):** "+ Deze week" op de stippeltab Glutenvrij → slot zonder `variant` (besluit 4).
+  Goedgekeurd → Koken: "GLUTENVRIJE VERSIE / KLAARZETTEN", "400 g glutenvrije pasta"; stap 1 "Spaghetti" → "(400 g glutenvrije
+  pasta)", ook met Toon hoeveelheden; balkpad `…?step=1&srv=4&v=glutenvrij`; Gekookt! → logregel met `variant`,
+  Glutenvrijbuiter 0/3 → 1/3, `recipe.tags` ongewijzigd; ✓ Gekookt op het recept → 2/3; ⏱-chip op de tab → sessie met variant.
+  Dieetchip "glutenvrij-optie" onder de titel. "+ Deze week" → week-chip "Glutenvrij" (geel, geen zijwaartse scroll) → rij
+  Origineel · Glutenvrij met hint → Boodschappenlijst maken: "400 g glutenvrije pasta", geen spaghetti; "Waarvoor is dit?" →
+  "… — Spaghettischotel uit de oven (glutenvrije versie)"; Origineel kiezen → Boodschappen "Weekplan gewijzigd / Bijwerken".
+  Naam tikken → recept op tab Glutenvrij. Filter glutenvrij: alleen met "ook als optie" (74 i.p.v. 73). `#w=` draagt `vr`;
+  Overnemen → slot met `variant`; na intrekken hetzelfde token → slot zonder. Vegan goedgekeurd met gehakt afgevinkt
+  (`checkedIngs: ['gehakt']`, nieuwe hinttekst in de sheet) → regel 7 via override naar spekblokjes → stale, Opnieuw controleren
+  opent die regel uitgevinkt; override weg → weer goedgekeurd. EN: "GLUTEN-FREE VERSION / GET READY", "Cook the spaghetti (400 g
+  gluten-free pasta)", "Gluten-free"-chip, "Version for this dish", "Only approved versions; …", "(gluten-free version)".
+  Opgeruimd: de twee test-kookbeurten, goedkeuringen, plan, de gegenereerde lijstregels (extra's bleven), `recepten.vtab`; taal
+  terug op NL, viewport terug, server gestopt. In de dev-database blijven de level-ups en de geheime badge Weegschaal die tijdens
+  de test vielen.
+- **DEVICE-TEST:** rij 87 (NL en EN) direct na rij 86, letterlijk uit §6; knopnamen gecontroleerd in de app.
+- **Open voor Fable/Stijn:** (1) **Timermelding / timerregel in de balk** opent `/cook/<id>?step=N` zonder `&v=` (src/timers.ts
+  `timerPath`, dat `@/cooking` niet mag importeren, README §4.7): de kookstand toont dan het origineel en zet de variant van de
+  sessie op null. Binnen een open kookstand gaat het goed. Oplossen vraagt een besluit (terugvallen op de sessie botst met
+  Koken vanaf Origineel, dat ook geen `v` stuurt). (2) Besluit 4 "toont de bestaande snack": op het recept bestaat geen snack na
+  "+ Deze week" (de knop wordt "✓ Staat in je week"); `recipe.addedToWeek` bestaat maar is ongebruikt; niets toegevoegd.
+  (3) Staat het gerecht al in de week en tik je "+ Deze week" op een niet-goedgekeurde tab, dan blijft het slot zoals het was
+  (geen terugzetten naar het origineel). (4) Ingrediënt-badges tellen bij een gekookte variant nog de regels van het origineel
+  (§3 noemt alleen tags). (5) Acceptatie 5 zegt "Glutenvrijbuiter 1/5"; sinds de badge-ladder is het 1/3. (6) Week: bijgerecht-
+  slots krijgen ook de chip (§1e "`.week-slot`" letterlijk); een dieet kiezen terwijl het slot een persoonlijke versie heeft =
+  eerst terug naar het origineel; de eigen dieettabs van een persoonlijke versie biedt de rij niet aan; tik op de naam van een
+  versie-slot opent de versie zelf; een niet meer goedgekeurde `variant` blijft op het slot staan (chip zegt Origineel); open
+  rijen blijven open binnen de sessie (zoals N en het filter). (7) In & uit koppelt `vr` aan de nieuwe slots in InboxScreen
+  (plan-import.ts was van niemand); netter in `planItemsFromShare` via de derde parameter van `newPlanItem`. (8) Dieetchips:
+  een vegetarisch recept met goedgekeurde vegan-tab toont "vegetarisch" én "vega-optie" (besluit 3 na blok 1); de proto-stap
+  (ProtoRow `sourceLines`) zet geen "(glutenvrije versie)"; `search.ts` en `planner.isVegetarian` lezen nog `recipe.tags`
+  (isVegetarian bewust). "Waarvoor is dit?" toont in het Engels de Nederlandse bronregel ("400 g glutenvrije pasta"), zoals al
+  voor elke bronregel gold; elke bronregel van een dieet-slot krijgt het achtervoegsel. (9) `checkedIngs` staat niet in het
+  veldenregister README §2b (README §4 punt 2); de tolerantieregel (aaneengesloten strings/null vooraan, eerste dubbele index
+  beslist, vergelijking met de effectieve regel) is de invulling van bouwer D; goedkeuringen van vóór blok 3 houden het
+  index-gedrag tot ze opnieuw worden goedgekeurd. (10) `variant.checkSwap` heeft geen `{from}`/`{to}` meer (VariantSheet geeft ze
+  nog mee, onschadelijk); `variant.onlyCheck` en `recipe.variants` ongebruikt → opschoonronde.
+
+- **Besluit Fable (30 okt, commit van blok 3; sessie gestopt op de 5-uurslimiet):** kookstand zonder ?v= valt terug op de
+  variant van de lopende sessie (blok 4 D); geen "-optie"-chip voor een dieet dat het recept al heeft (blok 4 D); rest akkoord.
+  Weekbudget ±48 %: volgende sessie nog blok 4 (±5 %) en dan stoppen tot de reset van 5 nov. Timeline bijwerken (v26).
 ## 30 okt (Opus): 13D blok 2 — varianten als tabs: tabrij, goedkeuren, markeringen
 Gebouwd volgens docs/specs/varianten-tabs.md "Blok 2" (bouwer A tabrij + vegen + geheugen, B goedkeur-sheet + regelmarkeringen,
 C RecipeScreen/CSS/i18n, extra bouwer D de domeinpunten 2, 3 en 6 uit "Besluiten Fable na blok 1"; integrator). Niet gecommit.

@@ -287,6 +287,50 @@ describe('evaluateBadges: category / tag / ingredient', () => {
   });
 });
 
+describe('evaluateBadges: tag counts of a cooked diet tab (13D blok 3)', () => {
+  // A classic without the tag 'glutenvrij' / 'vegetarisch', with an approved gluten-free tab.
+  const schotel = recipe('b:spaghettischotel-uit-de-oven', 'Spaghettischotel uit de oven', {
+    tags: ['oven', 'kids'],
+    variants: {
+      glutenvrij: {
+        approved: true,
+        approvedAt: '2026-10-22T18:40:00.000Z',
+        by: 'Stijn',
+        swaps: [{ index: 0, fromId: 'spaghetti', toId: 'glutenvrije-pasta', raw: { nl: '400 g glutenvrije pasta' }, name: 'glutenvrije pasta' }],
+        checked: [],
+      },
+    },
+  });
+  const cooked = (variant?: CookLogEntry['variant']): CookLogEntry => ({ ...entry(schotel.id), ...(variant === undefined ? {} : { variant }) });
+
+  it("two cooks with variant 'glutenvrij' count for the tag glutenvrij; recipe.tags stays as it was", () => {
+    const f = facts({ recipes: recipeMap(schotel), log: [cooked('glutenvrij'), cooked('glutenvrij')] });
+    expect(status({ kind: 'tag', id: 'glutenvrij', n: 2 }, f)).toMatchObject({ earned: true, current: 2, target: 2 });
+    // The recipe's own tags still count once per cook.
+    expect(status({ kind: 'tag', id: 'oven', n: 2 }, f)).toMatchObject({ earned: true, current: 2 });
+    expect(schotel.tags).toEqual(['oven', 'kids']);
+  });
+
+  it("variant 'vegan' also counts for 'vegetarisch'", () => {
+    const f = facts({ recipes: recipeMap(schotel), log: [cooked('vegan')] });
+    expect(status({ kind: 'tag', id: 'vegan', n: 1 }, f)).toMatchObject({ earned: true, current: 1 });
+    expect(status({ kind: 'tag', id: 'vegetarisch', n: 1 }, f)).toMatchObject({ earned: true, current: 1 });
+    expect(status({ kind: 'tag', id: 'glutenvrij', n: 1 }, f)).toMatchObject({ earned: false, current: 0 });
+  });
+
+  it('an approved but uncooked tab never counts: cooks of the original, null or a non-diet variant', () => {
+    const f = facts({ recipes: recipeMap(schotel), log: [cooked(), cooked(null), { ...cooked(), variant: 'notenvrij' as never }] });
+    expect(status({ kind: 'tag', id: 'glutenvrij', n: 1 }, f)).toMatchObject({ earned: false, current: 0 });
+    expect(status({ kind: 'tag', id: 'oven', n: 3 }, f)).toMatchObject({ earned: true, current: 3 });
+  });
+
+  it('a variant on a recipe that already has the tag counts that cook once', () => {
+    const gv = recipe('u:gv', 'Al glutenvrij', { tags: ['glutenvrij'] });
+    const f = facts({ recipes: recipeMap(gv), log: [{ ...entry(gv.id), variant: 'glutenvrij' }] });
+    expect(status({ kind: 'tag', id: 'glutenvrij', n: 2 }, f)).toMatchObject({ earned: false, current: 1 });
+  });
+});
+
 describe('evaluateBadges: classics', () => {
   const classics = [recipe('b:a', 'Aardappelsoep'), recipe('b:b', 'Bami'), recipe('b:c', 'Couscous')];
   const own = recipe('u:x', 'Eigen gerecht');

@@ -42,6 +42,7 @@ import {
   getSetting,
   isUndoable,
   listImports,
+  listLineOverrides,
   listShareEvents,
   localStateForImport,
   logShareEvent,
@@ -52,13 +53,15 @@ import {
   userRecipes,
   type ImportResult,
 } from '@/db/repo';
-import { reloadDictionary } from '@/dictionary';
+import { dictionary, reloadDictionary } from '@/dictionary';
 import { memberByName, membersFrom, type HouseholdSetting, type MemberCard } from '@/domain/household';
 import { defaultChoices, planImport, type ImportChoice, type ImportChoices, type ImportPlan } from '@/domain/merge';
 import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
+import { applyLineOverrides } from '@/domain/overrides';
 import { classifyPaste } from '@/domain/paste-classify';
-import { emptyPlan, mainItems } from '@/domain/planner';
-import { planItemsFromShare, sharedDishCount, sharedPlanRows } from '@/domain/plan-import';
+import { emptyPlan, mainItems, type PlanItem } from '@/domain/planner';
+import { planItemsFromShare, sharedDishCount, sharedPlanRows, type SharedPlanItem } from '@/domain/plan-import';
+import { parseVariantParam, type VariantDiet } from '@/domain/variants';
 import type { PlanShare, ProgressCard } from '@/domain/share';
 import { planWrites } from '@/components/ImportPreview';
 import { lang, t } from '@/i18n';
@@ -68,6 +71,7 @@ import { activeProfile, profiles } from '@/profile';
 import { navigate, pendingImport, route } from '@/router';
 import { applyMemberCard, applyProgressCard, MemberCardRow, ProgressCardRow, type CardOutcome, type ProgressOutcome } from './HouseholdScreen';
 import { Avatar } from './ProfilesScreen';
+import { approvedDiets } from './WeekScreen';
 
 // --- Seen bookkeeping (setting 'inbox.seenIds'; the Nav badge in src/inbox-badge.ts follows it) ---
 
@@ -238,6 +242,57 @@ function SharedRow(props: { event: ShareEvent; byId: Map<string, Recipe>; ui: La
       )}
     </li>
   );
+}
+
+// --- Received week plan: the diet version of a slot (13D, docs/specs/varianten-tabs.md §1e) -------
+
+/**
+ * The `vr` of the received item each made slot came from. `planItemsFromShare` keeps the received
+ * order and gives a slot the recipe of its item, so each slot takes the first unused item of its
+ * recipe: a side dish the one whose `sideOfRecipeId` is the recipe of its main slot, a plain dish one
+ * without `sideOfRecipeId` (else any, for a side whose main was not made here).
+ */
+function receivedVariants(made: readonly PlanItem[], items: readonly SharedPlanItem[]): Array<VariantDiet | undefined> {
+  const used = new Set<number>();
+  const recipeOfSlot = new Map(made.map((p) => [p.id, p.recipeId] as const));
+  const take = (fits: (it: SharedPlanItem) => boolean): number => items.findIndex((it, i) => !used.has(i) && fits(it));
+  return made.map((p) => {
+    const main = p.sideOf ? recipeOfSlot.get(p.sideOf) : undefined;
+    let i = take((it) => it.recipeId === p.recipeId && (main ? it.sideOfRecipeId === main : !it.sideOfRecipeId));
+    if (i < 0) i = take((it) => it.recipeId === p.recipeId);
+    if (i < 0) return undefined;
+    used.add(i);
+    return items[i]?.variant;
+  });
+}
+
+/**
+ * The made slots with the sender's version (`vr`) where the recipe HERE has that tab approved; any
+ * other `vr` silently becomes the original (§1e, §5: never half a version). `recipes` = the local
+ * recipes of the received items (read after the import, so embedded recipes carry their own tabs).
+ */
+async function withReceivedVariants(made: PlanItem[], items: readonly SharedPlanItem[], recipes: ReadonlyMap<string, Recipe>): Promise<PlanItem[]> {
+  const wanted = receivedVariants(made, items);
+  if (!wanted.some(Boolean)) return made;
+  const dict = dictionary.value;
+  const approved = new Map<string, VariantDiet[]>();
+  const out: PlanItem[] = [];
+  for (const [i, p] of made.entries()) {
+    const vr = wanted[i];
+    const r = recipes.get(p.recipeId);
+    if (!vr || !r) {
+      out.push(p);
+      continue;
+    }
+    let diets = approved.get(r.id);
+    if (!diets) {
+      diets = approvedDiets(r, applyLineOverrides(r.lines, await listLineOverrides(r.id)), dict);
+      approved.set(r.id, diets);
+    }
+    const variant = parseVariantParam(vr, diets);
+    out.push(variant ? { ...p, variant } : p);
+  }
+  return out;
 }
 
 // --- Screen --------------------------------------------------------------------------------------
@@ -473,7 +528,8 @@ export function InboxScreen() {
    * recipes go through the normal import first (so their ids exist here), then the dishes we
    * know become plan slots; unknown ids (recipes the sender did not include) are skipped. A side
    * dish (6B block 4) hangs under the slot just made for its main recipe, else it is a plain dish
-   * (src/domain/plan-import.ts). The counts in the notice are main dishes only.
+   * (src/domain/plan-import.ts). The counts in the notice are main dishes only. 13D: a slot gets the
+   * sender's diet version (`vr`) when that tab is approved on the recipe here, else the original.
    */
   async function takePlan(mode: 'replace' | 'append') {
     if (!received || busy) return;
@@ -489,21 +545,25 @@ export function InboxScreen() {
         }
       }
       const known: PlanShare['items'] = [];
+      const here = new Map<string, Recipe>();
       let unknown = 0;
       for (const it of received.share.items) {
-        if (await getRecipe(it.recipeId)) known.push(it);
-        else unknown++;
+        const r = await getRecipe(it.recipeId);
+        if (r) {
+          known.push(it);
+          here.set(r.id, r);
+        } else unknown++;
       }
       const parts: string[] = [];
       if (mode === 'replace') {
         const fresh = emptyPlan();
-        fresh.items = planItemsFromShare(known, 'replace');
+        fresh.items = await withReceivedVariants(planItemsFromShare(known, 'replace'), known, here);
         if (received.share.note) fresh.note = received.share.note;
         await savePlan(fresh);
         parts.push(t('inbox.plan.taken', { n: mainItems(fresh.items).length }));
       } else {
         const current = await getPlan();
-        const fresh = planItemsFromShare(known, 'append', current.items);
+        const fresh = await withReceivedVariants(planItemsFromShare(known, 'append', current.items), known, here);
         if (fresh.length > 0) await savePlan({ ...current, items: [...current.items, ...fresh] });
         const added = mainItems(fresh).length;
         parts.push(added > 0 ? t('inbox.plan.added', { n: added }) : t('inbox.plan.nothing'));

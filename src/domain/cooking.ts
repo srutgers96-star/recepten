@@ -10,9 +10,13 @@
 //   upsertSession      one row per recipe; keeps startedAt of an existing row
 //   isExpired          8 hours without activity and no running timer of that recipe
 //   pruneSessions      drops the expired sessions, keeps the order
-//   cookPath           '/cook/<id>?step=N&srv=S' — where a bar row leads
+//   cookPath           '/cook/<id>?step=N&srv=S&v=<diet>' — where a bar row leads
 //   groupBar           what the bar shows: rows per recipe with their timers, loose timers last
+//
+// 13D blok 3 (docs/specs/varianten-tabs.md §1d): a session remembers the approved diet version cook
+// mode shows (`variant`, from `?v=`), so the bar row reopens cook mode on that version (`&v=<diet>`).
 import type { RunningTimer, Text } from './model.ts';
+import { VARIANT_DIETS, type VariantDiet } from './diets.ts';
 
 /** One recipe you are cooking right now. Lives in the settings row `cook.sessions`. */
 export interface CookingSession {
@@ -27,6 +31,8 @@ export interface CookingSession {
   /** Epoch ms. `lastActiveAt` moves on every step change and every timer start of this recipe. */
   startedAt: number;
   lastActiveAt: number;
+  /** 13D: the approved diet version cook mode shows (passed back as &v=); absent/null = the original. */
+  variant?: VariantDiet | null;
 }
 
 export const COOKING_SETTING = 'cook.sessions';
@@ -51,10 +57,17 @@ function isCount(v: unknown): v is number {
   return typeof v === 'number' && Number.isInteger(v) && v >= 0;
 }
 
-/** One stored row, or null when it cannot be read. Fields this version does not know are kept. */
+function isVariantDiet(v: unknown): v is VariantDiet {
+  return typeof v === 'string' && (VARIANT_DIETS as readonly string[]).includes(v);
+}
+
+/**
+ * One stored row, or null when it cannot be read. Fields this version does not know are kept. A
+ * `variant` that is not a diet becomes null (the original); an absent one stays absent.
+ */
 function normalizeSession(v: unknown): CookingSession | null {
   if (!isRecord(v)) return null;
-  const { recipeId, page, stepCount, name, startedAt, lastActiveAt, servings } = v;
+  const { recipeId, page, stepCount, name, startedAt, lastActiveAt, servings, variant } = v;
   if (typeof recipeId !== 'string') return null;
   if (!isCount(page) || !isCount(stepCount)) return null;
   if (!isRecord(name)) return null;
@@ -63,7 +76,7 @@ function normalizeSession(v: unknown): CookingSession | null {
   if (lastActiveAt === undefined || lastActiveAt === null) active = startedAt;
   else if (isFiniteNumber(lastActiveAt)) active = lastActiveAt;
   else return null;
-  return {
+  const out: CookingSession = {
     ...v,
     recipeId,
     page,
@@ -76,6 +89,8 @@ function normalizeSession(v: unknown): CookingSession | null {
     startedAt,
     lastActiveAt: active,
   };
+  if ('variant' in v) out.variant = isVariantDiet(variant) ? variant : null;
+  return out;
 }
 
 /**
@@ -121,15 +136,23 @@ export function pruneSessions(list: CookingSession[], timers: readonly TimerLike
   return kept.length === list.length ? list : kept;
 }
 
-/** '/cook/<id>' + '?step=<page>' when page ≥ 1 + ('&' or '?') 'srv=<n>' when servings is set. */
-export function cookPath(s: Pick<CookingSession, 'recipeId' | 'page' | 'servings'>): string {
+/**
+ * '/cook/<id>' + '?step=<page>' when page ≥ 1 + ('&' or '?') 'srv=<n>' when servings is set +
+ * ('&' or '?') 'v=<diet>' when the session cooks a diet version (13D). Without a variant the path is
+ * the same as before 13D.
+ */
+export function cookPath(s: Pick<CookingSession, 'recipeId' | 'page' | 'servings' | 'variant'>): string {
   let path = '/cook/' + s.recipeId;
   let sep = '?';
   if (s.page >= 1) {
     path += sep + 'step=' + s.page;
     sep = '&';
   }
-  if (s.servings !== null && s.servings !== undefined) path += sep + 'srv=' + s.servings;
+  if (s.servings !== null && s.servings !== undefined) {
+    path += sep + 'srv=' + s.servings;
+    sep = '&';
+  }
+  if (isVariantDiet(s.variant)) path += sep + 'v=' + s.variant;
   return path;
 }
 

@@ -15,12 +15,17 @@
 // "controleer zelf" lines. `variantView` then sees the approval as `approved`, not `stale`; a diet
 // with only unticked swaps still exists ({ swaps: [], checked: [i] }).
 //
+// Next to `checked` the sheet stores `checkedIngs` ("Besluiten Fable na blok 2", point 2): per index the
+// `ing` of that line as the sheet showed it. `variantView` counts an index as ticked only while its line
+// still holds that ing, so a ticked line that later turns into another product makes the tab stale.
+//
 // "Opnieuw controleren" (status stale) opens the same sheet over the plan of the current lines: every
 // swap that still fits is on (spec §1c, "de checkboxes van swaps die nog passen staan aan"); the
-// "controleer zelf" lines that were ticked before (and still break the diet) are ticked again
-// (`initialSheetState`). A swap is never unticked from `checked`: that list holds bare line indexes,
-// so after a line is inserted or deleted above it an old index can point at a different line, and an
-// unticked swap row would silently drop a swap that was approved (review finding, 30 Oct).
+// "controleer zelf" lines that were ticked before and still hold the same ing (`view.checked`) are
+// ticked again (`initialSheetState`). A swap is never unticked from `checked`: Fable's decision (3)
+// after blok 2 keeps §1c literal (an earlier "laat ik zo" is unticked again by hand), and an old
+// approval without `checkedIngs` holds bare line indexes that, after a line is inserted or deleted
+// above them, can point at a different line (review finding, 30 Oct).
 //
 // Dismissal (13J, spec §1c, as CookedSheet): Annuleer and Goedkeuren sit in the head; swiping the
 // sheet down (grab bar / head), tapping beside it, Annuleer and Escape all close WITHOUT saving. The
@@ -77,10 +82,11 @@ export function sheetRows(plan: VariantPlan): SheetRow[] {
 /**
  * The tick state the sheet opens with. A proposal: every swap on, no line checked. "Opnieuw
  * controleren" (stale): every swap that still fits is on (spec §1c); the indexes the earlier
- * approval had in `checked` that still break the diet (`view.checked`) come back as a ticked
- * "controleer zelf" row. A swap row is never unticked from `checked` (a bare index, no `ing`: after
- * an insert or delete above it, it can name another line, and re-approving would drop an approved
- * swap); a swap left as it was ("laat ik zo", decision (1)) is unticked again by hand.
+ * approval had in `checked` that still break the diet and (with `checkedIngs`) still hold the same
+ * ing (`view.checked`) come back as a ticked "controleer zelf" row. A swap row is never unticked from
+ * `checked` (decision (3) after blok 2; an old bare index can name another line after an insert or
+ * delete above it, and re-approving would drop an approved swap); a swap left as it was ("laat ik
+ * zo", decision (1)) is unticked again by hand.
  */
 export function initialSheetState(view: Pick<VariantView, 'status' | 'checked'>, rows: readonly SheetRow[]): { off: Set<number>; ticked: Set<number> } {
   const off = new Set<number>();
@@ -98,16 +104,23 @@ export function allChecked(rows: readonly SheetRow[], ticked: ReadonlySet<number
   return rows.every((r) => r.kind !== 'check' || ticked.has(r.index));
 }
 
+/** What the sheet hands `approveVariant`: the approval plus `checkedIngs` (stored as it is, `...a`). */
+export type SheetApproval = VariantApproval & { checkedIngs: Array<string | null> };
+
 /**
  * What `approveVariant` gets: the ticked swaps (`storedSwapsFrom`) and, as `checked`, the unticked
- * swaps (decision (1): "laat ik zo") plus the ticked "controleer zelf" lines, sorted, no duplicates.
+ * swaps (decision (1): "laat ik zo") plus the ticked "controleer zelf" lines, sorted, no duplicates;
+ * `checkedIngs` parallel to it ("Besluiten Fable na blok 2", point 2): the `ing` of each of those
+ * lines as the sheet showed it (null when it has none), so a line that later turns into another
+ * product makes the tab stale (`variantView`).
  */
-export function sheetApproval(plan: VariantPlan, rows: readonly SheetRow[], off: ReadonlySet<number>, ticked: ReadonlySet<number>): VariantApproval {
-  const checked = new Set<number>();
+export function sheetApproval(plan: VariantPlan, rows: readonly SheetRow[], off: ReadonlySet<number>, ticked: ReadonlySet<number>): SheetApproval {
+  const ingOf = new Map<number, string | null>();
   for (const r of rows) {
-    if (r.kind === 'swap' ? off.has(r.index) : ticked.has(r.index)) checked.add(r.index);
+    if (r.kind === 'swap' ? off.has(r.index) : ticked.has(r.index)) ingOf.set(r.index, typeof r.line.ing === 'string' && r.line.ing !== '' ? r.line.ing : null);
   }
-  return { swaps: storedSwapsFrom(plan, off), checked: [...checked].sort((a, b) => a - b) };
+  const checked = [...ingOf.keys()].sort((a, b) => a - b);
+  return { swaps: storedSwapsFrom(plan, off), checked, checkedIngs: checked.map((i) => ingOf.get(i) ?? null) };
 }
 
 export function VariantSheet(props: VariantSheetProps) {
@@ -269,7 +282,8 @@ export function VariantSheet(props: VariantSheetProps) {
                 }
                 // "controleer zelf": no swap known, or a swap the app could not place in this line
                 // (name not found, a count without a piece weight, an "of …" alternative outside
-                // parentheses) — then it says WHAT to replace it with, and still shows the cook's note.
+                // parentheses). Both hints say the same since blok 3 (Fable's decision (7) after blok 2);
+                // a swap's cook's note is still shown.
                 const done = ticked.has(row.index);
                 return (
                   <li key={'c' + row.index}>

@@ -15,6 +15,8 @@
 // 6D-1 (docs/specs/xp-levels.md §1e, §3): a rating and a photo are reward moments (settleXp; the cook
 // itself settles in recordCooked), and "Andere datum" more than 7 days back says honestly, with
 // badges on, that it counts for badges and the calendar but not for XP.
+// 13D blok 3 (docs/specs/varianten-tabs.md §1d): on an approved diet tab the recipe page passes that
+// diet as `variant`; a new cook logs it (recordCooked). "Beoordeel" (rate mode) is unchanged.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgesEnabled, checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
@@ -24,6 +26,7 @@ import { SheetPortal } from '@/components/SheetPortal';
 import { cookedAtForDay, daysAgo, localDay, recordCooked } from '@/cooklog';
 import { addPhoto, updateCookLogEntry } from '@/db/repo';
 import { dayFromKey, localDayIndex } from '@/domain/days';
+import type { VariantDiet } from '@/domain/diets';
 import { nowIso, type CookLogEntry } from '@/domain/model';
 import { XP_RULES } from '@/domain/xp';
 import { lang, t } from '@/i18n';
@@ -42,6 +45,8 @@ export interface CookedSheetProps {
   onClose: () => void;
   /** After a successful save; the caller closes the sheet and shows the confirmation. */
   onSaved: (kind: CookedSheetMode['kind']) => void;
+  /** 13D: the approved diet version this cook was (the chosen diet tab); absent/null = the original. */
+  variant?: VariantDiet | null;
 }
 
 export function CookedSheet(props: CookedSheetProps) {
@@ -185,7 +190,14 @@ export function CookedSheet(props: CookedSheetProps) {
         } else {
           const at = cookedAt();
           if (at === null) throw new Error('no date');
-          await recordCooked({ recipeId: props.recipeId, profileId: profile.id, at, stars: stars > 0 ? stars : null, note });
+          await recordCooked({
+            recipeId: props.recipeId,
+            profileId: profile.id,
+            at,
+            stars: stars > 0 ? stars : null,
+            note,
+            variant: props.variant ?? null,
+          });
           cookSaved.current = at;
         }
       }

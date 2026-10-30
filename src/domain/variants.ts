@@ -9,7 +9,8 @@
 //   variantView(diet, lines, stored, swaps, dict) -> VariantView: natural (no line breaks the diet) ->
 //                                                approved / stale (the stored swaps applied; stale when
 //                                                a swap no longer fits its line or a breaking line was
-//                                                not ticked) -> proposed (planVariant's applying swaps
+//                                                not ticked, or was ticked while it held another ing:
+//                                                `checkedIngs`) -> proposed (planVariant's applying swaps
 //                                                as a preview). Derived, never written back (invariant 2).
 //   applyStoredSwap(line, swap)               -> applySwap + `swappedFrom` / `swappedAlt` (display-only, never stored)
 //   storedSwapsFrom(plan, off)                -> the sheet's ticked swaps as StoredSwaps
@@ -89,6 +90,15 @@ export interface RecipeVariant {
   swaps: StoredSwap[];
   /** Indexes of the lines that break the diet without a swap and that were ticked ("Gecontroleerd") on approval. */
   checked: number[];
+  /**
+   * Parallel to `checked` ("Besluiten Fable na blok 2", point 2): the `ing` id each of those lines had
+   * when it was ticked (null: no ing). An index only still counts as ticked while its line holds that
+   * ing; otherwise the tab is stale. Absent (approvals from before blok 3) = the bare indexes count, as
+   * before. Read tolerantly: only the leading run of strings/nulls counts (a shorter array, or one cut
+   * off at a value of another type, says nothing about the indexes after it: those count as before),
+   * the same rule `readVariant` (recipe-io.ts) normalises to.
+   */
+  checkedIngs?: Array<string | null>;
   [k: string]: unknown;
 }
 
@@ -649,6 +659,36 @@ const byNumber = (a: number, b: number): number => a - b;
 
 type ViewBody = Pick<VariantView, 'lines' | 'swapped' | 'unresolved' | 'checked'>;
 
+/**
+ * The line indexes of `stored.checked` that still count as ticked. With `checkedIngs` ("Besluiten
+ * Fable na blok 2", point 2) an index counts only while its line (in the effective `lines`, as the
+ * sheet showed it) still holds the ing it had when it was ticked, so a "controleer zelf" line changed
+ * into another product that breaks the diet makes the tab stale instead of keeping a stale "approved".
+ * Without `checkedIngs` (older approvals), and for the positions after its leading run of
+ * strings/nulls, the bare index counts as before (tolerant: a classic's override is not normalised
+ * on a backup restore).
+ */
+function tickedIndexes(stored: RecipeVariant, lines: readonly Line[]): Set<number> {
+  const checked: unknown[] = Array.isArray(stored.checked) ? stored.checked : [];
+  const ings: unknown[] = Array.isArray(stored.checkedIngs) ? stored.checkedIngs : [];
+  let known = ings.findIndex((x) => x !== null && typeof x !== 'string');
+  if (known === -1) known = ings.length;
+  const seen = new Set<number>();
+  const out = new Set<number>();
+  checked.forEach((i, j) => {
+    // The first occurrence of an index decides (as `readVariant` deduplicates).
+    if (typeof i !== 'number' || seen.has(i)) return;
+    seen.add(i);
+    if (j < known) {
+      const line = lines[i];
+      const now = line && typeof line.ing === 'string' && line.ing !== '' ? line.ing : null;
+      if (now !== ings[j]) return;
+    }
+    out.add(i);
+  });
+  return out;
+}
+
 /** An approved variant: its stored swaps applied (those that still fit) and what still breaks the diet. */
 function approvedView(diet: VariantDiet, lines: readonly Line[], stored: RecipeVariant, dict: Dictionary): { body: ViewBody; ok: boolean } {
   const out = [...lines];
@@ -667,7 +707,7 @@ function approvedView(diet: VariantDiet, lines: readonly Line[], stored: RecipeV
   out.forEach((l, i) => {
     if (lineBreaksDiet(l, diet, dict)) unresolved.push(i);
   });
-  const ticked = new Set<unknown>(Array.isArray(stored.checked) ? stored.checked : []);
+  const ticked = tickedIndexes(stored, lines);
   const checked = unresolved.filter((i) => ticked.has(i));
   return { body: { lines: out, swapped: swapped.sort(byNumber), unresolved, checked }, ok: all && checked.length === unresolved.length };
 }

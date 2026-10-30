@@ -13,6 +13,13 @@
 // stepper, lock or 🎲: it follows its main (servings, cooked, removed: the cascades live in
 // src/db/repo.ts). 🎲 and Verras me on a main dish give it a new dish and drop its sides (they
 // belonged to THAT dish). The summary counts main dishes as "gerechten" plus "· N bijgerechten".
+// 13D blok 3 (docs/specs/varianten-tabs.md §1e): under the name of a slot whose recipe has at least
+// one approved diet tab or one personal version sits a small chip with the current version
+// (Origineel / the diet / the maker's first name); a tap opens a row of choices under it
+// (`role="radiogroup"`): Origineel · the approved diets · the personal versions — never a proposal.
+// A diet → `setPlanVariant`; a personal version → the slot gets that recipe (`setPlanRecipe`, servings
+// stay); Origineel from a version → back to `variantOf`. Another tap on the chip folds the row. A tap
+// on the name of a slot with a diet version opens the recipe on that tab (`?v=<diet>`).
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
@@ -20,6 +27,7 @@ import { EMPTY_PICK_FILTER, PickChips, PickSheet, applyPickFilter, cuisineIdsIn,
 import { otherLanguageName } from '@/components/RecipeRow';
 import { SideSheet } from '@/components/SideSheet';
 import { TimerBar } from '@/components/TimerBar';
+import { tabChoiceToParam, versionTabLabels, type TabChoice } from '@/components/VariantTabs';
 import { useLive } from '@/db/live';
 import {
   addSideToPlan,
@@ -34,20 +42,24 @@ import {
   recentCooked,
   removeFromPlan,
   savePlan,
+  setPlanRecipe,
   setPlanServings,
+  setPlanVariant,
   togglePlanLock,
 } from '@/db/repo';
-import { dictionary } from '@/dictionary';
-import { pickText, type CookLogEntry, type Recipe } from '@/domain/model';
-import type { LineOverride } from '@/domain/overrides';
+import { dictionary, type Dictionary } from '@/dictionary';
+import { pickText, type CookLogEntry, type Line, type Recipe } from '@/domain/model';
+import { applyLineOverrides, type LineOverride } from '@/domain/overrides';
 import { isMainDish, newPlanItem, normalizeServings, pickRecipes, recentCookedIds, sidesOf, type PlanItem } from '@/domain/planner';
 import { buildPlanEnvelope, planMessages, type MessagePlan } from '@/domain/share';
+import { variantTabs, type VariantDiet } from '@/domain/variants';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { navigate } from '@/router';
 import { copyText, shareJsonFile, shareText } from '@/share-actions';
 import { ShuffleIcon } from '@/components/ShuffleIcon';
+import { swapsData } from '@/swaps';
 
 export const MIN_N = 1;
 export const MAX_N = 14;
@@ -59,6 +71,71 @@ const COOK_LOG_ROWS = 2000;
 // Module-level so a trip to a recipe and back keeps the chosen N and the filter (session only).
 let savedN = DEFAULT_N;
 let savedFilter: PickFilter = EMPTY_PICK_FILTER;
+/** The slots whose row of version choices is open (13D §1e; session only, like N and the filter). */
+let savedOpenVersions: ReadonlySet<string> = new Set();
+
+/**
+ * 13D (docs/specs/varianten-tabs.md §1e): the diets whose tab is approved on `recipe` (tab order),
+ * with `lines` = its effective lines (line overrides applied, as the approval indexes point at).
+ * Only these are offered for a slot; a proposed or stale tab never is. The Inbox reads a received
+ * `vr` with the same rule.
+ */
+export function approvedDiets(recipe: Pick<Recipe, 'variants'>, lines: readonly Line[], dict: Dictionary): VariantDiet[] {
+  const v = recipe.variants;
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return [];
+  return variantTabs(lines, v, swapsData, dict, 0)
+    .diets.filter((d) => d.status === 'approved')
+    .map((d) => d.diet);
+}
+
+/** What the version chip of one slot offers (13D §1e). */
+interface SlotVersions {
+  /** The original whose tabs are offered: the slot's recipe, or its `variantOf` when it is a personal version. */
+  base: Recipe;
+  /** The approved diets of `base`. */
+  diets: VariantDiet[];
+  /** The personal versions of `base` (`variantsOf`), oldest first, and their tab labels. */
+  versions: Recipe[];
+  labels: string[];
+  /** The slot's current version: a diet only while it is approved here (else Origineel, as the list does). */
+  choice: TabChoice;
+}
+
+/** `repo.variantsOf` over the loaded recipes: per original id its own/received versions, oldest first. */
+function versionsByOriginal(all: readonly Recipe[]): Map<string, Recipe[]> {
+  const out = new Map<string, Recipe[]>();
+  for (const r of all) {
+    if (!r.variantOf || isBuiltinId(r.id)) continue;
+    const list = out.get(r.variantOf) ?? [];
+    list.push(r);
+    out.set(r.variantOf, list);
+  }
+  for (const list of out.values()) list.sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id));
+  return out;
+}
+
+/** The original whose version row a slot with recipe `r` shows: `variantOf` when `r` is one of its versions. */
+function originalOf(r: Recipe, byId: ReadonlyMap<string, Recipe>, versions: ReadonlyMap<string, Recipe[]>): Recipe {
+  const original = r.variantOf ? byId.get(r.variantOf) : undefined;
+  return original && original.id !== r.id && (versions.get(original.id) ?? []).some((v) => v.id === r.id) ? original : r;
+}
+
+/** The CSS class of a version choice: the diet colour, the personal colour or neutral (Origineel). */
+function choiceClass(c: TabChoice): string {
+  if (c.kind === 'diet') return 'diet-' + c.diet;
+  return c.kind === 'version' ? 'personal' : 'original';
+}
+
+/**
+ * A slot that gets another dish (🎲, Verras me): the new recipe WITHOUT the slot's diet version. That
+ * version was chosen for the previous dish (13D §2a `PlanItem.variant`), so it must not quietly apply
+ * to the new one (chip, list, `#w=` `vr`, planHash); as `repo.setPlanRecipe` does.
+ */
+function withNewDish(p: PlanItem, recipeId: string): PlanItem {
+  const next: PlanItem = { ...p, recipeId };
+  delete next.variant;
+  return next;
+}
 
 /**
  * The plan as rows: every main dish (no `sideOf`) with its side dishes under it, in plan order. A
@@ -95,6 +172,16 @@ export function WeekScreen() {
   const [busy, setBusy] = useState(false);
   /** The main slot the SideSheet is open for (null = closed). */
   const [sideFor, setSideFor] = useState<PlanItem | null>(null);
+  /** The slots whose row of version choices is open (13D §1e). */
+  const [openVersions, setOpenVersionsState] = useState<ReadonlySet<string>>(savedOpenVersions);
+
+  function toggleVersions(slotId: string) {
+    const next = new Set(openVersions);
+    if (next.has(slotId)) next.delete(slotId);
+    else next.add(slotId);
+    savedOpenVersions = next;
+    setOpenVersionsState(next);
+  }
 
   function setFilter(next: PickFilter) {
     savedFilter = next;
@@ -121,12 +208,46 @@ export function WeekScreen() {
   const cookedCount = mains.filter((p) => p.cooked).length;
   const filtering = pickFilterActive(filter);
 
+  // 13D §1e: per slot what its version chip offers. The approved diets are read on the effective
+  // lines of the original (its line overrides, as RecipeScreen and generateList do), so the week
+  // offers exactly the tabs that are full on the recipe page.
+  const versionsOf = useMemo(() => versionsByOriginal(all ?? []), [all]);
+  const originals = new Set<string>();
+  for (const p of items) {
+    const r = byId.get(p.recipeId);
+    if (!r) continue;
+    const base = originalOf(r, byId, versionsOf);
+    if (base.variants && typeof base.variants === 'object') originals.add(base.id);
+  }
+  const overrideKey = [...originals].sort().join('|');
+  const lineOverrides = useLive(async () => {
+    const ids = overrideKey ? overrideKey.split('|') : [];
+    const rows = await Promise.all(ids.map((id) => listLineOverrides(id)));
+    return new Map(ids.map((id, i) => [id, rows[i] ?? []] as const));
+  }, [overrideKey]);
+  const slotVersions = useMemo(() => {
+    const out = new Map<string, SlotVersions>();
+    for (const p of items) {
+      const r = byId.get(p.recipeId);
+      if (!r) continue;
+      const base = originalOf(r, byId, versionsOf);
+      const versions = versionsOf.get(base.id) ?? [];
+      const diets = approvedDiets(base, applyLineOverrides(base.lines, lineOverrides?.get(base.id)), dict);
+      if (diets.length === 0 && versions.length === 0) continue;
+      let choice: TabChoice = { kind: 'original' };
+      if (base !== r) choice = { kind: 'version', recipeId: r.id };
+      else if (p.variant && diets.includes(p.variant)) choice = { kind: 'diet', diet: p.variant };
+      out.set(p.id, { base, diets, versions, labels: versionTabLabels(versions), choice });
+    }
+    return out;
+  }, [items, byId, versionsOf, lineOverrides, dict, l]);
+
   // The share message is built ahead of the tap (encodeToken is async; navigator.share must be
   // called synchronously inside the tap handler). Rebuilt when the uncooked dishes change (a side
-  // dish with the recipe of its main, as `#w=` carries it in `of`).
+  // dish with the recipe of its main, as `#w=` carries it in `of`; the chosen version as `vr`).
   const recipeOfItem = new Map(items.map((p) => [p.id, p.recipeId] as const));
   const shareKey = uncooked
-    .map((p) => `${p.recipeId}@${p.servings}${p.sideOf ? '<' + (recipeOfItem.get(p.sideOf) ?? '') : ''}`)
+    .map((p) => `${p.recipeId}@${p.servings}${p.sideOf ? '<' + (recipeOfItem.get(p.sideOf) ?? '') : ''}${p.variant ? '#' + p.variant : ''}`)
     .sort()
     .join('|');
   useEffect(() => {
@@ -194,7 +315,8 @@ export function WeekScreen() {
    * The dishes now in the open slots are taken out of the pool, so a slot never gets "replaced" by
    * the same dish and dishes do not merely swap places; a slot keeps its dish only when the pool
    * runs dry. Side dishes are no slots of their own: those of a main that keeps its dish stay, those
-   * of a main that gets a new dish (or is dropped) go, as with 🎲 (§1d).
+   * of a main that gets a new dish (or is dropped) go, as with 🎲 (§1d). A slot with a new dish loses its
+   * diet version (13D: it was chosen for the old dish; `withNewDish`).
    */
   function surpriseUnlocked() {
     void run(async () => {
@@ -224,7 +346,7 @@ export function WeekScreen() {
         }
         const r = picked[i++];
         if (r) {
-          next.push({ ...p, recipeId: r.id });
+          next.push(withNewDish(p, r.id));
           changed.add(p.id);
         } else if (!pickedIds.has(p.recipeId)) next.push(p); // pool exhausted: keep the old dish
         else changed.add(p.id);
@@ -238,7 +360,8 @@ export function WeekScreen() {
    * 🎲 on one slot: one dish from the pool that is not in the plan yet. The slot itself is left
    * out of `existing` (it is being replaced, so it must not count towards the pasta/rijst caps)
    * and its current dish out of the pool (never the same dish again). Its side dishes go: they
-   * belonged to THAT dish (§1d; the slot keeps its id, so the cascade must be explicit).
+   * belonged to THAT dish (§1d; the slot keeps its id, so the cascade must be explicit), and so did
+   * its diet version (13D; `withNewDish`).
    */
   function reroll(item: PlanItem) {
     void run(async () => {
@@ -249,7 +372,7 @@ export function WeekScreen() {
         setStatus(t('week.noPool'));
         return;
       }
-      const next = current.items.filter((p) => p.sideOf !== item.id).map((p) => (p.id === item.id ? { ...p, recipeId: picked.id } : p));
+      const next = current.items.filter((p) => p.sideOf !== item.id).map((p) => (p.id === item.id ? withNewDish(p, picked.id) : p));
       await savePlan({ ...current, items: next });
       void recordFeature('surprise');
     });
@@ -266,6 +389,85 @@ export function WeekScreen() {
   function servings(item: PlanItem, delta: number) {
     const next = Math.min(MAX_SLOT_SERVINGS, Math.max(1, normalizeServings(item.servings) + delta));
     if (next !== item.servings) void run(() => setPlanServings(item.id, next));
+  }
+
+  /**
+   * 13D §1e: a choice in the version row of a slot. A diet → `setPlanVariant`; a personal version →
+   * the slot gets that recipe (`setPlanRecipe`: servings, lock and side dishes stay, the diet goes);
+   * Origineel or a diet while the slot holds a personal version → first back to the original.
+   */
+  function chooseVersion(p: PlanItem, sv: SlotVersions, c: TabChoice) {
+    if (tabChoiceToParam(c) === tabChoiceToParam(sv.choice)) return;
+    void run(async () => {
+      if (c.kind === 'version') {
+        await setPlanRecipe(p.id, c.recipeId);
+        return;
+      }
+      if (p.recipeId !== sv.base.id) await setPlanRecipe(p.id, sv.base.id);
+      await setPlanVariant(p.id, c.kind === 'diet' ? c.diet : null);
+    });
+  }
+
+  /** The label of a version choice: the tab label of the diet, the version's first name, or Origineel. */
+  function choiceLabel(sv: SlotVersions, c: TabChoice): string {
+    if (c.kind === 'diet') return t('vt.tab.' + c.diet);
+    if (c.kind === 'version') {
+      const i = sv.versions.findIndex((v) => v.id === c.recipeId);
+      return sv.labels[i] ?? t('vt.tab.version');
+    }
+    return t('vt.tab.original');
+  }
+
+  /** The recipe page of a slot: on the tab of its diet version when it has one (§1e: `?v=<diet>`). */
+  function openSlotRecipe(r: Recipe, sv: SlotVersions | undefined) {
+    navigate('/recipe/' + r.id + (sv?.choice.kind === 'diet' ? '?v=' + sv.choice.diet : ''));
+  }
+
+  /**
+   * The version chip under a slot's name and, when open, the row of choices with its hint (§1e). The
+   * chip shows the current version; the row offers Origineel, the approved diets and the personal
+   * versions (never a proposal).
+   */
+  function versionChip(p: PlanItem, sv: SlotVersions) {
+    const open = openVersions.has(p.id);
+    const rowId = 'week-vrow-' + p.id;
+    const options: TabChoice[] = [
+      { kind: 'original' },
+      ...sv.diets.map((diet): TabChoice => ({ kind: 'diet', diet })),
+      ...sv.versions.map((v): TabChoice => ({ kind: 'version', recipeId: v.id })),
+    ];
+    const chosen = tabChoiceToParam(sv.choice);
+    return (
+      <div class="week-variant">
+        <button type="button" class="week-vchip" aria-expanded={open} aria-controls={rowId} onClick={() => toggleVersions(p.id)}>
+          <span class={'week-vpill ' + choiceClass(sv.choice)}>{choiceLabel(sv, sv.choice)}</span>
+        </button>
+        {open && (
+          <>
+            <div class="week-vrow" id={rowId} role="radiogroup" aria-label={t('week.variantAria')}>
+              {options.map((c) => {
+                const key = tabChoiceToParam(c);
+                const on = key === chosen;
+                return (
+                  <button
+                    key={key ?? ''}
+                    type="button"
+                    role="radio"
+                    class={'week-vopt' + (on ? ' on' : '')}
+                    aria-checked={on}
+                    disabled={busy}
+                    onClick={() => chooseVersion(p, sv, c)}
+                  >
+                    <span class={'week-vpill ' + choiceClass(c)}>{choiceLabel(sv, c)}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <p class="muted small week-vhint">{t('week.variantHint')}</p>
+          </>
+        )}
+      </div>
+    );
   }
 
   function onClear() {
@@ -362,8 +564,12 @@ export function WeekScreen() {
                 const locked = p.locked === true;
                 // "+ bijgerecht" only under an uncooked slot whose recipe is a main dish itself.
                 const canAddSide = !!r && !cooked && isMainDish(r);
+                const sv = slotVersions.get(p.id);
                 return (
-                  <li key={p.id} class={'week-slot' + (cooked ? ' cooked' : '') + (locked ? ' locked' : '') + (sides.length > 0 ? ' has-sides' : '')}>
+                  <li
+                    key={p.id}
+                    class={'week-slot' + (cooked ? ' cooked' : '') + (locked ? ' locked' : '') + (sides.length > 0 ? ' has-sides' : '') + (sv ? ' has-variant' : '')}
+                  >
                     <button
                       type="button"
                       class={'week-tick' + (cooked ? ' on' : '')}
@@ -375,7 +581,7 @@ export function WeekScreen() {
                     >
                       {cooked ? '✓' : ''}
                     </button>
-                    <button type="button" class="week-name" disabled={!r} onClick={() => r && navigate('/recipe/' + r.id)}>
+                    <button type="button" class="week-name" disabled={!r} onClick={() => r && openSlotRecipe(r, sv)}>
                       <span class="week-name-text">{name}</span>
                       {(alt || locked) && (
                         <span class="row-sub">
@@ -385,6 +591,7 @@ export function WeekScreen() {
                         </span>
                       )}
                     </button>
+                    {sv && versionChip(p, sv)}
                     <div class="week-tools">
                       <div class="week-srv" role="group" aria-label={t('servings.label')}>
                         <button type="button" class="week-srv-step" aria-label={t('week.servingsLess')} disabled={busy || p.servings <= 1} onClick={() => servings(p, -1)}>
@@ -417,12 +624,13 @@ export function WeekScreen() {
                         {sides.map((sp) => {
                           const sr = byId.get(sp.recipeId);
                           const sideAlt = sr ? otherLanguageName(sr, l) : null;
+                          const ssv = slotVersions.get(sp.id);
                           return (
-                            <li key={sp.id} class={'week-slot side' + (sp.cooked ? ' cooked' : '')}>
+                            <li key={sp.id} class={'week-slot side' + (sp.cooked ? ' cooked' : '') + (ssv ? ' has-variant' : '')}>
                               <span class="week-side-mark" aria-hidden="true">
                                 ↳
                               </span>
-                              <button type="button" class="week-name" disabled={!sr} onClick={() => sr && navigate('/recipe/' + sr.id)}>
+                              <button type="button" class="week-name" disabled={!sr} onClick={() => sr && openSlotRecipe(sr, ssv)}>
                                 <span class="week-name-text">{sr ? pickText(sr.name, l) : t('week.missing')}</span>
                                 {sideAlt && (
                                   <span class="row-sub">
@@ -433,6 +641,7 @@ export function WeekScreen() {
                               <button type="button" class="week-tool week-remove" aria-label={t('week.removeSide')} disabled={busy} onClick={() => void run(() => removeFromPlan(sp.id))}>
                                 ×
                               </button>
+                              {ssv && versionChip(sp, ssv)}
                             </li>
                           );
                         })}

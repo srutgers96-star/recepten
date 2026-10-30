@@ -145,14 +145,15 @@ export const browse: Dict = {
   'recipe.variantOf': { nl: 'Versie van {name}', en: 'Version of {name}' },
   'recipe.variants': { nl: 'Varianten', en: 'Variants' },
   'variant.check': { nl: 'controleer zelf', en: 'check yourself' },
+  // A "controleer zelf" row of the approve sheet: no swap known (checkHint) or a swap the app could not
+  // place in this line (checkSwap). One text for both ("Besluiten Fable na blok 2", point 7).
   'variant.checkHint': {
-    nl: 'Hiervoor kent de app geen vervanger. De regel blijft staan; pas hem na het opslaan zelf aan.',
-    en: 'The app knows no replacement for this. The line stays as it is; adjust it yourself after saving.',
+    nl: 'Dit ingrediënt past niet bij dit dieet. Controleer of vervang het zelf en vink het af.',
+    en: 'This ingredient does not fit this diet. Check or replace it yourself and tick it off.',
   },
-  // A swap exists but the app could not rewrite this line safely: say what to use instead.
   'variant.checkSwap': {
-    nl: 'Vervang {from} hier zelf door {to}. De regel blijft staan; pas hem na het opslaan aan.',
-    en: 'Replace {from} with {to} yourself here. The line stays as it is; adjust it after saving.',
+    nl: 'Dit ingrediënt past niet bij dit dieet. Controleer of vervang het zelf en vink het af.',
+    en: 'This ingredient does not fit this diet. Check or replace it yourself and tick it off.',
   },
   'variant.onlyCheck': {
     nl: 'De app kan hier niets automatisch vervangen. Je krijgt een kopie met het label; pas de regels daarna zelf aan.',

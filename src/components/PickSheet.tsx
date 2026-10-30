@@ -19,6 +19,10 @@
 // (src/domain/planner.ts `excludeNonMain`), unless `PickFilter.all` ("ook bijgerechten & zoet", the
 // chip `pick.all` that `PickChips` shows with `mainOnlyToggle`) is on or such a category chip is on.
 // The Recipes list never passes `mainOnly` and has no toggle chip: it always shows everything.
+// 13D blok 3 (docs/specs/varianten-tabs.md §1g, §3 blok 3 bouwer C): every tag read here goes through
+// `tagsWithVariants(r)`: an approved diet tab counts as that diet's "-optie" tag (an approved
+// glutenvrij tab → 'glutenvrij-optie'; vegan also 'vega-optie'), so the diet chip with "ook als
+// optie" finds it. The stored `recipe.tags` never change.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { formatShortDate } from '@/components/RecipeRow';
 import { CuisineChips, DIET_ROW_TAGS, DietChips, OPTIE_TAG, categoryLabel, isDietTag, tagChipLabel } from '@/components/FilterChips';
@@ -27,6 +31,7 @@ import type { Dictionary } from '@/domain/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
 import { excludeNonMain, pickRecipes, type PlanItem } from '@/domain/planner';
 import { flattenResults, searchRecipes } from '@/domain/search';
+import { tagsWithVariants } from '@/domain/variants';
 import { lang, t } from '@/i18n';
 import { ShuffleIcon } from '@/components/ShuffleIcon';
 
@@ -72,17 +77,24 @@ function hasChicken(r: Recipe): boolean {
  */
 const DERIVED_TAGS: Record<string, (r: Recipe) => boolean> = { kip: hasChicken };
 
-function hasTag(r: Recipe, tag: string, optie = false): boolean {
+/**
+ * Whether the recipe carries `tag`. `tags` is `tagsWithVariants(r)` (the stored tags plus the
+ * "-optie" tag of every approved diet tab, 13D), computed once per recipe by the caller.
+ */
+function hasTag(r: Recipe, tags: readonly string[], tag: string, optie = false): boolean {
   const derived = DERIVED_TAGS[tag];
   if (derived) return derived(r);
-  if (r.tags.includes(tag)) return true;
-  return optie && isDietTag(tag) && r.tags.includes(OPTIE_TAG[tag]);
+  if (tags.includes(tag)) return true;
+  return optie && isDietTag(tag) && tags.includes(OPTIE_TAG[tag]);
 }
 
-/** Every tag id present in the recipes, most frequent first, then the derived ones that match anything. */
+/**
+ * Every tag id present in the recipes (`tagsWithVariants`: an approved diet tab counts as its
+ * "-optie" tag), most frequent first, then the derived ones that match anything.
+ */
 export function tagIdsIn(recipes: readonly Recipe[]): string[] {
   const counts = new Map<string, number>();
-  for (const r of recipes) for (const tag of r.tags ?? []) if (typeof tag === 'string' && tag) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  for (const r of recipes) for (const tag of tagsWithVariants(r)) if (tag) counts.set(tag, (counts.get(tag) ?? 0) + 1);
   const out = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([id]) => id);
   for (const [id, test] of Object.entries(DERIVED_TAGS)) if (!counts.has(id) && recipes.some(test)) out.push(id);
   return out;
@@ -148,10 +160,12 @@ export function applyPickFilter(recipes: readonly Recipe[], f: PickFilter, dict:
   const optie = f.optie === true;
   const base = opts?.mainOnly ? excludeNonMain(recipes, f) : recipes;
   let out = base.filter((r) => {
-    if (f.cats.length && !f.cats.some((c) => r.category === c || r.tags.includes(c))) return false;
+    // 13D: the stored tags plus the "-optie" tag of every approved diet tab.
+    const tags = tagsWithVariants(r);
+    if (f.cats.length && !f.cats.some((c) => r.category === c || tags.includes(c))) return false;
     // Cuisines: OR among themselves; a recipe without a cuisine never matches a chosen one.
     if (f.cuisines.length && !(typeof r.cuisine === 'string' && f.cuisines.includes(r.cuisine))) return false;
-    return f.tags.every((tag) => hasTag(r, tag, optie));
+    return f.tags.every((tag) => hasTag(r, tags, tag, optie));
   });
   const q = f.query.trim();
   if (q) out = flattenResults(searchRecipes(out, q, dict, l));

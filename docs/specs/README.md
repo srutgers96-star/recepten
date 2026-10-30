@@ -99,7 +99,7 @@ integrator; DEVICE-TEST-rij 101.
 
 ### 2b. Velden, keys en namen (register; niets hiervan twee keer definiëren)
 Nieuwe velden: `Recipe.cuisine?: string | null` (6B) · `Recipe.credit?: Text | null` (13F) ·
-`Recipe.variants?: RecipeVariants | null` en `Recipe.tip?: Text | null` (13D) · `PlanItem.sideOf?: string`
+`Recipe.variants?: RecipeVariants | null` (met `RecipeVariant.checkedIngs?`, 13D blok 3) en `Recipe.tip?: Text | null` (13D) · `PlanItem.sideOf?: string`
 (6B) · `PlanItem.variant?: VariantDiet | null` (13D) · `CookLogEntry.variant?` (13D) ·
 `CookLogEntry.loggedAt?: string` (6D-1) · `Profile.avatar?: AvatarSpec | null` (6D-3) ·
 `Ingredient.lactose?/lactoseUnsure?` (6B) · `ListItem.standing?: boolean` (6C) ·

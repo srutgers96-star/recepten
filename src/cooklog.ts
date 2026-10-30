@@ -20,10 +20,14 @@
 // 6D-4a (docs/specs/xp-levels.md §1g): with `cooked.sound` on and `sound-cooked-tada` unlocked, a
 // short ta-da plays once the cook is saved, together with the confetti. The audio context is woken
 // before the first await — still inside the tap, which iOS needs — and played after the save.
+//
+// 13D blok 3 (docs/specs/varianten-tabs.md §1d): "✓ Gekookt" on an approved diet tab passes that
+// diet as `variant`; it is logged on the entry (the badges count its diet tags, src/domain/badges.ts).
 import { badgesEnabled, checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
 import { endCooking } from '@/cooking';
 import { listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
+import type { VariantDiet } from '@/domain/diets';
 import { recordFeature } from '@/features';
 import { cookedSound, playCookedSound, tapAudioContext } from '@/sounds';
 import { isActive } from '@/unlocks';
@@ -53,6 +57,8 @@ export interface RecordCookedInput {
   /** 1–5, or null for "no stars (yet)". */
   stars: number | null;
   note: string | null;
+  /** 13D: the approved diet version that was cooked; absent/null = the original. */
+  variant?: VariantDiet | null;
 }
 
 /** Logs a cook and does everything that goes with it (see the header comment). Throws when the log write fails. */
@@ -66,6 +72,7 @@ export async function recordCooked(input: RecordCookedInput): Promise<void> {
     at: input.at,
     stars: input.stars !== null && input.stars > 0 ? input.stars : null,
     note,
+    ...(input.variant ? { variant: input.variant } : {}),
   });
   markXpDirty(input.profileId);
   // Phase 5 C.4: this member's 10th/25th/50th cook gets the big burst instead of the normal one.

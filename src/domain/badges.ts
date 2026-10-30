@@ -23,7 +23,10 @@
 // - letters          = target 26; distinct first letters A–Z (diacritics folded) of the NL name
 //                      (else EN) of cooked recipes
 // - category/tag/ingredient/cuisine = number of LOG ENTRIES (cooks, not distinct) whose recipe has
-//                      that category / tag / a line with ing === id / cuisine
+//                      that category / tag / a line with ing === id / cuisine. 13D blok 3: an entry
+//                      with `variant` (a cooked diet tab) also counts for the tags of that diet
+//                      (DIET_TAGS_FOR: vegan counts for vegetarisch too); `recipe.tags` itself does
+//                      not change, and an approved but uncooked tab never counts
 // - cuisines         = distinct non-empty `cuisine` values among cooked recipes
 // - classics         = distinct cooked classics ('b:' ids that exist in `recipes`); allClassics
 //                      (target classicsTotal) and halfClassics (target ceil(classicsTotal / 2)) share it
@@ -54,6 +57,7 @@
 // recipe (category, tag, ingredient, cuisine(s), letters, classics, allCategories). An unparsable
 // `at` only counts where no date is needed. `current` is capped at `target`.
 import { pickText, type CookLogEntry, type Recipe } from './model.ts';
+import { DIET_TAGS_FOR, VARIANT_DIETS, type VariantDiet } from './diets.ts';
 import { dayIndexOfIso, isoWeekMondayOf, localDayIndex } from './days.ts';
 import { isFeatureId, type FeatureId } from './features.ts';
 import { XP_RULES, longestDayStreak, type XpState } from './xp.ts';
@@ -623,7 +627,13 @@ function derive(facts: BadgeFacts): Derived {
     if (!recipe) continue;
     if (typeof recipe.category === 'string' && recipe.category !== '') bump(categoryCounts, recipe.category);
     if (typeof recipe.cuisine === 'string' && recipe.cuisine !== '') bump(cuisineCounts, recipe.cuisine);
-    for (const tag of new Set(recipe.tags ?? [])) bump(tagCounts, tag);
+    // 13D: a cooked diet tab (entry.variant) adds the tags of that diet to this one cook.
+    const tags = new Set(recipe.tags ?? []);
+    const variant = entry.variant;
+    if (typeof variant === 'string' && (VARIANT_DIETS as readonly string[]).includes(variant)) {
+      for (const tag of DIET_TAGS_FOR[variant as VariantDiet]) tags.add(tag);
+    }
+    for (const tag of tags) bump(tagCounts, tag);
     let ings = ingsByRecipe.get(entry.recipeId);
     if (!ings) {
       const set = new Set<string>();

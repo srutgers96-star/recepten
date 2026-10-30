@@ -69,4 +69,11 @@ export const variants: Dict = {
   'vt.version.vegetarisch': { nl: 'Vegetarische versie', en: 'Vegetarian version' },
   'vt.version.vegan': { nl: 'Vegan versie', en: 'Vegan version' },
   'vt.version.lactosevrij': { nl: 'Lactosevrije versie', en: 'Lactose-free version' },
+
+  // §1e Block 3: the version chip under a slot in the week plan (WeekScreen) and its row of choices.
+  'week.variantAria': { nl: 'Versie voor dit gerecht', en: 'Version for this dish' },
+  'week.variantHint': {
+    nl: 'Alleen goedgekeurde versies; keur ze goed op het recept.',
+    en: 'Only approved versions; approve them on the recipe.',
+  },
 };

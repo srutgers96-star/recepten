@@ -80,7 +80,7 @@ import type { Dictionary } from '@/domain/dictionary';
 import { memberById, membersFrom, type Member } from '@/domain/household';
 import { hasLang, nowIso, pickText, type Lang, type Line, type Recipe } from '@/domain/model';
 import { ingredientsAsText, recipeAsText, type RecipeTextInput } from '@/domain/recipe-text';
-import { variantTabs, variantView, versionName, type VariantDiet } from '@/domain/variants';
+import { tagsWithVariants, variantTabs, variantView, versionName, type VariantDiet } from '@/domain/variants';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
@@ -111,10 +111,12 @@ interface DietChip {
  * hand-linked ingredient) — shows its stored diet tags plus what `dietTags` finds in its
  * effective lines right now; a tag that is not stored and rests on lines the dictionary cannot
  * judge is marked "waarschijnlijk". The -optie tags (vega-optie, …) are shown as stored, after
- * the diet tags.
+ * the diet tags. 13D blok 3 (docs/specs/varianten-tabs.md §1g): the tags are read through
+ * `tagsWithVariants`, so an approved diet tab shows as its "-optie" chip (glutenvrij-optie, …);
+ * `recipe.tags` itself never changes.
  */
 function dietChipsFor(recipe: Recipe, lines: readonly Line[], dict: Dictionary, linesAdjusted: boolean): DietChip[] {
-  const stored = new Set(recipe.tags);
+  const stored = new Set(tagsWithVariants(recipe));
   const out: DietChip[] = [];
   if (recipe.origin.kind === 'builtin' && !linesAdjusted) {
     for (const tag of DIET_TAGS) if (stored.has(tag)) out.push({ tag, unsure: false });
@@ -450,6 +452,12 @@ export function RecipeScreen(props: { id: string }) {
     return m;
   }, [view]);
   const lockedIndexes = useMemo(() => new Set(view?.swapped ?? []), [view]);
+  /**
+   * 13D blok 3 (§1d): the diet version that ✓ Gekookt logs and a ⏱ chip gives the cooking session:
+   * only an APPROVED diet tab (as cook mode, which cooks the original for a ?v= that is not approved,
+   * and "+ Deze week", Fable's decision (4) after blok 2); null otherwise.
+   */
+  const cookVariant: VariantDiet | null = view?.status === 'approved' ? view.diet : null;
   const storedApproval = recipe && dietChoice ? recipe.variants?.[dietChoice] : undefined;
 
   /** A tap on a tab (or a swipe): ?v= (replace) and the remembered tab of this recipe follow. */
@@ -592,7 +600,9 @@ export function RecipeScreen(props: { id: string }) {
     // The store may still be loading on a cold start: decide on the stored session, not on [].
     await loadCooking();
     const s = sessionFor(r.id);
-    await touchCooking(r, !s || s.page < page ? page : s.page, servings);
+    // 13D: on an approved diet tab the session cooks that version (the bar row reopens cook mode with
+    // &v=<diet>); elsewhere the variant is left out, so a running session keeps the one it has.
+    await touchCooking(r, !s || s.page < page ? page : s.page, servings, cookVariant ?? undefined);
   }
 
   async function onCopy() {
@@ -603,17 +613,20 @@ export function RecipeScreen(props: { id: string }) {
 
   /**
    * "+ Deze week": a slot with the household servings (repo default); already there → open the week.
-   * 13D §1d: on a diet tab the slot gets that version (`addToPlan(id, undefined, diet)`; an existing
-   * slot of this dish gets it through `setPlanVariant` before the week opens); on a personal-version
-   * tab the version itself goes in the week.
+   * 13D §1d: on an APPROVED diet tab the slot gets that version (`addToPlan(id, undefined, diet)`; an
+   * existing slot of this dish gets it through `setPlanVariant` before the week opens); on a diet tab
+   * that is not approved (proposed / stale) the original goes in the week, no `variant` on the slot,
+   * as from the Origineel tab ("Besluiten Fable na blok 2", point 4); on a personal-version tab the
+   * version itself goes in the week.
    */
   async function onAddToWeek() {
     if (weekBusy) return;
+    const planDiet: VariantDiet | null = dietChoice && view?.status === 'approved' ? dietChoice : null;
     const slot = plan?.items.find((p) => p.recipeId === targetId);
     if (slot) {
-      if (dietChoice && (slot.variant ?? null) !== dietChoice) {
+      if (planDiet && (slot.variant ?? null) !== planDiet) {
         try {
-          await setPlanVariant(slot.id, dietChoice);
+          await setPlanVariant(slot.id, planDiet);
         } catch (e) {
           console.error('setPlanVariant', e);
         }
@@ -623,7 +636,7 @@ export function RecipeScreen(props: { id: string }) {
     }
     setWeekBusy(true);
     try {
-      await addToPlan(targetId, undefined, dietChoice);
+      await addToPlan(targetId, undefined, planDiet);
     } catch (e) {
       console.error('addToPlan', e);
     } finally {
@@ -1170,7 +1183,7 @@ export function RecipeScreen(props: { id: string }) {
               <VariantSheet recipe={recipe} view={view} onClose={() => setApproveSheet(false)} onApproved={() => onApproved(view.diet)} />
             )}
 
-            {cookedSheet && <CookedSheet recipeId={cookedFor} mode={cookedSheet} onClose={() => setCookedSheet(null)} onSaved={onCookedSaved} />}
+            {cookedSheet && <CookedSheet recipeId={cookedFor} mode={cookedSheet} variant={cookVariant} onClose={() => setCookedSheet(null)} onSaved={onCookedSaved} />}
           </>
         )}
       </div>

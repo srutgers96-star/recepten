@@ -205,3 +205,63 @@ describe('sheetApproval (what approveVariant gets)', () => {
     expect(JSON.stringify(stored)).not.toContain('swappedFrom');
   });
 });
+
+// "Besluiten Fable na blok 2", point 2: next to `checked` the sheet stores the `ing` of each of those
+// lines (`checkedIngs`), so `variantView` only counts an index while its line still holds that ing.
+describe('checkedIngs (Fable after blok 2, point 2)', () => {
+  it('sheetApproval writes checkedIngs parallel to checked: the ing of every ticked "controleer zelf" line and every unticked swap', () => {
+    const vegan = approve('vegan', SCHOTEL, [4], [3, 5]);
+    expect(vegan.checked).toEqual([3, 4, 5]);
+    expect(vegan.checkedIngs).toEqual(['gehakt', 'kaas', 'ei']);
+    expect(approve('vegan', SCHOTEL, [], [3, 5]).checkedIngs).toEqual(['gehakt', 'ei']);
+    expect(approve('glutenvrij', SCHOTEL, [], []).checkedIngs).toEqual([]);
+    expect(approve('glutenvrij', SCHOTEL, [0], [])).toMatchObject({ swaps: [], checked: [0], checkedIngs: ['spaghetti'] });
+  });
+
+  it('a row whose line has no ing stores null', () => {
+    const plan = variantView('glutenvrij', SCHOTEL, undefined, swaps, dict).plan!;
+    const bare: Line = { raw: { nl: 'iets onbekends' } };
+    const a = sheetApproval(plan, [{ kind: 'check', index: 1, line: bare }], new Set(), new Set([1]));
+    expect(a.checked).toEqual([1]);
+    expect(a.checkedIngs).toEqual([null]);
+  });
+
+  it('lens case: a ticked line changed into another product that breaks the diet -> stale; the sheet does not tick it again', () => {
+    // Approved vegan: cheese swapped, mince (3) and egg (5) ticked.
+    const stored = approve('vegan', SCHOTEL, [], [3, 5]);
+    expect(variantView('vegan', SCHOTEL, stored, swaps, dict).status).toBe('approved');
+    // The mince becomes bacon cubes: not vegan either, no vegan swap -> the same index is "controleer zelf" again.
+    const changed = [...SCHOTEL.slice(0, 3), ...nl('200 g spekblokjes'), ...SCHOTEL.slice(4)];
+    const view = variantView('vegan', changed, stored, swaps, dict);
+    expect(view.status).toBe('stale');
+    const rows = sheetRows(view.plan!);
+    expect(rows.map((r) => [r.kind, r.index])).toEqual([
+      ['swap', 4],
+      ['check', 3],
+      ['check', 5],
+    ]);
+    // §1c "weer aan als die regel nog hetzelfde ing heeft": the egg comes back ticked, the bacon does not
+    const s = initialSheetState(view, rows);
+    expect([...s.ticked]).toEqual([5]);
+    expect(allChecked(rows, s.ticked)).toBe(false);
+    // ticked and approved again: now the bacon is what was checked
+    const again: RecipeVariant = { approved: true, ...sheetApproval(view.plan!, rows, s.off, new Set([...s.ticked, 3])) };
+    expect(again.checkedIngs).toEqual(['spekblokjes', 'ei']);
+    expect(variantView('vegan', changed, again, swaps, dict).status).toBe('approved');
+    // an approval from before blok 3 (no checkedIngs) keeps the old behaviour: the bare index counts
+    const { checkedIngs: _drop, ...old } = stored;
+    expect(variantView('vegan', changed, old as RecipeVariant, swaps, dict).status).toBe('approved');
+  });
+
+  it('a "laat ik zo" swap whose line became another product: stale, and its new swap opens on', () => {
+    const stored = approve('vegan', SCHOTEL, [4], [3, 5]);
+    const changed = [...SCHOTEL.slice(0, 4), ...nl('125 g mozzarella'), ...SCHOTEL.slice(5)];
+    const view = variantView('vegan', changed, stored, swaps, dict);
+    expect(view.status).toBe('stale');
+    const rows = sheetRows(view.plan!);
+    expect(rows.find((r) => r.index === 4)).toMatchObject({ kind: 'swap', swap: { fromId: 'mozzarella' } });
+    const s = initialSheetState(view, rows);
+    expect([...s.off]).toEqual([]);
+    expect([...s.ticked].sort()).toEqual([3, 5]);
+  });
+});

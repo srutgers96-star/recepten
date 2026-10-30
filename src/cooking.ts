@@ -7,6 +7,7 @@
 import { computed, signal, type ReadonlySignal } from '@preact/signals';
 import type { Recipe } from '@/domain/model';
 import { COOKING_SETTING, normalizeSessions, pruneSessions, upsertSession, type CookingSession } from '@/domain/cooking';
+import type { VariantDiet } from '@/domain/diets';
 import { getRecipe, getSetting, setSetting } from '@/db/repo';
 import { now, startTimerEngine, stopTimer, timers } from '@/timers';
 
@@ -107,11 +108,15 @@ export function reloadCooking(): Promise<void> {
  * `servings: null` means "no choice known on this visit" and keeps the number a live session
  * already has: cook mode opened cold (a notification tap, F5 after `?step=`) reads its servings
  * before the store has loaded, and must not wipe the servings the bar row brings back as `&srv=`.
+ * 13D blok 3: `variant` is the approved diet version cook mode shows (the bar row brings it back as
+ * `&v=`); null = the original. Left out (a caller that does not know the tab, such as a ⏱ chip on
+ * the recipe page) it keeps the variant a live session already has, like `servings: null`.
  */
 export async function touchCooking(
   recipe: Pick<Recipe, 'id' | 'name' | 'steps'>,
   page: number,
   servings: number | null,
+  variant?: VariantDiet | null,
 ): Promise<void> {
   // Wait for a load that may still be running, or its late write would undo this change.
   await loadCooking();
@@ -121,10 +126,12 @@ export async function touchCooking(
   const at = Date.now();
   // An expired session is over: touching its recipe again starts a new one.
   const live = pruneSessions(cookingSessions.value, timers.value, at);
-  const kept = servings ?? live.find((s) => s.recipeId === recipe.id)?.servings ?? null;
+  const own = live.find((s) => s.recipeId === recipe.id);
+  const kept = servings ?? own?.servings ?? null;
+  const keptVariant = variant === undefined ? (own?.variant ?? null) : variant;
   // Through the same normalisation as a stored row, so the mirror equals what a reload reads.
   const session = normalizeSessions([
-    { recipeId: recipe.id, page, name: recipe.name, stepCount, servings: kept, startedAt: at, lastActiveAt: at },
+    { recipeId: recipe.id, page, name: recipe.name, stepCount, servings: kept, startedAt: at, lastActiveAt: at, variant: keptVariant },
   ])[0];
   if (!session) return;
   const list = upsertSession(live, session);

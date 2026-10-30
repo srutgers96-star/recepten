@@ -208,18 +208,43 @@ function readStoredSwap(v: unknown): StoredSwap | null {
 }
 
 /**
+ * `checked` and its parallel `checkedIngs` ("Besluiten Fable na blok 2", point 2), read together so
+ * they stay aligned: `checked` keeps the integers ≥ 0, deduplicated (the first occurrence wins), and
+ * `checkedIngs` the entry at the same position for each kept index, but only over its leading run of
+ * strings/nulls (cut off at the first value of another type, and at the length of `checked`): the
+ * indexes after it count as before, exactly as `variantView` reads an unnormalised one. `checkedIngs`
+ * not an array → undefined (the key is left out: the old behaviour).
+ */
+function readChecked(rawChecked: unknown, rawIngs: unknown): { checked: number[]; checkedIngs?: Array<string | null> } {
+  const list: unknown[] = Array.isArray(rawChecked) ? rawChecked : [];
+  const ings: unknown[] | null = Array.isArray(rawIngs) ? rawIngs : null;
+  let known = ings ? ings.findIndex((x) => x !== null && typeof x !== 'string') : 0;
+  if (ings && known === -1) known = ings.length;
+  const checked: number[] = [];
+  const checkedIngs: Array<string | null> = [];
+  list.forEach((c, k) => {
+    if (!isNonNegativeInteger(c) || checked.includes(c)) return;
+    checked.push(c);
+    if (ings && k < known) checkedIngs.push(ings[k] as string | null);
+  });
+  return ings ? { checked, checkedIngs } : { checked };
+}
+
+/**
  * One approved diet version (§2e), or null when there is nothing in it: an object with a `swaps`
  * array; `approved` a boolean (default true); every swap through `readStoredSwap` (a bad one is
- * dropped); `checked` the integers ≥ 0, deduplicated; `approvedAt` a valid ISO timestamp, else left
- * out; `by` a string or null, else left out. Empty `swaps` AND empty `checked` → null (nothing was
- * approved). Unknown keys stay.
+ * dropped); `checked` the integers ≥ 0, deduplicated, with `checkedIngs` alongside (`readChecked`);
+ * `approvedAt` a valid ISO timestamp, else left out; `by` a string or null, else left out. Empty
+ * `swaps` AND empty `checked` → null (nothing was approved). Unknown keys stay.
  */
 export function readVariant(v: unknown): RecipeVariant | null {
   if (!isRecord(v) || !Array.isArray(v.swaps)) return null;
   const swaps = v.swaps.map(readStoredSwap).filter((s): s is StoredSwap => s !== null);
-  const checked = Array.isArray(v.checked) ? [...new Set(v.checked.filter(isNonNegativeInteger))] : [];
+  const { checked, checkedIngs } = readChecked(v.checked, v.checkedIngs);
   if (swaps.length === 0 && checked.length === 0) return null;
   const out = { ...(v as object), approved: typeof v.approved === 'boolean' ? v.approved : true, swaps, checked } as RecipeVariant;
+  if (checkedIngs) out.checkedIngs = checkedIngs;
+  else delete (out as Dict).checkedIngs;
   const approvedAt = readIso(v.approvedAt);
   if (approvedAt !== undefined) out.approvedAt = approvedAt;
   else delete (out as Dict).approvedAt;

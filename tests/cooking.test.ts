@@ -122,6 +122,11 @@ describe('normalizeSessions', () => {
     const row = { ...mk(), variant: 'vegan' };
     expect(normalizeSessions([row])[0]).toEqual(row);
   });
+
+  it('13D: a variant that is not a diet reads as the original (null)', () => {
+    expect(normalizeSessions([{ ...mk(), variant: 'notenvrij' }])[0]!.variant).toBeNull();
+    expect(normalizeSessions([mk()])[0]).not.toHaveProperty('variant');
+  });
 });
 
 describe('upsertSession', () => {
@@ -199,6 +204,11 @@ describe('cookPath', () => {
     expect(cookPath({ recipeId: 'b:x', page: 0, servings: 2 })).toBe('/cook/b:x?srv=2');
     expect(cookPath({ recipeId: 'b:x', page: 3, servings: 6 })).toBe('/cook/b:x?step=3&srv=6');
     expect(cookPath({ recipeId: 'b:x', page: 0, servings: null })).toBe('/cook/b:x');
+  });
+
+  it('13D: adds &v=<diet> for a diet version; without one the path is unchanged', () => {
+    expect(cookPath({ recipeId: 'b:x', page: 3, servings: 6, variant: 'glutenvrij' })).toBe('/cook/b:x?step=3&srv=6&v=glutenvrij');
+    expect(cookPath({ recipeId: 'b:x', page: 3, servings: 6, variant: null })).toBe('/cook/b:x?step=3&srv=6');
   });
 });
 

@@ -15,6 +15,9 @@
 //      and extras, undo via the snack; also in the proto step) and "winkelstand" (wake lock).
 // `?proto=1` (the Week screen's "Boodschappenlijst maken") builds the list and opens the proto step.
 // All data goes through src/db/repo.ts; the dictionary comes from the `dictionary` signal.
+// 13D blok 3 (docs/specs/varianten-tabs.md §1e): "Waarvoor is dit?" puts "(glutenvrije versie)"
+// (`vt.version.<diet>`, lower case) after the dish of a line that came from a slot's diet version
+// (`ListSource.diet`); the line text itself is already the swapped one ("400 g glutenvrije pasta").
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { isIOS } from '@/components/AppInfo';
 import { ExtraField } from '@/components/ExtraField';
@@ -410,7 +413,8 @@ export function ShoppingScreen() {
   const total = split.main.length + split.check.length;
   const done = split.main.filter((it) => it.checked).length + split.check.filter((it) => it.checked).length;
   const allDone = total > 0 && done === total;
-  const menuLines = menuItem ? sourceLines(menuItem, l) : [];
+  // 13D: each source line keeps the diet version of its slot (`ListSource.diet`) for the suffix.
+  const menuLines = menuItem ? sourceLines(menuItem, l).map((s, i) => ({ ...s, diet: menuItem.sources[i]?.diet })) : [];
   // "Leeg de lijst" shows as soon as there is anything to clear (never in shop mode).
   const canClear = items.length > 0 || (list?.extras.length ?? 0) > 0;
 
@@ -781,6 +785,7 @@ export function ShoppingScreen() {
                     {menuLines.map((s) => (
                       <li key={s.key}>
                         <strong>{s.what}</strong> — {s.dish}
+                        {s.diet && ` (${t('vt.version.' + s.diet).toLocaleLowerCase()})`}
                       </li>
                     ))}
                   </ul>

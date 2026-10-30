@@ -22,6 +22,11 @@
 // recipe (src/cooking.ts; Klaarzetten and the Gekookt page write nothing), a timer started here keeps
 // it alive, Koken without ?step= opens once on the step the session remembers, "Gekookt!" ends it,
 // and the bar on top hides this recipe's own row (`current`) but keeps its timers.
+// 13D blok 3 (docs/specs/varianten-tabs.md §1d): Koken on an approved diet tab opens with `?v=<diet>`.
+// Cook mode then shows that version's lines (`variantView`) for Klaarzetten, the green step words,
+// "Toon hoeveelheden" and "hoeveel?", says "Glutenvrije versie" above the kicker, logs Gekookt! with
+// `variant` and keeps the version in the cooking session (the bar row reopens it with `&v=`). A `?v=`
+// that is not (or no longer) approved silently cooks the original, without the extra kicker line.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
@@ -37,6 +42,7 @@ import { useLive } from '@/db/live';
 import { addPhoto, getRecipe, getSetting, listCookLog, logCooked, markRecipeCookedInPlan } from '@/db/repo';
 import { dictionary, lineText } from '@/dictionary';
 import { nowIso, pickText, type Lang } from '@/domain/model';
+import { parseVariantParam, variantTabs, variantView, type VariantDiet } from '@/domain/variants';
 import { encodePhotoFile } from '@/photo';
 import { spokenStepQuantities } from '@/domain/stepingredients';
 import { pickSpoken, type VoiceCommand } from '@/domain/voice';
@@ -49,6 +55,7 @@ import { playCookedSound } from '@/sounds';
 import { canSpeak, loadSpeechSettings, readAloud, setReadAloud, speak, speaking, stopSpeaking } from '@/speech';
 import { loadShowAmounts, setShowAmounts, showAmounts } from '@/step-amounts';
 import { MINUTE_MS, startTimer, timers } from '@/timers';
+import { swapsData } from '@/swaps';
 import { COOK_FONT_SETTING, type CookFont } from '@/unlocks';
 import { canListen, commandsEnabled, loadVoiceSettings, micState, startListening, stopListening } from '@/voice';
 import { markXpDirty, settleXp } from '@/xp';
@@ -180,6 +187,31 @@ export function CookScreen(props: { id: string }) {
   const profile = activeProfile.value;
   const recipe = useLive(async () => (await getRecipe(id)) ?? null, [id]);
   const lines = useRecipeLines(recipe);
+  const dict = dictionary.value;
+  // 13D §1d: the diet version to cook. `?v=` is read once per visit, like `?srv=`: a tap on this
+  // recipe's own timer in the bar replaces the URL with '/cook/<id>?step=N' and must not switch the
+  // version mid-cook. Only a diet whose tab is approved on this recipe counts (parseVariantParam);
+  // anything else is the original, silently.
+  const [vParam] = useState(() => route.value.query.get('v'));
+  const approvedDiets = useMemo<VariantDiet[]>(
+    () =>
+      recipe && vParam
+        ? variantTabs(lines, recipe.variants, swapsData, dict, 0)
+            .diets.filter((d) => d.status === 'approved')
+            .map((d) => d.diet)
+        : [],
+    [recipe, lines, dict, vParam],
+  );
+  const variant = parseVariantParam(vParam, approvedDiets);
+  const view = useMemo(() => {
+    if (!recipe || !variant) return null;
+    const v = variantView(variant, lines, recipe.variants?.[variant], swapsData, dict);
+    return v.status === 'approved' ? v : null;
+  }, [recipe, lines, dict, variant]);
+  /** The lines cook mode shows: the approved version's (swaps applied), else the effective lines. */
+  const shownLines = view ? view.lines : lines;
+  /** Swapped lines are derived from the original: no "Koppel ingrediënt" on them (§1b). */
+  const lockedIndexes = useMemo(() => new Set(view?.swapped ?? []), [view]);
   const fahrenheit = useFahrenheit();
   const font = useCookFont();
   // Servings: the detail page passes its choice as ?srv=; else the session memory; else (13K) the
@@ -296,15 +328,18 @@ export function CookScreen(props: { id: string }) {
   // that step; Klaarzetten (page 0) and the Gekookt page write nothing. `chosen` is null when this
   // visit knows no choice (e.g. a cold start before the store loaded): touchCooking then keeps the
   // session's own servings instead of wiping them.
+  // 13D: the session also keeps the version shown here (null = the original), for the bar's `&v=`.
   useEffect(() => {
-    if (recipe && page >= 1 && page <= steps.length) void touchCooking(recipe, page, chosen);
-  }, [page, loadedId, servings]);
+    if (recipe && page >= 1 && page <= steps.length) void touchCooking(recipe, page, chosen, variant);
+  }, [page, loadedId, servings, variant]);
   // 13I: the current step as StepView shows it, with the ingredients it names. The same words feed
-  // the "Toon hoeveelheden" button and the voice command "hoeveel?".
-  const dict = dictionary.value;
+  // the "Toon hoeveelheden" button and the voice command "hoeveel?". 13D: the lines of the version.
   const currentStep = page > 0 && page <= steps.length ? steps[page - 1] : undefined;
-  const shown = useMemo(() => (currentStep ? shownStep(currentStep, l, fahrenheit, lines, dict) : null), [currentStep, l, fahrenheit, lines, dict]);
-  const amountsOffered = !!shown && hasAmountsToShow(shown, lines, dict);
+  const shown = useMemo(
+    () => (currentStep ? shownStep(currentStep, l, fahrenheit, shownLines, dict) : null),
+    [currentStep, l, fahrenheit, shownLines, dict],
+  );
+  const amountsOffered = !!shown && hasAmountsToShow(shown, shownLines, dict);
   const amountsOn = showAmounts.value;
 
   function onServings(n: number) {
@@ -358,7 +393,7 @@ export function CookScreen(props: { id: string }) {
   /** Reads the scaled ingredient lines as the "Klaarzetten" page shows them; headers are skipped. */
   function speakIngredients() {
     const parts: string[] = [];
-    for (const ln of lines) {
+    for (const ln of shownLines) {
       if (ln.kind === 'header') continue; // the sentence break between lines is pause enough
       const text = lineText(ln, l, factor).trim();
       if (text) parts.push(text);
@@ -379,7 +414,7 @@ export function CookScreen(props: { id: string }) {
       speakIngredients();
       return;
     }
-    const pieces = spokenStepQuantities(shown.matches, lines, dict, shown.lang, factor);
+    const pieces = spokenStepQuantities(shown.matches, shownLines, dict, shown.lang, factor);
     if (pieces.length) {
       if (!showAmounts.value) void setShowAmounts(true);
       say(pieces.join(', '), shown.lang);
@@ -470,7 +505,7 @@ export function CookScreen(props: { id: string }) {
       case 'timer':
         // 13K §1a: a timer means you are cooking: start or keep alive the session (on Klaarzetten at
         // page 0, on the Gekookt page at the last step).
-        void touchCooking(recipe, page <= steps.length ? page : steps.length, chosen);
+        void touchCooking(recipe, page <= steps.length ? page : steps.length, chosen, variant);
         void startTimer({
           durationMs: cmd.minutes * MINUTE_MS,
           label: onStep ? `${name} · ${t('cook.stepShort', { n: page })}` : name,
@@ -549,12 +584,14 @@ export function CookScreen(props: { id: string }) {
         // Phase 5 (docs/phase-5-spec.md A.8): the cook-log entry is attributed to a household
         // member; a local member's id IS the profile id (src/domain/household.ts), so `profileId`
         // stays the field and no migration is needed.
+        // 13D: a cooked diet version is logged as such (the badges count its diet tags).
         await logCooked({
           recipeId: id,
           profileId: profile.id,
           at: nowIso(),
           stars: stars > 0 ? stars : null,
           note: note.trim() ? note.trim() : null,
+          ...(variant ? { variant } : {}),
         });
         markXpDirty(profile.id);
         // Phase 5 C.4: this member's 10th/25th/50th cook gets the big burst instead of the normal one.
@@ -596,7 +633,9 @@ export function CookScreen(props: { id: string }) {
   const isPrepare = page === 0;
   const isDone = page === last;
   const stepIndex = page - 1;
-  const tickable = lines.map((ln, i) => (ln.kind === 'header' ? -1 : i)).filter((i) => i >= 0);
+  const tickable = shownLines.map((ln, i) => (ln.kind === 'header' ? -1 : i)).filter((i) => i >= 0);
+  /** 13D: "Glutenvrije versie" above "Klaarzetten" / "stap 3 van 7" while cooking a diet version. */
+  const versionKicker = variant ? <div class="cook-kicker-version">{t('vt.version.' + variant)}</div> : null;
   const tickedCount = tickable.filter((i) => ticked.has(i)).length;
   const allTicked = tickable.length > 0 && tickedCount === tickable.length;
 
@@ -640,7 +679,10 @@ export function CookScreen(props: { id: string }) {
             <div key={page} class={'cook-card enter-' + dir} ref={card} data-font={font}>
               {isPrepare && (
                 <>
-                  <div class="cook-kicker">{t('cook.prepare')}</div>
+                  <div class="cook-kicker">
+                    {versionKicker}
+                    {t('cook.prepare')}
+                  </div>
                   <div class="cook-ready-row">
                     <p class="muted">
                       {t('cook.prepareHint')} {tickable.length > 0 && <strong>{t('cook.ready', { n: tickedCount, total: tickable.length })}</strong>}
@@ -654,9 +696,10 @@ export function CookScreen(props: { id: string }) {
                   <ServingsPicker compact value={servings} base={base} onChange={onServings} />
                   <IngredientList
                     recipeId={id}
-                    lines={lines}
+                    lines={shownLines}
                     servings={servings}
                     base={base}
+                    lockedIndexes={lockedIndexes}
                     big
                     tick={{
                       ticked,
@@ -676,7 +719,10 @@ export function CookScreen(props: { id: string }) {
               )}
               {!isPrepare && !isDone && steps[stepIndex] && (
                 <>
-                  <div class="cook-kicker">{t('cook.stepOf', { n: stepIndex + 1, total: steps.length })}</div>
+                  <div class="cook-kicker">
+                    {versionKicker}
+                    {t('cook.stepOf', { n: stepIndex + 1, total: steps.length })}
+                  </div>
                   <StepView
                     big
                     recipeId={id}
@@ -684,10 +730,10 @@ export function CookScreen(props: { id: string }) {
                     index={stepIndex}
                     step={steps[stepIndex]!}
                     fahrenheit={fahrenheit}
-                    lines={lines}
+                    lines={shownLines}
                     factor={factor}
                     // 13K: a timer chip keeps the session alive (same page; only lastActiveAt moves).
-                    onTimerStart={() => void touchCooking(recipe, page, chosen)}
+                    onTimerStart={() => void touchCooking(recipe, page, chosen, variant)}
                   />
                   {(speechOk || amountsOffered) && (
                     <div class="cook-speak">

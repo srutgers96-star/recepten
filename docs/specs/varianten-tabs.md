@@ -38,6 +38,14 @@ yourself and tick it off." (één tekst voor beide keys; blok 3 bouwer D, src/i1
 `recipe.variants` ongebruikt → opschoonronde. (8) Bouwer D-keuzes van blok 2 (swappedAlt alleen in applyStoredSwap, eerste
 opgeloste alternatief, OPTIE_TAG_FOR blijft) akkoord; landing-chunk 29,3 → 24,7 kB gzip: doel gehaald.
 Gebouwd: 30 okt 2026 (13D blok 2, workflow wf_9d212c6e-5fe)
+**Besluiten Fable na blok 3 (30 okt; voor blok 4, extra bouwer D):** (1) Kookstand zonder `?v=` (timermelding, timerregel in de
+balk) valt terug op de variant van de LOPENDE kooksessie van dat recept (`CookingSession.variant`), niet op het origineel;
+alleen een expliciete `v` wint. (2) `dietChipsFor` toont geen "-optie"-chip voor een dieet dat het recept al als tag heeft
+(vegetarisch recept met vegan-tab: chips "vegetarisch" + "vegan-optie", geen "vega-optie"); het filter blijft wél beide tags
+kennen. (3) "+ Deze week" op een niet-goedgekeurde tab terwijl het gerecht al in de week staat: slot ongemoeid, akkoord.
+(4) `checkedIngs` → README §2b-register (Fable). (5) Overige bouwerskeuzes akkoord (bijgerecht-slots krijgen de chip; 🎲 en
+Verras me wissen de versie van het slot; ingrediënt-badges tellen de originele regels; acceptatiecheck 5 is "1/3").
+Gebouwd: 30 okt 2026 (13D blok 3, workflow wf_d2218906-bc4)
 
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (besluiten over specs heen in
 docs/specs/README.md §2; bij tegenspraak wint README.md). Voor deze spec:
