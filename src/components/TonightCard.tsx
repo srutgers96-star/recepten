@@ -32,6 +32,7 @@ import { currentPlanItem, nextPlanItem, outsideWeekIds, pickRandomId, tonightMet
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { navigate } from '@/router';
+import { ShuffleIcon } from '@/components/ShuffleIcon';
 
 /** The dice chips survive a reload (moved here from HomeScreen; same key, so nobody loses them). */
 export const SURPRISE_FILTERS_KEY = 'recepten.surpriseFilters';
@@ -185,7 +186,7 @@ export function TonightCard(props: TonightCardProps): JSX.Element {
               bump((n) => n + 1);
             }}
           >
-            <span aria-hidden="true">🎲</span> {t('home.tonightOther')}
+            <ShuffleIcon /> {t('home.tonightOther')}
           </button>
         </div>
         <div class="tonight-foot">
@@ -218,7 +219,7 @@ export function TonightCard(props: TonightCardProps): JSX.Element {
                   void recordFeature('surprise');
                 }}
               >
-                <span aria-hidden="true">🎲</span> {t('home.reroll')}
+                <ShuffleIcon /> {t('home.reroll')}
               </button>
             </div>
           </>

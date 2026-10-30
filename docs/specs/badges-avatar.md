@@ -206,7 +206,13 @@ controlemiddel. Twee bouwers; wat hier niet staat, beslist Opus niet (README §2
 Legendarisch" met een stipje op de tegels. STATUS-kop "… (Opus): 6D-R — zeldzaamheid van avatar-onderdelen". Acceptatie
 in de dev-app op 360 en 375 px, licht en donker, NL en EN; het contactblad opnieuw gemaakt met de zeldzaamheidstabel in
 het rapport (Fable beoordeelt de verdeling). Vrijgespeeld/level-up-venster veranderen in dit blok niet (later, opschoonronde).
-Gebouwd: 30 okt 2026 (blok 6D-R, workflow: run-id vult de hoofdsessie in bij de commit)
+**Na de lens (besluit Fable, 30 okt):** keuzes van de bouwers akkoord: "gewoon" = elk level-onderdeel van haar, kleding en
+attribuut dat niet episch/legendarisch is genoemd (15 stuks); badge-onderdelen na de level-onderdelen van hun groepje;
+de uitlegregel onder het groepje van de getikte tegel; een onbekende of ontbrekende zeldzaamheid valt terug op de regel;
+"vóór level N" = t/m N. Verdeling nu 56/20/19/6 % — zeldzaam wat laag, episch wat hoog; bijsturen in ronde 3 (6D-F),
+geen datawijziging nu. Rij 96 mocht mee worden aangepast. Het contactblad houdt de "(regel: …)"-hints en de lijst van 29
+afwijkingen (handig voor Stijn). Fixer-fixes (rij 96, grijs van het contactblad) blijven.
+Gebouwd: 30 okt 2026 (blok 6D-R, workflow wf_6657df6f-d3b)
 
 ### Blok 6D-S — "Jouw stijl": één personaliseer-menu achter de avatar (plan Fable, 30 okt 2026; spec volgt bij de start)
 

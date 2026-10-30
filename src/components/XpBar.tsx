@@ -92,8 +92,8 @@ export interface XpBarProps {
 }
 
 /**
- * Line 1 (bold) "Level 6 · Oma" with "922 / 970 XP" on the right ("MAX LEVEL · … XP" on level 100),
- * the cobalt bar (role="progressbar"), line 2 (muted small) streak · "nog 48 XP tot level 7".
+ * Line 1 (bold) "Level 5 · Boterhamsmeerder" with "922 / 1044 XP" on the right ("MAX LEVEL · … XP" on level 100),
+ * the cobalt bar (role="progressbar"), line 2 (muted small) streak · "nog 122 XP tot level 6" (curve of 30 Oct, XP_RULES_VERSION 3).
  */
 export function XpBar(props: XpBarProps): JSX.Element | null {
   const { ready, state } = useXpState(props.memberId, true);

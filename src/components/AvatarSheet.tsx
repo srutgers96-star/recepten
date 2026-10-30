@@ -19,6 +19,13 @@
 // opening (Gezicht always; decision Fable 30 Oct), so a skipped tab keeps its dot. At the bottom of the
 // panel area (outside the grid) "Terug naar de beginletter" (Bewaar then stores `avatar: null`)
 // and the "Alleen Bewaar bewaart" line.
+// Rarity (block 6D-R, builder R-B): a part tab is split into groups per rarity, common → rare →
+// epic → legendary (RARITIES), each with a small caption in its rarity colour ("Zeldzaam · 5")
+// above its own grid; inside a group by unlock level, then id; empty groups are left out. The
+// "geen" tile stands before the first group; the two colour tabs have no groups. A tile that is not
+// common carries an 8 px dot top left in its rarity colour, locked or not; its title and aria-label
+// start with the rarity ("Zeldzaam · Koksbuis"), and so does the line under the grid ("Zeldzaam ·
+// Komt vrij op level 35."), which stands under the grid of the group of its part.
 // Bewaar → updateProfile({ ...p, avatar }); a failure keeps the sheet open with `common.error`.
 // Annuleer, swiping down (grab bar / head), tapping beside the sheet and Escape save nothing (13J).
 // Who may open it (level ≥ AVATAR_MAKER_LEVEL, the active profile, badges on) is up to the caller.
@@ -37,13 +44,16 @@ import {
   normalizeAvatarSpec,
   randomAvatar,
   renderAvatarSvg,
+  RARITIES,
   type AvatarLayer,
   type AvatarPart,
   type AvatarSpec,
+  type Rarity,
 } from '@/domain/avatar';
 import type { Profile } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { profiles, updateProfile } from '@/profile';
+import { ShuffleIcon } from '@/components/ShuffleIcon';
 
 /** How far (px) the sheet must be pulled down before letting go closes it (as CookedSheet). */
 const DISMISS_PX = 80;
@@ -68,6 +78,28 @@ interface Ready {
   ctx: UnlockContext;
   free: ReadonlySet<string>;
   unseen: ReadonlySet<string>;
+}
+
+/** One rarity group of a part tab: its parts in maker order (block 6D-R, R-B.3). */
+interface RarityGroup {
+  rarity: Rarity;
+  parts: AvatarPart[];
+}
+
+/** The word for a rarity: "Gewoon", "Zeldzaam", "Episch", "Legendarisch" (R-B.5). */
+function rarityName(r: Rarity): string {
+  return t('avatar.rarity.' + r);
+}
+
+/**
+ * Order inside a rarity group: by unlock level, then by id (R-B.3). A badge part has no unlock
+ * level; it comes after the level parts of its group (then by id as well).
+ */
+function byUnlockThenId(a: AvatarPart, b: AvatarPart): number {
+  const la = 'level' in a.unlock ? a.unlock.level : Number.POSITIVE_INFINITY;
+  const lb = 'level' in b.unlock ? b.unlock.level : Number.POSITIVE_INFINITY;
+  if (la !== lb) return la < lb ? -1 : 1;
+  return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 }
 
 /** A part renamed later stays drawable but leaves the maker (`retired`, §5a; none yet). */
@@ -152,6 +184,20 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
     }
     return out;
   }, [parts]);
+
+  // Per layer the rarity groups of its panel: in the order of RARITIES, empty groups left out.
+  const groupsByLayer = useMemo(() => {
+    const out = new Map<AvatarLayer, RarityGroup[]>();
+    for (const [layer, list] of byLayer) {
+      const groups: RarityGroup[] = [];
+      for (const rarity of RARITIES) {
+        const inGroup = list.filter((p) => p.rarity === rarity).sort(byUnlockThenId);
+        if (inGroup.length > 0) groups.push({ rarity, parts: inGroup });
+      }
+      out.set(layer, groups);
+    }
+    return out;
+  }, [byLayer]);
 
   useEffect(() => {
     let live = true;
@@ -373,62 +419,83 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
     stripRef.current?.querySelector<HTMLElement>(`[data-row="${next}"]`)?.focus({ preventScroll: true });
   }
 
+  /** One part tile: the part alone on the light circle, its rarity dot, lock label and unseen dot. */
+  function partTile(layer: AvatarLayer, p: AvatarPart, r: Ready, selected: string | undefined): JSX.Element {
+    const free = r.free.has(p.id);
+    const on = selected === p.id;
+    // A locked part of a secret badge never carries that badge's name (§1b.4): pin-heart
+    // "Hartje" gets no name then, only the secret lock text (makerTileName).
+    const name = makerTileName(p, lang.value, free, partBadge(p));
+    // Title and aria-label start with the rarity (block 6D-R, R-B.2): "Zeldzaam · Koksbuis".
+    const rarity = rarityName(p.rarity);
+    const title = name ? `${rarity} · ${name}` : rarity;
+    const label = free ? title : name ? `${title}. ${lockText(p)}` : `${rarity} · ${lockText(p)}`;
+    return (
+      <button
+        key={p.id}
+        type="button"
+        role="radio"
+        aria-checked={on}
+        aria-label={label}
+        title={title}
+        class={'avatar-tile' + (on ? ' on' : '') + (free ? '' : ' locked')}
+        disabled={busy}
+        onClick={() => pickPart(layer, p)}
+      >
+        <span class="avatar-tile-art" dangerouslySetInnerHTML={{ __html: tileSvgs.get(p.id) ?? '' }} />
+        {/* The rarity dot, on locked tiles too (you see what is still to come); common has none. */}
+        {p.rarity !== 'common' && <span class="avatar-tile-rarity" data-rarity={p.rarity} aria-hidden="true" />}
+        {!free && (
+          <span class="avatar-tile-lock" aria-hidden="true">
+            🔒 {lockLabel(p)}
+          </span>
+        )}
+        {free && r.unseen.has(p.id) && <span class="avatar-tile-new" aria-hidden="true" />}
+      </button>
+    );
+  }
+
   function partPanel(layer: AvatarLayer, r: Ready): JSX.Element {
-    const list = byLayer.get(layer) ?? [];
+    const groups = groupsByLayer.get(layer) ?? [];
     const selected = spec ? partOn(spec, layer, parts) : undefined;
     const noteId = notes[layer];
     const notePart = noteId ? parts.get(noteId) : undefined;
+    const noneOn = spec !== null && selected === undefined;
     return (
-      <>
-        <div class="avatar-grid" role="radiogroup" aria-labelledby={tabId(layer)}>
-          {OPTIONAL.has(layer) && (
+      <div class="avatar-groups" role="radiogroup" aria-labelledby={tabId(layer)}>
+        {/* "geen" stands before the first rarity group, in a grid of its own. */}
+        {OPTIONAL.has(layer) && (
+          <div class="avatar-grid">
             <button
               type="button"
               role="radio"
-              aria-checked={spec !== null && selected === undefined}
-              class={'avatar-tile none' + (spec !== null && selected === undefined ? ' on' : '')}
+              aria-checked={noneOn}
+              class={'avatar-tile none' + (noneOn ? ' on' : '')}
               disabled={busy}
               onClick={() => pickPart(layer, null)}
             >
               <span class="avatar-tile-none">{t('avatar.none')}</span>
             </button>
-          )}
-          {list.map((p) => {
-            const free = r.free.has(p.id);
-            const on = selected === p.id;
-            // A locked part of a secret badge never carries that badge's name (§1b.4): pin-heart
-            // "Hartje" gets no name then, only the secret lock text (makerTileName).
-            const name = makerTileName(p, lang.value, free, partBadge(p));
-            const label = free ? name : name ? `${name}. ${lockText(p)}` : lockText(p);
-            return (
-              <button
-                key={p.id}
-                type="button"
-                role="radio"
-                aria-checked={on}
-                aria-label={label}
-                title={name || undefined}
-                class={'avatar-tile' + (on ? ' on' : '') + (free ? '' : ' locked')}
-                disabled={busy}
-                onClick={() => pickPart(layer, p)}
-              >
-                <span class="avatar-tile-art" dangerouslySetInnerHTML={{ __html: tileSvgs.get(p.id) ?? '' }} />
-                {!free && (
-                  <span class="avatar-tile-lock" aria-hidden="true">
-                    🔒 {lockLabel(p)}
-                  </span>
-                )}
-                {free && r.unseen.has(p.id) && <span class="avatar-tile-new" aria-hidden="true" />}
-              </button>
-            );
-          })}
-        </div>
-        {notePart && (
-          <p class="muted small avatar-panel-note" role="status">
-            {lockText(notePart)}
-          </p>
+          </div>
         )}
-      </>
+        {groups.map((g) => {
+          const headId = `${uid}-${layer}-${g.rarity}`;
+          const noteHere = notePart !== undefined && g.parts.some((p) => p.id === notePart.id);
+          return (
+            <div key={g.rarity} class="avatar-group" role="group" aria-labelledby={headId}>
+              <p id={headId} class="avatar-group-head" data-rarity={g.rarity}>
+                {`${rarityName(g.rarity)} · ${g.parts.length}`}
+              </p>
+              <div class="avatar-grid">{g.parts.map((p) => partTile(layer, p, r, selected))}</div>
+              {noteHere && (
+                <p class="muted small avatar-panel-note" role="status">
+                  {`${rarityName(notePart.rarity)} · ${lockText(notePart)}`}
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
     );
   }
 
@@ -496,7 +563,7 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
           <div ref={bodyRef} class="sheet-body avatar-body">
             <p class="muted small avatar-color-hint">{t('avatar.colorHint')}</p>
             <button type="button" class="btn avatar-random" disabled={busy || !ready} onClick={surprise}>
-              {t('avatar.random')}
+              <ShuffleIcon /> {t('avatar.random')}
             </button>
             <div ref={stickRef} class="avatar-tabs-stick" aria-hidden="true" />
             {/* The tab strip sticks under the preview; the active tab is underlined in the profile colour. */}

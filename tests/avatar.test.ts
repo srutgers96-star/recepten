@@ -1,6 +1,7 @@
 // The avatar domain (src/domain/avatar.ts; docs/specs/badges-avatar.md §2f, §6a, block 6D-3): the
 // parts library from data/avatar-parts.json, the tolerant spec reader, completeness, unlocking,
-// the level ring, the default and random avatar, and the SVG string renderer.
+// the level ring, the default and random avatar, and the SVG string renderer; the rarity of the
+// parts (block 6D-R).
 import { describe, expect, it } from 'vitest';
 import partsJson from '../data/avatar-parts.json';
 import badgesJson from '../data/badges.json';
@@ -9,6 +10,7 @@ import {
   AVATAR_MAKER_LEVEL,
   AVATAR_TONES,
   LAYER_ORDER,
+  RARITIES,
   REQUIRED_LAYERS,
   defaultAvatar,
   isComplete,
@@ -17,12 +19,15 @@ import {
   normalizeAvatarParts,
   normalizeAvatarSpec,
   randomAvatar,
+  rarityFor,
   renderAvatarSvg,
   ringForLevel,
   type AvatarPart,
   type AvatarSpec,
+  type Rarity,
 } from '../src/domain/avatar';
 import { TIER_COLOURS, normalizeBadges } from '../src/domain/badges';
+import { AVATAR_RARITIES, validateAvatarParts } from '../tools/validate-data.ts';
 
 const BADGES = normalizeBadges(badgesJson as unknown);
 const PARTS = normalizeAvatarParts(partsJson as unknown, BADGES);
@@ -279,10 +284,18 @@ describe('the library after round 2 (block 6D-UI, UI-C §2–§4 and §7)', () =
     expect(PARTS.filter((p) => !(p.id in ROUND_1)).length).toBeGreaterThanOrEqual(60);
   });
 
-  it('every part is at most 1.5 kB and at most 14 elements', () => {
+  it('every part stays within the drawing budget of its rarity (block 6D-R point 3)', () => {
+    // common/rare ≤ 14 elements and 1.5 kB; epic ≤ 20 and 2 kB; legendary ≤ 26 and 2.5 kB.
+    const BUDGET: Readonly<Record<Rarity, { elements: number; bytes: number }>> = {
+      common: { elements: 14, bytes: 1500 },
+      rare: { elements: 14, bytes: 1500 },
+      epic: { elements: 20, bytes: 2000 },
+      legendary: { elements: 26, bytes: 2500 },
+    };
     for (const p of PARTS) {
-      expect(new TextEncoder().encode(p.svg).length, p.id).toBeLessThanOrEqual(1500);
-      expect((p.svg.match(/<[a-z]/g) ?? []).length, p.id).toBeLessThanOrEqual(14);
+      const budget = BUDGET[p.rarity];
+      expect(new TextEncoder().encode(p.svg).length, `${p.id} (${p.rarity})`).toBeLessThanOrEqual(budget.bytes);
+      expect((p.svg.match(/<[a-z]/g) ?? []).length, `${p.id} (${p.rarity})`).toBeLessThanOrEqual(budget.elements);
     }
   });
 
@@ -336,6 +349,118 @@ describe('the library after round 2 (block 6D-UI, UI-C §2–§4 and §7)', () =
         expect(level, p.id).toBeLessThanOrEqual(60);
       }
     }
+  });
+});
+
+describe('rarity (block 6D-R)', () => {
+  const levelOf = (p: AvatarPart): number | null => ('level' in p.unlock ? p.unlock.level : null);
+  const byLevel = PARTS.filter((p) => levelOf(p) !== null);
+
+  it('has the four rarities in order; the validator mirrors them', () => {
+    expect(RARITIES).toEqual(['common', 'rare', 'epic', 'legendary']);
+    expect(AVATAR_RARITIES).toEqual([...RARITIES]);
+  });
+
+  it('every part has a valid rarity, and the data file sets it explicitly on every part (point 3)', () => {
+    for (const p of PARTS) expect(RARITIES, p.id).toContain(p.rarity);
+    for (const raw of partsJson as Array<Record<string, unknown>>) {
+      expect(RARITIES as readonly unknown[], String(raw['id'])).toContain(raw['rarity']);
+    }
+  });
+
+  it('rarityFor on a level: ≤ 20 common · 21–50 rare · 51–80 epic · 81–100 legendary', () => {
+    const table: Array<[number, Rarity]> = [
+      [3, 'common'], [20, 'common'], [21, 'rare'], [50, 'rare'], [51, 'epic'], [80, 'epic'], [81, 'legendary'], [100, 'legendary'],
+    ];
+    for (const [level, rarity] of table) expect(rarityFor({ level }), `level ${level}`).toBe(rarity);
+  });
+
+  it('rarityFor on a badge: tier ≤ 2 or a visible one-off rare · tier 3–5 epic · tier ≥ 6 legendary; hidden at least epic', () => {
+    expect(rarityFor({ badge: 'b', tier: 1 })).toBe('rare');
+    expect(rarityFor({ badge: 'b', tier: 2 })).toBe('rare');
+    expect(rarityFor({ badge: 'b', tier: 3 })).toBe('epic');
+    expect(rarityFor({ badge: 'b', tier: 5 })).toBe('epic');
+    expect(rarityFor({ badge: 'b', tier: 6 })).toBe('legendary');
+    expect(rarityFor({ badge: 'b', tier: 8 })).toBe('legendary');
+    // A one-off badge (no tier), visible or without a catalogue: rare.
+    expect(rarityFor({ badge: 'b' })).toBe('rare');
+    expect(rarityFor({ badge: 'b' }, { hidden: false })).toBe('rare');
+    expect(rarityFor({ badge: 'b' }, null)).toBe('rare');
+    // A hidden (secret) badge: at least epic, never lowered.
+    expect(rarityFor({ badge: 'b' }, { hidden: true })).toBe('epic');
+    expect(rarityFor({ badge: 'b', tier: 2 }, { hidden: true })).toBe('epic');
+    expect(rarityFor({ badge: 'b', tier: 4 }, { hidden: true })).toBe('epic');
+    expect(rarityFor({ badge: 'b', tier: 6 }, { hidden: true })).toBe('legendary');
+    // With the real catalogue: nachtbraker is a secret one-off, het-hele-boek a visible one.
+    const badge = (id: string) => BADGES.find((b) => b.id === id) ?? null;
+    expect(rarityFor(part('eyes-sleepy').unlock, badge('nachtbraker'))).toBe('epic');
+    expect(rarityFor(part('pin-medal-gold').unlock, badge('het-hele-boek'))).toBe('rare');
+    expect(rarityFor(part('hat-pan').unlock, badge('huiskok'))).toBe('epic'); // tier 5
+  });
+
+  it('normalizeAvatarParts: an explicit rarity wins; a missing or unknown one falls back to the rule', () => {
+    const base = { layer: 'hat', nl: 'Test', en: 'Test', svg: '<circle cx="50" cy="20" r="5"/>' };
+    const out = normalizeAvatarParts([
+      { ...base, id: 'hat-explicit', unlock: { level: 3 }, rarity: 'legendary' },
+      { ...base, id: 'hat-missing', unlock: { level: 35 } },
+      { ...base, id: 'hat-unknown', unlock: { level: 60 }, rarity: 'mythic' },
+      { ...base, id: 'hat-number', unlock: { level: 90 }, rarity: 3 },
+      { ...base, id: 'hat-secret', unlock: { badge: 'nachtbraker' } }, // hidden one-off: epic
+      { ...base, id: 'hat-cheese', unlock: { badge: 'kaaskop' } }, // the ladder at tier 3: epic
+    ], BADGES);
+    expect(out.map((p) => [p.id, p.rarity])).toEqual([
+      ['hat-explicit', 'legendary'],
+      ['hat-missing', 'rare'],
+      ['hat-unknown', 'epic'],
+      ['hat-number', 'legendary'],
+      ['hat-secret', 'epic'],
+      ['hat-cheese', 'epic'],
+    ]);
+    // Without the catalogue a badge part is a visible one-off: rare.
+    expect(normalizeAvatarParts([{ ...base, id: 'hat-secret', unlock: { badge: 'nachtbraker' } }])[0]?.rarity).toBe('rare');
+  });
+
+  it("holds Fable's decisions of point 3 literally (appearance counts as well as difficulty)", () => {
+    const LEGENDARY = ['hat-crown', 'body-gold-jacket', 'bg-gold', 'bg-confetti', 'hair-whipped-cream', 'hair-flame', 'hat-dino'];
+    const EPIC = ['hat-cheese', 'prop-camera', 'bg-rainbow', 'bg-stars', 'hat-watermelon', 'hat-mushroom', 'hat-pumpkin',
+      'body-tuxedo', 'glasses-monocle', 'hair-spaghetti', 'hair-broccoli', 'bg-sunset'];
+    for (const id of LEGENDARY) expect(part(id).rarity, id).toBe('legendary');
+    for (const id of EPIC) expect(part(id).rarity, id).toBe('epic');
+    // Ordinary clothes and hair stay common, also when they come late.
+    expect(part('body-dress').rarity).toBe('common');
+    expect(part('hair-ponytail').rarity).toBe('common');
+  });
+
+  it('the balance: ≥ 75 % of the level commons on level ≤ 20, ≥ 75 % of the level rares on level ≤ 50', () => {
+    const commons = byLevel.filter((p) => p.rarity === 'common');
+    const rares = byLevel.filter((p) => p.rarity === 'rare');
+    expect(commons.length).toBeGreaterThan(0);
+    expect(rares.length).toBeGreaterThan(0);
+    expect(commons.filter((p) => (levelOf(p) ?? 0) <= 20).length / commons.length).toBeGreaterThanOrEqual(0.75);
+    expect(rares.filter((p) => (levelOf(p) ?? 0) <= 50).length / rares.length).toBeGreaterThanOrEqual(0.75);
+  });
+
+  it('legendary: at least 3 parts and at most 10 % of the library', () => {
+    const legendary = PARTS.filter((p) => p.rarity === 'legendary').length;
+    expect(legendary).toBeGreaterThanOrEqual(3);
+    expect(legendary).toBeLessThanOrEqual(PARTS.length * 0.1);
+  });
+
+  it('the validator demands a valid rarity, and never warns when it differs from the rule', () => {
+    const minimal = (extra: Record<string, unknown>) => [
+      { id: 'face-a', layer: 'face', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+      { id: 'eyes-a', layer: 'eyes', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+      { id: 'mouth-a', layer: 'mouth', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+      { id: 'body-a', layer: 'body', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '', ...extra },
+    ];
+    // A level-3 part made legendary by hand: no error, no warning.
+    expect(validateAvatarParts(minimal({ rarity: 'legendary' }), [])).toMatchObject({ errors: [], warnings: [] });
+    // Missing: falls back to the rule, fine.
+    expect(validateAvatarParts(minimal({}), [])).toMatchObject({ errors: [], warnings: [] });
+    expect(validateAvatarParts(minimal({ rarity: 'mythic' }), []).errors).toEqual([
+      'avatar-parts.json "body-a": "rarity" must be one of common | rare | epic | legendary, got "mythic".',
+    ]);
+    expect(validateAvatarParts(minimal({ rarity: 2 }), []).errors).toHaveLength(1);
   });
 });
 
@@ -406,7 +531,7 @@ describe('isUnlocked', () => {
     const sleepy = part('eyes-sleepy'); // nachtbraker, secret one-off
     expect(isUnlocked(sleepy, { level: 3, badgeTiers: NO_BADGES })).toBe(false);
     expect(isUnlocked(sleepy, { level: 3, badgeTiers: new Map([['nachtbraker', 1]]) })).toBe(true);
-    const handMade: AvatarPart = { id: 'pin-x', layer: 'pin', nl: 'x', en: 'x', unlock: { badge: 'b' }, svg: '' };
+    const handMade: AvatarPart = { id: 'pin-x', layer: 'pin', nl: 'x', en: 'x', unlock: { badge: 'b' }, rarity: 'rare', svg: '' };
     expect(isUnlocked(handMade, { level: 1, badgeTiers: new Map([['b', 1]]) })).toBe(true);
     expect(isUnlocked(handMade, { level: 1, badgeTiers: new Map([['b', 0]]) })).toBe(false);
   });
@@ -522,7 +647,7 @@ describe('renderAvatarSvg', () => {
   it("replaces every __u in a part's own ids with the uid (the library itself needs none since round 2)", () => {
     const withIds = new Map(BY_ID);
     withIds.set('bg-test', {
-      id: 'bg-test', layer: 'bg', nl: 'Test', en: 'Test', unlock: { level: 3 },
+      id: 'bg-test', layer: 'bg', nl: 'Test', en: 'Test', unlock: { level: 3 }, rarity: 'common',
       svg: '<defs><linearGradient id="g1-__u"/></defs><rect width="100" height="100" fill="url(#g1-__u)"/>',
     });
     const svg = renderAvatarSvg({ ...spec, parts: [...spec.parts.filter((id) => !id.startsWith('bg-')), 'bg-test'] }, withIds, { color: '#d9402b', level: 3, uid: 'av7' });

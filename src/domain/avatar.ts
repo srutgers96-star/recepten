@@ -49,6 +49,16 @@ export interface AvatarSpec {
  */
 export type AvatarUnlock = { level: number } | { badge: string; tier?: number };
 
+/**
+ * How rare a part is (block 6D-R): a design trait Fable sets by hand per part in
+ * data/avatar-parts.json, weighing both how hard the part is to unlock and how striking it is.
+ * `rarityFor` is only the fallback for a part without the field.
+ */
+export type Rarity = 'common' | 'rare' | 'epic' | 'legendary';
+
+/** The four rarities, from common to legendary (the order of the maker's groups). */
+export const RARITIES: readonly Rarity[] = ['common', 'rare', 'epic', 'legendary'];
+
 export interface AvatarPart {
   /** '<layer>-<name>', kebab-case; forever (invariant 1 in spirit). */
   id: string;
@@ -57,6 +67,8 @@ export interface AvatarPart {
   nl: string;
   en: string;
   unlock: AvatarUnlock;
+  /** The explicit `rarity` of the data file, or `rarityFor(unlock, badge)` when it has none. */
+  rarity: Rarity;
   /** SVG fragment in viewBox 0 0 100 100; may use `var(--tone)`/`var(--hair)` and `__u` as the
    *  unique suffix for ids (the renderer replaces it). Empty = draws nothing (bg-color). */
   svg: string;
@@ -98,6 +110,7 @@ const PART_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const LAYER_SET: ReadonlySet<string> = new Set(LAYER_ORDER);
 /** The only `style` values a part may carry (tools/validate-data.ts `checkAvatarSvg`). */
 const PART_STYLES: ReadonlySet<string> = new Set(['fill:var(--tone)', 'fill:var(--hair)']);
+const RARITY_SET: ReadonlySet<string> = new Set(RARITIES);
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -122,6 +135,28 @@ function fromPalette(v: unknown, palette: readonly string[]): string | null {
 
 // ---------------------------------------------------------------------------- the library
 
+function isRarity(v: unknown): v is Rarity {
+  return typeof v === 'string' && RARITY_SET.has(v);
+}
+
+/**
+ * The default rarity of a part by how hard it is to unlock (block 6D-R point 2); only used when the
+ * data file gives none. A level part: level ≤ 20 common · 21–50 rare · 51–80 epic · 81–100
+ * legendary. A badge part: a ladder tier ≤ 2 or a visible one-off badge → rare · tier 3–5 → epic ·
+ * tier ≥ 6 → legendary; a hidden (secret) badge at least epic. The tier is the one
+ * normalizeAvatarParts put on the unlock (absent = a one-off); `badge` is that part's badge, read
+ * only for `hidden` (absent = visible).
+ */
+export function rarityFor(unlock: AvatarUnlock, badge?: Pick<Badge, 'hidden'> | null): Rarity {
+  if ('level' in unlock) {
+    const level = unlock.level;
+    return level <= 20 ? 'common' : level <= 50 ? 'rare' : level <= 80 ? 'epic' : 'legendary';
+  }
+  const tier = unlock.tier;
+  const byTier: Rarity = tier === undefined || tier <= 2 ? 'rare' : tier <= 5 ? 'epic' : 'legendary';
+  return badge?.hidden === true && byTier === 'rare' ? 'epic' : byTier;
+}
+
 /**
  * Defence in depth on top of the validator: a fragment with `<script`, an `href`, an event-handler
  * attribute or a `style` other than the two palette fills is never drawn.
@@ -144,6 +179,9 @@ function isSafePartSvg(svg: string): boolean {
  * data/badges.json). A badge unlock gets `tier` from it when that badge is a ladder whose
  * `unlock.part` is this part (e.g. hat-cheese ← kaaskop at tier 3, blue). Without the catalogue a
  * badge part counts as a one-off (tier 1), so the app layer passes it.
+ *
+ * `rarity` (block 6D-R): an explicit valid `rarity` in the data wins; a missing or unknown value
+ * falls back to `rarityFor(unlock, badge)` (the part itself stays usable).
  */
 export function normalizeAvatarParts(data: unknown, badges: readonly Badge[] = []): AvatarPart[] {
   if (!Array.isArray(data)) return [];
@@ -164,7 +202,9 @@ export function normalizeAvatarParts(data: unknown, badges: readonly Badge[] = [
     const unlock = normalizeUnlock(raw['unlock'], id, badgeById);
     if (unlock === null) continue;
     seen.add(id);
-    out.push({ id, layer: layer as AvatarLayer, nl, en, unlock, svg });
+    const explicit = raw['rarity'];
+    const rarity = isRarity(explicit) ? explicit : rarityFor(unlock, 'badge' in unlock ? badgeById.get(unlock.badge) : null);
+    out.push({ id, layer: layer as AvatarLayer, nl, en, unlock, rarity, svg });
   }
   return out;
 }

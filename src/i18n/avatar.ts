@@ -17,7 +17,7 @@ export const avatar: Dict = {
     nl: 'De achtergrond is je profielkleur (Profielen → Kleur).',
     en: 'The background is your profile colour (Profiles → Colour).',
   },
-  'avatar.random': { nl: '🎲 Verras me', en: '🎲 Surprise me' },
+  'avatar.random': { nl: 'Verras me', en: 'Surprise me' },
   'avatar.none': { nl: 'geen', en: 'none' },
   'avatar.reset': { nl: 'Terug naar de beginletter', en: 'Back to the initial' },
 
@@ -47,4 +47,11 @@ export const avatar: Dict = {
     en: 'Unlocks with the badge {badge} at level {colour}.',
   },
   'avatar.lockedSecret': { nl: 'Komt vrij met een geheime badge.', en: 'Unlocks with a secret badge.' },
+
+  // How rare a part is (block 6D-R, R-B.5): the group captions in a maker tab ("Zeldzaam · 5"), the
+  // start of a tile's title/aria-label and of the line under the grid. Order: RARITIES.
+  'avatar.rarity.common': { nl: 'Gewoon', en: 'Common' },
+  'avatar.rarity.rare': { nl: 'Zeldzaam', en: 'Rare' },
+  'avatar.rarity.epic': { nl: 'Episch', en: 'Epic' },
+  'avatar.rarity.legendary': { nl: 'Legendarisch', en: 'Legendary' },
 };

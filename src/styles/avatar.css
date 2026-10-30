@@ -74,6 +74,48 @@
 
 /* ---------- The maker sheet ---------- */
 
+/* Rarity colours (block 6D-R, R-B.1), readable in light and dark: common is the muted grey (it
+   follows the theme through --muted), rare blue, epic purple, legendary gold. */
+:root {
+  --rarity-common: var(--muted);
+  --rarity-rare: #2b6fd6;
+  --rarity-epic: #7a5aa8;
+  --rarity-legendary: #c9a227;
+}
+
+/* System dark, unless the user forced light (same pattern as base.css). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --rarity-rare: #6f9fe8;
+    --rarity-epic: #ab93d8;
+    --rarity-legendary: #e4c45a;
+  }
+}
+
+/* Forced dark (keep identical to the block above). */
+:root[data-theme='dark'] {
+  --rarity-rare: #6f9fe8;
+  --rarity-epic: #ab93d8;
+  --rarity-legendary: #e4c45a;
+}
+
+/* One rarity → its colour, for the group captions and the tile dots below. */
+.avatar-sheet [data-rarity='common'] {
+  --rarity: var(--rarity-common);
+}
+
+.avatar-sheet [data-rarity='rare'] {
+  --rarity: var(--rarity-rare);
+}
+
+.avatar-sheet [data-rarity='epic'] {
+  --rarity: var(--rarity-epic);
+}
+
+.avatar-sheet [data-rarity='legendary'] {
+  --rarity: var(--rarity-legendary);
+}
+
 /* Always the full sheet height, so switching tabs never makes the sheet jump (the 13 rows of
    block 6D-3 always filled it too). Same value as the .sheet max-height in base.css. */
 .avatar-sheet {
@@ -207,9 +249,27 @@
   background: var(--cobalt);
 }
 
-/* One panel: the tiles as a wrapping grid, the lock line under it. */
+/* One panel: the tiles as a wrapping grid, the lock line under it. A part tab splits its tiles
+   into rarity groups (block 6D-R): "geen" in a grid of its own first, then per group a small caption
+   in the rarity colour above its own grid. */
 .avatar-panel {
   padding: 12px 0 0;
+}
+
+.avatar-group {
+  margin-top: 14px;
+}
+
+.avatar-group:first-child {
+  margin-top: 0;
+}
+
+.avatar-group-head {
+  margin: 0 0 6px 2px;
+  color: var(--rarity, var(--muted));
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
 }
 
 .avatar-grid {
@@ -278,6 +338,19 @@
   font-weight: 700;
   line-height: 15px;
   white-space: nowrap;
+  pointer-events: none;
+}
+
+/* The rarity dot top left (block 6D-R, R-B.2): 8 px in the rarity colour, also on a locked tile (the
+   grey filter is on the art only); common tiles have none. */
+.avatar-tile-rarity {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--rarity, var(--muted));
   pointer-events: none;
 }
 

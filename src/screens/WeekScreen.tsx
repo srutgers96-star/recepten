@@ -47,6 +47,7 @@ import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { navigate } from '@/router';
 import { copyText, shareJsonFile, shareText } from '@/share-actions';
+import { ShuffleIcon } from '@/components/ShuffleIcon';
 
 export const MIN_N = 1;
 export const MAX_N = 14;
@@ -335,7 +336,7 @@ export function WeekScreen() {
                 {t('week.pickN', { n })}
               </button>
               <button type="button" class="btn btn-secondary btn-block" disabled={busy || pool.length === 0} onClick={surpriseFill}>
-                <span aria-hidden="true">🎲</span> {t('week.surprise')}
+                <ShuffleIcon /> {t('week.surprise')}
               </button>
             </div>
             <PickChips filter={filter} onChange={setFilter} tags={tags} cuisines={cuisineIdsIn(all ?? [])} mainOnlyToggle />
@@ -405,7 +406,7 @@ export function WeekScreen() {
                         {locked ? '🔒' : '🔓'}
                       </button>
                       <button type="button" class="week-tool" aria-label={t('week.reroll')} disabled={busy || locked || cooked || pool.length === 0} onClick={() => reroll(p)}>
-                        🎲
+                        <ShuffleIcon />
                       </button>
                       <button type="button" class="week-tool week-remove" aria-label={t('week.remove')} disabled={busy} onClick={() => void run(() => removeFromPlan(p.id))}>
                         ×
@@ -453,7 +454,7 @@ export function WeekScreen() {
               </button>
               <div class="week-actions-row">
                 <button type="button" class="btn btn-secondary" disabled={busy || pool.length === 0 || mains.every((p) => p.cooked || p.locked)} onClick={surpriseUnlocked}>
-                  <span aria-hidden="true">🎲</span> {t('week.surprise')}
+                  <ShuffleIcon /> {t('week.surprise')}
                 </button>
                 <button type="button" class="btn" onClick={() => setSheet(true)}>
                   {t('week.pickMore')}

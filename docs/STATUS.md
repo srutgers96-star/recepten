@@ -72,6 +72,9 @@ in een losse kopie: check groen, 1471 tests (61 bestanden) groen.
   de pull-down); niets voor gebouwd in dit blok.
 - **Volgende:** Fable-blik op de verdeling (contactblad), dan commit; daarna 13D blok 2.
 
+- **Besluit Fable (30 okt, commit van 6D-R):** bouwerskeuzes akkoord (zie "Na de lens" in de spec); verdeling 56/20/19/6 %
+  bijsturen in ronde 3. Tegelijk door Fable: het 🎲-icoon is overal een eigen schud-icoon (`ShuffleIcon`, zes plekken),
+  DEVICE-TEST rij 92 zegt 315 XP, XpBar-commentaar op de nieuwe curve. Weekbudget na dit blok: 39 % (afspraak: tot ±55 %).
 ## 30 okt (Opus): 13D blok 1 — varianten als tabs: model, domein, repo en deelformaat (onzichtbaar)
 Gebouwd volgens docs/specs/varianten-tabs.md "Blok 1" (bouwer A domein, B deelformaat en normalisatie, C repo,
 integrator). Niet gecommit. Onzichtbaar voor Stijn (§4), dus geen DEVICE-TEST-rij: geen UI-bestand geraakt

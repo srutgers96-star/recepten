@@ -28,6 +28,7 @@ import { pickText, type Lang, type Recipe } from '@/domain/model';
 import { excludeNonMain, pickRecipes, type PlanItem } from '@/domain/planner';
 import { flattenResults, searchRecipes } from '@/domain/search';
 import { lang, t } from '@/i18n';
+import { ShuffleIcon } from '@/components/ShuffleIcon';
 
 export { tagChipLabel };
 
@@ -367,7 +368,7 @@ export function PickSheet(props: PickSheetProps) {
           <div class="pick-sub muted small">
             <span>{t('pick.sortHint')}</span>
             <button type="button" class="btn btn-small btn-secondary" disabled={remaining === 0 || pool.length === 0} onClick={surprise}>
-              <span aria-hidden="true">🎲</span> {t('pick.surprise')} · {remaining}
+              <ShuffleIcon /> {t('pick.surprise')} · {remaining}
             </button>
           </div>
         </div>

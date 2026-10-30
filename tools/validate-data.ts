@@ -1004,13 +1004,16 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs, input: Badg
 // Avatar parts: data/avatar-parts.json (docs/specs/badges-avatar.md §2f, src/domain/avatar.ts `AvatarPart`)
 // ---------------------------------------------------------------------------
 //
-// Errors: an array of { id, layer, nl, en, unlock, svg }; ids kebab-case and unique and starting with
+// Errors: an array of { id, layer, nl, en, unlock, rarity?, svg }; ids kebab-case and unique and starting with
 // `<layer>-`; layer in AVATAR_LAYERS; nl/en non-empty; unlock exactly one of { level: 3..100 } or
 // { badge: <id> } where that badge exists, is not retired and has unlock.part === this id — and, the
 // other way round, every badge whose unlock.part names a part is named back by that part's unlock;
 // svg a string without `<script`, without `href=` and without `style=` other than the two allowed
 // `fill:var(--tone)` / `fill:var(--hair)`, every `id="…"` in it ends with `__u` and every `url(#…)`
-// points at such an id in the same svg; every layer in AVATAR_REQUIRED_LAYERS has a level-3 part.
+// points at such an id in the same svg; every layer in AVATAR_REQUIRED_LAYERS has a level-3 part;
+// `rarity`, when present, one of AVATAR_RARITIES (block 6D-R: only a valid value is demanded, never a
+// warning when it differs from the level/badge rule — differing is the point; a missing rarity falls
+// back to that rule in normalizeAvatarParts).
 // Warnings: stray keys.
 
 /**
@@ -1026,7 +1029,9 @@ const AVATAR_MIN_LEVEL = 3;
 const AVATAR_MAX_LEVEL = 100;
 /** The only inline styles a part may carry (the renderer sets --tone and --hair). */
 const AVATAR_STYLES: ReadonlySet<string> = new Set(['fill:var(--tone)', 'fill:var(--hair)']);
-const AVATAR_PART_KEYS: ReadonlySet<string> = new Set(['id', 'layer', 'nl', 'en', 'unlock', 'svg']);
+const AVATAR_PART_KEYS: ReadonlySet<string> = new Set(['id', 'layer', 'nl', 'en', 'unlock', 'rarity', 'svg']);
+/** Mirrors RARITIES in src/domain/avatar.ts (block 6D-R), in the same order. */
+export const AVATAR_RARITIES: readonly string[] = ['common', 'rare', 'epic', 'legendary'];
 /** The suffix the renderer replaces with a unique id per drawn avatar. */
 const AVATAR_UID = '__u';
 
@@ -1116,6 +1121,11 @@ export function validateAvatarParts(data: unknown, badges: unknown): ValidationR
       if (!badge) errors.push(`${label}: unlock.badge ${JSON.stringify(badgeId)} is not a badge in badges.json.`);
       else if (badge['retired'] === true) errors.push(`${label}: unlock.badge ${JSON.stringify(badgeId)} is retired, so the part could never unlock.`);
       else if (unlockPart(badge) !== id) errors.push(`${label}: badge ${JSON.stringify(badgeId)} does not point back (its unlock.part is ${JSON.stringify(unlockPart(badge))}).`);
+    }
+
+    const rarity = part['rarity'];
+    if (rarity !== undefined && (typeof rarity !== 'string' || !AVATAR_RARITIES.includes(rarity))) {
+      errors.push(`${label}: "rarity" must be one of ${AVATAR_RARITIES.join(' | ')}, got ${JSON.stringify(rarity)}.`);
     }
 
     const svg = part['svg'];
