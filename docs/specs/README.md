@@ -23,7 +23,7 @@ spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
 - **Volgorde omgegooid:** na de bijgerechten komt eerst **6D (XP)**: 6D-1 → 6D-2a/2b → 6D-3 → 6D-4a → 6D-4b.
 - **Bijgewerkt 30 okt (Stijn):** ná 6D-4b een **6D-UI-ronde** (tabs per categorie voor de badgepagina en de
   avatar-maker in plaats van één lange lijst; avatar mooier, groter en gedetailleerder, het attribuut valt nu weg) →
-  13D blok 1 → **6D-R zeldzaamheid** (klein) → 13D blok 2–4 → 6C → 13J → **challenges (level 20)** → **opschoonronde** (minder uitleg en tekst in de app, bv. niet
+  13D blok 1 → **6D-R zeldzaamheid** (klein) → 13D blok 2–4 → **6D-S Jouw stijl** → 6C → 13J → **challenges (level 20)** → **opschoonronde** (minder uitleg en tekst in de app, bv. niet
   overal "geel = niveau 1"; rustiger) → Z → eindcontrole. Stijn: "waarschijnlijk later in een soort opschoon-ronde
   nadat alles er staat"; Fable: de tabs en de avatar wél meteen na 6D-4b, omdat Stijn die schermen nu test.
 - **Bijgewerkt 30 okt (Stijn): 13F vervalt.** De 22 recepten uit Stijns export worden niet ingebouwd ("skipt weer
@@ -52,7 +52,8 @@ spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
 | 11 | 6D-4a ontgrendelingen (in xp-levels.md "Blok 6D-3") | xp-levels.md | 1 | compleet |
 | 12 | 6D-4b sync + kookkalender (in xp-levels.md "Blok 6D-4") | xp-levels.md | 1 | compleet (Fable-blik vóór main) |
 | 12b | 6D-UI tabs per categorie (badges én avatar-maker) + avatar ronde 2 (mooier, groter, gedetailleerder; attribuut zichtbaar) | badges-avatar.md "Blok 6D-UI" | 1 | compleet, gebouwd 30 okt |
-| 12c | 6D-R zeldzaamheid van avatar-onderdelen (gewoon/zeldzaam/episch/legendarisch) | badges-avatar.md "Blok 6D-R" | 1 (klein) | compleet (Stijn 30 okt; direct ná 13D blok 1) |
+| 12c | 6D-R zeldzaamheid van avatar-onderdelen (gewoon/zeldzaam/episch/legendarisch; moeilijkheid én uitstraling) | badges-avatar.md "Blok 6D-R" | 1 (klein) | compleet (Stijn 30 okt; direct ná 13D blok 1) |
+| 12d | 6D-S "Jouw stijl": één personaliseer-menu achter de avatar (avatar · geluiden · confetti · letters · thema; Vrijgespeeld gaat erin op; Meer rustiger) | badges-avatar.md "Blok 6D-S" (plan; spec bij de start) | 1–2 | plan (Fable 30 okt; ná 13D, vóór 6C) |
 | 13 | 13J iPhone-sheets afmaken | geen spec nodig (§1a) | 1 | ontbreekt bewust |
 | 13b | Challenges (level 20) | IDEAS 3 → eigen spec (Fable ontwerpt de eerste set) | 1 | nog te schrijven |
 | 13c | Opschoonronde: minder uitleg en tekst, rustiger (Stijn 30 okt) | STATUS.md "Opschoonronde" (Fable maakt de lijst tijdens het testen) | 1 | nog te schrijven |

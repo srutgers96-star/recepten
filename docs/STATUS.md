@@ -216,6 +216,12 @@ extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids
   xp-levels.md onder "Na de lens van 6D-4a".
 
 ## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+**Stijn, 30 okt (avond, 2): zeldzaamheid = moeilijkheid én uitstraling** ("je mag meer uitpakken op mooiere of gekkere dingen");
+de levels zijn maar een indicatie. Spec 6D-R aangepast (handmatig veld, regel alleen terugval, tekenbudget per zeldzaamheid).
+En: de belletjes en lettertypes verdienen een betere plek, "misschien achter de avatar als algemeen customize-menu" →
+plan **6D-S "Jouw stijl"** (badges-avatar.md): één menu met tabs Avatar · Geluiden · Confetti · Letters · Thema, zeldzaamheid
+ook op ontgrendelingen, Vrijgespeeld gaat erin op, Meer wordt rustiger; ná 13D, vóór 6C.
+
 **Stijn, 30 okt (avond): zeldzaamheid voor avatar-onderdelen** (common/rare/epic/legendary, op moeilijkheid van vrijspelen;
 vóór level 20 ±alle commons, vóór 50 ±alle rares; uitschieters mogen). Fable: klein blok 6D-R direct ná 13D blok 1 (spec
 bovenaan badges-avatar.md), zodat Stijn de verdeling kan beoordelen terwijl 13D doorloopt.

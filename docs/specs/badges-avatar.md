@@ -159,7 +159,11 @@ Status: compleet (Fable, 30 okt 2026). Klein blok, direct ná 13D blok 1 (README
 opdelen in common, rare, epic en legendary. Nu weet je niet hoe zeldzaam ze zijn; daarop kan het veld ook nog opgedeeld
 worden, en dan kan ik makkelijker zien of ik het met de rarities eens ben. Verdelen op hoe moeilijk het is vrij te spelen:
 vóór level 20 ongeveer alle commons, vóór level 50 ongeveer álle rares, etcetera, met uitschieters als je toevallig iets
-zeldzaams gedaan hebt op een laag level." Twee bouwers; wat hier niet staat, beslist Opus niet (README §2).
+zeldzaams gedaan hebt op een laag level." Aanvulling Stijn (30 okt, avond): "die levels zijn maar een kleine indicatie;
+ze weerspiegelen hoe moeilijk ze te halen zijn, maar ook hoe mooi ze zijn — je mag meer uitpakken op mooiere of gekkere
+dingen." **Zeldzaamheid is dus een ontwerpkenmerk dat Fable per onderdeel met de hand zet** (moeilijkheid én uitstraling);
+de levelregel hieronder is alleen de terugvaloptie als het veld ontbreekt, en de balans-tabel op het contactblad is het
+controlemiddel. Twee bouwers; wat hier niet staat, beslist Opus niet (README §2).
 
 **R-A — domein, data, validator, contactblad, tests.** Bezit: `src/domain/avatar.ts` (alleen toevoegen), `data/avatar-parts.json`
 (alleen het veld `rarity` erbij), `tools/validate-data.ts` (`validateAvatarParts`), `tools/avatar-sheet.ts`, `tests/avatar.test.ts`.
@@ -167,18 +171,22 @@ zeldzaams gedaan hebt op een laag level." Twee bouwers; wat hier niet staat, bes
 2. Standaardregel `rarityFor(unlock, badge?)` (geëxporteerd, puur): level ≤ 20 → common · 21–50 → rare · 51–80 → epic ·
    81–100 → legendary; badge-ontgrendeling: ladder-tier ≤ 2 of eenmalig zichtbaar → rare · tier 3–5 → epic · tier ≥ 6 →
    legendary; een verborgen (geheime) badge minstens epic. `normalizeAvatarParts`: een expliciet veld `rarity` in de data
-   wint; ontbreekt het, dan de regel. De validator eist een geldige waarde en geeft een WAARSCHUWING (geen fout) als het
-   expliciete veld afwijkt van de regel, met beide waarden in de tekst: zo ziet Stijn de uitschieters.
-3. Data: elk van de 126 onderdelen krijgt `rarity` expliciet (bouwer vult hem met de regel, daarna deze uitschieters door
-   Fable: legendary = hat-crown, body-gold-jacket, bg-gold, bg-confetti, hair-whipped-cream; epic = hat-cheese
-   (Kaaskop-blauw), prop-camera, hair-flame, bg-rainbow). Verdeling als richtlijn, geen hard getal: ±50 % common,
-   ±30 % rare, ±15 % epic, ±5 % legendary.
+   wint; ontbreekt het, dan de regel. De validator eist alleen een geldige waarde (géén waarschuwing bij afwijking van de
+   regel: afwijken is de bedoeling, de balans-tabel van punt 4 laat zien of het klopt).
+3. Data: elk van de 126 onderdelen krijgt `rarity` expliciet. De bouwer zet eerst de regel, en past dan deze besluiten
+   van Fable toe (uitstraling weegt mee): **legendary** = hat-crown, body-gold-jacket, bg-gold, bg-confetti,
+   hair-whipped-cream, hair-flame, hat-dino; **epic** = hat-cheese (Kaaskop-blauw), prop-camera, bg-rainbow, bg-stars,
+   hat-watermelon, hat-mushroom, hat-pumpkin, body-tuxedo, glasses-monocle, hair-spaghetti, hair-broccoli, bg-sunset;
+   **common** blijft alles wat gewoon kleding, haar of een simpel attribuut is, ook als het pas op level 25 komt
+   (bv. body-dress, hair-ponytail). Verdeling als richtlijn, geen hard getal: ±50 % common, ±30 % rare, ±15 % epic,
+   ±5 % legendary. Tekenbudget volgt de zeldzaamheid: common/rare ≤ 14 elementen en 1,5 kB; epic ≤ 20 en 2 kB;
+   legendary ≤ 26 en 2,5 kB (de tests van UI-C punt 7 gaan per zeldzaamheid; bestaande onderdelen hoeven niet groter).
 4. Contactblad (`tools/avatar-sheet.ts`): per onderdeel de zeldzaamheid als gekleurd hoekje en tekst; bovenaan een tabel
    per zeldzaamheid (aantal, en "vóór level 20 heb je n van m commons", "vóór level 50 n van m rares", "vóór level 80 n
    van m epics" — alleen level-ontgrendelingen tellen; badge-onderdelen apart genoemd), zodat Stijn de balans kan zien.
 5. Tests (`tests/avatar.test.ts`): elke part heeft een geldige rarity; `rarityFor` op de grensgevallen (20/21, 50/51,
-   80/81, tier 2/3/6, hidden); ≥ 85 % van de level-commons op level ≤ 20 en ≥ 85 % van de level-rares op ≤ 50 (de
-   uitschieters mogen); legendary ≥ 3 en ≤ 10 % van het totaal.
+   80/81, tier 2/3/6, hidden); ≥ 75 % van de level-commons op level ≤ 20 en ≥ 75 % van de level-rares op ≤ 50 (de
+   uitschieters zijn de bedoeling); legendary ≥ 3 en ≤ 10 % van het totaal; tekenbudget per zeldzaamheid.
 
 **R-B — maker en teksten.** Bezit: `src/components/AvatarSheet.tsx`, `src/styles/avatar.css` (alleen het maker-deel),
 `src/i18n/avatar.ts` (alleen toevoegen).
@@ -198,6 +206,28 @@ zeldzaams gedaan hebt op een laag level." Twee bouwers; wat hier niet staat, bes
 Legendarisch" met een stipje op de tegels. STATUS-kop "… (Opus): 6D-R — zeldzaamheid van avatar-onderdelen". Acceptatie
 in de dev-app op 360 en 375 px, licht en donker, NL en EN; het contactblad opnieuw gemaakt met de zeldzaamheidstabel in
 het rapport (Fable beoordeelt de verdeling). Vrijgespeeld/level-up-venster veranderen in dit blok niet (later, opschoonronde).
+
+### Blok 6D-S — "Jouw stijl": één personaliseer-menu achter de avatar (plan Fable, 30 okt 2026; spec volgt bij de start)
+
+Stijn (30 okt, avond): "kan eventueel ook met de belletjes en lettertypes van de app; misschien verdienen die een
+overzichtelijkere plaats, of gewoon achter de avatar, dat het een soort algemeen customize-menu wordt. Fable mag hier
+goed over nadenken." Fable's ontwerp, als blok ná 13D (blok 2–4) en vóór 6C:
+1. **Eén ingang:** tik op je avatar (Meer, Profielen, Home) → scherm **Jouw stijl** (`#/more/style`) met tabs:
+   **Avatar** (de maker van 6D-3/6D-UI, ongewijzigd, nu als eerste tab) · **Geluiden** (timergeluid, Gekookt!-geluid, met
+   "Probeer") · **Confetti** (kies een stijl of "verras me" = de huidige willekeur) · **Letters** (kookstand-lettertype) ·
+   **Thema** (systeem/licht/donker; later de gouden modus). Elke keuze is een tegel in hetzelfde raster als de avatar-maker,
+   met slotje + "Lv n"/badge voor wat nog vast zit en het zeldzaamheidsstipje van 6D-R.
+2. **Zeldzaamheid ook op ontgrendelingen:** `Unlock.rarity` in data/unlocks.json (zelfde vier niveaus, met de hand), getoond
+   op de tegels en in het level-up-venster ("🎉 Legendarisch: Gouden buis").
+3. **Meer wordt rustiger:** de rijen Timergeluid, Lettertype kookstand, Geluid bij Gekookt! en Thema verhuizen naar Jouw stijl;
+   in Meer blijft één rij "🎨 Jouw stijl" (plus Badges). De pagina **Vrijgespeeld** gaat erin op: de aan/uit-schakelaars
+   per ontgrendeling komen als "uit"-optie op de tegel (een ontgrendelde confetti die je niet wilt, zet je uit in Confetti).
+   `#/more/unlocks` blijft werken als doorverwijzing naar Jouw stijl (links in oude toasts).
+4. **Later koppelen:** IDEAS 5 (pull-down op Home → groot profiel) wordt de tweede ingang naar Jouw stijl; de gouden modus
+   (6D-4a-besluit) komt als legendarische Thema-tegel.
+5. **Niet in dit blok:** nieuwe geluiden of lettertypes (data-rondes), challenges.
+Geen nieuwe tabel, geen nieuwe setting behalve `unlocks.disabled` die blijft; i18n `style.*` NL én EN. Spec met
+bestandsverdeling schrijft Fable bij de start (ná 13D).
 
 ### Blok 6D-2c — mini-ronde (Fable, 29 okt 2026): "?"-kaartjes, Hele cirkel + boodschappenspoor, stille registratie bij start
 
