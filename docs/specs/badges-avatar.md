@@ -279,6 +279,14 @@ Bezit: `src/screens/BadgesScreen.tsx`, `src/styles/badges.css`, `src/i18n/badges
    "geel"/"blauw" in de verwachte tekst staat: aanpassen.
 **Integrator/gate:** DEVICE-TEST rij 94/95 (tegels, tik voor details) en de kleurnaam-rijen aanpassen (NL én EN), STATUS-kop
 "… 6D-B — badgepagina als tegels, kleur in plaats van kleurnaam". Acceptatie op 360/375 px, licht en donker, NL en EN.
+**Na de lens (besluit Fable, 30 okt):** (1) "✓ Platina" wordt "✓ Hoogste niveau" / "✓ Top tier" (geen kleurnaam, ook niet op
+niveau 8). (2) EN gebruikt overal "tier" voor badgeniveaus ("Tier {k}", "No tier yet"); "level" blijft voor het spelerslevel.
+(3) Het stipje staat overal direct vóór het woord niveau/tier: "Geeft: Steelpan op ● niveau 5", toast "· ● niveau 2", maker
+"op ● niveau 3" (keys `badges.unlocksAt` + `badges.tierWord`). (4) Het randje om het stipje op de kobaltblauwe toast blijft.
+(5) Rij 104 noemt de zeldzaamheidskleuren (grijs/blauw/paars/goud) — dat zijn geen niveaukleuren en mag. (6) Groot icoon in de
+sheet = cirkel 64 px met emoji 32 px, akkoord. (7) Fixer: de sheet sluit bij een groepswissel, akkoord. `badges.secretHint`
+ongebruikt → opschoonronde.
+Gebouwd: 30 okt 2026 (blok 6D-B, workflow wf_f57c73ee-af1; nabewerking (1)–(3) door Fable)
 
 ### Blok 6D-F — avatar ronde 3: lijsten (frames) en vrije achtergronden (plan Fable, 30 okt 2026; spec bij de start)
 

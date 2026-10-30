@@ -12,6 +12,7 @@
 // badges setting is known (badges off = no trace of XP). 6D-3 unlocks (= 6D-4a, §1f): the route
 // '/more/unlocks' (Vrijgespeeld); checkRulesVersion also refreshes the phone-wide unlocks at boot.
 // 6D-4 (= 6D-4b, §1j): the route '/more/calendar' (Kookkalender).
+import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, type NewBadge } from './badges';
 import { loadCelebrateSettings } from './celebrate';
@@ -26,7 +27,7 @@ import { loadCooking } from './cooking';
 import { ensureBuiltins } from './db/repo';
 import { loadDictionary } from './dictionary';
 import { isLadder } from './domain/badges';
-import { lang, t, type Lang } from './i18n';
+import { interpolate, lang, t, type Lang } from './i18n';
 import { startInboxBadge } from './inbox-badge';
 import { loadProfiles, needsOnboarding } from './profile';
 import { requestPersistentStorage } from './pwa';
@@ -67,14 +68,38 @@ startTestTimerTicker();
 const BADGE_TOAST_MS = 6000;
 
 /**
- * The toast's text (docs/specs/badges-avatar.md §1a.10, §3b): a secret badge → `badges.toastSecret`;
- * a ladder tier → `badges.toastTier` with the tier's colour; otherwise `badges.toast`, or its
- * "Samen" variant `badges.toastTogether` (as before 6D-2) when the household earned it.
+ * Splits a tier template right before the word in front of `{k}` ("niveau {k}" / "tier {k}"), so the
+ * tier dot can stand before that word (block 6D-B §6). No `{k}` → the whole template comes first.
  */
-function badgeToastText(nb: NewBadge, l: Lang): string {
+function splitAtTierWord(template: string): [string, string] {
+  const at = template.indexOf('{k}');
+  if (at < 0) return [template, ''];
+  const word = template.lastIndexOf(' ', at - 2) + 1;
+  return [template.slice(0, word), template.slice(word)];
+}
+
+/**
+ * The toast's text (docs/specs/badges-avatar.md §1a.10, §3b): a secret badge → `badges.toastSecret`;
+ * a ladder tier → `badges.toastTier`, "🏆 Huiskok · ● niveau 2" (block 6D-B §6: no colour name in the
+ * text; a `.tier-dot` in the tier's colour right before the word "niveau"/"tier", the colour name
+ * only as its aria text); otherwise `badges.toast`, or its "Samen" variant `badges.toastTogether`
+ * (as before 6D-2) when the household earned it.
+ */
+function badgeToastText(nb: NewBadge, l: Lang): ComponentChildren {
   const name = nb.badge[l].name;
   if (nb.badge.hidden) return t('badges.toastSecret', { name });
-  if (nb.tier > 1 || isLadder(nb.badge)) return t('badges.toastTier', { name, k: nb.tier, colour: t('badges.tier.' + nb.tier) });
+  if (nb.tier > 1 || isLadder(nb.badge)) {
+    const vars = { name, k: nb.tier };
+    const [before, after] = splitAtTierWord(t('badges.toastTier'));
+    return (
+      <>
+        {interpolate(before, vars)}
+        <i class={`tier-dot lvl-${nb.tier}`} role="img" aria-label={t('badges.tier.' + nb.tier)} />
+        {' '}
+        {interpolate(after, vars)}
+      </>
+    );
+  }
   return t(nb.memberId === 'all' ? 'badges.toastTogether' : 'badges.toast', { name });
 }
 

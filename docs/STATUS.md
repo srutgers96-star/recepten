@@ -4,6 +4,58 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 30 okt (Opus): 6D-B — badgepagina als tegels, kleur in plaats van kleurnaam
+Gebouwd volgens docs/specs/badges-avatar.md "Blok 6D-B" (bouwer B-A badgepagina + sheet + badges.css, B-B punt 6 buiten de
+pagina: toast, avatar-maker, gedeeld stipje; integrator). Niet gecommit. Geen Dexie-versie, geen setting, geen
+localStorage-sleutel, geen dependency, geen wijziging aan `badgePageModel`/`isShown` of tests/badges-page.test.ts. Gate
+groen: check, 1474 tests (61 bestanden), build, build:next, validate:data.
+- **Tegels (B-A, punt 1):** de kaarten zijn weg; per groep een omlopend raster (`repeat(auto-fill, minmax(64px, 1fr))`,
+  tegel 64 px, 8 px tussenruimte; 4 kolommen op 360 en 375 px). Een tegel = alleen het icoon (28 px) in een cirkel van
+  56 px: ladder = ring in de kleur van het bereikte niveau (niveau 0 grijze stippelring), eenmalig verdiend = gouden rand
+  (`--lvl-7`), niet verdiend = gedempt (opacity .55, grijze rand), "?"-tegel = stippelrand, icoon vol, geen knop,
+  aria-label "???". Geen tekst op de tegel; de aria-label is "Huiskok, niveau 2 van 8" / "Eerste hap, verdiend" /
+  "…, nog niet verdiend".
+- **Sheet (punt 2):** tik op een tegel opent een `SheetPortal` met **Sluit** bovenaan: icoon 64 px met ring, naam,
+  omschrijving met {n}, bij een ladder de acht stipjes + "● Niveau {k}" (of "Nog geen niveau") + "{current}/{target}" +
+  balk + "Volgende: {n} ●" (op platina "✓ Platina"), bij eenmalig "✓ Verdiend" / "{current}/{target} · nog niet verdiend",
+  dan seizoen, "hele huishouden" en "Geeft: {part} ● op niveau {k}". Sluiten met Sluit, omlaag vegen, tik ernaast,
+  Escape; de focus gaat naar Sluit en terug naar de tegel. Geen zijwaarts vegen (`useHorizontalSwipe` bestaat nog niet),
+  geen hash-state. Geheim (punt 3) ongewijzigd: telregel boven het raster, gevonden eerst, dan de "?"-tegels.
+- **CSS (punt 4):** alle oude kaartstijlen uit badges.css (niets gebruikt ze nog); nieuw `.badge-tiles`/`.badge-tile`/
+  `.badge-coin` en `.badge-sheet`. De ringkleuren gelden ook onder `.badge-sheet` (portal buiten `.badges`).
+- **Kleur in plaats van kleurnaam (punt 6, B-B + B-A):** gedeeld stipje `.tier-dot` (10 px, `lvl-1…8`) in base.css,
+  markup `<i class="tier-dot lvl-{k}" role="img" aria-label="{badges.tier.k}">`; de kleurnamen staan alleen nog als
+  aria-tekst. Toast "🏆 Huiskok · ● niveau 2" / "🏆 Home cook · ● tier 2" (`badgeToastText` geeft nu markup terug);
+  avatar-maker "Episch · Komt vrij met de badge Huiskok op ● niveau 5." / "Epic · Unlocks with the badge Home cook at ● tier 5.";
+  ook de aria-label van een maker-tegel noemt geen kleur meer. Eigen keuze B-B: op de kobaltblauwe toast krijgt het stipje
+  een dunne rand in `--on-cobalt` (anders valt blauw weg).
+- **i18n:** nieuw alleen `badges.tileLabel` (NL "{name}, niveau {k} van {max}" · EN "{name}, tier {k} of {max}"). Letterlijk
+  uit punt 6: `badges.toastTier`, `badges.unlocksTier`, `avatar.lockedBadgeTier`. Zonder kleurdeel (afgeleid uit punt 6,
+  niet letterlijk gegeven): `badges.tierLabel` NL "Niveau {k}" · EN "Level {k}" en `badges.tierNext` NL "Volgende: {n}" ·
+  EN "Next: {n}". `badges.secretHint` wordt niet meer getoond (de "?"-tegel heeft geen tekst) maar bestaat nog.
+- **Acceptatie in de dev-app** (375 en 360 px, licht en donker, NL en EN): geen horizontaal scrollen; tegels en
+  aria-labels zoals hierboven; sheet van een ladder op niveau 2 (Herfstpot: groene ring, "● Niveau 2", 3/5, "Volgende: 5 ●"
+  blauw, seizoensregel), van Huiskok op niveau 0 ("Nog geen niveau", "Geeft: Steelpan ● op niveau 5", brons stipje) en
+  van eenmalige badges; "?"-tegel opent niets; Escape/achtergrond/Sluit sluiten, focus terug op de tegel. Toast via het
+  signaal gezet (NL en EN, stipje met rand zichtbaar); maker-uitlegregel in NL en EN met het bronzen stipje. Taal na
+  afloop terug op NL, viewport teruggezet, server gestopt.
+- **DEVICE-TEST:** rij 94 en 95 (NL en EN) op tegels en de sheet gezet (welke tegel: het icoon erbij, want de naam staat
+  er niet meer op). De kleurnaam-teksten stonden in 94, 96 en 103, niet in 95 en 104 zoals de spec zegt: in 94, 96 en 103
+  is elke verwachte tekst met "geel"/"blauw" vervangen door de tekst met een stipje ("● niveau 1", "op ● niveau 3",
+  "Volgende: 10 ●"). In 104 staan alleen de kleuren van de zeldzaamheidskopjes (grijs/blauw/paars/goud): die kloppen nog
+  en bleven; daar alleen "kaarten" → "tegels". Bij het herschrijven ook gecorrigeerd: de badgemelding staat onderaan,
+  boven de menubalk (de rijen zeiden "bovenaan"), in 94, 95 en 103.
+- **Open voor Fable:** (1) EN van de sheet zegt "● Level 2" / "No level yet", de rest van 6D-B zegt "tier" (toast,
+  tileLabel, "at tier 5"); laten zo of "Tier {k}"? (2) "✓ Platina" noemt nog een kleur (punt 2 houdt hem, punt 6 zegt
+  nergens een kleurnaam). (3) Plek van het stipje: sheet "Geeft: Steelpan ● op niveau 5" (B-A, naar het voorbeeld
+  "Geeft: Steelpan ●"), maker "op ● niveau 3" (B-B, naar "vóór het woord niveau"): dezelfde zinsbouw met het stipje op
+  twee plekken. (4) "Icoon groot (64 px)" gelezen als een cirkel van 64 px met een emoji van 32 px. (5) De split-helper
+  staat twee keer (app.tsx en AvatarSheet.tsx; geen gedeelde module in de bestandsverdeling). (6) Rand om het stipje op de
+  toast (eigen keuze B-B).
+
+- **Besluit Fable (30 okt, commit van 6D-B):** "✓ Hoogste niveau"/"✓ Top tier" i.p.v. Platina; EN overal "tier" voor badgeniveaus;
+  stipje overal direct vóór niveau/tier ("Geeft: Steelpan op ● niveau 5"); toast-randje blijft; rij 104 mag kleurnamen van
+  zeldzaamheid noemen. Weekbudget na dit blok: 41 % (afspraak tot ±55 %): 13D blok 2 en waarschijnlijk blok 3 passen nog.
 ## 30 okt (Opus): 6D-R — zeldzaamheid van avatar-onderdelen (gewoon · zeldzaam · episch · legendarisch)
 Gebouwd volgens docs/specs/badges-avatar.md "Blok 6D-R" (bouwer R-A domein/data/validator/contactblad/tests, R-B maker en
 teksten, integrator). Niet gecommit. Geen Dexie-versie, geen setting, geen localStorage-sleutel, geen dependency; vier

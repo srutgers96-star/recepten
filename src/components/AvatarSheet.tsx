@@ -30,7 +30,7 @@
 // Annuleer, swiping down (grab bar / head), tapping beside the sheet and Escape save nothing (13J).
 // Who may open it (level ≥ AVATAR_MAKER_LEVEL, the active profile, badges on) is up to the caller.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
-import type { JSX } from 'preact';
+import type { ComponentChildren, JSX } from 'preact';
 import { SheetPortal } from '@/components/SheetPortal';
 import { avatarParts, avatarUid, markPartsSeen, partBadge, unlockContext, unseenParts, type UnlockContext } from '@/avatar';
 import {
@@ -51,7 +51,7 @@ import {
   type Rarity,
 } from '@/domain/avatar';
 import type { Profile } from '@/domain/model';
-import { lang, t } from '@/i18n';
+import { interpolate, lang, t } from '@/i18n';
 import { profiles, updateProfile } from '@/profile';
 import { ShuffleIcon } from '@/components/ShuffleIcon';
 
@@ -133,8 +133,33 @@ function lockText(part: AvatarPart): string {
   const badge = partBadge(part);
   if (!badge || badge.hidden === true) return t('avatar.lockedSecret');
   const name = badge[lang.value].name;
-  if (u.tier !== undefined) return t('avatar.lockedBadgeTier', { badge: name, colour: t('badges.tier.' + u.tier) });
+  if (u.tier !== undefined) return t('avatar.lockedBadgeTier', { badge: name, k: u.tier });
   return t('avatar.lockedBadge', { badge: name });
+}
+
+/**
+ * The line under the grid for a locked part: lockText, but a ladder tier gets the 10 px `.tier-dot`
+ * in its colour right before the word "niveau"/"tier" (block 6D-B §6: "Komt vrij met de badge Kaaskop
+ * op ● niveau 3."); the colour name is only the dot's aria text.
+ */
+function lockNote(part: AvatarPart): ComponentChildren {
+  const u = part.unlock;
+  if ('level' in u || u.tier === undefined) return lockText(part);
+  const badge = partBadge(part);
+  if (!badge || badge.hidden === true) return lockText(part);
+  const vars = { badge: badge[lang.value].name, k: u.tier };
+  const template = t('avatar.lockedBadgeTier');
+  // Split right before the word in front of {k} ("niveau {k}" / "tier {k}").
+  const at = template.indexOf('{k}');
+  const word = at < 0 ? template.length : template.lastIndexOf(' ', at - 2) + 1;
+  return (
+    <>
+      {interpolate(template.slice(0, word), vars)}
+      <i class={`tier-dot lvl-${u.tier}`} role="img" aria-label={t('badges.tier.' + u.tier)} />
+      {' '}
+      {interpolate(template.slice(word), vars)}
+    </>
+  );
 }
 
 /** The small label on a locked tile: "Lv n", the badge icon, or ❓ for a secret badge. */
@@ -489,7 +514,8 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
               <div class="avatar-grid">{g.parts.map((p) => partTile(layer, p, r, selected))}</div>
               {noteHere && (
                 <p class="muted small avatar-panel-note" role="status">
-                  {`${rarityName(notePart.rarity)} · ${lockText(notePart)}`}
+                  {`${rarityName(notePart.rarity)} · `}
+                  {lockNote(notePart)}
                 </p>
               )}
             </div>

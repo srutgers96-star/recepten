@@ -1,26 +1,36 @@
 // '#/more/badges' — Badges (docs/phase-5-spec.md Block C.2; the page of docs/specs/badges-avatar.md
-// §1a, block 6D-2b; tabs since block 6D-UI): a tab per household member (the local profiles +
-// hand-added members from src/domain/household.ts) plus "Samen" ('all'); under the count line a
-// horizontally scrolling strip with the eight badge groups (BADGE_GROUPS) as tabs, and one group at a
-// time in the panel below it: its grid of badge cards in catalogue order.
-// - one-off badge: icon, name, "✓ Verdiend" or "3/5" with a bar; an earned one gets a gold edge;
-// - ladder badge: the icon in a ring of the current colour tier (tier 0 = grey dotted ring), the
-//   tier line ("Niveau 1 · geel"), then "27/50" and the bar towards the NEXT tier ("✓ Platina" on top);
-// - tap a card → the details under it: the description with {n} filled in, the eight tier dots and
-//   "Volgende: …", the season window, "whole household", and the avatar part it unlocks.
+// §1a, block 6D-2b; tabs since block 6D-UI; tiles since block 6D-B): a tab per household member (the
+// local profiles + hand-added members from src/domain/household.ts) plus "Samen" ('all'); under the
+// count line a horizontally scrolling strip with the eight badge groups (BADGE_GROUPS) as tabs, and
+// one group at a time in the panel below it: a wrapping grid of 64 px tiles in catalogue order.
+// Block 6D-B (Stijn 30 Oct: "alleen die logo's, kleiner, en als je erop klikt de details"): a tile
+// is only the icon in a 56 px circle, no name and no text on it (the name is its aria-label):
+// - ladder badge: the ring in the colour of the reached tier (tier 0 = grey dotted ring);
+// - one-off badge: a gold edge (`--lvl-7`) once earned;
+// - not earned (one-off, or a ladder on tier 0): muted (opacity .55, grey edge).
+// Tap a tile → a bottom sheet (SheetPortal, Sluit at the top) with exactly the old card details: the
+// icon big with its ring, the name, the description with {n} filled in, for a ladder the eight tier
+// dots + "● Niveau {k}" + "{current}/{target}" + bar + "Volgende: {n} ●" ("✓ Platina" on top), for a
+// one-off "✓ Verdiend" / "{current}/{target} · nog niet verdiend", the season window, "whole
+// household", and the avatar part it unlocks ("Geeft: {part} ● op niveau {k}"). Colour instead of
+// colour names (6D-B.6): a tier is shown by its colour (ring, dots, a 10 px `.tier-dot`); the colour
+// names (`badges.tier.<k>`) are only the aria text of those dots. No sideways swipe in the sheet
+// (`useHorizontalSwipe` of block 13D-2 does not exist yet); the sheet is a portal of this screen, so
+// leaving the page (Back) takes it away; no hash state.
 // Secret badges (block 6D-2c, decision 29 Oct 2026): a hidden badge that is not earned yet is a "?"
-// card in its own group (Geheim; the heart in Samen & delen): its real icon as the only hint, name
-// "???", `badges.secretHint`, no progress, no tier, no ring, not tappable. Its name and description
-// never reach the DOM. Counts do not change: the tab of Geheim shows "{n} gevonden", never a total;
-// "{n} geheime gevonden" counts found badges only, group counts count the visible cards (never a "?"
-// card). The line above the tabs counts visible (non-hidden) badges only. Badges off
-// (`badges.enabled`) = only a muted note: gamification never in the way (PLAN.md §0).
+// tile in its own group (Geheim; the heart in Samen & delen): its real icon at full strength as the
+// only hint, a dotted edge, aria-label "???"; it opens nothing. Its name and description never reach
+// the DOM. Counts do not change: the tab of Geheim shows "{n} gevonden", never a total; "{n} geheime
+// gevonden" counts found badges only, group counts count the visible tiles (never a "?" tile). The
+// line above the tabs counts visible (non-hidden) badges only. Badges off (`badges.enabled`) = only a
+// muted note: gamification never in the way (PLAN.md §0).
 // Block 6D-UI (UI-A): the last group tab is remembered per phone (localStorage `recepten.badges.tab`,
 // replacing `recepten.badges.groups`); '?group=<id>' opens that group, '?tab=<member>' that member.
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { avatarParts } from '@/avatar';
 import { HOUSEHOLD_KINDS, badgeStatuses, badgesEnabled, loadBadgeSettings } from '@/badges';
 import { Header } from '@/components/Header';
+import { SheetPortal } from '@/components/SheetPortal';
 import { getHousehold } from '@/db/repo';
 import { BADGE_GROUPS, isLadder, parseSeasonWindow, type BadgeGroup, type BadgeStatus } from '@/domain/badges';
 import { memberFromProfile, membersFrom, type Member } from '@/domain/household';
@@ -145,7 +155,7 @@ function dropOldGroupsKey() {
 
 // --- Small helpers ---------------------------------------------------------------------------
 
-/** The colour name of tier k (1 … 8): "geel" … "platina" / "yellow" … "platinum". */
+/** The colour name of tier k (1 … 8): "geel" … "platina"; since 6D-B.6 only the aria text of a dot. */
 function colourName(k: number): string {
   return t(`badges.tier.${k}`);
 }
@@ -165,9 +175,32 @@ function partName(id: string, l: Lang): string | null {
   return part ? part[l] || part.nl : null;
 }
 
-// --- Cards -----------------------------------------------------------------------------------
+/**
+ * The aria-label of a tile (6D-B.1): "Huiskok, niveau 2 van 8" (ladder) / "Eerste hap, verdiend" /
+ * "Eerste hap, nog niet verdiend" (one-off). The visible tile carries no text at all.
+ */
+function tileLabel(s: BadgeStatus, l: Lang): string {
+  const name = s.badge[l].name;
+  if (isLadder(s.badge)) return t('badges.tileLabel', { name, k: s.tier, max: s.maxTier });
+  return `${name}, ${s.earned ? t('badges.earned').toLocaleLowerCase() : t('badges.locked')}`;
+}
 
-/** The thin progress bar under "3/5" / "27/50". */
+/** The classes of the round icon (tile and sheet): ring colour, gold edge, muted when not earned. */
+function coinClass(s: BadgeStatus): string {
+  const kind = isLadder(s.badge) ? `is-ladder lvl-${s.tier}` : 'is-once';
+  return `badge-coin ${kind} ${s.earned ? 'is-earned' : 'is-locked'}`;
+}
+
+/**
+ * The 10 px dot in the colour of tier k (6D-B.6: colour instead of the colour name). Its colour name
+ * is its aria text, so a screen reader still hears "geel"; `.tier-dot.lvl-<k>` in base.css (shared
+ * with the toast and the avatar maker).
+ */
+function TierDot(props: { k: number }) {
+  return <i class={`tier-dot lvl-${props.k}`} role="img" aria-label={colourName(props.k)} />;
+}
+
+/** The thin progress bar under "27/50". */
 function Bar(props: { current: number; target: number }) {
   const { current, target } = props;
   const pct = target > 0 ? Math.round((Math.min(current, target) / target) * 100) : 0;
@@ -178,122 +211,209 @@ function Bar(props: { current: number; target: number }) {
   );
 }
 
-/** Everything under a tapped card (§1a.7). */
-function BadgeDetail(props: { status: BadgeStatus }) {
-  const l = lang.value;
-  const { badge, earned, current, target, tier, maxTier } = props.status;
-  const ladder = isLadder(badge);
-  const season = badge.season ? parseSeasonWindow(badge.season) : null;
-  const unlock = badge.unlock;
-  const part = unlock ? partName(unlock.part, l) : null;
-  return (
-    <div class="badge-detail">
-      {/* {n} = the next threshold (on platinum the last one): exactly the status' target. */}
-      <p>{interpolate(badge[l].description, { n: target })}</p>
-      {ladder ? (
-        <>
-          <span class="badge-dots" aria-hidden="true">
-            {badge.tiers.map((_, i) => (
-              <span key={i} class={`badge-dot lvl-${i + 1}${i < tier ? ' is-on' : ''}`} />
-            ))}
-          </span>
-          {tier < maxTier && <p class="muted small">{t('badges.tierNext', { n: target, colour: colourName(tier + 1) })}</p>}
-        </>
-      ) : (
-        <p class="muted small">{earned ? t('badges.earned') : `${current}/${target} · ${t('badges.locked')}`}</p>
-      )}
-      {season && <p class="muted small">{t('badges.season', { from: dayMonth(season.from, l), to: dayMonth(season.to, l) })}</p>}
-      {HOUSEHOLD_KINDS.has(badge.rule.kind) && <p class="muted small">{t('badges.householdOnly')}</p>}
-      {part !== null && (
-        <p class="muted small">
-          {t('badges.unlocks', { part })}
-          {ladder && unlock?.tier !== undefined && ` ${t('badges.unlocksTier', { colour: colourName(unlock.tier) })}`}
-        </p>
-      )}
-    </div>
-  );
-}
+// --- Tiles -----------------------------------------------------------------------------------
 
-function BadgeCard(props: { status: BadgeStatus; open: boolean; onToggle: () => void }) {
+/** One visible badge (earned or not): only its icon in the 56 px circle; a tap opens the sheet. */
+function BadgeTile(props: { status: BadgeStatus; onOpen: (tile: HTMLElement) => void }) {
   const l = lang.value;
   const { status } = props;
-  const { badge, earned, current, target, tier, maxTier } = status;
-  const ladder = isLadder(badge);
-  const cls = 'badge-card' + (ladder ? ' is-ladder' : ' is-once') + (earned ? ' is-earned' : ' is-locked');
   return (
-    <li class={cls}>
-      <button type="button" class="badge-card-btn" aria-expanded={props.open} onClick={props.onToggle}>
-        {ladder ? (
-          // The ring takes the colour of the reached tier; tier 0 = grey dotted ring (badges.css).
-          <span class={`badge-ring lvl-${tier}`} aria-hidden="true">
-            <span class="badge-icon">{badge.icon}</span>
-          </span>
-        ) : (
-          <span class="badge-icon" aria-hidden="true">
-            {badge.icon}
-          </span>
-        )}
-        <span class="badge-name">{badge[l].name}</span>
-        {ladder ? (
-          <>
-            <span class="badge-tier">{tier >= 1 ? t('badges.tierLabel', { k: tier, colour: colourName(tier) }) : t('badges.tierNone')}</span>
-            {tier >= maxTier ? (
-              <span class="badge-done">{t('badges.tierMax')}</span>
-            ) : (
-              <>
-                <span class="badge-count">
-                  {current}/{target}
-                </span>
-                <Bar current={current} target={target} />
-              </>
-            )}
-          </>
-        ) : earned ? (
-          <span class="badge-done">✓ {t('badges.earned')}</span>
-        ) : (
-          <>
-            <span class="badge-count">
-              {current}/{target}
-            </span>
-            <Bar current={current} target={target} />
-          </>
-        )}
+    <li class="badge-tile-cell">
+      <button type="button" class="badge-tile" aria-label={tileLabel(status, l)} aria-haspopup="dialog" onClick={(e) => props.onOpen(e.currentTarget)}>
+        <span class={coinClass(status)} aria-hidden="true">
+          <span class="badge-coin-icon">{status.badge.icon}</span>
+        </span>
       </button>
-      {props.open && <BadgeDetail status={status} />}
     </li>
   );
 }
 
 /**
- * A "?" card (6D-2c, decision 29 Oct 2026): a hidden badge not earned yet. Only its real icon (at
- * full strength, the one hint), the name "???" and `badges.secretHint`; no progress, no tier, no
- * ring, not a button (a tap does nothing). The badge's name and description are never rendered.
+ * A "?" tile (6D-2c, decision 29 Oct 2026; a tile since 6D-B): a hidden badge not earned yet. Only
+ * its real icon at full strength (the one hint) in a dotted circle, aria-label "???"; not a button
+ * (a tap does nothing). The badge's name and description are never rendered.
  */
-function SecretCard(props: { icon: string }) {
+function SecretTile(props: { icon: string }) {
   return (
-    <li class="badge-card is-secret">
-      <div class="badge-card-face">
-        <span class="badge-icon" aria-hidden="true">
-          {props.icon}
+    <li class="badge-tile-cell">
+      <span class="badge-tile is-secret" role="img" aria-label="???">
+        <span class="badge-coin is-secret" aria-hidden="true">
+          <span class="badge-coin-icon">{props.icon}</span>
         </span>
-        <span class="badge-name">???</span>
-        <span class="badge-secret-hint">{t('badges.secretHint')}</span>
-      </div>
+      </span>
     </li>
   );
 }
 
-/** The full cards (`statuses`) first, then the "?" cards (`mystery`), each in catalogue order. */
-function BadgeGrid(props: { statuses: BadgeStatus[]; mystery: BadgeStatus[]; open: string | null; onToggle: (id: string) => void }) {
+/** The full tiles (`statuses`) first, then the "?" tiles (`mystery`), each in catalogue order. */
+function BadgeTiles(props: { statuses: BadgeStatus[]; mystery: BadgeStatus[]; onOpen: (id: string, tile: HTMLElement) => void }) {
   return (
-    <ul class="badge-grid">
+    <ul class="badge-tiles">
       {props.statuses.map((s) => (
-        <BadgeCard key={s.badge.id} status={s} open={props.open === s.badge.id} onToggle={() => props.onToggle(s.badge.id)} />
+        <BadgeTile key={s.badge.id} status={s} onOpen={(tile) => props.onOpen(s.badge.id, tile)} />
       ))}
       {props.mystery.map((s) => (
-        <SecretCard key={'?' + s.badge.id} icon={s.badge.icon} />
+        <SecretTile key={'?' + s.badge.id} icon={s.badge.icon} />
       ))}
     </ul>
+  );
+}
+
+// --- Detail sheet ----------------------------------------------------------------------------
+
+/** How far (px) the sheet must be pulled down before letting go closes it (as the other sheets). */
+const DISMISS_PX = 80;
+
+const SHEET_NAME_ID = 'badge-sheet-name';
+
+/**
+ * The details of one tile in a bottom sheet (6D-B.2): exactly what the old card and its expanded
+ * detail showed, in the order of the spec, with colour instead of colour names (6D-B.6). Sluit at
+ * the top (13J); swiping it down on the grab bar / head, tapping beside it and Escape close it too;
+ * there is nothing to keep. The focus goes to Sluit on open and back to the tile on close (`opener`:
+ * Safari does not focus a tapped button, so the tile is handed over rather than read from the focus).
+ */
+function BadgeSheet(props: { status: BadgeStatus; opener: HTMLElement | null; onClose: () => void }) {
+  const l = lang.value;
+  const { status, opener, onClose } = props;
+  const { badge, earned, current, target, tier, maxTier } = status;
+  const ladder = isLadder(badge);
+  const season = badge.season ? parseSeasonWindow(badge.season) : null;
+  const unlock = badge.unlock;
+  const part = unlock ? partName(unlock.part, l) : null;
+  const closeBtn = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ y: number; id: number; dy: number } | null>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  // aria-modal moves no focus by itself: put it on Sluit on open, hand it back to the tile on close.
+  useEffect(() => {
+    closeBtn.current?.focus({ preventScroll: true });
+    return () => {
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
+    };
+  }, [opener]);
+
+  // Swipe down on the grab bar / head: the sheet follows the finger; far enough = close.
+  function onDragStart(e: PointerEvent) {
+    if ((e.target as HTMLElement | null)?.closest('button')) return;
+    drag.current = { y: e.clientY, id: e.pointerId, dy: 0 };
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
+    } catch {
+      // The pointer is already gone (a very short tap): the drag works without capture.
+    }
+  }
+  function onDragMove(e: PointerEvent) {
+    const d = drag.current;
+    if (!d || e.pointerId !== d.id) return;
+    d.dy = Math.max(0, e.clientY - d.y);
+    if (sheetRef.current) {
+      sheetRef.current.style.transition = 'none';
+      sheetRef.current.style.transform = d.dy > 0 ? `translateY(${d.dy}px)` : '';
+    }
+  }
+  function onDragEnd(e: PointerEvent, cancelled: boolean) {
+    const d = drag.current;
+    if (!d || e.pointerId !== d.id) return;
+    drag.current = null;
+    if (sheetRef.current) {
+      sheetRef.current.style.transition = 'transform .18s ease-out';
+      sheetRef.current.style.transform = '';
+    }
+    if (!cancelled && d.dy > DISMISS_PX) onClose();
+  }
+
+  return (
+    <SheetPortal>
+      <div class="sheet-backdrop" onClick={onClose}>
+        <div ref={sheetRef} class="sheet badge-sheet" role="dialog" aria-modal="true" aria-labelledby={SHEET_NAME_ID} onClick={(e) => e.stopPropagation()}>
+          <div
+            class="cooked-drag"
+            onPointerDown={onDragStart}
+            onPointerMove={onDragMove}
+            onPointerUp={(e) => onDragEnd(e, false)}
+            onPointerCancel={(e) => onDragEnd(e, true)}
+          >
+            <div class="sheet-grab" aria-hidden="true" />
+            <div class="sheet-head with-actions">
+              <span class="badge-sheet-head-space" aria-hidden="true" />
+              <button ref={closeBtn} type="button" class="sheet-head-btn" onClick={onClose}>
+                {t('common.close')}
+              </button>
+            </div>
+          </div>
+          <div class="sheet-body badge-sheet-body">
+            <div class="badge-sheet-hero">
+              <span class={coinClass(status) + ' is-big'} aria-hidden="true">
+                <span class="badge-coin-icon">{badge.icon}</span>
+              </span>
+              <h2 id={SHEET_NAME_ID} class="badge-sheet-name">
+                {badge[l].name}
+              </h2>
+            </div>
+            {/* {n} = the next threshold (on platinum the last one): exactly the status' target. */}
+            <p class="badge-sheet-desc">{interpolate(badge[l].description, { n: target })}</p>
+            {ladder ? (
+              <>
+                <span class="badge-dots" aria-hidden="true">
+                  {badge.tiers.map((_, i) => (
+                    <span key={i} class={`badge-dot lvl-${i + 1}${i < tier ? ' is-on' : ''}`} />
+                  ))}
+                </span>
+                <p class="badge-sheet-tier">
+                  {tier >= 1 ? (
+                    <>
+                      <TierDot k={tier} /> {t('badges.tierLabel', { k: tier })}
+                    </>
+                  ) : (
+                    t('badges.tierNone')
+                  )}
+                </p>
+                {tier >= maxTier ? (
+                  <p class="badge-done">{t('badges.tierMax')}</p>
+                ) : (
+                  <>
+                    <p class="badge-count">
+                      {current}/{target}
+                    </p>
+                    <Bar current={current} target={target} />
+                    <p class="muted small">
+                      {t('badges.tierNext', { n: target })} <TierDot k={tier + 1} />
+                    </p>
+                  </>
+                )}
+              </>
+            ) : earned ? (
+              <p class="badge-done">✓ {t('badges.earned')}</p>
+            ) : (
+              <p class="muted small">{`${current}/${target} · ${t('badges.locked')}`}</p>
+            )}
+            {season && <p class="muted small">{t('badges.season', { from: dayMonth(season.from, l), to: dayMonth(season.to, l) })}</p>}
+            {HOUSEHOLD_KINDS.has(badge.rule.kind) && <p class="muted small">{t('badges.householdOnly')}</p>}
+            {part !== null && (
+              <p class="muted small">
+                {t('badges.unlocks', { part })}
+                {ladder && unlock?.tier !== undefined && (
+                  <>
+                    {' '}
+                    {/* The dot sits right before the word niveau/tier, like the toast and the maker (Fable 30 Oct). */}
+                    {t('badges.unlocksAt')} <TierDot k={unlock.tier} /> {t('badges.tierWord', { k: unlock.tier })}
+                  </>
+                )}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </SheetPortal>
   );
 }
 
@@ -384,11 +504,11 @@ function GroupTabs(props: { groups: BadgeGroupView[]; active: BadgeGroup; onSele
 }
 
 /**
- * The one group in view (UI-A.2): the grid as before (full cards, then the "?" cards). Geheim keeps
- * its found count above the cards ("Nog geen geheime badge gevonden …" only without any card); any
- * other empty group shows one muted line.
+ * The one group in view (UI-A.2): its tiles (full tiles, then the "?" tiles). Geheim keeps its found
+ * count above the tiles ("Nog geen geheime badge gevonden …" only without any tile); any other empty
+ * group shows one muted line.
  */
-function GroupPanel(props: { view: BadgeGroupView; open: string | null; onToggle: (id: string) => void }) {
+function GroupPanel(props: { view: BadgeGroupView; onOpen: (id: string, tile: HTMLElement) => void }) {
   const g = props.view;
   const empty = g.shown.length === 0 && g.mystery.length === 0;
   return (
@@ -399,13 +519,13 @@ function GroupPanel(props: { view: BadgeGroupView; open: string | null; onToggle
         ) : (
           <>
             <p class="badge-secret-note">{t('badges.secretCount', { n: g.shown.length })}</p>
-            <BadgeGrid statuses={g.shown} mystery={g.mystery} open={props.open} onToggle={props.onToggle} />
+            <BadgeTiles statuses={g.shown} mystery={g.mystery} onOpen={props.onOpen} />
           </>
         )
       ) : empty ? (
         <p class="muted badge-group-empty">{t('badges.groupEmpty')}</p>
       ) : (
-        <BadgeGrid statuses={g.shown} mystery={g.mystery} open={props.open} onToggle={props.onToggle} />
+        <BadgeTiles statuses={g.shown} mystery={g.mystery} onOpen={props.onOpen} />
       )}
     </div>
   );
@@ -420,7 +540,9 @@ export function BadgesScreen() {
   // The new-badge toast navigates here with '?tab=<memberId|all>': open on the tab that earned it.
   const [tab, setTab] = useState<string>(route.value.query.get('tab') ?? activeProfile.value?.id ?? TOGETHER);
   const [statuses, setStatuses] = useState<BadgeStatus[] | null>(null);
+  /** The badge id whose sheet is open (6D-B.2; never a "?" tile) and the tile that opened it. */
   const [open, setOpen] = useState<string | null>(null);
+  const opener = useRef<HTMLElement | null>(null);
   // 6D-UI: '?group=<id>' (the badge toast links with it) or the tab remembered on this phone.
   const [group, setGroup] = useState<BadgeGroup>(() => initialGroup(route.value.query.get('group')));
 
@@ -462,11 +584,21 @@ export function BadgesScreen() {
   const tabs = useMemo(() => members ?? profileList.map(memberFromProfile), [members, profileList]);
   const model = useMemo(() => (statuses ? badgePageModel(statuses) : null), [statuses]);
 
-  // The last tab shown is the one remembered (also when '?group=' opened it).
-  useEffect(() => saveGroupTab(group), [group]);
+  // The last tab shown is the one remembered (also when '?group=' opened it). A group switch also
+  // closes the sheet, as a member switch does: otherwise the old id would reopen it on coming back.
+  useEffect(() => {
+    saveGroupTab(group);
+    setOpen(null);
+  }, [group]);
 
-  const toggleCard = (id: string) => setOpen((cur) => (cur === id ? null : id));
   const view = model?.groups.find((g) => g.group === group) ?? null;
+  // Only a full tile of the group in view opens a sheet (a "?" tile has no button).
+  const openStatus = open !== null ? (view?.shown.find((s) => s.badge.id === open) ?? null) : null;
+  const openSheet = useCallback((id: string, tile: HTMLElement) => {
+    opener.current = tile;
+    setOpen(id);
+  }, []);
+  const closeSheet = useCallback(() => setOpen(null), []);
 
   return (
     <>
@@ -498,12 +630,13 @@ export function BadgesScreen() {
                   {model.secretFound > 0 && ` ${t('badges.secretFound', { n: model.secretFound })}`}
                 </p>
                 <GroupTabs groups={model.groups} active={group} onSelect={setGroup} />
-                {view && <GroupPanel view={view} open={open} onToggle={toggleCard} />}
+                {view && <GroupPanel view={view} onOpen={openSheet} />}
               </>
             )}
           </>
         )}
       </div>
+      {enabled && openStatus && <BadgeSheet key={openStatus.badge.id} status={openStatus} opener={opener.current} onClose={closeSheet} />}
     </>
   );
 }

@@ -1,6 +1,7 @@
 // Strings of the avatar maker and its entry points (docs/specs/badges-avatar.md §1b, block 6D-3).
 // Merged in ./index.ts right after badges. Part names come from data/avatar-parts.json (nl/en there),
-// badge names from data/badges.json, the colour names from `badges.tier.<k>`. Literal from the spec.
+// badge names from data/badges.json, the colour names from `badges.tier.<k>` (since 6D-B only the
+// aria text of the tier dot). Literal from the spec.
 import type { Dict } from './index';
 
 export const avatar: Dict = {
@@ -43,8 +44,8 @@ export const avatar: Dict = {
   'avatar.lockedLevel': { nl: 'Komt vrij op level {n}.', en: 'Unlocks at level {n}.' },
   'avatar.lockedBadge': { nl: 'Komt vrij met de badge {badge}.', en: 'Unlocks with the badge {badge}.' },
   'avatar.lockedBadgeTier': {
-    nl: 'Komt vrij met de badge {badge} op niveau {colour}.',
-    en: 'Unlocks with the badge {badge} at level {colour}.',
+    nl: 'Komt vrij met de badge {badge} op niveau {k}.',
+    en: 'Unlocks with the badge {badge} at tier {k}.',
   },
   'avatar.lockedSecret': { nl: 'Komt vrij met een geheime badge.', en: 'Unlocks with a secret badge.' },
 

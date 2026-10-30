@@ -1160,3 +1160,57 @@ button.row {
   color: var(--muted);
   font-style: italic;
 }
+
+/* ---------- Tier dot (block 6D-B §6) ----------
+   Wherever a badge tier is named, a 10 px round dot in that tier's colour stands in for the colour
+   name: the badge toast, the badge sheet and the avatar maker share it. Markup:
+   <i class="tier-dot lvl-{k}" role="img" aria-label="{badges.tier.k}"></i> — the colour name only as
+   aria text. The --lvl-1 … --lvl-8 tokens sit on :root in badges.css (fixed in both themes);
+   `--dot` may also be set inline instead of the lvl-{k} class. */
+.tier-dot {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--dot, var(--muted));
+  vertical-align: middle;
+}
+
+.tier-dot.lvl-1 {
+  --dot: var(--lvl-1);
+}
+
+.tier-dot.lvl-2 {
+  --dot: var(--lvl-2);
+}
+
+.tier-dot.lvl-3 {
+  --dot: var(--lvl-3);
+}
+
+.tier-dot.lvl-4 {
+  --dot: var(--lvl-4);
+}
+
+.tier-dot.lvl-5 {
+  --dot: var(--lvl-5);
+}
+
+.tier-dot.lvl-6 {
+  --dot: var(--lvl-6);
+}
+
+.tier-dot.lvl-7 {
+  --dot: var(--lvl-7);
+}
+
+.tier-dot.lvl-8 {
+  --dot: var(--lvl-8);
+}
+
+/* On the cobalt toast a blue dot would melt into the background: a thin ring in the toast's text
+   colour keeps every tier colour readable there (light and dark). */
+.badge-toast .tier-dot {
+  box-shadow: 0 0 0 1.5px var(--on-cobalt);
+}

@@ -27,9 +27,12 @@ export const badges: Dict = {
   'badges.group.foto': { nl: 'Fotografie', en: 'Photography' },
   'badges.group.reeksen': { nl: 'Reeksen', en: 'Streaks' },
   'badges.group.geheim': { nl: 'Geheim', en: 'Secret' },
-  'badges.tierLabel': { nl: 'Niveau {k} · {colour}', en: 'Level {k} · {colour}' },
-  'badges.tierNone': { nl: 'Nog geen niveau', en: 'No level yet' },
-  'badges.tierMax': { nl: '✓ Platina', en: '✓ Platinum' },
+  // 6D-B.6 (Stijn 30 Oct: colour instead of the colour name): the tier's colour is a dot before the
+  // text ("● Niveau 2") and after "Volgende: 10 ●"; the colour names below are only the aria text of
+  // those dots. The NL follows the spec's examples; the EN only lost its colour part.
+  'badges.tierLabel': { nl: 'Niveau {k}', en: 'Tier {k}' },
+  'badges.tierNone': { nl: 'Nog geen niveau', en: 'No tier yet' },
+  'badges.tierMax': { nl: '✓ Hoogste niveau', en: '✓ Top tier' },
   'badges.tier.1': { nl: 'geel', en: 'yellow' },
   'badges.tier.2': { nl: 'groen', en: 'green' },
   'badges.tier.3': { nl: 'blauw', en: 'blue' },
@@ -38,13 +41,15 @@ export const badges: Dict = {
   'badges.tier.6': { nl: 'zilver', en: 'silver' },
   'badges.tier.7': { nl: 'goud', en: 'gold' },
   'badges.tier.8': { nl: 'platina', en: 'platinum' },
-  'badges.tierNext': { nl: 'Volgende: {n} ({colour})', en: 'Next: {n} ({colour})' },
+  'badges.tierNext': { nl: 'Volgende: {n}', en: 'Next: {n}' },
   'badges.season': { nl: 'Telt van {from} tot {to}', en: 'Counts from {from} to {to}' },
   'badges.householdOnly': { nl: 'Telt voor het hele huishouden', en: 'Counts for the whole household' },
   'badges.unlocks': { nl: 'Geeft: {part}', en: 'Unlocks: {part}' },
-  // 6D-2b: appended to `badges.unlocks` on a ladder ("Geeft: Steelpan op niveau brons"); wording
-  // decided by Fable (docs/STATUS.md, 29 Oct, 6D-2a).
-  'badges.unlocksTier': { nl: 'op niveau {colour}', en: 'at {colour} tier' },
+  // 6D-2b: appended to `badges.unlocks` on a ladder; since 6D-B.6 after a dot in the tier colour
+  // ("Geeft: Steelpan ● op niveau 5") instead of the colour name.
+  'badges.unlocksTier': { nl: 'op niveau {k}', en: 'at tier {k}' },
+  'badges.unlocksAt': { nl: 'op', en: 'at' },
+  'badges.tierWord': { nl: 'niveau {k}', en: 'tier {k}' },
   'badges.secretCount': { nl: '{n} geheime badges gevonden', en: '{n} secret badges found' },
   'badges.secretNone': {
     nl: 'Nog geen geheime badge gevonden. Ontdek de app: sommige dingen die je doet leveren er een op.',
@@ -52,7 +57,7 @@ export const badges: Dict = {
   },
   // 6D-2c (decision 29 Oct 2026): the description on a "?" card, a hidden badge not found yet.
   'badges.secretHint': { nl: 'Nog te ontdekken.', en: 'Still to discover.' },
-  'badges.toastTier': { nl: '🏆 {name} · niveau {k}: {colour}', en: '🏆 {name} · level {k}: {colour}' },
+  'badges.toastTier': { nl: '🏆 {name} · niveau {k}', en: '🏆 {name} · tier {k}' },
   'badges.toastSecret': { nl: '🤫 Geheime badge: {name}', en: '🤫 Secret badge: {name}' },
   'badges.toastUnlock': { nl: 'Nieuw voor je avatar: {part}', en: 'New for your avatar: {part}' },
   // 6D-UI (UI-A): one group per tab. An empty group shows one muted line; the pill on the tab of
@@ -60,4 +65,6 @@ export const badges: Dict = {
   // literal from the spec; the key name and the EN were not given there (reported to the integrator).
   'badges.groupEmpty': { nl: 'Nog niets in deze groep.', en: 'Nothing in this group yet.' },
   'badges.groupFound': { nl: '{n} gevonden', en: '{n} found' },
+  // 6D-B.5: the aria-label of a ladder tile (the tile shows only the icon): "Huiskok, niveau 2 van 8".
+  'badges.tileLabel': { nl: '{name}, niveau {k} van {max}', en: '{name}, tier {k} of {max}' },
 };

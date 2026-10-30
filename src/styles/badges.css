@@ -1,8 +1,9 @@
-/* Badges: the Badges screen (member tabs, the strip of eight group tabs, badge grid, ladder rings,
-   tier dots) and the new-badge toast in the shell. Phase-5 block C, rebuilt for 6D-2b
-   (docs/specs/badges-avatar.md §1a, §3b), group tabs since 6D-UI; imported by src/main.tsx after shopping.css. Colour
-   tokens from base.css (dark mode included) plus the eight tier colours below. Mobile first:
-   360 px, 44 px targets. */
+/* Badges: the Badges screen (member tabs, the strip of eight group tabs, the grid of icon tiles with
+   their tier rings, the detail sheet) and the new-badge toast in the shell. Phase-5 block C, rebuilt
+   for 6D-2b (docs/specs/badges-avatar.md §1a, §3b), group tabs since 6D-UI, tiles + sheet since 6D-B;
+   imported by src/main.tsx after shopping.css. Colour tokens from base.css (dark mode included) plus
+   the eight tier colours below; the 10 px `.tier-dot` (6D-B.6) is in base.css. Mobile first: 360 px,
+   44 px targets. */
 
 /* ---------- Tokens: the eight colour tiers (§3b) ---------- */
 
@@ -182,196 +183,219 @@
   font-size: 14px;
 }
 
-/* ---------- Badge grid ---------- */
+/* ---------- Tiles (block 6D-B: only the icons, tap for the details) ---------- */
 
-.badge-grid {
+/* A wrapping grid of 64 px tiles, 8 px apart, like the avatar maker (.avatar-grid): 4 columns at
+   360/375 px, more on wider screens; never wider than the page. */
+.badge-tiles {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 8px;
+  justify-items: center;
   margin: 0 0 16px;
   padding: 0;
 }
 
-@media (min-width: 560px) {
-  .badge-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.badge-card {
-  min-width: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--card);
-  overflow: hidden;
-}
-
-/* An earned one-off badge has a gold edge (§1a.5); a ladder shows its colour in the ring instead. */
-.badge-card.is-once.is-earned {
-  border-color: var(--lvl-7);
-  box-shadow: inset 0 0 0 1px var(--lvl-7);
-}
-
-/* The whole card face is the tap target (≥ 44 px). */
-.badge-card-btn {
+.badge-tile-cell {
   display: flex;
-  flex-direction: column;
+  min-width: 0;
+}
+
+/* The tile is the 64 px tap target (≥ 44 px); no name and no text on it (the aria-label has them). */
+.badge-tile {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  width: 100%;
-  min-height: 100px;
-  padding: 12px 10px;
+  justify-content: center;
+  flex: none;
+  width: 64px;
+  height: 64px;
+  padding: 0;
   border: 0;
+  border-radius: 50%;
   background: none;
   color: var(--ink);
   font: inherit;
-  text-align: center;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
 
-.badge-card-btn:active {
+button.badge-tile:active {
   background: var(--press);
 }
 
-.badge-icon {
-  font-size: 30px;
-  line-height: 1;
+.badge-tile:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 0;
 }
 
-/* Ladder: the icon sits in a ring in the colour of the reached tier; tier 0 = grey dotted ring. */
-.badge-ring {
+/* The "?" tile is no button: a tap does nothing. */
+.badge-tile.is-secret {
+  cursor: default;
+}
+
+/* The round icon: 56 px on a tile, 64 px (.is-big) in the sheet. Ladder: a ring in the colour of the
+   reached tier (--ring from the .lvl-k classes below); tier 0 = grey dotted ring. */
+.badge-coin {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: none;
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   border: 3px solid var(--ring, var(--muted));
   border-radius: 50%;
+  background: var(--card);
 }
 
-.badge-ring .badge-icon {
-  font-size: 26px;
+.badge-coin-icon {
+  font-size: 28px;
+  line-height: 1;
 }
 
-.badge-ring.lvl-0 {
+.badge-coin.lvl-0 {
   border-width: 2px;
   border-style: dotted;
   border-color: var(--muted);
 }
 
-.badges .lvl-1 {
-  --ring: var(--lvl-1);
+/* One-off: a grey edge until earned, then gold (--lvl-7, §1a.5). */
+.badge-coin.is-once {
+  border: 2px solid var(--muted);
 }
 
-.badges .lvl-2 {
-  --ring: var(--lvl-2);
+.badge-coin.is-once.is-earned {
+  border: 3px solid var(--lvl-7);
 }
 
-.badges .lvl-3 {
-  --ring: var(--lvl-3);
+/* Not earned (a one-off, or a ladder on tier 0): muted. */
+.badge-coin.is-locked {
+  opacity: 0.55;
 }
 
-.badges .lvl-4 {
-  --ring: var(--lvl-4);
-}
-
-.badges .lvl-5 {
-  --ring: var(--lvl-5);
-}
-
-.badges .lvl-6 {
-  --ring: var(--lvl-6);
-}
-
-.badges .lvl-7 {
-  --ring: var(--lvl-7);
-}
-
-.badges .lvl-8 {
-  --ring: var(--lvl-8);
-}
-
-.badge-name {
-  max-width: 100%;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.25;
-  overflow-wrap: anywhere;
-}
-
-/* "Niveau 1 · geel" / "Nog geen niveau" under a ladder's name. */
-.badge-tier {
-  max-width: 100%;
-  color: var(--ink);
-  font-size: 12px;
-  line-height: 1.25;
-  overflow-wrap: anywhere;
-}
-
-/* Locked (one-off not earned, ladder on tier 0): the icon dimmed/grey, "7/10" and a thin bar. */
-.badge-card.is-locked .badge-icon {
-  filter: grayscale(1);
-  opacity: 0.45;
-}
-
-.badge-card.is-locked .badge-name,
-.badge-card.is-locked .badge-tier {
-  color: var(--muted);
-}
-
-/* 6D-2c "?" card (decision 29 Oct 2026): a hidden badge not found yet. A muted dotted edge, the
-   icon at full strength (not .is-locked: no grey filter), "???" and "Nog te ontdekken.". The face
-   has the button's layout but is no button: a tap does nothing. */
-.badge-card.is-secret {
+/* 6D-2c "?" tile (decision 29 Oct 2026): a hidden badge not found yet. A muted dotted edge and the
+   icon at full strength (not .is-locked). */
+.badge-coin.is-secret {
   border: 2px dotted var(--muted);
 }
 
-.badge-card-face {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  /* 2 px edge instead of 1 px: 2 px less height and padding keep it as tall as a normal card. */
-  min-height: 98px;
-  padding: 11px 9px;
-  color: var(--ink);
+.badge-coin.is-big {
+  width: 64px;
+  height: 64px;
+}
+
+.badge-coin.is-big .badge-coin-icon {
+  font-size: 32px;
+}
+
+/* The ring colour per tier, on the page and in the sheet (a portal under <body>, outside .badges);
+   the tokens themselves are on :root. */
+.badges .lvl-1,
+.badge-sheet .lvl-1 {
+  --ring: var(--lvl-1);
+}
+
+.badges .lvl-2,
+.badge-sheet .lvl-2 {
+  --ring: var(--lvl-2);
+}
+
+.badges .lvl-3,
+.badge-sheet .lvl-3 {
+  --ring: var(--lvl-3);
+}
+
+.badges .lvl-4,
+.badge-sheet .lvl-4 {
+  --ring: var(--lvl-4);
+}
+
+.badges .lvl-5,
+.badge-sheet .lvl-5 {
+  --ring: var(--lvl-5);
+}
+
+.badges .lvl-6,
+.badge-sheet .lvl-6 {
+  --ring: var(--lvl-6);
+}
+
+.badges .lvl-7,
+.badge-sheet .lvl-7 {
+  --ring: var(--lvl-7);
+}
+
+.badges .lvl-8,
+.badge-sheet .lvl-8 {
+  --ring: var(--lvl-8);
+}
+
+/* ---------- Detail sheet (6D-B.2; the details of the old cards) ---------- */
+
+/* The head has only Sluit on the right; the spacer keeps it there. */
+.badge-sheet-head-space {
+  flex: 1;
+}
+
+.badge-sheet-body {
+  padding-bottom: 16px;
+  font-size: 15px;
   text-align: center;
-}
-
-.badge-card.is-secret .badge-name {
-  color: var(--muted);
-}
-
-.badge-secret-hint {
-  max-width: 100%;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.25;
   overflow-wrap: anywhere;
 }
 
+.badge-sheet-body p {
+  margin: 0 0 6px;
+}
+
+.badge-sheet-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+}
+
+.badge-sheet-name {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.badge-sheet-desc {
+  color: var(--ink);
+}
+
+/* "● Niveau 2" / "Nog geen niveau": the tier dot (base.css .tier-dot) carries the colour. */
+.badge-sheet-tier {
+  font-weight: 600;
+}
+
+/* "✓ Platina" / "✓ Verdiend". */
 .badge-done {
   color: var(--rosemary);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 
+/* "27/50" above the bar. */
 .badge-count {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
 
 .badge-bar {
+  display: block;
   width: 100%;
-  height: 4px;
-  border-radius: 2px;
+  max-width: 240px;
+  height: 6px;
+  margin: 0 auto 8px;
+  border-radius: 3px;
   background: var(--line);
   overflow: hidden;
 }
@@ -379,35 +403,22 @@
 .badge-bar-fill {
   display: block;
   height: 100%;
-  border-radius: 2px;
+  border-radius: 3px;
   background: var(--cobalt);
 }
 
-/* Tap → the details (active language) expand under the card face. */
-.badge-detail {
-  padding: 0 12px 12px;
-  font-size: 14px;
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-
-.badge-detail p {
-  margin: 0 0 4px;
-}
-
-/* Eight dots in the eight tier colours; reached ones filled, the rest an outline. Fits the detail
-   of a half-width card at 360 px (8 × 12 + 7 × 4 = 124 px); wraps if a phone is narrower still. */
+/* Eight dots in the eight tier colours; reached ones filled, the rest an outline. */
 .badge-dots {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 4px;
-  margin: 6px 0 6px;
+  gap: 6px;
+  margin: 8px 0;
 }
 
 .badge-dot {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border: 2px solid var(--ring, var(--muted));
   border-radius: 50%;
   background: transparent;
