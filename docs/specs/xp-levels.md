@@ -2,6 +2,8 @@
 
 Status: compleet (Fable, 22 okt 2026)
 
+**Besluit Stijn + Fable (30 okt 2026):** eerste tien levels uitgedikt — increment ×(1 + (11−L)/10) voor L ≤ 10; XP_RULES_VERSION 3; alle levels vanaf 11 schuiven 1176 XP op.
+
 **Stijn, 28 okt 2026:** Oma kookt beter dan level 6 → Oma staat nu op **level 39** (was Tafelheld); level 6 heet **Tosti-tovenaar** / Toastie wizard. data/levels.json en tests/levels.test.ts zijn aangepast.
 Gebouwd: 28 okt 2026 (blok 6D-1; domein wf_a65d1ec4-750, app-laag + UI wf_04bdbbc2-d81)
 **Na de lens van 6D-4a (besluit Fable, 29 okt):** (1) badges uit = niets van de ontgrendelingen zichtbaar óf hoorbaar:
@@ -35,7 +37,7 @@ opties daar".
 
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs, vooral docs/specs/badges-avatar.md
 (besluiten over specs heen in docs/specs/README.md §2; bij tegenspraak wint README.md). De pins (hash32,
-94/505, curve, uitgewerkt voorbeeld 491/level 5, 273, 54/83/164) zijn opnieuw nagerekend en kloppen. Voor
+94/505, curve, uitgewerkt voorbeeld 491/level 4, 273, 54/83/164) zijn opnieuw nagerekend en kloppen. Voor
 deze spec:
 - **Bloknamen (canoniek, README §1):** 6D-1 = "Blok 6D-1" hier; 6D-2a/2b = badges-avatar §3a/§3b;
   6D-3 = avatar (badges-avatar §3c); **6D-4a = "Blok 6D-3" hier (ontgrendelingen)**; **6D-4b = "Blok 6D-4"
@@ -87,7 +89,7 @@ Feitencheck Opus, 22 okt 2026: 28 correcties (ontwerpkeuzes ongemoeid; waar een 
 feit rust staat een regel "⚠ Feitencheck" direct eronder). Alle pins (hash32, 94/505 crits, curve, titels,
 uitgewerkt voorbeeld, anti-valsspeel, streak, week, foto's, 30-jaar 1.259.039) zijn onafhankelijk
 nagerekend en kloppen.
-- §1a: voorbeeld "922 / 1.500 · nog 578" → "922 / 970 · nog 48" (curve: level 7 = 970).
+- §1a: voorbeeld "922 / 1.500 · nog 578" → "922 / 1.044 · nog 122" (curve: level 6 = 1.044, dus level 5).
 - §1b: `Avatar` = export uit src/screens/ProfilesScreen.tsx (signatuur erbij).
 - §1f, §1j: de Meer-groep heet "Jij & je huishouden" (`more.group.you`), niet "Jij".
 - §1g: "Kookstand & timer" is een kopje binnen de groep Instellingen, geen eigen groep.
@@ -95,7 +97,7 @@ nagerekend en kloppen.
 - §2b: actieve kooktijd ligt niet op alle 196 tussen 20 en 30 min (147 van 196; 5–45).
 - §2b: gemiddelde zonder crit is 100,02, niet 100,2.
 - §2b, §8: één op tien overslaan → level 95 na 30 jaar (eigen pin), niet 94.
-- §2b: robot 17,6 jaar (niet 19), 2×/week na 3 jaar level 25 (niet 24), 5/week 80–84 (niet 91).
+- §2b: robot 17,6 jaar (niet 19), 2×/week na 3 jaar level 24 (regelversie 3; met de curve van toen 25), 5/week 80–84 (niet 91).
 - §2c: `b:uiensoep` bestaat niet; echte `b:afwasmachinezalm` heeft 10 regels (fixture-waarden).
 - §2g: verwijzing "§1j" voor de regelversie-melding → §1e.
 - §2g, §6b.7: back-up is standaard zonder foto's → foto-XP weg na herstel.
@@ -151,11 +153,11 @@ Elke profielkaart in `ProfilesScreen` krijgt onder naam + taal een `<XpBar membe
   streak-tekst), gevolgd door `xp.toNext` — NL "nog {n} XP tot level {level}" · EN "{n} XP to level
   {level}". Als de vrije dag gebruikt is (`freeDayUsed`): `xp.streakFree` — NL "🔥 {n} dagen op rij ·
   vrije dag gebruikt" · EN "🔥 {n} days in a row · free day used".
-Voorbeeld: "Level 6 · Oma" rechts "922 / 970 XP"; onder: "🔥 12 dagen op rij · nog 48 XP tot level
-7". Badges uit → de hele XpBar is weg (geen lege ruimte). Laden: `common.loading`.
+Voorbeeld: "Level 5 · Boterhamsmeerder" rechts "922 / 1.044 XP"; onder: "🔥 12 dagen op rij · nog 122 XP tot
+level 6". Badges uit → de hele XpBar is weg (geen lege ruimte). Laden: `common.loading`.
 ⚠ Feitencheck: het voorbeeld stond op "922 / 1.500 XP … nog 578 XP" (het getal uit het plan, van vóór de
-curve); volgens de curve van §2b begint level 7 bij 970, dus bij 922 XP is het "922 / 970" en "nog 48".
-Zoals §6b.2 ("… / 171 XP") laat zien, zijn beide getallen totalen (xp = totaal, next = `nextAt`).
+curve); volgens de curve van §2b (regelversie 3) begint level 6 bij 1.044, dus 922 XP is level 5 met
+"922 / 1.044" en "nog 122". Zoals §6b.2 ("… / 315 XP") laat zien, zijn beide getallen totalen (xp = totaal, next = `nextAt`).
 
 ### 1b. Levelregel op Home (blok 6D-1)
 `<LevelLine memberId />` (zelfde bestand als XpBar): één rij onder de begroeting: het bestaande
@@ -337,9 +339,9 @@ back-up/herstel, op een nieuwe telefoon en na de id-migratie van 13F is het leve
 zeggen; "nog eens laden" geeft nooit een nieuwe worp. De afleiding werkt op de recipeIds zoals ze in de
 log staan (na 13F dus op de omgezette ids; een id dat de app niet kent, krijgt moeilijkheidsbonus 0).
 
-### 2b. De regels (`XP_RULES`, regelversie 1) — alle getallen hier, nergens anders
+### 2b. De regels (`XP_RULES`, regelversie 3) — alle getallen hier, nergens anders
 ```ts
-export const XP_RULES_VERSION = 1 as const;
+export const XP_RULES_VERSION = 3 as const; // 1 = 6D-1; 2 = 6D-2a (badge-XP, §2f); 3 = eerste tien levels uitgedikt (30 okt 2026)
 export interface XpRules {
   version: number;
   cookFirst: number;        // 100: 1e keer dít recept
@@ -367,9 +369,11 @@ export interface XpRules {
   critOvercooked: number;   // 0.01
   curveK: number;           // 11
   curveP: number;           // 2.5
+  earlyBoostLevels: number; // 10: increment L → L+1 ×(1 + (11 − L)/10) voor L ≤ 10 (+100 % … +10 %)
   maxLevel: number;         // 100
 }
 ```
+`XP_RULES` vult elk veld met het getal uit het commentaar (`earlyBoostLevels: 10`).
 **Moeilijkheidsbonus: ingrediëntregels, niet stappen.** Het plan stelde "+5 per stap boven de 4" voor.
 Gemeten op de 196 klassiekers: 165 hebben ≤ 4 stappen (lange alinea's), de bonus zou vrijwel nooit
 vallen en geplakte websiterecepten (8–12 korte stappen) zouden structureel meer opleveren. Daarom: **+5
@@ -460,41 +464,67 @@ zonder crit valt altijd in 80…120 (gemiddeld 100,02). Bekende crits voor tests
 `cook:b:test|2026-03-03T18:00:00.000Z#2` → cooked; `cook:b:test|2026-03-04T18:00:00.000Z#115` →
 overcooked; `photo:b:p|2026-04-01T12:00:00.000Z` → overcooked (base 30 → 175).
 
-**Levelcurve.** `xpForLevel(L) = round(11 · (L−1)^2,5)`, `levelForXp(total)` = hoogste L ≤ 100 met
-`xpForLevel(L) ≤ total`. Alle 100 waarden (totaal XP om dat level te hebben):
+**Levelcurve.** Basiscurve `base(L) = round(11 · (L−1)^2,5)` (0 voor L ≤ 1), met `inc(k) = base(k+1) −
+base(k)`. **Sinds regelversie 3** (besluit Stijn + Fable, 30 okt 2026: een nieuwe speler haalt in het begin veel
+eerste-keer-badges tegelijk en vloog zo door de eerste levels) zijn de eerste tien levels uitgedikt: het
+increment van level L naar L+1 telt ×(1 + (11 − L)/10) voor L ≤ 10 (+100 % op level 1, +90 % op level 2, …
++10 % op level 10) en ×1 vanaf level 11. Precies:
+`xpForLevel(L) = base(L) + Σ_{k=1}^{min(L−1, 10)} round(inc(k) · (11 − k) / 10)` (10 = `earlyBoostLevels`;
+elke term apart afgerond met `Math.round`, .5 naar boven). Vanaf level 11 is de som compleet, dus ligt elk
+level vanaf 11 precies **1176 XP** boven de basiscurve (`xpForLevel(L) = base(L) + 1176`). `levelForXp(total)`
+= hoogste L ≤ 100 met `xpForLevel(L) ≤ total` (monotoon zoeken; `xpForLevel` stijgt strikt). De eerste twaalf:
+
+| L | base(L) | opslag L→L+1 | extra L→L+1 | opslag tot L | xpForLevel(L) |
+|---|---|---|---|---|---|
+| 1 | 0 | +100 % | 11 | 0 | 0 |
+| 2 | 11 | +90 % | 46 | 11 | 22 |
+| 3 | 62 | +80 % | 87 | 57 | 119 |
+| 4 | 171 | +70 % | 127 | 144 | 315 |
+| 5 | 352 | +60 % | 158 | 271 | 623 |
+| 6 | 615 | +50 % | 178 | 429 | 1044 |
+| 7 | 970 | +40 % | 182 | 607 | 1577 |
+| 8 | 1426 | +30 % | 170 | 789 | 2215 |
+| 9 | 1991 | +20 % | 136 | 959 | 2950 |
+| 10 | 2673 | +10 % | 81 | 1095 | 3768 |
+| 11 | 3479 | — | 0 | 1176 | 4655 |
+| 12 | 4414 | — | 0 | 1176 | 5590 |
+
+Alle 100 waarden (totaal XP om dat level te hebben):
 
 | L | XP | L | XP | L | XP | L | XP |
 |---|---|---|---|---|---|---|---|
-| 1 | 0 | 26 | 34375 | 51 | 194454 | 76 | 535853 |
-| 2 | 11 | 27 | 37916 | 52 | 204323 | 77 | 553894 |
-| 3 | 62 | 28 | 41668 | 53 | 214487 | 78 | 572294 |
-| 4 | 171 | 29 | 45634 | 54 | 224948 | 79 | 591057 |
-| 5 | 352 | 30 | 49818 | 55 | 235709 | 80 | 610183 |
-| 6 | 615 | 31 | 54225 | 56 | 246774 | 81 | 629677 |
-| 7 | 970 | 32 | 58857 | 57 | 258144 | 82 | 649539 |
-| 8 | 1426 | 33 | 63719 | 58 | 269824 | 83 | 669773 |
-| 9 | 1991 | 34 | 68814 | 59 | 281814 | 84 | 690380 |
-| 10 | 2673 | 35 | 74146 | 60 | 294119 | 85 | 711362 |
-| 11 | 3479 | 36 | 79719 | 61 | 306740 | 86 | 732723 |
-| 12 | 4414 | 37 | 85536 | 62 | 319681 | 87 | 754465 |
-| 13 | 5487 | 38 | 91600 | 63 | 332945 | 88 | 776588 |
-| 14 | 6703 | 39 | 97916 | 64 | 346533 | 89 | 799097 |
-| 15 | 8067 | 40 | 104485 | 65 | 360448 | 90 | 821992 |
-| 16 | 9586 | 41 | 111312 | 66 | 374693 | 91 | 845277 |
-| 17 | 11264 | 42 | 118400 | 67 | 389271 | 92 | 868953 |
-| 18 | 13107 | 43 | 125752 | 68 | 404185 | 93 | 893022 |
-| 19 | 15121 | 44 | 133372 | 69 | 419435 | 94 | 917487 |
-| 20 | 17309 | 45 | 141262 | 70 | 435026 | 95 | 942350 |
-| 21 | 19677 | 46 | 149425 | 71 | 450960 | 96 | 967613 |
-| 22 | 22230 | 47 | 157866 | 72 | 467238 | 97 | 993278 |
-| 23 | 24972 | 48 | 166586 | 73 | 483865 | 98 | 1019347 |
-| 24 | 27907 | 49 | 175588 | 74 | 500841 | 99 | 1045822 |
-| 25 | 31040 | 50 | 184877 | 75 | 518170 | 100 | 1072706 |
+| 1 | 0 | 26 | 35551 | 51 | 195630 | 76 | 537029 |
+| 2 | 22 | 27 | 39092 | 52 | 205499 | 77 | 555070 |
+| 3 | 119 | 28 | 42844 | 53 | 215663 | 78 | 573470 |
+| 4 | 315 | 29 | 46810 | 54 | 226124 | 79 | 592233 |
+| 5 | 623 | 30 | 50994 | 55 | 236885 | 80 | 611359 |
+| 6 | 1044 | 31 | 55401 | 56 | 247950 | 81 | 630853 |
+| 7 | 1577 | 32 | 60033 | 57 | 259320 | 82 | 650715 |
+| 8 | 2215 | 33 | 64895 | 58 | 271000 | 83 | 670949 |
+| 9 | 2950 | 34 | 69990 | 59 | 282990 | 84 | 691556 |
+| 10 | 3768 | 35 | 75322 | 60 | 295295 | 85 | 712538 |
+| 11 | 4655 | 36 | 80895 | 61 | 307916 | 86 | 733899 |
+| 12 | 5590 | 37 | 86712 | 62 | 320857 | 87 | 755641 |
+| 13 | 6663 | 38 | 92776 | 63 | 334121 | 88 | 777764 |
+| 14 | 7879 | 39 | 99092 | 64 | 347709 | 89 | 800273 |
+| 15 | 9243 | 40 | 105661 | 65 | 361624 | 90 | 823168 |
+| 16 | 10762 | 41 | 112488 | 66 | 375869 | 91 | 846453 |
+| 17 | 12440 | 42 | 119576 | 67 | 390447 | 92 | 870129 |
+| 18 | 14283 | 43 | 126928 | 68 | 405361 | 93 | 894198 |
+| 19 | 16297 | 44 | 134548 | 69 | 420611 | 94 | 918663 |
+| 20 | 18485 | 45 | 142438 | 70 | 436202 | 95 | 943526 |
+| 21 | 20853 | 46 | 150601 | 71 | 452136 | 96 | 968789 |
+| 22 | 23406 | 47 | 159042 | 72 | 468414 | 97 | 994454 |
+| 23 | 26148 | 48 | 167762 | 73 | 485041 | 98 | 1020523 |
+| 24 | 29083 | 49 | 176764 | 74 | 502017 | 99 | 1046998 |
+| 25 | 32216 | 50 | 186053 | 75 | 519346 | 100 | 1073882 |
 
 **Claims nagerekend met deze regels** (simulatie in de tests, §6; pool van 40 recepten dat groeit met
 10 per jaar, de helft van de kookbeurten met sterren, elke 5e met foto, moeilijkheidsbonus volgens de
 echte verdeling):
-- "Level 3 na de eerste kook": klopt altijd (minimum 100 × 0,8 = 80 ≥ 62).
+- "Level 3 na de eerste kook": klopt altijd, samen met de badge Eerste hap die de eerste kook altijd
+  oplevert (seed `badge:eerste-hap|1` → 52): minimum 80 + 52 = 132 ≥ 119. De kook alleen (minimum
+  100 × 0,8 = 80) geeft sinds regelversie 3 minstens level 2.
 - "Level 20 na ±half jaar dagelijks": sneller — level 20 na ±4 maanden, na een half jaar level 22–25
   (de streakvermenigvuldiger doet dat; het plan rekende zonder).
 - Twee keer per week (di + vr, geen streak): na 1 jaar level 17, na 3 jaar level 24 (plan: 14 en 22).
@@ -505,11 +535,12 @@ echte verdeling):
   level 100 blijft wat het moet zijn: bijna onhaalbaar.
 ⚠ Feitencheck (onafhankelijk nagerekend met precies de regels en de `simulate()`-generator van §6a):
 "één op de tien overslaan → level 94" stond hier, maar de eigen pin in §6a (`skipEvery: 10` → 967.012
-XP) is level 95 (942.350 ≤ 967.012 < 967.613); daarom 95. Level 20 na ±111 dagen, half jaar → 24, 1 jaar
-→ 29, level 50 na ±4,4 jaar (overslaan: ±5,6 jaar), level 100 na ±25,5 jaar: kloppen. Wat NIET
+XP) is level 95 (943.526 ≤ 967.012 < 968.789); daarom 95. Level 20 na ±117 dagen, half jaar → 24, 1 jaar
+→ 29, level 50 na ±4,4 jaar (overslaan: ±5,6 jaar), level 100 na ±25,6 jaar: kloppen (nagerekend met
+regelversie 3). Twee keer per week (di + vr) staat na 3 jaar op level 24 (31.532 XP, onder de 32.216 van
+level 25; met de curve van vóór regelversie 3 was dat net 25). Wat NIET
 uitkomt (niet gepind, keuzes blijven staan): de robot (`holidaysPerYear: 0`) haalt 100 na ±17,6 jaar,
-niet 19; twee keer per week (di + vr) staat na 3 jaar op level 25 (31.532 XP, net boven 31.040), niet
-24; vijf dagen per week (ma–vr of twee losse vrije dagen, met vakanties) eindigt na 30 jaar op level
+niet 19; vijf dagen per week (ma–vr of twee losse vrije dagen, met vakanties) eindigt na 30 jaar op level
 80–84, niet 91 — twee vrije dagen per week breken de streak elke week, dus de hoge trappen vallen weg.
 
 ### 2c. Types van de afleiding (`src/domain/xp.ts`)
@@ -563,7 +594,7 @@ afwasmachinezalm (5 regels); log: (1) uiensoep 2026-10-20T17:30Z ★4, (2) zalm 
 (3) uiensoep 2026-10-22T18:10Z ★5; foto uiensoep 2026-10-22T19:00Z; eigen recept u:abc12345 tweetalig;
 badge eerste-hap niveau 1. Events: cook 1 base 120 (100+15+5) → 131 · cook 2 base 100 → 103 · cook 3
 base 110 (90+15+5) × streak 1,1 → 138 · foto 30 → **54 (Cooked!)** · recept 15 → 13 · badge 50 → 52.
-Totaal **491, level 5** (352 ≤ 491 < 615, nextAt 615). Geef kookbeurt 2 achteraf 3 sterren: event 2
+Totaal **491, level 4** (315 ≤ 491 < 623, nextAt 623). Geef kookbeurt 2 achteraf 3 sterren: event 2
 wordt 108, totaal 496, `diffXp` geeft één pop van +5.
 ⚠ Feitencheck: de getallen zijn nagerekend en kloppen. Let op: het zijn fixture-waarden; de test bouwt
 zijn eigen `recipes`-Map. In data/recipes.json bestaat `b:uiensoep` niet, en de echte
@@ -1044,7 +1075,8 @@ de stil-schakelaar aan helemaal niet (dat laatste zegt `more.timerSoundIOSHint` 
 over de stil-schakelaar, niet over de voorgrond). Schudden bij Overcooked! respecteert `prefers-reduced-motion` op beide.
 
 **Opus mag dit NIET zelf beslissen (zo doen als hier staat, anders vragen aan Stijn/Fable):**
-1. Alle getallen in `XP_RULES` (§2b), de curve 11·(L−1)^2,5, max level 100, de streaktrappen, ±20 %,
+1. Alle getallen in `XP_RULES` (§2b), de curve 11·(L−1)^2,5 met de opslag op de eerste tien levels
+   (`earlyBoostLevels` 10, regelversie 3), max level 100, de streaktrappen, ±20 %,
    5 %/1 % crits ×2/×5, het dagplafond 3/5/6, de rustregel 4-op-rij, 7 dagen terugdateren, de
    moeilijkheidsbonus op ingrediëntregels (niet stappen), weekbonus 7 van 7.
 2. De hash (FNV-1a + fmix32, UTF-16 code units) en de seed-strings letterlijk; geen `Math.random`
@@ -1084,15 +1116,18 @@ stars)`; dagen via `Date.UTC`-middagen zodat de lokale dag niet verschuift op St
   overcooked en **505** cooked (determinisme), én binnen de marges 60–140 / 420–580 (documentatie).
 - Bekende crits: `cook:b:test|2026-03-03T18:00:00.000Z#2` → cooked; `cook:b:test|2026-03-04T18:00:00.000Z#115`
   → overcooked (base 100 → xp in 400…600); `photo:b:p|2026-04-01T12:00:00.000Z` → base 30 → **175**.
-- Curve: `xpForLevel` 1→0, 2→11, 3→62, 4→171, 5→352, 6→615, 7→970, 10→2673, 20→17309, 30→49818,
-  50→184877, 100→1072706; `levelForXp` 0→1, 10→1, 11→2, 61→2, 62→3, 2672→9, 2673→10, 1072705→99,
-  1072706→100, 9e9→100. `streakMultiplier` 1→1, 2→1, 3→1,1, 6→1,1, 7→1,2, 13→1,2, 14→1,3, 29→1,3,
+- Curve (regelversie 3): `xpForLevel` 1→0, 2→22, 3→119, 4→315, 5→623, 6→1044, 7→1577, 10→3768,
+  20→18485, 30→50994, 50→186053, 100→1073882; de acceptatietabel van 30 okt (levels 1–14: 0, 22, 119, 315,
+  623, 1044, 1577, 2215, 2950, 3768, 4655, 5590, 6663, 7879); vanaf level 11 precies `base(L) + 1176`;
+  `xpForLevel` strikt stijgend 1…100; `levelForXp` 0→1, 21→1, 22→2, 118→2, 119→3, 3767→9, 3768→10,
+  1073881→99, 1073882→100, 9e9→100. `streakMultiplier` 1→1, 2→1, 3→1,1, 6→1,1, 7→1,2, 13→1,2, 14→1,3, 29→1,3,
   30→1,5, 99→1,5, 100→1,75, 364→1,75, 365→2, 1000→2.
-- Eerste kook → level 3 voor elke seed: 500 seeds `cook:b:r<i>|2026-01-01T12:00:00.000Z`, base 100:
-  minimum 80, `levelForXp(min)` = 3.
+- Eerste kook + badge Eerste hap → level 3 voor elke seed: 500 seeds `cook:b:r<i>|2026-01-01T12:00:00.000Z`,
+  base 100: minimum 80, `levelForXp(min)` = 2; `rollReward(50, 'badge:eerste-hap|1')` = 52;
+  `levelForXp(min + 52)` = 3.
 - **Uitgewerkt voorbeeld** (§2c): events in deze volgorde met xp 131, 103, 138, 54 (crit 'cooked'), 13,
-  52; totaal 491; level 5; levelStart 352; nextAt 615. Daarna sterren 3 op kookbeurt 2: event 2 → 108,
-  totaal 496; `diffXp(prev, next)` → `{ amount: 5, pops: [{ xp: 5, kind: 'cook' }], levelFrom: 5, levelTo: 5 }`.
+  52; totaal 491; level 4; levelStart 315; nextAt 623. Daarna sterren 3 op kookbeurt 2: event 2 → 108,
+  totaal 496; `diffXp(prev, next)` → `{ amount: 5, pops: [{ xp: 5, kind: 'cook' }], levelFrom: 4, levelTo: 4 }`.
   ⚠ Feitencheck: met `toEqual` faalt deze verwachting op het type van §2c: elke pop heeft ook `crit`
   (hier `null`, en `null` ≠ ontbrekend) en `XpDelta` heeft ook `zeroReasons`. Gebruik `toMatchObject` met
   dit object, of schrijf `pops: [{ xp: 5, crit: null, kind: 'cook' }]` en `zeroReasons: []` erbij.
@@ -1138,7 +1173,8 @@ stars)`; dagen via `Date.UTC`-middagen zodat de lokale dag niet verschuift op St
   13.430): ze kloppen ALLEEN als de stappen per dag in deze volgorde lopen: eerst de vakantie- en de
   skip-test (`continue`), pas daarna `if (d % 37 === 0) pool++`, dus de pool groeit alleen op kookdagen.
   Wie `pool++` vóór de vakantie-/skip-test zet (op elke dag), krijgt 1.264.313 (skipEvery 10: 972.178,
-  level 96; 1 jaar: 50.606, level 30). Dat is dan een fout in `simulate()`, niet in `deriveXp`.
+  level 96; 1 jaar: 50.606, level 29 — met de curve van vóór regelversie 3 was dat 30; de totalen vangen de
+fout nog steeds). Dat is dan een fout in `simulate()`, niet in `deriveXp`.
 **tests/levels.test.ts**: 100 items, levels 1…100 aaneengesloten, titels beide talen niet leeg en uniek
 per taal, level 2 = 'T-rex' (beide), 6 = 'Oma'/'Grandma', 100 = 'Best Chef of the Universe' (beide);
 `normalizeLevels([])` → 100 keer 'Level N'; `titleFor(101)` → 'Level 101' nooit een exception.
@@ -1172,11 +1208,13 @@ dagen buiten de maand ontbreken, `cooks` per dag op memberId-volgorde van invoer
 1. Nieuw profiel, één kookbeurt via ✓ Gekookt → confetti, dan rechtsboven "+1xx" (80–120 of een crit),
    dan de sheet "🎉 Level 3!" met "Aardappelschiller" en (6D-3) "Ontgrendeld: Dubbele confetti".
    ⚠ Feitencheck: de eerste kookbeurt verdient ook meteen de badge `eerste-hap` (data/badges.json:
-   cookCount 1, tier 1) → via `checkNewBadges` → `settleXp` nog een pop van base 50 (40–60). De kook zelf
-   is base 100 + moeilijkheid (0–30) + sterren (5): 80–162 zonder crit. Samen 120–222 XP, en level 4
-   begint bij 171: bij een recept met veel ingrediëntregels of een gunstige worp wordt het "Level 4!"
-   (Afwasser) in plaats van 3. Hetzelfde geldt voor stap 2 hieronder, DEVICE-TEST 92 en §7.15.
-2. Meer → Profielen: "Level 3 · Aardappelschiller — … / 171 XP", balk, "🔥 vandaag gekookt · nog … XP
+   cookCount 1, tier 1) → via `checkNewBadges` → `settleXp` nog een pop van base 50 (seed
+   `badge:eerste-hap|1` → altijd 52). De kook zelf is base 100 + moeilijkheid (0–30) + sterren (5): 80–162
+   zonder crit. Samen 132–214 XP; level 3 begint bij 119 en level 4 bij 315 (regelversie 3): met alleen
+   Eerste hap is het zonder crit altijd "Level 3!". Verdient dezelfde kook nog meer eerste-keer-badges (een
+   keuken, een seizoen: base 50 elk) of valt er een crit, dan kan het "Level 4!" (Afwasser) worden in plaats
+   van 3. Hetzelfde geldt voor stap 2 hieronder, DEVICE-TEST 92 en §7.15.
+2. Meer → Profielen: "Level 3 · Aardappelschiller — … / 315 XP", balk, "🔥 vandaag gekookt · nog … XP
    tot level 4". Home: dezelfde regel onder de begroeting; tik → Profielen.
 3. Zelfde recept nog eens vandaag → confetti, géén pop (0 XP, stil). Zes verschillende recepten op één
    dag → vanaf de 6e de toast "Genoeg gekookt voor vandaag — morgen weer XP."
@@ -1206,7 +1244,7 @@ Doe: 1. Tik op een recept en op **✓ Gekookt**. Tik bovenaan op **Bewaar**. Kij
 4. Open hetzelfde recept en tik nog eens **✓ Gekookt** → **Bewaar**.
 Goed: 1. Confetti, en daarna verschijnt rechtsboven kort een blauw blokje "+1xx" (soms in goud met
 "Cooked!"). Daarna schuift een venster omhoog: "🎉 Level 3!" met de titel **Aardappelschiller**.
-2. "Level 3 · Aardappelschiller" met een balk en "… / 171 XP"; eronder "🔥 vandaag gekookt · nog … XP
+2. "Level 3 · Aardappelschiller" met een balk en "… / 315 XP"; eronder "🔥 vandaag gekookt · nog … XP
 tot level 4". 3. Dezelfde regel met je avatar; de tik opent Profielen. 4. Wel confetti, geen blauw
 blokje (hetzelfde recept telt één keer per dag).
 ⚠ Feitencheck: de rij in de app heet "Profielen beheren" (`more.manageProfiles`; EN "Manage
@@ -1258,7 +1296,7 @@ voortgang."
 EN (zelfde nummers; in het Engelse deel van docs/DEVICE-TEST.md): 92 **XP and levels** — Tap a recipe → **✓
 Cooked** → **Save** at the top; look top right (confetti, then a blue "+1xx" chip, sometimes gold with
 "Cooked!"; then a sheet "🎉 Level 3!" with **Potato Peeler**). **More → Manage profiles**: "Level 3 · Potato
-Peeler", bar, "… / 171 XP", "🔥 cooked today · … XP to level 4". **Home**: the same line under the
+Peeler", bar, "… / 315 XP", "🔥 cooked today · … XP to level 4". **Home**: the same line under the
 greeting; tapping it opens Profiles. Cook the same recipe again → confetti, no chip. 93 **Honest about 0
 XP** — **✓ Cooked → Another date** two weeks back: "More than a week ago: counts for your badges and
 the calendar, not for XP."; after Save no chip. Six different recipes in one day → after the sixth: "That's

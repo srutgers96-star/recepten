@@ -164,7 +164,8 @@ Geen enkele nieuwe key bestaat nu al (gecontroleerd 22 okt); geen prefix wordt d
 - **6D-1 ↔ 6D-2 (badge-model):** `Badge.tiers`/`BadgeStatus.tier`/`maxTier`/`hidden`/`xp` (badges-avatar
   wint). Badge-XP: ladder per bereikt niveau k één event base 50·k; eenmalig één event
   `badge.xp ?? (hidden ? 250 : 50)`; 6D-1 alleen → elke verdiende badge base 50; **6D-2a bumpt
-  `XP_RULES_VERSION` naar 2** (eerlijke melding). `longestDayStreak(cookDays)` in src/domain/xp.ts (geen
+  `XP_RULES_VERSION` naar 2** (eerlijke melding); **sinds 30 okt is het 3** (eerste tien levels uitgedikt,
+  Stijn + Fable; xp-levels §2b "Levelcurve"). `longestDayStreak(cookDays)` in src/domain/xp.ts (geen
   streak.ts). Badge "Overcooked!" = regelsoort `overcooked` over `BadgeFacts.xp?: XpState` ('overcooked'
   uit FEATURE_IDS; 32 ids). Avatar-maker op level 3 in beide specs. `#x=`: badges als `id`/`id@k`,
   `avatar?: AvatarSpec`.
@@ -322,7 +323,8 @@ spec; dit is de ontdubbelde kern.
 11. 6D: alle getallen in `XP_RULES`, de curve, de hash en seeds letterlijk; XP afgeleid, nooit opgeslagen;
     geen `Math.random`; badges uit = geen spoor; `settleXp` alleen op de zeven beloningsmomenten; de 100
     titels, 15 ontgrendelingen, 144 badges, 66 avatar-onderdelen, kleuren en drempelreeksen letterlijk;
-    `XP_RULES_VERSION` 1 in 6D-1, 2 in 6D-2a; `#x=` precies zoals §2h.
+    `XP_RULES_VERSION` 1 in 6D-1, 2 in 6D-2a, 3 sinds 30 okt (eerste tien levels uitgedikt); `#x=` precies
+    zoals §2h.
 12. UI-teksten letterlijk uit de spec (NL + Brits-Engels); past iets niet op 360 px, dan in beide talen
     inkorten en melden; emoji's zoals genoemd; elke sheet via SheetPortal met knoppen bovenaan.
 13. Geen Home-wijzigingen buiten wat de spec noemt (slots: TimerBar, HomeLevelRow, TonightCard, WeekCard);
@@ -388,11 +390,11 @@ Gegroepeerd en ontdubbeld over de negen specs (de nummers verwijzen naar §7 van
         alleen met schakelaar; "Eigen versie maken" zet variantOf + basedOn; kookbalk onthoudt `variant`.
 21. [ ] 6C: pins verhuisd (idempotent); twee tabbladen; StandingSheet met Sluit; stap 1 l bij melk; "Heb
         ik al" niet onthouden; Klaar reset; back-up/herstel merge; Home-link in de lege weekkaart.
-22. [ ] 6D-1: geen `Math.random`; pins (hash32, 94/505, curve, 491/level 5, 1.259.039) groen; 30-jaar-test
+22. [ ] 6D-1: geen `Math.random`; pins (hash32, 94/505, curve, 491/level 4, 1.259.039) groen; 30-jaar-test
         < 50 ms; invoerdag-plafond werkt; badges uit = geen spoor; `reloadXp` na herstel zonder pops;
         `loggedAt` geschreven.
 23. [ ] 6D-2/3: acht groepen, ladders met `id@k`, Geheim toont nooit het totaal, toasts per hoogste niveau,
-        32 feature-hooks op de juiste momenten, `XP_RULES_VERSION === 2` met de melding; avatar-maker vanaf
+        32 feature-hooks op de juiste momenten, `XP_RULES_VERSION === 2` met de melding (sinds 30 okt 3); avatar-maker vanaf
         level 3, 66 onderdelen renderen, kaartje `#f=` met avatar, lokale leden tonen de avatar.
 24. [ ] 6D-4a/4b: Vrijgespeeld met aan/uit per telefoon (`unlocks.disabled` toestel-lokaal), geluiden en
         lettertypes; `#x=` ontvangst met de drie uitkomsten; kalender met lokaal-wint-regel; landingspagina

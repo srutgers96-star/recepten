@@ -60,15 +60,16 @@ const median = (xs: number[]): number => [...xs].sort((a, b) => a - b)[Math.floo
 
 // ---------------------------------------------------------------------------- rules + hash
 
-describe('XP_RULES (regelversie 2)', () => {
-  it('has version 2 (6D-2a) and the numbers of §2b', () => {
-    expect(XP_RULES_VERSION).toBe(2);
-    expect(XP_RULES.version).toBe(2);
+describe('XP_RULES (regelversie 3)', () => {
+  it('has version 3 (first ten levels thickened, 30 Oct 2026) and the numbers of §2b', () => {
+    expect(XP_RULES_VERSION).toBe(3);
+    expect(XP_RULES.version).toBe(3);
     expect(XP_RULES).toMatchObject({
       cookFirst: 100, cookStep: 10, cookFloor: 50, difficultyPer: 5, difficultyFromLines: 7, difficultyMax: 30,
       starsBonus: 5, photoFirst: 30, photoNext: 20, ownRecipe: 10, ownRecipeBilingual: 15, badgePerLevel: 50,
       badgeSecret: 250, fullWeek: 50, capFull: 3, capHalf: 5, busyDayFrom: 4, busyRunDays: 3, backdateDays: 7,
-      variation: 0.2, critCooked: 0.05, critOvercooked: 0.01, curveK: 11, curveP: 2.5, maxLevel: 100,
+      variation: 0.2, critCooked: 0.05, critOvercooked: 0.01, curveK: 11, curveP: 2.5, earlyBoostLevels: 10,
+      maxLevel: 100,
     });
     expect(XP_RULES.streak).toEqual([[365, 2], [100, 1.75], [30, 1.5], [14, 1.3], [7, 1.2], [3, 1.1]]);
   });
@@ -136,27 +137,52 @@ describe('hash32 / unitFromSeed / rollReward', () => {
 
 // ---------------------------------------------------------------------------- curve + streak
 
+/** The base curve of §2b without the early boost: round(11 · (L − 1)^2.5). */
+const baseCurve = (level: number): number => (level > 1 ? Math.round(11 * Math.pow(level - 1, 2.5)) : 0);
+
 describe('levelcurve', () => {
   it('pins xpForLevel', () => {
     const pins: Array<[number, number]> = [
-      [1, 0], [2, 11], [3, 62], [4, 171], [5, 352], [6, 615], [7, 970], [10, 2673], [20, 17309], [30, 49818],
-      [50, 184877], [100, 1072706],
+      [1, 0], [2, 22], [3, 119], [4, 315], [5, 623], [6, 1044], [7, 1577], [10, 3768], [20, 18485], [30, 50994],
+      [50, 186053], [100, 1073882],
     ];
     for (const [level, xp] of pins) expect(xpForLevel(level), `level ${level}`).toBe(xp);
+  });
+
+  it('thickens the first ten levels: the acceptance table of 30 Oct 2026 (Stijn + Fable)', () => {
+    // Increment L → L+1 ×(1 + (11 − L)/10) for L ≤ 10, each extra rounded (§2b "Levelcurve").
+    const table: Array<[number, number]> = [
+      [1, 0], [2, 22], [3, 119], [4, 315], [5, 623], [6, 1044], [7, 1577], [8, 2215], [9, 2950], [10, 3768],
+      [11, 4655], [12, 5590], [13, 6663], [14, 7879],
+    ];
+    for (const [level, xp] of table) expect(xpForLevel(level), `level ${level}`).toBe(xp);
+  });
+
+  it('from level 11 on every level is the base curve + exactly 1176', () => {
+    for (let level = 11; level <= 100; level++) expect(xpForLevel(level) - baseCurve(level), `level ${level}`).toBe(1176);
+    for (let level = 2; level <= 10; level++) expect(xpForLevel(level) - baseCurve(level), `level ${level}`).toBeLessThan(1176);
+  });
+
+  it('xpForLevel is strictly increasing 1..100, and levelForXp finds every threshold', () => {
+    for (let level = 2; level <= 100; level++) {
+      expect(xpForLevel(level), `level ${level}`).toBeGreaterThan(xpForLevel(level - 1));
+      expect(levelForXp(xpForLevel(level)), `at level ${level}`).toBe(level);
+      expect(levelForXp(xpForLevel(level) - 1), `just below level ${level}`).toBe(level - 1);
+    }
   });
 
   it('matches every value of the §2b table', () => {
     // A few from each column of the table (the formula is the source; the table is its print).
     const table: Array<[number, number]> = [
-      [8, 1426], [9, 1991], [11, 3479], [15, 8067], [25, 31040], [26, 34375], [40, 104485], [51, 194454],
-      [60, 294119], [75, 518170], [76, 535853], [90, 821992], [95, 942350], [96, 967613], [99, 1045822],
+      [8, 2215], [9, 2950], [11, 4655], [15, 9243], [25, 32216], [26, 35551], [40, 105661], [51, 195630],
+      [60, 295295], [75, 519346], [76, 537029], [90, 823168], [95, 943526], [96, 968789], [99, 1046998],
     ];
     for (const [level, xp] of table) expect(xpForLevel(level), `level ${level}`).toBe(xp);
   });
 
   it('pins levelForXp', () => {
     const pins: Array<[number, number]> = [
-      [0, 1], [10, 1], [11, 2], [61, 2], [62, 3], [2672, 9], [2673, 10], [1072705, 99], [1072706, 100], [9e9, 100],
+      [0, 1], [21, 1], [22, 2], [118, 2], [119, 3], [3767, 9], [3768, 10], [1073881, 99], [1073882, 100], [9e9, 100],
     ];
     for (const [total, level] of pins) expect(levelForXp(total), `total ${total}`).toBe(level);
     expect(levelForXp(-5)).toBe(1);
@@ -170,11 +196,16 @@ describe('levelcurve', () => {
     for (const [days, mult] of pins) expect(streakMultiplier(days), `${days} days`).toBe(mult);
   });
 
-  it('first cook → level 3 for every seed (minimum 80 ≥ 62)', () => {
+  it('first cook + its badge Eerste hap → level 3 for every seed (minimum 80 + 52 = 132 ≥ 119)', () => {
+    // Since rules version 3 the cook alone reaches level 2 at the minimum (80 < 119); the badge
+    // eerste-hap that the first cook always earns rolls a fixed 52 (seed `badge:eerste-hap|1`).
     let min = Infinity;
     for (let i = 0; i < 500; i++) min = Math.min(min, rollReward(100, `cook:b:r${i}|2026-01-01T12:00:00.000Z`).xp);
     expect(min).toBeGreaterThanOrEqual(80);
-    expect(levelForXp(min)).toBe(3);
+    expect(levelForXp(min)).toBe(2);
+    const badge = rollReward(XP_RULES.badgePerLevel, 'badge:eerste-hap|1');
+    expect(badge).toEqual({ xp: 52, crit: null });
+    expect(levelForXp(min + badge.xp)).toBe(3);
   });
 });
 
@@ -216,7 +247,7 @@ function workedExample(stars2: number | null = null): XpFacts {
 describe('deriveXp — worked example (§2c)', () => {
   const today = dayIndexOfIso('2026-10-22T18:10:00.000Z')!;
 
-  it('derives 131, 103, 138, 54 (Cooked!), 13, 52 = 491, level 5', () => {
+  it('derives 131, 103, 138, 54 (Cooked!), 13, 52 = 491, level 4', () => {
     const s = deriveXp(workedExample(), XP_RULES, today);
     expect(s.events.map((e) => e.kind)).toEqual(['cook', 'cook', 'cook', 'photo', 'recipe', 'badge']);
     expect(s.events.map((e) => e.xp)).toEqual([131, 103, 138, 54, 13, 52]);
@@ -225,10 +256,10 @@ describe('deriveXp — worked example (§2c)', () => {
     expect(s.events[3]!.crit).toBe('cooked');
     expect(s.events.filter((e) => e.crit !== null)).toHaveLength(1);
     expect(s.total).toBe(491);
-    expect(s.level).toBe(5);
-    expect(s.levelStart).toBe(352);
-    expect(s.nextAt).toBe(615);
-    expect(s.rulesVersion).toBe(2);
+    expect(s.level).toBe(4);
+    expect(s.levelStart).toBe(315);
+    expect(s.nextAt).toBe(623);
+    expect(s.rulesVersion).toBe(3);
     expect(s.cookDays).toHaveLength(3);
     expect(s.streak).toEqual({ current: 3, best: 3, lastDay: today, freeDayUsed: false });
     expect(s.byKey.get('cook:b:uiensoep|2026-10-20T17:30:00.000Z')!.xp).toBe(131);
@@ -241,18 +272,18 @@ describe('deriveXp — worked example (§2c)', () => {
     expect(next.events[1]!.xp).toBe(108);
     expect(next.total).toBe(496);
     const delta = diffXp(prev, next);
-    expect(delta).toMatchObject({ amount: 5, pops: [{ xp: 5, kind: 'cook' }], levelFrom: 5, levelTo: 5 });
-    expect(delta).toEqual({ amount: 5, pops: [{ xp: 5, crit: null, kind: 'cook' }], levelFrom: 5, levelTo: 5, zeroReasons: [] });
+    expect(delta).toMatchObject({ amount: 5, pops: [{ xp: 5, kind: 'cook' }], levelFrom: 4, levelTo: 4 });
+    expect(delta).toEqual({ amount: 5, pops: [{ xp: 5, crit: null, kind: 'cook' }], levelFrom: 4, levelTo: 4, zeroReasons: [] });
   });
 
-  it('diffXp from nothing: every event pops, level 1 → 5', () => {
+  it('diffXp from nothing: every event pops, level 1 → 4', () => {
     const next = deriveXp(workedExample(), XP_RULES, today);
     const delta = diffXp(null, next);
     expect(delta.pops.map((p) => p.xp)).toEqual([131, 103, 138, 54, 13, 52]);
     expect(delta.amount).toBe(491);
     expect(delta.levelFrom).toBe(1);
-    expect(delta.levelTo).toBe(5);
-    expect(diffXp(next, next)).toEqual({ amount: 0, pops: [], levelFrom: 5, levelTo: 5, zeroReasons: [] });
+    expect(delta.levelTo).toBe(4);
+    expect(diffXp(next, next)).toEqual({ amount: 0, pops: [], levelFrom: 4, levelTo: 4, zeroReasons: [] });
   });
 });
 

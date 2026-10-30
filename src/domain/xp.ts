@@ -7,8 +7,11 @@
 
 import { dayIndexOfIso, isoWeekMondayOf, localDayIndex } from './days';
 
-/** 1 = 6D-1; 2 = 6D-2a (badge catalogue with tiers and secret badges changes the badge XP, §2f). */
-export const XP_RULES_VERSION = 2 as const;
+/**
+ * 1 = 6D-1; 2 = 6D-2a (badge catalogue with tiers and secret badges changes the badge XP, §2f);
+ * 3 = the first ten levels thickened (`earlyBoostLevels`, Stijn + Fable 30 Oct 2026, §2b "Levelcurve").
+ */
+export const XP_RULES_VERSION = 3 as const;
 
 export interface XpRules {
   version: number;
@@ -37,6 +40,7 @@ export interface XpRules {
   critOvercooked: number;   // 0.01
   curveK: number;           // 11
   curveP: number;           // 2.5
+  earlyBoostLevels: number; // 10: increment L → L+1 ×(1 + (11 − L)/10) for L ≤ 10 (+100 % … +10 %)
   maxLevel: number;         // 100
 }
 
@@ -74,6 +78,7 @@ export const XP_RULES: XpRules = Object.freeze({
   critOvercooked: 0.01,
   curveK: 11,
   curveP: 2.5,
+  earlyBoostLevels: 10,
   maxLevel: 100,
 });
 
@@ -142,13 +147,37 @@ export interface XpDelta { amount: number; pops: Array<{ xp: number; crit: Crit 
 
 // ---------------------------------------------------------------------------- curve and streak
 
-/** Total XP needed to HAVE `level`: round(curveK · (level − 1)^curveP); level 1 (and below) = 0. */
-export function xpForLevel(level: number, rules: XpRules = XP_RULES): number {
+/** The base curve: round(curveK · (level − 1)^curveP); level 1 (and below) = 0. */
+function baseXpForLevel(level: number, rules: XpRules): number {
   if (!(level > 1)) return 0;
   return Math.round(rules.curveK * Math.pow(level - 1, rules.curveP));
 }
 
-/** Highest level ≤ maxLevel whose xpForLevel ≤ total (at least 1). */
+/**
+ * Total XP needed to HAVE `level` (§2b "Levelcurve"): the base curve plus the early boost. With
+ * n = earlyBoostLevels and inc(k) = base(k + 1) − base(k), every increment k → k + 1 for k ≤ n gets
+ * round(inc(k) · (n + 1 − k) / n) on top (+100 % at level 1 … +10 % at level 10; Math.round, so
+ * .5 rounds up):
+ *   xpForLevel(L) = base(L) + Σ_{k=1}^{min(L−1, n)} round(inc(k) · (n + 1 − k) / n)
+ * From level n + 1 on the sum is complete, so every later level shifts by the same constant (1176 XP
+ * with the rules of version 3). Level 1 (and below) = 0. At most n + 1 Math.pow calls, so
+ * levelForXp's search stays O(maxLevel · n).
+ */
+export function xpForLevel(level: number, rules: XpRules = XP_RULES): number {
+  if (!(level > 1)) return 0;
+  let xp = baseXpForLevel(level, rules);
+  const n = rules.earlyBoostLevels;
+  const top = Math.min(level - 1, n);
+  let prev = 0; // base(1)
+  for (let k = 1; k <= top; k++) {
+    const next = baseXpForLevel(k + 1, rules);
+    xp += Math.round(((next - prev) * (n + 1 - k)) / n);
+    prev = next;
+  }
+  return xp;
+}
+
+/** Highest level ≤ maxLevel whose xpForLevel ≤ total (at least 1); xpForLevel is strictly increasing. */
 export function levelForXp(total: number, rules: XpRules = XP_RULES): number {
   let level = 1;
   while (level < rules.maxLevel && xpForLevel(level + 1, rules) <= total) level++;
