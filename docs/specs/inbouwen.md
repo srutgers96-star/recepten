@@ -1,6 +1,9 @@
 # Spec 13F — Stijns recepten inbouwen met id-migratie
 
-Status: compleet (Fable, 22 okt 2026)
+Status: compleet (Fable, 22 okt 2026) — **VERVALLEN (Stijn, 30 okt 2026):** "skip het 22 recepten van Stijn's export
+toevoegen … dat skipt weer een hoop en is niet nodig". De 22 recepten worden niet ingebouwd, geen id-migratie, geen
+Dexie v8, DATA_VERSION blijft 9, klassiekers blijven 216. Alleen de 8 woordenboek-entries uit §2b (nduja, panko, truffel,
+haas, foie-gras, keelspek, noilly-prat, mokkaboontje) gaan naar docs/IDEAS.md idee 8 (ingrediënten-upgrade).
 
 **Let op (Fable, 24 okt 2026):** DATA_VERSION 9 is op 24 okt al gebruikt (drie keukens toegewezen); 13F bumpt daarom naar **10** (hieronder aangepast). tests/migrate.test.ts pint nu 9.
 

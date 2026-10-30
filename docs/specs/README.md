@@ -23,9 +23,12 @@ spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
 - **Volgorde omgegooid:** na de bijgerechten komt eerst **6D (XP)**: 6D-1 → 6D-2a/2b → 6D-3 → 6D-4a → 6D-4b.
 - **Bijgewerkt 30 okt (Stijn):** ná 6D-4b een **6D-UI-ronde** (tabs per categorie voor de badgepagina en de
   avatar-maker in plaats van één lange lijst; avatar mooier, groter en gedetailleerder, het attribuut valt nu weg) →
-  13F → 13D → 6C → 13J → **challenges (level 20)** → **opschoonronde** (minder uitleg en tekst in de app, bv. niet
+  13D → 6C → 13J → **challenges (level 20)** → **opschoonronde** (minder uitleg en tekst in de app, bv. niet
   overal "geel = niveau 1"; rustiger) → Z → eindcontrole. Stijn: "waarschijnlijk later in een soort opschoon-ronde
   nadat alles er staat"; Fable: de tabs en de avatar wél meteen na 6D-4b, omdat Stijn die schermen nu test.
+- **Bijgewerkt 30 okt (Stijn): 13F vervalt.** De 22 recepten uit Stijns export worden niet ingebouwd ("skipt weer
+  een hoop en is niet nodig"); geen id-migratie, geen Dexie v8, DATA_VERSION blijft 9, 216 klassiekers. De 8
+  woordenboek-entries die eruit voortkwamen staan in docs/IDEAS.md idee 8 (ingrediënten-upgrade).
   Daarna 13F → 13D → 6C → 13J → Z. 6D-1 hangt niet van 13F af (XP wordt afgeleid uit wat in de kooklog
   staat; 13F's alias-migratie zet de kooklog-ids om, de afleiding rekent daarna gewoon opnieuw).
 - **Gebouwd tot nu toe:** Home A+ (1–2), 13K (1–2), 6B+13E (1–5), bijgerechten (24 okt). Volgende: 6D-1 in lichte modus.
@@ -40,7 +43,7 @@ spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
 | 2 | 13K kookbalk | kookbalk.md | 2 | compleet |
 | 3 | 6B + 13E labels, lactose, keukens, categorieën, + bijgerecht | labels-categorieen.md | 5 | compleet |
 | 4 | 13E de 20 bijgerechten | bijgerechten.md | 1 (3 stappen) | compleet |
-| 5 | 13F inbouwen met id-migratie | inbouwen.md | 4 | compleet (3 vragen aan Stijn, §6) |
+| 5 | 13F inbouwen met id-migratie | inbouwen.md | 4 | **vervallen** (Stijn 30 okt: niet nodig; de 8 woordenboek-entries → IDEAS 8) |
 | 6 | 13D varianten als tabs, tip van de maker | varianten-tabs.md | 4 (blok 5 vervallen) | compleet |
 | 7 | 6C vaste lijst | vaste-lijst.md | 3 | compleet (open punten A–D beslist) |
 | 8 | 6D-1 XP, levels, pops, level-up | xp-levels.md "Blok 6D-1" | 1 | compleet |
@@ -60,7 +63,7 @@ Nummering 6D: de twee 6D-specs tellen hun blokken anders. Canoniek is de tabel: 
 "Blok 6D-3", ontgrendelingen) → 6D-4b (xp-levels "Blok 6D-4", sync + kalender).
 
 DEVICE-TEST-rijen zijn over alle specs heen definitief genummerd: Home A+ 70–71 · 13K 72–74 (+ rij 66
-aangepast) · 6B 75–80 · bijgerechten 81 · 13F 82–85 · 13D 86–88 (13D blok 2 past rij 85 aan) · 6C 89–91
+aangepast) · 6B 75–80 · bijgerechten 81 · 82–85 vrij (13F vervallen) · 13D 86–88 (13D blok 2 past rij 85 aan) · 6C 89–91
 (+ rij 28 aangepast) · 6D-1 92–93 · 6D-2 94–95 · 6D-3 96–97 · 6D-4a 98 · 6D-4b 99–100.
 
 ### 1a. 13J zonder spec
@@ -75,19 +78,19 @@ integrator; DEVICE-TEST-rij 101.
 ## 2. Besluiten van de kritische lezer (gelden over alle specs)
 
 ### 2a. Versies en tellingen
-- **Dexie:** v7 nu → **v8 = 13F** (upgrade zonder schemawijziging, `runAliasMigration`). 13D, 6C en 6D
-  voegen géén versie toe (alles settings of velden zonder index); de eerstvolgende vrije versie is v9.
+- **Dexie:** v7 nu; 13F (v8, `runAliasMigration`) is vervallen (Stijn 30 okt). 13D, 6C en 6D
+  voegen géén versie toe (alles settings of velden zonder index); de eerstvolgende vrije versie is v8.
 - **`DATA_VERSION`** (tools/migrate-from-recepten2.ts): 4 nu → 6B blok 2 **5** → blok 3 **6** → blok 4
-  **7** → bijgerechten **8** → keukens-toewijzing 24 okt **9** → 13F **10**. Elke bump neemt `tests/migrate.test.ts` (`toBe(n)`) mee.
-- **Klassiekers:** 196 → 216 (bijgerechten) → **236** (13F). `classicsTotal` volgt de bundel; badges
-  "Het hele boek"/"Halverwege het boek" worden 236/118. Tests die over "de 196" gaan filteren op
+  **7** → bijgerechten **8** → keukens-toewijzing 24 okt **9**; de eerstvolgende vrije is **10** (13F vervallen). Elke bump neemt `tests/migrate.test.ts` (`toBe(n)`) mee.
+- **Klassiekers:** 196 → 216 (bijgerechten); 13F (236) is vervallen. `classicsTotal` volgt de bundel; badges
+  "Het hele boek"/"Halverwege het boek" blijven 216/108. Tests die over "de 196" gaan filteren op
   `createdAt === BUILTIN_TIMESTAMP` (import uit tools/migrate-from-recepten2.ts).
 - **`migrate()`-volgorde (vast):** bron → batches → `applyReview` → sides (`data/source/bijgerechten.json`,
-  `tools/sides.ts`) → extras (13F, `tools/import-stijnchat.ts`) → `applyMeta` (`data/review/meta.json`,
-  kent ook side- en 13F-ids) → `applyDerivedTags` → sorteren. Er is géén `recipes-extra.json` en géén
+  `tools/sides.ts`) → `applyMeta` (`data/review/meta.json`,
+  kent ook side-ids; 13F vervallen) → `applyDerivedTags` → sorteren. Er is géén `recipes-extra.json` en géén
   batch-21: het pad voor de 20 bijgerechten is dat van bijgerechten.md.
-- **Woordenboek:** 1603 entries + 8 van 13F; `lactose` is vanaf 6B blok 1 verplicht op élke entry (ook
-  de 8 van 13F). Badges: 43 → 44 (`zuivelvrije-ziel`, 6B) → catalogus 144 (6D-2, ids blijven).
+- **Woordenboek:** 1603 entries (de 8 van 13F gaan naar IDEAS 8, ingrediënten-upgrade); `lactose` is vanaf 6B
+  blok 1 verplicht op élke entry. Badges: 43 → 44 (`zuivelvrije-ziel`, 6B) → catalogus 144 (6D-2, ids blijven).
 
 ### 2b. Velden, keys en namen (register; niets hiervan twee keer definiëren)
 Nieuwe velden: `Recipe.cuisine?: string | null` (6B) · `Recipe.credit?: Text | null` (13F) ·

@@ -181,3 +181,25 @@ kiezen. Woorden als "check" / "controleer" worden een notitie bij de regel, geen
 **Open vragen.** Alleen bij ≥ 3 regels of altijd? Ook voor de spraakinvoer? Leert hij van Gabi's keuzes (alias
 toevoegen aan de woordenlijst, zoals 6B "Zet in woordenboek")?
 
+## 8. Ingrediënten-upgrade: de woordenlijst uitbreiden (Stijn, 30 okt 2026)
+
+**Wens.** Blok 13F (Stijns 22 recepten inbouwen) is vervallen (30 okt: "skipt weer een hoop en is niet nodig"), maar
+de ingrediënten die daaruit voortkwamen moeten wél een keer in de woordenlijst komen. Dit is de verzamelplek voor
+alles wat de woordenlijst (nu 1603 producten) nog mist.
+
+**Uit 13F (inbouwen.md §2b), met exact deze ids zodat bestaande regels op beide telefoons blijven resolven:**
+`nduja` (vlees-vis, g) · `panko` (droog, g, gluten) · `truffel` (groente-fruit, g) · `haas` (vlees-vis, g) ·
+`foie-gras` (vlees-vis, g) · `keelspek` (vlees-vis, g) · `noilly-prat` (dranken, ml, alias "droge vermout") ·
+`mokkaboontje` (snacks-zoet, stuk). Volledige entries met NL/EN one/many, gangpad, defaultUnit, staple, veg/vegan/
+gluten/lactose. Van Stijns 12 eigen ingrediënten in de export van 13 okt zijn dit de 8 echte producten; de andere
+vier zijn bestaande producten onder een andere naam (paprika-2 → paprika, crushed-tomatoes → tomatenblokjes,
+pork-baby-back-ribs → spareribs, cooked-grain-pasta → geen).
+
+**Ook hierheen.** Woorden die Gabi's WhatsApp-lijstjes niet herkennen (idee 7: "coco acqua" → kokoswater), en wat
+Stijn via "Zet in woordenboek" (6B) zelf toevoegt en wat daarvan algemeen genoeg is om ingebouwd te worden.
+
+**Prioriteit.** Later; alleen data (`data/ingredients.json` + `npm run validate:data`), geen code. Kan in één
+uitbreidingsronde samen met de avatar-rondes.
+
+**Open vragen.** Alleen deze 8, of meteen een bredere ronde (Aziatische en Oost-Europese producten voor Gabi's
+Litouwse keuken)? Wie bepaalt de EN-namen?

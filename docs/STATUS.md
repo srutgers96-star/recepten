@@ -4,6 +4,53 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 30 okt (Opus): 6D-UI — tabs voor badges en avatar-maker, avatar ronde 2
+Gebouwd volgens docs/specs/badges-avatar.md "Blok 6D-UI" (bouwers UI-A badgepagina, UI-B maker, UI-C avatar ronde 2,
+integrator). Niet gecommit. Geen Dexie-versie, geen setting, geen dependency; één localStorage-sleutel wisselt
+(`recepten.badges.groups` → `recepten.badges.tab`). Gate groen: check, 1402 tests (61 bestanden), build, build:next,
+validate:data (126 avatar-onderdelen, 0 fouten). **Vóór main: Fable-blik op het contactblad** (spec UI-C.6, zoals 13F/13D).
+- **Badgepagina (UI-A):** de acht inklapbare groepen zijn een horizontaal scrollende tabstrook (48 px, scroll-snap,
+  `role="tablist"`, pijltjes/Home/End met roving tabindex): icoon + naam + "2/31" in een pil, Geheim "{n} gevonden"
+  (nooit een totaal). Eén groep tegelijk; een lege groep toont `badges.groupEmpty`. De laatste tab staat in
+  `recepten.badges.tab`; de oude sleutel wordt bij het laden één keer verwijderd. `?group=<id>` opent een groep; de
+  badge-toast in app.tsx linkt nu met `?tab=…&group=…` (integrator). `badgePageModel` ongewijzigd.
+- **Avatar-maker (UI-B):** voorbeeld 160 px vast bovenaan; kleurhint en 🎲 bovenaan de scrollende body; daaronder een
+  sticky tabstrook met de dertien lagen (bestaande `avatar.layer.*`-namen, onderrand in de profielkleur, cobalt stipje
+  + `avatar.tabNew` als een laag nieuwe vrije onderdelen heeft); per tab een omlopend raster van 64 px-tegels, de
+  slot-uitleg onder het raster. Opent altijd op Gezicht; bij een tabwissel springt het paneel naar boven.
+- **Avatar ronde 2 (UI-C):** alle 66 onderdelen opnieuw getekend op de nieuwe geometrie (hoofd (50,42) r 30, attribuut
+  op (84,80)), de acht referenties letterlijk, 60 nieuwe (126 totaal; per laag ≥ het doel van UI-C.4), ids en
+  ontgrendelingen van ronde 1 ongewijzigd. Maten: Home 72 · Meer 64 · Profielen 56 · Huishouden/In & uit 48 · chips
+  36 px (overrides in avatar.css). Contactblad: `node --experimental-strip-types tools/avatar-sheet.ts` →
+  scratch/avatar-sheet.html (+ screenshots per laag scratch/avatar-sheet-<laag>.png, gitignored). Nieuwe tests in
+  tests/avatar.test.ts; tests/validate-badges.test.ts telt nu "≥ 120, de 22 badge-onderdelen, elk level van ronde 1"
+  (integrator).
+- **Dev-app (375 en 360 px, licht en donker, NL en EN):** pagina nooit horizontaal scrollbaar (scrollWidth = breedte),
+  strook wel (±1500 px); Geheim gekozen → na herladen weer Geheim; `?tab=all&group=foto` opent Samen + Fotografie;
+  pijl rechts verplaatst tab en focus; onderrand cobalt in licht en donker. Maker: strook 48 px, tabs 44 px, raster
+  4 × 76 px op 360 px, tegels 64 px, strook plakt tegen de bovenkant van de body, tabwissel zet het paneel bovenaan;
+  NL- en EN-tabnamen. Avatar-maten gemeten: Home 72, Meer 64, Profielen 56, Huishouden 48.
+- **Open voor Fable / de hoofdsessie (niets zelf besloten):** (1) README §2b-register: `recepten.badges.groups` →
+  `recepten.badges.tab` — de spec geeft dat aan de integrator, maar deze run mocht docs/specs/ alleen de
+  Gebouwd-regel geven. (2) De pil op Geheim gebruikt nieuwe key `badges.groupFound`: NL "{n} gevonden" uit de spec,
+  EN "{n} found" niet in de spec (eigen vertaling van UI-A). (3) `--accent` bestaat niet in base.css: de onderrand is
+  `var(--accent, var(--cobalt))`. (4) Geen enkel nieuw onderdeel komt van een badge: UI-C.4 wil ze ook over bestaande
+  badge-ids (met laddertier) spreiden, maar dat vraagt `unlock.part` in data/badges.json (niet toegewezen) en de
+  koppeling is een keuze; UI-C stelde 16 paren voor (o.a. halloween → hat-pumpkin, uienhuiler → eyes-onion-tears,
+  stamppotstamper → prop-leek), zonder tier. (5) De letterlijke referentie prop-wooden-spoon valt half buiten de clip
+  (r 46): van de schep is alleen de linkerhelft zichtbaar; avatar.ts en de referentie mogen niet veranderen.
+  (6) Interpretatie UI-C: "hair-cap" = svg van hair-short, "body-shirt" = svg van body-tee (samen met de andere drie
+  precies `defaultAvatar()`). (7) Doelen per laag tellen op tot 120 (66 + 54), terwijl er "≥ 60 nieuwe" staat: het
+  werden er 60 (126). (8) De teken-regels (elementen, attributen, ≤ 1,5 kB, ≤ 14 elementen) staan in de tests, niet in
+  `validateAvatarParts`. (9) Het besluitblok noemt de tabs "Gezichtshaar"/"Attribuut", UI-B zegt "de bestaande namen":
+  het blijft "Baard & snor"/"Accessoire" (DEVICE-TEST 104 zegt dus Accessoire). (10) body-tee (#4a5d78) is precies
+  profielkleur "slate": daar valt het shirt weg op de omlijning na. (11) De oude 6D-3-maten in settings.css en edit.css
+  staan er nog (overschreven door avatar.css), plus `.home-hello + .home-level { margin-left: 84px }` in avatar.css.
+  (12) Bij sluiten worden alle vrije onderdelen "gezien", ook van tabs die je niet opende (gedrag van 6D-3; de spec
+  zegt niets anders). (13) data/avatar-parts.json groeide van 19,7 naar 72,4 kB (14,4 kB gzip), alleen in de
+  main-chunk. DEVICE-TEST: rij 94/95/96 aangepast (tabs), rij 104 nieuw (NL en EN); tools/README.md kreeg een regel
+  voor avatar-sheet.ts.
+
 ## 30 okt (Opus): 6D-4b — Sync mijn voortgang (#x=) en kookkalender
 Gebouwd volgens docs/specs/xp-levels.md "Blok 6D-4" (= 6D-4b in README §1; bouwer A contract, bouwer B ontvangst,
 bouwer C UI, integrator). Niet gecommit. Geen Dexie-versie, geen nieuwe dependency; wel een **nieuwe fragmentsleutel
@@ -144,6 +191,10 @@ extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids
   xp-levels.md onder "Na de lens van 6D-4a".
 
 ## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+**Stijn, 30 okt: 13F vervalt** ("skip het 22 recepten van Stijn's export toevoegen … niet nodig"): geen id-migratie, geen
+Dexie v8, DATA_VERSION blijft 9, 216 klassiekers; de 8 woordenboek-entries → IDEAS 8 (ingrediënten-upgrade). README §1/§2a,
+inbouwen.md en de timeline (v24) zijn aangepast.
+
 **Stijn, 30 okt: "je mag weer even door".** 6D-4b bouwt (workflow wf_01ac42d8-28f). Nieuwe wensen van Stijn, gepland
 (README §1 "Bijgewerkt 30 okt", besluitblok 30 okt in badges-avatar.md): **6D-UI** direct ná 6D-4b (tabs per categorie
 voor de badgepagina en de avatar-maker; avatar mooier, groter, gedetailleerder; attribuut valt weg) en een
