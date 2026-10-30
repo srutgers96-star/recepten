@@ -98,6 +98,8 @@ does not know `f` — its `extractTokens` skips `#f=` and its `parseEnvelope` an
 such a phone shows "no readable recipe" / opens Home, **not** "update the app" (that message is tied to `v`,
 which stays 2); both phones need this version before cards can be exchanged.
 
+**30 Oct 2026 (phase 6, block 6D-4b):** key `x` (shared progress, "Sync mijn voortgang", docs/specs/xp-levels.md §2h) added; frozen tokens (native and fflate) in tests/fixtures/frozen-share-tokens.ts. Same honest limit as `f`: an app from before 6D-4b does not see `#x=` as a token at all.
+
 ## Consequences
 
 - Recipe text never touches a server; WhatsApp's preview is the generic app card.

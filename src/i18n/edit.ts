@@ -208,6 +208,8 @@ export const edit: Dict = {
   'paste.card': { nl: 'Kaartje van {name}', en: 'Card from {name}' },
   'paste.cards': { nl: '{n} kaartjes', en: '{n} cards' },
   'paste.plan': { nl: 'een weekplan', en: 'a week plan' },
+  // 6D-4 (docs/specs/xp-levels.md §3, bouwer B's summarizePaste label for a `#x=`).
+  'paste.progress': { nl: 'Voortgang van {name}', en: "{name}'s progress" },
   'paste.bundle': { nl: 'Receptbestand: {what}', en: 'Recipe file: {what}' },
   'paste.website': { nl: 'Recept van een website: {lines} ingrediënten, {steps} stappen', en: 'Recipe from a website: {lines} ingredients, {steps} steps' },
   'paste.websiteLow': { nl: 'twijfelgeval', en: 'not sure' },
@@ -375,6 +377,8 @@ export const edit: Dict = {
   'inbox.ev.member': { nl: 'Je kaartje', en: 'Your card' },
   'inbox.ev.plan': { nl: 'Weekplan', en: 'Week plan' },
   'inbox.ev.list': { nl: 'Boodschappenlijst', en: 'Shopping list' },
+  // 6D-4 (docs/specs/xp-levels.md §1h): a shared "Sync mijn voortgang" link in the Gedeeld tab.
+  'inbox.ev.progress': { nl: 'Mijn voortgang', en: 'My progress' },
   'inbox.ev.deleted': { nl: '(verwijderd recept)', en: '(deleted recipe)' },
   'inbox.paste': { nl: 'Plak van klembord', en: 'Paste from clipboard' },
   'inbox.pasteHint': {

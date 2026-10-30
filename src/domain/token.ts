@@ -9,8 +9,9 @@
 // are byte-compatible with Kotlin's Deflater(nowrap = true) should a native shell ever exist.
 
 // Fragment keys are the envelope kind: r recipe, p patch of a classic, w week plan, b bundle,
-// f member card (phase 5 block F). A new kind gets a new key; an existing key never changes meaning.
-export type TokenKey = 'r' | 'p' | 'w' | 'b' | 'f';
+// f member card (phase 5 block F), x shared progress ("Sync mijn voortgang", docs/specs/xp-levels.md
+// §2h, block 6D-4). A new kind gets a new key; an existing key never changes meaning.
+export type TokenKey = 'r' | 'p' | 'w' | 'b' | 'f' | 'x';
 
 /** The JSON envelope inside every token. Unknown keys are preserved on decode (PLAN §7). */
 export interface Envelope {
@@ -30,7 +31,7 @@ export interface CodecOptions {
 }
 
 export const TOKEN_VERSION = 2 as const;
-export const TOKEN_KEYS: readonly TokenKey[] = ['r', 'p', 'w', 'b', 'f'];
+export const TOKEN_KEYS: readonly TokenKey[] = ['r', 'p', 'w', 'b', 'f', 'x'];
 /** Shortest string extractTokens accepts as a token; a real envelope never deflates below this. */
 export const MIN_TOKEN_LENGTH = 20;
 
@@ -39,7 +40,7 @@ const TOKEN_CHARS = /^[A-Za-z0-9_-]+$/;
 // a token someone stripped from its link. The key must not be glued to a preceding token/word
 // character, so "user=…" or "foor=…" never match. A prefix group is used instead of a lookbehind
 // so that an old engine fails the match, not the module parse.
-const TOKEN_RE = /(?:^|[^A-Za-z0-9_-])#?([rpwbf])=([A-Za-z0-9_-]{20,})/g;
+const TOKEN_RE = /(?:^|[^A-Za-z0-9_-])#?([rpwbfx])=([A-Za-z0-9_-]{20,})/g;
 
 export function isTokenKey(k: unknown): k is TokenKey {
   return typeof k === 'string' && (TOKEN_KEYS as readonly string[]).includes(k);

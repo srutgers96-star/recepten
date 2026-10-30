@@ -129,5 +129,5 @@ const LAUNCH_URL = typeof location === 'undefined' ? '' : location.href;
 /** What "Open in Chrome" hands over: the launch URL while it still carries a share token, else the current one. */
 export function urlForChrome(): string {
   const i = LAUNCH_URL.indexOf('#');
-  return i >= 0 && /^#[rpwbf]=/.test(LAUNCH_URL.slice(i)) ? LAUNCH_URL : location.href;
+  return i >= 0 && /^#[rpwbfx]=/.test(LAUNCH_URL.slice(i)) ? LAUNCH_URL : location.href;
 }

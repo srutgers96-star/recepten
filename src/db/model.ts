@@ -19,6 +19,8 @@ export type { Ingredient } from '@/domain/dictionary';
 export type { AppliedOverride, LineOverride, RecipeOverride, RecipePatch, RecipePatchKey } from '@/domain/overrides';
 export type { Plan, PlanItem } from '@/domain/planner';
 export type { ListItem, ListSection, ListSource } from '@/domain/aggregate';
+// 6D-4b (docs/specs/xp-levels.md §2h): a received "Sync mijn voortgang" stored in the setting `progress.snapshots`.
+export type { ProgressSnapshot } from '@/domain/progress';
 import type { CookLogEntry, Favorite, Note, Profile, Recipe } from '@/domain/model';
 import type { Ingredient } from '@/domain/dictionary';
 import type { LineOverride, RecipeOverride } from '@/domain/overrides';
@@ -97,7 +99,8 @@ export interface ShareEvent {
   /** ISO timestamp. */
   at: string;
   direction: 'in' | 'out';
-  kind: 'recipes' | 'patches' | 'plan' | 'bundle' | 'member' | 'list';
+  /** 'progress' (6D-4b): a "Sync mijn voortgang" sent (out) or saved from a received `#x=` (in). */
+  kind: 'recipes' | 'patches' | 'plan' | 'bundle' | 'member' | 'list' | 'progress';
   /** From whom (in) or to whom (out): a name, or null. */
   who: string | null;
   /** How many things: recipes + adjusted classics, or 1 for a card. */

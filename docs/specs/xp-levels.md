@@ -15,6 +15,14 @@ eerste uitbreidingsronde (≥ 100 ontgrendelingen + avatar-onderdelen samen), ni
 (pieken, uitklinktijden, Cabin Sketch alleen gewicht 400) en de fixer-fix voor het 🔔-knopje (`dropTimerSound`) akkoord.
 Challenges (level 20) en gouden modus: eigen blok, later (Stijn 29 okt: "nog niet level 20 challenges").
 Gebouwd: 29 okt 2026 (blok 6D-4a = 'Blok 6D-3 — ontgrendelingen' hier, workflow wf_cfd9a2be-d23; nabewerking (1) en (3) door Fable)
+**Fable-blik vóór main (30 okt):** token.ts en share.ts nagelezen: `x` is een nieuwe sleutel, de bestaande sleutels en
+bevroren tokens zijn ongewijzigd (git diff op tests/fixtures/frozen-share-tokens.ts voegt alleen toe), `readProgressPayload`
+is tolerant en bewaart onbekende sleutels (invariant 4), een `x` zonder object is `invalid-token`, `combineEnvelopes` laat
+`x` vallen, de leveltitels laden lazy zodat de Safari-landing klein blijft, de landing schrijft geen storage (invariant 6),
+het deelpaneel stuurt precies één veld (invariant 9). Alle open keuzes van de bouwers akkoord zoals in STATUS beschreven.
+Voor de opschoonronde: enkelvoud "1 badge"/"1 kookdag", de legenda van de kalender ook zonder "bijgewerkt" als badges uit
+staan, de inline kalender-stijlen naar xp.css. CLAUDE.md invariant 7 en de tokenregel hebben `#x=` (Fable).
+Gebouwd: 30 okt 2026 (blok 6D-4b = 'Blok 6D-4' hier, workflow wf_01ac42d8-28f; Fable-blik en CLAUDE.md door Fable)
 
 **Besluit Stijn (24 okt 2026) — ontgrendelingen rijk, niet spaarzaam.** Het level-up-overzicht en de pagina
 Vrijgespeeld moeten een "rijk scala" tonen: bij elke level-up minstens één ding, liefst meer. Daarom groeit

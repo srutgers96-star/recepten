@@ -135,6 +135,11 @@ describe('share events — decoding a backup row', () => {
     expect(decodeShareEvent({ at: AT, direction: 'out', kind: 'recipes', who: 'X', count: 2.9, recipeIds: ['u:a'] })?.count).toBe(2);
   });
 
+  it("accepts the kind 'progress' (6D-4b: a \"Sync mijn voortgang\" sent or saved)", () => {
+    expect(decodeShareEvent({ at: AT, direction: 'out', kind: 'progress', who: null, count: 1, recipeIds: [] })).toEqual({ at: AT, direction: 'out', kind: 'progress', who: null, count: 1, recipeIds: [] });
+    expect(decodeShareEvent({ at: AT, direction: 'in', kind: 'progress', who: 'Gabi', count: 1, recipeIds: [] })?.kind).toBe('progress');
+  });
+
   it('keeps a real note and a null who', () => {
     const row = decodeShareEvent({ at: AT, direction: 'out', kind: 'member', who: null, count: 1, recipeIds: [], note: 'Stijn' });
     expect(row?.who).toBeNull();

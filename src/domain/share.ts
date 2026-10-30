@@ -16,6 +16,11 @@
 //                                                            so the receiver can add them to the household;
 //                                                            `avatar` (6D-3, docs/specs/badges-avatar.md
 //                                                            §2g) is optional: an older app ignores it
+//   t: 'x'  x: ProgressCard                                  shared progress (`#x=`, "Sync mijn voortgang",
+//                                                            docs/specs/xp-levels.md §2h, block 6D-4): the
+//                                                            card fields plus level, XP, streak, badges and
+//                                                            the cook days of the last 90 days; aggregates
+//                                                            only (no notes, no stars, no photos)
 //
 // Every envelope may carry `dict: { ing: Ingredient[] }`: the USER ingredients (ids the bundled
 // dictionary does not know) the payload references, so the receiver can add the missing ones.
@@ -26,6 +31,7 @@ import { nowIso, type Lang, type Line, type Recipe, type Text } from './model.ts
 import { applyLineOverrides, type LineOverride, type RecipeOverride, type RecipePatch } from './overrides.ts';
 import { normalizeServings, type Plan } from './planner.ts';
 import { normalizeRecipe } from './recipe-io.ts';
+import { dayFromKey } from './days.ts';
 import { buildMultiShareHeader, buildPatchShareMessage, buildShareMessageFor, openLine } from './message.ts';
 import { buildShareUrl, encodeToken, parseEnvelope as validateEnvelope, type Envelope, type TokenKey } from './token.ts';
 
@@ -117,7 +123,43 @@ export interface MemberCard {
   [k: string]: unknown;
 }
 
-export type ShareKind = 'recipe' | 'patch' | 'bundle' | 'plan' | 'member';
+/**
+ * Shared progress as it travels (`#x=`, docs/specs/xp-levels.md §2h, block 6D-4): the member-card
+ * fields plus aggregates of the sender's XP. No notes, no stars, no photos. It is a snapshot: the
+ * receiver sees what was shared then, nothing syncs afterwards (there is no server). Unknown keys
+ * are preserved. Read through `readProgressPayload`.
+ */
+export interface ProgressCard {
+  /** = MemberCard fields: the sender's profile id ('p:…'), name, colour, language, phone id. */
+  id: string;
+  name: string;
+  color: string;
+  lang: Lang;
+  deviceId?: string;
+  /** The sender's XP rules version (XP_RULES_VERSION), integer ≥ 1. */
+  rv: number;
+  /** 1…100. */
+  level: number;
+  /** Total XP, integer ≥ 0. */
+  xp: number;
+  /** Current streak in cook days, integer ≥ 0. */
+  streak: number;
+  /**
+   * Badges earned on the sender's own tab, the `badges.earned` string format: `id` for a one-off
+   * badge, `id@k` for ladder tier k (`PROGRESS_BADGE_RE`), at most 400.
+   */
+  badges: string[];
+  /**
+   * 'yyyy-mm-dd' local days of the last 90 days with at least one cook, ascending; `r` = the recipe
+   * ids cooked that day (unique, at most 5).
+   */
+  cookDays: Array<{ d: string; r: string[] }>;
+  /** The sender's avatar (docs/specs/badges-avatar.md), through `normalizeAvatarSpec`. */
+  avatar?: AvatarSpec;
+  [k: string]: unknown;
+}
+
+export type ShareKind = 'recipe' | 'patch' | 'bundle' | 'plan' | 'member' | 'progress';
 
 /**
  * What parseEnvelope makes of any envelope: a flat list of recipes and patches plus the delta.
@@ -137,6 +179,8 @@ export interface ParsedShare {
   plan?: PlanShare;
   /** The member card of a `#f=` envelope (absent when the card was unreadable). */
   member?: MemberCard;
+  /** The shared progress of a `#x=` envelope (absent when it was unreadable). */
+  progress?: ProgressCard;
 }
 
 export interface ShareContext {
@@ -199,6 +243,13 @@ const SAFE_COLOR = /^(#[0-9a-f]{3,8}|[a-z]{3,20}|(?:rgb|hsl)a?\(\s*[\d.%\s,/]+\s
 /** An id as it travels: no whitespace, at most 64 characters. */
 const SAFE_ID = /^\S{1,64}$/;
 const MAX_MEMBER_NAME = 60;
+/** A badge on a progress card: `id` or `id@k` (ladder tier 1…8), the `badges.earned` format (§2h). */
+export const PROGRESS_BADGE_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*(?:@[1-8])?$/;
+/** Limits of a progress card (§2h): badges, cook days, recipe ids per cook day. */
+export const PROGRESS_MAX_BADGES = 400;
+export const PROGRESS_MAX_DAYS = 90;
+export const PROGRESS_MAX_DAY_RECIPES = 5;
+const PROGRESS_MAX_LEVEL = 100;
 
 /** Ingredient ids a list of lines references (`ing` and the `alt` lines). */
 export function referencedIngredientIds(lines: readonly Line[]): Set<string> {
@@ -396,6 +447,32 @@ export function buildMemberEnvelope(card: MemberCard): Envelope {
   return env;
 }
 
+/**
+ * `{v: 2, t: 'x', by, at, x: ProgressCard}`: the sender's progress ("Sync mijn voortgang", §2h).
+ * `by` is the card's name, like a member card. The card fields are trimmed as in
+ * buildMemberEnvelope and the numbers and lists are held to the same limits the receiver applies
+ * (`readProgressFields`), so what travels is exactly what the other phone reads.
+ */
+export function buildProgressEnvelope(card: ProgressCard): Envelope {
+  const x: ProgressCard = {
+    ...card,
+    id: card.id.trim(),
+    name: card.name.trim(),
+    color: cleanString(card.color) ?? DEFAULT_CARD_COLOR,
+    lang: card.lang === 'en' ? 'en' : 'nl',
+  };
+  const deviceId = cleanString(card.deviceId);
+  if (deviceId) x.deviceId = deviceId;
+  else delete x.deviceId;
+  readProgressFields(x, card);
+  const avatar = normalizeAvatarSpec(card.avatar);
+  if (avatar) x.avatar = avatar;
+  else delete x.avatar;
+  const env = baseEnvelope('x', x.name);
+  env.x = x;
+  return env;
+}
+
 // --- Parsing ------------------------------------------------------------------------------------
 
 /**
@@ -423,6 +500,55 @@ export function readMemberPayload(v: unknown): MemberCard | null {
   const avatar = normalizeAvatarSpec(v.avatar);
   if (avatar) out.avatar = avatar;
   else delete out.avatar;
+  return out;
+}
+
+/** An integer in [min, max], else `fallback`. */
+function intOr(v: unknown, min: number, max: number, fallback: number): number {
+  return typeof v === 'number' && Number.isInteger(v) && v >= min && v <= max ? v : fallback;
+}
+
+/**
+ * The aggregate fields of a progress card, tolerantly, written onto `out` (§2h): level an integer
+ * 1…100 else 1, xp an integer ≥ 0 else 0, rv an integer ≥ 1 else 1, streak an integer ≥ 0 else 0;
+ * badges only strings matching PROGRESS_BADGE_RE (unique, the first 400); cookDays only entries
+ * with a real 'yyyy-mm-dd' day (`dayFromKey`), ascending, one entry per day (the first), the last
+ * 90; per day `r` only ids matching SAFE_ID (unique, the first 5). Unknown keys on a day stay.
+ */
+function readProgressFields(out: ProgressCard, v: Dict): void {
+  out.rv = intOr(v.rv, 1, Number.MAX_SAFE_INTEGER, 1);
+  out.level = intOr(v.level, 1, PROGRESS_MAX_LEVEL, 1);
+  out.xp = intOr(v.xp, 0, Number.MAX_SAFE_INTEGER, 0);
+  out.streak = intOr(v.streak, 0, Number.MAX_SAFE_INTEGER, 0);
+  const badges = Array.isArray(v.badges)
+    ? v.badges.filter((b): b is string => typeof b === 'string' && PROGRESS_BADGE_RE.test(b))
+    : [];
+  out.badges = [...new Set(badges)].slice(0, PROGRESS_MAX_BADGES);
+  const days: Array<{ day: number; entry: ProgressCard['cookDays'][number] }> = [];
+  const seenDays = new Set<number>();
+  if (Array.isArray(v.cookDays)) for (const item of v.cookDays) {
+    if (!isRecord(item) || typeof item.d !== 'string') continue;
+    const day = dayFromKey(item.d);
+    if (day === null || seenDays.has(day)) continue;
+    seenDays.add(day);
+    const ids = Array.isArray(item.r) ? item.r.filter((r): r is string => typeof r === 'string' && SAFE_ID.test(r)) : [];
+    days.push({ day, entry: { ...item, d: item.d, r: [...new Set(ids)].slice(0, PROGRESS_MAX_DAY_RECIPES) } });
+  }
+  days.sort((a, b) => a.day - b.day);
+  out.cookDays = days.slice(-PROGRESS_MAX_DAYS).map((x) => x.entry);
+}
+
+/**
+ * A progress payload (`#x=`, §2h), tolerantly: `id` and `name` are required and the card fields
+ * follow the rules of `readMemberPayload` (colour, language, deviceId, avatar); the aggregates
+ * follow `readProgressFields`. Unknown keys stay. Null when it is no usable card.
+ */
+export function readProgressPayload(v: unknown): ProgressCard | null {
+  if (!isRecord(v)) return null;
+  const card = readMemberPayload(v);
+  if (!card) return null;
+  const out = card as ProgressCard;
+  readProgressFields(out, v);
   return out;
 }
 
@@ -490,13 +616,14 @@ function readRecipe(v: unknown): Recipe | null {
 }
 
 /**
- * Any envelope (`r`, `p`, `b`, `w`, `f`; also a legacy backup file with `userRecipes`) -> a
+ * Any envelope (`r`, `p`, `b`, `w`, `f`, `x`; also a legacy backup file with `userRecipes`) -> a
  * ParsedShare. Tolerant: phase-0/1 recipe shapes go through normalizeRecipe, unusable items are
  * dropped, unknown keys stay on the items. Throws Error('invalid-token') for anything that is not
  * an envelope and Error('unsupported-version') for a newer `v` (same as decodeToken).
  * NB: a kind this app does not know (a future key) is 'invalid-token', not 'unsupported-version',
  * because `v` stays 2 — so an app from before block F answers a `#f=` link with "no readable
- * recipe", never with "update the app" (pinned in tests/token.test.ts).
+ * recipe", never with "update the app" (pinned in tests/token.test.ts). The same holds for `#x=`
+ * on an app from before block 6D-4 (which does not even see `#x=` as a token).
  */
 export function parseEnvelope(env: unknown): ParsedShare {
   const e = validateEnvelope(env);
@@ -575,6 +702,17 @@ export function parseEnvelope(env: unknown): ParsedShare {
     }
     return out;
   }
+  if (e.t === 'x') {
+    // An `x` without a payload object is no progress (a stray "#x=" someone typed).
+    if (!isRecord(e.x)) throw new Error('invalid-token');
+    out.kind = 'progress';
+    const progress = readProgressPayload(e.x);
+    if (progress) {
+      out.progress = progress;
+      if (!out.by) out.by = progress.name;
+    }
+    return out;
+  }
   throw new Error('invalid-token');
 }
 
@@ -590,7 +728,7 @@ export function envelopeItemCount(env: Envelope): number {
   }
   // A plan counts its embedded recipes (what the import writes); the dishes are in planDishCount.
   if (env.t === 'w' && isRecord(env.w)) return Array.isArray(env.w.recipes) ? env.w.recipes.length : 0;
-  // A member card carries no recipes.
+  // A member card and shared progress carry no recipes.
   return 0;
 }
 
@@ -633,6 +771,26 @@ export function buildMemberShareMessage(i: { name: string; url: string; lang: La
   return [head, i.url].join('\n');
 }
 
+/**
+ * The WhatsApp text for shared progress (§2h): one sentence and the `#x=` URL alone on the last
+ * line: NL "📈 Voortgang van Stijn — Level 12 · Soepkoker. Open de link in de app of plak hem bij
+ * In & uit." / EN "📈 Stijn's progress — Level 12 · Soup Stirrer. Open the link in the app or paste
+ * it into In & out." (an iPhone never opens the app from a link, invariant 5). `title` is the level
+ * title in `lang` (data/levels.json, `titleFor`); {nl, en} literals like the other builders.
+ */
+export function buildProgressShareMessage(i: { name: string; level: number; title: string; url: string; lang: Lang }): string {
+  const lang: Lang = i.lang === 'en' ? 'en' : 'nl';
+  const name = i.name.trim() || (lang === 'nl' ? 'iemand' : 'someone');
+  const level = intOr(i.level, 1, PROGRESS_MAX_LEVEL, 1);
+  const title = i.title.trim();
+  const levelText = `Level ${level}${title ? ` · ${title}` : ''}`;
+  const head =
+    lang === 'nl'
+      ? `📈 Voortgang van ${name} — ${levelText}. Open de link in de app of plak hem bij In & uit.`
+      : `📈 ${name}'s progress — ${levelText}. Open the link in the app or paste it into In & out.`;
+  return [head, i.url].join('\n');
+}
+
 /** "Stijn & co" -> "stijn-co" for the file name; empty -> "export". */
 function fileSlug(name: string | undefined): string {
   const s = (name ?? '')
@@ -658,7 +816,8 @@ export function bundleFileName(name: string | undefined, date = new Date()): str
 
 /**
  * Several envelopes (r/p/b) -> ONE bundle envelope: recipes and patches concatenated, dict
- * deltas merged by id, by/at from the first envelope that has them.
+ * deltas merged by id, by/at from the first envelope that has them. A member card (`f`) and shared
+ * progress (`x`) carry no recipes, so they drop out (a bundle has no place for them).
  */
 export function combineEnvelopes(envelopes: readonly Envelope[], opts: BundleOptions = {}): Envelope {
   const recipes: Recipe[] = [];
@@ -693,10 +852,11 @@ function envelopeName(env: Envelope): Text {
 /**
  * The WhatsApp text for the envelopes: a single recipe gets the four-line message from
  * message.ts, a single patch its "(aangepast)" variant, a single plan "🗓️ Weekplan van Stijn:
- * 7 gerechten", a single member card its one-sentence text, several items a compact header
- * ("🍲 3 recepten van Stijn"), the open line and one URL per line. Each URL is
- * `#r=`/`#p=`/`#w=`/`#b=`/`#f=`. (A plan or a card combined with other envelopes into a bundle
- * file keeps the recipes but loses the plan / the card itself.)
+ * 7 gerechten", a single member card its one-sentence text, a single progress envelope
+ * "📈 Voortgang van Stijn — Level 12 · …" (the title in `opts.lang`), several items a compact
+ * header ("🍲 3 recepten van Stijn"), the open line and one URL per line. Each URL is
+ * `#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`. (A plan, a card or progress combined with other envelopes
+ * into a bundle file keeps the recipes but loses the plan / the card / the progress itself.)
  * When the text is longer than `limit` characters the result is a bundle FILE instead (pretty
  * JSON, not compressed), named "recepten-<name>-YYYY-MM-DD.json".
  */
@@ -724,6 +884,12 @@ export async function planMessages(envelopes: readonly Envelope[], appUrl: strin
   } else if (envelopes.length === 1 && first && first.t === 'f' && urls[0]) {
     const card = readMemberPayload(first.f);
     text = buildMemberShareMessage({ name: card?.name ?? by, url: urls[0], lang });
+  } else if (envelopes.length === 1 && first && first.t === 'x' && urls[0]) {
+    const card = readProgressPayload(first.x);
+    const level = card?.level ?? 1;
+    // Lazy: the level titles stay out of the Safari landing bundle, which shares this module.
+    const { titleFor } = await import('./levels.ts');
+    text = buildProgressShareMessage({ name: card?.name ?? by, level, title: titleFor(level, lang), url: urls[0], lang });
   } else {
     const count = envelopes.reduce((n, e) => n + envelopeItemCount(e), 0);
     text = [buildMultiShareHeader(count, by, lang), openLine(lang), ...urls].join('\n');

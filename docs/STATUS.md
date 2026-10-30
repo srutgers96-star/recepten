@@ -54,6 +54,10 @@ README §1); daarna de 6D-UI-ronde (tabs voor badges en avatar-maker, avatar ron
   blok had geen stylesheet; kan later naar xp.css), `more.calendar*` in src/i18n/xp.ts. "1 badges" / "1 kookdagen":
   de spec kent geen enkelvoud (iets voor de opschoonronde).
 
+- **Besluit Fable (30 okt, Fable-blik gedaan, commit van 6D-4b):** share.ts/token.ts akkoord (nieuwe sleutel, bevroren
+  tokens ongewijzigd, tolerant lezen, lazy titels, landing zonder storage, één deelveld). Alle open keuzes akkoord zoals
+  gebouwd. CLAUDE.md invariant 7 en de tokenregel hebben nu `#x=` (Fable). Voor de opschoonronde: enkelvoud "1 badge" /
+  "1 kookdag", kalender-legenda zonder "bijgewerkt" bij badges uit, inline kalender-stijlen naar xp.css.
 ## 29 okt (Opus): 6D-4a — ontgrendelingen: Vrijgespeeld, confetti-stijlen, geluiden, lettertypes
 Gebouwd volgens docs/specs/xp-levels.md "Blok 6D-3 — ontgrendelingen" (= 6D-4a in README §1; bouwer A domein en
 app-laag, bouwer B motoren, bouwer C schermen, integrator). Niet gecommit. Geen Dexie-versie, geen nieuwe dependency,
@@ -150,6 +154,8 @@ ronde hieronder.
 - Badgekaart: "Niveau 1 · geel" → alleen de gekleurde ring; de kleurnaam alleen in de detailweergave (Stijn 30 okt).
 - Meer: kortere of geen hints onder de rijen; het profiel-blok bovenaan kleiner of weg zodra IDEAS 5 er is.
 - Level-up-venster: de lijst avatar-onderdelen inkorten ("+13 avatar-onderdelen" met uitklappen).
+- Enkelvoud "1 badge" / "1 kookdag" (6D-4b); kalender-legenda zonder "bijgewerkt" bij badges uit; inline
+  kalender-stijlen naar xp.css.
 - ✔ Gedaan 30 okt (Fable, direct): boodschappenlijst compacter — de categorie is een klein grijs bijschrift rechts met
   een lijntje ervoor (30 px, tikdoel blijft 44 px via ::after), regels 44 px i.p.v. 48. Stijn: "5 categorieën, 5 dingen,
   vult bijna mijn hele pagina".

@@ -109,8 +109,8 @@ describe('chromeIntentUrl', () => {
     expect(intent.startsWith('intent://srutgers96-star.github.io/recepten/next/#Intent;scheme=https;')).toBe(true);
   });
 
-  it('keeps every token kind (#p=, #w=, #b=, #f=) on the /next/ channel too', () => {
-    for (const key of ['p', 'w', 'b', 'f']) {
+  it('keeps every token kind (#p=, #w=, #b=, #f=, #x=) on the /next/ channel too', () => {
+    for (const key of ['p', 'w', 'b', 'f', 'x']) {
       const url = `https://srutgers96-star.github.io/recepten/next/#${key}=eJxLTEoGAAJNASc`;
       const intent = chromeIntentUrl(url);
       expect(intent.startsWith(`intent://srutgers96-star.github.io/recepten/next/#${key}=eJxLTEoGAAJNASc#Intent;`)).toBe(true);

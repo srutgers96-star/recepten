@@ -21,6 +21,11 @@
 // date, to whom, what, how many; a tap opens the recipe, or unfolds the names when there are
 // several). A member card added here is logged as an 'in' row. The route stays '#/inbox'; the
 // badge stays "unseen received" (src/inbox-badge.ts).
+// 6D-4b (docs/specs/xp-levels.md §1i): a `#x=` "Sync mijn voortgang" (a link opened in the app or
+// pasted) becomes a card "Voortgang van <naam>" (HouseholdScreen's ProgressCardRow +
+// applyProgressCard): "Werk <naam> bij" for a member, the "profiel op deze telefoon" line for a
+// profile here, else "Voeg toe aan je huishouden" / "Bewaar als vriend". A sent progress shows in
+// "Gedeeld" as "Mijn voortgang".
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
@@ -54,14 +59,14 @@ import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/mo
 import { classifyPaste } from '@/domain/paste-classify';
 import { emptyPlan, mainItems } from '@/domain/planner';
 import { planItemsFromShare, sharedDishCount, sharedPlanRows } from '@/domain/plan-import';
-import type { PlanShare } from '@/domain/share';
+import type { PlanShare, ProgressCard } from '@/domain/share';
 import { planWrites } from '@/components/ImportPreview';
 import { lang, t } from '@/i18n';
 import { INBOX_SEEN_KEY, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { collectPaste, isInboxKind, looksLikeJson, openPasteIn, PASTE_FILE_ACCEPT, type ReceivedPlan } from '@/paste';
 import { activeProfile, profiles } from '@/profile';
 import { navigate, pendingImport, route } from '@/router';
-import { applyMemberCard, MemberCardRow, type CardOutcome } from './HouseholdScreen';
+import { applyMemberCard, applyProgressCard, MemberCardRow, ProgressCardRow, type CardOutcome, type ProgressOutcome } from './HouseholdScreen';
 import { Avatar } from './ProfilesScreen';
 
 // --- Seen bookkeeping (setting 'inbox.seenIds'; the Nav badge in src/inbox-badge.ts follows it) ---
@@ -154,6 +159,8 @@ function eventWhat(e: ShareEvent): string {
       return t('inbox.ev.plan');
     case 'list':
       return t('inbox.ev.list');
+    case 'progress':
+      return t('inbox.ev.progress');
   }
 }
 
@@ -258,6 +265,10 @@ export function InboxScreen() {
   const [cards, setCards] = useState<MemberCard[]>([]);
   const [cardDone, setCardDone] = useState<Record<string, CardOutcome>>({});
   const [cardBusy, setCardBusy] = useState(false);
+  // 6D-4b: received progress (`#x=`), when each was shared, and what happened to each.
+  const [progress, setProgress] = useState<ProgressCard[]>([]);
+  const [progressAt, setProgressAt] = useState<Record<string, string>>({});
+  const [progressDone, setProgressDone] = useState<Record<string, ProgressOutcome>>({});
   const [household, setHouseholdState] = useState<HouseholdSetting | null>(null);
   const seq = useRef(0);
   const textarea = useRef<HTMLTextAreaElement>(null);
@@ -354,6 +365,9 @@ export function InboxScreen() {
       setPlanDone(false);
       setCards([]);
       setCardDone({});
+      setProgress([]);
+      setProgressAt({});
+      setProgressDone({});
       return;
     }
     const handle = setTimeout(async () => {
@@ -363,14 +377,18 @@ export function InboxScreen() {
       let week: ReceivedPlan | null = null;
       let names: Record<string, Text> = {};
       let members: MemberCard[] = [];
+      let received: ProgressCard[] = [];
+      let receivedAt: Record<string, string> = {};
       try {
         const got = await collectPaste(trimmed, parts);
         probs = got.problems;
         members = got.members;
+        received = got.progress;
+        receivedAt = got.progressAt;
         const share = got.share;
         if (share.recipes.length || share.patches.length || share.dict.ing.length) {
           next = planImport(share, await localStateForImport());
-        } else if (!probs.length && !got.plan && !members.length) {
+        } else if (!probs.length && !got.plan && !members.length && !received.length) {
           err = t('inbox.noToken');
         }
         if (got.plan) {
@@ -397,6 +415,9 @@ export function InboxScreen() {
       setPlanDone(false);
       setCards(members);
       setCardDone({});
+      setProgress(received);
+      setProgressAt(receivedAt);
+      setProgressDone({});
     }, 150);
     return () => clearTimeout(handle);
   }, [text, parts, ui]);
@@ -519,6 +540,22 @@ export function InboxScreen() {
     }
   }
 
+  /** 6D-4b: "Werk bij" / "Voeg toe" / "Bewaar als vriend" on a received progress (§1i; logs the 'in' row). */
+  async function saveProgress(card: ProgressCard, asFriend: boolean) {
+    if (cardBusy) return;
+    setCardBusy(true);
+    try {
+      const r = await applyProgressCard(card, asFriend);
+      setHouseholdState(r.setting);
+      setProgressDone((prev) => ({ ...prev, [card.id]: r.outcome }));
+    } catch (e) {
+      console.error('applyProgressCard', e);
+      setNotice(`${t('household.cardFailed')}: ${String((e as Error)?.message ?? e)}`);
+    } finally {
+      setCardBusy(false);
+    }
+  }
+
   async function doUndo() {
     if (busy) return;
     setBusy(true);
@@ -625,6 +662,20 @@ export function InboxScreen() {
         {cards.map((card) => (
           <section class="card inbox-member" key={card.id}>
             <MemberCardRow card={card} members={householdMembers} done={cardDone[card.id]} busy={cardBusy} onAdd={(c) => void addCard(c)} onOpenHousehold={() => navigate('/more/household')} />
+          </section>
+        ))}
+
+        {progress.map((card) => (
+          <section class="card inbox-member" key={'x' + card.id}>
+            <ProgressCardRow
+              card={card}
+              sentAt={progressAt[card.id]}
+              members={householdMembers}
+              done={progressDone[card.id]}
+              busy={cardBusy}
+              onSave={(c, asFriend) => void saveProgress(c, asFriend)}
+              onOpenHousehold={() => navigate('/more/household')}
+            />
           </section>
         ))}
 

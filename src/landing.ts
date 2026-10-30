@@ -10,6 +10,10 @@
 //   #f=  a member card: "Kaartje van <name>" with the colour swatch and language; "Kopieer code"
 //        and the same hand-off card (copy → app → Meer → In & uit → Plak), because on an iPhone a link
 //        never opens the installed app (CLAUDE.md invariant 5)
+//   #x=  shared progress (6D-4b, docs/specs/xp-levels.md §1k): "Voortgang van <name>" with
+//        "Level N · <title>" and the same copy button and hand-off card as the member card. The
+//        titles (data/levels.json) arrive through `import()` like the dictionary: the line says
+//        "Level N" until they are in.
 // Ingredient lines are rendered through the bundled dictionary (schema-2 lines carry `ing`,
 // `qty`, `unit`, `prep` and usually only a Dutch `raw`), so the EN view shows English names;
 // a line the dictionary cannot render falls back to its raw text. The dictionary is by far the
@@ -19,7 +23,7 @@
 import type { Dictionary } from './domain/dictionary';
 import { pickText, type Lang, type Line, type Recipe, type Step, type Text } from './domain/model';
 import { renderLine } from './domain/render';
-import { parseEnvelope, type MemberCard, type ParsedShare, type PatchPayload } from './domain/share';
+import { parseEnvelope, type MemberCard, type ParsedShare, type PatchPayload, type ProgressCard } from './domain/share';
 import { decodeToken } from './domain/token';
 
 const S = {
@@ -75,6 +79,10 @@ const S = {
       { h: 'Open de app', b: "Open Rutgers' Recepten via het icoon op je beginscherm — niet hier in Safari." },
       { h: 'Plak', b: 'Tik onderaan op Meer → In & uit → Plak van klembord en daarna op Voeg toe aan je huishouden.' },
     ],
+    previewProgress: 'Voorproefje van gedeelde voortgang',
+    progressOf: (name: string) => `Voortgang van ${name}`,
+    progressLevel: (level: number, title: string) => `Level ${level} · ${title}`,
+    progressHint: (name: string) => `In de app zie je ${name} in de kookkalender en bij Huishouden.`,
   },
   en: {
     title: "Rutgers' Recipes",
@@ -128,6 +136,10 @@ const S = {
       { h: 'Open the app', b: "Open Rutgers' Recipes from the icon on your Home Screen — not here in Safari." },
       { h: 'Paste', b: 'Tap More at the bottom → In & out → Paste from clipboard, then Add to your household.' },
     ],
+    previewProgress: 'Preview of shared progress',
+    progressOf: (name: string) => `${name}'s progress`,
+    progressLevel: (level: number, title: string) => `Level ${level} · ${title}`,
+    progressHint: (name: string) => `In the app you see ${name} in the cooking calendar and under Household.`,
   },
 } as const;
 
@@ -176,6 +188,8 @@ let share: ParsedShare | null = null;
 let problem: 'invalid' | 'unsupported' | null = null;
 /** The bundled dictionary once its chunk has arrived (null until then: lines show their raw text). */
 let dict: Dictionary | null = null;
+/** `titleFor` of src/domain/levels.ts once its chunk (with data/levels.json) has arrived (#x=); null until then. */
+let levelTitle: ((level: number, l: Lang) => string) | null = null;
 /**
  * Android in another browser than Chrome: the intent URL of "Open in Chrome" (phase 6, 13B), set
  * once src/pwa.ts has been loaded lazily (see boot). Null on an iPhone, which is this page's real
@@ -203,6 +217,22 @@ function loadDictionaryLater() {
     })
     .catch(() => {
       /* offline or a stale precache: the raw text stays */
+    });
+}
+
+/**
+ * Loads the level titles (src/domain/levels.ts + data/levels.json) after the first paint of a
+ * shared progress and re-renders the level line with its title. Data only: no Dexie, no storage
+ * (CLAUDE.md invariant 6). A failed load leaves "Level N".
+ */
+function loadLevelTitlesLater() {
+  import('./domain/levels')
+    .then((m) => {
+      levelTitle = (level, l) => m.titleFor(level, l);
+      if (share) render(true);
+    })
+    .catch(() => {
+      /* offline or a stale precache: "Level N" stays */
     });
 }
 
@@ -353,6 +383,17 @@ function memberHtml(card: MemberCard): string[] {
   return parts;
 }
 
+/** Shared progress (#x=, §1k): "Voortgang van <name>", "Level N · <title>" and where the app shows it. */
+function progressHtml(card: ProgressCard): string[] {
+  const L = S[lang];
+  const parts: string[] = [];
+  parts.push(`<h2>${esc(L.progressOf(card.name))}</h2>`);
+  const line = levelTitle ? L.progressLevel(card.level, levelTitle(card.level, lang)) : `Level ${card.level}`;
+  parts.push(`<p>${esc(line)}</p>`);
+  parts.push(`<p class="muted">${esc(L.progressHint(card.name))}</p>`);
+  return parts;
+}
+
 /** `keepStatus`: the dictionary re-render must not wipe a "Gekopieerd" the person just got. */
 function render(keepStatus = false) {
   const L = S[lang];
@@ -365,18 +406,22 @@ function render(keepStatus = false) {
   const bundle = share?.kind === 'bundle' ? share : undefined;
   const plan = share?.kind === 'plan' ? share : undefined;
   const member = share?.kind === 'member' ? share.member : undefined;
+  const progress = share?.kind === 'progress' ? share.progress : undefined;
+  // A member card and a shared progress use the same copy button and hand-off card (§1k).
+  const cardLike = !!member || !!progress;
   const by = share?.by ?? '';
-  parts.push(`<p class="muted">${esc(patch ? L.previewPatch : bundle ? L.previewBundle : plan ? L.previewPlan : member ? L.previewMember : L.preview)}</p>`);
-  if (recipe || patch || bundle || plan || member) {
+  parts.push(`<p class="muted">${esc(patch ? L.previewPatch : bundle ? L.previewBundle : plan ? L.previewPlan : member ? L.previewMember : progress ? L.previewProgress : L.preview)}</p>`);
+  if (recipe || patch || bundle || plan || member || progress) {
     if (recipe) parts.push(...recipeHtml(recipe, by));
     else if (patch) parts.push(...patchHtml(patch, by));
     else if (bundle) parts.push(...bundleHtml(bundle, by));
     else if (plan) parts.push(...planHtml(plan, by));
     else if (member) parts.push(...memberHtml(member));
-    const steps: readonly HandoffStep[] = member ? L.stepsCard : L.steps;
+    else if (progress) parts.push(...progressHtml(progress));
+    const steps: readonly HandoffStep[] = cardLike ? L.stepsCard : L.steps;
     // Android outside Chrome: the real fix comes first; the copy button then steps back to secondary.
     if (chromeUrl) parts.push(`<a class="btn" href="${esc(chromeUrl)}">${esc(L.openChrome)}</a><p class="muted">${esc(L.openChromeHint)}</p>`);
-    parts.push(`<button type="button" class="btn${chromeUrl ? ' secondary' : ''}" id="copy">${esc(member ? L.copyCard : L.copy)}</button><div class="status" id="status"></div>`);
+    parts.push(`<button type="button" class="btn${chromeUrl ? ' secondary' : ''}" id="copy">${esc(cardLike ? L.copyCard : L.copy)}</button><div class="status" id="status"></div>`);
     const stepsHtml = steps.map((s, i) => `<li><span class="n" aria-hidden="true">${i + 1}</span><span><b>${esc(s.h)}</b>${esc(s.b)}</span></li>`).join('');
     parts.push(`<div class="card"><strong>${esc(L.handoff)}</strong><ol class="steps">${stepsHtml}</ol><div class="muted">${esc(L.install)}</div></div>`);
     parts.push(`<a class="btn secondary" href="${esc(appUrl())}">${esc(L.openApp)}</a>`);
@@ -403,7 +448,7 @@ function render(keepStatus = false) {
     const status = document.getElementById('status')!;
     try {
       await navigator.clipboard.writeText(location.href);
-      status.textContent = share?.kind === 'member' ? S[lang].copiedCard : S[lang].copied;
+      status.textContent = share?.kind === 'member' || share?.kind === 'progress' ? S[lang].copiedCard : S[lang].copied;
     } catch {
       status.textContent = S[lang].copyFailed;
     }
@@ -411,7 +456,7 @@ function render(keepStatus = false) {
 }
 
 async function boot() {
-  const m = /^#([rpwbf])=([A-Za-z0-9_-]+)/.exec(location.hash);
+  const m = /^#([rpwbfx])=([A-Za-z0-9_-]+)/.exec(location.hash);
   if (m && m[2]) {
     try {
       const env = await decodeToken(m[2]);
@@ -422,7 +467,8 @@ async function boot() {
         (parsed.kind === 'patch' && parsed.patches.length > 0) ||
         (parsed.kind === 'bundle' && (parsed.recipes.length > 0 || parsed.patches.length > 0)) ||
         (parsed.kind === 'plan' && (parsed.plan?.items.length ?? 0) > 0) ||
-        (parsed.kind === 'member' && !!parsed.member);
+        (parsed.kind === 'member' && !!parsed.member) ||
+        (parsed.kind === 'progress' && !!parsed.progress);
       if (usable) share = parsed;
       else problem = 'invalid';
     } catch (e) {
@@ -433,6 +479,7 @@ async function boot() {
   }
   render();
   if (share && hasLines(share)) loadDictionaryLater();
+  if (share?.kind === 'progress') loadLevelTitlesLater();
   // Android in another browser than Chrome (Opera, Samsung Internet, Firefox, a WebView): offer
   // "Open in Chrome". Today src/boot.ts sends only iOS here, so this is for the day the boot rule
   // changes; the helpers live in src/pwa.ts (single source of truth, pinned in tests/pwa.test.ts)

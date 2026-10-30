@@ -10,6 +10,8 @@
 // data/avatar-parts.json) when it has a complete one, else the letter circle; a card shows the
 // level ring. Editing the ACTIVE profile has a row "Avatar" under Colour that opens <AvatarSheet/>
 // from level 3 (AVATAR_MAKER_LEVEL); badges off = no row.
+// 6D-4 (docs/specs/xp-levels.md §1h): next to "Deel mijn kaartje" the ACTIVE profile has "Sync mijn
+// voortgang", which unfolds <ProgressSharePanel/> (a `#x=` snapshot); badges off = no button.
 import type { ComponentChildren } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { avatarParts, avatarUid } from '@/avatar';
@@ -17,6 +19,7 @@ import { badgesEnabled, loadBadgeSettings } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { AvatarSheet } from '@/components/AvatarSheet';
 import { Header } from '@/components/Header';
+import { ProgressSharePanel } from '@/components/ProgressSharePanel';
 import { QrCode } from '@/components/QrCode';
 import { Segmented } from '@/components/Segmented';
 import { XpBar } from '@/components/XpBar';
@@ -368,6 +371,8 @@ export function ProfilesScreen() {
   const [editing, setEditing] = useState<string | null>(null);
   // Block F: "Deel mijn kaartje" unfolds the card panel under the ACTIVE profile.
   const [sharing, setSharing] = useState(false);
+  // 6D-4: "Sync mijn voortgang" unfolds the progress panel under the ACTIVE profile.
+  const [syncing, setSyncing] = useState(false);
   // 6D-3: the avatar maker is open for this profile id (only ever the active profile).
   const [avatarFor, setAvatarFor] = useState<string | null>(null);
   const activeLevel = useAvatarLevel(active?.id);
@@ -448,8 +453,14 @@ export function ProfilesScreen() {
                       {t('household.shareCard')}
                     </button>
                   )}
+                  {active?.id === p.id && badgesEnabled.value && (
+                    <button type="button" class="btn btn-small" aria-expanded={syncing} onClick={() => setSyncing((v) => !v)}>
+                      {t('progress.share')}
+                    </button>
+                  )}
                 </div>
                 {active?.id === p.id && sharing && <MemberCardPanel profile={p} />}
+                {active?.id === p.id && syncing && badgesEnabled.value && <ProgressSharePanel profile={p} />}
               </>
             )}
           </div>

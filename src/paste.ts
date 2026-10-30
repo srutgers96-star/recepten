@@ -8,15 +8,17 @@
 //
 // The token/JSON collection the Inbox analyses with lives here too (it used to be in InboxScreen):
 // the summary line counts the same way the Inbox does. Everything the input held is merged into ONE
-// ParsedShare: tokens first (`#r=`/`#p=`/`#w=`/`#b=`/`#f=`, also several in one WhatsApp message),
-// else JSON by content per part (an envelope, the backup/export format, a bare recipe or patch).
+// ParsedShare: tokens first (`#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`, also several in one WhatsApp
+// message), else JSON by content per part (an envelope, the backup/export format, a bare recipe or
+// patch). A member card (`#f=`) and a shared progress (`#x=`, 6D-4b) carry no recipes: they are
+// collected next to the share (`members`, `progress`) and never name the import's sender.
 import { classifyPaste, type PasteClassification, type PasteKind } from '@/domain/paste-classify';
 import { parseWebsiteRecipe } from '@/domain/paste-recipe';
 import { cleanPastedText } from '@/domain/photo-import';
 import type { MemberCard } from '@/domain/household';
 import type { Recipe, Text } from '@/domain/model';
 import { normalizeRecipe } from '@/domain/recipe-io';
-import { parseEnvelope, readPatchPayload, type ParsedShare, type PatchPayload, type PlanShare } from '@/domain/share';
+import { parseEnvelope, readPatchPayload, type ParsedShare, type PatchPayload, type PlanShare, type ProgressCard } from '@/domain/share';
 import { decodeToken, extractTokens } from '@/domain/token';
 import { fileHasRecipes } from '@/file-import';
 import { t } from '@/i18n';
@@ -36,6 +38,10 @@ export interface Collected {
   plan?: ReceivedPlan;
   /** Member cards (`#f=`, block F), one per card id. */
   members: MemberCard[];
+  /** Shared progress (`#x=`, 6D-4b "Sync mijn voortgang"), one per card id (the first one wins, as for cards). */
+  progress: ProgressCard[];
+  /** When each progress in `progress` was shared (the envelope's `at`), by card id: "gedeeld op {date}". */
+  progressAt: Record<string, string>;
 }
 
 /** A `#w=` plan as the Inbox offers it: the dishes with a name when known here or in the token. */
@@ -68,6 +74,20 @@ function addShare(acc: Collected, parsed: ParsedShare) {
   if (parsed.kind === 'member') {
     // A member card carries no recipes; its `by` is the card's own name, so it never becomes the import's sender.
     if (parsed.member && !acc.members.some((m) => m.id === parsed.member?.id)) acc.members.push(parsed.member);
+    return;
+  }
+  if (parsed.kind === 'progress') {
+    // Shared progress (6D-4b) is a card too: no recipes, and its `by` is the sender's own name.
+    // An envelope whose card is unreadable says so (rather than "no code found").
+    const card = parsed.progress;
+    if (!card) {
+      acc.problems.push(t('inbox.invalid'));
+      return;
+    }
+    if (!acc.progress.some((p) => p.id === card.id)) {
+      acc.progress.push(card);
+      if (parsed.at) acc.progressAt[card.id] = parsed.at;
+    }
     return;
   }
   if (parsed.kind === 'plan' && parsed.plan && !acc.plan) {
@@ -170,13 +190,13 @@ export function looksLikeJson(text: string): boolean {
 }
 
 /**
- * Tokens first (every `#r=`/`#p=`/`#w=`/`#b=`/`#f=` in the text), else JSON by content per part
+ * Tokens first (every `#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=` in the text), else JSON by content per part
  * (`parts`: the share-target's message and files kept separate; null for a pasted text). Tokens
  * are read from the cleaned text, as `classifyPaste` reads them: a rendered chat may have escaped
  * a "_" or "-" inside the token or dropped a zero-width character into it. JSON is parsed as pasted.
  */
 export async function collectPaste(text: string, parts: string[] | null): Promise<Collected> {
-  const acc: Collected = { share: emptyShare(), problems: [], members: [] };
+  const acc: Collected = { share: emptyShare(), problems: [], members: [], progress: [], progressAt: {} };
   const tokens = extractTokens(cleanPastedText(text));
   if (tokens.length) {
     for (const tk of tokens) {
@@ -205,9 +225,15 @@ export interface PasteSummary {
   classification: PasteClassification;
   /** The one line under the box; empty for an empty box. */
   label: string;
-  /** Names on the member cards among the tokens (kind 'member' or 'tokens'). */
+  /**
+   * Names on the cards among the tokens (kind 'member' or 'tokens'): member cards (`#f=`) and, since
+   * 6D-4b, shared progress (`#x=`) — both are shown as a card row where they are handled (Inbox,
+   * Household), so the paste box treats them alike.
+   */
   memberNames: string[];
-  /** Recipe / plan / bundle tokens (not member cards). */
+  /** Names on the shared progress (`#x=`) among them (also in `memberNames`). */
+  progressNames: string[];
+  /** Recipe / plan / bundle tokens (not member cards, not shared progress). */
   shareTokens: number;
   /** Decoding problems (invalid code, newer version …). */
   problems: string[];
@@ -229,27 +255,35 @@ function membersLabel(names: string[]): string {
   return t('paste.cards', { n: names.length });
 }
 
+/** "Voortgang van Noor" per shared progress in a text (6D-4b). */
+function progressLabel(names: string[]): string {
+  return names.map((name) => t('paste.progress', { name })).join(' · ');
+}
+
 /**
  * Classifies a pasted text and builds the line that says what it is. Decodes tokens (async) so a
  * member card can be named and a bundle counted; a JSON text nothing was found in stays 'unknown'.
  */
 export async function summarizePaste(text: string): Promise<PasteSummary> {
   const classification = classifyPaste(text);
-  const out: PasteSummary = { kind: classification.kind, classification, label: '', memberNames: [], shareTokens: 0, problems: [] };
+  const out: PasteSummary = { kind: classification.kind, classification, label: '', memberNames: [], progressNames: [], shareTokens: 0, problems: [] };
   switch (classification.kind) {
     case 'empty':
       return out;
     case 'tokens':
     case 'member': {
       const tokens = extractTokens(classification.normalized);
-      out.shareTokens = tokens.filter((tk) => tk.key !== 'f').length;
+      out.shareTokens = tokens.filter((tk) => tk.key !== 'f' && tk.key !== 'x').length;
       const got = await collectPaste(text, null);
-      out.memberNames = got.members.map((m) => m.name);
+      const cardNames = got.members.map((m) => m.name);
+      out.progressNames = got.progress.map((p) => p.name);
+      out.memberNames = [...cardNames, ...out.progressNames];
       out.problems = got.problems;
       const parts: string[] = [];
       if (out.shareTokens === 1) parts.push(t('paste.link'));
       else if (out.shareTokens > 1) parts.push(t('paste.links', { n: out.shareTokens }));
-      if (out.memberNames.length) parts.push(membersLabel(out.memberNames));
+      if (cardNames.length) parts.push(membersLabel(cardNames));
+      if (out.progressNames.length) parts.push(progressLabel(out.progressNames));
       if (!parts.length) parts.push(out.problems[0] ?? t('inbox.invalid'));
       out.label = parts.join(' · ');
       return out;
@@ -260,7 +294,9 @@ export async function summarizePaste(text: string): Promise<PasteSummary> {
       if (classification.kind === 'bundle' || looksLikeJson(text)) {
         const got = await collectPaste(text, null);
         out.problems = got.problems;
-        out.memberNames = got.members.map((m) => m.name);
+        const cardNames = got.members.map((m) => m.name);
+        out.progressNames = got.progress.map((p) => p.name);
+        out.memberNames = [...cardNames, ...out.progressNames];
         const recipes = got.share.recipes.length;
         const patches = got.share.patches.length;
         if (recipes || patches || got.plan || got.share.dict.ing.length || out.memberNames.length) {
@@ -270,7 +306,8 @@ export async function summarizePaste(text: string): Promise<PasteSummary> {
           if (patches) parts.push(patches === 1 ? t('inbox.foundPatch') : t('inbox.foundPatches', { n: patches }));
           if (got.plan) parts.push(t('paste.plan'));
           if (!recipes && !patches && !got.plan && got.share.dict.ing.length) parts.push(t('inbox.dictAddN', { n: got.share.dict.ing.length }));
-          if (out.memberNames.length) parts.push(membersLabel(out.memberNames));
+          if (cardNames.length) parts.push(membersLabel(cardNames));
+          if (out.progressNames.length) parts.push(progressLabel(out.progressNames));
           out.label = t('paste.bundle', { what: parts.join(' · ') });
           return out;
         }

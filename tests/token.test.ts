@@ -35,6 +35,9 @@ import {
   FROZEN_TOKEN_P_FFLATE,
   FROZEN_TOKEN_W_SIDE,
   FROZEN_TOKEN_W_SIDE_FFLATE,
+  FROZEN_ENVELOPE_X,
+  FROZEN_TOKEN_X,
+  FROZEN_TOKEN_X_FFLATE,
 } from './fixtures/frozen-share-tokens';
 
 const SOURCE = fileURLToPath(new URL('../data/source/recipes-recepten2.json', import.meta.url));
@@ -156,6 +159,15 @@ describe('token codec', () => {
         const expected = engine === 'native' ? FROZEN_TOKEN_W_SIDE : FROZEN_TOKEN_W_SIDE_FFLATE;
         expect(await encodeToken(FROZEN_ENVELOPE_W_SIDE, { engine })).toBe(expected);
       });
+
+      // docs/specs/xp-levels.md §2h/§6a (6D-4): "Sync mijn voortgang", the new fragment key `x`.
+      it('decodes the frozen phase-6 #x= progress token (native- and fflate-produced)', async () => {
+        expect(await decodeToken(FROZEN_TOKEN_X, { engine })).toEqual(FROZEN_ENVELOPE_X);
+        expect(await decodeToken(FROZEN_TOKEN_X_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_X);
+        // The frozen token IS what this codec produces for that envelope today (byte-for-byte).
+        const expected = engine === 'native' ? FROZEN_TOKEN_X : FROZEN_TOKEN_X_FFLATE;
+        expect(await encodeToken(FROZEN_ENVELOPE_X, { engine })).toBe(expected);
+      });
     });
   }
 
@@ -187,7 +199,7 @@ describe('token codec', () => {
       await deflatedJson(null, 'native'),
       await deflatedJson({ t: 'r' }, 'native'), // no v
       await deflatedJson({ v: '2', t: 'r' }, 'native'), // v not a number
-      await deflatedJson({ v: 2, t: 'x' }, 'fflate'), // unknown key
+      await deflatedJson({ v: 2, t: 'z' }, 'fflate'), // unknown key ('x' is a kind since 6D-4)
       await deflatedJson({ v: 2 }, 'fflate'), // no t
       toBase64Url(await deflateRaw(new TextEncoder().encode('{"v":2,"t":"r"'), { engine: 'native' })), // truncated JSON
     ];
@@ -205,18 +217,31 @@ describe('token codec', () => {
   // 'unsupported-version', because "update the app" hangs on `v` and `v` stays 2. That is exactly
   // what an app from before block F says about a `#f=` card ("no readable recipe"), and what this
   // app will say about the next new kind. Adding a kind therefore means: both phones update first.
+  // ('x' was the stand-in unknown kind until 6D-4 made it "Sync mijn voortgang"; now it is 'z'.)
   it('a v2 envelope with an unknown kind is invalid-token (what a pre-block-F app makes of #f=)', async () => {
-    await expect(decodeToken(await deflatedJson({ v: 2, t: 'x', x: { id: 'p:1', name: 'A' } }, 'native'))).rejects.toThrow('invalid-token');
-    await expect(decodeToken(await deflatedJson({ v: 2, t: 'x', x: { id: 'p:1', name: 'A' } }, 'fflate'))).rejects.toThrow('invalid-token');
+    await expect(decodeToken(await deflatedJson({ v: 2, t: 'z', z: { id: 'p:1', name: 'A' } }, 'native'))).rejects.toThrow('invalid-token');
+    await expect(decodeToken(await deflatedJson({ v: 2, t: 'z', z: { id: 'p:1', name: 'A' } }, 'fflate'))).rejects.toThrow('invalid-token');
     // The pre-block-F key set never matched "#f=" at all, so a pasted card was simply no token there.
     const OLD_TOKEN_RE = /(?:^|[^A-Za-z0-9_-])#?([rpwb])=([A-Za-z0-9_-]{20,})/g;
     expect([...`${APP_URL}#f=${FROZEN_TOKEN_F}`.matchAll(OLD_TOKEN_RE)]).toHaveLength(0);
     expect(extractTokens(`${APP_URL}#f=${FROZEN_TOKEN_F}`)).toEqual([{ key: 'f', token: FROZEN_TOKEN_F }]);
   });
 
+  // docs/specs/xp-levels.md §5 (feitencheck): the same holds for `#x=` on an app from before 6D-4. Its
+  // key set `[rpwbf]` does not see "#x=" as a token at all (no code found), and a bare JSON envelope
+  // with t 'x' would be 'invalid-token' there, never "update the app" (`v` stays 2).
+  it('the pre-6D-4 key set never matched #x= at all; this app finds it', () => {
+    const PRE_6D4_TOKEN_RE = /(?:^|[^A-Za-z0-9_-])#?([rpwbf])=([A-Za-z0-9_-]{20,})/g;
+    expect([...`${APP_URL}#x=${FROZEN_TOKEN_X}`.matchAll(PRE_6D4_TOKEN_RE)]).toHaveLength(0);
+    expect(extractTokens(`${APP_URL}#x=${FROZEN_TOKEN_X}`)).toEqual([{ key: 'x', token: FROZEN_TOKEN_X }]);
+    expect(extractTokens(`📈 Voortgang van Stijn — Level 12 · Soepkoker.\n${APP_URL}#x=${FROZEN_TOKEN_X_FFLATE}`)).toEqual([
+      { key: 'x', token: FROZEN_TOKEN_X_FFLATE },
+    ]);
+  });
+
   it('isTokenKey', () => {
-    expect(['r', 'p', 'w', 'b', 'f'].every(isTokenKey)).toBe(true);
-    expect(['s', 'R', 'F', '', 1, null, undefined].some(isTokenKey)).toBe(false);
+    expect(['r', 'p', 'w', 'b', 'f', 'x'].every(isTokenKey)).toBe(true);
+    expect(['s', 'z', 'R', 'F', 'X', '', 1, null, undefined].some(isTokenKey)).toBe(false);
   });
 });
 
@@ -300,7 +325,7 @@ describe('extractTokens', () => {
   });
 
   it('extracts what buildShareUrl built, for every key', () => {
-    for (const key of ['r', 'p', 'w', 'b', 'f'] as const) {
+    for (const key of ['r', 'p', 'w', 'b', 'f', 'x'] as const) {
       const url = buildShareUrl(APP_URL, key, T2);
       expect(url).toBe(`${APP_URL}#${key}=${T2}`);
       expect(extractTokens(`Hoi! ${url}`)).toEqual([{ key, token: T2 }]);

@@ -1,7 +1,7 @@
 // Share envelopes (docs/phase-3-spec.md §1, src/domain/share.ts): recipe / patch / bundle
 // round-trips, the dictionary delta (user ids only), the frozen tokens of all kinds, the week plan
-// (`#w=`), the member card (`#f=`, phase 5 block F) and planMessages (single recipe, single patch,
-// several items, limit -> bundle file).
+// (`#w=`), the member card (`#f=`, phase 5 block F), shared progress (`#x=`, block 6D-4) and
+// planMessages (single recipe, single patch, several items, limit -> bundle file).
 import { describe, expect, it } from 'vitest';
 import type { Ingredient } from '../src/domain/dictionary';
 import type { Recipe } from '../src/domain/model';
@@ -15,6 +15,8 @@ import {
   buildPatchEnvelope,
   buildPlanEnvelope,
   buildPlanShareMessage,
+  buildProgressEnvelope,
+  buildProgressShareMessage,
   buildRecipeEnvelope,
   bundleFileName,
   combineEnvelopes,
@@ -23,10 +25,12 @@ import {
   planDishCount,
   planMessages,
   readMemberPayload,
+  readProgressPayload,
   referencedIngredientIds,
   type MemberCard,
   type PatchPayload,
   type PlanPayload,
+  type ProgressCard,
 } from '../src/domain/share';
 import { decodeToken, encodeToken, extractTokens, type Envelope } from '../src/domain/token';
 import type { AvatarSpec } from '../src/domain/avatar';
@@ -46,6 +50,9 @@ import {
   FROZEN_TOKEN_W_FFLATE,
   FROZEN_TOKEN_W_SIDE,
   FROZEN_TOKEN_W_SIDE_FFLATE,
+  FROZEN_ENVELOPE_X,
+  FROZEN_TOKEN_X,
+  FROZEN_TOKEN_X_FFLATE,
 } from './fixtures/frozen-share-tokens';
 
 const APP_URL = 'https://stijn.github.io/recepten/';
@@ -280,7 +287,8 @@ describe('parseEnvelope', () => {
     expect(parsed.patches).toEqual([]);
     expect(parsed.dict.ing.map((i) => i.id)).toEqual(['ok']);
     expect(() => parseEnvelope(null)).toThrow('invalid-token');
-    expect(() => parseEnvelope({ v: 2, t: 'x' })).toThrow('invalid-token');
+    // An unknown kind ('x' was the stand-in until 6D-4 made it shared progress; see the #x= block).
+    expect(() => parseEnvelope({ v: 2, t: 'z' })).toThrow('invalid-token');
     expect(() => parseEnvelope({ v: 3, t: 'r' })).toThrow('unsupported-version');
     // 'w' without a payload object is not a plan.
     expect(() => parseEnvelope({ v: 2, t: 'w' })).toThrow('invalid-token');
@@ -628,6 +636,184 @@ describe('member card with an avatar (#f=, optional key)', () => {
     if (!('text' in plan)) throw new Error('expected text');
     expect(plan.tokens).toBe(1);
     expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['f']);
+  });
+});
+
+// --- Phase 6 block 6D-4: "Sync mijn voortgang" (`#x=`, docs/specs/xp-levels.md §2h, §6a) ----------
+
+const PROGRESS: ProgressCard = {
+  id: 'p:k3x9w2qa',
+  name: 'Stijn',
+  color: '#2b4fa8',
+  lang: 'nl',
+  deviceId: 'd:7m4qz81c',
+  rv: 1,
+  level: 12,
+  xp: 4512,
+  streak: 5,
+  badges: ['eerste-hap', 'huiskok', 'proever'],
+  cookDays: [
+    { d: '2026-10-19', r: ['b:uiensoep'] },
+    { d: '2026-10-20', r: ['b:afwasmachinezalm', 'u:abc12345'] },
+    { d: '2026-10-22', r: ['b:uiensoep'] },
+  ],
+};
+
+/** 'yyyy-mm-dd' of the n-th day after 2026-01-01 (UTC calendar arithmetic, no local clock). */
+function dayAfter(n: number): string {
+  return new Date(Date.UTC(2026, 0, 1 + n)).toISOString().slice(0, 10);
+}
+
+describe('progress (#x=)', () => {
+  it('buildProgressEnvelope: {v:2, t:"x", by = name, at, x}; the card fields are trimmed like a member card', () => {
+    const env = buildProgressEnvelope(PROGRESS);
+    expect(env.v).toBe(2);
+    expect(env.t).toBe('x');
+    expect(env.by).toBe('Stijn');
+    expect(typeof env.at).toBe('string');
+    expect(env.x).toEqual(PROGRESS);
+    const trimmed = buildProgressEnvelope({ ...PROGRESS, id: ' p:abc ', name: '  Gabi ', color: ' ', lang: 'de' as 'nl', deviceId: '  ' });
+    expect(trimmed.by).toBe('Gabi');
+    expect(trimmed.x).toMatchObject({ id: 'p:abc', name: 'Gabi', color: '#2b4fa8', lang: 'nl' });
+    expect(trimmed.x as ProgressCard).not.toHaveProperty('deviceId');
+    // What travels is held to the receiver's limits; unknown keys travel.
+    const wild = buildProgressEnvelope({ ...PROGRESS, level: 500, badges: ['ok', 'Not OK'], mood: 'cat' });
+    expect(wild.x).toMatchObject({ level: 1, badges: ['ok'], mood: 'cat' });
+  });
+
+  it('round-trips through the codec as kind "progress" with no recipes, patches, plan or card', async () => {
+    const env = buildProgressEnvelope(PROGRESS);
+    const token = await encodeToken(env);
+    expect(extractTokens(`${APP_URL}#x=${token}`)).toEqual([{ key: 'x', token }]);
+    const parsed = parseEnvelope(await decodeToken(token));
+    expect(parsed.kind).toBe('progress');
+    expect(parsed.progress).toEqual(PROGRESS);
+    expect(parsed.by).toBe('Stijn');
+    expect(parsed.recipes).toEqual([]);
+    expect(parsed.patches).toEqual([]);
+    expect(parsed.dict.ing).toEqual([]);
+    expect(parsed.plan).toBeUndefined();
+    expect(parsed.member).toBeUndefined();
+    expect(envelopeItemCount(env)).toBe(0);
+    expect(planDishCount(env)).toBe(0);
+  });
+
+  it('reads the frozen #x= token on both engines (unknown keys kept)', async () => {
+    for (const token of [FROZEN_TOKEN_X, FROZEN_TOKEN_X_FFLATE]) {
+      const env = await decodeToken(token);
+      expect(env).toEqual(FROZEN_ENVELOPE_X);
+      expect(env['future']).toEqual({ keep: true });
+      const parsed = parseEnvelope(env);
+      expect(parsed.kind).toBe('progress');
+      expect(parsed.progress).toEqual(PROGRESS);
+      expect(parsed.by).toBe('Stijn');
+      expect(parsed.at).toBe('2026-10-22T10:00:00.000Z');
+    }
+  });
+
+  it('readProgressPayload: level 0/101/"12" → 1; xp, rv and streak fall back; unknown keys stay', () => {
+    for (const level of [0, 101, '12', 12.5, -3, null]) {
+      expect(readProgressPayload({ ...PROGRESS, level })?.level).toBe(1);
+    }
+    expect(readProgressPayload({ ...PROGRESS, level: 100 })?.level).toBe(100);
+    expect(readProgressPayload({ ...PROGRESS, level: 1 })?.level).toBe(1);
+    const bad = readProgressPayload({ id: 'p:x', name: 'A', xp: -5, rv: 0, streak: 1.5, mood: 'cat' });
+    expect(bad).toMatchObject({ id: 'p:x', name: 'A', color: '#2b4fa8', lang: 'nl', rv: 1, level: 1, xp: 0, streak: 0, badges: [], cookDays: [], mood: 'cat' });
+    expect(readProgressPayload({ ...PROGRESS, xp: '4512', rv: 2, streak: 7 })).toMatchObject({ xp: 0, rv: 2, streak: 7 });
+    // The card rules are those of readMemberPayload: id and name required, colour and avatar checked.
+    expect(readProgressPayload({ ...PROGRESS, id: undefined })).toBeNull();
+    expect(readProgressPayload({ ...PROGRESS, name: '  ' })).toBeNull();
+    expect(readProgressPayload({ ...PROGRESS, id: 'p x' })).toBeNull();
+    expect(readProgressPayload(null)).toBeNull();
+    expect(readProgressPayload('Stijn')).toBeNull();
+    expect(readProgressPayload({ ...PROGRESS, color: 'red; x:url(y)' })?.color).toBe('#2b4fa8');
+    expect(readProgressPayload({ ...PROGRESS, avatar: { v: 2 } })).toEqual(PROGRESS);
+    expect(readProgressPayload({ ...PROGRESS, avatar: AVATAR })?.avatar).toEqual(AVATAR);
+  });
+
+  it('readProgressPayload: badges with strange characters are filtered out (id or id@1…8, at most 400)', () => {
+    const card = readProgressPayload({
+      ...PROGRESS,
+      badges: ['eerste-hap', 'huiskok@3', 'Huiskok', 'kok:3', 'kok@9', 'kok@0', '-kok', 'kok-', 'a--b', ' proever', 7, null, 'op-dreef@8', 'eerste-hap'],
+    });
+    expect(card?.badges).toEqual(['eerste-hap', 'huiskok@3', 'op-dreef@8']);
+    expect(readProgressPayload({ ...PROGRESS, badges: 'eerste-hap' })?.badges).toEqual([]);
+    const many = Array.from({ length: 450 }, (_, i) => `b${i}`);
+    expect(readProgressPayload({ ...PROGRESS, badges: many })?.badges).toEqual(many.slice(0, 400));
+  });
+
+  it('readProgressPayload: 95 cook days → the last 90; r over 5 → the first 5; a bad day is dropped', () => {
+    const days = Array.from({ length: 95 }, (_, i) => ({ d: dayAfter(i), r: ['b:r' + i] }));
+    const card = readProgressPayload({ ...PROGRESS, cookDays: days });
+    expect(card?.cookDays).toHaveLength(90);
+    expect(card?.cookDays[0]).toEqual({ d: dayAfter(5), r: ['b:r5'] });
+    expect(card?.cookDays[89]).toEqual({ d: dayAfter(94), r: ['b:r94'] });
+    const r = readProgressPayload({ ...PROGRESS, cookDays: [{ d: '2026-10-20', r: ['a', 'b', 'c', 'd', 'e', 'f', 'g'] }] });
+    expect(r?.cookDays).toEqual([{ d: '2026-10-20', r: ['a', 'b', 'c', 'd', 'e'] }]);
+    const mixed = readProgressPayload({
+      ...PROGRESS,
+      cookDays: [
+        { d: '2026-02-30', r: ['b:x'] }, // no such day
+        { d: '2026-10-2', r: ['b:x'] },
+        { d: 20261020, r: ['b:x'] },
+        'yesterday',
+        { r: ['b:x'] },
+        { d: '2026-10-21', r: ['b:ok', 'has space', 7, '', 'x'.repeat(65), 'b:ok', 'u:abc12345'], extra: 1 },
+        { d: '2026-10-19' },
+        { d: '2026-10-21', r: ['b:second'] }, // the same day again: the first one counts
+      ],
+    });
+    expect(mixed?.cookDays).toEqual([
+      { d: '2026-10-19', r: [] },
+      { d: '2026-10-21', r: ['b:ok', 'u:abc12345'], extra: 1 },
+    ]);
+    expect(readProgressPayload({ ...PROGRESS, cookDays: 'lots' })?.cookDays).toEqual([]);
+  });
+
+  it('an `x` without a payload object is invalid-token; {v:2, t:"x", x:{}} is kind "progress" without `progress`', () => {
+    expect(() => parseEnvelope({ v: 2, t: 'x' })).toThrow('invalid-token');
+    expect(() => parseEnvelope({ v: 2, t: 'x', x: 'Stijn' })).toThrow('invalid-token');
+    expect(() => parseEnvelope({ v: 2, t: 'x', x: [PROGRESS] })).toThrow('invalid-token');
+    const parsed = parseEnvelope({ v: 2, t: 'x', x: {} });
+    expect(parsed.kind).toBe('progress');
+    expect(parsed.progress).toBeUndefined();
+    expect(parsed.by).toBeUndefined();
+    // `by` = the card's name when the envelope has none; the envelope's own `by` wins otherwise.
+    expect(parseEnvelope({ v: 2, t: 'x', x: PROGRESS }).by).toBe('Stijn');
+    expect(parseEnvelope({ v: 2, t: 'x', by: 'Mama', x: PROGRESS }).by).toBe('Mama');
+  });
+
+  it('buildProgressShareMessage: the exact NL/EN sentence and the #x= URL alone on the last line', () => {
+    const nl = buildProgressShareMessage({ name: 'Stijn', level: 12, title: 'Soepkoker', url: 'https://x/#x=abc', lang: 'nl' }).split('\n');
+    expect(nl).toEqual(['📈 Voortgang van Stijn — Level 12 · Soepkoker. Open de link in de app of plak hem bij In & uit.', 'https://x/#x=abc']);
+    const en = buildProgressShareMessage({ name: 'Stijn', level: 12, title: 'Soup Stirrer', url: 'https://x/#x=abc', lang: 'en' }).split('\n');
+    expect(en).toEqual(["📈 Stijn's progress — Level 12 · Soup Stirrer. Open the link in the app or paste it into In & out.", 'https://x/#x=abc']);
+  });
+
+  it('planMessages with one x: that text in the chosen language, 1 token, one extractable #x= link', async () => {
+    const env = buildProgressEnvelope(PROGRESS);
+    const nl = await planMessages([env], APP_URL, { lang: 'nl' });
+    if (!('text' in nl)) throw new Error('expected text');
+    const url = `${APP_URL}#x=${await encodeToken(env)}`;
+    expect(nl.text).toBe(buildProgressShareMessage({ name: 'Stijn', level: 12, title: 'Soepkoker', url, lang: 'nl' }));
+    expect(nl.tokens).toBe(1);
+    expect(nl.text.split('\n').at(-1)).toBe(url);
+    expect(extractTokens(nl.text).map((t) => t.key)).toEqual(['x']);
+    const parsed = parseEnvelope(await decodeToken(extractTokens(nl.text)[0]!.token));
+    expect(parsed.progress).toEqual(PROGRESS);
+    const en = await planMessages([env], APP_URL, { lang: 'en' });
+    if (!('text' in en)) throw new Error('expected text');
+    expect(en.text.split('\n')[0]).toBe("📈 Stijn's progress — Level 12 · Soup Stirrer. Open the link in the app or paste it into In & out.");
+  });
+
+  it('combineEnvelopes([x, r]) → a bundle with the one recipe; the progress drops out', () => {
+    const out = combineEnvelopes([buildProgressEnvelope(PROGRESS), buildRecipeEnvelope(recipe(), { by: 'Stijn', userIngredients: [] })]);
+    expect(out.t).toBe('b');
+    expect(envelopeItemCount(out)).toBe(1);
+    const parsed = parseEnvelope(out);
+    expect(parsed.recipes).toHaveLength(1);
+    expect(parsed.progress).toBeUndefined();
+    expect(parsed.by).toBe('Stijn');
   });
 });
 

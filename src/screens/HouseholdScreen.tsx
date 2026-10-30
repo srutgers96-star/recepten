@@ -3,17 +3,31 @@
 // and its members: the profiles on this phone (automatic, edited via Profiles) plus members added
 // by hand (name + colour) or received as a MEMBER CARD (`#f=` token, src/domain/household.ts
 // `upsertMemberFromCard`), all stored in the `household` setting.
-//   - "Mijn kaartje": <MemberCardPanel/> (ProfilesScreen) for the active profile.
+//   - "Mijn kaartje": <MemberCardPanel/> (ProfilesScreen) for the active profile, and under it (6D-4,
+//     docs/specs/xp-levels.md §1h) the button "Sync mijn voortgang" with <ProgressSharePanel/>.
 //   - "Voeg lid toe via link of plak": a paste box; every `#f=` in the text becomes a card row with
 //     "Voeg <naam> toe aan je huishouden" (`readMemberCards`, `MemberCardRow`, `applyMemberCard`;
 //     the Inbox reuses the last two). Works by pasting (iPhone, invariant 5) and by link (Android
 //     → Inbox). Phase 6 (docs/phase-6-spec.md 13A): the box is the universal one (<UniversalPaste>):
 //     a recipe link pasted here offers "Open in de Inbox", a website recipe "Open in de editor"; a
 //     text another paste box handed over arrives through `pendingMemberText`.
+//   - 6D-4b (docs/specs/xp-levels.md §1i): a shared progress (`#x=`, "Sync mijn voortgang") pasted
+//     here (or in the Inbox) becomes a card "Voortgang van <naam>" (`ProgressCardRow`,
+//     `applyProgressCard`; the Inbox reuses both): update a member, add a new one, or keep the
+//     snapshot as a friend (setting `progress.snapshots`). Each member row shows "Level N · <titel>"
+//     under the name (a profile here: live; a member on another phone: from the last snapshot, with
+//     "· bijgewerkt <datum>"); badges off = no level anywhere. Under the members a card "Vrienden"
+//     lists the friend snapshots (absent when there are none).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { badgesEnabled, loadBadgeSettings } from '@/badges';
 import { Header } from '@/components/Header';
+import { ProgressShareToggle } from '@/components/ProgressSharePanel';
+import { formatShortDate } from '@/components/RecipeRow';
 import { UniversalPaste } from '@/components/UniversalPaste';
-import { getHousehold, logShareEvent, setHousehold } from '@/db/repo';
+import { formatXp, levelTitleText } from '@/components/XpBar';
+import { useLive } from '@/db/live';
+import { getHousehold, getProgressSnapshots, logShareEvent, putProgressSnapshot, removeProgressSnapshot, setHousehold } from '@/db/repo';
+import { dayFromKey, dayIndexOfIso, localDayIndex } from '@/domain/days';
 import {
   matchMemberForCard,
   memberFromProfile,
@@ -29,13 +43,14 @@ import {
 import { nowIso } from '@/domain/model';
 import { classifyPaste } from '@/domain/paste-classify';
 import { cleanPastedText } from '@/domain/photo-import';
-import { parseEnvelope, type ParsedShare } from '@/domain/share';
+import type { ProgressSnapshot } from '@/domain/progress';
+import { parseEnvelope, type ParsedShare, type ProgressCard } from '@/domain/share';
 import { decodeToken, extractTokens } from '@/domain/token';
 import { t } from '@/i18n';
 import { openPasteIn } from '@/paste';
 import { PROFILE_COLORS, activeProfile, profiles } from '@/profile';
 import { navigate, pendingMemberText } from '@/router';
-import { Avatar, MemberCardPanel } from './ProfilesScreen';
+import { Avatar, MemberCardPanel, useAvatarLevel } from './ProfilesScreen';
 
 const NAME_DEBOUNCE_MS = 500;
 const PASTE_DEBOUNCE_MS = 150;
@@ -72,6 +87,10 @@ export async function applyMemberCard(card: MemberCard): Promise<{ outcome: Card
 
 export interface FoundCards {
   cards: MemberCard[];
+  /** Shared progress (`#x=`, 6D-4b), one per card id: a card too ("Voortgang van <naam>"). */
+  progress: ProgressCard[];
+  /** When each progress was shared (the envelope's `at`), by card id. */
+  progressAt: Record<string, string>;
   /** Human-readable problems per part (invalid code, newer version …). */
   problems: string[];
   /** Tokens that were something else (a recipe, a plan): "plak het in de Inbox". */
@@ -89,17 +108,30 @@ function isEnvelope(v: unknown): boolean {
 
 /**
  * Every member card in a pasted text: the `#f=` tokens (a WhatsApp message, a bare link), else one
- * raw JSON envelope. Other kinds of token, and other JSON (a bundle, an export, a recipe — the paste
- * box offers "Open in de Inbox" for those), are counted in `others`; the same card twice counts once.
+ * raw JSON envelope. A shared progress (`#x=`, 6D-4b) counts as a card too (`progress`); one whose
+ * card is unreadable is a problem. Other kinds of token, and other JSON (a bundle, an export, a
+ * recipe — the paste box offers "Open in de Inbox" for those), are counted in `others`; the same
+ * card twice counts once.
  */
 export async function readMemberCards(text: string): Promise<FoundCards> {
-  const out: FoundCards = { cards: [], problems: [], others: 0 };
+  const out: FoundCards = { cards: [], progress: [], progressAt: {}, problems: [], others: 0 };
   const seen = new Set<string>();
+  const seenProgress = new Set<string>();
   const take = (parsed: ParsedShare) => {
     if (parsed.kind === 'member' && parsed.member) {
       if (seen.has(parsed.member.id)) return;
       seen.add(parsed.member.id);
       out.cards.push(parsed.member);
+    } else if (parsed.kind === 'progress') {
+      const card = parsed.progress;
+      if (!card) {
+        out.problems.push(t('inbox.invalid'));
+        return;
+      }
+      if (seenProgress.has(card.id)) return;
+      seenProgress.add(card.id);
+      out.progress.push(card);
+      if (parsed.at) out.progressAt[card.id] = parsed.at;
     } else out.others++;
   };
   // Tokens from the cleaned text, as the paste box classifies them (a rendered chat may escape a "_" inside the token).
@@ -180,6 +212,181 @@ export function MemberCardRow(props: { card: MemberCard; members: readonly Membe
   );
 }
 
+// --- Shared progress (#x=, 6D-4b): shared with the Inbox -----------------------------------------
+
+/**
+ * True once the `badges.enabled` setting is known and on. Badges off = no level, streak or badge
+ * count anywhere (docs/specs/xp-levels.md §1, §5.9); waiting for the setting keeps a level line
+ * from flashing.
+ */
+function useBadgesOn(): boolean {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    void loadBadgeSettings().then(() => {
+      if (!cancelled) setReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  return ready && badgesEnabled.value;
+}
+
+/**
+ * Cook days of the card in the 30 days up to the day it was shared (the envelope's `at`; today when
+ * the share carries no date), that day included: "{n} kookdagen in de laatste 30 dagen".
+ */
+export function cookDaysIn30(card: Pick<ProgressCard, 'cookDays'>, sentAt?: string): number {
+  const end = (sentAt ? dayIndexOfIso(sentAt) : null) ?? localDayIndex(new Date());
+  let n = 0;
+  for (const c of card.cookDays) {
+    const day = dayFromKey(c.d);
+    if (day !== null && day <= end && day > end - 30) n++;
+  }
+  return n;
+}
+
+/** What saving a received progress did: a member added / updated, kept as a friend, or nothing (a profile here). */
+export type ProgressOutcome = 'added' | 'updated' | 'friend' | 'local';
+
+/**
+ * Saves a received progress (§1i). The sender is a profile on this phone → nothing is written
+ * ('local'). A member already (`matchMemberForCard`, by id or name) → the card fields update the
+ * member (`upsertMemberFromCard` via applyMemberCard) and the snapshot is stored. Not a member:
+ * `asFriend` false = add them as a member + the snapshot, true = only the snapshot with
+ * `friend: true`. Every save logs one 'in' row (kind 'progress', who = the name). Returns the
+ * household as stored, for the caller's state.
+ */
+export async function applyProgressCard(card: ProgressCard, asFriend: boolean): Promise<{ outcome: ProgressOutcome; setting: HouseholdSetting }> {
+  const h = await getHousehold();
+  const status = cardStatus(membersFrom(profiles.value, h), card);
+  if (status === 'local') return { outcome: 'local', setting: h };
+  let setting = h;
+  let outcome: ProgressOutcome = 'friend';
+  if (status === 'known' || !asFriend) {
+    const r = await applyMemberCard(card);
+    if (r.outcome === 'local') return { outcome: 'local', setting: r.setting };
+    setting = r.setting;
+    outcome = r.outcome;
+  }
+  const snapshot: ProgressSnapshot = { ...card, receivedAt: nowIso(), friend: outcome === 'friend' };
+  await putProgressSnapshot(snapshot);
+  void logShareEvent({ at: nowIso(), direction: 'in', kind: 'progress', who: card.name, count: 1, recipeIds: [] }).catch((err: unknown) => console.error('logShareEvent', err));
+  return { outcome, setting };
+}
+
+/**
+ * One received progress (§1i): avatar, "Voortgang van <naam>", "Level N · <titel> · 🔥 s · b badges"
+ * (badges on only), "{n} kookdagen in de laatste 30 dagen · gedeeld op <datum>", and the buttons:
+ * a member → "Werk <naam> bij"; a profile here → the line that you already see it; anyone else →
+ * "Voeg <naam> toe aan je huishouden" and "Bewaar als vriend".
+ */
+export function ProgressCardRow(props: {
+  card: ProgressCard;
+  /** The envelope's `at`. */
+  sentAt?: string;
+  members: readonly Member[];
+  done?: ProgressOutcome;
+  busy?: boolean;
+  onSave: (card: ProgressCard, asFriend: boolean) => void;
+  onOpenHousehold?: () => void;
+}) {
+  const { card } = props;
+  const badgesOn = useBadgesOn();
+  const status = props.done === 'local' ? 'local' : cardStatus(props.members, card);
+  const name = card.name;
+  const sent = formatShortDate(props.sentAt);
+  const line3 = [t('progress.cookDays30', { n: formatXp(cookDaysIn30(card, props.sentAt)) }), sent ? t('progress.sentAt', { date: sent }) : '']
+    .filter((s) => s !== '')
+    .join(' · ');
+  const doneText =
+    props.done === 'updated'
+      ? t('progress.updated', { name })
+      : props.done === 'added'
+        ? t('household.cardAdded', { name })
+        : props.done === 'friend'
+          ? t('household.saved')
+          : '';
+  return (
+    <div class="member-card-row progress-card-row">
+      <div class="member-card-head">
+        <Avatar profile={card} />
+        <div class="who">
+          <strong>{t('progress.from', { name })}</strong>
+          {badgesOn && (
+            <span class="muted small">
+              {levelTitleText(card.level)} · {t('progress.streakBadges', { streak: formatXp(card.streak), badges: formatXp(card.badges.length) })}
+            </span>
+          )}
+          <span class="muted small">{line3}</span>
+        </div>
+      </div>
+      {props.done && props.done !== 'local' ? (
+        <>
+          <p class="ok small">{doneText}</p>
+          {props.onOpenHousehold && (
+            <div class="actions">
+              <button type="button" class="btn" onClick={props.onOpenHousehold}>
+                {t('household.toHousehold')} ›
+              </button>
+            </div>
+          )}
+        </>
+      ) : status === 'local' ? (
+        <p class="muted small">{t('progress.local', { name })}</p>
+      ) : status === 'known' ? (
+        <div class="actions">
+          <button type="button" class="btn btn-primary btn-block" disabled={props.busy} onClick={() => props.onSave(card, false)}>
+            {t('progress.update', { name })}
+          </button>
+        </div>
+      ) : (
+        <div class="actions">
+          <button type="button" class="btn btn-primary btn-block" disabled={props.busy} onClick={() => props.onSave(card, false)}>
+            {t('household.addCard', { name })}
+          </button>
+          <button type="button" class="btn btn-block" disabled={props.busy} onClick={() => props.onSave(card, true)}>
+            {t('progress.saveFriend')}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** "Level N · <titel> · bijgewerkt <datum>" of a snapshot (the caller checks that badges are on). */
+function SnapshotLevelLine(props: { snapshot?: ProgressSnapshot }) {
+  const s = props.snapshot;
+  if (!s) return null;
+  const date = formatShortDate(s.receivedAt);
+  return (
+    <span class="muted small member-level">
+      {levelTitleText(s.level)}
+      {date ? ' ' + t('progress.updatedAgo', { date }) : ''}
+    </span>
+  );
+}
+
+/**
+ * The level line under a member's name (§1i): a profile on this phone = its live level
+ * (`useAvatarLevel`, a quiet read, never a reward moment); a member on another phone = the level of
+ * their last snapshot with "· bijgewerkt <datum>"; nothing without data or with badges off.
+ */
+function MemberLevelLine(props: { member: Member; snapshot?: ProgressSnapshot }) {
+  const on = useBadgesOn();
+  const localLevel = useAvatarLevel(props.member.local ? props.member.id : null);
+  if (!on) return null;
+  if (props.member.local) return localLevel ? <span class="muted small member-level">{levelTitleText(localLevel)}</span> : null;
+  return <SnapshotLevelLine snapshot={props.snapshot} />;
+}
+
+/** A friend's line on the Vrienden card: the snapshot's level and date, with badges on only. */
+function FriendLevelLine(props: { snapshot: ProgressSnapshot }) {
+  const on = useBadgesOn();
+  return on ? <SnapshotLevelLine snapshot={props.snapshot} /> : null;
+}
+
 // --- Screen --------------------------------------------------------------------------------------
 
 /** Name + colour form for a hand-added member (add and edit). */
@@ -242,6 +449,10 @@ export function HouseholdScreen() {
   const [cardDone, setCardDone] = useState<Record<string, CardOutcome>>({});
   const [pasteNotice, setPasteNotice] = useState('');
   const [cardBusy, setCardBusy] = useState(false);
+  // 6D-4b: what happened to each received progress in the paste box, and the stored snapshots (live:
+  // a save here or in the Inbox shows up at once in the level lines and on the Vrienden card).
+  const [progressDone, setProgressDone] = useState<Record<string, ProgressOutcome>>({});
+  const snapshots = useLive(getProgressSnapshots, []);
   const pasteSeq = useRef(0);
   const pasteBox = useRef<HTMLTextAreaElement>(null);
   const list = profiles.value;
@@ -270,6 +481,15 @@ export function HouseholdScreen() {
   }, []);
 
   const members = useMemo(() => (setting ? membersFrom(list, setting) : list.map(memberFromProfile)), [list, setting]);
+  // 6D-4b: the friend snapshots for the Vrienden card, by name; one that has since become a member
+  // (a member card of the same person) shows in the member list instead, not twice.
+  const friends = useMemo(
+    () =>
+      Object.values(snapshots ?? {})
+        .filter((s) => s.friend && !matchMemberForCard(members, s))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    [snapshots, members],
+  );
 
   async function save(next: HouseholdSetting) {
     setSettingState(next);
@@ -308,7 +528,18 @@ export function HouseholdScreen() {
     if (!setting) return;
     if (!confirm(t('household.removeConfirm', { name: m.name }))) return;
     await save(removeMember(setting, m.id));
+    // 6D-4b: their last shared progress goes with them (it would otherwise linger in the calendar).
+    void removeProgressSnapshot(m.id).catch((e: unknown) => console.error('removeProgressSnapshot', e));
     if (editing === m.id) setEditing(null);
+  }
+
+  /** "Verwijder" on the Vrienden card: the friend's snapshot goes (they can share it again). */
+  async function removeFriend(s: ProgressSnapshot) {
+    try {
+      await removeProgressSnapshot(s.id);
+    } catch (e) {
+      console.error('removeProgressSnapshot', e);
+    }
   }
 
   // Analyse the pasted text (debounced): every `#f=` becomes a card row. A new text starts with
@@ -322,6 +553,7 @@ export function HouseholdScreen() {
     if (!trimmed || !(kind === 'member' || kind === 'tokens' || kind === 'bundle')) {
       setFound(null);
       setCardDone({});
+      setProgressDone({});
       return;
     }
     const handle = window.setTimeout(() => {
@@ -330,10 +562,11 @@ export function HouseholdScreen() {
           if (my !== pasteSeq.current) return;
           setFound(got);
           setCardDone({});
+          setProgressDone({});
         })
         .catch((e: unknown) => {
           console.warn('readMemberCards', e);
-          if (my === pasteSeq.current) setFound({ cards: [], problems: [t('inbox.invalid')], others: 0 });
+          if (my === pasteSeq.current) setFound({ cards: [], progress: [], progressAt: {}, problems: [t('inbox.invalid')], others: 0 });
         });
     }, PASTE_DEBOUNCE_MS);
     return () => window.clearTimeout(handle);
@@ -347,6 +580,7 @@ export function HouseholdScreen() {
   function onPasteText(s: string) {
     setPasteNotice('');
     setCardDone({});
+    setProgressDone({});
     setPasteText(s);
   }
 
@@ -371,11 +605,28 @@ export function HouseholdScreen() {
     }
   }
 
+  /** 6D-4b: "Werk bij" / "Voeg toe" / "Bewaar als vriend" on a received progress (§1i). */
+  async function saveProgress(card: ProgressCard, asFriend: boolean) {
+    if (cardBusy) return;
+    setCardBusy(true);
+    setPasteNotice('');
+    try {
+      const r = await applyProgressCard(card, asFriend);
+      setSettingState(r.setting);
+      setProgressDone((prev) => ({ ...prev, [card.id]: r.outcome }));
+    } catch (e) {
+      console.error('applyProgressCard', e);
+      setPasteNotice(`${t('household.cardFailed')}: ${String((e as Error)?.message ?? e)}`);
+    } finally {
+      setCardBusy(false);
+    }
+  }
+
   const takenFor = (except?: string) => members.filter((m) => m.id !== except).map((m) => m.name);
   const count = members.length === 1 ? t('household.memberOne') : t('household.memberCount', { n: members.length });
   // Tokens that were something else (a recipe, a plan) are not "nothing": the paste box names them
   // and offers "Open in de Inbox".
-  const nothingFound = found !== null && found.cards.length === 0 && found.problems.length === 0 && found.others === 0;
+  const nothingFound = found !== null && found.cards.length === 0 && found.progress.length === 0 && found.problems.length === 0 && found.others === 0;
 
   return (
     <>
@@ -407,6 +658,8 @@ export function HouseholdScreen() {
               </div>
             </div>
             <MemberCardPanel profile={me} />
+            {/* 6D-4 (§1h): "Sync mijn voortgang" + its panel; nothing with badges off. */}
+            <ProgressShareToggle profile={me} />
           </section>
         )}
 
@@ -424,6 +677,7 @@ export function HouseholdScreen() {
                     <Avatar profile={m} />
                     <div class="who">
                       <strong>{m.name}</strong>
+                      <MemberLevelLine member={m} snapshot={snapshots?.[m.id]} />
                       <span class="muted small">{m.local ? t('household.local') : m.deviceId ? t('household.fromCard') : t('household.byHand')}</span>
                     </div>
                     {!m.local && (
@@ -447,6 +701,30 @@ export function HouseholdScreen() {
             </button>
           </div>
         </section>
+
+        {friends.length > 0 && (
+          <section class="card friends">
+            <h2>{t('progress.friends')}</h2>
+            <ul class="member-list">
+              {friends.map((s) => (
+                <li key={s.id} class="member-row-wrap">
+                  <div class="member-row">
+                    <Avatar profile={s} />
+                    <div class="who">
+                      <strong>{s.name}</strong>
+                      <FriendLevelLine snapshot={s} />
+                    </div>
+                    <div class="actions">
+                      <button type="button" class="btn btn-small btn-danger" onClick={() => void removeFriend(s)}>
+                        {t('household.remove')}
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section class="card member-paste">
           <h2>{t('household.addViaLink')}</h2>
@@ -473,10 +751,21 @@ export function HouseholdScreen() {
             </p>
           ))}
           {nothingFound && <p class="bad small">{t('household.noCard')}</p>}
-          {found && found.cards.length > 0 && (
+          {found && found.cards.length + found.progress.length > 0 && (
             <div class="member-cards">
               {found.cards.map((card) => (
                 <MemberCardRow key={card.id} card={card} members={members} done={cardDone[card.id]} busy={cardBusy} onAdd={(c) => void addCard(c)} />
+              ))}
+              {found.progress.map((card) => (
+                <ProgressCardRow
+                  key={'x' + card.id}
+                  card={card}
+                  sentAt={found.progressAt[card.id]}
+                  members={members}
+                  done={progressDone[card.id]}
+                  busy={cardBusy}
+                  onSave={(c, asFriend) => void saveProgress(c, asFriend)}
+                />
               ))}
             </div>
           )}

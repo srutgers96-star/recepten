@@ -21,6 +21,8 @@
 // sounds plus the unlocked, switched-on ones (`activeTimerSounds()`), the switch "Geluid bij
 // Gekookt!" (with Probeer) appears once `sound-cooked-tada` is active, and the picker "Lettertype
 // kookstand" once at least one typeface is (`activeFonts()`).
+// 6D-4 (docs/specs/xp-levels.md §1j): "📅 Kookkalender" (→ '/more/calendar') closes the menu of
+// "Jij & je huishouden", always shown (the calendar is a log; only its levels need badges on).
 // 6D-3 (docs/specs/badges-avatar.md §1b): a tap on the big avatar circle of the profile card opens
 // the avatar maker (<AvatarSheet/>) from level 3 with badges on; below that, or with badges off, the
 // circle is not a button and a tap does nothing. The card's circle shows the level ring.
@@ -552,6 +554,8 @@ export function MoreScreen() {
               {badgesEnabled.value && <MenuRow label={`🏆 ${t('more.badges')}`} sub={t('more.badgesRowHint')} to="/more/badges" />}
               {/* 6D-4a (docs/specs/xp-levels.md §1f): Vrijgespeeld, right under Badges, badges on only. */}
               {badgesEnabled.value && <MenuRow label={`🎁 ${t('more.unlocks')}`} sub={t('more.unlocksHint')} to="/more/unlocks" />}
+              {/* 6D-4 (docs/specs/xp-levels.md §1j): the cooking calendar, ALWAYS (also with badges off: it is a log). */}
+              <MenuRow label={`📅 ${t('more.calendar')}`} sub={t('more.calendarHint')} to="/more/calendar" />
             </div>
           </div>
           <div class="setting">

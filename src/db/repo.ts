@@ -23,6 +23,7 @@ import type { ParsedShare } from '@/domain/share';
 import { aggregate, type ListItem } from '@/domain/aggregate';
 import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, newSideItem, normalizeServings, planHash, planHashAll, type Plan, type PlanItem } from '@/domain/planner';
 import { HOUSEHOLD_KEY, normalizeHousehold, type HouseholdSetting } from '@/domain/household';
+import { normalizeSnapshots, type ProgressSnapshot } from '@/domain/progress';
 import { mergeDonateHearts, mergeEarned } from '@/domain/badges';
 import { mergeFeatureLogs, normalizeFeatureLog } from '@/domain/features';
 import { normalizeShopBought, recordBought } from '@/domain/shopbought';
@@ -862,7 +863,7 @@ export async function applyImportPlan(plan: ImportPlan, choices: ImportChoices, 
 
 // --- "In & uit" log (phase 6, docs/phase-6-spec.md 13A-2) ----------------------------------------
 
-const SHARE_EVENT_KINDS: ReadonlySet<ShareEvent['kind']> = new Set(['recipes', 'patches', 'plan', 'bundle', 'member', 'list']);
+const SHARE_EVENT_KINDS: ReadonlySet<ShareEvent['kind']> = new Set(['recipes', 'patches', 'plan', 'bundle', 'member', 'list', 'progress']);
 
 /** A clean row (no id; strings trimmed, count ≥ 1, duplicate ids dropped). Throws on a malformed one. */
 function normalizeShareEvent(e: Omit<ShareEvent, 'id'>): Omit<ShareEvent, 'id'> {
@@ -1464,6 +1465,41 @@ export async function getHousehold(): Promise<HouseholdSetting> {
 
 export async function setHousehold(h: HouseholdSetting): Promise<void> {
   await setSetting(HOUSEHOLD_KEY, normalizeHousehold(h));
+}
+
+// --- Sync my progress (docs/specs/xp-levels.md §1i/§2h, block 6D-4b) --------------------------------
+
+/**
+ * Setting 'progress.snapshots' (Record<card id, ProgressSnapshot>): the last "Sync mijn voortgang"
+ * received from a household member on another phone or from a friend (`friend: true`). A snapshot
+ * is what the sender shared at that moment, nothing more (no backend, invariant 14). It travels in
+ * the backup like every other setting (not device-local).
+ */
+export const PROGRESS_KEY = 'progress.snapshots';
+
+/** Every stored snapshot by card id (malformed entries dropped by `normalizeSnapshots`). */
+export async function getProgressSnapshots(): Promise<Record<string, ProgressSnapshot>> {
+  return normalizeSnapshots(await getSetting<unknown>(PROGRESS_KEY, null));
+}
+
+/** Stores (or replaces) the snapshot under its card id, in one transaction with the read. */
+export async function putProgressSnapshot(s: ProgressSnapshot): Promise<void> {
+  if (!s || typeof s.id !== 'string' || !s.id) return;
+  await db.transaction('rw', db.settings, async () => {
+    const all = normalizeSnapshots(await getSetting<unknown>(PROGRESS_KEY, null));
+    all[s.id] = s;
+    await setSetting(PROGRESS_KEY, all);
+  });
+}
+
+/** Removes the snapshot with that card id (no-op when there is none). */
+export async function removeProgressSnapshot(id: string): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const all = normalizeSnapshots(await getSetting<unknown>(PROGRESS_KEY, null));
+    if (!Object.prototype.hasOwnProperty.call(all, id)) return;
+    delete all[id];
+    await setSetting(PROGRESS_KEY, all);
+  });
 }
 
 // --- Reset (docs/phase-5-spec.md 30-09 "Reset app") ------------------------------------------------

@@ -11,6 +11,7 @@
 // toast) and <LevelUpSheet/> next to <BadgeToast/>; checkRulesVersion() once at boot after the
 // badges setting is known (badges off = no trace of XP). 6D-3 unlocks (= 6D-4a, §1f): the route
 // '/more/unlocks' (Vrijgespeeld); checkRulesVersion also refreshes the phone-wide unlocks at boot.
+// 6D-4 (= 6D-4b, §1j): the route '/more/calendar' (Kookkalender).
 import { useEffect, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, type NewBadge } from './badges';
 import { loadCelebrateSettings } from './celebrate';
@@ -31,6 +32,7 @@ import { loadProfiles, needsOnboarding } from './profile';
 import { requestPersistentStorage } from './pwa';
 import { IMPORT_ROUTE, navigate, route, startRouter, type Route } from './router';
 import { BadgesScreen } from './screens/BadgesScreen';
+import { CalendarScreen } from './screens/CalendarScreen';
 import { CheckRecipesScreen } from './screens/CheckRecipesScreen';
 import { CheckScreen } from './screens/CheckScreen';
 import { CookScreen } from './screens/CookScreen';
@@ -181,6 +183,9 @@ function Screen(props: { r: Route }) {
         // 6D-3 unlocks (docs/specs/xp-levels.md §1f): what this phone has unlocked, per kind.
         case 'unlocks':
           return <UnlocksScreen />;
+        // 6D-4 (docs/specs/xp-levels.md §1j): who cooked what, per day (local log + received snapshots).
+        case 'calendar':
+          return <CalendarScreen />;
         default:
           return <NotFound />;
       }

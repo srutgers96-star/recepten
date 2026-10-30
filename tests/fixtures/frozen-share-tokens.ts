@@ -232,3 +232,38 @@ export const FROZEN_ENVELOPE_F_AVATAR: Envelope = {
   },
   future: { keep: true },
 };
+
+// Phase 6 (docs/specs/xp-levels.md §2h, block 6D-4): a `#x=` "Sync mijn voortgang" envelope, produced
+// ONCE on 2026-10-30 by both engines with encodeToken. `x` is a NEW fragment key (invariant 4): the
+// member-card fields plus level, XP, streak, badges (`id` / `id@k`) and the cook days of the last 90
+// days with their recipe ids. Aggregates only: no notes, no stars, no photos. `v` stays 2, so an app
+// from before 6D-4 does not even see `#x=` as a token (its key set is `[rpwbf]`).
+export const FROZEN_TOKEN_X =
+  'bZBLT8NADIT_y3B10O42gdZnLpzhBMrBSdw25NnNo2mr_He0J4pUyQfL-jwz9g0z2BFGMBYQsgsYH2P504IgYeqMe4msiZz7tIZNqGdjzBcIC_iGsgCj52qz7M7uJCC00uidSt7VnQfjyWXxXrYg1NIewGhrEAqdy1zfg0jBr018um5tDoKfwZZQ66w12DrC0oPjJHTD6FUqcELIpDjoAP6Gqh9GjY7Sg3CcyqHqKhB63-msHmkI0lVvcgn0DcXdaXYXDINIxlOp7dBpj3Sl_5Qzf5TszzI0kh_LVq9SNyBMLFlu3SZOHqy6hwbpSthP4-Q1PLJS7cGjn3RdfwE';
+export const FROZEN_TOKEN_X_FFLATE =
+  'bVDLcoMwDPwX9Qod40Cb-NxLz-2pnRwEiEABm_hBSBj-vfKh03YmMz6sVqvVWivMoGQCHhQskEB5ZfDmuy_NBUZWCvmUZiKV8j0TSsT3KIT44P4CaoWuZtGk-t1yuMgzMq1xpD8ulRmM5fpBlnmDe2YG1Ccm9MC4prmr6DWa1Op5zM-3fVYxbzlXxlKaaWDEEZcJVF5E5Lwl7EEVnBfrEzlQn0Bknae0xYmn29C53vSMJmvYwsIxBjH9C16jeoW48Odr2SEujCalCh1pZ2iC45b8V0nxq8Lmgm7Equ003XAYuRMUllUmd3lxZ1TeXcA6aIIPls-1Qk9MKm8Dbds3';
+
+export const FROZEN_ENVELOPE_X: Envelope = {
+  v: 2,
+  t: 'x',
+  by: 'Stijn',
+  at: '2026-10-22T10:00:00.000Z',
+  x: {
+    id: 'p:k3x9w2qa',
+    name: 'Stijn',
+    color: '#2b4fa8',
+    lang: 'nl',
+    deviceId: 'd:7m4qz81c',
+    rv: 1,
+    level: 12,
+    xp: 4512,
+    streak: 5,
+    badges: ['eerste-hap', 'huiskok', 'proever'],
+    cookDays: [
+      { d: '2026-10-19', r: ['b:uiensoep'] },
+      { d: '2026-10-20', r: ['b:afwasmachinezalm', 'u:abc12345'] },
+      { d: '2026-10-22', r: ['b:uiensoep'] },
+    ],
+  },
+  future: { keep: true },
+};
