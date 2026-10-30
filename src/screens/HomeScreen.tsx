@@ -29,6 +29,13 @@ import { allRecipes, getPlan, latestCookFor, listFavorites, recentCooked, userRe
 import { pickText } from '@/domain/model';
 import { continueWithId } from '@/domain/tonight';
 import { lang, t } from '@/i18n';
+
+/** The Home header: today as "donderdag 30 oktober" / "Thursday 30 October" (Stijn 30 Oct: "Vanavond?" top-left was odd;
+ *  something functional instead). Capitalised like a title. */
+function todayTitle(l: 'nl' | 'en'): string {
+  const text = new Date().toLocaleDateString(l === 'nl' ? 'nl-NL' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { activeProfile, profiles } from '@/profile';
 import { lastViewed } from '@/recent';
@@ -104,7 +111,7 @@ export function HomeScreen() {
   return (
     <>
       <Header
-        title={t('home.title')}
+        title={todayTitle(lang.value)}
         action={
           <button type="button" class="icon-btn list-add" aria-label={t('list.add')} aria-haspopup="dialog" onClick={() => setAddMenu(true)}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
@@ -117,7 +124,8 @@ export function HomeScreen() {
       <div class="screen home">
         <div class="home-hello">
           {profile && <Avatar profile={profile} level={level} />}
-          <h2 class="home-greeting">{profile ? t('home.greeting', { name: profile.name }) : t('home.greetingAnon')}</h2>
+          {/* Stijn 30 Oct: no "Hoi Stijn, wat eten we vanavond?" ("Vanavond" stood on Home three times); just the name. */}
+          <h2 class="home-greeting">{profile ? profile.name : t('home.greetingAnon')}</h2>
         </div>
         <HomeLevelRow profileId={pid} />
 

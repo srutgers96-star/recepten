@@ -309,6 +309,9 @@ ronde hieronder.
 - Level-up-venster: de lijst avatar-onderdelen inkorten ("+13 avatar-onderdelen" met uitklappen).
 - Enkelvoud "1 badge" / "1 kookdag" (6D-4b); kalender-legenda zonder "bijgewerkt" bij badges uit; inline
   kalender-stijlen naar xp.css.
+- ✔ Gedaan 30 okt (Fable, direct): Home zei drie keer "vanavond" (kop "Vanavond?", begroeting, kaart). De kop is nu de dag
+  ("Donderdag 30 oktober"), de begroeting alleen je naam; de kaart houdt "Vanavond". Keys home.title/home.greeting
+  ongebruikt → opschoonronde.
 - ✔ Gedaan 30 okt (Fable, direct): Boodschapper telt nu boodschappenrondes waarop je iets afvinkt (eerste vinkje op een lijst
   zonder vinkjes), niet meer "Maak de lijst"; omschrijving aangepast. Het chipje "nieuw" achter nieuwe regels is weg
   (`fresh` blijft op het item). Stijn: "voelde makkelijk … stoort met de boodschappen-ervaring".
