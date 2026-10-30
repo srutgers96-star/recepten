@@ -4,6 +4,59 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 30 okt (Opus): 13D blok 1 — varianten als tabs: model, domein, repo en deelformaat (onzichtbaar)
+Gebouwd volgens docs/specs/varianten-tabs.md "Blok 1" (bouwer A domein, B deelformaat en normalisatie, C repo,
+integrator). Niet gecommit. Onzichtbaar voor Stijn (§4), dus geen DEVICE-TEST-rij: geen UI-bestand geraakt
+(VariantSheet.tsx houdt zijn eigen `swapsData`), geen i18n-key, geen Dexie-versie, geen setting of localStorage-sleutel,
+geen dependency; `v` blijft 2, geen nieuwe fragmentsleutel. 13F is vervallen: geen id-migratie, `variantOf`/`origin.basedOn`
+zoals de code nu is. Gate groen: check, 1462 tests (61 bestanden), build, build:next, validate:data (0 fouten).
+- **Domein (A):** types `StoredSwap`, `RecipeVariant`, `RecipeVariants`, `VariantStatus`, `VariantView`; `variantView`
+  (natural → approved/stale → proposed; stale vult ook `plan`), `applyStoredSwap` (+ `swappedFrom`, alleen weergave),
+  `storedSwapsFrom`, `variantTabs`, `tagsWithVariants` + `OPTIE_TAG_FOR`, `versionName`, `versionAuthor`,
+  `parseVariantParam`, `activeVariantDiets` (vier tabs); `OPTIE_TAGS_FOR`/`DIET_TAGS_FOR` nu geëxporteerd. Velden
+  `Recipe.variants`, `Recipe.tip`, `CookLogEntry.variant`, `PlanItem.variant`; `newPlanItem(…, variant)`. `planHash`
+  zet `#<diet>` achter een paar en is zonder variant byte-gelijk (vaste testwaarde `'2:d27734a2'`). Stapingrediënten:
+  een vervangen regel matcht ook de namen van het oude product (`viaSwap`); "hoeveel?" zegt dan "400 g glutenvrije pasta".
+- **Deelformaat (B):** `normalizeRecipe` leest `tip` (`readOptionalText`) en `variants` (`readVariants`/`readVariant`/
+  `readQty`; onbekende dieet-keys blijven staan); `readPatchPayload` normaliseert `patch.variants`/`patch.tip`; `#w=`
+  draagt `vr` (alleen een VARIANT_DIETS-waarde wordt gelezen); `RECIPE_PATCH_KEYS` + `variants`, `tip`; de leesbare tekst
+  krijgt "💡 Tip van de maker: …" / "💡 Maker's tip: …" na de serveertip. Drie nieuwe bevroren tokens (R, P en W, beide
+  engines, eenmalig gemaakt op 30 okt); de oude tokens zijn ongewijzigd (git diff: alleen toevoegingen); `recipeFingerprint`
+  en `contentFingerprint` ongewijzigd.
+- **Repo (C):** nieuw `src/swaps.ts`; `approveVariant`, `revokeVariant`, `setTip`, `makeOwnVersion`, `setPlanVariant`,
+  `setPlanRecipe`; `addToPlan(…, variant)`, `logCooked` met `variant`, `savePlan` gooit een onbekende `variant` weg;
+  `generateList` geeft per slot de regels van een goedgekeurde versie (bron krijgt `ListSource.diet`); `aggregate`
+  krijgt `lines(recipeId, item)`.
+- **Dev-app (375 px, NL en EN):** via de modules van de draaiende app op de klassieker Spaghettischotel uit de oven:
+  alle vier de dieettabs "proposed"; glutenvrij → regel 1 "400 g glutenvrije pasta" (`swappedFrom` spaghetti); vegan →
+  kaas vervangen ("125 g geraspte vegan kaas"), gehakt "controleer zelf"; `approveVariant` → override-patch met
+  `variants.glutenvrij`, status approved, géén `swappedFrom` in de opgeslagen rij (§7.6); slot met `variant: 'glutenvrij'`
+  → lijst "400 g glutenvrije pasta" met `diet`, geen spaghetti; terug naar Origineel → `planHash` anders en lijst
+  verouderd (§7.11); een slot met een niet-goedgekeurde vegan-versie → originele regels zonder `diet`; eigen versie
+  "… (versie van Testkok)" / "… (Testkok's version)" met `variantOf` en `origin.basedOn`, zonder variants/tip;
+  goedkeuring + tip op die versie, "penne" op regel 1 → stale; intrekken en tip wissen → keys weg; intrekken op de
+  klassieker → override weg; `logCooked` bewaart `glutenvrij` en laat 'bogus' weg; onbekend id → `not-found`. Daarna is
+  de dev-database teruggezet. Receptpagina (nog de oude blok-F-knoppen, zoals bedoeld), Week, Boodschappen, Recepten
+  en Home: geen fouten, nergens horizontaal scrollen.
+- **Open (voor Fable/Stijn; niet zelf beslist):** (1) Tegenspraak in de spec over `tip` als platte string: §2e zegt
+  "als description/servingTip" (`readOptionalText` → `{nl: …}`), §6 zegt "key weg". Gebouwd volgens §2e; de test legt
+  `{nl}` vast. Anders krijgt `tip` een eigen lezer (recipe-io én `readPatch` in share.ts). (2) "hoeveel?" via `viaSwap`
+  zegt niets als de staptekst zelf een hoeveelheid noemt (`qtyInText`) of de vervangen regel geen hoeveelheid heeft:
+  de tik zegt dan niet wat het product werd. (3) `tagsWithVariants` voegt per goedgekeurd dieet één tag toe
+  (`OPTIE_TAG_FOR`): een goedgekeurde vegan-tab geeft `vegan-optie`, niet ook `vega-optie`, dus "vegetarisch (ook als
+  optie)" vindt dat recept niet; hij krijgt geen regels mee en telt dus ook een stale goedkeuring mee. Beslissen vóór
+  blok 3 (filters). (4) Keuzes van bouwer C: `setPlanRecipe` haalt `variant` van het slot weg (de tab hoorde bij het
+  vorige recept); `generateList` geeft een slot met een niet (meer) goedgekeurde versie zónder `variant` aan
+  `aggregate`, zodat originele regels nooit "(glutenvrije versie)" heten; `addToPlan` geeft een bestaand slot
+  ongewijzigd terug (blok 2/3 roept dan `setPlanVariant`); `revokeVariant`/`setTip` gooien ook `not-found`;
+  `approveVariant`/`revokeVariant`/`setTip` vouwen bij een eigen recept eerst losse `lineOverrides` in de regels.
+  (5) `storedSwapsFrom(plan, off)`: `off` bevat regelindexen, net als `checked`. (6) Kleine leeskeuzes van bouwer B: een
+  aanwezig maar kapot optioneel swapveld (`name`, `grams`) laat de hele swap vallen; een `variants`-object dat na het
+  opschonen leeg is blijft `{}`. (7) De gedeelde chunk die ook de Safari-landingspagina laadt groeit van 23,6 naar
+  28,7 kB gzip: recipe-io.ts en share.ts importeren `VARIANT_DIETS` uit variants.ts, dus die hele module zit nu in die
+  chunk. Op te lossen door de constante later in een klein eigen bestand te zetten (geen spec-besluit, niet gedaan).
+- **Volgende:** 6D-R (zeldzaamheid avatar-onderdelen, Stijn 30 okt), daarna 13D blok 2 (tabrij en goedkeuren, eerst `/next/`).
+
 ## 30 okt (Opus): 6D-UI — tabs voor badges en avatar-maker, avatar ronde 2
 Gebouwd volgens docs/specs/badges-avatar.md "Blok 6D-UI" (bouwers UI-A badgepagina, UI-B maker, UI-C avatar ronde 2,
 integrator). Niet gecommit. Geen Dexie-versie, geen setting, geen dependency; één localStorage-sleutel wisselt
@@ -242,6 +295,9 @@ ronde hieronder.
 - Level-up-venster: de lijst avatar-onderdelen inkorten ("+13 avatar-onderdelen" met uitklappen).
 - Enkelvoud "1 badge" / "1 kookdag" (6D-4b); kalender-legenda zonder "bijgewerkt" bij badges uit; inline
   kalender-stijlen naar xp.css.
+- ✔ Gedaan 30 okt (Fable, direct): Boodschapper telt nu boodschappenrondes waarop je iets afvinkt (eerste vinkje op een lijst
+  zonder vinkjes), niet meer "Maak de lijst"; omschrijving aangepast. Het chipje "nieuw" achter nieuwe regels is weg
+  (`fresh` blijft op het item). Stijn: "voelde makkelijk … stoort met de boodschappen-ervaring".
 - ✔ Gedaan 30 okt (Fable, direct): een stil × rechts op elke boodschappenregel (44 px, `.lr-x`, ListRow `onRemove`)
   verwijdert de regel zonder af te vinken, met Ongedaan in de snack (zelfde `remove` als het houd-menu); i18n
   `shop.removeRow`. Stijn: "ketchup heb ik niet meer nodig".

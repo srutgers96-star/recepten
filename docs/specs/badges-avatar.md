@@ -382,7 +382,7 @@ Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs, vooral
   HomeScreen.tsx `level` mee aan `<Avatar>` in de begroeting (één regel) en zet `avatar` in
   `memberFromProfile` (household.ts, bouwer A) en in de handgebouwde Members van DeltaShareScreen.tsx,
   zodat lokale leden overal hun avatar tonen. De Badges-tabs houden hun kleurstip (DT 97 stap 4 weg).
-- Feature-momenten die de feitencheck openliet: `listMade` = alleen "Maak de lijst" (`build(true)`);
+- Feature-momenten die de feitencheck openliet: `listMade` = sinds 30 okt (Stijn: "voelde makkelijk zonder ze gekocht te hebben") het EERSTE vinkje op een lijst waarop nog niets is afgevinkt (één telling per boodschappenronde), niet meer "Maak de lijst";
   `surprise` = TonightCard "🎲 Nog een" (Home A+) én WeekScreen `surpriseFill`/`surpriseUnlocked`/`reroll`;
   `langToggle` = één hook in `chooseLang` (src/components/Header.tsx; dekt MoreScreen en de NL|EN-pil);
   `planShared` = `shareText` outcome 'shared' én `shareJsonFile` outcome 'shared'/'downloaded'; `dictEdit`

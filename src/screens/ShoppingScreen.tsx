@@ -218,7 +218,8 @@ export function ShoppingScreen() {
     setBusy(true);
     try {
       await generateList(dict);
-      if (toProto) void recordFeature('listMade');
+      // 'listMade' moved to the first tick of a shopping round (Stijn 30 Oct: a list you never shop with
+      // should not count for Boodschapper); see toggleCheck.
       if (toProto) setMode('proto');
       else showSnack(t('shop.updated'));
     } catch (e) {
@@ -248,7 +249,10 @@ export function ShoppingScreen() {
 
   async function toggleCheck(it: ListItem) {
     const next = !it.checked;
+    // Boodschapper counts shopping rounds you actually used: the first tick on a list with nothing ticked yet.
+    const firstTick = next && !items.some((x) => x.checked);
     await setListItem(it.key, { checked: next ? true : undefined });
+    if (firstTick) void recordFeature('listMade');
     // 6D-2c: the tick is a trace of "Hele cirkel"; the row is written, so check now.
     if (next) recheckActiveBadges();
     const name = itemName(it, dict, l);
