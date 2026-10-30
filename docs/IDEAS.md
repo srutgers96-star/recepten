@@ -228,6 +228,7 @@ van XP als badges uit staan).
 **Antwoord Stijn (30 okt) op de open vragen.** Tikken tijdens de viering versnelt de animatie ×2 (altijd, geen instelling).
 Daarnaast een **ontgrendeling op level 30: "Snelle vieringen"** — een schakelaar die alle vieringen (woord, confetti, XP-balk)
 standaard op dubbele snelheid zet; verschijnt als tegel in Vrijgespeeld/Jouw stijl (data/unlocks.json, kind 'feature' of
-een nieuwe kind 'setting'; past bij het 24-okt-besluit "rijk, niet spaarzaam"). Blijft open: de balk ook bij foto/beoordeling,
-of alleen bij koken.
+een nieuwe kind 'setting'; past bij het 24-okt-besluit "rijk, niet spaarzaam"). **Besloten (Stijn 30 okt):** de XP-balk
+NIET bij een foto of beoordeling (te klein om te laten zien), WEL bij koken en bij badges — badges geven meer XP naarmate je
+verder komt, dus daar is het verschil pas significant. Geen open vragen meer.
 
