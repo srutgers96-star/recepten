@@ -96,7 +96,12 @@
 /* ---------- Aisle sections ---------- */
 
 .shop-aisle {
-  margin: 0 0 2px;
+  margin: 0;
+}
+
+/* The caption above the next aisle already draws a line, so the last row of an aisle has none. */
+.shop-aisle .lr:last-child {
+  border-bottom: 0;
 }
 
 /* Compact aisle caption (Stijn 30 Oct: "weinig compact, categorieën naar rechts, onopvallender"): a small
@@ -110,8 +115,8 @@
   justify-content: flex-end;
   gap: 6px;
   width: 100%;
-  min-height: 30px;
-  padding: 6px 4px 0;
+  min-height: 28px;
+  padding: 4px 4px 0;
   border: 0;
   background: var(--paper);
   color: var(--muted);
