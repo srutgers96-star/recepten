@@ -20,6 +20,19 @@
   --on-cobalt: #ffffff;
   --on-rosemary: #ffffff;
 
+  /* 13D (docs/specs/varianten-tabs.md §1f): diet-version tabs, status bar and line markings.
+     Lactosevrij is white: always drawn with a --line border. */
+  --diet-glutenvrij-bg: #f7e9a8;
+  --diet-glutenvrij-ink: #5c4a05;
+  --diet-vegetarisch-bg: #e6cfb3;
+  --diet-vegetarisch-ink: #5a3b1a;
+  --diet-vegan-bg: #cdeac6;
+  --diet-vegan-ink: #1e4f1d;
+  --diet-lactosevrij-bg: #ffffff;
+  --diet-lactosevrij-ink: #3b4a5a;
+  --diet-personal-bg: #dbe4fa;
+  --diet-personal-ink: #233f86;
+
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
@@ -46,6 +59,16 @@
     --press: rgba(111, 143, 224, 0.16);
     --on-cobalt: #0f1a2b;
     --on-rosemary: #0f1a2b;
+    --diet-glutenvrij-bg: #5a4a10;
+    --diet-glutenvrij-ink: #f7e9a8;
+    --diet-vegetarisch-bg: #5c4028;
+    --diet-vegetarisch-ink: #eed5bb;
+    --diet-vegan-bg: #244d22;
+    --diet-vegan-ink: #cdeac6;
+    --diet-lactosevrij-bg: #1f2d44;
+    --diet-lactosevrij-ink: #e8eef6;
+    --diet-personal-bg: #22365e;
+    --diet-personal-ink: #dbe4fa;
   }
 }
 
@@ -64,6 +87,16 @@
   --press: rgba(111, 143, 224, 0.16);
   --on-cobalt: #0f1a2b;
   --on-rosemary: #0f1a2b;
+  --diet-glutenvrij-bg: #5a4a10;
+  --diet-glutenvrij-ink: #f7e9a8;
+  --diet-vegetarisch-bg: #5c4028;
+  --diet-vegetarisch-ink: #eed5bb;
+  --diet-vegan-bg: #244d22;
+  --diet-vegan-ink: #cdeac6;
+  --diet-lactosevrij-bg: #1f2d44;
+  --diet-lactosevrij-ink: #e8eef6;
+  --diet-personal-bg: #22365e;
+  --diet-personal-ink: #dbe4fa;
 }
 
 :root[data-theme='light'] {

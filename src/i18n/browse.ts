@@ -139,22 +139,11 @@ export const browse: Dict = {
   'recipe.copyFailed': { nl: 'Kopiëren lukte niet.', en: 'Copying failed.' },
 
   // --- Detail, phase 5 block F (2): recipe variants (glutenvrij / vegetarisch / vegan) ---
+  // 13D block 2 (docs/specs/varianten-tabs.md §3) replaced the "Maak … versie" buttons and the "Ook als:"
+  // chips by the tab row: its strings live in src/i18n/variants.ts (`vt.*`). These keys are still used by the
+  // approve sheet (VariantSheet) and the "Versie van …" link.
   'recipe.variantOf': { nl: 'Versie van {name}', en: 'Version of {name}' },
-  'recipe.alsoAs': { nl: 'Ook als:', en: 'Also as:' },
   'recipe.variants': { nl: 'Varianten', en: 'Variants' },
-  'variant.make.glutenvrij': { nl: 'Maak glutenvrije versie', en: 'Make gluten-free version' },
-  'variant.make.vegetarisch': { nl: 'Maak vegetarische versie', en: 'Make vegetarian version' },
-  'variant.make.vegan': { nl: 'Maak vegan versie', en: 'Make vegan version' },
-  // docs/specs/labels-categorieen.md §1a; temporary: 13D block 2 replaces these buttons with tabs.
-  'variant.make.lactosevrij': { nl: 'Maak lactosevrije versie', en: 'Make lactose-free version' },
-  'variant.title.glutenvrij': { nl: 'Glutenvrije versie', en: 'Gluten-free version' },
-  'variant.title.vegetarisch': { nl: 'Vegetarische versie', en: 'Vegetarian version' },
-  'variant.title.vegan': { nl: 'Vegan versie', en: 'Vegan version' },
-  'variant.title.lactosevrij': { nl: 'Lactosevrije versie', en: 'Lactose-free version' },
-  'variant.intro': {
-    nl: 'Deze ingrediënten worden vervangen. Haal het vinkje weg bij wat je liever zelf oplost.',
-    en: 'These ingredients get replaced. Untick anything you would rather solve yourself.',
-  },
   'variant.check': { nl: 'controleer zelf', en: 'check yourself' },
   'variant.checkHint': {
     nl: 'Hiervoor kent de app geen vervanger. De regel blijft staan; pas hem na het opslaan zelf aan.',
@@ -169,9 +158,6 @@ export const browse: Dict = {
     nl: 'De app kan hier niets automatisch vervangen. Je krijgt een kopie met het label; pas de regels daarna zelf aan.',
     en: 'The app cannot replace anything here automatically. You get a copy with the label; adjust the lines yourself afterwards.',
   },
-  'variant.foot': { nl: 'De kopie wordt een eigen recept; het origineel verandert niet.', en: 'The copy becomes an own recipe; the original stays as it is.' },
-  'variant.save': { nl: 'Bewaar als nieuw recept', en: 'Save as new recipe' },
-  'variant.saving': { nl: 'Bewaren…', en: 'Saving…' },
   'variant.saveFailed': { nl: 'Bewaren lukte niet. Probeer het nog eens.', en: 'Saving failed. Please try again.' },
   'variant.noProfile': { nl: 'Kies eerst een profiel (Meer) om een versie te maken.', en: 'Choose a profile first (More) to make a version.' },
   'variant.swapLabel': { nl: '{from} wordt {to}', en: '{from} becomes {to}' },

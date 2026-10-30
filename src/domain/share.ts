@@ -37,7 +37,7 @@ import { nowIso, type Lang, type Line, type Recipe, type Text } from './model.ts
 import { applyLineOverrides, type LineOverride, type RecipeOverride, type RecipePatch } from './overrides.ts';
 import { normalizeServings, type Plan } from './planner.ts';
 import { normalizeRecipe, readOptionalText, readVariants } from './recipe-io.ts';
-import { VARIANT_DIETS, type VariantDiet } from './variants.ts';
+import { VARIANT_DIETS, type VariantDiet } from './diets.ts';
 import { dayFromKey } from './days.ts';
 import { buildMultiShareHeader, buildPatchShareMessage, buildShareMessageFor, openLine } from './message.ts';
 import { buildShareUrl, encodeToken, parseEnvelope as validateEnvelope, type Envelope, type TokenKey } from './token.ts';

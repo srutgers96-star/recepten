@@ -7,9 +7,18 @@
 // Phase 5 block D (1-2): latest own photo as hero + gallery strip with a big-view overlay and
 // "+ Foto" (photos never travel in tokens), and Print / "Kopieer als tekst" (src/print.ts +
 // src/domain/recipe-text.ts); on iOS the Print button is an honest share-sheet hint instead.
-// Phase 5 block F (2): "Maak glutenvrije / vegetarische / vegan versie" (only the diets the recipe
-// does not have yet) opens the VariantSheet; the original shows "Ook als: …" chips to its
-// variants (repo.variantsOf) and a variant shows "Versie van <origineel>" (src/domain/variants.ts).
+// Phase 5 block F (2): a personal version (an own recipe with `variantOf`) shows "Versie van <origineel>".
+// 13D blok 2 (docs/specs/varianten-tabs.md §1a–§1d): the old "Maak … versie" buttons and "Ook als:"
+// chips are gone. Above "Ingrediënten" a tab row (VariantTabs) offers Origineel · the diet tabs
+// (`variantTabs`: dashed = proposal, full = approved, ✓ = naturally so) · the personal versions
+// (repo.variantsOf), shown only when there is something to choose. The choice comes from `?v=`, else
+// the tab remembered on this phone (src/vtab-memory.ts), else Origineel; a tap or a swipe on the
+// ingredient section (src/swipe.ts) sets both. A diet tab shows a status line (approve / check again /
+// approved by … with Intrekken) and the lines of `variantView` with markings (coloured bar = swapped,
+// orange dot = check yourself); the steps get the same lines, so their green words follow the swaps.
+// A personal-version tab shows that version's lines and steps with "Open als recept". Koken,
+// ✓ Gekookt, Deel and + Deze week follow the tab (§1d); the approve sheet (VariantSheet) writes
+// through repo.approveVariant, Intrekken through repo.revokeVariant.
 // Phase 6 (docs/phase-6-spec.md 6A.3): "✓ Gekookt" next to Koken logs a cook without cook mode
 // (CookedSheet → src/cooklog.ts recordCooked); when the active member's latest cook of this recipe
 // has no stars, a "Beoordeel" row opens the same sheet in rate mode. Home's "Recent gekookt" links
@@ -28,12 +37,13 @@ import { checkNewBadges } from '@/badges';
 import { isIOS } from '@/components/AppInfo';
 import { CookedSheet, type CookedSheetMode } from '@/components/CookedSheet';
 import { Header } from '@/components/Header';
-import { IngredientList } from '@/components/LineView';
+import { IngredientList, type LineMark } from '@/components/LineView';
 import { formatShortDate } from '@/components/RecipeRow';
 import { rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
 import { hasAmountsToShow, shownStep, StepView, useFahrenheit } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { VariantSheet } from '@/components/VariantSheet';
+import { nextTabChoice, tabChoiceFromParam, tabChoiceToParam, VariantTabs, type TabChoice } from '@/components/VariantTabs';
 import { endCooking, loadCooking, sessionFor, touchCooking } from '@/cooking';
 import { useLive } from '@/db/live';
 import type { Photo } from '@/db/model';
@@ -55,20 +65,22 @@ import {
   latestCookFor,
   listFavorites,
   listPhotos,
+  revokeVariant,
   saveOverride,
   saveUserRecipe,
   setNote,
+  setPlanVariant,
   toggleFavorite,
   variantsOf,
 } from '@/db/repo';
-import { DIET_ROW_TAGS, OPTIE_TAG, cuisineLabel, tagChipLabel, tagTextLabel } from '@/components/FilterChips';
+import { DIET_ROW_TAGS, OPTIE_TAG, cuisineLabel, tagTextLabel } from '@/components/FilterChips';
 import { dictionary, lineText } from '@/dictionary';
 import { DIET_TAGS, dietTags, type DietTag } from '@/domain/diet';
 import type { Dictionary } from '@/domain/dictionary';
 import { memberById, membersFrom, type Member } from '@/domain/household';
 import { hasLang, nowIso, pickText, type Lang, type Line, type Recipe } from '@/domain/model';
 import { ingredientsAsText, recipeAsText, type RecipeTextInput } from '@/domain/recipe-text';
-import { variantDietsFor, type VariantDiet } from '@/domain/variants';
+import { variantTabs, variantView, versionName, type VariantDiet } from '@/domain/variants';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { useRecipeLines } from '@/lines';
@@ -79,6 +91,9 @@ import { noteViewed } from '@/recent';
 import { navigate, route } from '@/router';
 import { copyText } from '@/share-actions';
 import { showAmounts } from '@/step-amounts';
+import { swapsData } from '@/swaps';
+import { useHorizontalSwipe } from '@/swipe';
+import { rememberedTab, rememberTab } from '@/vtab-memory';
 import { markXpDirty, settleXp } from '@/xp';
 
 const NOTE_DEBOUNCE_MS = 600;
@@ -132,13 +147,29 @@ export function tagLabel(tag: string): string {
   return label === key ? tag : label;
 }
 
+const ORIGINAL_TAB: TabChoice = { kind: 'original' };
+
+/** How long a line under the tab row stays ("Glutenvrij versie goedgekeurd"; the copy flash: 2.5 s). */
+const VT_FLASH_MS = 2500;
+
 /**
- * Chip label of a variant on its original (block F.2): the diet tag(s) the variant adds, e.g.
- * "Glutenvrij" or "Vegetarisch · Vegan"; the variant's name when the tags say nothing new.
+ * The maker of a personal version as its origin names them (13D §1b "Versie van {name}"): who sent it
+ * for a received recipe, the author otherwise; null when there is no name.
  */
-function variantChipLabel(variant: Recipe, original: Recipe, l: Lang): string {
-  const added = DIET_TAGS.filter((tag) => variant.tags.includes(tag) && !original.tags.includes(tag));
-  return added.length ? added.map(tagChipLabel).join(' · ') : pickText(variant.name, l);
+function makerName(r: Recipe): string | null {
+  const who = r.origin.kind === 'received' ? r.origin.receivedFrom : r.origin.author;
+  return typeof who === 'string' && who.trim() ? who.trim() : null;
+}
+
+/** True when the event started inside a sheet (`.sheet-backdrop`) that lives in the page tree. */
+function inSheet(e: Event): boolean {
+  const el = e.target as Element | null;
+  return !!el && typeof el.closest === 'function' && el.closest('.sheet-backdrop') !== null;
+}
+
+/** "(glutenvrije versie)" after the name in the copied / printed text of a diet tab (13D §1d). */
+function dietVersionSuffix(diet: VariantDiet): string {
+  return t('vt.version.' + diet).toLocaleLowerCase();
 }
 
 /** First letter of a member name for the little colour dot on a thumbnail. */
@@ -256,7 +287,6 @@ export function RecipeScreen(props: { id: string }) {
   const [catBusy, setCatBusy] = useState(false);
   // Phase 4: "+ Deze week" / "Staat in je week" (the plan is live: the tick follows cook mode).
   const plan = useLive(getPlan, []);
-  const inWeek = !!plan?.items.some((p) => p.recipeId === id);
   const [weekBusy, setWeekBusy] = useState(false);
   // Phase 5 block D: own photos, newest first (photos[0] is the hero), plus the big-view overlay
   // and "+ Foto". The member dot on a thumb comes from the household (profiles + hand-added members).
@@ -275,16 +305,20 @@ export function RecipeScreen(props: { id: string }) {
   const [toolsMenu, setToolsMenu] = useState<'print' | 'copy' | null>(null);
   const [copyFlash, setCopyFlash] = useState<'ok' | 'fail' | null>(null);
   const flashTimer = useRef<number | null>(null);
-  // Phase 5 block F (2): variants. The diets to offer come from the effective lines (a diet with
-  // nothing to swap gets no button); the variants of this recipe are live (a new one shows at once).
-  const [variantSheet, setVariantSheet] = useState<VariantDiet | null>(null);
-  const variants = useLive(() => variantsOf(id), [id]);
+  // 13D blok 2: the personal versions of this recipe (live: a new one shows as a tab at once), the
+  // approve sheet of the chosen diet tab and the short line under the tab row.
+  const versions = useLive(() => variantsOf(id), [id]);
+  const [approveSheet, setApproveSheet] = useState(false);
+  const [vtFlash, setVtFlash] = useState<{ text: string; fail: boolean } | null>(null);
+  const vtFlashTimer = useRef<number | null>(null);
   // Phase 6 A.3: "✓ Gekookt" / "Beoordeel". The active member's latest cook of this recipe decides
   // whether a rating is still missing. `undefined` = still loading, `null` = never cooked by them
   // (useLive's own undefined would otherwise collide with "no entry").
   const lastCook = useLive(() => (pid ? latestCookFor(id, pid).then((e) => e ?? null) : Promise.resolve(null)), [id, pid]);
   const needsRating = !!lastCook && !lastCook.stars;
   const [cookedSheet, setCookedSheet] = useState<CookedSheetMode | null>(null);
+  // The recipe the "✓ Gekookt" sheet logs: on a personal-version tab the version (13D §1d).
+  const [cookedFor, setCookedFor] = useState(id);
   const [cookedFlash, setCookedFlash] = useState<string | null>(null);
   const cookedFlashTimer = useRef<number | null>(null);
   // '?rate=<cook-log id>' (Home → "★ Beoordeel" on one row of "Laatst gekookt") opens the rate sheet
@@ -305,8 +339,13 @@ export function RecipeScreen(props: { id: string }) {
       })
       .then((entry) => {
         if (cancelled) return;
-        if (entry && entry.recipeId === id && entry.profileId === pid && !entry.stars) setCookedSheet({ kind: 'rate', entry });
-        navigate('/recipe/' + id, { replace: true });
+        if (entry && entry.recipeId === id && entry.profileId === pid && !entry.stars) {
+          setCookedFor(id);
+          setCookedSheet({ kind: 'rate', entry });
+        }
+        // Only ?rate= leaves the URL; a chosen tab (?v=) stays.
+        const v = route.value.query.get('v');
+        navigate('/recipe/' + id + (v ? '?v=' + encodeURIComponent(v) : ''), { replace: true });
       });
     return () => {
       cancelled = true;
@@ -326,7 +365,8 @@ export function RecipeScreen(props: { id: string }) {
     setViewPhoto(null);
     setToolsMenu(null);
     setPhotoError(false);
-    setVariantSheet(null);
+    setApproveSheet(false);
+    setVtFlash(null);
     setCookedSheet(null);
   }, [id]);
 
@@ -335,6 +375,7 @@ export function RecipeScreen(props: { id: string }) {
     () => () => {
       if (flashTimer.current !== null) window.clearTimeout(flashTimer.current);
       if (cookedFlashTimer.current !== null) window.clearTimeout(cookedFlashTimer.current);
+      if (vtFlashTimer.current !== null) window.clearTimeout(vtFlashTimer.current);
     },
     [],
   );
@@ -373,10 +414,106 @@ export function RecipeScreen(props: { id: string }) {
     }, NOTE_DEBOUNCE_MS);
   }
 
+  // --- 13D blok 2: the variant tabs (docs/specs/varianten-tabs.md §1a–§1d) ---
+  // Per active diet the status of its tab over the EFFECTIVE lines (an approval's indexes point at
+  // them), and whether the row shows at all (something to choose: a non-natural diet or a version).
+  const tabs = useMemo(
+    () => (recipe ? variantTabs(lines, recipe.variants, swapsData, dict, versions?.length ?? 0) : null),
+    [recipe, lines, dict, versions],
+  );
+  // The choice: ?v= → the tab remembered on this phone → Origineel; a tab that does not (or no
+  // longer) exist is Origineel. Derived on every render, so it settles once the versions are read.
+  const vParam = route.value.query.get('v');
+  const choice: TabChoice = tabs?.show ? tabChoiceFromParam(vParam ?? rememberedTab(id), tabs.diets, versions ?? []) : ORIGINAL_TAB;
+  const dietChoice: VariantDiet | null = choice.kind === 'diet' ? choice.diet : null;
+  const view = useMemo(
+    () => (recipe && dietChoice ? variantView(dietChoice, lines, recipe.variants?.[dietChoice], swapsData, dict) : null),
+    [recipe, lines, dietChoice, dict],
+  );
+  const version = choice.kind === 'version' ? versions?.find((v) => v.id === choice.recipeId) : undefined;
+  const versionLines = useRecipeLines(version ?? null);
+  /** The recipe whose steps, servings and id this tab acts on: the personal version, else this one. */
+  const shownRecipe = version ?? recipe;
+  /** The lines this tab shows: the diet version's, the personal version's, or the effective lines. */
+  const shownLines = view ? view.lines : version ? versionLines : lines;
+  /** Koken / ✓ Gekookt / Deel / + Deze week act on this id (a personal version: its own id). */
+  const targetId = version?.id ?? id;
+  const inWeek = !!plan?.items.some((p) => p.recipeId === targetId);
+  // Markings of a diet tab: a coloured bar on a swapped line, an orange dot on a "controleer zelf"
+  // line (✓ after it when it was ticked on approval, only while approved). Swapped lines are derived:
+  // no "Koppel ingrediënt" on them.
+  const marks = useMemo(() => {
+    const m = new Map<number, LineMark>();
+    if (!view) return m;
+    for (const i of view.swapped) m.set(i, { kind: 'swapped', diet: view.diet });
+    for (const i of view.unresolved) m.set(i, { kind: 'check', done: view.status === 'approved' && view.checked.includes(i) });
+    return m;
+  }, [view]);
+  const lockedIndexes = useMemo(() => new Set(view?.swapped ?? []), [view]);
+  const storedApproval = recipe && dietChoice ? recipe.variants?.[dietChoice] : undefined;
+
+  /** A tap on a tab (or a swipe): ?v= (replace) and the remembered tab of this recipe follow. */
+  function onChooseTab(c: TabChoice) {
+    if (c.kind === 'diet' && tabs?.diets.find((d) => d.diet === c.diet)?.status === 'natural') {
+      flashVt(t('vt.naturalSnack', { diet: t('vt.tab.' + c.diet).toLocaleLowerCase() }));
+      return;
+    }
+    const param = tabChoiceToParam(c);
+    rememberTab(id, param);
+    setApproveSheet(false);
+    navigate('/recipe/' + id + (param ? '?v=' + encodeURIComponent(param) : ''), { replace: true });
+  }
+
+  /** Swipe on the ingredient section: finger to the left = the next tab, to the right = the previous one. */
+  function swipeTab(dir: 1 | -1) {
+    if (!tabs?.show) return;
+    const next = nextTabChoice(choice, dir, tabs.diets, versions ?? []);
+    if (tabChoiceToParam(next) !== tabChoiceToParam(choice)) onChooseTab(next);
+  }
+  const swipeHandlers = useHorizontalSwipe({ onLeft: () => swipeTab(1), onRight: () => swipeTab(-1) });
+  // The "Koppel ingrediënt" sheet renders inside the section (it is not portaled): a gesture in an
+  // open sheet is never a tab swipe, and never has its tap swallowed.
+  const swipe = {
+    ...swipeHandlers,
+    onPointerDown: (e: PointerEvent) => {
+      if (!inSheet(e)) swipeHandlers.onPointerDown(e);
+    },
+    onClickCapture: (e: MouseEvent) => {
+      if (!inSheet(e)) swipeHandlers.onClickCapture(e);
+    },
+  };
+
+  function flashVt(text: string, fail = false) {
+    setVtFlash({ text, fail });
+    if (vtFlashTimer.current !== null) window.clearTimeout(vtFlashTimer.current);
+    vtFlashTimer.current = window.setTimeout(() => {
+      vtFlashTimer.current = null;
+      setVtFlash(null);
+    }, VT_FLASH_MS);
+  }
+
+  /** After VariantSheet stored the approval: close it and say so ("Glutenvrij versie goedgekeurd"). */
+  function onApproved(diet: VariantDiet) {
+    setApproveSheet(false);
+    flashVt(t('vt.approvedSnack', { diet: t('vt.tab.' + diet) }));
+    void recordFeature('variant');
+  }
+
+  /** "Intrekken": after one confirm the tab becomes a proposal again. */
+  async function onRevoke(diet: VariantDiet) {
+    if (!window.confirm(t('vt.revokeConfirm'))) return;
+    try {
+      await revokeVariant(id, diet);
+    } catch (e) {
+      console.error('revokeVariant', e);
+      flashVt(t('variant.saveFailed'), true);
+    }
+  }
+
   const name = recipe ? pickText(recipe.name, l) : '';
   const isFav = !!favs?.has(id);
   const editable = !!recipe && recipe.origin.kind !== 'builtin';
-  const base = recipe && recipe.servings > 0 ? recipe.servings : 4;
+  const base = shownRecipe && shownRecipe.servings > 0 ? shownRecipe.servings : 4;
   const servings = chosen ?? base;
   /** Scale of the amounts: the ingredient list, the green words in the steps, the plain-text copy. */
   const factor = base > 0 && servings > 0 ? servings / base : 1;
@@ -417,15 +554,14 @@ export function RecipeScreen(props: { id: string }) {
   // The tap hints under "Bereiding": timer chips, and (13I) underlined green words with an amount to
   // show. The amounts hint only while "Toon hoeveelheden" is off: with it on every amount is already
   // there and a tap hides one (reading the signal here re-renders when it changes).
-  const timersTappable = !!recipe && recipe.steps.some((s) => !!s.timers && s.timers.length > 0);
+  const timersTappable = !!shownRecipe && shownRecipe.steps.some((s) => !!s.timers && s.timers.length > 0);
   const amountsTappable = useMemo(
-    () => !!recipe && recipe.steps.some((s) => hasAmountsToShow(shownStep(s, l, fahrenheit, lines, dict), lines, dict)),
-    [recipe, l, fahrenheit, lines, dict],
+    () => !!shownRecipe && shownRecipe.steps.some((s) => hasAmountsToShow(shownStep(s, l, fahrenheit, shownLines, dict), shownLines, dict)),
+    [shownRecipe, l, fahrenheit, shownLines, dict],
   );
   const amountsHint = amountsTappable && !showAmounts.value;
-  // Block F.2: "Maak … versie" only for the diets a line of this recipe contradicts; the original
-  // of a variant (when it still exists on this phone) for the "Versie van …" link.
-  const offerDiets = useMemo(() => (recipe ? variantDietsFor(recipe, lines, dict) : []), [recipe, lines, dict]);
+  // Block F.2: the original of a personal version (when it still exists on this phone) for the
+  // "Versie van …" link.
   const original = recipe?.variantOf ? all?.find((r) => r.id === recipe.variantOf) : undefined;
   // Machine-translation badge: the English edition of a classic is a machine translation until someone
   // improves it in the editor (its override patch then sets text.en = 'human', src/screens/EditScreen.tsx).
@@ -449,12 +585,14 @@ export function RecipeScreen(props: { id: string }) {
   /** 13K: a ⏱ chip started a timer at step `stepIndex + 1`. New session or a later step → move the
    *  session there; otherwise only bump lastActiveAt on the step it already has. */
   async function onTimerStart(stepIndex: number) {
-    if (!recipe) return;
+    // On a personal-version tab the steps (and so the session) are the version's.
+    const r = shownRecipe;
+    if (!r) return;
     const page = stepIndex + 1;
     // The store may still be loading on a cold start: decide on the stored session, not on [].
     await loadCooking();
-    const s = sessionFor(id);
-    await touchCooking(recipe, !s || s.page < page ? page : s.page, servings);
+    const s = sessionFor(r.id);
+    await touchCooking(r, !s || s.page < page ? page : s.page, servings);
   }
 
   async function onCopy() {
@@ -463,16 +601,29 @@ export function RecipeScreen(props: { id: string }) {
     navigate('/edit/' + copy.id);
   }
 
-  /** "+ Deze week": a slot with the household servings (repo default); already there → open the week. */
+  /**
+   * "+ Deze week": a slot with the household servings (repo default); already there → open the week.
+   * 13D §1d: on a diet tab the slot gets that version (`addToPlan(id, undefined, diet)`; an existing
+   * slot of this dish gets it through `setPlanVariant` before the week opens); on a personal-version
+   * tab the version itself goes in the week.
+   */
   async function onAddToWeek() {
     if (weekBusy) return;
-    if (inWeek) {
+    const slot = plan?.items.find((p) => p.recipeId === targetId);
+    if (slot) {
+      if (dietChoice && (slot.variant ?? null) !== dietChoice) {
+        try {
+          await setPlanVariant(slot.id, dietChoice);
+        } catch (e) {
+          console.error('setPlanVariant', e);
+        }
+      }
       navigate('/week');
       return;
     }
     setWeekBusy(true);
     try {
-      await addToPlan(id);
+      await addToPlan(targetId, undefined, dietChoice);
     } catch (e) {
       console.error('addToPlan', e);
     } finally {
@@ -547,17 +698,19 @@ export function RecipeScreen(props: { id: string }) {
 
   /**
    * The recipe as the plain-text contract of src/domain/recipe-text.ts: exactly the line texts
-   * the screen shows (lineText over the effective lines, scaled to the chosen servings).
+   * the screen shows (lineText over the lines of the chosen tab, scaled to the chosen servings). A
+   * diet tab adds "(glutenvrije versie)" to the name, only in the text (13D §1d).
    */
   function asTextInput(r: Recipe): RecipeTextInput {
     const timeParts: string[] = [];
     if (r.time?.active) timeParts.push(t('recipe.timeActive', { n: r.time.active }));
     if (r.time?.total && r.time.total !== r.time.active) timeParts.push(t('recipe.timeTotal', { n: r.time.total }));
+    const title = pickText(r.name, l);
     return {
-      name: pickText(r.name, l),
+      name: dietChoice ? `${title} (${dietVersionSuffix(dietChoice)})` : title,
       servings,
       timeLabel: timeParts.length ? timeParts.join(' · ') : null,
-      lines: lines.map((ln) => ({ text: lineText(ln, l, factor).trim(), header: ln.kind === 'header' })).filter((x) => x.text !== ''),
+      lines: shownLines.map((ln) => ({ text: lineText(ln, l, factor).trim(), header: ln.kind === 'header' })).filter((x) => x.text !== ''),
       steps: r.steps.map((s) => pickText(s.text, l)).filter((s) => s !== ''),
       lang: l,
     };
@@ -573,9 +726,9 @@ export function RecipeScreen(props: { id: string }) {
   }
 
   async function onCopyAs(kind: 'recipe' | 'ingredients') {
-    if (!recipe) return;
+    if (!shownRecipe) return;
     setToolsMenu(null);
-    const input = asTextInput(recipe);
+    const input = asTextInput(shownRecipe);
     const res = await copyText(kind === 'recipe' ? recipeAsText(input) : ingredientsAsText(input));
     if (!res.ok) console.error('copyText', res.error);
     flashCopy(res.ok ? 'ok' : 'fail');
@@ -585,6 +738,23 @@ export function RecipeScreen(props: { id: string }) {
     setToolsMenu(null);
     printPage(kind);
     void recordFeature('print');
+  }
+
+  // The status line of an approved diet tab: "Goedgekeurd door Stijn op 22 okt" (anonymous without a name).
+  const approvedBy = typeof storedApproval?.by === 'string' && storedApproval.by.trim() ? storedApproval.by.trim() : null;
+  const approvedDate = formatShortDate(storedApproval?.approvedAt, l);
+  const approvedText = approvedBy ? t('vt.status.approved', { name: approvedBy, date: approvedDate }) : t('vt.status.approvedAnon', { date: approvedDate });
+  // The status line of a personal-version tab: "Versie van Dino", plus the version's own name when
+  // it is not simply "<naam> (versie van Dino)" (an older diet copy: "Uiensoep (glutenvrij)").
+  const versionMaker = version ? makerName(version) : null;
+  const versionTitle = version ? pickText(version.name, l) : '';
+  const versionTitleDiffers =
+    !!version && !!recipe && (!versionMaker || versionTitle !== pickText(versionName(recipe.name, versionMaker), l));
+
+  /** "✓ Gekookt" / "Beoordeel": the sheet for `recipeId` (the personal version on its tab). */
+  function openCooked(mode: CookedSheetMode, recipeId: string) {
+    setCookedFor(recipeId);
+    setCookedSheet(mode);
   }
 
   /** After the CookedSheet saved: close it and show a short confirmation under the buttons. */
@@ -613,7 +783,11 @@ export function RecipeScreen(props: { id: string }) {
               </button>
             )}
             <div class="detail-head">
-              <h2 class="detail-title">{name}</h2>
+              <h2 class="detail-title">
+                {name}
+                {/* 13D §1d: on paper a diet tab says which version it is; never in the stored name. */}
+                {dietChoice && <span class="vtab-print-suffix"> ({dietVersionSuffix(dietChoice)})</span>}
+              </h2>
               <button
                 type="button"
                 class={'fav-btn no-print' + (isFav ? ' on' : '')}
@@ -691,29 +865,11 @@ export function RecipeScreen(props: { id: string }) {
 
             <p class="detail-meta">{meta.join(' · ')}</p>
 
-            {/* Phase 5 block F: a variant links back to its original; the original lists its variants. */}
+            {/* Phase 5 block F: a personal version links back to its original (13D: the original shows it as a tab). */}
             {original && (
               <button type="button" class="detail-variant-of no-print" onClick={() => navigate('/recipe/' + original.id)}>
                 {t('recipe.variantOf', { name: pickText(original.name, l) })}
               </button>
-            )}
-            {variants && variants.length > 0 && (
-              <div class="detail-variants no-print" role="group" aria-label={t('recipe.variants')}>
-                <span class="detail-variants-label">{t('recipe.alsoAs')}</span>
-                {variants.map((v) => (
-                  <a
-                    key={v.id}
-                    class="chip"
-                    href={'#/recipe/' + v.id}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate('/recipe/' + v.id);
-                    }}
-                  >
-                    {variantChipLabel(v, recipe, l)}
-                  </a>
-                ))}
-              </div>
             )}
 
             {/* Phase 5 block D: gallery strip, newest first, with "+ Foto" at the end. No photos
@@ -756,14 +912,20 @@ export function RecipeScreen(props: { id: string }) {
             )}
 
             <div class="detail-actions detail-actions-3 no-print">
-              <button type="button" class="btn btn-primary" onClick={() => navigate(`/cook/${id}?srv=${servings}`)}>
+              {/* 13D §1d: a diet tab cooks with ?v=<diet> (cook mode falls back to the original when it is
+                  not approved); a personal-version tab cooks, logs and shares the version itself. */}
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={() => navigate(`/cook/${targetId}?srv=${servings}` + (dietChoice ? `&v=${dietChoice}` : ''))}
+              >
                 {t('recipe.cook')}
               </button>
               {/* Phase 6 A.3: log a cook without cook mode (no profile → the sheet says so). */}
-              <button type="button" class="btn btn-cooked" onClick={() => setCookedSheet({ kind: 'log' })}>
+              <button type="button" class="btn btn-cooked" onClick={() => openCooked({ kind: 'log' }, targetId)}>
                 {t('recipe.cooked')}
               </button>
-              <button type="button" class="btn btn-secondary" onClick={() => navigate('/share/' + id)}>
+              <button type="button" class="btn btn-secondary" onClick={() => navigate('/share/' + targetId)}>
                 {t('recipe.share')}
               </button>
             </div>
@@ -773,7 +935,7 @@ export function RecipeScreen(props: { id: string }) {
               </p>
             )}
             {needsRating && lastCook && (
-              <button type="button" class="btn btn-block detail-rate no-print" onClick={() => setCookedSheet({ kind: 'rate', entry: lastCook })}>
+              <button type="button" class="btn btn-block detail-rate no-print" onClick={() => openCooked({ kind: 'rate', entry: lastCook }, id)}>
                 <span class="detail-rate-star" aria-hidden="true">
                   ★
                 </span>
@@ -825,22 +987,67 @@ export function RecipeScreen(props: { id: string }) {
               </p>
             )}
 
-            {/* Phase 5 block F: "Maak … versie", one button per diet the recipe does not have yet. */}
-            {offerDiets.length > 0 && (
-              <div class="detail-variant-make no-print" role="group" aria-label={t('recipe.variants')}>
-                {offerDiets.map((diet) => (
-                  <button key={diet} type="button" class="btn" onClick={() => setVariantSheet(diet)}>
-                    {t('variant.make.' + diet)}
-                  </button>
-                ))}
+            {/* 13D §1a: the tab row, only when there is something to choose. */}
+            {tabs?.show && (
+              <div class="detail-vtabs">
+                <VariantTabs tabs={tabs.diets} versions={versions ?? []} choice={choice} onChoose={onChooseTab} />
+                {vtFlash && (
+                  <p class={'tool-flash vtab-flash no-print' + (vtFlash.fail ? ' fail' : '')} role="status">
+                    {vtFlash.text}
+                  </p>
+                )}
               </div>
             )}
 
-            <section class="section">
+            {/* 13D §1a: a sideways swipe anywhere on the ingredient section moves to the next / previous
+                tab (pan-y keeps the vertical scroll); a swipe that starts on a button is no tap. */}
+            <section class="section detail-ingredients" {...swipe}>
               <h2>{t('recipe.ingredients')}</h2>
+              {/* 13D §1b: the status line of a diet tab. */}
+              {view && (
+                <div class={'vtab-status no-print diet-' + view.diet}>
+                  {view.status === 'approved' ? (
+                    <>
+                      <p class="vtab-status-text">{approvedText}</p>
+                      <button type="button" class="link-btn vtab-revoke" onClick={() => void onRevoke(view.diet)}>
+                        {t('vt.revoke')}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <p class="vtab-status-text">{t(view.status === 'stale' ? 'vt.status.stale' : 'vt.status.proposed')}</p>
+                      <button type="button" class="btn btn-secondary vtab-status-btn" onClick={() => setApproveSheet(true)}>
+                        {t(view.status === 'stale' ? 'vt.recheck' : 'vt.approve')}
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+              {/* 13D §1b: the status line of a personal-version tab. */}
+              {version && (
+                <div class="vtab-status personal no-print">
+                  <p class="vtab-status-text">
+                    {versionMaker ? t('vt.personal.by', { name: versionMaker }) : versionTitle}
+                    {versionMaker && versionTitleDiffers && <span class="vtab-status-name">{versionTitle}</span>}
+                  </p>
+                  <button type="button" class="btn btn-secondary vtab-status-btn" onClick={() => navigate('/recipe/' + version.id)}>
+                    {t('vt.personal.open')}
+                  </button>
+                </div>
+              )}
               <ServingsPicker value={servings} base={base} onChange={onServings} />
-              <IngredientList recipeId={id} lines={lines} servings={servings} base={base} />
-              {lines.some((ln) => ln.kind !== 'header' && !(ln.ing && dict.get(ln.ing))) && <p class="muted small ing-hint">{t('line.linkHint')}</p>}
+              <IngredientList
+                recipeId={targetId}
+                lines={shownLines}
+                servings={servings}
+                base={base}
+                marks={view ? marks : undefined}
+                lockedIndexes={view ? lockedIndexes : undefined}
+              />
+              {marks.size > 0 && <p class="muted small vtab-legend">{t('vt.legend')}</p>}
+              {shownLines.some((ln, i) => !lockedIndexes.has(i) && ln.kind !== 'header' && !(ln.ing && dict.get(ln.ing))) && (
+                <p class="muted small ing-hint">{t('line.linkHint')}</p>
+              )}
             </section>
 
             <section class="section">
@@ -851,12 +1058,26 @@ export function RecipeScreen(props: { id: string }) {
                   {[timersTappable ? t('recipe.timerHint') : '', amountsHint ? t('recipe.amountsHint') : ''].filter(Boolean).join(' ')}
                 </p>
               )}
+              {/* 13D §1b: the steps of the chosen tab, green words over its lines (a swapped line still
+                  matches its old name through `swappedFrom`). */}
               <ol class="steps">
-                {recipe.steps.map((s, i) => (
-                  <StepView key={i} recipeId={id} recipeName={name} index={i} step={s} fahrenheit={fahrenheit} lines={lines} factor={factor} onTimerStart={(n) => void onTimerStart(n)} />
+                {(version ?? recipe).steps.map((s, i) => (
+                  <StepView
+                    key={i}
+                    recipeId={targetId}
+                    recipeName={version ? versionTitle : name}
+                    index={i}
+                    step={s}
+                    fahrenheit={fahrenheit}
+                    lines={shownLines}
+                    factor={factor}
+                    onTimerStart={(n) => void onTimerStart(n)}
+                  />
                 ))}
               </ol>
-              {recipe.servingTip && pickText(recipe.servingTip, l) && <p class="serving-tip">{pickText(recipe.servingTip, l)}</p>}
+              {(version ?? recipe).servingTip && pickText((version ?? recipe).servingTip, l) && (
+                <p class="serving-tip">{pickText((version ?? recipe).servingTip, l)}</p>
+              )}
             </section>
 
             {related.length > 0 && (
@@ -944,21 +1165,12 @@ export function RecipeScreen(props: { id: string }) {
               />
             )}
 
-            {variantSheet && (
-              <VariantSheet
-                recipe={recipe}
-                lines={lines}
-                diet={variantSheet}
-                onClose={() => setVariantSheet(null)}
-                onSaved={(newId) => {
-                  setVariantSheet(null);
-                  void recordFeature('variant');
-                  navigate('/recipe/' + newId);
-                }}
-              />
+            {/* 13D §1c: "Controleer en keur goed" / "Opnieuw controleren". */}
+            {approveSheet && view && (view.status === 'proposed' || view.status === 'stale') && (
+              <VariantSheet recipe={recipe} view={view} onClose={() => setApproveSheet(false)} onApproved={() => onApproved(view.diet)} />
             )}
 
-            {cookedSheet && <CookedSheet recipeId={id} mode={cookedSheet} onClose={() => setCookedSheet(null)} onSaved={onCookedSaved} />}
+            {cookedSheet && <CookedSheet recipeId={cookedFor} mode={cookedSheet} onClose={() => setCookedSheet(null)} onSaved={onCookedSaved} />}
           </>
         )}
       </div>

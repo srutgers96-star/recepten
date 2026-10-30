@@ -6,7 +6,8 @@ import { newUserId, nowIso, pickText, type Line, type Origin, type OriginKind, t
 import { splitSteps } from './steps.ts';
 import { findTimers } from './timers.ts';
 import type { Envelope } from './token.ts';
-import { VARIANT_DIETS, type RecipeVariant, type RecipeVariants, type StoredSwap } from './variants.ts';
+import { VARIANT_DIETS } from './diets.ts';
+import type { RecipeVariant, RecipeVariants, StoredSwap } from './variants.ts';
 
 type Dict = Record<string, unknown>;
 

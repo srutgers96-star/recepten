@@ -2,7 +2,8 @@
 // over REAL steps and lines from data/recipes.json and the bundled dictionary. Precision first: the
 // "no false positives" cases are real sentences that tripped a naive matcher. 13D
 // (docs/specs/varianten-tabs.md §3/§6): a swapped line of a diet tab (`swappedFrom`) is still found
-// by its old name and "hoeveel?" says what it became.
+// by its old name and "hoeveel?" says what it became; also by the alternative the swap dropped
+// (`swappedAlt`, "Besluiten Fable na blok 1" point 2: "pasta" for "farfalle (of een andere pastasoort)").
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import swapsJson from '../data/swaps.json';
@@ -405,6 +406,47 @@ describe('13D: swapped lines of a diet tab (swappedFrom)', () => {
     // the other green words of the step are the same as on the original
     const original = findStepIngredients(nlText, r.lines, dict, 'nl');
     expect(words(nlText, findStepIngredients(nlText, view.lines, dict, 'nl'))).toEqual(words(nlText, original));
+  });
+
+  it('b:warme-pastasalade on the gluten-free tab: "pasta" (the dropped alternative of farfalle) stays green, viaSwap', () => {
+    const id = 'b:warme-pastasalade';
+    const r = recipe(id);
+    const view = variantView('glutenvrij', r.lines, undefined, swapsJson as Swap[], dict);
+    expect(view.swapped).toContain(0);
+    expect(view.lines[0]).toMatchObject({ ing: 'glutenvrije-pasta', swappedFrom: 'farfalle', swappedAlt: 'pasta' });
+    expect(view.lines[0]!.alt).toBeUndefined();
+    // the original: "pasta" is green through the line's alternative
+    const nlText = stepText(id, 1, 'nl');
+    const before = findStepIngredients(nlText, r.lines, dict, 'nl').filter((m) => nlText.slice(m.start, m.end) === 'pasta');
+    expect(before.length).toBe(3);
+    expect(before.every((m) => m.viaSwap === undefined)).toBe(true);
+    // the gluten-free tab: still green, now via the swap, and "hoeveel?" names what it became
+    const after = findStepIngredients(nlText, view.lines, dict, 'nl');
+    const pasta = after.filter((m) => nlText.slice(m.start, m.end) === 'pasta');
+    expect(pasta.length).toBe(3);
+    for (const m of pasta) {
+      expect(m).toMatchObject({ lines: [0], viaSwap: true });
+      expect(m.alt).toBeUndefined();
+    }
+    expect(matchQuantityText(pasta[0]!, view.lines, dict, 'nl')).toBe('225 g glutenvrije pasta');
+    expect(matchQuantityText(pasta[0]!, view.lines, dict, 'nl', 2)).toBe('450 g glutenvrije pasta');
+    expect(spokenStepQuantities(after, view.lines, dict, 'nl')).toEqual(['glutenvrije pasta 225 gram']);
+    // English step (the line is Dutch only): the English name of the alternative, the English new name
+    const enText = stepText(id, 1, 'en');
+    const enPasta = findStepIngredients(enText, view.lines, dict, 'en').filter((m) => enText.slice(m.start, m.end) === 'pasta');
+    expect(enPasta.length).toBe(3);
+    expect(enPasta[0]).toMatchObject({ lines: [0], viaSwap: true });
+    expect(matchQuantityText(enPasta[0]!, view.lines, dict, 'en')).toBe('225 g gluten-free pasta');
+  });
+
+  it('swappedAlt alone is enough; without it the alternative is plain text', () => {
+    const line: Line = { raw: { nl: '225 g glutenvrije pasta' }, qty: { min: 225 }, unit: 'g', ing: 'glutenvrije-pasta', name: 'glutenvrije pasta', swappedFrom: 'farfalle', swappedAlt: 'pasta' };
+    const text = 'Kook de farfalle. Giet de pasta af.';
+    const matches = findStepIngredients(text, [line], dict, 'nl');
+    expect(words(text, matches)).toEqual(['farfalle', 'pasta']);
+    expect(matches.every((m) => m.viaSwap === true)).toBe(true);
+    const { swappedAlt: _, ...noAlt } = line;
+    expect(words(text, findStepIngredients(text, [noAlt], dict, 'nl'))).toEqual(['farfalle']);
   });
 });
 

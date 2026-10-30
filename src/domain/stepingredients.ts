@@ -21,9 +21,10 @@
 // in the pan", "2 el olie", "the third tbsp of olive oil": the amount is in the text (`qtyInText`).
 // Offsets are UTF-16 offsets into the text exactly as passed in, so the UI can slice it.
 // 13D (docs/specs/varianten-tabs.md §3): on a diet tab a swapped line carries `swappedFrom` (the old
-// ingredient id, display-only, src/domain/variants.ts `applyStoredSwap`). Step texts are never
-// rewritten, so the old product's names are looked for too; such a match gets `viaSwap: true` and
-// "hoeveel?" says what it became ("400 g glutenvrije pasta" behind "spaghetti").
+// ingredient id, display-only, src/domain/variants.ts `applyStoredSwap`) and, when the old line had an
+// alternative, `swappedAlt` (its id: "farfalle (of een andere pastasoort)" -> 'pasta'). Step texts are
+// never rewritten, so the names of both are looked for too; such a match gets `viaSwap: true` and
+// "hoeveel?" says what it became ("400 g glutenvrije pasta" behind "spaghetti" or "pasta").
 // Corpus sweep (196 classics, 16 Oct 2026, after review): 585 of 659 Dutch and 581 of 659 English steps
 // (89% / 88%) get at least one match.
 import { normalizeKey, dutchBaseForms, englishBaseForms, type Dictionary, type Ingredient } from './dictionary.ts';
@@ -56,8 +57,8 @@ export interface StepIngredientMatch {
   alt?: number[];
   /**
    * 13D: present (true) only when the text named the OLD product of a swapped line of a diet tab
-   * (`line.swappedFrom`): "spaghetti" for "400 g glutenvrije pasta". `matchQuantityText` then adds
-   * the new name to the amount.
+   * (`line.swappedFrom`, or its dropped alternative `line.swappedAlt`): "spaghetti" for "400 g
+   * glutenvrije pasta". `matchQuantityText` then adds the new name to the amount.
    */
   viaSwap?: boolean;
 }
@@ -265,7 +266,7 @@ interface Candidate {
   who: string;
   /** 0 = the entry's own name or the name as written in the line; 1 = an alias. */
   rank: number;
-  /** 13D: a name of the line's `swappedFrom` ingredient (the old product of a swapped line). */
+  /** 13D: a name of the line's `swappedFrom` / `swappedAlt` ingredient (the old product of a swapped line). */
   via?: boolean;
 }
 
@@ -335,26 +336,35 @@ function collectCandidates(lines: readonly Line[], dict: Dictionary, lang: Lang)
     if (line.kind === 'header') return;
     addLine(line, i, -1);
     (line.alt ?? []).forEach((alt, k) => addLine(altLine(line, alt), i, k));
-    // 13D: the step text still names the old product of a swapped line ("Kook de spaghetti.").
-    const from = swappedFromOf(line, dict);
-    if (from) addForms(from, line, { line: i, alt: -1, who: `i:${from.id}`, via: true });
+    // 13D: the step text still names the old product of a swapped line ("Kook de spaghetti.") or
+    // the alternative the swap dropped ("Voeg de pasta toe." for "farfalle (of een andere pastasoort)").
+    for (const old of swappedOf(line, dict)) addForms(old, line, { line: i, alt: -1, who: `i:${old.id}`, via: true });
   });
   return out;
 }
 
-/** The old product of a swapped line of a diet tab (`line.swappedFrom`, display-only), when the dictionary knows it. */
-function swappedFromOf(line: Line, dict: Dictionary): Ingredient | undefined {
-  return typeof line.swappedFrom === 'string' && line.swappedFrom ? dict.get(line.swappedFrom) : undefined;
+/** The ids a swapped line of a diet tab replaced: `line.swappedFrom` and `line.swappedAlt` (display-only). */
+function swappedIds(line: Line): string[] {
+  const out: string[] = [];
+  for (const id of [line.swappedFrom, line.swappedAlt]) if (typeof id === 'string' && id && !out.includes(id)) out.push(id);
+  return out;
 }
 
-/** Dictionary ids of every line and alternative of the recipe (and the old product of a swapped line). */
+/** The old products of a swapped line of a diet tab that the dictionary knows. */
+function swappedOf(line: Line, dict: Dictionary): Ingredient[] {
+  return swappedIds(line)
+    .map((id) => dict.get(id))
+    .filter((x): x is Ingredient => !!x);
+}
+
+/** Dictionary ids of every line and alternative of the recipe (and the old products of a swapped line). */
 function recipeIngredients(lines: readonly Line[]): Set<string> {
   const out = new Set<string>();
   for (const line of lines) {
     if (line.kind === 'header') continue;
     if (line.ing) out.add(line.ing);
     for (const alt of line.alt ?? []) if (alt.ing) out.add(alt.ing);
-    if (typeof line.swappedFrom === 'string' && line.swappedFrom) out.add(line.swappedFrom);
+    for (const id of swappedIds(line)) out.add(id);
   }
   return out;
 }

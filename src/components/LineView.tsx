@@ -8,6 +8,12 @@
 //
 // `IngredientList` is the list the detail page and the cook mode ("Klaarzetten") render: it owns
 // the picker state and, in cook mode, the tick boxes.
+//
+// 13D (docs/specs/varianten-tabs.md §1b, §1f): on a diet tab a line can carry a marking (`LineMark`):
+// a swapped line gets `.ing-item.swapped.diet-<diet>` (a bar in the diet colour), a "controleer zelf"
+// line `.ing-item.check-self` with an orange dot before the text (labelled "controleer zelf") and, when
+// it was ticked on approval, a small "✓" after it. Swapped lines are derived (`lockedIndexes`): no "?"
+// chip and no long press on them; the other lines stay linkable.
 import type { ComponentChildren } from 'preact';
 import { useRef, useState } from 'preact/hooks';
 import { IngredientPicker } from '@/components/IngredientPicker';
@@ -15,6 +21,7 @@ import { isBuiltinId, linkUserRecipeLine, setLineOverride } from '@/db/repo';
 import { dictionary, lineParts } from '@/dictionary';
 import { wordLinkOverride, type WordLink } from '@/domain/line-words';
 import { pickText, type Lang, type Line } from '@/domain/model';
+import type { VariantDiet } from '@/domain/variants';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 
@@ -124,6 +131,9 @@ function splitForeign(text: string, parts: string[]): ComponentChildren {
   return out;
 }
 
+/** A marking on one line of a diet tab: swapped (diet-coloured bar) or "controleer zelf" (orange dot; `done` = ticked on approval). */
+export type LineMark = { kind: 'swapped'; diet: VariantDiet } | { kind: 'check'; done: boolean };
+
 export interface LineViewProps {
   line: Line;
   index: number;
@@ -135,10 +145,12 @@ export interface LineViewProps {
   tick?: { on: boolean; toggle: () => void };
   /** Opens "Koppel ingrediënt" for this line (the "?" chip, or a long press on a resolved line). */
   onLink?: (index: number, query: string) => void;
+  /** 13D: the marking of this line on a diet tab. */
+  mark?: LineMark;
 }
 
 export function LineView(props: LineViewProps) {
-  const { line, index, factor, base, tick } = props;
+  const { line, index, factor, base, tick, mark } = props;
   const l = lang.value;
   const header = line.kind === 'header';
   // An `ing` this dictionary does not know (a user entry from the other phone) is unresolved here.
@@ -152,9 +164,21 @@ export function LineView(props: LineViewProps) {
   if (header) {
     return <li class="ing-header">{pickText(line.raw, l).replace(/:\s*$/, '')}</li>;
   }
-  const text = <LineText line={line} lang={l} factor={factor} base={base} />;
+  const markClass = mark?.kind === 'swapped' ? ` swapped diet-${mark.diet}` : mark?.kind === 'check' ? ' check-self' : '';
+  // The orange dot sits before the text, the "✓" (ticked on approval) after it.
+  const text = (
+    <>
+      {mark?.kind === 'check' && <span class="ing-dot" role="img" aria-label={t('variant.check')} />}
+      <LineText line={line} lang={l} factor={factor} base={base} />
+      {mark?.kind === 'check' && mark.done && (
+        <span class="ing-done" role="img" aria-label={t('vt.sheet.checked')}>
+          {' ✓'}
+        </span>
+      )}
+    </>
+  );
   return (
-    <li class={'ing-item' + (tick?.on ? ' on' : '')}>
+    <li class={'ing-item' + (tick?.on ? ' on' : '') + markClass}>
       {tick ? (
         <button type="button" class={'ing-row' + (tick.on ? ' on' : '')} aria-pressed={tick.on} onClick={tick.toggle} {...press}>
           <span class="box" aria-hidden="true">
@@ -187,6 +211,10 @@ export interface IngredientListProps {
   big?: boolean;
   /** Set false to hide the "?" chips (e.g. read-only contexts). Default true. */
   linkable?: boolean;
+  /** 13D: index -> marking on a diet tab (swapped line / "controleer zelf"). */
+  marks?: ReadonlyMap<number, LineMark>;
+  /** 13D: lines without "?" chip and long press (the swapped lines of a diet tab: derived, not linkable). */
+  lockedIndexes?: ReadonlySet<number>;
 }
 
 /** The ingredient list with its "Koppel ingrediënt" sheet; the pick is stored as a line override (classic) or in the line (own recipe). */
@@ -196,6 +224,7 @@ export function IngredientList(props: IngredientListProps) {
   const factor = base > 0 && servings > 0 ? servings / base : 1;
   const linkable = props.linkable !== false;
   const onLink = linkable ? (index: number, query: string) => setPick({ index, query }) : undefined;
+  const { marks, lockedIndexes } = props;
 
   /**
    * Stores the pick. "Variant van …" (6A.16) comes with a `WordLink`: the words that are not the
@@ -226,7 +255,8 @@ export function IngredientList(props: IngredientListProps) {
             index={i}
             factor={factor}
             base={base}
-            onLink={onLink}
+            onLink={lockedIndexes?.has(i) ? undefined : onLink}
+            mark={marks?.get(i)}
             tick={
               props.tick && line.kind !== 'header'
                 ? { on: props.tick.ticked.has(i), toggle: () => props.tick?.toggle(i) }

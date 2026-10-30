@@ -18,6 +18,26 @@ bouwer D zet `VariantDiet`/`VARIANT_DIETS`/`DIET_TAGS_FOR`/`OPTIE_TAGS_FOR` in e
 (variants.ts re-exporteert) en share.ts/recipe-io.ts importeren dat; doel: terug naar ±24 kB. (7) `matchQuantityText`
 blijft letterlijk de spec volgen (geen tekst als de stap al een hoeveelheid noemt). Blok 1 mag direct naar main (§4).
 Gebouwd: 30 okt 2026 (13D blok 1, workflow wf_bbad638a-243)
+**Besluiten Fable na blok 2 (30 okt; gelden voor blok 3–4):** (1) Kleuren van de tabrij blijven §1f (per dieet: geel, lichtbruin,
+groen, wit, blauw; gekozen tab 2 px inktrand), in de pilvorm van de chips — de kleur draagt betekenis en matcht de regelbalk;
+Stijn beoordeelt op de telefoon, bijsturen is CSS. Rij 86 met "(in het lichte thema donker goudgeel)" akkoord. (2) Eerlijkheid
+van `approved` (lens-bevinding 2): `checked` bewaart alleen indexen, dus een later gewijzigde "controleer zelf"-regel telt nog
+als afgevinkt. Oplossing (blok 3, extra bouwer D): `RecipeVariant.checkedIngs?: Array<string | null>` parallel aan `checked`
+(het `ing`-id van die regel op het moment van afvinken); `variantView` telt een index alleen als afgevinkt wanneer het
+huidige `ing` van die regel gelijk is aan het bewaarde (geen `checkedIngs` = oud gedrag, tolerant); anders wordt de tab
+`stale`. De sheet schrijft `checkedIngs` mee; `readVariant` leest het tolerant (alleen strings/null, lengte van `checked`);
+de drie bevroren envelopes blijven geldig (veld ontbreekt = oud gedrag). Daarmee is ook §1c "weer aan als die regel nog
+hetzelfde ing heeft" exact. (3) De stale-sheet opent elke nog passende vervanging aangevinkt (fixer, §1c letterlijk); een
+eerder "laat ik zo" vink je opnieuw uit — akkoord. (4) "+ Deze week" op een NIET-goedgekeurde tab zet het origineel in de
+week (geen `variant` op het slot) en toont de bestaande snack; alleen een goedgekeurde tab zet `variant` (blok 3 bouwer D,
+RecipeScreen alleen die ene plek). (5) `recordFeature('variant')` bij een geslaagde goedkeuring: akkoord. (6) Op een
+persoonlijke-versie-tab gebruiken ook ⏱-chips, kookbalk, serveertip en "Kopieer als tekst" de versie: akkoord. (7) De oude
+hintteksten `variant.checkHint`/`variant.checkSwap` ("pas hem na het opslaan aan") worden NL "Dit ingrediënt past niet bij
+dit dieet. Controleer of vervang het zelf en vink het af." · EN "This ingredient does not fit this diet. Check or replace it
+yourself and tick it off." (één tekst voor beide keys; blok 3 bouwer D, src/i18n/browse.ts). `variant.onlyCheck` en
+`recipe.variants` ongebruikt → opschoonronde. (8) Bouwer D-keuzes van blok 2 (swappedAlt alleen in applyStoredSwap, eerste
+opgeloste alternatief, OPTIE_TAG_FOR blijft) akkoord; landing-chunk 29,3 → 24,7 kB gzip: doel gehaald.
+Gebouwd: 30 okt 2026 (13D blok 2, workflow wf_9d212c6e-5fe)
 
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (besluiten over specs heen in
 docs/specs/README.md §2; bij tegenspraak wint README.md). Voor deze spec:

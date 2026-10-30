@@ -5,12 +5,15 @@
 // (docs/specs/labels-categorieen.md §2b / §6a): the fourth variant diet with its dairy swaps.
 // 13D (docs/specs/varianten-tabs.md §2c, §6): variantView (natural / proposed / approved / stale),
 // applyStoredSwap, storedSwapsFrom, variantTabs, tagsWithVariants, versionName, versionAuthor and
-// parseVariantParam; makeVariant stays (old copy variants).
+// parseVariantParam; makeVariant stays (old copy variants). After block 1 ("Besluiten Fable na blok 1"):
+// `swappedAlt` (2), an approved vegan tab also gives 'vega-optie' (3), the diet constants in
+// src/domain/diets.ts re-exported by variants.ts (6).
 import { describe, expect, it } from 'vitest';
 import swapsJson from '../data/swaps.json';
 import { defaultDictionary, defaultDictionaryData, ingredientsData } from '../src/domain/data';
 import { loadDictionary, type Ingredient } from '../src/domain/dictionary';
 import { DIET_TAGS, dietTags } from '../src/domain/diet';
+import * as diets from '../src/domain/diets';
 import type { Line, Recipe } from '../src/domain/model';
 import { parseLine } from '../src/domain/parser';
 import { normalizeRecipe } from '../src/domain/recipe-io';
@@ -532,6 +535,14 @@ describe('13D constants', () => {
     expect(DIET_TAGS_FOR.lactosevrij).toEqual(['lactosevrij']);
     expect(OPTIE_TAG_FOR).toEqual({ glutenvrij: 'glutenvrij-optie', vegetarisch: 'vega-optie', vegan: 'vegan-optie', lactosevrij: 'lactosevrij-optie' });
   });
+
+  it('the diet constants live in diets.ts; variants.ts re-exports the very same objects', () => {
+    expect(VARIANT_DIETS).toBe(diets.VARIANT_DIETS);
+    expect(DIET_SUFFIX).toBe(diets.DIET_SUFFIX);
+    expect(DIET_TAGS_FOR).toBe(diets.DIET_TAGS_FOR);
+    expect(OPTIE_TAGS_FOR).toBe(diets.OPTIE_TAGS_FOR);
+    expect(diets.VARIANT_DIETS).toEqual(['glutenvrij', 'vegetarisch', 'vegan', 'lactosevrij']);
+  });
 });
 
 describe('variantView', () => {
@@ -653,6 +664,38 @@ describe('applyStoredSwap and storedSwapsFrom', () => {
     const plan = planVariant({ lines: fillets }, 'vegan', swaps, dict);
     const [stored] = storedSwapsFrom(plan, new Set());
     expect(applyStoredSwap(fillets[0]!, stored!)).toMatchObject({ ing: 'tofu', qty: { min: 800 }, unit: 'g', swappedFrom: 'kipfilet' });
+    // a line without an alternative gets no swappedAlt
+    expect('swappedAlt' in out).toBe(false);
+  });
+
+  it('applyStoredSwap sets swappedAlt to the id of the alternative the swap drops (farfalle "of een andere pastasoort")', () => {
+    const src = nl('225 g farfalle (of een andere pastasoort)')[0]!;
+    expect(src.alt?.[0]?.ing).toBe('pasta');
+    const plan = planVariant({ lines: [src] }, 'glutenvrij', swaps, dict);
+    const [stored] = storedSwapsFrom(plan, new Set());
+    expect(stored).toMatchObject({ fromId: 'farfalle', toId: 'glutenvrije-pasta', raw: { nl: '225 g glutenvrije pasta' } });
+    const out = applyStoredSwap(src, stored!);
+    expect(out).toMatchObject({ ing: 'glutenvrije-pasta', swappedFrom: 'farfalle', swappedAlt: 'pasta' });
+    expect(out.alt).toBeUndefined();
+    // the source line keeps its alternative and gets no display-only keys
+    expect(src.alt?.[0]?.ing).toBe('pasta');
+    expect('swappedAlt' in src).toBe(false);
+    // an alternative the dictionary could not resolve gives no swappedAlt
+    const unresolvedAlt: Line = { ...src, alt: [{ raw: { nl: 'iets anders' }, ing: null, name: 'iets anders' }] };
+    expect('swappedAlt' in applyStoredSwap(unresolvedAlt, stored!)).toBe(false);
+  });
+
+  it('the proposed and the approved view both carry swappedAlt (warme pastasalade, gluten-free)', () => {
+    const lines = nl('225 g farfalle (of een andere pastasoort)', '50 g rucola');
+    const proposed = variantView('glutenvrij', lines, undefined, swaps, dict);
+    expect(proposed.status).toBe('proposed');
+    expect(proposed.lines[0]).toMatchObject({ swappedFrom: 'farfalle', swappedAlt: 'pasta' });
+    const stored: RecipeVariant = { approved: true, by: 'Stijn', swaps: storedSwapsFrom(proposed.plan!, new Set()), checked: [] };
+    const approved = variantView('glutenvrij', lines, stored, swaps, dict);
+    expect(approved.status).toBe('approved');
+    expect(approved.lines[0]).toMatchObject({ swappedFrom: 'farfalle', swappedAlt: 'pasta' });
+    // never stored: the StoredSwap has no swappedAlt
+    expect(stored.swaps.some((s) => 'swappedAlt' in s)).toBe(false);
   });
 
   it('storedSwapsFrom leaves out unticked and applies-false swaps and keeps fromId/toId/raw/name/grams', () => {
@@ -706,7 +749,23 @@ describe('tagsWithVariants', () => {
   it("adds '<diet>-optie' for every approved diet, without duplicates", () => {
     expect(tagsWithVariants({ tags: ['oven', 'kids'], variants: { glutenvrij: GV_STORED } })).toEqual(['oven', 'kids', 'glutenvrij-optie']);
     expect(tagsWithVariants({ tags: ['glutenvrij-optie', 'oven'], variants: { glutenvrij: GV_STORED } })).toEqual(['glutenvrij-optie', 'oven']);
-    expect(tagsWithVariants({ tags: ['oven'], variants: { vegan: veganStored([3, 5]), lactosevrij: { ...GV_STORED } } })).toEqual(['oven', 'vegan-optie', 'lactosevrij-optie']);
+    // vegan is vegetarian too (DIET_TAGS_FOR): an approved vegan tab also gives 'vega-optie'
+    expect(tagsWithVariants({ tags: ['oven'], variants: { vegan: veganStored([3, 5]), lactosevrij: { ...GV_STORED } } })).toEqual(['oven', 'vega-optie', 'vegan-optie', 'lactosevrij-optie']);
+    expect(tagsWithVariants({ tags: ['vega-optie'], variants: { vegetarisch: { ...GV_STORED }, vegan: veganStored([3, 5]) } })).toEqual(['vega-optie', 'vegan-optie']);
+  });
+
+  it('mirrors DIET_TAGS_FOR: per approved diet the -optie tag of each of its diet tags', () => {
+    for (const diet of VARIANT_DIETS) {
+      const got = tagsWithVariants({ tags: [], variants: { [diet]: { ...GV_STORED } } });
+      expect(got, diet).toEqual(DIET_TAGS_FOR[diet].map((t) => OPTIE_TAG_FOR[t as keyof typeof OPTIE_TAG_FOR]));
+    }
+    expect(tagsWithVariants({ tags: [], variants: { vegan: { ...GV_STORED } } })).toEqual(['vega-optie', 'vegan-optie']);
+  });
+
+  it('a stale approval counts until it is withdrawn', () => {
+    const stale = veganStored([]);
+    expect(variantView('vegan', SCHOTEL, stale, swaps, dict).status).toBe('stale');
+    expect(tagsWithVariants({ tags: ['oven'], variants: { vegan: stale } })).toEqual(['oven', 'vega-optie', 'vegan-optie']);
   });
 
   it('a variant that is not approved, a future diet key or no variants add nothing', () => {

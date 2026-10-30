@@ -11,13 +11,17 @@
 //                                                a swap no longer fits its line or a breaking line was
 //                                                not ticked) -> proposed (planVariant's applying swaps
 //                                                as a preview). Derived, never written back (invariant 2).
-//   applyStoredSwap(line, swap)               -> applySwap + `swappedFrom` (display-only, never stored)
+//   applyStoredSwap(line, swap)               -> applySwap + `swappedFrom` / `swappedAlt` (display-only, never stored)
 //   storedSwapsFrom(plan, off)                -> the sheet's ticked swaps as StoredSwaps
 //   variantTabs(lines, variants, swaps, dict, n) -> the status per active diet and whether the row shows
-//   tagsWithVariants(r)                       -> tags + '<diet>-optie' per approved diet (filters, chips)
+//   tagsWithVariants(r)                       -> tags + the '-optie' tags per approved diet (vegan also
+//                                                'vega-optie', like DIET_TAGS_FOR) (filters, chips)
 //   versionName / versionAuthor               -> "Goulash (versie van Dino)" and the tab label of a
 //                                                personal version (a real recipe with `variantOf`)
 //   parseVariantParam(v, approved)            -> `?v=` of cook mode / the plan, null when not approved
+//
+// The diet constants (VariantDiet, VARIANT_DIETS, DIET_SUFFIX, DIET_TAGS_FOR, OPTIE_TAGS_FOR) live in
+// src/domain/diets.ts and are re-exported here.
 //
 //   variantDietsFor(recipe, lines, dict)      -> the diets a recipe does not have yet (a line contradicts it)
 //   planVariant(recipe, diet, swaps, dict)    -> VariantPlan: per line that breaks the diet the swap from
@@ -44,16 +48,14 @@
 // independently; a second language whose text does not contain the old name is left out of the
 // new line rather than kept with the old product in it.
 import { dutchBaseForms, englishBaseForms, normalizeKey, type Dictionary, type Ingredient } from './dictionary.ts';
-import { DIET_TAGS, dietTags, type DietTag } from './diet.ts';
+import { DIET_TAGS, dietTags } from './diet.ts';
+import { DIET_SUFFIX, DIET_TAGS_FOR, OPTIE_TAGS_FOR, VARIANT_DIETS, type VariantDiet } from './diets.ts';
 import { hasLang, newUserId, nowIso, type Lang, type Line, type Qty, type Recipe, type Text } from './model.ts';
 
-export type VariantDiet = DietTag;
-
-/**
- * The diets a variant can be made for, in the order the UI offers them (the tab order of the
- * variants spec 13D; docs/specs/README.md §2b). Not the chip order of `DIET_TAGS`.
- */
-export const VARIANT_DIETS: readonly VariantDiet[] = ['glutenvrij', 'vegetarisch', 'vegan', 'lactosevrij'];
+// The diet constants live in the small, import-free src/domain/diets.ts (so share.ts / recipe-io.ts,
+// in the Safari landing's chunk, do not pull this module in); re-exported so existing imports keep working.
+export { DIET_SUFFIX, DIET_TAGS_FOR, OPTIE_TAGS_FOR, VARIANT_DIETS };
+export type { VariantDiet };
 
 /** The diet tabs this build really offers: VARIANT_DIETS filtered on DIET_TAGS (diet.ts), in tab order. */
 export function activeVariantDiets(): VariantDiet[] {
@@ -172,30 +174,6 @@ export interface MakeVariantOptions {
   /** createdAt / updatedAt (tests); default now. */
   now?: string;
 }
-
-/** The suffix in the variant's name per language: "Lasagne (glutenvrij)" / "Lasagne (gluten-free)". */
-export const DIET_SUFFIX: Readonly<Record<VariantDiet, { nl: string; en: string }>> = {
-  glutenvrij: { nl: 'glutenvrij', en: 'gluten-free' },
-  vegetarisch: { nl: 'vegetarisch', en: 'vegetarian' },
-  vegan: { nl: 'vegan', en: 'vegan' },
-  lactosevrij: { nl: 'lactosevrij', en: 'lactose-free' },
-};
-
-/** The tags a variant carries for a diet (data/recipes.json tag vocabulary: vegan implies vegetarisch). */
-export const DIET_TAGS_FOR: Readonly<Record<VariantDiet, readonly string[]>> = {
-  glutenvrij: ['glutenvrij'],
-  vegetarisch: ['vegetarisch'],
-  vegan: ['vegetarisch', 'vegan'],
-  lactosevrij: ['lactosevrij'],
-};
-
-/** The "-optie" tags that stop meaning anything once the variant IS that diet. */
-export const OPTIE_TAGS_FOR: Readonly<Record<VariantDiet, readonly string[]>> = {
-  glutenvrij: ['glutenvrij-optie'],
-  vegetarisch: ['vega-optie'],
-  vegan: ['vega-optie', 'vegan-optie'],
-  lactosevrij: ['lactosevrij-optie'],
-};
 
 /** The one "-optie" tag an approved diet tab adds to a recipe (13D `tagsWithVariants`; data/recipes.json vocabulary). */
 export const OPTIE_TAG_FOR: Readonly<Record<VariantDiet, string>> = {
@@ -632,9 +610,20 @@ function toStoredSwap(s: VariantSwap): StoredSwap {
 }
 
 /**
- * `applySwap` for a stored swap, plus `swappedFrom: s.fromId` on the line: display-only (the step
- * text still says "spaghetti"; src/domain/stepingredients.ts matches that word through it), never
- * saved. The source line is not touched.
+ * The dictionary id of the source line's alternative ("farfalle (of een andere pastasoort)" ->
+ * 'pasta'): the first alternative with a resolved `ing`, or undefined. `applySwap` drops `alt`.
+ */
+function altIdOf(line: Line): string | undefined {
+  if (!Array.isArray(line.alt)) return undefined;
+  for (const a of line.alt) if (a && typeof a.ing === 'string' && a.ing) return a.ing;
+  return undefined;
+}
+
+/**
+ * `applySwap` for a stored swap, plus `swappedFrom: s.fromId` on the line and, when the source line
+ * had a resolved alternative, `swappedAlt: <its id>` ("Besluiten Fable na blok 1", point 2): both
+ * display-only (the step text still says "spaghetti" or "pasta"; src/domain/stepingredients.ts matches
+ * those words through them), never saved. The source line is not touched.
  */
 export function applyStoredSwap(line: Line, s: StoredSwap): Line {
   const swap: VariantSwap = { index: s.index, fromId: s.fromId, toId: s.toId, raw: s.raw, applies: true };
@@ -642,6 +631,8 @@ export function applyStoredSwap(line: Line, s: StoredSwap): Line {
   if (s.grams && typeof s.grams === 'object') swap.grams = s.grams;
   const out = applySwap(line, swap);
   out.swappedFrom = s.fromId;
+  const alt = altIdOf(line);
+  if (alt !== undefined) out.swappedAlt = alt;
   return out;
 }
 
@@ -741,11 +732,24 @@ export function variantTabs(
   return { show: personalCount > 0 || diets.some((d) => d.status !== 'natural'), diets };
 }
 
-/** `recipe.tags` plus '<diet>-optie' for every approved diet (filters, diet chips); no duplicates, order kept. */
+/**
+ * `recipe.tags` plus the '-optie' tag of every diet an approved tab makes the recipe, mirroring
+ * `DIET_TAGS_FOR` ("Besluiten Fable na blok 1", point 3): an approved vegan tab is vegetarian too, so
+ * it adds 'vega-optie' and 'vegan-optie' and the filter "vegetarisch (ook als optie)" finds it. A
+ * stale approval counts until it is withdrawn. Filters and diet chips; no duplicates, order kept.
+ */
 export function tagsWithVariants(r: Pick<Recipe, 'tags' | 'variants'>): string[] {
   const out = new Set<string>((Array.isArray(r.tags) ? r.tags : []).filter((t): t is string => typeof t === 'string'));
   const vs = r.variants && typeof r.variants === 'object' && !Array.isArray(r.variants) ? r.variants : undefined;
-  if (vs) for (const diet of VARIANT_DIETS) if (usableStored(vs[diet])?.approved === true) out.add(OPTIE_TAG_FOR[diet]);
+  if (vs) {
+    for (const diet of VARIANT_DIETS) {
+      if (usableStored(vs[diet])?.approved !== true) continue;
+      for (const tag of DIET_TAGS_FOR[diet]) {
+        const optie = (OPTIE_TAG_FOR as Readonly<Record<string, string>>)[tag];
+        if (optie) out.add(optie);
+      }
+    }
+  }
   return [...out];
 }
 

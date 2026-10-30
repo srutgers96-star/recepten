@@ -2214,9 +2214,10 @@ button.recipe-cuisine:active {
   color: var(--rosemary);
 }
 
-/* ---------- Phase 5 block F (2): recipe variants (glutenvrij / vegetarisch / vegan) ---------- */
+/* ---------- Phase 5 block F (2): recipe variants (glutenvrij / vegetarisch / vegan) ----------
+   13D blok 2 replaced the "Ook als:" chips and the "Maak … versie" buttons by the tab row (below). */
 
-/* "Versie van <origineel>" under the meta line of a variant: a text link back to the original. */
+/* "Versie van <origineel>" under the meta line of a personal version: a text link back to the original. */
 .detail-variant-of {
   display: inline-flex;
   align-items: center;
@@ -2244,39 +2245,8 @@ button.recipe-cuisine:active {
   border-radius: 8px;
 }
 
-/* "Ook als: [Glutenvrij] [Vegan]" on the original: 44 px chips that open the variant. */
-.detail-variants {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 10px;
-}
-
-.detail-variants-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.detail-variants .chip {
-  border-color: var(--rosemary);
-  color: var(--rosemary);
-}
-
-/* "Maak … versie" buttons under the tools row, stacked for 360 px. */
-.detail-variant-make {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0 0 10px;
-}
-
-.detail-variant-make .btn {
-  min-height: 48px;
-}
-
-/* The review sheet (VariantSheet): .sheet-* from base.css; rows with a native checkbox. */
+/* The approve sheet (VariantSheet, 13D §1c): .sheet-* from base.css, the grab bar and drag area of
+   CookedSheet (.cooked-drag / .sheet-grab, below); rows with a native checkbox. */
 .variant-intro {
   margin: 4px 0 8px;
 }
@@ -2397,6 +2367,241 @@ button.recipe-cuisine:active {
   color: var(--tomato);
   font-size: 13px;
   font-weight: 600;
+}
+
+/* A "controleer zelf" row is no label: only its "Gecontroleerd" box is tappable. */
+.variant-check-row {
+  cursor: default;
+}
+
+.variant-checked {
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Why Goedkeuren is grey ("Vink eerst elke ‘controleer zelf’-regel af."). */
+.variant-reason {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ---------- 13D (docs/specs/varianten-tabs.md §1a, §1b, §1f): diet versions as tabs ----------
+   Calm: only the tabs, the status line and the line markings carry colour. The colour pairs are the
+   --diet-* tokens of base.css (light and dark); each element below picks its pair into --vt-bg /
+   --vt-ink. */
+
+.vtab.diet-glutenvrij,
+.vtab-status.diet-glutenvrij,
+.ing-item.diet-glutenvrij {
+  --vt-bg: var(--diet-glutenvrij-bg);
+  --vt-ink: var(--diet-glutenvrij-ink);
+}
+
+.vtab.diet-vegetarisch,
+.vtab-status.diet-vegetarisch,
+.ing-item.diet-vegetarisch {
+  --vt-bg: var(--diet-vegetarisch-bg);
+  --vt-ink: var(--diet-vegetarisch-ink);
+}
+
+.vtab.diet-vegan,
+.vtab-status.diet-vegan,
+.ing-item.diet-vegan {
+  --vt-bg: var(--diet-vegan-bg);
+  --vt-ink: var(--diet-vegan-ink);
+}
+
+.vtab.diet-lactosevrij,
+.vtab-status.diet-lactosevrij,
+.ing-item.diet-lactosevrij {
+  --vt-bg: var(--diet-lactosevrij-bg);
+  --vt-ink: var(--diet-lactosevrij-ink);
+}
+
+.vtab.personal,
+.vtab-status.personal {
+  --vt-bg: var(--diet-personal-bg);
+  --vt-ink: var(--diet-personal-ink);
+}
+
+/* The tab row (src/components/VariantTabs.tsx) right above "Ingrediënten": one line of the app's
+   chip pills (`.chip`: 44 px, 14 px/600, the shape of the diet filter chips), 8 px apart, scrolling
+   sideways edge to edge like .chips; it never wraps and never widens the page at 360 px. */
+.detail-vtabs {
+  margin: 20px 0 0;
+}
+
+.detail-vtabs + .detail-ingredients {
+  margin-top: 4px;
+}
+
+.vtabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 calc(-1 * max(16px, var(--sar))) 0 calc(-1 * max(16px, var(--sal)));
+  padding: 2px max(16px, var(--sar)) 8px max(16px, var(--sal));
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.vtabs::-webkit-scrollbar {
+  display: none;
+}
+
+.vtab {
+  --vt-bg: var(--card);
+  --vt-ink: var(--ink);
+  font-family: inherit;
+  line-height: 1.2;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* Origineel: neutral (card colour, --line border: the plain .chip). */
+
+/* Dashed = a proposal (proposed / stale): 2 px dashed in the diet ink, no fill. */
+.vtab.dotted {
+  padding: 0 13px;
+  border: 2px dashed var(--vt-ink);
+  background: transparent;
+  color: var(--vt-ink);
+}
+
+/* Full = approved, a personal version, or naturally so (✓, not choosable): fill + ink. */
+.vtab.full,
+.vtab.personal,
+.vtab.natural {
+  border-color: transparent;
+  background: var(--vt-bg);
+  color: var(--vt-ink);
+}
+
+/* Lactose-free is white: always with a --line border. */
+.vtab.full.diet-lactosevrij,
+.vtab.natural.diet-lactosevrij {
+  border-color: var(--line);
+}
+
+.vtab.full:active,
+.vtab.personal:active {
+  background: var(--vt-bg);
+  box-shadow: inset 0 0 0 999px var(--press);
+}
+
+.vtab.natural {
+  cursor: default;
+}
+
+.vtab.natural:active {
+  background: var(--vt-bg);
+}
+
+.vtab.dotted:active {
+  background: var(--press);
+}
+
+/* The chosen tab: a 2 px --ink border (a dashed tab stays dashed; also over the white tab's line). */
+.vtabs .vtab.on {
+  padding: 0 13px;
+  border-width: 2px;
+  border-color: var(--ink);
+}
+
+/* "Dit recept is al glutenvrij." / "Glutenvrij versie goedgekeurd" under the row. */
+.vtab-flash {
+  margin: -2px 0 4px;
+}
+
+/* A sideways swipe on the ingredient section changes the tab; vertical scrolling stays the browser's. */
+.detail-ingredients {
+  touch-action: pan-y;
+}
+
+/* §1b: the narrow status line above the lines of a tab: a 4 px bar in the diet colour on the left,
+   the text, and one action (Controleer en keur goed / Opnieuw controleren / Intrekken / Open als recept). */
+.vtab-status {
+  --vt-bg: var(--card);
+  --vt-ink: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin: -2px 0 12px;
+  padding: 6px 10px 6px 12px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--vt-ink);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--vt-bg) 40%, var(--card));
+}
+
+.vtab-status-text {
+  flex: 1 1 200px;
+  min-width: 0;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* A personal version whose own name is not "<naam> (versie van …)": its name under "Versie van …". */
+.vtab-status-name {
+  display: block;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.vtab-status-btn {
+  flex: none;
+  padding: 0 14px;
+  font-size: 15px;
+}
+
+.vtab-revoke {
+  flex: none;
+  margin-left: auto;
+}
+
+/* §1f line markings (src/components/LineView.tsx): a swapped line gets a 3 px bar in the diet ink on
+   the left; a "controleer zelf" line an 8 px orange dot before the text and, when ticked on approval,
+   a small ✓ after it. */
+.ing-item.swapped {
+  padding-left: 11px;
+  box-shadow: inset 3px 0 0 var(--vt-ink);
+}
+
+.ing-item.check-self .ing-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: var(--orange);
+  vertical-align: 0.1em;
+}
+
+.ing-item.check-self .ing-done {
+  color: var(--rosemary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.vtab-legend {
+  margin: 6px 0 0;
+}
+
+/* §1d: "(glutenvrije versie)" after the title only on paper; the stored name never changes. */
+.vtab-print-suffix {
+  display: none;
+}
+
+@media print {
+  .vtab-print-suffix {
+    display: inline;
+  }
 }
 
 /* ---------- Phase 6 A.3: "✓ Gekookt" without cook mode + "Beoordeel" afterwards ---------- */

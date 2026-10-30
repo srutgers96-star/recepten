@@ -4,6 +4,88 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 30 okt (Opus): 13D blok 2 — varianten als tabs: tabrij, goedkeuren, markeringen
+Gebouwd volgens docs/specs/varianten-tabs.md "Blok 2" (bouwer A tabrij + vegen + geheugen, B goedkeur-sheet + regelmarkeringen,
+C RecipeScreen/CSS/i18n, extra bouwer D de domeinpunten 2, 3 en 6 uit "Besluiten Fable na blok 1"; integrator). Niet gecommit.
+Geen Dexie-versie, geen setting, geen dependency; één localStorage-sleutel `recepten.vtab` (staat in het register, README §2b).
+Gate groen: check, 1505 tests (63 bestanden), build, build:next, validate:data. Eerst naar `/next/` (spec §4).
+- **Tabrij (A):** nieuw src/components/VariantTabs.tsx: boven "Ingrediënten" één zijwaarts scrollende rij pillen (de `.chip`-vorm,
+  44 px, 8 px tussenruimte): Origineel · per dieet (stippel = voorstel/stale, vol = goedgekeurd, "✓ Glutenvrij" = van nature,
+  niet kiesbaar; tik → "Dit recept is al glutenvrij.") · persoonlijke versies (voornaam, "Dino 2" bij een tweede). Alleen als er
+  iets te kiezen valt (`variantTabs(…).show`). Keuze: `?v=` → onthouden per recept (src/vtab-memory.ts, max 200, try/catch) →
+  Origineel; een tik of veeg zet beide. src/swipe.ts `useHorizontalSwipe` (60 px, 12 px, horizontaal > verticaal) op de nieuwe
+  `section.detail-ingredients` (`touch-action: pan-y`); een veeg die op een knop begint is geen tik.
+- **Goedkeur-sheet (B):** VariantSheet herbouwd met SheetPortal, Annuleer/Goedkeuren in de kop, greepbalk + omlaag vegen (patroon
+  CookedSheet); eerst de vervangingen (vinkje aan), dan "controleer zelf" met `!` en een vakje "Gecontroleerd". Goedkeuren pas
+  actief met profiel én elke controleer-zelf-regel afgevinkt ("Vink eerst elke ‘controleer zelf’-regel af."). Besluit (1): een
+  uitgevinkte vervanging gaat als regelindex in `checked` ("laat ik zo"), dus de tab is `approved`, niet `stale`. De oude
+  `swapsData`-export is weg (src/swaps.ts). LineView: `LineMark` (gekleurde balk = vervangen, oranje stip = controleer zelf, ✓
+  erachter bij goedgekeurd) en `lockedIndexes` (geen "?" en geen lange druk op vervangen regels).
+- **Recept (C):** statusregel per tab ("Nog niet bevestigd …" + Controleer en keur goed / "Het recept is veranderd …" + Opnieuw
+  controleren / "Goedgekeurd door {name} op {date}" + Intrekken met bevestiging); de regels van `variantView` met markeringen en
+  daaronder de legenda; de stappen krijgen dezelfde regels (groen "Spaghetti" → "(400 g glutenvrije pasta)"). Persoonlijke
+  versie: "Versie van {name}" + Open als recept, regels/stappen/serveertip van de versie. Koken (`&v=<dieet>` of de versie-id),
+  ✓ Gekookt, Deel en + Deze week volgen de tab (§1d); Kopieer als tekst en print zetten "(glutenvrije versie)" achter de naam
+  (nooit in de opgeslagen naam). Weg: de knoppen "Maak … versie", de chips "Ook als:", `variantChipLabel`/`offerDiets`. Tokens
+  `--diet-*` (licht + twee identieke donkerblokken) in base.css; `.vtab*`, `.vtab-status`, `.ing-item.swapped/.check-self`.
+- **Domein (D):** `src/domain/diets.ts` (zonder runtime-imports) met `VariantDiet`/`VARIANT_DIETS`/`DIET_SUFFIX`/`DIET_TAGS_FOR`/
+  `OPTIE_TAGS_FOR`; variants.ts exporteert ze opnieuw, share.ts en recipe-io.ts importeren diets.ts. Gedeelde chunk van de
+  Safari-landing (`share-*.js`) 29,3 → 24,7 kB gzip (doel ±24). `swappedAlt` naast `swappedFrom` (alleen in `applyStoredSwap`,
+  display-only) en `findStepIngredients` matcht ook die naamvormen. `tagsWithVariants`: goedgekeurd vegan geeft ook `vega-optie`.
+- **i18n:** nieuw src/i18n/variants.ts (na badges in index.ts) met alle `vt.*`-keys van §1a–§1d letterlijk in NL en EN. Uit
+  browse.ts: `variant.make.*`, `variant.title.*`, `variant.intro`, `variant.foot`, `variant.save`, `variant.saving`,
+  `recipe.alsoAs` (nergens meer gebruikt). Geen bouwer meldde een ontbrekende key.
+- **Dev-app (375 en 360 px, licht en donker, NL en EN):** Spaghettischotel: vijf tabs (Lactosevrij ook, sinds 6B), geen
+  zijwaarts scrollen van de pagina; Ratatouille geen rij; Aardappel-broccoli gratin "✓ Glutenvrij"/"✓ Vegetarisch" met snack.
+  Glutenvrij: statusregel, "400 g glutenvrije pasta" met balk, sheet omlaag geveegd → niets bewaard, Goedkeuren → vol + snack
+  "Glutenvrij versie goedgekeurd", herladen → nog vol met `?v=glutenvrij`; override zonder `swappedFrom`. Vegan: gehakt met
+  stip, kaas vervangen, Goedkeuren grijs tot afgevinkt. Vegen links/rechts wisselt tabs, ook vanaf de porties-kiezer (die blijft
+  op 4). Intrekken → weer stippel. Persoonlijke versie (via `makeOwnVersion` in de console): tab "Testkok" verschijnt meteen,
+  "Versie van Testkok" + Open als recept, `?v=u:…` overleeft herladen. Acceptatie 7 op die versie: regel 1 → penne → stale →
+  Opnieuw controleren → vol. Besluit (1): vegan met kaas uitgevinkt → goedgekeurd, kaas en gehakt met stip en ✓. Geen
+  consolefouten. Opgeruimd: testversie verwijderd, goedkeuringen ingetrokken (override weer weg), `recepten.vtab` gewist, taal
+  terug op NL, viewport terug, server gestopt. In de dev-database blijven alleen `features.log`-regels 'variant' (en de
+  badge-toast die daarbij hoorde).
+- **DEVICE-TEST:** rij 86 (NL en EN) direct na rij 81, uit §6c. Twee afwijkingen van de letterlijke tekst: bij 1 vijf knopjes
+  (met Lactosevrij, "de laatste vier"), want 6B maakte lactosevrij actief (kritische lezer: "vier tabs vanaf blok 2"); bij 2
+  "geel streepje links (in het lichte thema donker goudgeel)", want §1f zet de balk in `--diet-glutenvrij-ink` (#5c4a05 licht).
+- **Open voor Fable/Stijn:** (1) **Groene chipstijl** (Stijn 30 okt) tegenover §1f: de tabs hebben de pilvorm van de chips, maar
+  de kleuren per dieet uit §1f (geel/lichtbruin/groen/wit/blauw) en de gekozen tab een 2 px inktrand; kleuren zijn §5 punt 2,
+  dus niet aangepast. Groen gevuld of groene rand voor de gekozen tab = besluit. (2) Rij 86/§1f: balk in de inktkleur (licht
+  donker goudgeel) of in de achtergrondkleur (licht geel)? (3) §1c stale "eerder afgevinkte indexen weer aan als die regel nog
+  hetzelfde `ing` heeft": `checked` bewaart alleen indexen, dus de sheet gebruikt `view.checked` (indexen die het dieet nog
+  breken); exact kan alleen met een modelwijziging. Na een ingevoegde of verwijderde regel kan zo'n index dus een vinkje
+  zetten bij een andere "controleer zelf"-regel. Keuze voor Fable: (a) zo laten (index + "breekt het dieet nog"), of
+  (b) naast elke afgevinkte index het `ing` bewaren (nieuw veld in `RecipeVariant`, register README §2b), dan exact.
+  (4) Stale en besluit (1) — **gerepareerd na de review**: de sheet zette een vervanging uit als haar index in `checked`
+  stond; na een ingevoegde regel boven de kaas (vegan Spaghettischotel) opende de goedgekeurde kaas-vervanging zo
+  UITgevinkt en ging ze bij opnieuw goedkeuren stil verloren (tab "goedgekeurd" met echte kaas). Nu volgt de sheet §1c letterlijk: elke
+  vervanging die nog past staat aan; een eerder "laat ik zo" vinkt de gebruiker opnieuw uit (test in
+  tests/variant-sheet.test.ts). Keuze voor Fable: (a) zo laten, of (b) "laat ik zo" exact terugzetten, wat hetzelfde
+  `ing`-veld als bij (3b) vraagt. (4b) **Escalatie (review, §5 punt 5, niet door de bouwer op te lossen):** een goedgekeurde
+  tab blijft `approved` ("Goedgekeurd door …") als een "controleer zelf"- of "laat ik zo"-regel daarna in een ánder
+  dieet-brekend ingrediënt verandert (vegan: gehakt → spekblokjes, kaas → mozzarella), want `approvedView` kijkt alleen of
+  `unresolved ⊆ checked` (indexen). Dat botst met §5 "Eerlijk" ("valt terug op stippellijn"). Keuze voor Fable: (a) het
+  `ing` naast elke `checked`-index bewaren en een index alleen laten tellen als `lines[i].ing` nog gelijk is (hetzelfde
+  veld als bij 3b en 4b; lost alle drie op), of (b) bij goedkeuren een vingerafdruk van de regels bewaren en bij elke
+  afwijking `stale` (strenger: ook een andere hoeveelheid paprika maakt hem stale). Beide raken de §2c-regels en het model.
+  (5) `variant.checkHint`/`variant.checkSwap` zeggen
+  nog "pas hem na het opslaan aan" (kopie-tijdperk); `variant.onlyCheck` en `recipe.variants` worden niet meer gebruikt (spec
+  houdt ze). (6) `recordFeature('variant')` vuurt nu bij goedkeuren (was: kopie bewaren). (7) + Deze week op een niet-
+  goedgekeurde tab zet `variant` op het slot (§1d letterlijk; `generateList` negeert het, besluit 5); de weekchip van blok 3 mag
+  hem niet als keuze tonen. Koken zet `&v=` op elke dieettab (CookScreen leest het pas in blok 3); ✓ Gekookt geeft nog geen
+  `variant` mee (CookedSheet-prop is blok 3). (8) Op een versie-tab gebruiken ook ⏱-chips/kookbalk, serveertip en Kopieer als
+  tekst de versie. (9) Eigen toevoegingen: aria-label "Versie van Dino" op een versie-tab, "Versie 2" bij twee naamloze versies,
+  de van-nature-snack in de component, de gekozen pil zijwaarts in beeld schuiven, een klik na ≥ 12 px zijwaarts wordt
+  ingeslikt (strenger dan CookScreen). (10) `swappedAlt` = het eerste opgeloste alternatief; doet in de klassiekers alleen iets
+  bij warme pastasalade (glutenvrij) en koolraapstamppot (vegan/lactosevrij: "boter of crème fraîche" beide groen). (11) Een
+  goedkeuring zonder `approvedAt` (vreemde data) toont "Goedgekeurd door X op " met lege datum. (12) IngredientPicker zit niet
+  in een portal: RecipeScreen negeert gebaren die in een `.sheet-backdrop` beginnen.
+
+- **Besluit Fable (30 okt, na de lens; commit van blok 2):** tabkleuren blijven §1f (per dieet), pilvorm van de chips;
+  eerlijkheid van `approved` via `checkedIngs` (blok 3 bouwer D); stale-sheet opent passende vervangingen aangevinkt; "+ Deze
+  week" op een niet-goedgekeurde tab zet het origineel; hintteksten herschreven (blok 3 D); overige keuzes akkoord. Alles in
+  varianten-tabs.md onder "Besluiten Fable na blok 2". Landing-chunk terug naar 24,7 kB gzip.
 ## 30 okt (Opus): 6D-B — badgepagina als tegels, kleur in plaats van kleurnaam
 Gebouwd volgens docs/specs/badges-avatar.md "Blok 6D-B" (bouwer B-A badgepagina + sheet + badges.css, B-B punt 6 buiten de
 pagina: toast, avatar-maker, gedeeld stipje; integrator). Niet gecommit. Geen Dexie-versie, geen setting, geen
