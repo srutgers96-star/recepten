@@ -1,7 +1,7 @@
 // applyOverride / mergeLineOverride / applyLineOverrides (docs/phase-2-spec.md §5, src/domain/overrides.ts).
 import { describe, expect, it } from 'vitest';
 import type { Line, Recipe } from '../src/domain/model';
-import { applyLineOverrides, applyOverride, mergeLineOverride, mergeText, type LineOverride, type RecipeOverride } from '../src/domain/overrides';
+import { applyLineOverrides, applyOverride, mergeLineOverride, mergeText, RECIPE_PATCH_KEYS, type LineOverride, type RecipeOverride } from '../src/domain/overrides';
 
 function recipe(): Recipe {
   return {
@@ -109,6 +109,36 @@ describe('applyOverride', () => {
   it('rev falls back to +1 for a bogus override rev', () => {
     expect(applyOverride(recipe(), override({ category: 'vis' }, 0)).rev).toBe(2);
     expect(applyOverride(recipe(), override({ category: 'vis' }, Number.NaN)).rev).toBe(2);
+  });
+
+  // docs/specs/varianten-tabs.md §2a (13D): a classic's approved diet versions and maker's tip live
+  // in the override patch; applyOverride puts them on the recipe as a whole (replace semantics).
+  it('patch.variants and patch.tip are set on the recipe as a whole (no merge per diet or language)', () => {
+    const variants = {
+      glutenvrij: {
+        approved: true,
+        approvedAt: '2026-10-22T18:00:00.000Z',
+        by: 'Gabi',
+        swaps: [{ index: 1, fromId: 'bouillon', toId: 'groentebouillon', raw: { nl: '1 l groentebouillon' } }],
+        checked: [],
+      },
+    };
+    const base: Recipe = { ...recipe(), variants: { vegan: { approved: true, swaps: [], checked: [0] } }, tip: { nl: 'Oud.', en: 'Old.' } };
+    const out = applyOverride(base, override({ variants, tip: { en: 'Grate the cheese yourself.' } }));
+    expect(out.variants).toEqual(variants);
+    expect(out.variants).not.toHaveProperty('vegan');
+    expect(out.tip).toEqual({ en: 'Grate the cheese yourself.' });
+    // null clears both; the base recipe is never touched.
+    const cleared = applyOverride(base, override({ variants: null, tip: null }));
+    expect(cleared.variants).toBeNull();
+    expect(cleared.tip).toBeNull();
+    expect(base.tip).toEqual({ nl: 'Oud.', en: 'Old.' });
+  });
+
+  it('RECIPE_PATCH_KEYS holds variants and tip', () => {
+    expect(RECIPE_PATCH_KEYS).toContain('variants');
+    expect(RECIPE_PATCH_KEYS).toContain('tip');
+    expect(RECIPE_PATCH_KEYS).toEqual(['name', 'description', 'steps', 'lines', 'category', 'tags', 'servingTip', 'variants', 'tip']);
   });
 });
 

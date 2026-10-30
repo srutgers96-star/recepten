@@ -1,7 +1,8 @@
 // The week plan (docs/phase-4-spec.md §1, src/domain/planner.ts): "Verras me" variation rules,
 // locks / existing dishes, small pools, the plan hash and the 6-week window; phase 6 (13E,
 // docs/specs/labels-categorieen.md §1c/§2d): main dishes, the pickers' pool and side dishes;
-// the 20 built-in side dishes (docs/specs/bijgerechten.md §6b) stay out of the pickers' pool.
+// the 20 built-in side dishes (docs/specs/bijgerechten.md §6b) stay out of the pickers' pool;
+// 13D (docs/specs/varianten-tabs.md §3/§6): the chosen diet version of a slot in planHash and newPlanItem.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { defaultDictionary } from '../src/domain/data';
@@ -177,6 +178,29 @@ describe('planHash', () => {
     expect(planHashAll(plan([slot('b:a'), slot('b:b', { servings: 2 }), slot('b:c')]))).not.toBe(planHashAll(before));
     expect(planHashAll(plan([]))).toBe('');
   });
+
+  it('13D: without a variant the hash is byte-equal to the hash before 13D (fixed value)', () => {
+    const items: PlanItem[] = [
+      { id: 'pi:1', recipeId: 'b:dahl', servings: 4, addedAt: 'x' },
+      { id: 'pi:2', recipeId: 'b:uiensoep', servings: 2, addedAt: 'x' },
+    ];
+    // Recorded once from the code before 13D (30 Oct 2026); never change this value.
+    expect(planHash(plan(items))).toBe('2:d27734a2');
+    expect(planHashAll(plan(items))).toBe('2:d27734a2');
+    // a null variant is the original as well
+    expect(planHash(plan(items.map((p) => ({ ...p, variant: null }))))).toBe('2:d27734a2');
+  });
+
+  it('13D: a chosen diet version changes the hash, still order-independent', () => {
+    const dahl: PlanItem = { id: 'pi:1', recipeId: 'b:dahl', servings: 4, addedAt: 'x' };
+    const soup: PlanItem = { id: 'pi:2', recipeId: 'b:uiensoep', servings: 2, addedAt: 'x', variant: 'glutenvrij' };
+    const withVariant = planHash(plan([dahl, soup]));
+    expect(withVariant).not.toBe('2:d27734a2');
+    expect(withVariant).toMatch(/^2:[0-9a-f]{8}$/);
+    expect(planHash(plan([soup, dahl]))).toBe(withVariant);
+    expect(planHash(plan([dahl, { ...soup, variant: 'vegan' }]))).not.toBe(withVariant);
+    expect(planHashAll(plan([dahl, soup]))).toBe(withVariant);
+  });
 });
 
 describe('helpers', () => {
@@ -201,6 +225,13 @@ describe('helpers', () => {
     expect(normalizeServings('6')).toBe(4);
     expect(normalizeServings(6)).toBe(6);
     expect(normalizeServings(undefined, 2)).toBe(2);
+  });
+
+  it('newPlanItem takes the chosen diet version (13D); without one the key is absent', () => {
+    expect(newPlanItem('b:a', 4, 'vegan').variant).toBe('vegan');
+    expect('variant' in newPlanItem('b:a', 4)).toBe(false);
+    expect('variant' in newPlanItem('b:a')).toBe(false);
+    expect('variant' in newPlanItem('b:a', 4, null)).toBe(false);
   });
 });
 

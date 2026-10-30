@@ -57,6 +57,10 @@ zoals de code nu is. Gate groen: check, 1462 tests (61 bestanden), build, build:
   chunk. Op te lossen door de constante later in een klein eigen bestand te zetten (geen spec-besluit, niet gedaan).
 - **Volgende:** 6D-R (zeldzaamheid avatar-onderdelen, Stijn 30 okt), daarna 13D blok 2 (tabrij en goedkeuren, eerst `/next/`).
 
+- **Besluit Fable (30 okt, na de lens; commit van blok 1):** uitgevinkte vervanging = "laat ik zo" → in `checked` (blok 2
+  sheet); `swappedAlt` zodat het alternatief op de tab ook groen wordt; vegan-goedkeuring geeft ook `vega-optie`; platte
+  `tip`-string = `{nl}`; bouwer C-keuzes akkoord; `src/domain/diets.ts` tegen de groei van de landing-chunk (23,6 → 28,7 kB).
+  Alles in varianten-tabs.md onder "Besluiten Fable na blok 1"; blok 2 krijgt een extra bouwer D voor (2), (3) en (6).
 ## 30 okt (Opus): 6D-UI — tabs voor badges en avatar-maker, avatar ronde 2
 Gebouwd volgens docs/specs/badges-avatar.md "Blok 6D-UI" (bouwers UI-A badgepagina, UI-B maker, UI-C avatar ronde 2,
 integrator). Niet gecommit. Geen Dexie-versie, geen setting, geen dependency; één localStorage-sleutel wisselt

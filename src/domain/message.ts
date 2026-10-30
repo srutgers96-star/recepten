@@ -7,7 +7,8 @@
 //
 // Both names on line 1 (a readable bubble for either phone), the URL alone on the last line so
 // WhatsApp renders one tappable link. Plus "Deel als tekst": the readable recipe (title, servings,
-// lines, numbered steps, serving tip) in NL, EN or both, for people without the app — link last.
+// lines, numbered steps, serving tip, maker's tip) in NL, EN or both, for people without the app —
+// link last.
 // Framework-free.
 import { hasLang, pickText, type Lang, type Recipe, type Text } from './model.ts';
 import type { Dictionary } from './dictionary.ts';
@@ -137,17 +138,19 @@ export function buildShareMessageFor(r: Recipe, o: RecipeShareOptions): string {
 
 // --- "Deel als tekst": the readable recipe ------------------------------------------------------
 
-const LABELS: Record<Lang, { ingredients: string; method: string; tip: string; servings: (n: number) => string }> = {
+const LABELS: Record<Lang, { ingredients: string; method: string; tip: string; makerTip: string; servings: (n: number) => string }> = {
   nl: {
     ingredients: 'Ingrediënten:',
     method: 'Bereiding:',
     tip: 'Serveertip:',
+    makerTip: 'Tip van de maker:',
     servings: (n) => `${n} pers.`,
   },
   en: {
     ingredients: 'Ingredients:',
     method: 'Method:',
     tip: 'Serving tip:',
+    makerTip: "Maker's tip:",
     servings: (n) => `${n} ${n === 1 ? 'serving' : 'servings'}`,
   },
 };
@@ -214,12 +217,17 @@ function readableBlock(r: Recipe, lang: Lang, dict: Dictionary | undefined): str
 
   const tip = pickText(r.servingTip, lang);
   if (tip) out.push('', `${L.tip} ${oneParagraph(tip)}`);
+  // 13D (docs/specs/varianten-tabs.md §1g): the maker's tip after the serving tip, only when it has
+  // text in THIS language (no fallback to the other one).
+  const makerTip = r.tip && hasLang(r.tip, lang) ? (r.tip[lang] ?? '') : '';
+  if (makerTip) out.push('', `💡 ${L.makerTip} ${oneParagraph(makerTip)}`);
   return out.join('\n');
 }
 
 /**
  * The readable recipe for people without the app: title, servings, lines (group headers kept as
- * they are), numbered steps and the serving tip, one block per language (NL first), and the link
+ * they are), numbered steps, the serving tip and the maker's tip ("💡 Tip van de maker: …", 13D;
+ * only in a language the tip has text in), one block per language (NL first), and the link
  * alone on the last line when given. A requested language without any text is skipped, unless
  * that would leave nothing (then the first language is rendered with fallbacks). With a
  * dictionary the ingredient lines are rendered through it in each language (a classic's English

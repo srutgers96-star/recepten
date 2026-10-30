@@ -3,10 +3,12 @@
 // dataVersion changes; user + received recipes live in `userRecipes`.
 import recipesData from '@data/recipes.json';
 import {
+  hasLang,
   newUserId,
   nowIso,
   type CookLogEntry,
   type Favorite,
+  type Line,
   type Note,
   type Profile,
   type Recipe,
@@ -27,7 +29,9 @@ import { normalizeSnapshots, type ProgressSnapshot } from '@/domain/progress';
 import { mergeDonateHearts, mergeEarned } from '@/domain/badges';
 import { mergeFeatureLogs, normalizeFeatureLog } from '@/domain/features';
 import { normalizeShopBought, recordBought } from '@/domain/shopbought';
+import { VARIANT_DIETS, variantView, versionName, type RecipeVariant, type RecipeVariants, type VariantDiet } from '@/domain/variants';
 import { activeProfile } from '@/profile';
+import { swapsData } from '@/swaps';
 import { db, getSetting, setSetting } from './db';
 import type { BackupBundle, BundledPhoto, ImportBefore, ImportSnapshot, ImportWrote, List, PantryItem, Photo, Setting, ShareEvent } from './model';
 
@@ -481,6 +485,13 @@ export async function clearOverride(baseId: string): Promise<void> {
  * lines, so the copy keeps those links.
  */
 export async function duplicateAsOwn(r: Recipe, profile: Profile): Promise<Recipe> {
+  const copy = await ownCopyOf(r, profile);
+  await db.userRecipes.put(copy);
+  return copy;
+}
+
+/** The copy `duplicateAsOwn` saves (not saved here): fresh 'u:' id, origin.basedOn, line overrides folded in. */
+async function ownCopyOf(r: Recipe, profile: Profile): Promise<Recipe> {
   const now = nowIso();
   const lines = applyLineOverrides(r.lines, await listLineOverrides(r.id));
   const copy: Recipe = {
@@ -501,7 +512,6 @@ export async function duplicateAsOwn(r: Recipe, profile: Profile): Promise<Recip
   // received recipe its receiver-side `sync`; an own copy is a plain recipe again.
   delete (copy as { override?: unknown }).override;
   delete (copy as { sync?: unknown }).sync;
-  await db.userRecipes.put(copy);
   return copy;
 }
 
@@ -513,6 +523,184 @@ export async function variantsOf(id: string): Promise<Recipe[]> {
   if (!id) return [];
   const rows = await db.userRecipes.filter((r) => r.variantOf === id).toArray();
   return rows.sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id));
+}
+
+// --- Variant tabs (docs/specs/varianten-tabs.md) -------------------------------------------------
+//
+// A diet version is not a copy but an approved set of swaps on top of the recipe itself (§2):
+// `Recipe.variants` on an own/received recipe, `patch.variants` in the override of a classic. So it
+// travels in `#r=` / `#p=` and in the backup without a table or Dexie version of its own. What a tab
+// shows is derived in src/domain/variants.ts (`variantView`); nothing derived is ever stored here.
+// Personal versions stay real recipes (`variantOf`, `makeOwnVersion`).
+
+/** What the approval sheet hands over: the swaps it kept and the "controleer zelf" lines it ticked. */
+export type VariantApproval = Pick<RecipeVariant, 'swaps' | 'checked'>;
+
+/** A stored `variants` value as a fresh object; anything that is not a plain object counts as none. */
+function variantsObject(v: unknown): RecipeVariants {
+  return v !== null && typeof v === 'object' && !Array.isArray(v) ? { ...(v as RecipeVariants) } : {};
+}
+
+/** True when `v` is one of the diet tabs (VARIANT_DIETS); anything else is "the original". */
+function isVariantDiet(v: unknown): v is VariantDiet {
+  return typeof v === 'string' && (VARIANT_DIETS as readonly string[]).includes(v);
+}
+
+/** A tip with only the languages that have text (trimmed), or null when none has (invariant 3). */
+function cleanTip(tip: Text | null | undefined): Text | null {
+  if (!tip || typeof tip !== 'object') return null;
+  const out: Text = {};
+  for (const lang of ['nl', 'en'] as const) if (hasLang(tip, lang)) out[lang] = (tip[lang] as string).trim();
+  return out.nl !== undefined || out.en !== undefined ? out : null;
+}
+
+/** The own/received recipe `id`, or Error('not-found'). */
+async function userRecipeOrThrow(id: string): Promise<Recipe> {
+  const r = await db.userRecipes.get(id);
+  if (!r) throw new Error('not-found');
+  return r;
+}
+
+/** A copy of the current patch of the classic `id` ({} when it has no override), or Error('not-found'). */
+async function classicPatchOrThrow(id: string): Promise<RecipePatch> {
+  if (!(await db.builtins.get(id))) throw new Error('not-found');
+  return { ...((await db.overrides.get(id))?.patch ?? {}) };
+}
+
+/**
+ * Saves an own/received recipe with one change through `saveUserRecipe` (rev +1). Its line overrides
+ * are folded into the lines first, as `linkUserRecipeLine` does: saveUserRecipe clears those rows, and
+ * the effective lines an approval's indexes point at must stay exactly the same.
+ */
+async function updateUserRecipe(r: Recipe, change: (r: Recipe) => Recipe): Promise<void> {
+  const lines = applyLineOverrides(r.lines, await listLineOverrides(r.id));
+  await saveUserRecipe(change({ ...r, lines }));
+}
+
+/** `x` without `variants[diet]`; `variants` itself goes when no key is left. */
+function withoutVariant<T extends { variants?: unknown }>(x: T, diet: VariantDiet): T {
+  const variants = variantsObject(x.variants);
+  delete variants[diet];
+  const out = { ...x };
+  if (Object.keys(variants).length) out.variants = variants;
+  else delete out.variants;
+  return out;
+}
+
+/**
+ * Writes `variants[diet] = { approved: true, approvedAt: now, by, ...a }`. Own/received recipe:
+ * `saveUserRecipe` with the rest of the recipe untouched (rev +1). Classic: `saveOverride` with
+ * `{ ...existing patch, variants: { ...existing, [diet]: … } }`. The other diets (also unknown future
+ * keys) are kept. Throws Error('not-found').
+ */
+export async function approveVariant(id: string, diet: VariantDiet, a: VariantApproval, by: string | null): Promise<void> {
+  const entry: RecipeVariant = {
+    approved: true,
+    approvedAt: nowIso(),
+    by: by?.trim() || null,
+    ...a,
+    swaps: a.swaps.map((s) => ({ ...s, raw: { ...s.raw }, ...(s.grams ? { grams: { ...s.grams } } : {}) })),
+    checked: [...new Set(a.checked)],
+  };
+  if (isBuiltinId(id)) {
+    const patch = await classicPatchOrThrow(id);
+    await saveOverride({ baseId: id, patch: { ...patch, variants: { ...variantsObject(patch.variants), [diet]: entry } }, by: entry.by });
+    return;
+  }
+  const r = await userRecipeOrThrow(id);
+  await updateUserRecipe(r, (x) => ({ ...x, variants: { ...variantsObject(x.variants), [diet]: entry } }));
+}
+
+/**
+ * Removes `variants[diet]`; when no key is left, `variants` goes too (own: off the recipe; classic:
+ * out of the patch, and an empty patch removes the override as `saveOverride` already does). Nothing
+ * stored for that diet = no write. Throws Error('not-found').
+ */
+export async function revokeVariant(id: string, diet: VariantDiet): Promise<void> {
+  if (isBuiltinId(id)) {
+    const patch = await classicPatchOrThrow(id);
+    if (!(diet in variantsObject(patch.variants))) return;
+    await saveOverride({ baseId: id, patch: withoutVariant(patch, diet) });
+    return;
+  }
+  const r = await userRecipeOrThrow(id);
+  if (!(diet in variantsObject(r.variants))) return;
+  await updateUserRecipe(r, (x) => withoutVariant(x, diet));
+}
+
+/**
+ * Sets or clears the maker's tip (§1g). Own/received recipe: on the recipe (null, or no text in either
+ * language, = the key goes); classic: `patch.tip` (null = out of the patch). An unchanged tip is no
+ * write. Throws Error('not-found').
+ */
+export async function setTip(id: string, tip: Text | null, by: string | null): Promise<void> {
+  const next = cleanTip(tip);
+  const same = (cur: unknown) => JSON.stringify(cleanTip(cur as Text | null | undefined)) === JSON.stringify(next);
+  if (isBuiltinId(id)) {
+    const patch = await classicPatchOrThrow(id);
+    if (same(patch.tip)) return;
+    if (next) patch.tip = next;
+    else delete patch.tip;
+    await saveOverride({ baseId: id, patch, by: by?.trim() || null });
+    return;
+  }
+  const r = await userRecipeOrThrow(id);
+  if (same(r.tip)) return;
+  await updateUserRecipe(r, (x) => {
+    const out: Recipe = { ...x };
+    if (next) out.tip = next;
+    else delete out.tip;
+    return out;
+  });
+}
+
+/**
+ * "Eigen versie maken" (§1h): the `duplicateAsOwn` copy (fresh 'u:' id, origin.basedOn, line overrides
+ * folded in) plus `variantOf: r.id` and the name "<naam> (versie van <maker>)" in the languages the
+ * name has (`versionName`); the original's `variants` and `tip` do not come along. Saved and returned.
+ */
+export async function makeOwnVersion(r: Recipe, profile: Profile): Promise<Recipe> {
+  const copy: Recipe = { ...(await ownCopyOf(r, profile)), variantOf: r.id, name: versionName(r.name, profile.name) };
+  delete copy.variants;
+  delete copy.tip;
+  await db.userRecipes.put(copy);
+  return copy;
+}
+
+/**
+ * Week plan: the diet version of one slot (null = the original; a value outside VARIANT_DIETS counts
+ * as null). Only that slot: its side dishes are other recipes. No-op when the slot does not exist or
+ * already has that version.
+ */
+export async function setPlanVariant(itemId: string, variant: VariantDiet | null): Promise<void> {
+  const want = isVariantDiet(variant) ? variant : null;
+  await db.transaction('rw', db.plans, async () => {
+    const plan = await getPlan();
+    const item = plan.items.find((p) => p.id === itemId);
+    if (!item || (item.variant ?? null) === want) return;
+    const next: PlanItem = { ...item };
+    if (want) next.variant = want;
+    else delete next.variant;
+    await savePlan({ ...plan, items: plan.items.map((p) => (p === item ? next : p)) });
+  });
+}
+
+/**
+ * Week plan: gives a slot another recipe (a personal version ↔ its original, §1e). The slot keeps its
+ * id, servings, lock, cooked tick and side dishes; its diet version goes, because that was a tab of
+ * the previous recipe (the new one starts at its original). No-op when the slot does not exist or
+ * already holds that recipe.
+ */
+export async function setPlanRecipe(itemId: string, recipeId: string): Promise<void> {
+  if (!recipeId) return;
+  await db.transaction('rw', db.plans, async () => {
+    const plan = await getPlan();
+    const item = plan.items.find((p) => p.id === itemId);
+    if (!item || item.recipeId === recipeId) return;
+    const next: PlanItem = { ...item, recipeId };
+    delete next.variant;
+    await savePlan({ ...plan, items: plan.items.map((p) => (p === item ? next : p)) });
+  });
 }
 
 // --- Favorites ---------------------------------------------------------------------------------
@@ -557,10 +745,15 @@ export async function setNote(recipeId: string, profileId: string, text: string)
 
 // --- Cook log ----------------------------------------------------------------------------------
 
+/**
+ * Adds a cook-log row. `variant` (13D, docs/specs/varianten-tabs.md §1d) = the approved diet version
+ * that was cooked; a value outside VARIANT_DIETS (null included) is left off the row (= the original).
+ */
 export async function logCooked(entry: Omit<CookLogEntry, 'id'>): Promise<void> {
   // 6D-1 (docs/specs/xp-levels.md §2g): `loggedAt` = the moment of entering, for the backdating rule.
   const row: CookLogEntry = { ...entry, at: entry.at || nowIso(), loggedAt: entry.loggedAt || nowIso() };
   if (row.stars !== undefined && row.stars !== null) row.stars = Math.min(5, Math.max(1, Math.round(row.stars)));
+  if ('variant' in row && !isVariantDiet(row.variant)) delete row.variant;
   await db.cookLog.add(row);
 }
 
@@ -1537,7 +1730,8 @@ export async function getPlan(): Promise<Plan> {
 /**
  * Stores the plan as 'current' with `updatedAt` stamped here. Returns the stored plan. A `sideOf`
  * ("+ bijgerecht", 6B blok 4) that points to no item of this plan is dropped: that side dish becomes
- * an ordinary dish (docs/specs/labels-categorieen.md §2d).
+ * an ordinary dish (docs/specs/labels-categorieen.md §2d). A `variant` (13D) that is not one of
+ * VARIANT_DIETS (null included) is dropped: absent = the original.
  */
 export async function savePlan(plan: Plan): Promise<Plan> {
   const valid = (Array.isArray(plan.items) ? plan.items : []).filter((p) => p && typeof p.id === 'string' && typeof p.recipeId === 'string');
@@ -1545,6 +1739,7 @@ export async function savePlan(plan: Plan): Promise<Plan> {
   const items: PlanItem[] = valid.map((p) => {
     const next: PlanItem = { ...p, servings: normalizeServings(p.servings), addedAt: p.addedAt || nowIso() };
     if ('sideOf' in next && (typeof next.sideOf !== 'string' || next.sideOf === next.id || !ids.has(next.sideOf))) delete next.sideOf;
+    if ('variant' in next && !isVariantDiet(next.variant)) delete next.variant;
     return next;
   });
   const row: Plan = { ...plan, id: PLAN_ID, items, updatedAt: nowIso() };
@@ -1565,10 +1760,12 @@ async function updatePlan(fn: (plan: Plan) => Plan | void): Promise<Plan> {
 }
 
 /**
- * Adds a dish (servings default: the household size). A recipe already in the plan is not added
- * twice: its slot is returned instead. Returns the slot.
+ * Adds a dish (servings default: the household size; `variant` = the approved diet version chosen
+ * on the recipe's tab, 13D). A recipe already in the plan is not added twice: its slot is returned
+ * unchanged instead (the "+ Deze week" on a diet tab then sets that slot's version with
+ * `setPlanVariant`, docs/specs/varianten-tabs.md §1d). Returns the slot.
  */
-export async function addToPlan(recipeId: string, servings?: number): Promise<PlanItem> {
+export async function addToPlan(recipeId: string, servings?: number, variant?: VariantDiet | null): Promise<PlanItem> {
   const n = normalizeServings(servings, await getHouseholdServings());
   let item: PlanItem | undefined;
   await updatePlan((plan) => {
@@ -1577,7 +1774,7 @@ export async function addToPlan(recipeId: string, servings?: number): Promise<Pl
       item = existing;
       return;
     }
-    item = newPlanItem(recipeId, n);
+    item = newPlanItem(recipeId, n, isVariantDiet(variant) ? variant : null);
     return { ...plan, items: [...plan.items, item] };
   });
   return item as PlanItem;
@@ -1738,6 +1935,11 @@ async function updateList(fn: (list: List) => List | void): Promise<List> {
  * list (checks / in-house / adjustments / pins survive by key; new keys are `fresh`). The
  * dictionary is a parameter because the repo knows no signals: pass `dictionary.value`
  * (src/dictionary.ts). Returns the stored list.
+ *
+ * A slot with a diet version (13D, docs/specs/varianten-tabs.md §1e/§3) gets the lines of that
+ * version (`variantView(...).lines`) while the version is `approved` on its recipe; otherwise the
+ * effective lines, and the slot is handed to `aggregate` without its `variant`, so no source says
+ * "(glutenvrije versie)" for lines that are the original's (§5: never half a version).
  */
 export async function generateList(dict: Dictionary): Promise<List> {
   const [plan, previous, pantry, overrides] = await Promise.all([getPlan(), getList(), listPantry(), db.lineOverrides.toArray()]);
@@ -1753,12 +1955,43 @@ export async function generateList(dict: Dictionary): Promise<List> {
     list.push(o);
     overridesByRecipe.set(o.recipeId, list);
   }
+  const effective = new Map<string, Line[]>();
+  const effectiveLines = (r: Recipe): Line[] => {
+    let lines = effective.get(r.id);
+    if (!lines) {
+      lines = applyLineOverrides(r.lines, overridesByRecipe.get(r.id));
+      effective.set(r.id, lines);
+    }
+    return lines;
+  };
+  // recipeId#diet -> the lines of that approved version, or null when the version is not approved.
+  const versions = new Map<string, Line[] | null>();
+  const versionLines = (r: Recipe, diet: VariantDiet): Line[] | null => {
+    const key = `${r.id}#${diet}`;
+    if (!versions.has(key)) {
+      const view = variantView(diet, effectiveLines(r), variantsObject(r.variants)[diet], swapsData, dict);
+      versions.set(key, view.status === 'approved' ? view.lines : null);
+    }
+    return versions.get(key) ?? null;
+  };
+  const listPlan: Plan = {
+    ...plan,
+    items: plan.items.map((p) => {
+      if (!p.variant) return p;
+      const r = recipes.get(p.recipeId);
+      if (r && isVariantDiet(p.variant) && versionLines(r, p.variant)) return p;
+      const rest: PlanItem = { ...p };
+      delete rest.variant;
+      return rest;
+    }),
+  };
   const items = aggregate({
-    plan,
+    plan: listPlan,
     recipes,
-    lines: (id) => {
+    lines: (id, item) => {
       const r = recipes.get(id);
-      return r ? applyLineOverrides(r.lines, overridesByRecipe.get(id)) : [];
+      if (!r) return [];
+      return (item.variant && versionLines(r, item.variant)) || effectiveLines(r);
     },
     dict,
     pantry: new Set(pantry.map((p) => p.ing)),

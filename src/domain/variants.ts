@@ -2,6 +2,23 @@
 // lactosevrije versie" (lactosevrij: docs/specs/labels-categorieen.md §2b). Framework-free: no
 // preact, no dexie; runs in Node (tests).
 //
+// 13D (docs/specs/varianten-tabs.md): a diet version is no longer a copy but an APPROVED SET OF
+// SWAPS on top of the original, stored on the recipe (`Recipe.variants`) or in a classic's override
+// patch, and shown as a tab:
+//
+//   variantView(diet, lines, stored, swaps, dict) -> VariantView: natural (no line breaks the diet) ->
+//                                                approved / stale (the stored swaps applied; stale when
+//                                                a swap no longer fits its line or a breaking line was
+//                                                not ticked) -> proposed (planVariant's applying swaps
+//                                                as a preview). Derived, never written back (invariant 2).
+//   applyStoredSwap(line, swap)               -> applySwap + `swappedFrom` (display-only, never stored)
+//   storedSwapsFrom(plan, off)                -> the sheet's ticked swaps as StoredSwaps
+//   variantTabs(lines, variants, swaps, dict, n) -> the status per active diet and whether the row shows
+//   tagsWithVariants(r)                       -> tags + '<diet>-optie' per approved diet (filters, chips)
+//   versionName / versionAuthor               -> "Goulash (versie van Dino)" and the tab label of a
+//                                                personal version (a real recipe with `variantOf`)
+//   parseVariantParam(v, approved)            -> `?v=` of cook mode / the plan, null when not approved
+//
 //   variantDietsFor(recipe, lines, dict)      -> the diets a recipe does not have yet (a line contradicts it)
 //   planVariant(recipe, diet, swaps, dict)    -> VariantPlan: per line that breaks the diet the swap from
 //                                                data/swaps.json with the NEW raw text (only the ingredient
@@ -27,7 +44,7 @@
 // independently; a second language whose text does not contain the old name is left out of the
 // new line rather than kept with the old product in it.
 import { dutchBaseForms, englishBaseForms, normalizeKey, type Dictionary, type Ingredient } from './dictionary.ts';
-import { dietTags, type DietTag } from './diet.ts';
+import { DIET_TAGS, dietTags, type DietTag } from './diet.ts';
 import { hasLang, newUserId, nowIso, type Lang, type Line, type Qty, type Recipe, type Text } from './model.ts';
 
 export type VariantDiet = DietTag;
@@ -37,6 +54,66 @@ export type VariantDiet = DietTag;
  * variants spec 13D; docs/specs/README.md §2b). Not the chip order of `DIET_TAGS`.
  */
 export const VARIANT_DIETS: readonly VariantDiet[] = ['glutenvrij', 'vegetarisch', 'vegan', 'lactosevrij'];
+
+/** The diet tabs this build really offers: VARIANT_DIETS filtered on DIET_TAGS (diet.ts), in tab order. */
+export function activeVariantDiets(): VariantDiet[] {
+  return VARIANT_DIETS.filter((d) => (DIET_TAGS as readonly string[]).includes(d));
+}
+
+/**
+ * One approved swap (13D, docs/specs/varianten-tabs.md §2a). Everything the view needs is in it, so
+ * a later change to data/swaps.json never changes what was approved. Unknown keys are preserved.
+ */
+export interface StoredSwap {
+  /** Index into the recipe's effective lines at the moment of approval. */
+  index: number;
+  /** ingredients.json id that was on the line; when `lines[index].ing` no longer matches, the swap is stale. */
+  fromId: string;
+  toId: string;
+  /** The new raw text per language (only the languages the line had). */
+  raw: Text;
+  name?: string;
+  /** Set when "4 kipfilets" became "800 g tofu" (see VariantSwap.grams). */
+  grams?: Qty;
+  [k: string]: unknown;
+}
+
+/** An approved diet version of a recipe: `Recipe.variants[diet]` or a classic's `patch.variants[diet]`. */
+export interface RecipeVariant {
+  approved: boolean;
+  approvedAt?: string;
+  /** Profile name of whoever approved it, or null. */
+  by?: string | null;
+  swaps: StoredSwap[];
+  /** Indexes of the lines that break the diet without a swap and that were ticked ("Gecontroleerd") on approval. */
+  checked: number[];
+  [k: string]: unknown;
+}
+
+/** Per diet the approved version; a key that is not a VariantDiet (a future diet) is kept as it is. */
+export type RecipeVariants = Partial<Record<VariantDiet, RecipeVariant>> & { [k: string]: unknown };
+
+/**
+ * natural: no line breaks the diet (a "probably" counts as natural) — a full tab, nothing to choose;
+ * proposed: not approved yet (dashed); approved: approved and still fitting (full); stale: approved,
+ * but the recipe changed since (dashed again, "Opnieuw controleren").
+ */
+export type VariantStatus = 'natural' | 'proposed' | 'approved' | 'stale';
+
+export interface VariantView {
+  diet: VariantDiet;
+  status: VariantStatus;
+  /** The lines as the tab shows them (the original for 'natural'). */
+  lines: Line[];
+  /** Indexes of swapped lines (coloured bar). */
+  swapped: number[];
+  /** Indexes of lines that break the diet without a valid swap ("controleer zelf", orange dot). */
+  unresolved: number[];
+  /** The part of `unresolved` that was ticked on approval. */
+  checked: number[];
+  /** The proposal behind a 'proposed' / 'stale' tab (for the approve sheet). */
+  plan?: VariantPlan;
+}
 
 /** One entry of data/swaps.json. Unknown keys are preserved. */
 export interface Swap {
@@ -105,7 +182,7 @@ export const DIET_SUFFIX: Readonly<Record<VariantDiet, { nl: string; en: string 
 };
 
 /** The tags a variant carries for a diet (data/recipes.json tag vocabulary: vegan implies vegetarisch). */
-const DIET_TAGS_FOR: Readonly<Record<VariantDiet, readonly string[]>> = {
+export const DIET_TAGS_FOR: Readonly<Record<VariantDiet, readonly string[]>> = {
   glutenvrij: ['glutenvrij'],
   vegetarisch: ['vegetarisch'],
   vegan: ['vegetarisch', 'vegan'],
@@ -113,11 +190,19 @@ const DIET_TAGS_FOR: Readonly<Record<VariantDiet, readonly string[]>> = {
 };
 
 /** The "-optie" tags that stop meaning anything once the variant IS that diet. */
-const OPTIE_TAGS_FOR: Readonly<Record<VariantDiet, readonly string[]>> = {
+export const OPTIE_TAGS_FOR: Readonly<Record<VariantDiet, readonly string[]>> = {
   glutenvrij: ['glutenvrij-optie'],
   vegetarisch: ['vega-optie'],
   vegan: ['vega-optie', 'vegan-optie'],
   lactosevrij: ['lactosevrij-optie'],
+};
+
+/** The one "-optie" tag an approved diet tab adds to a recipe (13D `tagsWithVariants`; data/recipes.json vocabulary). */
+export const OPTIE_TAG_FOR: Readonly<Record<VariantDiet, string>> = {
+  glutenvrij: 'glutenvrij-optie',
+  vegetarisch: 'vega-optie',
+  vegan: 'vegan-optie',
+  lactosevrij: 'lactosevrij-optie',
 };
 
 // --- which lines break a diet -----------------------------------------------------------------
@@ -514,4 +599,187 @@ export function makeVariant(recipe: Recipe, plan: VariantPlan, diet: VariantDiet
   delete (out as Record<string, unknown>).sync;
   delete (out as Record<string, unknown>).text;
   return out;
+}
+
+// --- variant tabs (13D, docs/specs/varianten-tabs.md §2c) ---------------------------------------
+
+/**
+ * A stored variant as the view can use it, or undefined. A classic's override is not normalised on
+ * a backup restore (`importBundle` keeps overrides as they are), so anything that is not an object
+ * with a `swaps` array counts as "nothing stored" (tolerant, spec §2e).
+ */
+function usableStored(stored: unknown): RecipeVariant | undefined {
+  if (!stored || typeof stored !== 'object' || Array.isArray(stored)) return undefined;
+  return Array.isArray((stored as { swaps?: unknown }).swaps) ? (stored as RecipeVariant) : undefined;
+}
+
+/** A well-formed stored swap whose line (in `lines`) still holds its `fromId`; else false. */
+function storedSwapFits(s: unknown, lines: readonly Line[]): s is StoredSwap {
+  if (!s || typeof s !== 'object') return false;
+  const x = s as Partial<StoredSwap>;
+  if (typeof x.index !== 'number' || !Number.isInteger(x.index) || x.index < 0) return false;
+  if (typeof x.fromId !== 'string' || typeof x.toId !== 'string' || !x.raw || typeof x.raw !== 'object') return false;
+  const line = lines[x.index];
+  return !!line && line.kind !== 'header' && line.ing === x.fromId;
+}
+
+/** A sheet swap as it is stored: what the view needs, without `applies` and the cook's note. */
+function toStoredSwap(s: VariantSwap): StoredSwap {
+  const out: StoredSwap = { index: s.index, fromId: s.fromId, toId: s.toId, raw: { ...s.raw } };
+  if (s.name !== undefined) out.name = s.name;
+  if (s.grams) out.grams = { ...s.grams };
+  return out;
+}
+
+/**
+ * `applySwap` for a stored swap, plus `swappedFrom: s.fromId` on the line: display-only (the step
+ * text still says "spaghetti"; src/domain/stepingredients.ts matches that word through it), never
+ * saved. The source line is not touched.
+ */
+export function applyStoredSwap(line: Line, s: StoredSwap): Line {
+  const swap: VariantSwap = { index: s.index, fromId: s.fromId, toId: s.toId, raw: s.raw, applies: true };
+  if (typeof s.name === 'string') swap.name = s.name;
+  if (s.grams && typeof s.grams === 'object') swap.grams = s.grams;
+  const out = applySwap(line, swap);
+  out.swappedFrom = s.fromId;
+  return out;
+}
+
+/**
+ * From the approve sheet to storage: the swaps with `applies: true` that were not unticked, with
+ * index, fromId, toId, raw, name and grams. `off` holds line indexes (`VariantSwap.index`), the same
+ * indexes as `checked`.
+ */
+export function storedSwapsFrom(plan: VariantPlan, off: ReadonlySet<number>): StoredSwap[] {
+  return plan.swaps.filter((s) => s.applies && !off.has(s.index)).map(toStoredSwap);
+}
+
+const byNumber = (a: number, b: number): number => a - b;
+
+type ViewBody = Pick<VariantView, 'lines' | 'swapped' | 'unresolved' | 'checked'>;
+
+/** An approved variant: its stored swaps applied (those that still fit) and what still breaks the diet. */
+function approvedView(diet: VariantDiet, lines: readonly Line[], stored: RecipeVariant, dict: Dictionary): { body: ViewBody; ok: boolean } {
+  const out = [...lines];
+  const swapped: number[] = [];
+  let all = true;
+  for (const s of stored.swaps) {
+    // Checked against the lines as swapped so far: a second swap on the same line does not fit.
+    if (!storedSwapFits(s, out)) {
+      all = false;
+      continue;
+    }
+    out[s.index] = applyStoredSwap(out[s.index] as Line, s);
+    swapped.push(s.index);
+  }
+  const unresolved: number[] = [];
+  out.forEach((l, i) => {
+    if (lineBreaksDiet(l, diet, dict)) unresolved.push(i);
+  });
+  const ticked = new Set<unknown>(Array.isArray(stored.checked) ? stored.checked : []);
+  const checked = unresolved.filter((i) => ticked.has(i));
+  return { body: { lines: out, swapped: swapped.sort(byNumber), unresolved, checked }, ok: all && checked.length === unresolved.length };
+}
+
+/**
+ * The view behind one tab. `facts` = `dietTags(lines, dict)` (computed once by `variantTabs`);
+ * `withPlan` false skips `planVariant` when only the status is needed.
+ */
+function buildView(diet: VariantDiet, lines: readonly Line[], stored: unknown, swaps: readonly Swap[], dict: Dictionary, facts: ReturnType<typeof dietTags>, withPlan: boolean): VariantView {
+  // 1. No line contradicts the diet ("probably" included: the diet chip already says so).
+  if (facts[diet] !== false) return { diet, status: 'natural', lines: [...lines], swapped: [], unresolved: [], checked: [] };
+  // 2. Approved: still fitting -> approved; a swap that no longer fits or an unticked breaking line -> stale.
+  const s = usableStored(stored);
+  if (s?.approved === true) {
+    const a = approvedView(diet, lines, s, dict);
+    if (a.ok) return { diet, status: 'approved', ...a.body };
+    const view: VariantView = { diet, status: 'stale', ...a.body };
+    if (withPlan) view.plan = planVariant({ lines: [...lines] }, diet, swaps, dict);
+    return view;
+  }
+  // 3. A proposal: the applying swaps as a preview, the rest "controleer zelf".
+  if (!withPlan) return { diet, status: 'proposed', lines: [...lines], swapped: [], unresolved: [], checked: [] };
+  const plan = planVariant({ lines: [...lines] }, diet, swaps, dict);
+  const shown = [...lines];
+  const swapped: number[] = [];
+  const unresolved = [...plan.unresolved];
+  for (const sw of plan.swaps) {
+    const line = shown[sw.index];
+    if (sw.applies && line) {
+      shown[sw.index] = applyStoredSwap(line, toStoredSwap(sw));
+      swapped.push(sw.index);
+    } else unresolved.push(sw.index);
+  }
+  return { diet, status: 'proposed', lines: shown, swapped: swapped.sort(byNumber), unresolved: unresolved.sort(byNumber), checked: [], plan };
+}
+
+/**
+ * What one diet tab shows (spec §2c), in this order: natural (no line breaks the diet; the
+ * original lines) -> approved / stale (the stored swaps applied; stale also carries `plan` for
+ * "Opnieuw controleren") -> proposed (`plan` with its applying swaps as a preview). Pass the
+ * EFFECTIVE lines (a classic's line overrides folded in). Derived only: nothing is written back.
+ */
+export function variantView(diet: VariantDiet, lines: readonly Line[], stored: RecipeVariant | undefined, swaps: readonly Swap[], dict: Dictionary): VariantView {
+  return buildView(diet, lines, stored, swaps, dict, dietTags(lines, dict), true);
+}
+
+/**
+ * Per active diet (tab order) the status of its tab, and whether the tab row shows at all: only
+ * when something can be chosen — a diet tab that is proposed / approved / stale, or at least one
+ * personal version (`personalCount`).
+ */
+export function variantTabs(
+  lines: readonly Line[],
+  variants: RecipeVariants | null | undefined,
+  swaps: readonly Swap[],
+  dict: Dictionary,
+  personalCount: number,
+): { show: boolean; diets: Array<{ diet: VariantDiet; status: VariantStatus }> } {
+  const facts = dietTags(lines, dict);
+  const stored = variants && typeof variants === 'object' && !Array.isArray(variants) ? variants : undefined;
+  const diets = activeVariantDiets().map((diet) => ({ diet, status: buildView(diet, lines, stored?.[diet], swaps, dict, facts, false).status }));
+  return { show: personalCount > 0 || diets.some((d) => d.status !== 'natural'), diets };
+}
+
+/** `recipe.tags` plus '<diet>-optie' for every approved diet (filters, diet chips); no duplicates, order kept. */
+export function tagsWithVariants(r: Pick<Recipe, 'tags' | 'variants'>): string[] {
+  const out = new Set<string>((Array.isArray(r.tags) ? r.tags : []).filter((t): t is string => typeof t === 'string'));
+  const vs = r.variants && typeof r.variants === 'object' && !Array.isArray(r.variants) ? r.variants : undefined;
+  if (vs) for (const diet of VARIANT_DIETS) if (usableStored(vs[diet])?.approved === true) out.add(OPTIE_TAG_FOR[diet]);
+  return [...out];
+}
+
+/**
+ * The name of a personal version: "Goulash (versie van Dino)" / "Goulash (Dino's version)", only
+ * for the languages the name has (invariant 3). A blank author leaves the name as it is.
+ */
+export function versionName(name: Text, author: string): Text {
+  const who = String(author ?? '').trim();
+  const out: Text = {};
+  if (hasLang(name, 'nl')) {
+    const n = (name.nl as string).trim();
+    out.nl = who ? `${n} (versie van ${who})` : n;
+  }
+  if (hasLang(name, 'en')) {
+    const n = (name.en as string).trim();
+    out.en = who ? `${n} (${who}'s version)` : n;
+  }
+  return out;
+}
+
+/**
+ * The first name of the maker of a personal version (its tab label): `origin.receivedFrom` for a
+ * received recipe, `origin.author` otherwise, first word only; null when there is none.
+ */
+export function versionAuthor(r: Pick<Recipe, 'origin'>): string | null {
+  const o = r.origin;
+  const who = o?.kind === 'received' ? o.receivedFrom : o?.author;
+  const first = typeof who === 'string' ? (who.trim().split(/\s+/)[0] ?? '') : '';
+  return first || null;
+}
+
+/** `?v=` of cook mode / a plan choice read as a diet: only a diet in `approved`; anything else null. */
+export function parseVariantParam(v: string | null, approved: readonly VariantDiet[]): VariantDiet | null {
+  if (!v) return null;
+  return (VARIANT_DIETS as readonly string[]).includes(v) && (approved as readonly string[]).includes(v) ? (v as VariantDiet) : null;
 }

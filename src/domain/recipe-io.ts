@@ -2,10 +2,11 @@
 // §1): a schema-2 recipe (unknown keys kept), the phase-0 share payload, the phase-0 Dexie record
 // and a plain {name, ingredients, instructions}. Framework-free: used by the app, the Safari landing
 // bundle, the Node tools and the tests.
-import { newUserId, nowIso, pickText, type Line, type Origin, type OriginKind, type Recipe, type Step, type Text, type TimerSpec } from './model.ts';
+import { newUserId, nowIso, pickText, type Line, type Origin, type OriginKind, type Qty, type Recipe, type Step, type Text, type TimerSpec } from './model.ts';
 import { splitSteps } from './steps.ts';
 import { findTimers } from './timers.ts';
 import type { Envelope } from './token.ts';
+import { VARIANT_DIETS, type RecipeVariant, type RecipeVariants, type StoredSwap } from './variants.ts';
 
 type Dict = Record<string, unknown>;
 
@@ -149,10 +150,101 @@ function readIso(v: unknown): string | undefined {
   return Number.isNaN(new Date(v).getTime()) ? undefined : v;
 }
 
-function readOptionalText(v: unknown): Text | null | undefined {
+/**
+ * An optional Text field (`description`, `servingTip`, `tip`): undefined stays undefined (the key
+ * is left out), null stays null, anything else goes through the Text reader (a plain string is
+ * taken as Dutch; something without text becomes null). Also used for `patch.tip` in share.ts.
+ */
+export function readOptionalText(v: unknown): Text | null | undefined {
   if (v === undefined) return undefined;
   if (v === null) return null;
   return readText(v);
+}
+
+// --- Variant tabs (docs/specs/varianten-tabs.md §2e) ----------------------------------------------
+
+function isNonNegativeInteger(v: unknown): v is number {
+  return typeof v === 'number' && Number.isInteger(v) && v >= 0;
+}
+
+function nonEmptyString(v: unknown): v is string {
+  return typeof v === 'string' && v.trim() !== '';
+}
+
+/**
+ * A quantity as a StoredSwap carries it (`grams`, type Qty): `min` a finite number > 0 is required;
+ * `max` (a finite number > min) and `approx` (a boolean) are optional and left out when unusable.
+ * Undefined when there is no usable `min`.
+ */
+export function readQty(v: unknown): Qty | undefined {
+  if (!isRecord(v)) return undefined;
+  const min = v.min;
+  if (typeof min !== 'number' || !Number.isFinite(min) || min <= 0) return undefined;
+  const q: Qty = { min };
+  if (typeof v.max === 'number' && Number.isFinite(v.max) && v.max > min) q.max = v.max;
+  if (typeof v.approx === 'boolean') q.approx = v.approx;
+  return q;
+}
+
+/**
+ * One stored swap, or null when it is unusable (the item is then dropped): `index` an integer ≥ 0,
+ * `fromId`/`toId` non-empty strings, `raw` a Text with at least one language, `name` (optional) a
+ * string, `grams` (optional) a usable Qty. Unknown keys stay.
+ */
+function readStoredSwap(v: unknown): StoredSwap | null {
+  if (!isRecord(v)) return null;
+  if (!isNonNegativeInteger(v.index) || !nonEmptyString(v.fromId) || !nonEmptyString(v.toId)) return null;
+  if (v.name !== undefined && typeof v.name !== 'string') return null;
+  const raw = isRecord(v.raw) ? readText(v.raw) : null;
+  if (!raw) return null;
+  const swap = { ...(v as object), index: v.index, fromId: v.fromId, toId: v.toId, raw } as StoredSwap;
+  if (v.grams !== undefined) {
+    const grams = readQty(v.grams);
+    if (!grams) return null;
+    swap.grams = grams;
+  }
+  return swap;
+}
+
+/**
+ * One approved diet version (§2e), or null when there is nothing in it: an object with a `swaps`
+ * array; `approved` a boolean (default true); every swap through `readStoredSwap` (a bad one is
+ * dropped); `checked` the integers ≥ 0, deduplicated; `approvedAt` a valid ISO timestamp, else left
+ * out; `by` a string or null, else left out. Empty `swaps` AND empty `checked` → null (nothing was
+ * approved). Unknown keys stay.
+ */
+export function readVariant(v: unknown): RecipeVariant | null {
+  if (!isRecord(v) || !Array.isArray(v.swaps)) return null;
+  const swaps = v.swaps.map(readStoredSwap).filter((s): s is StoredSwap => s !== null);
+  const checked = Array.isArray(v.checked) ? [...new Set(v.checked.filter(isNonNegativeInteger))] : [];
+  if (swaps.length === 0 && checked.length === 0) return null;
+  const out = { ...(v as object), approved: typeof v.approved === 'boolean' ? v.approved : true, swaps, checked } as RecipeVariant;
+  const approvedAt = readIso(v.approvedAt);
+  if (approvedAt !== undefined) out.approvedAt = approvedAt;
+  else delete (out as Dict).approvedAt;
+  if (typeof v.by === 'string' || v.by === null) out.by = v.by;
+  else delete (out as Dict).by;
+  return out;
+}
+
+/**
+ * `Recipe.variants` / `patch.variants` (§2e): not an object → undefined (the key is left out);
+ * null stays null. A key of VARIANT_DIETS goes through `readVariant` (dropped when that gives
+ * null); any other key (a diet a newer app knows) stays exactly as it came.
+ */
+export function readVariants(v: unknown): RecipeVariants | null | undefined {
+  if (v === null) return null;
+  if (!isRecord(v)) return undefined;
+  // Spread (own keys only, in their order) rather than assigning key by key, so an odd key such as
+  // "__proto__" stays a plain unknown key instead of changing the object's prototype.
+  const out: Dict = { ...v };
+  for (const diet of VARIANT_DIETS) {
+    if (!Object.prototype.hasOwnProperty.call(out, diet)) continue;
+    const variant = readVariant(out[diet]);
+    if (variant) out[diet] = variant;
+    else delete out[diet];
+  }
+  return out as RecipeVariants;
 }
 
 /**
@@ -188,11 +280,16 @@ export function normalizeRecipe(input: unknown): Recipe | null {
       goesWith: readStringArray(o.goesWith),
       aliases: readStringArray(o.aliases),
     };
-    for (const key of ['description', 'servingTip'] as const) {
+    // 13D: `tip` ("Tip van de maker") is read like the other optional texts.
+    for (const key of ['description', 'servingTip', 'tip'] as const) {
       const t = readOptionalText(o[key]);
       if (t === undefined) delete (recipe as Dict)[key];
       else recipe[key] = t;
     }
+    // 13D: approved diet versions (docs/specs/varianten-tabs.md §2e); not part of the fingerprint.
+    const variants = readVariants(o.variants);
+    if (variants === undefined) delete (recipe as Dict).variants;
+    else recipe.variants = variants;
     if (o.category === undefined) delete (recipe as Dict).category;
     else recipe.category = typeof o.category === 'string' && o.category.trim() ? o.category : null;
     if (o.time === undefined) delete (recipe as Dict).time;

@@ -267,3 +267,109 @@ export const FROZEN_ENVELOPE_X: Envelope = {
   },
   future: { keep: true },
 };
+
+// Phase 6 (docs/specs/varianten-tabs.md §2d, 13D "varianten als tabs"): three envelopes with the new
+// optional keys, the tokens produced ONCE on 2026-10-30 by both engines with encodeToken. `v` stays 2
+// and there is no new fragment key: `r.variants`/`r.tip` ride in `#r=`, `p.patch.variants`/`p.patch.tip`
+// in `#p=` and `w.items[].vr` (the chosen diet version) in `#w=`. An older app ignores them (the recipe
+// shows without tabs, the plan without the version). The envelopes are literal from the spec.
+export const FROZEN_TOKEN_R_VARIANTS =
+  'jZJBj9owEIX_ijVnszIp2m19a6U9VD12pUpFHAweHK-DnbUn2UUo_72aAAFKD71Esuflm3nPc4AedCWBQEMGCes9aPhJ_jWCBMO3laoeZ3M1q6qX-WetlFbqQSn1GyRk0Acomxp3ZoR4Cxo6_bT9FKq3L4YVeMRvMhpC-_UaqOYvc3UL7Fp7J-O-T7eylL3zkZsHH8eeBXl401Gd8mRgkBDNDlkXG75tjauRyJdNnQgb0XkSFkXqkd1ivNaItQnICDKugF7CSRW8LbCSUDD3PnJpIaHxEVl0gGzep34LpYQT5Uxk2Bvtubzj6RdKDRK66NmtAwk-OtBw0Z_Hh2vEv1o4rE2g_-SfxBP8_DN7ImyPNgg_aGryI6XAOU1jPJzT-pZ8I6i-KQ1McgnLL0816OVKgmm8KWNAKwm9yd5EKox3TUcY--xf-WTaNqceLWjKHcrpfLcOj7frcLOz5d2cPPho8QO0krDNaffd_pUtpfHqMgLOWlNo3Nr7hC8qcVQNlwDvaysJmxo3gb0sVwNvkW8n5DNGYY0TPnKqIWETTCGxMyaQqHEnYnKiwRAwW8xT2M89RrFGIszCbMevsGbPGH6CbfbWIecvYdtRl8fFD4jtMc9h-AM';
+export const FROZEN_TOKEN_R_VARIANTS_FFLATE =
+  'jVPBbtswDP0VQWenULyi3XzbgB6GHVdgwIoemJiRVTmSK9Npi8D_PtKxHQfZoUDgmOTTI_n0fNQHXeSZJl3opDO9-eCX3-ReAgcg2dzkd6u1WeX54_prYQz_bowxf7medHHU7bbCPQwkrmR8V9zvvvj89RsIAk_024RAWH5fEpr141rYFoRdU17BpO_9JSwmZ12Q5t6FoWeLMjx0VEUealygz3SAPQou1JJtwFZI5HjkSFirzpEqUcUDyrb8WGDUBjwKBYFtdfGkR5R3ZaufM80dDy5I6TbTtQsooKNO8Db3uzVGWdVOjEL2SqzvUe9lei5zpgtOtrVMzXT8dsZP4y9Sffa_FhYr8PRJ_hE8k0-HZSfC5rQG4TufGpv8itGLTvMYN5NaP6KrFVUXpV6YbMT2j6OKyTiC2kE7CMTBAZKDQBwdta07wnBI7kUiaJrEKvOFUuqQj43xlR3uLu1w4dn2DcYd2Br4rguT6V2K-5_ik6W2FIfUeQRcNdDS4Nprhc8odULN5loyTDVek7-KrZddnp57cZFrZsoHDKoEqxz_ofIRa8_H1B74HhR_TCpEq2r0HlOJaRb7gQ2oNjw9JgW74ck0H0IjV7BLrrQo-vPCHXVpML5H5MaiZ9__Aw';
+
+export const FROZEN_ENVELOPE_R_VARIANTS: Envelope = {
+  v: 2,
+  t: 'r',
+  by: 'Stijn',
+  at: '2026-10-22T18:00:00.000Z',
+  r: {
+    schema: 2,
+    id: 'u:7f3k2q9a',
+    rev: 2,
+    createdAt: '2026-10-01T10:00:00.000Z',
+    updatedAt: '2026-10-22T17:00:00.000Z',
+    origin: { kind: 'user', author: 'Stijn' },
+    name: { nl: 'Spaghettischotel uit de oven', en: 'Spaghetti bake' },
+    tags: ['oven', 'kids'],
+    servings: 4,
+    lines: [
+      { raw: { nl: '400 g spaghetti' }, qty: { min: 400 }, unit: 'g', ing: 'spaghetti', name: 'spaghetti' },
+      { raw: { nl: '400 g gehakt' }, qty: { min: 400 }, unit: 'g', ing: 'gehakt', name: 'gehakt' },
+    ],
+    steps: [{ text: { nl: 'Kook de spaghetti.', en: 'Boil the spaghetti.' } }],
+    goesWith: [],
+    aliases: [],
+    variants: {
+      glutenvrij: {
+        approved: true,
+        approvedAt: '2026-10-22T16:00:00.000Z',
+        by: 'Stijn',
+        swaps: [{ index: 0, fromId: 'spaghetti', toId: 'glutenvrije-pasta', raw: { nl: '400 g glutenvrije pasta' }, name: 'glutenvrije pasta' }],
+        checked: [],
+      },
+    },
+    tip: { nl: 'Een dag in de koelkast maakt hem nog lekkerder.', en: 'Even better after a day in the fridge.' },
+  },
+  future: { keep: true },
+};
+
+export const FROZEN_TOKEN_P_VARIANTS =
+  'hVFBTsMwEPyKNWe3cqOCkDlxoeIOF6oenGRD3Ka2ZW9Sqip_R05piwQSN493dkYze8IAXUgwNAIkyiM0Vqa0kDD5s1DF_WyhZkXxunjQ6k4rNVdKvUMiQJ9QmkQvNTRK3VtyyVOWiTRALySc2VNmuQ4ab7c5OWg8R3JVK7yz3onk-4BRog-1Yaqf_vBWP70NV21WHky0xnHK74-uZ3JDtNuMTAjRD1RDc-xJXvF_0j8rSAcTEvT6BOtq-oReSjTR78-Jo_c1JNhP8OY-u0yiOVzTL0VyRLylJG5McWFOhSxF6mxFSfjmmzNrIpEoI5k6l3OuE7_2x41E1VK1y2nXxWYcJdhO95mEV9EwCW5JVC1RInH0fUzUNY_CsthTx0mUxExxjjEvNz33cbrcjiicGxzHLw';
+export const FROZEN_TOKEN_P_VARIANTS_FFLATE =
+  'hZHBTsMwDIZfJfK5nbJqIFROXJi4w4Vph7R1abYuiRKnY5r67jjdxnpA4mbHn3_Hv88wQFlkQFCCgwyqEwdrVWmOVXosZPGYL2VeFO_Lp1I-lFIupJSfXHdQnqFSAd8aBqsyajTBYpLxyLLLDIw6YKJMz8THvY6G81ePpu6ENdoaEWx0MGYQXaMIm5c_Zsv5bEV1l5QH5bUyFFL81UdCM3i9S5lyztsB-W_kI_I61_w_6bkF4agcS2_OoE2D31CuMmi9PVw29tY2DJGd0vv0_Fbx6vi7_UoEg0g7DOJOihs5GcJIr2sGbHtl8tYjMoSqSeZc7JxNuvaP2wzqDut92nZTbEdmSU_3mYTXnj0V1KFgCgOKk40-YN8-C03igD0FUSER-gWMqbmNFP10uT3ywSYHx_EH';
+
+export const FROZEN_ENVELOPE_P_VARIANTS: Envelope = {
+  v: 2,
+  t: 'p',
+  by: 'Gabi',
+  at: '2026-10-22T18:05:00.000Z',
+  p: {
+    baseId: 'b:uiensoep',
+    rev: 1,
+    name: { nl: 'Uiensoep', en: 'French onion soup' },
+    updatedAt: '2026-10-22T18:00:00.000Z',
+    patch: {
+      variants: {
+        glutenvrij: {
+          approved: true,
+          approvedAt: '2026-10-22T18:00:00.000Z',
+          by: 'Gabi',
+          swaps: [
+            {
+              index: 4,
+              fromId: 'brood',
+              toId: 'glutenvrij-brood',
+              raw: { nl: '4 sneetjes glutenvrij brood', en: '4 slices of gluten-free bread' },
+              name: 'glutenvrij brood',
+            },
+          ],
+          checked: [2],
+        },
+      },
+      tip: { en: 'Grate the cheese yourself; it melts better.' },
+    },
+  },
+  future: { keep: true },
+};
+
+export const FROZEN_TOKEN_W_VARIANT =
+  'VY7BCoJAFEV_Re76GeMQEe8nWtSqcKH5qjEbZXyjhMy_h4uItofD4SyYwJagYMwg1G8wjupaD0K1UmvsLi9Mbu2p2HNh2JiNMeYMwgxe4FReI_iyILgGjJqjEz_2MoAwhgm8JUwBjHsXVfwUXItEP72pHt1XtakkBLm6QdZmSfC9ChiHV5WJaPbXwC1qDLJePEUGsIYoKX0A';
+export const FROZEN_TOKEN_W_VARIANT_FFLATE =
+  'VY3LCsJADEV_pWQ9lXQQkfyEC10pLlobdWpfTDMtMsy_my5E3OXmHs6NMANZAwIECxio3nocxTW9hnL9WrS7vMDc2lOxpwIJcYOIZ-0XoAhOuJuALhG8q5WvKDjup4FHJSav-q2B2WvzaINwP3vXQDI_vC6f7Re16WrA882NvDo19IOwYoeuzJgl-3PAPUjwWkd4se6R-MApfQA';
+
+export const FROZEN_ENVELOPE_W_VARIANT: Envelope = {
+  v: 2,
+  t: 'w',
+  by: 'Stijn',
+  at: '2026-10-22T18:10:00.000Z',
+  w: {
+    items: [
+      { rid: 'b:uiensoep', srv: 4, vr: 'glutenvrij' },
+      { rid: 'b:dahl', srv: 2 },
+    ],
+    recipes: [],
+    note: 'Oma eet glutenvrij',
+  },
+  future: { keep: true },
+};

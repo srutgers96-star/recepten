@@ -2,7 +2,9 @@
 // function from the plan + the structured lines + the dictionary to one list of items. One rule
 // per step, each with a unit test in tests/aggregate.test.ts. Framework-free.
 //
-//   1. cooked dishes are skipped; factor = item.servings / recipe.servings
+//   1. cooked dishes are skipped; factor = item.servings / recipe.servings; the lines come per slot
+//      (`lines(recipeId, item)`: a slot with an approved diet version gets that version's lines, and
+//      its sources carry `diet`, docs/specs/varianten-tabs.md §1e)
 //   2. unresolved lines (ing null / unknown id) -> section 'check': the raw text, never scaled
 //      (the factor is shown as "×1,5"); otherwise qty = max ?? min, null = "pm"
 //   3. scale, then to a base unit: g (mass; also spoons/pieces of a gram-based ingredient via
@@ -21,8 +23,9 @@
 //      extras; vanished keys drop unless manual or pinned; new keys get `fresh: true`
 import type { Aisle, Dictionary, Ingredient, Qualifier, Unit } from './dictionary.ts';
 import { pickText, type Lang, type Line, type Recipe, type Text } from './model.ts';
-import type { Plan } from './planner.ts';
+import type { Plan, PlanItem } from './planner.ts';
 import { formatQty, renderLine, unitLabel } from './render.ts';
+import type { VariantDiet } from './variants.ts';
 
 // --- Types --------------------------------------------------------------------------------------
 
@@ -35,6 +38,12 @@ export interface ListSource {
   raw: string;
   /** The line rendered at the slot's servings ("3 uien"); for unresolved lines the raw text + "×N". */
   scaled: string;
+  /**
+   * 13D (docs/specs/varianten-tabs.md §1e): the diet version of the slot this line came from (the
+   * slot's `PlanItem.variant`), so "Waarvoor is dit?" can say "(glutenvrije versie)". Absent = the
+   * original. Not `variant`: on a ListItem that word is a qualifier variant ("rode").
+   */
+  diet?: VariantDiet;
 }
 
 export interface ListItem {
@@ -76,8 +85,12 @@ export interface ListItem {
 export interface AggregateInput {
   plan: Plan;
   recipes: Map<string, Recipe>;
-  /** The effective lines of a recipe (line overrides applied). */
-  lines: (recipeId: string) => Line[];
+  /**
+   * The lines of a recipe for one slot: the effective lines (line overrides applied), or, for a slot
+   * with an approved diet version (`item.variant`, 13D), the lines of that version. The slot is passed
+   * along; a function that only reads the id still fits.
+   */
+  lines: (recipeId: string, item: PlanItem) => Line[];
   dict: Dictionary;
   /** Ingredient ids in the pantry ("Heb ik al"): the single source of `inHouse` for dictionary items. */
   pantry: Set<string>;
@@ -419,7 +432,7 @@ function keyOf(e: Entry): string {
   return `${e.ing.id}|${e.variant.join('+')}|${e.baseUnit}`;
 }
 
-function sourceFor(recipe: Recipe, line: Line, dict: Dictionary, factor: number, resolved: boolean): ListSource {
+function sourceFor(recipe: Recipe, line: Line, dict: Dictionary, factor: number, resolved: boolean, diet?: VariantDiet | null): ListSource {
   const raw = rawOf(line);
   let scaled = raw;
   if (resolved) {
@@ -431,7 +444,9 @@ function sourceFor(recipe: Recipe, line: Line, dict: Dictionary, factor: number,
   } else if (Math.abs(factor - 1) > EPS) {
     scaled = `${raw} ${factorText(factor)}`;
   }
-  return { recipeId: recipe.id, name: { ...recipe.name }, raw, scaled };
+  const source: ListSource = { recipeId: recipe.id, name: { ...recipe.name }, raw, scaled };
+  if (diet) source.diet = diet;
+  return source;
 }
 
 /**
@@ -478,7 +493,8 @@ export function aggregate(i: AggregateInput): ListItem[] {
     if (!recipe) continue;
     const base = recipe.servings > 0 ? recipe.servings : 4;
     const factor = item.servings > 0 ? item.servings / base : 1;
-    const lines = i.lines(recipe.id);
+    const lines = i.lines(recipe.id, item);
+    const diet = item.variant || null;
     lines.forEach((line, index) => {
       if (!line || line.kind === 'header') return;
       const ing = line.ing ? dict.get(line.ing) : undefined;
@@ -490,7 +506,7 @@ export function aggregate(i: AggregateInput): ListItem[] {
           ing: null,
           aisle: 'overig',
           section: 'check',
-          sources: [sourceFor(recipe, line, dict, factor, false)],
+          sources: [sourceFor(recipe, line, dict, factor, false, diet)],
           label: { ...line.raw },
           qty: null,
           unit: null,
@@ -499,7 +515,7 @@ export function aggregate(i: AggregateInput): ListItem[] {
         check.push(it);
         return;
       }
-      const c = contributionOf(line, ing, dict, factor, sourceFor(recipe, line, dict, factor, true));
+      const c = contributionOf(line, ing, dict, factor, sourceFor(recipe, line, dict, factor, true, diet));
       const groupKey = `${ing.id}|${c.variant.join('+')}`;
       let group = byIngVariant.get(groupKey);
       if (!group) {

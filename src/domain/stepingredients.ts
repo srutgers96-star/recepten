@@ -20,6 +20,10 @@
 // "Ruim water", "de helft van de boter", "wat witte wijn", "a little more olive oil", "the butter left
 // in the pan", "2 el olie", "the third tbsp of olive oil": the amount is in the text (`qtyInText`).
 // Offsets are UTF-16 offsets into the text exactly as passed in, so the UI can slice it.
+// 13D (docs/specs/varianten-tabs.md §3): on a diet tab a swapped line carries `swappedFrom` (the old
+// ingredient id, display-only, src/domain/variants.ts `applyStoredSwap`). Step texts are never
+// rewritten, so the old product's names are looked for too; such a match gets `viaSwap: true` and
+// "hoeveel?" says what it became ("400 g glutenvrije pasta" behind "spaghetti").
 // Corpus sweep (196 classics, 16 Oct 2026, after review): 585 of 659 Dutch and 581 of 659 English steps
 // (89% / 88%) get at least one match.
 import { normalizeKey, dutchBaseForms, englishBaseForms, type Dictionary, type Ingredient } from './dictionary.ts';
@@ -50,6 +54,12 @@ export interface StepIngredientMatch {
    * ingredient. `matchQuantityText` / `spokenStepQuantities` then use the alternative's amount.
    */
   alt?: number[];
+  /**
+   * 13D: present (true) only when the text named the OLD product of a swapped line of a diet tab
+   * (`line.swappedFrom`): "spaghetti" for "400 g glutenvrije pasta". `matchQuantityText` then adds
+   * the new name to the amount.
+   */
+  viaSwap?: boolean;
 }
 
 /** A piece of a step text for rendering: plain text, or a recognised ingredient. */
@@ -255,6 +265,8 @@ interface Candidate {
   who: string;
   /** 0 = the entry's own name or the name as written in the line; 1 = an alias. */
   rank: number;
+  /** 13D: a name of the line's `swappedFrom` ingredient (the old product of a swapped line). */
+  via?: boolean;
 }
 
 /** The language a line is written in: Dutch when present, else English (src/domain/line-words.ts `lineLang`). */
@@ -299,18 +311,23 @@ function collectCandidates(lines: readonly Line[], dict: Dictionary, lang: Lang)
     if (!list) out.set(key, (list = []));
     const prev = list.find((x) => x.line === c.line && x.who === c.who);
     if (!prev) list.push(c);
-    else if (c.rank < prev.rank || (c.rank === prev.rank && c.alt < prev.alt)) Object.assign(prev, c);
+    else if (c.rank < prev.rank || (c.rank === prev.rank && c.alt < prev.alt)) {
+      Object.assign(prev, c);
+      if (!c.via) delete prev.via;
+    }
+  };
+  /** The dictionary forms of `ing` (singular, plural, aliases, part forms) as names of `c.line`. */
+  const addForms = (ing: Ingredient, src: Line, c: Omit<Candidate, 'rank'>): void => {
+    const n = ing[lang];
+    add(n?.one, { ...c, rank: 0 });
+    add(n?.many, { ...c, rank: 0 });
+    for (const a of ing.aliases?.[lang] ?? []) add(a, { ...c, rank: 1 });
+    for (const p of partForms(src, ing, lang)) add(p, { ...c, rank: 0 });
   };
   const addLine = (src: Line, line: number, alt: number): void => {
     const ing = src.ing ? dict.get(src.ing) : undefined;
     const who = ing ? `i:${ing.id}` : `n:${normalizeKey(src.name ?? '')}`;
-    if (ing) {
-      const n = ing[lang];
-      add(n?.one, { line, alt, who, rank: 0 });
-      add(n?.many, { line, alt, who, rank: 0 });
-      for (const a of ing.aliases?.[lang] ?? []) add(a, { line, alt, who, rank: 1 });
-      for (const p of partForms(src, ing, lang)) add(p, { line, alt, who, rank: 0 });
-    }
+    if (ing) addForms(ing, src, { line, alt, who });
     // The name as written, only in the language it was written in ("gezeefde tomaten").
     if (src.name && lineLang(src) === lang) add(src.name, { line, alt, who, rank: 0 });
   };
@@ -318,17 +335,26 @@ function collectCandidates(lines: readonly Line[], dict: Dictionary, lang: Lang)
     if (line.kind === 'header') return;
     addLine(line, i, -1);
     (line.alt ?? []).forEach((alt, k) => addLine(altLine(line, alt), i, k));
+    // 13D: the step text still names the old product of a swapped line ("Kook de spaghetti.").
+    const from = swappedFromOf(line, dict);
+    if (from) addForms(from, line, { line: i, alt: -1, who: `i:${from.id}`, via: true });
   });
   return out;
 }
 
-/** Dictionary ids of every line and alternative of the recipe. */
+/** The old product of a swapped line of a diet tab (`line.swappedFrom`, display-only), when the dictionary knows it. */
+function swappedFromOf(line: Line, dict: Dictionary): Ingredient | undefined {
+  return typeof line.swappedFrom === 'string' && line.swappedFrom ? dict.get(line.swappedFrom) : undefined;
+}
+
+/** Dictionary ids of every line and alternative of the recipe (and the old product of a swapped line). */
 function recipeIngredients(lines: readonly Line[]): Set<string> {
   const out = new Set<string>();
   for (const line of lines) {
     if (line.kind === 'header') continue;
     if (line.ing) out.add(line.ing);
     for (const alt of line.alt ?? []) if (alt.ing) out.add(alt.ing);
+    if (typeof line.swappedFrom === 'string' && line.swappedFrom) out.add(line.swappedFrom);
   }
   return out;
 }
@@ -507,6 +533,8 @@ interface RawMatch {
   fe: number;
   /** [line index, alt index (-1 = the line itself)], ascending by line. */
   refs: [number, number][];
+  /** Line indexes reached through a swapped line's old product (13D). */
+  via: ReadonlySet<number>;
 }
 
 /**
@@ -537,6 +565,8 @@ export function findStepIngredients(text: string, lines: readonly Line[], dict: 
     const refs = new Map<number, number>();
     for (const c of chosen) refs.set(c.line, Math.min(refs.get(c.line) ?? c.alt, c.alt));
     const sortedRefs = [...refs].sort((a, b) => a[0] - b[0]);
+    const via = new Set<number>();
+    for (const c of chosen) if (c.via) via.add(c.line);
 
     let from = 0;
     for (;;) {
@@ -565,7 +595,7 @@ export function findStepIngredients(text: string, lines: readonly Line[], dict: 
       if (next !== undefined && TOOL_AFTER[lang].has(next)) continue;
       if (imperativeVerb(text, folded, at, end, lang)) continue;
       if (ids.size > 0 && otherIngredientAround(s, at, end, key, ids, idx, lang)) continue;
-      raw.push({ fs: at, fe: end, refs: sortedRefs });
+      raw.push({ fs: at, fe: end, refs: sortedRefs, via });
     }
   }
 
@@ -597,6 +627,7 @@ export function findStepIngredients(text: string, lines: readonly Line[], dict: 
     const left = after !== undefined && LEFT_AFTER[lang].has(after);
     const match: StepIngredientMatch = { start, end, lines: refs.map(([li]) => li), qtyInText: left || amountBefore(s, fs, dict, lang) };
     if (refs.some(([, alt]) => alt >= 0)) match.alt = refs.map(([, alt]) => alt);
+    if (refs.some(([li]) => m.via.has(li))) match.viaSwap = true;
     out.push(match);
   }
   return out;
@@ -663,7 +694,9 @@ function referredLine(lines: readonly Line[], match: StepIngredientMatch, k: num
  * What the UI shows after a green word, scaled by `factor`: '' when the text already gives the
  * amount (`qtyInText`) or no line has a quantity; else the quantity of its line ("1 tl"), or of
  * its lines joined with " + ", each with its qualifiers when the lines differ in them
- * ("1 groene + 1 rode"). Lines without a quantity are left out of the sum.
+ * ("1 groene + 1 rode"). Lines without a quantity are left out of the sum. When the word named the
+ * old product of a swapped line (`viaSwap`, 13D), that line's piece is the quantity plus the NEW
+ * name ("400 g glutenvrije pasta" behind "spaghetti").
  */
 export function matchQuantityText(match: StepIngredientMatch, lines: readonly Line[], dict: Dictionary, lang: Lang, factor = 1): string {
   if (match.qtyInText) return '';
@@ -673,6 +706,12 @@ export function matchQuantityText(match: StepIngredientMatch, lines: readonly Li
   for (const line of own) {
     const q = lineQuantityText(line, dict, lang, factor);
     if (!q) continue;
+    // 13D: say what the old product became; a part line's quantity already carries its name ("1 citroen").
+    if (match.viaSwap && typeof line.swappedFrom === 'string' && !line.part) {
+      const name = renderLineParts(line, dict, lang, factor).name.trim();
+      pieces.push(name ? `${q} ${name}` : q);
+      continue;
+    }
     const words = quals.size > 1 ? (line.qual ?? []).map((id) => dict.qualifierName(id, lang)) : [];
     pieces.push([q, ...words].join(' '));
   }

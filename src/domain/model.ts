@@ -3,6 +3,7 @@
 // `Text` ({nl, en}); either side may be empty (CLAUDE.md invariant 3). Ids never change (invariant 1).
 import { slugId } from './recipe-source.ts';
 import type { AvatarSpec } from './avatar.ts';
+import type { RecipeVariants, VariantDiet } from './variants.ts';
 
 export type Lang = 'nl' | 'en';
 
@@ -145,6 +146,14 @@ export interface Recipe {
    * so the key rides along and is preserved); absent or null = not a variant.
    */
   variantOf?: string | null;
+  /**
+   * 13D (docs/specs/varianten-tabs.md §2a): the approved diet versions of this recipe, as swaps on
+   * top of its own lines (src/domain/variants.ts `variantView`); absent or null = none. On a classic
+   * they live in the override patch instead. Travels in share tokens like any other recipe key.
+   */
+  variants?: RecipeVariants | null;
+  /** 13D "Tip van de maker": travels when the recipe is shared; the private note (table notes) never does. */
+  tip?: Text | null;
   /** Unknown keys are preserved on round-trip (PLAN.md §5). */
   [k: string]: unknown;
 }
@@ -198,6 +207,8 @@ export interface CookLogEntry {
   /** 6D-1: ISO moment the cook was ENTERED (`logCooked` fills it); cooks older than 6D have none.
    *  More than 7 days after `at` = no XP (docs/specs/xp-levels.md §2b rule 3). Not an id. */
   loggedAt?: string;
+  /** 13D: the approved diet version that was cooked (cook mode on a diet tab); absent/null = the original. */
+  variant?: VariantDiet | null;
 }
 
 /** A timer that is running right now; persisted so it survives a reload. Times are epoch ms. */

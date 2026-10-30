@@ -10,6 +10,7 @@
 //                PlanItem with `sideOf` = the id of its main item; the pools of the pickers leave
 //                the non-main categories out (NON_MAIN_CATEGORIES, isMainDish, excludeNonMain).
 import { nowIso, randomId, type CookLogEntry, type Recipe } from './model.ts';
+import type { VariantDiet } from './variants.ts';
 
 export interface PlanItem {
   id: string;
@@ -23,6 +24,9 @@ export interface PlanItem {
   /** "+ bijgerecht" (13E): id of the PlanItem this side dish belongs to. Absent = a main dish. The side
    *  follows its main dish: same servings, cooked together, removed together. */
   sideOf?: string;
+  /** 13D (docs/specs/varianten-tabs.md §2a): the approved diet version chosen for this dish; absent
+   *  or null = the original. The shopping list follows it; `planHash` counts it. */
+  variant?: VariantDiet | null;
 }
 
 export interface Plan {
@@ -59,9 +63,11 @@ export function emptyPlan(): Plan {
   return { id: 'current', items: [], updatedAt: nowIso() };
 }
 
-/** A new slot for a recipe: id 'pi:' + 8 chars. */
-export function newPlanItem(recipeId: string, servings = DEFAULT_SERVINGS): PlanItem {
-  return { id: randomId('pi:'), recipeId, servings: normalizeServings(servings), addedAt: nowIso() };
+/** A new slot for a recipe: id 'pi:' + 8 chars; `variant` only when a diet version is chosen (13D). */
+export function newPlanItem(recipeId: string, servings = DEFAULT_SERVINGS, variant?: VariantDiet | null): PlanItem {
+  const item: PlanItem = { id: randomId('pi:'), recipeId, servings: normalizeServings(servings), addedAt: nowIso() };
+  if (variant) item.variant = variant;
+  return item;
 }
 
 /**
@@ -214,7 +220,9 @@ function fnv1a(s: string): string {
 
 /**
  * Stable hash of the plan as the shopping list sees it: the (recipeId, servings) pairs of the
- * dishes that are not cooked yet, order-independent. The list stores it as `generatedFrom`; a
+ * dishes that are not cooked yet, order-independent; a chosen diet version (13D) adds "#<diet>" to
+ * its pair, so switching versions marks the list as changed (without one the hash is byte-equal to
+ * the hash before 13D). The list stores it as `generatedFrom`; a
  * different value means "Weekplan gewijzigd — Bijwerken". An empty plan hashes to ''. Side dishes
  * (`sideOf`) count like any dish, so adding one marks the list as changed (labels-categorieen.md §2d).
  */
@@ -232,7 +240,7 @@ export function planHashAll(plan: Pick<Plan, 'items'>): string {
 }
 
 function hashPairs(items: readonly PlanItem[]): string {
-  const pairs = items.map((p) => `${p.recipeId}@${normalizeServings(p.servings)}`).sort();
+  const pairs = items.map((p) => `${p.recipeId}@${normalizeServings(p.servings)}${p.variant ? '#' + p.variant : ''}`).sort();
   if (pairs.length === 0) return '';
   return `${pairs.length}:${fnv1a(pairs.join('|'))}`;
 }

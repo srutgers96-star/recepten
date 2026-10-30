@@ -38,6 +38,15 @@ import {
   FROZEN_ENVELOPE_X,
   FROZEN_TOKEN_X,
   FROZEN_TOKEN_X_FFLATE,
+  FROZEN_ENVELOPE_P_VARIANTS,
+  FROZEN_ENVELOPE_R_VARIANTS,
+  FROZEN_ENVELOPE_W_VARIANT,
+  FROZEN_TOKEN_P_VARIANTS,
+  FROZEN_TOKEN_P_VARIANTS_FFLATE,
+  FROZEN_TOKEN_R_VARIANTS,
+  FROZEN_TOKEN_R_VARIANTS_FFLATE,
+  FROZEN_TOKEN_W_VARIANT,
+  FROZEN_TOKEN_W_VARIANT_FFLATE,
 } from './fixtures/frozen-share-tokens';
 
 const SOURCE = fileURLToPath(new URL('../data/source/recipes-recepten2.json', import.meta.url));
@@ -167,6 +176,22 @@ describe('token codec', () => {
         // The frozen token IS what this codec produces for that envelope today (byte-for-byte).
         const expected = engine === 'native' ? FROZEN_TOKEN_X : FROZEN_TOKEN_X_FFLATE;
         expect(await encodeToken(FROZEN_ENVELOPE_X, { engine })).toBe(expected);
+      });
+
+      // docs/specs/varianten-tabs.md §2d (13D): `r.variants`/`r.tip`, `p.patch.variants`/`p.patch.tip`
+      // and `w.items[].vr` are optional keys in `v: 2`, no new fragment key.
+      it('decodes the frozen phase-6 #r=/#p=/#w= tokens with variants (native- and fflate-produced)', async () => {
+        const frozen: Array<[Envelope, string, string]> = [
+          [FROZEN_ENVELOPE_R_VARIANTS, FROZEN_TOKEN_R_VARIANTS, FROZEN_TOKEN_R_VARIANTS_FFLATE],
+          [FROZEN_ENVELOPE_P_VARIANTS, FROZEN_TOKEN_P_VARIANTS, FROZEN_TOKEN_P_VARIANTS_FFLATE],
+          [FROZEN_ENVELOPE_W_VARIANT, FROZEN_TOKEN_W_VARIANT, FROZEN_TOKEN_W_VARIANT_FFLATE],
+        ];
+        for (const [envelope, native, fflate] of frozen) {
+          expect(await decodeToken(native, { engine })).toEqual(envelope);
+          expect(await decodeToken(fflate, { engine })).toEqual(envelope);
+          // The frozen token IS what this codec produces for that envelope today (byte-for-byte).
+          expect(await encodeToken(envelope, { engine })).toBe(engine === 'native' ? native : fflate);
+        }
       });
     });
   }

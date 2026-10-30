@@ -2,7 +2,7 @@
 // ever produced becomes a full schema-2 recipe; unknown keys survive; fingerprints are stable.
 import { describe, expect, it } from 'vitest';
 import type { Recipe } from '../src/domain/model';
-import { normalizeRecipe, recipeFingerprint, recipeFromEnvelope, recipeToShareEnvelope } from '../src/domain/recipe-io';
+import { normalizeRecipe, readOptionalText, readQty, readVariant, readVariants, recipeFingerprint, recipeFromEnvelope, recipeToShareEnvelope } from '../src/domain/recipe-io';
 import { decodeToken, encodeToken } from '../src/domain/token';
 
 const INSTRUCTIONS = 'Kook de pasta in 10 minuten beetgaar en giet af.\n\nMeng met de pesto en serveer direct met kaas.';
@@ -180,5 +180,115 @@ describe('share envelopes', () => {
   it('rejects non-recipe envelopes', () => {
     expect(recipeFromEnvelope({ v: 2, t: 'p' })).toBeNull();
     expect(recipeFromEnvelope({ v: 2, t: 'r', r: { nonsense: true } })).toBeNull();
+  });
+});
+
+// --- 13D: variants and tip (docs/specs/varianten-tabs.md §2e) -------------------------------------
+
+const VARIANT_SWAP = { index: 1, fromId: 'pasta', toId: 'glutenvrije-pasta', raw: { nl: '400 g glutenvrije pasta', en: '400 g gluten-free pasta' }, name: 'glutenvrije pasta' };
+const GF = { approved: true, approvedAt: '2026-10-22T16:00:00.000Z', by: 'Stijn', swaps: [VARIANT_SWAP], checked: [] as number[] };
+const TIP = { nl: 'Een dag in de koelkast maakt hem nog lekkerder.', en: 'Even better after a day in the fridge.' };
+
+function withVariants(extra: Record<string, unknown>): Recipe {
+  return normalizeRecipe(JSON.parse(JSON.stringify({ ...SCHEMA2, ...extra })))!;
+}
+
+describe('normalizeRecipe: variants and tip (13D)', () => {
+  it('keeps valid variants and a tip exactly', () => {
+    const r = withVariants({ variants: { glutenvrij: GF, vegan: { approved: false, swaps: [], checked: [2] } }, tip: TIP });
+    expect(r).toEqual({ ...SCHEMA2, variants: { glutenvrij: GF, vegan: { approved: false, swaps: [], checked: [2] } }, tip: TIP });
+    expect(normalizeRecipe(r)).toEqual(r); // idempotent
+  });
+
+  it('drops a swap without raw (or with another broken field) and keeps the rest of the variant', () => {
+    const bad = [
+      { ...VARIANT_SWAP, raw: undefined },
+      { ...VARIANT_SWAP, raw: { nl: '  ' } },
+      { ...VARIANT_SWAP, raw: '400 g glutenvrije pasta' },
+      { ...VARIANT_SWAP, index: -1 },
+      { ...VARIANT_SWAP, index: 1.5 },
+      { ...VARIANT_SWAP, fromId: '' },
+      { ...VARIANT_SWAP, toId: 7 },
+      { ...VARIANT_SWAP, name: 12 },
+      { ...VARIANT_SWAP, grams: { min: 0 } },
+      { ...VARIANT_SWAP, grams: 'veel' },
+      'x',
+      null,
+    ];
+    const r = withVariants({ variants: { glutenvrij: { ...GF, swaps: [...bad, VARIANT_SWAP] } } });
+    expect(r.variants).toEqual({ glutenvrij: GF });
+  });
+
+  it('reads grams through the Qty reader and keeps unknown keys on a swap and a variant', () => {
+    const swap = { ...VARIANT_SWAP, grams: { min: 800, max: 600, approx: true, junk: 1 }, future: 'kept' };
+    const r = withVariants({ variants: { glutenvrij: { ...GF, swaps: [swap], extra: { a: 1 } } } });
+    expect(r.variants?.glutenvrij).toEqual({ ...GF, swaps: [{ ...VARIANT_SWAP, grams: { min: 800, approx: true }, future: 'kept' }], extra: { a: 1 } });
+    expect(readQty({ min: 2, max: 3 })).toEqual({ min: 2, max: 3 });
+    expect(readQty({ min: Infinity })).toBeUndefined();
+    expect(readQty(null)).toBeUndefined();
+  });
+
+  it('drops a variant with empty swaps AND empty checked (nothing was approved)', () => {
+    const r = withVariants({ variants: { glutenvrij: { ...GF, swaps: [], checked: [] }, vegan: GF } });
+    expect(r.variants).toEqual({ vegan: GF });
+    // Only broken swaps and no checked lines: also nothing left.
+    expect(withVariants({ variants: { glutenvrij: { ...GF, swaps: [{ index: 'a' }] } } }).variants).toEqual({});
+    // No swaps array at all: not a variant.
+    expect(withVariants({ variants: { glutenvrij: { approved: true, checked: [1] } } }).variants).toEqual({});
+  });
+
+  it('cleans approved, checked, approvedAt and by', () => {
+    const r = withVariants({ variants: { glutenvrij: { swaps: [VARIANT_SWAP], checked: [3, 3, -1, 2.5, '4', 5, 0], approvedAt: 'gisteren', by: 42 } } });
+    expect(r.variants?.glutenvrij).toEqual({ approved: true, swaps: [VARIANT_SWAP], checked: [3, 5, 0] });
+    const anon = withVariants({ variants: { glutenvrij: { ...GF, approved: 'ja', by: null } } });
+    expect(anon.variants?.glutenvrij).toEqual({ ...GF, approved: true, by: null });
+    expect(withVariants({ variants: { glutenvrij: { ...GF, approved: false } } }).variants?.glutenvrij?.approved).toBe(false);
+  });
+
+  it('keeps a diet key this app does not know exactly as it came', () => {
+    const r = withVariants({ variants: { notenvrij: { whatever: [1, 2] }, glutenvrij: GF } });
+    expect(r.variants).toEqual({ notenvrij: { whatever: [1, 2] }, glutenvrij: GF });
+    // 'lactosevrij' is one of the VARIANT_DIETS: it is read (and kept when valid).
+    expect(withVariants({ variants: { lactosevrij: GF } }).variants).toEqual({ lactosevrij: GF });
+    // A "__proto__" key from a token stays a plain key: it never smuggles an unchecked diet in.
+    const odd = normalizeRecipe(JSON.parse('{"schema":2,"name":{"nl":"x"},"lines":[],"variants":{"__proto__":{"glutenvrij":{"swaps":[1]}}}}'))!;
+    expect(Object.getPrototypeOf(odd.variants)).toBe(Object.prototype);
+    expect(odd.variants?.glutenvrij).toBeUndefined();
+  });
+
+  it('variants that are not an object drop the key; null stays null; readVariants/readVariant directly', () => {
+    expect(withVariants({ variants: 'x' })).not.toHaveProperty('variants');
+    expect(withVariants({ variants: [GF] })).not.toHaveProperty('variants');
+    expect(withVariants({ variants: 3 })).not.toHaveProperty('variants');
+    expect(withVariants({ variants: null }).variants).toBeNull();
+    expect(withVariants({})).not.toHaveProperty('variants');
+    expect(readVariants(undefined)).toBeUndefined();
+    expect(readVariants(null)).toBeNull();
+    expect(readVariant({ swaps: 'x' })).toBeNull();
+    expect(readVariant(GF)).toEqual(GF);
+  });
+
+  it('tip is read like description/servingTip (readOptionalText): null stays null, no text becomes null', () => {
+    expect(withVariants({ tip: null }).tip).toBeNull();
+    expect(withVariants({ tip: {} }).tip).toBeNull();
+    expect(withVariants({ tip: 5 }).tip).toBeNull();
+    expect(withVariants({ tip: { en: ' Taste first. ', fr: 'x' } }).tip).toEqual({ en: 'Taste first.' });
+    expect(withVariants({})).not.toHaveProperty('tip');
+    // NB: a plain string is taken as Dutch, exactly as for description/servingTip (§2e "als
+    // description/servingTip (readOptionalText)"); §6 of the spec expects "key weg" here — reported.
+    expect(withVariants({ tip: 'Proef eerst.' }).tip).toEqual({ nl: 'Proef eerst.' });
+    expect(readOptionalText(undefined)).toBeUndefined();
+  });
+
+  it('variants and tip do not change the fingerprint (an approval is "the same recipe")', () => {
+    const plain = normalizeRecipe(SCHEMA2)!;
+    expect(recipeFingerprint(withVariants({ variants: { glutenvrij: GF }, tip: TIP }))).toBe(recipeFingerprint(plain));
+  });
+
+  it('a recipe with variants and a tip survives the share envelope', () => {
+    const r = withVariants({ variants: { glutenvrij: GF }, tip: TIP });
+    const back = recipeFromEnvelope(recipeToShareEnvelope(r, 'Stijn'))!;
+    expect(back.variants).toEqual({ glutenvrij: GF });
+    expect(back.tip).toEqual(TIP);
   });
 });

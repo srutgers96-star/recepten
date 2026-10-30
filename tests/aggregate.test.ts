@@ -528,3 +528,65 @@ describe('typed extras with a unit', () => {
     expect(en(it)).toMatch(/^200 ml /u);
   });
 });
+
+// 13D (docs/specs/varianten-tabs.md §3 blok 1, §6): `lines(recipeId, item)` gets the slot, so the repo
+// can hand over the lines of the slot's approved diet version; each source carries that version as
+// `diet` for "Waarvoor is dit?" ("(glutenvrije versie)").
+describe('diet versions per slot (13D)', () => {
+  const schotel = rec('b:schotel', 'Spaghettischotel', ['400 g spaghetti', '400 g gehakt']);
+  const glutenvrij = rec('b:schotel', 'Spaghettischotel', ['400 g glutenvrije pasta', '400 g gehakt']).lines;
+  const byVersion = (id: string, item: PlanItem): Line[] => (item.variant === 'glutenvrij' ? glutenvrij : (id === schotel.id ? schotel.lines : []));
+
+  it('lines(recipeId, item) gets the slot itself (cooked slots are never asked)', () => {
+    const seen: Array<[string, PlanItem]> = [];
+    const open = slot('b:schotel', 4, { variant: 'glutenvrij' });
+    run([schotel], [open, slot('b:schotel', 2, { id: 'pi:cooked', cooked: true })], {
+      lines: (id, item) => {
+        seen.push([id, item]);
+        return schotel.lines;
+      },
+    });
+    expect(seen).toHaveLength(1);
+    expect(seen[0]?.[0]).toBe('b:schotel');
+    expect(seen[0]?.[1]).toEqual(open);
+  });
+
+  it('a slot with variant glutenvrij and the version lines -> glutenvrije pasta, sources[0].diet "glutenvrij", no spaghetti', () => {
+    const items = run([schotel], [slot('b:schotel', 4, { variant: 'glutenvrij' })], { lines: byVersion });
+    const pasta = one(items, 'glutenvrije-pasta');
+    expect(pasta.ing).toBe('glutenvrije-pasta');
+    expect(pasta.qty).toBe(400);
+    expect(pasta.sources[0]?.diet).toBe('glutenvrij');
+    expect(pasta.sources[0]?.raw).toBe('400 g glutenvrije pasta');
+    expect(one(items, 'gehakt').sources[0]?.diet).toBe('glutenvrij');
+    expect(byIng(items, 'spaghetti')).toEqual([]);
+  });
+
+  it('without a variant the source has no diet key (unchanged list)', () => {
+    const items = run([schotel], [slot('b:schotel', 4)], { lines: byVersion });
+    const spaghetti = one(items, 'spaghetti');
+    expect(spaghetti.sources[0]).not.toHaveProperty('diet');
+    expect(byIng(items, 'glutenvrije-pasta')).toEqual([]);
+  });
+
+  it('the lines follow each slot: the same dish as original and as version in one plan', () => {
+    const items = run([schotel], [slot('b:schotel', 4), slot('b:schotel', 2, { id: 'pi:gv', variant: 'glutenvrij' })], { lines: byVersion });
+    expect(one(items, 'spaghetti').qty).toBe(400);
+    expect(one(items, 'glutenvrije-pasta').qty).toBe(200);
+    const gehakt = one(items, 'gehakt');
+    expect(gehakt.baseQty).toBe(600);
+    expect(gehakt.sources.map((s) => s.diet ?? null)).toEqual([null, 'glutenvrij']);
+  });
+
+  it('an unresolved line of a version slot carries the diet on its "Controleer zelf" source too', () => {
+    const r = rec('b:a', 'A', ['Iets lekkers voor erbij']);
+    const items = run([r], [slot('b:a', 4, { variant: 'vegan' })]);
+    const check = items.find((it) => it.section === 'check');
+    expect(check?.sources[0]?.diet).toBe('vegan');
+  });
+
+  it('a one-parameter lines function still fits (additive change)', () => {
+    const items = run([schotel], [slot('b:schotel', 4)], { lines: (id) => (id === schotel.id ? schotel.lines : []) });
+    expect(one(items, 'spaghetti').qty).toBe(400);
+  });
+});

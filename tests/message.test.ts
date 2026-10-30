@@ -215,3 +215,34 @@ describe('buildReadableRecipe', () => {
     expect(buildReadableRecipe(classic, ['nl'], undefined, dict)).toContain('- 2 rode uien, gesnipperd');
   });
 });
+
+// docs/specs/varianten-tabs.md §1g/§3 Blok 1 B (13D): "Tip van de maker" in the readable text, after
+// the serving tip, only in a language the tip has text in. With a link the link stays last.
+describe('buildReadableRecipe: the maker\'s tip (13D)', () => {
+  const withTip: Recipe = { ...RECIPE, tip: { nl: 'Een dag in de koelkast maakt hem\nnog lekkerder.', en: 'Even better after a day in the fridge.' } };
+
+  it('ends the Dutch block with "💡 Tip van de maker: …" after the serving tip', () => {
+    const nl = buildReadableRecipe(withTip, ['nl']);
+    expect(nl.endsWith('Serveertip: Lekker met Parmezaan.\n\n💡 Tip van de maker: Een dag in de koelkast maakt hem nog lekkerder.')).toBe(true);
+    expect(nl).toBe(buildReadableRecipe(RECIPE, ['nl']) + '\n\n💡 Tip van de maker: Een dag in de koelkast maakt hem nog lekkerder.');
+  });
+
+  it('uses "Maker\'s tip:" in the English block; with a link the tip closes each language block', () => {
+    const en = buildReadableRecipe(withTip, ['en']);
+    expect(en.split('\n').at(-1)).toBe("💡 Maker's tip: Even better after a day in the fridge.");
+    const both = buildReadableRecipe(withTip, ['nl', 'en'], URL);
+    expect(both).toBe(buildReadableRecipe(withTip, ['nl']) + '\n\n' + en + "\n\nOpen in Rutgers' Recepten (of tik voor een voorproefje):\n" + URL);
+    expect(both.split('\n').at(-1)).toBe(URL);
+  });
+
+  it('only in a language the tip has text in (no fallback); no tip, an empty or a null tip: no line', () => {
+    const nlOnly: Recipe = { ...RECIPE, tip: { nl: 'Proef eerst.' } };
+    expect(buildReadableRecipe(nlOnly, ['nl'])).toContain('💡 Tip van de maker: Proef eerst.');
+    expect(buildReadableRecipe(nlOnly, ['en'])).not.toContain('💡');
+    expect(buildReadableRecipe({ ...RECIPE, tip: { nl: '  ', en: '' } }, ['nl', 'en'])).not.toContain('💡');
+    expect(buildReadableRecipe({ ...RECIPE, tip: null }, ['nl', 'en'])).toBe(buildReadableRecipe(RECIPE, ['nl', 'en']));
+    // Without a serving tip the maker's tip directly follows the steps.
+    const noServing = buildReadableRecipe({ ...nlOnly, servingTip: null }, ['nl']);
+    expect(noServing.endsWith('2. Meng met de pesto en serveer.\n\n💡 Tip van de maker: Proef eerst.')).toBe(true);
+  });
+});

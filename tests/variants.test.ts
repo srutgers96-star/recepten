@@ -3,11 +3,14 @@
 // languages, capital, alternatives), makeVariant (new id, variantOf, tags, name suffix, only ticked
 // swaps, original untouched), variantOf travelling in a share token, and validateSwaps. Lactosevrij
 // (docs/specs/labels-categorieen.md §2b / §6a): the fourth variant diet with its dairy swaps.
+// 13D (docs/specs/varianten-tabs.md §2c, §6): variantView (natural / proposed / approved / stale),
+// applyStoredSwap, storedSwapsFrom, variantTabs, tagsWithVariants, versionName, versionAuthor and
+// parseVariantParam; makeVariant stays (old copy variants).
 import { describe, expect, it } from 'vitest';
 import swapsJson from '../data/swaps.json';
 import { defaultDictionary, defaultDictionaryData, ingredientsData } from '../src/domain/data';
 import { loadDictionary, type Ingredient } from '../src/domain/dictionary';
-import { dietTags } from '../src/domain/diet';
+import { DIET_TAGS, dietTags } from '../src/domain/diet';
 import type { Line, Recipe } from '../src/domain/model';
 import { parseLine } from '../src/domain/parser';
 import { normalizeRecipe } from '../src/domain/recipe-io';
@@ -15,14 +18,29 @@ import { renderLine } from '../src/domain/render';
 import { buildRecipeEnvelope, parseEnvelope } from '../src/domain/share';
 import { decodeToken, encodeToken } from '../src/domain/token';
 import {
+  activeVariantDiets,
+  applyStoredSwap,
   applySwap,
+  DIET_SUFFIX,
+  DIET_TAGS_FOR,
   lineBreaksDiet,
   makeVariant,
+  OPTIE_TAG_FOR,
+  OPTIE_TAGS_FOR,
+  parseVariantParam,
   planVariant,
+  storedSwapsFrom,
+  tagsWithVariants,
   VARIANT_DIETS,
   variantDietsFor,
   variantName,
+  variantTabs,
   variantTags,
+  variantView,
+  versionAuthor,
+  versionName,
+  type RecipeVariant,
+  type StoredSwap,
   type Swap,
   type VariantPlan,
 } from '../src/domain/variants';
@@ -481,5 +499,244 @@ describe('validateSwaps', () => {
     }
     // margarine -> vegan-boter stays vegan only (margarine is "maybe lactose"; the swap would never fire)
     expect(swaps.find((s) => s.from === 'margarine')?.diets).toEqual(['vegan']);
+  });
+});
+
+// --- 13D: variants as tabs (docs/specs/varianten-tabs.md §2c, §6) ---------------------------------
+
+/** The glutenvrij approval of SCHOTEL as stored on the recipe (spec §2b). */
+const GV_STORED: RecipeVariant = {
+  approved: true,
+  approvedAt: '2026-10-22T18:40:00.000Z',
+  by: 'Stijn',
+  swaps: [{ index: 0, fromId: 'spaghetti', toId: 'glutenvrije-pasta', raw: { nl: '400 g glutenvrije pasta' }, name: 'glutenvrije pasta' }],
+  checked: [],
+};
+
+/** The vegan approval of SCHOTEL: cheese swapped, mince (3) and egg (5) ticked as "controleer zelf". */
+function veganStored(checked: number[]): RecipeVariant {
+  const plan = planVariant({ lines: SCHOTEL }, 'vegan', swaps, dict);
+  return { approved: true, by: 'Stijn', swaps: storedSwapsFrom(plan, new Set()), checked };
+}
+
+describe('13D constants', () => {
+  it('activeVariantDiets = the VARIANT_DIETS that DIET_TAGS knows, in tab order (four since 6B)', () => {
+    expect(activeVariantDiets()).toEqual(VARIANT_DIETS.filter((d) => (DIET_TAGS as readonly string[]).includes(d)));
+    expect(activeVariantDiets()).toEqual(['glutenvrij', 'vegetarisch', 'vegan', 'lactosevrij']);
+  });
+
+  it('DIET_SUFFIX, OPTIE_TAGS_FOR, DIET_TAGS_FOR and OPTIE_TAG_FOR know lactosevrij; the last two are exported', () => {
+    expect(DIET_SUFFIX.lactosevrij).toEqual({ nl: 'lactosevrij', en: 'lactose-free' });
+    expect(OPTIE_TAGS_FOR.lactosevrij).toEqual(['lactosevrij-optie']);
+    expect(DIET_TAGS_FOR.vegan).toEqual(['vegetarisch', 'vegan']);
+    expect(DIET_TAGS_FOR.lactosevrij).toEqual(['lactosevrij']);
+    expect(OPTIE_TAG_FOR).toEqual({ glutenvrij: 'glutenvrij-optie', vegetarisch: 'vega-optie', vegan: 'vegan-optie', lactosevrij: 'lactosevrij-optie' });
+  });
+});
+
+describe('variantView', () => {
+  it('natural: no line breaks the diet -> the original lines, nothing marked', () => {
+    const noMince = SCHOTEL.filter((_, i) => i !== 3);
+    const v = variantView('vegetarisch', noMince, undefined, swaps, dict);
+    expect(v.status).toBe('natural');
+    expect(v.lines).toEqual(noMince);
+    expect(v.swapped).toEqual([]);
+    expect(v.unresolved).toEqual([]);
+    expect(v.checked).toEqual([]);
+    expect(v.plan).toBeUndefined();
+    // natural wins over a stored approval (the recipe no longer needs one)
+    expect(variantView('vegetarisch', noMince, veganStored([3, 5]), swaps, dict).status).toBe('natural');
+  });
+
+  it('proposed: the applying swaps as a preview, with swappedFrom; the plan for the sheet', () => {
+    const v = variantView('glutenvrij', SCHOTEL, undefined, swaps, dict);
+    expect(v.status).toBe('proposed');
+    expect(v.swapped).toEqual([0]);
+    expect(v.lines[0]!.raw.nl).toBe('400 g glutenvrije pasta');
+    expect(v.lines[0]!.ing).toBe('glutenvrije-pasta');
+    expect(v.lines[0]!.swappedFrom).toBe('spaghetti');
+    expect(v.lines.slice(1)).toEqual(SCHOTEL.slice(1));
+    expect(v.unresolved).toEqual([]);
+    expect(v.checked).toEqual([]);
+    expect(v.plan).toEqual(planVariant({ lines: SCHOTEL }, 'glutenvrij', swaps, dict));
+  });
+
+  it('proposed vegan: cheese swapped, mince and egg "controleer zelf" (the gehakt swap is vegetarian only)', () => {
+    const v = variantView('vegan', SCHOTEL, undefined, swaps, dict);
+    expect(v.status).toBe('proposed');
+    expect(v.swapped).toEqual([4]);
+    expect(v.lines[4]).toMatchObject({ ing: 'vegan-kaas', swappedFrom: 'kaas', raw: { nl: '125 g geraspte vegan kaas' } });
+    expect(v.unresolved).toEqual([3, 5]);
+    expect(v.lines[3]).toBe(SCHOTEL[3]);
+  });
+
+  it('proposed: a swap with applies false stays as it is and counts as "controleer zelf"', () => {
+    const lines = nl('100 g boter of 100 g spekblokjes', '200 ml room');
+    const v = variantView('vegan', lines, undefined, swaps, dict);
+    expect(v.swapped).toEqual([1]);
+    expect(v.unresolved).toEqual([0]);
+    expect(v.lines[0]).toBe(lines[0]);
+    expect(v.lines[1]).toMatchObject({ ing: 'sojaroom', swappedFrom: 'room' });
+  });
+
+  it('approved: the stored swaps applied, checked empty, no plan', () => {
+    const v = variantView('glutenvrij', SCHOTEL, GV_STORED, swaps, dict);
+    expect(v.status).toBe('approved');
+    expect(v.swapped).toEqual([0]);
+    expect(v.lines[0]).toMatchObject({ ing: 'glutenvrije-pasta', raw: { nl: '400 g glutenvrije pasta' }, name: 'glutenvrije pasta', swappedFrom: 'spaghetti' });
+    expect(v.unresolved).toEqual([]);
+    expect(v.checked).toEqual([]);
+    expect(v.plan).toBeUndefined();
+  });
+
+  it('stale: the line changed since the approval (spaghetti became penne); the plan is filled again', () => {
+    const changed = [{ ...SCHOTEL[0]!, raw: { nl: '400 g penne' }, ing: 'penne', name: 'penne' }, ...SCHOTEL.slice(1)];
+    const v = variantView('glutenvrij', changed, GV_STORED, swaps, dict);
+    expect(v.status).toBe('stale');
+    expect(v.swapped).toEqual([]);
+    expect(v.unresolved).toEqual([0]);
+    expect(v.lines[0]).toBe(changed[0]);
+    expect(v.plan).toBeDefined();
+    expect(v.plan!.diet).toBe('glutenvrij');
+  });
+
+  it('stale: a line that breaks the diet was not ticked; approved once mince and egg are both ticked', () => {
+    const unticked = variantView('vegan', SCHOTEL, veganStored([]), swaps, dict);
+    expect(unticked.status).toBe('stale');
+    expect(unticked.swapped).toEqual([4]);
+    expect(unticked.unresolved).toEqual([3, 5]);
+    expect(unticked.checked).toEqual([]);
+    expect(unticked.plan?.unresolved).toEqual([3, 5]);
+    const both = variantView('vegan', SCHOTEL, veganStored([3, 5]), swaps, dict);
+    expect(both.status).toBe('approved');
+    expect(both.unresolved).toEqual([3, 5]);
+    expect(both.checked).toEqual([3, 5]);
+    expect(both.plan).toBeUndefined();
+    const onlyEgg = variantView('vegan', SCHOTEL, veganStored([5]), swaps, dict);
+    expect(onlyEgg.status).toBe('stale');
+    expect(onlyEgg.checked).toEqual([5]);
+  });
+
+  it('an unapproved or unusable stored value counts as nothing stored (overrides are not normalised on restore)', () => {
+    for (const odd of ['x', 42, null, [], { approved: true }, { approved: true, swaps: 'no' }, { ...GV_STORED, approved: false }]) {
+      const v = variantView('glutenvrij', SCHOTEL, odd as unknown as RecipeVariant, swaps, dict);
+      expect(v.status, JSON.stringify(odd)).toBe('proposed');
+    }
+    // a malformed swap inside an approval never applies: the tab asks to be checked again
+    const broken: RecipeVariant = { ...GV_STORED, swaps: [{ index: 0, fromId: 'spaghetti' } as unknown as StoredSwap] };
+    expect(variantView('glutenvrij', SCHOTEL, broken, swaps, dict).status).toBe('stale');
+  });
+
+  it('is derived only: the lines and the stored variant are never changed', () => {
+    const before = JSON.stringify(SCHOTEL);
+    const stored = JSON.stringify(GV_STORED);
+    variantView('glutenvrij', SCHOTEL, GV_STORED, swaps, dict);
+    variantView('vegan', SCHOTEL, undefined, swaps, dict);
+    expect(JSON.stringify(SCHOTEL)).toBe(before);
+    expect(JSON.stringify(GV_STORED)).toBe(stored);
+    expect(SCHOTEL.some((l) => 'swappedFrom' in l)).toBe(false);
+  });
+});
+
+describe('applyStoredSwap and storedSwapsFrom', () => {
+  it('applyStoredSwap sets swappedFrom and leaves the source line (and its raw) alone', () => {
+    const src = SCHOTEL[0]!;
+    const raw = { ...src.raw };
+    const out = applyStoredSwap(src, GV_STORED.swaps[0]!);
+    expect(out).toMatchObject({ ing: 'glutenvrije-pasta', raw: { nl: '400 g glutenvrije pasta' }, name: 'glutenvrije pasta', swappedFrom: 'spaghetti', qty: { min: 400 }, unit: 'g' });
+    expect(src.raw).toEqual(raw);
+    expect(src.ing).toBe('spaghetti');
+    expect('swappedFrom' in src).toBe(false);
+    expect(out.raw).not.toBe(GV_STORED.swaps[0]!.raw);
+    // a count turned into grams: the stored grams become the quantity
+    const fillets = nl('4 kipfilets');
+    const plan = planVariant({ lines: fillets }, 'vegan', swaps, dict);
+    const [stored] = storedSwapsFrom(plan, new Set());
+    expect(applyStoredSwap(fillets[0]!, stored!)).toMatchObject({ ing: 'tofu', qty: { min: 800 }, unit: 'g', swappedFrom: 'kipfilet' });
+  });
+
+  it('storedSwapsFrom leaves out unticked and applies-false swaps and keeps fromId/toId/raw/name/grams', () => {
+    const lines = nl('100 g boter of 100 g spekblokjes', '200 ml room', '4 kipfilets');
+    const plan = planVariant({ lines }, 'vegan', swaps, dict);
+    expect(plan.swaps.map((s) => [s.index, s.applies])).toEqual([
+      [0, false],
+      [1, true],
+      [2, true],
+    ]);
+    expect(storedSwapsFrom(plan, new Set())).toEqual([
+      { index: 1, fromId: 'room', toId: 'sojaroom', raw: { nl: '200 ml sojaroom' }, name: 'sojaroom' },
+      { index: 2, fromId: 'kipfilet', toId: 'tofu', raw: { nl: '800 g tofu' }, name: 'tofu', grams: { min: 800 } },
+    ]);
+    // `off` holds line indexes
+    expect(storedSwapsFrom(plan, new Set([1])).map((s) => s.index)).toEqual([2]);
+    expect(storedSwapsFrom(plan, new Set([1, 2]))).toEqual([]);
+    // no `applies`, no cook's note in storage
+    for (const s of storedSwapsFrom(planVariant({ lines: SCHOTEL }, 'glutenvrij', swaps, dict), new Set())) {
+      expect('applies' in s).toBe(false);
+      expect('note' in s).toBe(false);
+    }
+  });
+});
+
+describe('variantTabs', () => {
+  const ALL_NATURAL = nl('400 g glutenvrije pasta', '1 ui', '200 ml sojaroom');
+
+  it('no row when every diet is natural and there are no personal versions; a row with one version', () => {
+    const t = variantTabs(ALL_NATURAL, undefined, swaps, dict, 0);
+    expect(t.show).toBe(false);
+    expect(t.diets).toEqual(activeVariantDiets().map((diet) => ({ diet, status: 'natural' })));
+    expect(variantTabs(ALL_NATURAL, null, swaps, dict, 1).show).toBe(true);
+  });
+
+  it('the status per active diet in tab order, from the stored variants', () => {
+    const t = variantTabs(SCHOTEL, { glutenvrij: GV_STORED, vegan: veganStored([5]), notenvrij: { future: true } }, swaps, dict, 0);
+    expect(t.show).toBe(true);
+    expect(t.diets).toEqual([
+      { diet: 'glutenvrij', status: 'approved' },
+      { diet: 'vegetarisch', status: 'proposed' },
+      { diet: 'vegan', status: 'stale' },
+      { diet: 'lactosevrij', status: 'proposed' },
+    ]);
+    // the same statuses as variantView
+    for (const d of t.diets) expect(variantView(d.diet, SCHOTEL, d.diet === 'glutenvrij' ? GV_STORED : d.diet === 'vegan' ? veganStored([5]) : undefined, swaps, dict).status).toBe(d.status);
+  });
+});
+
+describe('tagsWithVariants', () => {
+  it("adds '<diet>-optie' for every approved diet, without duplicates", () => {
+    expect(tagsWithVariants({ tags: ['oven', 'kids'], variants: { glutenvrij: GV_STORED } })).toEqual(['oven', 'kids', 'glutenvrij-optie']);
+    expect(tagsWithVariants({ tags: ['glutenvrij-optie', 'oven'], variants: { glutenvrij: GV_STORED } })).toEqual(['glutenvrij-optie', 'oven']);
+    expect(tagsWithVariants({ tags: ['oven'], variants: { vegan: veganStored([3, 5]), lactosevrij: { ...GV_STORED } } })).toEqual(['oven', 'vegan-optie', 'lactosevrij-optie']);
+  });
+
+  it('a variant that is not approved, a future diet key or no variants add nothing', () => {
+    expect(tagsWithVariants({ tags: ['oven'], variants: { glutenvrij: { ...GV_STORED, approved: false } } })).toEqual(['oven']);
+    expect(tagsWithVariants({ tags: ['oven'], variants: { notenvrij: { ...GV_STORED } } })).toEqual(['oven']);
+    expect(tagsWithVariants({ tags: ['oven'], variants: null })).toEqual(['oven']);
+    expect(tagsWithVariants({ tags: ['oven'] })).toEqual(['oven']);
+  });
+});
+
+describe('personal versions and ?v=', () => {
+  it('versionName per language that is there (invariant 3)', () => {
+    expect(versionName({ nl: 'Goulash', en: 'Goulash' }, 'Dino')).toEqual({ nl: 'Goulash (versie van Dino)', en: "Goulash (Dino's version)" });
+    expect(versionName({ nl: 'Goulash' }, 'Dino')).toEqual({ nl: 'Goulash (versie van Dino)' });
+    expect(versionName({ en: ' Goulash ' }, 'Dino')).toEqual({ en: "Goulash (Dino's version)" });
+  });
+
+  it('versionAuthor: the first name of the author (own) or the sender (received), else null', () => {
+    expect(versionAuthor({ origin: { kind: 'user', author: 'Dino Rutgers' } })).toBe('Dino');
+    expect(versionAuthor({ origin: { kind: 'received', receivedFrom: 'Gabi', author: 'Stijn' } })).toBe('Gabi');
+    expect(versionAuthor({ origin: { kind: 'user', author: null } })).toBeNull();
+    expect(versionAuthor({ origin: { kind: 'received', receivedFrom: '  ' } })).toBeNull();
+    expect(versionAuthor({ origin: { kind: 'builtin' } })).toBeNull();
+  });
+
+  it('parseVariantParam: only an approved diet', () => {
+    expect(parseVariantParam('glutenvrij', ['glutenvrij'])).toBe('glutenvrij');
+    expect(parseVariantParam('vegan', ['glutenvrij'])).toBeNull();
+    expect(parseVariantParam('x', ['glutenvrij'])).toBeNull();
+    expect(parseVariantParam(null, ['glutenvrij'])).toBeNull();
+    expect(parseVariantParam('', ['glutenvrij'])).toBeNull();
   });
 });

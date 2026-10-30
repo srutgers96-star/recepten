@@ -5,12 +5,16 @@
 //   t: 'p'  p: { baseId, rev, patch, lineOverrides?, name? } an edited classic (`#p=`), applied as an
 //                                                            override on the receiver, never a duplicate
 //   t: 'b'  b: { title?, recipes, patches, since? }          a bundle (`#b=` token or a .json file)
-//   t: 'w'  w: { items: [{rid, srv, of?}], recipes, note? }  a week plan (`#w=`, docs/phase-4-spec.md §1):
+//   t: 'w'  w: { items: [{rid, srv, of?, vr?}], recipes, note? }
+//                                                            a week plan (`#w=`, docs/phase-4-spec.md §1):
 //                                                            the dishes with their servings plus the own
 //                                                            recipes the partner may lack (normal import);
 //                                                            `of` = recipe id of the main dish a side dish
 //                                                            belongs to (docs/specs/labels-categorieen.md
-//                                                            §2d; an older app shows it as a plain dish)
+//                                                            §2d; an older app shows it as a plain dish);
+//                                                            `vr` = the chosen diet version of the dish
+//                                                            (docs/specs/varianten-tabs.md §2d, 13D; an
+//                                                            older app shows the original)
 //   t: 'f'  f: { id, name, color, lang, deviceId?, avatar? }  a member card (`#f=`, docs/phase-5-spec.md
 //                                                            block F): who the sender is on their phone,
 //                                                            so the receiver can add them to the household;
@@ -25,12 +29,15 @@
 // Every envelope may carry `dict: { ing: Ingredient[] }`: the USER ingredients (ids the bundled
 // dictionary does not know) the payload references, so the receiver can add the missing ones.
 // Unknown keys are preserved everywhere; a codec change gets a NEW fragment key.
+// 13D (docs/specs/varianten-tabs.md §2d): `r.variants`/`r.tip` and `p.patch.variants`/`p.patch.tip`
+// are ordinary optional keys in `v: 2` (normalised on the way in); an older app ignores them.
 import { normalizeAvatarSpec, type AvatarSpec } from './avatar.ts';
 import type { Ingredient } from './dictionary.ts';
 import { nowIso, type Lang, type Line, type Recipe, type Text } from './model.ts';
 import { applyLineOverrides, type LineOverride, type RecipeOverride, type RecipePatch } from './overrides.ts';
 import { normalizeServings, type Plan } from './planner.ts';
-import { normalizeRecipe } from './recipe-io.ts';
+import { normalizeRecipe, readOptionalText, readVariants } from './recipe-io.ts';
+import { VARIANT_DIETS, type VariantDiet } from './variants.ts';
 import { dayFromKey } from './days.ts';
 import { buildMultiShareHeader, buildPatchShareMessage, buildShareMessageFor, openLine } from './message.ts';
 import { buildShareUrl, encodeToken, parseEnvelope as validateEnvelope, type Envelope, type TokenKey } from './token.ts';
@@ -74,6 +81,12 @@ export interface PlanPayloadItem {
    * an older app ignores it and shows the side dish as a dish of its own.
    */
   of?: string;
+  /**
+   * 13D (docs/specs/varianten-tabs.md §2d): the approved diet version chosen for this dish (a
+   * VARIANT_DIETS value). Absent = the original. Optional key in `v: 2`: an older app ignores it;
+   * the receiver keeps it only when its own recipe has that tab approved (UI, block 3).
+   */
+  vr?: string;
   [k: string]: unknown;
 }
 
@@ -91,9 +104,10 @@ export interface PlanShare {
   /**
    * The dishes in the sender's order. `sideOfRecipeId` (from `of`) marks a side dish: the receiver
    * hangs it under the item it makes for that recipe, or keeps it as a plain dish when that recipe
-   * is not in the plan (docs/specs/labels-categorieen.md §2d).
+   * is not in the plan (docs/specs/labels-categorieen.md §2d). `variant` (from `vr`, 13D) is the
+   * diet version the sender chose; only a VARIANT_DIETS value is read, anything else is left out.
    */
-  items: Array<{ recipeId: string; servings: number; sideOfRecipeId?: string }>;
+  items: Array<{ recipeId: string; servings: number; sideOfRecipeId?: string; variant?: VariantDiet }>;
   note?: string;
 }
 
@@ -382,7 +396,8 @@ export function buildBundleEnvelope(items: BundleItems, ctx: ShareContext, opts:
  * folded into those recipes by id. `note` from `plan.note`.
  * A side dish (`sideOf`, labels-categorieen.md §2d) travels with `of` = the recipe id of its main
  * dish; the side of a cooked main stays home like the main itself. A side whose main item is gone
- * travels as a plain dish (as `savePlan` would make it).
+ * travels as a plain dish (as `savePlan` would make it). A dish with a chosen diet version
+ * (`PlanItem.variant`, 13D) travels with `vr`.
  */
 export function buildPlanEnvelope(plan: Plan, recipes: readonly Recipe[], ctx: ShareContext): Envelope {
   const byItemId = new Map(plan.items.map((p) => [p.id, p]));
@@ -393,6 +408,8 @@ export function buildPlanEnvelope(plan: Plan, recipes: readonly Recipe[], ctx: S
     if (main?.cooked) continue;
     const item: PlanPayloadItem = { rid: p.recipeId, srv: normalizeServings(p.servings) };
     if (main) item.of = main.recipeId;
+    // 13D: the chosen diet version travels as `vr`, only when one is set.
+    if (p.variant) item.vr = p.variant;
     items.push(item);
   }
   const wanted = new Set(items.map((p) => p.rid));
@@ -587,12 +604,35 @@ function readLineOverride(v: unknown): LineOverride | null {
   return o;
 }
 
+/**
+ * The patch as it came, with the two 13D keys normalised (docs/specs/varianten-tabs.md §2e, besluit
+ * kritische lezer) so a `#p=` never puts rubbish in the override: `variants` through `readVariants`
+ * and `tip` through `readOptionalText` (undefined → the key is left out). Other keys are untouched;
+ * a patch without either key is returned as it is.
+ */
+function readPatch(v: Dict): RecipePatch {
+  const patch = v as RecipePatch;
+  if (!('variants' in patch) && !('tip' in patch)) return patch;
+  const out: RecipePatch = { ...patch };
+  if ('variants' in out) {
+    const variants = readVariants(out.variants);
+    if (variants === undefined) delete out.variants;
+    else out.variants = variants;
+  }
+  if ('tip' in out) {
+    const tip = readOptionalText(out.tip);
+    if (tip === undefined) delete out.tip;
+    else out.tip = tip;
+  }
+  return out;
+}
+
 /** A patch payload (also accepts a stored RecipeOverride row shape). */
 export function readPatchPayload(v: unknown): PatchPayload | null {
   if (!isRecord(v)) return null;
   const baseId = cleanString(v.baseId);
   if (!baseId || !isRecord(v.patch)) return null;
-  const out: PatchPayload = { ...(v as object), baseId, rev: 1, patch: v.patch as RecipePatch } as PatchPayload;
+  const out: PatchPayload = { ...(v as object), baseId, rev: 1, patch: readPatch(v.patch) } as PatchPayload;
   out.rev = typeof v.rev === 'number' && Number.isFinite(v.rev) && v.rev > 0 ? Math.floor(v.rev) : 1;
   if (Array.isArray(v.lineOverrides)) {
     const list = v.lineOverrides.map(readLineOverride).filter((o): o is LineOverride => o !== null && o.recipeId === baseId);
@@ -679,6 +719,8 @@ export function parseEnvelope(env: unknown): ParsedShare {
       const item: PlanShare['items'][number] = { recipeId, servings: normalizeServings(v.srv) };
       const sideOfRecipeId = sideOfIn(v);
       if (sideOfRecipeId) item.sideOfRecipeId = sideOfRecipeId;
+      // 13D: `vr` only as one of the VARIANT_DIETS values; anything else is left out.
+      if (typeof v.vr === 'string' && (VARIANT_DIETS as readonly string[]).includes(v.vr)) item.variant = v.vr as VariantDiet;
       items.push(item);
     }
     const plan: PlanShare = { items };

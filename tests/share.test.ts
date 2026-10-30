@@ -53,7 +53,17 @@ import {
   FROZEN_ENVELOPE_X,
   FROZEN_TOKEN_X,
   FROZEN_TOKEN_X_FFLATE,
+  FROZEN_ENVELOPE_P_VARIANTS,
+  FROZEN_ENVELOPE_R_VARIANTS,
+  FROZEN_ENVELOPE_W_VARIANT,
+  FROZEN_TOKEN_P_VARIANTS,
+  FROZEN_TOKEN_P_VARIANTS_FFLATE,
+  FROZEN_TOKEN_R_VARIANTS,
+  FROZEN_TOKEN_R_VARIANTS_FFLATE,
+  FROZEN_TOKEN_W_VARIANT,
+  FROZEN_TOKEN_W_VARIANT_FFLATE,
 } from './fixtures/frozen-share-tokens';
+import type { RecipeVariant } from '../src/domain/variants';
 
 const APP_URL = 'https://stijn.github.io/recepten/';
 
@@ -472,6 +482,169 @@ describe('week plan with side dishes (#w= of)', () => {
     const messages = await planMessages([buildPlanEnvelope(plan, [], { by: 'Stijn', userIngredients: [] })], APP_URL, { lang: 'nl' });
     if (!('text' in messages)) throw new Error('expected text');
     expect(messages.text.split('\n')[0]).toBe('🗓️ Weekplan van Stijn: 1 gerecht');
+  });
+});
+
+// --- Phase 6 (13D): variants and tip in #r= / #p=, the chosen version `vr` in #w= -----------------
+// docs/specs/varianten-tabs.md §2d/§2e: optional keys in `v: 2`, no new fragment key.
+
+const GF_VARIANT: RecipeVariant = {
+  approved: true,
+  approvedAt: '2026-10-22T16:00:00.000Z',
+  by: 'Stijn',
+  swaps: [{ index: 0, fromId: 'pasta', toId: 'glutenvrije-pasta', raw: { nl: '400 g glutenvrije pasta' }, name: 'glutenvrije pasta' }],
+  checked: [],
+};
+const TIP = { nl: 'Een dag in de koelkast maakt hem nog lekkerder.', en: 'Even better after a day in the fridge.' };
+
+describe('variants and tip (#r=, #p=) and the chosen version (#w= vr)', () => {
+  it('buildRecipeEnvelope lets variants and tip travel; parseEnvelope gives them back normalised', async () => {
+    const r = recipe({ variants: { glutenvrij: GF_VARIANT }, tip: TIP });
+    const env = buildRecipeEnvelope(r, { by: 'Stijn', userIngredients: [] });
+    expect((env.r as Recipe).variants).toEqual({ glutenvrij: GF_VARIANT });
+    expect((env.r as Recipe).tip).toEqual(TIP);
+    const parsed = parseEnvelope(await decodeToken(await encodeToken(env)));
+    expect(parsed.recipes[0]).toEqual(r);
+    // Rubbish in a received recipe is cleaned on the way in: a bad swap and an unusable variant drop
+    // out, a future diet stays as it came, a tip without text becomes null.
+    const messy = parseEnvelope({
+      v: 2,
+      t: 'r',
+      r: { ...recipe(), variants: { glutenvrij: { ...GF_VARIANT, swaps: [...GF_VARIANT.swaps, { index: -1, fromId: 'x', toId: 'y', raw: { nl: 'z' } }] }, vegan: { swaps: [], checked: [] }, notenvrij: { any: 1 } }, tip: {} },
+    });
+    expect(messy.recipes[0]?.variants).toEqual({ glutenvrij: GF_VARIANT, notenvrij: { any: 1 } });
+    expect(messy.recipes[0]?.tip).toBeNull();
+  });
+
+  it('travelRecipe still strips sync, override and origin.via next to variants and tip', () => {
+    const r = recipe({ variants: { glutenvrij: GF_VARIANT }, tip: TIP, sync: { receivedRev: 3 }, override: { rev: 1, updatedAt: 'x' }, origin: { kind: 'user', via: 'manual' } } as Partial<Recipe>);
+    const out = buildRecipeEnvelope(r, { by: 'Stijn', userIngredients: [] }).r as Recipe;
+    expect(out.sync).toBeUndefined();
+    expect(out.override).toBeUndefined();
+    expect(out.origin.via).toBeUndefined();
+    expect(out.variants).toEqual({ glutenvrij: GF_VARIANT });
+    expect(out.tip).toEqual(TIP);
+  });
+
+  it('buildPatchEnvelope carries patch.variants and patch.tip; readPatchPayload normalises them', async () => {
+    const override: RecipeOverride = { ...OVERRIDE, patch: { variants: { glutenvrij: { ...GF_VARIANT, checked: [2] } }, tip: { en: 'Grate the cheese yourself.' } } };
+    const env = buildPatchEnvelope(override, { by: 'Gabi', userIngredients: [] });
+    expect((env.p as PatchPayload).patch).toEqual(override.patch);
+    const parsed = parseEnvelope(await decodeToken(await encodeToken(env)));
+    expect(parsed.kind).toBe('patch');
+    expect(parsed.patches[0]?.patch).toEqual(override.patch);
+    // A `#p=` never puts rubbish in the override: variants that are not an object and a tip that is
+    // undefined drop out, a variant without anything approved drops out, null stays null.
+    const bad = parseEnvelope({ v: 2, t: 'p', p: { baseId: 'b:uiensoep', rev: 1, patch: { variants: 'x', tip: undefined, name: { en: 'Soup' } } } });
+    expect(bad.patches[0]?.patch).toEqual({ name: { en: 'Soup' } });
+    const empty = parseEnvelope({ v: 2, t: 'p', p: { baseId: 'b:uiensoep', rev: 1, patch: { variants: { glutenvrij: { swaps: [] } }, tip: null } } });
+    expect(empty.patches[0]?.patch).toEqual({ variants: {}, tip: null });
+    const cleared = parseEnvelope({ v: 2, t: 'p', p: { baseId: 'b:uiensoep', rev: 1, patch: { variants: null } } });
+    expect(cleared.patches[0]?.patch).toEqual({ variants: null });
+    // A patch without either key is passed on untouched.
+    const plain = { name: { en: 'Soup' } };
+    expect(parseEnvelope({ v: 2, t: 'p', p: { baseId: 'b:uiensoep', rev: 1, patch: plain } }).patches[0]?.patch).toBe(plain);
+  });
+
+  it('buildPlanEnvelope writes vr only for a dish with a chosen version', () => {
+    const plan: Plan = {
+      ...PLAN,
+      items: [
+        { id: 'pi:1', recipeId: 'b:uiensoep', servings: 4, variant: 'glutenvrij', addedAt: 'x' },
+        { id: 'pi:2', recipeId: 'b:dahl', servings: 2, variant: null, addedAt: 'x' },
+        { id: 'pi:3', recipeId: 'b:lasagne', servings: 4, addedAt: 'x' },
+      ],
+    };
+    const w = buildPlanEnvelope(plan, [], { by: 'Stijn', userIngredients: [] }).w as PlanPayload;
+    expect(w.items).toEqual([
+      { rid: 'b:uiensoep', srv: 4, vr: 'glutenvrij' },
+      { rid: 'b:dahl', srv: 2 },
+      { rid: 'b:lasagne', srv: 4 },
+    ]);
+    expect(w.items[1]).not.toHaveProperty('vr');
+  });
+
+  it('parseEnvelope reads vr into variant only for a VARIANT_DIETS value', async () => {
+    const env: Envelope = {
+      v: 2,
+      t: 'w',
+      w: {
+        items: [
+          { rid: 'b:a', srv: 2, vr: 'glutenvrij' },
+          { rid: 'b:b', srv: 2, vr: 'x' },
+          { rid: 'b:c', srv: 2, vr: 7 },
+          { rid: 'b:d', srv: 2, vr: 'lactosevrij' },
+          { rid: 'b:e', srv: 2, vr: ' vegan ' },
+          { rid: 'b:f', srv: 2 },
+        ],
+        recipes: [],
+      },
+    };
+    const parsed = parseEnvelope(await decodeToken(await encodeToken(env)));
+    expect(parsed.plan?.items).toEqual([
+      { recipeId: 'b:a', servings: 2, variant: 'glutenvrij' },
+      { recipeId: 'b:b', servings: 2 },
+      { recipeId: 'b:c', servings: 2 },
+      { recipeId: 'b:d', servings: 2, variant: 'lactosevrij' },
+      { recipeId: 'b:e', servings: 2 },
+      { recipeId: 'b:f', servings: 2 },
+    ]);
+    // Round trip from a plan.
+    const plan: Plan = { ...PLAN, items: [{ id: 'pi:1', recipeId: 'b:uiensoep', servings: 4, variant: 'vegan', addedAt: 'x' }] };
+    const back = parseEnvelope(await decodeToken(await encodeToken(buildPlanEnvelope(plan, [], { by: 'Stijn', userIngredients: [] }))));
+    expect(back.plan?.items).toEqual([{ recipeId: 'b:uiensoep', servings: 4, variant: 'vegan' }]);
+  });
+
+  it('reads the frozen #r= token with variants and a tip on both engines', async () => {
+    for (const token of [FROZEN_TOKEN_R_VARIANTS, FROZEN_TOKEN_R_VARIANTS_FFLATE]) {
+      const env = await decodeToken(token);
+      expect(env).toEqual(FROZEN_ENVELOPE_R_VARIANTS);
+      const parsed = parseEnvelope(env);
+      expect(parsed.kind).toBe('recipe');
+      expect(parsed.by).toBe('Stijn');
+      expect(parsed.recipes).toHaveLength(1);
+      // The recipe comes through exactly as it was sent (it is already normal).
+      expect(parsed.recipes[0]).toEqual(FROZEN_ENVELOPE_R_VARIANTS.r as Recipe);
+      expect(parsed.recipes[0]?.variants?.glutenvrij?.swaps[0]?.toId).toBe('glutenvrije-pasta');
+      expect(parsed.recipes[0]?.tip).toEqual({ nl: 'Een dag in de koelkast maakt hem nog lekkerder.', en: 'Even better after a day in the fridge.' });
+    }
+  });
+
+  it('reads the frozen #p= token with variants and a tip on both engines', async () => {
+    for (const token of [FROZEN_TOKEN_P_VARIANTS, FROZEN_TOKEN_P_VARIANTS_FFLATE]) {
+      const env = await decodeToken(token);
+      expect(env).toEqual(FROZEN_ENVELOPE_P_VARIANTS);
+      const parsed = parseEnvelope(env);
+      expect(parsed.kind).toBe('patch');
+      expect(parsed.by).toBe('Gabi');
+      expect(parsed.patches[0]).toEqual(FROZEN_ENVELOPE_P_VARIANTS.p as PatchPayload);
+      expect(parsed.patches[0]?.patch.variants?.glutenvrij?.checked).toEqual([2]);
+      expect(parsed.patches[0]?.patch.tip).toEqual({ en: 'Grate the cheese yourself; it melts better.' });
+    }
+  });
+
+  it('reads the frozen #w= token with a chosen version on both engines', async () => {
+    for (const token of [FROZEN_TOKEN_W_VARIANT, FROZEN_TOKEN_W_VARIANT_FFLATE]) {
+      const env = await decodeToken(token);
+      expect(env).toEqual(FROZEN_ENVELOPE_W_VARIANT);
+      const parsed = parseEnvelope(env);
+      expect(parsed.kind).toBe('plan');
+      expect(parsed.plan).toEqual({
+        items: [
+          { recipeId: 'b:uiensoep', servings: 4, variant: 'glutenvrij' },
+          { recipeId: 'b:dahl', servings: 2 },
+        ],
+        note: 'Oma eet glutenvrij',
+      });
+      expect(planDishCount(env)).toBe(2);
+    }
+  });
+
+  it('the older frozen #w= tokens give items without a variant (invariant 4)', async () => {
+    for (const token of [FROZEN_TOKEN_W, FROZEN_TOKEN_W_SIDE]) {
+      const parsed = parseEnvelope(await decodeToken(token));
+      for (const item of parsed.plan?.items ?? []) expect(item).not.toHaveProperty('variant');
+    }
   });
 });
 

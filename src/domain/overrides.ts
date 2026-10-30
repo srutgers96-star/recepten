@@ -2,18 +2,22 @@
 //
 // Two kinds of override, both keyed by the builtin's id (ids never change, invariant 1):
 //   - a RecipeOverride (table `overrides`): a schema-2 patch from the editor's override mode
-//     (name, description, steps, lines, category, tags, servingTip) rendered on top of the
-//     builtin by `applyOverride`. The builtin itself is never modified, so a data-version bump
-//     keeps the user's edits.
+//     (name, description, steps, lines, category, tags, servingTip; 13D: variants, tip) rendered on
+//     top of the builtin by `applyOverride`. The builtin itself is never modified, so a
+//     data-version bump keeps the user's edits.
 //   - a LineOverride (table `lineOverrides`): "Koppel ingrediënt" on one line of a builtin
 //     (ing, qual, prep) merged into the parsed line by `mergeLineOverride`.
 // User recipes store such corrections directly in the line; these helpers are harmless on them.
 import type { Line, Recipe, Step, Text } from './model.ts';
 
-/** The recipe fields a RecipeOverride patch may carry. */
-export type RecipePatchKey = 'name' | 'description' | 'steps' | 'lines' | 'category' | 'tags' | 'servingTip';
+/**
+ * The recipe fields a RecipeOverride patch may carry. 13D (docs/specs/varianten-tabs.md §2a): `variants`
+ * (approved diet versions of a classic) and `tip` ("Tip van de maker"); `applyOverride` sets both as a
+ * whole on the recipe (replace semantics, no merge per diet or per language).
+ */
+export type RecipePatchKey = 'name' | 'description' | 'steps' | 'lines' | 'category' | 'tags' | 'servingTip' | 'variants' | 'tip';
 
-export const RECIPE_PATCH_KEYS: readonly RecipePatchKey[] = ['name', 'description', 'steps', 'lines', 'category', 'tags', 'servingTip'];
+export const RECIPE_PATCH_KEYS: readonly RecipePatchKey[] = ['name', 'description', 'steps', 'lines', 'category', 'tags', 'servingTip', 'variants', 'tip'];
 
 /** The schema-2 patch of a builtin. Unknown keys are preserved (round-trip in tokens later). */
 export type RecipePatch = Partial<Pick<Recipe, RecipePatchKey>> & { [k: string]: unknown };

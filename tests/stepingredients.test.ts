@@ -1,8 +1,11 @@
 // findStepIngredients & friends (docs/phase-6-spec.md 13I): the recipe's own ingredients in a step,
 // over REAL steps and lines from data/recipes.json and the bundled dictionary. Precision first: the
-// "no false positives" cases are real sentences that tripped a naive matcher.
+// "no false positives" cases are real sentences that tripped a naive matcher. 13D
+// (docs/specs/varianten-tabs.md §3/§6): a swapped line of a diet tab (`swappedFrom`) is still found
+// by its old name and "hoeveel?" says what it became.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import swapsJson from '../data/swaps.json';
 import { defaultDictionary } from '../src/domain/data';
 import type { Lang, Line, Recipe } from '../src/domain/model';
 import {
@@ -13,6 +16,7 @@ import {
   stepSegments,
   type StepIngredientMatch,
 } from '../src/domain/stepingredients';
+import { variantView, type Swap } from '../src/domain/variants';
 
 const { recipes } = JSON.parse(readFileSync(new URL('../data/recipes.json', import.meta.url), 'utf8')) as { recipes: Recipe[] };
 const dict = defaultDictionary();
@@ -350,3 +354,60 @@ describe('stepSegments', () => {
     expect(segs.every((s) => s.text !== '')).toBe(true);
   });
 });
+
+describe('13D: swapped lines of a diet tab (swappedFrom)', () => {
+  const SWAPPED: Line = { raw: { nl: '400 g glutenvrije pasta' }, qty: { min: 400 }, unit: 'g', ing: 'glutenvrije-pasta', name: 'glutenvrije pasta', swappedFrom: 'spaghetti' };
+
+  it('finds the old name in the unchanged step text, with viaSwap; "hoeveel?" names what it became', () => {
+    const text = 'Kook de spaghetti.';
+    const matches = findStepIngredients(text, [SWAPPED], dict, 'nl');
+    expect(words(text, matches)).toEqual(['spaghetti']);
+    expect(matches[0]).toMatchObject({ lines: [0], qtyInText: false, viaSwap: true });
+    expect(matchQuantityText(matches[0]!, [SWAPPED], dict, 'nl')).toBe('400 g glutenvrije pasta');
+    expect(matchQuantityText(matches[0]!, [SWAPPED], dict, 'nl', 1.5)).toBe('600 g glutenvrije pasta');
+    // the spoken format is "name amount unit" from the line itself: the new name, no extra code
+    expect(spokenStepQuantities(matches, [SWAPPED], dict, 'nl')).toEqual(['glutenvrije pasta 400 gram']);
+    // English step, English name of the new product
+    const en = 'Boil the spaghetti.';
+    const enMatches = findStepIngredients(en, [SWAPPED], dict, 'en');
+    expect(enMatches[0]).toMatchObject({ viaSwap: true });
+    expect(matchQuantityText(enMatches[0]!, [SWAPPED], dict, 'en')).toBe('400 g gluten-free pasta');
+  });
+
+  it('the new name itself is an ordinary match (no viaSwap, quantity only)', () => {
+    const text = 'Kook de glutenvrije pasta.';
+    const matches = findStepIngredients(text, [SWAPPED], dict, 'nl');
+    expect(words(text, matches)).toEqual(['glutenvrije pasta']);
+    expect(matches[0]!.viaSwap).toBeUndefined();
+    expect(matchQuantityText(matches[0]!, [SWAPPED], dict, 'nl')).toBe('400 g');
+  });
+
+  it('without swappedFrom nothing changes: the old name is plain text', () => {
+    const { swappedFrom: _, ...plain } = SWAPPED;
+    expect(findStepIngredients('Kook de spaghetti.', [plain], dict, 'nl')).toEqual([]);
+    const lines = spaghettiLines();
+    const matches = findStepIngredients('Kook de spaghetti.', lines, dict, 'nl');
+    expect(matches[0]!.viaSwap).toBeUndefined();
+    expect(matchQuantityText(matches[0]!, lines, dict, 'nl')).toBe('400 g');
+  });
+
+  it('acceptance check 5: Spaghettischotel uit de oven on the gluten-free tab, step 1 "Spaghetti koken."', () => {
+    const r = recipe('b:spaghettischotel-uit-de-oven');
+    const view = variantView('glutenvrij', r.lines, undefined, swapsJson as Swap[], dict);
+    expect(view.swapped).toContain(0);
+    const nlText = stepText('b:spaghettischotel-uit-de-oven', 0, 'nl');
+    const nlMatch = find(nlText, findStepIngredients(nlText, view.lines, dict, 'nl'), 'Spaghetti');
+    expect(nlMatch.viaSwap).toBe(true);
+    expect(matchQuantityText(nlMatch, view.lines, dict, 'nl')).toBe('400 g glutenvrije pasta');
+    const enText = stepText('b:spaghettischotel-uit-de-oven', 0, 'en');
+    const enMatch = find(enText, findStepIngredients(enText, view.lines, dict, 'en'), 'spaghetti');
+    expect(matchQuantityText(enMatch, view.lines, dict, 'en')).toBe('400 g gluten-free pasta');
+    // the other green words of the step are the same as on the original
+    const original = findStepIngredients(nlText, r.lines, dict, 'nl');
+    expect(words(nlText, findStepIngredients(nlText, view.lines, dict, 'nl'))).toEqual(words(nlText, original));
+  });
+});
+
+function spaghettiLines(): Line[] {
+  return [{ raw: { nl: '400 g spaghetti' }, qty: { min: 400 }, unit: 'g', ing: 'spaghetti', name: 'spaghetti' }];
+}

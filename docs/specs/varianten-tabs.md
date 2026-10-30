@@ -1,6 +1,23 @@
 # Spec 13D — Varianten als tabs, "Tip van de maker", eigen versie vs bewerken
 
 Status: compleet (Fable, 22 okt 2026)
+**Besluiten Fable na blok 1 (30 okt; gelden voor blok 2–4):** (1) Een vervanging die je in de goedkeur-sheet UITVINKT betekent
+"deze regel laat ik zo, dat regel ik zelf": de sheet zet die regelindex in `checked` (naast de afgevinkte "controleer zelf"-
+regels), zodat `variantView` de goedkeuring als `approved` ziet en niet als `stale`; een dieet met alleen uitgevinkte
+vervangingen blijft dus bestaan ({swaps: [], checked: [i]}). Domein ongewijzigd; blok 2 bouwer B doet dit in de sheet.
+(2) Het alternatief van een vervangen regel ("farfalle (of een andere pastasoort)" → alt `pasta`) moet op de dieettab ook
+groen: `applyStoredSwap`/`applySwap` zetten naast `swappedFrom` ook `swappedAlt` (het alt-id, als dat er was) en
+`findStepIngredients` neemt ook die naamvormen mee (blok 2, extra bouwer D). (3) `tagsWithVariants`: een goedgekeurde
+vegan-tab geeft óók `vega-optie` (vegan is vegetarisch; spiegel `DIET_TAGS_FOR`), zodat het filter "vegetarisch (ook als
+optie)" het recept vindt; een stale goedkeuring telt mee tot ze wordt ingetrokken (blok 2 bouwer D). (4) Een platte string
+als `tip` wordt `{nl: s}` zoals bij description/servingTip (§2e wint van de §6-testregel). (5) Bouwer C-interpretaties
+akkoord: `setPlanRecipe` wist `variant`; `generateList` geeft een niet-goedgekeurd slot zonder `variant` door;
+`addToPlan` laat een bestaand slot ongemoeid (de UI roept `setPlanVariant` aan). (6) Bundelgrootte: de gedeelde chunk van
+de Safari-landing groeide 23,6 → 28,7 kB gzip omdat share.ts/recipe-io.ts `VARIANT_DIETS` uit variants.ts halen; blok 2
+bouwer D zet `VariantDiet`/`VARIANT_DIETS`/`DIET_TAGS_FOR`/`OPTIE_TAGS_FOR` in een klein `src/domain/diets.ts`
+(variants.ts re-exporteert) en share.ts/recipe-io.ts importeren dat; doel: terug naar ±24 kB. (7) `matchQuantityText`
+blijft letterlijk de spec volgen (geen tekst als de stap al een hoeveelheid noemt). Blok 1 mag direct naar main (§4).
+Gebouwd: 30 okt 2026 (13D blok 1, workflow wf_bbad638a-243)
 
 Kritische lezer (Fable, 22 okt 2026): gelezen naast de acht andere specs (besluiten over specs heen in
 docs/specs/README.md §2; bij tegenspraak wint README.md). Voor deze spec:
