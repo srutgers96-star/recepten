@@ -225,6 +225,9 @@ level-up-venster. Bron van de getallen: `settleXp` kent oud en nieuw totaal; de 
 (3) Geluid: de tadaa (6D-4a) blijft op hetzelfde moment. (4) Alles alleen met badges aan (§1 xp-levels: geen spoor
 van XP als badges uit staan).
 
-**Open vragen.** Ook bij een foto of beoordeling (kleinere XP) de balk tonen, of alleen bij koken? Hoe lang mag het
-duren voordat het irritant wordt (Stijn test: 1,4 + 1,2 s)? Overslaan door te tikken?
+**Antwoord Stijn (30 okt) op de open vragen.** Tikken tijdens de viering versnelt de animatie ×2 (altijd, geen instelling).
+Daarnaast een **ontgrendeling op level 30: "Snelle vieringen"** — een schakelaar die alle vieringen (woord, confetti, XP-balk)
+standaard op dubbele snelheid zet; verschijnt als tegel in Vrijgespeeld/Jouw stijl (data/unlocks.json, kind 'feature' of
+een nieuwe kind 'setting'; past bij het 24-okt-besluit "rijk, niet spaarzaam"). Blijft open: de balk ook bij foto/beoordeling,
+of alleen bij koken.
 
