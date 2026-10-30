@@ -206,6 +206,7 @@ controlemiddel. Twee bouwers; wat hier niet staat, beslist Opus niet (README §2
 Legendarisch" met een stipje op de tegels. STATUS-kop "… (Opus): 6D-R — zeldzaamheid van avatar-onderdelen". Acceptatie
 in de dev-app op 360 en 375 px, licht en donker, NL en EN; het contactblad opnieuw gemaakt met de zeldzaamheidstabel in
 het rapport (Fable beoordeelt de verdeling). Vrijgespeeld/level-up-venster veranderen in dit blok niet (later, opschoonronde).
+Gebouwd: 30 okt 2026 (blok 6D-R, workflow: run-id vult de hoofdsessie in bij de commit)
 
 ### Blok 6D-S — "Jouw stijl": één personaliseer-menu achter de avatar (plan Fable, 30 okt 2026; spec volgt bij de start)
 
@@ -272,6 +273,28 @@ Bezit: `src/screens/BadgesScreen.tsx`, `src/styles/badges.css`, `src/i18n/badges
    "geel"/"blauw" in de verwachte tekst staat: aanpassen.
 **Integrator/gate:** DEVICE-TEST rij 94/95 (tegels, tik voor details) en de kleurnaam-rijen aanpassen (NL én EN), STATUS-kop
 "… 6D-B — badgepagina als tegels, kleur in plaats van kleurnaam". Acceptatie op 360/375 px, licht en donker, NL en EN.
+
+### Blok 6D-F — avatar ronde 3: lijsten (frames) en vrije achtergronden (plan Fable, 30 okt 2026; spec bij de start)
+
+Stijn (30 okt): "het frame van je avatar, de rand eromheen, als iets om te verzamelen; en de achtergrond kan flink aangepast
+worden. Ergens — achtergrond of frame — moet de originele profielkleur altijd terug te vinden zijn. Spelen met frames lijkt me
+heel nice: andere vormen, of juist dat het poppetje eruit springt." Plan, als avatar-ronde ná 6D-S:
+1. **Nieuwe laag `frame`** (twaalfde laag, buiten de clip getekend door `renderAvatarSvg`, dus een eigen tekenregel): vormen
+   zoals cirkel (standaard), zeshoek, schulprand, lauwerkrans, koksmuts-rand, houten bord, pannenrand, lijst met klemmetjes;
+   een frame mag de figuur erbovenuit laten steken (de clip wordt dan de framevorm; het hoofddeksel mag erbuiten). Frames
+   zijn vooral episch/legendarisch (zeldzaamheid 6D-R) en komen uit hoge levels en badges.
+2. **Kleurregel (hard):** de profielkleur blijft altijd zichtbaar: óf de achtergrond is de profielkleur (zoals nu), óf het
+   frame neemt de profielkleur aan als hoofdkleur zodra een achtergrond gekozen is die haar bedekt. De validator eist
+   dat elk frame een `profileColor`-vlak heeft; de renderer kiest: achtergrond = `bg-color` → frame vrij gekleurd,
+   anders → frame in de profielkleur. Zo herken je elk lid aan zijn kleur, ook met een drukke achtergrond.
+3. **Levelkleur:** de dunne ring in de niveaukleur blijft als binnenlijn van elk frame (het frame vervangt de buitenrand).
+4. **Achtergronden vrijer:** volvlak-achtergronden mogen de profielkleur bedekken (de regel van punt 2 vangt dat op);
+   daarmee kunnen de 13 achtergronden van ronde 2 groeien naar ±30 (patronen, tafereeltjes, seizoenen).
+5. Maker: tab "Lijst" na "Achtergrond"; kaartje `#f=` en `#x=` dragen het frame-id mee in `AvatarSpec.parts` zoals elk
+   onderdeel (geen nieuw formaat). Oude apps zonder de laag negeren een onbekend id (normalizeAvatarSpec laat ids met een
+   onbekende laag … let op: `layerOfId` kent `frame` dan niet → de id valt weg; dat is het bestaande gedrag voor onbekende
+   lagen en acceptabel: de ontvanger ziet de standaardrand).
+Geen nieuwe setting, geen nieuwe sleutel. Spec met bestandsverdeling schrijft Fable bij de start.
 
 ### Blok 6D-2c — mini-ronde (Fable, 29 okt 2026): "?"-kaartjes, Hele cirkel + boodschappenspoor, stille registratie bij start
 

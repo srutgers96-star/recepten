@@ -4,6 +4,74 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 30 okt (Opus): 6D-R — zeldzaamheid van avatar-onderdelen (gewoon · zeldzaam · episch · legendarisch)
+Gebouwd volgens docs/specs/badges-avatar.md "Blok 6D-R" (bouwer R-A domein/data/validator/contactblad/tests, R-B maker en
+teksten, integrator). Niet gecommit. Geen Dexie-versie, geen setting, geen localStorage-sleutel, geen dependency; vier
+nieuwe i18n-keys `avatar.rarity.common/rare/epic/legendary` (NL "Gewoon/Zeldzaam/Episch/Legendarisch", EN "Common/Rare/
+Epic/Legendary", letterlijk uit R-B.5). Gate groen: check, 1474 tests (61 bestanden), build, build:next, validate:data
+(avatar-parts.json 126 onderdelen, 0 fouten, 0 waarschuwingen). Let op: de werkmap bevat ook een losse, niet-gecommitte
+wijziging van een andere sessie in src/domain/xp.ts en tests/xp.test.ts (`XP_RULES_VERSION` 3, `earlyBoostLevels`; niet
+van dit blok, niet aangeraakt; die test stond tijdens de integratie even rood). HEAD plus alleen de acht 6D-R-bestanden
+in een losse kopie: check groen, 1471 tests (61 bestanden) groen.
+- **Domein (R-A, alleen toegevoegd):** `Rarity`, `RARITIES` (gewoon → legendarisch), `AvatarPart.rarity`, en de pure regel
+  `rarityFor(unlock, badge?)`: level ≤ 20 gewoon · 21–50 zeldzaam · 51–80 episch · 81–100 legendarisch; badge tier ≤ 2 of
+  eenmalig zichtbaar zeldzaam · tier 3–5 episch · ≥ 6 legendarisch; geheime badge minstens episch.
+  `normalizeAvatarParts`: een geldige `rarity` uit de data wint, ontbreekt hij (of is hij onbekend) dan de regel; het
+  onderdeel blijft bruikbaar. `renderAvatarSvg`, `isSafePartSvg` en de rest ongewijzigd.
+- **Data:** alleen `"rarity"` op alle 126 onderdelen (script-controle: verder byte-gelijk). Eerst de regel, dan de
+  besluiten van Fable letterlijk (7 legendarisch, 12 episch) en "gewone kleding, haar, simpel attribuut = gewoon".
+  29 onderdelen wijken af van de regel (lijst op het contactblad).
+- **Validator:** `rarity` is een toegestane sleutel; een ongeldige waarde is een fout, een afwijking van de regel nooit
+  een waarschuwing; ontbreken mag (valt terug op de regel). `AVATAR_RARITIES` spiegelt `RARITIES`.
+- **Contactblad:** `node --experimental-strip-types tools/avatar-sheet.ts` → scratch/avatar-sheet.html: per onderdeel een
+  gekleurd hoekje + de naam (met "(regel: …)" als Fable anders zette), bovenaan de sectie "Zeldzaamheid" met de tabel,
+  de badge-onderdelen per zeldzaamheid en de 29 afwijkingen; de tabel ook in de console. Opnieuw gemaakt op 30 okt:
+
+  | Zeldzaamheid | Aantal | Aandeel (richtlijn) | Via level | Via badge | Vóór level |
+  |---|---|---|---|---|---|
+  | Gewoon | 70 | 56 % (±50 %) | 70 | 0 | t/m level 20: 55 van 70 |
+  | Zeldzaam | 25 | 20 % (±30 %) | 16 | 9 | t/m level 50: 16 van 16 |
+  | Episch | 24 | 19 % (±15 %) | 12 | 12 | t/m level 80: 12 van 12 |
+  | Legendarisch | 7 | 6 % (±5 %) | 6 | 1 | – |
+  | Totaal | 126 | | 104 | 22 | |
+
+  Badge-onderdelen: zeldzaam 9 (o.a. hat-santa, prop-baguette, pin-medal-gold), episch 12 (o.a. eyes-sleepy, hat-pan,
+  pin-heart, pin-globe), legendarisch 1 (hair-flame, op-dreef @4).
+- **Tests:** geldige rarity op elk onderdeel en expliciet in de data; `rarityFor` op 20/21, 50/51, 80/81, tier 1/2/3/5/6/8
+  en hidden; expliciet wint, ontbrekend/onbekend → regel; Fable's lijsten letterlijk; balans ≥ 75 % (commons ≤ 20,
+  rares ≤ 50); legendarisch ≥ 3 en ≤ 10 %; tekenbudget per zeldzaamheid (gewoon/zeldzaam 14 el · 1,5 kB, episch 20 · 2 kB,
+  legendarisch 26 · 2,5 kB; vervangt de vaste 14/1,5 kB-test); validator-test.
+- **Maker (R-B):** tokens `--rarity-common` (= `--muted`), `--rarity-rare` #2b6fd6/#6f9fe8, `--rarity-epic` #7a5aa8/#ab93d8,
+  `--rarity-legendary` #c9a227/#e4c45a (systeem- en geforceerd donker). Een onderdelentab: "geen" in een eigen raster,
+  dan per zeldzaamheid een groepje met een 13 px-kopje in die kleur ("Zeldzaam · 6", `role="group"`) boven een eigen
+  raster; binnen een groepje op level, dan id; lege groepjes weg; Huid en Haarkleur zonder groepjes. 8 px-stipje
+  linksboven op niet-gewone tegels, ook vergrendeld. Title/aria-label beginnen met de zeldzaamheid ("Zeldzaam ·
+  Pannenkoekhoed. Komt vrij op level 28."); de uitlegregel ook ("Zeldzaam · Komt vrij op level 28.").
+- **Dev-app (integrator; 375 en 360 px, licht en donker, NL en EN):** Hoofddeksel: geen → Gewoon · 5 → Zeldzaam · 6 →
+  Episch · 6 → Legendarisch · 2, stipjes alleen buiten Gewoon; kleuren gemeten precies de spec-waarden (licht #2b6fd6/
+  #7a5aa8/#c9a227, donker #6f9fe8/#ab93d8/#e4c45a); stipje 8 × 8 px linksboven, kopje 13 px; Accessoire: geen, dan
+  Houten lepel als eerste onder Gewoon (DEVICE-TEST 104 stap 3 klopt nog); geheim speldje zonder naam ("Episch · Komt
+  vrij met een geheime badge."); EN "Common · 5 / Rare · 6 / Epic · 6 / Legendary · 2", "Rare · Unlocks at level 28.";
+  pagina nooit horizontaal scrollbaar (scrollWidth = 360/375); geen consolefouten. Daarna terug op NL, Annuleer, viewport
+  terug en server gestopt. DEVICE-TEST rij 104 aangevuld (stap 6, NL en EN).
+- **Open voor Fable (niets zelf besloten):** (1) Welke onderdelen "gewoon" zijn: R-A las de gewoon-regel als élk
+  level-onderdeel van haar, kleding en attribuut dat Fable niet episch/legendarisch noemde (15 stuks: hair-braid,
+  hair-ponytail, hair-afro, body-dress, body-raincoat, body-tee-avocado, body-orange-shirt, body-christmas-jumper,
+  prop-frying-pan, prop-ice-cream, prop-cupcake, prop-herbs, prop-chopsticks, prop-egg-timer, prop-leek). Twijfelgevallen
+  (regel gaf episch of zeldzaam): body-christmas-jumper (Lv 57), body-orange-shirt (52), prop-egg-timer (53), prop-leek
+  (59), body-tee-avocado (48). Niet toegepast op badge-onderdelen (prop-baguette/-carrot-ear/-aubergine blijven
+  zeldzaam) en niet op andere lagen (facial-sideburns, facial-milk, hat-hairnet blijven zeldzaam). (2) Verdeling t.o.v. de
+  richtlijn: zeldzaam laag (20 %), episch hoog (19 %), vooral door (1) en de badge-onderdelen met tier ≥ 3; niets
+  bijgesteld. (3) "Vóór level N" is geteld als t/m N (zelfde grens als de regel en de 75 %-test). (4) Badge-onderdelen
+  hebben geen level: R-B zet ze ná de level-onderdelen van hun groepje, op id. (5) De uitlegregel staat onder het raster
+  van het groepje van het getikte onderdeel (niet één keer onderaan het paneel). (6) Ook gewone tegels beginnen hun
+  title/aria-label met "Gewoon · " (spec letterlijk; alleen het stipje vervalt); de vergrendelde geheime tegel heeft nu
+  title "Episch" (had geen title). (7) Binnen Gezicht staat Ovaal nu vóór Rond (beide Lv 3, dan op id). (8) Het contactblad
+  geeft meer dan de spec vraagt ("(regel: …)" per onderdeel, de lijst van 29 afwijkingen, de tabel in de console).
+- **Stijns bericht (30 okt) "de avatar naar beneden slepen mixen met profiel":** staat al als 6D-S punt 4 (Mijn profiel =
+  de pull-down); niets voor gebouwd in dit blok.
+- **Volgende:** Fable-blik op de verdeling (contactblad), dan commit; daarna 13D blok 2.
+
 ## 30 okt (Opus): 13D blok 1 — varianten als tabs: model, domein, repo en deelformaat (onzichtbaar)
 Gebouwd volgens docs/specs/varianten-tabs.md "Blok 1" (bouwer A domein, B deelformaat en normalisatie, C repo,
 integrator). Niet gecommit. Onzichtbaar voor Stijn (§4), dus geen DEVICE-TEST-rij: geen UI-bestand geraakt
@@ -273,6 +341,11 @@ extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids
   xp-levels.md onder "Na de lens van 6D-4a".
 
 ## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+**Stijn, 30 okt (avond, 6): frames als verzamellaag + vrije achtergronden** (profielkleur altijd ergens zichtbaar: achtergrond
+óf frame) → plan **6D-F** (badges-avatar.md), ná 6D-S. En: het dobbelsteentje 🎲 bij "Verras me" is "zo Claude-standaard" →
+vervangen door een eigen schud-icoon (SVG) op alle zes plekken (PickSheet, TonightCard, WeekScreen, AvatarSheet) — Fable doet dat
+zodra 6D-R binnen is (AvatarSheet is nu bezet).
+
 **Stijn, 30 okt (avond, 5): badgepagina nog te groot** → blok **6D-B**: alleen de iconen als tegels van 64 px (ring/rand/gedempt/"?"),
 tik opent een sheet met de details; direct ná 6D-R (spec in badges-avatar.md).
 
