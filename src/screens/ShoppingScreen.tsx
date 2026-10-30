@@ -628,7 +628,7 @@ export function ShoppingScreen() {
             {expanded && (
               <ul class="list">
                 {visible.map((it) => (
-                  <ListRow key={it.key} item={it} text={lineText(it, dict, l)} onToggle={(item) => void toggleCheck(item)} onHold={(item) => setMenu({ item, view: 'menu' })} />
+                  <ListRow key={it.key} item={it} text={lineText(it, dict, l)} name={itemName(it, dict, l)} onToggle={(item) => void toggleCheck(item)} onHold={(item) => setMenu({ item, view: 'menu' })} onRemove={(item) => void remove(item)} />
                 ))}
               </ul>
             )}
@@ -642,7 +642,7 @@ export function ShoppingScreen() {
           <p class="hint">{t('shop.checkHint')}</p>
           <ul class="list">
             {(hideChecked ? split.check.filter((it) => !it.checked) : split.check).map((it) => (
-              <ListRow key={it.key} item={it} text={lineText(it, dict, l)} onToggle={(item) => void toggleCheck(item)} onHold={(item) => setMenu({ item, view: 'menu' })} />
+              <ListRow key={it.key} item={it} text={lineText(it, dict, l)} name={itemName(it, dict, l)} onToggle={(item) => void toggleCheck(item)} onHold={(item) => setMenu({ item, view: 'menu' })} onRemove={(item) => void remove(item)} />
             ))}
           </ul>
         </section>

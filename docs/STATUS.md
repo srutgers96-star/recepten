@@ -156,6 +156,9 @@ ronde hieronder.
 - Level-up-venster: de lijst avatar-onderdelen inkorten ("+13 avatar-onderdelen" met uitklappen).
 - Enkelvoud "1 badge" / "1 kookdag" (6D-4b); kalender-legenda zonder "bijgewerkt" bij badges uit; inline
   kalender-stijlen naar xp.css.
+- ✔ Gedaan 30 okt (Fable, direct): een stil × rechts op elke boodschappenregel (44 px, `.lr-x`, ListRow `onRemove`)
+  verwijdert de regel zonder af te vinken, met Ongedaan in de snack (zelfde `remove` als het houd-menu); i18n
+  `shop.removeRow`. Stijn: "ketchup heb ik niet meer nodig".
 - ✔ Gedaan 30 okt (Fable, direct): categorie-bijschrift gecentreerd tussen twee lijnen; per categorie een zachte kleur
   (16 tokens `--aisle-*` in shopping.css, licht én donker) op bijschrift, lijn en vinkvakjes; geen onderstreep na de laatste
   regel. Overig/onbekend blijft --muted.

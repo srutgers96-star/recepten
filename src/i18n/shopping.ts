@@ -53,6 +53,7 @@ export const shopping: Dict = {
   'shop.checkedSnack': { nl: 'Afgevinkt', en: 'Ticked' },
   'shop.uncheckedSnack': { nl: 'Vinkje weg', en: 'Untick' },
   'shop.removedSnack': { nl: 'Verwijderd', en: 'Removed' },
+  'shop.removeRow': { nl: 'Verwijder {name}', en: 'Remove {name}' },
   'shop.inHouseSnack': { nl: 'In huis gezet', en: 'Marked in stock' },
   'shop.neededSnack': { nl: 'Weer op de lijst', en: 'Back on the list' },
   'shop.pinnedSnack': { nl: 'Gaat elke week mee', en: 'Goes every week' },

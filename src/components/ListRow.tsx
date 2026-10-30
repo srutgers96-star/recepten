@@ -2,7 +2,8 @@
 // the row stays where it is), hold ≈ 500 ms = the long-press menu (Heb ik al / Aantal aanpassen /
 // Waarvoor is dit? / Verwijder / Elke week). The caller renders the text (`renderListItem`) so
 // the row knows nothing about the dictionary. Pointer events only: a finger that moves more than
-// 10 px scrolls, and the click after a completed hold is swallowed.
+// 10 px scrolls, and the click after a completed hold is swallowed. A small × on the right removes the
+// line without ticking it (Stijn 30 Oct: "ketchup heb ik niet meer nodig"); the caller shows the Undo snack.
 import { useRef, useState } from 'preact/hooks';
 import type { ListItem } from '@/domain/aggregate';
 import { t } from '@/i18n';
@@ -16,6 +17,10 @@ export interface ListRowProps {
   text: string;
   onToggle: (item: ListItem) => void;
   onHold: (item: ListItem) => void;
+  /** The × on the right (44 px); absent = no × (the proto list). */
+  onRemove?: (item: ListItem) => void;
+  /** Accessible name of the line for the × ('Verwijder ketchup'). */
+  name?: string;
 }
 
 export function ListRow(props: ListRowProps) {
@@ -91,6 +96,11 @@ export function ListRow(props: ListRowProps) {
           </span>
         )}
       </button>
+      {props.onRemove && (
+        <button type="button" class="lr-x" aria-label={t('shop.removeRow', { name: props.name ?? props.text })} onClick={() => props.onRemove?.(item)}>
+          ×
+        </button>
+      )}
     </li>
   );
 }
