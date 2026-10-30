@@ -153,6 +153,52 @@ hint en 🎲 scrollen weg, sheet altijd even hoog). Opschoonronde: oude avatar-m
 Home-regel uit avatar.css naar home.css. Register README §2b: `recepten.badges.groups` → `recepten.badges.tab` (Fable).
 Gebouwd: 30 okt 2026 (blok 6D-UI, workflow wf_0575b903-abc; nabewerking (1) en (4) door een Opus-fixer, docs door Fable)
 
+### Blok 6D-R — zeldzaamheid van avatar-onderdelen: gewoon · zeldzaam · episch · legendarisch (Fable, 30 okt 2026)
+
+Status: compleet (Fable, 30 okt 2026). Klein blok, direct ná 13D blok 1 (README §1 rij 12c). Stijn (30 okt): "de avatar dingen
+opdelen in common, rare, epic en legendary. Nu weet je niet hoe zeldzaam ze zijn; daarop kan het veld ook nog opgedeeld
+worden, en dan kan ik makkelijker zien of ik het met de rarities eens ben. Verdelen op hoe moeilijk het is vrij te spelen:
+vóór level 20 ongeveer alle commons, vóór level 50 ongeveer álle rares, etcetera, met uitschieters als je toevallig iets
+zeldzaams gedaan hebt op een laag level." Twee bouwers; wat hier niet staat, beslist Opus niet (README §2).
+
+**R-A — domein, data, validator, contactblad, tests.** Bezit: `src/domain/avatar.ts` (alleen toevoegen), `data/avatar-parts.json`
+(alleen het veld `rarity` erbij), `tools/validate-data.ts` (`validateAvatarParts`), `tools/avatar-sheet.ts`, `tests/avatar.test.ts`.
+1. Type `Rarity = 'common' | 'rare' | 'epic' | 'legendary'`, `RARITIES` in die volgorde, `AvatarPart.rarity: Rarity`.
+2. Standaardregel `rarityFor(unlock, badge?)` (geëxporteerd, puur): level ≤ 20 → common · 21–50 → rare · 51–80 → epic ·
+   81–100 → legendary; badge-ontgrendeling: ladder-tier ≤ 2 of eenmalig zichtbaar → rare · tier 3–5 → epic · tier ≥ 6 →
+   legendary; een verborgen (geheime) badge minstens epic. `normalizeAvatarParts`: een expliciet veld `rarity` in de data
+   wint; ontbreekt het, dan de regel. De validator eist een geldige waarde en geeft een WAARSCHUWING (geen fout) als het
+   expliciete veld afwijkt van de regel, met beide waarden in de tekst: zo ziet Stijn de uitschieters.
+3. Data: elk van de 126 onderdelen krijgt `rarity` expliciet (bouwer vult hem met de regel, daarna deze uitschieters door
+   Fable: legendary = hat-crown, body-gold-jacket, bg-gold, bg-confetti, hair-whipped-cream; epic = hat-cheese
+   (Kaaskop-blauw), prop-camera, hair-flame, bg-rainbow). Verdeling als richtlijn, geen hard getal: ±50 % common,
+   ±30 % rare, ±15 % epic, ±5 % legendary.
+4. Contactblad (`tools/avatar-sheet.ts`): per onderdeel de zeldzaamheid als gekleurd hoekje en tekst; bovenaan een tabel
+   per zeldzaamheid (aantal, en "vóór level 20 heb je n van m commons", "vóór level 50 n van m rares", "vóór level 80 n
+   van m epics" — alleen level-ontgrendelingen tellen; badge-onderdelen apart genoemd), zodat Stijn de balans kan zien.
+5. Tests (`tests/avatar.test.ts`): elke part heeft een geldige rarity; `rarityFor` op de grensgevallen (20/21, 50/51,
+   80/81, tier 2/3/6, hidden); ≥ 85 % van de level-commons op level ≤ 20 en ≥ 85 % van de level-rares op ≤ 50 (de
+   uitschieters mogen); legendary ≥ 3 en ≤ 10 % van het totaal.
+
+**R-B — maker en teksten.** Bezit: `src/components/AvatarSheet.tsx`, `src/styles/avatar.css` (alleen het maker-deel),
+`src/i18n/avatar.ts` (alleen toevoegen).
+1. Kleuren (tokens in avatar.css, licht én donker leesbaar): `--rarity-common` grijs (var(--muted)), `--rarity-rare` blauw
+   #2b6fd6 / donker #6f9fe8, `--rarity-epic` paars #7a5aa8 / #ab93d8, `--rarity-legendary` goud #c9a227 / #e4c45a.
+2. Tegel: een klein rond stipje (8 px) linksboven in de zeldzaamheidskleur, ook op vergrendelde tegels (zodat je ziet wat
+   er nog komt); gewoon = geen stipje. `title`/aria-label van de tegel begint met de zeldzaamheid ("Zeldzaam · Koksbuis").
+3. Het paneel van een tab wordt opgedeeld in groepjes per zeldzaamheid, in de volgorde gewoon → zeldzaam → episch →
+   legendarisch, elk met een klein gedempt bijschrift in de zeldzaamheidskleur ("Zeldzaam · 5") boven zijn raster;
+   binnen een groepje op ontgrendel-level, dan op id. Lege groepjes worden niet getoond. De "geen"-tegel staat vóór het
+   eerste groepje, de kleurtabs (Huid, Haarkleur) hebben geen groepjes.
+4. De uitlegregel onder het raster begint met de zeldzaamheid: "Zeldzaam · Komt vrij op level 35."
+5. i18n: `avatar.rarity.common` NL "Gewoon" · EN "Common"; `.rare` "Zeldzaam" · "Rare"; `.epic` "Episch" · "Epic";
+   `.legendary` "Legendarisch" · "Legendary". Geen andere nieuwe keys.
+
+**Integrator.** DEVICE-TEST rij 104 aanvullen (NL én EN): in de maker staan per tab groepjes "Gewoon / Zeldzaam / Episch /
+Legendarisch" met een stipje op de tegels. STATUS-kop "… (Opus): 6D-R — zeldzaamheid van avatar-onderdelen". Acceptatie
+in de dev-app op 360 en 375 px, licht en donker, NL en EN; het contactblad opnieuw gemaakt met de zeldzaamheidstabel in
+het rapport (Fable beoordeelt de verdeling). Vrijgespeeld/level-up-venster veranderen in dit blok niet (later, opschoonronde).
+
 ### Blok 6D-2c — mini-ronde (Fable, 29 okt 2026): "?"-kaartjes, Hele cirkel + boodschappenspoor, stille registratie bij start
 
 Dit blok bundelt de drie besluiten hierboven plus de twee gereproduceerde bevindingen van de lens van 6D-2b. Het is

@@ -216,6 +216,10 @@ extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids
   xp-levels.md onder "Na de lens van 6D-4a".
 
 ## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+**Stijn, 30 okt (avond): zeldzaamheid voor avatar-onderdelen** (common/rare/epic/legendary, op moeilijkheid van vrijspelen;
+vóór level 20 ±alle commons, vóór 50 ±alle rares; uitschieters mogen). Fable: klein blok 6D-R direct ná 13D blok 1 (spec
+bovenaan badges-avatar.md), zodat Stijn de verdeling kan beoordelen terwijl 13D doorloopt.
+
 **Stijn, 30 okt: 13F vervalt** ("skip het 22 recepten van Stijn's export toevoegen … niet nodig"): geen id-migratie, geen
 Dexie v8, DATA_VERSION blijft 9, 216 klassiekers; de 8 woordenboek-entries → IDEAS 8 (ingrediënten-upgrade). README §1/§2a,
 inbouwen.md en de timeline (v24) zijn aangepast.
