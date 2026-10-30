@@ -55,4 +55,9 @@ export const badges: Dict = {
   'badges.toastTier': { nl: '🏆 {name} · niveau {k}: {colour}', en: '🏆 {name} · level {k}: {colour}' },
   'badges.toastSecret': { nl: '🤫 Geheime badge: {name}', en: '🤫 Secret badge: {name}' },
   'badges.toastUnlock': { nl: 'Nieuw voor je avatar: {part}', en: 'New for your avatar: {part}' },
+  // 6D-UI (UI-A): one group per tab. An empty group shows one muted line; the pill on the tab of
+  // Geheim counts found badges only ("3 gevonden", never a total). The NL of `badges.groupFound` is
+  // literal from the spec; the key name and the EN were not given there (reported to the integrator).
+  'badges.groupEmpty': { nl: 'Nog niets in deze groep.', en: 'Nothing in this group yet.' },
+  'badges.groupFound': { nl: '{n} gevonden', en: '{n} found' },
 };

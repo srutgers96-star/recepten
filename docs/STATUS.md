@@ -30,27 +30,52 @@ validate:data (126 avatar-onderdelen, 0 fouten). **Vóór main: Fable-blik op he
   pijl rechts verplaatst tab en focus; onderrand cobalt in licht en donker. Maker: strook 48 px, tabs 44 px, raster
   4 × 76 px op 360 px, tegels 64 px, strook plakt tegen de bovenkant van de body, tabwissel zet het paneel bovenaan;
   NL- en EN-tabnamen. Avatar-maten gemeten: Home 72, Meer 64, Profielen 56, Huishouden 48.
+- **Na de review (fixer):** drie tekeningen opnieuw volgens UI-C.1. `hat-hairnet`: het elastiek liep door de ogen
+  (y ≈ 38,6 bij x 39/61); nu volgen net en elastiek de haarlijn (y 29 in het midden, 36 aan de zijkant). `prop-camera`:
+  was 19 hoog en zweefde naast de schouder; nu een grotere camera op een handgreep in de hand (getBBox x 67–92,
+  y 49–82, dus 33 hoog en door (84, 80)). `facial-beard`: liep tot y 82 over het speldje; volgt nu de kaaklijn tot y 72,5
+  (snor erin ongewijzigd). Gemeten in Chrome (canvas-probe met clip r 46): ogen onder het haarnetje 0 % bedekt (was
+  11–46 %), speldjes onder de baard ≤ 5 % (was tot 31 %, gouden medaille), camera 6 % geknipt (andere attributen 0–7 %).
+  De baard zit daarmee op y 42–72,5, net als stoppels (50–72) en sikje (61–74); "gezichtshaar y 50–64" uit UI-C.1
+  haalt een volle baard op een kin op y 72 niet.
 - **Open voor Fable / de hoofdsessie (niets zelf besloten):** (1) README §2b-register: `recepten.badges.groups` →
-  `recepten.badges.tab` — de spec geeft dat aan de integrator, maar deze run mocht docs/specs/ alleen de
-  Gebouwd-regel geven. (2) De pil op Geheim gebruikt nieuwe key `badges.groupFound`: NL "{n} gevonden" uit de spec,
-  EN "{n} found" niet in de spec (eigen vertaling van UI-A). (3) `--accent` bestaat niet in base.css: de onderrand is
-  `var(--accent, var(--cobalt))`. (4) Geen enkel nieuw onderdeel komt van een badge: UI-C.4 wil ze ook over bestaande
-  badge-ids (met laddertier) spreiden, maar dat vraagt `unlock.part` in data/badges.json (niet toegewezen) en de
-  koppeling is een keuze; UI-C stelde 16 paren voor (o.a. halloween → hat-pumpkin, uienhuiler → eyes-onion-tears,
-  stamppotstamper → prop-leek), zonder tier. (5) De letterlijke referentie prop-wooden-spoon valt half buiten de clip
-  (r 46): van de schep is alleen de linkerhelft zichtbaar; avatar.ts en de referentie mogen niet veranderen.
-  (6) Interpretatie UI-C: "hair-cap" = svg van hair-short, "body-shirt" = svg van body-tee (samen met de andere drie
-  precies `defaultAvatar()`). (7) Doelen per laag tellen op tot 120 (66 + 54), terwijl er "≥ 60 nieuwe" staat: het
-  werden er 60 (126). (8) De teken-regels (elementen, attributen, ≤ 1,5 kB, ≤ 14 elementen) staan in de tests, niet in
-  `validateAvatarParts`. (9) Het besluitblok noemt de tabs "Gezichtshaar"/"Attribuut", UI-B zegt "de bestaande namen":
-  het blijft "Baard & snor"/"Accessoire" (DEVICE-TEST 104 zegt dus Accessoire). (10) body-tee (#4a5d78) is precies
-  profielkleur "slate": daar valt het shirt weg op de omlijning na. (11) De oude 6D-3-maten in settings.css en edit.css
-  staan er nog (overschreven door avatar.css), plus `.home-hello + .home-level { margin-left: 84px }` in avatar.css.
-  (12) Bij sluiten worden alle vrije onderdelen "gezien", ook van tabs die je niet opende (gedrag van 6D-3; de spec
-  zegt niets anders). (13) data/avatar-parts.json groeide van 19,7 naar 72,4 kB (14,4 kB gzip), alleen in de
-  main-chunk. DEVICE-TEST: rij 94/95/96 aangepast (tabs), rij 104 nieuw (NL en EN); tools/README.md kreeg een regel
-  voor avatar-sheet.ts.
+  `recepten.badges.tab` — de spec geeft dat aan de integrator, maar deze run mocht docs/specs/ alleen de Gebouwd-regel
+  geven. (2) De pil op Geheim gebruikt nieuwe key `badges.groupFound`: NL "{n} gevonden" uit de spec, EN "{n} found"
+  niet in de spec (eigen vertaling van UI-A); ook de keynaam staat niet in de spec. Opties: (a) EN "{n} found" en de
+  keynaam bevestigen, (b) Fable/Stijn geeft een andere EN-tekst (alleen die regel verandert). (3) `--accent` bestaat
+  niet in base.css: de onderrand is `var(--accent, var(--cobalt))`. (4) Geen enkel nieuw onderdeel komt van een badge:
+  UI-C.4 wil ze ook over bestaande badge-ids (met laddertier) spreiden, maar dat vraagt `unlock.part` in
+  data/badges.json (niet toegewezen) en de koppeling is een keuze; UI-C stelde 16 paren voor (o.a. halloween →
+  hat-pumpkin, uienhuiler → eyes-onion-tears, stamppotstamper → prop-leek), zonder tier. Een badge heeft maar één
+  `unlock.part` (validator), dus alleen badges zonder onderdeel komen in aanmerking. Opties: (a) Fable kiest de paren
+  (met tier bij een ladder) en wijst data/badges.json toe aan een vervolgronde, (b) de badge-spreiding van UI-C.4
+  vervalt voor deze ronde (alles via een level). (5) De letterlijke referentie prop-wooden-spoon valt grotendeels
+  buiten de clip (r 46): 63 % van de lepel valt weg, van de schep blijft een smal randje (ook prop-leek 28 %,
+  prop-baguette 16 %); avatar.ts en de referentie mogen niet veranderen, en UI-C.1 "mag over de rand uitsteken" botst
+  met de clip. DEVICE-TEST 104 stap 3 hangt hiervan af. Opties: (a) Fable verschuift de referentielepel (en prei en
+  stokbrood) binnen de clip, (b) Fable staat een wijziging in avatar.ts toe zodat de attribuutlaag ruimer geknipt
+  wordt. (6) Interpretatie UI-C: "hair-cap" = svg van hair-short, "body-shirt" = svg van body-tee (samen met de andere
+  drie precies `defaultAvatar()`). (7) Doelen per laag tellen op tot 120 (66 + 54), terwijl er "≥ 60 nieuwe" staat:
+  het werden er 60 (126). (8) De teken-regels (elementen, attributen, ≤ 1,5 kB, ≤ 14 elementen) staan in de tests,
+  niet in `validateAvatarParts`. (9) Het besluitblok noemt de tabs "Gezichtshaar"/"Attribuut", UI-B zegt "de bestaande
+  namen": het blijft "Baard & snor"/"Accessoire" (DEVICE-TEST 104 zegt dus Accessoire). (10) body-tee (#4a5d78) is
+  precies profielkleur "slate": daar valt het shirt weg op de omlijning na. Opties bij (6)/(10): (a) zo laten, Fable
+  kiest eventueel een andere shirtkleur in de referentie, (b) `hair-cap` en `body-shirt` worden eigen nieuwe ids met
+  de referentie-svg, en hair-short/body-tee houden hun eigen kleur (body-tee was #2b6fd6). (11) De oude 6D-3-maten in
+  settings.css en edit.css staan er nog (overschreven door avatar.css), plus
+  `.home-hello + .home-level { margin-left: 84px }` in avatar.css. (12) Bij sluiten worden alle vrije onderdelen
+  "gezien", ook van tabs die je niet opende (gedrag van 6D-3). §1b.5 zegt "alle nu zichtbare vrije ids"; met tabs is
+  maar één paneel zichtbaar, dus het tabstipje (UI-B.2) verdwijnt na één keer openen, ook op een tab die je oversloeg.
+  Opties: (a) alleen de vrije ids van de tabs die je deze keer opende worden gezien, (b) zo laten: alles bij sluiten.
+  (13) data/avatar-parts.json groeide van 19,7 naar 72,4 kB (14,4 kB gzip), alleen in de main-chunk. DEVICE-TEST: rij
+  94/95/96 aangepast (tabs), rij 104 nieuw (NL en EN); tools/README.md kreeg een regel voor avatar-sheet.ts.
 
+- **Besluit Fable (30 okt, na contactblad en lens):** tekeningen akkoord. Referenties aangepast in de spec: eyes-dots met
+  oogwit, body-shirt crème (#f1e9dc; #4a5d78 was de profielkleur leisteen), prop-wooden-spoon binnen de clip; regel: geen
+  attribuut meer dan 15 % buiten de clip r 46 (prei en stokbrood ook naar binnen), hair-bun 3 lager. Bij sluiten alleen de
+  geopende tabs als gezien. Badge-koppelingen van nieuwe onderdelen → volgende avatar-ronde (met `unlock.part` in
+  data/badges.json). `badges.groupFound` EN akkoord; bestaande tabnamen blijven. Register §2b bijgewerkt. Fixer doet de
+  data- en AvatarSheet-wijzigingen; daarna gate, contactblad opnieuw en commit.
 ## 30 okt (Opus): 6D-4b — Sync mijn voortgang (#x=) en kookkalender
 Gebouwd volgens docs/specs/xp-levels.md "Blok 6D-4" (= 6D-4b in README §1; bouwer A contract, bouwer B ontvangst,
 bouwer C UI, integrator). Niet gecommit. Geen Dexie-versie, geen nieuwe dependency; wel een **nieuwe fragmentsleutel

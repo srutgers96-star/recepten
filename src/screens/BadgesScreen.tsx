@@ -1,7 +1,8 @@
 // '#/more/badges' — Badges (docs/phase-5-spec.md Block C.2; the page of docs/specs/badges-avatar.md
-// §1a, block 6D-2b): a tab per household member (the local profiles + hand-added members from
-// src/domain/household.ts) plus "Samen" ('all'); per tab the eight badge groups (BADGE_GROUPS) as
-// collapsible sections, each with its grid of badge cards in catalogue order.
+// §1a, block 6D-2b; tabs since block 6D-UI): a tab per household member (the local profiles +
+// hand-added members from src/domain/household.ts) plus "Samen" ('all'); under the count line a
+// horizontally scrolling strip with the eight badge groups (BADGE_GROUPS) as tabs, and one group at a
+// time in the panel below it: its grid of badge cards in catalogue order.
 // - one-off badge: icon, name, "✓ Verdiend" or "3/5" with a bar; an earned one gets a gold edge;
 // - ladder badge: the icon in a ring of the current colour tier (tier 0 = grey dotted ring), the
 //   tier line ("Niveau 1 · geel"), then "27/50" and the bar towards the NEXT tier ("✓ Platina" on top);
@@ -10,12 +11,13 @@
 // Secret badges (block 6D-2c, decision 29 Oct 2026): a hidden badge that is not earned yet is a "?"
 // card in its own group (Geheim; the heart in Samen & delen): its real icon as the only hint, name
 // "???", `badges.secretHint`, no progress, no tier, no ring, not tappable. Its name and description
-// never reach the DOM. Counts do not change: the head of Geheim has no count, "{n} geheime gevonden"
-// counts found badges only, group counts count the visible cards (never a "?" card). The line above
-// the groups counts visible (non-hidden) badges only. Badges off (`badges.enabled`) = only a muted
-// note: gamification never in the way (PLAN.md §0).
-import type { ComponentChildren } from 'preact';
-import { useEffect, useMemo, useState } from 'preact/hooks';
+// never reach the DOM. Counts do not change: the tab of Geheim shows "{n} gevonden", never a total;
+// "{n} geheime gevonden" counts found badges only, group counts count the visible cards (never a "?"
+// card). The line above the tabs counts visible (non-hidden) badges only. Badges off
+// (`badges.enabled`) = only a muted note: gamification never in the way (PLAN.md §0).
+// Block 6D-UI (UI-A): the last group tab is remembered per phone (localStorage `recepten.badges.tab`,
+// replacing `recepten.badges.groups`); '?group=<id>' opens that group, '?tab=<member>' that member.
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { avatarParts } from '@/avatar';
 import { HOUSEHOLD_KINDS, badgeStatuses, badgesEnabled, loadBadgeSettings } from '@/badges';
 import { Header } from '@/components/Header';
@@ -86,35 +88,56 @@ export function badgePageModel(statuses: readonly BadgeStatus[]): BadgePageModel
   };
 }
 
-// --- Group open/closed state (per device, like Meer's groups) -----------------------------------
+// --- Group tab (per device) ---------------------------------------------------------------------
 
-type GroupState = Record<BadgeGroup, boolean>;
+/** localStorage key (docs/specs/README.md §2b register, block 6D-UI): the last group tab on this phone. */
+const TAB_KEY = 'recepten.badges.tab';
 
-/** localStorage key (docs/specs/README.md §2b register): which groups are folded on this phone. */
-const GROUPS_KEY = 'recepten.badges.groups';
+/** The 6D-2b key of the folded groups; gone since the tabs (6D-UI), removed once on load. */
+const OLD_GROUPS_KEY = 'recepten.badges.groups';
 
-function loadGroupState(): GroupState {
-  // Default: every group open (§1a.3).
-  const out = Object.fromEntries(BADGE_GROUPS.map((g) => [g, true])) as GroupState;
-  try {
-    const raw = localStorage.getItem(GROUPS_KEY);
-    if (!raw) return out;
-    const v: unknown = JSON.parse(raw);
-    if (v && typeof v === 'object' && !Array.isArray(v)) {
-      for (const g of BADGE_GROUPS) {
-        const b = (v as Record<string, unknown>)[g];
-        if (typeof b === 'boolean') out[g] = b;
-      }
-    }
-  } catch {
-    /* private mode or a corrupt value: defaults */
-  }
-  return out;
+/** The first tab ("Koken"): the fallback for an unknown or missing value. */
+const FIRST_GROUP: BadgeGroup = BADGE_GROUPS[0] ?? 'koken';
+
+/** The fixed group icons on the tabs (block 6D-UI, UI-A.1). */
+const GROUP_ICONS: Record<BadgeGroup, string> = {
+  koken: '🍳',
+  ontdekken: '🧭',
+  keukens: '🌍',
+  seizoenen: '🍂',
+  samen: '🤝',
+  foto: '📷',
+  reeksen: '🔥',
+  geheim: '🤫',
+};
+
+function isGroup(v: unknown): v is BadgeGroup {
+  return typeof v === 'string' && (BADGE_GROUPS as readonly string[]).includes(v);
 }
 
-function saveGroupState(s: GroupState) {
+/** '?group=<id>' first (the badge toast links with it), then the remembered tab, else "Koken". */
+function initialGroup(fromQuery: string | null): BadgeGroup {
+  if (isGroup(fromQuery)) return fromQuery;
   try {
-    localStorage.setItem(GROUPS_KEY, JSON.stringify(s));
+    const v = localStorage.getItem(TAB_KEY);
+    if (isGroup(v)) return v;
+  } catch {
+    /* private mode: the first tab */
+  }
+  return FIRST_GROUP;
+}
+
+function saveGroupTab(g: BadgeGroup) {
+  try {
+    localStorage.setItem(TAB_KEY, g);
+  } catch {
+    /* ignore */
+  }
+}
+
+function dropOldGroupsKey() {
+  try {
+    localStorage.removeItem(OLD_GROUPS_KEY);
   } catch {
     /* ignore */
   }
@@ -140,14 +163,6 @@ function dayMonth(md: [number, number], l: Lang): string {
 function partName(id: string, l: Lang): string | null {
   const part = avatarParts().get(id);
   return part ? part[l] || part.nl : null;
-}
-
-function Chevron() {
-  return (
-    <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M9 5l7 7-7 7" />
-    </svg>
-  );
 }
 
 // --- Cards -----------------------------------------------------------------------------------
@@ -282,32 +297,117 @@ function BadgeGrid(props: { statuses: BadgeStatus[]; mystery: BadgeStatus[]; ope
   );
 }
 
-// --- Groups ----------------------------------------------------------------------------------
+// --- Group tabs ------------------------------------------------------------------------------
+
+const PANEL_ID = 'badge-group-panel';
+
+function tabId(g: BadgeGroup): string {
+  return `badge-group-tab-${g}`;
+}
 
 /**
- * One collapsible group (the pattern of Meer's `Group`): the head is an h2 wrapping a 48 px button
- * ("Koken · 3/33" + chevron), the body is rendered only while open. `count` is left out for the
- * secret group: its total is never shown.
+ * Scrolls the strip sideways (never the page: no scrollIntoView) just far enough that the tab is
+ * fully visible, with a 16 px margin. offsetLeft is relative to the strip (position: relative).
  */
-function GroupSection(props: { group: BadgeGroup; open: boolean; onToggle: (g: BadgeGroup) => void; count?: string; children: ComponentChildren }) {
-  const bodyId = `badge-group-${props.group}`;
+function revealTab(strip: HTMLElement, tab: HTMLElement) {
+  const margin = 16;
+  const left = tab.offsetLeft - margin;
+  const right = tab.offsetLeft + tab.offsetWidth + margin - strip.clientWidth;
+  if (strip.scrollLeft > left) strip.scrollLeft = Math.max(0, left);
+  else if (strip.scrollLeft < right) strip.scrollLeft = right;
+}
+
+/**
+ * The strip with the eight groups (block 6D-UI, UI-A.1/5): icon + name + "2/31" in a pill (Geheim:
+ * "{n} gevonden", never a total). Roving tabindex: only the active tab is in the tab order; arrow
+ * left/right (and Home/End) switch tab and move the focus with it. The active tab is scrolled into
+ * view when the strip appears (also after a member switch, which remounts it) and on every change.
+ */
+function GroupTabs(props: { groups: BadgeGroupView[]; active: BadgeGroup; onSelect: (g: BadgeGroup) => void }) {
+  const stripRef = useRef<HTMLDivElement>(null);
+  /** Set by the keyboard: the next active tab takes the focus (a tap already has it). */
+  const moveFocus = useRef(false);
+
+  useLayoutEffect(() => {
+    const strip = stripRef.current;
+    const tab = strip ? document.getElementById(tabId(props.active)) : null;
+    if (!strip || !tab) return;
+    revealTab(strip, tab);
+    if (moveFocus.current) {
+      moveFocus.current = false;
+      tab.focus({ preventScroll: true });
+    }
+  }, [props.active]);
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    const n = props.groups.length;
+    const i = props.groups.findIndex((g) => g.group === props.active);
+    let next: number;
+    if (e.key === 'ArrowRight') next = (i + 1) % n;
+    else if (e.key === 'ArrowLeft') next = (i - 1 + n) % n;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = n - 1;
+    else return;
+    e.preventDefault();
+    const target = props.groups[next];
+    if (!target) return;
+    moveFocus.current = true;
+    props.onSelect(target.group);
+  };
+
   return (
-    <section class={'badge-group' + (props.open ? ' open' : '')}>
-      <h2 class="badge-group-head">
-        <button type="button" aria-expanded={props.open} aria-controls={props.open ? bodyId : undefined} onClick={() => props.onToggle(props.group)}>
-          <span class="badge-group-title">
-            {t(`badges.group.${props.group}`)}
-            {props.count !== undefined && <span class="badge-group-count"> · {props.count}</span>}
-          </span>
-          <Chevron />
-        </button>
-      </h2>
-      {props.open && (
-        <div class="badge-group-body" id={bodyId}>
-          {props.children}
-        </div>
+    <div class="badge-gtabs" role="tablist" aria-label={t('badges.title')} ref={stripRef} onKeyDown={onKeyDown}>
+      {props.groups.map((g) => {
+        const on = g.group === props.active;
+        return (
+          <button
+            key={g.group}
+            type="button"
+            role="tab"
+            id={tabId(g.group)}
+            class="badge-gtab"
+            aria-selected={on}
+            aria-controls={PANEL_ID}
+            tabIndex={on ? 0 : -1}
+            onClick={() => props.onSelect(g.group)}
+          >
+            <span class="badge-gtab-icon" aria-hidden="true">
+              {GROUP_ICONS[g.group]}
+            </span>
+            <span class="badge-gtab-name">{t(`badges.group.${g.group}`)}</span>
+            <span class="badge-gtab-pill">{g.group === SECRET_GROUP ? t('badges.groupFound', { n: g.shown.length }) : `${g.earned}/${g.total}`}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * The one group in view (UI-A.2): the grid as before (full cards, then the "?" cards). Geheim keeps
+ * its found count above the cards ("Nog geen geheime badge gevonden …" only without any card); any
+ * other empty group shows one muted line.
+ */
+function GroupPanel(props: { view: BadgeGroupView; open: string | null; onToggle: (id: string) => void }) {
+  const g = props.view;
+  const empty = g.shown.length === 0 && g.mystery.length === 0;
+  return (
+    <div class="badge-gpanel" id={PANEL_ID} role="tabpanel" aria-labelledby={tabId(g.group)} tabIndex={0}>
+      {g.group === SECRET_GROUP ? (
+        empty ? (
+          <p class="muted badge-secret-note">{t('badges.secretNone')}</p>
+        ) : (
+          <>
+            <p class="badge-secret-note">{t('badges.secretCount', { n: g.shown.length })}</p>
+            <BadgeGrid statuses={g.shown} mystery={g.mystery} open={props.open} onToggle={props.onToggle} />
+          </>
+        )
+      ) : empty ? (
+        <p class="muted badge-group-empty">{t('badges.groupEmpty')}</p>
+      ) : (
+        <BadgeGrid statuses={g.shown} mystery={g.mystery} open={props.open} onToggle={props.onToggle} />
       )}
-    </section>
+    </div>
   );
 }
 
@@ -321,10 +421,12 @@ export function BadgesScreen() {
   const [tab, setTab] = useState<string>(route.value.query.get('tab') ?? activeProfile.value?.id ?? TOGETHER);
   const [statuses, setStatuses] = useState<BadgeStatus[] | null>(null);
   const [open, setOpen] = useState<string | null>(null);
-  const [groupsOpen, setGroupsOpen] = useState<GroupState>(loadGroupState);
+  // 6D-UI: '?group=<id>' (the badge toast links with it) or the tab remembered on this phone.
+  const [group, setGroup] = useState<BadgeGroup>(() => initialGroup(route.value.query.get('group')));
 
   useEffect(() => {
     let cancelled = false;
+    dropOldGroupsKey();
     void loadBadgeSettings();
     void getHousehold().then(
       (h) => {
@@ -360,13 +462,11 @@ export function BadgesScreen() {
   const tabs = useMemo(() => members ?? profileList.map(memberFromProfile), [members, profileList]);
   const model = useMemo(() => (statuses ? badgePageModel(statuses) : null), [statuses]);
 
+  // The last tab shown is the one remembered (also when '?group=' opened it).
+  useEffect(() => saveGroupTab(group), [group]);
+
   const toggleCard = (id: string) => setOpen((cur) => (cur === id ? null : id));
-  const toggleGroup = (g: BadgeGroup) =>
-    setGroupsOpen((cur) => {
-      const next = { ...cur, [g]: !cur[g] };
-      saveGroupState(next);
-      return next;
-    });
+  const view = model?.groups.find((g) => g.group === group) ?? null;
 
   return (
     <>
@@ -397,26 +497,8 @@ export function BadgesScreen() {
                   {t('badges.earnedOf', { earned: model.earned, total: model.total })}
                   {model.secretFound > 0 && ` ${t('badges.secretFound', { n: model.secretFound })}`}
                 </p>
-                {model.groups.map((g) =>
-                  g.group === SECRET_GROUP ? (
-                    <GroupSection key={g.group} group={g.group} open={groupsOpen[g.group]} onToggle={toggleGroup}>
-                      {/* 6D-2c: "Nog geen geheime badge gevonden …" only while there is no card at
-                          all; with "?" cards the found count (also 0) stands above them. */}
-                      {g.shown.length === 0 && g.mystery.length === 0 ? (
-                        <p class="muted badge-secret-note">{t('badges.secretNone')}</p>
-                      ) : (
-                        <>
-                          <p class="badge-secret-note">{t('badges.secretCount', { n: g.shown.length })}</p>
-                          <BadgeGrid statuses={g.shown} mystery={g.mystery} open={open} onToggle={toggleCard} />
-                        </>
-                      )}
-                    </GroupSection>
-                  ) : (
-                    <GroupSection key={g.group} group={g.group} open={groupsOpen[g.group]} onToggle={toggleGroup} count={`${g.earned}/${g.total}`}>
-                      <BadgeGrid statuses={g.shown} mystery={g.mystery} open={open} onToggle={toggleCard} />
-                    </GroupSection>
-                  ),
-                )}
+                <GroupTabs groups={model.groups} active={group} onSelect={setGroup} />
+                {view && <GroupPanel view={view} open={open} onToggle={toggleCard} />}
               </>
             )}
           </>

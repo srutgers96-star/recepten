@@ -1,21 +1,28 @@
-// The avatar maker (docs/specs/badges-avatar.md §1b, block 6D-3, builder B). A bottom sheet through
-// SheetPortal with the head `.sheet-head.with-actions`: Annuleer left, "Jouw avatar" in the middle,
-// Bewaar right. Under the head the preview (120 px, on the profile colour, with the ring of the
-// level); it stays in view while the rows below scroll, so every pick shows at once (DEVICE-TEST 96
-// step 6). Then the colour hint, "🎲 Verras me" (randomAvatar over the unlocked parts, seed
-// Date.now()) and one row per layer in the order of §1b.3: horizontally scrolling strips of 56 px
-// tiles (role="radiogroup"); skin and hair colour are colour circles (all free); the optional
-// layers start with a "geen" tile. Each tile shows its part alone on a neutral light circle.
-// Locked parts are grey with 🔒 and "Lv n" or the badge icon (❓ for a secret badge); a tap
-// changes nothing and explains under the row how the part unlocks. A saved part that is locked on
-// this phone (a restore on a phone with less XP) stays selected and drawn, with its explanation
-// under the row from the start. Unlocked parts not in `avatar.seen` get a dot until the sheet
-// closes; closing (any way) marks every unlocked part as seen. At the bottom "Terug naar de
-// beginletter" (Bewaar then stores `avatar: null`) and the "Alleen Bewaar bewaart" line.
+// The avatar maker (docs/specs/badges-avatar.md §1b, block 6D-3, builder B; tabs since block 6D-UI,
+// builder UI-B). A bottom sheet through SheetPortal with the head `.sheet-head.with-actions`:
+// Annuleer left, "Jouw avatar" in the middle, Bewaar right. Under the head the preview (160 px, on
+// the profile colour, with the ring of the level); it stays in view while the panel below scrolls,
+// so every pick shows at once (DEVICE-TEST 96 step 6). Then, at the top of the scrolling body as
+// before, the colour hint and "🎲 Verras me" (randomAvatar over the unlocked parts, seed
+// Date.now()), and a horizontally scrolling tab strip (role="tablist") with one tab per row in the
+// order of ROWS; it sticks under the preview while the panel scrolls. The active tab has the
+// profile colour as underline; a tab gets a cobalt dot while its layer has unlocked parts not yet
+// in `avatar.seen`. Arrow keys / Home / End move between tabs (roving tabindex). The sheet always
+// opens on Gezicht. One panel per tab (role="tabpanel"): the tiles as a wrapping grid of 64 px
+// tiles (role="radiogroup"); skin and hair colour are colour circles in the same grid (all free);
+// the optional layers start with a "geen" tile. Each tile shows its part alone on a neutral light
+// circle. Locked parts are grey with 🔒 and "Lv n" or the badge icon (❓ for a secret badge); a
+// tap changes nothing and explains under the grid how the part unlocks. A saved part that is
+// locked on this phone (a restore on a phone with less XP) stays selected and drawn, with its
+// explanation under its grid from the start. Unlocked parts not in `avatar.seen` get a dot until
+// the sheet closes; closing (any way) marks as seen the unlocked parts of the tabs opened in this
+// opening (Gezicht always; decision Fable 30 Oct), so a skipped tab keeps its dot. At the bottom of the
+// panel area (outside the grid) "Terug naar de beginletter" (Bewaar then stores `avatar: null`)
+// and the "Alleen Bewaar bewaart" line.
 // Bewaar → updateProfile({ ...p, avatar }); a failure keeps the sheet open with `common.error`.
 // Annuleer, swiping down (grab bar / head), tapping beside the sheet and Escape save nothing (13J).
 // Who may open it (level ≥ AVATAR_MAKER_LEVEL, the active profile, badges on) is up to the caller.
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { JSX } from 'preact';
 import { SheetPortal } from '@/components/SheetPortal';
 import { avatarParts, avatarUid, markPartsSeen, partBadge, unlockContext, unseenParts, type UnlockContext } from '@/avatar';
@@ -43,9 +50,9 @@ const DISMISS_PX = 80;
 /** The neutral light circle behind every tile (never the profile colour, so a bg tile stays readable). */
 const TILE_BG = '#eef1f5';
 
-/** One row of the maker: a part layer, or one of the two colour rows. */
+/** One tab of the maker: a part layer, or one of the two colour tabs. */
 type RowId = AvatarLayer | 'tone' | 'hairColor';
-/** The rows in the order of §1b.3. */
+/** The tabs in the order of §1b.3 (block 6D-UI keeps it); the sheet opens on the first (Gezicht). */
 const ROWS: readonly RowId[] = ['face', 'tone', 'hair', 'hairColor', 'eyes', 'mouth', 'facial', 'glasses', 'hat', 'body', 'prop', 'pin', 'bg'];
 /** The layers whose row starts with the "geen" tile (§1b.3). */
 // Hair is optional too (decision Fable 29 Oct: §2f "de rest mag leeg" wins over the §1b.3 list).
@@ -116,15 +123,23 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
   const [spec, setSpec] = useState<AvatarSpec | null>(initial);
   const [ready, setReady] = useState<Ready | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
-  // Per layer the part whose lock is explained under the row (tapped, or saved but locked here).
+  // Per layer the part whose lock is explained under its grid (tapped, or saved but locked here).
   const [notes, setNotes] = useState<Partial<Record<AvatarLayer, string>>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
+  // The tab in view; every opening starts on Gezicht (block 6D-UI, UI-B.4).
+  const [tab, setTab] = useState<RowId>('face');
   const cancelBtn = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
+  // The scrolling body, the tab strip, and the empty marker right above the strip (where it sticks).
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
+  const stickRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ y: number; id: number; dy: number } | null>(null);
-  // The unlocked part ids shown in this opening: marked as seen when the sheet goes away.
+  // The unlocked part ids of this opening; those on an opened tab are marked as seen when the sheet goes away.
   const shownFree = useRef<string[]>([]);
+  // The tabs opened in this opening (the first, Gezicht, included); grows on every tab switch.
+  const openedTabs = useRef<Set<RowId>>(new Set<RowId>(['face']));
 
   // The parts of each layer the maker offers, in file order.
   const byLayer = useMemo(() => {
@@ -166,10 +181,15 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
     };
   }, [profile.id, parts, initial]);
 
-  // Closing in any way: every unlocked part this opening showed counts as seen (§1b.5).
+  // Closing in any way: the unlocked parts of the tabs opened this time count as seen (§1b.5,
+  // "zichtbaar" = the opened panel; decision Fable 30 Oct). Tone and hair colour have no parts.
   useEffect(
     () => () => {
-      if (shownFree.current.length > 0) void markPartsSeen(shownFree.current);
+      const seen = shownFree.current.filter((id) => {
+        const layer = parts.get(id)?.layer;
+        return layer !== undefined && openedTabs.current.has(layer);
+      });
+      if (seen.length > 0) void markPartsSeen(seen);
     },
     [],
   );
@@ -190,6 +210,21 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
       if (opener?.isConnected) opener.focus({ preventScroll: true });
     };
   }, []);
+
+  // A new tab: its panel starts at the top (right under the stuck strip), and the tab itself is
+  // scrolled into view in the strip. Only the strip and the body scroll, never the page.
+  useLayoutEffect(() => {
+    const body = bodyRef.current;
+    const stick = stickRef.current;
+    if (body && stick && body.scrollTop > stick.offsetTop) body.scrollTop = stick.offsetTop;
+    const strip = stripRef.current;
+    const el = strip?.querySelector<HTMLElement>(`[data-row="${tab}"]`);
+    if (!strip || !el) return;
+    const left = el.offsetLeft;
+    const right = left + el.offsetWidth;
+    if (left < strip.scrollLeft) strip.scrollLeft = Math.max(0, left - 16);
+    else if (right > strip.scrollLeft + strip.clientWidth) strip.scrollLeft = right - strip.clientWidth + 16;
+  }, [tab]);
 
   const level = ready?.ctx.level ?? 0;
   const tone: string = spec?.tone ?? AVATAR_TONES[1];
@@ -307,18 +342,45 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
     if (!cancelled && d.dy > DISMISS_PX) dismiss();
   }
 
-  function partRow(layer: AvatarLayer, r: Ready): JSX.Element {
+  const tabId = (row: RowId) => `${uid}-tab-${row}`;
+  const panelId = (row: RowId) => `${uid}-panel-${row}`;
+
+  /** Show another tab and remember it was opened (its unlocked parts count as seen on closing). */
+  function openTab(row: RowId) {
+    openedTabs.current.add(row);
+    setTab(row);
+  }
+
+  /** Whether a tab gets the cobalt dot: its layer has unlocked parts this phone has not seen yet. */
+  function tabHasNew(row: RowId): boolean {
+    if (!ready || row === 'tone' || row === 'hairColor') return false;
+    return (byLayer.get(row) ?? []).some((p) => ready.free.has(p.id) && ready.unseen.has(p.id));
+  }
+
+  /** Arrow keys, Home and End move to (and open) another tab; focus follows (roving tabindex). */
+  function onTabKey(e: KeyboardEvent) {
+    const i = ROWS.indexOf(tab);
+    let j: number;
+    if (e.key === 'ArrowRight') j = (i + 1) % ROWS.length;
+    else if (e.key === 'ArrowLeft') j = (i - 1 + ROWS.length) % ROWS.length;
+    else if (e.key === 'Home') j = 0;
+    else if (e.key === 'End') j = ROWS.length - 1;
+    else return;
+    const next = ROWS[j];
+    if (!next) return;
+    e.preventDefault();
+    openTab(next);
+    stripRef.current?.querySelector<HTMLElement>(`[data-row="${next}"]`)?.focus({ preventScroll: true });
+  }
+
+  function partPanel(layer: AvatarLayer, r: Ready): JSX.Element {
     const list = byLayer.get(layer) ?? [];
     const selected = spec ? partOn(spec, layer, parts) : undefined;
     const noteId = notes[layer];
     const notePart = noteId ? parts.get(noteId) : undefined;
-    const labelId = `${uid}-row-${layer}`;
     return (
-      <section key={layer} class="avatar-row">
-        <h3 class="avatar-row-label" id={labelId}>
-          {t('avatar.layer.' + layer)}
-        </h3>
-        <div class="avatar-strip" role="radiogroup" aria-labelledby={labelId}>
+      <>
+        <div class="avatar-grid" role="radiogroup" aria-labelledby={tabId(layer)}>
           {OPTIONAL.has(layer) && (
             <button
               type="button"
@@ -362,44 +424,38 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
           })}
         </div>
         {notePart && (
-          <p class="muted small avatar-row-note" role="status">
+          <p class="muted small avatar-panel-note" role="status">
             {lockText(notePart)}
           </p>
         )}
-      </section>
+      </>
     );
   }
 
-  function colourRow(row: 'tone' | 'hairColor'): JSX.Element {
+  function colourPanel(row: 'tone' | 'hairColor'): JSX.Element {
     const palette: readonly string[] = row === 'tone' ? AVATAR_TONES : AVATAR_HAIR;
     const current = row === 'tone' ? tone : hair;
     const label = t('avatar.layer.' + row);
-    const labelId = `${uid}-row-${row}`;
     return (
-      <section key={row} class="avatar-row">
-        <h3 class="avatar-row-label" id={labelId}>
-          {label}
-        </h3>
-        <div class="avatar-strip" role="radiogroup" aria-labelledby={labelId}>
-          {palette.map((hex, i) => {
-            const on = spec !== null && current === hex;
-            return (
-              <button
-                key={hex}
-                type="button"
-                role="radio"
-                aria-checked={on}
-                aria-label={`${label} ${i + 1}`}
-                class={'avatar-tile swatch' + (on ? ' on' : '')}
-                disabled={busy}
-                onClick={() => (row === 'tone' ? pickTone(hex) : pickHair(hex))}
-              >
-                <span class="avatar-swatch" style={{ background: hex }} />
-              </button>
-            );
-          })}
-        </div>
-      </section>
+      <div class="avatar-grid" role="radiogroup" aria-labelledby={tabId(row)}>
+        {palette.map((hex, i) => {
+          const on = spec !== null && current === hex;
+          return (
+            <button
+              key={hex}
+              type="button"
+              role="radio"
+              aria-checked={on}
+              aria-label={`${label} ${i + 1}`}
+              class={'avatar-tile swatch' + (on ? ' on' : '')}
+              disabled={busy}
+              onClick={() => (row === 'tone' ? pickTone(hex) : pickHair(hex))}
+            >
+              <span class="avatar-swatch" style={{ background: hex }} />
+            </button>
+          );
+        })}
+      </div>
     );
   }
 
@@ -437,20 +493,61 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
               </span>
             )}
           </div>
-          <div class="sheet-body avatar-body">
+          <div ref={bodyRef} class="sheet-body avatar-body">
             <p class="muted small avatar-color-hint">{t('avatar.colorHint')}</p>
             <button type="button" class="btn avatar-random" disabled={busy || !ready} onClick={surprise}>
               {t('avatar.random')}
             </button>
-            {ready ? (
-              ROWS.map((row) => (row === 'tone' || row === 'hairColor' ? colourRow(row) : partRow(row, ready)))
-            ) : loadFailed ? (
-              <p class="avatar-error" role="alert">
-                {t('common.error')}
-              </p>
-            ) : (
-              <p class="muted avatar-loading">{t('common.loading')}</p>
-            )}
+            <div ref={stickRef} class="avatar-tabs-stick" aria-hidden="true" />
+            {/* The tab strip sticks under the preview; the active tab is underlined in the profile colour. */}
+            <div
+              ref={stripRef}
+              class="avatar-tabs"
+              role="tablist"
+              aria-label={title}
+              style={{ '--avatar-tab-line': profile.color }}
+              onKeyDown={onTabKey}
+            >
+              {ROWS.map((row) => {
+                const on = row === tab;
+                return (
+                  <button
+                    key={row}
+                    type="button"
+                    role="tab"
+                    id={tabId(row)}
+                    data-row={row}
+                    class={'avatar-tab' + (on ? ' on' : '')}
+                    aria-selected={on}
+                    aria-controls={panelId(row)}
+                    tabIndex={on ? 0 : -1}
+                    onClick={() => openTab(row)}
+                  >
+                    {t('avatar.layer.' + row)}
+                    {tabHasNew(row) && (
+                      <span class="avatar-tab-new">
+                        <span class="visually-hidden">{t('avatar.tabNew')}</span>
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            <div class="avatar-panel" role="tabpanel" id={panelId(tab)} aria-labelledby={tabId(tab)}>
+              {ready ? (
+                tab === 'tone' || tab === 'hairColor' ? (
+                  colourPanel(tab)
+                ) : (
+                  partPanel(tab, ready)
+                )
+              ) : loadFailed ? (
+                <p class="avatar-error" role="alert">
+                  {t('common.error')}
+                </p>
+              ) : (
+                <p class="muted avatar-loading">{t('common.loading')}</p>
+              )}
+            </div>
             <button type="button" class="btn btn-block avatar-reset" disabled={busy || spec === null} onClick={backToInitial}>
               {t('avatar.reset')}
             </button>

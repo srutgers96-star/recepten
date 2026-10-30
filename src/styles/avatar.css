@@ -3,7 +3,7 @@
    right after badges.css (the level ring uses its --lvl-* tokens). The .sheet-* shell comes from
    base.css, .cooked-drag/.sheet-grab/.cooked-dismiss-hint from browse.css. Colour tokens switch
    with the theme; the tile circle stays light on purpose (§1b.3). Mobile first: 360 px wide, the
-   strips scroll sideways and the page never does, 44 px targets (tiles are 56 px). */
+   tab strip scrolls sideways and the page never does, 44 px targets (tiles are 64 px; block 6D-UI). */
 
 /* ---------- The drawn avatar (renderAvatarSvg → <svg class="avatar-svg">) ---------- */
 
@@ -13,15 +13,74 @@
   height: 100%;
 }
 
-/* Inside the existing circle (40/56 px, 32 px in chips) the SVG fills it; the circle keeps its size. */
+/* Inside the existing circle the SVG fills it; the circle keeps its size (below). */
 .avatar .avatar-svg {
   width: 100%;
   height: 100%;
 }
 
+/* ---------- Avatar sizes (block 6D-UI, UI-C §5) ----------
+   The avatar is bigger in view since round 2: Home greeting 72 px · Meer 64 px · Profielen rows
+   56 px · Huishouden and In & uit 48 px · chips 36 px (the maker preview, 160 px, is in the maker
+   part below). These override the 6D-3 sizes of settings.css and edit.css (same selectors; this
+   file loads after them); the letter circle scales along. The Home level line (xp.css) keeps its
+   24 px. */
+
+/* Home greeting. The level line under it keeps lining up with the greeting text (avatar + 12 px
+   gap, as home.css does for the 40 px circle). */
+.home-hello .avatar {
+  width: 72px;
+  height: 72px;
+  font-size: 32px;
+}
+
+.home-hello + .home-level {
+  margin-left: 84px;
+}
+
+/* Meer: the profile card (the big circle, the maker opens from it). */
+.avatar.big {
+  width: 64px;
+  height: 64px;
+  font-size: 28px;
+}
+
+/* Profielen: one card per profile (LevelAvatar, not big). */
+.profile-card .avatar:not(.big) {
+  width: 56px;
+  height: 56px;
+  font-size: 25px;
+}
+
+/* Huishouden (my card, members, friends, cards to add) and In & uit (the sender who is a member). */
+.my-card-head .avatar,
+.member-row .avatar,
+.member-card-head .avatar,
+.inbox-sender .avatar,
+.inbox-row .avatar {
+  width: 48px;
+  height: 48px;
+  font-size: 21px;
+}
+
+/* Chips: other profiles on Meer, "Stuur nieuwe naar …", the members on Het verhaal. */
+.profile-chip .avatar,
+.delta .partner-chip .avatar,
+.story-members .member .avatar {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+}
+
 /* ---------- The maker sheet ---------- */
 
-/* Preview: stays above the scrolling rows, so every pick shows at once. */
+/* Always the full sheet height, so switching tabs never makes the sheet jump (the 13 rows of
+   block 6D-3 always filled it too). Same value as the .sheet max-height in base.css. */
+.avatar-sheet {
+  height: calc(100dvh - var(--sat) - 24px);
+}
+
+/* Preview: stays above the scrolling panel, so every pick shows at once. */
 .avatar-preview {
   flex: none;
   display: flex;
@@ -31,22 +90,27 @@
 
 .avatar-preview-art {
   display: block;
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
 }
 
 .avatar-preview .avatar-preview-letter {
-  width: 120px;
-  height: 120px;
-  font-size: 52px;
+  width: 160px;
+  height: 160px;
+  font-size: 68px;
 }
 
+/* The scrolling body: hint, 🎲, the (sticky) tab strip, the panel, reset. Positioned, so the
+   offsetTop of the marker above the strip is measured from here (AvatarSheet scrolls to it). */
 .avatar-body {
+  position: relative;
   overflow-x: hidden;
+  padding-top: 0;
 }
 
+/* No top padding on the body (above): the stuck strip then sits flush, with nothing peeking over it. */
 .avatar-color-hint {
-  margin: 0 0 8px;
+  margin: 4px 0 8px;
   text-align: center;
 }
 
@@ -60,34 +124,106 @@
   text-align: center;
 }
 
-.avatar-row {
-  margin: 12px 0 0;
+/* Where the tab strip sticks: an empty marker right above it. */
+.avatar-tabs-stick {
+  height: 0;
+  margin-top: 8px;
 }
 
-.avatar-row-label {
-  margin: 0 0 4px;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-/* One horizontally scrolling strip per layer; only the strip scrolls, never the page. */
-.avatar-strip {
+/* The tab strip: one tab per layer (and the two colour tabs), scrolling sideways, never the page.
+   It sticks to the top of the body while the panel scrolls, bleeding to the sheet edges. */
+.avatar-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
-  gap: 8px;
-  min-width: 0;
+  align-items: flex-end;
+  gap: 2px;
+  box-sizing: border-box;
+  height: 48px;
+  margin: 0 calc(-1 * max(16px, var(--sar))) 0 calc(-1 * max(16px, var(--sal)));
+  padding: 0 max(12px, var(--sar)) 0 max(12px, var(--sal));
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  padding: 4px 2px 6px;
+  scroll-snap-type: x proximity;
+  scroll-padding: 0 12px;
+  scrollbar-width: none;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.avatar-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.avatar-tab {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 8px 8px 0 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  scroll-snap-align: start;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.avatar-tab:active {
+  background: var(--press);
+}
+
+/* The active tab: ink text, the profile colour as underline (set inline on the strip). */
+.avatar-tab.on {
+  color: var(--ink);
+  border-bottom-color: var(--avatar-tab-line, var(--cobalt));
+}
+
+.avatar-tab:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: -2px;
+}
+
+/* New unlocked parts in this layer (the same cobalt dot as on the tiles). */
+.avatar-tab-new {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--cobalt);
+}
+
+/* One panel: the tiles as a wrapping grid, the lock line under it. */
+.avatar-panel {
+  padding: 12px 0 0;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 8px;
+  justify-items: center;
 }
 
 .avatar-tile {
   position: relative;
   flex: none;
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   padding: 0;
   display: inline-flex;
   align-items: center;
@@ -118,8 +254,8 @@
 
 .avatar-tile-art {
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   pointer-events: none;
 }
 
@@ -163,8 +299,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   border-radius: 999px;
   background: #eef1f5;
   color: #3b4654;
@@ -176,15 +312,15 @@
 /* Skin and hair colour: a plain colour circle. */
 .avatar-swatch {
   display: block;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
   pointer-events: none;
 }
 
-.avatar-row-note {
-  margin: 2px 0 0;
+.avatar-panel-note {
+  margin: 8px 0 0;
 }
 
 .avatar-reset {

@@ -21,7 +21,7 @@ export const avatar: Dict = {
   'avatar.none': { nl: 'geen', en: 'none' },
   'avatar.reset': { nl: 'Terug naar de beginletter', en: 'Back to the initial' },
 
-  // One row per layer, in the maker's order (§1b.3).
+  // One tab per layer, in the maker's order (§1b.3; rows until block 6D-UI).
   'avatar.layer.face': { nl: 'Gezicht', en: 'Face' },
   'avatar.layer.tone': { nl: 'Huid', en: 'Skin' },
   'avatar.layer.hair': { nl: 'Haar', en: 'Hair' },
@@ -35,6 +35,8 @@ export const avatar: Dict = {
   'avatar.layer.prop': { nl: 'Accessoire', en: 'Accessory' },
   'avatar.layer.pin': { nl: 'Speldje', en: 'Pin' },
   'avatar.layer.bg': { nl: 'Achtergrond', en: 'Background' },
+  // The cobalt dot on a maker tab whose layer has new unlocked parts (aria text; block 6D-UI, UI-B.5).
+  'avatar.tabNew': { nl: 'Nieuw', en: 'New' },
 
   // Locked parts: the label on the tile and the line under the row (§1b.4).
   'avatar.lockLevel': { nl: 'Lv {n}', en: 'Lv {n}' },

@@ -103,8 +103,9 @@ function BadgeToast() {
           onClick={() => {
             dismissBadgeToast();
             // '?tab=': open on the tab that actually earned it. 'all' = "Samen": a household badge
-            // can be reached together while every member tab still shows it locked.
-            navigate('/more/badges?tab=' + encodeURIComponent(nb.memberId));
+            // can be reached together while every member tab still shows it locked. '&group=' (block
+            // 6D-UI): open the group tab the badge sits in.
+            navigate('/more/badges?tab=' + encodeURIComponent(nb.memberId) + '&group=' + encodeURIComponent(nb.badge.group));
           }}
         >
           <span class="badge-toast-icon" aria-hidden="true">

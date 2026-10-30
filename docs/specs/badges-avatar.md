@@ -105,12 +105,17 @@ hieronder), `src/styles/base.css`/`browse.css` (alleen de `.avatar`-maten), `too
    transform`. Elk onderdeel leesbaar op 40 px (test: op het contactblad van 6 op 40 px herkenbaar).
 3. **Referentie-onderdelen (Fable; letterlijk overnemen, de rest in deze stijl):**
    - face-round: `<circle cx="50" cy="42" r="30" style="fill:var(--tone)" stroke="#2a2420" stroke-width="1.5"/><ellipse cx="50" cy="58" rx="9" ry="3" fill="#2a2420" opacity=".08"/>`
-   - eyes-dots: `<circle cx="39" cy="40" r="3.4" fill="#2a2420"/><circle cx="61" cy="40" r="3.4" fill="#2a2420"/><circle cx="40.2" cy="38.8" r="1.1" fill="#fff"/><circle cx="62.2" cy="38.8" r="1.1" fill="#fff"/>`
+   - eyes-dots: `<circle cx="39" cy="40" r="4.8" fill="#fff" opacity=".9"/><circle cx="61" cy="40" r="4.8" fill="#fff" opacity=".9"/><circle cx="39" cy="40" r="3.2" fill="#2a2420"/><circle cx="61" cy="40" r="3.2" fill="#2a2420"/><circle cx="40.1" cy="38.9" r="1" fill="#fff"/><circle cx="62.1" cy="38.9" r="1" fill="#fff"/>`
+     (oogwit erachter, zodat de ogen ook op de donkerste huidtint leesbaar blijven — Fable-blik 30 okt)
    - mouth-smile: `<path d="M41 54q9 9 18 0" fill="none" stroke="#2a2420" stroke-width="2.4" stroke-linecap="round"/>`
-   - hair-cap (basis voor alle haar): `<path d="M19 40q-3-24 15-27 5-9 16-9t16 9q18 3 15 27-7-10-31-10T19 40z" style="fill:var(--hair)" stroke="#2a2420" stroke-width="1.5" stroke-linejoin="round"/>`
-   - body-shirt: `<path d="M44 68h12v9H44z" style="fill:var(--tone)"/><path d="M15 100V88q0-12 15-15l20 7 20-7q15 3 15 15v12z" fill="#4a5d78" stroke="#2a2420" stroke-width="1.5" stroke-linejoin="round"/><path d="M50 80l-7 9h14z" fill="#e9eef5"/>`
+   - hair-cap (= id `hair-short`, basis voor alle haar): `<path d="M19 40q-3-24 15-27 5-9 16-9t16 9q18 3 15 27-7-10-31-10T19 40z" style="fill:var(--hair)" stroke="#2a2420" stroke-width="1.5" stroke-linejoin="round"/>`
+   - body-shirt (= id `body-tee`): `<path d="M44 68h12v9H44z" style="fill:var(--tone)"/><path d="M15 100V88q0-12 15-15l20 7 20-7q15 3 15 15v12z" fill="#f1e9dc" stroke="#2a2420" stroke-width="1.5" stroke-linejoin="round"/><path d="M50 80l-7 9h14z" fill="#d9d1c4"/>`
+     (crème in plaats van #4a5d78: dat was precies de profielkleur leisteen, waardoor het shirt daar wegviel — Fable-blik 30 okt)
    - hat-toque: `<path d="M22 22q-2-16 28-16t28 16v6H22z" fill="#fff" stroke="#2a2420" stroke-width="1.5"/><rect x="24" y="26" width="52" height="9" rx="2" fill="#efefef" stroke="#2a2420" stroke-width="1.5"/>`
-   - prop-wooden-spoon: `<path d="M82 100L94 66" stroke="#8a4a1f" stroke-width="6" stroke-linecap="round"/><ellipse cx="95" cy="59" rx="8" ry="11" fill="#c58a4a" stroke="#2a2420" stroke-width="1.5"/><ellipse cx="95" cy="58" rx="4" ry="6" fill="#a86f33"/>`
+   - prop-wooden-spoon: `<path d="M83 82L79 64" stroke="#8a4a1f" stroke-width="6" stroke-linecap="round"/><ellipse cx="78" cy="56" rx="8" ry="11" fill="#c58a4a" stroke="#2a2420" stroke-width="1.5"/><ellipse cx="78" cy="55" rx="4" ry="6" fill="#a86f33"/>`
+     (de lepel leunt naar binnen over de schouder: de clip van `renderAvatarSvg` is een cirkel met straal 46, dus "over de rand
+     uitsteken" bestaat niet — alles buiten die cirkel is weg. Regel voor ALLE attributen: hoogstens 15 % van de pixels buiten
+     de clip — Fable-blik 30 okt)
    - bg-rays: `<circle cx="50" cy="50" r="62" fill="#fff" opacity=".16"/><path d="M50 50L8 0h18zM50 50L44 0h18zM50 50L80 0h18zM50 50L100 18v18zM50 50L100 60v18zM50 50L0 22v18zM50 50L0 58v18zM50 50L20 100h18zM50 50L62 100h18z" fill="#fff" opacity=".26"/>`
 4. **Nieuwe onderdelen (≥ 60; doel per laag na ronde 2):** hair 14 · hat 18 · body 14 · prop 18 · bg 12 · eyes 9 ·
    mouth 8 · facial 7 · glasses 7 · pin 8 · face 5 (= 120). Ingrediënten-thema blijft (wortel achter het oor, prei als
@@ -134,6 +139,19 @@ hieronder), `src/styles/base.css`/`browse.css` (alleen de `.avatar`-maten), `too
 buiten het lichaam uitsteekt; avatar op Home groter). STATUS-kop "… (Opus): 6D-UI — tabs voor badges en avatar-maker,
 avatar ronde 2". Acceptatie in de dev-app op 360 en 375 px, licht en donker, NL en EN: geen horizontaal scrollen van de
 pagina, tabstrook scrolt wel; contactblad (6) gemaakt en screenshots in het rapport.
+**Fable-blik op het contactblad (30 okt):** de 126 onderdelen zijn helder en consequent; de stijl klopt. Besluiten na de lens en
+het blad: (1) de referenties eyes-dots (oogwit), body-shirt (crème) en prop-wooden-spoon (binnen de clip) zijn hierboven
+aangepast; geen enkel attribuut mag meer dan 15 % buiten de clip r 46 vallen (ook prei en stokbrood naar binnen); hair-bun
+3 eenheden lager zodat de knot niet wordt afgeknipt. (2) Hair-cap = `hair-short`, body-shirt = `body-tee` (interpretatie
+bouwer akkoord). (3) Nieuwe onderdelen komen deze ronde allemaal van een level; de badge-koppelingen (16 paren van bouwer
+UI-C, met laddertier) komen in de volgende avatar-ronde samen met `unlock.part` in data/badges.json. (4) Bij sluiten van
+de maker worden alleen de vrije onderdelen van de tabs die je deze keer opende als gezien gemarkeerd (§1b.5 "zichtbaar"
+= het geopende paneel); het tabstipje blijft op tabs die je oversloeg. (5) `badges.groupFound` NL "{n} gevonden" · EN
+"{n} found" akkoord; tabnamen blijven de bestaande (`Baard & snor`, `Accessoire`). (6) De tekenregels blijven in
+tests/avatar.test.ts (niet in de validator). (7) UI-A/UI-B-keuzes akkoord (tab via ?group= onthouden, Home/End, strook plakt,
+hint en 🎲 scrollen weg, sheet altijd even hoog). Opschoonronde: oude avatar-maten in settings.css/edit.css weg, de
+Home-regel uit avatar.css naar home.css. Register README §2b: `recepten.badges.groups` → `recepten.badges.tab` (Fable).
+Gebouwd: 30 okt 2026 (blok 6D-UI, workflow wf_0575b903-abc; nabewerking (1) en (4) door een Opus-fixer, docs door Fable)
 
 ### Blok 6D-2c — mini-ronde (Fable, 29 okt 2026): "?"-kaartjes, Hele cirkel + boodschappenspoor, stille registratie bij start
 

@@ -92,13 +92,17 @@ describe('the real data (§2d, §2f)', () => {
     expect(active.some((b) => b['id'] === 'vaste-klant')).toBe(false);
   });
 
-  it('has the 66 avatar parts of §2f: 44 by level (13 at level 3), 22 by badge', () => {
-    expect(PARTS).toHaveLength(66);
+  // §2f had 66 parts (44 by level, 13 of them at level 3, 22 by badge). Round 2 (block 6D-UI, UI-C)
+  // redrew them and added at least 60, all by level so far; tests/avatar.test.ts checks the 66 one
+  // by one (ids and unlocks never change).
+  it('has the avatar parts of §2f plus round 2: ≥ 120, the 22 badge parts, every round-1 level still there', () => {
+    expect(PARTS.length).toBeGreaterThanOrEqual(120);
     const byLevel = PARTS.filter((p) => (p['unlock'] as Obj)['level'] !== undefined);
-    expect(byLevel).toHaveLength(44);
-    expect(byLevel.filter((p) => (p['unlock'] as Obj)['level'] === 3)).toHaveLength(13);
-    expect(PARTS.filter((p) => (p['unlock'] as Obj)['badge'] !== undefined)).toHaveLength(22);
-    expect([...new Set(byLevel.map((p) => (p['unlock'] as Obj)['level']))].sort((a, b) => Number(a) - Number(b))).toEqual([3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 20, 30, 50, 60]);
+    expect(byLevel.filter((p) => (p['unlock'] as Obj)['level'] === 3).length).toBeGreaterThanOrEqual(13);
+    expect(PARTS.filter((p) => (p['unlock'] as Obj)['badge'] !== undefined).length).toBeGreaterThanOrEqual(22);
+    const levels = new Set(byLevel.map((p) => Number((p['unlock'] as Obj)['level'])));
+    for (const level of [3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 20, 30, 50, 60]) expect(levels.has(level), `level ${level}`).toBe(true);
+    for (const level of levels) expect(level >= 3 && level <= 100, `level ${level}`).toBe(true);
   });
 
   it('mirrors the domain lists it cannot import under Node type stripping', () => {

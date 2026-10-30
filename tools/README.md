@@ -21,6 +21,7 @@ Type-stripping rules: type-only syntax only (interfaces, type aliases, `as`, `sa
 | `apply-meta.ts` | — | The hand-kept recipe labels of the classics `data/review/meta.json` (`category`, `goesWith`, `cuisine`; `readMeta`, `checkMeta`, `applyMeta`); used by `migrate` (after the review layer, before the derived diet tags) and `apply-llm-batch --apply all`, no CLI of its own (tested in `tests/apply-meta.test.ts`). |
 | `apply-flag-slices.ts` | — | Validates and merges the lactose slices `data/work/lactose/slice-NN-*.json` into `data/ingredients.json` (`--check`: covered / missing / double per slice, exit 1 on errors; `--apply`: writes `lactose` (+ `lactoseUnsure`) right after `gluten`, file style unchanged). Exports `readSlices`, `checkSlices`, `applySlices` (tested in `tests/apply-flag-slices.test.ts`). |
 | `gen-golden.ts` | — | Regenerates `tests/parser.golden.json` (every unique corpus line parsed + rendered NL/EN). |
+| `avatar-sheet.ts` | — | Contact sheet of the avatar library (block 6D-UI): every part of `data/avatar-parts.json` per layer at 40 and 96 px with the app's own `renderAvatarSvg` on the default avatar, plus the default avatar on every profile colour, skin tone and hair colour and a few "Verras me" combinations. Writes `scratch/avatar-sheet.html` (gitignored); `?layer=hat` shows one layer. |
 
 ## measure-parse.ts
 

@@ -1,6 +1,6 @@
-/* Badges: the Badges screen (member tabs, eight collapsible groups, badge grid, ladder rings,
+/* Badges: the Badges screen (member tabs, the strip of eight group tabs, badge grid, ladder rings,
    tier dots) and the new-badge toast in the shell. Phase-5 block C, rebuilt for 6D-2b
-   (docs/specs/badges-avatar.md §1a, §3b); imported by src/main.tsx after shopping.css. Colour
+   (docs/specs/badges-avatar.md §1a, §3b), group tabs since 6D-UI; imported by src/main.tsx after shopping.css. Colour
    tokens from base.css (dark mode included) plus the eight tier colours below. Mobile first:
    360 px, 44 px targets. */
 
@@ -69,75 +69,111 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Groups (§1a.3; the pattern of Meer's collapsible groups) ---------- */
+/* ---------- Group tabs (block 6D-UI, UI-A; one group at a time) ---------- */
 
-.badge-group {
-  margin: 4px 0;
-}
-
-/* The head is an h2 (a heading for screen readers) wrapping a 48 px button: "Koken · 3/33" and a
-   chevron that turns when open. */
-.badge-group .badge-group-head {
-  margin: 0;
-  font-size: 17px;
-  border-bottom: 1px solid var(--line);
-}
-
-.badge-group-head > button {
+/* A 48 px strip that scrolls sideways only, edge to edge like .chips (the content keeps the page
+   gutter), snapping per tab. A 1 px line along the bottom (an inset shadow: it stays put while the
+   strip scrolls); the active tab draws its 2 px accent edge over it. position: relative makes the
+   strip the offsetParent of the tabs (revealTab in BadgesScreen.tsx). */
+.badge-gtabs {
+  position: relative;
   display: flex;
+  height: 48px;
+  margin: 0 calc(-1 * max(16px, var(--sar))) 0 calc(-1 * max(16px, var(--sal)));
+  padding: 0 max(16px, var(--sar)) 0 max(16px, var(--sal));
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: max(16px, var(--sal)) max(16px, var(--sar));
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+
+.badge-gtabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* A tab: icon + name + count pill, the full strip height (48 px ≥ the 44 px target). */
+.badge-gtab {
+  flex: none;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  width: 100%;
-  min-height: 48px;
-  padding: 6px 4px;
+  gap: 6px;
+  height: 48px;
+  min-width: 44px;
+  padding: 0 12px;
   border: 0;
+  border-bottom: 2px solid transparent;
   background: transparent;
-  color: inherit;
+  color: var(--muted);
   font: inherit;
-  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
+  scroll-snap-align: start;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
 
-.badge-group-head > button:active {
+.badge-gtab:active {
   background: var(--press);
 }
 
-.badge-group-title {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* Inside the clipped strip an outer focus ring would be cut off: draw it inside. */
+.badge-gtab:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: -2px;
 }
 
-.badge-group-count {
-  color: var(--muted);
-  font-weight: 600;
+/* The active tab: ink text and the accent as its bottom edge (base.css has no --accent token yet,
+   so cobalt, like the Inbox tabs, is the fallback). */
+.badge-gtab[aria-selected='true'] {
+  color: var(--ink);
+  border-bottom-color: var(--accent, var(--cobalt));
+}
+
+.badge-gtab-icon {
+  flex: none;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* "2/31" or (Geheim) "3 gevonden". */
+.badge-gtab-pill {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--line);
+  color: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
   font-variant-numeric: tabular-nums;
 }
 
-.badge-group-head .chev {
-  flex: none;
-  color: var(--muted);
-  opacity: 0.6;
-  transition: transform 0.15s;
+/* The panel of the active tab. */
+.badge-gpanel {
+  padding-top: 12px;
 }
 
-.badge-group.open .badge-group-head .chev {
-  transform: rotate(90deg);
+.badge-gpanel:focus {
+  outline: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .badge-group-head .chev {
-    transition: none;
-  }
+.badge-gpanel:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
-.badge-group-body {
-  padding-top: 10px;
+/* An empty group: one muted line ("Nog niets in deze groep."). */
+.badge-group-empty {
+  margin: 4px 0 16px;
+  font-size: 14px;
 }
 
 /* Group "Geheim": "{n} geheime badges gevonden" or "Nog geen geheime badge gevonden …". */
