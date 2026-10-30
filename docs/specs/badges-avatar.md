@@ -237,6 +237,32 @@ goed over nadenken." Fable's ontwerp, als blok ná 13D (blok 2–4) en vóór 6C
 Geen nieuwe tabel, geen nieuwe setting behalve `unlocks.disabled` die blijft; i18n `style.*` NL én EN. Spec met
 bestandsverdeling schrijft Fable bij de start (ná 13D).
 
+### Blok 6D-B — badgepagina als tegels: alleen de iconen, tik voor de details (Fable, 30 okt 2026)
+
+Stijn (30 okt, na de tabs): "de badges-pagina is goed verdeeld, maar nog steeds veel te groot. Doe maar alleen die logo's,
+kleiner, en als je erop klikt de details, net als bij de avatar." Klein blok, direct ná 6D-R (één Opus-bouwer + gate).
+Bezit: `src/screens/BadgesScreen.tsx`, `src/styles/badges.css`, `src/i18n/badges.ts` (alleen toevoegen), `tests/badges-page.test.ts`
+(alleen als het paginamodel verandert; liever niet). `badgePageModel`, de lid-tabs, de telregel en de groep-tabs blijven.
+1. **Raster van tegels** in plaats van kaarten: `repeat(auto-fill, minmax(64px, 1fr))`, tegel 64 px, rij-afstand 8 px, zoals de
+   avatar-maker. Een tegel = het icoon (emoji ±28 px) in een cirkel van 56 px. Ladder: de ring in de kleur van het bereikte
+   niveau (niveau 0 = grijze stippelring); eenmalig verdiend: gouden rand (`--lvl-7`); niet verdiend: gedempt (opacity .55,
+   grijze rand); geheim nog niet gevonden: de "?"-tegel (stippelrand, icoon op volle sterkte, aria-label "???"). Geen naam en
+   geen tekst op de tegel; de naam is de aria-label ("Huiskok, niveau 2 van 8" / "Eerste hap, verdiend" / "???").
+2. **Tik op een tegel → detail in een onderste sheet** (`SheetPortal`, Sluiten bovenaan): icoon groot (64 px) met ring, naam,
+   de omschrijving met {n} ingevuld, voor een ladder de acht stipjes + "Niveau {k} · {kleur}" + "{current}/{target}" + balk +
+   "Volgende: {n} ({kleur})" (op platina "✓ Platina"), voor een eenmalige "Verdiend"/"{current}/{target} · nog niet verdiend",
+   "Telt van … tot …" (seizoen), "Telt voor het hele huishouden" (HOUSEHOLD_KINDS), "Geeft: {part}" (+ "op niveau {kleur}").
+   Dus precies de inhoud van de huidige kaartdetails, nu in de sheet. Een "?"-tegel opent niets. Vegen links/rechts in de
+   sheet gaat naar de volgende/vorige tegel van de groep (zelfde patroon als `useHorizontalSwipe`, als dat in blok 13D-2 al
+   bestaat; anders zonder vegen). Terug-knop sluit de sheet (hash-state niet nodig: de sheet is een portal).
+3. **Groep Geheim**: "{n} geheime badges gevonden" boven het raster blijft; gevonden eerst, dan de "?"-tegels.
+4. De oude kaartstijlen (`.badge-card`, `.badge-card-face`, …) gaan weg uit badges.css als niets ze meer gebruikt; de
+   detail-stijlen verhuizen naar `.badge-sheet`. Donker thema via tokens. Geen horizontaal scrollen op 360 px.
+5. i18n: alleen `badges.tileLabel` als dat voor de aria-label nodig is (NL "{name}, niveau {k} van {max}" · EN "{name}, tier
+   {k} of {max}"); verder bestaande keys.
+**Integrator/gate:** DEVICE-TEST rij 94/95 aanpassen (tegels, tik voor details; NL én EN), STATUS-kop "… 6D-B — badgepagina
+als tegels". Acceptatie op 360/375 px, licht en donker, NL en EN.
+
 ### Blok 6D-2c — mini-ronde (Fable, 29 okt 2026): "?"-kaartjes, Hele cirkel + boodschappenspoor, stille registratie bij start
 
 Dit blok bundelt de drie besluiten hierboven plus de twee gereproduceerde bevindingen van de lens van 6D-2b. Het is

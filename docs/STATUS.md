@@ -273,6 +273,9 @@ extra rij breekt de vaste tellingen "15 unlocks" (§7.6) en "level 25 → 11 ids
   xp-levels.md onder "Na de lens van 6D-4a".
 
 ## PAUZE (29 okt, avond) — volgende stap: 6D-4b sync + kookkalender (Fable-blik vóór main)
+**Stijn, 30 okt (avond, 5): badgepagina nog te groot** → blok **6D-B**: alleen de iconen als tegels van 64 px (ring/rand/gedempt/"?"),
+tik opent een sheet met de details; direct ná 6D-R (spec in badges-avatar.md).
+
 **Stijn, 30 okt (avond, 4): pull-down-avatar en profielpagina samenvoegen** → ja, kan, en het ruimt op: blok 6D-S krijgt
 het scherm **Mijn profiel** (pull-down op Home of tik op je avatar; avatar groot, level, knoppen Jouw stijl · Badges · Deel
 kaartje · Sync · Naam & kleur); Profielen beheren wordt alleen de lijst, het profiel-blok in Meer verdwijnt (IDEAS 5 gaat erin op).
