@@ -266,7 +266,7 @@ export function WeekScreen() {
       const overrides: LineOverride[] = (await Promise.all(ownIds.map((id) => listLineOverrides(id)))).flat();
       const userIngredients = await listUserIngredients();
       const recipes = ownIds.map((id) => byId.get(id)).filter((r): r is Recipe => !!r);
-      const env = buildPlanEnvelope(plan, recipes, { by, userIngredients, lineOverrides: overrides });
+      const env = buildPlanEnvelope(plan, recipes, { by, byId: activeProfile.value?.id, userIngredients, lineOverrides: overrides });
       const built = await planMessages([env], appInfo.appUrl, { lang: l, by, name: by });
       const url = buildShareUrl(appInfo.appUrl, env.t, await encodeToken(env));
       if (cancelled) return;
@@ -488,8 +488,9 @@ export function WeekScreen() {
   function onShare() {
     if (!message) return;
     setStatus('');
-    if ('text' in message) {
-      void shareText(message.text).then((r) => {
+    if ('parts' in message) {
+      // One envelope (the week plan) always gives exactly one part (V2).
+      void shareText(message.parts[0] ?? '').then((r) => {
         if (r.outcome === 'shared') void recordFeature('planShared');
         if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
         else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
@@ -505,8 +506,8 @@ export function WeekScreen() {
   }
 
   function onCopy() {
-    if (!message || !('text' in message)) return;
-    void copyText(message.text).then((r) => setStatus(r.ok ? t('week.copied') : `${t('share.copyError')}: ${r.error ?? ''}`));
+    if (!message || !('parts' in message)) return;
+    void copyText(message.parts[0] ?? '').then((r) => setStatus(r.ok ? t('week.copied') : `${t('share.copyError')}: ${r.error ?? ''}`));
   }
 
   const loading = plan === undefined || all === undefined;
@@ -698,7 +699,7 @@ export function WeekScreen() {
                 <button type="button" class="btn btn-primary btn-block" disabled={!message || uncooked.length === 0} onClick={onShare}>
                   {message && 'file' in message ? t('week.shareFile') : t('week.share')}
                 </button>
-                {message && 'text' in message && (
+                {message && 'parts' in message && (
                   <button type="button" class="btn" onClick={onCopy}>
                     {t('week.copy')}
                   </button>

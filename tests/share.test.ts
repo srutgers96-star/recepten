@@ -23,6 +23,8 @@ import {
   buildRecipeEnvelope,
   bundleFileName,
   combineEnvelopes,
+  DEFAULT_MESSAGE_LIMIT,
+  RECIPE_LINK_MESSAGE_LIMIT,
   envelopeItemCount,
   parseEnvelope,
   planDishCount,
@@ -34,6 +36,7 @@ import {
   LIST_MAX_LINES,
   type MemberCard,
   type PatchPayload,
+  type MessagePlan,
   type PlanPayload,
   type ProgressCard,
 } from '../src/domain/share';
@@ -400,11 +403,11 @@ describe('buildPlanEnvelope', () => {
   it('planMessages: "🗓️ Weekplan van Stijn: 3 gerechten", open line and one #w= URL', async () => {
     const env = buildPlanEnvelope(PLAN, [], { by: 'Stijn', userIngredients: [] });
     const plan = await planMessages([env], APP_URL, { lang: 'nl' });
-    if (!('text' in plan)) throw new Error('expected text');
-    const lines = plan.text.split('\n');
+    if (!('parts' in plan)) throw new Error('expected text');
+    const lines = plan.parts[0]!.split('\n');
     expect(lines[0]).toBe('🗓️ Weekplan van Stijn: 3 gerechten');
     expect(lines[1]).toMatch(/^Open in Rutgers' Recepten/);
-    expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['w']);
+    expect(extractTokens(plan.parts[0]!).map((t) => t.key)).toEqual(['w']);
     expect(buildPlanShareMessage({ dishes: 1, by: '', url: 'u', lang: 'en' }).split('\n')[0]).toBe('🗓️ Week plan: 1 dish');
   });
 });
@@ -487,8 +490,8 @@ describe('week plan with side dishes (#w= of)', () => {
   it('planMessages counts the main dishes: "🗓️ Weekplan van Stijn: 1 gerecht"', async () => {
     const plan: Plan = { ...SIDE_PLAN, items: SIDE_PLAN.items.slice(0, 3) };
     const messages = await planMessages([buildPlanEnvelope(plan, [], { by: 'Stijn', userIngredients: [] })], APP_URL, { lang: 'nl' });
-    if (!('text' in messages)) throw new Error('expected text');
-    expect(messages.text.split('\n')[0]).toBe('🗓️ Weekplan van Stijn: 1 gerecht');
+    if (!('parts' in messages)) throw new Error('expected text');
+    expect(messages.parts[0]!.split('\n')[0]).toBe('🗓️ Weekplan van Stijn: 1 gerecht');
   });
 });
 
@@ -745,11 +748,11 @@ describe('member card (#f=)', () => {
     expect(en[0]).toBe("👋 Gabi's card for Rutgers' Recipes — open the link in the app or paste it into In & out to add Gabi to your household.");
     // planMessages with one card uses that text and one extractable #f= link.
     const plan = await planMessages([buildMemberEnvelope(CARD)], APP_URL, { lang: 'nl' });
-    if (!('text' in plan)) throw new Error('expected text');
-    expect(plan.text.split('\n')[0]).toMatch(/^👋 Kaartje van Stijn/);
+    if (!('parts' in plan)) throw new Error('expected text');
+    expect(plan.parts[0]!.split('\n')[0]).toMatch(/^👋 Kaartje van Stijn/);
     expect(plan.tokens).toBe(1);
-    expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['f']);
-    const parsed = parseEnvelope(await decodeToken(extractTokens(plan.text)[0]!.token));
+    expect(extractTokens(plan.parts[0]!).map((t) => t.key)).toEqual(['f']);
+    const parsed = parseEnvelope(await decodeToken(extractTokens(plan.parts[0]!)[0]!.token));
     expect(parsed.member).toEqual(CARD);
   });
 
@@ -813,9 +816,9 @@ describe('member card with an avatar (#f=, optional key)', () => {
     expect(parsed.member?.avatar).toEqual(AVATAR);
     // Still a single #f= link in the one-field share text (invariant 9: `{text}` only).
     const plan = await planMessages([env], APP_URL, { lang: 'en' });
-    if (!('text' in plan)) throw new Error('expected text');
+    if (!('parts' in plan)) throw new Error('expected text');
     expect(plan.tokens).toBe(1);
-    expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['f']);
+    expect(extractTokens(plan.parts[0]!).map((t) => t.key)).toEqual(['f']);
   });
 });
 
@@ -973,17 +976,17 @@ describe('progress (#x=)', () => {
   it('planMessages with one x: that text in the chosen language, 1 token, one extractable #x= link', async () => {
     const env = buildProgressEnvelope(PROGRESS);
     const nl = await planMessages([env], APP_URL, { lang: 'nl' });
-    if (!('text' in nl)) throw new Error('expected text');
+    if (!('parts' in nl)) throw new Error('expected text');
     const url = `${APP_URL}#x=${await encodeToken(env)}`;
-    expect(nl.text).toBe(buildProgressShareMessage({ name: 'Stijn', level: 12, title: 'Soepkoker', url, lang: 'nl' }));
+    expect(nl.parts[0]!).toBe(buildProgressShareMessage({ name: 'Stijn', level: 12, title: 'Soepkoker', url, lang: 'nl' }));
     expect(nl.tokens).toBe(1);
-    expect(nl.text.split('\n').at(-1)).toBe(url);
-    expect(extractTokens(nl.text).map((t) => t.key)).toEqual(['x']);
-    const parsed = parseEnvelope(await decodeToken(extractTokens(nl.text)[0]!.token));
+    expect(nl.parts[0]!.split('\n').at(-1)).toBe(url);
+    expect(extractTokens(nl.parts[0]!).map((t) => t.key)).toEqual(['x']);
+    const parsed = parseEnvelope(await decodeToken(extractTokens(nl.parts[0]!)[0]!.token));
     expect(parsed.progress).toEqual(PROGRESS);
     const en = await planMessages([env], APP_URL, { lang: 'en' });
-    if (!('text' in en)) throw new Error('expected text');
-    expect(en.text.split('\n')[0]).toBe("📈 Stijn's progress — Level 12 · Soup Stirrer. Open the link in the app or paste it into In & out.");
+    if (!('parts' in en)) throw new Error('expected text');
+    expect(en.parts[0]!.split('\n')[0]).toBe("📈 Stijn's progress — Level 12 · Soup Stirrer. Open the link in the app or paste it into In & out.");
   });
 
   it('combineEnvelopes([x, r]) → a bundle with the one recipe; the progress drops out', () => {
@@ -1099,16 +1102,16 @@ describe('shopping list (#l=, 13Q)', () => {
   it('planMessages with one l: that text in the chosen language, 1 token, one extractable #l= link', async () => {
     const env = buildListEnvelope(ITEMS, dict, 'Stijn', { title: TITLE, hideChecked: true, hideInHouse: true });
     const nl = await planMessages([env], APP_URL, { lang: 'nl' });
-    if (!('text' in nl)) throw new Error('expected text');
+    if (!('parts' in nl)) throw new Error('expected text');
     const url = `${APP_URL}#l=${await encodeToken(env)}`;
-    expect(nl.text).toBe(buildListShareMessage({ name: 'Stijn', lines: 3, url, lang: 'nl' }));
-    expect(nl.text.split('\n')[0]).toBe('🛒 Boodschappenlijst van Stijn — 3 regels. Open de link in de app of plak hem bij In & uit.');
+    expect(nl.parts[0]!).toBe(buildListShareMessage({ name: 'Stijn', lines: 3, url, lang: 'nl' }));
+    expect(nl.parts[0]!.split('\n')[0]).toBe('🛒 Boodschappenlijst van Stijn — 3 regels. Open de link in de app of plak hem bij In & uit.');
     expect(nl.tokens).toBe(1);
-    expect(nl.text.split('\n').at(-1)).toBe(url);
-    expect(extractTokens(nl.text).map((t) => t.key)).toEqual(['l']);
+    expect(nl.parts[0]!.split('\n').at(-1)).toBe(url);
+    expect(extractTokens(nl.parts[0]!).map((t) => t.key)).toEqual(['l']);
     const en = await planMessages([env], APP_URL, { lang: 'en' });
-    if (!('text' in en)) throw new Error('expected text');
-    expect(en.text.split('\n')[0]).toBe("🛒 Stijn's shopping list — 3 lines. Open the link in the app or paste it into In & out.");
+    if (!('parts' in en)) throw new Error('expected text');
+    expect(en.parts[0]!.split('\n')[0]).toBe("🛒 Stijn's shopping list — 3 lines. Open the link in the app or paste it into In & out.");
   });
 
   it('combineEnvelopes([l, r]) → a bundle with the one recipe; the list drops out', () => {
@@ -1134,29 +1137,29 @@ describe('planMessages', () => {
   it('a single recipe: the four-line message from message.ts with its #r= URL', async () => {
     const env = buildRecipeEnvelope(recipe(), { by: 'Stijn', userIngredients: [] });
     const plan = await planMessages([env], APP_URL, { lang: 'nl' });
-    if (!('text' in plan)) throw new Error('expected text');
-    const tokens = extractTokens(plan.text);
+    if (!('parts' in plan)) throw new Error('expected text');
+    const tokens = extractTokens(plan.parts[0]!);
     expect(tokens).toHaveLength(1);
     expect(tokens[0]?.key).toBe('r');
     expect(plan.tokens).toBe(1);
-    expect(plan.chars).toBe(plan.text.length);
-    expect(plan.text).toBe(buildShareMessageFor(recipe(), { by: 'Stijn', url: `${APP_URL}#r=${tokens[0]?.token}`, lang: 'nl' }));
-    expect(plan.text.split('\n')[0]).toBe('🍲 Pasta pesto · Pesto pasta');
+    expect(plan.chars).toBe(plan.parts[0]!.length);
+    expect(plan.parts[0]!).toBe(buildShareMessageFor(recipe(), { by: 'Stijn', url: `${APP_URL}#r=${tokens[0]?.token}`, lang: 'nl' }));
+    expect(plan.parts[0]!.split('\n')[0]).toBe('🍲 Pasta pesto · Pesto pasta');
   });
 
   it('a single patch: "<name> (aangepast)" and a #p= URL', async () => {
     const env = buildPatchEnvelope(OVERRIDE, { by: 'Stijn', userIngredients: [], name: { nl: 'Uiensoep', en: 'French onion soup' } });
     const plan = await planMessages([env], APP_URL, { lang: 'nl' });
-    if (!('text' in plan)) throw new Error('expected text');
-    const lines = plan.text.split('\n');
+    if (!('parts' in plan)) throw new Error('expected text');
+    const lines = plan.parts[0]!.split('\n');
     expect(lines[0]).toBe('🍲 Uiensoep · French onion soup (aangepast)');
     expect(lines[1]).toBe('van Stijn');
     expect(lines[3]).toMatch(new RegExp(`^${APP_URL.replace(/[.]/g, '\\.')}#p=`));
-    expect(extractTokens(plan.text)).toHaveLength(1);
+    expect(extractTokens(plan.parts[0]!)).toHaveLength(1);
     const en = await planMessages([env], APP_URL, { lang: 'en' });
-    if (!('text' in en)) throw new Error('expected text');
-    expect(en.text.split('\n')[0]).toBe('🍲 Uiensoep · French onion soup (adjusted)');
-    expect(en.text.split('\n')[1]).toBe('from Stijn');
+    if (!('parts' in en)) throw new Error('expected text');
+    expect(en.parts[0]!.split('\n')[0]).toBe('🍲 Uiensoep · French onion soup (adjusted)');
+    expect(en.parts[0]!.split('\n')[1]).toBe('from Stijn');
   });
 
   it('several items: compact header, open line and one URL per line, in order', async () => {
@@ -1166,19 +1169,19 @@ describe('planMessages', () => {
       buildPatchEnvelope(OVERRIDE, { by: 'Stijn', userIngredients: [] }),
     ];
     const plan = await planMessages(envs, APP_URL, { lang: 'nl' });
-    if (!('text' in plan)) throw new Error('expected text');
-    const lines = plan.text.split('\n');
+    if (!('parts' in plan)) throw new Error('expected text');
+    const lines = plan.parts[0]!.split('\n');
     expect(lines[0]).toBe('🍲 3 recepten van Stijn');
     expect(lines[1]).toMatch(/^Open in Rutgers' Recepten/);
     expect(lines.slice(2)).toHaveLength(3);
-    expect(extractTokens(plan.text).map((t) => t.key)).toEqual(['r', 'r', 'p']);
+    expect(extractTokens(plan.parts[0]!).map((t) => t.key)).toEqual(['r', 'r', 'p']);
     expect(plan.tokens).toBe(3);
     const en = await planMessages(envs, APP_URL, { lang: 'en' });
-    if (!('text' in en)) throw new Error('expected text');
-    expect(en.text.split('\n')[0]).toBe('🍲 3 recipes from Stijn');
+    if (!('parts' in en)) throw new Error('expected text');
+    expect(en.parts[0]!.split('\n')[0]).toBe('🍲 3 recipes from Stijn');
   });
 
-  it('over the limit: a pretty-printed bundle file named recepten-<name>-YYYY-MM-DD.json', async () => {
+  it('an envelope that alone is over the limit: a pretty-printed bundle file with the readable name', async () => {
     const envs = [
       buildRecipeEnvelope(recipe(), { by: 'Stijn', userIngredients: USER_INGREDIENTS }),
       buildPatchEnvelope(OVERRIDE, { by: 'Stijn', userIngredients: USER_INGREDIENTS }),
@@ -1186,7 +1189,7 @@ describe('planMessages', () => {
     const plan = await planMessages(envs, APP_URL, { limit: 200, name: 'Anna Ë.', date: new Date(2026, 8, 29) });
     if (!('file' in plan)) throw new Error('expected file');
     expect(plan.reason).toBe('too-large');
-    expect(plan.file.name).toBe('recepten-anna-e-2026-09-29.json');
+    expect(plan.file.name).toBe('Recepten van Anna Ë. 29 sep - open via Delen in Rutgers Recepten.json');
     expect(plan.file.json).toContain('\n  ');
     const parsed = parseEnvelope(JSON.parse(plan.file.json));
     expect(parsed.kind).toBe('bundle');
@@ -1201,13 +1204,13 @@ describe('planMessages', () => {
     const plan = await planMessages([env], APP_URL, { limit: 100 });
     if (!('file' in plan)) throw new Error('expected file');
     expect(JSON.parse(plan.file.json)).toEqual(env);
-    expect(plan.file.name).toMatch(/^recepten-export-\d{4}-\d{2}-\d{2}\.json$/);
+    expect(plan.file.name).toMatch(/^Recepten \d{1,2} [a-z]{3} - open via Delen in Rutgers Recepten\.json$/);
   });
 
-  it('the default limit (3500) holds a couple of recipes', async () => {
+  it('the default limit (RECIPE_LINK_MESSAGE_LIMIT) holds a couple of recipes', async () => {
     const envs = [1, 2].map((i) => buildRecipeEnvelope(recipe({ id: `u:r${i}000000` }), { by: 'Stijn', userIngredients: [] }));
     const plan = await planMessages(envs, APP_URL);
-    expect('text' in plan).toBe(true);
+    expect('parts' in plan).toBe(true);
   });
 });
 
@@ -1222,8 +1225,148 @@ describe('combineEnvelopes / bundleFileName', () => {
     expect(envelopeItemCount(out)).toBe(2);
   });
 
-  it('bundleFileName slugifies the name', () => {
+  it('bundleFileName without a language keeps the old slug name', () => {
     expect(bundleFileName('Stijn & Co', new Date(2026, 0, 5))).toBe('recepten-stijn-co-2026-01-05.json');
     expect(bundleFileName(undefined, new Date(2026, 0, 5))).toBe('recepten-export-2026-01-05.json');
+  });
+});
+
+// --- V2 (docs/specs/verbeterronde-2.md §1a): messages in parts, file as the last resort, byId ----
+
+/** Deterministic, hardly compressible step text, so a token grows about as long as the text. */
+function noise(length: number, seed: number): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let x = seed >>> 0 || 1;
+  let out = '';
+  for (let i = 0; i < length; i++) {
+    x ^= x << 13;
+    x >>>= 0;
+    x ^= x >>> 17;
+    x ^= x << 5;
+    x >>>= 0;
+    out += chars[x % chars.length];
+  }
+  return out;
+}
+
+function bigRecipe(i: number, steps: number): Recipe {
+  return recipe({ id: `u:big${String(i).padStart(5, '0')}`, name: { nl: `Recept ${i}` }, steps: [{ text: { nl: noise(steps, i + 1) } }] });
+}
+
+function partsOf(plan: MessagePlan): string[] {
+  if (!('parts' in plan)) throw new Error('expected parts');
+  return plan.parts;
+}
+
+describe('planMessages in parts (V2 §1a)', () => {
+  it('the limit is 20000; the old constant stays for whoever imports it', () => {
+    expect(RECIPE_LINK_MESSAGE_LIMIT).toBe(20000);
+    expect(DEFAULT_MESSAGE_LIMIT).toBe(3500);
+  });
+
+  it('12 envelopes of about 2,500 characters: 2 parts, each within 20,000, all 12 exactly once, in order', async () => {
+    const envs = Array.from({ length: 12 }, (_, i) => buildRecipeEnvelope(bigRecipe(i, 1850), { by: 'Gabi', userIngredients: [] }));
+    const tokens = await Promise.all(envs.map((e) => encodeToken(e)));
+    for (const t of tokens) {
+      expect(t.length).toBeGreaterThan(2200);
+      expect(t.length).toBeLessThan(2800);
+    }
+    const plan = await planMessages(envs, APP_URL, { lang: 'nl' });
+    const parts = partsOf(plan);
+    expect(parts).toHaveLength(2);
+    for (const p of parts) expect(p.length).toBeLessThanOrEqual(20000);
+    const found = parts.flatMap((p) => extractTokens(p).map((t) => t.token));
+    expect(found).toEqual(tokens);
+    // Greedy: the first part is as full as it can be (one more link would not fit).
+    const first = extractTokens(parts[0]!).length;
+    expect(first + extractTokens(parts[1]!).length).toBe(12);
+    expect(parts[0]!.length + 1 + `${APP_URL}#r=${tokens[first]}`.length).toBeGreaterThan(20000);
+    expect(parts[0]!.split('\n')[0]).toBe(`🍲 ${first} recepten van Gabi (deel 1 van 2)`);
+    expect(parts[1]!.split('\n')[0]).toBe(`🍲 ${12 - first} recepten van Gabi (deel 2 van 2)`);
+    for (const p of parts) expect(p.split('\n')[1]).toMatch(/^Open in Rutgers' Recepten/);
+    expect(plan).toMatchObject({ tokens: 12, chars: parts[0]!.length + parts[1]!.length });
+    const en = partsOf(await planMessages(envs, APP_URL, { lang: 'en' }));
+    expect(en[0]!.split('\n')[0]).toBe(`🍲 ${first} recipes from Gabi (part 1 of 2)`);
+    expect(en[1]!.split('\n')[0]).toBe(`🍲 ${12 - first} recipes from Gabi (part 2 of 2)`);
+  });
+
+  it('every part stays under a small custom limit and the numbering is right for more parts', async () => {
+    const envs = Array.from({ length: 7 }, (_, i) => buildRecipeEnvelope(bigRecipe(i, 300), { by: 'Gabi', userIngredients: [] }));
+    const plan = await planMessages(envs, APP_URL, { lang: 'nl', limit: 1500 });
+    const parts = partsOf(plan);
+    expect(parts.length).toBeGreaterThan(2);
+    parts.forEach((p, i) => {
+      expect(p.length).toBeLessThanOrEqual(1500);
+      expect(p.split('\n')[0]).toMatch(new RegExp(`\\(deel ${i + 1} van ${parts.length}\\)$`));
+    });
+    expect(parts.flatMap((p) => extractTokens(p)).length).toBe(7);
+  });
+
+  it('3 small envelopes: 1 part without "deel"', async () => {
+    const envs = [0, 1, 2].map((i) => buildRecipeEnvelope(recipe({ id: `u:small${i}00` }), { by: 'Gabi', userIngredients: [] }));
+    const parts = partsOf(await planMessages(envs, APP_URL, { lang: 'nl' }));
+    expect(parts).toHaveLength(1);
+    expect(parts[0]!.split('\n')[0]).toBe('🍲 3 recepten van Gabi');
+    expect(parts[0]).not.toContain('deel');
+  });
+
+  it('one envelope of about 25,000 characters: a file (also when it travels with small ones)', async () => {
+    const big = buildRecipeEnvelope(bigRecipe(99, 24000), { by: 'Gabi', userIngredients: [] });
+    expect((await encodeToken(big)).length).toBeGreaterThan(20000);
+    const alone = await planMessages([big], APP_URL, { lang: 'nl', name: 'Gabi', date: new Date(2026, 10, 8) });
+    if (!('file' in alone)) throw new Error('expected file');
+    expect(alone.reason).toBe('too-large');
+    expect(alone.file.name).toBe('Recepten van Gabi 8 nov - open via Delen in Rutgers Recepten.json');
+    const small = buildRecipeEnvelope(recipe(), { by: 'Gabi', userIngredients: [] });
+    const mixed = await planMessages([small, big], APP_URL, { lang: 'en', name: 'Gabi', date: new Date(2026, 10, 8) });
+    if (!('file' in mixed)) throw new Error('expected file');
+    expect(mixed.file.name).toBe('Recipes from Gabi 8 Nov - open via Share in Rutgers Recepten.json');
+    expect(parseEnvelope(JSON.parse(mixed.file.json)).recipes).toHaveLength(2);
+  });
+});
+
+describe('bundleFileName with a language (V2 §1a)', () => {
+  const d = new Date(2026, 10, 8);
+  it('NL and EN, readable, with the explanation in it', () => {
+    expect(bundleFileName('Gabi', d, 'nl')).toBe('Recepten van Gabi 8 nov - open via Delen in Rutgers Recepten.json');
+    expect(bundleFileName('Gabi', d, 'en')).toBe('Recipes from Gabi 8 Nov - open via Share in Rutgers Recepten.json');
+  });
+
+  it('an empty name: "Recepten 8 nov - …" / "Recipes 8 Nov - …"', () => {
+    expect(bundleFileName('', d, 'nl')).toBe('Recepten 8 nov - open via Delen in Rutgers Recepten.json');
+    expect(bundleFileName(undefined, d, 'en')).toBe('Recipes 8 Nov - open via Share in Rutgers Recepten.json');
+    expect(bundleFileName('  ', d, 'nl')).toBe('Recepten 8 nov - open via Delen in Rutgers Recepten.json');
+  });
+
+  it('only letters, digits, spaces, hyphen and dot', () => {
+    expect(bundleFileName('Stijn & Co / "test"', new Date(2026, 2, 1), 'nl')).toBe('Recepten van Stijn Co test 1 mrt - open via Delen in Rutgers Recepten.json');
+    expect(bundleFileName('Zoë-Ann J.', new Date(2026, 4, 31), 'en')).toBe('Recipes from Zoë-Ann J. 31 May - open via Share in Rutgers Recepten.json');
+  });
+});
+
+describe('byId (V2 §1a)', () => {
+  it('travels on r, p and b when the context has it, and reads back', async () => {
+    const ctx = { by: 'Gabi', byId: 'p:gabi1234', userIngredients: [] };
+    const envs = [
+      buildRecipeEnvelope(recipe(), ctx),
+      buildPatchEnvelope(OVERRIDE, ctx),
+      buildBundleEnvelope({ recipes: [recipe()], patches: [] }, ctx),
+    ];
+    for (const env of envs) {
+      expect(env.byId).toBe('p:gabi1234');
+      const back = parseEnvelope(await decodeToken(await encodeToken(env)));
+      expect(back.by).toBe('Gabi');
+      expect(back.byId).toBe('p:gabi1234');
+    }
+    expect(combineEnvelopes(envs.slice(0, 2)).byId).toBe('p:gabi1234');
+  });
+
+  it('is absent without it in the context, and an unusable byId is not read', () => {
+    const env = buildRecipeEnvelope(recipe(), { by: 'Gabi', userIngredients: [] });
+    expect('byId' in env).toBe(false);
+    expect('byId' in parseEnvelope(env)).toBe(false);
+    expect('byId' in buildRecipeEnvelope(recipe(), { by: 'Gabi', byId: '  ', userIngredients: [] })).toBe(false);
+    expect('byId' in parseEnvelope({ ...env, byId: 'has spaces in it' })).toBe(false);
+    expect('byId' in parseEnvelope({ ...env, byId: 42 })).toBe(false);
   });
 });

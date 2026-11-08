@@ -13,9 +13,10 @@
 // spec §0).
 // Phase 5 (docs/phase-5-spec.md A-bis.8): select mode. "Selecteer" in the header, a long-press on
 // a row, or '#/recipes?select=1[&id=<id>]' (Home) turns the rows into checkboxes and shows the
-// `SelectBar` above the nav: Deel (one message with one token per recipe, or a bundle file when
-// too long — navigator.share with ONE field, prepared in advance so the share runs inside the
-// tap), + Deze week, Categorie/labels (own recipes in the recipe, classics as an override patch),
+// `SelectBar` above the nav: Deel (one message with one token per recipe — over 20 KB several
+// parts, "Deel deel 2 van 2" above the bar, V2 — or a bundle file when one recipe alone is too long,
+// then "Stuur ook de uitleg"; navigator.share with ONE field, prepared in advance so the share runs
+// inside the tap), + Deze week, Categorie/labels (own recipes in the recipe, classics as an override patch),
 // Verwijder (own and received only, confirm) and Exporteer (a bundle file). Escape or "Klaar"
 // leaves select mode.
 // Phase 6 (docs/phase-6-spec.md 13A-2): a sort row above the list — A–Z (groups + rail, the
@@ -50,6 +51,7 @@ import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { LIST_SORTS, isListSort, loadListSort, orderRecipes, recentIds, saveListSort, type ListSort } from '@/recent';
 import { navigate, route } from '@/router';
+import { buildFileHintMessage } from '@/domain/message';
 import { shareJsonFile, shareText } from '@/share-actions';
 
 interface Group {
@@ -152,6 +154,10 @@ export function RecipesScreen() {
   const [building, setBuilding] = useState(false);
   const [showQr, setShowQr] = useState(false);
   const [addMenu, setAddMenu] = useState(false);
+  /** V2 (docs/specs/verbeterronde-2.md §1b): parts of a multi-part "Deel" already shared. */
+  const [sentParts, setSentParts] = useState(0);
+  /** V2: a bundle file left through Deel or Exporteer: offer "Stuur ook de uitleg". */
+  const [fileSent, setFileSent] = useState(false);
 
   // '#/recipes?cat=<id>' from the Home shelf: replace the selection, then drop the query from the
   // hash so a reload or a tab switch does not re-apply it. '?select=1[&id=<id>]' (Home "Selecteer"
@@ -304,6 +310,8 @@ export function RecipesScreen() {
   // the user activation, and encoding tokens is async (DeltaShareScreen does the same).
   useEffect(() => {
     setShowQr(false);
+    setSentParts(0);
+    setFileSent(false);
     if (!selectMode || selectedList.length === 0) {
       setShareData(null);
       setBuilding(false);
@@ -313,7 +321,7 @@ export function RecipesScreen() {
     setBuilding(true);
     (async () => {
       const userIngredients = await listUserIngredients();
-      const ctx = { by, userIngredients };
+      const ctx = { by, byId: pid || undefined, userIngredients };
       const envs: Envelope[] = [];
       const recipes: Recipe[] = [];
       const patches: RecipeOverride[] = [];
@@ -353,9 +361,13 @@ export function RecipesScreen() {
     return () => {
       cancelled = true;
     };
-  }, [selectMode, selectedKey, by, l]);
+  }, [selectMode, selectedKey, by, pid, l]);
 
-  /** "Deel": the text (one token per recipe) or, when too long, the bundle file. Inside the tap. */
+  /**
+   * "Deel": the text (one token per recipe), part by part when it does not fit in one message (V2:
+   * counter and "In & uit" row only after the last part), or the bundle file when one recipe alone
+   * is too long. Inside the tap.
+   */
   function shareSelected() {
     if (!shareData || selectBusy) return;
     setSelectBusy(true);
@@ -364,9 +376,15 @@ export function RecipesScreen() {
     const shared = selectedList.length;
     const ids = shareData.ids;
     const plan = shareData.plan;
-    const done = 'text' in plan
-      ? shareText(plan.text).then((r) => {
-          if (r.outcome === 'shared') {
+    const n = 'parts' in plan ? plan.parts.length : 0;
+    const i = Math.min(sentParts, Math.max(0, n - 1));
+    const done = 'parts' in plan
+      ? shareText(plan.parts[i] ?? '').then((r) => {
+          if (r.outcome === 'shared' && i + 1 < n) {
+            setSentParts(i + 1);
+            setSelectStatus(t('delta.partSent', { i: i + 1, n }));
+          } else if (r.outcome === 'shared') {
+            setSentParts(0);
             setSelectStatus(t('select.shared'));
             countShared(shared);
             logSelectionShared('recipes', ids);
@@ -375,10 +393,12 @@ export function RecipesScreen() {
         })
       : shareJsonFile(plan.file.name, plan.file.json).then((r) => {
           if (r.outcome === 'shared') {
+            setFileSent(true);
             setSelectStatus(t('share.fileShared'));
             countShared(shared);
             logSelectionShared('recipes', ids);
           } else if (r.outcome === 'downloaded') {
+            setFileSent(true);
             setSelectStatus(t('share.fileDownloaded', { name: r.name }));
             logSelectionShared('recipes', ids);
           } else if (r.outcome === 'failed') setSelectStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
@@ -393,17 +413,27 @@ export function RecipesScreen() {
     setSelectStatus('');
     const ids = shareData.ids;
     const fresh: Envelope = { ...shareData.bundle, at: nowIso() };
-    void shareJsonFile(bundleFileName(by || 'selectie'), JSON.stringify(fresh, null, 2))
+    void shareJsonFile(bundleFileName(by, undefined, l), JSON.stringify(fresh, null, 2))
       .then((r) => {
         if (r.outcome === 'shared') {
+          setFileSent(true);
           setSelectStatus(t('share.fileShared'));
           logSelectionShared('bundle', ids);
         } else if (r.outcome === 'downloaded') {
+          setFileSent(true);
           setSelectStatus(t('share.fileDownloaded', { name: r.name }));
           logSelectionShared('bundle', ids);
         } else if (r.outcome === 'failed') setSelectStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
       })
       .finally(() => setSelectBusy(false));
+  }
+
+  /** V2: the explanation that goes with a file, as its own share (invariant 9: one field). */
+  function shareFileHint() {
+    void shareText(buildFileHintMessage(l)).then((r) => {
+      if (r.outcome === 'no-share-api') setSelectStatus(t('share.noShareApi'));
+      else if (r.outcome === 'failed') setSelectStatus(`${t('share.error')}: ${r.error ?? ''}`);
+    });
   }
 
   /** "+ Deze week": a slot per recipe (repo skips ones already in the plan). */
@@ -618,6 +648,12 @@ export function RecipesScreen() {
         // one `#b=` link; a bundle rarely fits, and then the panel says so (share.qrTooBig).
         <div class="select-qr">
           <div class="actions">
+            {/* V2 §1b: the explanation after a file (the next part is the bar's own Deel label). */}
+            {fileSent && (
+              <button type="button" class="btn" onClick={shareFileHint}>
+                {t('share.fileHint')}
+              </button>
+            )}
             <QrToggle open={showQr} disabled={!shareData} onToggle={() => setShowQr((v) => !v)} />
           </div>
           <QrPanel url={shareData?.bundleUrl ?? ''} open={showQr} onToggle={() => setShowQr(false)} />
@@ -629,6 +665,7 @@ export function RecipesScreen() {
           busy={selectBusy}
           building={building || !shareData}
           status={selectStatus}
+          shareLabel={shareData && 'parts' in shareData.plan && sentParts > 0 ? t('delta.shareNext', { i: sentParts + 1, n: shareData.plan.parts.length }) : undefined}
           onShare={shareSelected}
           onWeek={() => void weekSelected()}
           onMeta={(change) => void metaSelected(change)}

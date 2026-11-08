@@ -478,8 +478,8 @@
         "en": ["Tap **More** at the bottom.", "Tap **You & your household** if that group is closed.", "Tap 📅 **Cooking calendar**.", "Tap a day with dots.", "Tap ‹ or › for another month."]
       },
       "see": {
-        "nl": "Een maandrooster van maandag tot zondag; vandaag heeft een rand. Onder het rooster staat per kookbeurt \"naam — gerecht\".",
-        "en": "A month grid from Monday to Sunday; today has a border. Under the grid each cook shows as \"name — dish\"."
+        "nl": "Een maandrooster van maandag tot zondag; vandaag heeft een rand. Tik je een dag aan, dan staat daaronder per kookbeurt \"naam — gerecht\". Onderaan staat de legenda: iedereen met een kleine avatar en zijn naam.",
+        "en": "A month grid from Monday to Sunday; today has a border. When you tap a day, each cook shows below as \"name — dish\". At the bottom is the legend: everyone with a small avatar and their name."
       },
       "know": {
         "nl": "Kookte iemand iets wat jij niet hebt, dan staat er \"een recept\". Anderen zie je zoals ze het laatst deelden via Sync mijn voortgang.",
@@ -487,7 +487,7 @@
       },
       "route": "/more/calendar",
       "platform": "all",
-      "keywords": { "nl": ["kalender", "kookkalender", "maand", "wie kookte", "stipjes"], "en": ["calendar", "cooking calendar", "month", "who cooked", "dots"] }
+      "keywords": { "nl": ["kalender", "kookkalender", "maand", "wie kookte", "stipjes", "legenda", "avatar"], "en": ["calendar", "cooking calendar", "month", "who cooked", "dots", "legend", "avatar"] }
     }
   ]
 }

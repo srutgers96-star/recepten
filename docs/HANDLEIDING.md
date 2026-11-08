@@ -1167,7 +1167,7 @@ Klassiekers in je selectie blijven gewoon staan. Verwijderen kun je niet ongedaa
 
 #### Wat het doet
 
-Deel meerdere recepten in één keer, als bericht of als bestand.
+Deel meerdere recepten in één keer, in één bericht of in een paar berichten.
 
 #### Waar je tikt
 
@@ -1176,11 +1176,11 @@ Deel meerdere recepten in één keer, als bericht of als bestand.
 
 #### Wat je dan ziet
 
-Het deelmenu van je telefoon opent met één bericht. Zijn het te veel recepten voor één bericht, dan wordt het één bestand.
+Het deelmenu van je telefoon opent met één bericht. Zijn het te veel recepten, dan heet de knop daarna “Deel deel 2 van 2”. Tik erop voor het volgende bericht.
 
 #### Goed om te weten
 
-Met **Exporteer** maak je altijd één bestand. Met **Toon QR** laat je een code zien; voor veel recepten is die vaak te groot.
+Met **Exporteer** maak je altijd één bestand; de naam zegt hoe de ander het opent. Daarna kun je met **Stuur ook de uitleg** een bericht met de uitleg nasturen. Met **Toon QR** laat je een code zien; voor veel recepten is die vaak te groot.
 
 ### Klassiekers, eigen en ontvangen recepten
 
@@ -1719,7 +1719,7 @@ De kalender laat per maand zien wie wanneer kookte. Elke kok heeft stipjes in ee
 
 #### Wat je dan ziet
 
-Een maandrooster van maandag tot zondag; vandaag heeft een rand. Onder het rooster staat per kookbeurt "naam — gerecht".
+Een maandrooster van maandag tot zondag; vandaag heeft een rand. Tik je een dag aan, dan staat daaronder per kookbeurt "naam — gerecht". Onderaan staat de legenda: iedereen met een kleine avatar en zijn naam.
 
 #### Goed om te weten
 
@@ -2477,7 +2477,7 @@ Een recept, je weekplan, je kaartje of je voortgang stuur je met een paar tikken
 
 #### Wat het doet
 
-Je kunt een recept, je weekplan, je boodschappenlijst, je kaartje en je voortgang delen. Meerdere recepten tegelijk gaan in één bericht of als bestand.
+Je kunt een recept, je weekplan, je boodschappenlijst, je kaartje en je voortgang delen. Meerdere recepten tegelijk gaan in één bericht, of in een paar berichten als het veel is.
 
 #### Waar je tikt
 
@@ -2556,32 +2556,38 @@ Voor mensen zonder de app deel je het hele recept als leesbare tekst. De link st
 
 Je ziet het recept zoals de ander het leest: naam, ingrediënten en stappen. Met **Kopieer tekst** zet je het op je klembord.
 
-### Te groot voor één bericht: een bestand
+### Te veel voor één bericht: meerdere berichten
 
 #### Wat het doet
 
-Een heel lang recept past niet in één WhatsApp-bericht. De app maakt er dan een bestand van, dat de ander in de app opent.
+Veel recepten passen niet in één WhatsApp-bericht. De app verdeelt ze dan over een paar berichten. Elk bericht werkt op zichzelf.
 
 #### Waar je tikt
 
-1. Tik op een recept.
-2. Tik op **Deel**.
-3. Tik op **Deel het bestand**.
-4. Kies WhatsApp of een andere app.
+1. Tik onderaan op **Meer**.
+2. Tik op **Recepten & delen**.
+3. Tik op **Deel je nieuwe recepten**.
+4. Tik bij **Aan wie?** op een naam.
+5. Tik op **Deel via WhatsApp**.
+6. Stuur het eerste bericht in WhatsApp.
+7. Tik op de knop “Deel deel 2 van 2”.
+8. Stuur ook dit bericht in WhatsApp.
 
 #### Wat je dan ziet
 
-Bovenaan staat dat het recept te groot is voor één WhatsApp-bericht, met het aantal tekens. Met **Download** bewaar je het bestand in je Downloads.
+Boven de knop staat “Dit gaat in 2 berichten.” Elk bericht begint met een kop als “🍲 3 recepten van Gabi (deel 1 van 2)”. Na elk bericht staat er bijvoorbeeld “Deel 1 van 2 verstuurd”.
 
 #### Goed om te weten
 
-De ander opent het bestand in de app via **In & uit** en **Kies bestand**.
+Elk recept zit in precies één bericht. De ontvanger plakt de berichten één voor één bij **In & uit**; op Android tikt hij op de link in elk bericht. **Kopieer** kopieert alle berichten tegelijk. Een bestand komt alleen nog bij een heel lang recept of met **Exporteer**; tik dan na het delen op **Stuur ook de uitleg**.
+
+(`#/share`)
 
 ### Meerdere recepten tegelijk delen
 
 #### Wat het doet
 
-Je kiest een paar recepten uit de lijst en deelt ze in één keer. Past het niet in één bericht, dan gaan ze als bestand.
+Je kiest een paar recepten uit de lijst en deelt ze in één keer. Past het niet in één bericht, dan gaan ze in een paar berichten.
 
 #### Waar je tikt
 
@@ -2592,11 +2598,11 @@ Je kiest een paar recepten uit de lijst en deelt ze in één keer. Past het niet
 
 #### Wat je dan ziet
 
-Bovenaan staat hoeveel recepten je hebt geselecteerd. Na het delen staat er “Gedeeld”.
+Bovenaan staat hoeveel recepten je hebt geselecteerd. Na het delen staat er “Gedeeld”. Zijn het meer berichten, dan heet de knop daarna “Deel deel 2 van 2”.
 
 #### Goed om te weten
 
-**Exporteer** maakt altijd een bestand, ook bij een paar recepten. **Toon QR** past bij veel recepten meestal niet.
+**Exporteer** maakt altijd een bestand, ook bij een paar recepten. De naam van het bestand zegt hoe de ander het opent; daarna stuurt **Stuur ook de uitleg** de uitleg in een eigen bericht. **Toon QR** past bij veel recepten meestal niet.
 
 (`#/recipes`)
 
@@ -2755,7 +2761,7 @@ Safari heeft een eigen opslag, los van de app. Wat je in Safari ziet, staat dus 
 
 #### Wat je dan ziet
 
-Onder het plakvak staat wat de app herkent, zoals “1 deellink herkend”. Daaronder verschijnt wat je kunt bewaren.
+Onder het plakvak staat wat de app herkent, zoals “1 deellink herkend”. Daaronder verschijnt wat je kunt bewaren. Komt het van een huisgenoot of vriend, dan staat zijn avatar voor zijn naam.
 
 #### Goed om te weten
 
@@ -2763,27 +2769,30 @@ Een getal op het tabblad **Meer** betekent dat er iets nieuws is ontvangen. Met 
 
 (`#/inbox`)
 
-### Een receptbestand openen
+### Een bestand uit WhatsApp openen
 
 #### Wat het doet
 
-Kreeg je een bestand met recepten, bijvoorbeeld via WhatsApp of in je Downloads? Dan open je het bij **In & uit**.
+Kreeg je een bestand met recepten in WhatsApp? Op Android stuur je het via Delen naar de app. Op de iPhone kies je het in de app.
 
 #### Waar je tikt
 
-1. Tik onderaan op **Meer**.
-2. Tik op **In & uit**.
-3. Tik op **Kies bestand**.
-4. Kies het bestand op je telefoon.
-5. Tik op **Importeer**.
+1. Android: houd het bestand in WhatsApp ingedrukt.
+2. Android: tik op Delen.
+3. Android: kies Rutgers' Recepten.
+4. iPhone: bewaar het bestand vanuit WhatsApp in Bestanden.
+5. iPhone: tik onderaan op **Meer**.
+6. iPhone: tik op **In & uit**.
+7. iPhone: tik op **Kies bestand**.
+8. iPhone: kies het bestand.
 
 #### Wat je dan ziet
 
-Bovenaan staat wat er in het bestand zit, zoals “Gevonden: 3 recepten”. Daaronder staat elk recept met een label.
+**In & uit** toont wat er in het bestand zit, zoals “Gevonden: 3 recepten”. Daaronder staat elk recept met een label; tik op **Importeer** om ze te bewaren. Op Android staat onder **Kies bestand** een tip over WhatsApp.
 
 #### Goed om te weten
 
-Het bestand eindigt op .json of .txt.
+De naam van het bestand zegt al hoe je het opent, bijvoorbeeld “Recepten van Gabi 8 nov - open via Delen in Rutgers Recepten.json”. Wie het bestand stuurt, kan daarna op **Stuur ook de uitleg** tikken. Dan krijg je een bericht met deze stappen.
 
 (`#/inbox`)
 
@@ -2859,7 +2868,7 @@ Alleen de laatste import kun je nog ongedaan maken.
 
 #### Wat het doet
 
-Alles wat je sinds de vorige keer maakte of aanpaste, stuur je in één bericht naar één persoon. Zo blijven jullie recepten gelijk.
+Alles wat je sinds de vorige keer maakte of aanpaste, stuur je naar één persoon. Meestal past het in één bericht. Zo blijven jullie recepten gelijk.
 
 #### Waar je tikt
 
@@ -2875,7 +2884,7 @@ Je ziet hoe het bericht eruitziet en wat er meegaat, zoals het aantal recepten e
 
 #### Goed om te weten
 
-Een getal bij **Deel je nieuwe recepten** zegt hoeveel recepten nog niet gedeeld zijn. Deelde je met **Kopieer**, tik dan daarna op **Markeer als verzonden**. Te veel voor één bericht? Dan gaat het als bestand.
+Een getal bij **Deel je nieuwe recepten** zegt hoeveel recepten nog niet gedeeld zijn. Deelde je met **Kopieer**, tik dan daarna op **Markeer als verzonden**. Te veel voor één bericht? Dan staat er “Dit gaat in 2 berichten.” en deel je ze na elkaar.
 
 (`#/share`)
 
@@ -2923,7 +2932,7 @@ Je ziet “Kaartje van” met de naam en een rondje in de kleur van die persoon.
 
 #### Goed om te weten
 
-Is iemand al lid, dan heet de knop “Werk … bij”; dan worden alleen naam, kleur en taal bijgewerkt. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.
+Is iemand al lid, dan heet de knop “Werk … bij”; dan worden naam, kleur, taal en avatar bijgewerkt. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.
 
 (`#/more/household`)
 
@@ -2944,11 +2953,11 @@ In je huishouden staan de mensen met wie je kookt, ook als ze een eigen telefoon
 
 #### Wat je dan ziet
 
-Elk lid staat bij **Leden** met een rondje in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.
+Elk lid staat bij **Leden** met zijn avatar, of een rondje met een letter in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.
 
 #### Goed om te weten
 
-Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. Een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.
+Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. De avatar van een lid op een andere telefoon reist mee met zijn kaartje en zijn voortgang, en wordt dan bijgewerkt. Een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.
 
 (`#/more/household`)
 
@@ -2956,7 +2965,7 @@ Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. In *
 
 #### Wat het doet
 
-Je stuurt je level, je badges en je kookdagen van de laatste 90 dagen naar je huishouden of een vriend. Notities, sterren en foto's gaan niet mee.
+Je stuurt je level, je badges, je avatar en je kookdagen van de laatste 90 dagen naar je huishouden of een vriend. Notities, sterren en foto's gaan niet mee.
 
 #### Waar je tikt
 
@@ -2991,7 +3000,7 @@ Een gedeelde voortgang laat je het level en de kookdagen van een ander zien. Je 
 
 #### Wat je dan ziet
 
-Je ziet een kaart “Voortgang van” met de naam, het level, de badges en de kookdagen van de laatste 30 dagen. Is het een lid, dan heet de knop “Werk … bij”.
+Je ziet een kaart “Voortgang van” met de naam, het level, de badges en de kookdagen van de laatste 30 dagen. Is het een lid, dan heet de knop “Werk … bij”. Daaronder staat wat er wordt bijgewerkt: level, streak, badges, kookdagen en avatar.
 
 #### Goed om te weten
 

@@ -6,9 +6,11 @@
 // something was sent to before, or a free-text name; the
 // setting 'share.lastSentTo' remembers per name when something was last sent. Everything changed
 // since then (own recipes, received ones edited after receipt, adjusted classics, the user
-// ingredients they reference) goes as ONE WhatsApp text with several tokens when it fits in
-// 3.5 KB, else as one bundle file (.json → .txt → download). After a share-sheet share the date
-// is stored automatically; "Markeer als verzonden" covers Copy / wa.me (share() cannot tell
+// ingredients they reference) goes as WhatsApp text with several tokens: one message when it fits
+// in 20 KB, else several self-contained parts shared one tap at a time (V2,
+// docs/specs/verbeterronde-2.md §1b); only an envelope too big on its own makes a bundle file
+// (.json → .txt → download), after which "Stuur ook de uitleg" sends the explanation as a second,
+// separate share. After a share-sheet share of the last part the date is stored automatically; "Markeer als verzonden" covers Copy / wa.me (share() cannot tell
 // whether it was sent). Invariant 9: navigator.share with exactly one field, inside the tap.
 import { useEffect, useState } from 'preact/hooks';
 import { checkNewBadges, recheckActiveBadges } from '@/badges';
@@ -16,7 +18,7 @@ import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { bumpSharedRecipes, collectDeltaSince, getHousehold, getLastSentTo, logShareEvent, markSentTo, type DeltaSince } from '@/db/repo';
 import { membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
-import { buildMultiShareHeader, openLine } from '@/domain/message';
+import { buildFileHintMessage, buildMultiShareHeader, openLine } from '@/domain/message';
 import { nowIso, pickText, type Text } from '@/domain/model';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
 import { recordFeature } from '@/features';
@@ -87,8 +89,10 @@ function MessageExample(props: { plan: MessagePlan | null; by: string; ui: 'nl' 
   if (plan && 'file' in plan) return null;
   let lines: string[];
   let more = 0;
+  // V2: with several parts the example shows part 1 and a "+ n more messages" line.
+  const moreParts = plan ? plan.parts.length - 1 : 0;
   if (plan) {
-    const all = plan.text.split('\n');
+    const all = (plan.parts[0] ?? '').split('\n');
     const firstUrl = all.findIndex((l) => /^https?:\/\//.test(l));
     const head = firstUrl < 0 ? all : all.slice(0, firstUrl);
     lines = firstUrl < 0 ? head : [...head, shortUrl(all[firstUrl] ?? '')];
@@ -103,6 +107,7 @@ function MessageExample(props: { plan: MessagePlan | null; by: string; ui: 'nl' 
       <pre>
         {lines.join('\n')}
         {more > 0 && '\n' + (more === 1 ? t('delta.exampleMoreOne') : t('delta.exampleMore', { n: more }))}
+        {moreParts > 0 && '\n' + (moreParts === 1 ? t('delta.morePartsOne') : t('delta.moreParts', { n: moreParts }))}
       </pre>
       <p class="muted small">{t('delta.exampleHint')}</p>
     </aside>
@@ -151,6 +156,10 @@ export function DeltaShareScreen() {
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
+  /** V2: how many parts of a multi-part text already went out through the share sheet. */
+  const [sentParts, setSentParts] = useState(0);
+  /** V2: the bundle file was shared or downloaded: offer "Stuur ook de uitleg". */
+  const [fileSent, setFileSent] = useState(false);
 
   // Partner choices: the household members (the other profiles on this phone, members from a card,
   // hand-typed ones) first, then everyone else something was sent to before. 6D-3: a local profile
@@ -194,24 +203,29 @@ export function DeltaShareScreen() {
     };
   }, []);
 
+  // "Stuur ook de uitleg" belongs to the file just sent to this partner; another partner hides it.
+  useEffect(() => setFileSent(false), [name]);
+
   // The delta and its message plan follow the partner (and their last-sent date).
   useEffect(() => {
     if (!lastSent) return;
     let cancelled = false;
     setDelta(null);
     setPlan(null);
+    setSentParts(0);
     if (!name) return;
     (async () => {
       const d = await collectDeltaSince(since);
       if (cancelled) return;
       setDelta(d);
       if (!d.recipes.length && !d.patches.length) return;
-      const ctx = { by, userIngredients: d.userIngredients };
+      const ctx = { by, byId: me?.id, userIngredients: d.userIngredients };
       const envs = [
         ...d.recipes.map((r) => buildRecipeEnvelope(r, ctx)),
         ...d.patches.map((o) => buildPatchEnvelope(o, { ...ctx, lineOverrides: d.lineOverrides.filter((lo) => lo.recipeId === o.baseId), name: d.names[o.baseId] as Text | undefined })),
       ];
-      const p = await planMessages(envs, appInfo.appUrl, { lang: ui, by, name });
+      // V2: the file is named after the SENDER ("Recepten van Gabi 8 nov - …"), not the partner.
+      const p = await planMessages(envs, appInfo.appUrl, { lang: ui, by, name: by });
       if (!cancelled) setPlan(p);
     })().catch((e: unknown) => {
       if (!cancelled) setError(String(e));
@@ -219,7 +233,7 @@ export function DeltaShareScreen() {
     return () => {
       cancelled = true;
     };
-  }, [lastSent, name, since, by, ui]);
+  }, [lastSent, name, since, by, me?.id, ui]);
 
   async function markSent(auto: boolean) {
     if (!name) return;
@@ -230,16 +244,26 @@ export function DeltaShareScreen() {
     void refreshShareBadges();
   }
 
+  /**
+   * "Deel": the next part (part 1 first). Only after the LAST part are the date, the badge counter
+   * and the "In & uit" row written, as before; earlier parts just say "Deel i van n verstuurd".
+   */
   function shareAsText() {
-    if (!plan || !('text' in plan) || busy) return;
+    if (!plan || !('parts' in plan) || busy) return;
+    const n = plan.parts.length;
+    const i = Math.min(sentParts, n - 1);
     setBusy(true);
     setStatus('');
     // Recipes + patched classics in this delta count for the 'shared' badge (ingredients do not).
     const shared = delta ? delta.recipes.length + delta.patches.length : 0;
     // navigator.share runs before the first await inside shareText: still within the tap.
-    void shareText(plan.text)
+    void shareText(plan.parts[i] ?? '')
       .then(async (r) => {
-        if (r.outcome === 'shared') {
+        if (r.outcome === 'shared' && i + 1 < n) {
+          setSentParts(i + 1);
+          setStatus(t('delta.partSent', { i: i + 1, n }));
+        } else if (r.outcome === 'shared') {
+          setSentParts(0);
           await markSent(true);
           countShared(shared);
           if (delta) logDeltaShared(delta, name);
@@ -249,9 +273,10 @@ export function DeltaShareScreen() {
       .finally(() => setBusy(false));
   }
 
+  /** "Kopieer": every part, one blank line between them (the paste box reads several codes). */
   function copyAsText() {
-    if (!plan || !('text' in plan)) return;
-    void copyText(plan.text).then((r) => setStatus(r.ok ? t('delta.copiedHint') : `${t('share.copyError')}: ${r.error ?? ''}`));
+    if (!plan || !('parts' in plan)) return;
+    void copyText(plan.parts.join('\n\n')).then((r) => setStatus(r.ok ? t('delta.copiedHint') : `${t('share.copyError')}: ${r.error ?? ''}`));
   }
 
   function shareAsFile() {
@@ -262,16 +287,26 @@ export function DeltaShareScreen() {
     void shareJsonFile(plan.file.name, plan.file.json)
       .then(async (r) => {
         if (r.outcome === 'shared') {
+          setFileSent(true);
           await markSent(true);
           countShared(shared);
           if (delta) logDeltaShared(delta, name);
         } else if (r.outcome === 'downloaded') {
           // A file in Downloads left this phone too (the person hands it over themselves).
+          setFileSent(true);
           setStatus(t('share.fileDownloaded', { name: r.name }));
           if (delta) logDeltaShared(delta, name);
         } else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
       })
       .finally(() => setBusy(false));
+  }
+
+  /** V2: the explanation that goes with a file, as its own share (invariant 9: one field). */
+  function shareFileHint() {
+    void shareText(buildFileHintMessage(ui)).then((r) => {
+      if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
+      else if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
+    });
   }
 
   function choose(n: string) {
@@ -363,12 +398,14 @@ export function DeltaShareScreen() {
                   ))}
                 </ul>
                 {plan === null && <div class="muted small">{t('share.encoding')}</div>}
-                {plan && 'text' in plan && (
+                {plan && 'parts' in plan && (
                   <>
-                    <p class="muted small">{t('delta.asText', { tokens: plan.tokens, chars: plan.chars })}</p>
+                    <p class="muted small">
+                      {plan.parts.length > 1 ? t('delta.parts', { n: plan.parts.length }) : t('delta.asText', { tokens: plan.tokens, chars: plan.chars })}
+                    </p>
                     <div class="actions">
                       <button type="button" class="btn btn-primary btn-block" disabled={busy} onClick={shareAsText}>
-                        {t('share.whatsapp')}
+                        {sentParts > 0 ? t('delta.shareNext', { i: sentParts + 1, n: plan.parts.length }) : t('share.whatsapp')}
                       </button>
                       <button type="button" class="btn" onClick={copyAsText}>
                         {t('share.copy')}
@@ -395,6 +432,14 @@ export function DeltaShareScreen() {
                 )}
                 <p class="muted small">{t('delta.markHint')}</p>
               </>
+            )}
+            {/* V2: outside the delta block, so it stays after "shared" empties the delta (markSent). */}
+            {fileSent && (
+              <div class="actions">
+                <button type="button" class="btn btn-block" onClick={shareFileHint}>
+                  {t('share.fileHint')}
+                </button>
+              </div>
             )}
             <div class="status" role="status">
               {status}

@@ -1,7 +1,7 @@
 // WhatsApp share message (PLAN.md §7 "Het bericht (exact)") and the readable "Deel als tekst".
 import { describe, it, expect } from 'vitest';
 import type { Recipe } from '../src/domain/model';
-import { APP_NAME, buildReadableRecipe, buildShareMessage, buildShareMessageFor, countIngredientLines, recipeHasLang, shareMessageInput } from '../src/domain/message';
+import { APP_NAME, buildFileHintMessage, buildMultiShareHeader, buildReadableRecipe, buildShareMessage, buildShareMessageFor, countIngredientLines, recipeHasLang, shareMessageInput } from '../src/domain/message';
 import { parseLine } from '../src/domain/parser';
 import { extractTokens } from '../src/domain/token';
 import { testDictionary } from './fixtures/test-dictionary';
@@ -244,5 +244,28 @@ describe('buildReadableRecipe: the maker\'s tip (13D)', () => {
     // Without a serving tip the maker's tip directly follows the steps.
     const noServing = buildReadableRecipe({ ...nlOnly, servingTip: null }, ['nl']);
     expect(noServing.endsWith('2. Meng met de pesto en serveer.\n\n💡 Tip van de maker: Proef eerst.')).toBe(true);
+  });
+});
+
+// docs/specs/verbeterronde-2.md §1a: the "deel i van n" header and the explanation after a file.
+describe('buildMultiShareHeader with parts (V2)', () => {
+  it('adds "(deel i van n)" / "(part i of n)" only when there is more than one part', () => {
+    expect(buildMultiShareHeader(3, 'Gabi', 'nl', { part: 1, parts: 2 })).toBe('🍲 3 recepten van Gabi (deel 1 van 2)');
+    expect(buildMultiShareHeader(3, 'Gabi', 'en', { part: 1, parts: 2 })).toBe('🍲 3 recipes from Gabi (part 1 of 2)');
+    expect(buildMultiShareHeader(1, 'Gabi', 'nl', { part: 2, parts: 2 })).toBe('🍲 1 recept van Gabi (deel 2 van 2)');
+    expect(buildMultiShareHeader(3, 'Gabi', 'nl', { part: 1, parts: 1 })).toBe('🍲 3 recepten van Gabi');
+    expect(buildMultiShareHeader(3, 'Gabi', 'nl')).toBe('🍲 3 recepten van Gabi');
+    expect(buildMultiShareHeader(2, '', 'nl', { part: 2, parts: 3 })).toBe('🍲 2 recepten (deel 2 van 3)');
+  });
+});
+
+describe('buildFileHintMessage (V2)', () => {
+  it('NL and EN, literally from the spec', () => {
+    expect(buildFileHintMessage('nl')).toBe(
+      "Het bestand hierboven is voor Rutgers' Recepten. Android: houd het ingedrukt → Delen → Rutgers' Recepten. iPhone: bewaar het in Bestanden en kies het in de app onder In & uit → Kies bestand.",
+    );
+    expect(buildFileHintMessage('en')).toBe(
+      "The file above is for Rutgers' Recepten. Android: press and hold it → Share → Rutgers' Recepten. iPhone: save it to Files and pick it in the app under In & out → Choose file.",
+    );
   });
 });

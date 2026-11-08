@@ -516,7 +516,7 @@ export function ShoppingScreen() {
       const lines = (env.l as ListShare | undefined)?.lines.length ?? 0;
       // Only a list beyond even that limit comes back as a file (planMessages): then the link buttons
       // stay disabled.
-      setLink({ message: 'text' in built ? built.text : '', url: buildShareUrl(appInfo.appUrl, 'l', token), lines });
+      setLink({ message: 'parts' in built ? built.parts[0] ?? '' : '', url: buildShareUrl(appInfo.appUrl, 'l', token), lines });
     })().catch((e: unknown) => {
       console.error('list link', e);
       if (!cancelled) setShareStatus(`${t('shop.shareError')}: ${String((e as Error)?.message ?? e)}`);

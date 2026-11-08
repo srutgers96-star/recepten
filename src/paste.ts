@@ -57,6 +57,8 @@ export type ReceivedList = ListShare & { by?: string; at?: string };
 export interface ReceivedPlan {
   share: PlanShare;
   by?: string;
+  /** The sender's profile id (V2, optional). */
+  byId?: string;
   /** Names of the embedded recipes by id (the receiver may not have them yet). */
   names: Record<string, Text>;
 }
@@ -119,9 +121,13 @@ function addShare(acc: Collected, parsed: ParsedShare) {
   if (parsed.kind === 'plan' && parsed.plan && !acc.plan) {
     const names: Record<string, Text> = {};
     for (const r of parsed.recipes) names[r.id] = r.name;
-    acc.plan = { share: parsed.plan, names, ...(parsed.by ? { by: parsed.by } : {}) };
+    acc.plan = { share: parsed.plan, names, ...(parsed.by ? { by: parsed.by } : {}), ...(parsed.by && parsed.byId ? { byId: parsed.byId } : {}) };
   }
-  if (!s.by && parsed.by) s.by = parsed.by;
+  if (!s.by && parsed.by) {
+    s.by = parsed.by;
+    // V2: the profile id travels with the name it belongs to (taken from the same envelope).
+    if (parsed.byId) s.byId = parsed.byId;
+  }
   if (!s.at && parsed.at) s.at = parsed.at;
   if (!s.title && parsed.title) s.title = parsed.title;
   s.recipes.push(...parsed.recipes.filter(usable));

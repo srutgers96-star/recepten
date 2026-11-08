@@ -87,6 +87,8 @@ export interface ImportPlan {
   items: ImportItem[];
   dict: { add: Ingredient[]; skip: string[] };
   by?: string;
+  /** The sender's profile id (V2, optional): the Inbox finds the sender's avatar by it. */
+  byId?: string;
   at?: string;
 }
 
@@ -426,6 +428,7 @@ export function planImport(incoming: ParsedShare, local: LocalState): ImportPlan
   }
   const plan: ImportPlan = { items, dict: planDict(incoming.dict ?? { ing: [] }, local) };
   if (incoming.by) plan.by = incoming.by;
+  if (incoming.by && incoming.byId) plan.byId = incoming.byId;
   if (incoming.at) plan.at = incoming.at;
   return plan;
 }

@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { lang } from '../src/i18n';
 import { collectPaste, summarizePaste } from '../src/paste';
 import { encodeToken } from '../src/domain/token';
-import { FROZEN_ENVELOPE_L, FROZEN_TOKEN_L, FROZEN_TOKEN_L_FFLATE } from './fixtures/frozen-share-tokens';
+import { FROZEN_ENVELOPE_L, FROZEN_ENVELOPE_W, FROZEN_TOKEN_L, FROZEN_TOKEN_L_FFLATE } from './fixtures/frozen-share-tokens';
 
 const APP_URL = 'https://srutgers96-star.github.io/recepten/';
 
@@ -53,5 +53,16 @@ describe('paste: shopping list (#l=)', () => {
     const en = await summarizePaste(`${APP_URL}#l=${FROZEN_TOKEN_L}`);
     expect(en.label).toBe("Stijn's shopping list");
     lang.value = 'nl';
+  });
+});
+
+describe('paste: the sender id (V2)', () => {
+  it('a #w= plan with byId keeps it on the received plan; without it, none', async () => {
+    const withId = await encodeToken({ ...FROZEN_ENVELOPE_W, byId: 'p:stijn123' });
+    const got = await collectPaste(`${APP_URL}#w=${withId}`, null);
+    expect(got.plan?.by).toBe('Stijn');
+    expect(got.plan?.byId).toBe('p:stijn123');
+    const without = await collectPaste(`${APP_URL}#w=${await encodeToken(FROZEN_ENVELOPE_W)}`, null);
+    expect(without.plan?.byId).toBeUndefined();
   });
 });

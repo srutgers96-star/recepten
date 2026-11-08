@@ -91,7 +91,7 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 |---|---|---|---|
 | V1 | Handleiding ingeklapt en dubbel uitklapbaar · Meer opgeruimd (Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg) · gekozen chips vooraan met kruisje, na drie uur vergeten | verbeterronde-1.md | compleet (8 nov) |
 | V1b | Meer: gecentreerd profielblok, Huishouden & vrienden, Jouw stijl-rij weg, Confetti/Badges-tekst opent de pagina, Trillen, Temperatuur °C/°F/beide · Home: Verder met (3 uur, ×), datum → kalender · receptkop met klokje · profiel: potlood + knipoog · ring volgt de lijstvorm · voorraaddrempel 100 g · uitdagingen +1 %/level | verbeterronde-1b.md | compleet (8 nov) |
-| V2 | Delen zonder bestanden (links tot 20 KB, meerdere berichten) · bestandsnaam met uitleg + "Stuur ook de uitleg" · Android-hint · afzender met avatar in de inbox · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | verbeterronde-2.md | in aanbouw (8 nov) |
+| V2 | Delen zonder bestanden (links tot 20 KB, meerdere berichten) · bestandsnaam met uitleg + "Stuur ook de uitleg" · Android-hint · afzender met avatar in de inbox · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | verbeterronde-2.md | compleet (8 nov) |
 | V3 | Avatar-ronde: poppetje iets kleiner in de lijst (niets valt meer weg), niveauring alleen op de kale cirkel, haar-revamp, zes brillen na level 30 en zes kook-onderdelen, vijftien onderdelen met een te lage zeldzaamheid hersteld, tegel Verras me per laag (de oude V3, uitdagingen +1 %, zit in V1b) | verbeterronde-3.md | wacht op V2 (8 nov) |
 | V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | — (IDEAS 9) | gepland |
 | V5 | Boodschappen terugkijken in de kalender | — (IDEAS 10 + 2) | vervallen (Stijn 8 nov) |
@@ -325,7 +325,7 @@ spec; dit is de ontdubbelde kern.
 2. Geen nieuwe tabel, setting, localStorage-key, route, fragmentsleutel of veld buiten het register §2b.
 3. Deelformaat: `v` blijft 2; nieuwe velden alleen zoals genoemd (`cuisine`, `credit`, `variants`, `tip`,
    `of`, `vr`, `avatar` op `#f=`, sleutel `x`); elk nieuw bevroren token één keer maken en nooit meer
-   hergenereren; `src/domain/token.ts` alleen door 6D-4b aangeraakt.
+   hergenereren; `src/domain/token.ts` alleen door 6D-4b aangeraakt (en door Fable: V2 voegde het optionele veld `byId?` aan `Envelope` toe; codec en bevroren tokens ongewijzigd).
 4. Data: recepttekst van de 20 bijgerechten en de 20 van 13F letterlijk; ids = `builtinId(naam)`;
    nooit met de hand in data/recipes.json; alleen `npm run migrate`.
 5. Lactose streng (ghee en elke kaas `true`; twijfel = `false, unsure`; vegan ⇒ false); de steekproef is

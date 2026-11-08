@@ -343,6 +343,8 @@ export function ProgressCardRow(props: {
           <button type="button" class="btn btn-primary btn-block" disabled={props.busy} onClick={() => props.onSave(card, false)}>
             {t('progress.update', { name })}
           </button>
+          {/* V2 §1c: what the update brings along (the card's avatar too, upsertMemberFromCard). */}
+          <p class="muted small progress-update-hint">{t('progress.updateHint')}</p>
         </div>
       ) : (
         <div class="actions">

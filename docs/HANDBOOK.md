@@ -1167,7 +1167,7 @@ Classics in your selection simply stay. Deleting cannot be undone.
 
 #### What it does
 
-Share several recipes in one go, as a message or as a file.
+Share several recipes in one go, in one message or in a few messages.
 
 #### Where you tap
 
@@ -1176,11 +1176,11 @@ Share several recipes in one go, as a message or as a file.
 
 #### What you then see
 
-Your phone's share menu opens with one message. If there are too many recipes for one message, it becomes one file.
+Your phone's share menu opens with one message. If there are too many recipes, the button then says “Share part 2 of 2”. Tap it for the next message.
 
 #### Good to know
 
-**Export** always makes one file. **Show QR** shows a code; for many recipes it is often too big.
+**Export** always makes one file; its name says how the other person opens it. Afterwards **Also send the explanation** sends a message with the explanation. **Show QR** shows a code; for many recipes it is often too big.
 
 ### Classics, own and received recipes
 
@@ -1719,7 +1719,7 @@ The calendar shows per month who cooked when. Every cook has dots in their own c
 
 #### What you then see
 
-A month grid from Monday to Sunday; today has a border. Under the grid each cook shows as "name — dish".
+A month grid from Monday to Sunday; today has a border. When you tap a day, each cook shows below as "name — dish". At the bottom is the legend: everyone with a small avatar and their name.
 
 #### Good to know
 
@@ -2477,7 +2477,7 @@ You send a recipe, your week plan, your card or your progress to someone else in
 
 #### What it does
 
-You can share a recipe, your week plan, your shopping list, your card and your progress. Several recipes at once go in one message or as a file.
+You can share a recipe, your week plan, your shopping list, your card and your progress. Several recipes at once go in one message, or in a few messages if there are many.
 
 #### Where you tap
 
@@ -2556,32 +2556,38 @@ For people without the app you share the whole recipe as readable text. The link
 
 You see the recipe as the other person will read it: name, ingredients and steps. **Copy text** puts it on your clipboard.
 
-### Too big for one message: a file
+### Too much for one message: several messages
 
 #### What it does
 
-A very long recipe does not fit in one WhatsApp message. The app then turns it into a file, which the other person opens in the app.
+Many recipes do not fit in one WhatsApp message. The app then spreads them over a few messages. Each message works on its own.
 
 #### Where you tap
 
-1. Tap a recipe.
-2. Tap **Share**.
-3. Tap **Share the file**.
-4. Choose WhatsApp or another app.
+1. Tap **More** at the bottom.
+2. Tap **Recipes & sharing**.
+3. Tap **Share your new recipes**.
+4. Tap a name under **To whom?**.
+5. Tap **Share via WhatsApp**.
+6. Send the first message in WhatsApp.
+7. Tap the button “Share part 2 of 2”.
+8. Send this message in WhatsApp too.
 
 #### What you then see
 
-At the top it says the recipe is too large for one WhatsApp message, with the number of characters. **Download** saves the file in your Downloads.
+Above the button it says “This goes in 2 messages.” Each message starts with a heading like “🍲 3 recipes from Gabi (part 1 of 2)”. After each message it says, for example, “Part 1 of 2 sent”.
 
 #### Good to know
 
-The other person opens the file in the app through **In & out** and **Choose file**.
+Every recipe is in exactly one message. The receiver pastes the messages one by one in **In & out**; on Android they tap the link in each message. **Copy** copies all the messages at once. A file only comes with a very long recipe or with **Export**; then tap **Also send the explanation** after sharing.
+
+(`#/share`)
 
 ### Share several recipes at once
 
 #### What it does
 
-You pick a few recipes from the list and share them in one go. If they do not fit in one message, they go as a file.
+You pick a few recipes from the list and share them in one go. If they do not fit in one message, they go in a few messages.
 
 #### Where you tap
 
@@ -2592,11 +2598,11 @@ You pick a few recipes from the list and share them in one go. If they do not fi
 
 #### What you then see
 
-At the top it says how many recipes you have selected. After sharing it says “Shared”.
+At the top it says how many recipes you have selected. After sharing it says “Shared”. If there are more messages, the button then says “Share part 2 of 2”.
 
 #### Good to know
 
-**Export** always makes a file, even for a few recipes. **Show QR** usually does not fit for many recipes.
+**Export** always makes a file, even for a few recipes. The file name says how the other person opens it; afterwards **Also send the explanation** sends the explanation in a message of its own. **Show QR** usually does not fit for many recipes.
 
 (`#/recipes`)
 
@@ -2755,7 +2761,7 @@ Safari has storage of its own, separate from the app. So what you see in Safari 
 
 #### What you then see
 
-Under the paste box it says what the app recognises, such as “1 share link recognised”. Below that appears what you can keep.
+Under the paste box it says what the app recognises, such as “1 share link recognised”. Below that appears what you can keep. If it comes from a housemate or friend, their avatar sits in front of their name.
 
 #### Good to know
 
@@ -2763,27 +2769,30 @@ A number on the **More** tab means something new has come in. **Clear** empties 
 
 (`#/inbox`)
 
-### Open a recipe file
+### Open a file from WhatsApp
 
 #### What it does
 
-Did you get a file with recipes, for example through WhatsApp or in your Downloads? Then you open it in **In & out**.
+Did you get a file with recipes in WhatsApp? On Android you send it to the app through Share. On the iPhone you pick it in the app.
 
 #### Where you tap
 
-1. Tap **More** at the bottom.
-2. Tap **In & out**.
-3. Tap **Choose file**.
-4. Choose the file on your phone.
-5. Tap **Import**.
+1. Android: press and hold the file in WhatsApp.
+2. Android: tap Share.
+3. Android: choose Rutgers' Recepten.
+4. iPhone: save the file from WhatsApp to Files.
+5. iPhone: tap **More** at the bottom.
+6. iPhone: tap **In & out**.
+7. iPhone: tap **Choose file**.
+8. iPhone: pick the file.
 
 #### What you then see
 
-At the top it says what is in the file, such as “Found: 3 recipes”. Below that each recipe has a label.
+**In & out** shows what is in the file, such as “Found: 3 recipes”. Below that each recipe has a label; tap **Import** to keep them. On Android a tip about WhatsApp sits under **Choose file**.
 
 #### Good to know
 
-The file ends in .json or .txt.
+The file name already says how to open it, for example “Recipes from Gabi 8 Nov - open via Share in Rutgers Recepten.json”. Whoever sends the file can then tap **Also send the explanation**. You then get a message with these steps.
 
 (`#/inbox`)
 
@@ -2859,7 +2868,7 @@ Only the latest import can still be undone.
 
 #### What it does
 
-Everything you made or changed since last time goes to one person in one message. That keeps your recipes in step.
+Everything you made or changed since last time goes to one person. Usually it fits in one message. That keeps your recipes in step.
 
 #### Where you tap
 
@@ -2875,7 +2884,7 @@ You see what the message looks like and what goes along, such as the number of r
 
 #### Good to know
 
-A number by **Share your new recipes** tells you how many recipes have not been shared yet. If you shared with **Copy**, tap **Mark as sent** afterwards. Too much for one message? Then it goes as a file.
+A number by **Share your new recipes** tells you how many recipes have not been shared yet. If you shared with **Copy**, tap **Mark as sent** afterwards. Too much for one message? Then it says “This goes in 2 messages.” and you share them one after the other.
 
 (`#/share`)
 
@@ -2923,7 +2932,7 @@ You see “Card from” with the name and a circle in that person's colour. Afte
 
 #### Good to know
 
-If someone is already a member, the button says “Update …”; then only name, colour and language are updated. Pasting in **In & out** works too. On Android you can tap the link, but Android itself decides whether the app opens.
+If someone is already a member, the button says “Update …”; then name, colour, language and avatar are updated. Pasting in **In & out** works too. On Android you can tap the link, but Android itself decides whether the app opens.
 
 (`#/more/household`)
 
@@ -2944,11 +2953,11 @@ Your household holds the people you cook with, also when they have their own pho
 
 #### What you then see
 
-Each member is under **Members** with a circle in their colour. You see whether someone is on this phone, came through a card or was added by hand.
+Each member is under **Members** with their avatar, or a circle with a letter in their colour. You see whether someone is on this phone, came through a card or was added by hand.
 
 #### Good to know
 
-**Edit** and **Remove** change a member from another phone. In **More** your housemates and friends are listed under **Household & friends**, each with the label housemate or friend. A tap brings you here. Members come first in **Share your new recipes**.
+**Edit** and **Remove** change a member from another phone. In **More** your housemates and friends are listed under **Household & friends**, each with the label housemate or friend. The avatar of a member on another phone travels along with their card and their progress, and is then updated. A tap brings you here. Members come first in **Share your new recipes**.
 
 (`#/more/household`)
 
@@ -2956,7 +2965,7 @@ Each member is under **Members** with a circle in their colour. You see whether 
 
 #### What it does
 
-You send your level, your badges and your cooking days of the last 90 days to your household or a friend. Notes, stars and photos do not go along.
+You send your level, your badges, your avatar and your cooking days of the last 90 days to your household or a friend. Notes, stars and photos do not go along.
 
 #### Where you tap
 
@@ -2991,7 +3000,7 @@ Shared progress shows you someone else's level and cooking days. You keep it wit
 
 #### What you then see
 
-You see a progress card with the name, the level, the badges and the cooking days of the last 30 days. If it is a member, the button says “Update …”.
+You see a progress card with the name, the level, the badges and the cooking days of the last 30 days. If it is a member, the button says “Update …”. Under it you see what gets updated: level, streak, badges, cook days and avatar.
 
 #### Good to know
 

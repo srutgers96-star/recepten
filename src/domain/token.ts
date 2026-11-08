@@ -19,6 +19,8 @@ export interface Envelope {
   v: 2;
   t: TokenKey;
   by?: string;
+  /** V2 (docs/specs/verbeterronde-2.md §1a): the sender profile id, optional; readers match it to a household member. */
+  byId?: string;
   at?: string;
   msg?: string;
   [k: string]: unknown;

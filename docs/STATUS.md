@@ -4,6 +4,41 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): V2 — delen zonder bestanden (links tot 20 KB in meerdere berichten, bestandsnaam met uitleg, Stuur ook de uitleg, Android-hint) en de afzender met avatar (inbox, voortgang, kalenderlegenda)
+Gebouwd volgens docs/specs/verbeterronde-2.md (lichte workflow, vier bouwers + integrator; run-id: niet bekend bij de integrator,
+de workflow vult hem in). **Domein (A):** `planMessages` heeft als standaard `RECIPE_LINK_MESSAGE_LIMIT = 20_000`
+(`DEFAULT_MESSAGE_LIMIT = 3500` blijft voor wie hem importeert); `MessagePlan` = `{ parts; tokens; chars } | { file; reason }`;
+boven de grens gretig verdeeld over delen met kop "(deel i van n)", elk envelop in precies één deel; een bestand alleen als één
+envelop op zichzelf niet past. `bundleFileName(name, date, lang)` = "Recepten van Gabi 8 nov - open via Delen in Rutgers
+Recepten.json" (zonder `lang` de oude slug, voor StorageScreen; maandafkortingen jan…dec / Jan…Dec gekozen door bouwer A);
+`buildFileHintMessage(lang)`; `byId` (profiel-id van de afzender) optioneel in r/p/b/w, nieuw bevroren token
+`FROZEN_ENVELOPE_R_BYID`. **Deelschermen (B):** Deel je nieuwe recepten, Deel van een selectie en het recept-deelscherm: delen
+één voor één (knop "Deel deel 2 van 2", status "Deel 1 van 2 verstuurd", pas na het laatste deel markSent/teller/In & uit-rij),
+Kopieer = alle delen met een lege regel, na een bestand de knop **Stuur ook de uitleg** (ook na Exporteer). **Ontvangkant (C):**
+avatar 28 px vóór de afzender in de inbox (eerst op `byId`, anders op naam; vrienden uit de voortgangssnapshots tellen mee), hint
+onder Kies bestand op Android, sub-regel onder **Werk {naam} bij**, kalenderlegenda met mini-avatars van 20 px.
+**Integrator:** WeekScreen/ShoppingScreen/tests/share-list.test.ts naar `parts[0]` (één envelop = één deel; de share-list-test
+vraagt het bestand nu met `limit: DEFAULT_MESSAGE_LIMIT`); `Envelope.byId?` in token.ts; `byId` doorgegeven door de afzenders
+(DeltaShare, selectie, ShareScreen via een vierde parameter van `buildShareEnvelope`, WeekScreen) en door de ontvanger
+(`ImportPlan.byId` in merge.ts, `ReceivedPlan.byId` en `share.byId` in paste.ts; byId alleen samen met de naam uit dezelfde
+envelop) met tests in merge.test.ts en paste.test.ts; SelectBar kreeg `shareLabel` zodat de Deel-knop van de balk zelf "Deel deel
+2 van 2" zegt (de extra knop van bouwer B erboven is weg); een vriend als afzender krijgt zijn avatar vóór "van Bram" in de
+samenvatting van het voorproefje (`ImportPreview.senderAvatar`; een huisgenoot houdt de regel `inbox.fromMember`). **Twee fouten
+uit de acceptatie hersteld:** (1) in Deel je nieuwe recepten verdween **Stuur ook de uitleg** meteen na het delen van het bestand
+(markSent leegt de delta, de knop stond ín het delta-blok) — hij staat nu onder het blok en verdwijnt alleen bij een andere
+ontvanger; (2) de bestandsnaam droeg de naam van de ontvanger ("Recepten van Gabi" als je áán Gabi stuurt) — nu de afzender.
+Handleiding (D): rijen 05 (bestand → meerdere berichten, bestand-openen herschreven onder het bestaande id), 02 selectie-delen,
+03 kookkalender (legenda), huishouden/voortgang (avatar reist mee). DEVICE-TEST: rij 111 nieuw, rijen 15, 17, 19, 39 en 40
+bijgewerkt, NL én EN. Check/test (1820)/build/build:next/validate groen; acceptatie in de dev-app (375 px, NL en EN) gelopen met
+navigator.share/clipboard als stub: 9 recepten + 1 patch → 2 delen, Kopieer geeft beide, `byId` in de token; reuzenrecept →
+bestand + uitleg; selectie: balkknop "Deel deel 2 van 2", Exporteer + uitleg; inbox: avatar op `byId` (afzendernaam anders dan
+de ledennaam), vriend in de samenvatting, Android-hint alleen met Android-UA; voortgangskaart werkt kleur en avatar bij; legenda
+20 px. **Open voor Stijn/Fable:** de intro van Deel je nieuwe recepten (`delta.intro`) zegt nog "of in één bestand als het te
+veel is"; handboekrij 09 `iphone-vs-android.bestand-ontvangen` zegt nog "kies Recepten" en rij 17 "Delen → **Recepten**" (de
+hint zegt Rutgers' Recepten — welke naam het deelmenu toont hangt af van de WebAPK); `delta.moreParts` NL is "+ {n} berichten
+erna" (spec: "bericht(en)", met de enkelvoudzuster apart); de uitleg na een bestand volgt de taal van de afzender; "Stuur ook de
+uitleg" blijft in de selecteer-stand staan tot de selectie verandert. Niet gecommit.
+
 ## 8 nov (Opus): V1b — verbeterronde 1b: Meer gecentreerd profiel en Huishouden & vrienden, temperatuurkeuze, Home-regel en datum, receptkop met klokje, profielknipoog en potlood, ring langs de lijstvorm, voorraaddrempel 100 g, uitdagingen +1 %/level
 Gebouwd volgens docs/specs/verbeterronde-1b.md (lichte workflow wf_1d9bf38d-541, zeven bouwers + integrator; lens: chip-letterkleur in
 donkere modus hersteld, en "Verder met" verbergt nu ook een gerecht dat op of na het bekijken gekookt is, over middernacht heen —

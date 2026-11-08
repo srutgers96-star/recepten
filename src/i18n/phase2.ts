@@ -106,6 +106,12 @@ export const phase2: Dict = {
     en: 'After sharing via the share sheet the app remembers the date itself. After Copy or WhatsApp web, tap "Mark as sent".',
   },
   'delta.copiedHint': { nl: 'Gekopieerd. Plak het in WhatsApp en tik daarna op "Markeer als verzonden".', en: 'Copied. Paste it in WhatsApp, then tap "Mark as sent".' },
+  // V2 (docs/specs/verbeterronde-2.md §1b): more than fits in one message goes in several parts.
+  'delta.parts': { nl: 'Dit gaat in {n} berichten.', en: 'This goes in {n} messages.' },
+  'delta.shareNext': { nl: 'Deel deel {i} van {n}', en: 'Share part {i} of {n}' },
+  'delta.partSent': { nl: 'Deel {i} van {n} verstuurd', en: 'Part {i} of {n} sent' },
+  'delta.moreParts': { nl: '+ {n} berichten erna', en: '+ {n} more messages' },
+  'delta.morePartsOne': { nl: '+ 1 bericht erna', en: '+ 1 more message' },
 
   // --- Phase 3: Home reminder cards ---
   'home.backupOverdue': {

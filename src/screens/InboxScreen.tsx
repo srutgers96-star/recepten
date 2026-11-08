@@ -30,6 +30,9 @@
 // card "🛒 Lijst van <naam> · N regels" with its lines and one button "Zet op mijn lijst"
 // (repo.addListLinesFromShare: manual lines on the own week list, lines already there skipped,
 // nothing summed, the plan untouched); that logs one 'in' row (kind 'list').
+// V2 (docs/specs/verbeterronde-2.md §1c): the sender of a received recipe, patch, bundle or week plan
+// gets a 28 px avatar before the name when they are a household member or a friend (by `byId` when
+// the envelope has it, else by name); on Android a hint under "Kies bestand" points to the share sheet.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
@@ -42,6 +45,7 @@ import {
   applyImportPlan,
   getHousehold,
   getPlan,
+  getProgressSnapshots,
   getRecipe,
   getSetting,
   isUndoable,
@@ -59,7 +63,7 @@ import {
   type ImportResult,
 } from '@/db/repo';
 import { dictionary, reloadDictionary } from '@/dictionary';
-import { memberByName, membersFrom, type HouseholdSetting, type MemberCard } from '@/domain/household';
+import { memberById, memberByName, memberFromCard, membersFrom, type HouseholdSetting, type Member, type MemberCard } from '@/domain/household';
 import { defaultChoices, planImport, type ImportChoice, type ImportChoices, type ImportPlan } from '@/domain/merge';
 import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
 import { applyLineOverrides } from '@/domain/overrides';
@@ -73,6 +77,7 @@ import { lang, t } from '@/i18n';
 import { INBOX_SEEN_KEY, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { collectPaste, isInboxKind, looksLikeJson, openPasteIn, PASTE_FILE_ACCEPT, type ReceivedList, type ReceivedPlan } from '@/paste';
 import { activeProfile, profiles } from '@/profile';
+import { isAndroid } from '@/pwa';
 import { navigate, pendingImport, route } from '@/router';
 import { applyMemberCard, applyProgressCard, MemberCardRow, ProgressCardRow, type CardOutcome, type ProgressOutcome } from './HouseholdScreen';
 import { Avatar } from './ProfilesScreen';
@@ -97,6 +102,43 @@ export async function markInboxSeen(id: string): Promise<void> {
 function checkBadgesAfterImport() {
   const pid = activeProfile.value?.id;
   if (pid) void checkNewBadges(pid).catch((e: unknown) => console.error('checkNewBadges', e));
+}
+
+// --- Sender with avatar (V2 §1c) ------------------------------------------------------------------
+
+/**
+ * The optional `byId` (the sender's profile id, V2 §1a) of whatever carries the sender, when it is
+ * there as a string. Read defensively: it is optional on every envelope and an older app never sends it.
+ */
+function byIdOf(x: object | null | undefined): string | undefined {
+  const v = x ? (x as { byId?: unknown }).byId : undefined;
+  return typeof v === 'string' && v.trim() ? v : undefined;
+}
+
+/** The friends (snapshots saved with "Bewaar als vriend", `friend: true`) as members, for the sender lookup. */
+async function friendMembers(): Promise<Member[]> {
+  const snapshots = await getProgressSnapshots();
+  return Object.values(snapshots)
+    .filter((s) => s.friend === true)
+    .map((s) => memberFromCard(s));
+}
+
+/**
+ * The household member or friend who sent something: first by `byId` (robust against a renamed
+ * profile), else by name (`memberByName`: trimmed, case- and accent-insensitive, local first).
+ * `senders` = the household (local profiles first) followed by the friends that are not a member.
+ */
+function senderOf(senders: readonly Member[], by: string | null | undefined, byId: string | undefined): Member | undefined {
+  return memberById(senders, byId) ?? memberByName(senders, by);
+}
+
+/** The 28 px avatar in front of a sender's name on the Inbox cards (edit.css .inbox-from-avatar). */
+function FromAvatar(props: { member: Member }) {
+  return (
+    <span class="inbox-from-avatar">
+      <Avatar profile={props.member} />
+    </span>
+  );
 }
 
 // --- Input -> one ParsedShare: src/paste.ts `collectPaste` -------------------------------------
@@ -369,6 +411,13 @@ export function InboxScreen() {
     };
   }, []);
   const householdMembers = useMemo(() => (household ? membersFrom(profiles.value, household) : []), [household, profiles.value]);
+  // V2 §1c: friends (saved progress with `friend: true`) count as senders too; live, so a friend
+  // saved on this screen is recognised at once. Members first: a friend never shadows a member.
+  const friends = useLive(friendMembers, []);
+  const senders = useMemo(() => {
+    const ids = new Set(householdMembers.map((m) => m.id));
+    return [...householdMembers, ...(friends ?? []).filter((f) => !ids.has(f.id))];
+  }, [householdMembers, friends]);
 
   // A share token arrived in the URL hash (at boot or later): move it into the textarea.
   useEffect(() => {
@@ -694,9 +743,14 @@ export function InboxScreen() {
   const undoable = isUndoable(rows[0]) ? rows[0] : undefined;
   const resultUndoable = !!result && result.importId !== undefined && !!undoable && undoable.id === result.importId;
   const written = result ? [...result.added, ...result.updated].filter((id) => !id.startsWith('p:')) : [];
-  // Block F: the sender of what is about to be imported, when they are a member of the household
-  // (by name: r/p/w/b envelopes carry only `by`, ADR-0004).
-  const senderMember = plan ? memberByName(householdMembers, plan.by) : undefined;
+  // Block F + V2 §1c: the sender of what is about to be imported (recipes, patches, a bundle) and of a
+  // week plan, when they are a member of the household or a friend: by `byId` when the envelope has
+  // it, else by name. No match = no avatar, the name stays text as before.
+  // The line above the preview says "lid van je huishouden" (inbox.fromMember), so it only shows for
+  // a member; the spec has no text for a friend there (open point, V2 report).
+  const planSender = plan ? senderOf(senders, plan.by, byIdOf(plan)) : undefined;
+  const senderMember = planSender && householdMembers.some((m) => m.id === planSender.id) ? planSender : undefined;
+  const weekSender = received ? senderOf(senders, received.by, byIdOf(received)) : undefined;
 
   return (
     <>
@@ -735,10 +789,14 @@ export function InboxScreen() {
           textareaRef={textarea}
           showProblems={false}
           extra={
-            <label class="btn">
-              {t('inbox.file')}
-              <input type="file" accept={PASTE_FILE_ACCEPT} style="display:none" onChange={onFile} />
-            </label>
+            <>
+              <label class="btn">
+                {t('inbox.file')}
+                <input type="file" accept={PASTE_FILE_ACCEPT} style="display:none" onChange={onFile} />
+              </label>
+              {/* V2 §1c: on Android a file from WhatsApp goes faster through the share sheet. */}
+              {isAndroid() && <p class="muted small inbox-file-hint">{t('inbox.fileAndroidHint')}</p>}
+            </>
           }
           onRecipe={(s, kind) => openPasteIn('add', s, kind)}
           onAi={() => navigate('/add?mode=ai')}
@@ -799,7 +857,10 @@ export function InboxScreen() {
 
         {received && (
           <section class="card inbox-plan">
-            <h3>{weekTitle}</h3>
+            <h3 class="inbox-from">
+              {weekSender && <FromAvatar member={weekSender} />}
+              <span>{weekTitle}</span>
+            </h3>
             {received.share.note && (
               <p class="muted small">
                 {t('inbox.plan.note')}: {received.share.note}
@@ -848,11 +909,11 @@ export function InboxScreen() {
         )}
         {plan && !planDone && senderMember && (
           <p class="muted small inbox-sender">
-            <Avatar profile={senderMember} />
+            <FromAvatar member={senderMember} />
             <span>{t('inbox.fromMember', { name: senderMember.name })}</span>
           </p>
         )}
-        {plan && !planDone && <ImportPreview plan={plan} choices={choices} ui={ui} busy={busy} onChoice={choose} onImport={() => void doImport()} onOpen={open} />}
+        {plan && !planDone && <ImportPreview plan={plan} choices={choices} ui={ui} busy={busy} senderAvatar={planSender && !senderMember ? <FromAvatar member={planSender} /> : undefined} onChoice={choose} onImport={() => void doImport()} onOpen={open} />}
         {resultError && <div class="card bad">{resultError}</div>}
 
         {result && (
@@ -914,8 +975,9 @@ export function InboxScreen() {
                   if (r.patch) meta.push(r.from ? t('inbox.patchBy', { name: r.from }) : t('inbox.patchAnon'));
                   else if (r.from) meta.push(t('common.from', { name: r.from }));
                   meta.push(fmtDate(r.at, ui));
-                  // Block F: a sender who is a household member gets their colour and initial.
-                  const member = memberByName(householdMembers, r.from);
+                  // Block F: a sender who is a household member (V2: or a friend) gets their avatar.
+                  // A stored recipe keeps only the sender's name, so this is by name.
+                  const member = memberByName(senders, r.from);
                   return (
                     <li key={r.key}>
                       <a

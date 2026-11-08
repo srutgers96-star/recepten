@@ -1,10 +1,11 @@
 # Spec V2 — Delen zonder bestanden, en de afzender met avatar (Stijn, 8 nov 2026)
 
-Status: in aanbouw (Fable, 8 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: docs/IDEAS.md ideeën 12 en 13
+Status: compleet (Fable, 8 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: docs/IDEAS.md ideeën 12 en 13
 (Stijn 8 nov: "daar moet een structurele oplossing voor komen"; "misschien een bericht bij de json, of de titel"; "avatar en level
 kunnen net zo goed mee"). Leidend bij tegenspraak: docs/specs/README.md §2–§4, CLAUDE.md (invariant 4: deelformaat is een
 contract, onbekende sleutels blijven; invariant 9: `navigator.share` met precies één veld; invariant 5: iPhone = kopiëren →
 plakken), docs/specs/handbook.md §4.
+Gebouwd: 8 nov 2026 (V2, lichte workflow wf_ff9f04b6-ab5; integrator: WeekScreen/ShoppingScreen/share-list-test naar parts[0], byId meegegeven vanuit alle deelschermen en gelezen in ImportPlan/ReceivedPlan, SelectBar-knop heet "Deel deel 2 van 2", Stuur ook de uitleg blijft staan na het verzenden, bestandsnaam draagt de naam van de afzender; lens: type-regel byId in token.ts eerst teruggedraaid wegens README §4.3, door Fable alsnog gezet; maandafkortingen jan–dec / Jan–Dec)
 
 **Kritische lezer (Fable, vooraf).** (1) De oorzaak van Stijns bestandsprobleem is de grens van 3.500 tekens in `planMessages`:
 drie of vier recepten zijn al te veel, dus bijna elke delta van Gabi wordt een bestand. De lijst-link gebruikt sinds 13c 20.000

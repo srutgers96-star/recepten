@@ -1289,25 +1289,25 @@
       "id": "recepten.selectie-delen",
       "title": { "nl": "Meerdere recepten delen", "en": "Share several recipes" },
       "what": {
-        "nl": "Deel meerdere recepten in één keer, als bericht of als bestand.",
-        "en": "Share several recipes in one go, as a message or as a file."
+        "nl": "Deel meerdere recepten in één keer, in één bericht of in een paar berichten.",
+        "en": "Share several recipes in one go, in one message or in a few messages."
       },
       "where": {
         "nl": ["Selecteer de recepten die je wilt delen.", "Tik in de balk onderaan op **Deel**."],
         "en": ["Select the recipes you want to share.", "Tap **Share** in the bar at the bottom."]
       },
       "see": {
-        "nl": "Het deelmenu van je telefoon opent met één bericht. Zijn het te veel recepten voor één bericht, dan wordt het één bestand.",
-        "en": "Your phone's share menu opens with one message. If there are too many recipes for one message, it becomes one file."
+        "nl": "Het deelmenu van je telefoon opent met één bericht. Zijn het te veel recepten, dan heet de knop daarna “Deel deel 2 van 2”. Tik erop voor het volgende bericht.",
+        "en": "Your phone's share menu opens with one message. If there are too many recipes, the button then says “Share part 2 of 2”. Tap it for the next message."
       },
       "know": {
-        "nl": "Met **Exporteer** maak je altijd één bestand. Met **Toon QR** laat je een code zien; voor veel recepten is die vaak te groot.",
-        "en": "**Export** always makes one file. **Show QR** shows a code; for many recipes it is often too big."
+        "nl": "Met **Exporteer** maak je altijd één bestand; de naam zegt hoe de ander het opent. Daarna kun je met **Stuur ook de uitleg** een bericht met de uitleg nasturen. Met **Toon QR** laat je een code zien; voor veel recepten is die vaak te groot.",
+        "en": "**Export** always makes one file; its name says how the other person opens it. Afterwards **Also send the explanation** sends a message with the explanation. **Show QR** shows a code; for many recipes it is often too big."
       },
       "platform": "all",
       "keywords": {
-        "nl": ["delen", "meerdere", "bestand", "exporteren", "QR"],
-        "en": ["share", "several", "file", "export", "QR"]
+        "nl": ["delen", "meerdere", "bestand", "exporteren", "QR", "berichten"],
+        "en": ["share", "several", "file", "export", "QR", "messages"]
       }
     },
     {

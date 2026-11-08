@@ -223,6 +223,8 @@ export type ShareKind = 'recipe' | 'patch' | 'bundle' | 'plan' | 'member' | 'pro
 export interface ParsedShare {
   kind: ShareKind;
   by?: string;
+  /** The sender's profile id (V2 §1a, optional): lets the receiver find the sender's avatar even after a rename. */
+  byId?: string;
   at?: string;
   msg?: string;
   title?: string;
@@ -241,6 +243,11 @@ export interface ParsedShare {
 
 export interface ShareContext {
   by: string;
+  /**
+   * The sender's profile id (`activeProfile.value?.id`, V2 §1a). Optional: written as `byId` when
+   * present, never required; an older app ignores the key (unknown keys stay, invariant 4).
+   */
+  byId?: string;
   /** All user-created dictionary entries; only the referenced ones travel. */
   userIngredients: Ingredient[];
   /** Line overrides of the recipe / classic being shared (folded into the lines, or sent with the patch). */
@@ -253,22 +260,35 @@ export interface BundleOptions {
 }
 
 export interface MessagePlanOptions {
-  /** Character budget of one WhatsApp text (default 3500). */
+  /** Character budget of one WhatsApp message (default RECIPE_LINK_MESSAGE_LIMIT, 20000). */
   limit?: number;
   /** Language of the sender's UI for the header lines (default 'nl'). */
   lang?: Lang;
   /** Sender name for headers when the envelopes carry none. */
   by?: string;
-  /** Recipient name for the bundle file name ("recepten-<name>-YYYY-MM-DD.json"). */
+  /** Name for the bundle file name ("Recepten van <name> 8 nov - open via Delen in Rutgers Recepten.json"). */
   name?: string;
   /** Date for the file name (default today). */
   date?: Date;
 }
 
+/**
+ * The messages for a share (V2 §1a): `parts` are separate messages, each under the limit, each
+ * envelope in exactly one part, in the original order; `parts.length === 1` is the ordinary case
+ * (exactly the text of before). `chars` is the total over all parts. A FILE only when one envelope
+ * on its own does not fit in a message.
+ */
 export type MessagePlan =
-  | { text: string; tokens: number; chars: number }
+  | { parts: string[]; tokens: number; chars: number }
   | { file: { name: string; json: string }; reason: 'too-large' };
 
+/** Character budget of one message with recipe links (V2 §1a; the same as the list link since 13c). */
+export const RECIPE_LINK_MESSAGE_LIMIT = 20_000;
+
+/**
+ * The old default of planMessages (until V2) and still the budget of the plain-text list share;
+ * kept for whoever imports it. planMessages itself now defaults to RECIPE_LINK_MESSAGE_LIMIT.
+ */
 export const DEFAULT_MESSAGE_LIMIT = 3500;
 
 // --- Helpers ------------------------------------------------------------------------------------
@@ -354,11 +374,13 @@ function travelRecipe(recipe: Recipe, lineOverrides: readonly LineOverride[] | u
   return out;
 }
 
-/** `{v: 2, t, at, by?}`; exported for share-list.ts. */
-export function baseEnvelope(t: TokenKey, by: string): Envelope {
+/** `{v: 2, t, at, by?, byId?}`; exported for share-list.ts. `byId` only when given (V2 §1a). */
+export function baseEnvelope(t: TokenKey, by: string, byId?: string): Envelope {
   const env: Envelope = { v: 2, t, at: nowIso() };
   const sender = by.trim();
   if (sender) env.by = sender;
+  const id = cleanString(byId);
+  if (id && SAFE_ID.test(id)) env.byId = id;
   return env;
 }
 
@@ -367,7 +389,7 @@ export function baseEnvelope(t: TokenKey, by: string): Envelope {
 /** `{v: 2, t: 'r', by, at, r, dict?}`: one recipe with its line overrides folded in. */
 export function buildRecipeEnvelope(recipe: Recipe, ctx: ShareContext): Envelope {
   const r = travelRecipe(recipe, ctx.lineOverrides);
-  const env = baseEnvelope('r', ctx.by);
+  const env = baseEnvelope('r', ctx.by, ctx.byId);
   env.r = r;
   const dict = dictDeltaFor(referencedIngredientIds(r.lines), ctx.userIngredients);
   if (dict) env.dict = dict;
@@ -380,7 +402,7 @@ export function buildPatchEnvelope(override: RecipeOverride, ctx: ShareContext &
   if (ctx.lineOverrides && ctx.lineOverrides.length) p.lineOverrides = ctx.lineOverrides.map((o) => ({ ...o }));
   if (ctx.name && (ctx.name.nl || ctx.name.en)) p.name = { ...ctx.name };
   if (override.updatedAt) p.updatedAt = override.updatedAt;
-  const env = baseEnvelope('p', ctx.by);
+  const env = baseEnvelope('p', ctx.by, ctx.byId);
   env.p = p;
   const ids = referencedIngredientIds(Array.isArray(override.patch.lines) ? override.patch.lines : []);
   for (const id of lineOverrideIds(ctx.lineOverrides)) ids.add(id);
@@ -428,7 +450,7 @@ export function buildBundleEnvelope(items: BundleItems, ctx: ShareContext, opts:
   if (title) b.title = title;
   const since = cleanString(opts.since);
   if (since) b.since = since;
-  const env = baseEnvelope('b', ctx.by);
+  const env = baseEnvelope('b', ctx.by, ctx.byId);
   env.b = b;
   const dict = dictDeltaFor(ids, ctx.userIngredients);
   if (dict) env.dict = dict;
@@ -478,7 +500,7 @@ export function buildPlanEnvelope(plan: Plan, recipes: readonly Recipe[], ctx: S
   const w: PlanPayload = { items, recipes: embedded };
   const note = cleanString(plan.note);
   if (note) w.note = note;
-  const env = baseEnvelope('w', ctx.by);
+  const env = baseEnvelope('w', ctx.by, ctx.byId);
   env.w = w;
   const dict = dictDeltaFor(ids, ctx.userIngredients);
   if (dict) env.dict = dict;
@@ -751,6 +773,8 @@ export function parseEnvelope(env: unknown): ParsedShare {
   const out: ParsedShare = { kind: 'bundle', dict: readDict(e.dict), recipes: [], patches: [] };
   const by = cleanString(e.by);
   if (by) out.by = by;
+  const byId = cleanString(e.byId);
+  if (byId && SAFE_ID.test(byId)) out.byId = byId;
   const at = cleanString(e.at);
   if (at) out.at = at;
   const msg = cleanString(e.msg);
@@ -957,9 +981,33 @@ function isoDate(d: Date): string {
   return `${y}-${m}-${day}`;
 }
 
-/** "recepten-<name>-YYYY-MM-DD.json" (§3). */
-export function bundleFileName(name: string | undefined, date = new Date()): string {
-  return `recepten-${fileSlug(name)}-${isoDate(date)}.json`;
+const SHORT_MONTHS: Record<Lang, readonly string[]> = {
+  nl: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
+  en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+};
+
+/** Only letters, digits, spaces, hyphen and dot (V2 §1a); runs of spaces collapse. */
+function readableFilePart(s: string): string {
+  return s
+    .replace(/[^\p{L}\p{N} .-]+/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * The bundle file name. With `lang` (V2 §1a) it is readable and carries the explanation:
+ * NL "Recepten van Gabi 8 nov - open via Delen in Rutgers Recepten.json" ·
+ * EN "Recipes from Gabi 8 Nov - open via Share in Rutgers Recepten.json"; an empty name gives
+ * "Recepten 8 nov - …" / "Recipes 8 Nov - …". Without `lang` the old slug name
+ * "recepten-<name>-YYYY-MM-DD.json" (§3) for the callers that still use it.
+ */
+export function bundleFileName(name: string | undefined, date = new Date(), lang?: Lang): string {
+  if (lang !== 'nl' && lang !== 'en') return `recepten-${fileSlug(name)}-${isoDate(date)}.json`;
+  const who = readableFilePart(name ?? '');
+  const day = `${date.getDate()} ${SHORT_MONTHS[lang][date.getMonth()]}`;
+  const head = lang === 'nl' ? (who ? `Recepten van ${who}` : 'Recepten') : who ? `Recipes from ${who}` : 'Recipes';
+  const tail = lang === 'nl' ? 'open via Delen in Rutgers Recepten' : 'open via Share in Rutgers Recepten';
+  return `${head} ${day} - ${tail}.json`;
 }
 
 /**
@@ -973,8 +1021,13 @@ export function combineEnvelopes(envelopes: readonly Envelope[], opts: BundleOpt
   const patches: PatchPayload[] = [];
   const ing = new Map<string, Ingredient>();
   let by: string | undefined;
+  let byId: string | undefined;
   for (const env of envelopes) {
-    if (!by) by = cleanString(env.by);
+    if (!by) {
+      by = cleanString(env.by);
+      // The sender's profile id travels with the sender's name (V2 §1a).
+      if (by && typeof env.byId === 'string') byId = env.byId;
+    }
     const parsed = parseEnvelope(env);
     recipes.push(...parsed.recipes);
     patches.push(...parsed.patches);
@@ -985,7 +1038,7 @@ export function combineEnvelopes(envelopes: readonly Envelope[], opts: BundleOpt
   if (title) b.title = title;
   const since = cleanString(opts.since);
   if (since) b.since = since;
-  const out = baseEnvelope('b', by ?? '');
+  const out = baseEnvelope('b', by ?? '', byId);
   out.b = b;
   if (ing.size) out.dict = { ing: [...ing.values()].sort((a, c) => a.id.localeCompare(c.id)) };
   return out;
@@ -999,19 +1052,23 @@ function envelopeName(env: Envelope): Text {
 }
 
 /**
- * The WhatsApp text for the envelopes: a single recipe gets the four-line message from
+ * The WhatsApp messages for the envelopes: a single recipe gets the four-line message from
  * message.ts, a single patch its "(aangepast)" variant, a single plan "🗓️ Weekplan van Stijn:
  * 7 gerechten", a single member card its one-sentence text, a single progress envelope
  * "📈 Voortgang van Stijn — Level 12 · …" (the title in `opts.lang`), a single shopping list
  * "🛒 Boodschappenlijst van Stijn — 12 regels. …", several items a compact
  * header ("🍲 3 recepten van Stijn"), the open line and one URL per line. Each URL is
- * `#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`/`#l=`. (A plan, a card, progress or a list combined with other envelopes
- * into a bundle file keeps the recipes but loses the plan / the card / the progress / the list itself.)
- * When the text is longer than `limit` characters the result is a bundle FILE instead (pretty
- * JSON, not compressed), named "recepten-<name>-YYYY-MM-DD.json".
+ * `#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`/`#l=`.
+ * V2 §1a: when that one text is longer than `limit` (default RECIPE_LINK_MESSAGE_LIMIT) the
+ * envelopes are spread GREEDILY over several parts: envelope after envelope is added to a part
+ * (header "🍲 3 recepten van Gabi (deel 1 van 2)", open line, links) while the part stays under the
+ * limit; every envelope is in exactly one part, in the original order. Only when one envelope on its
+ * own does not fit is the result a bundle FILE (pretty JSON, not compressed; a plan, a card, progress
+ * or a list combined with other envelopes into that file keeps the recipes but loses the plan / the
+ * card / the progress / the list itself), named by bundleFileName(name, date, lang).
  */
 export async function planMessages(envelopes: readonly Envelope[], appUrl: string, opts: MessagePlanOptions = {}): Promise<MessagePlan> {
-  const limit = typeof opts.limit === 'number' && opts.limit > 0 ? opts.limit : DEFAULT_MESSAGE_LIMIT;
+  const limit = typeof opts.limit === 'number' && opts.limit > 0 ? opts.limit : RECIPE_LINK_MESSAGE_LIMIT;
   const lang: Lang = opts.lang === 'en' ? 'en' : 'nl';
   const by = cleanString(opts.by) ?? cleanString(envelopes.find((e) => cleanString(e.by))?.by) ?? '';
   const urls: string[] = [];
@@ -1048,11 +1105,52 @@ export async function planMessages(envelopes: readonly Envelope[], appUrl: strin
     text = [buildMultiShareHeader(count, by, lang), openLine(lang), ...urls].join('\n');
   }
 
-  if (text.length <= limit) return { text, tokens: urls.length, chars: text.length };
+  if (text.length <= limit) return { parts: [text], tokens: urls.length, chars: text.length };
+
+  if (envelopes.length > 1) {
+    const parts = splitIntoParts(envelopes.map(envelopeItemCount), urls, by, lang, limit);
+    if (parts) return { parts, tokens: urls.length, chars: parts.reduce((n, p) => n + p.length, 0) };
+  }
 
   const bundle = envelopes.length === 1 && first && first.t === 'b' ? first : combineEnvelopes(envelopes);
   return {
-    file: { name: bundleFileName(opts.name, opts.date), json: JSON.stringify(bundle, null, 2) },
+    file: { name: bundleFileName(opts.name, opts.date, lang), json: JSON.stringify(bundle, null, 2) },
     reason: 'too-large',
   };
+}
+
+/**
+ * Greedy split of the links over messages (V2 §1a), or null when one envelope on its own does not
+ * fit. The header names "deel i van n", so the split is computed for an assumed total n and redone
+ * with the real total until it no longer grows (fewer parts only shorten the headers).
+ */
+function splitIntoParts(counts: readonly number[], urls: readonly string[], by: string, lang: Lang, limit: number): string[] | null {
+  const render = (group: readonly number[], part: number, parts: number): string => {
+    const count = group.reduce((n, i) => n + (counts[i] ?? 0), 0);
+    return [buildMultiShareHeader(count, by, lang, { part, parts }), openLine(lang), ...group.map((i) => urls[i] ?? '')].join('\n');
+  };
+  const split = (total: number): number[][] | null => {
+    const groups: number[][] = [];
+    let current: number[] = [];
+    for (let i = 0; i < urls.length; i++) {
+      if (render([...current, i], groups.length + 1, total).length <= limit) {
+        current.push(i);
+        continue;
+      }
+      if (current.length === 0) return null;
+      groups.push(current);
+      current = [i];
+      if (render(current, groups.length + 1, total).length > limit) return null;
+    }
+    if (current.length) groups.push(current);
+    return groups;
+  };
+  let total = 2;
+  for (let round = 0; round <= urls.length; round++) {
+    const groups = split(total);
+    if (!groups) return null;
+    if (groups.length <= total) return groups.map((g, i) => render(g, i + 1, groups.length));
+    total = groups.length;
+  }
+  return null;
 }

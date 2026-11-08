@@ -533,3 +533,58 @@ describe('frozen #l= token with variant (13c)', () => {
     expect(parsed.list?.lines[1]).toMatchObject({ raw: { nl: '3 uien', en: '3 onions' }, ing: 'ui', qty: 3 });
   });
 });
+
+// docs/specs/verbeterronde-2.md §1a (V2): an envelope may carry the optional `byId` (the sender's
+// profile id); no new fragment key, the frozen tokens above stay byte-for-byte, and an older app
+// keeps the key as an unknown one. Frozen ONCE on 8 Nov 2026 (native and fflate); never regenerate.
+const FROZEN_ENVELOPE_R_BYID: Envelope = {
+  v: 2,
+  t: 'r',
+  by: 'Gabi',
+  byId: 'p:gabi1234',
+  at: '2026-11-08T20:00:00.000Z',
+  r: {
+    schema: 2,
+    id: 'u:gabi0001',
+    rev: 1,
+    createdAt: '2026-11-08T19:00:00.000Z',
+    updatedAt: '2026-11-08T19:30:00.000Z',
+    origin: { kind: 'user', author: 'Gabi' },
+    name: { nl: 'Shakshuka', en: 'Shakshuka' },
+    tags: [],
+    servings: 2,
+    lines: [
+      { raw: { nl: '4 eieren', en: '4 eggs' }, qty: { min: 4 }, ing: 'ei', name: 'eieren' },
+      { raw: { nl: '1 blik tomaten', en: '1 tin of tomatoes' }, qty: { min: 1 }, unit: 'blik', ing: 'tomaten-blik', name: 'tomaten' },
+    ],
+    steps: [{ text: { nl: 'Laat de tomaten inkoken.', en: 'Reduce the tomatoes.' } }, { text: { nl: 'Breek de eieren erin en dek af.', en: 'Crack in the eggs and cover.' } }],
+    goesWith: [],
+    aliases: [],
+  },
+};
+const FROZEN_TOKEN_R_BYID =
+  'dZFBi9swEIX_inhnJUjesLS6tT2Uwp7ahYWWHCb2rC2UyFlZznYJ-u9l7DhtWgo-yMPT994bnXGCqzQyHBI0dm9w-Ew7P52_NHA4upZ23lZ3G2iQCCtT3a-sXZl3j5VxRr61MeY7NBLcGUPd8YEmrhfCOBGMMVYUfIKzGnViytx8-Ato398Cx2PzH9ndn7I--dZHMQ8-Tp4DSx8ac9enpVPRiHRgkcU9HL51FIZuDAQNjjeDopGpHeB-bDUGTicf5a_S2PvIMj8j0esVtVHsOXFcSBvFbTsI5iW_ieog8TZFw8cWDiwbnsPgcrPoW6RVu70PKvcHyr_BVmUfVf88z3v-x8MWjTF6WZjcx-J44awuw4v3Qi9SM_Nxbpb5Z77meCDKquEliPIx9IHjekn0lZuxZpU7vmZao0ibG8zHxByEM9dVnHxUHFXDQdHzlfYpUR2UjxNPdqgoNqruT5yEutVoex6efO7mt6G9p2F6kG0pvwA';
+const FROZEN_TOKEN_R_BYID_FFLATE =
+  'dZFBS8NAEIX_yrLntGRjEc1NPYjgSQVB6WGaTJMl7aZuNlUJ-e--SdLSFoRAdmbffPNmttN7nSaRDjrVXkd69YvDI63scH7KEe3SArFJrhbIkQiTOLmeGTOLb96SOI3lm8dx_IF7r9NON1nJWxq4VgjtQIDCiILR0UQ680yB87sLoLk9B7a7_B_Z1ams9rawTppX1g09G5Z5qA1lDVPjTH2kHW1ZZG6D5GtJVVO2FUHJqD5JQBqoaHT6uYw0WHvrJMJIG-tY8p329H1ELRRb9oBMJMQFCoD5Cthpp7dib4EYINyzbHg0g_NQ2UfnSKNWG1upUG-xgSPYqGCdqtdjvoaVix4GceusLEzqUTd2nDizKTn1PtB7GTPwbpws8A_qJx_PREHlfDCirKvqit384OiF8zbDdTlJ4Gmue5nmDHPvmSvhjOMq9pgD_xxZWh9pD56yCj0GnuxQkctVVu_ZCxU2CzR4t6Ec34Y2lprhQZZ9_wc';
+
+describe('frozen #r= token with byId (V2)', () => {
+  for (const engine of ENGINES) {
+    it(`decodes and re-encodes byte-for-byte (engine ${engine})`, async () => {
+      expect(await decodeToken(FROZEN_TOKEN_R_BYID, { engine })).toEqual(FROZEN_ENVELOPE_R_BYID);
+      expect(await decodeToken(FROZEN_TOKEN_R_BYID_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_R_BYID);
+      expect(await encodeToken(FROZEN_ENVELOPE_R_BYID, { engine })).toBe(engine === 'native' ? FROZEN_TOKEN_R_BYID : FROZEN_TOKEN_R_BYID_FFLATE);
+    });
+  }
+
+  it('reads back with by and byId; the recipe reads as without it', async () => {
+    const parsed = parseShareEnvelope(await decodeToken(FROZEN_TOKEN_R_BYID));
+    expect(parsed.kind).toBe('recipe');
+    expect(parsed.by).toBe('Gabi');
+    expect(parsed.byId).toBe('p:gabi1234');
+    expect(parsed.recipes.map((r) => r.id)).toEqual(['u:gabi0001']);
+    const { byId: _drop, ...without } = FROZEN_ENVELOPE_R_BYID;
+    const plain = parseShareEnvelope(without);
+    expect('byId' in plain).toBe(false);
+    expect(plain.recipes).toEqual(parsed.recipes);
+  });
+});

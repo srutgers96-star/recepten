@@ -9,8 +9,10 @@
 //   - a classic without an override travels as `#r=` like before.
 // "Deel via WhatsApp" (navigator.share({text}) ONLY inside the tap handler, exactly one field;
 // wa.me fallback), "Kopieer", and "Deel als tekst": the readable full recipe in NL / EN / both.
-// A recipe too big for one message (> 3.5 KB) becomes a .json file instead (planMessages):
+// A recipe too big for one message (> 20 KB since V2) becomes a .json file instead (planMessages):
 // "Deel het bestand" first, "Download" second; a download reports "Opgeslagen als … in Downloads".
+// After "Deel het bestand" (shared or downloaded) a second button "Stuur ook de uitleg" sends
+// buildFileHintMessage as its own share (docs/specs/verbeterronde-2.md §1b; invariant 9).
 // '#/share' without an id is "Stuur nieuwe naar …" (DeltaShareScreen; no router change).
 // 13D block 4 (docs/specs/varianten-tabs.md §1g): when the active profile has a private note on
 // this recipe, a switch "Mijn notitie meesturen als tip van de maker" (default off) puts the note
@@ -27,7 +29,7 @@ import { dictionary } from '@/dictionary';
 import type { Ingredient } from '@/domain/dictionary';
 import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
 import { applyLineOverrides, type LineOverride, type RecipeOverride } from '@/domain/overrides';
-import { buildReadableRecipe, countIngredientLines, recipeHasLang } from '@/domain/message';
+import { buildFileHintMessage, buildReadableRecipe, countIngredientLines, recipeHasLang } from '@/domain/message';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
 import { buildShareUrl, encodeToken, type Envelope } from '@/domain/token';
 import { lang, t } from '@/i18n';
@@ -77,8 +79,8 @@ export function withNoteTip(existing: Text | null | undefined, note: string, l: 
  * a COPY: `{ ...loaded.base, tip }` for `#r=`, `{ ...patch, tip }` for `#p=`; `loaded` itself is
  * left untouched. Without `noteTip` the envelope is exactly what it was before 13D block 4.
  */
-export function buildShareEnvelope(loaded: Loaded, by: string, noteTip: Text | null): Envelope {
-  const ctx = { by, userIngredients: loaded.userIngredients, lineOverrides: loaded.lineOverrides };
+export function buildShareEnvelope(loaded: Loaded, by: string, noteTip: Text | null, byId?: string): Envelope {
+  const ctx = { by, byId, userIngredients: loaded.userIngredients, lineOverrides: loaded.lineOverrides };
   // A classic always sends its tip as a patch (§1g): an unadjusted classic is 'present' at the
   // receiver, so a `#r=` with `r.tip` would never arrive. An empty override carries it then.
   const tipOnClassic = !!noteTip && isBuiltinId(loaded.base.id);
@@ -142,6 +144,8 @@ function RecipeShareScreen(props: { id: string }) {
   const [built, setBuilt] = useState<Built | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState('');
+  /** V2: "Deel het bestand" went out (or downloaded): offer "Stuur ook de uitleg". */
+  const [fileSent, setFileSent] = useState(false);
   const [textStatus, setTextStatus] = useState('');
   const [textLangs, setTextLangs] = useState<TextLangs>('nl');
   // 13Q (docs/specs/qr-link.md §1a): "Toon QR" next to Deel and Kopieer, no Experimenten flag any more.
@@ -210,7 +214,7 @@ function RecipeShareScreen(props: { id: string }) {
     setBuilt(null);
     setError(null);
     (async () => {
-      const env = buildShareEnvelope(loaded, by, noteTip);
+      const env = buildShareEnvelope(loaded, by, noteTip, pid || undefined);
       const [plan, token] = await Promise.all([planMessages([env], appInfo.appUrl, { lang: ui, by }), encodeToken(env)]);
       if (cancelled) return;
       setBuilt({ env, plan, url: buildShareUrl(appInfo.appUrl, env.t, token) });
@@ -220,11 +224,12 @@ function RecipeShareScreen(props: { id: string }) {
     return () => {
       cancelled = true;
     };
-  }, [loaded, by, ui, noteTip]);
+  }, [loaded, by, pid, ui, noteTip]);
 
   // The readable text is built from `effective` (not from the envelope): the same tip on a copy.
   const recipe = useMemo(() => (loaded ? (noteTip ? { ...loaded.effective, tip: noteTip } : loaded.effective) : undefined), [loaded, noteTip]);
-  const message = built && 'text' in built.plan ? built.plan.text : '';
+  // One envelope is always one part (V2: only several envelopes are split over several messages).
+  const message = built && 'parts' in built.plan ? (built.plan.parts[0] ?? '') : '';
   const file = built && 'file' in built.plan ? built.plan.file : null;
   const dictCount = built && built.env.dict && Array.isArray((built.env.dict as { ing?: unknown[] }).ing) ? (built.env.dict as { ing: unknown[] }).ing.length : 0;
   // Ingredient lines through the dictionary in each language (same text as the landing page).
@@ -259,13 +264,20 @@ function RecipeShareScreen(props: { id: string }) {
     setStatus('');
     void shareJsonFile(file.name, file.json).then((r) => {
       if (r.outcome === 'shared') {
+        setFileSent(true);
         setStatus(t('share.fileShared'));
         onRecipeShared();
       } else if (r.outcome === 'downloaded') {
+        setFileSent(true);
         setStatus(t('share.fileDownloaded', { name: r.name }));
         logRecipeShared(props.id, asPatch);
       } else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
     });
+  }
+
+  /** V2: the explanation that goes with the file, as its own share (invariant 9: one field). */
+  function shareFileHint() {
+    doShareText(buildFileHintMessage(ui), setStatus);
   }
 
   function downloadFile() {
@@ -331,6 +343,11 @@ function RecipeShareScreen(props: { id: string }) {
                   <button type="button" class="btn" onClick={downloadFile}>
                     {t('share.download')}
                   </button>
+                  {fileSent && (
+                    <button type="button" class="btn" onClick={shareFileHint}>
+                      {t('share.fileHint')}
+                    </button>
+                  )}
                 </div>
                 <div class="status" role="status">
                   {status || file.name}

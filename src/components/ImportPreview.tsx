@@ -3,6 +3,7 @@
 // delta ("2 nieuwe ingrediënten"), a ConflictCard where a decision is needed, and ONE "Importeer"
 // button. The plan comes from src/domain/merge.ts `planImport`; the choices go back to the screen,
 // which calls repo.applyImportPlan.
+import type { ComponentChildren } from 'preact';
 import { ConflictCard, itemName } from '@/components/ConflictCard';
 import { pickText, type Lang } from '@/domain/model';
 import { defaultChoice, type ImportChoice, type ImportChoices, type ImportItem, type ImportPlan } from '@/domain/merge';
@@ -17,6 +18,8 @@ export interface ImportPreviewProps {
   onChoice: (id: string, choice: ImportChoice) => void;
   onImport: () => void;
   onOpen: (id: string) => void;
+  /** V2 §1c: the sender's avatar in front of "Van {naam}" (a friend; a housemate gets the line above). */
+  senderAvatar?: ComponentChildren;
 }
 
 function fmtDate(iso: string | undefined, l: string): string {
@@ -169,7 +172,9 @@ export function ImportPreview(props: ImportPreviewProps) {
       <div class="ip-summary">
         <div class="ip-summary-main">
           <strong>{t('inbox.found')}:</strong> {found.join(' · ') || t('inbox.dictOnly')}
-          {by ? ` · ${t('common.from', { name: by })}` : ''}
+          {by ? ' · ' : ''}
+          {by && props.senderAvatar}
+          {by ? t('common.from', { name: by }) : ''}
           {plan.at ? ` · ${t('inbox.at')} ${fmtDate(plan.at, ui)}` : ''}
         </div>
         {dictParts.length > 0 && (

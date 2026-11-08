@@ -332,6 +332,8 @@ export const edit: Dict = {
   'share.whatsapp': { nl: 'Deel via WhatsApp', en: 'Share via WhatsApp' },
   'share.copy': { nl: 'Kopieer', en: 'Copy' },
   'share.copied': { nl: 'Gekopieerd', en: 'Copied' },
+  // V2 (docs/specs/verbeterronde-2.md §1b): after a file share, the explanation as its own message.
+  'share.fileHint': { nl: 'Stuur ook de uitleg', en: 'Also send the explanation' },
   'share.encoding': { nl: 'Bezig met coderen…', en: 'Encoding…' },
   'share.error': { nl: 'Delen mislukt', en: 'Sharing failed' },
   'share.copyError': { nl: 'Kopiëren mislukt', en: 'Copy failed' },
@@ -389,6 +391,10 @@ export const edit: Dict = {
     en: 'iPhone: tap "Paste" when it appears, or long-press the text box → Paste.',
   },
   'inbox.file': { nl: 'Kies bestand', en: 'Choose file' },
+  'inbox.fileAndroidHint': {
+    nl: "Kreeg je een bestand in WhatsApp? Houd het daar ingedrukt → Delen → Rutgers' Recepten.",
+    en: "Got a file in WhatsApp? Press and hold it there → Share → Rutgers' Recepten.",
+  },
   'inbox.clear': { nl: 'Wis', en: 'Clear' },
   'inbox.noToken': { nl: 'Geen recept of kaartje gevonden in deze tekst.', en: 'No recipe or card found in this text.' },
   // Phase 5 block F: a `#f=` member card in the Inbox, and the sender shown as a household member.

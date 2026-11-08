@@ -30,6 +30,8 @@ export interface SelectBarProps {
   building?: boolean;
   /** One-line status under the buttons ("3 toegevoegd aan je week"). */
   status?: string;
+  /** The Deel label while a multi-part share is under way (V2: "Deel deel 2 van 2"); default select.share. */
+  shareLabel?: string;
   onShare: () => void;
   onWeek: () => void;
   onMeta: (change: MetaChange) => void;
@@ -104,7 +106,7 @@ export function SelectBar(props: SelectBarProps) {
         </div>
       ) : (
         <div class="select-actions">
-          {action('share', t('select.share'), props.onShare, props.building === true)}
+          {action('share', props.shareLabel ?? t('select.share'), props.onShare, props.building === true)}
           {action('week', t('select.week'), props.onWeek)}
           {action('meta', t('select.meta'), () => setSheet(true))}
           {action('delete', t('select.delete'), () => setConfirmDelete(true), own.length === 0, true)}

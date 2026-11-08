@@ -579,3 +579,11 @@ describe('legacyChoices (phase-1 importRecipes behaviour)', () => {
     expect(w.recipes.find((r) => r.id === 'u:abc12345')?.steps[0]?.text.nl).toBe('Anders.');
   });
 });
+
+describe('byId on the import plan (V2)', () => {
+  it('travels with the sender name; absent without it', () => {
+    expect(planImport(share({ byId: 'p:gabi1234' }), local()).byId).toBe('p:gabi1234');
+    expect(planImport(share({ by: undefined, byId: 'p:gabi1234' }), local()).byId).toBeUndefined();
+    expect('byId' in planImport(share(), local())).toBe(false);
+  });
+});

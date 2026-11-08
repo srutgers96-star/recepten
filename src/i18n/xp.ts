@@ -83,6 +83,7 @@ export const xp: Dict = {
   'progress.cookDays30One': { nl: '1 kookdag in de laatste 30 dagen', en: '1 cooking day in the last 30 days' },
   'progress.sentAt': { nl: 'gedeeld op {date}', en: 'shared on {date}' },
   'progress.update': { nl: 'Werk {name} bij', en: 'Update {name}' },
+  'progress.updateHint': { nl: 'Level, streak, badges, kookdagen en avatar', en: 'Level, streak, badges, cook days and avatar' },
   'progress.updated': { nl: '{name} is bijgewerkt.', en: '{name} was updated.' },
   'progress.local': {
     nl: '{name} is een profiel op deze telefoon — die voortgang zie je al.',

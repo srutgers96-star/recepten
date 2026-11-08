@@ -374,6 +374,32 @@ div.inbox-shared-row:active {
   margin: 4px 0 8px;
 }
 
+/* V2 §1c: the sender's avatar before the name (import preview line, week plan title), 28 px. The
+   extra .inbox makes it win over avatar.css (.inbox-sender .avatar, 48 px). */
+.inbox .inbox-from-avatar {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.inbox .inbox-from-avatar .avatar {
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+}
+
+.inbox-plan h3.inbox-from {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* V2 §1c: the Android hint directly under "Kies bestand": its own line at the end of the button row. */
+.upaste-actions .inbox-file-hint {
+  order: 1;
+  flex-basis: 100%;
+  margin: -4px 0 0;
+}
+
 
 
 /* ---------- Inbox: phase 3 — import preview, conflict card, result, history ---------- */
@@ -1528,4 +1554,10 @@ button.lc-unresolved.lc-tap:active {
 
 .edit-maker-tip p {
   margin: 0;
+}
+
+/* V2: a friend's avatar inline in the import preview summary ("· [avatar] van Bram"). */
+.inbox .ip-summary-main .inbox-from-avatar {
+  vertical-align: middle;
+  margin-right: 4px;
 }

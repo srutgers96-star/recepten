@@ -653,3 +653,17 @@
   flex: 0 0 auto;
   background: var(--dot);
 }
+
+/* The legend (V2 §1c): a mini avatar per person instead of the colour dot (the day dots stay dots). */
+.cal-legend .avatar {
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  flex: 0 0 auto;
+}
+
+/* V2 §1c: the sub-line under "Werk {naam} bij" on a received progress card. */
+.progress-update-hint {
+  flex-basis: 100%;
+  margin: -4px 0 0;
+}

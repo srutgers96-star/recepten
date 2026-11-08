@@ -11,8 +11,8 @@
       "id": "delen-en-ontvangen.wat-kun-je-delen",
       "title": { "nl": "Wat je kunt delen", "en": "What you can share" },
       "what": {
-        "nl": "Je kunt een recept, je weekplan, je boodschappenlijst, je kaartje en je voortgang delen. Meerdere recepten tegelijk gaan in één bericht of als bestand.",
-        "en": "You can share a recipe, your week plan, your shopping list, your card and your progress. Several recipes at once go in one message or as a file."
+        "nl": "Je kunt een recept, je weekplan, je boodschappenlijst, je kaartje en je voortgang delen. Meerdere recepten tegelijk gaan in één bericht, of in een paar berichten als het veel is.",
+        "en": "You can share a recipe, your week plan, your shopping list, your card and your progress. Several recipes at once go in one message, or in a few messages if there are many."
       },
       "where": {
         "nl": [
@@ -148,45 +148,71 @@
     },
     {
       "id": "delen-en-ontvangen.bestand",
-      "title": { "nl": "Te groot voor één bericht: een bestand", "en": "Too big for one message: a file" },
+      "title": {
+        "nl": "Te veel voor één bericht: meerdere berichten",
+        "en": "Too much for one message: several messages"
+      },
       "what": {
-        "nl": "Een heel lang recept past niet in één WhatsApp-bericht. De app maakt er dan een bestand van, dat de ander in de app opent.",
-        "en": "A very long recipe does not fit in one WhatsApp message. The app then turns it into a file, which the other person opens in the app."
+        "nl": "Veel recepten passen niet in één WhatsApp-bericht. De app verdeelt ze dan over een paar berichten. Elk bericht werkt op zichzelf.",
+        "en": "Many recipes do not fit in one WhatsApp message. The app then spreads them over a few messages. Each message works on its own."
       },
       "where": {
         "nl": [
-          "Tik op een recept.",
-          "Tik op **Deel**.",
-          "Tik op **Deel het bestand**.",
-          "Kies WhatsApp of een andere app."
+          "Tik onderaan op **Meer**.",
+          "Tik op **Recepten & delen**.",
+          "Tik op **Deel je nieuwe recepten**.",
+          "Tik bij **Aan wie?** op een naam.",
+          "Tik op **Deel via WhatsApp**.",
+          "Stuur het eerste bericht in WhatsApp.",
+          "Tik op de knop “Deel deel 2 van 2”.",
+          "Stuur ook dit bericht in WhatsApp."
         ],
         "en": [
-          "Tap a recipe.",
-          "Tap **Share**.",
-          "Tap **Share the file**.",
-          "Choose WhatsApp or another app."
+          "Tap **More** at the bottom.",
+          "Tap **Recipes & sharing**.",
+          "Tap **Share your new recipes**.",
+          "Tap a name under **To whom?**.",
+          "Tap **Share via WhatsApp**.",
+          "Send the first message in WhatsApp.",
+          "Tap the button “Share part 2 of 2”.",
+          "Send this message in WhatsApp too."
         ]
       },
       "see": {
-        "nl": "Bovenaan staat dat het recept te groot is voor één WhatsApp-bericht, met het aantal tekens. Met **Download** bewaar je het bestand in je Downloads.",
-        "en": "At the top it says the recipe is too large for one WhatsApp message, with the number of characters. **Download** saves the file in your Downloads."
+        "nl": "Boven de knop staat “Dit gaat in 2 berichten.” Elk bericht begint met een kop als “🍲 3 recepten van Gabi (deel 1 van 2)”. Na elk bericht staat er bijvoorbeeld “Deel 1 van 2 verstuurd”.",
+        "en": "Above the button it says “This goes in 2 messages.” Each message starts with a heading like “🍲 3 recipes from Gabi (part 1 of 2)”. After each message it says, for example, “Part 1 of 2 sent”."
       },
       "know": {
-        "nl": "De ander opent het bestand in de app via **In & uit** en **Kies bestand**.",
-        "en": "The other person opens the file in the app through **In & out** and **Choose file**."
+        "nl": "Elk recept zit in precies één bericht. De ontvanger plakt de berichten één voor één bij **In & uit**; op Android tikt hij op de link in elk bericht. **Kopieer** kopieert alle berichten tegelijk. Een bestand komt alleen nog bij een heel lang recept of met **Exporteer**; tik dan na het delen op **Stuur ook de uitleg**.",
+        "en": "Every recipe is in exactly one message. The receiver pastes the messages one by one in **In & out**; on Android they tap the link in each message. **Copy** copies all the messages at once. A file only comes with a very long recipe or with **Export**; then tap **Also send the explanation** after sharing."
       },
+      "route": "/share",
       "platform": "all",
       "keywords": {
-        "nl": ["bestand", "te groot", "te lang", "downloaden", "json"],
-        "en": ["file", "too big", "too long", "download", "json"]
+        "nl": [
+          "meerdere berichten",
+          "te veel",
+          "deel 1 van 2",
+          "te groot",
+          "te lang",
+          "bestand"
+        ],
+        "en": [
+          "several messages",
+          "too much",
+          "part 1 of 2",
+          "too big",
+          "too long",
+          "file"
+        ]
       }
     },
     {
       "id": "delen-en-ontvangen.meerdere-recepten",
       "title": { "nl": "Meerdere recepten tegelijk delen", "en": "Share several recipes at once" },
       "what": {
-        "nl": "Je kiest een paar recepten uit de lijst en deelt ze in één keer. Past het niet in één bericht, dan gaan ze als bestand.",
-        "en": "You pick a few recipes from the list and share them in one go. If they do not fit in one message, they go as a file."
+        "nl": "Je kiest een paar recepten uit de lijst en deelt ze in één keer. Past het niet in één bericht, dan gaan ze in een paar berichten.",
+        "en": "You pick a few recipes from the list and share them in one go. If they do not fit in one message, they go in a few messages."
       },
       "where": {
         "nl": [
@@ -203,18 +229,18 @@
         ]
       },
       "see": {
-        "nl": "Bovenaan staat hoeveel recepten je hebt geselecteerd. Na het delen staat er “Gedeeld”.",
-        "en": "At the top it says how many recipes you have selected. After sharing it says “Shared”."
+        "nl": "Bovenaan staat hoeveel recepten je hebt geselecteerd. Na het delen staat er “Gedeeld”. Zijn het meer berichten, dan heet de knop daarna “Deel deel 2 van 2”.",
+        "en": "At the top it says how many recipes you have selected. After sharing it says “Shared”. If there are more messages, the button then says “Share part 2 of 2”."
       },
       "know": {
-        "nl": "**Exporteer** maakt altijd een bestand, ook bij een paar recepten. **Toon QR** past bij veel recepten meestal niet.",
-        "en": "**Export** always makes a file, even for a few recipes. **Show QR** usually does not fit for many recipes."
+        "nl": "**Exporteer** maakt altijd een bestand, ook bij een paar recepten. De naam van het bestand zegt hoe de ander het opent; daarna stuurt **Stuur ook de uitleg** de uitleg in een eigen bericht. **Toon QR** past bij veel recepten meestal niet.",
+        "en": "**Export** always makes a file, even for a few recipes. The file name says how the other person opens it; afterwards **Also send the explanation** sends the explanation in a message of its own. **Show QR** usually does not fit for many recipes."
       },
       "route": "/recipes",
       "platform": "all",
       "keywords": {
-        "nl": ["meerdere", "selecteren", "selectie", "exporteren", "bestand", "alles delen"],
-        "en": ["several", "select", "selection", "export", "file", "share all"]
+        "nl": ["meerdere", "selecteren", "selectie", "exporteren", "bestand", "alles delen", "berichten"],
+        "en": ["several", "select", "selection", "export", "file", "share all", "messages"]
       }
     },
     {
@@ -459,8 +485,8 @@
         ]
       },
       "see": {
-        "nl": "Onder het plakvak staat wat de app herkent, zoals “1 deellink herkend”. Daaronder verschijnt wat je kunt bewaren.",
-        "en": "Under the paste box it says what the app recognises, such as “1 share link recognised”. Below that appears what you can keep."
+        "nl": "Onder het plakvak staat wat de app herkent, zoals “1 deellink herkend”. Daaronder verschijnt wat je kunt bewaren. Komt het van een huisgenoot of vriend, dan staat zijn avatar voor zijn naam.",
+        "en": "Under the paste box it says what the app recognises, such as “1 share link recognised”. Below that appears what you can keep. If it comes from a housemate or friend, their avatar sits in front of their name."
       },
       "know": {
         "nl": "Een getal op het tabblad **Meer** betekent dat er iets nieuws is ontvangen. Met **Wis** maak je het plakvak leeg.",
@@ -475,40 +501,65 @@
     },
     {
       "id": "delen-en-ontvangen.bestand-openen",
-      "title": { "nl": "Een receptbestand openen", "en": "Open a recipe file" },
+      "title": {
+        "nl": "Een bestand uit WhatsApp openen",
+        "en": "Open a file from WhatsApp"
+      },
       "what": {
-        "nl": "Kreeg je een bestand met recepten, bijvoorbeeld via WhatsApp of in je Downloads? Dan open je het bij **In & uit**.",
-        "en": "Did you get a file with recipes, for example through WhatsApp or in your Downloads? Then you open it in **In & out**."
+        "nl": "Kreeg je een bestand met recepten in WhatsApp? Op Android stuur je het via Delen naar de app. Op de iPhone kies je het in de app.",
+        "en": "Did you get a file with recipes in WhatsApp? On Android you send it to the app through Share. On the iPhone you pick it in the app."
       },
       "where": {
         "nl": [
-          "Tik onderaan op **Meer**.",
-          "Tik op **In & uit**.",
-          "Tik op **Kies bestand**.",
-          "Kies het bestand op je telefoon.",
-          "Tik op **Importeer**."
+          "Android: houd het bestand in WhatsApp ingedrukt.",
+          "Android: tik op Delen.",
+          "Android: kies Rutgers' Recepten.",
+          "iPhone: bewaar het bestand vanuit WhatsApp in Bestanden.",
+          "iPhone: tik onderaan op **Meer**.",
+          "iPhone: tik op **In & uit**.",
+          "iPhone: tik op **Kies bestand**.",
+          "iPhone: kies het bestand."
         ],
         "en": [
-          "Tap **More** at the bottom.",
-          "Tap **In & out**.",
-          "Tap **Choose file**.",
-          "Choose the file on your phone.",
-          "Tap **Import**."
+          "Android: press and hold the file in WhatsApp.",
+          "Android: tap Share.",
+          "Android: choose Rutgers' Recepten.",
+          "iPhone: save the file from WhatsApp to Files.",
+          "iPhone: tap **More** at the bottom.",
+          "iPhone: tap **In & out**.",
+          "iPhone: tap **Choose file**.",
+          "iPhone: pick the file."
         ]
       },
       "see": {
-        "nl": "Bovenaan staat wat er in het bestand zit, zoals “Gevonden: 3 recepten”. Daaronder staat elk recept met een label.",
-        "en": "At the top it says what is in the file, such as “Found: 3 recipes”. Below that each recipe has a label."
+        "nl": "**In & uit** toont wat er in het bestand zit, zoals “Gevonden: 3 recepten”. Daaronder staat elk recept met een label; tik op **Importeer** om ze te bewaren. Op Android staat onder **Kies bestand** een tip over WhatsApp.",
+        "en": "**In & out** shows what is in the file, such as “Found: 3 recipes”. Below that each recipe has a label; tap **Import** to keep them. On Android a tip about WhatsApp sits under **Choose file**."
       },
       "know": {
-        "nl": "Het bestand eindigt op .json of .txt.",
-        "en": "The file ends in .json or .txt."
+        "nl": "De naam van het bestand zegt al hoe je het opent, bijvoorbeeld “Recepten van Gabi 8 nov - open via Delen in Rutgers Recepten.json”. Wie het bestand stuurt, kan daarna op **Stuur ook de uitleg** tikken. Dan krijg je een bericht met deze stappen.",
+        "en": "The file name already says how to open it, for example “Recipes from Gabi 8 Nov - open via Share in Rutgers Recepten.json”. Whoever sends the file can then tap **Also send the explanation**. You then get a message with these steps."
       },
       "route": "/inbox",
       "platform": "all",
       "keywords": {
-        "nl": ["bestand", "openen", "importeren", "receptbestand", "downloads", "json"],
-        "en": ["file", "open", "import", "recipe file", "downloads", "json"]
+        "nl": [
+          "bestand",
+          "openen",
+          "whatsapp",
+          "importeren",
+          "kies bestand",
+          "json",
+          "uitleg"
+        ],
+        "en": [
+          "file",
+          "open",
+          "whatsapp",
+          "import",
+          "choose file",
+          "json",
+          "explanation"
+        ]
       }
     },
     {
@@ -621,8 +672,8 @@
       "id": "delen-en-ontvangen.nieuwe-recepten",
       "title": { "nl": "Deel je nieuwe recepten", "en": "Share your new recipes" },
       "what": {
-        "nl": "Alles wat je sinds de vorige keer maakte of aanpaste, stuur je in één bericht naar één persoon. Zo blijven jullie recepten gelijk.",
-        "en": "Everything you made or changed since last time goes to one person in one message. That keeps your recipes in step."
+        "nl": "Alles wat je sinds de vorige keer maakte of aanpaste, stuur je naar één persoon. Meestal past het in één bericht. Zo blijven jullie recepten gelijk.",
+        "en": "Everything you made or changed since last time goes to one person. Usually it fits in one message. That keeps your recipes in step."
       },
       "where": {
         "nl": [
@@ -645,14 +696,14 @@
         "en": "You see what the message looks like and what goes along, such as the number of recipes and new ingredients. Members of your household come first, with their colour."
       },
       "know": {
-        "nl": "Een getal bij **Deel je nieuwe recepten** zegt hoeveel recepten nog niet gedeeld zijn. Deelde je met **Kopieer**, tik dan daarna op **Markeer als verzonden**. Te veel voor één bericht? Dan gaat het als bestand.",
-        "en": "A number by **Share your new recipes** tells you how many recipes have not been shared yet. If you shared with **Copy**, tap **Mark as sent** afterwards. Too much for one message? Then it goes as a file."
+        "nl": "Een getal bij **Deel je nieuwe recepten** zegt hoeveel recepten nog niet gedeeld zijn. Deelde je met **Kopieer**, tik dan daarna op **Markeer als verzonden**. Te veel voor één bericht? Dan staat er “Dit gaat in 2 berichten.” en deel je ze na elkaar.",
+        "en": "A number by **Share your new recipes** tells you how many recipes have not been shared yet. If you shared with **Copy**, tap **Mark as sent** afterwards. Too much for one message? Then it says “This goes in 2 messages.” and you share them one after the other."
       },
       "route": "/share",
       "platform": "all",
       "keywords": {
-        "nl": ["nieuwe recepten", "bijwerken", "gelijk houden", "stuur nieuwe", "huishouden", "getal"],
-        "en": ["new recipes", "update", "keep in step", "send new", "household", "number"]
+        "nl": ["nieuwe recepten", "bijwerken", "gelijk houden", "stuur nieuwe", "huishouden", "getal", "meerdere berichten"],
+        "en": ["new recipes", "update", "keep in step", "send new", "household", "number", "several messages"]
       }
     },
     {
@@ -721,8 +772,8 @@
         "en": "You see “Card from” with the name and a circle in that person's colour. Afterwards the person is under **Members**, with “via card”."
       },
       "know": {
-        "nl": "Is iemand al lid, dan heet de knop “Werk … bij”; dan worden alleen naam, kleur en taal bijgewerkt. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.",
-        "en": "If someone is already a member, the button says “Update …”; then only name, colour and language are updated. Pasting in **In & out** works too. On Android you can tap the link, but Android itself decides whether the app opens."
+        "nl": "Is iemand al lid, dan heet de knop “Werk … bij”; dan worden naam, kleur, taal en avatar bijgewerkt. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.",
+        "en": "If someone is already a member, the button says “Update …”; then name, colour, language and avatar are updated. Pasting in **In & out** works too. On Android you can tap the link, but Android itself decides whether the app opens."
       },
       "route": "/more/household",
       "platform": "all",
@@ -757,12 +808,12 @@
         ]
       },
       "see": {
-        "nl": "Elk lid staat bij **Leden** met een rondje in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.",
-        "en": "Each member is under **Members** with a circle in their colour. You see whether someone is on this phone, came through a card or was added by hand."
+        "nl": "Elk lid staat bij **Leden** met zijn avatar, of een rondje met een letter in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.",
+        "en": "Each member is under **Members** with their avatar, or a circle with a letter in their colour. You see whether someone is on this phone, came through a card or was added by hand."
       },
       "know": {
-        "nl": "Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. Een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.",
-        "en": "**Edit** and **Remove** change a member from another phone. In **More** your housemates and friends are listed under **Household & friends**, each with the label housemate or friend. A tap brings you here. Members come first in **Share your new recipes**."
+        "nl": "Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. De avatar van een lid op een andere telefoon reist mee met zijn kaartje en zijn voortgang, en wordt dan bijgewerkt. Een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.",
+        "en": "**Edit** and **Remove** change a member from another phone. In **More** your housemates and friends are listed under **Household & friends**, each with the label housemate or friend. The avatar of a member on another phone travels along with their card and their progress, and is then updated. A tap brings you here. Members come first in **Share your new recipes**."
       },
       "route": "/more/household",
       "platform": "all",
@@ -775,8 +826,8 @@
       "id": "delen-en-ontvangen.voortgang-delen",
       "title": { "nl": "Sync mijn voortgang", "en": "Sync my progress" },
       "what": {
-        "nl": "Je stuurt je level, je badges en je kookdagen van de laatste 90 dagen naar je huishouden of een vriend. Notities, sterren en foto's gaan niet mee.",
-        "en": "You send your level, your badges and your cooking days of the last 90 days to your household or a friend. Notes, stars and photos do not go along."
+        "nl": "Je stuurt je level, je badges, je avatar en je kookdagen van de laatste 90 dagen naar je huishouden of een vriend. Notities, sterren en foto's gaan niet mee.",
+        "en": "You send your level, your badges, your avatar and your cooking days of the last 90 days to your household or a friend. Notes, stars and photos do not go along."
       },
       "where": {
         "nl": [
@@ -831,8 +882,8 @@
         ]
       },
       "see": {
-        "nl": "Je ziet een kaart “Voortgang van” met de naam, het level, de badges en de kookdagen van de laatste 30 dagen. Is het een lid, dan heet de knop “Werk … bij”.",
-        "en": "You see a progress card with the name, the level, the badges and the cooking days of the last 30 days. If it is a member, the button says “Update …”."
+        "nl": "Je ziet een kaart “Voortgang van” met de naam, het level, de badges en de kookdagen van de laatste 30 dagen. Is het een lid, dan heet de knop “Werk … bij”. Daaronder staat wat er wordt bijgewerkt: level, streak, badges, kookdagen en avatar.",
+        "en": "You see a progress card with the name, the level, the badges and the cooking days of the last 30 days. If it is a member, the button says “Update …”. Under it you see what gets updated: level, streak, badges, cook days and avatar."
       },
       "know": {
         "nl": "Daarna staat het level onder de naam bij **Huishouden**, met de datum van bijwerken. Een vriend staat onder **Vrienden** en is geen lid. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.",

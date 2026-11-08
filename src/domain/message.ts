@@ -89,14 +89,42 @@ export function buildPatchShareMessage(i: PatchShareMessageInput): string {
   return lines.join('\n');
 }
 
-/** "🍲 3 recepten van Stijn" / "🍲 3 recipes from Stijn": the compact header above several links. */
-export function buildMultiShareHeader(count: number, by: string, lang: 'nl' | 'en'): string {
+/** Which message of a multi-part share this header heads (docs/specs/verbeterronde-2.md §1a). */
+export interface MultiSharePart {
+  /** 1-based number of this part. */
+  part: number;
+  /** Total number of parts; 1 (or less) adds nothing to the header. */
+  parts: number;
+}
+
+/**
+ * "🍲 3 recepten van Stijn" / "🍲 3 recipes from Stijn": the compact header above several links.
+ * With `{ part, parts }` and more than one part (V2 §1a): "🍲 3 recepten van Gabi (deel 1 van 2)" /
+ * "🍲 3 recipes from Gabi (part 1 of 2)"; a single part gets no addition.
+ */
+export function buildMultiShareHeader(count: number, by: string, lang: 'nl' | 'en', part?: MultiSharePart): string {
   const l = lang === 'en' ? 'en' : 'nl';
   const n = Math.max(0, Math.floor(count));
   const what = l === 'nl' ? (n === 1 ? 'recept' : 'recepten') : n === 1 ? 'recipe' : 'recipes';
   const sender = by.trim();
   const from = sender ? (l === 'nl' ? ` van ${sender}` : ` from ${sender}`) : '';
-  return `🍲 ${n} ${what}${from}`;
+  let suffix = '';
+  if (part && Math.floor(part.parts) > 1) {
+    const total = Math.floor(part.parts);
+    const i = Math.min(total, Math.max(1, Math.floor(part.part)));
+    suffix = l === 'nl' ? ` (deel ${i} van ${total})` : ` (part ${i} of ${total})`;
+  }
+  return `🍲 ${n} ${what}${from}${suffix}`;
+}
+
+/**
+ * The second, separate message after a bundle FILE was shared (V2 §1a; a message cannot carry a
+ * file and a text together, CLAUDE.md invariant 9): how the receiver opens the file.
+ */
+export function buildFileHintMessage(lang: 'nl' | 'en'): string {
+  return lang === 'en'
+    ? "The file above is for Rutgers' Recepten. Android: press and hold it → Share → Rutgers' Recepten. iPhone: save it to Files and pick it in the app under In & out → Choose file."
+    : "Het bestand hierboven is voor Rutgers' Recepten. Android: houd het ingedrukt → Delen → Rutgers' Recepten. iPhone: bewaar het in Bestanden en kies het in de app onder In & uit → Kies bestand.";
 }
 
 /** The "Open in Rutgers' Recepten (…)" line in the sender's language, for messages built elsewhere. */
