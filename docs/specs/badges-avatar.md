@@ -383,7 +383,7 @@ sheet = cirkel 64 px met emoji 32 px, akkoord. (7) Fixer: de sheet sluit bij een
 ongebruikt → opschoonronde.
 Gebouwd: 30 okt 2026 (blok 6D-B, workflow wf_f57c73ee-af1; nabewerking (1)–(3) door Fable)
 
-### Blok 6D-F — avatar ronde 3: lijsten (frames) en vrije achtergronden (plan Fable, 30 okt 2026; spec bij de start)
+### Blok 6D-F — avatar ronde 3: lijsten (frames) en vrije achtergronden (plan Fable, 30 okt 2026; de spec is docs/specs/frames.md, 8 nov)
 
 Stijn (30 okt): "het frame van je avatar, de rand eromheen, als iets om te verzamelen; en de achtergrond kan flink aangepast
 worden. Ergens — achtergrond of frame — moet de originele profielkleur altijd terug te vinden zijn. Spelen met frames lijkt me

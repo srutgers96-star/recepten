@@ -4,6 +4,11 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Fable): spec 6D-F — lijsten (frames) en vrijere achtergronden
+Spec docs/specs/frames.md geschreven (twaalfde laag `frame` buiten de clip, eigen clipvorm, niveauring langs de vorm, harde
+kleurregel met impliciete ring in de profielkleur bij een dekkende achtergrond, 11 lijsten en 17 achtergronden met id/naam/
+zeldzaamheid/level/accent vastgelegd; `uitdager` → frame-laurel tier 3, `vaste-klant` → frame-basket tier 5). Bouw gestart.
+
 ## 8 nov (Opus): 13c — Opschoonronde
 Gebouwd volgens docs/specs/opschoonronde.md (bouwer A tekst en rust, bouwer B losse eindjes, integrator; workflow wf_8661b993-08c). Geen dependency, geen Dexie-versie, geen fragmentsleutel; `XP_RULES_VERSION` en `DATA_VERSION` ongewijzigd.
 - **Tekst en rust (A):** de zeven hints uit §2A.1 weg (NL en EN), de blijvende hints één zin van hoogstens ±60 tekens; level-up-venster
