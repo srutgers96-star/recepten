@@ -96,6 +96,12 @@ export interface ChallengeFacts { log: CookLogEntry[]; recipes: ReadonlyMap<stri
   dertig-kookbeurten (cooks 30, 1500, 🌶🌶🌶), feestmaal (categories [nagerecht, bijgerecht, soep], 600, 🌶🌶).
   Namen en omschrijvingen NL én EN met `{n}` waar het doel staat; Fable keurt de teksten in de eindcontrole.
 
+**Aanvulling V1b (Stijn 8 nov 2026, docs/specs/verbeterronde-1b.md §1f): de beloning groeit met het level.** `rewardFor(baseXp,
+level) = round(baseXp · (1 + 0,01 · max(0, level − 20)) / 10) · 10`, berekend bij **Start** met het level van het lid op dat moment
+en bewaard in `ActiveChallenge.xp`; bij het halen gaat dat bedrag in `DoneChallenge.xp`. Level 20 ×1,0 · 50 ×1,3 · 75 ×1,55 ·
+100 ×1,8. `deriveXp` en `XP_RULES_VERSION` (3) veranderen niet; de aanbodkaarten tonen het geschaalde bedrag voor het huidige
+level, de omschrijvingen in data/challenges.json blijven het basisbedrag.
+
 ## 3. Bestandsverdeling
 
 **Bouwer A — domein** (`src/domain/challenges.ts` [nieuw], `src/domain/xp.ts` (alleen de invoer `challenges` en het event 'challenge'),
