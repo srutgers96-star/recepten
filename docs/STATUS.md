@@ -5,7 +5,7 @@ Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee:
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
 ## 9 nov (Opus): V6 — Gabi's lijstje plakken met voorstellen (zeker/twijfel/onbekend in beide talen, notities, leren onder Woordenboek) en de woordenlijst-ronde
-Gebouwd volgens docs/specs/verbeterronde-6.md (lichte workflow, vier bouwers + integrator; run-id wf_323231d0-63a; na de lens: notitie als veld  zichtbaar achter de naam, twijfel-chip met één tik bevestigd, vaste score 1,0/0,9/≤0,8 met één treffer als twijfel vanaf 0,5).
+Gebouwd volgens docs/specs/verbeterronde-6.md (lichte workflow, vier bouwers + integrator; run-id wf_323231d0-63a; na de lens: notitie als veld note zichtbaar achter de naam, twijfel-chip met één tik bevestigd, vaste score 1,0/0,9/≤0,8 met één treffer als twijfel vanaf 0,5).
 **Herkenner (A, src/domain/shopinput.ts):** `splitShopList`/`isShopList` splitsen ook op regeleinden en " · " (decimale komma blijft heel);
 `suggestShopLines(text, dict, lang, learned)` → per regel `ShopSuggestion` (raw, qty, unit, name, note, match, alternatives, status);
 notitiewoorden NL/EN vooraan of achteraan (kleine letters, meerdere met ", "); koppeling learned → `ingredientByName` in beide talen →
