@@ -17,17 +17,21 @@ klein, snel live, elk met een eigen spec. Dit is de voorgestelde volgorde; Stijn
 
 | Blok | Inhoud | Uit idee | Grootte | Stijn beslist eerst |
 |---|---|---|---|---|
-| **V1** | Handleiding ingeklapt en dubbel uitklapbaar · Meer opgeruimd (Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg) · gekozen chips vooraan met kruisje, na drie uur vergeten | Stijns berichten 8 nov | M | — (in aanbouw, spec verbeterronde-1.md) |
-| **V2** | Delen zonder bestanden (links tot 20 KB, anders meerdere berichten; bestand alleen als laatste redmiddel) · Android-hint "houd het bestand ingedrukt → Delen → Rutgers' Recepten" · afzender met avatar op de inbox-kaarten · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | 13 + 12 | M | niets: Fable's keuzes staan in 12 en 13; één vraag bij 13 (bericht-grens 20 KB zoals de lijst) |
-| **V3** | Uitdagingen schalen met level: +2 % per level boven 20, vast bij de start van de uitdaging | 11 | S | **ja/nee op de regel** (of Stijns "20 % van de curve": ×3,1 op level 100 i.p.v. ×2,6) |
-| **V4** | Dopamine-kick bij Gekookt!: het woord groot, XP-balk die oploopt, ontgrendeling "Snelle vieringen" op level 30 | 9 | M | — (alles al besloten op 30 okt) |
-| **V5** | Boodschappen terugkijken: momentopnames van de lijst, 🛒 in de kalender, rij "Eerder" onder Boodschappen met "Zet terug" | 10 + 2 | M | welk moment een lijstje is; hoe lang bewaren (voorstel: delen/legen/opnieuw maken; 26 weken) |
-| **V6** | Gabi's WhatsApp-lijstje plakken met voorstellen (controlestap) · vooraf een data-ronde woordenlijst | 7 + 8 | M + S (data) | leert hij van de keuzes? (voorstel: ja, als alias in het eigen woordenboek) |
-| **V7** | Boodschappen-badges over de ingrediënten (Verzamelaar, Groenteboer, Kaasmeester, Kruidenkast, Alfabet, …) | 4 | M | telt "Heb ik al" mee? (voorstel: nee) |
+| **V1** | Handleiding ingeklapt en dubbel uitklapbaar · Meer opgeruimd (Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg) · gekozen chips vooraan met kruisje, na drie uur vergeten | Stijns berichten 8 nov | M | — (live op main 8 nov, spec verbeterronde-1.md) |
+| **V1b** | Meer: gecentreerd profielblok, tussenkop Huishouden & vrienden met gelabelde leden, Jouw stijl-rij weg, Confetti/Badges-tekst opent de pagina, Trillen zonder hint, Temperatuur °C/°F/beide · Home: "Verder met" na 3 uur weg en wegklikbaar, datum opent de kookkalender · receptkop compact met klokje · Mijn profiel: potlood rechtsonder, knipoog · selectie-ring volgt de lijstvorm · voorraaddrempel 100 g · uitdagingen +1 % per level (was V3) | Stijns tweede bericht 8 nov + idee 11 | M | — (in aanbouw, spec verbeterronde-1b.md) |
+| **V2** | Delen zonder bestanden (links tot 20 KB, anders meerdere berichten; bestand alleen als laatste redmiddel) · bestandsnaam met de uitleg erin + knop "Stuur ook de uitleg" · Android-hint in In & uit · afzender met avatar op de inbox-kaarten · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | 13 + 12 | M | — (Stijn 8 nov: akkoord; grens 20 KB zoals de lijst) |
+| ~~V3~~ | Uitdagingen schalen met level — Stijn 8 nov: **1 % per level**; opgenomen in V1b | 11 | — | besloten |
+| **V4** | Dopamine-kick bij Gekookt!: het woord groot, XP-balk die oploopt, ontgrendeling "Snelle vieringen" op level 30 | 9 | M | — (Stijn 8 nov: "goed, gaan we zo doen") |
+| ~~V5~~ | Boodschappen terugkijken in de kalender — Stijn 8 nov: "laat maar zitten, te ingewikkeld om goed uit te voeren"; vervalt. Idee 2 (archief van afgevinkte boodschappen) blijft een los idee, niet gepland | 10 + 2 | — | vervallen |
+| **V6** | Gabi's WhatsApp-lijstje plakken met voorstellen (controlestap) · vooraf een data-ronde woordenlijst | 7 + 8 | M + S (data) | — (Stijn 8 nov: "is goed"; leren = ja) |
+| **V7** | Boodschappen-badges over de ingrediënten (Verzamelaar, Groenteboer, Kaasmeester, Kruidenkast, Alfabet, …); daarna de 30-jaar-simulatie opnieuw draaien en zo nodig de curve bijstellen | 4 | M | — (Stijn 8 nov: "Heb ik al" telt niet; voorzichtig met badges over die producten; curve zo nodig tweaken) |
 | **V8** | Van links naar rechts swipen door de vijf tabbladen | 6 | S–M | doorlopen aan de randen? (voorstel: nee) |
-| **V9** | Voedingswaarden en macro's: eerst grammen-dekking (data), dan nutrition.json (data), dan het uitklapmenu op de receptpagina | 1 | L (drie stappen) | standaard aan of uit; welke waarden in het menu; weektotalen |
+| **V9** | Voedingswaarden en macro's: eerst grammen-dekking (data), dan nutrition.json (data), dan één subtiele kcal-regel op de receptpagina met een uitklap voor de macro's | 1 | L (drie stappen) | — (Stijn 8 nov: subtiel, kcal in het recept, waarden bij de ingrediënten, details alleen in een uitklap; geen weektotalen) |
 
 Afgerond en hier alleen nog als geschiedenis: **3** (uitdagingen, blok 6E) en **5** (swipe omlaag → Mijn profiel, blok 6D-S).
+Volgorde na V1b (Stijn 8 nov): **V2 → V4 → V6 → V7 → V8 → V9**. Open punten uit de eindcontrole: de Engelse pass/fail in de
+Apparaatcheck blijven (Stijn: "geen klachten over het Engels"); de chip-ring volgt de lijstvorm (V1b); de dubbele route naar de
+avatar-maker blijft zo.
 Niet gepland (geen idee, wel een antwoord): nagerecht/gebak/ontbijt-lunch bestaan als categorie en chip sinds 6B, maar geen van
 de 216 recepten is er een (de lijsten "overig" en "oven" bevatten geen toetjes), dus er valt nu niets te labelen.
 
@@ -113,8 +117,9 @@ als sjouwwerk voor Haiku, omdat het ook de boodschappenlijst helpt.
   "weinig calorieën").
 - **Bestanden:** data/ingredients.json, data/nutrition.json [nieuw], tools/validate-data.ts, tools/measure-parse.ts,
   src/domain/nutrition.ts [nieuw], src/screens/RecipeScreen.tsx (één regel + uitklap), src/i18n, tests/nutrition.test.ts.
-- **Stijn beslist:** de drie open vragen hierboven. Fable's voorstellen: kcal + eiwit/vet/kh + vezels + zout; geen weektotalen
-  in de eerste versie; standaard aan.
+- **Stijn (8 nov):** "subtiel met calorieën in recepten; de waarden bij de ingrediënten, verder niet standaard tonen; misschien bij
+  calorieën een uitklap voor de macro's." Dus: één rustige kcal-regel op de receptpagina, de rest alleen in de uitklap, geen
+  weektotalen, niets in lijsten of kookstand. Stap 1 en 2 zijn data-werk en kunnen eerder, los van de UI.
 
 ## 2. Archief van afgevinkte boodschappen (Stijn, 25 okt 2026)
 
@@ -191,7 +196,9 @@ beginletter. Bronnen: `shop.bought.ings` + de woordenlijst (categorie per ingred
 - **Bestanden:** src/domain/shopbought.ts (`first`), src/domain/badges.ts, data/badges.json, tools/validate-data.ts (nieuwe
   regelsoorten), tests/badges.test.ts, tests/validate-badges.test.ts (aantallen), handboekrijen in 07. Geen UI-werk buiten de
   bestaande badge-schermen.
-- **Stijn beslist:** alleen de "Heb ik al"-vraag (voorstel: nee).
+- **Stijn (8 nov):** "Heb ik al" telt niet mee, en wees voorzichtig met badges over die producten (voorraadproducten als bloem
+  en suiker dus niet als aparte badge-doelen). Na het bouwen de 30-jaar-simulatie (tests/xp.test.ts) opnieuw draaien: schuift
+  level 100 meer dan ±10 % naar voren door de nieuwe badge-XP, dan de curve bijstellen (regelversie 4, eenmalige eerlijke melding).
 
 ## 5. Swipe omlaag op Home: profiel bijna paginavullend, avatar heel groot (Stijn, 29 okt 2026) — GEBOUWD (6D-S)
 
@@ -277,7 +284,7 @@ toevoegen aan de woordenlijst, zoals 6B "Zet in woordenboek")?
 - **Bestanden:** src/domain/shopinput.ts, src/domain/search.ts (alleen als de index een export mist), src/components/
   ShopPasteSheet.tsx [nieuw], src/screens/ShoppingScreen.tsx, src/i18n (shop.paste.*), tests/shopinput.test.ts (Gabi's
   voorbeeldlijst letterlijk als testgeval), handboekrij in 04.
-- **Stijn beslist:** leren ja/nee (voorstel: ja).
+- **Stijn (8 nov):** "is goed, als je dat kan maken klinkt het geweldig." Leren = ja.
 
 ## 8. Ingrediënten-upgrade: de woordenlijst uitbreiden (Stijn, 30 okt 2026)
 
@@ -351,9 +358,9 @@ verder komt, dus daar is het verschil pas significant. Geen open vragen meer.
 - **Bestanden:** src/celebrate.ts, src/components/CelebrationWord.tsx [nieuw], XpRise.tsx [nieuw], XpPop.tsx, src/xp.ts,
   src/screens/StyleScreen.tsx (schakelaar), data/unlocks.json, tools/validate-data.ts (kind setting), src/styles/xp.css,
   tests/xp.test.ts (before/after), handboekrijen in 07, DEVICE-TEST-rij op beide telefoons (60 fps, geluid op hetzelfde moment).
-- **Stijn beslist:** niets meer; dit is klaar voor een spec.
+- **Stijn (8 nov): "goed, gaan we zo doen."** Klaar voor een spec (V4), na V2.
 
-## 10. Boodschappenlijstjes terugkijken in de kalender (Stijn, 8 nov 2026)
+## 10. Boodschappenlijstjes terugkijken in de kalender (Stijn, 8 nov 2026) — VERVALLEN (Stijn, 8 nov: te ingewikkeld)
 
 **Wens.** "Kunnen gemaakte boodschappenlijstjes ook in de kalender? Dat je een beetje terug kan kijken?"
 
@@ -427,7 +434,8 @@ gelijk: 250 XP is altijd ongeveer twee kookdagen.
 - **Bestanden:** src/domain/challenges.ts (`rewardFor(challenge, level)` + test), src/challenges.ts, src/components/
   ChallengeCard.tsx en ChallengeOfferSheet.tsx (bedrag), tests/challenges.test.ts, handboekrij in 07, docs/specs/challenges.md
   (§2 aanvulling), ACHTER-DE-SCHERMEN.md (rekenregel).
-- **Stijn beslist:** ja/nee, en lineair (+2 %/level) of "20 % van de curve".
+- **Besluit Stijn (8 nov):** ja, maar **1 % per level** boven 20 (level 50 ×1,3 · 75 ×1,55 · 100 ×1,8). Gebouwd in V1b (§1f van
+  docs/specs/verbeterronde-1b.md): `rewardFor(baseXp, level)`, vast bij de start, afgerond op tientallen.
 
 ## 12. Avatar en level laten meereizen: bij voortgang én bij gedeelde recepten (Stijn, 8 nov 2026)
 
@@ -478,6 +486,12 @@ het ziet. Voor de boodschappenlijst gebruikt 13c al een grens van 20.000 tekens 
   elkaar via het deelmenu (één `navigator.share({text})` per deel, elk vanuit een tik: knop **Deel deel 2 van 2**). Een
   bestand alleen als één recept op zichzelf boven de grens komt (komt in de corpus niet voor) of als de gebruiker **Exporteer**
   kiest. Patches (`#p=`) en weekplannen gaan mee in de delen.
+- **Als het tóch een bestand wordt (Stijn 8 nov: "misschien een bericht bij de json, of de titel"):** de bestandsnaam draagt de
+  uitleg: `Recepten van Gabi 8 nov - openen via Delen, Rutgers Recepten.json` (geen tekens die een bestandsnaam niet mag hebben;
+  WhatsApp toont de naam als titel van het document). Een bericht mét het bestand kan niet (invariant 9: `navigator.share` met
+  precies één veld), dus na een bestandsdeling verschijnt één knop **Stuur ook de uitleg** die als tweede deelactie een kort
+  bericht deelt: "Open dit bestand in Rutgers' Recepten: houd het ingedrukt → Delen → Rutgers' Recepten (iPhone: Bestanden →
+  In & uit → Kies bestand)."
 - **Hint waar het misgaat.** Onder **Kies bestand** in In & uit, alleen op Android: "Kreeg je een bestand in WhatsApp? Houd het
   daar ingedrukt → Delen → Rutgers' Recepten." Op de iPhone blijft de bestaande uitleg (Bestanden → Kies bestand).
 - **Handboek:** rij "Een bestand uit WhatsApp openen" in 05 (Android via Delen, iPhone via Bestanden) en de rijen over "te groot

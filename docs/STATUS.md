@@ -4,6 +4,16 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Fable): V1b in aanbouw, en Stijns besluiten over het plan
+Tweede testronde van Stijn (na V1): Meer opnieuw ingedeeld (gecentreerd profielblok, tussenkop Huishouden & vrienden met
+gelabelde huisgenoten en vrienden, Jouw stijl-rij weg, Confetti/Badges-tekst opent de pagina, Trillen zonder hint, Temperatuur
+°C/°F/beide als segment), Home ("Verder met" na 3 uur weg en wegklikbaar; datum opent de kookkalender), receptkop compact met
+klokje, Mijn profiel (potlood rechtsonder, knipoog bij een tik op de avatar), selectie-ring langs de lijstvorm, voorraaddrempel
+250 → 100 g/ml, uitdagingen +1 % per level boven 20 (was V3). Spec: docs/specs/verbeterronde-1b.md; lichte workflow.
+Besluiten voor het plan (IDEAS.md): V2 akkoord (+ bestandsnaam met uitleg en "Stuur ook de uitleg"), V4 akkoord, V5 vervalt
+(kalender-lijstjes te ingewikkeld), V6 akkoord (leren = ja), V7 akkoord ("Heb ik al" telt niet, voorzichtig met voorraadbadges,
+daarna de curve nalopen), V9: subtiele kcal-regel met uitklap. Open punten eindcontrole: alle vier beantwoord (README §5).
+
 ## 8 nov (Opus): V1 — verbeterronde 1: handleiding ingeklapt en dubbel uitklapbaar, Meer opgeruimd, gekozen chips vooraan
 Gebouwd volgens docs/specs/verbeterronde-1.md (lichte workflow wf_3ec5d3a4-1a9; vier bouwers + integrator; lens: één bevinding, de Meer-kop verloor van `.section h2`, hersteld met `.more-group .fold-head`).
 Nieuwe gedeelde kop `src/components/FoldHead.tsx` (CSS `.fold-head` in base.css; de `.more-group-head`-regels in settings.css

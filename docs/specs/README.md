@@ -90,10 +90,11 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 | Blok | Inhoud | Spec | Status |
 |---|---|---|---|
 | V1 | Handleiding ingeklapt en dubbel uitklapbaar · Meer opgeruimd (Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg) · gekozen chips vooraan met kruisje, na drie uur vergeten | verbeterronde-1.md | compleet (8 nov) |
-| V2 | Delen zonder bestanden (links tot 20 KB, meerdere berichten) · Android-hint voor een WhatsApp-bestand · afzender met avatar in de inbox · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | — (IDEAS 12 + 13) | gepland |
-| V3 | Uitdagingen: beloning +2 % per level boven 20, vast bij de start | — (IDEAS 11) | wacht op Stijns ja |
+| V1b | Meer: gecentreerd profielblok, Huishouden & vrienden, Jouw stijl-rij weg, Confetti/Badges-tekst opent de pagina, Trillen, Temperatuur °C/°F/beide · Home: Verder met (3 uur, ×), datum → kalender · receptkop met klokje · profiel: potlood + knipoog · ring volgt de lijstvorm · voorraaddrempel 100 g · uitdagingen +1 %/level | verbeterronde-1b.md | in aanbouw (8 nov) |
+| V2 | Delen zonder bestanden (links tot 20 KB, meerdere berichten) · bestandsnaam met uitleg + "Stuur ook de uitleg" · Android-hint · afzender met avatar in de inbox · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | — (IDEAS 12 + 13) | gepland, volgende |
+| V3 | Uitdagingen: beloning +1 % per level boven 20, vast bij de start | — (IDEAS 11) | opgenomen in V1b |
 | V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | — (IDEAS 9) | gepland |
-| V5 | Boodschappen terugkijken: momentopnames, 🛒 in de kalender, rij Eerder | — (IDEAS 10 + 2) | wacht op twee keuzes |
+| V5 | Boodschappen terugkijken in de kalender | — (IDEAS 10 + 2) | vervallen (Stijn 8 nov) |
 | V6 | Gabi's lijstje plakken met voorstellen · data-ronde woordenlijst vooraf | — (IDEAS 7 + 8) | gepland |
 | V7 | Boodschappen-badges over de ingrediënten | — (IDEAS 4) | gepland |
 | V8 | Swipen tussen de vijf tabbladen | — (IDEAS 6) | gepland |
@@ -381,10 +382,9 @@ bestaan), geen "[open punt]"; STATUS heeft per blok een alinea met de besluiten;
 **Gate op de laatste commit (248e047)** — ✔ `npm run check`, 1780 tests in 79 bestanden, `npm run build`, `npm run build:next`,
 `npm run validate:data`.
 
-**Open voor Stijn (geen bugs, wel keuzes)** — ~~de schakelaar Experimenten doet niets meer~~ (Stijn 8 nov: weghalen; gedaan, zie
-STATUS); pass/fail in de Apparaatcheck zijn Engels; de ronde `box-shadow` van een gekozen chip in "Deel je nieuwe recepten" blijft
-rond bij een zeshoek- of gouden lijst; de knop "Maak je avatar" staat nog onder Naam & kleur én in Jouw stijl (twee routes). Alles
-wat in het testen opvalt → één verbeterronde.
+**Open voor Stijn (geen bugs, wel keuzes) — alle vier beantwoord op 8 nov:** de schakelaar Experimenten is weg; pass/fail in de
+Apparaatcheck blijven Engels ("geen klachten over het Engels"); de ring van een gekozen chip in "Deel je nieuwe recepten" volgt
+voortaan de lijstvorm (V1b); de twee routes naar de avatar-maker blijven. Wat in het testen opvalt → verbeterrondes (§1b).
 
 ## 6. Vragen aan Stijn vóór de bouw
 
