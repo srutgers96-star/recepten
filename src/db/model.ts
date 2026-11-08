@@ -19,6 +19,8 @@ export type { Ingredient } from '@/domain/dictionary';
 export type { AppliedOverride, LineOverride, RecipeOverride, RecipePatch, RecipePatchKey } from '@/domain/overrides';
 export type { Plan, PlanItem } from '@/domain/planner';
 export type { ListItem, ListSection, ListSource } from '@/domain/aggregate';
+// 6C (docs/specs/vaste-lijst.md §2): the standing list ("Vaste lijst") stored in the setting `standing.list`.
+export type { StandingItem, StandingList } from '@/domain/standing';
 // 13D (docs/specs/varianten-tabs.md §2a): approved diet versions on a recipe / in a classic's patch.
 export type { VariantDiet, RecipeVariant, RecipeVariants, StoredSwap } from '@/domain/variants';
 // 6D-4b (docs/specs/xp-levels.md §2h): a received "Sync mijn voortgang" stored in the setting `progress.snapshots`.

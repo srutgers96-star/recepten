@@ -22,7 +22,21 @@ import { ingredientsData } from '@/domain/data';
 import { rewriteIngredientId, rewriteLinesIngredientId } from '@/domain/merge-ingredients';
 import { legacyChoices, planImport, resolveImport, type ImportChoices, type ImportPlan, type LocalState } from '@/domain/merge';
 import type { ParsedShare } from '@/domain/share';
-import { aggregate, type ListItem } from '@/domain/aggregate';
+import { aggregate, effectiveQty, type ListItem } from '@/domain/aggregate';
+import {
+  absorbPins,
+  emptyStandingList,
+  findSameStanding,
+  isStandingKey,
+  mergeStandingLists,
+  newStandingId,
+  normalizeStandingList,
+  standingFromListItem,
+  standingKey,
+  standingToListItem,
+  type StandingItem,
+  type StandingList,
+} from '@/domain/standing';
 import { DEFAULT_SERVINGS, emptyPlan, newPlanItem, newSideItem, normalizeServings, planHash, planHashAll, type Plan, type PlanItem } from '@/domain/planner';
 import { HOUSEHOLD_KEY, normalizeHousehold, type HouseholdSetting } from '@/domain/household';
 import { normalizeSnapshots, type ProgressSnapshot } from '@/domain/progress';
@@ -1485,7 +1499,7 @@ export function mergeRestoredSetting(key: string, local: unknown, incoming: unkn
 /**
  * Merges a backup into the database (put by key; cook-log entries deduplicated on
  * recipeId+profileId+at). `inbox.seenIds`, `badges.earned`, `features.log` and `donate.hearts` are
- * merged with what is here (mergeRestoredSetting). Device-local settings (theme, last backup date,
+ * merged with what is here (mergeRestoredSetting); `standing.list` (6C) via `mergeStandingLists`. Device-local settings (theme, last backup date,
  * the cooking sessions, `avatar.seen`, and the active profile when a profile already exists) are
  * left alone, so restoring the other person's backup on this phone adds their recipes/favourites
  * without switching who this phone is.
@@ -1604,6 +1618,13 @@ export async function importBundle(b: BackupBundle): Promise<RestoreResult> {
     }
     for (const s of settings) {
       if (s.key === ACTIVE_PROFILE_SETTING && hadProfiles) continue;
+      if (s.key === STANDING_LIST_KEY) {
+        // 6C: union on id (local wins), same ingredient / text skipped: restoring the other phone's
+        // backup never wipes this phone's standing list (docs/specs/vaste-lijst.md §2).
+        const current = (await db.settings.get(s.key))?.value;
+        await db.settings.put({ key: s.key, value: mergeStandingLists(normalizeStandingList(current), normalizeStandingList(s.value)) });
+        continue;
+      }
       if (s.key === INBOX_SEEN_SETTING) {
         const current = stringArray((await db.settings.get(s.key))?.value);
         await db.settings.put({ key: s.key, value: [...new Set([...current, ...stringArray(s.value)])] });
@@ -1932,8 +1953,9 @@ async function updateList(fn: (list: List) => List | void): Promise<List> {
 
 /**
  * Regenerates the list from the current plan: `aggregate` over the dishes that are not cooked,
- * with the effective lines (line overrides applied), the pantry, the extras and the previous
- * list (checks / in-house / adjustments / pins survive by key; new keys are `fresh`). The
+ * with the effective lines (line overrides applied), the pantry, the extras, the enabled
+ * standing-list items (6C, after `migratePinsToStanding`) and the previous list (checks / in-house /
+ * adjustments / pins survive by key; new keys are `fresh`). The
  * dictionary is a parameter because the repo knows no signals: pass `dictionary.value`
  * (src/dictionary.ts). Returns the stored list.
  *
@@ -1943,7 +1965,10 @@ async function updateList(fn: (list: List) => List | void): Promise<List> {
  * "(glutenvrije versie)" for lines that are the original's (§5: never half a version).
  */
 export async function generateList(dict: Dictionary): Promise<List> {
-  const [plan, previous, pantry, overrides] = await Promise.all([getPlan(), getList(), listPantry(), db.lineOverrides.toArray()]);
+  // 6C: old "Elke week" pins (also from a restored backup) move to the standing list first, so the
+  // previous list read below already has their 's|' lines (docs/specs/vaste-lijst.md §2).
+  await migratePinsToStanding();
+  const [plan, previous, pantry, overrides, standing] = await Promise.all([getPlan(), getList(), listPantry(), db.lineOverrides.toArray(), getStandingList()]);
   const recipes = new Map<string, Recipe>();
   for (const p of plan.items) {
     if (p.cooked || recipes.has(p.recipeId)) continue;
@@ -1997,6 +2022,7 @@ export async function generateList(dict: Dictionary): Promise<List> {
     dict,
     pantry: new Set(pantry.map((p) => p.ing)),
     extras: previous?.extras ?? [],
+    standing: standing.items.filter((x) => x.enabled).map(standingToListItem),
     ...(previous ? { previous: previous.items } : {}),
   });
   const now = nowIso();
@@ -2129,13 +2155,23 @@ export async function togglePinned(key: string): Promise<boolean> {
   return pinned;
 }
 
-/** "Klaar": clears every check (the plan, the pins and the in-house flags stay). */
+/**
+ * "Klaar": clears every check (the plan, the pins and the in-house flags stay). A standing-list line
+ * (6C, `it.standing`) also loses `inHouse` and `adjusted` and returns to the main list: the next list
+ * starts from the usual amounts ("Klaar" is the only "new week" moment, docs/specs/vaste-lijst.md §1d).
+ */
 export async function clearChecks(): Promise<void> {
   await updateList((list) => {
     const clear = (it: ListItem): ListItem => {
-      if (!it.checked) return it;
+      const reset = it.standing === true && (it.inHouse !== undefined || it.adjusted !== undefined || it.section === 'inHouse');
+      if (!it.checked && !reset) return it;
       const next = { ...it };
       delete next.checked;
+      if (it.standing === true) {
+        delete next.inHouse;
+        delete next.adjusted;
+        if (next.section === 'inHouse') next.section = 'main';
+      }
       return next;
     };
     return { ...list, items: list.items.map(clear), extras: list.extras.map(clear) };
@@ -2228,10 +2264,249 @@ export async function clearPantry(): Promise<void> {
   await db.pantry.clear();
 }
 
-/** Counters for the Storage screen: dishes in the plan, items on the list, pantry rows. */
-export async function weekCounts(): Promise<{ plan: number; list: number; pantry: number }> {
-  const [plan, list, pantry] = await Promise.all([getPlan(), getList(), db.pantry.count()]);
-  return { plan: plan.items.length, list: list?.items.length ?? 0, pantry };
+// --- Standing list ("Vaste lijst", docs/specs/vaste-lijst.md) ---------------------------------------
+// One setting per phone (= per household); its enabled items join every shopping list as 's|<id>'
+// lines (never summed with recipe lines, never the pantry). The pure rules live in src/domain/standing.ts.
+
+export const STANDING_LIST_KEY = 'standing.list';
+
+/** The standing list as stored (normalised; an empty list when absent or unreadable). Never throws. */
+export async function getStandingList(): Promise<StandingList> {
+  try {
+    return normalizeStandingList(await getSetting<unknown>(STANDING_LIST_KEY, null));
+  } catch {
+    return emptyStandingList();
+  }
+}
+
+async function saveStandingList(items: StandingItem[], now: string = nowIso()): Promise<void> {
+  const value: StandingList = { v: 1, items, updatedAt: now };
+  await setSetting(STANDING_LIST_KEY, value);
+}
+
+/** A standing quantity is a positive number or null ("no amount"); never 0. */
+function standingQty(q: unknown): number | null {
+  return typeof q === 'number' && Number.isFinite(q) && q > 0 ? q : null;
+}
+
+/**
+ * Applies `fn` to the current list (a fresh list row when there is none) and stores the result,
+ * unless `fn` returns null (nothing changed: no write, so `updatedAt` / "gewijzigd sinds delen" stay).
+ * Runs inside the caller's transaction (which must include db.lists).
+ */
+async function patchList(fn: (list: List) => List | null): Promise<void> {
+  const next = fn((await getList()) ?? newList());
+  if (next) await saveList(next);
+}
+
+/** The list with the line of `s` added when its key is not there yet (null when it already is). */
+function withStandingLine(list: List, s: StandingItem): List | null {
+  const key = standingKey(s.id);
+  if (list.items.some((it) => it.key === key)) return null;
+  return { ...list, items: [...list.items, standingToListItem(s)] };
+}
+
+/** The list without the line with `key` (items and extras); null when it was not there. */
+function withoutLine(list: List, key: string): List | null {
+  if (!list.items.some((it) => it.key === key) && !list.extras.some((it) => it.key === key)) return null;
+  return { ...list, items: list.items.filter((it) => it.key !== key), extras: list.extras.filter((it) => it.key !== key) };
+}
+
+export type NewStandingItem = Pick<StandingItem, 'ing' | 'qty' | 'unit' | 'aisle'> & Partial<Pick<StandingItem, 'label' | 'enabled'>>;
+
+/**
+ * Adds an item (id and addedAt are made here). When the same ingredient / the same text is already on
+ * the standing list (`findSameStanding`) that item is returned and nothing changes. Otherwise the
+ * line 's|…' goes onto the current list at once (a list row is created when there is none), unless
+ * `enabled` is false.
+ */
+export async function addStandingItem(input: NewStandingItem): Promise<StandingItem> {
+  return db.transaction('rw', db.settings, db.lists, async () => {
+    const cur = await getStandingList();
+    const ing = typeof input.ing === 'string' && input.ing ? input.ing : null;
+    const same = findSameStanding(cur.items, { ing, ...(input.label ? { label: input.label } : {}) });
+    if (same) return same;
+    const now = nowIso();
+    const item: StandingItem = {
+      id: newStandingId(),
+      ing,
+      qty: standingQty(input.qty),
+      unit: typeof input.unit === 'string' && input.unit ? input.unit : null,
+      aisle: input.aisle || 'overig',
+      enabled: input.enabled !== false,
+      addedAt: now,
+    };
+    if (input.label) item.label = input.label;
+    await saveStandingList([...cur.items, item], now);
+    if (item.enabled) await patchList((list) => withStandingLine(list, item));
+    return item;
+  });
+}
+
+export type StandingPatch = Partial<Pick<StandingItem, 'qty' | 'unit' | 'enabled'>>;
+
+/**
+ * Changes an item. `qty` / `unit` are also set on its list line, where `adjusted` is cleared (the new
+ * usual amount is what the list shows). `enabled: false` takes the line off the list; `enabled: true`
+ * puts it back when it is missing. No-op for an unknown id.
+ */
+export async function updateStandingItem(id: string, patch: StandingPatch): Promise<void> {
+  await db.transaction('rw', db.settings, db.lists, async () => {
+    const cur = await getStandingList();
+    const old = cur.items.find((s) => s.id === id);
+    if (!old) return;
+    const next: StandingItem = { ...old };
+    const amount = 'qty' in patch || 'unit' in patch;
+    if ('qty' in patch) next.qty = standingQty(patch.qty);
+    if ('unit' in patch) next.unit = typeof patch.unit === 'string' && patch.unit ? patch.unit : null;
+    if (typeof patch.enabled === 'boolean') next.enabled = patch.enabled;
+    await saveStandingList(cur.items.map((s) => (s.id === id ? next : s)));
+    const key = standingKey(id);
+    await patchList((list) => {
+      if (!next.enabled) return withoutLine(list, key);
+      const fresh = standingToListItem(next);
+      let changed = false;
+      const items = list.items.map((it) => {
+        if (it.key !== key || !amount) return it;
+        changed = true;
+        const line: ListItem = { ...it };
+        if (fresh.qty === undefined) delete line.qty;
+        else line.qty = fresh.qty;
+        if (fresh.unit === undefined) delete line.unit;
+        else line.unit = fresh.unit;
+        delete line.adjusted;
+        return line;
+      });
+      const base = changed ? { ...list, items } : list;
+      return withStandingLine(base, next) ?? (changed ? base : null);
+    });
+  });
+}
+
+/** Removes the item and its line; returns the item for "Ongedaan" (`restoreStandingItem`). */
+export async function removeStandingItem(id: string): Promise<StandingItem | undefined> {
+  return db.transaction('rw', db.settings, db.lists, async () => {
+    const cur = await getStandingList();
+    const item = cur.items.find((s) => s.id === id);
+    if (!item) return undefined;
+    await saveStandingList(cur.items.filter((s) => s.id !== id));
+    await patchList((list) => withoutLine(list, standingKey(id)));
+    return item;
+  });
+}
+
+/**
+ * Undo of `removeStandingItem`: the item comes back with its own id, and its line when it is enabled.
+ * An item with the same id is replaced; when another item for the same ingredient / text was added in
+ * the meantime nothing is restored (never two of the same on the standing list).
+ */
+export async function restoreStandingItem(item: StandingItem): Promise<void> {
+  await db.transaction('rw', db.settings, db.lists, async () => {
+    const cur = await getStandingList();
+    const restored = normalizeStandingList({ v: 1, items: [item], updatedAt: nowIso() }).items[0];
+    if (!restored) return;
+    const others = cur.items.filter((s) => s.id !== restored.id);
+    if (findSameStanding(others, restored)) return;
+    await saveStandingList([...others, restored]);
+    if (restored.enabled) await patchList((list) => withStandingLine(list, restored));
+  });
+}
+
+/**
+ * "Zet op de vaste lijst" from a list line: `standingFromListItem` → `addStandingItem`. A manual
+ * extra leaves `items` and `extras` and the new 's|' line takes over its checked / inHouse / adjusted;
+ * a generated (recipe) line stays. Returns undefined for a 'check' line, a line that is already
+ * standing, or an unknown key; returns the existing item when the same one is already on the
+ * standing list (nothing else changes then).
+ */
+export async function addLineToStanding(key: string): Promise<StandingItem | undefined> {
+  return db.transaction('rw', db.settings, db.lists, async () => {
+    const list = await getList();
+    if (!list) return undefined;
+    const it = list.items.find((x) => x.key === key) ?? list.extras.find((x) => x.key === key);
+    if (!it || it.standing || isStandingKey(it.key) || it.section === 'check') return undefined;
+    const s = standingFromListItem(it, nowIso());
+    if (!s) return undefined;
+    const same = findSameStanding((await getStandingList()).items, s);
+    if (same) return same;
+    const added = await addStandingItem({
+      ing: s.ing,
+      qty: s.qty,
+      unit: s.unit,
+      aisle: s.aisle,
+      enabled: true,
+      ...(s.label ? { label: s.label } : {}),
+    });
+    if (it.manual) {
+      const lineKey = standingKey(added.id);
+      await patchList((l) => {
+        const items = l.items
+          .filter((x) => x.key !== key)
+          .map((x) => {
+            if (x.key !== lineKey) return x;
+            const line: ListItem = { ...x };
+            if (it.checked) line.checked = true;
+            if (it.inHouse) {
+              line.inHouse = true;
+              line.section = 'inHouse';
+            }
+            if (typeof it.adjusted === 'number' && Number.isFinite(it.adjusted) && it.adjusted !== 0) line.adjusted = it.adjusted;
+            return line;
+          });
+        return { ...l, items, extras: l.extras.filter((x) => x.key !== key) };
+      });
+    }
+    return added;
+  });
+}
+
+/**
+ * "Ook voortaan": the standing item's qty becomes the line's effective amount (null when that is 0),
+ * the line's qty likewise, and the line's `adjusted` goes. No-op when the line is not a standing line.
+ */
+export async function adoptStandingAdjustment(key: string): Promise<void> {
+  await db.transaction('rw', db.settings, db.lists, async () => {
+    const list = await getList();
+    const line = list?.items.find((it) => it.key === key);
+    if (!list || !line || !line.standing || !isStandingKey(key)) return;
+    const qty = standingQty(effectiveQty(line));
+    const id = `s:${key.slice(2)}`;
+    const cur = await getStandingList();
+    if (cur.items.some((s) => s.id === id)) await saveStandingList(cur.items.map((s) => (s.id === id ? { ...s, qty } : s)));
+    await saveList({
+      ...list,
+      items: list.items.map((it) => {
+        if (it.key !== key) return it;
+        const next: ListItem = { ...it, qty };
+        delete next.adjusted;
+        return next;
+      }),
+    });
+  });
+}
+
+/**
+ * Moves the old "Elke week" pins onto the standing list (`absorbPins` over the standing list and the
+ * current list). Writes both only when something moved; returns how many moved. Idempotent: a second
+ * run moves 0. Called on ShoppingScreen mount and at the start of `generateList`.
+ */
+export async function migratePinsToStanding(): Promise<number> {
+  return db.transaction('rw', db.settings, db.lists, async () => {
+    const list = await getList();
+    if (!list) return 0;
+    if (!list.items.some((it) => it.pinned) && !list.extras.some((it) => it.pinned)) return 0;
+    const r = absorbPins(await getStandingList(), list, nowIso());
+    if (r.moved <= 0) return 0;
+    await setSetting(STANDING_LIST_KEY, r.standing);
+    await saveList({ ...list, items: r.items, extras: r.extras });
+    return r.moved;
+  });
+}
+
+/** Counters for the Storage screen: dishes in the plan, items on the list, pantry rows, standing-list items (paused ones too). */
+export async function weekCounts(): Promise<{ plan: number; list: number; pantry: number; standing: number }> {
+  const [plan, list, pantry, standing] = await Promise.all([getPlan(), getList(), db.pantry.count(), getStandingList()]);
+  return { plan: plan.items.length, list: list?.items.length ?? 0, pantry, standing: standing.items.length };
 }
 
 // --- Timers ------------------------------------------------------------------------------------

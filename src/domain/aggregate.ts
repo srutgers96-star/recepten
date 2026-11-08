@@ -21,6 +21,8 @@
 //      pinned; "Heb ik al" comes from the pantry for dictionary items (perishables are never
 //      remembered there, so they return to the list) and from the item's own flag for label-only
 //      extras; vanished keys drop unless manual or pinned; new keys get `fresh: true`
+//   9. standing-list lines ("Vaste lijst", docs/specs/vaste-lijst.md): key 's|<id>', included like
+//      extras and never summed with recipe lines; "Heb ik al" is their own flag (never the pantry)
 import type { Aisle, Dictionary, Ingredient, Qualifier, Unit } from './dictionary.ts';
 import { pickText, type Lang, type Line, type Recipe, type Text } from './model.ts';
 import type { Plan, PlanItem } from './planner.ts';
@@ -47,7 +49,7 @@ export interface ListSource {
 }
 
 export interface ListItem {
-  /** 'ing|variant|baseUnit' for dictionary items, 'x|<manual id>' for extras, 'raw|<recipeId>|<index>' for unresolved lines. */
+  /** 'ing|variant|baseUnit' for dictionary items, 'x|<manual id>' for extras, 's|<id>' for standing-list lines, 'raw|<recipeId>|<index>' for unresolved lines. */
   key: string;
   ing?: string | null;
   /** Variant qualifier ids ("rode"), sorted, '' / absent when none. */
@@ -80,6 +82,8 @@ export interface ListItem {
   spoon?: boolean;
   /** True when the key was not in `previous` (only set when a previous list was given). */
   fresh?: boolean;
+  /** True for a line that comes from the standing list ("Vaste lijst"): key 's|…', never summed with recipe lines, "Heb ik al" is its own flag (never the pantry). */
+  standing?: boolean;
 }
 
 export interface AggregateInput {
@@ -96,6 +100,8 @@ export interface AggregateInput {
   pantry: Set<string>;
   /** Manual items (extras); they are included as they are, with their previous state merged in. */
   extras: ListItem[];
+  /** Standing-list lines (`standingToListItem`), enabled only; included like extras, never summed. */
+  standing?: ListItem[];
   /** The previous list: checked / adjusted / pinned survive by key; pinned + manual items survive a vanished key. */
   previous?: ListItem[];
 }
@@ -601,6 +607,22 @@ export function aggregate(i: AggregateInput): ListItem[] {
     route(it);
   }
 
+  // Standing-list lines: as given, never summed, never the pantry; "Heb ik al" is their own flag.
+  // A previous 's|' line that is no longer in `standing` drops through the vanished rule below.
+  for (const s of i.standing ?? []) {
+    if (!s || typeof s.key !== 'string' || seen.has(s.key)) continue;
+    const prev = prevByKey.get(s.key);
+    const it: ListItem = { ...s, standing: true, section: 'main', sources: [] };
+    carry(it, prev);
+    if (prev?.inHouse) {
+      it.inHouse = true;
+      it.section = 'inHouse';
+    }
+    if (hadPrevious && !prev) it.fresh = true;
+    seen.add(it.key);
+    route(it);
+  }
+
   // Vanished keys drop unless manual or pinned ("elke week"); those stay as they were.
   for (const p of i.previous ?? []) {
     if (seen.has(p.key) || p.section === 'check') continue;
@@ -741,7 +763,7 @@ const PM = { nl: 'pm', en: 'as needed' } as const;
  * One list line in a language: "4 uien (1 grote)", "7 teentjes knoflook (≈1 bol)", "1,3 kg
  * aardappelen", "boter (≈ 85 g)" for a staple at rest, "1 pak boter" once tapped, "Rookworst en/of
  * braadworst ×1,5" for an unresolved line, "wc-papier" for an extra without a dictionary id, and
- * just "melk" for a manual item without a number (a hand-added item is never "pm").
+ * just "melk" for a manual or standing-list item without a number (never "pm").
  */
 export function renderListItem(it: ListItem, dict: Dictionary, lang: Lang): string {
   const eff = effectiveQty(it);
@@ -756,7 +778,7 @@ export function renderListItem(it: ListItem, dict: Dictionary, lang: Lang): stri
   const parts: string[] = [];
   if (eff === null) {
     parts.push(nameText(it, ing, dict, lang, null, null));
-    if (!it.manual) parts.push(`(${PM[lang]})`);
+    if (!it.manual && !it.standing) parts.push(`(${PM[lang]})`);
   } else if (it.section === 'staples' || (it.qty === 0 && (it.baseQty ?? null) !== null)) {
     // A staple: "boter (≈ 85 g)" at rest, "1 pak boter" / "1× boter" once tapped.
     const need = displayOf(it.baseQty ?? null, it.baseUnit, it.spoon === true, dict);

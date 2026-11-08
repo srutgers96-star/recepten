@@ -39,6 +39,7 @@ import {
   getPlan,
   isListStale,
   markListShared,
+  migratePinsToStanding,
   removeExtra,
   restoreListItem,
   restoreShoppingList,
@@ -197,6 +198,15 @@ export function ShoppingScreen() {
     },
     [],
   );
+
+  // 6C (docs/specs/vaste-lijst.md §1d): old "Elke week" pins move to the standing list once; one snack when any moved.
+  useEffect(() => {
+    void migratePinsToStanding()
+      .then((n) => {
+        if (n > 0) showSnack(n === 1 ? t('shop.standing.migratedSnackOne') : t('shop.standing.migratedSnack', { n }));
+      })
+      .catch(() => undefined);
+  }, []);
 
   function showSnack(text: string, undo?: () => void | Promise<void>) {
     if (snackTimer.current !== null) window.clearTimeout(snackTimer.current);

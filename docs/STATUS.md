@@ -4,6 +4,35 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 6C blok 1 — vaste lijst: model, aggregate, repo en pin-migratie (onzichtbaar)
+Gebouwd volgens docs/specs/vaste-lijst.md "Blok 1" (bouwer A `src/domain/standing.ts` + tests/standing.test.ts, B `aggregate.ts`
++ tests/aggregate.test.ts, C repo/model; integrator). Niet gecommit. Geen Dexie-versie (blijft v7), geen dependency, geen tokenwijziging.
+Nieuw: setting `standing.list` (`STANDING_LIST_KEY`, `{ v: 1, items, updatedAt }`), `ListItem.standing`, `AggregateInput.standing`,
+lijstregels met key `s|<id>` (nooit opgeteld bij receptregels, nooit de voorraadkast; een vaste regel zonder aantal toont geen "(pm)").
+Repo: `getStandingList`, `addStandingItem`, `updateStandingItem`, `removeStandingItem`, `restoreStandingItem`, `addLineToStanding`,
+`adoptStandingAdjustment`, `migratePinsToStanding`; `generateList` migreert eerst en geeft de aanstaande vaste items mee; `clearChecks`
+(Klaar) wist bij vaste regels ook `inHouse` en `adjusted`; `weekCounts` geeft `standing`; `importBundle` voegt `standing.list` samen
+via `mergeStandingLists`. ShoppingScreen roept bij mount `migratePinsToStanding()` aan met de snack `shop.standing.migratedSnack` /
+`…One` (NL + EN letterlijk uit §1d); ListRow toont 📌 bij `pinned || standing`. "Elke week" in het menu en `togglePinned` bestaan nog
+(blok 2 haalt ze weg). Groen: check, 1607 tests (69 bestanden), build, build:next, validate:data (alleen de bekende 4 swaps-waarschuwingen).
+- **Dev-app (375 px, NL en EN):** twee gepinde extra's (melk afgevinkt, postzegels) → bij openen van Boodschappen staan ze als `s|`-regels
+  met 📌, het vinkje ging mee, snack "2 ‘Elke week’-regels staan nu op de vaste lijst" / EN "1 ‘Every week’ line is now on the Every week
+  list"; tweede keer openen verhuist niets; "postzegels" zonder "(pm)"; `generateList` houdt de vaste regels met hun vinkje/"in huis";
+  Klaar wist vinkje, "in huis" en aanpassing; uitzetten haalt de regel weg; `weekCounts.standing` telt ook uitgezette. Testgegevens daarna
+  weer opgeruimd. DEVICE-TEST ongewijzigd (blok 1 is onzichtbaar behalve de pin-verhuizing; rijen 89–91 komen in blok 2/3).
+- **Open voor Fable (niet zelf beslist):** (1) Spec §2 (absorbPins) en §3 (addLineToStanding) zetten het vaste aantal op
+  `effectiveQty(regel)` (= qty + adjusted) én geven de nieuwe `s|`-regel de `adjusted` van de oude regel mee: het aantal telt dan dubbel
+  ("4 uien" +2 → vast item 6, de regel toont 8 tot Klaar). Letterlijk zo gebouwd en getest; de voor de hand liggende oplossing is
+  `adjusted` niet meenemen. (2) Een pin waarvan het ingrediënt al op de vaste lijst staat: absorbPins haalt alleen `pinned` weg en meldt
+  moved 0, en `migratePinsToStanding` schrijft volgens de spec alleen bij moved > 0, dus die pin (en zijn 📌) blijft staan. Kan in blok 1
+  ontstaan door "Elke week" te tikken op een `s|`-regel; verdwijnt in blok 2 met het menu-item. (3) `restoreStandingItem` zet niets terug
+  als intussen hetzelfde ingrediënt/dezelfde tekst is toegevoegd (geen dubbelen, §5 punt 8). (4) Tot blok 2 roept "Heb ik al" in het
+  menu op een vaste regel met ingrediënt nog `setInHouse` aan (voorraadkast); de spec legt de `!it.standing`-regel in blok 2.
+  (5) normalizeStandingList: een item zonder geldig `s:`-id valt weg, bij een dubbele id wint de eerste (lezing van de §6-testregel).
+
+- **Besluit Fable (8 nov, commit van blok 1):** geen dubbel aantal (vast aantal = effectiveQty, `adjusted` niet overnemen);
+  een pin die al op de vaste lijst staat verdwijnt als extra en de lijst wordt geschreven zodra er iets veranderde (blok 2 D);
+  Klaar-undo-beperking tot blok 3 aanvaard; overige lezingen akkoord. Alles in vaste-lijst.md onder "Besluiten Fable na blok 1".
 ## 8 nov (Opus): 6D-S — Mijn profiel en Jouw stijl
 Gebouwd volgens docs/specs/badges-avatar.md "Blok 6D-S" (bouwer S-A Mijn profiel/Home/Meer/Profielen beheren, S-B Jouw stijl +
 zeldzaamheid van ontgrendelingen + opruimen; integrator). Niet gecommit. Geen Dexie-versie, geen dependency. Nieuw: setting

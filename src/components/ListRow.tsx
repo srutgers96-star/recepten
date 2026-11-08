@@ -90,7 +90,7 @@ export function ListRow(props: ListRowProps) {
         </span>
         <span class="lr-text">{props.text}</span>
         {/* `fresh` stays on the item (aggregate marks new lines) but shows no chip: it got in the way of shopping (Stijn 30 Oct). */}
-        {item.pinned && (
+        {(item.pinned || item.standing) && (
           <span class="lr-pin" title={t('shop.pinned')} aria-label={t('shop.pinned')}>
             📌
           </span>

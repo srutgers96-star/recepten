@@ -590,3 +590,104 @@ describe('diet versions per slot (13D)', () => {
     expect(one(items, 'spaghetti').qty).toBe(400);
   });
 });
+
+// 6C (docs/specs/vaste-lijst.md §3 "src/domain/aggregate.ts", §6): standing-list lines ("Vaste lijst")
+// come in as given, key 's|<id>', never summed with recipe lines, and "Heb ik al" is their own flag.
+// Built by hand here (the shape `standingToListItem` gives), so this file does not depend on standing.ts.
+describe('standing lines', () => {
+  const st = (id: string, over: Partial<ListItem>): ListItem => ({ key: `s|${id}`, ing: null, qty: null, unit: null, aisle: 'overig', section: 'main', sources: [], standing: true, ...over });
+  const melk = st('k3m9x2ab', { ing: 'melk', qty: 3, unit: 'l', aisle: 'zuivel-eieren' });
+  const mayo = st('q7p1zz0c', { ing: 'mayonaise', qty: 1, unit: 'pot', aisle: 'sauzen-olie-azijn' });
+  const zegels = st('e5f6g7h8', { label: { nl: 'postzegels', en: '' } });
+  const pasta = rec('b:pasta', 'Pasta', ['400 g pasta', '2 uien']);
+  const byKey = (items: ListItem[], key: string) => items.find((it) => it.key === key);
+
+  it('a standing line lands in main with standing: true, no sources, in aisle order among the rest', () => {
+    const items = run([pasta], undefined, { standing: [zegels, mayo, melk] });
+    const m = byKey(items, 's|k3m9x2ab') as ListItem;
+    expect(m).toMatchObject({ standing: true, section: 'main', sources: [], qty: 3, unit: 'l', aisle: 'zuivel-eieren' });
+    expect(m.manual).toBeUndefined();
+    expect(nl(m)).toBe('3 l melk');
+    expect(en(m)).toBe('3 l milk');
+    // groente-fruit (ui) · droog (pasta) · zuivel-eieren (melk) · sauzen-olie-azijn (mayo) · overig (postzegels)
+    const main = items.filter((it) => it.section === 'main').map((it) => it.aisle);
+    const order = new Map(dict.aisles.map((a, idx) => [a.id, idx]));
+    const idx = main.map((a) => order.get(a) ?? 999);
+    expect(idx).toEqual([...idx].sort((a, b) => a - b));
+    expect(main.indexOf('zuivel-eieren')).toBeLessThan(main.indexOf('sauzen-olie-azijn'));
+    expect(main[main.length - 1]).toBe('overig');
+  });
+
+  it('a recipe line and a standing line of the same ingredient stay two lines (never summed)', () => {
+    const items = run([rec('b:pap', 'Pap', ['250 ml melk'])], undefined, { standing: [melk] });
+    const melks = byIng(items, 'melk');
+    expect(melks).toHaveLength(2);
+    expect(melks.filter((it) => it.standing).map((it) => it.key)).toEqual(['s|k3m9x2ab']);
+    expect(byKey(items, 's|k3m9x2ab')?.qty).toBe(3);
+  });
+
+  it('carries checked / adjusted / inHouse from the previous list on the s| key', () => {
+    const previous: ListItem[] = [
+      { ...melk, checked: true },
+      { ...mayo, adjusted: 1 },
+      { ...zegels, inHouse: true, section: 'inHouse' },
+    ];
+    const items = run([], [], { standing: [melk, mayo, zegels], previous });
+    expect(byKey(items, 's|k3m9x2ab')).toMatchObject({ checked: true, section: 'main' });
+    const m = byKey(items, 's|q7p1zz0c') as ListItem;
+    expect(m.adjusted).toBe(1);
+    expect(nl(m)).toBe('2 potten mayonaise');
+    expect(en(m)).toBe('2 jars mayonnaise');
+    expect(byKey(items, 's|e5f6g7h8')).toMatchObject({ inHouse: true, section: 'inHouse' });
+    expect(items.some((it) => it.fresh)).toBe(false);
+    // A key that was not in the previous list is fresh.
+    expect(byKey(run([], [], { standing: [melk], previous: [] }), 's|k3m9x2ab')?.fresh).toBe(true);
+  });
+
+  it('the pantry never makes a standing line "in huis" (its own flag only)', () => {
+    const items = run([], [], { standing: [mayo, melk], pantry: new Set(['mayonaise', 'melk']) });
+    expect(byKey(items, 's|q7p1zz0c')).toMatchObject({ section: 'main' });
+    expect(byKey(items, 's|q7p1zz0c')?.inHouse).toBeUndefined();
+    expect(byKey(items, 's|k3m9x2ab')?.inHouse).toBeUndefined();
+    // ... and a previous "Heb ik al" survives without a pantry row.
+    const kept = run([], [], { standing: [mayo], previous: [{ ...mayo, inHouse: true, section: 'inHouse' }], pantry: new Set() });
+    expect(byKey(kept, 's|q7p1zz0c')).toMatchObject({ inHouse: true, section: 'inHouse' });
+  });
+
+  it('a standing line that is no longer given drops (vanished, not manual, not pinned)', () => {
+    const previous = run([], [], { standing: [melk, mayo] });
+    const next = run([], [], { standing: [melk], previous });
+    expect(next.map((it) => it.key)).toEqual(['s|k3m9x2ab']);
+    expect(run([], [], { previous }).length).toBe(0);
+  });
+
+  it('an extra with the same key wins; the standing loop skips a key already seen', () => {
+    const items = run([], [], { extras: [{ key: 's|k3m9x2ab', ing: 'melk', qty: 1, unit: 'l', aisle: '', section: 'main', sources: [] }], standing: [melk] });
+    expect(items).toHaveLength(1);
+    expect(items[0]?.qty).toBe(1);
+  });
+
+  it('renderListItem: a standing line without a number never says "(pm)"', () => {
+    const plain = st('a1', { ing: 'melk', aisle: 'zuivel-eieren' });
+    expect(nl(plain)).toBe('melk');
+    expect(en(plain)).toBe('milk');
+    expect(nl(zegels)).toBe('postzegels');
+    // The same line without `standing` (and not manual) is "pm".
+    expect(nl({ ...plain, standing: undefined })).toBe('melk (pm)');
+  });
+
+  it('listAsText takes standing lines along, hides in-house ones on request, and has no "— …" line without dishes', () => {
+    const items = run([], [], { standing: [melk, mayo, zegels], previous: [{ ...mayo, inHouse: true, section: 'inHouse' }] });
+    const text = listAsText(items, dict, 'nl', { title: 'T' });
+    expect(text).toContain('☐ 3 l melk');
+    expect(text).toContain('☐ 1 pot mayonaise (in huis)');
+    expect(text).toContain('☐ postzegels');
+    expect(text.split('\n').some((l) => l.startsWith('—'))).toBe(false);
+    const hidden = listAsText(items, dict, 'nl', { title: 'T', hideInHouse: true });
+    expect(hidden).not.toContain('mayonaise');
+    expect(hidden).toContain('☐ 3 l melk');
+    const english = listAsText(items, dict, 'en', { title: 'T' });
+    expect(english).toContain('☐ 3 l milk');
+    expect(english).toContain('☐ 1 jar mayonnaise');
+  });
+});

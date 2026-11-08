@@ -130,6 +130,10 @@ export const shopping: Dict = {
   'inbox.plan.servings': { nl: '{n} pers.', en: '{n} serv.' },
   'inbox.plan.unknownDish': { nl: 'onbekend gerecht', en: 'unknown dish' },
 
+  // --- Standing list ("Vaste lijst", docs/specs/vaste-lijst.md; 6C block 1: only the pin-migration snack) ---
+  'shop.standing.migratedSnack': { nl: '{n} ‘Elke week’-regels staan nu op de vaste lijst', en: '{n} ‘Every week’ lines are now on the Every week list' },
+  'shop.standing.migratedSnackOne': { nl: '1 ‘Elke week’-regel staat nu op de vaste lijst', en: '1 ‘Every week’ line is now on the Every week list' },
+
   // --- Storage counters ----------------------------------------------------------------------
   'storage.plan': { nl: 'Weekplan (gerechten)', en: 'Week plan (dishes)' },
   'storage.list': { nl: 'Boodschappenlijst (regels)', en: 'Shopping list (lines)' },

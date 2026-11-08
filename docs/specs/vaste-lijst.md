@@ -455,6 +455,19 @@ ShoppingScreen roept bij mount `migratePinsToStanding()` aan (één regel, met s
 verschijnt na de update als `s|`-regel met 📌-icoon (ListRow mag in dit blok `item.pinned || item.standing`
 tonen); "Elke week" in het menu bestaat nog (maakt een pin die bij de volgende mount verhuist). Zichtbaar
 gedrag voor Stijn: niets breekt, pins blijven elke week komen.
+**Besluiten Fable na blok 1 (8 nov; voor blok 2, extra bouwer D):** (1) Geen dubbel aantal: bij `absorbPins` én
+`addLineToStanding` wordt het vaste aantal `effectiveQty(regel)` (wat de gebruiker wilde) en de nieuwe `s|`-regel neemt
+`adjusted` NIET over (de aanpassing is opgenomen in het vaste aantal); `checked` en `inHouse` gaan wel mee. (2) Een gepinde
+regel waarvan het ingrediënt al op de vaste lijst staat (lens-bevinding 1): optie A — de gepinde extra verdwijnt uit `items` én
+`extras` zoals bij een echte verhuizing; `checked`/`inHouse`/`adjusted` gaan naar de bestaande `s|`-regel als die ze nog niet
+heeft; `absorbPins` geeft naast `moved` ook `changed` terug en `migratePinsToStanding` schrijft zodra `changed > 0` (de snack
+telt alleen `moved`). (3) Tot blok 3 verliest "Ongedaan" na Klaar de "Heb ik al"-vlag en het aangepaste aantal van vaste regels:
+aanvaard, blok 3 lost het op. (4) `restoreStandingItem` zet niets terug als hetzelfde ingrediënt intussen is toegevoegd: akkoord
+(§5.8). (5) Lezing van `normalizeStandingList` (geen geldig id → weg, dubbele id → eerste wint) akkoord. (6) Snack-keys
+`shop.standing.migratedSnack`/`…One` uit §1d: akkoord. (7) Tot blok 2 roept "Heb ik al" op een vaste regel nog `setInHouse` aan:
+aanvaard. (8) Blok 2 zet de feature-hook `recordFeature('standingList')` in StandingTab bij een geslaagd toevoegen; bouwer B
+controleert of de badge `vaste-klant` (regel feature standingList) in data/badges.json staat en meldt het anders als open.
+Gebouwd: 8 nov 2026 (6C blok 1, workflow wf_a0bd53dc-e80)
 
 **Blok 2 — beheer-UI** (A StandingSheet, B StandingTab, C ShoppingScreen-tabbladen + i18n + CSS +
 Storage-telregel + ExtraField-placeholder; integrator). Af als: tabblad Vaste lijst werkt (toevoegen,
