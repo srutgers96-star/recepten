@@ -23,6 +23,12 @@
 // `unlocks.announced`; those fill `LevelUpInfo.unlocked`. After settles the phone-wide union of
 // unlocks is refreshed (`refreshUnlocks`), once per burst, and once at boot (checkRulesVersion).
 //
+// V4 (docs/specs/verbeterronde-4.md §1b): a settle's pops are split. 'photo' and 'recipe' stay
+// small pops (`xpPops`, <XpPop/>); 'cook', 'week', 'badge' and 'challenge' go together into one
+// rising XP bar (`xpRise`, <XpRise/>). A level-up that comes with a rise waits in `xpRise.levelUp`
+// until the bar has filled; the strip then calls `releaseLevelUp`. A crit sets `celebrationCrit`
+// (the big word "Overcooked!" over the confetti).
+//
 // 6E challenges (docs/specs/challenges.md §2, §3): the member's done challenges (`challenges.done`)
 // are one more XP fact (one event 'challenge' per finished challenge, src/domain/xp.ts), and after
 // every settle `settleChallenges` (src/challenges.ts) looks whether the running challenge was reached
@@ -64,6 +70,36 @@ export interface XpPopItem {
   sumAfter?: number;
 }
 
+/** A settle's delta plus the total before and after it (V4 §1b: `totalFrom = totalTo − amount`). */
+export interface XpSettleDelta extends XpDelta {
+  totalFrom: number;
+  totalTo: number;
+}
+
+/** A level-up held back until the rising bar is full (V4 §1b); `releaseLevelUp` announces it. */
+export interface XpRiseLevelUp {
+  from: number;
+  to: number;
+  unlocked: Unlock[];
+}
+
+/**
+ * What <XpRise/> shows: the bar rising from `totalFrom` to `totalTo` ("+amount XP"). `crit` = the
+ * heaviest crit of its pops (overcooked > cooked > null); `at` = when it was (last) filled.
+ */
+export interface XpRiseInfo {
+  memberId: string;
+  totalFrom: number;
+  totalTo: number;
+  amount: number;
+  levelFrom: number;
+  levelTo: number;
+  crit: Crit | null;
+  at: number;
+  /** The level-up waiting for the bar to fill, if any (announced by `releaseLevelUp`). */
+  levelUp?: XpRiseLevelUp;
+}
+
 /** What <LevelUpSheet/> shows: from → to (several levels at once = one sheet for the highest). */
 export interface LevelUpInfo {
   memberId: string;
@@ -79,6 +115,10 @@ export const xpStates: Signal<ReadonlyMap<string, XpState>> = signal<ReadonlyMap
 export const xpPops: Signal<XpPopItem[]> = signal<XpPopItem[]>([]);
 /** The level-up to show after the last pop, or null. */
 export const levelUp: Signal<LevelUpInfo | null> = signal<LevelUpInfo | null>(null);
+/** The rising XP bar to show (V4 §1b), or null; <XpRise/> clears it when it slides away. */
+export const xpRise: Signal<XpRiseInfo | null> = signal<XpRiseInfo | null>(null);
+/** The latest crit of a settle (for the word "Cooked!" → "Overcooked!", V4 §1a), or null. */
+export const celebrationCrit: Signal<{ crit: Crit; at: number } | null> = signal<{ crit: Crit; at: number } | null>(null);
 /** i18n key of the 0-XP note to toast ('xp.busyWeek' | 'xp.dayCap' | 'xp.rulesChanged'), or null. */
 export const xpToast: Signal<string | null> = signal<string | null>(null);
 
@@ -221,9 +261,27 @@ const MERGE_MS = 2000;
 let series: { startedAt: number; sum: number; count: number; lastId: number } | null = null;
 let nextPopId = 1;
 
-function queuePops(pops: XpDelta['pops']): void {
+/** Pop kinds that stay small "+n" pops (V4 §1b); every other kind goes into the rising bar. */
+const POP_KINDS: ReadonlySet<XpEventKind> = new Set<XpEventKind>(['photo', 'recipe']);
+
+/** The heavier of two crits: overcooked > cooked > null. */
+function heavierCrit(a: Crit | null, b: Crit | null): Crit | null {
+  if (a === 'overcooked' || b === 'overcooked') return 'overcooked';
+  if (a === 'cooked' || b === 'cooked') return 'cooked';
+  return null;
+}
+
+/** Level-ups that were already announced (by `releaseLevelUp`): never announced twice. */
+const releasedLevelUps = new WeakSet<XpRiseLevelUp>();
+
+/** `delta` with `totalTo` = the state's total after the settle and `totalFrom = totalTo − amount`. */
+export function withTotals(delta: XpDelta, totalTo: number): XpSettleDelta {
+  return { ...delta, totalFrom: totalTo - delta.amount, totalTo };
+}
+
+/** The small pops into the <XpPop/> queue (one series within MERGE_MS, one sum line). */
+function queueSmallPops(pops: XpDelta['pops'], now: number): void {
   if (!pops.length) return;
-  const now = Date.now();
   const join = series !== null && now - series.startedAt <= MERGE_MS;
   const s = join && series ? series : { startedAt: now, sum: 0, count: 0, lastId: 0 };
   const items: XpPopItem[] = pops.map((p) => ({ id: nextPopId++, xp: p.xp, crit: p.crit, kind: p.kind }));
@@ -236,6 +294,79 @@ function queuePops(pops: XpDelta['pops']): void {
   s.lastId = last.id;
   series = s;
   xpPops.value = [...queue, ...items];
+}
+
+/**
+ * A settle's rewards (V4 §1b): 'photo'/'recipe' pops to `xpPops` as before; 'cook', 'week', 'badge'
+ * and 'challenge' together into `xpRise`, added to a rise that is still open for the same member
+ * (totalFrom stays, totalTo the new one, amount = totalTo − totalFrom, levelTo the highest, crit the
+ * heaviest). The settle's level-up rides along in `xpRise.levelUp` when there is a rise; any crit
+ * sets `celebrationCrit`. Returns true when a rise was set: the caller then does NOT announce the
+ * level-up itself (`releaseLevelUp` does, once the bar is full). Exported for tests.
+ */
+export function queuePops(memberId: string, delta: XpSettleDelta, levelUp: XpRiseLevelUp | null = null, now: number = Date.now()): boolean {
+  const small: XpDelta['pops'] = [];
+  let riseXp = 0;
+  let riseCrit: Crit | null = null;
+  let anyRise = false;
+  let crit: Crit | null = null;
+  for (const p of delta.pops) {
+    crit = heavierCrit(crit, p.crit);
+    if (POP_KINDS.has(p.kind)) {
+      small.push(p);
+    } else {
+      anyRise = true;
+      riseXp += p.xp;
+      riseCrit = heavierCrit(riseCrit, p.crit);
+    }
+  }
+  queueSmallPops(small, now);
+  if (crit !== null) celebrationCrit.value = { crit, at: now };
+  if (!anyRise) return false;
+  // The bar shows the rise's own XP: in a settle that also had a photo/recipe pop it starts after it.
+  const fresh: XpRiseInfo = {
+    memberId,
+    totalFrom: delta.totalTo - riseXp,
+    totalTo: delta.totalTo,
+    amount: riseXp,
+    levelFrom: delta.levelFrom,
+    levelTo: delta.levelTo,
+    crit: riseCrit,
+    at: now,
+  };
+  if (levelUp && levelUp.to > levelUp.from) fresh.levelUp = { from: levelUp.from, to: levelUp.to, unlocked: [...levelUp.unlocked] };
+  const open = xpRise.value;
+  if (open === null) {
+    xpRise.value = fresh;
+    return true;
+  }
+  if (open.memberId !== memberId) {
+    // Another member's bar is still open: its waiting level-up is never lost, the new bar replaces it.
+    releaseLevelUp(open);
+    xpRise.value = fresh;
+    return true;
+  }
+  const merged: XpRiseInfo = {
+    memberId,
+    totalFrom: open.totalFrom,
+    totalTo: fresh.totalTo,
+    amount: fresh.totalTo - open.totalFrom,
+    levelFrom: open.levelFrom,
+    levelTo: Math.max(open.levelTo, fresh.levelTo),
+    crit: heavierCrit(open.crit, fresh.crit),
+    at: now,
+  };
+  const pending = open.levelUp && !releasedLevelUps.has(open.levelUp) ? open.levelUp : undefined;
+  if (pending && fresh.levelUp) {
+    const unlocked = [...pending.unlocked];
+    for (const u of fresh.levelUp.unlocked) if (!unlocked.some((m) => m.id === u.id)) unlocked.push(u);
+    merged.levelUp = { from: Math.min(pending.from, fresh.levelUp.from), to: Math.max(pending.to, fresh.levelUp.to), unlocked };
+  } else {
+    const lu = pending ?? fresh.levelUp;
+    if (lu) merged.levelUp = lu;
+  }
+  xpRise.value = merged;
+  return true;
 }
 
 /**
@@ -267,6 +398,24 @@ function announceLevelUp(memberId: string, from: number, to: number, unlocked: r
   }
 }
 
+/**
+ * <XpRise/>: the bar is full (or the strip was tapped away / badges are off): open the level-up
+ * sheet it held back. Safe to call more than once (a level-up is announced once); none = no-op.
+ */
+export function releaseLevelUp(info: XpRiseInfo): void {
+  const lu = info.levelUp;
+  if (!lu || releasedLevelUps.has(lu)) return;
+  releasedLevelUps.add(lu);
+  announceLevelUp(info.memberId, lu.from, lu.to, lu.unlocked);
+}
+
+/** <XpRise/> slid away: clear the bar (a level-up still waiting is released first, never lost). */
+export function clearXpRise(): void {
+  const open = xpRise.value;
+  if (open) releaseLevelUp(open);
+  xpRise.value = null;
+}
+
 // ---------------------------------------------------------------------------- unlocks refresh
 
 let unlockRefreshQueued = false;
@@ -295,10 +444,10 @@ let settling: Promise<unknown> = Promise.resolve();
 
 /**
  * Reward moment: recompute, compare with the last settled state / `xp.lastSeen`, fill the pops,
- * the level-up and the 0-XP toast, and write `xp.lastSeen`. `quiet` = only record the new state
+ * the rising bar (V4), the level-up and the 0-XP toast, and write `xp.lastSeen`. `quiet` = only record the new state
  * (also what happens with badges off). Returns the delta, or null when quiet.
  */
-export function settleXp(memberId: string, opts?: { quiet?: boolean }): Promise<XpDelta | null> {
+export function settleXp(memberId: string, opts?: { quiet?: boolean }): Promise<XpSettleDelta | null> {
   const quiet = opts?.quiet === true;
   const run = settling.then(() => doSettle(memberId, quiet));
   settling = run.catch(() => undefined);
@@ -311,7 +460,7 @@ export function settleXp(memberId: string, opts?: { quiet?: boolean }): Promise<
   return run;
 }
 
-async function doSettle(memberId: string, quietAsked: boolean): Promise<XpDelta | null> {
+async function doSettle(memberId: string, quietAsked: boolean): Promise<XpSettleDelta | null> {
   await loadBadgeSettings();
   const quiet = quietAsked || !badgesEnabled.value;
   const [next, seenRaw] = await Promise.all([recompute(memberId), getSetting<unknown>(XP_LAST_SEEN_SETTING, {})]);
@@ -338,13 +487,16 @@ async function doSettle(memberId: string, quietAsked: boolean): Promise<XpDelta 
     const kind = next.events.length ? next.events[next.events.length - 1]!.kind : 'cook';
     delta = { amount, pops: amount > 0 ? [{ xp: amount, crit: null, kind }] : [], levelFrom: seen.level, levelTo: next.level, zeroReasons: [] };
   }
-  queuePops(delta.pops);
-  announceLevelUp(memberId, delta.levelFrom, delta.levelTo, await unlocksFor(memberId, delta.levelFrom, delta.levelTo));
+  const settled = withTotals(delta, next.total);
+  const unlocked = await unlocksFor(memberId, settled.levelFrom, settled.levelTo);
+  // V4 §1b: with a rise the level-up waits in xpRise.levelUp until the bar is full (releaseLevelUp).
+  const rise = queuePops(memberId, settled, { from: settled.levelFrom, to: settled.levelTo, unlocked });
+  if (!rise) announceLevelUp(memberId, settled.levelFrom, settled.levelTo, unlocked);
   // §1e: a cook that got 0 XP from the busy-week rule or the day cap says so; sameRecipe and
   // backdated stay silent (the sheet said it already).
   if (delta.zeroReasons.includes('busyWeek')) xpToast.value = 'xp.busyWeek';
   else if (delta.zeroReasons.includes('dayCap')) xpToast.value = 'xp.dayCap';
-  return delta;
+  return settled;
 }
 
 /** After a restore: everything dirty, then a quiet settle of every local profile (no pops, no sheet). */

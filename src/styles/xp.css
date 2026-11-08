@@ -667,3 +667,161 @@
   flex-basis: 100%;
   margin: -4px 0 0;
 }
+
+/* ---------- V4 (docs/specs/verbeterronde-4.md §1a): the word in the confetti ---------- */
+
+/* Its own gold (no --gold token from base.css; the Cooked! pop's --gold turns pale in dark mode). */
+:root {
+  --celebrate-gold: #c9a227;
+}
+
+.celebrate-word-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 1001; /* right above the confetti (1000) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  pointer-events: none;
+}
+
+.celebrate-word {
+  font-family: var(--font);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--celebrate-gold);
+  /* A dark shadow keeps the gold readable on a light and on a dark screen. */
+  text-shadow:
+    0 2px 0 rgba(15, 26, 43, 0.55),
+    0 4px 14px rgba(15, 26, 43, 0.45);
+  opacity: 1;
+  animation: celebrate-word-in 180ms ease-out;
+  transition: opacity var(--word-fade, 250ms) ease-in;
+}
+
+/* The cook typeface, as on the cook card (src/styles/browse.css loads the faces). */
+.celebrate-word[data-font='chalk'] {
+  font-family: 'Cabin Sketch', var(--font);
+}
+
+.celebrate-word[data-font='hand'] {
+  font-family: 'Patrick Hand', var(--font);
+}
+
+/* Overcooked! (×5): the crit red of the pop. */
+.celebrate-word.overcooked {
+  color: var(--tomato);
+}
+
+/* Cooked! (×2) on the way: a golden glow. */
+.celebrate-word.glow {
+  text-shadow:
+    0 2px 0 rgba(15, 26, 43, 0.55),
+    0 0 18px rgba(242, 209, 107, 0.95),
+    0 0 36px rgba(201, 162, 39, 0.8);
+}
+
+.celebrate-word.out {
+  opacity: 0;
+}
+
+@keyframes celebrate-word-in {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* prefers-reduced-motion: static, no scale, no glow, no fade (the component also marks it .still). */
+.celebrate-word.still {
+  animation: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .celebrate-word {
+    animation: none;
+    transition: none;
+  }
+
+  .celebrate-word.glow {
+    text-shadow:
+      0 2px 0 rgba(15, 26, 43, 0.55),
+      0 4px 14px rgba(15, 26, 43, 0.45);
+  }
+}
+
+/* ---------- V4 §1b: the XP strip above the navigation bar ---------- */
+
+.xp-rise-wrap {
+  position: fixed;
+  left: max(16px, var(--sal));
+  right: max(16px, var(--sar));
+  bottom: calc(var(--nav-h, 64px) + env(safe-area-inset-bottom) + 8px);
+  z-index: 15; /* above the screen, under sheets (20) and toasts (30) */
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.xp-rise {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  min-height: 44px;
+  padding: 10px 16px 8px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  box-shadow: 0 4px 16px rgba(15, 26, 43, 0.25);
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: xp-rise-in 0.25s ease-out;
+  transition:
+    transform var(--rise-out, 250ms) ease-in,
+    opacity var(--rise-out, 250ms) ease-in;
+}
+
+.xp-rise .xp-bar {
+  margin: 6px 0 2px;
+}
+
+.xp-rise-plus {
+  flex: none;
+  color: var(--cobalt);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.xp-rise.out {
+  transform: translateY(calc(100% + 16px));
+  opacity: 0;
+}
+
+@keyframes xp-rise-in {
+  from {
+    transform: translateY(calc(100% + 16px));
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-rise {
+    animation: none;
+    transition: none;
+  }
+}

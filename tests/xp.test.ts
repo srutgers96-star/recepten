@@ -2,7 +2,7 @@
 // hash, the crit distribution, the curve, the worked example, the anti-cheat rules, the streak, the
 // week bonus, photos/recipes/badges and the 30-year simulation (exact totals + the 50 ms budget).
 // Days are built from Date.UTC middays/evenings so the local day does not shift on Stijn's PC.
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { dayFromKey, dayIndexOfIso, dayKey, isoWeekMondayOf, localDayIndex } from '../src/domain/days';
 import {
   XP_RULES,
@@ -27,6 +27,7 @@ import {
 } from '../src/domain/xp';
 import { simulate } from './fixtures/xp-sim';
 import type { DoneChallenge } from '../src/domain/challenges';
+import { celebrationCrit, clearXpRise, levelUp, queuePops, releaseLevelUp, withTotals, xpPops, xpRise, type XpSettleDelta } from '../src/xp';
 
 // ---------------------------------------------------------------------------- helpers
 
@@ -676,5 +677,142 @@ describe('30-year simulation (§6a)', () => {
   it('half a year → level 24; one year → level 29', () => {
     expect(deriveXp(simulate({ years: 0.5 })).level).toBe(24);
     expect(deriveXp(simulate({ years: 1 })).level).toBe(29);
+  });
+});
+
+// ---------------------------------------------------------------------------- V4: the rising bar
+
+describe('V4 XP layer (docs/specs/verbeterronde-4.md §1b)', () => {
+  type Pop = XpSettleDelta['pops'][number];
+  const pop = (kind: Pop['kind'], xp: number, crit: Pop['crit'] = null): Pop => ({ xp, crit, kind });
+  function settled(pops: Pop[], totalTo: number, levelFrom = 3, levelTo = 3): XpSettleDelta {
+    const amount = pops.reduce((n, p) => n + p.xp, 0);
+    return withTotals({ amount, pops, levelFrom, levelTo, zeroReasons: [] }, totalTo);
+  }
+  // Each test far apart in time, so the <XpPop/> series of one test never joins another's.
+  let now = 1_000_000;
+  beforeEach(() => {
+    now += 100_000;
+    xpRise.value = null;
+    xpPops.value = [];
+    celebrationCrit.value = null;
+    levelUp.value = null;
+  });
+
+  it('withTotals: totalTo = the total after the settle, totalFrom = totalTo − amount', () => {
+    const d = withTotals({ amount: 42, pops: [pop('cook', 42)], levelFrom: 4, levelTo: 5, zeroReasons: [] }, 500);
+    expect(d.totalTo).toBe(500);
+    expect(d.totalFrom).toBe(458);
+    expect(d.amount).toBe(42);
+    expect(d.levelFrom).toBe(4);
+    expect(d.levelTo).toBe(5);
+    const zero = withTotals({ amount: 0, pops: [], levelFrom: 2, levelTo: 2, zeroReasons: ['dayCap'] }, 120);
+    expect(zero.totalFrom).toBe(120);
+    expect(zero.totalTo).toBe(120);
+  });
+
+  it("splits: 'photo'/'recipe' → xpPops, 'cook'/'week'/'badge'/'challenge' → one xpRise", () => {
+    const rose = queuePops('p1', settled([pop('cook', 30), pop('photo', 5), pop('week', 20), pop('badge', 50), pop('recipe', 10), pop('challenge', 100)], 1000), null, now);
+    expect(rose).toBe(true);
+    expect(xpPops.value.map((p) => p.kind)).toEqual(['photo', 'recipe']);
+    expect(xpPops.value[1]!.sumAfter).toBe(15);
+    const r = xpRise.value!;
+    expect(r.memberId).toBe('p1');
+    expect(r.amount).toBe(200);
+    expect(r.totalTo).toBe(1000);
+    expect(r.totalFrom).toBe(800);
+    expect(r.at).toBe(now);
+    expect(r.crit).toBeNull();
+    expect(r.levelUp).toBeUndefined();
+  });
+
+  it('only a photo or a recipe → small pops, no rise (and the caller announces the level-up as before)', () => {
+    const rose = queuePops('p1', settled([pop('photo', 5)], 300, 2, 3), { from: 2, to: 3, unlocked: [] }, now);
+    expect(rose).toBe(false);
+    expect(xpRise.value).toBeNull();
+    expect(xpPops.value).toHaveLength(1);
+    expect(levelUp.value).toBeNull(); // queuePops itself never opens the sheet
+  });
+
+  it('a level-up waits in xpRise.levelUp; releaseLevelUp opens the sheet once', () => {
+    queuePops('p1', settled([pop('cook', 60)], 400, 4, 5), { from: 4, to: 5, unlocked: [] }, now);
+    const r = xpRise.value!;
+    expect(r.levelUp).toEqual({ from: 4, to: 5, unlocked: [] });
+    expect(levelUp.value).toBeNull();
+    releaseLevelUp(r);
+    expect(levelUp.value).toEqual({ memberId: 'p1', from: 4, to: 5, unlocked: [] });
+    levelUp.value = null;
+    releaseLevelUp(r); // a second call (tap after the bar filled) announces nothing
+    clearXpRise();
+    expect(levelUp.value).toBeNull();
+    expect(xpRise.value).toBeNull();
+  });
+
+  it('a rise without a level change carries no levelUp', () => {
+    queuePops('p1', settled([pop('cook', 10)], 50), { from: 3, to: 3, unlocked: [] }, now);
+    expect(xpRise.value!.levelUp).toBeUndefined();
+  });
+
+  it('two rises while the first is open are added up (totalFrom stays, levelTo highest, crit heaviest)', () => {
+    queuePops('p1', settled([pop('cook', 40, 'overcooked')], 540, 5, 5), null, now);
+    queuePops('p1', settled([pop('badge', 50)], 590, 5, 6), { from: 5, to: 6, unlocked: [] }, now + 500);
+    const r = xpRise.value!;
+    expect(r.totalFrom).toBe(500);
+    expect(r.totalTo).toBe(590);
+    expect(r.amount).toBe(90);
+    expect(r.levelFrom).toBe(5);
+    expect(r.levelTo).toBe(6);
+    expect(r.crit).toBe('overcooked');
+    expect(r.at).toBe(now + 500);
+    expect(r.levelUp).toEqual({ from: 5, to: 6, unlocked: [] });
+  });
+
+  it('two waiting level-ups merge into one (lowest from, highest to)', () => {
+    queuePops('p1', settled([pop('cook', 100)], 600, 5, 6), { from: 5, to: 6, unlocked: [] }, now);
+    queuePops('p1', settled([pop('challenge', 200)], 800, 6, 7), { from: 6, to: 7, unlocked: [] }, now + 100);
+    expect(xpRise.value!.levelUp).toEqual({ from: 5, to: 7, unlocked: [] });
+    expect(xpRise.value!.levelFrom).toBe(5);
+    expect(xpRise.value!.levelTo).toBe(7);
+  });
+
+  it('a level-up already released is not carried into the merged rise again', () => {
+    queuePops('p1', settled([pop('cook', 100)], 600, 5, 6), { from: 5, to: 6, unlocked: [] }, now);
+    releaseLevelUp(xpRise.value!);
+    levelUp.value = null;
+    queuePops('p1', settled([pop('badge', 50)], 650, 6, 6), null, now + 100);
+    expect(xpRise.value!.levelUp).toBeUndefined();
+    releaseLevelUp(xpRise.value!);
+    expect(levelUp.value).toBeNull();
+  });
+
+  it('crit = the heaviest of the rise pops: overcooked > cooked > null', () => {
+    queuePops('p1', settled([pop('cook', 20, 'cooked'), pop('week', 10)], 100), null, now);
+    expect(xpRise.value!.crit).toBe('cooked');
+    xpRise.value = null;
+    queuePops('p1', settled([pop('cook', 20, 'cooked'), pop('badge', 50, 'overcooked'), pop('week', 10)], 200), null, now + 1);
+    expect(xpRise.value!.crit).toBe('overcooked');
+    xpRise.value = null;
+    queuePops('p1', settled([pop('cook', 20), pop('week', 10)], 300), null, now + 2);
+    expect(xpRise.value!.crit).toBeNull();
+    xpRise.value = null;
+    // A photo crit is not the rise's crit (it stays on its own pop).
+    queuePops('p1', settled([pop('cook', 20), pop('photo', 25, 'overcooked')], 400), null, now + 3);
+    expect(xpRise.value!.crit).toBeNull();
+    expect(xpRise.value!.totalFrom).toBe(380);
+  });
+
+  it('celebrationCrit is set on a crit (the heaviest of the settle), not without one', () => {
+    queuePops('p1', settled([pop('cook', 20)], 100), null, now);
+    expect(celebrationCrit.value).toBeNull();
+    queuePops('p1', settled([pop('cook', 20, 'cooked'), pop('week', 10, 'overcooked')], 130), null, now + 1);
+    expect(celebrationCrit.value).toEqual({ crit: 'overcooked', at: now + 1 });
+  });
+
+  it("another member's open rise: its waiting level-up is released, the new rise replaces it", () => {
+    queuePops('p1', settled([pop('cook', 100)], 600, 5, 6), { from: 5, to: 6, unlocked: [] }, now);
+    queuePops('p2', settled([pop('cook', 30)], 90), null, now + 1);
+    expect(levelUp.value).toEqual({ memberId: 'p1', from: 5, to: 6, unlocked: [] });
+    expect(xpRise.value!.memberId).toBe('p2');
+    expect(xpRise.value!.totalFrom).toBe(60);
   });
 });

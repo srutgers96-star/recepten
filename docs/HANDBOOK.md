@@ -3347,15 +3347,15 @@ You earn XP by cooking, with a photo of your dish, with a recipe of your own and
 1. Tap a recipe.
 2. Tap **✓ Cooked**.
 3. Tap **Save** at the top.
-4. Look at the top right of the screen.
+4. Look at the bottom, just above the tabs.
 
 #### What you then see
 
-A blue chip with the XP appears briefly at the top right, for example “+105”. If you get several rewards at once, a few follow each other, with “+… XP in total” under them.
+A strip slides in at the bottom with your level, your XP bar and, on the right, for example “+105 XP”. The bar fills up and the number counts along. Then the strip slides away again.
 
 #### Good to know
 
-The first time you cook a recipe gives 100 XP; each next time 10 less, but never less than 50. A recipe with many ingredients gives up to 30 extra, stars give 5 extra. A first photo of a dish gives 30, a recipe of your own 10, or 15 when it is in two languages.
+A badge or a completed challenge brings that strip too. Tap it to close it straight away. A photo or a recipe of your own brings no strip, but a small chip at the top right, such as “+30”. The first time you cook a recipe gives 100 XP; each next time 10 less, but never less than 50. A recipe with many ingredients gives up to 30 extra, stars give 5 extra. A first photo of a dish gives 30, a recipe of your own 10, or 15 when it is in two languages.
 
 ### Extra XP: days in a row, a full week and badges
 
@@ -3405,13 +3405,14 @@ The same recipe counts once a day. The fourth and fifth cook on a day give half,
 
 #### What it does
 
-After a reward a chip with the XP appears briefly at the top right. Sometimes it is extra much: that is luck, not a mistake.
+After a photo or a recipe of your own, a chip with the XP appears briefly at the top right. Sometimes it is extra much: that is luck, not a mistake.
 
 #### Where you tap
 
 1. Tap a recipe.
-2. Tap **✓ Cooked**.
-3. Tap **Save** at the top.
+2. Under **Photos**, tap **+ Photo**.
+3. Choose a photo of your dish.
+4. Look at the top right of the screen.
 
 #### What you then see
 
@@ -3419,7 +3420,28 @@ Most of the time the chip is blue. A gold chip with “Cooked!” means double X
 
 #### Good to know
 
-Every reward varies a little, up to a fifth more or less. With “OVERCOOKED!” the screen shakes briefly, unless **Confetti** is switched off.
+Every reward varies a little, up to a fifth more or less. With “OVERCOOKED!” the screen shakes briefly, unless **Confetti** is switched off. When you cook, that luck shows in the big word instead of a chip: see “Cooked! big on the screen”.
+
+### Cooked! big on the screen
+
+#### What it does
+
+When you save a cook, “Cooked!” appears big in the middle of the confetti. When you complete a challenge, it says “Done!”.
+
+#### Where you tap
+
+1. Tap a recipe.
+2. Tap **✓ Cooked**.
+3. Tap **Save** at the top.
+4. Tap anywhere on the screen if you want it faster.
+
+#### What you then see
+
+In the middle of the screen “Cooked!” appears in gold, among the confetti. With double XP the word glows extra. With five times the XP it turns into a red “Overcooked!”, the screen shakes and the word stays a little longer.
+
+#### Good to know
+
+One tap during the celebration makes the rest twice as fast. The word belongs to the confetti: with **Confetti** off, no word appears. If you cook with another typeface from **Your style**, the word uses that typeface. If your phone is set to reduce motion, the word stands still.
 
 ### Levels and titles
 
@@ -3468,14 +3490,14 @@ Below level 5 there is no ring. The ring only shows on an avatar without a frame
 
 #### What it does
 
-When you go up a level, a window slides up with your new title. It also shows what you have unlocked.
+When you go up a level, the XP bar at the bottom first fills up and starts again at your new level. Only then does a window slide up with your new title and what you have unlocked.
 
 #### Where you tap
 
 1. Tap a recipe.
 2. Tap **✓ Cooked**.
 3. Tap **Save** at the top.
-4. Wait until the chips have gone.
+4. Watch the XP bar at the bottom fill up.
 5. Tap **Open Your style** to try what is new.
 
 #### What you then see
@@ -3484,7 +3506,7 @@ At the top it says, for example, “🎉 Level 3!”, with your new title large 
 
 #### Good to know
 
-**Open Your style** is only there when you have unlocked something new. **Close**, or swiping down, closes the window.
+**Open Your style** is only there when you have unlocked something new. **Close**, or swiping down, closes the window. Tap the strip with the bar and the window comes straight away.
 
 ### View your badges
 
@@ -3773,6 +3795,30 @@ Want a confetti out of the rotation? Press and hold that tile, or tap the ☑ co
 
 (`#/more/style`)
 
+### Fast celebrations
+
+#### What it does
+
+At level 30 you unlock **Fast celebrations**. The word, the confetti and the XP bar then run at double speed by default.
+
+#### Where you tap
+
+1. Tap **More** at the bottom.
+2. Tap your name at the top.
+3. On **My profile**, tap the **Your style** tile.
+4. Tap the **Confetti** tab.
+5. Below the confetti, tap the switch next to **Fast celebrations**.
+
+#### What you then see
+
+The switch is on. At your next cook the whole celebration runs twice as fast.
+
+#### Good to know
+
+Below level 30 you do not see this switch yet. Tapping during a celebration always makes it faster, even without the switch; together it gets no faster still. The switch applies to this phone.
+
+(`#/more/style`)
+
 ### Your style: typefaces in cook mode
 
 #### What it does
@@ -3879,11 +3925,11 @@ Not keen on the game? The **Badges** switch turns off all badges, XP and levels.
 
 #### What you then see
 
-The **Badges** tile on **My profile** disappears, as do your level and the XP bar. No more chips, messages, challenges or level windows appear.
+The **Badges** tile on **My profile** disappears, as do your level and the XP bar. No more chips, XP strip, messages, challenges or level windows appear.
 
 #### Good to know
 
-Your avatar stays, as do the **Cooking calendar** and the **Theme** tab in **Your style**. Switch **Badges** back on and everything returns. **Confetti** off means no confetti and no shaking screen. Tapping the word **Badges** instead of the switch opens your badges.
+Your avatar stays, as do the **Cooking calendar** and the **Theme** tab in **Your style**. Switch **Badges** back on and everything returns. **Confetti** off means no confetti, no big “Cooked!” and no shaking screen. Tapping the word **Badges** instead of the switch opens your badges.
 
 (`#/more`)
 

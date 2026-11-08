@@ -3,7 +3,15 @@
 // over the phone's unlocks. No database is opened.
 import { afterEach, describe, expect, it } from 'vitest';
 import { badgesEnabled } from '../src/badges';
-import { DEFAULT_CONFETTI_STYLE, pickConfettiStyle, RANDOM_CONFETTI_STYLE, usableConfettiStyles } from '../src/celebrate';
+import {
+  celebrateFast,
+  celebrationSpeed,
+  DEFAULT_CONFETTI_STYLE,
+  FAST_CELEBRATIONS_UNLOCK,
+  pickConfettiStyle,
+  RANDOM_CONFETTI_STYLE,
+  usableConfettiStyles,
+} from '../src/celebrate';
 import { hash32 } from '../src/domain/xp';
 import { disabledUnlocks, unlockedOnPhone } from '../src/unlocks';
 
@@ -62,5 +70,22 @@ describe('usableConfettiStyles', () => {
     unlockedOnPhone.value = new Set(['confetti-double', 'confetti-trex']);
     badgesEnabled.value = false;
     expect(usableConfettiStyles()).toEqual(['default']);
+  });
+});
+
+describe('celebrationSpeed (V4 §1c)', () => {
+  afterEach(() => {
+    unlockedOnPhone.value = new Set();
+    celebrateFast.value = false;
+    badgesEnabled.value = true;
+  });
+
+  it('"Snelle vieringen" on and unlocked → 2; with badges off it no longer counts → 1', () => {
+    unlockedOnPhone.value = new Set([FAST_CELEBRATIONS_UNLOCK]);
+    celebrateFast.value = true;
+    badgesEnabled.value = true;
+    expect(celebrationSpeed.value).toBe(2);
+    badgesEnabled.value = false;
+    expect(celebrationSpeed.value).toBe(1);
   });
 });

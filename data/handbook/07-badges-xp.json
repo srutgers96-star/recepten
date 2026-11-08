@@ -19,27 +19,27 @@
           "Tik op een recept.",
           "Tik op **✓ Gekookt**.",
           "Tik bovenaan op **Bewaar**.",
-          "Kijk rechtsboven in het scherm."
+          "Kijk onderaan, net boven de tabbladen."
         ],
         "en": [
           "Tap a recipe.",
           "Tap **✓ Cooked**.",
           "Tap **Save** at the top.",
-          "Look at the top right of the screen."
+          "Look at the bottom, just above the tabs."
         ]
       },
       "see": {
-        "nl": "Rechtsboven verschijnt kort een blauw blokje met de XP, bijvoorbeeld “+105”. Krijg je meer beloningen tegelijk, dan komen er een paar na elkaar, met eronder “samen +… XP”.",
-        "en": "A blue chip with the XP appears briefly at the top right, for example “+105”. If you get several rewards at once, a few follow each other, with “+… XP in total” under them."
+        "nl": "Onderaan schuift een strook in met je level, je XP-balk en rechts bijvoorbeeld “+105 XP”. De balk loopt op en het getal telt mee. Daarna schuift de strook weer weg.",
+        "en": "A strip slides in at the bottom with your level, your XP bar and, on the right, for example “+105 XP”. The bar fills up and the number counts along. Then the strip slides away again."
       },
       "know": {
-        "nl": "De eerste keer dat je een recept kookt, geeft 100 XP; elke volgende keer 10 minder, maar nooit minder dan 50. Een recept met veel ingrediënten geeft tot 30 extra, sterren geven 5 extra. Een eerste foto van een gerecht geeft 30, een eigen recept 10, of 15 als het in twee talen is.",
-        "en": "The first time you cook a recipe gives 100 XP; each next time 10 less, but never less than 50. A recipe with many ingredients gives up to 30 extra, stars give 5 extra. A first photo of a dish gives 30, a recipe of your own 10, or 15 when it is in two languages."
+        "nl": "Ook bij een badge of een gehaalde uitdaging komt die strook. Tik erop om hem meteen te sluiten. Bij een foto of een eigen recept komt er geen strook, maar rechtsboven een klein blokje, zoals “+30”. De eerste keer dat je een recept kookt, geeft 100 XP; elke volgende keer 10 minder, maar nooit minder dan 50. Een recept met veel ingrediënten geeft tot 30 extra, sterren geven 5 extra. Een eerste foto van een gerecht geeft 30, een eigen recept 10, of 15 als het in twee talen is.",
+        "en": "A badge or a completed challenge brings that strip too. Tap it to close it straight away. A photo or a recipe of your own brings no strip, but a small chip at the top right, such as “+30”. The first time you cook a recipe gives 100 XP; each next time 10 less, but never less than 50. A recipe with many ingredients gives up to 30 extra, stars give 5 extra. A first photo of a dish gives 30, a recipe of your own 10, or 15 when it is in two languages."
       },
       "platform": "all",
       "keywords": {
-        "nl": ["xp", "punten", "verdienen", "koken", "foto", "eigen recept"],
-        "en": ["xp", "points", "earn", "cooking", "photo", "own recipe"]
+        "nl": ["xp", "punten", "verdienen", "koken", "foto", "eigen recept", "strook", "xp-balk"],
+        "en": ["xp", "points", "earn", "cooking", "photo", "own recipe", "strip", "xp bar"]
       }
     },
     {
@@ -117,19 +117,21 @@
       "id": "badges-xp.blokjes",
       "title": { "nl": "De blauwe, gouden en rode blokjes", "en": "The blue, gold and red chips" },
       "what": {
-        "nl": "Na een beloning verschijnt rechtsboven kort een blokje met de XP. Soms is het extra veel: dat is geluk, geen fout.",
-        "en": "After a reward a chip with the XP appears briefly at the top right. Sometimes it is extra much: that is luck, not a mistake."
+        "nl": "Na een foto of een eigen recept verschijnt rechtsboven kort een blokje met de XP. Soms is het extra veel: dat is geluk, geen fout.",
+        "en": "After a photo or a recipe of your own, a chip with the XP appears briefly at the top right. Sometimes it is extra much: that is luck, not a mistake."
       },
       "where": {
         "nl": [
           "Tik op een recept.",
-          "Tik op **✓ Gekookt**.",
-          "Tik bovenaan op **Bewaar**."
+          "Tik bij **Foto’s** op **+ Foto**.",
+          "Kies een foto van je gerecht.",
+          "Kijk rechtsboven in het scherm."
         ],
         "en": [
           "Tap a recipe.",
-          "Tap **✓ Cooked**.",
-          "Tap **Save** at the top."
+          "Under **Photos**, tap **+ Photo**.",
+          "Choose a photo of your dish.",
+          "Look at the top right of the screen."
         ]
       },
       "see": {
@@ -137,13 +139,48 @@
         "en": "Most of the time the chip is blue. A gold chip with “Cooked!” means double XP; a red chip with “OVERCOOKED!” five times as much."
       },
       "know": {
-        "nl": "Elke beloning schommelt een beetje, tot een vijfde meer of minder. Bij “OVERCOOKED!” schudt het scherm even, behalve als **Confetti** uit staat.",
-        "en": "Every reward varies a little, up to a fifth more or less. With “OVERCOOKED!” the screen shakes briefly, unless **Confetti** is switched off."
+        "nl": "Elke beloning schommelt een beetje, tot een vijfde meer of minder. Bij “OVERCOOKED!” schudt het scherm even, behalve als **Confetti** uit staat. Bij koken zie je dat geluk niet in een blokje maar in het grote woord: zie “Cooked! groot in beeld”.",
+        "en": "Every reward varies a little, up to a fifth more or less. With “OVERCOOKED!” the screen shakes briefly, unless **Confetti** is switched off. When you cook, that luck shows in the big word instead of a chip: see “Cooked! big on the screen”."
       },
       "platform": "all",
       "keywords": {
         "nl": ["blokje", "plus xp", "cooked", "overcooked", "dubbel", "geluk"],
         "en": ["chip", "plus xp", "cooked", "overcooked", "double", "luck"]
+      }
+    },
+    {
+      "id": "badges-xp.gekookt-woord",
+      "title": { "nl": "Cooked! groot in beeld", "en": "Cooked! big on the screen" },
+      "what": {
+        "nl": "Bewaar je een kookbeurt, dan staat “Cooked!” groot midden in de confetti. Haal je een uitdaging, dan staat er “Gehaald!”.",
+        "en": "When you save a cook, “Cooked!” appears big in the middle of the confetti. When you complete a challenge, it says “Done!”."
+      },
+      "where": {
+        "nl": [
+          "Tik op een recept.",
+          "Tik op **✓ Gekookt**.",
+          "Tik bovenaan op **Bewaar**.",
+          "Tik ergens op het scherm als je het sneller wilt."
+        ],
+        "en": [
+          "Tap a recipe.",
+          "Tap **✓ Cooked**.",
+          "Tap **Save** at the top.",
+          "Tap anywhere on the screen if you want it faster."
+        ]
+      },
+      "see": {
+        "nl": "Midden in beeld staat in goud “Cooked!”, tussen de confetti. Bij dubbele XP gloeit het woord extra. Bij vijf keer zoveel XP wordt het rood “Overcooked!”, schudt het scherm en blijft het woord iets langer staan.",
+        "en": "In the middle of the screen “Cooked!” appears in gold, among the confetti. With double XP the word glows extra. With five times the XP it turns into a red “Overcooked!”, the screen shakes and the word stays a little longer."
+      },
+      "know": {
+        "nl": "Eén tik tijdens het feestje maakt de rest twee keer zo snel. Het woord hoort bij de confetti: staat **Confetti** uit, dan komt er geen woord. Kook je met andere letters uit **Jouw stijl**, dan staat het woord in die letters. Staat op je telefoon minder beweging aan, dan staat het woord stil.",
+        "en": "One tap during the celebration makes the rest twice as fast. The word belongs to the confetti: with **Confetti** off, no word appears. If you cook with another typeface from **Your style**, the word uses that typeface. If your phone is set to reduce motion, the word stands still."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["gekookt", "cooked", "overcooked", "gehaald", "woord", "feestje", "sneller", "tikken"],
+        "en": ["cooked", "overcooked", "done", "word", "celebration", "faster", "tap"]
       }
     },
     {
@@ -216,22 +253,22 @@
       "id": "badges-xp.level-omhoog",
       "title": { "nl": "Een level omhoog", "en": "Going up a level" },
       "what": {
-        "nl": "Ga je een level omhoog, dan schuift er een venster omhoog met je nieuwe titel. Daarin staat ook wat je hebt vrijgespeeld.",
-        "en": "When you go up a level, a window slides up with your new title. It also shows what you have unlocked."
+        "nl": "Ga je een level omhoog, dan loopt eerst de XP-balk onderaan vol en begint hij opnieuw bij je nieuwe level. Pas daarna schuift er een venster omhoog met je nieuwe titel en wat je hebt vrijgespeeld.",
+        "en": "When you go up a level, the XP bar at the bottom first fills up and starts again at your new level. Only then does a window slide up with your new title and what you have unlocked."
       },
       "where": {
         "nl": [
           "Tik op een recept.",
           "Tik op **✓ Gekookt**.",
           "Tik bovenaan op **Bewaar**.",
-          "Wacht tot de blokjes weg zijn.",
+          "Kijk hoe de XP-balk onderaan volloopt.",
           "Tik op **Naar Jouw stijl** om het nieuwe te proberen."
         ],
         "en": [
           "Tap a recipe.",
           "Tap **✓ Cooked**.",
           "Tap **Save** at the top.",
-          "Wait until the chips have gone.",
+          "Watch the XP bar at the bottom fill up.",
           "Tap **Open Your style** to try what is new."
         ]
       },
@@ -240,8 +277,8 @@
         "en": "At the top it says, for example, “🎉 Level 3!”, with your new title large under it. Under **Unlocked** you find new confetti, sounds or avatar parts."
       },
       "know": {
-        "nl": "**Naar Jouw stijl** staat er alleen als je iets nieuws hebt vrijgespeeld. Met **Sluit** of door naar beneden te vegen sluit je het venster.",
-        "en": "**Open Your style** is only there when you have unlocked something new. **Close**, or swiping down, closes the window."
+        "nl": "**Naar Jouw stijl** staat er alleen als je iets nieuws hebt vrijgespeeld. Met **Sluit** of door naar beneden te vegen sluit je het venster. Tik je op de strook met de balk, dan komt het venster meteen.",
+        "en": "**Open Your style** is only there when you have unlocked something new. **Close**, or swiping down, closes the window. Tap the strip with the bar and the window comes straight away."
       },
       "platform": "all",
       "keywords": {
@@ -707,6 +744,44 @@
       }
     },
     {
+      "id": "badges-xp.snelle-vieringen",
+      "title": { "nl": "Snelle vieringen", "en": "Fast celebrations" },
+      "what": {
+        "nl": "Op level 30 speel je **Snelle vieringen** vrij. Dan gaan het woord, de confetti en de XP-balk standaard twee keer zo snel.",
+        "en": "At level 30 you unlock **Fast celebrations**. The word, the confetti and the XP bar then run at double speed by default."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik bovenaan op je naam.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
+          "Tik op de tab **Confetti**.",
+          "Tik onder de confetti op de schakelaar naast **Snelle vieringen**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap your name at the top.",
+          "On **My profile**, tap the **Your style** tile.",
+          "Tap the **Confetti** tab.",
+          "Below the confetti, tap the switch next to **Fast celebrations**."
+        ]
+      },
+      "see": {
+        "nl": "De schakelaar staat aan. Bij je volgende kookbeurt gaat het hele feestje twee keer zo snel.",
+        "en": "The switch is on. At your next cook the whole celebration runs twice as fast."
+      },
+      "know": {
+        "nl": "Onder level 30 zie je deze schakelaar nog niet. Tikken tijdens een viering maakt het altijd sneller, ook zonder schakelaar; samen wordt het niet nog sneller. De schakelaar geldt voor deze telefoon.",
+        "en": "Below level 30 you do not see this switch yet. Tapping during a celebration always makes it faster, even without the switch; together it gets no faster still. The switch applies to this phone."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": ["snelle vieringen", "sneller", "dubbele snelheid", "level 30", "confetti", "jouw stijl"],
+        "en": ["fast celebrations", "faster", "double speed", "level 30", "confetti", "your style"]
+      }
+    },
+    {
       "id": "badges-xp.stijl-letters",
       "title": { "nl": "Jouw stijl: letters in de kookstand", "en": "Your style: typefaces in cook mode" },
       "what": {
@@ -874,12 +949,12 @@
         ]
       },
       "see": {
-        "nl": "De tegel **Badges** op **Mijn profiel** verdwijnt, net als je level en de XP-balk. Er komen geen blokjes, meldingen, uitdagingen of level-vensters meer.",
-        "en": "The **Badges** tile on **My profile** disappears, as do your level and the XP bar. No more chips, messages, challenges or level windows appear."
+        "nl": "De tegel **Badges** op **Mijn profiel** verdwijnt, net als je level en de XP-balk. Er komen geen blokjes, XP-strook, meldingen, uitdagingen of level-vensters meer.",
+        "en": "The **Badges** tile on **My profile** disappears, as do your level and the XP bar. No more chips, XP strip, messages, challenges or level windows appear."
       },
       "know": {
-        "nl": "Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti en geen schuddend scherm. Tik je op het woord **Badges** in plaats van op de schakelaar, dan open je je badges.",
-        "en": "Your avatar stays, as do the **Cooking calendar** and the **Theme** tab in **Your style**. Switch **Badges** back on and everything returns. **Confetti** off means no confetti and no shaking screen. Tapping the word **Badges** instead of the switch opens your badges."
+        "nl": "Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti, geen groot “Cooked!” en geen schuddend scherm. Tik je op het woord **Badges** in plaats van op de schakelaar, dan open je je badges.",
+        "en": "Your avatar stays, as do the **Cooking calendar** and the **Theme** tab in **Your style**. Switch **Badges** back on and everything returns. **Confetti** off means no confetti, no big “Cooked!” and no shaking screen. Tapping the word **Badges** instead of the switch opens your badges."
       },
       "route": "/more",
       "platform": "all",

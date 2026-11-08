@@ -4,6 +4,47 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): V4 — dopamine-kick bij Gekookt!: het woord groot in de confetti, de XP-strook die oploopt met uitgestelde level-up, pops alleen nog voor foto en beoordeling, tik = ×2, ontgrendeling Snelle vieringen (level 30)
+Gebouwd volgens docs/specs/verbeterronde-4.md (lichte workflow, vier bouwers + integrator; run-id wf_0341fae8-b8b
+de workflow vult hem in). **XP-laag (A):** src/xp.ts: `XpSettleDelta extends XpDelta { totalFrom, totalTo }` (via `withTotals`;
+`XpDelta` in src/domain/xp.ts bleef ongewijzigd), `queuePops(memberId, delta, levelUp, now)` splitst: `photo`/`recipe` naar
+`xpPops`, `cook`/`week`/`badge`/`challenge` samen naar het nieuwe signal `xpRise` (`XpRiseInfo` met `crit` = de zwaarste en
+`levelUp?`); een open rise van hetzelfde lid wordt opgeteld (twee wachtende level-ups worden er één); een rise van een ander lid
+releaset eerst de wachtende level-up van de oude. `celebrationCrit` bij elke crit; `releaseLevelUp` (elke level-up één keer) en
+`clearXpRise`. Zonder rise blijft `announceLevelUp` direct. 11 nieuwe tests. **Viering (B):** src/celebrate.ts: setting
+`celebrate.fast` (`celebrateFast`, `setCelebrateFast`, mee geladen), `celebrationSpeed` (computed 1 | 2: basis 2 met de setting
+én `isActive('fast-celebrations')`, een tik → 2, nooit meer), `holdCelebration()` (tik-luisteraar op document zolang een deel
+van de viering in beeld is) en `afterCelebration(ms, fn)` (timer die bij een snelheidswissel herplant; `extend` voor Overcooked!).
+`celebrate()` zet de burst nu óók onder prefers-reduced-motion (confetti verbergt zich daar met CSS; het woord staat dan stil).
+Nieuw `CelebrationWord.tsx` (Cooked!/Gehaald!/Done!, 48 px 800 `--celebrate-gold` #c9a227, `data-font` uit `cook.font`, 1,4 s,
++1,0 s en rood bij Overcooked!, gloed bij ×2) en `XpRise.tsx` (strook boven de nav, 1,2 s oplopen met ease-out, level-up: vol →
+nieuw level → door, dan `releaseLevelUp`; 1,2 s staan, wegschuiven; tik sluit; badges uit = niets; reduced motion = direct vol,
+1,8 s; schud bij overcooked via het geëxporteerde `shakeShell`). XpPop toont alleen `photo`/`recipe`. Confetti deelt de duur door
+de snelheid (`playbackRate` voor wat al vliegt). i18n in src/i18n/xp.ts. **Ontgrendeling (C):** `fast-celebrations` (feature,
+level 30, ⚡, rare) in data/unlocks.json (16 → 17); Jouw stijl → Confetti: Section **Snelle vieringen** met schakelaar alleen bij
+`isActive`; tests/unlocks.test.ts bijgewerkt. **Handboek (D):** `xp-verdienen`, `level-omhoog`, `blokjes`, `uitzetten` bijgewerkt,
+nieuw `gekookt-woord` en `snelle-vieringen`; HANDLEIDING/HANDBOOK opnieuw gegenereerd. **Integrator:** `celebrate.cooked` NL
+gecorrigeerd naar "Cooked!" (bouwer B had "Gekookt!"; spec 8 nov: ook in het Nederlands Cooked!), net als de titel en teksten van
+handboekrij `gekookt-woord` en de verwijzingen in `blokjes` en `uitzetten`; verouderd commentaar in Confetti.tsx/CelebrationWord.tsx/
+xp.ts. check, 1843 tests, build, build:next en validate:data groen. DEVICE-TEST rij 113 (NL/EN) nieuw; rijen 92, 93 en 107
+(blauw blokje / XP-pop bij koken en uitdaging) bijgewerkt naar de strook. Acceptatie in de dev-app (375 px, NL en EN, via de
+signalen): woord 48 px goud, 1,4 s; Overcooked! rood, schud, 2,4 s; strook 1,2 s oplopen + 1,2 s staan; level-up-venster op ≈1,4 s
+(na de balk); foto → alleen de pop; badges uit → woord + confetti, geen strook; confetti uit → strook, geen woord; tik → woord
+0,9 s, confetti 0,8 s, strook 1,6 s; Snelle vieringen aan → snelheid 2, tik blijft 2; reduced motion (matchMedia nagebootst) →
+statisch woord 1,4 s, balk meteen vol, ≈2,2 s; schakelaar zichtbaar op level 33 in NL en EN; geen consolefouten.
+**Open (voor Fable/Stijn):** (1) `celebrate.fast` heet in de spec "toestel-instelling", maar staat niet in `DEVICE_LOCAL_SETTINGS`
+(src/db/repo.ts) en niet in het register README §2b: hij reist nu mee in de back-up — beslissen of hij toestel-lokaal moet;
+(2) "de tegel in Vrijgespeeld": dat scherm bestaat sinds 6D-S niet meer en `feature`-ontgrendelingen hebben geen tegel in Jouw
+stijl (net als avatar-maker en challenges); het level-up-venster op level 30 noemt hem wel; (3) onder reduced motion zet
+`celebrate()` nu de burst, waardoor badges.ts:475 (`celebration.value === null`) daar een mijlpaal-burst kan overslaan terwijl een
+andere loopt (onzichtbaar, want confetti staat dan verborgen); (4) onder reduced motion wordt de level-up meteen gereleaset (er is
+niets om op te wachten), het venster opent dus terwijl de strook nog 1,8 s staat; (5) de strook (z-index 15) zit op dezelfde hoogte
+als badge-, xp- en uitdagingstoast (z 30): een toast op hetzelfde moment ligt eroverheen; (6) een tik tijdens de viering gaat ook
+door naar wat eronder ligt (passieve pointerdown-luisteraar; woord en confetti laten tikken door); (7) handboek zegt "foto of eigen
+recept" waar spec §1d "foto of beoordeling" zegt: in de code blijven alleen `photo` en `recipe` (eigen recept) pops, de
+sterren-extra zit in het kook-event en dus in de strook; (8) een settle met foto én koken (komt nu niet voor) toont in de strook
+alleen de XP van de rise-pops.
+
 ## 8 nov (Opus): V3 — avatar-ronde: binnenschaal 0,9, niveauring alleen op de kale cirkel, lijsten dunner, haar-revamp, zes brillen en zes kook-onderdelen, vijftien zeldzaamheden hersteld, tegel Verras me per laag
 Gebouwd volgens docs/specs/verbeterronde-3.md (lichte workflow, vier bouwers + integrator; run-id: niet bekend bij de integrator,
 de workflow vult hem in). **Afwijking: vijf kook-onderdelen, niet zes** — zie open punt 1. **Renderer (A):** `INNER_SCALE = 0.9`

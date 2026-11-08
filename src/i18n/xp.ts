@@ -19,6 +19,11 @@ export const xp: Dict = {
   'xp.sum': { nl: 'samen +{n} XP', en: '+{n} XP in total' },
   'xp.cooked': { nl: '+{n} · Cooked!', en: '+{n} · Cooked!' },
   'xp.overcooked': { nl: '+{n} · OVERCOOKED!', en: '+{n} · OVERCOOKED!' },
+  // V4 (docs/specs/verbeterronde-4.md §1a, §1b): the word in the confetti and the XP strip.
+  'celebrate.cooked': { nl: 'Cooked!', en: 'Cooked!' },
+  'celebrate.overcooked': { nl: 'Overcooked!', en: 'Overcooked!' },
+  'celebrate.challenge': { nl: 'Gehaald!', en: 'Done!' },
+  'xp.rise.plus': { nl: '+{xp} XP', en: '+{xp} XP' },
   // §1d the level-up sheet ("Ontgrendeld" + "Bekijk Vrijgespeeld" only show from 6D-3 on).
   'levelup.title': { nl: '🎉 Level {level}!', en: '🎉 Level {level}!' },
   'levelup.unlocked': { nl: 'Ontgrendeld', en: 'Unlocked' },
@@ -49,6 +54,12 @@ export const xp: Dict = {
   'style.tab.confetti': { nl: 'Confetti', en: 'Confetti' },
   'style.tab.fonts': { nl: 'Letters', en: 'Typefaces' },
   'style.tab.theme': { nl: 'Thema', en: 'Theme' },
+  // V4 (docs/specs/verbeterronde-4.md §1c): the switch "Snelle vieringen" on the Confetti tab.
+  'style.fast': { nl: 'Snelle vieringen', en: 'Fast celebrations' },
+  'style.fastHint': {
+    nl: 'Alles op dubbele snelheid. Tikken tijdens een viering kan altijd.',
+    en: 'Everything at double speed. Tapping during a celebration always works.',
+  },
   'style.timerSound': { nl: 'Timergeluid', en: 'Timer sound' },
   'style.cookedSound': { nl: 'Bij Gekookt!', en: 'On Cooked!' },
   'style.random': { nl: 'Verras me', en: 'Surprise me' },

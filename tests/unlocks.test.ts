@@ -53,11 +53,11 @@ const levelUnlock = (over: Obj = {}): Obj => ({
 });
 
 describe('data/unlocks.json', () => {
-  it('passes the validator: 16 unlocks, no errors, no warnings', () => {
+  it('passes the validator: 17 unlocks, no errors, no warnings', () => {
     const r = validateUnlocks(unlocksJson, BADGE_IDS, RETIRED_IDS);
     expect(r.errors).toEqual([]);
     expect(r.warnings).toEqual([]);
-    expect(r.stats.lines).toBe(16);
+    expect(r.stats.lines).toBe(17);
     // Normalizing the shipped file drops nothing and keeps the file order.
     expect(ids(UNLOCKS)).toEqual(unlocksJson.map((u) => u.id));
   });
@@ -78,6 +78,7 @@ describe('data/unlocks.json', () => {
       ['challenges', 'feature', { level: 20 }, 'challenges', 'Uitdagingen', 'Challenges'],
       ['confetti-trex', 'confetti', { level: 25 }, 'trex', 'T-rex-confetti', 'T-rex confetti'],
       ['sound-fanfare', 'timerSound', { level: 30 }, 'fanfare', 'Fanfare', 'Fanfare'],
+      ['fast-celebrations', 'feature', { level: 30 }, 'fast', 'Snelle vieringen', 'Fast celebrations'],
       ['confetti-gold', 'confetti', { level: 40 }, 'gold', 'Gouden confetti', 'Golden confetti'],
       ['confetti-stars', 'confetti', { level: 50 }, 'stars', 'Sterrenregen', 'Star shower'],
       ['confetti-fire', 'confetti', { badge: 'op-dreef' }, 'fire', 'Vlammetjes', 'Flames'],
@@ -102,6 +103,7 @@ describe('data/unlocks.json', () => {
       challenges: ['Kies elke week een uitdaging op Mijn profiel, voor bonus-XP.', 'Pick a challenge each week on My profile, for bonus XP.'],
       'confetti-trex': ['🦖 Het leven vindt een weg.', '🦖 Life finds a way.'],
       'sound-fanfare': timer,
+      'fast-celebrations': ['Woord, confetti en XP-balk standaard op dubbele snelheid.', 'Word, confetti and XP bar at double speed by default.'],
       'confetti-gold': ['Alles goud bij Gekookt!', 'All gold on Cooked!'],
       'confetti-stars': ['⭐✨ voor een sterrenkok.', '⭐✨ for a star cook.'],
       'confetti-fire': ['🔥 Zo heet als je streak.', '🔥 As hot as your streak.'],
@@ -113,6 +115,13 @@ describe('data/unlocks.json', () => {
     const maker = UNLOCKS.find((u) => u.id === 'avatar-maker');
     expect(maker?.by).toEqual({ level: AVATAR_MAKER_LEVEL });
     expect(AVATAR_MAKER_LEVEL).toBe(3);
+  });
+
+  it('V4 §1c: fast-celebrations is a rare ⚡ feature on level 30', () => {
+    const u = UNLOCKS.find((x) => x.id === 'fast-celebrations');
+    expect(u).toMatchObject({ kind: 'feature', by: { level: 30 }, icon: '⚡', value: 'fast', rarity: 'rare' });
+    expect(unlockedIds(UNLOCKS, { level: 29, badges: NO_BADGES }).has('fast-celebrations')).toBe(false);
+    expect(unlockedIds(UNLOCKS, { level: 30, badges: NO_BADGES }).has('fast-celebrations')).toBe(true);
   });
 
   it('the validator mirrors the kinds of src/domain/unlocks.ts', () => {
@@ -181,8 +190,8 @@ describe('unlockedIds', () => {
     expect(unlockedIds(UNLOCKS, { level: 1, badges: [badge('huiskok', 8)] })).toEqual(new Set());
   });
 
-  it('level 100 with op-dreef → all 16', () => {
-    expect(unlockedIds(UNLOCKS, { level: 100, badges: [badge('op-dreef')] }).size).toBe(16);
+  it('level 100 with op-dreef → all 17', () => {
+    expect(unlockedIds(UNLOCKS, { level: 100, badges: [badge('op-dreef')] }).size).toBe(17);
   });
 
   it('a badge unlock with a tier needs that tier', () => {
@@ -205,7 +214,7 @@ describe('unlocksForLevels', () => {
   it('a level without an unlock gives nothing; badge unlocks are never in here', () => {
     expect(unlocksForLevels(UNLOCKS, 3, 4)).toEqual([]);
     expect(unlocksForLevels(UNLOCKS, 5, 5)).toEqual([]);
-    expect(ids(unlocksForLevels(UNLOCKS, 1, 100))).toHaveLength(15);
+    expect(ids(unlocksForLevels(UNLOCKS, 1, 100))).toHaveLength(16);
     expect(ids(unlocksForLevels(UNLOCKS, 1, 100))).not.toContain('confetti-fire');
   });
 });
@@ -353,6 +362,7 @@ describe('rarity of unlocks (block 6D-S)', () => {
       challenges: 'rare',
       'confetti-trex': 'epic',
       'sound-fanfare': 'epic',
+      'fast-celebrations': 'rare',
       'confetti-stars': 'epic',
       'confetti-fire': 'epic',
       'confetti-gold': 'legendary',

@@ -24,7 +24,7 @@
 import type { ComponentChildren, JSX } from 'preact';
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { badgeData, badgesEnabled, loadBadgeSettings } from '@/badges';
-import { celebrate, confettiStyle, DEFAULT_CONFETTI_STYLE, loadCelebrateSettings, RANDOM_CONFETTI_STYLE, setConfettiStyle } from '@/celebrate';
+import { celebrate, celebrateFast, confettiStyle, DEFAULT_CONFETTI_STYLE, loadCelebrateSettings, RANDOM_CONFETTI_STYLE, setCelebrateFast, setConfettiStyle } from '@/celebrate';
 import { isIOS } from '@/components/AppInfo';
 import { AvatarSheet } from '@/components/AvatarSheet';
 import { Header } from '@/components/Header';
@@ -40,7 +40,7 @@ import { activeProfile } from '@/profile';
 import { navigate, route } from '@/router';
 import { cookedSound, loadSoundSettings, previewCookedSound, previewTimerSound, setCookedSound, setTimerSound, timerSound, type TimerSound } from '@/sounds';
 import { setTheme, theme, type Theme } from '@/theme';
-import { COOK_FONT_SETTING, disabledUnlocks, refreshUnlocks, setUnlockEnabled, unlockData, unlockedOnPhone, type CookFont } from '@/unlocks';
+import { COOK_FONT_SETTING, disabledUnlocks, isActive, refreshUnlocks, setUnlockEnabled, unlockData, unlockedOnPhone, type CookFont } from '@/unlocks';
 import { Avatar, useAvatarLevel } from './ProfilesScreen';
 
 // ---------------------------------------------------------------------------- the pure tile model
@@ -421,6 +421,9 @@ function TileGrid(props: { tiles: StyleTile[]; l: Lang; note: StyleTile | null; 
   );
 }
 
+/** V4 §1c: the unlock id of "Snelle vieringen" (data/unlocks.json). */
+const FAST_CELEBRATIONS_UNLOCK = 'fast-celebrations';
+
 function Section(props: { title: string; hint?: ComponentChildren; children: ComponentChildren }) {
   return (
     <section class="style-section">
@@ -558,6 +561,31 @@ export function StyleScreen() {
               {grid(tiles.filter((x) => x.group === 'timerSound'))}
             </Section>
             {tiles.some((x) => x.group === 'cookedSound') && <Section title={t('style.cookedSound')}>{grid(tiles.filter((x) => x.group === 'cookedSound'))}</Section>}
+          </>
+        );
+      case 'confetti':
+        return (
+          <>
+            {grid(tiles)}
+            {/* V4 §1c: the level-30 unlock "Snelle vieringen" — a phone setting (`celebrate.fast`), shown only while active. */}
+            {isActive(FAST_CELEBRATIONS_UNLOCK) && (
+              <Section title={t('style.fast')}>
+                <label class="setting">
+                  <div class="label">
+                    <small>{t('style.fastHint')}</small>
+                  </div>
+                  <span class="switch">
+                    <input
+                      type="checkbox"
+                      aria-label={t('style.fast')}
+                      checked={celebrateFast.value}
+                      onChange={(e) => void Promise.resolve(setCelebrateFast((e.currentTarget as HTMLInputElement).checked)).catch((err: unknown) => console.error('setCelebrateFast', err))}
+                    />
+                    <span class="track" />
+                  </span>
+                </label>
+              </Section>
+            )}
           </>
         );
       default:

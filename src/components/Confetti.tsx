@@ -1,12 +1,17 @@
 // CSS-only confetti burst (~1.2 s) driven by the `celebration` signal (src/celebrate.ts). Mount
 // <Confetti/> once in the shell. Pointer events pass through; the overlay is aria-hidden; the CSS
-// hides it under `prefers-reduced-motion` (celebrate() also skips it there).
+// hides it under `prefers-reduced-motion`; since V4 celebrate() still sets the burst there (the word shows statically).
 //
 // 6D-4a (docs/specs/xp-levels.md §1g): the burst's `style` (src/celebrate.ts) changes the pieces:
 // 'double' = 160 pieces; 'veggies', 'party', 'trex', 'fire' and 'stars' = emoji pieces (an <i> with
 // the emoji as text, 18 px); 'gold' = pieces in three golds. Anything else is the plain burst.
-import { useEffect, useMemo } from 'preact/hooks';
-import { celebration, clearCelebration } from '@/celebrate';
+//
+// V4 (docs/specs/verbeterronde-4.md §1c): the burst runs at `celebrationSpeed` — `durationMs` divided
+// by the speed at the start of the burst; a tap halfway through speeds the pieces still flying up
+// (Web Animations `playbackRate`) and re-plans the clear (afterCelebration). It holds the
+// celebration while it is on screen, so a tap during the confetti counts.
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'preact/hooks';
+import { afterCelebration, celebration, celebrationSpeed, clearCelebration, holdCelebration, type Celebration } from '@/celebrate';
 
 export interface ConfettiProps {
   /** Number of pieces (default 80). */
@@ -64,13 +69,36 @@ export function Confetti(props: ConfettiProps) {
   // 6D-4a: 'stars' (the kind) is always the plain small burst, whatever the style says.
   const look = !current || small ? 'default' : current.style;
   const pieces = props.pieces ?? (small ? 26 : look === 'double' ? DOUBLE_PIECES : 80);
-  const durationMs = props.durationMs ?? (small ? 850 : 1200);
+  const baseMs = props.durationMs ?? (small ? 850 : 1200);
+  const speed = celebrationSpeed.value;
+  // The speed this burst started at: its pieces are planned at durationMs / startSpeed.
+  const startSpeed = useRef<{ burst: Celebration | null; speed: number }>({ burst: null, speed: 1 });
+  if (startSpeed.current.burst !== current) startSpeed.current = { burst: current, speed };
+  const burstSpeed = startSpeed.current.speed;
+  const durationMs = baseMs / burstSpeed;
+  const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!current) return;
-    const handle = setTimeout(clearCelebration, durationMs + 100);
-    return () => clearTimeout(handle);
-  }, [current, durationMs]);
+    const release = holdCelebration();
+    // Celebration time (speed 1): the clear follows a later tap by itself.
+    const timer = afterCelebration(baseMs + 100, () => {
+      release();
+      clearCelebration();
+    });
+    return () => {
+      timer.cancel();
+      release();
+    };
+  }, [current, baseMs]);
+
+  // A tap during the burst: the pieces already flying speed up relative to the burst's own speed.
+  useLayoutEffect(() => {
+    const el = root.current;
+    if (!el || typeof el.getAnimations !== 'function') return;
+    const rate = speed / burstSpeed;
+    for (const a of el.getAnimations({ subtree: true })) a.playbackRate = rate;
+  }, [current, speed, burstSpeed]);
 
   const styles = useMemo(() => {
     if (!current) return [];
@@ -101,7 +129,7 @@ export function Confetti(props: ConfettiProps) {
 
   if (!current) return null;
   return (
-    <div class="confetti" aria-hidden="true" data-kind={current.kind} data-style={look}>
+    <div class="confetti" ref={root} aria-hidden="true" data-kind={current.kind} data-style={look}>
       <style>{CSS}</style>
       {styles.map((p, i) =>
         p.text !== null ? (

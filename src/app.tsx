@@ -20,12 +20,14 @@ import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, 
 import { loadCelebrateSettings } from './celebrate';
 import { challengeToast, dismissChallengeToast } from './challenges';
 import { BrowserNotice } from './components/BrowserNotice';
+import { CelebrationWord } from './components/CelebrationWord';
 import { Confetti } from './components/Confetti';
 import { InstallCard } from './components/InstallCard';
 import { LevelUpSheet } from './components/LevelUpSheet';
 import { Nav } from './components/Nav';
 import { UpdateBar } from './components/UpdateBar';
 import { XpPop, XpToast } from './components/XpPop';
+import { XpRise } from './components/XpRise';
 import { loadCooking } from './cooking';
 import { ensureBuiltins } from './db/repo';
 import { loadDictionary } from './dictionary';
@@ -382,10 +384,12 @@ export function App(props: { openImportFromHash: boolean }) {
       <InstallCard />
       {!onboarding && <Nav />}
       <Confetti />
+      <CelebrationWord />
       <BadgeToast />
       <ChallengeToast />
       <XpPop />
       <XpToast />
+      <XpRise />
       <LevelUpSheet />
     </div>
   );

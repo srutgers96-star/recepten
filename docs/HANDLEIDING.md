@@ -3347,15 +3347,15 @@ Je verdient XP met koken, met een foto van je gerecht, met een eigen recept en m
 1. Tik op een recept.
 2. Tik op **✓ Gekookt**.
 3. Tik bovenaan op **Bewaar**.
-4. Kijk rechtsboven in het scherm.
+4. Kijk onderaan, net boven de tabbladen.
 
 #### Wat je dan ziet
 
-Rechtsboven verschijnt kort een blauw blokje met de XP, bijvoorbeeld “+105”. Krijg je meer beloningen tegelijk, dan komen er een paar na elkaar, met eronder “samen +… XP”.
+Onderaan schuift een strook in met je level, je XP-balk en rechts bijvoorbeeld “+105 XP”. De balk loopt op en het getal telt mee. Daarna schuift de strook weer weg.
 
 #### Goed om te weten
 
-De eerste keer dat je een recept kookt, geeft 100 XP; elke volgende keer 10 minder, maar nooit minder dan 50. Een recept met veel ingrediënten geeft tot 30 extra, sterren geven 5 extra. Een eerste foto van een gerecht geeft 30, een eigen recept 10, of 15 als het in twee talen is.
+Ook bij een badge of een gehaalde uitdaging komt die strook. Tik erop om hem meteen te sluiten. Bij een foto of een eigen recept komt er geen strook, maar rechtsboven een klein blokje, zoals “+30”. De eerste keer dat je een recept kookt, geeft 100 XP; elke volgende keer 10 minder, maar nooit minder dan 50. Een recept met veel ingrediënten geeft tot 30 extra, sterren geven 5 extra. Een eerste foto van een gerecht geeft 30, een eigen recept 10, of 15 als het in twee talen is.
 
 ### Extra XP: dagen op rij, een volle week en badges
 
@@ -3405,13 +3405,14 @@ Hetzelfde recept telt één keer per dag. De vierde en vijfde kookbeurt op een d
 
 #### Wat het doet
 
-Na een beloning verschijnt rechtsboven kort een blokje met de XP. Soms is het extra veel: dat is geluk, geen fout.
+Na een foto of een eigen recept verschijnt rechtsboven kort een blokje met de XP. Soms is het extra veel: dat is geluk, geen fout.
 
 #### Waar je tikt
 
 1. Tik op een recept.
-2. Tik op **✓ Gekookt**.
-3. Tik bovenaan op **Bewaar**.
+2. Tik bij **Foto’s** op **+ Foto**.
+3. Kies een foto van je gerecht.
+4. Kijk rechtsboven in het scherm.
 
 #### Wat je dan ziet
 
@@ -3419,7 +3420,28 @@ Meestal is het blokje blauw. Een gouden blokje met “Cooked!” betekent dubbel
 
 #### Goed om te weten
 
-Elke beloning schommelt een beetje, tot een vijfde meer of minder. Bij “OVERCOOKED!” schudt het scherm even, behalve als **Confetti** uit staat.
+Elke beloning schommelt een beetje, tot een vijfde meer of minder. Bij “OVERCOOKED!” schudt het scherm even, behalve als **Confetti** uit staat. Bij koken zie je dat geluk niet in een blokje maar in het grote woord: zie “Cooked! groot in beeld”.
+
+### Cooked! groot in beeld
+
+#### Wat het doet
+
+Bewaar je een kookbeurt, dan staat “Cooked!” groot midden in de confetti. Haal je een uitdaging, dan staat er “Gehaald!”.
+
+#### Waar je tikt
+
+1. Tik op een recept.
+2. Tik op **✓ Gekookt**.
+3. Tik bovenaan op **Bewaar**.
+4. Tik ergens op het scherm als je het sneller wilt.
+
+#### Wat je dan ziet
+
+Midden in beeld staat in goud “Cooked!”, tussen de confetti. Bij dubbele XP gloeit het woord extra. Bij vijf keer zoveel XP wordt het rood “Overcooked!”, schudt het scherm en blijft het woord iets langer staan.
+
+#### Goed om te weten
+
+Eén tik tijdens het feestje maakt de rest twee keer zo snel. Het woord hoort bij de confetti: staat **Confetti** uit, dan komt er geen woord. Kook je met andere letters uit **Jouw stijl**, dan staat het woord in die letters. Staat op je telefoon minder beweging aan, dan staat het woord stil.
 
 ### Levels en titels
 
@@ -3468,14 +3490,14 @@ Onder level 5 is er geen ring. De ring staat alleen om een avatar zonder lijst e
 
 #### Wat het doet
 
-Ga je een level omhoog, dan schuift er een venster omhoog met je nieuwe titel. Daarin staat ook wat je hebt vrijgespeeld.
+Ga je een level omhoog, dan loopt eerst de XP-balk onderaan vol en begint hij opnieuw bij je nieuwe level. Pas daarna schuift er een venster omhoog met je nieuwe titel en wat je hebt vrijgespeeld.
 
 #### Waar je tikt
 
 1. Tik op een recept.
 2. Tik op **✓ Gekookt**.
 3. Tik bovenaan op **Bewaar**.
-4. Wacht tot de blokjes weg zijn.
+4. Kijk hoe de XP-balk onderaan volloopt.
 5. Tik op **Naar Jouw stijl** om het nieuwe te proberen.
 
 #### Wat je dan ziet
@@ -3484,7 +3506,7 @@ Bovenaan staat bijvoorbeeld “🎉 Level 3!”, met daaronder groot je nieuwe t
 
 #### Goed om te weten
 
-**Naar Jouw stijl** staat er alleen als je iets nieuws hebt vrijgespeeld. Met **Sluit** of door naar beneden te vegen sluit je het venster.
+**Naar Jouw stijl** staat er alleen als je iets nieuws hebt vrijgespeeld. Met **Sluit** of door naar beneden te vegen sluit je het venster. Tik je op de strook met de balk, dan komt het venster meteen.
 
 ### Je badges bekijken
 
@@ -3773,6 +3795,30 @@ Wil je een confetti niet meer in de afwisseling? Houd die tegel lang ingedrukt, 
 
 (`#/more/style`)
 
+### Snelle vieringen
+
+#### Wat het doet
+
+Op level 30 speel je **Snelle vieringen** vrij. Dan gaan het woord, de confetti en de XP-balk standaard twee keer zo snel.
+
+#### Waar je tikt
+
+1. Tik onderaan op **Meer**.
+2. Tik bovenaan op je naam.
+3. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
+4. Tik op de tab **Confetti**.
+5. Tik onder de confetti op de schakelaar naast **Snelle vieringen**.
+
+#### Wat je dan ziet
+
+De schakelaar staat aan. Bij je volgende kookbeurt gaat het hele feestje twee keer zo snel.
+
+#### Goed om te weten
+
+Onder level 30 zie je deze schakelaar nog niet. Tikken tijdens een viering maakt het altijd sneller, ook zonder schakelaar; samen wordt het niet nog sneller. De schakelaar geldt voor deze telefoon.
+
+(`#/more/style`)
+
 ### Jouw stijl: letters in de kookstand
 
 #### Wat het doet
@@ -3879,11 +3925,11 @@ Houd je niet van het spel? Met de schakelaar **Badges** zet je alle badges, XP e
 
 #### Wat je dan ziet
 
-De tegel **Badges** op **Mijn profiel** verdwijnt, net als je level en de XP-balk. Er komen geen blokjes, meldingen, uitdagingen of level-vensters meer.
+De tegel **Badges** op **Mijn profiel** verdwijnt, net als je level en de XP-balk. Er komen geen blokjes, XP-strook, meldingen, uitdagingen of level-vensters meer.
 
 #### Goed om te weten
 
-Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti en geen schuddend scherm. Tik je op het woord **Badges** in plaats van op de schakelaar, dan open je je badges.
+Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti, geen groot “Cooked!” en geen schuddend scherm. Tik je op het woord **Badges** in plaats van op de schakelaar, dan open je je badges.
 
 (`#/more`)
 

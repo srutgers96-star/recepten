@@ -10,6 +10,10 @@
 //   shakes 400 ms (`.shell.shake`) — not under prefers-reduced-motion and not with Confetti off
 //   (then only the text).
 // A stale queue is never shown for a quiet recompute: settleXp only queues pops on reward moments.
+// V4 (docs/specs/verbeterronde-4.md §1b): only the pops of a photo and a rating ('photo', 'recipe')
+// still come here; cooking, the week, badges and challenges go to the XP strip (<XpRise/>, which
+// also plays the Overcooked! shake for those — `shakeShell` is exported for it). The sum line and
+// the shake stay for what does come through here; any other kind is dismissed unseen.
 // Also here: <XpToast/>, the honest 0-XP toast (§1e: `xp.busyWeek`, `xp.dayCap`, `xp.rulesChanged`;
 // class `xp-toast`, 5 s, not tappable), driven by the `xpToast` signal (an i18n key).
 import { signal } from '@preact/signals';
@@ -17,10 +21,13 @@ import type { JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgesEnabled } from '@/badges';
 import { confettiEnabled, prefersReducedMotion } from '@/celebrate';
-import type { Crit } from '@/domain/xp';
+import type { Crit, XpEventKind } from '@/domain/xp';
 import { t } from '@/i18n';
 import { dismissXpPop, xpPops, xpToast, type XpPopItem } from '@/xp';
 import { formatXp } from './XpBar';
+
+/** The pop kinds this component still shows (V4 §1b); the rest is the XP strip's. */
+export const POP_KINDS: ReadonlySet<XpEventKind> = new Set<XpEventKind>(['photo', 'recipe']);
 
 /** Delay between the reward moment (the item entering the queue) and its pop. */
 export const POP_DELAY_MS = 900;
@@ -59,7 +66,8 @@ function popLabel(p: ShownPop): string {
   return `+${n}`;
 }
 
-function shakeShell(): void {
+/** The Overcooked! shake of the shell (400 ms); not with Confetti off or under reduced motion. */
+export function shakeShell(): void {
   if (!confettiEnabled.value || prefersReducedMotion()) return;
   const shell = typeof document !== 'undefined' ? document.querySelector('.shell') : null;
   if (!shell) return;
@@ -103,7 +111,11 @@ export function XpPop(): JSX.Element | null {
   }
 
   useEffect(() => {
-    const fresh = queue.filter((item) => !scheduled.current.has(item.id));
+    const queued = queue.filter((item) => !scheduled.current.has(item.id));
+    if (queued.length === 0) return;
+    // V4: cook, week, badge and challenge XP belong to the strip; a stray one here is dropped.
+    const fresh = queued.filter((item) => POP_KINDS.has(item.kind));
+    for (const item of queued) if (!POP_KINDS.has(item.kind)) dismissXpPop(item.id);
     if (fresh.length === 0) return;
     // Badges off: XP leaves no trace (settleXp is a no-op then; this only guards a stray item).
     if (!badgesEnabled.value) {

@@ -1,9 +1,10 @@
 # Spec V4 — Dopamine-kick bij Gekookt!: het woord groot, een XP-balk die oploopt, Snelle vieringen (Stijn, 30 okt + 8 nov 2026)
 
-Status: in aanbouw (Fable, 8 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 9 (Stijn 30 okt,
+Status: compleet (Fable, 8 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 9 (Stijn 30 okt,
 alle open vragen door hem beantwoord; 8 nov: "goed, gaan we zo doen"). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
 docs/specs/xp-levels.md (§1 "geen spoor van XP als badges uit staan", §1c–§1e pops en level-up), docs/specs/badges-avatar.md
 (ontgrendelingen "rijk, niet spaarzaam"), docs/specs/handbook.md §4.
+Gebouwd: 8 nov 2026 (V4, lichte workflow wf_0341fae8-b8b)
 
 **Kritische lezer (Fable, vooraf).** (1) Twee lagen, twee schakelaars: het **woord** hoort bij de viering en volgt de
 confetti-instelling (en `prefers-reduced-motion`); de **XP-strook** is XP en volgt de badges-schakelaar (badges uit = geen strook,
