@@ -1078,8 +1078,8 @@ describe('block 6D-F: the validator (frames.md §2d, §6.5)', () => {
 });
 
 describe('block 6D-F: the real library of round 3 (frames.md §3, §4; needs the data of builder B)', () => {
-  it('has 165 parts (154 + 11 of spec V3): 30 backgrounds (14 covering), 11 frames; legendary 11 (≤ 10 %)', () => {
-    expect(PARTS).toHaveLength(165);
+  it('has 169 parts (154 + 11 of spec V3 + 4 of spec V7): 30 backgrounds (14 covering), 11 frames; legendary 11 (≤ 10 %)', () => {
+    expect(PARTS).toHaveLength(169);
     expect(PARTS.filter((p) => p.layer === 'bg')).toHaveLength(30);
     expect(PARTS.filter((p) => p.layer === 'bg' && p.covers === true)).toHaveLength(14);
     expect(PARTS.filter((p) => p.layer === 'frame')).toHaveLength(11);

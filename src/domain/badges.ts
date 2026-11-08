@@ -54,6 +54,16 @@
 //                      member ('all' = everyone, so a cook and a photo by different members count)
 // - challenges       = facts.challengesDone: finished challenges of the member ('all' = the total;
 //                      6E, docs/specs/challenges.md §2); 0 when absent
+// Groceries (V7, docs/specs/verbeterronde-7.md §1a) read facts.bought (src/domain/shopbought.ts
+// `boughtFacts`: the member's own ticks, or the household's on 'all'; "Heb ik al" never gets there).
+// Pantry products (`staple`) are skipped by the first four, never by boughtInMonth:
+// - boughtDistinct   = distinct bought ingredients, optionally only those in `aisle`; with
+//                      `staples: true` staples count too (Kruidenkast: almost every spice is one)
+// - boughtGroup      = how many of `ids` were bought
+// - boughtRare       = bought ingredients that occur in exactly one recipe of facts.recipes
+// - boughtLetters    = distinct first letters A–Z (diacritics folded) of the NL names
+// - boughtInMonth    = 1 when ingredient `id` has a first tick (`first`) in one of `months` (1–12,
+//                      local month), else 0; without n and without tiers the goal is 1
 // A recipeId that is not in `recipes` only counts for the kinds that need nothing but the log
 // itself (counts, stars, dates, streaks, per-recipeId runs); never for the kinds that read the
 // recipe (category, tag, ingredient, cuisine(s), letters, classics, allCategories). An unparsable
@@ -62,14 +72,15 @@ import { pickText, type CookLogEntry, type Recipe } from './model.ts';
 import { DIET_TAGS_FOR, VARIANT_DIETS, type VariantDiet } from './diets.ts';
 import { dayIndexOfIso, isoWeekMondayOf, localDayIndex } from './days.ts';
 import { isFeatureId, type FeatureId } from './features.ts';
+import type { BoughtFact } from './shopbought.ts';
 import { XP_RULES, longestDayStreak, type XpState } from './xp.ts';
 
 // ---------------------------------------------------------------------------- model
 
-export type BadgeGroup = 'koken' | 'ontdekken' | 'keukens' | 'seizoenen' | 'samen' | 'foto' | 'reeksen' | 'geheim';
+export type BadgeGroup = 'koken' | 'boodschappen' | 'ontdekken' | 'keukens' | 'seizoenen' | 'samen' | 'foto' | 'reeksen' | 'geheim';
 
-/** The eight groups in page order (§1a). */
-export const BADGE_GROUPS: readonly BadgeGroup[] = ['koken', 'ontdekken', 'keukens', 'seizoenen', 'samen', 'foto', 'reeksen', 'geheim'];
+/** The nine groups in page order (§1a; V7 put 'boodschappen' between Koken and Ontdekken). */
+export const BADGE_GROUPS: readonly BadgeGroup[] = ['koken', 'boodschappen', 'ontdekken', 'keukens', 'seizoenen', 'samen', 'foto', 'reeksen', 'geheim'];
 
 /** The eight ladder colours, tier 1 … 8 (§1a; the UI translates them via `badges.tier.<k>`). */
 export const TIER_COLOURS = ['geel', 'groen', 'blauw', 'rood', 'brons', 'zilver', 'goud', 'platina'] as const;
@@ -125,7 +136,13 @@ export type BadgeRule =
   | { kind: 'retryAfterOneStar'; n?: number }
   | { kind: 'comeback'; days: number; n?: number }
   | { kind: 'overcooked'; n?: number } // counts facts.xp?.events with crit 'overcooked'
-  | { kind: 'fullCycle'; n?: number }; // AI prompt → share → groceries → cook → photo, per recipe (6D-2c)
+  | { kind: 'fullCycle'; n?: number } // AI prompt → share → groceries → cook → photo, per recipe (6D-2c)
+  // V7 groceries (facts.bought); staples never count in the first four.
+  | { kind: 'boughtDistinct'; aisle?: string; staples?: boolean; n?: number } // staples: true = staples count too
+  | { kind: 'boughtGroup'; ids: string[]; n?: number }
+  | { kind: 'boughtRare'; n?: number }
+  | { kind: 'boughtLetters'; n?: number }
+  | { kind: 'boughtInMonth'; id: string; months: number[]; n?: number }; // without n: goal 1
 
 export interface Badge {
   id: string;
@@ -191,6 +208,8 @@ export interface BadgeFacts {
   boughtRecipeIds: ReadonlySet<string>;
   /** 6E: number of finished challenges (`challenges.done`) of the member; 'all' = the total. Absent = 0. */
   challengesDone?: number;
+  /** V7: the bought ingredients (`shop.bought` via shopbought.ts `boughtFacts`), staples flagged. Absent = nothing bought. */
+  bought?: { ings: ReadonlyMap<string, BoughtFact> };
 }
 
 export interface BadgeStatus {
@@ -233,7 +252,7 @@ const COUNT_KINDS: ReadonlySet<string> = new Set<CountKind>([
 const ID_KINDS: ReadonlySet<string> = new Set<IdKind>(['category', 'tag', 'ingredient', 'cuisine']);
 const PLAIN_KINDS: ReadonlySet<string> = new Set<PlainKind>(['letters', 'allClassics', 'halfClassics', 'allCategories']);
 /** Kinds whose only parameter (besides n) is nothing at all. */
-const BARE_KINDS: ReadonlySet<string> = new Set(['seasonCooks', 'retryAfterOneStar', 'overcooked', 'fullCycle']);
+const BARE_KINDS: ReadonlySet<string> = new Set(['seasonCooks', 'retryAfterOneStar', 'overcooked', 'fullCycle', 'boughtRare', 'boughtLetters']);
 const CALENDAR_WHENS: ReadonlySet<string> = new Set<CalendarWhen>(['friday-13', 'leap-day']);
 const GROUP_SET: ReadonlySet<string> = new Set<string>(BADGE_GROUPS);
 
@@ -284,6 +303,11 @@ function takesThreshold(kind: string): boolean {
   return !PLAIN_KINDS.has(kind);
 }
 
+/** Threshold kinds whose one-off form may leave out `n` (goal 1): V7 `boughtInMonth`. */
+function defaultsToOne(kind: string): boolean {
+  return kind === 'boughtInMonth';
+}
+
 /** Rule kinds that can be a ladder (a threshold kind whose `n` is optional). */
 function canLadder(kind: string): boolean {
   return takesThreshold(kind) && kind !== 'sameRecipeDays';
@@ -304,7 +328,7 @@ function normalizeRule(value: unknown): BadgeRule | null {
     const id = nonEmptyString(value['id']);
     return id === null ? null : { kind: kind as IdKind, id, ...withN };
   }
-  if (BARE_KINDS.has(kind)) return { kind: kind as 'seasonCooks' | 'retryAfterOneStar' | 'overcooked' | 'fullCycle', ...withN };
+  if (BARE_KINDS.has(kind)) return { kind: kind as 'seasonCooks' | 'retryAfterOneStar' | 'overcooked' | 'fullCycle' | 'boughtRare' | 'boughtLetters', ...withN };
   switch (kind) {
     case 'weekdayCooks': {
       const raw = value['days'];
@@ -335,6 +359,38 @@ function normalizeRule(value: unknown): BadgeRule | null {
     case 'comeback': {
       const days = target(value['days']);
       return days === null ? null : { kind, days, ...withN };
+    }
+    case 'boughtDistinct': {
+      const rawStaples = value['staples'];
+      if (rawStaples !== undefined && typeof rawStaples !== 'boolean') return null;
+      const withStaples = rawStaples === true ? { staples: true } : {};
+      const rawAisle = value['aisle'];
+      if (rawAisle === undefined) return { kind, ...withStaples, ...withN };
+      const aisle = nonEmptyString(rawAisle);
+      return aisle === null ? null : { kind, aisle, ...withStaples, ...withN };
+    }
+    case 'boughtGroup': {
+      const raw = value['ids'];
+      if (!Array.isArray(raw) || raw.length === 0) return null;
+      const ids: string[] = [];
+      for (const v of raw) {
+        const id = nonEmptyString(v);
+        if (id === null) return null;
+        if (!ids.includes(id)) ids.push(id);
+      }
+      return { kind, ids, ...withN };
+    }
+    case 'boughtInMonth': {
+      const id = nonEmptyString(value['id']);
+      const raw = value['months'];
+      if (id === null || !Array.isArray(raw) || raw.length === 0) return null;
+      const months: number[] = [];
+      for (const v of raw) {
+        const m = intIn(v, 1, 12);
+        if (m === null) return null;
+        if (!months.includes(m)) months.push(m);
+      }
+      return { kind, id, months, ...withN };
     }
   }
   return null;
@@ -377,7 +433,8 @@ function normalizeUnlock(value: unknown): BadgeUnlock | null {
  * exactly 8 strictly ascending integers ≥ 1 (or sit on a kind that can not be a ladder) are left
  * out; `hidden`/`retired` only count when `true` (group 'geheim' is always hidden); `season` needs
  * two valid 'MM-DD' strings; `unlock` a non-empty `part` (its `tier` only 1..8); `xp` an integer
- * ≥ 0. With valid `tiers` the badge is a ladder and `rule.n` is dropped. The strict checks are the
+ * ≥ 0. With valid `tiers` the badge is a ladder and `rule.n` is dropped. V7 `boughtInMonth` is the one
+ * threshold kind whose one-off form may leave out `n` (goal 1). The strict checks are the
  * validator's (tools/validate-data.ts); the data always passes `npm run validate:data` first.
  */
 export function normalizeBadges(data: unknown): Badge[] {
@@ -399,7 +456,7 @@ export function normalizeBadges(data: unknown): Badge[] {
         delete copy.n;
         rule = copy as BadgeRule;
       }
-    } else if (takesThreshold(rule.kind) && !('n' in rule && typeof rule.n === 'number')) {
+    } else if (takesThreshold(rule.kind) && !defaultsToOne(rule.kind) && !('n' in rule && typeof rule.n === 'number')) {
       continue; // a threshold kind without n and without tiers can never be evaluated
     }
 
@@ -443,7 +500,7 @@ export function tierFor(b: Badge, current: number, target?: number): number {
     }
     return k;
   }
-  const goal = target ?? ('n' in b.rule && typeof b.rule.n === 'number' ? b.rule.n : undefined);
+  const goal = target ?? ('n' in b.rule && typeof b.rule.n === 'number' ? b.rule.n : defaultsToOne(b.rule.kind) ? 1 : undefined);
   return goal !== undefined && current >= goal ? 1 : 0;
 }
 
@@ -765,6 +822,52 @@ function fullCycles(facts: BadgeFacts): number {
   return n;
 }
 
+/** The bought ingredients that count for the first four groceries kinds: everything but staples (unless `staples`). */
+function countedBought(facts: BadgeFacts, staples = false): Array<[string, BoughtFact]> {
+  const out: Array<[string, BoughtFact]> = [];
+  const ings = facts.bought?.ings;
+  if (!ings) return out;
+  for (const [id, fact] of ings) if ((staples || !fact.staple) && fact.n > 0) out.push([id, fact]);
+  return out;
+}
+
+function boughtDistinct(facts: BadgeFacts, aisle: string | undefined, staples: boolean): number {
+  let n = 0;
+  for (const [, fact] of countedBought(facts, staples)) if (aisle === undefined || fact.aisle === aisle) n++;
+  return n;
+}
+
+function boughtGroup(facts: BadgeFacts, ids: readonly string[]): number {
+  const want = new Set(ids);
+  let n = 0;
+  for (const [id] of countedBought(facts)) if (want.has(id)) n++;
+  return n;
+}
+
+function boughtRare(facts: BadgeFacts): number {
+  let n = 0;
+  for (const [, fact] of countedBought(facts)) if (fact.recipes === 1) n++;
+  return n;
+}
+
+function boughtLetters(facts: BadgeFacts): number {
+  const letters = new Set<string>();
+  for (const [, fact] of countedBought(facts)) {
+    const letter = fact.nameNl === null ? null : firstLetter(fact.nameNl);
+    if (letter !== null) letters.add(letter);
+  }
+  return letters.size;
+}
+
+/** 1 when `id` was first bought (local month) in one of `months`; staples count here (V7). */
+function boughtInMonth(facts: BadgeFacts, id: string, months: readonly number[]): number {
+  const fact = facts.bought?.ings.get(id);
+  if (!fact || !(fact.n > 0) || fact.first === null) return 0;
+  const t = Date.parse(fact.first);
+  if (!Number.isFinite(t)) return 0;
+  return months.includes(new Date(t).getMonth() + 1) ? 1 : 0;
+}
+
 /** The raw count of a badge's rule (not capped). */
 function measure(badge: Badge, facts: BadgeFacts, d: Derived): number {
   const rule = badge.rule;
@@ -854,6 +957,16 @@ function measure(badge: Badge, facts: BadgeFacts, d: Derived): number {
       return facts.xp ? facts.xp.events.filter((e) => e.crit === 'overcooked').length : 0;
     case 'fullCycle':
       return fullCycles(facts);
+    case 'boughtDistinct':
+      return boughtDistinct(facts, rule.aisle, rule.staples === true);
+    case 'boughtGroup':
+      return boughtGroup(facts, rule.ids);
+    case 'boughtRare':
+      return boughtRare(facts);
+    case 'boughtLetters':
+      return boughtLetters(facts);
+    case 'boughtInMonth':
+      return boughtInMonth(facts, rule.id, rule.months);
   }
 }
 

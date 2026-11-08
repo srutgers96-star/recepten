@@ -1,6 +1,6 @@
 // Block 6D-2b (docs/specs/badges-avatar.md §1a.2, §1a.3, §1a.8): the pure page model of the badges
-// screen against the shipped catalogue. The page counts only visible badges, renders all eight
-// groups in BADGE_GROUPS order, and never lets an unearned hidden badge reach the page (the secret
+// screen against the shipped catalogue. The page counts only visible badges, renders all nine
+// groups (eight + Boodschappen, V7) in BADGE_GROUPS order, and never lets an unearned hidden badge reach the page (the secret
 // group shows found badges only; the heart only once it is earned). No DOM, no database.
 import { describe, expect, it } from 'vitest';
 import badgesJson from '../data/badges.json';
@@ -25,11 +25,11 @@ const none = catalogue.map((b) => status(b, false));
 const byId = (id: string) => catalogue.find((b) => b.id === id)!;
 
 describe('badgePageModel (§1a)', () => {
-  it('nothing earned: eight groups in order, visible badges only, the secret group empty', () => {
+  it('nothing earned: all groups in order, visible badges only, the secret group empty', () => {
     const m = badgePageModel(none);
     expect(m.groups.map((g) => g.group)).toEqual([...BADGE_GROUPS]);
     expect(m.total).toBe(catalogue.filter((b) => b.hidden !== true).length);
-    expect(m.total).toBe(118);
+    expect(m.total).toBe(128);
     expect(m.earned).toBe(0);
     expect(m.secretFound).toBe(0);
     const secret = m.groups.find((g) => g.group === 'geheim')!;
@@ -43,7 +43,7 @@ describe('badgePageModel (§1a)', () => {
     const m = badgePageModel(none.map((s) => (s.badge.id === secretBadge.id ? status(s.badge, true) : s)));
     expect(m.secretFound).toBe(1);
     expect(m.groups.find((g) => g.group === 'geheim')!.shown.map((s) => s.badge.id)).toEqual([secretBadge.id]);
-    expect(m.total).toBe(118);
+    expect(m.total).toBe(128);
     expect(m.earned).toBe(0);
   });
 
@@ -75,16 +75,17 @@ describe('badgePageModel (§1a)', () => {
 describe('badgePageModel mystery cards (6D-2c)', () => {
   const secretIds = catalogue.filter((b) => b.group === 'geheim').map((b) => b.id);
 
-  it('nothing earned: Geheim holds every secret badge as a "?" card, Samen only the heart', () => {
+  it('nothing earned: Geheim holds every secret badge as a "?" card, Samen only the heart, Boodschappen its two (V7)', () => {
     const m = badgePageModel(none);
     const secret = m.groups.find((g) => g.group === 'geheim')!;
     expect(secret.mystery.map((s) => s.badge.id)).toEqual(secretIds);
     expect(secret.mystery.length).toBe(27);
     expect(m.groups.find((g) => g.group === 'samen')!.mystery.map((s) => s.badge.id)).toEqual(['hartje']);
-    for (const g of m.groups) if (g.group !== 'geheim' && g.group !== 'samen') expect(g.mystery).toEqual([]);
+    expect(m.groups.find((g) => g.group === 'boodschappen')!.mystery.map((s) => s.badge.id)).toEqual(['zeldzaam', 'alfabet']);
+    for (const g of m.groups) if (g.group !== 'geheim' && g.group !== 'samen' && g.group !== 'boodschappen') expect(g.mystery).toEqual([]);
     // Counts unchanged: a "?" card is never shown in full and never counted.
     expect(m.secretFound).toBe(0);
-    expect(m.total).toBe(118);
+    expect(m.total).toBe(128);
     expect(m.groups.find((g) => g.group === 'samen')!.total).toBe(catalogue.filter((b) => b.group === 'samen' && b.hidden !== true).length);
   });
 

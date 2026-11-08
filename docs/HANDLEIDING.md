@@ -3366,7 +3366,7 @@ Koken levert XP op, met XP ga je een level omhoog, en badges en levels spelen le
 
 #### Wat het doet
 
-Je verdient XP met koken, met een foto van je gerecht, met een eigen recept en met badges. Bladeren, zoeken, delen, plannen en boodschappen doen leveren geen XP op.
+Je verdient XP met koken, met een foto van je gerecht, met een eigen recept en met badges. Bladeren, zoeken, delen, plannen en boodschappen doen leveren zelf geen XP op; een badge daarvoor wel.
 
 #### Waar je tikt
 
@@ -3538,7 +3538,7 @@ Bovenaan staat bijvoorbeeld “🎉 Level 3!”, met daaronder groot je nieuwe t
 
 #### Wat het doet
 
-Badges verdien je met koken, ontdekken, delen, foto's en meer. Ze staan in acht groepen, elk met een eigen tab.
+Badges verdien je met koken, boodschappen, ontdekken, delen, foto's en meer. Ze staan in negen groepen, elk met een eigen tab.
 
 #### Waar je tikt
 
@@ -3554,7 +3554,7 @@ Bovenaan staat “… van … badges verdiend”. De badges zijn ronde tegels me
 
 #### Goed om te weten
 
-De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. Ook een tik op het woord **Badges** onder **Instellingen** in **Meer** brengt je hier. De app onthoudt de laatste groep die je bekeek.
+De groepen zijn Koken, Boodschappen, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. Ook een tik op het woord **Badges** onder **Instellingen** in **Meer** brengt je hier. De app onthoudt de laatste groep die je bekeek.
 
 (`#/more/badges`)
 
@@ -3601,7 +3601,7 @@ Je ziet hoeveel geheime badges je hebt gevonden en de tegels met een stippelrand
 
 #### Goed om te weten
 
-Het totaal staat nergens, zodat er altijd iets te ontdekken blijft. Ook bij **Samen & delen** staat zo'n tegel. Een gevonden geheime badge geeft 250 XP.
+Het totaal staat nergens, zodat er altijd iets te ontdekken blijft. Ook bij **Samen & delen** en bij **Boodschappen** staat zo'n tegel. Een gevonden geheime badge geeft 250 XP.
 
 (`#/more/badges`)
 
@@ -3626,6 +3626,30 @@ Op **Samen** staan ook de badges voor het hele huishouden, zoals Huisgenoten. Op
 #### Goed om te weten
 
 In het venster van zo'n badge staat “Telt voor het hele huishouden”.
+
+(`#/more/badges`)
+
+### Badges voor boodschappen
+
+#### Wat het doet
+
+Op het tabblad **Boodschappen** staan badges voor wat je op je boodschappenlijst afvinkt. Boodschappenmand telt alle verschillende ingrediënten; de andere tellen verschillende soorten groente en fruit, kaas, vlees, vis, kruiden, wereldproducten en bakspullen.
+
+#### Waar je tikt
+
+1. Tik onderaan op **Meer**.
+2. Tik bovenaan op de rij met je naam.
+3. Tik op **Mijn profiel** op de tegel **Badges**.
+4. Tik in de strook met tabs op **Boodschappen**.
+5. Tik op een tegel.
+
+#### Wat je dan ziet
+
+Het venster laat zien hoeveel verschillende ingrediënten je al hebt afgevinkt. Bij “Volgende:” staat hoeveel je nodig hebt voor het volgende niveau.
+
+#### Goed om te weten
+
+Alleen een vinkje op de lijst telt, en elk ingrediënt telt één keer. **Heb ik al** telt niet. Voorraadproducten zoals zout, suiker en bloem tellen ook niet, behalve bij Kruidenkast: daar telt elk kruid en elke specerij. Wat je eerder al afvinkte, telt mee. Twee badges hangen aan het seizoen: speculaaskruiden in november of december, en aardbeien in de zomer. Daarvoor telt de eerste keer dat je ze afvinkt. Op je eigen tab tellen jouw vinkjes, op **Samen** die van het hele huishouden.
 
 (`#/more/badges`)
 
@@ -3716,7 +3740,7 @@ Onder het groepje verschijnt een regel zoals “Zeldzaam · Komt vrij op level �
 
 #### Goed om te weten
 
-Gewoon is grijs, Zeldzaam blauw, Episch paars en Legendarisch goud. Een tik op een tegel met een slotje verandert niets aan je avatar. Een pas vrijgespeelde tegel heeft een stipje tot je de maker sluit.
+Gewoon is grijs, Zeldzaam blauw, Episch paars en Legendarisch goud. Een tik op een tegel met een slotje verandert niets aan je avatar. Een pas vrijgespeelde tegel heeft een stipje tot je de maker sluit. De badges voor boodschappen spelen vier onderdelen vrij: een wortelspeldje, een kaasschaaf, een bril met een prijskaartje en één die je zelf moet ontdekken.
 
 (`#/more/style`)
 

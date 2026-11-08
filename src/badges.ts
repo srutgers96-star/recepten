@@ -11,12 +11,14 @@ import { signal } from '@preact/signals';
 import badgesData from '@data/badges.json';
 import avatarPartsData from '@data/avatar-parts.json';
 import { celebrate, celebration } from './celebrate';
-import { allRecipes, boughtRecipeIds, getDoneChallenges, getHousehold, getSetting, getSharedRecipes, listAllPhotosMeta, listCookLog, setSetting, sharedRecipeIds } from '@/db/repo';
+import { allRecipes, boughtRecipeIds, getDoneChallenges, getHousehold, getSetting, getSharedRecipes, listAllPhotosMeta, listCookLog, setSetting, sharedRecipeIds, SHOP_BOUGHT_SETTING } from '@/db/repo';
+import { dictionary } from '@/dictionary';
 import { normalizeAvatarParts, type AvatarPart } from '@/domain/avatar';
 import { evaluateBadges, isLadder, normalizeBadges, normalizeEarned, type Badge, type BadgeFacts, type BadgeStatus } from '@/domain/badges';
 import { categoriesData } from '@/domain/data';
 import { featureCounts, normalizeFeatureLog } from '@/domain/features';
 import { membersFrom } from '@/domain/household';
+import { boughtFacts, normalizeShopBought, recipesPerIngredient } from '@/domain/shopbought';
 import type { Recipe } from '@/domain/model';
 import { activeProfile, profiles } from '@/profile';
 import { markXpDirty, settleXp, xpStateFor } from '@/xp';
@@ -135,7 +137,7 @@ function donorLevelFor(raw: unknown, memberId: string | 'all'): number {
  * the two would wait on each other forever; there a registered `overcooked` still counts (sticky).
  */
 async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<BadgeFacts> {
-  const [recipes, log, shared, photoMeta, featuresRaw, household, heartsRaw, xp, sharedIds, boughtIds, doneChallenges] = await Promise.all([
+  const [recipes, log, shared, photoMeta, featuresRaw, household, heartsRaw, xp, sharedIds, boughtIds, doneChallenges, shopBoughtRaw] = await Promise.all([
     allRecipes(),
     listCookLog(),
     getSharedRecipes(),
@@ -154,6 +156,8 @@ async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<Ba
     boughtRecipeIds(),
     // 6E (rule kind 'challenges'): the done history; per member, 'all' = the household total.
     getDoneChallenges(),
+    // V7 (groceries kinds): the ingredient ticks of the shopping trail.
+    getSetting<unknown>(SHOP_BOUGHT_SETTING, null),
   ]);
   const byId = new Map<string, Recipe>();
   let classicsTotal = 0;
@@ -167,6 +171,10 @@ async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<Ba
   }
   // 6D-2a: photos count per member (Photo.memberId); 'Samen' = every photo.
   const photoRows = memberId === 'all' ? photoMeta : photoMeta.filter((p) => p.memberId === memberId);
+  // V7: the member's own ticks per ingredient ('all' = the household), with the dictionary's staple
+  // flag, aisle and NL name (user entries included) and the number of recipes per ingredient.
+  const dict = dictionary.value;
+  const bought = boughtFacts(normalizeShopBought(shopBoughtRaw), memberId, (id) => dict.get(id), recipesPerIngredient(byId.values()));
   return {
     log: memberId === 'all' ? log : log.filter((e) => e.profileId === memberId),
     recipes: byId,
@@ -184,6 +192,7 @@ async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<Ba
     sharedRecipeIds: sharedIds,
     boughtRecipeIds: boughtIds,
     challengesDone: memberId === 'all' ? doneChallenges.length : doneChallenges.filter((d) => d.memberId === memberId).length,
+    bought: { ings: bought },
   };
 }
 

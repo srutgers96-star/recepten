@@ -27,6 +27,7 @@ import {
   type PhotoRow,
 } from '../src/domain/badges';
 import type { CookLogEntry, Recipe } from '../src/domain/model';
+import { boughtFacts, normalizeShopBought, recipesPerIngredient, type BoughtFact } from '../src/domain/shopbought';
 import { normalizeRecipe } from '../src/domain/recipe-io';
 import type { XpEvent, XpState } from '../src/domain/xp';
 
@@ -727,8 +728,8 @@ describe('ladders: tierFor and progress towards the next tier', () => {
     expect(evaluateBadges([tag], f)[0]).toMatchObject({ earned: true, tier: 1, current: 4, target: 10 });
   });
 
-  it('exports the eight groups in page order and the eight tier colours', () => {
-    expect(BADGE_GROUPS).toEqual(['koken', 'ontdekken', 'keukens', 'seizoenen', 'samen', 'foto', 'reeksen', 'geheim']);
+  it('exports the nine groups in page order (V7: boodschappen after koken) and the eight tier colours', () => {
+    expect(BADGE_GROUPS).toEqual(['koken', 'boodschappen', 'ontdekken', 'keukens', 'seizoenen', 'samen', 'foto', 'reeksen', 'geheim']);
     expect(TIER_COLOURS).toEqual(['geel', 'groen', 'blauw', 'rood', 'brons', 'zilver', 'goud', 'platina']);
   });
 });
@@ -1352,5 +1353,209 @@ describe('data/badges.json (catalogue smoke, §2d)', () => {
     const f = facts({ recipes: recipeMap(free, optie), log: [entry(free.id), entry(free.id), entry(optie.id)] });
     // two cooks of the tagged recipe; the "-optie" tag does not count
     expect(evaluateBadges([def], f)).toMatchObject([{ badge: { id: 'zuivelvrije-ziel' }, earned: false, tier: 0, current: 2, target: 3 }]);
+  });
+});
+
+// ---------------------------------------------------------------------------- groceries (V7)
+
+describe('evaluateBadges: groceries kinds (V7, docs/specs/verbeterronde-7.md §1a)', () => {
+  /** A bought ingredient fact; defaults: bought once, no first moment, not a staple. */
+  function fact(over: Partial<BoughtFact> = {}): BoughtFact {
+    return { n: 1, first: null, staple: false, aisle: 'groente-fruit', nameNl: 'x', recipes: 3, ...over };
+  }
+  function boughtF(entries: Record<string, Partial<BoughtFact>>): BadgeFacts {
+    return facts({ bought: { ings: new Map(Object.entries(entries).map(([id, over]) => [id, fact(over)])) } });
+  }
+  const LADDER = [2, 3, 4, 5, 6, 7, 8, 9];
+
+  it('without facts.bought every groceries kind measures 0', () => {
+    const f = facts();
+    for (const rule of [
+      { kind: 'boughtDistinct', n: 1 },
+      { kind: 'boughtGroup', ids: ['ui'], n: 1 },
+      { kind: 'boughtRare', n: 1 },
+      { kind: 'boughtLetters', n: 1 },
+      { kind: 'boughtInMonth', id: 'ui', months: [1] },
+    ] as BadgeRule[]) {
+      expect(status(rule, f)).toMatchObject({ earned: false, current: 0 });
+    }
+  });
+
+  it('boughtDistinct: one-off and ladder, optionally within one aisle; staples never count', () => {
+    const f = boughtF({
+      ui: { aisle: 'groente-fruit' },
+      prei: { aisle: 'groente-fruit', n: 4 },
+      gouda: { aisle: 'kaas' },
+      bloem: { aisle: 'bakken', staple: true },
+      zout: { aisle: 'groente-fruit', staple: true },
+    });
+    expect(status({ kind: 'boughtDistinct', n: 3 }, f)).toMatchObject({ earned: true, current: 3, target: 3, tier: 1 });
+    expect(status({ kind: 'boughtDistinct', n: 4 }, f)).toMatchObject({ earned: false, current: 3, target: 4 });
+    expect(status({ kind: 'boughtDistinct', aisle: 'groente-fruit', n: 2 }, f)).toMatchObject({ earned: true, current: 2 });
+    expect(status({ kind: 'boughtDistinct', aisle: 'bakken', n: 1 }, f)).toMatchObject({ earned: false, current: 0 });
+    expect(status({ kind: 'boughtDistinct' }, f, { tiers: LADDER })).toMatchObject({ earned: true, tier: 2, current: 3, target: 4, maxTier: 8 });
+    expect(status({ kind: 'boughtDistinct', aisle: 'groente-fruit' }, f, { tiers: LADDER })).toMatchObject({ earned: true, tier: 1, current: 2, target: 3 });
+  });
+
+  it('boughtDistinct with staples: true lets staples count (Kruidenkast); without it, or false, they do not', () => {
+    const f = boughtF({
+      kaneel: { aisle: 'kruiden-specerijen', staple: true },
+      peper: { aisle: 'kruiden-specerijen', staple: true },
+      saffraan: { aisle: 'kruiden-specerijen' },
+      zout: { aisle: 'kruiden-specerijen', staple: true, n: 0 }, // never ticked: never counts
+      bloem: { aisle: 'bakken', staple: true },
+    });
+    const aisle = 'kruiden-specerijen';
+    expect(status({ kind: 'boughtDistinct', aisle, staples: true, n: 3 }, f)).toMatchObject({ earned: true, current: 3 });
+    expect(status({ kind: 'boughtDistinct', aisle, n: 3 }, f)).toMatchObject({ earned: false, current: 1 });
+    expect(status({ kind: 'boughtDistinct', aisle, staples: false, n: 3 }, f)).toMatchObject({ earned: false, current: 1 });
+    expect(status({ kind: 'boughtDistinct', staples: true, n: 4 }, f)).toMatchObject({ earned: true, current: 4 });
+    expect(status({ kind: 'boughtDistinct', n: 1 }, boughtF({ kaneel: { aisle, staple: true } }))).toMatchObject({ earned: false, current: 0 });
+    expect(status({ kind: 'boughtDistinct', staples: true, n: 1 }, boughtF({ kaneel: { aisle, staple: true } }))).toMatchObject({ earned: true, current: 1 });
+  });
+
+  it('boughtGroup: how many of a fixed list; staples and ids outside the list never count', () => {
+    const f = boughtF({ rundergehakt: {}, kipfilet: {}, spek: { staple: true }, zalm: {} });
+    const ids = ['rundergehakt', 'kipfilet', 'spek', 'varkenshaas'];
+    expect(status({ kind: 'boughtGroup', ids, n: 2 }, f)).toMatchObject({ earned: true, current: 2 });
+    expect(status({ kind: 'boughtGroup', ids, n: 3 }, f)).toMatchObject({ earned: false, current: 2, target: 3 });
+    expect(status({ kind: 'boughtGroup', ids }, f, { tiers: LADDER })).toMatchObject({ earned: true, tier: 1, current: 2, target: 3 });
+    expect(status({ kind: 'boughtGroup', ids: ['varkenshaas'] }, f, { tiers: LADDER })).toMatchObject({ earned: false, tier: 0, current: 0, target: 2 });
+  });
+
+  it('boughtRare: a bought ingredient that occurs in exactly one recipe; a staple does not count', () => {
+    const f = boughtF({ yuzu: { recipes: 1 }, ui: { recipes: 40 }, nergens: { recipes: 0 }, saffraan: { recipes: 1, staple: true } });
+    expect(status({ kind: 'boughtRare', n: 1 }, f)).toMatchObject({ earned: true, current: 1 });
+    expect(status({ kind: 'boughtRare', n: 2 }, f)).toMatchObject({ earned: false, current: 1 });
+    expect(status({ kind: 'boughtRare' }, f, { tiers: [1, 2, 3, 4, 5, 6, 7, 8] })).toMatchObject({ earned: true, tier: 1, current: 1, target: 2 });
+    expect(status({ kind: 'boughtRare', n: 1 }, boughtF({ saffraan: { recipes: 1, staple: true } }))).toMatchObject({ earned: false, current: 0 });
+  });
+
+  it('boughtLetters: distinct first letters A–Z of the NL names (folded); staples and nameless ids skipped', () => {
+    const f = boughtF({
+      ui: { nameNl: 'ui' },
+      uitje: { nameNl: 'Uitje' },
+      eendenborst: { nameNl: 'Éendenborst' },
+      tijm: { nameNl: '’t Tijmpje' },
+      onbekend: { nameNl: null },
+      zout: { nameNl: 'zout', staple: true },
+    });
+    expect(status({ kind: 'boughtLetters', n: 3 }, f)).toMatchObject({ earned: true, current: 3 });
+    expect(status({ kind: 'boughtLetters', n: 26 }, f)).toMatchObject({ earned: false, current: 3, target: 26 });
+    expect(status({ kind: 'boughtLetters' }, f, { tiers: LADDER })).toMatchObject({ earned: true, tier: 2, current: 3, target: 4 });
+  });
+
+  it('boughtInMonth: the first tick in one of the months (local); a staple DOES count; no first = no badge', () => {
+    const rule: BadgeRule = { kind: 'boughtInMonth', id: 'speculaaskruiden', months: [11, 12] };
+    const at = (m: number) => new Date(2026, m - 1, 15, 12).toISOString();
+    expect(status(rule, boughtF({ speculaaskruiden: { first: at(11), staple: true } }))).toMatchObject({ earned: true, current: 1, target: 1, tier: 1 });
+    expect(status(rule, boughtF({ speculaaskruiden: { first: at(12) } }))).toMatchObject({ earned: true });
+    expect(status(rule, boughtF({ speculaaskruiden: { first: at(3) } }))).toMatchObject({ earned: false, current: 0, target: 1 });
+    expect(status(rule, boughtF({ speculaaskruiden: { first: null } }))).toMatchObject({ earned: false });
+    expect(status(rule, boughtF({ kaneel: { first: at(11) } }))).toMatchObject({ earned: false });
+    expect(status({ ...rule, n: 1 }, boughtF({ speculaaskruiden: { first: at(11) } }))).toMatchObject({ earned: true });
+    const ladder = status(rule, boughtF({ speculaaskruiden: { first: at(11) } }), { tiers: [1, 2, 3, 4, 5, 6, 7, 8] });
+    expect(ladder).toMatchObject({ earned: true, tier: 1, maxTier: 8 });
+  });
+
+  it('per member vs all: boughtFacts gives the member only their own ticks, all gets the total and the earliest first', () => {
+    const A = 'p:aaaaaaaa';
+    const B = 'p:bbbbbbbb';
+    const trail = normalizeShopBought({
+      recipes: {},
+      ings: {
+        ui: { n: 3, by: { [A]: 2, [B]: 1 }, first: { [A]: '2026-11-20T10:00:00.000Z', [B]: '2026-06-02T10:00:00.000Z' } },
+        prei: { n: 1, by: { [B]: 1 }, first: { [B]: '2026-11-03T10:00:00.000Z' } },
+        bloem: { n: 2, by: { [A]: 2 } },
+        kaneel: { n: 1, by: {} }, // ticked without a member: only on 'all'
+      },
+    });
+    const dict: Record<string, { staple: boolean; aisle: string; nl: { one: string } }> = {
+      ui: { staple: false, aisle: 'groente-fruit', nl: { one: 'ui' } },
+      prei: { staple: false, aisle: 'groente-fruit', nl: { one: 'prei' } },
+      bloem: { staple: true, aisle: 'bakken', nl: { one: 'bloem' } },
+      kaneel: { staple: false, aisle: 'kruiden-specerijen', nl: { one: 'kaneel' } },
+    };
+    const counts = recipesPerIngredient([
+      { lines: [{ ing: 'ui' }, { ing: 'ui' }, { ing: 'prei' }] },
+      { lines: [{ ing: 'ui' }, { ing: null }] },
+    ]);
+    expect([...counts]).toEqual([['ui', 2], ['prei', 1]]);
+    const lookup = (id: string) => dict[id];
+
+    const anna = boughtFacts(trail, A, lookup, counts);
+    expect([...anna.keys()].sort()).toEqual(['bloem', 'ui']);
+    expect(anna.get('ui')).toEqual({ n: 2, first: '2026-11-20T10:00:00.000Z', staple: false, aisle: 'groente-fruit', nameNl: 'ui', recipes: 2 });
+    expect(anna.get('bloem')).toMatchObject({ n: 2, first: null, staple: true, recipes: 0 });
+
+    const all = boughtFacts(trail, 'all', lookup, counts);
+    expect([...all.keys()].sort()).toEqual(['bloem', 'kaneel', 'prei', 'ui']);
+    expect(all.get('ui')).toMatchObject({ n: 3, first: '2026-06-02T10:00:00.000Z' });
+    expect(all.get('kaneel')).toMatchObject({ n: 1, first: null });
+    expect(boughtFacts(trail, 'p:unknown', lookup, counts).size).toBe(0);
+    // An id the dictionary does not know: kept, no staple, no aisle, no name.
+    expect(boughtFacts(trail, B, () => undefined, counts).get('prei')).toEqual({ n: 1, first: '2026-11-03T10:00:00.000Z', staple: false, aisle: null, nameNl: null, recipes: 1 });
+
+    const distinct: BadgeRule = { kind: 'boughtDistinct', n: 2 };
+    const asFacts = (ings: Map<string, BoughtFact>) => facts({ bought: { ings } });
+    expect(status(distinct, asFacts(anna))).toMatchObject({ earned: false, current: 1 }); // bloem is a staple
+    expect(status(distinct, asFacts(all))).toMatchObject({ earned: true, current: 2 }); // ui, prei, kaneel (capped at 2)
+    expect(status({ kind: 'boughtDistinct' }, asFacts(all), { tiers: LADDER })).toMatchObject({ tier: 2, current: 3 });
+    expect(status({ kind: 'boughtRare', n: 1 }, asFacts(anna))).toMatchObject({ earned: false });
+    expect(status({ kind: 'boughtRare', n: 1 }, asFacts(boughtFacts(trail, B, lookup, counts)))).toMatchObject({ earned: true }); // prei: one recipe
+    const summer: BadgeRule = { kind: 'boughtInMonth', id: 'ui', months: [6, 7, 8] };
+    expect(status(summer, asFacts(anna))).toMatchObject({ earned: false }); // Anna's first ui: November
+    expect(status(summer, asFacts(all))).toMatchObject({ earned: true }); // the household's first: June (Bram)
+  });
+
+  it('normalizeBadges keeps the five kinds as ladders and one-offs and drops unusable rules', () => {
+    const raw = (rule: Record<string, unknown>, extra: Record<string, unknown> = {}) => ({
+      id: 'x',
+      nl: { name: 'X', description: 'Koop {n}' },
+      en: { name: 'X', description: 'Buy {n}' },
+      icon: '🧺',
+      group: 'boodschappen',
+      rule,
+      ...extra,
+    });
+    const out = normalizeBadges([
+      raw({ kind: 'boughtDistinct' }, { tiers: LADDER }),
+      raw({ kind: 'boughtDistinct', aisle: 'kaas', n: 3 }),
+      raw({ kind: 'boughtGroup', ids: ['zalm', 'zalm', 'tonijn'] }, { tiers: LADDER }),
+      raw({ kind: 'boughtRare', n: 1 }, { hidden: true }),
+      raw({ kind: 'boughtLetters', n: 26 }),
+      raw({ kind: 'boughtInMonth', id: 'aardbei', months: [6, 7, 8] }),
+      raw({ kind: 'boughtLetters' }, { tiers: LADDER }),
+      raw({ kind: 'boughtDistinct', aisle: 'kruiden-specerijen', staples: true }, { tiers: LADDER }),
+      raw({ kind: 'boughtDistinct', staples: false, n: 2 }),
+    ]);
+    expect(out.map((b) => b.rule)).toEqual([
+      { kind: 'boughtDistinct' },
+      { kind: 'boughtDistinct', aisle: 'kaas', n: 3 },
+      { kind: 'boughtGroup', ids: ['zalm', 'tonijn'] },
+      { kind: 'boughtRare', n: 1 },
+      { kind: 'boughtLetters', n: 26 },
+      { kind: 'boughtInMonth', id: 'aardbei', months: [6, 7, 8] },
+      { kind: 'boughtLetters' },
+      { kind: 'boughtDistinct', aisle: 'kruiden-specerijen', staples: true },
+      { kind: 'boughtDistinct', n: 2 },
+    ]);
+    expect(out.every((b) => b.group === 'boodschappen')).toBe(true);
+    expect(out[0]?.tiers).toEqual(LADDER);
+    expect(out[3]?.hidden).toBe(true);
+    expect(tierFor(out[5] as Badge, 1)).toBe(1); // boughtInMonth without n: goal 1
+    expect(
+      normalizeBadges([
+        raw({ kind: 'boughtDistinct' }), // no n, no tiers
+        raw({ kind: 'boughtDistinct', aisle: '', n: 1 }),
+        raw({ kind: 'boughtDistinct', staples: 'ja', n: 1 }),
+        raw({ kind: 'boughtGroup', ids: [], n: 1 }),
+        raw({ kind: 'boughtGroup', ids: ['zalm', 3], n: 1 }),
+        raw({ kind: 'boughtRare' }),
+        raw({ kind: 'boughtInMonth', id: 'aardbei', months: [13] }),
+        raw({ kind: 'boughtInMonth', id: 'aardbei', months: [] }),
+        raw({ kind: 'boughtInMonth', months: [6] }),
+      ]),
+    ).toEqual([]);
   });
 });

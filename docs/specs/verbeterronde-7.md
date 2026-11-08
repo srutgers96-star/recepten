@@ -1,10 +1,11 @@
 # Spec V7 — Boodschappen-badges over de ingrediënten, met avatar-beloningen (Stijn, 29 okt + 8 nov 2026)
 
-Status: in aanbouw (Fable, 9 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 4 (Stijn 29 okt:
+Status: compleet (Fable, 9 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 4 (Stijn 29 okt:
 "daar kan nog best wat creativiteit in, met 1600 verschillende ingrediënten"; 8 nov: "Heb ik al" telt niet mee, voorzichtig met
 badges over die producten, "de nieuwe boodschappen-badges misschien een paar leuke nieuwe items, of linken met bestaande items, in
 ieder geval een bril"). Leidend bij tegenspraak: docs/specs/README.md §2–§4, docs/specs/badges-avatar.md (badgeregels, ladders van
 precies acht treden, zeldzaamheid, XP per badge: ladder 50 × trede, geheim 250), docs/specs/xp-levels.md, docs/specs/handbook.md §4.
+Gebouwd: 9 nov 2026 (V7, lichte workflow wf_32e1c36b-f05; besluiten Fable na de bouw: (1) de ladder heet `boodschappenmand` (Boodschappenmand · Shopping basket) omdat `verzamelaar` al de Samen-badge "Ontvang n recepten" is — beloning Prijskaartjesbril op trede 3; (2) Kruidenkast telt óók voorraadproducten (vlag `staples: true` op de regel), want bijna elk kruid is een voorraadproduct; de andere ladders blijven voorraad uitsluiten; (3) Alfabet vraagt 25 letters, want geen enkel product begint met een x; lens: een ongeldig `first`-moment wordt nu weggegooid; XP van de set ≈ 15.000 over een kookleven = 1,4 % van level 100, geen curve-aanpassing)
 
 **Kritische lezer (Fable, vooraf).** (1) De feiten bestaan al: `shop.bought.ings` telt per ingrediënt de vinkjes, huishoud-breed en
 per lid; "Heb ik al" (in huis) komt er niet in, dus Stijns regel geldt vanzelf. (2) Wat ontbreekt is het moment van een vinkje per

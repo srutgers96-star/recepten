@@ -65,10 +65,10 @@ describe('recordBought', () => {
   it('a resolved ingredient counts n + 1 and by[member] + 1, per member', () => {
     let s: ShopBought = emptyShopBought();
     s = recordBought(s, onion, ANNA, T1);
-    expect(s.ings).toEqual({ ui: { n: 1, by: { [ANNA]: 1 } } });
+    expect(s.ings).toEqual({ ui: { n: 1, by: { [ANNA]: 1 }, first: { [ANNA]: T1 } } });
     s = recordBought(s, onion, ANNA, T2);
     s = recordBought(s, onion, BRAM, T2);
-    expect(s.ings).toEqual({ ui: { n: 3, by: { [ANNA]: 2, [BRAM]: 1 } } });
+    expect(s.ings).toEqual({ ui: { n: 3, by: { [ANNA]: 2, [BRAM]: 1 }, first: { [ANNA]: T1, [BRAM]: T2 } } });
   });
 
   it('without a member only n counts', () => {
@@ -87,6 +87,63 @@ describe('recordBought', () => {
     const after = recordBought(before, onion, BRAM, T2);
     expect(before).toEqual(copy);
     expect(after).not.toBe(before);
-    expect(after.ings['ui']).toEqual({ n: 2, by: { [ANNA]: 1, [BRAM]: 1 } });
+    expect(after.ings['ui']).toEqual({ n: 2, by: { [ANNA]: 1, [BRAM]: 1 }, first: { [BRAM]: T2 } });
+  });
+});
+
+describe('first moment per member (V7)', () => {
+  const T3 = '2026-11-15T09:00:00.000Z';
+
+  it('recordBought sets first[member] only the first time; later ticks never move it', () => {
+    let s: ShopBought = emptyShopBought();
+    s = recordBought(s, onion, ANNA, T1);
+    s = recordBought(s, onion, ANNA, T2);
+    s = recordBought(s, onion, ANNA, T3);
+    expect(s.ings['ui']).toEqual({ n: 3, by: { [ANNA]: 3 }, first: { [ANNA]: T1 } });
+    s = recordBought(s, onion, BRAM, T3);
+    expect(s.ings['ui']?.first).toEqual({ [ANNA]: T1, [BRAM]: T3 });
+  });
+
+  it('without a member no first is written (and none is added to an empty record)', () => {
+    const s = recordBought(emptyShopBought(), onion, null, T1);
+    expect(s.ings['ui']).toEqual({ n: 1, by: {} });
+    expect('first' in (s.ings['ui'] ?? {})).toBe(false);
+  });
+
+  it('old data without first stays valid; the first new tick of a member adds it', () => {
+    const old = normalizeShopBought({ recipes: {}, ings: { ui: { n: 5, by: { [ANNA]: 5 } } } });
+    expect(old.ings['ui']).toEqual({ n: 5, by: { [ANNA]: 5 } });
+    const next = recordBought(old, onion, ANNA, T2);
+    expect(next.ings['ui']).toEqual({ n: 6, by: { [ANNA]: 6 }, first: { [ANNA]: T2 } });
+  });
+
+  it('normalizeShopBought keeps valid first moments and leaves out what does not fit', () => {
+    const out = normalizeShopBought({
+      recipes: {},
+      ings: {
+        ui: { n: 2, by: { [ANNA]: 2 }, first: { [ANNA]: T1, [BRAM]: '', '': T1, 'p:c': 5, 'p:d': null } },
+        prei: { n: 1, by: {}, first: 'gisteren' },
+        rijst: { n: 1, by: {}, first: { [BRAM]: '  ' } },
+        kool: { n: 0, first: { [ANNA]: T1 } },
+      },
+    });
+    expect(out.ings).toEqual({
+      ui: { n: 2, by: { [ANNA]: 2 }, first: { [ANNA]: T1 } },
+      prei: { n: 1, by: {} },
+      rijst: { n: 1, by: {} },
+    });
+  });
+
+  it('an unparseable first moment is dropped, so a later tick of that member can still set it', () => {
+    const out = normalizeShopBought({
+      recipes: {},
+      ings: { aardbei: { n: 1, by: { [ANNA]: 1 }, first: { [ANNA]: 'not a date', [BRAM]: T1 } } },
+    });
+    expect(out.ings['aardbei']?.first).toEqual({ [BRAM]: T1 });
+    const next = normalizeShopBought({
+      recipes: {},
+      ings: { aardbei: { n: 1, by: { [ANNA]: 1 }, first: { [ANNA]: 'not a date' } } },
+    });
+    expect('first' in (next.ings['aardbei'] ?? {})).toBe(false);
   });
 });

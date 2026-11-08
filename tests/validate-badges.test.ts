@@ -81,14 +81,16 @@ describe('the real data (§2d, §2f)', () => {
     });
   });
 
-  it('has the group counts of §2d (Koken 36 with vaste-klant of 6C and uitdager of 6E), all of Geheim hidden', () => {
+  it('has the group counts of §2d (Koken 36 with vaste-klant of 6C and uitdager of 6E; Boodschappen of V7), all of Geheim hidden', () => {
     const active = BADGES.filter((b) => b['retired'] !== true);
     const count = (g: string) => active.filter((b) => b['group'] === g).length;
-    expect(BADGE_GROUP_IDS.map(count)).toEqual([36, 31, 18, 13, 11, 4, 6, 27]);
-    expect(active).toHaveLength(146);
+    // Boodschappen has the 12 badges of spec V7; the spec's "verzamelaar" (taken by Samen) became "boodschappenmand".
+    expect(BADGE_GROUP_IDS.map(count)).toEqual([36, 12, 31, 18, 13, 11, 4, 6, 27]);
+    expect(active).toHaveLength(158);
+    expect(BADGES).toHaveLength(164);
     expect(active.filter((b) => b['group'] === 'geheim').every((b) => b['hidden'] === true)).toBe(true);
-    // The heart is the one hidden badge outside Geheim.
-    expect(active.filter((b) => b['hidden'] === true && b['group'] !== 'geheim').map((b) => b['id'])).toEqual(['hartje']);
+    // Hidden outside Geheim: the heart, and the two secret shopping badges of spec V7.
+    expect(active.filter((b) => b['hidden'] === true && b['group'] !== 'geheim').map((b) => b['id']).sort()).toEqual(['alfabet', 'hartje', 'zeldzaam']);
     expect(active.find((b) => b['id'] === 'vaste-klant')?.['group']).toBe('koken');
     expect(active.find((b) => b['id'] === 'uitdager')).toMatchObject({ group: 'koken', icon: '🎯', rule: { kind: 'challenges' }, tiers: [1, 3, 5, 10, 20, 35, 50, 75] });
   });
@@ -119,7 +121,7 @@ describe('validateBadges: §2e errors', () => {
   });
 
   it('group missing or unknown', () => {
-    const msg = 'badges.json "proef": "group" must be one of koken | ontdekken | keukens | seizoenen | samen | foto | reeksen | geheim.';
+    const msg = 'badges.json "proef": "group" must be one of koken | boodschappen | ontdekken | keukens | seizoenen | samen | foto | reeksen | geheim.';
     expect(errorsOf([oneOff({ group: undefined })])).toEqual([msg]);
     expect(errorsOf([oneOff({ group: 'snacks' })])).toEqual([msg]);
   });
@@ -344,9 +346,9 @@ describe('the avatar library after spec V3 (§1b)', () => {
     return p;
   };
 
-  it('has 165 parts: 154 before, plus six glasses and five kitchen parts', () => {
-    expect(PARTS).toHaveLength(165);
-    expect(PARTS.filter((p) => p['layer'] === 'glasses')).toHaveLength(13);
+  it('has 169 parts: 154 before, six glasses and five kitchen parts of V3, four badge parts of V7', () => {
+    expect(PARTS).toHaveLength(169);
+    expect(PARTS.filter((p) => p['layer'] === 'glasses')).toHaveLength(15);
   });
 
   it('the fifteen rarities below the level rule are fixed', () => {
@@ -393,5 +395,180 @@ describe('hats cover the hair after spec V3b (§1b)', () => {
         expect(hat['brim'] as number, id).toBeLessThanOrEqual(40);
       }
     }
+  });
+});
+
+// Spec V7 §1b: the shopping badges (group 'boodschappen') and their avatar parts.
+describe('the shopping badges of spec V7 (§1b)', () => {
+  const byId = new Map(BADGES.map((b) => [String(b['id']), b]));
+  const get = (id: string): Obj => {
+    const b = byId.get(id);
+    if (!b) throw new Error(`no badge ${id}`);
+    return b;
+  };
+  const part = (id: string): Obj => {
+    const p = PARTS.find((x) => x['id'] === id);
+    if (!p) throw new Error(`no part ${id}`);
+    return p;
+  };
+  const ING = new Map(DICT.ingredients.map((i) => [i.id, i]));
+
+  it('has the table: ids, names, rules, tiers, icons, rewards', () => {
+    const TABLE: ReadonlyArray<[string, string, string, string, Obj, number[] | null, Obj | null]> = [
+      ['boodschappenmand', 'Boodschappenmand', 'Shopping basket', '🧺', { kind: 'boughtDistinct' }, [10, 25, 50, 100, 175, 250, 350, 500], { part: 'glasses-shopping', tier: 3 }],
+      ['groenteboer', 'Groenteboer', 'Greengrocer', '🥦', { kind: 'boughtDistinct', aisle: 'groente-fruit' }, [10, 20, 35, 50, 70, 90, 120, 150], { part: 'pin-carrot', tier: 2 }],
+      ['kaasmeester', 'Kaasmeester', 'Cheesemonger', '🧀', { kind: 'boughtDistinct', aisle: 'kaas' }, [3, 5, 8, 12, 16, 20, 28, 36], { part: 'prop-cheese-slicer', tier: 2 }],
+      ['slager', 'Slager', 'Butcher', '🥩', { kind: 'boughtGroup' }, [5, 10, 15, 20, 30, 40, 55, 70], null],
+      ['vismarkt', 'Vismarkt', 'Fishmonger', '🐟', { kind: 'boughtGroup' }, [3, 5, 8, 12, 16, 20, 25, 30], null],
+      ['kruidenkast', 'Kruidenkast', 'Spice rack', '🌿', { kind: 'boughtDistinct', aisle: 'kruiden-specerijen', staples: true }, [5, 10, 15, 20, 30, 40, 55, 70], null],
+      ['wereldwinkel', 'Wereldwinkel', 'World shelf', '🌍', { kind: 'boughtDistinct', aisle: 'wereld' }, [5, 10, 15, 20, 30, 40, 55, 70], null],
+      ['bakkersmand', 'Bakkersmand', "Baker's basket", '🥐', { kind: 'boughtDistinct', aisle: 'bakken' }, [5, 8, 12, 16, 20, 25, 30, 40], null],
+      ['zeldzaam', 'Zeldzaam', 'One-of-a-kind', '💎', { kind: 'boughtRare', n: 1 }, null, null],
+      ['alfabet', 'Alfabet', 'Alphabet', '🔤', { kind: 'boughtLetters', n: 25 }, null, { part: 'glasses-letters' }],
+      ['speculaastijd', 'Speculaastijd', 'Spice season', '🍪', { kind: 'boughtInMonth', id: 'speculaaskruiden', months: [11, 12] }, null, null],
+      ['zomerkoninkjes', 'Zomerkoninkjes', 'Summer berries', '🍓', { kind: 'boughtInMonth', id: 'aardbei', months: [6, 7, 8] }, null, null],
+    ];
+    for (const [id, nl, en, icon, rule, tiers, unlock] of TABLE) {
+      const b = get(id);
+      expect(b['group'], id).toBe('boodschappen');
+      expect((b['nl'] as Obj)['name'], id).toBe(nl);
+      expect((b['en'] as Obj)['name'], id).toBe(en);
+      expect(b['icon'], id).toBe(icon);
+      expect(b['rule'], id).toMatchObject(rule);
+      expect(b['tiers'], id).toEqual(tiers ?? undefined);
+      expect(b['unlock'], id).toEqual(unlock ?? undefined);
+      expect(b['xp'], id).toBeUndefined();
+      expect(b['retired'], id).toBeUndefined();
+    }
+    // Only the two secret ones are hidden (XP 250 each by default).
+    expect(BADGES.filter((b) => b['group'] === 'boodschappen' && b['hidden'] === true).map((b) => b['id'])).toEqual(['zeldzaam', 'alfabet']);
+    // The table's "verzamelaar" became "boodschappenmand" (Fable): the id belongs to the Samen ladder of received recipes.
+    expect(get('verzamelaar')).toMatchObject({ group: 'samen', icon: '📬', rule: { kind: 'received' } });
+    // The first badge of the group; only Kruidenkast lets staples count, Alfabet skips the x.
+    expect(BADGES.find((b) => b['group'] === 'boodschappen')?.['id']).toBe('boodschappenmand');
+    expect(BADGES.filter((b) => (b['rule'] as Obj)['staples'] === true).map((b) => b['id'])).toEqual(['kruidenkast']);
+    expect((get('boodschappenmand')['rule'] as Obj)['aisle']).toBeUndefined();
+    expect((get('alfabet')['rule'] as Obj)['n']).toBe(25);
+    expect((get('alfabet')['nl'] as Obj)['description']).toContain('25');
+    expect((get('alfabet')['en'] as Obj)['description']).toContain('25');
+  });
+
+  it('slager is meat and vismarkt fish from the vlees-vis aisle: no fish, no vegetarian products, no staples, no overlap', () => {
+    const slager = (get('slager')['rule'] as Obj)['ids'] as string[];
+    const vis = (get('vismarkt')['rule'] as Obj)['ids'] as string[];
+    for (const id of [...slager, ...vis]) {
+      const ing = ING.get(id);
+      expect(ing, id).toBeDefined();
+      expect(ing?.aisle, id).toBe('vlees-vis');
+      expect(ing?.veg, id).toBe(false);
+      expect(ing?.staple, id).toBe(false);
+    }
+    expect(slager.filter((id) => vis.includes(id))).toEqual([]);
+    for (const fish of ['zalm', 'tonijnfilet', 'garnaal', 'mossel', 'haring', 'vis']) expect(slager.includes(fish), fish).toBe(false);
+    expect(slager.length).toBeGreaterThanOrEqual(70);
+    expect(vis.length).toBeGreaterThanOrEqual(30);
+  });
+
+  it('the four parts: badge unlock, layer, rarity, names, and the badge points back', () => {
+    const PARTS_V7: ReadonlyArray<[string, string, string, string]> = [
+      ['pin-carrot', 'pin', 'groenteboer', 'rare'],
+      ['prop-cheese-slicer', 'prop', 'kaasmeester', 'rare'],
+      ['glasses-letters', 'glasses', 'alfabet', 'epic'],
+      ['glasses-shopping', 'glasses', 'boodschappenmand', 'rare'],
+    ];
+    for (const [id, layer, badge, rarity] of PARTS_V7) {
+      const p = part(id);
+      expect(p['layer'], id).toBe(layer);
+      expect(p['unlock'], id).toEqual({ badge });
+      expect(p['rarity'], id).toBe(rarity);
+      expect(String(p['nl']).length, id).toBeGreaterThan(0);
+      expect(String(p['en']).length, id).toBeGreaterThan(0);
+      expect(checkAvatarSvg(String(p['svg'])), id).toEqual([]);
+      expect((get(badge)['unlock'] as Obj)['part'], id).toBe(id);
+    }
+    expect(part('glasses-shopping')).toMatchObject({ nl: 'Prijskaartjesbril', en: 'Price-tag glasses' });
+  });
+
+  it('the real data has every shopping goal within reach (Kruidenkast counts staples, Alfabet asks 25 letters)', () => {
+    const { warnings } = validateBadges(BADGES, refs, { avatarParts: PARTS, classics: CLASSICS, ingredients: DICT.ingredients });
+    const v7 = warnings.filter((w) => /"(boodschappenmand|groenteboer|kaasmeester|slager|vismarkt|kruidenkast|wereldwinkel|bakkersmand|zeldzaam|alfabet|speculaastijd|zomerkoninkjes)"/.test(w));
+    expect(v7).toEqual([]);
+  });
+});
+
+describe('validateBadges: the shopping-trail rule kinds of spec V7', () => {
+  const shop = (rule: Obj, over: Obj = {}): Obj => oneOff({ id: 'winkel', group: 'boodschappen', rule, nl: { name: 'Winkel', description: 'Koop iets' }, en: { name: 'Shop', description: 'Buy something' }, ...over });
+  const shopLadder = (rule: Obj, over: Obj = {}): Obj => ladder({ id: 'winkel', group: 'boodschappen', rule, ...over });
+
+  it('valid one-offs and ladders of every kind pass', () => {
+    expect(errorsOf([
+      shop({ kind: 'boughtDistinct', n: 10 }),
+      shopLadder({ kind: 'boughtDistinct', aisle: 'kaas' }, { id: 'winkel-2' }),
+      shop({ kind: 'boughtGroup', ids: ['kip', 'gehakt'], n: 2 }, { id: 'winkel-3' }),
+      shopLadder({ kind: 'boughtGroup', ids: ['kip', 'gehakt', 'bacon', 'ham', 'salami', 'chorizo', 'rosbief', 'pancetta'] }, { id: 'winkel-4' }),
+      shop({ kind: 'boughtRare', n: 1 }, { id: 'winkel-5' }),
+      shopLadder({ kind: 'boughtRare' }, { id: 'winkel-6' }),
+      shop({ kind: 'boughtLetters', n: 26 }, { id: 'winkel-7' }),
+      shopLadder({ kind: 'boughtLetters' }, { id: 'winkel-8' }),
+      shop({ kind: 'boughtInMonth', id: 'aardbei', months: [6, 7, 8] }, { id: 'winkel-9' }),
+      shop({ kind: 'boughtInMonth', id: 'aardbei', months: [6], n: 1 }, { id: 'winkel-10' }),
+    ])).toEqual([]);
+  });
+
+  it('staples is accepted on boughtDistinct only, and must be a boolean', () => {
+    expect(errorsOf([shop({ kind: 'boughtDistinct', aisle: 'kruiden-specerijen', staples: true, n: 3 })])).toEqual([]);
+    expect(errorsOf([shopLadder({ kind: 'boughtDistinct', staples: false })])).toEqual([]);
+    expect(errorsOf([shop({ kind: 'boughtDistinct', staples: 'ja', n: 3 })])).toEqual(['badges.json "winkel": rule.staples must be a boolean when present.']);
+    const only = 'badges.json "winkel": rule.staples is only allowed on kind "boughtDistinct".';
+    expect(errorsOf([shop({ kind: 'boughtGroup', ids: ['kip', 'ham'], staples: true, n: 1 })])).toEqual([only]);
+    expect(errorsOf([shop({ kind: 'boughtLetters', staples: true, n: 3 })])).toEqual([only]);
+    expect(errorsOf([shop({ kind: 'boughtRare', staples: true, n: 1 })])).toEqual([only]);
+    expect(errorsOf([oneOff({ rule: { kind: 'cookCount', staples: true, n: 1 } })])).toEqual(['badges.json "proef": rule.staples is only allowed on kind "boughtDistinct".']);
+  });
+
+  it('boughtDistinct with an unknown aisle', () => {
+    expect(errorsOf([shop({ kind: 'boughtDistinct', aisle: 'snoep', n: 3 })])).toEqual(['badges.json "winkel": rule.aisle "snoep" is not a known aisle id.']);
+  });
+
+  it('boughtGroup: ids empty, duplicate, unknown, or fewer than the goal', () => {
+    expect(errorsOf([shop({ kind: 'boughtGroup', ids: [], n: 1 })])).toEqual(['badges.json "winkel": rule.ids must be a non-empty array of ingredient ids.']);
+    expect(errorsOf([shop({ kind: 'boughtGroup', ids: ['kip', 'kip', 'ham'], n: 2 })])).toEqual(['badges.json "winkel": rule.ids has duplicates.']);
+    expect(errorsOf([shop({ kind: 'boughtGroup', ids: ['kip', 'draak'], n: 1 })])).toEqual(['badges.json "winkel": rule.ids "draak" is not a known ingredient id.']);
+    expect(errorsOf([shop({ kind: 'boughtGroup', ids: ['kip', 'ham'], n: 3 })])).toEqual(['badges.json "winkel": goal 3 is more than the 2 ids in rule.ids.']);
+    expect(errorsOf([shopLadder({ kind: 'boughtGroup', ids: ['kip', 'ham'] })])).toEqual(['badges.json "winkel": goal 8 is more than the 2 ids in rule.ids.']);
+  });
+
+  it('boughtInMonth: unknown id, bad months, or a ladder', () => {
+    expect(errorsOf([shop({ kind: 'boughtInMonth', id: 'draak', months: [1] })])).toEqual(['badges.json "winkel": rule.id "draak" is not a known ingredient id.']);
+    const msg = 'badges.json "winkel": rule.months must be a non-empty array of distinct months 1..12.';
+    expect(errorsOf([shop({ kind: 'boughtInMonth', id: 'aardbei', months: [] })])).toEqual([msg]);
+    expect(errorsOf([shop({ kind: 'boughtInMonth', id: 'aardbei', months: [0, 13] })])).toEqual([msg]);
+    expect(errorsOf([shop({ kind: 'boughtInMonth', id: 'aardbei', months: [6, 6] })])).toEqual([msg]);
+    expect(errorsOf([shopLadder({ kind: 'boughtInMonth', id: 'aardbei', months: [6] })])).toEqual(['badges.json "winkel": rule kind "boughtInMonth" cannot be a ladder; drop "tiers".']);
+  });
+
+  it('boughtLetters above 26', () => {
+    expect(errorsOf([shop({ kind: 'boughtLetters', n: 27 })])).toEqual(['badges.json "winkel": goal 27 is more than the 26 letters A–Z.']);
+  });
+
+  it('warns (with the ingredients) on an unreachable goal and on a staple in a group', () => {
+    const ingredients = [
+      { id: 'kip', nl: { one: 'kip' }, aisle: 'vlees-vis', staple: false },
+      { id: 'ham', nl: { one: 'ham' }, aisle: 'vlees-vis', staple: false },
+      { id: 'zout', nl: { one: 'zout' }, aisle: 'kruiden-specerijen', staple: true },
+    ];
+    const warn = (b: Obj) => validateBadges([b], refs, { avatarParts: PARTS, ingredients }).warnings;
+    expect(warn(shop({ kind: 'boughtDistinct', aisle: 'vlees-vis', n: 3 }))).toEqual(['badges.json "winkel": goal 3 is out of reach: the dictionary has 2 non-staple ingredients in aisle "vlees-vis".']);
+    expect(warn(shop({ kind: 'boughtDistinct', aisle: 'vlees-vis', n: 2 }))).toEqual([]);
+    // With staples: true the staples are in the pool (zout is the only one in its aisle).
+    expect(warn(shop({ kind: 'boughtDistinct', aisle: 'kruiden-specerijen', n: 1 }))).toEqual(['badges.json "winkel": goal 1 is out of reach: the dictionary has 0 non-staple ingredients in aisle "kruiden-specerijen".']);
+    expect(warn(shop({ kind: 'boughtDistinct', aisle: 'kruiden-specerijen', staples: true, n: 1 }))).toEqual([]);
+    expect(warn(shop({ kind: 'boughtDistinct', aisle: 'kruiden-specerijen', staples: true, n: 2 }))).toEqual(['badges.json "winkel": goal 2 is out of reach: the dictionary has 1 ingredients (staples included) in aisle "kruiden-specerijen".']);
+    expect(warn(shop({ kind: 'boughtGroup', ids: ['kip', 'zout'], n: 1 }))).toEqual(['badges.json "winkel": rule.ids "zout" is a staple; staples never count on the shopping trail.']);
+    expect(warn(shop({ kind: 'boughtLetters', n: 3 }))).toEqual([
+      'badges.json "winkel": goal 3 is out of reach: non-staple ingredients start with 2 letters (missing: a, b, c, d, e, f, g, i, j, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z).',
+    ]);
+    // Without the ingredients nothing warns.
+    expect(validateBadges([shop({ kind: 'boughtDistinct', aisle: 'vlees-vis', n: 3 })], refs, { avatarParts: PARTS }).warnings).toEqual([]);
   });
 });

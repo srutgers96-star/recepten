@@ -1,7 +1,7 @@
 // '#/more/badges' — Badges (docs/phase-5-spec.md Block C.2; the page of docs/specs/badges-avatar.md
 // §1a, block 6D-2b; tabs since block 6D-UI; tiles since block 6D-B): a tab per household member (the
 // local profiles + hand-added members from src/domain/household.ts) plus "Samen" ('all'); under the
-// count line a horizontally scrolling strip with the eight badge groups (BADGE_GROUPS) as tabs, and
+// count line a horizontally scrolling strip with the badge groups (BADGE_GROUPS) as tabs, and
 // one group at a time in the panel below it: a wrapping grid of 64 px tiles in catalogue order.
 // Block 6D-B (Stijn 30 Oct: "alleen die logo's, kleiner, en als je erop klikt de details"): a tile
 // is only the icon in a 56 px circle, no name and no text on it (the name is its aria-label):
@@ -67,7 +67,7 @@ export interface BadgePageModel {
   total: number;
   /** Badges found in the group "Geheim" ("· {n} geheime gevonden", "{n} geheime badges gevonden"). */
   secretFound: number;
-  /** All eight groups in BADGE_GROUPS order, also when one is empty on this tab. */
+  /** All groups in BADGE_GROUPS order, also when one is empty on this tab. */
   groups: BadgeGroupView[];
 }
 
@@ -109,8 +109,11 @@ const OLD_GROUPS_KEY = 'recepten.badges.groups';
 /** The first tab ("Koken"): the fallback for an unknown or missing value. */
 const FIRST_GROUP: BadgeGroup = BADGE_GROUPS[0] ?? 'koken';
 
-/** The fixed group icons on the tabs (block 6D-UI, UI-A.1). */
-const GROUP_ICONS: Record<BadgeGroup, string> = {
+/**
+ * The fixed group icons on the tabs (block 6D-UI, UI-A.1). Partial: a group without a decided icon
+ * (V7 "boodschappen": the spec names no tab icon) renders its tab without one.
+ */
+const GROUP_ICONS: Partial<Record<BadgeGroup, string>> = {
   koken: '🍳',
   ontdekken: '🧭',
   keukens: '🌍',
@@ -438,7 +441,7 @@ function revealTab(strip: HTMLElement, tab: HTMLElement) {
 }
 
 /**
- * The strip with the eight groups (block 6D-UI, UI-A.1/5): icon + name + "2/31" in a pill (Geheim:
+ * The strip with the groups (block 6D-UI, UI-A.1/5): icon + name + "2/31" in a pill (Geheim:
  * "{n} gevonden", never a total). Roving tabindex: only the active tab is in the tab order; arrow
  * left/right (and Home/End) switch tab and move the focus with it. The active tab is scrolled into
  * view when the strip appears (also after a member switch, which remounts it) and on every change.
@@ -491,9 +494,11 @@ function GroupTabs(props: { groups: BadgeGroupView[]; active: BadgeGroup; onSele
             tabIndex={on ? 0 : -1}
             onClick={() => props.onSelect(g.group)}
           >
-            <span class="badge-gtab-icon" aria-hidden="true">
-              {GROUP_ICONS[g.group]}
-            </span>
+            {GROUP_ICONS[g.group] !== undefined && (
+              <span class="badge-gtab-icon" aria-hidden="true">
+                {GROUP_ICONS[g.group]}
+              </span>
+            )}
             <span class="badge-gtab-name">{t(`badges.group.${g.group}`)}</span>
             <span class="badge-gtab-pill">{g.group === SECRET_GROUP ? t('badges.groupFound', { n: g.shown.length }) : `${g.earned}/${g.total}`}</span>
           </button>

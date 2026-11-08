@@ -19,6 +19,8 @@ export const badges: Dict = {
   // and the new toasts. Literal from the spec; the page itself is block 6D-2b.
   'badges.secretFound': { nl: '· {n} geheime gevonden', en: '· {n} secret found' },
   'badges.group.koken': { nl: 'Koken', en: 'Cooking' },
+  // V7 (docs/specs/verbeterronde-7.md §1c): the tab between Koken and Ontdekken.
+  'badges.group.boodschappen': { nl: 'Boodschappen', en: 'Groceries' },
   'badges.group.ontdekken': { nl: 'Ontdekken', en: 'Discovering' },
   'badges.group.keukens': { nl: 'Keukens van de wereld', en: 'Cuisines of the world' },
   'badges.group.seizoenen': { nl: 'Seizoenen', en: 'Seasons' },

@@ -11,8 +11,8 @@
       "id": "badges-xp.xp-verdienen",
       "title": { "nl": "Hoe je XP verdient", "en": "How you earn XP" },
       "what": {
-        "nl": "Je verdient XP met koken, met een foto van je gerecht, met een eigen recept en met badges. Bladeren, zoeken, delen, plannen en boodschappen doen leveren geen XP op.",
-        "en": "You earn XP by cooking, with a photo of your dish, with a recipe of your own and with badges. Browsing, searching, sharing, planning and shopping earn no XP."
+        "nl": "Je verdient XP met koken, met een foto van je gerecht, met een eigen recept en met badges. Bladeren, zoeken, delen, plannen en boodschappen doen leveren zelf geen XP op; een badge daarvoor wel.",
+        "en": "You earn XP by cooking, with a photo of your dish, with a recipe of your own and with badges. Browsing, searching, sharing, planning and shopping earn no XP themselves; a badge for them does."
       },
       "where": {
         "nl": [
@@ -290,8 +290,8 @@
       "id": "badges-xp.badges-bekijken",
       "title": { "nl": "Je badges bekijken", "en": "View your badges" },
       "what": {
-        "nl": "Badges verdien je met koken, ontdekken, delen, foto's en meer. Ze staan in acht groepen, elk met een eigen tab.",
-        "en": "You earn badges by cooking, discovering, sharing, taking photos and more. They sit in eight groups, each with its own tab."
+        "nl": "Badges verdien je met koken, boodschappen, ontdekken, delen, foto's en meer. Ze staan in negen groepen, elk met een eigen tab.",
+        "en": "You earn badges by cooking, shopping, discovering, sharing, taking photos and more. They sit in nine groups, each with its own tab."
       },
       "where": {
         "nl": [
@@ -314,8 +314,8 @@
         "en": "At the top it says “… of … badges earned”. The badges are round tiles with only an icon; the ones you do not have yet are paler. A tap opens a window with the name, the explanation and how far you are."
       },
       "know": {
-        "nl": "De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. Ook een tik op het woord **Badges** onder **Instellingen** in **Meer** brengt je hier. De app onthoudt de laatste groep die je bekeek.",
-        "en": "The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. Tapping the word **Badges** under **Settings** in **More** brings you here too. The app remembers the last group you looked at."
+        "nl": "De groepen zijn Koken, Boodschappen, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. Ook een tik op het woord **Badges** onder **Instellingen** in **Meer** brengt je hier. De app onthoudt de laatste groep die je bekeek.",
+        "en": "The groups are Cooking, Groceries, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. Tapping the word **Badges** under **Settings** in **More** brings you here too. The app remembers the last group you looked at."
       },
       "route": "/more/badges",
       "platform": "all",
@@ -388,8 +388,8 @@
         "en": "You see how many secret badges you have found and the tiles with a dotted edge. Tapping such a tile does nothing; the name stays secret."
       },
       "know": {
-        "nl": "Het totaal staat nergens, zodat er altijd iets te ontdekken blijft. Ook bij **Samen & delen** staat zo'n tegel. Een gevonden geheime badge geeft 250 XP.",
-        "en": "The total is never shown, so there is always something left to discover. **Together & sharing** has such a tile too. A secret badge you find gives 250 XP."
+        "nl": "Het totaal staat nergens, zodat er altijd iets te ontdekken blijft. Ook bij **Samen & delen** en bij **Boodschappen** staat zo'n tegel. Een gevonden geheime badge geeft 250 XP.",
+        "en": "The total is never shown, so there is always something left to discover. **Together & sharing** and **Groceries** have such a tile too. A secret badge you find gives 250 XP."
       },
       "route": "/more/badges",
       "platform": "all",
@@ -434,6 +434,44 @@
       "keywords": {
         "nl": ["samen", "huishouden", "per persoon", "lid", "tab", "gezamenlijk"],
         "en": ["together", "household", "per person", "member", "tab", "shared"]
+      }
+    },
+    {
+      "id": "badges-xp.boodschappen",
+      "title": { "nl": "Badges voor boodschappen", "en": "Badges for groceries" },
+      "what": {
+        "nl": "Op het tabblad **Boodschappen** staan badges voor wat je op je boodschappenlijst afvinkt. Boodschappenmand telt alle verschillende ingrediënten; de andere tellen verschillende soorten groente en fruit, kaas, vlees, vis, kruiden, wereldproducten en bakspullen.",
+        "en": "The **Groceries** tab has badges for what you tick off on your shopping list. Shopping basket counts all different ingredients; the others count different kinds of fruit and veg, cheese, meat, fish, herbs, world foods and baking things."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik bovenaan op de rij met je naam.",
+          "Tik op **Mijn profiel** op de tegel **Badges**.",
+          "Tik in de strook met tabs op **Boodschappen**.",
+          "Tik op een tegel."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the row with your name at the top.",
+          "On **My profile**, tap the **Badges** tile.",
+          "Tap **Groceries** in the strip of tabs.",
+          "Tap a tile."
+        ]
+      },
+      "see": {
+        "nl": "Het venster laat zien hoeveel verschillende ingrediënten je al hebt afgevinkt. Bij “Volgende:” staat hoeveel je nodig hebt voor het volgende niveau.",
+        "en": "The window shows how many different ingredients you have ticked off so far. “Next:” shows how many you need for the next tier."
+      },
+      "know": {
+        "nl": "Alleen een vinkje op de lijst telt, en elk ingrediënt telt één keer. **Heb ik al** telt niet. Voorraadproducten zoals zout, suiker en bloem tellen ook niet, behalve bij Kruidenkast: daar telt elk kruid en elke specerij. Wat je eerder al afvinkte, telt mee. Twee badges hangen aan het seizoen: speculaaskruiden in november of december, en aardbeien in de zomer. Daarvoor telt de eerste keer dat je ze afvinkt. Op je eigen tab tellen jouw vinkjes, op **Samen** die van het hele huishouden.",
+        "en": "Only a tick on the list counts, and each ingredient counts once. **Already have it** does not count. Staples such as salt, sugar and flour do not count either, except for Spice rack: there every herb and spice counts. What you ticked off before counts too. Two badges follow the season: speculaas spices in November or December, and strawberries in summer. For those, the first time you tick them off counts. Your own tab counts your ticks; **Together** counts those of the whole household."
+      },
+      "route": "/more/badges",
+      "platform": "all",
+      "keywords": {
+        "nl": ["boodschappen", "afvinken", "ingrediënten", "seizoen", "boodschappenmand", "groenteboer", "kruidenkast", "voorraad"],
+        "en": ["groceries", "tick off", "ingredients", "season", "shopping basket", "greengrocer", "spice rack", "staples"]
       }
     },
     {
@@ -571,8 +609,8 @@
         "en": "Under the group a line appears such as “Rare · Unlocks at level …” or “Unlocks with the badge …”. Rare, epic and legendary tiles have a coloured dot at the top left."
       },
       "know": {
-        "nl": "Gewoon is grijs, Zeldzaam blauw, Episch paars en Legendarisch goud. Een tik op een tegel met een slotje verandert niets aan je avatar. Een pas vrijgespeelde tegel heeft een stipje tot je de maker sluit.",
-        "en": "Common is grey, Rare blue, Epic purple and Legendary gold. Tapping a tile with a padlock changes nothing about your avatar. A newly unlocked tile has a dot until you close the maker."
+        "nl": "Gewoon is grijs, Zeldzaam blauw, Episch paars en Legendarisch goud. Een tik op een tegel met een slotje verandert niets aan je avatar. Een pas vrijgespeelde tegel heeft een stipje tot je de maker sluit. De badges voor boodschappen spelen vier onderdelen vrij: een wortelspeldje, een kaasschaaf, een bril met een prijskaartje en één die je zelf moet ontdekken.",
+        "en": "Common is grey, Rare blue, Epic purple and Legendary gold. Tapping a tile with a padlock changes nothing about your avatar. A newly unlocked tile has a dot until you close the maker. The badges for groceries unlock four parts: a carrot pin, a cheese slicer, price-tag glasses and one you have to discover yourself."
       },
       "route": "/more/style",
       "platform": "all",

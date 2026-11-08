@@ -3366,7 +3366,7 @@ Cooking earns XP, XP takes you up a level, and badges and levels unlock fun extr
 
 #### What it does
 
-You earn XP by cooking, with a photo of your dish, with a recipe of your own and with badges. Browsing, searching, sharing, planning and shopping earn no XP.
+You earn XP by cooking, with a photo of your dish, with a recipe of your own and with badges. Browsing, searching, sharing, planning and shopping earn no XP themselves; a badge for them does.
 
 #### Where you tap
 
@@ -3538,7 +3538,7 @@ At the top it says, for example, “🎉 Level 3!”, with your new title large 
 
 #### What it does
 
-You earn badges by cooking, discovering, sharing, taking photos and more. They sit in eight groups, each with its own tab.
+You earn badges by cooking, shopping, discovering, sharing, taking photos and more. They sit in nine groups, each with its own tab.
 
 #### Where you tap
 
@@ -3554,7 +3554,7 @@ At the top it says “… of … badges earned”. The badges are round tiles wi
 
 #### Good to know
 
-The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. Tapping the word **Badges** under **Settings** in **More** brings you here too. The app remembers the last group you looked at.
+The groups are Cooking, Groceries, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. Tapping the word **Badges** under **Settings** in **More** brings you here too. The app remembers the last group you looked at.
 
 (`#/more/badges`)
 
@@ -3601,7 +3601,7 @@ You see how many secret badges you have found and the tiles with a dotted edge. 
 
 #### Good to know
 
-The total is never shown, so there is always something left to discover. **Together & sharing** has such a tile too. A secret badge you find gives 250 XP.
+The total is never shown, so there is always something left to discover. **Together & sharing** and **Groceries** have such a tile too. A secret badge you find gives 250 XP.
 
 (`#/more/badges`)
 
@@ -3626,6 +3626,30 @@ At the top of the badges there is a tab for each member of your household and a 
 #### Good to know
 
 The window of such a badge says “Counts for the whole household”.
+
+(`#/more/badges`)
+
+### Badges for groceries
+
+#### What it does
+
+The **Groceries** tab has badges for what you tick off on your shopping list. Shopping basket counts all different ingredients; the others count different kinds of fruit and veg, cheese, meat, fish, herbs, world foods and baking things.
+
+#### Where you tap
+
+1. Tap **More** at the bottom.
+2. Tap the row with your name at the top.
+3. On **My profile**, tap the **Badges** tile.
+4. Tap **Groceries** in the strip of tabs.
+5. Tap a tile.
+
+#### What you then see
+
+The window shows how many different ingredients you have ticked off so far. “Next:” shows how many you need for the next tier.
+
+#### Good to know
+
+Only a tick on the list counts, and each ingredient counts once. **Already have it** does not count. Staples such as salt, sugar and flour do not count either, except for Spice rack: there every herb and spice counts. What you ticked off before counts too. Two badges follow the season: speculaas spices in November or December, and strawberries in summer. For those, the first time you tick them off counts. Your own tab counts your ticks; **Together** counts those of the whole household.
 
 (`#/more/badges`)
 
@@ -3716,7 +3740,7 @@ Under the group a line appears such as “Rare · Unlocks at level …” or “
 
 #### Good to know
 
-Common is grey, Rare blue, Epic purple and Legendary gold. Tapping a tile with a padlock changes nothing about your avatar. A newly unlocked tile has a dot until you close the maker.
+Common is grey, Rare blue, Epic purple and Legendary gold. Tapping a tile with a padlock changes nothing about your avatar. A newly unlocked tile has a dot until you close the maker. The badges for groceries unlock four parts: a carrot pin, a cheese slicer, price-tag glasses and one you have to discover yourself.
 
 (`#/more/style`)
 

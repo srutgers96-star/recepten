@@ -698,13 +698,23 @@ export function validateDictionary(data: DictionaryData): ValidationResult {
 // (src/domain/badges.ts `BadgeRule`: `n: number`), so it is never a ladder.
 // Warnings: a ladder cuisine/tag/ingredient id that occurs in 0 classics (only with `classics`), more
 // than 150 badges (retired ones not counted), stray rule fields, `replacedBy` without `retired`.
+// Spec V7 §1b (group 'boodschappen', the shopping-trail kinds of src/domain/badges.ts `BadgeRule`):
+// errors · `boughtDistinct.aisle` not a known aisle · `boughtDistinct.staples` not a boolean (and `staples`
+// on any other kind) · `boughtGroup.ids` empty, with duplicates or with
+// an id that is not an ingredient, or fewer ids than its goal (`n` or the top tier) · `boughtInMonth`
+// without a known ingredient `id`, with `months` empty / outside 1..12 / repeated, or with `tiers`
+// (always a one-off; without `n` the goal is 1) · `boughtLetters` with a goal above 26. Warnings (only
+// with `input.ingredients`): a `boughtDistinct` / `boughtLetters` goal above what the dictionary can
+// deliver once staples are left out (`staple: true` never counts on the shopping trail, Stijn 8 nov;
+// a `boughtDistinct` with `staples: true` counts them, so its pool includes them),
+// and a `boughtGroup` id that is a staple (it can never count).
 
 /**
- * The eight badge groups in page order. Mirrors BADGE_GROUPS in src/domain/badges.ts — not imported:
+ * The nine badge groups in page order (spec V7 put boodschappen second). Mirrors BADGE_GROUPS in src/domain/badges.ts — not imported:
  * the domain modules import each other without `.ts` extensions, which Node's type stripping cannot
  * resolve (tests/validate-badges.test.ts keeps the two lists equal).
  */
-export const BADGE_GROUP_IDS: readonly string[] = ['koken', 'ontdekken', 'keukens', 'seizoenen', 'samen', 'foto', 'reeksen', 'geheim'];
+export const BADGE_GROUP_IDS: readonly string[] = ['koken', 'boodschappen', 'ontdekken', 'keukens', 'seizoenen', 'samen', 'foto', 'reeksen', 'geheim'];
 
 /** The 32 feature-event ids (§2c). Mirrors FEATURE_IDS in src/domain/features.ts (not imported, as above). */
 export const BADGE_FEATURE_IDS: readonly string[] = [
@@ -742,6 +752,9 @@ export const BADGE_COUNT_KINDS: readonly string[] = [
   'fullCycle',
   // 6E "Uitdager": finished challenges (docs/specs/challenges.md §2).
   'challenges',
+  // Spec V7: a bought ingredient that occurs in exactly one recipe; distinct first letters of bought ingredients.
+  'boughtRare',
+  'boughtLetters',
 ];
 /** Rule kinds that carry `{ id, n? }`, checked against the dictionary refs. */
 export const BADGE_REF_KINDS: readonly string[] = ['category', 'tag', 'ingredient', 'cuisine'];
@@ -758,7 +771,14 @@ export const BADGE_FIELD_KINDS: Readonly<Record<string, readonly string[]>> = {
   retryAfterOneStar: [],
   comeback: ['days'],
   overcooked: [],
+  // Spec V7: distinct bought ingredients (optionally in one aisle); how many of a fixed list were bought.
+  boughtDistinct: ['aisle', 'staples'],
+  boughtGroup: ['ids'],
+  // Spec V7: that ingredient first ticked off in one of the months; always a one-off, `n` optional (goal 1).
+  boughtInMonth: ['id', 'months'],
 };
+/** Rule kinds that are always a one-off and need no `n` (goal 1 without it; spec V7 `boughtInMonth`). */
+export const BADGE_NO_N_KINDS: readonly string[] = ['boughtInMonth'];
 /** `calendar.when` values. */
 export const BADGE_CALENDAR_WHEN: readonly string[] = ['friday-13', 'leap-day'];
 
@@ -795,6 +815,89 @@ export interface BadgeCheckInput {
   avatarParts?: unknown;
   /** The classics (builtin recipes of data/recipes.json); with them, ladder ids found in none warn. */
   classics?: readonly unknown[];
+  /** data/ingredients.json (spec V7): with it, shopping-trail goals beyond the non-staple dictionary warn. */
+  ingredients?: readonly BadgeIngredient[];
+}
+
+/** The fields of a dictionary ingredient the shopping-trail checks read (src/domain/dictionary.ts `Ingredient`). */
+export interface BadgeIngredient {
+  id: string;
+  nl: { one: string };
+  aisle?: string;
+  staple?: boolean;
+}
+
+/** The letter a–z an ingredient name starts with (diacritics folded), or null. */
+function firstLetter(name: string): string | null {
+  const c = name.normalize('NFD').charAt(0).toLowerCase();
+  return c >= 'a' && c <= 'z' ? c : null;
+}
+
+/** Spec V7: the shopping-trail checks of one rule (`goal` = `n` or the top tier; null when unknown). */
+function checkBoughtRule(
+  label: string,
+  kind: string,
+  rule: Record<string, unknown>,
+  goal: number | null,
+  refs: DictionaryRefs | undefined,
+  ingredients: readonly BadgeIngredient[] | undefined,
+  errors: string[],
+  warnings: string[],
+): void {
+  const counted = ingredients?.filter((i) => i.staple !== true);
+  if (kind === 'boughtDistinct') {
+    const aisle = rule['aisle'];
+    const staples = rule['staples'];
+    if (staples !== undefined && typeof staples !== 'boolean') errors.push(`${label}: rule.staples must be a boolean when present.`);
+    const pooled = staples === true ? ingredients : counted;
+    if (aisle !== undefined && (typeof aisle !== 'string' || aisle === '')) {
+      errors.push(`${label}: rule.aisle must be a non-empty aisle id when present.`);
+    } else if (typeof aisle === 'string' && refs && !refs.aisles.has(aisle)) {
+      errors.push(`${label}: rule.aisle ${JSON.stringify(aisle)} is not a known aisle id.`);
+    } else if (pooled && goal !== null) {
+      const pool = pooled.filter((i) => aisle === undefined || i.aisle === aisle).length;
+      if (goal > pool) {
+        const where = aisle === undefined ? '' : ` in aisle ${JSON.stringify(aisle)}`;
+        const what = staples === true ? 'ingredients (staples included)' : 'non-staple ingredients';
+        warnings.push(`${label}: goal ${goal} is out of reach: the dictionary has ${pool} ${what}${where}.`);
+      }
+    }
+  }
+  if (kind === 'boughtGroup') {
+    const ids = rule['ids'];
+    if (!isStringArray(ids) || ids.length === 0) {
+      errors.push(`${label}: rule.ids must be a non-empty array of ingredient ids.`);
+      return;
+    }
+    const unique = new Set(ids);
+    if (unique.size !== ids.length) errors.push(`${label}: rule.ids has duplicates.`);
+    if (refs) for (const id of unique) if (!refs.ingredients.has(id)) errors.push(`${label}: rule.ids ${JSON.stringify(id)} is not a known ingredient id.`);
+    if (goal !== null && goal > unique.size) errors.push(`${label}: goal ${goal} is more than the ${unique.size} ids in rule.ids.`);
+    if (ingredients) {
+      const staples = new Set(ingredients.filter((i) => i.staple === true).map((i) => i.id));
+      for (const id of unique) if (staples.has(id)) warnings.push(`${label}: rule.ids ${JSON.stringify(id)} is a staple; staples never count on the shopping trail.`);
+    }
+  }
+  if (kind === 'boughtInMonth') {
+    const id = rule['id'];
+    if (typeof id !== 'string' || id === '') errors.push(`${label}: rule.id must be a non-empty ingredient id for kind "boughtInMonth".`);
+    else if (refs && !refs.ingredients.has(id)) errors.push(`${label}: rule.id ${JSON.stringify(id)} is not a known ingredient id.`);
+    const months = rule['months'];
+    if (!Array.isArray(months) || months.length === 0 || !months.every((m: unknown) => isIntIn(m, 1, 12)) || new Set(months).size !== months.length) {
+      errors.push(`${label}: rule.months must be a non-empty array of distinct months 1..12.`);
+    }
+  }
+  if (kind === 'boughtLetters') {
+    if (goal !== null && goal > 26) {
+      errors.push(`${label}: goal ${goal} is more than the 26 letters A–Z.`);
+    } else if (counted && goal !== null) {
+      const letters = new Set(counted.map((i) => firstLetter(i.nl.one)).filter((c): c is string => c !== null));
+      if (goal > letters.size) {
+        const missing = [...'abcdefghijklmnopqrstuvwxyz'].filter((c) => !letters.has(c)).join(', ');
+        warnings.push(`${label}: goal ${goal} is out of reach: non-staple ingredients start with ${letters.size} letters (missing: ${missing}).`);
+      }
+    }
+  }
 }
 
 /** How many classics use a cuisine / tag / ingredient id (src/domain/badges.ts counts top-level lines). */
@@ -884,7 +987,9 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs, input: Badg
         if (ladder) errors.push(`${label}: rule kind "${kind}" cannot be a ladder; drop "tiers".`);
       } else {
         if (n !== undefined && !isIntIn(n, 1)) errors.push(`${label}: rule.n must be an integer >= 1 for kind "${kind}".`);
-        if (kind === 'sameRecipeDays') {
+        if (BADGE_NO_N_KINDS.includes(kind)) {
+          if (ladder) errors.push(`${label}: rule kind "${kind}" cannot be a ladder; drop "tiers".`);
+        } else if (kind === 'sameRecipeDays') {
           if (n === undefined) errors.push(`${label}: rule.n must be an integer >= 1 for kind "${kind}".`);
           if (ladder) errors.push(`${label}: rule kind "${kind}" cannot be a ladder; drop "tiers".`);
         } else if (ladder && n !== undefined) {
@@ -893,7 +998,16 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs, input: Badg
           errors.push(`${label}: rule.n must be an integer >= 1 for kind "${kind}" (or give the badge "tiers").`);
         }
         const allowed = new Set(['kind', 'n', ...(BADGE_REF_KINDS.includes(kind) ? ['id'] : []), ...(BADGE_FIELD_KINDS[kind] ?? [])]);
-        for (const key of Object.keys(rule)) if (!allowed.has(key)) warnings.push(`${label}: rule kind "${kind}" takes no ${JSON.stringify(key)}; it is ignored.`);
+        for (const key of Object.keys(rule)) {
+          if (allowed.has(key)) continue;
+          // `staples` changes what counts, so on the wrong kind it is an error, not an ignored field (V7 Kruidenkast).
+          if (key === 'staples') errors.push(`${label}: rule.staples is only allowed on kind "boughtDistinct".`);
+          else warnings.push(`${label}: rule kind "${kind}" takes no ${JSON.stringify(key)}; it is ignored.`);
+        }
+        if (kind.startsWith('bought')) {
+          const top: unknown = ladder && Array.isArray(tiers) ? tiers[tiers.length - 1] : n;
+          checkBoughtRule(label, kind, rule, isIntIn(top, 1) ? top : null, refs, input.ingredients, errors, warnings);
+        }
       }
 
       if (BADGE_REF_KINDS.includes(kind)) {
@@ -1954,7 +2068,7 @@ function main(): void {
   const partsData: unknown = existsSync(partsPath) ? readJson(partsPath) : undefined;
   const recipeList = isRecord(schema2Data) && Array.isArray(schema2Data['recipes']) ? (schema2Data['recipes'] as unknown[]) : undefined;
   const classics = recipeList?.filter((r) => isRecord(r) && typeof r['id'] === 'string' && r['id'].startsWith('b:'));
-  const badges = validateBadges(badgesData, refsFromData(dictData), { avatarParts: partsData, classics });
+  const badges = validateBadges(badgesData, refsFromData(dictData), { avatarParts: partsData, classics, ingredients: dictData.ingredients });
   const badgeRows = Array.isArray(badgesData) ? badgesData : [];
   const retiredCount = badgeRows.filter((b) => isRecord(b) && b['retired'] === true).length;
   const hiddenCount = badgeRows.filter((b) => isRecord(b) && b['hidden'] === true && b['retired'] !== true).length;
