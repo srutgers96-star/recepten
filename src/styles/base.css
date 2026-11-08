@@ -1258,3 +1258,43 @@ button.row {
 .badge-toast .tier-dot {
   box-shadow: 0 0 0 1.5px var(--on-cobalt);
 }
+
+/* ---------- 13Q: QR panel under the share buttons (docs/specs/qr-link.md §1a) ---------- */
+
+/* The block under "Deel / Kopieer link / Toon QR": the code (±220 px) on a white card with a quiet
+   zone in BOTH themes (scanner contrast beats dark mode, ADR-0007; the card is .share-qr-card from
+   QrCode), the hint or the too-big line under it. Tapping the panel closes it. */
+.qr-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 12px;
+  cursor: pointer;
+}
+
+.qr-panel .share-qr-card {
+  background: #fff;
+  width: min(220px, 70vw);
+  padding: 12px;
+}
+
+.qr-panel-hint {
+  text-align: center;
+  max-width: 420px;
+  margin: 0;
+}
+
+/* Recipes select mode: the "Toon QR" row (and its panel) right above the select bar. */
+.select-qr {
+  flex: none;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  padding: 0 max(12px, var(--sar)) 0 max(12px, var(--sal));
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.select-qr .actions {
+  margin: 6px 0;
+}

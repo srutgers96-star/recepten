@@ -14,7 +14,7 @@ import { avatarParts, avatarUid } from '@/avatar';
 import { badgesEnabled, loadBadgeSettings } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
-import { QrCode } from '@/components/QrCode';
+import { QrPanel, QrToggle } from '@/components/QrPanel';
 import { Segmented } from '@/components/Segmented';
 import { XpBar } from '@/components/XpBar';
 import { getSetting, logShareEvent, setSetting } from '@/db/repo';
@@ -140,7 +140,7 @@ function LevelAvatar(props: { profile: Profile; big?: boolean }) {
 /**
  * "Deel mijn kaartje" for one profile: builds the `#f=` link once (device id + token), then
  * shares it as text (navigator.share with exactly {text}, inside the tap), copies it, or shows
- * the QR (Experimenten flag). The link is rebuilt when the profile's name/colour/language/avatar change.
+ * the QR (13Q: QrPanel, no flag). The link is rebuilt when the profile's name/colour/language/avatar change.
  */
 export function MemberCardPanel(props: { profile: Profile }) {
   const p = props.profile;
@@ -148,7 +148,6 @@ export function MemberCardPanel(props: { profile: Profile }) {
   const [buildFailed, setBuildFailed] = useState(false);
   const [status, setStatus] = useState('');
   const [showRaw, setShowRaw] = useState(false);
-  const [experiments, setExperiments] = useState(false);
   const [showQr, setShowQr] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -171,19 +170,6 @@ export function MemberCardPanel(props: { profile: Profile }) {
     };
     // 6D-3: the card carries the avatar too (§2g), so a new avatar rebuilds the link.
   }, [p.id, p.name, p.color, p.lang, JSON.stringify(p.avatar ?? null)]);
-
-  // "Toon QR" exists only while the Experimenten flag is on (flag off = no trace), like ShareScreen.
-  useEffect(() => {
-    let cancelled = false;
-    getSetting<unknown>('experiments', false)
-      .then((v) => {
-        if (!cancelled) setExperiments(v === true);
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const message = url ? memberCardMessage(p.name, p.lang, url) : '';
 
@@ -229,22 +215,12 @@ export function MemberCardPanel(props: { profile: Profile }) {
         <button type="button" class="btn" disabled={!url} onClick={copy}>
           {t('household.copyCard')}
         </button>
+        <QrToggle open={showQr} disabled={!url} onToggle={() => setShowQr((v) => !v)} />
       </div>
+      {/* 13Q §1a: the card's QR via the shared panel (no Experimenten flag). */}
+      <QrPanel url={url ?? ''} open={showQr} onToggle={() => setShowQr(false)} label={t('household.cardQrAlt')} />
       {showRaw && <textarea class="input member-card-raw" readOnly rows={3} value={message} onFocus={(e) => (e.currentTarget as HTMLTextAreaElement).select()} />}
       <p class="muted small">{t('household.cardIosHint')}</p>
-      {experiments && (
-        <div class="share-qr">
-          <button type="button" class="btn" disabled={!url} onClick={() => { if (!showQr) void recordFeature('qrShown'); setShowQr((v) => !v); }}>
-            {showQr ? t('share.qrHide') : t('share.qrShow')}
-          </button>
-          {showQr && url && (
-            <>
-              <QrCode text={url} label={t('household.cardQrAlt')} />
-              <p class="muted small share-qr-hint">{t('household.cardQrHint')}</p>
-            </>
-          )}
-        </div>
-      )}
       <div class="status" role="status">
         {status}
       </div>

@@ -21,8 +21,8 @@ import { normalizeKey, type Dictionary, type Ingredient } from '@/domain/diction
 import { ingredientsData } from '@/domain/data';
 import { rewriteIngredientId, rewriteLinesIngredientId } from '@/domain/merge-ingredients';
 import { legacyChoices, planImport, resolveImport, type ImportChoices, type ImportPlan, type LocalState } from '@/domain/merge';
-import type { ParsedShare } from '@/domain/share';
-import { aggregate, effectiveQty, type ListItem } from '@/domain/aggregate';
+import type { ListShareLine, ParsedShare } from '@/domain/share';
+import { aggregate, effectiveQty, renderListItem, type ListItem } from '@/domain/aggregate';
 import {
   absorbPins,
   emptyStandingList,
@@ -2118,6 +2118,94 @@ export async function addExtra(item: Partial<ListItem> & { key?: string }): Prom
     return { ...list, items: [...others, extra], extras: [...otherExtras, extra] };
   });
   return extra;
+}
+
+/**
+ * 13Q (docs/specs/qr-link.md §1c/§2): which lines of a received shopping list (`#l=`) go onto the own
+ * list as manual items, and how many are skipped. Pure (tests/list-share.test.ts). Rules:
+ * - a line with an ingredient id the dictionary knows becomes `{ ing, qty, unit, aisle }` (qty only
+ *   as a finite number > 0, a unit only when the dictionary knows it, aisle from the line or the
+ *   ingredient); it is skipped when that ingredient is already on the list and not ticked
+ *   (`items.some(it => it.ing === line.ing && !it.checked)`);
+ * - any other line is free text: `label` = the line's `raw` (both languages as received; the screen
+ *   shows the UI language), no qty/unit (the raw text already says the amount), aisle from the line
+ *   or 'overig'; it is skipped when an unticked item without ingredient has the same normalised text
+ *   (its label or its rendered line, either language).
+ * Lines are judged in order against the list as it grows, so a line twice in one share counts once.
+ * Nothing is summed (§4.5): an existing line is never changed.
+ */
+export function listShareAdditions(current: readonly ListItem[], lines: readonly ListShareLine[], dict: Dictionary): { add: Array<Partial<ListItem>>; skipped: number } {
+  const ings = new Set<string>();
+  const texts = new Set<string>();
+  const addText = (s: unknown) => {
+    if (typeof s !== 'string') return;
+    const k = normalizeKey(s);
+    if (k) texts.add(k);
+  };
+  for (const it of current) {
+    if (it.checked) continue;
+    if (it.ing) {
+      ings.add(it.ing);
+      continue;
+    }
+    addText(it.label?.nl);
+    addText(it.label?.en);
+    addText(renderListItem(it, dict, 'nl'));
+    addText(renderListItem(it, dict, 'en'));
+  }
+  const add: Array<Partial<ListItem>> = [];
+  let skipped = 0;
+  for (const line of lines) {
+    const raw = { nl: typeof line.raw?.nl === 'string' ? line.raw.nl.trim() : '', en: typeof line.raw?.en === 'string' ? line.raw.en.trim() : '' };
+    const ingId = typeof line.ing === 'string' && line.ing ? line.ing : null;
+    const ing = ingId ? dict.get(ingId) : undefined;
+    const aisle = typeof line.aisle === 'string' && line.aisle.trim() ? line.aisle.trim() : null;
+    if (ing) {
+      if (ings.has(ing.id)) {
+        skipped++;
+        continue;
+      }
+      const qty = typeof line.qty === 'number' && Number.isFinite(line.qty) && line.qty > 0 ? line.qty : null;
+      const unit = qty !== null && typeof line.unit === 'string' && line.unit && dict.unit(line.unit) ? line.unit : null;
+      add.push({ ing: ing.id, aisle: aisle ?? ing.aisle ?? 'overig', qty, unit });
+      ings.add(ing.id);
+      continue;
+    }
+    const keys = [raw.nl, raw.en].map((s) => normalizeKey(s)).filter((k) => k !== '');
+    if (keys.length === 0) continue; // no text at all: nothing to put on the list (not counted)
+    if (keys.some((k) => texts.has(k))) {
+      skipped++;
+      continue;
+    }
+    add.push({ ing: null, aisle: aisle ?? 'overig', qty: null, unit: null, label: raw });
+    for (const k of keys) texts.add(k);
+  }
+  return { add, skipped };
+}
+
+/**
+ * 13Q "Zet op mijn lijst" (docs/specs/qr-link.md §1c/§2): the lines of a received `#l=` become manual
+ * items on the own week list (`listShareAdditions` decides; `addExtra`'s shape: key 'x|<id>',
+ * `manual: true`, section 'main'), in ONE write. The plan is not touched. Returns how many were
+ * added and how many were already on the list.
+ */
+export async function addListLinesFromShare(lines: readonly ListShareLine[], dict: Dictionary): Promise<{ added: number; skipped: number }> {
+  let result = { added: 0, skipped: 0 };
+  await updateList((list) => {
+    const { add, skipped } = listShareAdditions(list.items, lines, dict);
+    result = { added: add.length, skipped };
+    if (add.length === 0) return list;
+    const extras: ListItem[] = add.map((item) => ({
+      ...item,
+      key: `x|${newUserId().slice(2)}`,
+      aisle: item.aisle || 'overig',
+      section: 'main',
+      sources: [],
+      manual: true,
+    }));
+    return { ...list, items: [...list.items, ...extras], extras: [...list.extras, ...extras] };
+  });
+  return result;
 }
 
 /** Removes an item by key from the list (and from the extras). Works for generated items too ("Verwijder"). */

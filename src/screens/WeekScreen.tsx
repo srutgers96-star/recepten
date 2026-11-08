@@ -23,6 +23,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
+import { QrPanel, QrToggle } from '@/components/QrPanel';
 import { EMPTY_PICK_FILTER, PickChips, PickSheet, applyPickFilter, cuisineIdsIn, pickFilterActive, tagIdsIn, type PickFilter } from '@/components/PickSheet';
 import { otherLanguageName } from '@/components/RecipeRow';
 import { SideSheet } from '@/components/SideSheet';
@@ -52,6 +53,7 @@ import { pickText, type CookLogEntry, type Line, type Recipe } from '@/domain/mo
 import { applyLineOverrides, type LineOverride } from '@/domain/overrides';
 import { isMainDish, newPlanItem, normalizeServings, pickRecipes, recentCookedIds, sidesOf, type PlanItem } from '@/domain/planner';
 import { buildPlanEnvelope, planMessages, type MessagePlan } from '@/domain/share';
+import { buildShareUrl, encodeToken } from '@/domain/token';
 import { variantTabs, type VariantDiet } from '@/domain/variants';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
@@ -169,6 +171,9 @@ export function WeekScreen() {
   const [sheet, setSheet] = useState(false);
   const [status, setStatus] = useState('');
   const [message, setMessage] = useState<MessagePlan | null>(null);
+  // 13Q (docs/specs/qr-link.md §1a): the `#w=` link of the same envelope, for "Toon QR".
+  const [planUrl, setPlanUrl] = useState('');
+  const [showQr, setShowQr] = useState(false);
   const [busy, setBusy] = useState(false);
   /** The main slot the SideSheet is open for (null = closed). */
   const [sideFor, setSideFor] = useState<PlanItem | null>(null);
@@ -252,6 +257,8 @@ export function WeekScreen() {
     .join('|');
   useEffect(() => {
     setMessage(null);
+    setPlanUrl('');
+    setShowQr(false);
     if (!plan || !all || uncooked.length === 0) return;
     let cancelled = false;
     (async () => {
@@ -261,7 +268,10 @@ export function WeekScreen() {
       const recipes = ownIds.map((id) => byId.get(id)).filter((r): r is Recipe => !!r);
       const env = buildPlanEnvelope(plan, recipes, { by, userIngredients, lineOverrides: overrides });
       const built = await planMessages([env], appInfo.appUrl, { lang: l, by, name: by });
-      if (!cancelled) setMessage(built);
+      const url = buildShareUrl(appInfo.appUrl, env.t, await encodeToken(env));
+      if (cancelled) return;
+      setMessage(built);
+      setPlanUrl(url);
     })().catch((e: unknown) => {
       if (!cancelled) setStatus(String(e));
     });
@@ -693,7 +703,9 @@ export function WeekScreen() {
                     {t('week.copy')}
                   </button>
                 )}
+                {planUrl && uncooked.length > 0 && <QrToggle open={showQr} onToggle={() => setShowQr((v) => !v)} />}
               </div>
+              <QrPanel url={uncooked.length > 0 ? planUrl : ''} open={showQr} onToggle={() => setShowQr(false)} />
               <div class="status" role="status">
                 {status || (uncooked.length > 0 && !message ? t('week.shareBuilding') : '')}
               </div>

@@ -8,17 +8,18 @@
 //
 // The token/JSON collection the Inbox analyses with lives here too (it used to be in InboxScreen):
 // the summary line counts the same way the Inbox does. Everything the input held is merged into ONE
-// ParsedShare: tokens first (`#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`, also several in one WhatsApp
+// ParsedShare: tokens first (`#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`/`#l=`, also several in one WhatsApp
 // message), else JSON by content per part (an envelope, the backup/export format, a bare recipe or
-// patch). A member card (`#f=`) and a shared progress (`#x=`, 6D-4b) carry no recipes: they are
-// collected next to the share (`members`, `progress`) and never name the import's sender.
+// patch). A member card (`#f=`), a shared progress (`#x=`, 6D-4b) and a shopping list (`#l=`, 13Q)
+// carry no recipes: they are collected next to the share (`members`, `progress`, `lists`) and never
+// name the import's sender.
 import { classifyPaste, type PasteClassification, type PasteKind } from '@/domain/paste-classify';
 import { parseWebsiteRecipe } from '@/domain/paste-recipe';
 import { cleanPastedText } from '@/domain/photo-import';
 import type { MemberCard } from '@/domain/household';
 import type { Recipe, Text } from '@/domain/model';
 import { normalizeRecipe } from '@/domain/recipe-io';
-import { parseEnvelope, readPatchPayload, type ParsedShare, type PatchPayload, type PlanShare, type ProgressCard } from '@/domain/share';
+import { parseEnvelope, readPatchPayload, type ListShare, type ParsedShare, type PatchPayload, type PlanShare, type ProgressCard } from '@/domain/share';
 import { decodeToken, extractTokens } from '@/domain/token';
 import { fileHasRecipes } from '@/file-import';
 import { t } from '@/i18n';
@@ -42,7 +43,15 @@ export interface Collected {
   progress: ProgressCard[];
   /** When each progress in `progress` was shared (the envelope's `at`), by card id: "gedeeld op {date}". */
   progressAt: Record<string, string>;
+  /**
+   * Shopping lists (`#l=`, docs/specs/qr-link.md §2, 13Q), with the envelope's sender and time;
+   * one per `at` + `by` (the first one wins, a quoted reply repeating the link adds nothing).
+   */
+  lists: ReceivedList[];
 }
+
+/** A received `#l=` list: the payload plus who shared it (`by`, the "Lijst van {name}") and when (`at`). */
+export type ReceivedList = ListShare & { by?: string; at?: string };
 
 /** A `#w=` plan as the Inbox offers it: the dishes with a name when known here or in the token. */
 export interface ReceivedPlan {
@@ -87,6 +96,23 @@ function addShare(acc: Collected, parsed: ParsedShare) {
     if (!acc.progress.some((p) => p.id === card.id)) {
       acc.progress.push(card);
       if (parsed.at) acc.progressAt[card.id] = parsed.at;
+    }
+    return;
+  }
+  if (parsed.kind === 'list') {
+    // A shopping list (13Q) carries no recipes and never names the import's sender. An envelope
+    // whose list is unreadable says so (rather than "no code found").
+    const list = parsed.list;
+    if (!list) {
+      acc.problems.push(t('inbox.invalid'));
+      return;
+    }
+    const same = (l: ReceivedList) => (l.at ?? '') === (parsed.at ?? '') && (l.by ?? '') === (parsed.by ?? '');
+    if (!acc.lists.some(same)) {
+      const received: ReceivedList = { ...list };
+      if (parsed.by) received.by = parsed.by;
+      if (parsed.at) received.at = parsed.at;
+      acc.lists.push(received);
     }
     return;
   }
@@ -190,13 +216,13 @@ export function looksLikeJson(text: string): boolean {
 }
 
 /**
- * Tokens first (every `#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=` in the text), else JSON by content per part
+ * Tokens first (every `#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`/`#l=` in the text), else JSON by content per part
  * (`parts`: the share-target's message and files kept separate; null for a pasted text). Tokens
  * are read from the cleaned text, as `classifyPaste` reads them: a rendered chat may have escaped
  * a "_" or "-" inside the token or dropped a zero-width character into it. JSON is parsed as pasted.
  */
 export async function collectPaste(text: string, parts: string[] | null): Promise<Collected> {
-  const acc: Collected = { share: emptyShare(), problems: [], members: [], progress: [], progressAt: {} };
+  const acc: Collected = { share: emptyShare(), problems: [], members: [], progress: [], progressAt: {}, lists: [] };
   const tokens = extractTokens(cleanPastedText(text));
   if (tokens.length) {
     for (const tk of tokens) {
@@ -233,8 +259,10 @@ export interface PasteSummary {
   memberNames: string[];
   /** Names on the shared progress (`#x=`) among them (also in `memberNames`). */
   progressNames: string[];
-  /** Recipe / plan / bundle tokens (not member cards, not shared progress). */
+  /** Recipe / plan / bundle tokens (not member cards, not shared progress, not shopping lists). */
   shareTokens: number;
+  /** Senders of the shopping lists (`#l=`, 13Q) among them, one per list ('' when the list names nobody). */
+  listNames: string[];
   /** Decoding problems (invalid code, newer version …). */
   problems: string[];
 }
@@ -260,30 +288,37 @@ function progressLabel(names: string[]): string {
   return names.map((name) => t('paste.progress', { name })).join(' · ');
 }
 
+/** "Boodschappenlijst van Noor" per shopping list in a text (13Q). */
+function listLabel(names: string[]): string {
+  return names.map((name) => t('paste.list', { name })).join(' · ');
+}
+
 /**
  * Classifies a pasted text and builds the line that says what it is. Decodes tokens (async) so a
  * member card can be named and a bundle counted; a JSON text nothing was found in stays 'unknown'.
  */
 export async function summarizePaste(text: string): Promise<PasteSummary> {
   const classification = classifyPaste(text);
-  const out: PasteSummary = { kind: classification.kind, classification, label: '', memberNames: [], progressNames: [], shareTokens: 0, problems: [] };
+  const out: PasteSummary = { kind: classification.kind, classification, label: '', memberNames: [], progressNames: [], shareTokens: 0, listNames: [], problems: [] };
   switch (classification.kind) {
     case 'empty':
       return out;
     case 'tokens':
     case 'member': {
       const tokens = extractTokens(classification.normalized);
-      out.shareTokens = tokens.filter((tk) => tk.key !== 'f' && tk.key !== 'x').length;
+      out.shareTokens = tokens.filter((tk) => tk.key !== 'f' && tk.key !== 'x' && tk.key !== 'l').length;
       const got = await collectPaste(text, null);
       const cardNames = got.members.map((m) => m.name);
       out.progressNames = got.progress.map((p) => p.name);
       out.memberNames = [...cardNames, ...out.progressNames];
+      out.listNames = got.lists.map((l) => l.by ?? '');
       out.problems = got.problems;
       const parts: string[] = [];
       if (out.shareTokens === 1) parts.push(t('paste.link'));
       else if (out.shareTokens > 1) parts.push(t('paste.links', { n: out.shareTokens }));
       if (cardNames.length) parts.push(membersLabel(cardNames));
       if (out.progressNames.length) parts.push(progressLabel(out.progressNames));
+      if (out.listNames.length) parts.push(listLabel(out.listNames));
       if (!parts.length) parts.push(out.problems[0] ?? t('inbox.invalid'));
       out.label = parts.join(' · ');
       return out;
@@ -297,9 +332,10 @@ export async function summarizePaste(text: string): Promise<PasteSummary> {
         const cardNames = got.members.map((m) => m.name);
         out.progressNames = got.progress.map((p) => p.name);
         out.memberNames = [...cardNames, ...out.progressNames];
+        out.listNames = got.lists.map((l) => l.by ?? '');
         const recipes = got.share.recipes.length;
         const patches = got.share.patches.length;
-        if (recipes || patches || got.plan || got.share.dict.ing.length || out.memberNames.length) {
+        if (recipes || patches || got.plan || got.share.dict.ing.length || out.memberNames.length || out.listNames.length) {
           out.kind = out.memberNames.length && !recipes && !patches && !got.plan ? 'member' : 'bundle';
           const parts: string[] = [];
           if (recipes) parts.push(recipes === 1 ? t('inbox.foundRecipe') : t('inbox.foundRecipes', { n: recipes }));
@@ -308,6 +344,7 @@ export async function summarizePaste(text: string): Promise<PasteSummary> {
           if (!recipes && !patches && !got.plan && got.share.dict.ing.length) parts.push(t('inbox.dictAddN', { n: got.share.dict.ing.length }));
           if (cardNames.length) parts.push(membersLabel(cardNames));
           if (out.progressNames.length) parts.push(progressLabel(out.progressNames));
+          if (out.listNames.length) parts.push(listLabel(out.listNames));
           out.label = t('paste.bundle', { what: parts.join(' · ') });
           return out;
         }

@@ -8,8 +8,12 @@ import type { Recipe } from '../src/domain/model';
 import type { LineOverride, RecipeOverride } from '../src/domain/overrides';
 import { buildShareMessageFor } from '../src/domain/message';
 import type { Plan } from '../src/domain/planner';
+import { defaultDictionary } from '../src/domain/data';
+import { renderListItem, type ListItem } from '../src/domain/aggregate';
 import {
   buildBundleEnvelope,
+  buildListEnvelope,
+  buildListShareMessage,
   buildMemberEnvelope,
   buildMemberShareMessage,
   buildPatchEnvelope,
@@ -24,9 +28,11 @@ import {
   parseEnvelope,
   planDishCount,
   planMessages,
+  readListPayload,
   readMemberPayload,
   readProgressPayload,
   referencedIngredientIds,
+  LIST_MAX_LINES,
   type MemberCard,
   type PatchPayload,
   type PlanPayload,
@@ -36,6 +42,7 @@ import { decodeToken, encodeToken, extractTokens, type Envelope } from '../src/d
 import type { AvatarSpec } from '../src/domain/avatar';
 import {
   FROZEN_ENVELOPE_F,
+  FROZEN_ENVELOPE_L,
   FROZEN_ENVELOPE_F_AVATAR,
   FROZEN_ENVELOPE_W,
   FROZEN_ENVELOPE_W_SIDE,
@@ -987,6 +994,133 @@ describe('progress (#x=)', () => {
     expect(parsed.recipes).toHaveLength(1);
     expect(parsed.progress).toBeUndefined();
     expect(parsed.by).toBe('Stijn');
+  });
+});
+
+describe('shopping list (#l=, 13Q)', () => {
+  const dict = defaultDictionary();
+  const ITEMS: ListItem[] = [
+    { key: 'gehakt||g', ing: 'gehakt', qty: 400, unit: 'g', aisle: 'vlees-vis', section: 'main', sources: [] },
+    { key: 'ui||stuk', ing: 'ui', qty: 3, unit: null, aisle: 'groente-fruit', section: 'main', sources: [] },
+    { key: 'x|m1', label: { nl: 'wc-papier', en: 'toilet paper' }, aisle: 'drogisterij', section: 'main', manual: true, sources: [] },
+    { key: 'melk||ml', ing: 'melk', qty: 1000, unit: 'ml', aisle: 'zuivel', section: 'main', sources: [], checked: true },
+    { key: 'zout||g', ing: 'zout', qty: 10, unit: 'g', aisle: 'kruiden', section: 'inHouse', sources: [], inHouse: true },
+  ];
+  const TITLE = { nl: '🛒 Boodschappen wk 46', en: '🛒 Shopping wk 46' };
+
+  it('buildListEnvelope over three lines: raw per language, ing/qty/unit/aisle, checked and in-house out', () => {
+    const env = buildListEnvelope(ITEMS, dict, ' Stijn ', { title: TITLE, hideChecked: true, hideInHouse: true });
+    expect(env.v).toBe(2);
+    expect(env.t).toBe('l');
+    expect(env.by).toBe('Stijn');
+    expect(typeof env.at).toBe('string');
+    const l = env.l as { title: unknown; lines: Array<Record<string, unknown>> };
+    expect(l.title).toEqual(TITLE);
+    expect(l.lines).toHaveLength(3);
+    const byIng = (id: string | undefined) => l.lines.find((x) => x.ing === id);
+    const gehakt = ITEMS[0]!;
+    expect(byIng('gehakt')).toEqual({
+      raw: { nl: renderListItem(gehakt, dict, 'nl'), en: renderListItem(gehakt, dict, 'en') },
+      ing: 'gehakt',
+      qty: 400,
+      unit: 'g',
+      aisle: 'vlees-vis',
+    });
+    const ui = byIng('ui')!;
+    expect(ui.raw).toEqual({ nl: renderListItem(ITEMS[1]!, dict, 'nl'), en: renderListItem(ITEMS[1]!, dict, 'en') });
+    expect((ui.raw as { nl: string }).nl).toContain('uien');
+    expect((ui.raw as { en: string }).en).toContain('onions');
+    expect(ui.qty).toBe(3);
+    expect('unit' in ui).toBe(false);
+    expect(byIng(undefined)).toEqual({ raw: { nl: 'wc-papier', en: 'toilet paper' }, aisle: 'drogisterij' });
+    // Without hideChecked the checked line travels too; hideInHouse still keeps the pantry line home.
+    const all = buildListEnvelope(ITEMS, dict, 'Stijn', { title: TITLE, hideInHouse: true }).l as { lines: unknown[] };
+    expect(all.lines).toHaveLength(4);
+  });
+
+  it('round-trips through the token and parseEnvelope → kind list', async () => {
+    const env = buildListEnvelope(ITEMS, dict, 'Stijn', { title: TITLE, hideChecked: true, hideInHouse: true });
+    const parsed = parseEnvelope(await decodeToken(await encodeToken(env)));
+    expect(parsed.kind).toBe('list');
+    expect(parsed.by).toBe('Stijn');
+    expect(parsed.list).toEqual(env.l);
+    expect(parsed.recipes).toEqual([]);
+    expect(parsed.patches).toEqual([]);
+  });
+
+  it('parseEnvelope reads the frozen #l= envelope; an l without an object is invalid-token', () => {
+    const parsed = parseEnvelope(FROZEN_ENVELOPE_L);
+    expect(parsed.kind).toBe('list');
+    expect(parsed.by).toBe('Stijn');
+    expect(parsed.at).toBe('2026-11-08T10:00:00.000Z');
+    expect(parsed.list).toEqual(FROZEN_ENVELOPE_L.l);
+    expect(() => parseEnvelope({ v: 2, t: 'l' })).toThrow('invalid-token');
+    expect(() => parseEnvelope({ v: 2, t: 'l', l: [] })).toThrow('invalid-token');
+    expect(() => parseEnvelope({ v: 2, t: 'l', l: 'x' })).toThrow('invalid-token');
+  });
+
+  it('readListPayload is tolerant: no raw → line gone, > 200 → cut, unknown keys stay, bad numbers out', () => {
+    expect(readListPayload(null)).toBeNull();
+    expect(readListPayload([])).toBeNull();
+    expect(readListPayload('x')).toBeNull();
+    const many = Array.from({ length: LIST_MAX_LINES + 50 }, (_, i) => ({ raw: { nl: `regel ${i}` } }));
+    expect(LIST_MAX_LINES).toBe(200);
+    expect(readListPayload({ title: 'T', lines: many })!.lines).toHaveLength(200);
+    const out = readListPayload({
+      title: 'Boodschappen',
+      extra: { keep: 1 },
+      lines: [
+        { raw: { nl: '400 g gehakt' }, ing: 'gehakt', qty: 400, unit: 'g', aisle: 'vlees-vis', future: [1] },
+        { ing: 'ui', qty: 3 }, // no raw
+        { raw: { nl: '  ', en: '' } }, // no text in either language
+        { raw: 'brood', qty: Infinity, unit: '', aisle: 5, ing: null }, // a plain string is Dutch
+        { raw: { en: 'milk' }, qty: '2' },
+        null,
+        'x',
+      ],
+    })!;
+    expect(out.title).toEqual({ nl: 'Boodschappen' });
+    expect((out as unknown as { extra: unknown }).extra).toEqual({ keep: 1 });
+    expect(out.lines).toEqual([
+      { raw: { nl: '400 g gehakt' }, ing: 'gehakt', qty: 400, unit: 'g', aisle: 'vlees-vis', future: [1] },
+      { raw: { nl: 'brood' } },
+      { raw: { en: 'milk' } },
+    ]);
+    expect(readListPayload({})).toEqual({ title: {}, lines: [] });
+  });
+
+  it('buildListShareMessage: the share.listMessage sentence, the URL alone on the last line', () => {
+    const nl = buildListShareMessage({ name: 'Stijn', lines: 12, url: 'https://x/#l=abc', lang: 'nl' }).split('\n');
+    expect(nl).toEqual(['🛒 Boodschappenlijst van Stijn — 12 regels. Open de link in de app of plak hem bij In & uit.', 'https://x/#l=abc']);
+    const en = buildListShareMessage({ name: 'Stijn', lines: 12, url: 'https://x/#l=abc', lang: 'en' }).split('\n');
+    expect(en).toEqual(["🛒 Stijn's shopping list — 12 lines. Open the link in the app or paste it into In & out.", 'https://x/#l=abc']);
+  });
+
+  it('planMessages with one l: that text in the chosen language, 1 token, one extractable #l= link', async () => {
+    const env = buildListEnvelope(ITEMS, dict, 'Stijn', { title: TITLE, hideChecked: true, hideInHouse: true });
+    const nl = await planMessages([env], APP_URL, { lang: 'nl' });
+    if (!('text' in nl)) throw new Error('expected text');
+    const url = `${APP_URL}#l=${await encodeToken(env)}`;
+    expect(nl.text).toBe(buildListShareMessage({ name: 'Stijn', lines: 3, url, lang: 'nl' }));
+    expect(nl.text.split('\n')[0]).toBe('🛒 Boodschappenlijst van Stijn — 3 regels. Open de link in de app of plak hem bij In & uit.');
+    expect(nl.tokens).toBe(1);
+    expect(nl.text.split('\n').at(-1)).toBe(url);
+    expect(extractTokens(nl.text).map((t) => t.key)).toEqual(['l']);
+    const en = await planMessages([env], APP_URL, { lang: 'en' });
+    if (!('text' in en)) throw new Error('expected text');
+    expect(en.text.split('\n')[0]).toBe("🛒 Stijn's shopping list — 3 lines. Open the link in the app or paste it into In & out.");
+  });
+
+  it('combineEnvelopes([l, r]) → a bundle with the one recipe; the list drops out', () => {
+    const list = buildListEnvelope(ITEMS, dict, 'Stijn', { title: TITLE });
+    const out = combineEnvelopes([list, buildRecipeEnvelope(recipe(), { by: 'Stijn', userIngredients: [] })]);
+    expect(out.t).toBe('b');
+    expect(envelopeItemCount(out)).toBe(1);
+    expect(envelopeItemCount(list)).toBe(0);
+    const parsed = parseEnvelope(out);
+    expect(parsed.recipes).toHaveLength(1);
+    expect(parsed.list).toBeUndefined();
+    expect('l' in out).toBe(false);
   });
 });
 

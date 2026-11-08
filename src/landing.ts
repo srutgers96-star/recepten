@@ -14,6 +14,9 @@
 //        "Level N · <title>" and the same copy button and hand-off card as the member card. The
 //        titles (data/levels.json) arrive through `import()` like the dictionary: the line says
 //        "Level N" until they are in.
+//   #l=  a shopping list (13Q, docs/specs/qr-link.md §1c): the list title, "van <by> · N regels" and
+//        the lines as text in the chosen language, with the same copy button and hand-off card as
+//        the member card (copy → app → In & uit → Plak → Zet op mijn lijst). Nothing is saved here.
 // Ingredient lines are rendered through the bundled dictionary (schema-2 lines carry `ing`,
 // `qty`, `unit`, `prep` and usually only a Dutch `raw`), so the EN view shows English names;
 // a line the dictionary cannot render falls back to its raw text. The dictionary is by far the
@@ -23,7 +26,7 @@
 import type { Dictionary } from './domain/dictionary';
 import { pickText, type Lang, type Line, type Recipe, type Step, type Text } from './domain/model';
 import { renderLine } from './domain/render';
-import { parseEnvelope, type MemberCard, type ParsedShare, type PatchPayload, type ProgressCard } from './domain/share';
+import { parseEnvelope, type ListShare, type MemberCard, type ParsedShare, type PatchPayload, type ProgressCard } from './domain/share';
 import { decodeToken } from './domain/token';
 
 const S = {
@@ -83,6 +86,15 @@ const S = {
     progressOf: (name: string) => `Voortgang van ${name}`,
     progressLevel: (level: number, title: string) => `Level ${level} · ${title}`,
     progressHint: (name: string) => `In de app zie je ${name} in de kookkalender en bij Huishouden.`,
+    previewList: 'Voorproefje van een gedeelde boodschappenlijst',
+    listTitle: 'Boodschappenlijst',
+    listLines: (n: number) => `${n} ${n === 1 ? 'regel' : 'regels'}`,
+    listEmpty: 'Deze lijst is leeg.',
+    stepsList: [
+      { h: 'Kopieer', b: 'Tik hierboven op de blauwe knop Kopieer code.' },
+      { h: 'Open de app', b: "Open Rutgers' Recepten via het icoon op je beginscherm — niet hier in Safari." },
+      { h: 'Plak', b: 'Tik onderaan op Meer → In & uit → Plak van klembord en daarna op Zet op mijn lijst.' },
+    ],
   },
   en: {
     title: "Rutgers' Recipes",
@@ -140,6 +152,15 @@ const S = {
     progressOf: (name: string) => `${name}'s progress`,
     progressLevel: (level: number, title: string) => `Level ${level} · ${title}`,
     progressHint: (name: string) => `In the app you see ${name} in the cooking calendar and under Household.`,
+    previewList: 'Preview of a shared shopping list',
+    listTitle: 'Shopping list',
+    listLines: (n: number) => `${n} ${n === 1 ? 'line' : 'lines'}`,
+    listEmpty: 'This list is empty.',
+    stepsList: [
+      { h: 'Copy', b: 'Tap the blue Copy code button above.' },
+      { h: 'Open the app', b: "Open Rutgers' Recipes from the icon on your Home Screen — not here in Safari." },
+      { h: 'Paste', b: 'Tap More at the bottom → In & out → Paste from clipboard, then Put on my list.' },
+    ],
   },
 } as const;
 
@@ -394,6 +415,21 @@ function progressHtml(card: ProgressCard): string[] {
   return parts;
 }
 
+/** A shared shopping list (#l=, 13Q §1c): the title, "van <by> · N regels" and the lines as text. */
+function listHtml(list: ListShare, by: string): string[] {
+  const L = S[lang];
+  const parts: string[] = [];
+  parts.push(`<h2>${esc(pickText(list.title, lang) || L.listTitle)}</h2>`);
+  const meta = [by ? `${L.by} ${by}` : '', L.listLines(list.lines.length)].filter(Boolean).join(' · ');
+  parts.push(`<p class="muted">${esc(meta)}</p>`);
+  const items = list.lines
+    .map((l) => pickText(l.raw, lang))
+    .filter(Boolean)
+    .map((text) => `<li>${esc(text)}</li>`);
+  parts.push(items.length ? `<ul>${items.join('')}</ul>` : `<p>${esc(L.listEmpty)}</p>`);
+  return parts;
+}
+
 /** `keepStatus`: the dictionary re-render must not wipe a "Gekopieerd" the person just got. */
 function render(keepStatus = false) {
   const L = S[lang];
@@ -407,18 +443,20 @@ function render(keepStatus = false) {
   const plan = share?.kind === 'plan' ? share : undefined;
   const member = share?.kind === 'member' ? share.member : undefined;
   const progress = share?.kind === 'progress' ? share.progress : undefined;
-  // A member card and a shared progress use the same copy button and hand-off card (§1k).
-  const cardLike = !!member || !!progress;
+  const list = share?.kind === 'list' ? share.list : undefined;
+  // A member card, a shared progress (§1k) and a shopping list (13Q) use the same copy button.
+  const cardLike = !!member || !!progress || !!list;
   const by = share?.by ?? '';
-  parts.push(`<p class="muted">${esc(patch ? L.previewPatch : bundle ? L.previewBundle : plan ? L.previewPlan : member ? L.previewMember : progress ? L.previewProgress : L.preview)}</p>`);
-  if (recipe || patch || bundle || plan || member || progress) {
+  parts.push(`<p class="muted">${esc(patch ? L.previewPatch : bundle ? L.previewBundle : plan ? L.previewPlan : member ? L.previewMember : progress ? L.previewProgress : list ? L.previewList : L.preview)}</p>`);
+  if (recipe || patch || bundle || plan || member || progress || list) {
     if (recipe) parts.push(...recipeHtml(recipe, by));
     else if (patch) parts.push(...patchHtml(patch, by));
     else if (bundle) parts.push(...bundleHtml(bundle, by));
     else if (plan) parts.push(...planHtml(plan, by));
     else if (member) parts.push(...memberHtml(member));
     else if (progress) parts.push(...progressHtml(progress));
-    const steps: readonly HandoffStep[] = cardLike ? L.stepsCard : L.steps;
+    else if (list) parts.push(...listHtml(list, by));
+    const steps: readonly HandoffStep[] = list ? L.stepsList : cardLike ? L.stepsCard : L.steps;
     // Android outside Chrome: the real fix comes first; the copy button then steps back to secondary.
     if (chromeUrl) parts.push(`<a class="btn" href="${esc(chromeUrl)}">${esc(L.openChrome)}</a><p class="muted">${esc(L.openChromeHint)}</p>`);
     parts.push(`<button type="button" class="btn${chromeUrl ? ' secondary' : ''}" id="copy">${esc(cardLike ? L.copyCard : L.copy)}</button><div class="status" id="status"></div>`);
@@ -448,7 +486,7 @@ function render(keepStatus = false) {
     const status = document.getElementById('status')!;
     try {
       await navigator.clipboard.writeText(location.href);
-      status.textContent = share?.kind === 'member' || share?.kind === 'progress' ? S[lang].copiedCard : S[lang].copied;
+      status.textContent = share?.kind === 'member' || share?.kind === 'progress' || share?.kind === 'list' ? S[lang].copiedCard : S[lang].copied;
     } catch {
       status.textContent = S[lang].copyFailed;
     }
@@ -456,7 +494,7 @@ function render(keepStatus = false) {
 }
 
 async function boot() {
-  const m = /^#([rpwbfx])=([A-Za-z0-9_-]+)/.exec(location.hash);
+  const m = /^#([rpwbfxl])=([A-Za-z0-9_-]+)/.exec(location.hash);
   if (m && m[2]) {
     try {
       const env = await decodeToken(m[2]);
@@ -468,7 +506,8 @@ async function boot() {
         (parsed.kind === 'bundle' && (parsed.recipes.length > 0 || parsed.patches.length > 0)) ||
         (parsed.kind === 'plan' && (parsed.plan?.items.length ?? 0) > 0) ||
         (parsed.kind === 'member' && !!parsed.member) ||
-        (parsed.kind === 'progress' && !!parsed.progress);
+        (parsed.kind === 'progress' && !!parsed.progress) ||
+        (parsed.kind === 'list' && !!parsed.list);
       if (usable) share = parsed;
       else problem = 'invalid';
     } catch (e) {

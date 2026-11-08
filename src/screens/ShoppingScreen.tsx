@@ -27,12 +27,17 @@
 // 13D blok 3 (docs/specs/varianten-tabs.md §1e): "Waarvoor is dit?" puts "(glutenvrije versie)"
 // (`vt.version.<diet>`, lower case) after the dish of a line that came from a slot's diet version
 // (`ListSource.diet`); the line text itself is already the swapped one ("400 g glutenvrije pasta").
+// 13Q (docs/specs/qr-link.md §1c): the share card also offers the list as a LINK (`#l=`, built by
+// share.buildListEnvelope over the same lines as the text): "Deel link" / "Kopieer link" / "Toon QR"
+// (QrPanel). Sharing the link logs one 'out' row (kind 'list'); the receiver gets "Zet op mijn lijst"
+// in In & uit.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { isIOS } from '@/components/AppInfo';
+import { appInfo, isIOS } from '@/components/AppInfo';
 import { ExtraField } from '@/components/ExtraField';
 import { Header } from '@/components/Header';
 import { ListRow } from '@/components/ListRow';
 import { ProtoRow, sourceLines } from '@/components/ProtoRow';
+import { QrPanel, QrToggle } from '@/components/QrPanel';
 import { Segmented } from '@/components/Segmented';
 import { StandingProtoRow, canKeepStanding } from '@/components/StandingProtoRow';
 import { StandingTab } from '@/components/StandingTab';
@@ -52,6 +57,7 @@ import {
   getPlan,
   getStandingList,
   isListStale,
+  logShareEvent,
   markListShared,
   migratePinsToStanding,
   removeExtra,
@@ -67,10 +73,13 @@ import { recheckActiveBadges } from '@/badges';
 import { dictionary } from '@/dictionary';
 import { effectiveQty, groupByAisle, isoWeekNumber, itemName, listAsText, renderListItem, type AisleGroup, type ListItem } from '@/domain/aggregate';
 import type { Dictionary } from '@/domain/dictionary';
-import { nowIso, type Lang } from '@/domain/model';
+import { nowIso, type Lang, type Text } from '@/domain/model';
+import { buildListEnvelope, planMessages, type ListShare } from '@/domain/share';
+import { buildShareUrl, encodeToken } from '@/domain/token';
 import { recordFeature } from '@/features';
 import { lang, t, tIn } from '@/i18n';
 import { printPage } from '@/print';
+import { activeProfile } from '@/profile';
 import { navigate, route } from '@/router';
 import { copyText, shareText } from '@/share-actions';
 
@@ -186,6 +195,10 @@ export function ShoppingScreen() {
   const [snack, setSnack] = useState<Snack | null>(null);
   // "Gekopieerd ✓" flash on the "Kopieer als tekst" button (block D.2).
   const [copiedFlash, setCopiedFlash] = useState(false);
+  // 13Q (docs/specs/qr-link.md §1c): the same lines as a `#l=` link — the message (one sentence +
+  // the URL alone on the last line), the URL itself for "Toon QR", and how many lines it carries.
+  const [link, setLink] = useState<{ message: string; url: string; lines: number } | null>(null);
+  const [showQr, setShowQr] = useState(false);
   const flashTimer = useRef<number | null>(null);
   const snackTimer = useRef<number | null>(null);
   const autoProto = useRef(false);
@@ -435,13 +448,15 @@ export function ShoppingScreen() {
 
   // "🛒 Boodschappen wk 39 · 7 gerechten · 4 pers." (PLAN.md §8 "Delen van de lijst"); a plain
   // list without a plan is just "🛒 Boodschappen wk 39".
-  const shareTitle = [
-    tIn(shareLang, 'shop.shareTitle', { week: isoWeekNumber(new Date()) }),
-    dishes === 1 ? tIn(shareLang, 'shop.shareTitleDishOne') : dishes > 1 ? tIn(shareLang, 'shop.shareTitleDishes', { n: dishes }) : '',
-    dishes > 0 ? tIn(shareLang, 'shop.shareTitleServings', { n: household }) : '',
-  ]
-    .filter(Boolean)
-    .join(' · ');
+  const titleIn = (lg: Lang) =>
+    [
+      tIn(lg, 'shop.shareTitle', { week: isoWeekNumber(new Date()) }),
+      dishes === 1 ? tIn(lg, 'shop.shareTitleDishOne') : dishes > 1 ? tIn(lg, 'shop.shareTitleDishes', { n: dishes }) : '',
+      dishes > 0 ? tIn(lg, 'shop.shareTitleServings', { n: household }) : '',
+    ]
+      .filter(Boolean)
+      .join(' · ');
+  const shareTitle = titleIn(shareLang);
   const shareTextValue = useMemo(
     () => (items.length ? listAsText(items, dict, shareLang, { title: shareTitle, hideInHouse: true, hideChecked: shareHideChecked }) : ''),
     [items, dict, shareLang, shareTitle, shareHideChecked],
@@ -465,6 +480,71 @@ export function ShoppingScreen() {
     if (!shareTextValue) return;
     const at = nowIso();
     void copyText(shareTextValue).then(async (r) => {
+      if (r.ok) {
+        await markListShared(at);
+        void recordFeature('listShared');
+        setShareStatus(t('shop.copied'));
+      } else setShareStatus(`${t('shop.copyError')}: ${r.error ?? ''}`);
+    });
+  }
+
+  // 13Q (docs/specs/qr-link.md §1c/§2): the link carries the list as the text shows it — the same
+  // items, in-house lines left out, ticked lines per "Zonder afgevinkt" — with the title in both
+  // languages (invariant 3). Built ahead of the tap (encodeToken is async; navigator.share must be
+  // called inside the tap), only while the share card is open.
+  const by = activeProfile.value?.name ?? '';
+  const titleNl = titleIn('nl');
+  const titleEn = titleIn('en');
+  useEffect(() => {
+    setLink(null);
+    setShowQr(false);
+    if (!shareOpen || !shareTextValue) return;
+    let cancelled = false;
+    (async () => {
+      const title: Text = { nl: titleNl, en: titleEn };
+      const env = buildListEnvelope(items, dict, by, { title, hideChecked: shareHideChecked, hideInHouse: true });
+      const [built, token] = await Promise.all([planMessages([env], appInfo.appUrl, { lang: shareLang, by, name: by }), encodeToken(env)]);
+      if (cancelled) return;
+      const lines = (env.l as ListShare | undefined)?.lines.length ?? 0;
+      // A list too long for one message comes back as a file (planMessages): then only the QR line
+      // (too big) is left; the link buttons stay disabled.
+      setLink({ message: 'text' in built ? built.text : '', url: buildShareUrl(appInfo.appUrl, 'l', token), lines });
+    })().catch((e: unknown) => {
+      console.error('list link', e);
+      if (!cancelled) setShareStatus(`${t('shop.shareError')}: ${String((e as Error)?.message ?? e)}`);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [shareOpen, shareTextValue, titleNl, titleEn, shareLang, by]);
+
+  /** "Deel link": `{ text }` only (invariant 9), the sentence above the link; logs one 'out' row. */
+  function doShareLink() {
+    const current = link;
+    if (!current?.message) return;
+    setShareStatus('');
+    const at = nowIso();
+    void shareText(current.message).then(async (r) => {
+      if (r.outcome === 'shared' || r.outcome === 'no-share-api') {
+        await markListShared(at);
+        void recordFeature('listShared');
+        setShareStatus(r.outcome === 'shared' ? t('shop.shared') : t('shop.noShareApi'));
+      } else if (r.outcome === 'failed') setShareStatus(`${t('shop.shareError')}: ${r.error ?? ''}`);
+      if (r.outcome === 'shared') {
+        // §2: the list went out — one 'out' row (kind 'list'), then the badges re-check.
+        void logShareEvent({ at, direction: 'out', kind: 'list', who: null, count: current.lines, recipeIds: [] })
+          .then(() => recheckActiveBadges())
+          .catch((e: unknown) => console.error('logShareEvent', e));
+      }
+    });
+  }
+
+  /** "Kopieer link": the same message to the clipboard (copying does not log, as with the member card). */
+  function doCopyLink() {
+    const current = link;
+    if (!current?.message) return;
+    const at = nowIso();
+    void copyText(current.message).then(async (r) => {
       if (r.ok) {
         await markListShared(at);
         void recordFeature('listShared');
@@ -726,6 +806,17 @@ export function ShoppingScreen() {
               {t('shop.copy')}
             </button>
           </div>
+          {/* 13Q §1c: the same lines as a link (`#l=`) and as a QR code. */}
+          <div class="actions">
+            <button type="button" class="btn" disabled={!link?.message} onClick={doShareLink}>
+              {t('shop.shareLink')}
+            </button>
+            <button type="button" class="btn" disabled={!link?.message} onClick={doCopyLink}>
+              {t('shop.copyLink')}
+            </button>
+            <QrToggle open={showQr} disabled={!link?.url} onToggle={() => setShowQr((v) => !v)} />
+          </div>
+          <QrPanel url={link?.url ?? ''} open={showQr} onToggle={() => setShowQr(false)} />
           <div class="status" role="status">
             {shareStatus}
           </div>

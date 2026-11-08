@@ -373,3 +373,29 @@ export const FROZEN_ENVELOPE_W_VARIANT: Envelope = {
   },
   future: { keep: true },
 };
+
+// Phase 6 (docs/specs/qr-link.md §2, block 13Q): a `#l=` shopping-list envelope, produced ONCE on
+// 2026-11-08 by both engines with encodeToken. `l` is a NEW fragment key (invariant 4): the list title
+// in both languages and its lines as the text share shows them (`raw` per language) with, when known,
+// the ingredient id, amount, unit and aisle. Unknown keys stay (a line's `future`, the top-level
+// `future`). `v` stays 2, so an app from before 13Q does not even see `#l=` as a token (`[rpwbfx]`).
+export const FROZEN_TOKEN_L =
+  'ZY9NTgMxDIWvEr11BmXaqkJZcoWyArEYWjd1O3VCflpVo7kEWxZckSOgCKYVQvLC9vP7bA84wc40Mix6aLxeYLHKvBdodLU7M7Nl07aNuX9sjTU17owxT9DoYQdkzj3VRHpYfH1-vKsH7zdpvetCIFHng1osoUEyyaudD4HF_UqjRs9CCfZ5QOzOV9bCGOWUo113yBPgp3dkWVM1sjhYXEfe8gV2YYxGEa7Hu_oFp3ogTj1Rak6cMOq_i-aqMMm0Yq68sJd04xee2PMbzkVPkqnZxsL5H_K8bkIXmGKlTJZN9I5Tpsh7aGxLLpFg2_FlvFUDDkQBNsdC4_gN';
+export const FROZEN_TOKEN_L_FFLATE =
+  'XY9NTsQwDIWvEnk9RWk7GqEsucKwArEoHU_qaUlCflqhqpdgy4IrcgQc0Q4CKQv7-fnzywwjqGoHERQMsIPnNy6OkS6GmyarlawORVkW8va-lErmdyOlfOD5AGqGSHHAXBhu4evz413cWXsKbdc4h0ZMvdgf2IxmGx876xwZvY4WBpHBAOpxBt9MV9ZeSqGFxq7p4wb40V7ItJgXmcLi1fIaOT5bdpAM5fA6_4JCDgjjgBiKkQIv_j1Ui0RMX0_UwhqyJttWfqKNXf_itLdoIhZnn_jUf-TUFq5xhD5TtpWTt5pCRE8XBp5TTJ7lcnliz9bN0CM6UNEnXJZv';
+
+export const FROZEN_ENVELOPE_L: Envelope = {
+  v: 2,
+  t: 'l',
+  by: 'Stijn',
+  at: '2026-11-08T10:00:00.000Z',
+  l: {
+    title: { nl: '🛒 Boodschappen wk 46', en: '🛒 Shopping wk 46' },
+    lines: [
+      { raw: { nl: '400 g gehakt', en: '400 g mince' }, ing: 'gehakt', qty: 400, unit: 'g', aisle: 'vlees-vis' },
+      { raw: { nl: '3 uien', en: '3 onions' }, ing: 'ui', qty: 3, aisle: 'groente-fruit' },
+      { raw: { nl: 'wc-papier' }, aisle: 'drogisterij', future: 1 },
+    ],
+  },
+  future: { keep: true },
+};

@@ -4,6 +4,15 @@ Status: compleet (Fable, 8 nov 2026). Eén blok, drie bouwers + integrator (lich
 "elke deelknop die een link is: deel via link en deel via QR. Recepten, boodschappenlijsten en kaartje via link of QR
 zou ideaal zijn." Leidend bij tegenspraak: docs/specs/README.md §2, CLAUDE.md invarianten 4, 5, 6, 7 en 9, ADR-0004
 (tokens) en ADR-0007 (QR: `qrcode` lazy, alleen encoderen, scannen met de camera-app van de telefoon).
+**Na de lens (besluit Fable, 8 nov):** (1) grens 1.200 → 1.600 tekens met foutniveau L en een QR van 320 px (zie 1b); een recept
+past daarmee ongeveer de helft van de keren, de link werkt altijd. (2) Een lijst van ±100+ regels heeft geen link (de tekst wordt
+een bestand): aanvaard voor nu; afwerkronde: de link negeert de berichtgrens (één veld {text}) of toont de reden. (3) Een
+gedeelde regel verliest zijn kwalificatie ("rode ui" → "ui"): aanvaard voor nu; afwerkronde: `variant` optioneel in
+`ListShareLine` en matchen op ing+variant. (4) Delen als tekst logt geen 'out'-rij, de link wel: akkoord. (5) Engelse teksten
+en landingsteksten van de bouwers akkoord. (6) `more.experimentsHint` noemt de QR niet meer (Fable). (7) Landing-chunk 24,9 →
+29,6 kB gzip door `buildListEnvelope` in share.ts: aanvaard; afwerkronde: eigen module. (8) Opschoonronde: `share.qrShow`,
+`share.qrHide`, `household.cardQrHint` ongebruikt; `addListLinesFromShare` schrijft ook als alles is overgeslagen.
+Gebouwd: 8 nov 2026 (13Q, workflow wf_55088b35-038; nabewerking (1) en (6) door Fable)
 
 ## 1. Doel en gebruikersgedrag
 
@@ -15,11 +24,11 @@ in een blok (`QrPanel`): de code (±220 px, wit vlak met marge, ook in het donke
 `share.qrHint` NL "Laat de ander dit scannen met de camera van de telefoon." · EN "Let the other person scan this with
 their phone camera." Tik nogmaals op Toon QR of ernaast → dicht. De Experimenten-vlag gaat van de QR af (ShareScreen).
 
-1b. **Eerlijke grens.** Een QR met meer dan **1.200 tekens** in de URL wordt op een telefoon onbetrouwbaar gescand
-(versie 25+ bij foutniveau M). Past de link niet, dan toont Toon QR geen code maar de regel `share.qrTooBig` NL "Te groot voor
+1b. **Eerlijke grens.** Een QR met meer dan **1.600 tekens** in de URL wordt op een telefoon onbetrouwbaar gescand
+(boven versie ±27 bij foutniveau L, getekend op 320 px; Fable 8 nov: was 1.200, maar de helft van de recepten zit tussen 1.200 en 1.700). Past de link niet, dan toont Toon QR geen code maar de regel `share.qrTooBig` NL "Te groot voor
 een QR-code. Deel de link." · EN "Too big for a QR code. Share the link instead." (de knop blijft, zodat je begrijpt waarom).
-Een weggeef-bundel past vrijwel nooit; een los recept meestal wel (±600–1.100 tekens); kaartje, voortgang en een lijst
-vrijwel altijd. De grens staat in één constante `QR_MAX_URL_CHARS = 1200` (src/domain/qr-fit.ts) met pure `qrFits(url)`.
+Een weggeef-bundel past vrijwel nooit; een los recept ongeveer de helft van de keren (gemeten: mediaan ±1.700 tekens, 4 van
+50 onder de 1.200); kaartje, voortgang en een lijst vrijwel altijd. De grens staat in één constante `QR_MAX_URL_CHARS = 1600` (src/domain/qr-fit.ts) met pure `qrFits(url)`.
 
 1c. **De boodschappenlijst als link (`#l=`).** Op Boodschappen krijgt het deelblok naast "Deel als tekst" en "Kopieer als
 tekst" de knoppen **Deel link** / **Kopieer link** / **Toon QR**. De link draagt de lijst zoals de tekst hem toont: de
@@ -117,7 +126,7 @@ als link"; ADR-0004 regel; README §2b.
 - tests/token.test.ts: `FROZEN_TOKEN_L` decodeert op beide engines, encode byte-gelijk; onbekende soort blijft 'z'; `[rpwbfx]` ziet `#l=` niet.
 - tests/share.test.ts: `buildListEnvelope` over drie regels (NL/EN raw), `readListPayload` tolerant (geen raw → regel weg, > 200 → afgekapt,
   onbekende sleutels blijven), `parseEnvelope` → kind 'list', `combineEnvelopes` laat `l` vallen, `planMessages` voor één `l`.
-- tests/qr-fit.test.ts: 1.200 past, 1.201 niet; een echte `#r=` van een kort recept past; een bundel van 20 recepten niet.
+- tests/qr-fit.test.ts: 1.600 past, 1.601 niet; een echte `#r=` van een kort recept past; een bundel van 20 recepten niet.
 - tests/list-share.test.ts: de overslaan-regel (zelfde ing → overslaan; zelfde tekst zonder ing → overslaan; anders toevoegen).
 - tests/paste.test.ts: een geplakte `#l=` komt in `Collected.lists`, `summarizePaste` noemt "Boodschappenlijst van …".
 

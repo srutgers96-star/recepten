@@ -117,7 +117,7 @@ Settings-keys: `cook.sessions` (13K, toestel-lokaal) · `aliases.notice` (13F, t
 `badges.catalogSynced` (6D-2c) · `confetti.style` ('random' | stijl-id, toestel-lokaal, 6D-S); route `#/more/unlocks` is sinds 6D-S een doorverwijzing naar `#/more/style`. Veld `Origin.via` ('ai' | 'paste' | 'website' | 'manual'): alleen bij aanmaken gezet,
 reist niet mee in deel-tokens (`travelRecipe`), wel in de back-up (6D-2c).
 localStorage: `recepten.tonightFiltersOpen`, `recepten.recent.last` (Home A+) · `recepten.vtab` (13D) ·
-`recepten.badges.tab` (6D-UI; verving `recepten.badges.groups` van 6D-2) · `recepten.style.tab` (6D-S). Tokensleutels: `#x=` (6D-4b, in token.ts, router.ts, boot.ts,
+`recepten.badges.tab` (6D-UI; verving `recepten.badges.groups` van 6D-2) · `recepten.style.tab` (6D-S). Tokensleutels: `#l=` (13Q, boodschappenlijst; dezelfde vijf plekken; `Collected.lists`, `paste.list`) · `#x=` (6D-4b, in token.ts, router.ts, boot.ts,
 landing.ts én pwa.ts `urlForChrome`); `#d=` gereserveerd voor de latere dank-je-link (geen landing).
 i18n-prefixen per spec: `home.*` (Home A+, browse.ts; + `home.weekEmptyStanding` door 6C) · `cooking.*`
 (13K) · `filter./tag./meta.tag.` lactosevrij, `filter.cuisine`, `recipe.cuisine`, `meta.cuisine*`,

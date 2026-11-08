@@ -4,6 +4,37 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 13Q — QR en link overal, de boodschappenlijst als link
+Gebouwd volgens docs/specs/qr-link.md (bouwer A contract en ontvangstpad, B `QrPanel` en de knoppen, C de lijst delen en ontvangen;
+integrator). Niet gecommit. Geen Dexie-versie, geen setting, geen dependency; `v` blijft 2.
+- **Zichtbaar:** **Toon QR** als derde knop op zes plekken, allemaal via `QrPanel` (wit vlak, ook donker; tik nogmaals of op het blok
+  → dicht): recept (ShareScreen, de Experimenten-vlag is eraf), selectie/Exporteer op Recepten (één `#b=`, in een strook boven de
+  selectiebalk omdat SelectBar.tsx niet in de bestandsverdeling stond), weekplan, kaartje, voortgang en de boodschappenlijst. Boven
+  `QR_MAX_URL_CHARS = 1200` toont het blok "Te groot voor een QR-code. Deel de link." Boodschappen → Deel lijst heeft nu ook **Deel
+  link** / **Kopieer link** / **Toon QR** (`#l=`, `buildListEnvelope` over dezelfde regels als de tekst); In & uit toont "🛒 Lijst van
+  {name} · {n} regels" met **Zet op mijn lijst** (`addListLinesFromShare`: handmatige regels, al aanwezige overgeslagen, niets
+  opgeteld); de iPhone-landing toont de lijst als tekst met Kopieer code.
+- **Contract:** sleutel `l` op de vijf plekken (token.ts, boot.ts, router.ts, landing.ts, pwa.ts); bevroren `FROZEN_TOKEN_L`/`_FFLATE`
+  (alleen toegevoegd); `Collected.lists` (als `ReceivedList = ListShare & { by?, at? }`), `PasteSummary.listNames`, `paste.list`.
+  ADR-0004 kreeg de regel voor `l`. **Nog voor Fable:** CLAUDE.md invariant 7 + tokenregel (`#l=`) en README §2b-register
+  (sleutel `l`, `Collected.lists`, `paste.list`) — docs/specs/ en CLAUDE.md mocht de integrator niet aanraken.
+- **Groen:** check, 1649 tests (73 bestanden; nieuw qr-fit, paste, list-share), build, build:next, validate:data (bekende 4
+  swaps-waarschuwingen). De Safari-landing laadt een grotere `share`-chunk (71 → 85 kB, gzip 25 → 30 kB) omdat share.ts nu
+  aggregate.ts importeert.
+- **Dev-app (375 px, NL en EN):** QR op alle zes plekken gezien; selectie van 20 recepten → te-groot-regel; Kopieer link → plakken in
+  In & uit → kaart → Zet op mijn lijst ("0 regels op je lijst gezet, 11 stonden er al"; een lijst met citroen, vrije regel en eieren →
+  "2 … gezet, 1 stonden er al"); `#l=` als link geopend → In & uit; landing.ts met `#l=` → lijst + Kopieer code, geen storage.
+- **Let op (Fable):** de spec schat een los recept op ±600–1.100 tekens, maar de ingebouwde recepten zijn tweetalig: in een steekproef
+  van 50 paste maar 4 onder 1.200 (mediaan ±1.700, max ±2.700). Toon QR bij een recept geeft dus meestal de te-groot-regel.
+- **Open (door bouwers gekozen, niet in de spec):** Engelse teksten van `shop.shareLink`, `shop.copyLink`, `shop.list.received`,
+  `shop.list.put`, `shop.list.putSnack` (spec gaf alleen NL; geen enkelvoud); landingteksten voor de lijst; de tekstdeling logt geen
+  'out'-rij (alleen de linkdeling, §2 dubbelzinnig); te lang bericht → link-knoppen uit; kaart zonder afzender zonder terugvalnaam;
+  één selectie gebruikt `#b=`, ook bij één recept; `more.experimentsHint` noemt de QR nog (MoreScreen hoorde bij niemand);
+  `share.qrShow`/`qrHide`/`household.cardQrHint` worden niet meer gelezen (blijven staan).
+
+- **Besluit Fable (8 nov, commit van 13Q):** QR-grens 1.600 tekens met foutniveau L op 320 px (recepten passen ±de helft van de
+  keren; de link werkt altijd); lange lijst zonder link en verloren kwalificatie op een gedeelde regel → afwerkronde; CLAUDE.md
+  invariant 7 en de tokenregel hebben `#l=`; register §2b bijgewerkt; Experimenten-hint zonder QR.
 ## 8 nov (Opus): 6C blok 3 — vaste lijst: vaste regels in de weeklijst, Ook voortaan, Klaar; badge Vaste klant
 Gebouwd volgens docs/specs/vaste-lijst.md "Blok 3" (bouwer A `StandingProtoRow.tsx` + `.spr-actions`, B ShoppingScreen proto-blok /
 Ook voortaan / Klaar-undo + ListRow, C tests, D Fable's besluiten (1) en (2) na blok 2; integrator). Niet gecommit. Geen Dexie-versie,

@@ -100,6 +100,8 @@ which stays 2); both phones need this version before cards can be exchanged.
 
 **30 Oct 2026 (phase 6, block 6D-4b):** key `x` (shared progress, "Sync mijn voortgang", docs/specs/xp-levels.md §2h) added; frozen tokens (native and fflate) in tests/fixtures/frozen-share-tokens.ts. Same honest limit as `f`: an app from before 6D-4b does not see `#x=` as a token at all.
 
+**8 Nov 2026 (block 13Q):** sleutel `l` (boodschappenlijst) toegevoegd; bevroren token in tests (key `l`, shopping list, docs/specs/qr-link.md §2; `FROZEN_TOKEN_L` native and fflate in tests/fixtures/frozen-share-tokens.ts). Same honest limit as `f` and `x`: an app from before 13Q does not see `#l=` as a token at all.
+
 ## Consequences
 
 - Recipe text never touches a server; WhatsApp's preview is the generic app card.

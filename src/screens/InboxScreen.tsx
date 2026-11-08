@@ -26,6 +26,10 @@
 // applyProgressCard): "Werk <naam> bij" for a member, the "profiel op deze telefoon" line for a
 // profile here, else "Voeg toe aan je huishouden" / "Bewaar als vriend". A sent progress shows in
 // "Gedeeld" as "Mijn voortgang".
+// 13Q (docs/specs/qr-link.md §1c): a `#l=` shopping list (a link opened in the app or pasted) becomes a
+// card "🛒 Lijst van <naam> · N regels" with its lines and one button "Zet op mijn lijst"
+// (repo.addListLinesFromShare: manual lines on the own week list, lines already there skipped,
+// nothing summed, the plan untouched); that logs one 'in' row (kind 'list').
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
@@ -45,6 +49,7 @@ import {
   listLineOverrides,
   listShareEvents,
   localStateForImport,
+  addListLinesFromShare,
   logShareEvent,
   receivedPatches,
   savePlan,
@@ -66,7 +71,7 @@ import type { PlanShare, ProgressCard } from '@/domain/share';
 import { planWrites } from '@/components/ImportPreview';
 import { lang, t } from '@/i18n';
 import { INBOX_SEEN_KEY, refreshShareBadges, unsentChanges } from '@/inbox-badge';
-import { collectPaste, isInboxKind, looksLikeJson, openPasteIn, PASTE_FILE_ACCEPT, type ReceivedPlan } from '@/paste';
+import { collectPaste, isInboxKind, looksLikeJson, openPasteIn, PASTE_FILE_ACCEPT, type ReceivedList, type ReceivedPlan } from '@/paste';
 import { activeProfile, profiles } from '@/profile';
 import { navigate, pendingImport, route } from '@/router';
 import { applyMemberCard, applyProgressCard, MemberCardRow, ProgressCardRow, type CardOutcome, type ProgressOutcome } from './HouseholdScreen';
@@ -324,6 +329,9 @@ export function InboxScreen() {
   const [progress, setProgress] = useState<ProgressCard[]>([]);
   const [progressAt, setProgressAt] = useState<Record<string, string>>({});
   const [progressDone, setProgressDone] = useState<Record<string, ProgressOutcome>>({});
+  // 13Q: received shopping lists (`#l=`) and the outcome line of "Zet op mijn lijst" per list.
+  const [lists, setLists] = useState<ReceivedList[]>([]);
+  const [listDone, setListDone] = useState<Record<number, string>>({});
   const [household, setHouseholdState] = useState<HouseholdSetting | null>(null);
   const seq = useRef(0);
   const textarea = useRef<HTMLTextAreaElement>(null);
@@ -423,6 +431,8 @@ export function InboxScreen() {
       setProgress([]);
       setProgressAt({});
       setProgressDone({});
+      setLists([]);
+      setListDone({});
       return;
     }
     const handle = setTimeout(async () => {
@@ -434,16 +444,18 @@ export function InboxScreen() {
       let members: MemberCard[] = [];
       let received: ProgressCard[] = [];
       let receivedAt: Record<string, string> = {};
+      let shoppingLists: ReceivedList[] = [];
       try {
         const got = await collectPaste(trimmed, parts);
         probs = got.problems;
         members = got.members;
         received = got.progress;
         receivedAt = got.progressAt;
+        shoppingLists = got.lists;
         const share = got.share;
         if (share.recipes.length || share.patches.length || share.dict.ing.length) {
           next = planImport(share, await localStateForImport());
-        } else if (!probs.length && !got.plan && !members.length && !received.length) {
+        } else if (!probs.length && !got.plan && !members.length && !received.length && !shoppingLists.length) {
           err = t('inbox.noToken');
         }
         if (got.plan) {
@@ -473,6 +485,8 @@ export function InboxScreen() {
       setProgress(received);
       setProgressAt(receivedAt);
       setProgressDone({});
+      setLists(shoppingLists);
+      setListDone({});
     }, 150);
     return () => clearTimeout(handle);
   }, [text, parts, ui]);
@@ -616,6 +630,27 @@ export function InboxScreen() {
     }
   }
 
+  /**
+   * 13Q "Zet op mijn lijst" on a received `#l=` (§1c/§2): the lines become manual lines on the own
+   * week list (the ones already there are skipped); one 'in' row in the "In & uit" log.
+   */
+  async function putList(index: number, received: ReceivedList) {
+    if (cardBusy) return;
+    setCardBusy(true);
+    try {
+      const r = await addListLinesFromShare(received.lines, dictionary.value);
+      setListDone((prev) => ({ ...prev, [index]: t('shop.list.putSnack', { n: r.added, m: r.skipped }) }));
+      void logShareEvent({ at: nowIso(), direction: 'in', kind: 'list', who: received.by || null, count: received.lines.length, recipeIds: [] }).catch((err: unknown) =>
+        console.error('logShareEvent', err),
+      );
+    } catch (e) {
+      console.error('addListLinesFromShare', e);
+      setNotice(`${t('inbox.importError')}: ${String((e as Error)?.message ?? e)}`);
+    } finally {
+      setCardBusy(false);
+    }
+  }
+
   async function doUndo() {
     if (busy) return;
     setBusy(true);
@@ -736,6 +771,29 @@ export function InboxScreen() {
               onSave={(c, asFriend) => void saveProgress(c, asFriend)}
               onOpenHousehold={() => navigate('/more/household')}
             />
+          </section>
+        ))}
+
+        {lists.map((sl, i) => (
+          <section class="card inbox-plan inbox-list" key={'l' + i}>
+            <h3>{t('shop.list.received', { name: sl.by ?? '', n: sl.lines.length })}</h3>
+            {pickText(sl.title, ui) && <p class="muted small">{pickText(sl.title, ui)}</p>}
+            <ul>
+              {sl.lines.map((line, j) => (
+                <li key={j}>
+                  <span class="name">{pickText(line.raw, ui)}</span>
+                </li>
+              ))}
+            </ul>
+            <div class="actions">
+              {/* Once put on the list the button stays, disabled: a second tap would only skip every line. */}
+              <button type="button" class="btn btn-primary" disabled={cardBusy || sl.lines.length === 0 || listDone[i] !== undefined} onClick={() => void putList(i, sl)}>
+                {t('shop.list.put')}
+              </button>
+            </div>
+            <div class="status" role="status">
+              {listDone[i] ?? ''}
+            </div>
           </section>
         ))}
 

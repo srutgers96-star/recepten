@@ -210,6 +210,8 @@ export const edit: Dict = {
   'paste.plan': { nl: 'een weekplan', en: 'a week plan' },
   // 6D-4 (docs/specs/xp-levels.md §3, bouwer B's summarizePaste label for a `#x=`).
   'paste.progress': { nl: 'Voortgang van {name}', en: "{name}'s progress" },
+  // 13Q (docs/specs/qr-link.md §2, the summarizePaste label for a `#l=`).
+  'paste.list': { nl: 'Boodschappenlijst van {name}', en: "{name}'s shopping list" },
   'paste.bundle': { nl: 'Receptbestand: {what}', en: 'Recipe file: {what}' },
   'paste.website': { nl: 'Recept van een website: {lines} ingrediënten, {steps} stappen', en: 'Recipe from a website: {lines} ingredients, {steps} steps' },
   'paste.websiteLow': { nl: 'twijfelgeval', en: 'not sure' },
@@ -342,13 +344,16 @@ export const edit: Dict = {
   'share.textLang': { nl: 'Taal', en: 'Language' },
   'share.copyText': { nl: 'Kopieer tekst', en: 'Copy text' },
 
-  // --- Share: QR (phase 5 block D.5, behind the Experimenten flag) ---
+  // --- Share: QR (phase 5 block D.5; 13Q docs/specs/qr-link.md §1a/§1b: next to every share button) ---
+  // share.qrShow / share.qrHide are no longer read since 13Q (the button is share.qr); kept, not removed.
   'share.qrShow': { nl: 'Toon QR', en: 'Show QR' },
   'share.qrHide': { nl: 'Verberg QR', en: 'Hide QR' },
+  'share.qr': { nl: 'Toon QR', en: 'Show QR' },
   'share.qrHint': {
-    nl: 'Scan met de camera-app van de andere telefoon. Die opent de voorproefpagina — op een iPhone is dat Safari; kopieer daar de receptcode en plak hem in de app.',
-    en: 'Scan with the other phone’s camera app. It opens the preview page — on an iPhone that is Safari; copy the recipe code there and paste it into the app.',
+    nl: 'Laat de ander dit scannen met de camera van de telefoon.',
+    en: 'Let the other person scan this with their phone camera.',
   },
+  'share.qrTooBig': { nl: 'Te groot voor een QR-code. Deel de link.', en: 'Too big for a QR code. Share the link instead.' },
   'share.qrAlt': { nl: 'QR-code met de receptlink', en: 'QR code with the recipe link' },
   'share.qrLoading': { nl: 'QR-code maken…', en: 'Creating QR code…' },
   'share.qrError': { nl: 'QR-code kon niet worden gemaakt.', en: 'Could not create the QR code.' },

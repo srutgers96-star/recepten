@@ -38,6 +38,9 @@ import {
   FROZEN_ENVELOPE_X,
   FROZEN_TOKEN_X,
   FROZEN_TOKEN_X_FFLATE,
+  FROZEN_ENVELOPE_L,
+  FROZEN_TOKEN_L,
+  FROZEN_TOKEN_L_FFLATE,
   FROZEN_ENVELOPE_P_VARIANTS,
   FROZEN_ENVELOPE_R_VARIANTS,
   FROZEN_ENVELOPE_W_VARIANT,
@@ -178,6 +181,15 @@ describe('token codec', () => {
         expect(await encodeToken(FROZEN_ENVELOPE_X, { engine })).toBe(expected);
       });
 
+      // docs/specs/qr-link.md §2/§5 (13Q): the shopping list as a link, the new fragment key `l`.
+      it('decodes the frozen phase-6 #l= shopping-list token (native- and fflate-produced)', async () => {
+        expect(await decodeToken(FROZEN_TOKEN_L, { engine })).toEqual(FROZEN_ENVELOPE_L);
+        expect(await decodeToken(FROZEN_TOKEN_L_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_L);
+        // The frozen token IS what this codec produces for that envelope today (byte-for-byte).
+        const expected = engine === 'native' ? FROZEN_TOKEN_L : FROZEN_TOKEN_L_FFLATE;
+        expect(await encodeToken(FROZEN_ENVELOPE_L, { engine })).toBe(expected);
+      });
+
       // docs/specs/varianten-tabs.md §2d (13D): `r.variants`/`r.tip`, `p.patch.variants`/`p.patch.tip`
       // and `w.items[].vr` are optional keys in `v: 2`, no new fragment key.
       it('decodes the frozen phase-6 #r=/#p=/#w= tokens with variants (native- and fflate-produced)', async () => {
@@ -264,9 +276,21 @@ describe('token codec', () => {
     ]);
   });
 
+  // docs/specs/qr-link.md §5 (13Q): the same for `#l=` on an app from before 13Q. Its key set
+  // `[rpwbfx]` does not see "#l=" as a token at all, and a kind it does not know stays 'invalid-token'
+  // (the stand-in unknown kind is still 'z').
+  it('the pre-13Q key set never matched #l= at all; this app finds it', () => {
+    const PRE_13Q_TOKEN_RE = /(?:^|[^A-Za-z0-9_-])#?([rpwbfx])=([A-Za-z0-9_-]{20,})/g;
+    expect([...`${APP_URL}#l=${FROZEN_TOKEN_L}`.matchAll(PRE_13Q_TOKEN_RE)]).toHaveLength(0);
+    expect(extractTokens(`${APP_URL}#l=${FROZEN_TOKEN_L}`)).toEqual([{ key: 'l', token: FROZEN_TOKEN_L }]);
+    expect(extractTokens(`🛒 Boodschappenlijst van Stijn — 3 regels.\n${APP_URL}#l=${FROZEN_TOKEN_L_FFLATE}`)).toEqual([
+      { key: 'l', token: FROZEN_TOKEN_L_FFLATE },
+    ]);
+  });
+
   it('isTokenKey', () => {
-    expect(['r', 'p', 'w', 'b', 'f', 'x'].every(isTokenKey)).toBe(true);
-    expect(['s', 'z', 'R', 'F', 'X', '', 1, null, undefined].some(isTokenKey)).toBe(false);
+    expect(['r', 'p', 'w', 'b', 'f', 'x', 'l'].every(isTokenKey)).toBe(true);
+    expect(['s', 'z', 'R', 'F', 'X', 'L', '', 1, null, undefined].some(isTokenKey)).toBe(false);
   });
 });
 
@@ -350,7 +374,7 @@ describe('extractTokens', () => {
   });
 
   it('extracts what buildShareUrl built, for every key', () => {
-    for (const key of ['r', 'p', 'w', 'b', 'f', 'x'] as const) {
+    for (const key of ['r', 'p', 'w', 'b', 'f', 'x', 'l'] as const) {
       const url = buildShareUrl(APP_URL, key, T2);
       expect(url).toBe(`${APP_URL}#${key}=${T2}`);
       expect(extractTokens(`Hoi! ${url}`)).toEqual([{ key, token: T2 }]);

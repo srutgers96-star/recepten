@@ -25,6 +25,12 @@
 //                                                            card fields plus level, XP, streak, badges and
 //                                                            the cook days of the last 90 days; aggregates
 //                                                            only (no notes, no stars, no photos)
+//   t: 'l'  l: { title: Text, lines: [{raw, ing?, qty?, unit?, aisle?}] }
+//                                                            a shopping list (`#l=`, docs/specs/qr-link.md
+//                                                            §2, block 13Q): the lines as the text share
+//                                                            shows them, per language; the receiver puts
+//                                                            them on its own list as manual lines ("Zet op
+//                                                            mijn lijst"); it plans nothing
 //
 // Every envelope may carry `dict: { ing: Ingredient[] }`: the USER ingredients (ids the bundled
 // dictionary does not know) the payload references, so the receiver can add the missing ones.
@@ -32,7 +38,8 @@
 // 13D (docs/specs/varianten-tabs.md §2d): `r.variants`/`r.tip` and `p.patch.variants`/`p.patch.tip`
 // are ordinary optional keys in `v: 2` (normalised on the way in); an older app ignores them.
 import { normalizeAvatarSpec, type AvatarSpec } from './avatar.ts';
-import type { Ingredient } from './dictionary.ts';
+import { effectiveQty, groupByAisle, renderListItem, type ListItem } from './aggregate.ts';
+import type { Dictionary, Ingredient } from './dictionary.ts';
 import { nowIso, type Lang, type Line, type Recipe, type Text } from './model.ts';
 import { applyLineOverrides, type LineOverride, type RecipeOverride, type RecipePatch } from './overrides.ts';
 import { normalizeServings, type Plan } from './planner.ts';
@@ -173,7 +180,31 @@ export interface ProgressCard {
   [k: string]: unknown;
 }
 
-export type ShareKind = 'recipe' | 'patch' | 'bundle' | 'plan' | 'member' | 'progress';
+/**
+ * A shopping list as it travels (`#l=`, docs/specs/qr-link.md §2, block 13Q): the lines that are
+ * not "in huis" (checked lines left out when the sender chose so), as the text share shows them.
+ * Read through `readListPayload`.
+ */
+export interface ListShare {
+  /** {nl, en}: "Boodschappen week 46" in both languages (invariant 3). */
+  title: Text;
+  /** At most LIST_MAX_LINES. */
+  lines: ListShareLine[];
+}
+
+/** One line of a shared list. Unknown keys are preserved. */
+export interface ListShareLine {
+  /** The line as shown, per language ("400 g gehakt" / "400 g minced meat"). */
+  raw: Text;
+  /** Ingredient id when recognised. */
+  ing?: string | null;
+  qty?: number | null;
+  unit?: string | null;
+  aisle?: string | null;
+  [k: string]: unknown;
+}
+
+export type ShareKind = 'recipe' | 'patch' | 'bundle' | 'plan' | 'member' | 'progress' | 'list';
 
 /**
  * What parseEnvelope makes of any envelope: a flat list of recipes and patches plus the delta.
@@ -195,6 +226,8 @@ export interface ParsedShare {
   member?: MemberCard;
   /** The shared progress of a `#x=` envelope (absent when it was unreadable). */
   progress?: ProgressCard;
+  /** The shopping list of a `#l=` envelope (absent when it was unreadable). */
+  list?: ListShare;
 }
 
 export interface ShareContext {
@@ -264,6 +297,8 @@ export const PROGRESS_MAX_BADGES = 400;
 export const PROGRESS_MAX_DAYS = 90;
 export const PROGRESS_MAX_DAY_RECIPES = 5;
 const PROGRESS_MAX_LEVEL = 100;
+/** At most this many lines on a shared shopping list (docs/specs/qr-link.md §2). */
+export const LIST_MAX_LINES = 200;
 
 /** Ingredient ids a list of lines references (`ing` and the `alt` lines). */
 export function referencedIngredientIds(lines: readonly Line[]): Set<string> {
@@ -490,6 +525,68 @@ export function buildProgressEnvelope(card: ProgressCard): Envelope {
   return env;
 }
 
+export interface ListEnvelopeOptions {
+  /** The list title in both languages ("Boodschappen week 46" / "Shopping week 46"). */
+  title: Text;
+  /** Leave checked lines out (the "verberg afgevinkt" switch of the text share). */
+  hideChecked?: boolean;
+  /** Leave "in huis" lines out. */
+  hideInHouse?: boolean;
+}
+
+/**
+ * `{v: 2, t: 'l', by, at, l: {title, lines}}` (docs/specs/qr-link.md §2): the list as the text
+ * share (`listAsText`) shows it: the same visible lines (checked ones out with `hideChecked`,
+ * in-house ones out with `hideInHouse`, numeric lines at 0 always out), the aisle groups in data
+ * order and the "Controleer zelf" lines last. Each line carries its text per language
+ * (`renderListItem`) and, when known, the ingredient id, the effective amount, the unit and the
+ * aisle. Within a group the lines follow the Dutch names (the receiver regroups by aisle anyway).
+ * At most LIST_MAX_LINES lines.
+ */
+export function buildListEnvelope(items: readonly ListItem[], dict: Dictionary, by: string, opts: ListEnvelopeOptions): Envelope {
+  const visible = (it: ListItem): boolean => {
+    if (it.checked && opts.hideChecked) return false;
+    if (it.inHouse && opts.hideInHouse) return false;
+    if (typeof it.qty === 'number') {
+      const eff = effectiveQty(it);
+      return eff !== null && eff > 0;
+    }
+    return true;
+  };
+  const listed = items.filter((it) => it.section !== 'check' && visible(it));
+  const ordered: ListItem[] = [];
+  for (const g of groupByAisle(listed, dict, 'nl')) ordered.push(...g.items);
+  ordered.push(...items.filter((it) => it.section === 'check' && visible(it)));
+  const lines: ListShareLine[] = [];
+  for (const it of ordered) {
+    if (lines.length >= LIST_MAX_LINES) break;
+    const raw: Text = {};
+    const nl = renderListItem(it, dict, 'nl').trim();
+    const en = renderListItem(it, dict, 'en').trim();
+    if (nl) raw.nl = nl;
+    if (en) raw.en = en;
+    if (!raw.nl && !raw.en) continue;
+    const line: ListShareLine = { raw };
+    if (typeof it.ing === 'string' && it.ing && dict.get(it.ing)) line.ing = it.ing;
+    const qty = effectiveQty(it);
+    if (qty !== null && Number.isFinite(qty) && qty > 0) {
+      line.qty = qty;
+      if (typeof it.unit === 'string' && it.unit) line.unit = it.unit;
+    }
+    if (typeof it.aisle === 'string' && it.aisle) line.aisle = it.aisle;
+    lines.push(line);
+  }
+  const title: Text = {};
+  const tnl = cleanString(opts.title.nl);
+  const ten = cleanString(opts.title.en);
+  if (tnl) title.nl = tnl;
+  if (ten) title.en = ten;
+  const l: ListShare = { title, lines };
+  const env = baseEnvelope('l', by);
+  env.l = l;
+  return env;
+}
+
 // --- Parsing ------------------------------------------------------------------------------------
 
 /**
@@ -567,6 +664,41 @@ export function readProgressPayload(v: unknown): ProgressCard | null {
   const out = card as ProgressCard;
   readProgressFields(out, v);
   return out;
+}
+
+/** A finite number, else null. */
+function finiteOrNull(v: unknown): number | null {
+  return typeof v === 'number' && Number.isFinite(v) ? v : null;
+}
+
+/**
+ * A shopping-list payload (`#l=`, docs/specs/qr-link.md §2), tolerantly: `title` through the
+ * `readOptionalText` rules (a plain string is Dutch; nothing usable gives `{}`); `lines` only
+ * entries with a `raw` text in at least one language (a plain string is Dutch), at most
+ * LIST_MAX_LINES; `ing`/`unit`/`aisle` only as non-empty strings, `qty` only as a finite number.
+ * Unknown keys stay (on the list and on each line). Null when it is no object.
+ */
+export function readListPayload(v: unknown): ListShare | null {
+  if (!isRecord(v)) return null;
+  const lines: ListShareLine[] = [];
+  if (Array.isArray(v.lines)) for (const item of v.lines) {
+    if (lines.length >= LIST_MAX_LINES) break;
+    if (!isRecord(item)) continue;
+    const raw = readOptionalText(item.raw);
+    if (!raw) continue;
+    const line: ListShareLine = { ...item, raw };
+    for (const key of ['ing', 'unit', 'aisle'] as const) {
+      const s = cleanString(item[key]);
+      if (s) line[key] = s;
+      else delete line[key];
+    }
+    const qty = finiteOrNull(item.qty);
+    if (qty !== null) line.qty = qty;
+    else delete line.qty;
+    lines.push(line);
+  }
+  const title = readOptionalText(v.title) ?? {};
+  return { ...(v as object), title, lines } as ListShare;
 }
 
 function readIngredient(v: unknown): Ingredient | null {
@@ -656,7 +788,7 @@ function readRecipe(v: unknown): Recipe | null {
 }
 
 /**
- * Any envelope (`r`, `p`, `b`, `w`, `f`, `x`; also a legacy backup file with `userRecipes`) -> a
+ * Any envelope (`r`, `p`, `b`, `w`, `f`, `x`, `l`; also a legacy backup file with `userRecipes`) -> a
  * ParsedShare. Tolerant: phase-0/1 recipe shapes go through normalizeRecipe, unusable items are
  * dropped, unknown keys stay on the items. Throws Error('invalid-token') for anything that is not
  * an envelope and Error('unsupported-version') for a newer `v` (same as decodeToken).
@@ -755,6 +887,14 @@ export function parseEnvelope(env: unknown): ParsedShare {
     }
     return out;
   }
+  if (e.t === 'l') {
+    // An `l` without a payload object is no list (a stray "#l=" someone typed).
+    if (!isRecord(e.l)) throw new Error('invalid-token');
+    out.kind = 'list';
+    const list = readListPayload(e.l);
+    if (list) out.list = list;
+    return out;
+  }
   throw new Error('invalid-token');
 }
 
@@ -770,7 +910,7 @@ export function envelopeItemCount(env: Envelope): number {
   }
   // A plan counts its embedded recipes (what the import writes); the dishes are in planDishCount.
   if (env.t === 'w' && isRecord(env.w)) return Array.isArray(env.w.recipes) ? env.w.recipes.length : 0;
-  // A member card and shared progress carry no recipes.
+  // A member card, shared progress and a shopping list carry no recipes.
   return 0;
 }
 
@@ -833,6 +973,23 @@ export function buildProgressShareMessage(i: { name: string; level: number; titl
   return [head, i.url].join('\n');
 }
 
+/**
+ * The WhatsApp text for a shopping list (docs/specs/qr-link.md §2, `share.listMessage`): one
+ * sentence and the `#l=` URL alone on the last line: NL "🛒 Boodschappenlijst van Stijn — 12
+ * regels. Open de link in de app of plak hem bij In & uit." / EN "🛒 Stijn's shopping list — 12
+ * lines. Open the link in the app or paste it into In & out." {nl, en} literals like the other builders.
+ */
+export function buildListShareMessage(i: { name: string; lines: number; url: string; lang: Lang }): string {
+  const lang: Lang = i.lang === 'en' ? 'en' : 'nl';
+  const name = i.name.trim() || (lang === 'nl' ? 'iemand' : 'someone');
+  const n = Math.max(0, Math.floor(i.lines));
+  const head =
+    lang === 'nl'
+      ? `🛒 Boodschappenlijst van ${name} — ${n} regels. Open de link in de app of plak hem bij In & uit.`
+      : `🛒 ${name}'s shopping list — ${n} lines. Open the link in the app or paste it into In & out.`;
+  return [head, i.url].join('\n');
+}
+
 /** "Stijn & co" -> "stijn-co" for the file name; empty -> "export". */
 function fileSlug(name: string | undefined): string {
   const s = (name ?? '')
@@ -858,8 +1015,9 @@ export function bundleFileName(name: string | undefined, date = new Date()): str
 
 /**
  * Several envelopes (r/p/b) -> ONE bundle envelope: recipes and patches concatenated, dict
- * deltas merged by id, by/at from the first envelope that has them. A member card (`f`) and shared
- * progress (`x`) carry no recipes, so they drop out (a bundle has no place for them).
+ * deltas merged by id, by/at from the first envelope that has them. A member card (`f`), shared
+ * progress (`x`) and a shopping list (`l`) carry no recipes, so they drop out (a bundle has no place
+ * for them).
  */
 export function combineEnvelopes(envelopes: readonly Envelope[], opts: BundleOptions = {}): Envelope {
   const recipes: Recipe[] = [];
@@ -895,10 +1053,11 @@ function envelopeName(env: Envelope): Text {
  * The WhatsApp text for the envelopes: a single recipe gets the four-line message from
  * message.ts, a single patch its "(aangepast)" variant, a single plan "🗓️ Weekplan van Stijn:
  * 7 gerechten", a single member card its one-sentence text, a single progress envelope
- * "📈 Voortgang van Stijn — Level 12 · …" (the title in `opts.lang`), several items a compact
+ * "📈 Voortgang van Stijn — Level 12 · …" (the title in `opts.lang`), a single shopping list
+ * "🛒 Boodschappenlijst van Stijn — 12 regels. …", several items a compact
  * header ("🍲 3 recepten van Stijn"), the open line and one URL per line. Each URL is
- * `#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`. (A plan, a card or progress combined with other envelopes
- * into a bundle file keeps the recipes but loses the plan / the card / the progress itself.)
+ * `#r=`/`#p=`/`#w=`/`#b=`/`#f=`/`#x=`/`#l=`. (A plan, a card, progress or a list combined with other envelopes
+ * into a bundle file keeps the recipes but loses the plan / the card / the progress / the list itself.)
  * When the text is longer than `limit` characters the result is a bundle FILE instead (pretty
  * JSON, not compressed), named "recepten-<name>-YYYY-MM-DD.json".
  */
@@ -932,6 +1091,9 @@ export async function planMessages(envelopes: readonly Envelope[], appUrl: strin
     // Lazy: the level titles stay out of the Safari landing bundle, which shares this module.
     const { titleFor } = await import('./levels.ts');
     text = buildProgressShareMessage({ name: card?.name ?? by, level, title: titleFor(level, lang), url: urls[0], lang });
+  } else if (envelopes.length === 1 && first && first.t === 'l' && urls[0]) {
+    const list = readListPayload(first.l);
+    text = buildListShareMessage({ name: by, lines: list?.lines.length ?? 0, url: urls[0], lang });
   } else {
     const count = envelopes.reduce((n, e) => n + envelopeItemCount(e), 0);
     text = [buildMultiShareHeader(count, by, lang), openLine(lang), ...urls].join('\n');

@@ -20,9 +20,9 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import { checkNewBadges, recheckActiveBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
-import { QrCode } from '@/components/QrCode';
+import { QrPanel, QrToggle } from '@/components/QrPanel';
 import { Segmented } from '@/components/Segmented';
-import { bumpSharedRecipes, getNote, getOverride, getRecipe, getSetting, isBuiltinId, listLineOverrides, listUserIngredients, logShareEvent } from '@/db/repo';
+import { bumpSharedRecipes, getNote, getOverride, getRecipe, isBuiltinId, listLineOverrides, listUserIngredients, logShareEvent } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import type { Ingredient } from '@/domain/dictionary';
 import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
@@ -30,7 +30,6 @@ import { applyLineOverrides, type LineOverride, type RecipeOverride } from '@/do
 import { buildReadableRecipe, countIngredientLines, recipeHasLang } from '@/domain/message';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
 import { buildShareUrl, encodeToken, type Envelope } from '@/domain/token';
-import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { navigate } from '@/router';
@@ -145,8 +144,7 @@ function RecipeShareScreen(props: { id: string }) {
   const [status, setStatus] = useState('');
   const [textStatus, setTextStatus] = useState('');
   const [textLangs, setTextLangs] = useState<TextLangs>('nl');
-  // Phase 5 block D.5: "Toon QR" exists only while the Experimenten flag is on (flag off = no trace).
-  const [experiments, setExperiments] = useState(false);
+  // 13Q (docs/specs/qr-link.md §1a): "Toon QR" next to Deel and Kopieer, no Experimenten flag any more.
   const [showQr, setShowQr] = useState(false);
   // 13D §1g: the active profile's private note on this recipe ('' = none, no switch) and the switch.
   const [note, setNote] = useState('');
@@ -154,18 +152,6 @@ function RecipeShareScreen(props: { id: string }) {
   const by = activeProfile.value?.name ?? '';
   const pid = activeProfile.value?.id ?? '';
   const ui = lang.value;
-
-  useEffect(() => {
-    let cancelled = false;
-    getSetting<unknown>('experiments', false)
-      .then((v) => {
-        if (!cancelled) setExperiments(v === true);
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -360,25 +346,13 @@ function RecipeShareScreen(props: { id: string }) {
                   <button type="button" class="btn" disabled={!message} onClick={() => doCopy(message, setStatus)}>
                     {t('share.copy')}
                   </button>
+                  <QrToggle open={showQr} disabled={!url} onToggle={() => setShowQr((v) => !v)} />
                 </div>
+                {/* 13Q §1a/§1b (ADR-0007): QR of exactly the URL in the message above, or the too-big line. */}
+                <QrPanel url={url} open={showQr} onToggle={() => setShowQr(false)} />
                 <div class="status" role="status">
                   {status || (message ? t('share.length', { n: message.length }) : '')}
                 </div>
-                {experiments && (
-                  // Block D.5 (ADR-0007, ADR-0006 flow D): QR of exactly the URL in the message
-                  // above. Behind the Experimenten flag; tapping again hides it.
-                  <div class="share-qr">
-                    <button type="button" class="btn" disabled={!url} onClick={() => { if (!showQr) void recordFeature('qrShown'); setShowQr((v) => !v); }}>
-                      {showQr ? t('share.qrHide') : t('share.qrShow')}
-                    </button>
-                    {showQr && url && (
-                      <>
-                        <QrCode text={url} />
-                        <p class="muted small share-qr-hint">{t('share.qrHint')}</p>
-                      </>
-                    )}
-                  </div>
-                )}
               </>
             )}
 

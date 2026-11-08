@@ -183,8 +183,8 @@ export const settings: Dict = {
   // --- Phase 5 block D (docs/phase-5-spec.md D.4): the experiments switch ---
   'more.experiments': { nl: 'Experimenten', en: 'Experiments' },
   'more.experimentsHint': {
-    nl: 'Functies in aanbouw. Nu: "Toon QR" op het deelscherm en bij je kaartje.',
-    en: 'Features under construction. Currently: "Show QR" on the share screen and for your card.',
+    nl: 'Proeffuncties die nog niet af zijn. Staat uit, dan zie je er niets van.',
+    en: 'Trial features that are not finished yet. Switched off, nothing of them shows.',
   },
   'more.householdRow': { nl: 'Huishouden', en: 'Household' },
   'more.householdRowHint': { nl: 'Naam en wie er meekookt', en: 'Name and who cooks along' },

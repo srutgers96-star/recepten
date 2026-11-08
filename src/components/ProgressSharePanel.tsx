@@ -13,11 +13,14 @@
 // share screens. Copying does not log (as with the member card). The card is built once per
 // opening (and again when name, colour, language or avatar change); it never writes anything else.
 //
+// 13Q (docs/specs/qr-link.md §1a): a third button "Toon QR" shows the `#x=` link as a QR (QrPanel).
+//
 // Badges off (`badges.enabled` false) = no trace of XP or level anywhere (§1, §5.9): the panel then
 // renders nothing, and the screens leave the button out.
 import { useEffect, useState } from 'preact/hooks';
 import { badgesEnabled, recheckActiveBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
+import { QrPanel, QrToggle } from '@/components/QrPanel';
 import { logShareEvent } from '@/db/repo';
 import { normalizeAvatarSpec } from '@/domain/avatar';
 import { localDayIndex } from '@/domain/days';
@@ -31,8 +34,8 @@ import { ensureDeviceId } from '@/screens/ProfilesScreen';
 import { copyText, shareText } from '@/share-actions';
 import { buildXpFacts, xpStateFor } from '@/xp';
 
-/** The WhatsApp text: one sentence in the SENDER's language, the `#x=` link alone on the last line (§2h). */
-async function buildProgressMessage(p: Profile): Promise<string> {
+/** The WhatsApp text: one sentence in the SENDER's language, the `#x=` link alone on the last line (§2h); plus that link for the QR. */
+async function buildProgressMessage(p: Profile): Promise<{ message: string; url: string }> {
   const [deviceId, state, facts] = await Promise.all([ensureDeviceId(), xpStateFor(p.id), buildXpFacts(p.id)]);
   const avatar = normalizeAvatarSpec(p.avatar);
   const card = progressCardFor({
@@ -46,12 +49,14 @@ async function buildProgressMessage(p: Profile): Promise<string> {
   });
   const token = await encodeToken(buildProgressEnvelope(card));
   const url = buildShareUrl(appInfo.appUrl, 'x', token);
-  return buildProgressShareMessage({ name: card.name, level: card.level, title: titleFor(card.level, p.lang), url, lang: p.lang });
+  return { message: buildProgressShareMessage({ name: card.name, level: card.level, title: titleFor(card.level, p.lang), url, lang: p.lang }), url };
 }
 
 export function ProgressSharePanel(props: { profile: Profile }) {
   const p = props.profile;
   const [message, setMessage] = useState('');
+  const [url, setUrl] = useState('');
+  const [showQr, setShowQr] = useState(false);
   const [buildFailed, setBuildFailed] = useState(false);
   const [status, setStatus] = useState('');
   const [showRaw, setShowRaw] = useState(false);
@@ -61,13 +66,17 @@ export function ProgressSharePanel(props: { profile: Profile }) {
   useEffect(() => {
     let cancelled = false;
     setMessage('');
+    setUrl('');
+    setShowQr(false);
     setBuildFailed(false);
     setStatus('');
     setShowRaw(false);
     if (!on) return;
     buildProgressMessage(p)
       .then((m) => {
-        if (!cancelled) setMessage(m);
+        if (cancelled) return;
+        setMessage(m.message);
+        setUrl(m.url);
       })
       .catch((e: unknown) => {
         console.error('progress card', e);
@@ -123,7 +132,9 @@ export function ProgressSharePanel(props: { profile: Profile }) {
         <button type="button" class="btn" disabled={!message} onClick={copy}>
           {t('progress.copy')}
         </button>
+        <QrToggle open={showQr} disabled={!url} onToggle={() => setShowQr((v) => !v)} />
       </div>
+      <QrPanel url={url} open={showQr} onToggle={() => setShowQr(false)} />
       {showRaw && <textarea class="input member-card-raw" readOnly rows={3} value={message} onFocus={(e) => (e.currentTarget as HTMLTextAreaElement).select()} />}
       <p class="muted small">{t('household.cardIosHint')}</p>
       <p class="muted small">{t('progress.honest')}</p>

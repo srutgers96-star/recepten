@@ -30,6 +30,7 @@ import { checkNewBadges, recheckActiveBadges } from '@/badges';
 import { AddMenu } from '@/components/AddMenu';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
+import { QrPanel, QrToggle } from '@/components/QrPanel';
 import { PickChips, applyPickFilter, cuisineIdsIn, loadPickFilter, pickFilterActive, savePickFilter, tagIdsIn, type PickFilter } from '@/components/PickSheet';
 import { RecipeRow } from '@/components/RecipeRow';
 import { SelectBar, type MetaChange } from '@/components/SelectBar';
@@ -43,7 +44,7 @@ import { type LineOverride, type RecipeOverride } from '@/domain/overrides';
 import { initialOf } from '@/domain/recipe-source';
 import { searchRecipes, type SearchGroup } from '@/domain/search';
 import { buildBundleEnvelope, buildPatchEnvelope, buildRecipeEnvelope, bundleFileName, planMessages, type MessagePlan } from '@/domain/share';
-import type { Envelope } from '@/domain/token';
+import { buildShareUrl, encodeToken, type Envelope } from '@/domain/token';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
@@ -90,6 +91,8 @@ function linksOnlyOverride(baseId: string, lineOverrides: LineOverride[]): Recip
 interface ShareData {
   plan: MessagePlan;
   bundle: Envelope;
+  /** 13Q (docs/specs/qr-link.md §1a): the bundle as one `#b=` link, for "Toon QR" (rarely fits). */
+  bundleUrl: string;
   /** Ids of the selected recipes (patched classics by their own id) for the "In & uit" log. */
   ids: string[];
 }
@@ -147,6 +150,7 @@ export function RecipesScreen() {
   const [selectBusy, setSelectBusy] = useState(false);
   const [shareData, setShareData] = useState<ShareData | null>(null);
   const [building, setBuilding] = useState(false);
+  const [showQr, setShowQr] = useState(false);
   const [addMenu, setAddMenu] = useState(false);
 
   // '#/recipes?cat=<id>' from the Home shelf: replace the selection, then drop the query from the
@@ -299,6 +303,7 @@ export function RecipesScreen() {
   // Build the message plan and the export bundle ahead of the tap: navigator.share must run inside
   // the user activation, and encoding tokens is async (DeltaShareScreen does the same).
   useEffect(() => {
+    setShowQr(false);
     if (!selectMode || selectedList.length === 0) {
       setShareData(null);
       setBuilding(false);
@@ -335,7 +340,8 @@ export function RecipesScreen() {
       const plan = await planMessages(envs, appInfo.appUrl, { lang: l, by, name: by });
       const title = by ? t('select.exportTitle', { name: by }) : undefined;
       const bundle = buildBundleEnvelope({ recipes, patches, lineOverrides, names }, ctx, title ? { title } : {});
-      if (!cancelled) setShareData({ plan, bundle, ids: selectedList.map((r) => r.id) });
+      const bundleUrl = buildShareUrl(appInfo.appUrl, bundle.t, await encodeToken(bundle));
+      if (!cancelled) setShareData({ plan, bundle, bundleUrl, ids: selectedList.map((r) => r.id) });
     })()
       .catch((e: unknown) => {
         console.error('select share', e);
@@ -607,6 +613,16 @@ export function RecipesScreen() {
         {railLetter && <div class="az-bubble">{railLetter}</div>}
       </div>
       <AddMenu open={addMenu} onClose={() => setAddMenu(false)} />
+      {selectMode && selectedList.length > 0 && (
+        // 13Q §1a/§1b: "Toon QR" for the selection and Exporteer — both carry the same recipes, as
+        // one `#b=` link; a bundle rarely fits, and then the panel says so (share.qrTooBig).
+        <div class="select-qr">
+          <div class="actions">
+            <QrToggle open={showQr} disabled={!shareData} onToggle={() => setShowQr((v) => !v)} />
+          </div>
+          <QrPanel url={shareData?.bundleUrl ?? ''} open={showQr} onToggle={() => setShowQr(false)} />
+        </div>
+      )}
       {selectMode && (
         <SelectBar
           selected={selectedList}

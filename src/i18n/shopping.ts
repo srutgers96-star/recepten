@@ -103,6 +103,12 @@ export const shopping: Dict = {
   'shop.shareError': { nl: 'Delen mislukt', en: 'Sharing failed' },
   'shop.copyError': { nl: 'Kopiëren mislukt', en: 'Copy failed' },
   'shop.nothingToShare': { nl: 'Niets te delen.', en: 'Nothing to share.' },
+  // 13Q (docs/specs/qr-link.md §1c): the list as a link (`#l=`) next to the text, and receiving it in In & uit.
+  'shop.shareLink': { nl: 'Deel link', en: 'Share link' },
+  'shop.copyLink': { nl: 'Kopieer link', en: 'Copy link' },
+  'shop.list.received': { nl: '🛒 Lijst van {name} · {n} regels', en: "🛒 {name}'s list · {n} lines" },
+  'shop.list.put': { nl: 'Zet op mijn lijst', en: 'Put on my list' },
+  'shop.list.putSnack': { nl: '{n} regels op je lijst gezet, {m} stonden er al', en: '{n} lines put on your list, {m} were already there' },
 
   // --- Print & copy as text (docs/phase-5-spec.md block D.2) ----------------------------------
   'shop.print': { nl: 'Print', en: 'Print' },

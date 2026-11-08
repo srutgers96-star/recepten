@@ -18,6 +18,8 @@ export function QrCode(props: { text: string; label?: string }) {
           // ECC 'L' = smallest symbol; the link is fetched live, a misread just means re-scan.
           errorCorrectionLevel: 'L',
           margin: 2,
+          // 320 px wide so a ~27-version symbol still has ≈2.5 px per module on a phone screen (13Q).
+          width: 320,
           // Deliberately NOT theme tokens: scanner contrast beats dark mode (ADR-0007).
           color: { dark: '#000000', light: '#ffffff' },
         }),
