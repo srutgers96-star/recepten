@@ -4,6 +4,35 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): V3b — hoeden bedekken het haar: randlijn brim per hoed, haar alleen onder de rand (Stijns bandana)
+Gebouwd volgens docs/specs/verbeterronde-3b.md (lichte workflow, twee bouwers + integrator; run-id: de workflow vult hem in).
+**Renderer (A):** `AvatarPart.brim?: number` (src/domain/avatar.ts); de lezer neemt hem alleen over bij een hoed en als eindig
+getal 0–100, de renderer controleert opnieuw. Draagt de avatar een hoed met `brim`, dan krijgt `<defs>` ná de bestaande clipPath
+`<clipPath id="h-UID"><rect x="-10" y="BRIM" width="120" height="120"/></clipPath>` (BRIM op één decimaal) en wordt de haarlaag
+`<g data-layer="hair" clip-path="url(#h-UID)">`; de hoed zelf wordt niet geknipt. Zonder hoed of zonder `brim` is de uitvoer
+byte-gelijk. **Afwijking van de letter van de spec (bouwer A, door de integrator overgenomen):** de tweede clipPath komt er alleen
+als er ook een haarlaag getekend wordt; zonder haar valt er niets te knippen, en de bestaande test die `<defs>…</defs>` letterlijk
+pint voor een avatar met `hat-toque` zonder haar (tests/avatar.test.ts ±676) blijft zo groen. Wil Fable de clipPath altijd bij een
+hoed met `brim`: de voorwaarde `byLayer.has('hair') ?` weghalen en die test bijwerken. Nieuwe tests in het blok "V3b §1a".
+**Data (B):** 17 hoeden kregen `brim`; crown, flower-crown en party niet. Validator: `brim` in `AVATAR_PART_KEYS`, alleen bij
+`layer` hat, eindig getal 0–100. Contactblad: sectie **Hoeden × hoog haar** (#hat-hair; 17 hoeden × krullen, afro, hanenkam,
+knotje, slagroomkuif, staartjes, 40 px). Test in tests/validate-badges.test.ts (20 hoeden; de drie open zonder brim, de rest 20–40).
+**Open voor Fable — de brim-waarden.** Bouwer B paste de vaste regel letterlijk toe (onderrand van de hoed bij x=50 uit de svg,
+min 1). Dat geeft bij de meeste hoeden een grotere waarde (lagere lijn) dan de richtwaarden in de spec: bandana 29 (spec 29),
+santa 29,5 (29), baseball 31 (29), colander 33 (29), beanie 35 (27), toque 34 (25), beret 29,5 (23), strawhat 34 (33), hairnet 28
+(25), pan 34 (29), dino 29 (35), cheese 33 (36), watermelon 34 (31), pancake 33 (27), mushroom 35 (29), sombrero 35 (33), pumpkin
+35 (33). De spec noemt de richtwaarden "bouwer B controleert ze op de tekening" en de regel staat in §2 als vast, dus de integrator
+liet de gemeten waarden staan; ik heb er een paar nagerekend (bandana, toque, dino, cheese: kloppen met de regel). Cheese 36 lag
+zelfs onder de onderrand van de hoed (34) en dino 35 telde de tanden mee. Gevolg: een lagere lijn knipt meer haar opzij van de hoed
+weg (bv. de zijkanten van de afro naast een muts). Andere keuze = één getal per hoed in data/avatar-parts.json; de test blijft groen.
+Ook voor Fable: het haarnetje is doorschijnend (opacity 0,3); met `brim` 28 verdwijnt het haar erboven helemaal in plaats van erdoor
+te schemeren (zo gebouwd, want de spec geeft hairnet een brim). **Integrator:** contactblad gegenereerd (scratch/avatar-sheet.html)
+en de nieuwe sectie in de browser nagekeken: bij geen enkele hoed staat haar boven de hoedrand. Dev-app (375 px, NL en EN, testprofiel
+tijdelijk via IndexedDB omgezet en daarna teruggezet): bandana op krullen → geen haar boven de hoofddoek, krullen opzij zichtbaar,
+`h-UID`-clipPath met y 29 in de DOM; kroon op afro → geen tweede clipPath, haar eromheen en tussen de punten door. check, 1852 tests,
+build, build:next en validate:data groen. DEVICE-TEST rij 112 (NL/EN) kreeg stap 7. Geen i18n-keys (geen nieuwe UI-tekst), geen
+handboekrij (geen nieuwe functie; alleen tekenwerk).
+
 ## 8 nov (Opus): V4 — dopamine-kick bij Gekookt!: het woord groot in de confetti, de XP-strook die oploopt met uitgestelde level-up, pops alleen nog voor foto en beoordeling, tik = ×2, ontgrendeling Snelle vieringen (level 30)
 Gebouwd volgens docs/specs/verbeterronde-4.md (lichte workflow, vier bouwers + integrator; run-id wf_0341fae8-b8b
 de workflow vult hem in). **XP-laag (A):** src/xp.ts: `XpSettleDelta extends XpDelta { totalFrom, totalTo }` (via `withTotals`;

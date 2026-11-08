@@ -1041,7 +1041,7 @@ const AVATAR_MIN_LEVEL = 3;
 const AVATAR_MAX_LEVEL = 100;
 /** The only inline styles a part may carry (the renderer sets --tone and --hair). */
 const AVATAR_STYLES: ReadonlySet<string> = new Set(['fill:var(--tone)', 'fill:var(--hair)']);
-const AVATAR_PART_KEYS: ReadonlySet<string> = new Set(['id', 'layer', 'nl', 'en', 'unlock', 'rarity', 'svg', 'clip', 'accent', 'covers']);
+const AVATAR_PART_KEYS: ReadonlySet<string> = new Set(['id', 'layer', 'nl', 'en', 'unlock', 'rarity', 'svg', 'clip', 'accent', 'covers', 'brim']);
 /** A frame's clip (block 6D-F): one shape element, attributes only, self-closing. */
 const AVATAR_CLIP_SHAPE = /^<(circle|ellipse|rect|polygon|path)((?:\s+[a-z-]+="[^"<>]*")*)\s*\/>$/;
 /** The only attributes a clip may carry: geometry (no fill, stroke, style, id, transform …). */
@@ -1200,6 +1200,15 @@ export function validateAvatarParts(data: unknown, badges: unknown): ValidationR
       else if (typeof covers !== 'boolean') errors.push(`${label}: "covers" must be a boolean, got ${JSON.stringify(covers)}.`);
       else if (covers && typeof svg === 'string' && !coversFirstElement(svg)) {
         errors.push(`${label}: "covers": true needs a covering first element (<rect width="100" height="100" fill="…"/> or a circle r 50).`);
+      }
+    }
+    // Block V3b (docs/specs/verbeterronde-3b.md §1b): `brim` only on hats, a number 0–100 (the y of
+    // the hat's bottom edge at x≈50 minus 1; the renderer clips the hair layer above it).
+    const brim = part['brim'];
+    if (brim !== undefined) {
+      if (layer !== 'hat') errors.push(`${label}: "brim" is only for layer "hat".`);
+      else if (typeof brim !== 'number' || !Number.isFinite(brim) || brim < 0 || brim > 100) {
+        errors.push(`${label}: "brim" must be a number 0–100, got ${JSON.stringify(brim)}.`);
       }
     }
     // The reverse rule (decision a): a background whose first element covers the avatar hides the

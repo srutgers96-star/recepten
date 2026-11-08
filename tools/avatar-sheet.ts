@@ -21,6 +21,9 @@
 // shape shows. The backgrounds section marks the covering ones "dekkend". The balance table counts
 // the frames like any other part.
 //
+// Block V3b (docs/specs/verbeterronde-3b.md §1b): a section "Hoeden × hoog haar" with every hat that
+// has a `brim` on the base avatar under each tall hairstyle (six tiles per hat, 40 px).
+//
 // Node 22 type stripping: type-only syntax, plain ESM; no dependency.
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -51,6 +54,9 @@ const SHEET_LAYERS: readonly AvatarLayer[] = ['face', 'hair', 'eyes', 'mouth', '
 const BASE_COLOR = '#2b4fa8';
 /** The level the frames section draws with, so the level ring along the frame's shape shows. */
 const FRAME_LEVEL = 30;
+/** Block V3b: the tall hairstyles the "Hoeden × hoog haar" section puts under every hat with a brim
+ *  (curls, afro, mohawk, bun, whipped cream, pigtails). */
+const TALL_HAIR = ['hair-curly', 'hair-afro', 'hair-mohawk', 'hair-bun', 'hair-whipped-cream', 'hair-pigtails'] as const;
 /** Mirrors PROFILE_COLORS in src/profile.ts (not imported: that module needs the app). */
 const PROFILE_COLORS = ['#2b4fa8', '#d9402b', '#3d7a3a', '#d98a2e', '#7a3d8a', '#2a8a8a', '#1f3b73', '#b0246b',
   '#a6421c', '#8a5a00', '#5a6b1f', '#1f6b5a', '#4a5d78', '#7a1f3d'];
@@ -235,6 +241,23 @@ function main(): void {
     `<p>Links: doorschijnende achtergrond, de lijst in zijn eigen accent. Rechts: ${cover ? `dekkende achtergrond ${esc(cover.id)}, de lijst in de profielkleur` : 'geen dekkende achtergrond in de bibliotheek'}. Beide met de niveauring van level ${FRAME_LEVEL}.</p>` +
     `<div class="grid frames">${frameCells}</div></section>`);
 
+  // Block V3b (docs/specs/verbeterronde-3b.md §1b): every hat with a `brim` on the base avatar with
+  // each tall hairstyle in turn, at 40 px, so no hair above a hat's edge shows at a glance.
+  const brimHats = parts.filter((p) => p.layer === 'hat' && p.brim !== undefined);
+  const tallHair = TALL_HAIR.map((id) => byId.get(id)).filter((p): p is AvatarPart => p !== undefined);
+  counts.push(`<a href="#hat-hair">hoed × haar ${brimHats.length}</a>`);
+  const hatRows = brimHats.map((hat) => {
+    const tiles = tallHair.map((h) => {
+      const spec = withPart(hat, byId);
+      const parts2 = spec.parts.filter((id) => byId.get(id)?.layer !== 'hair');
+      return `<div class="a40" title="${esc(hat.id)} + ${esc(h.id)}">${draw({ ...spec, parts: [...parts2, h.id] }, byId)}</div>`;
+    }).join('');
+    return `<div class="hh"><span>${esc(hat.id)} <i>brim ${hat.brim}</i></span><div class="row">${tiles}</div></div>`;
+  }).join('');
+  sections.push(`<section id="hat-hair"><h2>Hoeden × hoog haar (${brimHats.length})</h2>` +
+    `<p>Elke hoed met een randlijn (brim) op de basis-avatar met ${esc(tallHair.map((h) => h.nl.toLowerCase()).join(', '))}; boven de hoedrand hoort geen haar te staan.</p>` +
+    `${hatRows}</section>`);
+
   const html = `<!doctype html>
 <html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Avatar contact sheet</title>
@@ -271,6 +294,10 @@ function main(): void {
   .a96 { width: 96px; height: 96px; border-radius: 999px; overflow: hidden; margin: 0 auto; }
   /* A frame may draw outside the round clip (gold corners, the pan's handle): no round mask. */
   .a96f { width: 96px; height: 96px; margin: 0 auto; }
+  .hh { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+  .hh > span { width: 150px; font-size: 12px; }
+  .hh > span i { color: #6b625b; font-style: normal; }
+  .hh .row { margin: 0 0 6px; }
   .pair { display: flex; gap: 6px; justify-content: center; }
   .cover { display: inline-block; margin-left: 4px; padding: 0 5px; border-radius: 6px; background: #2a2420; color: #fff; font-size: 10px; font-style: normal; }
   .avatar-svg { display: block; width: 100%; height: 100%; }

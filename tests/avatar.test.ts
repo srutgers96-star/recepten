@@ -1231,3 +1231,103 @@ describe('V3 §1a: renderAvatarSvg inner scale and the level ring on the bare ci
     expect(bare.endsWith(`${LEVEL_RING}<circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="4"/></svg>`)).toBe(true);
   });
 });
+
+// ---------------------------------------------------------------------------- V3b §1a: the brim line of a hat
+
+describe('V3b §1a: a hat with a brim clips the hair layer', () => {
+  const HAT = { layer: 'hat', nl: 'Hoed', en: 'Hat', unlock: { level: 3 }, rarity: 'common',
+    svg: '<path d="M20 30 Q50 0 80 30 Z" fill="#c33"/>' };
+  const BRIM_RAW = [
+    { ...HAT, id: 'hat-brimtest', brim: 30 },
+    { ...HAT, id: 'hat-nobrim' },
+    { ...HAT, id: 'hat-decimal', brim: 28.46 },
+    { ...HAT, id: 'hat-toohigh', brim: 101 },
+    { ...HAT, id: 'hat-negative', brim: -1 },
+    { ...HAT, id: 'hat-text', brim: '30' },
+    { ...HAT, id: 'hat-nan', brim: Number.NaN },
+    { ...HAT, id: 'hat-inf', brim: Number.POSITIVE_INFINITY },
+    { id: 'hair-brimtest', layer: 'hair', nl: 'Haar', en: 'Hair', unlock: { level: 3 }, rarity: 'common',
+      svg: '<path d="M30 30 Q50 2 70 30" fill="var(--hair)"/>', brim: 30 },
+  ];
+  const BRIM_PARTS = normalizeAvatarParts(BRIM_RAW);
+  const BRIM_BY_ID = new Map(BRIM_PARTS.map((p) => [p.id, p]));
+  const LIB: ReadonlyMap<string, AvatarPart> = new Map([...TEST_LIB, ...BRIM_PARTS.map((p) => [p.id, p] as const)]);
+  const render = (uid: string, ...ids: string[]) => renderAvatarSvg(withParts(...ids), LIB, { color: '#d9402b', level: 10, uid });
+  const hairSvg = (uid: string) => part('hair-short').svg.replaceAll('__u', uid);
+
+  it('the reader keeps a finite brim 0–100 on a hat and drops it otherwise (and on other layers)', () => {
+    expect(BRIM_BY_ID.get('hat-brimtest')?.brim).toBe(30);
+    expect(BRIM_BY_ID.get('hat-decimal')?.brim).toBe(28.46);
+    for (const id of ['hat-nobrim', 'hat-toohigh', 'hat-negative', 'hat-text', 'hat-nan', 'hat-inf', 'hair-brimtest']) {
+      expect(BRIM_BY_ID.get(id), id).toBeDefined();
+      expect(BRIM_BY_ID.get(id) && 'brim' in BRIM_BY_ID.get(id)!, id).toBe(false);
+    }
+  });
+
+  it('brim 30: a second clipPath after the first in <defs>, and the hair layer clipped by it', () => {
+    const svg = render('b1', 'hat-brimtest');
+    expect(svg).toContain('<defs><clipPath id="c-b1"><circle cx="50" cy="50" r="46"/></clipPath>'
+      + '<clipPath id="h-b1"><rect x="-10" y="30" width="120" height="120"/></clipPath></defs>');
+    expect(svg).toContain(`<g data-layer="hair" clip-path="url(#h-b1)">${hairSvg('b1')}</g>`);
+    expect(svg.match(/clip-path="url\(#h-b1\)"/g)?.length).toBe(1);
+    // The hat itself is not clipped.
+    expect(svg).toContain(`<g data-layer="hat">${BRIM_BY_ID.get('hat-brimtest')!.svg}</g>`);
+  });
+
+  it('the order stays <defs> → clip group → ring (and a frame after the clip group)', () => {
+    const svg = render('b2', 'hat-brimtest');
+    const defs = svg.indexOf('<defs>');
+    const defsEnd = svg.indexOf('</defs>');
+    const group = svg.indexOf('<g clip-path="url(#c-b2)">');
+    const ring = svg.indexOf('<circle cx="50" cy="50" r="48" fill="none" stroke="#3d9a3a"');
+    expect(defs).toBeGreaterThan(0);
+    expect(defsEnd).toBeLessThan(group);
+    expect(svg.indexOf('<clipPath id="h-b2">')).toBeLessThan(defsEnd);
+    expect(group).toBeLessThan(ring);
+    // The clipped hair layer lies inside the clip group (in av-inner).
+    expect(splitClip(svg).inside).toContain('<g data-layer="hair" clip-path="url(#h-b2)">');
+    const framed = render('b3', 'hat-brimtest', 'frame-hextest');
+    const { inside, outside } = splitClip(framed);
+    expect(inside).toContain('<g data-layer="hair" clip-path="url(#h-b3)">');
+    expect(outside).toContain('<clipPath id="h-b3">');
+    expect(outside).toContain('<g data-layer="frame">');
+    expect(framed.indexOf('</defs>')).toBeLessThan(framed.indexOf('<g clip-path="url(#c-b3)">'));
+  });
+
+  it('brim with at most one decimal', () => {
+    expect(render('b4', 'hat-decimal')).toContain('<clipPath id="h-b4"><rect x="-10" y="28.5" width="120" height="120"/></clipPath>');
+  });
+
+  it('a hat without brim, an invalid brim, or no hat: output unchanged (no second clipPath, plain hair layer)', () => {
+    const plain = render('b5');
+    for (const id of ['hat-nobrim', 'hat-toohigh', 'hat-negative', 'hat-text', 'hat-nan', 'hat-inf']) {
+      const svg = render('b5', id);
+      expect(svg, id).not.toContain('clipPath id="h-');
+      expect(svg, id).not.toContain('url(#h-');
+      expect(svg, id).toContain(`<g data-layer="hair">${hairSvg('b5')}</g>`);
+      // Byte-equal to the hatless avatar apart from the hat layer itself.
+      const hatLayer = `<g data-layer="hat">${BRIM_BY_ID.get(id)!.svg}</g>`;
+      expect(svg.replace(hatLayer, ''), id).toBe(plain);
+    }
+    expect(plain).not.toContain('clipPath id="h-');
+    expect(plain).toContain('<defs><clipPath id="c-b5"><circle cx="50" cy="50" r="46"/></clipPath></defs>');
+  });
+
+  it('a brim set directly on a part outside 0–100 or not a number is ignored by the renderer too', () => {
+    const base = BRIM_BY_ID.get('hat-nobrim')!;
+    for (const brim of [-5, 150, Number.NaN, '30' as unknown as number]) {
+      const lib = new Map(LIB);
+      lib.set('hat-nobrim', { ...base, brim });
+      const svg = renderAvatarSvg(withParts('hat-nobrim'), lib, { color: '#d9402b', level: 10, uid: 'b6' });
+      expect(svg, String(brim)).not.toContain('url(#h-');
+    }
+  });
+
+  it('a hat with brim but no hair: nothing to clip, so no extra clipPath (the existing toque tests stay byte-equal)', () => {
+    const spec: AvatarSpec = { ...defaultAvatar(), parts: defaultAvatar().parts.filter((id) => id !== 'hair-short').concat('hat-brimtest') };
+    const svg = renderAvatarSvg(spec, LIB, { color: '#d9402b', level: 0, uid: 'b7' });
+    expect(svg).not.toContain('clipPath id="h-');
+    expect(svg).toContain('<defs><clipPath id="c-b7"><circle cx="50" cy="50" r="46"/></clipPath></defs>');
+    expect(svg).not.toContain('data-layer="hair"');
+  });
+});

@@ -1,8 +1,9 @@
 # Spec V3b — Hoeden bedekken het haar (Stijn, 8 nov 2026, na V3)
 
-Status: in aanbouw (Fable, 8 nov 2026). Eén klein blok, twee bouwers + integrator (lichte modus). Bron: Stijn, 8 nov: "rode
+Status: compleet (Fable, 8 nov 2026). Eén klein blok, twee bouwers + integrator (lichte modus). Bron: Stijn, 8 nov: "rode
 hoofddoek is niet groot genoeg voor het kapsel dat ik heb, dus het kapsel komt erboven uit bij m'n avatar." Leidend bij
 tegenspraak: docs/specs/README.md §2–§4, docs/specs/verbeterronde-3.md (binnenschaal, structuur van de SVG), docs/specs/frames.md.
+Gebouwd: 8 nov 2026 (V3b, lichte workflow wf_0092dc8f-9db; besluit Fable: de randlijnen volgen de letterlijke regel uit §1b (onderrand bij x≈50 min 1, afgelezen uit de tekening) en niet de richtwaarden — die kwamen van de bol van de hoed; op het contactblad (sectie Hoeden × hoog haar, 102 tegels) steekt nergens haar boven een hoedrand uit; de tweede clipPath komt alleen mee als er een haarlaag is; het haarnetje houdt zijn randlijn)
 
 **Kritische lezer (Fable, vooraf).** (1) Het is een laagprobleem, geen tekenfout van één hoed: de laag `hat` ligt bóven `hair`,
 maar een hoed bedekt alleen het basis-hoofd (top ±y 6–12). Sinds V3 zijn krullen (top y≈2,5), hanenkam (y≈4), knot (y≈7) en afro

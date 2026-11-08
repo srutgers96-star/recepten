@@ -377,3 +377,21 @@ describe('the avatar library after spec V3 (§1b)', () => {
     }
   });
 });
+
+describe('hats cover the hair after spec V3b (§1b)', () => {
+  it('every hat except crown, flower-crown and party has a brim between 20 and 40', () => {
+    const OPEN = new Set(['hat-crown', 'hat-flower-crown', 'hat-party']);
+    const hats = PARTS.filter((p) => p['layer'] === 'hat');
+    expect(hats.length).toBe(20);
+    for (const hat of hats) {
+      const id = String(hat['id']);
+      if (OPEN.has(id)) {
+        expect(hat['brim'], id).toBeUndefined();
+      } else {
+        expect(typeof hat['brim'], id).toBe('number');
+        expect(hat['brim'] as number, id).toBeGreaterThanOrEqual(20);
+        expect(hat['brim'] as number, id).toBeLessThanOrEqual(40);
+      }
+    }
+  });
+});

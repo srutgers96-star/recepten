@@ -79,6 +79,10 @@ export interface AvatarPart {
   accent?: string;
   /** Backgrounds only: true = the background covers the profile colour completely (§2c). */
   covers?: boolean;
+  /** Hats only (V3b §1a): the brim line, the y of the hat's lower edge in the middle (minus 1), in
+   *  the part's own 0–100 space. With it, the hair layer is drawn only below this line. Absent on a
+   *  hat that does not enclose the crown (crown, flower crown, party hat). */
+  brim?: number;
 }
 
 export const AVATAR_TONES = ['#f7dcc4', '#f3d2b3', '#e0b08a', '#c68a5a', '#9c6a45', '#6b4530'] as const;
@@ -247,6 +251,8 @@ export function normalizeAvatarParts(data: unknown, badges: readonly Badge[] = [
     const part: AvatarPart = { id, layer: layer as AvatarLayer, nl, en, unlock, rarity, svg };
     if (frame) Object.assign(part, frame);
     if (layer === 'bg' && raw['covers'] === true) part.covers = true;
+    const brim = validBrim(raw['brim']);
+    if (layer === 'hat' && brim !== null) part.brim = brim;
     out.push(part);
   }
   return out;
@@ -396,8 +402,13 @@ export function randomAvatar(unlocked: AvatarPart[], seed: number): AvatarSpec {
 /** One layer's markup in `<g data-layer="LAYER">` (V1b §1d): an addressable group for CSS (the wink
  *  animates `[data-layer="eyes"]`); the part's own markup inside is unchanged. Markup only: nothing
  *  of it is in the data or in the share codes. */
-function wrapLayer(layer: AvatarLayer, svg: string): string {
-  return `<g data-layer="${layer}">${svg}</g>`;
+function wrapLayer(layer: AvatarLayer, svg: string, clipPath?: string): string {
+  return `<g data-layer="${layer}"${clipPath ? ` clip-path="${clipPath}"` : ''}>${svg}</g>`;
+}
+
+/** V3b §1a: a hat's brim is a finite number 0–100; anything else is ignored (null). */
+function validBrim(v: unknown): number | null {
+  return typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 100 ? v : null;
 }
 
 /**
@@ -414,6 +425,10 @@ function wrapLayer(layer: AvatarLayer, svg: string): string {
  * Every part layer (bg … prop, and the frame) is wrapped as `<g data-layer="LAYER">PART SVG</g>`;
  * the rect and the bg layer stay unscaled, everything else is scaled by INNER_SCALE around the
  * bottom centre (the body still runs to the edge). The av-inner group is always there, even empty.
+ * V3b §1a: with a hat that has a `brim` (and a hair layer to clip), `<defs>` gets a second clip path after the first,
+ * `<clipPath id="h-UID"><rect x="-10" y="BRIM" width="120" height="120"/></clipPath>` (part space,
+ * BRIM with at most one decimal), and the hair layer becomes
+ * `<g data-layer="hair" clip-path="url(#h-UID)">`. Without such a hat the output is unchanged.
  * HIGHLIGHT is the clip shape once more, `fill="none" stroke="currentColor" stroke-width="3"`;
  * without a frame the circle r 48, stroke-width 4.
  * CLIP is the chosen frame's `clip`, else the round clip r 46. RING is the plain circle r 48,
@@ -445,12 +460,18 @@ export function renderAvatarSvg(spec: AvatarSpec, parts: ReadonlyMap<string, Ava
   // V3 §1a: the profile-colour rect and the bg layer stay unscaled; every other layer (body … prop)
   // sits in one group scaled by INNER_SCALE, anchored on the bottom edge, so nothing tall falls
   // behind a frame's clip.
+  // V3b §1a: a hat with a brim line hides the hair above that line (clip on the hair layer). Only
+  // when a hair layer is drawn: without hair there is nothing to clip and the output stays as before.
+  const brimRaw = byLayer.has('hair') ? validBrim(byLayer.get('hat')?.brim) : null;
+  const brim = brimRaw === null ? null : String(Math.round(brimRaw * 10) / 10);
+  const hairClip = brim === null ? '' : `<clipPath id="h-${uid}"><rect x="-10" y="${brim}" width="120" height="120"/></clipPath>`;
   let bgLayer = '';
   let inner = '';
   for (const layer of LAYER_ORDER) {
     const part = byLayer.get(layer);
     if (!part || layer === 'frame') continue;
-    const wrapped = wrapLayer(layer, part.svg.replaceAll('__u', uid));
+    const wrapped = wrapLayer(layer, part.svg.replaceAll('__u', uid),
+      layer === 'hair' && brim !== null ? `url(#h-${uid})` : undefined);
     if (layer === 'bg') bgLayer += wrapped;
     else inner += wrapped;
   }
@@ -482,7 +503,7 @@ export function renderAvatarSvg(spec: AvatarSpec, parts: ReadonlyMap<string, Ava
     : '<circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="4"/>';
   return (
     `<svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:${tone};--hair:${hair}${accent ? `;--accent:${accent}` : ''}" aria-hidden="true">` +
-    `<defs><clipPath id="c-${uid}">${clip}</clipPath></defs>` +
+    `<defs><clipPath id="c-${uid}">${clip}</clipPath>${hairClip}</defs>` +
     `<g clip-path="url(#c-${uid})"><rect width="100" height="100" fill="${color}"/>${layers}</g>` +
     ringSvg +
     frameSvg +
