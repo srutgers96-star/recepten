@@ -1306,6 +1306,7 @@ describe('data/badges.json (catalogue smoke, §2d)', () => {
       rule: { kind: 'feature', id: 'standingList' },
       group: 'koken',
       tiers: [1, 3, 5, 10, 15, 20, 30, 50],
+      unlock: { part: 'frame-basket', tier: 5 },
     });
     expect(i).toBeGreaterThan(catalogue.findIndex((b) => b.id === 'boodschapper'));
     const def = catalogue[i] as Badge;

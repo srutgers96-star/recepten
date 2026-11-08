@@ -20,7 +20,7 @@ validator eist dat badge en onderdeel naar elkaar wijzen.
 lagen in `<g clip-path>` (cirkel r 46) en vanaf level 5 een ring r 48, dikte 4, in de niveaukleur. `layerOfId` kent alleen
 `LAYER_ORDER`. De maker (`AvatarSheet.tsx`) heeft `ROWS` = face, tone, hair, hairColor, eyes, mouth, facial, glasses, hat, body,
 prop, pin, bg en `OPTIONAL` voor lagen met een "geen"-tegel; tegels renderen één onderdeel op `TILE_BG` zonder ring. De bibliotheek
-telt 126 onderdelen, waarvan 13 achtergronden (alle doorschijnend óver de profielkleur; `bg-color` tekent niets); 7 legendarische.
+telt 126 onderdelen, waarvan 13 achtergronden (11 doorschijnend óver de profielkleur, `bg-gold` en `bg-sunset` dekkend — correctie van de lens, 8 nov; `bg-color` tekent niets); 7 legendarische.
 Badges `uitdager` (6E, ladder 1/3/5/10/20/35/50/75) en `vaste-klant` (6C, ladder 1/3/5/10/15/20/30/50) hebben nog geen
 `unlock.part`. `tools/avatar-sheet.ts` maakt het contactblad met `renderAvatarSvg`. `tests/avatar.test.ts` eist o.a. dat nieuwe
 onderdelen van ronde 2 op level 3–60 vrijkomen en dat legendarisch ≤ 10 % van de bibliotheek is.
@@ -101,7 +101,7 @@ impliciete ring)."
 |---|---|---|---|---|---|---|
 | frame-ring | Rand / Plain ring | common | level 3 | #f4ede4 | cirkel r 46 | ring r 48, dikte 4, `var(--accent)` |
 | frame-dots | Stippelrand / Dotted ring | common | level 9 | #ffffff | cirkel r 46 | 16 stippen (r 2) op r 48 in `var(--accent)` + dunne ring r 47 dikte 1 |
-| frame-plate | Bord / Plate | rare | level 18 | #2b6fd6 | cirkel r 40 | witte rand r 40–50 (ring dikte 10, fill #fff) met een lijn r 45 dikte 1,5 in `var(--accent)` (Delfts blauw) |
+| frame-plate | Bord / Plate | rare | level 18 | #ffffff | cirkel r 40 | rand r 40–50 (ring dikte 10) in `var(--accent)` met een vaste lijn r 45 dikte 1,5 in Delfts blauw #2b6fd6 (besluit Fable na de lens: het grootste vlak draagt het accent) |
 | frame-hexagon | Zeshoek / Hexagon | rare | level 24 | #6b7a90 | regelmatige zeshoek, punt boven, straal 46 | dezelfde zeshoek op straal 48,5 gestrookt dikte 3 in `var(--accent)`, plus een binnenlijn straal 44 dikte 1 wit 40 % |
 | frame-scallop | Schulprand / Scalloped | rare | level 33 | #e07a5f | cirkel r 44 | 12 halve cirkels (r 7) op r 46 in `var(--accent)` als schulpen, daarbinnen ring r 44 dikte 1,5 wit |
 | frame-board | Houten plank / Wooden board | epic | level 42 | #a9743f | cirkel r 42 | brede rand r 42–50 in `var(--accent)`, 3 nerflijnen (bogen, donkerder #7a4f28 opacity .5) en 4 spijkerkopjes (r 1,5, #d9c7a6) |
@@ -140,8 +140,9 @@ en `vaste-klant` `"unlock": { "part": "frame-basket", "tier": 5 }` (de validator
 | bg-galaxy | Melkweg / Galaxy | legendary | 90 | ja | #120a2a met een schuine lichte band (#6b4fa8 opacity .6), 10 sterren, één planeet met ring |
 
 Dekkende achtergronden beginnen met een `<rect width="100" height="100" fill="…"/>` (of een cirkel r 50) als eerste element; de
-validator eist dat bij `covers: true` (eenvoudige regex op het eerste element). De 13 bestaande achtergronden blijven doorschijnend
-en krijgen geen `covers`. Balans na dit blok (test): legendarisch ≤ 10 % van de bibliotheek (7 + 2 lijsten + 2 achtergronden =
+validator eist dat bij `covers: true` (eenvoudige regex op het eerste element). Van de 13 bestaande achtergronden blijven er 11 doorschijnend; `bg-gold` en `bg-sunset` waren al dekkend en krijgen
+`covers: true` (besluit Fable na de lens: 14 dekkende achtergronden; de validator eist voortaan ook het omgekeerde: een dekkend
+eerste element zonder `covers` is een fout). Balans na dit blok (test): legendarisch ≤ 10 % van de bibliotheek (7 + 2 lijsten + 2 achtergronden =
 11 van 154 = 7 %); ≥ 75 % van de level-commons op level ≤ 20 en ≥ 75 % van de level-rares op level ≤ 50 blijven gelden.
 
 ## 5. Bestandsverdeling
@@ -189,6 +190,17 @@ integrator maakt de validator groen op de echte data. Nieuwe i18n-sleutel: allee
 - De kleurregel versoepelen (bv. een dekkende achtergrond zonder lijst zonder impliciete ring).
 - Een lijst die buiten 0–100 tekent of de budgetten overschrijdt "omdat het mooier is": dan eenvoudiger tekenen en melden.
 - Gradients, `<text>`, nieuwe `style=`-waarden, een dependency.
+
+**Na de lens (besluit Fable, 8 nov):** (1) `bg-gold` en `bg-sunset` waren al dekkend zonder `covers` (lens, gereproduceerd):
+optie (a) — `covers: true` erop, 14 dekkende achtergronden, en de validator plus de kruisproduct-test eisen voortaan dat een
+achtergrond zonder `covers` geen dekkend eerste element heeft. (2) Buiten de maker bleef een ronde schijf in de profielkleur
+achter een niet-ronde lijst staan (`.avatar.has-svg` had `background: profile.color`): weg voor avatars met SVG; de letter-avatar
+houdt zijn cirkel. (3) Lijst-tegels in de maker renderen op een eigen tegelkleur `#b7c0cc`, zodat Rand, Stippelrand en Bord
+zichtbaar zijn. (4) Bord: accent wit op de brede rand, de blauwe lijn vast (§3 aangepast). (5) Bouwerskeuzes akkoord: schulpen op
+r 43 (binnen 0–100), koksmuts met een randring, `--accent` weggelaten zonder lijst, contactblad met ring van level 30, Engelse
+én Nederlandse rij 108 via Jouw stijl → Avatar. (6) Het kaartje op een tweede telefoon en de combinatie plank + sterrennacht
+zijn niet in de dev-app gezien (testprofiel op level 33): rij 108. Contactblad: `scratch/avatar-sheet.html` (niet in git).
+Gebouwd: 8 nov 2026 (6D-F, workflow wf_bc8903f0-0ed; nabewerking (1)–(4) door een Opus-fixer, docs door Fable)
 
 ## 8. Niet in dit blok
 

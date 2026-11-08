@@ -15,6 +15,12 @@
 // many of the level parts of a rarity you have before level 20 / 50 / 80; badge parts apart), then
 // the base avatar on every profile colour, and on every skin tone and hair colour.
 //
+// Block 6D-F (docs/specs/frames.md §2d): a section "Lijsten" with every frame on the base avatar at
+// 96 px, twice: on a see-through background (the frame in its own accent) and on a covering
+// background (the frame in the profile colour); both with a level ring, so the ring along the frame's
+// shape shows. The backgrounds section marks the covering ones "dekkend". The balance table counts
+// the frames like any other part.
+//
 // Node 22 type stripping: type-only syntax, plain ESM; no dependency.
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -43,6 +49,8 @@ const OUT = join(ROOT, 'scratch', 'avatar-sheet.html');
 const SHEET_LAYERS: readonly AvatarLayer[] = ['face', 'hair', 'eyes', 'mouth', 'facial', 'glasses', 'hat', 'body', 'prop', 'pin', 'bg'];
 /** The neutral colour behind every part (cobalt, the default member colour). */
 const BASE_COLOR = '#2b4fa8';
+/** The level the frames section draws with, so the level ring along the frame's shape shows. */
+const FRAME_LEVEL = 30;
 /** Mirrors PROFILE_COLORS in src/profile.ts (not imported: that module needs the app). */
 const PROFILE_COLORS = ['#2b4fa8', '#d9402b', '#3d7a3a', '#d98a2e', '#7a3d8a', '#2a8a8a', '#1f3b73', '#b0246b',
   '#a6421c', '#8a5a00', '#5a6b1f', '#1f6b5a', '#4a5d78', '#7a1f3d'];
@@ -200,12 +208,32 @@ function main(): void {
       const bytes = new TextEncoder().encode(p.svg).length;
       const rule = ruleOf(p);
       const ruleNote = rule !== p.rarity ? ` <span>(regel: ${RARITY_NAME[rule].toLowerCase()})</span>` : '';
-      return `<figure class="r-${p.rarity}" title="${RARITY_NAME[p.rarity]}"><div class="a96">${draw(withPart(p, byId), byId)}</div><figcaption><b>${esc(p.id)}</b><br>` +
+      const coverNote = p.covers === true ? '<i class="cover">dekkend</i>' : '';
+      return `<figure class="r-${p.rarity}" title="${RARITY_NAME[p.rarity]}"><div class="a96">${draw(withPart(p, byId), byId)}</div><figcaption><b>${esc(p.id)}</b>${coverNote}<br>` +
         `${esc(p.nl)} / ${esc(p.en)}<br><em>${RARITY_NAME[p.rarity]}</em>${ruleNote}<br>` +
         `<span>${esc(unlockText(p))} · ${bytes} B · ${elementCount(p.svg)} el</span></figcaption></figure>`;
     }).join('');
     sections.push(`<section id="${layer}"><h2>${layer} (${list.length})</h2><div class="row">${small}</div><div class="grid">${cells}</div></section>`);
   }
+
+  // Block 6D-F: the frames, each twice on the base avatar (§2d). The covering background is the first
+  // `covers` background of the library (without one only the see-through version is drawn).
+  const frames = parts.filter((p) => p.layer === 'frame');
+  const cover = parts.find((p) => p.layer === 'bg' && p.covers === true) ?? null;
+  counts.push(`<a href="#frame">frame ${frames.length}</a>`);
+  const frameCells = frames.map((p) => {
+    const bytes = new TextEncoder().encode(p.svg).length;
+    const spec = withPart(p, byId);
+    const own = draw(spec, byId, BASE_COLOR, FRAME_LEVEL);
+    const covered = cover ? draw({ ...spec, parts: [...spec.parts, cover.id] }, byId, BASE_COLOR, FRAME_LEVEL) : '';
+    return `<figure class="r-${p.rarity}" title="${RARITY_NAME[p.rarity]}"><div class="pair"><div class="a96f" title="eigen accent ${esc(p.accent ?? '')}">${own}</div>` +
+      (cover ? `<div class="a96f" title="dekkend: ${esc(cover.id)}">${covered}</div>` : '') + `</div><figcaption><b>${esc(p.id)}</b><br>` +
+      `${esc(p.nl)} / ${esc(p.en)}<br><em>${RARITY_NAME[p.rarity]}</em> · accent ${esc(p.accent ?? '')}<br>` +
+      `<span>${esc(unlockText(p))} · ${bytes} B · ${elementCount(p.svg)} el</span></figcaption></figure>`;
+  }).join('');
+  sections.push(`<section id="frame"><h2>Lijsten (${frames.length})</h2>` +
+    `<p>Links: doorschijnende achtergrond, de lijst in zijn eigen accent. Rechts: ${cover ? `dekkende achtergrond ${esc(cover.id)}, de lijst in de profielkleur` : 'geen dekkende achtergrond in de bibliotheek'}. Beide met de niveauring van level ${FRAME_LEVEL}.</p>` +
+    `<div class="grid frames">${frameCells}</div></section>`);
 
   const html = `<!doctype html>
 <html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -219,6 +247,7 @@ function main(): void {
   p { margin: 8px 0 4px; color: #6b625b; }
   .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .grid.frames { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
   figure { margin: 0; text-align: center; position: relative; padding-top: 4px; }
   /* The rarity: a coloured corner on every part, and its name in the caption. */
   figure::before { content: ""; position: absolute; top: 0; left: 0; border-top: 22px solid var(--r); border-right: 22px solid transparent; border-top-left-radius: 6px; }
@@ -240,6 +269,10 @@ function main(): void {
   .a40 { width: 40px; height: 40px; border-radius: 999px; overflow: hidden; }
   .a72 { width: 72px; height: 72px; border-radius: 999px; overflow: hidden; }
   .a96 { width: 96px; height: 96px; border-radius: 999px; overflow: hidden; margin: 0 auto; }
+  /* A frame may draw outside the round clip (gold corners, the pan's handle): no round mask. */
+  .a96f { width: 96px; height: 96px; margin: 0 auto; }
+  .pair { display: flex; gap: 6px; justify-content: center; }
+  .cover { display: inline-block; margin-left: 4px; padding: 0 5px; border-radius: 6px; background: #2a2420; color: #fff; font-size: 10px; font-style: normal; }
   .avatar-svg { display: block; width: 100%; height: 100%; }
 </style></head>
 <body>
@@ -255,7 +288,7 @@ ${sections.join('\n')}
 `;
   mkdirSync(dirname(OUT), { recursive: true });
   writeFileSync(OUT, html);
-  console.log(`${OUT}: ${parts.length} parts on ${SHEET_LAYERS.length} layers.\n`);
+  console.log(`${OUT}: ${parts.length} parts on ${SHEET_LAYERS.length + 1} layers.\n`);
   console.log(balanceMarkdown(rows, parts.length));
   console.log(`\nMet de hand anders dan de regel (${deviations.length}): ${deviationText}`);
 }

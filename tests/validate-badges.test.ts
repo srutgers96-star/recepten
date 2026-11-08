@@ -270,7 +270,7 @@ describe('validateAvatarParts (§2f)', () => {
   });
 
   it('an unknown layer', () => {
-    expect(errors([...BASE, part('cape-a', 'cape')])).toEqual(['avatar-parts.json "cape-a": "layer" must be one of bg | body | pin | face | facial | mouth | eyes | hair | glasses | hat | prop.']);
+    expect(errors([...BASE, part('cape-a', 'cape')])).toEqual(['avatar-parts.json "cape-a": "layer" must be one of bg | body | pin | face | facial | mouth | eyes | hair | glasses | hat | prop | frame.']);
   });
 
   it('unlock.badge that does not point back, or is unknown', () => {

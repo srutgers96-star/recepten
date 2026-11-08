@@ -4,6 +4,61 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 6D-F — lijsten (frames) en vrijere achtergronden
+Gebouwd volgens docs/specs/frames.md (bouwer A domein/validator/tests/contactblad, bouwer B data, bouwer C maker/i18n, integrator;
+lichte modus). Geen dependency, geen Dexie-versie, geen setting, geen fragmentsleutel; `#f=`/`#x=` dragen een `frame-*`-id als gewoon
+onderdeel. Bibliotheek 126 → 154 onderdelen (11 lijsten, 17 achtergronden waarvan 12 `covers`; 11 legendarisch = 7 %).
+- **Renderer:** laag `frame` als laatste in `LAYER_ORDER` (`REQUIRED_LAYERS`/`isComplete` ongewijzigd); velden `clip`/`accent`/`covers`
+  (tolerant genormaliseerd); vaste structuur `<defs>clip</defs><g clip><rect profielkleur/>lagen</g>RING FRAME`; met lijst is de
+  niveauring de clipvorm gestrookt (dikte 2); kleurregel: `--accent` = profielkleur bij een dekkende achtergrond, anders het accent van
+  de lijst; **zonder lijst ontbreekt `--accent` in de style** (vorm gepind in de test); dekkend zonder lijst → impliciete `frame-ring`.
+- **Validator:** frame eist `clip` (één vorm, alleen geometrie) en `accent` `#rrggbb` en `var(--accent)` in de svg; `covers` alleen op
+  `bg`, boolean, met dekkend eerste element. Badges: `uitdager` → `frame-laurel` (tier 3), `vaste-klant` → `frame-basket` (tier 5).
+- **Tests:** structuurtests van `renderAvatarSvg` bewust aangepast (rect in de clip); de ronde-2-test "level 3–60" sluit de 28 nieuwe
+  onderdelen uit (kleinste wijziging); kleurregel als kruisproduct 30 achtergronden × (11 lijsten + geen) met `#aa3366`;
+  tests/badges.test.ts pint `vaste-klant` nu met zijn `unlock` (integrator). Groen: check, test (1750), build, build:next,
+  validate:data (154 onderdelen, 0 fouten).
+- **Contactblad:** `node --experimental-strip-types tools/avatar-sheet.ts` → `scratch/avatar-sheet.html` (sectie Lijsten: elke lijst
+  op doorschijnend en op `bg-kitchen`, met niveauring van level 30 alleen voor het blad; achtergronden met markering "dekkend").
+- **Gecontroleerd in de dev-app (375 px, NL en EN, licht en donker):** tab Lijst/Frame na Achtergrond met "geen" en de vier groepen,
+  slotjes met level of badge; Zeshoek (op level 33; Houten plank en Sterrennacht zitten boven dat level) op Verloop → eigen accent,
+  op Keukentegels → `--accent` = profielkleur; lijst "geen" op Keukentegels → impliciete ring in de profielkleur; terug op Verloop →
+  ring weg. Mijn profiel (206 px), Home (72 px), Profielen beheren (48 px) tonen de lijst. Het testprofiel is teruggezet op de letter.
+  DEVICE-TEST rij 108 (NL nieuw, EN gecorrigeerd: de maker zit sinds 6D-S onder Jouw stijl → Avatar, niet onder Naam & kleur).
+- **Open voor Fable/Stijn (niet zelf beslist):**
+  1. **Ronde schijf in de profielkleur rond een lijst.** De `.avatar`-span (ProfilesScreen.tsx `Avatar`) heeft `background:
+     profielkleur` en `border-radius: 999px`; buiten een niet-ronde of kleinere lijst (Zeshoek, Gouden lijst, Bord r 40) blijft
+     overal behalve in de maker een blauwe cirkel zichtbaar, dus de lijst "vervangt de ronde rand" niet helemaal. Voorstel:
+     `.avatar.has-svg { background: transparent }` (zonder lijst verandert dan alleen de band r 46–50 onder level 5). Niet gedaan:
+     buiten de bestandsverdeling en een ontwerpkeuze.
+  2. **Rand en Stippelrand zijn als tegel bijna onzichtbaar** (accent #f4ede4/#ffffff op de lichte tegel); Bord toont als tegel
+     alleen het dunne blauwe lijntje (witte rand op wit). Accentkleuren komen uit §3; niet aangepast.
+  3. **bg-gold en bg-sunset** beginnen met een dekkende rect maar hebben geen `covers` (§4: de 13 bestaande blijven zoals ze zijn);
+     zonder lijst is de profielkleur daar onzichtbaar (vanaf level 5 dekt de niveauring ook de band r 46–50 van de span); mét een
+     lijst evenmin, want `--accent` is dan de accent van de lijst (bv. frame-board #a9743f). Gereproduceerd (review 8 nov) met
+     profielkleur #aa3366 op level 30: '#aa3366' staat precies één keer in de string, in de rect binnen de clip, die de dekkende rect
+     van de achtergrond meteen overschildert. De kleurregeltest (§6.3) mist het, want hij kijkt bij een niet-`covers`-achtergrond
+     alleen naar `fill` van die rect. Spec botst met zichzelf (Kritische lezer 2 / §2c "geen combinatie" tegenover §4 "de 13
+     bestaande krijgen geen `covers`" en de feitencheck "alle doorschijnend"); §7 laat dit bij Fable. Niet zelf beslist, twee opties:
+     (a) `"covers": true` op bg-gold en bg-sunset (tekening blijft; validator accepteert het, het eerste element is al een dekkende
+     rect; lijsten nemen dan de profielkleur over, zonder lijst verschijnt de impliciete ring; 14 dekkende achtergronden i.p.v. 12);
+     (b) de eerste rect van beide doorschijnend maken (bv. `opacity=".55"` of de rect weglaten, zodat de profielkleur doorschijnt
+     zoals bij de andere 11; Goud en Zonsondergang zien er dan per profielkleur anders uit). Bij beide hoort een test die bij een
+     niet-`covers`-achtergrond eist dat geen ondoorzichtige rect 0 0 100 100 de profielkleur bedekt.
+  4. **Tekenkeuzes van bouwer B:** frame-scallop schulpen op r 43 i.p.v. r 46 (r 46 + 7 valt buiten 0–100; §7: eenvoudiger tekenen
+     en melden); frame-plate volgt de tabel (witte rand, accentlijn 1,5) terwijl de regel "accent op het grootste vlak" iets anders
+     vraagt, dus bij een dekkende achtergrond is de profielkleur daar alleen een dunne lijn; frame-chefhat kreeg een randring
+     (r 46,5, dikte 5, accent) onder plofjes en band; verder vrije details (steel pan 8 breed, maten gouden lijst, kleuren van
+     planeet/zon/takken). Bevestigen of aanpassen.
+  5. Het kaartje `#f=` op een tweede telefoon is niet in de dev-app bekeken (staat in rij 108).
+- **Besluit Fable (8 nov, na de lens):** `bg-gold`/`bg-sunset` krijgen `covers: true` (14 dekkend) en de validator eist het omgekeerde
+  (dekkend eerste element zonder `covers` = fout; kruisproduct-test aangescherpt); de ronde schijf in de profielkleur achter een
+  niet-ronde lijst buiten de maker is weg (`.avatar.has-svg`); lijst-tegels op eigen tegelkleur `#b7c0cc`; Bord met het accent op de
+  brede rand en een vaste blauwe lijn; overige bouwerskeuzes akkoord (schulpen r 43, koksmuts-randring, `--accent` weg zonder lijst,
+  contactblad level 30). Nabewerking door een Opus-fixer (gate groen: 1751 tests). Nog klein, voor later: de ronde
+  `box-shadow`-ring van een gekozen chip in "Stuur nieuwe naar …" (`.delta .partner-chip.on .avatar`) blijft rond bij een zeshoek of
+  gouden lijst. Spec: besluitalinea + Gebouwd-regel met run-id.
+
 ## 8 nov (Fable): spec 6D-F — lijsten (frames) en vrijere achtergronden
 Spec docs/specs/frames.md geschreven (twaalfde laag `frame` buiten de clip, eigen clipvorm, niveauring langs de vorm, harde
 kleurregel met impliciete ring in de profielkleur bij een dekkende achtergrond, 11 lijsten en 17 achtergronden met id/naam/

@@ -27,7 +27,7 @@ import {
   type Rarity,
 } from '../src/domain/avatar';
 import { TIER_COLOURS, normalizeBadges } from '../src/domain/badges';
-import { AVATAR_RARITIES, validateAvatarParts } from '../tools/validate-data.ts';
+import { AVATAR_LAYERS, AVATAR_RARITIES, coversFirstElement, validateAvatarParts } from '../tools/validate-data.ts';
 
 const BADGES = normalizeBadges(badgesJson as unknown);
 const PARTS = normalizeAvatarParts(partsJson as unknown, BADGES);
@@ -79,6 +79,46 @@ const REFERENCES: Readonly<Record<string, string>> = {
   'prop-wooden-spoon': '<path d="M83 82L79 64" stroke="#8a4a1f" stroke-width="6" stroke-linecap="round"/><ellipse cx="78" cy="56" rx="8" ry="11" fill="#c58a4a" stroke="#2a2420" stroke-width="1.5"/><ellipse cx="78" cy="55" rx="4" ry="6" fill="#a86f33"/>',
   'bg-rays': '<circle cx="50" cy="50" r="62" fill="#fff" opacity=".16"/><path d="M50 50L8 0h18zM50 50L44 0h18zM50 50L80 0h18zM50 50L100 18v18zM50 50L100 60v18zM50 50L0 22v18zM50 50L0 58v18zM50 50L20 100h18zM50 50L62 100h18z" fill="#fff" opacity=".26"/>',
 };
+
+/**
+ * Round 3 (docs/specs/frames.md §3 and §4, block 6D-F): the 11 frames and the 17 new backgrounds,
+ * literally as Fable decided them. Unlock: a level, or [badge, tier]. Frames: accent and clip; the
+ * clip as [cx, cy, r] for a circle, 'hexagon' or 'gold-rect'. Backgrounds: whether they cover.
+ */
+const ROUND_3_FRAMES: Readonly<Record<string, { unlock: number | readonly [string, number]; rarity: Rarity; accent: string; clip: readonly [number, number, number] | 'hexagon' | 'gold-rect' }>> = {
+  'frame-ring': { unlock: 3, rarity: 'common', accent: '#f4ede4', clip: [50, 50, 46] },
+  'frame-dots': { unlock: 9, rarity: 'common', accent: '#ffffff', clip: [50, 50, 46] },
+  'frame-plate': { unlock: 18, rarity: 'rare', accent: '#ffffff', clip: [50, 50, 40] },
+  'frame-hexagon': { unlock: 24, rarity: 'rare', accent: '#6b7a90', clip: 'hexagon' },
+  'frame-scallop': { unlock: 33, rarity: 'rare', accent: '#e07a5f', clip: [50, 50, 44] },
+  'frame-board': { unlock: 42, rarity: 'epic', accent: '#a9743f', clip: [50, 50, 42] },
+  'frame-pan': { unlock: 55, rarity: 'epic', accent: '#3b3f45', clip: [50, 50, 43] },
+  'frame-laurel': { unlock: ['uitdager', 3], rarity: 'epic', accent: '#4f8a3c', clip: [50, 50, 44] },
+  'frame-basket': { unlock: ['vaste-klant', 5], rarity: 'epic', accent: '#b98a4a', clip: [50, 50, 43] },
+  'frame-chefhat': { unlock: 70, rarity: 'legendary', accent: '#ffffff', clip: [50, 50, 44] },
+  'frame-gold': { unlock: 85, rarity: 'legendary', accent: '#c9a227', clip: 'gold-rect' },
+};
+const ROUND_3_BGS: Readonly<Record<string, { level: number; rarity: Rarity; covers: boolean }>> = {
+  'bg-stripes': { level: 5, rarity: 'common', covers: false },
+  'bg-chevron': { level: 7, rarity: 'common', covers: false },
+  'bg-waves': { level: 10, rarity: 'common', covers: false },
+  'bg-grid': { level: 16, rarity: 'common', covers: false },
+  'bg-checker': { level: 19, rarity: 'common', covers: false },
+  'bg-kitchen': { level: 21, rarity: 'rare', covers: true },
+  'bg-herbs': { level: 25, rarity: 'rare', covers: true },
+  'bg-wood': { level: 27, rarity: 'rare', covers: true },
+  'bg-night': { level: 35, rarity: 'rare', covers: true },
+  'bg-spring': { level: 40, rarity: 'rare', covers: true },
+  'bg-summer': { level: 44, rarity: 'epic', covers: true },
+  'bg-autumn': { level: 48, rarity: 'epic', covers: true },
+  'bg-winter': { level: 52, rarity: 'epic', covers: true },
+  'bg-market': { level: 58, rarity: 'epic', covers: true },
+  'bg-fire': { level: 65, rarity: 'epic', covers: true },
+  'bg-aurora': { level: 75, rarity: 'legendary', covers: true },
+  'bg-galaxy': { level: 90, rarity: 'legendary', covers: true },
+};
+/** Every id of round 3: left out of the round-2 checks (frames.md §6.1). */
+const ROUND_3: ReadonlySet<string> = new Set([...Object.keys(ROUND_3_FRAMES), ...Object.keys(ROUND_3_BGS)]);
 
 /**
  * Props left out of the clip test: Fable's reference spoon (UI-C §3, byte for byte) has its handle
@@ -267,8 +307,9 @@ describe('the library after round 2 (block 6D-UI, UI-C §2–§4 and §7)', () =
   it('has at least 120 parts and at least the target of §4 per layer', () => {
     expect(PARTS.length).toBeGreaterThanOrEqual(120);
     expect(Object.values(TARGET).reduce((a, b) => a + b, 0)).toBe(120);
-    expect(Object.keys(TARGET).sort()).toEqual([...LAYER_ORDER].sort());
-    for (const layer of LAYER_ORDER) {
+    // Round 2 knew no frames (block 6D-F adds that layer; its own test is below).
+    expect(Object.keys(TARGET).sort()).toEqual(LAYER_ORDER.filter((l) => l !== 'frame').sort());
+    for (const layer of Object.keys(TARGET)) {
       expect(PARTS.filter((p) => p.layer === layer).length, layer).toBeGreaterThanOrEqual(TARGET[layer] ?? 0);
     }
   });
@@ -336,7 +377,9 @@ describe('the library after round 2 (block 6D-UI, UI-C §2–§4 and §7)', () =
   });
 
   it('every level 3–30 unlocks at least one part, and at least one new part; new parts unlock on level 3–60', () => {
-    const fresh = PARTS.filter((p) => !(p.id in ROUND_1));
+    // The parts of round 2 only: the frames and the 17 backgrounds of round 3 (block 6D-F) go up to
+    // level 90 by design and are left out (frames.md §6.1).
+    const fresh = PARTS.filter((p) => !(p.id in ROUND_1) && !ROUND_3.has(p.id));
     const levelOf = (p: AvatarPart): number | null => ('level' in p.unlock ? p.unlock.level : null);
     for (let level = 3; level <= 30; level++) {
       expect(PARTS.some((p) => levelOf(p) === level), `level ${level}`).toBe(true);
@@ -620,11 +663,15 @@ describe('renderAvatarSvg', () => {
   const spec: AvatarSpec = { v: 1, parts: ['hat-toque', 'face-round', 'eyes-happy', 'mouth-grin', 'body-apron', 'bg-gradient'], tone: '#e0b08a', hair: '#8a5a2b' };
 
   it('has the fixed structure: clip path with the uid, the profile colour, the layers, no ring under level 5', () => {
+    // Block 6D-F (frames.md §2b): the profile colour is a rect INSIDE the clip group (was a circle
+    // r 46 before it); without a frame the style has no --accent (the pinned form) and the clip is the
+    // round one.
     const svg = renderAvatarSvg(spec, BY_ID, { color: '#d9402b', level: 3, uid: 'av7' });
     expect(svg.startsWith('<svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:#e0b08a;--hair:#8a5a2b" aria-hidden="true">')).toBe(true);
+    expect(svg).not.toContain('--accent');
     expect(svg).toContain('<defs><clipPath id="c-av7"><circle cx="50" cy="50" r="46"/></clipPath></defs>');
-    expect(svg).toContain('<circle cx="50" cy="50" r="46" fill="#d9402b"/>');
-    expect(svg).toContain('<g clip-path="url(#c-av7)">');
+    expect(svg).toContain('<g clip-path="url(#c-av7)"><rect width="100" height="100" fill="#d9402b"/>');
+    expect(svg).not.toContain('<circle cx="50" cy="50" r="46" fill=');
     expect(svg).toContain('id="c-av7"');
     expect(svg).toContain('url(#c-av7)');
     expect(svg).not.toContain('__u');
@@ -685,5 +732,388 @@ describe('renderAvatarSvg', () => {
       expect(svg).toContain(p.svg.replaceAll('__u', 'p1'));
       expect(svg).not.toContain('__u');
     }
+  });
+});
+
+// ---------------------------------------------------------------------------- block 6D-F: frames
+
+/** The svg split into what lies inside the clip group and what lies outside it (ring, frame, root). */
+function splitClip(svg: string): { inside: string; outside: string } {
+  const start = svg.indexOf('<g clip-path="url(#c-');
+  if (start < 0) return { inside: '', outside: svg };
+  let depth = 0;
+  for (const m of svg.slice(start).matchAll(/<(\/?)g[\s>]/g)) {
+    depth += m[1] ? -1 : 1;
+    if (depth === 0) {
+      const end = start + (m.index ?? 0) + '</g>'.length;
+      return { inside: svg.slice(start, end), outside: svg.slice(0, start) + svg.slice(end) };
+    }
+  }
+  throw new Error('unbalanced <g>');
+}
+
+/** Self-made test parts (frames.md §6: the colour rule is tested without builder B's data too). */
+const TEST_RING_SVG = '<circle cx="50" cy="50" r="48" fill="none" stroke="var(--accent)" stroke-width="4"/>';
+const HEX_CLIP = '<polygon points="50,4 89.84,27 89.84,73 50,96 10.16,73 10.16,27"/>';
+const TEST_PARTS_RAW = [
+  { id: 'frame-ring', layer: 'frame', nl: 'Rand', en: 'Plain ring', unlock: { level: 3 }, rarity: 'common',
+    clip: '<circle cx="50" cy="50" r="46"/>', accent: '#f4ede4', svg: TEST_RING_SVG },
+  { id: 'frame-hextest', layer: 'frame', nl: 'Zeshoek', en: 'Hexagon', unlock: { level: 24 }, rarity: 'rare',
+    clip: HEX_CLIP, accent: '#6b7a90', svg: '<polygon points="50,1.5 92,25.75 92,74.25 50,98.5 8,74.25 8,25.75" fill="none" stroke="var(--accent)" stroke-width="3" id="h__u"/>' },
+  { id: 'bg-seethrough', layer: 'bg', nl: 'Door', en: 'Through', unlock: { level: 3 }, rarity: 'common',
+    svg: '<rect width="100" height="100" fill="#fff" opacity=".2"/>' },
+  { id: 'bg-cover', layer: 'bg', nl: 'Nacht', en: 'Night', unlock: { level: 3 }, rarity: 'rare', covers: true,
+    svg: '<rect width="100" height="100" fill="#1b2a4a"/><circle cx="20" cy="20" r="2" fill="#fff5c2"/>' },
+];
+const TEST_PARTS = normalizeAvatarParts(TEST_PARTS_RAW);
+/** The five default parts plus the test parts. */
+const TEST_LIB: ReadonlyMap<string, AvatarPart> = new Map([
+  ...defaultAvatar().parts.map((id) => [id, part(id)] as const),
+  ...TEST_PARTS.map((p) => [p.id, p] as const),
+]);
+const TEST_LIB_NO_RING: ReadonlyMap<string, AvatarPart> = new Map([...TEST_LIB].filter(([id]) => id !== 'frame-ring'));
+const withParts = (...ids: string[]): AvatarSpec => ({ ...defaultAvatar(), parts: [...defaultAvatar().parts, ...ids] });
+
+describe('block 6D-F: the frame layer and its fields (frames.md §2a, §6.2)', () => {
+  it("'frame' is the last layer, not required; the validator mirrors the layers", () => {
+    expect(LAYER_ORDER[LAYER_ORDER.length - 1]).toBe('frame');
+    expect(LAYER_ORDER).toHaveLength(12);
+    expect(REQUIRED_LAYERS).toEqual(['face', 'eyes', 'mouth', 'body']);
+    expect(AVATAR_LAYERS).toEqual([...LAYER_ORDER]);
+  });
+
+  it('normalizeAvatarParts reads clip and accent on a frame and covers on a background', () => {
+    const ring = TEST_PARTS.find((p) => p.id === 'frame-ring');
+    expect(ring).toMatchObject({ layer: 'frame', clip: '<circle cx="50" cy="50" r="46"/>', accent: '#f4ede4' });
+    expect(ring?.covers).toBeUndefined();
+    expect(TEST_PARTS.find((p) => p.id === 'bg-cover')?.covers).toBe(true);
+    expect('covers' in TEST_PARTS.find((p) => p.id === 'bg-seethrough')!).toBe(false);
+  });
+
+  it('a frame without a valid clip or accent is skipped', () => {
+    const ok = TEST_PARTS_RAW[0]!;
+    const out = normalizeAvatarParts([
+      { ...ok, id: 'frame-no-clip', clip: undefined },
+      { ...ok, id: 'frame-no-accent', accent: undefined },
+      { ...ok, id: 'frame-named-accent', accent: 'red' },
+      { ...ok, id: 'frame-short-accent', accent: '#fff' },
+      { ...ok, id: 'frame-clip-fill', clip: '<circle cx="50" cy="50" r="46" fill="#000"/>' },
+      { ...ok, id: 'frame-clip-style', clip: '<circle cx="50" cy="50" r="46" style="fill:red"/>' },
+      { ...ok, id: 'frame-clip-id', clip: '<circle id="x" cx="50" cy="50" r="46"/>' },
+      { ...ok, id: 'frame-clip-two', clip: '<circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="40"/>' },
+      { ...ok, id: 'frame-clip-g', clip: '<g><circle cx="50" cy="50" r="46"/></g>' },
+      { ...ok, id: 'frame-clip-number', clip: 46 },
+      { ...ok, id: 'frame-ok' },
+      { ...ok, id: 'frame-path', clip: '<path d="M50 4L96 50 50 96 4 50z"/>', accent: '#ABCDEF' },
+    ]);
+    expect(out.map((p) => p.id)).toEqual(['frame-ok', 'frame-path']);
+    expect(out[1]!.accent).toBe('#abcdef');
+  });
+
+  it('covers only when literally true and only on a background; clip/accent/covers ignored on other layers', () => {
+    const base = { nl: 'x', en: 'x', unlock: { level: 3 }, svg: '<rect width="100" height="100" fill="#123456"/>' };
+    const out = normalizeAvatarParts([
+      { ...base, id: 'bg-string', layer: 'bg', covers: 'true' },
+      { ...base, id: 'bg-one', layer: 'bg', covers: 1 },
+      { ...base, id: 'bg-false', layer: 'bg', covers: false },
+      { ...base, id: 'hat-covers', layer: 'hat', covers: true, clip: '<circle cx="50" cy="50" r="46"/>', accent: '#ffffff' },
+    ]);
+    expect(out.map((p) => p.id)).toEqual(['bg-string', 'bg-one', 'bg-false', 'hat-covers']);
+    for (const p of out) {
+      expect('covers' in p, p.id).toBe(false);
+      expect('clip' in p, p.id).toBe(false);
+      expect('accent' in p, p.id).toBe(false);
+    }
+  });
+
+  it('normalizeAvatarSpec keeps a frame-* id (a known layer), one per layer', () => {
+    expect(normalizeAvatarSpec({ v: 1, parts: ['face-round', 'frame-gold', 'frame-ring'] })?.parts).toEqual(['face-round', 'frame-gold']);
+    expect(normalizeAvatarSpec({ v: 1, parts: ['frame-future'] })?.parts).toEqual(['frame-future']);
+  });
+
+  it('isComplete does not need a frame', () => {
+    expect(isComplete(defaultAvatar(), TEST_LIB)).toBe(true);
+    expect(isComplete(withParts('frame-ring'), TEST_LIB)).toBe(true);
+  });
+
+  it('randomAvatar can pick a frame (optional layer, about half the time) and stays complete', () => {
+    const unlocked = [...TEST_LIB.values()];
+    const specs = Array.from({ length: 40 }, (_, i) => randomAvatar(unlocked, 500 + i));
+    const withFrame = specs.filter((s) => s.parts.some((id) => id.startsWith('frame-')));
+    expect(withFrame.length).toBeGreaterThan(5);
+    expect(withFrame.length).toBeLessThan(35);
+    for (const s of specs) {
+      expect(isComplete(s, TEST_LIB)).toBe(true);
+      expect(normalizeAvatarSpec(s)).toEqual(s);
+      // The frame, when there, comes last (drawing order).
+      const i = s.parts.findIndex((id) => id.startsWith('frame-'));
+      if (i >= 0) expect(i).toBe(s.parts.length - 1);
+    }
+  });
+});
+
+describe('block 6D-F: renderAvatarSvg with a frame (frames.md §2b, §6.1)', () => {
+  it('a frame: its clip, the level ring as the stroked clip shape, the frame after the ring, --accent its own colour', () => {
+    const svg = renderAvatarSvg(withParts('frame-hextest'), TEST_LIB, { color: '#d9402b', level: 10, uid: 'f1' });
+    expect(svg.startsWith('<svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:#f3d2b3;--hair:#4a2c17;--accent:#6b7a90" aria-hidden="true">')).toBe(true);
+    expect(svg).toContain(`<defs><clipPath id="c-f1">${HEX_CLIP}</clipPath></defs>`);
+    expect(svg).toContain('<g clip-path="url(#c-f1)"><rect width="100" height="100" fill="#d9402b"/>');
+    const ring = '<polygon points="50,4 89.84,27 89.84,73 50,96 10.16,73 10.16,27" fill="none" stroke="#3d9a3a" stroke-width="2"/>';
+    const frame = TEST_LIB.get('frame-hextest')!.svg.replaceAll('__u', 'f1');
+    expect(svg).toContain(`</g>${ring}${frame}</svg>`);
+    expect(svg).not.toContain('r="48" fill="none" stroke="#3d9a3a"');
+    expect(svg).not.toContain('__u');
+    // The frame is outside the clip group; nothing of it inside.
+    const { inside, outside } = splitClip(svg);
+    expect(inside).not.toContain('var(--accent)');
+    expect(outside).toContain(frame);
+  });
+
+  it('a frame under level 5: no ring, the frame right after the clip group', () => {
+    const svg = renderAvatarSvg(withParts('frame-ring'), TEST_LIB, { color: '#d9402b', level: 3, uid: 'f2' });
+    expect(svg).toContain(`</g>${TEST_RING_SVG}</svg>`);
+    expect(svg).toContain(';--accent:#f4ede4"');
+  });
+
+  it('without a frame: the ring as before (r 48, width 4), no --accent', () => {
+    const svg = renderAvatarSvg(withParts('bg-seethrough'), TEST_LIB, { color: '#d9402b', level: 10, uid: 'f3' });
+    expect(svg).toContain('</g><circle cx="50" cy="50" r="48" fill="none" stroke="#3d9a3a" stroke-width="4"/></svg>');
+    expect(svg).not.toContain('--accent');
+    expect(svg).toContain('<clipPath id="c-f3"><circle cx="50" cy="50" r="46"/></clipPath>');
+  });
+
+  it('a covering background hands the profile colour to the frame', () => {
+    const svg = renderAvatarSvg(withParts('bg-cover', 'frame-hextest'), TEST_LIB, { color: '#aa3366', level: 10, uid: 'f4' });
+    expect(svg).toContain(';--accent:#aa3366"');
+    expect(svg).not.toContain('#6b7a90');
+  });
+
+  it('implicit ring: a covering background without a frame draws frame-ring in the profile colour', () => {
+    for (const spec of [withParts('bg-cover'), withParts('bg-cover', 'frame-unknown')]) {
+      const svg = renderAvatarSvg(spec, TEST_LIB, { color: '#aa3366', level: 10, uid: 'f5' });
+      expect(svg).toContain(';--accent:#aa3366"');
+      expect(svg).toContain('<clipPath id="c-f5"><circle cx="50" cy="50" r="46"/></clipPath>');
+      expect(svg).toContain(`</g><circle cx="50" cy="50" r="46" fill="none" stroke="#3d9a3a" stroke-width="2"/>${TEST_RING_SVG}</svg>`);
+    }
+  });
+
+  it('implicit ring without frame-ring in the library: a plain ring in the profile colour after a thin level ring', () => {
+    const ten = renderAvatarSvg(withParts('bg-cover'), TEST_LIB_NO_RING, { color: '#aa3366', level: 10, uid: 'f6' });
+    expect(ten).toContain('</g><circle cx="50" cy="50" r="45" fill="none" stroke="#3d9a3a" stroke-width="2"/><circle cx="50" cy="50" r="48" fill="none" stroke="#aa3366" stroke-width="4"/></svg>');
+    expect(ten).not.toContain('--accent');
+    const three = renderAvatarSvg(withParts('bg-cover'), TEST_LIB_NO_RING, { color: '#aa3366', level: 3, uid: 'f6' });
+    expect(three).toContain('</g><circle cx="50" cy="50" r="48" fill="none" stroke="#aa3366" stroke-width="4"/></svg>');
+  });
+
+  it('an unsafe colour falls back to cobalt in the rect and in --accent alike', () => {
+    const svg = renderAvatarSvg(withParts('bg-cover'), TEST_LIB, { color: '#fff" onload="x()', level: 0, uid: 'f7' });
+    expect(svg).not.toMatch(/onload/);
+    expect(svg).toContain(';--accent:#2b4fa8"');
+    expect(svg).toContain('fill="#2b4fa8"');
+  });
+});
+
+/** The colour rule §2c over every background × (every frame + none) of a library (frames.md §6.3). */
+function checkColourRule(lib: ReadonlyMap<string, AvatarPart>): number {
+  const COLOUR = '#aa3366';
+  const all = [...lib.values()];
+  const bgs = all.filter((p) => p.layer === 'bg');
+  const frames: Array<AvatarPart | null> = [null, ...all.filter((p) => p.layer === 'frame')];
+  let n = 0;
+  for (const bg of bgs) {
+    for (const frame of frames) {
+      for (const level of [0, 10]) {
+        const ids = frame ? [bg.id, frame.id] : [bg.id];
+        const svg = renderAvatarSvg(withParts(...ids), lib, { color: COLOUR, level, uid: 'k' });
+        const { inside, outside } = splitClip(svg);
+        const label = `${bg.id} × ${frame?.id ?? 'none'} @${level}`;
+        expect(inside.startsWith(`<g clip-path="url(#c-k)"><rect width="100" height="100" fill="${COLOUR}"/>`), label).toBe(true);
+        // Decision a: a background without covers must never start with a covering element,
+        // or it would hide the profile colour without the implicit ring.
+        if (bg.covers !== true) expect(coversFirstElement(bg.svg), label).toBe(false);
+        if (bg.covers === true) {
+          expect(outside.includes(`--accent:${COLOUR}`) || outside.includes(`stroke="${COLOUR}"`), label).toBe(true);
+          if (frame) expect(outside, label).toContain(`--accent:${COLOUR}`);
+        } else if (frame) {
+          expect(outside, label).toContain(`--accent:${frame.accent}`);
+        }
+        n++;
+      }
+    }
+  }
+  return n;
+}
+
+describe('block 6D-F: the colour rule (frames.md §2c, §6.3)', () => {
+  it('holds over the self-made test library (both backgrounds × both frames + none), also without frame-ring', () => {
+    expect(checkColourRule(TEST_LIB)).toBe(2 * 3 * 2);
+    expect(checkColourRule(TEST_LIB_NO_RING)).toBe(2 * 2 * 2);
+  });
+
+  it('holds over the real library: every background × (every frame + none)', () => {
+    const bgs = PARTS.filter((p) => p.layer === 'bg').length;
+    const frames = PARTS.filter((p) => p.layer === 'frame').length;
+    expect(checkColourRule(BY_ID)).toBe(bgs * (frames + 1) * 2);
+  });
+});
+
+describe('block 6D-F: the validator (frames.md §2d, §6.5)', () => {
+  const required = [
+    { id: 'face-a', layer: 'face', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+    { id: 'eyes-a', layer: 'eyes', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+    { id: 'mouth-a', layer: 'mouth', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+    { id: 'body-a', layer: 'body', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+  ];
+  const frame = { id: 'frame-a', layer: 'frame', nl: 'a', en: 'a', unlock: { level: 9 }, clip: '<circle cx="50" cy="50" r="46"/>', accent: '#f4ede4', svg: TEST_RING_SVG };
+  const cover = { id: 'bg-a', layer: 'bg', nl: 'a', en: 'a', unlock: { level: 21 }, covers: true, svg: '<rect width="100" height="100" fill="#1b2a4a"/><circle cx="20" cy="20" r="2" fill="#fff"/>' };
+  const errorsOf = (extra: Array<Record<string, unknown>>, badges: unknown[] = []) => validateAvatarParts([...required, ...extra], badges).errors;
+
+  it('a valid frame and a valid covering background pass; a frame is not needed on level 3', () => {
+    expect(validateAvatarParts([...required, frame, cover], [])).toMatchObject({ errors: [], warnings: [] });
+    expect(errorsOf([{ ...frame, clip: HEX_CLIP }, { ...frame, id: 'frame-b', clip: '<rect x="8" y="8" width="84" height="84" rx="14"/>' }])).toEqual([]);
+    expect(errorsOf([{ ...cover, svg: '<circle cx="50" cy="50" r="50" fill="#123456"/>' }])).toEqual([]);
+  });
+
+  it('a frame without clip or accent, or with a bad one', () => {
+    expect(errorsOf([{ ...frame, clip: undefined }])).toEqual(['avatar-parts.json "frame-a": a frame needs "clip" (one SVG shape element).']);
+    expect(errorsOf([{ ...frame, accent: undefined }])).toEqual(['avatar-parts.json "frame-a": a frame needs "accent" as #rrggbb, got undefined.']);
+    expect(errorsOf([{ ...frame, accent: '#fff' }])).toHaveLength(1);
+    expect(errorsOf([{ ...frame, accent: 'var(--x)' }])).toHaveLength(1);
+  });
+
+  it('a clip with fill=, style=, id=, two elements or another element is an error', () => {
+    expect(errorsOf([{ ...frame, clip: '<circle cx="50" cy="50" r="46" fill="#000"/>' }])).toEqual([
+      'avatar-parts.json "frame-a": clip attribute "fill" is not allowed (geometry only).',
+    ]);
+    for (const clip of ['<circle cx="50" cy="50" r="46" style="fill:red"/>', '<circle id="c__u" cx="50" cy="50" r="46"/>',
+      '<circle cx="50" cy="50" r="46" stroke="#000"/>', '<circle cx="50" cy="50" r="46"/><circle r="2"/>',
+      '<g><circle cx="50" cy="50" r="46"/></g>', '<line x1="0" y1="0" x2="1" y2="1"/>', '<circle cx="50" cy="50" r="46">', '<circle/>']) {
+      expect(errorsOf([{ ...frame, clip }]), clip).not.toEqual([]);
+    }
+  });
+
+  it("a frame's svg must use var(--accent), and the svg drawing rules hold for frames too", () => {
+    expect(errorsOf([{ ...frame, svg: '<circle cx="50" cy="50" r="48" fill="none" stroke="#000" stroke-width="4"/>' }])).toEqual([
+      'avatar-parts.json "frame-a": a frame\'s svg must use var(--accent) at least once.',
+    ]);
+    expect(errorsOf([{ ...frame, svg: `${TEST_RING_SVG}<circle r="1" style="fill:var(--accent)"/>` }])).toHaveLength(1);
+    expect(errorsOf([{ ...frame, svg: `${TEST_RING_SVG}<circle id="x" r="1"/>` }])).toHaveLength(1);
+  });
+
+  it('clip or accent on another layer, covers on another layer than bg, covers not a boolean', () => {
+    expect(errorsOf([{ id: 'hat-a', layer: 'hat', nl: 'a', en: 'a', unlock: { level: 4 }, svg: '', clip: '<circle cx="50" cy="50" r="46"/>' }]))
+      .toEqual(['avatar-parts.json "hat-a": "clip" is only for layer "frame".']);
+    expect(errorsOf([{ id: 'hat-a', layer: 'hat', nl: 'a', en: 'a', unlock: { level: 4 }, svg: '', accent: '#ffffff' }]))
+      .toEqual(['avatar-parts.json "hat-a": "accent" is only for layer "frame".']);
+    expect(errorsOf([{ id: 'hat-a', layer: 'hat', nl: 'a', en: 'a', unlock: { level: 4 }, svg: '', covers: true }]))
+      .toEqual(['avatar-parts.json "hat-a": "covers" is only for layer "bg".']);
+    expect(errorsOf([{ ...cover, covers: 'yes' }])).toEqual(['avatar-parts.json "bg-a": "covers" must be a boolean, got "yes".']);
+    expect(errorsOf([{ ...cover, covers: false, svg: '<circle cx="20" cy="20" r="2" fill="#fff"/>' }])).toEqual([]);
+  });
+
+  it('a background whose first element covers but has no covers: true is an error (decision a)', () => {
+    const msg = 'avatar-parts.json "bg-a": its first element covers the profile colour but has no "covers": true.';
+    expect(errorsOf([{ ...cover, covers: false }])).toEqual([msg]);
+    const { covers: _drop, ...noCovers } = cover;
+    expect(errorsOf([noCovers])).toEqual([msg]);
+    expect(errorsOf([{ ...noCovers, svg: '<circle cx="50" cy="50" r="50" fill="#123456"/>' }])).toEqual([msg]);
+    expect(errorsOf([{ ...noCovers, svg: '<rect width="100" height="100" fill="#fff" opacity=".16"/>' }])).toEqual([]);
+  });
+
+  it('covers: true without a covering first element is an error', () => {
+    const msg = 'avatar-parts.json "bg-a": "covers": true needs a covering first element (<rect width="100" height="100" fill="…"/> or a circle r 50).';
+    for (const svg of ['<circle cx="20" cy="20" r="2" fill="#fff"/><rect width="100" height="100" fill="#1b2a4a"/>',
+      '<rect width="100" height="100" fill="#fff" opacity=".14"/>', '<rect width="100" height="60" fill="#8fd0f0"/>',
+      '<rect x="5" width="100" height="100" fill="#123456"/>', '<rect width="100" height="100" fill="none"/>',
+      '<circle cx="50" cy="50" r="46" fill="#123456"/>', '']) {
+      expect(errorsOf([{ ...cover, svg }]), svg).toEqual([msg]);
+    }
+    expect(coversFirstElement('<rect width="100" height="100" fill="#f6f1e8"/>')).toBe(true);
+  });
+
+  it('the badge cross-check holds for frames: uitdager ↔ frame-laurel', () => {
+    const laurel = { ...frame, id: 'frame-laurel', unlock: { badge: 'uitdager' } };
+    const uitdager = { id: 'uitdager', unlock: { part: 'frame-laurel', tier: 3 } };
+    expect(errorsOf([laurel], [uitdager])).toEqual([]);
+    expect(errorsOf([laurel], [{ id: 'uitdager' }])).toEqual([
+      'avatar-parts.json "frame-laurel": badge "uitdager" does not point back (its unlock.part is undefined).',
+    ]);
+    expect(errorsOf([{ ...laurel, unlock: { level: 40 } }], [uitdager])).toEqual([
+      'badges.json "uitdager": unlocks part "frame-laurel", but that part\'s unlock is {"level":40}.',
+    ]);
+  });
+});
+
+describe('block 6D-F: the real library of round 3 (frames.md §3, §4; needs the data of builder B)', () => {
+  it('has 154 parts: 30 backgrounds (14 covering), 11 frames; legendary 11 (≤ 10 %)', () => {
+    expect(PARTS).toHaveLength(154);
+    expect(PARTS.filter((p) => p.layer === 'bg')).toHaveLength(30);
+    expect(PARTS.filter((p) => p.layer === 'bg' && p.covers === true)).toHaveLength(14);
+    expect(PARTS.filter((p) => p.layer === 'frame')).toHaveLength(11);
+    expect(PARTS.filter((p) => p.rarity === 'legendary')).toHaveLength(11);
+  });
+
+  it('holds the 11 frames of §3 literally: unlock, rarity, accent, clip; the svg uses var(--accent)', () => {
+    for (const [id, want] of Object.entries(ROUND_3_FRAMES)) {
+      const p = part(id);
+      expect(p.layer, id).toBe('frame');
+      expect(p.rarity, id).toBe(want.rarity);
+      expect(p.accent, id).toBe(want.accent);
+      expect(p.unlock, id).toEqual(typeof want.unlock === 'number' ? { level: want.unlock } : { badge: want.unlock[0], tier: want.unlock[1] });
+      expect(p.svg, id).toContain('var(--accent)');
+      const clip = p.clip ?? '';
+      const at = new Map([...clip.matchAll(/([a-z]+)="([^"]*)"/g)].map((a) => [a[1] ?? '', Number(a[2])]));
+      if (want.clip === 'hexagon') {
+        expect(clip.startsWith('<polygon '), id).toBe(true);
+        const n = numbers(clip);
+        expect(n, id).toHaveLength(12);
+        for (let i = 0; i < 12; i += 2) expect(Math.hypot((n[i] ?? 0) - 50, (n[i + 1] ?? 0) - 50), id).toBeCloseTo(46, 0);
+        expect(Math.min(...n.filter((_, i) => i % 2 === 1)), id).toBeCloseTo(4, 0); // point up
+      } else if (want.clip === 'gold-rect') {
+        expect(clip.startsWith('<rect '), id).toBe(true);
+        expect([at.get('x'), at.get('y'), at.get('width'), at.get('height'), at.get('rx')], id).toEqual([8, 8, 84, 84, 14]);
+      } else {
+        expect(clip.startsWith('<circle '), id).toBe(true);
+        expect([at.get('cx'), at.get('cy'), at.get('r')], id).toEqual([...want.clip]);
+      }
+    }
+    expect(part('frame-ring').unlock).toEqual({ level: AVATAR_MAKER_LEVEL });
+  });
+
+  it('holds the 17 new backgrounds of §4 literally; of the 13 old ones only gold and sunset cover (decision a)', () => {
+    for (const [id, want] of Object.entries(ROUND_3_BGS)) {
+      const p = part(id);
+      expect(p.layer, id).toBe('bg');
+      expect(p.unlock, id).toEqual({ level: want.level });
+      expect(p.rarity, id).toBe(want.rarity);
+      expect(p.covers === true, id).toBe(want.covers);
+      if (want.covers) expect(coversFirstElement(p.svg), id).toBe(true);
+    }
+    const OLD_COVERING: ReadonlySet<string> = new Set(['bg-gold', 'bg-sunset']);
+    for (const p of PARTS.filter((x) => x.layer === 'bg' && !ROUND_3.has(x.id))) {
+      expect(p.covers, p.id).toBe(OLD_COVERING.has(p.id) ? true : undefined);
+      expect(coversFirstElement(p.svg), p.id).toBe(OLD_COVERING.has(p.id));
+    }
+  });
+
+  it('frames and the new backgrounds draw inside 0–100', () => {
+    for (const p of PARTS.filter((x) => ROUND_3.has(x.id))) {
+      for (const [x, y] of svgPoints(p.svg)) {
+        expect(x, p.id).toBeGreaterThanOrEqual(0);
+        expect(x, p.id).toBeLessThanOrEqual(100);
+        expect(y, p.id).toBeGreaterThanOrEqual(0);
+        expect(y, p.id).toBeLessThanOrEqual(100);
+      }
+    }
+  });
+
+  it('the real data validates with 0 errors and 0 warnings', () => {
+    expect(validateAvatarParts(partsJson as unknown, badgesJson as unknown)).toMatchObject({ errors: [], warnings: [] });
+  });
+
+  it('🎲 Verras me picks a frame for some seed from the real library', () => {
+    const specs = Array.from({ length: 20 }, (_, i) => randomAvatar(PARTS, 2000 + i));
+    expect(specs.some((s) => s.parts.some((id) => id.startsWith('frame-')))).toBe(true);
+    for (const s of specs) expect(isComplete(s, BY_ID)).toBe(true);
   });
 });

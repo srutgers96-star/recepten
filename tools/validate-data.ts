@@ -1017,13 +1017,18 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs, input: Badg
 // `rarity`, when present, one of AVATAR_RARITIES (block 6D-R: only a valid value is demanded, never a
 // warning when it differs from the level/badge rule — differing is the point; a missing rarity falls
 // back to that rule in normalizeAvatarParts).
+// Block 6D-F (docs/specs/frames.md §2d): a `frame` needs `clip` (exactly one <circle|ellipse|rect|
+// polygon|path …/> with geometry attributes only) and `accent` (#rrggbb), and its svg uses
+// `var(--accent)` at least once; `clip`/`accent` on another layer are errors; `covers` only on `bg`,
+// only a boolean, and `covers: true` demands a covering first element (a full rect in a fill, or a
+// circle r ≥ 50 around the centre); conversely a bg whose first element covers needs `covers: true`. A frame on level 3 is not required (optional layer).
 // Warnings: stray keys.
 
 /**
  * The avatar layers in drawing order. Mirrors LAYER_ORDER in src/domain/avatar.ts (6D-3; not imported
  * for the same reason as BADGE_GROUP_IDS, and that module does not exist before 6D-3).
  */
-export const AVATAR_LAYERS: readonly string[] = ['bg', 'body', 'pin', 'face', 'facial', 'mouth', 'eyes', 'hair', 'glasses', 'hat', 'prop'];
+export const AVATAR_LAYERS: readonly string[] = ['bg', 'body', 'pin', 'face', 'facial', 'mouth', 'eyes', 'hair', 'glasses', 'hat', 'prop', 'frame'];
 /** Layers an avatar must have. Mirrors REQUIRED_LAYERS in src/domain/avatar.ts (6D-3). */
 export const AVATAR_REQUIRED_LAYERS: readonly string[] = ['face', 'eyes', 'mouth', 'body'];
 /** Mirrors AVATAR_MAKER_LEVEL in src/domain/avatar.ts: the lowest level a part can unlock at. */
@@ -1032,7 +1037,11 @@ const AVATAR_MIN_LEVEL = 3;
 const AVATAR_MAX_LEVEL = 100;
 /** The only inline styles a part may carry (the renderer sets --tone and --hair). */
 const AVATAR_STYLES: ReadonlySet<string> = new Set(['fill:var(--tone)', 'fill:var(--hair)']);
-const AVATAR_PART_KEYS: ReadonlySet<string> = new Set(['id', 'layer', 'nl', 'en', 'unlock', 'rarity', 'svg']);
+const AVATAR_PART_KEYS: ReadonlySet<string> = new Set(['id', 'layer', 'nl', 'en', 'unlock', 'rarity', 'svg', 'clip', 'accent', 'covers']);
+/** A frame's clip (block 6D-F): one shape element, attributes only, self-closing. */
+const AVATAR_CLIP_SHAPE = /^<(circle|ellipse|rect|polygon|path)((?:\s+[a-z-]+="[^"<>]*")*)\s*\/>$/;
+/** The only attributes a clip may carry: geometry (no fill, stroke, style, id, transform …). */
+const AVATAR_CLIP_ATTRIBUTES: ReadonlySet<string> = new Set(['cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'width', 'height', 'points', 'd']);
 /** Mirrors RARITIES in src/domain/avatar.ts (block 6D-R), in the same order. */
 export const AVATAR_RARITIES: readonly string[] = ['common', 'rare', 'epic', 'legendary'];
 /** The suffix the renderer replaces with a unique id per drawn avatar. */
@@ -1058,6 +1067,34 @@ export function checkAvatarSvg(svg: string): string[] {
     if (!ref.endsWith(AVATAR_UID) || !ids.has(ref)) problems.push(`url(#${ref}) does not point at an id="…${AVATAR_UID}" in this svg`);
   }
   return problems;
+}
+
+/** Problems in a frame's `clip` (empty list = fine). */
+export function checkAvatarClip(clip: string): string[] {
+  const m = AVATAR_CLIP_SHAPE.exec(clip);
+  if (!m) return ['must be exactly one <circle|ellipse|rect|polygon|path …/> element'];
+  const names = [...(m[2] ?? '').matchAll(/([a-z-]+)="/g)].map((a) => a[1]!);
+  const problems: string[] = [];
+  if (names.length === 0) problems.push('has no geometry attributes');
+  for (const name of names) if (!AVATAR_CLIP_ATTRIBUTES.has(name)) problems.push(`attribute ${JSON.stringify(name)} is not allowed (geometry only)`);
+  if (new Set(names).size !== names.length) problems.push('repeats an attribute');
+  return problems;
+}
+
+/**
+ * Whether a background's svg starts with an element that covers the whole avatar (block 6D-F §4):
+ * `<rect width="100" height="100" fill="…"/>` (x/y absent or 0) or a circle r ≥ 50 around (50, 50),
+ * with a fill that is not `none` and no opacity. A simple check on the first element only.
+ */
+export function coversFirstElement(svg: string): boolean {
+  const m = /^\s*<(rect|circle)((?:\s+[a-z-]+="[^"]*")*)\s*\/?>/.exec(svg);
+  if (!m) return false;
+  const at = new Map([...(m[2] ?? '').matchAll(/([a-z-]+)="([^"]*)"/g)].map((a) => [a[1]!, a[2]!]));
+  const fill = at.get('fill');
+  if (fill === undefined || fill.trim() === '' || fill.trim() === 'none' || at.has('opacity') || at.has('fill-opacity') || at.has('transform')) return false;
+  const num = (k: string, absent: number): number => (at.has(k) ? Number(at.get(k)) : absent);
+  if (m[1] === 'rect') return num('x', 0) === 0 && num('y', 0) === 0 && num('width', 0) >= 100 && num('height', 0) >= 100;
+  return num('cx', 0) === 50 && num('cy', 0) === 50 && num('r', 0) >= 50;
 }
 
 /**
@@ -1134,6 +1171,33 @@ export function validateAvatarParts(data: unknown, badges: unknown): ValidationR
     const svg = part['svg'];
     if (typeof svg !== 'string') errors.push(`${label}: "svg" must be a string (empty = draws nothing).`);
     else for (const problem of checkAvatarSvg(svg)) errors.push(`${label}: svg ${problem}.`);
+
+    // Block 6D-F: frames (clip, accent, var(--accent)) and covering backgrounds.
+    const clip = part['clip'];
+    const accent = part['accent'];
+    const covers = part['covers'];
+    if (layer === 'frame') {
+      if (typeof clip !== 'string') errors.push(`${label}: a frame needs "clip" (one SVG shape element).`);
+      else for (const problem of checkAvatarClip(clip)) errors.push(`${label}: clip ${problem}.`);
+      if (typeof accent !== 'string' || !/^#[0-9a-f]{6}$/i.test(accent)) errors.push(`${label}: a frame needs "accent" as #rrggbb, got ${JSON.stringify(accent)}.`);
+      if (typeof svg === 'string' && !svg.includes('var(--accent)')) errors.push(`${label}: a frame's svg must use var(--accent) at least once.`);
+    } else {
+      if (clip !== undefined) errors.push(`${label}: "clip" is only for layer "frame".`);
+      if (accent !== undefined) errors.push(`${label}: "accent" is only for layer "frame".`);
+    }
+    if (covers !== undefined) {
+      if (layer !== 'bg') errors.push(`${label}: "covers" is only for layer "bg".`);
+      else if (typeof covers !== 'boolean') errors.push(`${label}: "covers" must be a boolean, got ${JSON.stringify(covers)}.`);
+      else if (covers && typeof svg === 'string' && !coversFirstElement(svg)) {
+        errors.push(`${label}: "covers": true needs a covering first element (<rect width="100" height="100" fill="…"/> or a circle r 50).`);
+      }
+    }
+    // The reverse rule (decision a): a background whose first element covers the avatar hides the
+    // profile colour, so it must say so (the renderer then draws the implicit ring). A covers of the
+    // wrong type already has its own error above.
+    if (layer === 'bg' && (covers === undefined || covers === false) && typeof svg === 'string' && coversFirstElement(svg)) {
+      errors.push(`${label}: its first element covers the profile colour but has no "covers": true.`);
+    }
 
     for (const key of Object.keys(part)) if (!AVATAR_PART_KEYS.has(key)) warnings.push(`${label}: unexpected key ${JSON.stringify(key)}.`);
   });

@@ -20,11 +20,12 @@ import { RARITIES, type Rarity } from './rarity.ts';
 // ---------------------------------------------------------------------------- model
 
 export type AvatarLayer = 'bg' | 'body' | 'pin' | 'face' | 'facial' | 'mouth' | 'eyes' | 'hair' | 'glasses'
-  | 'hat' | 'prop';
+  | 'hat' | 'prop' | 'frame';
 
-/** Drawing order, bottom to top. */
+/** Drawing order, bottom to top. `frame` (block 6D-F) is the odd one out: it is not drawn inside the
+ *  clip like the others but gives the clip shape, and is drawn on top, after the level ring. */
 export const LAYER_ORDER: readonly AvatarLayer[] = ['bg', 'body', 'pin', 'face', 'facial', 'mouth', 'eyes', 'hair',
-  'glasses', 'hat', 'prop'];
+  'glasses', 'hat', 'prop', 'frame'];
 
 /** Layers an avatar MUST have; the rest may be empty. */
 export const REQUIRED_LAYERS: readonly AvatarLayer[] = ['face', 'eyes', 'mouth', 'body'];
@@ -67,8 +68,17 @@ export interface AvatarPart {
   /** The explicit `rarity` of the data file, or `rarityFor(unlock, badge)` when it has none. */
   rarity: Rarity;
   /** SVG fragment in viewBox 0 0 100 100; may use `var(--tone)`/`var(--hair)` and `__u` as the
-   *  unique suffix for ids (the renderer replaces it). Empty = draws nothing (bg-color). */
+   *  unique suffix for ids (the renderer replaces it). Empty = draws nothing (bg-color). A frame may
+   *  also use `var(--accent)` as an attribute value (`fill="var(--accent)"`, `stroke="var(--accent)"`). */
   svg: string;
+  /** Frames only (and always there): exactly one SVG shape element with geometry attributes only,
+   *  e.g. `<circle cx="50" cy="50" r="44"/>`. The clip shape of the avatar and the line of the level
+   *  ring (docs/specs/frames.md §2a). */
+  clip?: string;
+  /** Frames only (and always there): the frame's own main colour, `#rrggbb`. */
+  accent?: string;
+  /** Backgrounds only: true = the background covers the profile colour completely (§2c). */
+  covers?: boolean;
 }
 
 export const AVATAR_TONES = ['#f7dcc4', '#f3d2b3', '#e0b08a', '#c68a5a', '#9c6a45', '#6b4530'] as const;
@@ -107,6 +117,15 @@ const PART_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const LAYER_SET: ReadonlySet<string> = new Set(LAYER_ORDER);
 /** The only `style` values a part may carry (tools/validate-data.ts `checkAvatarSvg`). */
 const PART_STYLES: ReadonlySet<string> = new Set(['fill:var(--tone)', 'fill:var(--hair)']);
+/** A frame's clip: exactly one shape element with geometry attributes only (docs/specs/frames.md §2a;
+ *  the same rule as tools/validate-data.ts). */
+const CLIP_SHAPE = /^<(circle|ellipse|rect|polygon|path)((?:\s+[a-z]+="[^"<>]*")+)\s*\/>$/;
+const CLIP_ATTRIBUTES: ReadonlySet<string> = new Set(['cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'width', 'height', 'points', 'd']);
+const HEX_COLOR = /^#[0-9a-f]{6}$/i;
+/** The frame the renderer draws by itself on a covering background without a chosen frame (§2b). */
+const IMPLICIT_FRAME = 'frame-ring';
+/** The round clip and the plain level ring without a frame (unchanged since 6D-3). */
+const ROUND_CLIP = '<circle cx="50" cy="50" r="46"/>';
 const RARITY_SET: ReadonlySet<string> = new Set(RARITIES);
 
 function isRecord(v: unknown): v is Record<string, unknown> {
@@ -165,6 +184,16 @@ function isSafePartSvg(svg: string): boolean {
   return styles.every((m) => PART_STYLES.has(m[2] ?? ''));
 }
 
+/** A frame's `clip`, trimmed, when it is one allowed shape with geometry attributes only; else null. */
+function safeClip(v: unknown): string | null {
+  if (typeof v !== 'string') return null;
+  const clip = v.trim();
+  const m = CLIP_SHAPE.exec(clip);
+  if (!m) return null;
+  const names = [...(m[2] ?? '').matchAll(/([a-z]+)="/g)].map((a) => a[1] ?? '');
+  return names.every((n) => CLIP_ATTRIBUTES.has(n)) && new Set(names).size === names.length ? clip : null;
+}
+
 /**
  * Normalize the raw contents of data/avatar-parts.json. Tolerant, like normalizeBadges: unusable
  * entries are skipped (never an exception). A part is usable with a kebab-case id that starts with
@@ -179,6 +208,10 @@ function isSafePartSvg(svg: string): boolean {
  *
  * `rarity` (block 6D-R): an explicit valid `rarity` in the data wins; a missing or unknown value
  * falls back to `rarityFor(unlock, badge)` (the part itself stays usable).
+ *
+ * Block 6D-F: a frame needs a valid `clip` (one shape, geometry only) and `accent` (`#rrggbb`), else
+ * it is skipped; `covers` is kept only on a background and only when it is literally `true`. On other
+ * layers `clip`, `accent` and `covers` are ignored.
  */
 export function normalizeAvatarParts(data: unknown, badges: readonly Badge[] = []): AvatarPart[] {
   if (!Array.isArray(data)) return [];
@@ -198,10 +231,20 @@ export function normalizeAvatarParts(data: unknown, badges: readonly Badge[] = [
     if (nl === null || en === null || typeof svg !== 'string' || !isSafePartSvg(svg)) continue;
     const unlock = normalizeUnlock(raw['unlock'], id, badgeById);
     if (unlock === null) continue;
+    let frame: { clip: string; accent: string } | null = null;
+    if (layer === 'frame') {
+      const clip = safeClip(raw['clip']);
+      const accent = typeof raw['accent'] === 'string' && HEX_COLOR.test(raw['accent'].trim()) ? raw['accent'].trim().toLowerCase() : null;
+      if (clip === null || accent === null) continue;
+      frame = { clip, accent };
+    }
     seen.add(id);
     const explicit = raw['rarity'];
     const rarity = isRarity(explicit) ? explicit : rarityFor(unlock, 'badge' in unlock ? badgeById.get(unlock.badge) : null);
-    out.push({ id, layer: layer as AvatarLayer, nl, en, unlock, rarity, svg });
+    const part: AvatarPart = { id, layer: layer as AvatarLayer, nl, en, unlock, rarity, svg };
+    if (frame) Object.assign(part, frame);
+    if (layer === 'bg' && raw['covers'] === true) part.covers = true;
+    out.push(part);
   }
   return out;
 }
@@ -348,13 +391,22 @@ export function randomAvatar(unlocked: AvatarPart[], seed: number): AvatarSpec {
 // ---------------------------------------------------------------------------- rendering
 
 /**
- * The whole SVG as a string (no framework), exactly:
- *   <svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:…;--hair:…" aria-hidden="true">
- *     <defs><clipPath id="c-UID"><circle cx="50" cy="50" r="46"/></clipPath></defs>
- *     <circle cx="50" cy="50" r="46" fill="COLOR"/>
- *     <g clip-path="url(#c-UID)">…layers in LAYER_ORDER…</g>
- *     <circle cx="50" cy="50" r="48" fill="none" stroke="RING" stroke-width="4"/>   (only with a ring)
+ * The whole SVG as a string (no framework), exactly (docs/specs/frames.md §2b, block 6D-F):
+ *   <svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:T;--hair:H[;--accent:A]" aria-hidden="true">
+ *     <defs><clipPath id="c-UID">CLIP</clipPath></defs>
+ *     <g clip-path="url(#c-UID)"><rect width="100" height="100" fill="COLOR"/>…layers bg … prop…</g>
+ *     RING    (only from level 5)
+ *     FRAME   (only with a frame)
  *   </svg>
+ * CLIP is the chosen frame's `clip`, else the round clip r 46. RING without a frame is the plain
+ * circle r 48, width 4 (as before 6D-F); with a frame it is the clip shape itself, stroked
+ * `fill="none" stroke="RING" stroke-width="2"`. FRAME is the frame's own svg, not clipped, after the
+ * ring. `--accent` (the colour rule, §2c) is only there with a frame: the profile colour when the
+ * background `covers`, else the frame's own `accent`; without a frame the style has no `--accent`.
+ * Implicit ring: on a covering background without a (known) frame, the renderer draws as if
+ * `frame-ring` were chosen with the profile colour as accent; if the library has no `frame-ring`, a
+ * plain circle r 48 width 4 in the profile colour follows the level ring, which then is r 45 width 2.
+ *
  * `color` is the profile colour (a plain CSS colour, else cobalt); `level` gives the ring
  * (`ringForLevel`; pass 0 for no ring); `uid` replaces every `__u` and suffixes the clip path, so
  * several avatars on one page never share an id. Per layer the spec's first part this library
@@ -376,17 +428,34 @@ export function renderAvatarSvg(spec: AvatarSpec, parts: ReadonlyMap<string, Ava
   let layers = '';
   for (const layer of LAYER_ORDER) {
     const part = byLayer.get(layer);
-    if (part) layers += part.svg.replaceAll('__u', uid);
+    if (part && layer !== 'frame') layers += part.svg.replaceAll('__u', uid);
   }
 
+  // The frame and the colour rule (§2c): a covering background hands the profile colour to the
+  // frame, and without a chosen frame it brings the plain ring of its own.
+  const covers = byLayer.get('bg')?.covers === true;
+  const isFrame = (p: AvatarPart | undefined): p is AvatarPart & { clip: string; accent: string } =>
+    p !== undefined && p.layer === 'frame' && typeof p.clip === 'string' && typeof p.accent === 'string';
+  const chosen = byLayer.get('frame');
+  const implicit = parts.get(IMPLICIT_FRAME);
+  const frame = isFrame(chosen) ? chosen : covers && isFrame(implicit) ? implicit : null;
+  const fallbackRing = covers && frame === null;
+  const accent = frame === null ? null : covers ? color : frame.accent;
+
+  const clip = frame?.clip ?? ROUND_CLIP;
   const ring = ringForLevel(opts.level);
-  const ringSvg = ring ? `<circle cx="50" cy="50" r="48" fill="none" stroke="${RING_HEX[ring]}" stroke-width="4"/>` : '';
+  let ringSvg = '';
+  if (ring && frame) ringSvg = clip.replace(/\s*\/>$/, ` fill="none" stroke="${RING_HEX[ring]}" stroke-width="2"/>`);
+  else if (ring && fallbackRing) ringSvg = `<circle cx="50" cy="50" r="45" fill="none" stroke="${RING_HEX[ring]}" stroke-width="2"/>`;
+  else if (ring) ringSvg = `<circle cx="50" cy="50" r="48" fill="none" stroke="${RING_HEX[ring]}" stroke-width="4"/>`;
+  const frameSvg = frame ? frame.svg.replaceAll('__u', uid)
+    : fallbackRing ? `<circle cx="50" cy="50" r="48" fill="none" stroke="${color}" stroke-width="4"/>` : '';
   return (
-    `<svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:${tone};--hair:${hair}" aria-hidden="true">` +
-    `<defs><clipPath id="c-${uid}"><circle cx="50" cy="50" r="46"/></clipPath></defs>` +
-    `<circle cx="50" cy="50" r="46" fill="${color}"/>` +
-    `<g clip-path="url(#c-${uid})">${layers}</g>` +
+    `<svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:${tone};--hair:${hair}${accent ? `;--accent:${accent}` : ''}" aria-hidden="true">` +
+    `<defs><clipPath id="c-${uid}">${clip}</clipPath></defs>` +
+    `<g clip-path="url(#c-${uid})"><rect width="100" height="100" fill="${color}"/>${layers}</g>` +
     ringSvg +
+    frameSvg +
     `</svg>`
   );
 }

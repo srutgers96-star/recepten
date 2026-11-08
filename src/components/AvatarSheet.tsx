@@ -59,14 +59,16 @@ import { ShuffleIcon } from '@/components/ShuffleIcon';
 const DISMISS_PX = 80;
 /** The neutral light circle behind every tile (never the profile colour, so a bg tile stays readable). */
 const TILE_BG = '#eef1f5';
+/** A frame tile's own colour (block 6D-F): darker, so white and light frames stay visible on a tile. */
+const FRAME_TILE_BG = '#b7c0cc';
 
 /** One tab of the maker: a part layer, or one of the two colour tabs. */
 type RowId = AvatarLayer | 'tone' | 'hairColor';
 /** The tabs in the order of §1b.3 (block 6D-UI keeps it); the sheet opens on the first (Gezicht). */
-const ROWS: readonly RowId[] = ['face', 'tone', 'hair', 'hairColor', 'eyes', 'mouth', 'facial', 'glasses', 'hat', 'body', 'prop', 'pin', 'bg'];
+const ROWS: readonly RowId[] = ['face', 'tone', 'hair', 'hairColor', 'eyes', 'mouth', 'facial', 'glasses', 'hat', 'body', 'prop', 'pin', 'bg', 'frame'];
 /** The layers whose row starts with the "geen" tile (§1b.3). */
 // Hair is optional too (decision Fable 29 Oct: §2f "de rest mag leeg" wins over the §1b.3 list).
-const OPTIONAL: ReadonlySet<AvatarLayer> = new Set<AvatarLayer>(['hair', 'facial', 'glasses', 'hat', 'prop', 'pin', 'bg']);
+const OPTIONAL: ReadonlySet<AvatarLayer> = new Set<AvatarLayer>(['hair', 'facial', 'glasses', 'hat', 'prop', 'pin', 'bg', 'frame']);
 
 export interface AvatarSheetProps {
   profile: Profile;
@@ -312,7 +314,7 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
     const out = new Map<string, string>();
     for (const list of byLayer.values()) {
       for (const p of list) {
-        out.set(p.id, renderAvatarSvg({ v: 1, parts: [p.id], tone, hair }, parts, { color: TILE_BG, level: 0, uid: `${uid}-${p.id}` }));
+        out.set(p.id, renderAvatarSvg({ v: 1, parts: [p.id], tone, hair }, parts, { color: p.layer === 'frame' ? FRAME_TILE_BG : TILE_BG, level: 0, uid: `${uid}-${p.id}` }));
       }
     }
     return out;

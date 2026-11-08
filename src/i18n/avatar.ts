@@ -36,6 +36,7 @@ export const avatar: Dict = {
   'avatar.layer.prop': { nl: 'Accessoire', en: 'Accessory' },
   'avatar.layer.pin': { nl: 'Speldje', en: 'Pin' },
   'avatar.layer.bg': { nl: 'Achtergrond', en: 'Background' },
+  'avatar.layer.frame': { nl: 'Lijst', en: 'Frame' },
   // The cobalt dot on a maker tab whose layer has new unlocked parts (aria text; block 6D-UI, UI-B.5).
   'avatar.tabNew': { nl: 'Nieuw', en: 'New' },
 

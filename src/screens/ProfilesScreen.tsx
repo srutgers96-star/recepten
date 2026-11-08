@@ -95,8 +95,10 @@ export function Avatar(props: { profile: Pick<Profile, 'name' | 'color' | 'avata
     // The markup comes ONLY from data/avatar-parts.json (checked by validateAvatarParts: no <script,
     // no href=, no style= except the tone/hair fills); the spec only picks part ids and palette
     // colours, and renderAvatarSvg takes the profile colour only as a plain CSS colour. No free user
-    // input reaches the string, so innerHTML is safe here.
-    return <span class={cls + ' has-svg'} style={{ background: profile.color }} aria-hidden="true" dangerouslySetInnerHTML={{ __html: svg }} />;
+    // input reaches the string, so innerHTML is safe here. No background on the span: the SVG draws
+    // the profile colour itself inside the frame's clip, and a round disc would show behind a
+    // hexagon or square frame (block 6D-F).
+    return <span class={cls + ' has-svg'} aria-hidden="true" dangerouslySetInnerHTML={{ __html: svg }} />;
   }
   return (
     <span class={cls} style={{ background: profile.color }} aria-hidden="true">
