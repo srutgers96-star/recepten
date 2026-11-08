@@ -13,10 +13,14 @@ niveauring blijft alleen op de kale ronde avatar (zonder lijst, zonder dekkende 
 de clipvormen r 40–46 zijn: de toppen vallen weg achter de lijst en het haar lijkt "laag". Een lijst kan binnen het vak niet
 groter dan r 50, dus de oplossing is andersom: het poppetje iets kleiner tekenen binnen een vaste schaal, verankerd op de
 onderkant (het lijf blijft tot de rand lopen) — één transformatie in de renderer, geen 150 tekeningen aanpassen. Daarnaast de
-dikke lijsten (bord, plank, pan, mand) dunner met een clip van minstens r 44. (3) "Vind Gewoon wat vol": de groep **Gewoon**
-telt 77 onderdelen (level 3–20), Zeldzaam 33, Episch 33, Legendarisch 11. Fable leest Stijns zin als: de grenzen omlaag, zodat
-Gewoon kleiner wordt en alles boven level 40 minstens Episch is. Dit is één datapas en één drempelregel; als Stijn iets anders
-bedoelde, draait één script het terug. (4) "Verras me" bestaat al als knop boven de maker (alle lagen tegelijk); per laag komt er
+dikke lijsten (bord, plank, pan, mand) dunner met een clip van minstens r 44. (3) Zeldzaamheid (Stijn, tweede bericht: "ik zie dingen bij Gewoon die
+pas op level 59 unlocken; dat is dus een foutje"): klopt. Vijftien onderdelen hebben een `rarity` die LAGER is dan de levelregel
+(≤ 20 gewoon · ≤ 50 zeldzaam · ≤ 80 episch · daarboven legendarisch) toestaat: hair-braid (21), hair-ponytail (31), hair-afro (38),
+body-dress (25), body-raincoat (35), body-tee-avocado (48), body-orange-shirt (52), body-christmas-jumper (57), prop-frying-pan (23),
+prop-ice-cream (29), prop-cupcake (36), prop-herbs (43), prop-chopsticks (49), prop-egg-timer (53), prop-leek (59) — allemaal
+"common". Achttien onderdelen zitten bewust HOGER dan de regel (dino-hoed legendarisch op level 3, smoking episch op 40, kroon
+legendarisch op 50, …): dat is het punt van een expliciete zeldzaamheid en blijft. De drempels zelf veranderen NIET; de vijftien
+fouten worden hersteld en de validator verbiedt voortaan een zeldzaamheid onder de levelregel. (4) "Verras me" bestaat al als knop boven de maker (alle lagen tegelijk); per laag komt er
 een tegel bij die alleen die laag verrast. (5) Brillen: 7 nu (rond, zon, citroen, monocle, cat-eye, pizza, duikbril); erbij komen
 zes na level 30, twee ervan ingrediënt-gebonden, en zes kook-/ingrediëntonderdelen verspreid over de andere lagen.
 
@@ -85,18 +89,18 @@ boven level 40, niet 60: vind gewoon wat vol meestal."
 - **Zes kook-/ingrediëntonderdelen:** `prop-whisk` (garde, 22), `pin-chili` (chilipeper-speld, 26), `facial-sauce` (saussnor, 29),
   `hat-colander` (vergiet als hoed, 36), `mouth-spaghetti` (sliert spaghetti uit de mond, 41), `eyes-sunny` (spiegeleitjes als ogen,
   43). Stijl en lijndikte zoals de bestaande onderdelen; alles binnen het 100×100-vak; `__u` voor eigen ids.
-- **Zeldzaamheid (Fable's lezing van "vind Gewoon wat vol"):** nieuwe drempels voor level-onderdelen: level ≤ 10 → common ·
-  11–40 → rare · 41–70 → epic · ≥ 71 → legendary; badge-onderdelen: minstens rare, bij een geheime badge of ladder-trede ≥ 3 epic
-  (bestaande legendary blijft legendary). Pas dit toe op ALLE bestaande onderdelen (één script, in het rapport de nieuwe aantallen
-  per groep; richtwaarde: Gewoon ±42, Zeldzaam ±60, Episch ±50, Legendarisch ±14). De nieuwe onderdelen volgen dezelfde regel.
-  Valideren: `npm run validate:data`, daarna `node --experimental-strip-types tools/avatar-sheet.ts` (de console-tabel in het
+- **Zeldzaamheid herstellen:** de vijftien onderdelen uit de Kritische lezer (3) krijgen de zeldzaamheid van de levelregel
+  (`rarityForLevel`: 21–50 → rare, 51–80 → epic): hair-braid, hair-ponytail, hair-afro, body-dress, body-raincoat, body-tee-avocado,
+  prop-frying-pan, prop-ice-cream, prop-cupcake, prop-herbs, prop-chopsticks → `rare`; body-orange-shirt, body-christmas-jumper,
+  prop-egg-timer, prop-leek → `epic`. Niets anders verandert; de achttien bewust hogere blijven. Nieuwe onderdelen krijgen de
+  zeldzaamheid van de levelregel. **Validator (`tools/validate-data.ts`, avatar-onderdelen):** een expliciete `rarity` die LAGER
+  is dan `rarityForLevel(unlock.level)` is voortaan een fout ("rarity below the level rule"); hoger blijft toegestaan zonder
+  waarschuwing. Daarna `npm run validate:data` en `node --experimental-strip-types tools/avatar-sheet.ts` (de console-tabel in het
   rapport).
 
-### 1c. Regel, maker en tegel "Verras me" per laag (bouwer C: `src/domain/rarity.ts`, `tests/rarity.test.ts` of de bestaande
-test die `rarityForLevel` dekt, `src/components/AvatarSheet.tsx`, `src/styles/avatar.css`, `src/i18n/avatar.ts`)
+### 1c. Maker: tegel "Verras me" per laag (bouwer C: `src/components/AvatarSheet.tsx`, `src/styles/avatar.css`, `src/i18n/avatar.ts`)
 
-- `rarityForLevel(level)`: ≤ 10 common · ≤ 40 rare · ≤ 70 epic · anders legendary (dezelfde drempels als §1b; tests bijwerken,
-  randen 10/11, 40/41, 70/71).
+- `rarityForLevel` blijft zoals hij is (≤ 20 · ≤ 50 · ≤ 80); bouwer C raakt src/domain/rarity.ts niet.
 - **Tegel per laag:** in elk laagpaneel, vóór de "geen"-tegel (of vooraan als de laag niet optioneel is), een tegel
   `avatar-tile random` met het schud-icoon en het woord `avatar.random` ("Verras me"/"Surprise me"); tik → één willekeurig
   **vrijgespeeld** onderdeel van die laag dat niet het huidige is (bij maar één vrij onderdeel: dat onderdeel); de keuze gaat door
@@ -107,30 +111,29 @@ test die `rarityForLevel` dekt, `src/components/AvatarSheet.tsx`, `src/styles/av
 ### 1d. Handboek (bouwer D: `data/handbook/07-badges-xp.json`, `docs/HANDLEIDING.md`, `docs/HANDBOOK.md`)
 
 `badges-xp.ring`: de ring alleen zonder lijst (en zonder dekkende achtergrond); met een lijst is de lijst zelf de versiering.
-`badges-xp.avatar-zeldzaam`: de nieuwe grenzen (t/m level 10 gewoon, tot 40 zeldzaam, tot 70 episch, daarboven legendarisch).
+`badges-xp.avatar-zeldzaam`: ongewijzigd, behalve als de rij levels noemt (de regel blijft t/m 20 gewoon, tot 50 zeldzaam, tot 80 episch).
 `badges-xp.avatar-maken`: de tegel Verras me per laag. `badges-xp.lijst-en-achtergrond`: het poppetje staat iets kleiner in de
 lijst zodat haar, hoed en accessoires nooit achter de lijst vallen. Een rij over de brillen is niet nodig (ze staan in de maker).
 Daarna `npm run validate:data` en `node --experimental-strip-types tools/handbook-md.ts`.
 
 ## 2. Opus mag dit NIET zelf beslissen
 
-`INNER_SCALE` 0,9 en de verankering op de onderkant · de niveauring alleen op de kale cirkel · de zeldzaamheidsgrenzen · de lijst
+`INNER_SCALE` 0,9 en de verankering op de onderkant · de niveauring alleen op de kale cirkel · de zeldzaamheidsdrempels (ongewijzigd) en de vijftien correcties · de lijst
 van twaalf nieuwe onderdelen en hun levels · de clipradius 44 · nieuwe lagen (nee) · nieuwe dependencies (nee) · bestaande
 onderdeel-ids wijzigen (nooit: ze staan in avatars op beide telefoons en in deelcodes).
 
 ## 3. Bestandsverdeling
 
 **A — Renderer:** `src/domain/avatar.ts`, `tests/avatar.test.ts`.
-**B — Data:** `data/avatar-parts.json`, `tools/validate-data.ts` (alleen als nodig), `tools/avatar-sheet.ts` (alleen als nodig),
+**B — Data:** `data/avatar-parts.json`, `tools/validate-data.ts` (de nieuwe zeldzaamheidsregel), `tools/avatar-sheet.ts` (alleen als nodig),
 tests met aantallen (`tests/validate-badges.test.ts`, `tests/avatar.test.ts` alleen de telling als die daar staat — stem af via het
 rapport, raak A's structuurtests niet aan).
-**C — Regel en maker:** `src/domain/rarity.ts`, de test die `rarityForLevel` dekt, `src/components/AvatarSheet.tsx`,
-`src/styles/avatar.css`, `src/i18n/avatar.ts`.
+**C — Maker:** `src/components/AvatarSheet.tsx`, `src/styles/avatar.css`, `src/i18n/avatar.ts`.
 **D — Handboek:** `data/handbook/07-badges-xp.json`, `docs/HANDLEIDING.md`, `docs/HANDBOOK.md`. Raakt geen src.
 **Integrator:** check/test/build/build:next/validate groen; contactblad genereren en in de dev-app (375 px) op Mijn profiel en in
 de maker nakijken: hanenkam en slagroom volledig zichtbaar in bord, pan en zeshoek; geen dunne ring langs een lijst, wel de 4 px
 ring op de kale cirkel vanaf level 5; tegel Verras me in elk paneel kiest een vrij onderdeel; groepen Gewoon/Zeldzaam/Episch/
-Legendarisch met de nieuwe aantallen; de zes brillen en zes kook-onderdelen op het contactblad. DEVICE-TEST: nieuwe rij 112
+Legendarisch zonder onderdelen onder de levelregel (prop-leek op level 59 staat bij Episch); de zes brillen en zes kook-onderdelen op het contactblad. DEVICE-TEST: nieuwe rij 112
 "Avatar-ronde (V3)" NL én EN na rij 111; rij 108 (lijsten) bijwerken waar hij de ring langs de lijst noemt. STATUS-alinea en de
 regel "Gebouwd: …". Fable kijkt daarna zelf het contactblad na (haar, brillen, kook-onderdelen) en past docs/specs/frames.md §2b en
 badges-avatar.md (zeldzaamheidsregel) aan.
