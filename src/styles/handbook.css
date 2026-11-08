@@ -46,20 +46,8 @@
 }
 
 .hb-section {
-  margin: 24px 0;
+  margin: 14px 0 4px; /* V1: the same rhythm as the groups on Meer (ten closed captions) */
   scroll-margin-top: 8px;
-}
-
-.hb-section h2 {
-  font-size: 19px;
-  font-weight: 700;
-  margin: 0 0 6px;
-}
-
-.hb-section-intro {
-  margin: 0 0 10px;
-  color: var(--muted);
-  font-size: 15px;
 }
 
 .hb-row {

@@ -698,11 +698,14 @@ export function HouseholdScreen() {
               </li>
             ))}
           </ul>
-          <div class="actions" style="margin:8px 0 0">
-            <button type="button" class="btn btn-small" onClick={() => navigate('/more/profiles')}>
-              {t('household.manageProfiles')}
-            </button>
-          </div>
+          {/* V1 (docs/specs/verbeterronde-1.md §1c point 7): only with more than one profile on this phone. */}
+          {list.length > 1 && (
+            <div class="actions" style="margin:8px 0 0">
+              <button type="button" class="btn btn-small" onClick={() => navigate('/more/profiles')}>
+                {t('household.manageProfiles')}
+              </button>
+            </div>
+          )}
         </section>
 
         {friends.length > 0 && (

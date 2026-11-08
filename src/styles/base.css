@@ -1300,3 +1300,22 @@ button.row {
 .select-qr .actions {
   margin: 6px 0;
 }
+
+/* ---------- Fold head (V1): the caption of a collapsible group on Meer and in the handbook ---------- */
+/* Centred, cobalt, small capitals between two rules (::before/::after), badge and chevron right after
+   the name, 44 px tap target; the rows under it stay left-aligned in the ink colour, so a glance tells
+   a head from an item (Stijn 8 nov 2026). The chevron turns when the group is open (aria-expanded). */
+.fold-head { margin: 0; font-size: 13px; }
+.fold-head > button {
+  display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 44px;
+  padding: 4px 0; border: 0; border-radius: 8px; background: transparent; color: var(--cobalt); font: inherit;
+  font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; cursor: pointer;
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+}
+.fold-head > button::before, .fold-head > button::after { content: ''; flex: 1; height: 1px; background: var(--cobalt); opacity: 0.35; }
+.fold-head > button:active { background: var(--press); }
+.fold-head .fold-title { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fold-head .menu-badge { flex: none; letter-spacing: 0; text-transform: none; user-select: none; -webkit-user-select: none; }
+.fold-head .chev { flex: none; width: 16px; height: 16px; color: inherit; opacity: 0.8; transition: transform 0.15s; }
+.fold-head > button[aria-expanded='true'] .chev { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) { .fold-head .chev { transition: none; } }

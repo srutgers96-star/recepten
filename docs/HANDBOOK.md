@@ -380,7 +380,7 @@ The results come in groups: **By name**, **With this ingredient**, **Category** 
 
 #### Good to know
 
-Search looks through every recipe that fits your filters, also when you sort by **Own**. A cuisine, such as Italian, shows under **Category**.
+Search looks through every recipe that fits your filters, also when you sort by **Own**. A cuisine, such as Italian, shows under **Category**. Chosen filters sit at the front of their row, with a cross ×; after three hours the app forgets them.
 
 (`#/recipes`)
 
@@ -420,11 +420,11 @@ The Diet row only shows recipes that are vegetarian, vegan, gluten-free or lacto
 
 #### What you then see
 
-The list gets shorter and the top says how many of the total are left. The chosen button is coloured.
+The list gets shorter and the top says how many of the total are left. The chosen button is coloured and has a cross ×.
 
 #### Good to know
 
-Choose two diets and a recipe must fit both. **options too** only works once a diet is on. The app remembers your filters on this phone.
+Choose two diets and a recipe must fit both. **options too** only works once a diet is on. The app remembers your filters on this phone for three hours.
 
 (`#/recipes`)
 
@@ -442,11 +442,11 @@ The Cuisine row shows cuisines with a little flag, such as 🇮🇹 Italian. Tha
 
 #### What you then see
 
-Only dishes with that cuisine stay. Choose two cuisines and you see the dishes of both.
+Only dishes with that cuisine stay. The chosen cuisine gets a cross × and moves to the front of the row. Choose two cuisines and you see the dishes of both.
 
 #### Good to know
 
-The row only shows cuisines that occur in your recipes. A recipe without a cuisine drops out once a cuisine is on.
+The row only shows cuisines that occur in your recipes. A recipe without a cuisine drops out once a cuisine is on. Three hours after your last choice the app forgets the cuisine again.
 
 (`#/recipes`)
 
@@ -465,7 +465,11 @@ Below Diet and Cuisine there is a row of labels, such as Quick and Oven, and cat
 
 #### What you then see
 
-The button turns coloured and the list gets shorter. Two categories show both; two labels must both fit.
+The button turns coloured, gets a cross × and moves to the front of the row. The list gets shorter. Two categories show both; two labels must both fit.
+
+#### Good to know
+
+Tap a chosen button again to switch it off. Three hours after your last choice the app forgets the filters; then everything is off again.
 
 (`#/recipes`)
 
@@ -2884,7 +2888,7 @@ Your card is your name, colour, language and avatar in one link. Whoever receive
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Household**.
+2. Under **You & your household**, tap **Household**, below your housemates.
 3. Under **My card**, tap **Share my card**.
 4. Choose WhatsApp and the person you are sending it to.
 
@@ -2908,7 +2912,7 @@ Did you get a card from someone on another phone? Then you add that person to yo
 
 1. Copy the message with the card.
 2. Tap **More** at the bottom.
-3. Tap **Household**.
+3. Under **You & your household**, tap **Household**, below your housemates.
 4. Scroll to **Add a member via link or paste**.
 5. Tap **Paste from clipboard**.
 6. Tap the button “Add … to your household”, with the name in it.
@@ -2927,12 +2931,12 @@ If someone is already a member, the button says “Update …”; then only name
 
 #### What it does
 
-Your household holds the profiles on this phone and the people on another phone. Everyone has their own colour.
+Your household holds the people you cook with, also when they have their own phone. Everyone has their own colour.
 
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Household**.
+2. Under **You & your household**, tap **Household**, below your housemates.
 3. Tap **Add member** at the bottom.
 4. Type a name.
 5. Tap a colour.
@@ -2944,7 +2948,7 @@ Each member is under **Members** with a circle in their colour. You see whether 
 
 #### Good to know
 
-**Edit** and **Remove** change a member from another phone. You manage profiles on this phone with **Manage the profiles on this phone**. Members come first in **Share your new recipes**.
+**Edit** and **Remove** change a member from another phone. Your housemates and friends also show in **More** straight under **My profile**; a tap brings you here. Members come first in **Share your new recipes**.
 
 (`#/more/household`)
 
@@ -2957,7 +2961,7 @@ You send your level, your badges and your cooking days of the last 90 days to yo
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Household**.
+2. Under **You & your household**, tap **Household**, below your housemates.
 3. Under **My card**, tap **Sync my progress**.
 4. Tap **Share**.
 5. Choose WhatsApp and the person you are sending it to.
@@ -3482,9 +3486,10 @@ You earn badges by cooking, discovering, sharing, taking photos and more. They s
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Badges**.
-3. Tap a group in the strip of tabs.
-4. Tap a tile.
+2. Tap the row with your name at the top.
+3. On **My profile**, tap the **Badges** tile.
+4. Tap a group in the strip of tabs.
+5. Tap a tile.
 
 #### What you then see
 
@@ -3492,7 +3497,7 @@ At the top it says “… of … badges earned”. The badges are round tiles wi
 
 #### Good to know
 
-The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open the badges from **My profile**. The app remembers the last group you looked at.
+The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. The app remembers the last group you looked at.
 
 (`#/more/badges`)
 
@@ -3505,9 +3510,10 @@ Many badges have eight tiers. With each tier the ring around the tile changes co
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Badges**.
-3. Tap a tile with a coloured ring.
-4. Tap **Close** at the top of the window.
+2. Tap the row with your name at the top.
+3. On **My profile**, tap the **Badges** tile.
+4. Tap a tile with a coloured ring.
+5. Tap **Close** at the top of the window.
 
 #### What you then see
 
@@ -3528,8 +3534,9 @@ Some badges are secret: you discover them by doing things in the app. Until you 
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Badges**.
-3. Tap **Secret** in the strip of tabs.
+2. Tap the row with your name at the top.
+3. On **My profile**, tap the **Badges** tile.
+4. Tap **Secret** in the strip of tabs.
 
 #### What you then see
 
@@ -3550,9 +3557,10 @@ At the top of the badges there is a tab for each member of your household and a 
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Badges**.
-3. Tap **Together** at the top.
-4. Tap your own name at the top.
+2. Tap the row with your name at the top.
+3. On **My profile**, tap the **Badges** tile.
+4. Tap **Together** at the top.
+5. Tap your own name at the top.
 
 #### What you then see
 
@@ -3857,7 +3865,7 @@ Not keen on the game? The **Badges** switch turns off all badges, XP and levels.
 
 #### What you then see
 
-The **Badges** row in More disappears, as do your level and the XP bar. No more chips, messages, challenges or level windows appear.
+The **Badges** tile on **My profile** disappears, as do your level and the XP bar. No more chips, messages, challenges or level windows appear.
 
 #### Good to know
 
@@ -4250,38 +4258,16 @@ You lose own and received recipes, favourites, notes, cook log, profiles, week, 
 
 (`#/more/storage`)
 
-### Several people on one phone
+### More than one profile on this phone
 
 #### What it does
 
-Does someone else cook on this phone too? Give that person their own profile.
+A phone normally belongs to one person. You add housemates through **Household**. If there are more profiles on it anyway, from before, you switch profile here.
 
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Manage profiles**.
-3. Tap **+ profile**.
-4. Type a name under **Name**.
-5. Choose a language under **Language**.
-6. Tap a colour under **Colour**.
-7. Tap **Add profile**.
-
-#### What you then see
-
-The new profile is in the list and active straight away.
-
-(`#/more/profiles`)
-
-### Switch profile
-
-#### What it does
-
-The active profile is who is using the phone now. Switch when someone else is going to cook.
-
-#### Where you tap
-
-1. Tap **More** at the bottom.
-2. Tap **Manage profiles**.
+2. Under **You & your household**, tap **Profiles on this phone**.
 3. Next to the other profile, tap **Make active**.
 
 #### What you then see
@@ -4290,46 +4276,44 @@ That profile now shows **Active**. The app switches to that profile's language s
 
 #### Good to know
 
-Tap the row itself to look at that profile first.
+The **Profiles on this phone** row is only there when this phone holds more than one profile. Tap a profile's row to look at it first.
 
 (`#/more/profiles`)
 
-### What belongs to each profile
+### What is yours and what belongs to the phone
 
 #### What it does
 
-Each profile has its own name, language, colour, avatar, favourites and notes, and its own level and badges. Recipes, week plan, shopping list and settings are shared.
+Your name, language, colour, avatar, favourites and notes are yours, as are your level and badges. Recipes, week plan, shopping list and settings belong to the phone.
 
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Manage profiles**.
+2. Tap the row with your name at the top.
 
 #### What you then see
 
-Each profile has a row with avatar and name, and with badges on a bar with points. On the right it says **Active** or **Make active**.
+**My profile** opens with your avatar and your name, and with badges on your level. **Name & colour** changes your name, language and colour.
 
 #### Good to know
 
-Does someone cook on their own phone? They make their own profile there. Through **Household** you then belong together.
+Does someone cook along on their own phone? They have their own profile there. Through **Household** you then belong together.
 
-(`#/more/profiles`)
+(`#/more/profile`)
 
 ### Delete a profile
 
 #### What it does
 
-You remove a profile from this phone. Its favourites and notes go with it.
+You remove your profile from this phone. Your favourites and notes go with it.
 
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Manage profiles**.
-3. Next to the profile, tap **Make active** if it is not active yet.
-4. Tap that profile's row.
-5. Tap **Name & colour**.
-6. Tap **Delete** at the bottom.
-7. Confirm the question with OK.
+2. Tap the row with your name at the top.
+3. Tap **Name & colour**.
+4. Tap **Delete** at the bottom.
+5. Confirm the question with OK.
 
 #### What you then see
 
@@ -4337,9 +4321,9 @@ You return to **Profiles** and the profile is no longer in the list.
 
 #### Good to know
 
-You can only edit or delete the active profile. Afterwards another profile becomes active.
+You can only edit or delete the active profile. If this phone holds more profiles, switch first with **Make active**. Afterwards another profile becomes active.
 
-(`#/more/profiles`)
+(`#/more/profile`)
 
 <a id="iphone-vs-android"></a>
 
@@ -4732,14 +4716,16 @@ This handbook explains, topic by topic, what the app can do, where you tap and w
 1. Tap **More** at the bottom.
 2. Tap the **Help & about** heading.
 3. Tap **Handbook**.
+4. Tap a heading, for example Recipes.
+5. Tap a row.
 
 #### What you then see
 
-At the top are a search field and a row of topics. Below are all the topics with their rows, folded.
+At the top are a search field and a row of topics. Below are ten headings, all folded. Tap a heading and that topic's rows appear, folded too. Tap a row and its explanation folds open.
 
 #### Good to know
 
-Tap a row to fold it open.
+Tap the heading again to fold the topic shut. After **Open** and back, everything is still as you left it.
 
 ### Search the handbook
 
@@ -4755,17 +4741,17 @@ Type a word and the handbook shows only the rows that contain it.
 
 #### What you then see
 
-With every letter only the matching rows remain, folded open and grouped by topic. If nothing is found, the handbook says so.
+With every letter only the matching rows remain, folded open and under their topic's heading. If nothing is found, the handbook says so.
 
 #### Good to know
 
-If you type several words, each word must appear in the row. Capitals and accents do not matter.
+If you type several words, each word must appear in the row. Capitals and accents do not matter. While you search the headings stay open; without a search word they are folded again, except the ones you opened yourself.
 
 ### The topics and the Open button
 
 #### What it does
 
-The row of topics jumps you to a topic. **Open** takes you straight to the screen a row is about.
+The row of topics opens a topic straight away. **Open** takes you straight to the screen a row is about.
 
 #### Where you tap
 
@@ -4775,7 +4761,7 @@ The row of topics jumps you to a topic. **Open** takes you straight to the scree
 
 #### What you then see
 
-The handbook scrolls to that topic. After **Open** you see that row's screen.
+That topic folds open and the handbook scrolls to it. After **Open** you see that row's screen.
 
 #### Good to know
 

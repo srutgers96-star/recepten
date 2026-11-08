@@ -31,7 +31,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { SheetPortal } from '@/components/SheetPortal';
 import { formatShortDate } from '@/components/RecipeRow';
-import { CuisineChips, DIET_ROW_TAGS, DietChips, OPTIE_TAG, categoryLabel, isDietTag, tagChipLabel } from '@/components/FilterChips';
+import { ChipX, CuisineChips, DIET_ROW_TAGS, DietChips, OPTIE_TAG, categoryLabel, isDietTag, tagChipLabel } from '@/components/FilterChips';
 import { dictionary } from '@/dictionary';
 import type { Dictionary } from '@/domain/dictionary';
 import { pickText, type Lang, type Recipe } from '@/domain/model';
@@ -116,6 +116,7 @@ export function cuisineIdsIn(recipes: readonly Recipe[]): string[] {
   return [...ids].sort();
 }
 
+/** Any other key of the stored value (such as `at`, V1) is ignored. */
 function sanitizePickFilter(v: unknown): PickFilter {
   const o = (v && typeof v === 'object' ? v : {}) as { tags?: unknown; cats?: unknown; cuisines?: unknown; query?: unknown; quick?: unknown; optie?: unknown; all?: unknown };
   const strings = (list: unknown): string[] => (Array.isArray(list) ? list.filter((x): x is string => typeof x === 'string' && x !== '') : []);
@@ -133,11 +134,28 @@ function sanitizePickFilter(v: unknown): PickFilter {
   return out;
 }
 
-/** The persisted chip selection of a screen (localStorage; the query is never persisted). */
-export function loadPickFilter(key: string): PickFilter {
+/**
+ * V1 (docs/specs/verbeterronde-1.md §1d): a stored chip selection is forgotten three hours after its
+ * last change, so an old choice ("Hartige taart") does not linger unnoticed.
+ */
+export const PICK_FILTER_TTL_MS = 3 * 3_600_000;
+
+/**
+ * The persisted chip selection of a screen (localStorage; the query is never persisted). A stored
+ * value older than PICK_FILTER_TTL_MS, or without `at` (stored before V1), counts as expired: the key
+ * is removed and the empty filter comes back.
+ */
+export function loadPickFilter(key: string, now: number = Date.now()): PickFilter {
   try {
     const raw = localStorage.getItem(key);
-    return raw ? { ...sanitizePickFilter(JSON.parse(raw)), query: '' } : EMPTY_PICK_FILTER;
+    if (!raw) return EMPTY_PICK_FILTER;
+    const parsed: unknown = JSON.parse(raw);
+    const at = parsed && typeof parsed === 'object' ? (parsed as { at?: unknown }).at : undefined;
+    if (typeof at !== 'number' || !Number.isFinite(at) || now - at > PICK_FILTER_TTL_MS) {
+      localStorage.removeItem(key);
+      return EMPTY_PICK_FILTER;
+    }
+    return { ...sanitizePickFilter(parsed), query: '' };
   } catch {
     return EMPTY_PICK_FILTER;
   }
@@ -146,10 +164,18 @@ export function loadPickFilter(key: string): PickFilter {
 export function savePickFilter(key: string, f: PickFilter): void {
   try {
     // `cuisines`, `optie` and `all` only when set, so an unchanged filter keeps its old stored shape.
+    // `at` (V1): the time of this change; loadPickFilter forgets the choice after PICK_FILTER_TTL_MS.
     if (f.tags.length || f.cats.length || f.cuisines.length || f.optie || f.all) {
       localStorage.setItem(
         key,
-        JSON.stringify({ tags: f.tags, cats: f.cats, ...(f.cuisines.length ? { cuisines: f.cuisines } : {}), ...(f.optie ? { optie: true } : {}), ...(f.all ? { all: true } : {}) }),
+        JSON.stringify({
+          tags: f.tags,
+          cats: f.cats,
+          ...(f.cuisines.length ? { cuisines: f.cuisines } : {}),
+          ...(f.optie ? { optie: true } : {}),
+          ...(f.all ? { all: true } : {}),
+          at: Date.now(),
+        }),
       );
     } else localStorage.removeItem(key);
   } catch {
@@ -219,6 +245,20 @@ export function PickChips(props: PickChipsProps) {
   // still filters, so its chip must be there to switch it off.
   const present = new Set([...props.cuisines, ...f.cuisines]);
   const cuisines = dict.cuisines.filter((c) => present.has(c.id));
+  const chipTags = tags.map((id) => ({
+    key: 't:' + id,
+    cls: 'chip',
+    on: f.tags.includes(id),
+    label: tagChipLabel(id),
+    onClick: () => props.onChange({ ...f, tags: toggle(f.tags, id) }),
+  }));
+  const chipCats = dict.categories.map((c) => ({
+    key: 'c:' + c.id,
+    cls: 'chip chip-cat',
+    on: f.cats.includes(c.id),
+    label: categoryLabel(c, c.id),
+    onClick: () => props.onChange({ ...f, cats: toggle(f.cats, c.id) }),
+  }));
   return (
     <div class="pick-rows">
       <DietChips
@@ -259,22 +299,14 @@ export function PickChips(props: PickChipsProps) {
             “{q}” ×
           </button>
         )}
-        {tags.map((id) => {
-          const on = f.tags.includes(id);
-          return (
-            <button key={id} type="button" class={'chip' + (on ? ' on' : '')} aria-pressed={on} onClick={() => props.onChange({ ...f, tags: toggle(f.tags, id) })}>
-              {tagChipLabel(id)}
-            </button>
-          );
-        })}
-        {dict.categories.map((c) => {
-          const on = f.cats.includes(c.id);
-          return (
-            <button key={c.id} type="button" class={'chip chip-cat' + (on ? ' on' : '')} aria-pressed={on} onClick={() => props.onChange({ ...f, cats: toggle(f.cats, c.id) })}>
-              {categoryLabel(c, c.id)}
-            </button>
-          );
-        })}
+        {/* V1 §1d: the chosen tags and categories first (tags before categories, data order within
+            each), then the rest in the same order; a chosen chip carries a small × after its text. */}
+        {[...chipTags.filter((x) => x.on), ...chipCats.filter((x) => x.on), ...chipTags.filter((x) => !x.on), ...chipCats.filter((x) => !x.on)].map((x) => (
+          <button key={x.key} type="button" class={x.cls + (x.on ? ' on' : '')} aria-pressed={x.on} onClick={x.onClick}>
+            {x.label}
+            {x.on && <ChipX />}
+          </button>
+        ))}
       </div>
     </div>
   );

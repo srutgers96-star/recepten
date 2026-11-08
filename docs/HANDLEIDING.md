@@ -380,7 +380,7 @@ De treffers staan in groepen: **Op naam**, **Met dit ingrediënt**, **Categorie*
 
 #### Goed om te weten
 
-Zoeken kijkt door alle recepten die bij je filters passen, ook als je op **Eigen** sorteert. Een keuken, zoals italiaans, vind je onder **Categorie**.
+Zoeken kijkt door alle recepten die bij je filters passen, ook als je op **Eigen** sorteert. Een keuken, zoals italiaans, vind je onder **Categorie**. Gekozen filters staan vooraan in hun rij, met een kruisje ×; na drie uur vergeet de app ze.
 
 (`#/recipes`)
 
@@ -420,11 +420,11 @@ De rij Dieet toont alleen recepten die vegetarisch, vegan, glutenvrij of lactose
 
 #### Wat je dan ziet
 
-De lijst wordt korter en bovenaan staat hoeveel van het totaal er overblijven. Het gekozen knopje is gekleurd.
+De lijst wordt korter en bovenaan staat hoeveel van het totaal er overblijven. Het gekozen knopje is gekleurd en heeft een kruisje ×.
 
 #### Goed om te weten
 
-Kies je twee diëten, dan moet een recept bij allebei passen. **ook als optie** werkt pas als er een dieet aan staat. De app onthoudt je filters op deze telefoon.
+Kies je twee diëten, dan moet een recept bij allebei passen. **ook als optie** werkt pas als er een dieet aan staat. De app onthoudt je filters drie uur op deze telefoon.
 
 (`#/recipes`)
 
@@ -442,11 +442,11 @@ De rij Keuken toont keukens met een vlaggetje, zoals 🇮🇹 Italiaans. Zo zie 
 
 #### Wat je dan ziet
 
-Alleen gerechten met die keuken blijven over. Kies je twee keukens, dan zie je de gerechten van allebei.
+Alleen gerechten met die keuken blijven over. De gekozen keuken krijgt een kruisje × en springt naar voren in de rij. Kies je twee keukens, dan zie je de gerechten van allebei.
 
 #### Goed om te weten
 
-De rij toont alleen keukens die in je recepten voorkomen. Een recept zonder keuken valt weg zodra er een keuken aan staat.
+De rij toont alleen keukens die in je recepten voorkomen. Een recept zonder keuken valt weg zodra er een keuken aan staat. Drie uur na je laatste keuze vergeet de app de keuken weer.
 
 (`#/recipes`)
 
@@ -465,7 +465,11 @@ Onder Dieet en Keuken staat een rij met labels, zoals Snel en Oven, en categorie
 
 #### Wat je dan ziet
 
-Het knopje wordt gekleurd en de lijst wordt korter. Twee categorieën tonen ze allebei; twee labels moeten allebei passen.
+Het knopje wordt gekleurd, krijgt een kruisje × en springt naar voren in de rij. De lijst wordt korter. Twee categorieën tonen ze allebei; twee labels moeten allebei passen.
+
+#### Goed om te weten
+
+Tik nog eens op een gekozen knopje om het uit te zetten. Drie uur na je laatste keuze vergeet de app de filters; dan staat alles weer uit.
 
 (`#/recipes`)
 
@@ -2884,7 +2888,7 @@ Je kaartje is je naam, kleur, taal en avatar in één link. Wie het ontvangt, ka
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Huishouden**.
+2. Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.
 3. Tik onder **Mijn kaartje** op **Deel mijn kaartje**.
 4. Kies WhatsApp en de persoon aan wie je het stuurt.
 
@@ -2908,7 +2912,7 @@ Kreeg je een kaartje van iemand op een andere telefoon? Dan voeg je die persoon 
 
 1. Kopieer het bericht met het kaartje.
 2. Tik onderaan op **Meer**.
-3. Tik op **Huishouden**.
+3. Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.
 4. Scrol naar **Voeg lid toe via link of plak**.
 5. Tik op **Plak van klembord**.
 6. Tik op de knop “Voeg … toe aan je huishouden”, met de naam erin.
@@ -2927,12 +2931,12 @@ Is iemand al lid, dan heet de knop “Werk … bij”; dan worden alleen naam, k
 
 #### Wat het doet
 
-In je huishouden staan de profielen op deze telefoon en de mensen op een andere telefoon. Iedereen heeft een eigen kleur.
+In je huishouden staan de mensen met wie je kookt, ook als ze een eigen telefoon hebben. Iedereen heeft een eigen kleur.
 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Huishouden**.
+2. Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.
 3. Tik onderaan op **Voeg lid toe**.
 4. Typ een naam.
 5. Tik op een kleur.
@@ -2944,7 +2948,7 @@ Elk lid staat bij **Leden** met een rondje in zijn kleur. Je ziet of iemand op d
 
 #### Goed om te weten
 
-Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. Profielen op deze telefoon regel je met **Profielen op deze telefoon beheren**. Leden staan vooraan bij **Deel je nieuwe recepten**.
+Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. Je huisgenoten en vrienden staan in **Meer** ook direct onder **Mijn profiel**; een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.
 
 (`#/more/household`)
 
@@ -2957,7 +2961,7 @@ Je stuurt je level, je badges en je kookdagen van de laatste 90 dagen naar je hu
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Huishouden**.
+2. Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.
 3. Tik onder **Mijn kaartje** op **Sync mijn voortgang**.
 4. Tik op **Deel**.
 5. Kies WhatsApp en de persoon aan wie je het stuurt.
@@ -3482,9 +3486,10 @@ Badges verdien je met koken, ontdekken, delen, foto's en meer. Ze staan in acht 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Badges**.
-3. Tik in de strook met tabs op een groep.
-4. Tik op een tegel.
+2. Tik bovenaan op de rij met je naam.
+3. Tik op **Mijn profiel** op de tegel **Badges**.
+4. Tik in de strook met tabs op een groep.
+5. Tik op een tegel.
 
 #### Wat je dan ziet
 
@@ -3492,7 +3497,7 @@ Bovenaan staat “… van … badges verdiend”. De badges zijn ronde tegels me
 
 #### Goed om te weten
 
-De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. Je opent de badges ook via **Mijn profiel**. De app onthoudt de laatste groep die je bekeek.
+De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. De app onthoudt de laatste groep die je bekeek.
 
 (`#/more/badges`)
 
@@ -3505,9 +3510,10 @@ Veel badges hebben acht niveaus. Bij elk niveau krijgt de ring om de tegel een a
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Badges**.
-3. Tik op een tegel met een gekleurde ring.
-4. Tik bovenaan het venster op **Sluit**.
+2. Tik bovenaan op de rij met je naam.
+3. Tik op **Mijn profiel** op de tegel **Badges**.
+4. Tik op een tegel met een gekleurde ring.
+5. Tik bovenaan het venster op **Sluit**.
 
 #### Wat je dan ziet
 
@@ -3528,8 +3534,9 @@ Sommige badges zijn geheim: je ontdekt ze door dingen in de app te doen. Tot je 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Badges**.
-3. Tik in de strook met tabs op **Geheim**.
+2. Tik bovenaan op de rij met je naam.
+3. Tik op **Mijn profiel** op de tegel **Badges**.
+4. Tik in de strook met tabs op **Geheim**.
 
 #### Wat je dan ziet
 
@@ -3550,9 +3557,10 @@ Bovenaan bij de badges staat een tab per lid van je huishouden en een tab **Same
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Badges**.
-3. Tik bovenaan op **Samen**.
-4. Tik bovenaan op je eigen naam.
+2. Tik bovenaan op de rij met je naam.
+3. Tik op **Mijn profiel** op de tegel **Badges**.
+4. Tik bovenaan op **Samen**.
+5. Tik bovenaan op je eigen naam.
 
 #### Wat je dan ziet
 
@@ -3857,7 +3865,7 @@ Houd je niet van het spel? Met de schakelaar **Badges** zet je alle badges, XP e
 
 #### Wat je dan ziet
 
-De rij **Badges** in Meer verdwijnt, net als je level en de XP-balk. Er komen geen blokjes, meldingen, uitdagingen of level-vensters meer.
+De tegel **Badges** op **Mijn profiel** verdwijnt, net als je level en de XP-balk. Er komen geen blokjes, meldingen, uitdagingen of level-vensters meer.
 
 #### Goed om te weten
 
@@ -4250,38 +4258,16 @@ Je verliest eigen en ontvangen recepten, favorieten, notities, kooklog, profiele
 
 (`#/more/storage`)
 
-### Meer mensen op één telefoon
+### Meer dan één profiel op deze telefoon
 
 #### Wat het doet
 
-Kookt er nog iemand op deze telefoon? Geef die persoon een eigen profiel.
+Een telefoon is normaal van één persoon. Huisgenoten voeg je toe via **Huishouden**. Staan er toch meer profielen op, van vroeger, dan wissel je hier van profiel.
 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Profielen beheren**.
-3. Tik op **+ profiel**.
-4. Typ een naam bij **Naam**.
-5. Kies een taal bij **Taal**.
-6. Tik bij **Kleur** op een kleur.
-7. Tik op **Profiel toevoegen**.
-
-#### Wat je dan ziet
-
-Het nieuwe profiel staat in de lijst en is meteen actief.
-
-(`#/more/profiles`)
-
-### Van profiel wisselen
-
-#### Wat het doet
-
-Het actieve profiel is wie de telefoon nu gebruikt. Wissel als iemand anders gaat koken.
-
-#### Waar je tikt
-
-1. Tik onderaan op **Meer**.
-2. Tik op **Profielen beheren**.
+2. Tik onder **Jij & je huishouden** op **Profielen op deze telefoon**.
 3. Tik bij het andere profiel op **Maak actief**.
 
 #### Wat je dan ziet
@@ -4290,46 +4276,44 @@ Bij dat profiel staat nu **Actief**. De app praat meteen de taal van dat profiel
 
 #### Goed om te weten
 
-Tik op de rij zelf om dat profiel eerst te bekijken.
+De rij **Profielen op deze telefoon** staat er alleen als er meer dan één profiel op deze telefoon staat. Tik op de rij van een profiel om het eerst te bekijken.
 
 (`#/more/profiles`)
 
-### Wat per profiel is
+### Wat van jou is en wat van de telefoon
 
 #### Wat het doet
 
-Elk profiel heeft een eigen naam, taal, kleur, avatar, favorieten en notities, en een eigen level en badges. Recepten, weekplan, boodschappenlijst en instellingen deel je.
+Je naam, taal, kleur, avatar, favorieten en notities zijn van jou, net als je level en badges. Recepten, weekplan, boodschappenlijst en instellingen horen bij de telefoon.
 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Profielen beheren**.
+2. Tik bovenaan op de rij met je naam.
 
 #### Wat je dan ziet
 
-Elk profiel staat op een rij met avatar en naam, en met badges aan een balk met punten. Rechts staat **Actief** of **Maak actief**.
+**Mijn profiel** opent met je avatar en je naam, en met badges aan je level. Met **Naam & kleur** pas je je naam, taal en kleur aan.
 
 #### Goed om te weten
 
-Kookt iemand op een eigen telefoon? Die maakt daar een eigen profiel. Via **Huishouden** horen jullie dan bij elkaar.
+Kookt iemand mee op een eigen telefoon? Die heeft daar een eigen profiel. Via **Huishouden** horen jullie dan bij elkaar.
 
-(`#/more/profiles`)
+(`#/more/profile`)
 
 ### Een profiel verwijderen
 
 #### Wat het doet
 
-Je haalt een profiel van deze telefoon. Zijn favorieten en notities verdwijnen mee.
+Je haalt je profiel van deze telefoon. Je favorieten en notities verdwijnen mee.
 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Profielen beheren**.
-3. Tik bij het profiel op **Maak actief** als het nog niet actief is.
-4. Tik op de rij van dat profiel.
-5. Tik op **Naam & kleur**.
-6. Tik onderaan op **Verwijder**.
-7. Bevestig de vraag met OK.
+2. Tik bovenaan op de rij met je naam.
+3. Tik op **Naam & kleur**.
+4. Tik onderaan op **Verwijder**.
+5. Bevestig de vraag met OK.
 
 #### Wat je dan ziet
 
@@ -4337,9 +4321,9 @@ Je komt terug in **Profielen** en het profiel staat niet meer in de lijst.
 
 #### Goed om te weten
 
-Je kunt alleen het actieve profiel aanpassen of verwijderen. Daarna wordt een ander profiel actief.
+Je kunt alleen het actieve profiel aanpassen of verwijderen. Staan er meer profielen op deze telefoon, wissel dan eerst met **Maak actief**. Daarna wordt een ander profiel actief.
 
-(`#/more/profiles`)
+(`#/more/profile`)
 
 <a id="iphone-vs-android"></a>
 
@@ -4732,14 +4716,16 @@ Deze handleiding legt per onderwerp uit wat de app kan, waar je tikt en wat je d
 1. Tik onderaan op **Meer**.
 2. Tik op het kopje **Hulp & over**.
 3. Tik op **Handleiding**.
+4. Tik op een kopje, bijvoorbeeld Recepten.
+5. Tik op een rij.
 
 #### Wat je dan ziet
 
-Bovenaan staan een zoekveld en een rij onderwerpen. Daaronder staan alle onderwerpen met hun rijen, ingeklapt.
+Bovenaan staan een zoekveld en een rij onderwerpen. Daaronder staan tien kopjes, allemaal dicht. Tik op een kopje en de rijen van dat onderwerp verschijnen, ook dicht. Tik op een rij en de uitleg klapt open.
 
 #### Goed om te weten
 
-Tik op een rij om hem open te klappen.
+Tik nog eens op het kopje om het onderwerp weer dicht te klappen. Na **Open** en terug staat alles nog zoals je het liet.
 
 ### Zoeken in de handleiding
 
@@ -4755,17 +4741,17 @@ Typ een woord en de handleiding toont alleen de rijen waar het in voorkomt.
 
 #### Wat je dan ziet
 
-Bij elke letter blijven alleen de passende rijen over, opengeklapt en per onderwerp. Vindt hij niets, dan zegt de handleiding dat.
+Bij elke letter blijven alleen de passende rijen over, opengeklapt en onder het kopje van hun onderwerp. Vindt hij niets, dan zegt de handleiding dat.
 
 #### Goed om te weten
 
-Typ je meer woorden, dan moet elk woord in de rij voorkomen. Hoofdletters en accenten maken niet uit.
+Typ je meer woorden, dan moet elk woord in de rij voorkomen. Hoofdletters en accenten maken niet uit. Tijdens het zoeken staan de kopjes open; zonder zoekwoord zijn ze weer dicht, behalve die je zelf opende.
 
 ### De onderwerpen en de knop Open
 
 #### Wat het doet
 
-Met de rij onderwerpen spring je naar een onderwerp. Met **Open** ga je meteen naar het scherm waar een rij over gaat.
+Met de rij onderwerpen open je meteen een onderwerp. Met **Open** ga je meteen naar het scherm waar een rij over gaat.
 
 #### Waar je tikt
 
@@ -4775,7 +4761,7 @@ Met de rij onderwerpen spring je naar een onderwerp. Met **Open** ga je meteen n
 
 #### Wat je dan ziet
 
-De handleiding schuift naar dat onderwerp. Na **Open** zie je het scherm van die rij.
+Dat onderwerp klapt open en de handleiding schuift ernaartoe. Na **Open** zie je het scherm van die rij.
 
 #### Goed om te weten
 

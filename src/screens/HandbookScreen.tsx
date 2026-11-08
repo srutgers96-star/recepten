@@ -1,8 +1,9 @@
 // '#/more/handbook' — the handbook (docs/specs/handbook.md, block Z §1 + §3): Meer → Hulp & over →
 // 📖 Handleiding. A search field (16 px, filters on every letter) and a row of topic chips in the
-// header; below, the topics in their fixed order with their intro and their rows. Without a search
-// a row is folded (title + first sentence of "Wat het doet"); a tap unfolds it. With a search only
-// the matching rows show, unfolded, grouped per topic. An unfolded row shows "Wat het doet" · "Waar
+// header; below, the topics in their fixed order, each under a fold head (spec V1 §1b: the shared
+// FoldHead caption, all topics closed by default, no intro paragraphs in the app). An open topic shows
+// its rows folded (title + first sentence of "Wat het doet"); a tap unfolds a row. With a search only
+// the matching rows show, unfolded, grouped per topic under an open, non-interactive head. An unfolded row shows "Wat het doet" · "Waar
 // je tikt" (numbered steps) · "Wat je dan ziet" · optionally "Goed om te weten" and an "Open" button
 // for the row's route. A row that exists on one platform only carries an "Android"/"iPhone" chip.
 //
@@ -11,6 +12,7 @@
 // markup in the texts is **bold** around button and screen names.
 import { signal } from '@preact/signals';
 import { useEffect, useMemo, useState } from 'preact/hooks';
+import { FoldHead } from '@/components/FoldHead';
 import { Header } from '@/components/Header';
 import { boldParts, firstSentence, searchHandbook, type HandbookEntry, type HandbookSection } from '@/domain/handbook';
 import { loadHandbook } from '@/handbook';
@@ -19,6 +21,15 @@ import { navigate } from '@/router';
 
 /** The search text survives "Open" → Back (the screen remounts; the query stays). */
 const query = signal('');
+/** Topics the user unfolded; survives "Open" → Back like `query`, never stored (each visit starts closed). */
+const openTopics = signal<ReadonlySet<string>>(new Set());
+
+function setTopicOpen(id: string, open: boolean) {
+  const next = new Set(openTopics.value);
+  if (open) next.add(id);
+  else next.delete(id);
+  openTopics.value = next;
+}
 
 /** Text with `**bold**` names → plain text and <strong>. */
 function Rich(props: { text: string }) {
@@ -132,7 +143,15 @@ export function HandbookScreen() {
         {shown.length > 0 && (
           <div class="chips hb-chips">
             {shown.map((s) => (
-              <button key={s.id} type="button" class="chip" onClick={() => scrollToSection(s.id)}>
+              <button
+                key={s.id}
+                type="button"
+                class="chip"
+                onClick={() => {
+                  setTopicOpen(s.id, true);
+                  scrollToSection(s.id);
+                }}
+              >
                 {s.title[l]}
               </button>
             ))}
@@ -146,19 +165,30 @@ export function HandbookScreen() {
         {sections && searching && shown.length === 0 && <p class="hb-none">{t('handbook.none', { q: q.trim() })}</p>}
         {/* Keyed on the mode so rows fold again when the search is cleared and unfold when one starts. */}
         <div key={searching ? 'search' : 'all'}>
-          {shown.map((s) => (
-            <section key={s.id} id={`hb-${s.id}`} class="hb-section">
-              <h2>{s.title[l]}</h2>
-              {!searching && s.intro[l] && (
-                <p class="hb-section-intro">
-                  <Rich text={s.intro[l]} />
-                </p>
-              )}
-              {s.entries.map((e) => (
-                <Row key={e.id} entry={e} open={searching} />
-              ))}
-            </section>
-          ))}
+          {shown.map((s) => {
+            // While searching every shown topic is open and its head does nothing.
+            const open = searching || openTopics.value.has(s.id);
+            const bodyId = `hb-body-${s.id}`;
+            return (
+              <section key={s.id} id={`hb-${s.id}`} class="hb-section">
+                <FoldHead
+                  title={s.title[l]}
+                  open={open}
+                  controls={bodyId}
+                  onToggle={() => {
+                    if (!searching) setTopicOpen(s.id, !open);
+                  }}
+                />
+                {open && (
+                  <div id={bodyId}>
+                    {s.entries.map((e) => (
+                      <Row key={e.id} entry={e} open={searching} />
+                    ))}
+                  </div>
+                )}
+              </section>
+            );
+          })}
         </div>
       </div>
     </>

@@ -7,7 +7,6 @@ export const settings: Dict = {
   // --- Meer -------------------------------------------------------------------------------------
   'more.title': { nl: 'Meer', en: 'More' },
   'more.addProfile': { nl: '+ profiel', en: '+ profile' },
-  'more.manageProfiles': { nl: 'Profielen beheren', en: 'Manage profiles' },
   'more.settings': { nl: 'Instellingen', en: 'Settings' },
   'more.language': { nl: 'Taal', en: 'Language' },
   'more.theme.system': { nl: 'Systeem', en: 'System' },
@@ -135,7 +134,12 @@ export const settings: Dict = {
   'more.checkRecipes': { nl: 'Controleer mijn recepten', en: 'Check my recipes' },
   'more.checkRecipesHint': { nl: 'Voorstel voor categorie en dieet per eigen recept', en: 'Suggested category and diet per own recipe' },
   'more.householdRow': { nl: 'Huishouden', en: 'Household' },
-  'more.householdRowHint': { nl: 'Naam en wie er meekookt', en: 'Name and who cooks along' },
+  // V1 (docs/specs/verbeterronde-1.md §1c): the Huishouden row under the housemates and friends.
+  'more.householdRowHint': { nl: 'Leden, vrienden en je kaartje', en: 'Members, friends and your card' },
+  'more.householdRowEmpty': { nl: 'Voeg een huisgenoot toe', en: 'Add a housemate' },
+  'more.friend': { nl: 'Vriend', en: 'Friend' },
+  'more.profilesHere': { nl: 'Profielen op deze telefoon', en: 'Profiles on this phone' },
+  'more.profilesHereHint': { nl: '{n} profielen · tik om te wisselen', en: '{n} profiles · tap to switch' },
 
   // --- Phase 5: Huishouden (docs/phase-5-spec.md A.8) ---
   'household.title': { nl: 'Huishouden', en: 'Household' },

@@ -5,7 +5,7 @@ Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee:
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
 ## 8 nov (Opus): V1 — verbeterronde 1: handleiding ingeklapt en dubbel uitklapbaar, Meer opgeruimd, gekozen chips vooraan
-Gebouwd volgens docs/specs/verbeterronde-1.md (lichte workflow wf_3ec5d3a4-1a9; vier bouwers + integrator; niet gecommit).
+Gebouwd volgens docs/specs/verbeterronde-1.md (lichte workflow wf_3ec5d3a4-1a9; vier bouwers + integrator; lens: één bevinding, de Meer-kop verloor van `.section h2`, hersteld met `.more-group .fold-head`).
 Nieuwe gedeelde kop `src/components/FoldHead.tsx` (CSS `.fold-head` in base.css; de `.more-group-head`-regels in settings.css
 zijn weg). Handleiding: tien dichte bijschriften, onderwerp open → rijen dicht → rij open → uitleg; intro-alinea's alleen nog
 in de data/Markdown; open onderwerpen in een module-signal `openTopics` (niet bewaard); zoeken opent de getoonde onderwerpen;

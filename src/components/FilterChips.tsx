@@ -54,6 +54,18 @@ export function tagTextLabel(id: string): string {
   return hasKey('tag.' + id) ? t('tag.' + id) : id;
 }
 
+/**
+ * V1 (docs/specs/verbeterronde-1.md §1d): the small × after the text of a chosen chip. Decorative
+ * only: the chip stays one button and a tap switches it off.
+ */
+export function ChipX() {
+  return (
+    <span class="chip-x" aria-hidden="true">
+      ×
+    </span>
+  );
+}
+
 export interface DietChipsProps {
   /** The diet tags that are on. */
   selected: readonly string[];
@@ -76,6 +88,7 @@ export function DietChips(props: DietChipsProps) {
         return (
           <button key={tag} type="button" class={'chip chip-diet' + (on ? ' on' : '')} aria-pressed={on} onClick={() => props.onToggle(tag)}>
             {tagChipLabel(tag)}
+            {on && <ChipX />}
           </button>
         );
       })}
@@ -113,11 +126,13 @@ export function CuisineChips(props: CuisineChipsProps) {
       <span class="diet-label" aria-hidden="true">
         {t('filter.cuisine')}
       </span>
-      {props.cuisines.map((c) => {
+      {/* V1 §1d: the chosen cuisines first, then the rest; both in data order. */}
+      {[...props.cuisines.filter((c) => props.selected.includes(c.id)), ...props.cuisines.filter((c) => !props.selected.includes(c.id))].map((c) => {
         const on = props.selected.includes(c.id);
         return (
           <button key={c.id} type="button" class={'chip chip-cuisine' + (on ? ' on' : '')} aria-pressed={on} onClick={() => props.onToggle(c.id)}>
             {cuisineLabel(c, c.id)}
+            {on && <ChipX />}
           </button>
         );
       })}

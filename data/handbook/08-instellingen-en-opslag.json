@@ -892,79 +892,24 @@
       }
     },
     {
-      "id": "instellingen-en-opslag.profiel-toevoegen",
+      "id": "instellingen-en-opslag.meer-profielen",
       "title": {
-        "nl": "Meer mensen op één telefoon",
-        "en": "Several people on one phone"
+        "nl": "Meer dan één profiel op deze telefoon",
+        "en": "More than one profile on this phone"
       },
       "what": {
-        "nl": "Kookt er nog iemand op deze telefoon? Geef die persoon een eigen profiel.",
-        "en": "Does someone else cook on this phone too? Give that person their own profile."
+        "nl": "Een telefoon is normaal van één persoon. Huisgenoten voeg je toe via **Huishouden**. Staan er toch meer profielen op, van vroeger, dan wissel je hier van profiel.",
+        "en": "A phone normally belongs to one person. You add housemates through **Household**. If there are more profiles on it anyway, from before, you switch profile here."
       },
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Profielen beheren**.",
-          "Tik op **+ profiel**.",
-          "Typ een naam bij **Naam**.",
-          "Kies een taal bij **Taal**.",
-          "Tik bij **Kleur** op een kleur.",
-          "Tik op **Profiel toevoegen**."
-        ],
-        "en": [
-          "Tap **More** at the bottom.",
-          "Tap **Manage profiles**.",
-          "Tap **+ profile**.",
-          "Type a name under **Name**.",
-          "Choose a language under **Language**.",
-          "Tap a colour under **Colour**.",
-          "Tap **Add profile**."
-        ]
-      },
-      "see": {
-        "nl": "Het nieuwe profiel staat in de lijst en is meteen actief.",
-        "en": "The new profile is in the list and active straight away."
-      },
-      "route": "/more/profiles",
-      "platform": "all",
-      "keywords": {
-        "nl": [
-          "profiel",
-          "toevoegen",
-          "partner",
-          "gezin",
-          "meer mensen",
-          "gebruiker"
-        ],
-        "en": [
-          "profile",
-          "add",
-          "partner",
-          "family",
-          "several people",
-          "user"
-        ]
-      }
-    },
-    {
-      "id": "instellingen-en-opslag.profiel-wisselen",
-      "title": {
-        "nl": "Van profiel wisselen",
-        "en": "Switch profile"
-      },
-      "what": {
-        "nl": "Het actieve profiel is wie de telefoon nu gebruikt. Wissel als iemand anders gaat koken.",
-        "en": "The active profile is who is using the phone now. Switch when someone else is going to cook."
-      },
-      "where": {
-        "nl": [
-          "Tik onderaan op **Meer**.",
-          "Tik op **Profielen beheren**.",
+          "Tik onder **Jij & je huishouden** op **Profielen op deze telefoon**.",
           "Tik bij het andere profiel op **Maak actief**."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Manage profiles**.",
+          "Under **You & your household**, tap **Profiles on this phone**.",
           "Next to the other profile, tap **Make active**."
         ]
       },
@@ -973,76 +918,76 @@
         "en": "That profile now shows **Active**. The app switches to that profile's language straight away."
       },
       "know": {
-        "nl": "Tik op de rij zelf om dat profiel eerst te bekijken.",
-        "en": "Tap the row itself to look at that profile first."
+        "nl": "De rij **Profielen op deze telefoon** staat er alleen als er meer dan één profiel op deze telefoon staat. Tik op de rij van een profiel om het eerst te bekijken.",
+        "en": "The **Profiles on this phone** row is only there when this phone holds more than one profile. Tap a profile's row to look at it first."
       },
       "route": "/more/profiles",
       "platform": "all",
       "keywords": {
         "nl": [
+          "profiel",
           "wisselen",
           "actief",
-          "profiel",
+          "meer profielen",
           "andere persoon",
-          "inloggen",
-          "omschakelen"
+          "telefoon delen"
         ],
         "en": [
+          "profile",
           "switch",
           "active",
-          "profile",
+          "several profiles",
           "other person",
-          "log in",
-          "change user"
+          "shared phone"
         ]
       }
     },
     {
       "id": "instellingen-en-opslag.per-profiel",
       "title": {
-        "nl": "Wat per profiel is",
-        "en": "What belongs to each profile"
+        "nl": "Wat van jou is en wat van de telefoon",
+        "en": "What is yours and what belongs to the phone"
       },
       "what": {
-        "nl": "Elk profiel heeft een eigen naam, taal, kleur, avatar, favorieten en notities, en een eigen level en badges. Recepten, weekplan, boodschappenlijst en instellingen deel je.",
-        "en": "Each profile has its own name, language, colour, avatar, favourites and notes, and its own level and badges. Recipes, week plan, shopping list and settings are shared."
+        "nl": "Je naam, taal, kleur, avatar, favorieten en notities zijn van jou, net als je level en badges. Recepten, weekplan, boodschappenlijst en instellingen horen bij de telefoon.",
+        "en": "Your name, language, colour, avatar, favourites and notes are yours, as are your level and badges. Recipes, week plan, shopping list and settings belong to the phone."
       },
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Profielen beheren**."
+          "Tik bovenaan op de rij met je naam."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Manage profiles**."
+          "Tap the row with your name at the top."
         ]
       },
       "see": {
-        "nl": "Elk profiel staat op een rij met avatar en naam, en met badges aan een balk met punten. Rechts staat **Actief** of **Maak actief**.",
-        "en": "Each profile has a row with avatar and name, and with badges on a bar with points. On the right it says **Active** or **Make active**."
+        "nl": "**Mijn profiel** opent met je avatar en je naam, en met badges aan je level. Met **Naam & kleur** pas je je naam, taal en kleur aan.",
+        "en": "**My profile** opens with your avatar and your name, and with badges on your level. **Name & colour** changes your name, language and colour."
       },
       "know": {
-        "nl": "Kookt iemand op een eigen telefoon? Die maakt daar een eigen profiel. Via **Huishouden** horen jullie dan bij elkaar.",
-        "en": "Does someone cook on their own phone? They make their own profile there. Through **Household** you then belong together."
+        "nl": "Kookt iemand mee op een eigen telefoon? Die heeft daar een eigen profiel. Via **Huishouden** horen jullie dan bij elkaar.",
+        "en": "Does someone cook along on their own phone? They have their own profile there. Through **Household** you then belong together."
       },
-      "route": "/more/profiles",
+      "route": "/more/profile",
       "platform": "all",
       "keywords": {
         "nl": [
-          "per profiel",
+          "per persoon",
           "favorieten",
           "notities",
           "gedeeld",
           "eigen",
-          "samen"
+          "van jou"
         ],
         "en": [
-          "per profile",
+          "per person",
           "favourites",
           "notes",
           "shared",
           "own",
-          "together"
+          "yours"
         ]
       }
     },
@@ -1053,24 +998,20 @@
         "en": "Delete a profile"
       },
       "what": {
-        "nl": "Je haalt een profiel van deze telefoon. Zijn favorieten en notities verdwijnen mee.",
-        "en": "You remove a profile from this phone. Its favourites and notes go with it."
+        "nl": "Je haalt je profiel van deze telefoon. Je favorieten en notities verdwijnen mee.",
+        "en": "You remove your profile from this phone. Your favourites and notes go with it."
       },
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Profielen beheren**.",
-          "Tik bij het profiel op **Maak actief** als het nog niet actief is.",
-          "Tik op de rij van dat profiel.",
+          "Tik bovenaan op de rij met je naam.",
           "Tik op **Naam & kleur**.",
           "Tik onderaan op **Verwijder**.",
           "Bevestig de vraag met OK."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Manage profiles**.",
-          "Next to the profile, tap **Make active** if it is not active yet.",
-          "Tap that profile's row.",
+          "Tap the row with your name at the top.",
           "Tap **Name & colour**.",
           "Tap **Delete** at the bottom.",
           "Confirm the question with OK."
@@ -1081,10 +1022,10 @@
         "en": "You return to **Profiles** and the profile is no longer in the list."
       },
       "know": {
-        "nl": "Je kunt alleen het actieve profiel aanpassen of verwijderen. Daarna wordt een ander profiel actief.",
-        "en": "You can only edit or delete the active profile. Afterwards another profile becomes active."
+        "nl": "Je kunt alleen het actieve profiel aanpassen of verwijderen. Staan er meer profielen op deze telefoon, wissel dan eerst met **Maak actief**. Daarna wordt een ander profiel actief.",
+        "en": "You can only edit or delete the active profile. If this phone holds more profiles, switch first with **Make active**. Afterwards another profile becomes active."
       },
-      "route": "/more/profiles",
+      "route": "/more/profile",
       "platform": "all",
       "keywords": {
         "nl": [

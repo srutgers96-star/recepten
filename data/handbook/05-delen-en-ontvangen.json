@@ -665,13 +665,13 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Huishouden**.",
+          "Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.",
           "Tik onder **Mijn kaartje** op **Deel mijn kaartje**.",
           "Kies WhatsApp en de persoon aan wie je het stuurt."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Household**.",
+          "Under **You & your household**, tap **Household**, below your housemates.",
           "Under **My card**, tap **Share my card**.",
           "Choose WhatsApp and the person you are sending it to."
         ]
@@ -702,7 +702,7 @@
         "nl": [
           "Kopieer het bericht met het kaartje.",
           "Tik onderaan op **Meer**.",
-          "Tik op **Huishouden**.",
+          "Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.",
           "Scrol naar **Voeg lid toe via link of plak**.",
           "Tik op **Plak van klembord**.",
           "Tik op de knop “Voeg … toe aan je huishouden”, met de naam erin."
@@ -710,7 +710,7 @@
         "en": [
           "Copy the message with the card.",
           "Tap **More** at the bottom.",
-          "Tap **Household**.",
+          "Under **You & your household**, tap **Household**, below your housemates.",
           "Scroll to **Add a member via link or paste**.",
           "Tap **Paste from clipboard**.",
           "Tap the button “Add … to your household”, with the name in it."
@@ -735,13 +735,13 @@
       "id": "delen-en-ontvangen.huishouden",
       "title": { "nl": "Je huishouden: leden en kleuren", "en": "Your household: members and colours" },
       "what": {
-        "nl": "In je huishouden staan de profielen op deze telefoon en de mensen op een andere telefoon. Iedereen heeft een eigen kleur.",
-        "en": "Your household holds the profiles on this phone and the people on another phone. Everyone has their own colour."
+        "nl": "In je huishouden staan de mensen met wie je kookt, ook als ze een eigen telefoon hebben. Iedereen heeft een eigen kleur.",
+        "en": "Your household holds the people you cook with, also when they have their own phone. Everyone has their own colour."
       },
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Huishouden**.",
+          "Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.",
           "Tik onderaan op **Voeg lid toe**.",
           "Typ een naam.",
           "Tik op een kleur.",
@@ -749,7 +749,7 @@
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Household**.",
+          "Under **You & your household**, tap **Household**, below your housemates.",
           "Tap **Add member** at the bottom.",
           "Type a name.",
           "Tap a colour.",
@@ -761,8 +761,8 @@
         "en": "Each member is under **Members** with a circle in their colour. You see whether someone is on this phone, came through a card or was added by hand."
       },
       "know": {
-        "nl": "Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. Profielen op deze telefoon regel je met **Profielen op deze telefoon beheren**. Leden staan vooraan bij **Deel je nieuwe recepten**.",
-        "en": "**Edit** and **Remove** change a member from another phone. You manage profiles on this phone with **Manage the profiles on this phone**. Members come first in **Share your new recipes**."
+        "nl": "Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. Je huisgenoten en vrienden staan in **Meer** ook direct onder **Mijn profiel**; een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.",
+        "en": "**Edit** and **Remove** change a member from another phone. Your housemates and friends also show in **More** straight under **My profile**; a tap brings you here. Members come first in **Share your new recipes**."
       },
       "route": "/more/household",
       "platform": "all",
@@ -781,14 +781,14 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Huishouden**.",
+          "Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.",
           "Tik onder **Mijn kaartje** op **Sync mijn voortgang**.",
           "Tik op **Deel**.",
           "Kies WhatsApp en de persoon aan wie je het stuurt."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Household**.",
+          "Under **You & your household**, tap **Household**, below your housemates.",
           "Under **My card**, tap **Sync my progress**.",
           "Tap **Share**.",
           "Choose WhatsApp and the person you are sending it to."

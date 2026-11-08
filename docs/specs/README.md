@@ -89,7 +89,7 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 
 | Blok | Inhoud | Spec | Status |
 |---|---|---|---|
-| V1 | Handleiding ingeklapt en dubbel uitklapbaar · Meer opgeruimd (Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg) · gekozen chips vooraan met kruisje, na drie uur vergeten | verbeterronde-1.md | in aanbouw (8 nov) |
+| V1 | Handleiding ingeklapt en dubbel uitklapbaar · Meer opgeruimd (Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg) · gekozen chips vooraan met kruisje, na drie uur vergeten | verbeterronde-1.md | compleet (8 nov) |
 | V2 | Delen zonder bestanden (links tot 20 KB, meerdere berichten) · Android-hint voor een WhatsApp-bestand · afzender met avatar in de inbox · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | — (IDEAS 12 + 13) | gepland |
 | V3 | Uitdagingen: beloning +2 % per level boven 20, vast bij de start | — (IDEAS 11) | wacht op Stijns ja |
 | V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | — (IDEAS 9) | gepland |

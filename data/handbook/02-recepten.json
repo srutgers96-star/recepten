@@ -67,8 +67,8 @@
         "en": "The results come in groups: **By name**, **With this ingredient**, **Category** and **Tag**. Each recipe shows in one group only."
       },
       "know": {
-        "nl": "Zoeken kijkt door alle recepten die bij je filters passen, ook als je op **Eigen** sorteert. Een keuken, zoals italiaans, vind je onder **Categorie**.",
-        "en": "Search looks through every recipe that fits your filters, also when you sort by **Own**. A cuisine, such as Italian, shows under **Category**."
+        "nl": "Zoeken kijkt door alle recepten die bij je filters passen, ook als je op **Eigen** sorteert. Een keuken, zoals italiaans, vind je onder **Categorie**. Gekozen filters staan vooraan in hun rij, met een kruisje ×; na drie uur vergeet de app ze.",
+        "en": "Search looks through every recipe that fits your filters, also when you sort by **Own**. A cuisine, such as Italian, shows under **Category**. Chosen filters sit at the front of their row, with a cross ×; after three hours the app forgets them."
       },
       "route": "/recipes",
       "platform": "all",
@@ -131,12 +131,12 @@
         ]
       },
       "see": {
-        "nl": "De lijst wordt korter en bovenaan staat hoeveel van het totaal er overblijven. Het gekozen knopje is gekleurd.",
-        "en": "The list gets shorter and the top says how many of the total are left. The chosen button is coloured."
+        "nl": "De lijst wordt korter en bovenaan staat hoeveel van het totaal er overblijven. Het gekozen knopje is gekleurd en heeft een kruisje ×.",
+        "en": "The list gets shorter and the top says how many of the total are left. The chosen button is coloured and has a cross ×."
       },
       "know": {
-        "nl": "Kies je twee diëten, dan moet een recept bij allebei passen. **ook als optie** werkt pas als er een dieet aan staat. De app onthoudt je filters op deze telefoon.",
-        "en": "Choose two diets and a recipe must fit both. **options too** only works once a diet is on. The app remembers your filters on this phone."
+        "nl": "Kies je twee diëten, dan moet een recept bij allebei passen. **ook als optie** werkt pas als er een dieet aan staat. De app onthoudt je filters drie uur op deze telefoon.",
+        "en": "Choose two diets and a recipe must fit both. **options too** only works once a diet is on. The app remembers your filters on this phone for three hours."
       },
       "route": "/recipes",
       "platform": "all",
@@ -165,12 +165,12 @@
         ]
       },
       "see": {
-        "nl": "Alleen gerechten met die keuken blijven over. Kies je twee keukens, dan zie je de gerechten van allebei.",
-        "en": "Only dishes with that cuisine stay. Choose two cuisines and you see the dishes of both."
+        "nl": "Alleen gerechten met die keuken blijven over. De gekozen keuken krijgt een kruisje × en springt naar voren in de rij. Kies je twee keukens, dan zie je de gerechten van allebei.",
+        "en": "Only dishes with that cuisine stay. The chosen cuisine gets a cross × and moves to the front of the row. Choose two cuisines and you see the dishes of both."
       },
       "know": {
-        "nl": "De rij toont alleen keukens die in je recepten voorkomen. Een recept zonder keuken valt weg zodra er een keuken aan staat.",
-        "en": "The row only shows cuisines that occur in your recipes. A recipe without a cuisine drops out once a cuisine is on."
+        "nl": "De rij toont alleen keukens die in je recepten voorkomen. Een recept zonder keuken valt weg zodra er een keuken aan staat. Drie uur na je laatste keuze vergeet de app de keuken weer.",
+        "en": "The row only shows cuisines that occur in your recipes. A recipe without a cuisine drops out once a cuisine is on. Three hours after your last choice the app forgets the cuisine again."
       },
       "route": "/recipes",
       "platform": "all",
@@ -201,8 +201,12 @@
         ]
       },
       "see": {
-        "nl": "Het knopje wordt gekleurd en de lijst wordt korter. Twee categorieën tonen ze allebei; twee labels moeten allebei passen.",
-        "en": "The button turns coloured and the list gets shorter. Two categories show both; two labels must both fit."
+        "nl": "Het knopje wordt gekleurd, krijgt een kruisje × en springt naar voren in de rij. De lijst wordt korter. Twee categorieën tonen ze allebei; twee labels moeten allebei passen.",
+        "en": "The button turns coloured, gets a cross × and moves to the front of the row. The list gets shorter. Two categories show both; two labels must both fit."
+      },
+      "know": {
+        "nl": "Tik nog eens op een gekozen knopje om het uit te zetten. Drie uur na je laatste keuze vergeet de app de filters; dan staat alles weer uit.",
+        "en": "Tap a chosen button again to switch it off. Three hours after your last choice the app forgets the filters; then everything is off again."
       },
       "route": "/recipes",
       "platform": "all",

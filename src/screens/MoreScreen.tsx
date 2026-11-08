@@ -3,9 +3,12 @@
 // device in localStorage, with the "Opslag & back-up" row (backup-due badge) as a plain row between
 // them (a group holding one row of the same name was two taps for one):
 //   "Jij & je huishouden"  row Mijn profiel (6D-S: small avatar, name, level title → '/more/profile'),
-//                          Profielen beheren, Huishouden, 🏆 Badges row (phase 5 block C, only while
-//                          the badges switch is on), 📅 Kookkalender, 🎨 Jouw stijl ('/more/style'),
-//                          "Aantal personen" stepper (phase 4 week slots)
+//                          then (V1, docs/specs/verbeterronde-1.md §1c) the housemates and the friends
+//                          as smaller rows (→ '/more/household'), the row Huishouden, the row
+//                          "Profielen op deze telefoon" (only with more than one profile), 📅
+//                          Kookkalender, 🎨 Jouw stijl ('/more/style'), "Aantal personen" stepper
+//                          (phase 4 week slots). The 🏆 Badges row went in V1: the badges are a tile on
+//                          Mijn profiel (the route '/more/badges' stays).
 //   "Instellingen"         language, confetti, badges switch, °F, "Kookstand & timer" (read-aloud,
 //                          voice commands, timer vibrate — phase 5 block B); the Experimenten switch
 //                          (phase 5 block D) went on 8 nov 2026: nothing read it any more since 13Q
@@ -23,25 +26,28 @@
 // 6D-4 (docs/specs/xp-levels.md §1j): "📅 Kookkalender" (→ '/more/calendar') closes the menu of
 // "Jij & je huishouden", always shown (the calendar is a log; only its levels need badges on).
 // A closed group shows its badge (unsent) on the group head, so nothing gets lost. The group head
-// is an <h2> wrapping the toggle button (not a heading inside a button, which screen readers drop
-// from their headings list), the standard disclosure pattern.
+// is the shared <FoldHead/> (V1 §1a): an <h2> wrapping the toggle button (not a heading inside a
+// button, which screen readers drop from their headings list), the standard disclosure pattern.
 import type { ComponentChildren } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgesEnabled, loadBadgeSettings, setBadgesEnabled, syncCatalogIfNeeded } from '@/badges';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo, isIOS } from '@/components/AppInfo';
 import { browserLabel, OpenInChrome } from '@/components/BrowserNotice';
+import { FoldHead } from '@/components/FoldHead';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
 import { levelTitleText } from '@/components/XpBar';
 import { SheetPortal } from '@/components/SheetPortal';
-import { getFahrenheit, getHouseholdServings, setFahrenheit, setHouseholdServings } from '@/db/repo';
+import { getFahrenheit, getHousehold, getHouseholdServings, getProgressSnapshots, setFahrenheit, setHouseholdServings } from '@/db/repo';
 import { baseDictionary, userIngredients } from '@/dictionary';
+import { matchMemberForCard, memberFromProfile, membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
 import type { Lang } from '@/domain/model';
+import type { ProgressSnapshot } from '@/domain/progress';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
-import { activeProfile } from '@/profile';
+import { activeProfile, profiles } from '@/profile';
 import { browserName, isAndroid, isStandalone } from '@/pwa';
 import { navigate } from '@/router';
 import { copyText, shareText } from '@/share-actions';
@@ -114,10 +120,12 @@ function MenuRow(props: {
   /** 6D-S: an element before the label (the row Mijn profiel: the small avatar). */
   icon?: ComponentChildren;
   ariaLabel?: string;
+  /** V1: an extra class on the row ('row-member': a housemate or friend, a size smaller). */
+  extraClass?: string;
 }) {
   const { to, onClick } = props;
   return (
-    <button type="button" class={'row' + (props.icon ? ' row-icon' : '')} aria-label={props.ariaLabel} onClick={onClick ?? (() => to && navigate(to))}>
+    <button type="button" class={'row' + (props.icon ? ' row-icon' : '') + (props.extraClass ? ' ' + props.extraClass : '')} aria-label={props.ariaLabel} onClick={onClick ?? (() => to && navigate(to))}>
       {props.icon}
       <span class="name">
         {props.label}
@@ -138,13 +146,13 @@ function Group(props: { id: GroupId; title: string; open: boolean; onToggle: (id
   const bodyId = `more-group-${props.id}`;
   return (
     <section class={'section more-group' + (props.open ? ' open' : '')}>
-      <h2 class="more-group-head">
-        <button type="button" aria-expanded={props.open} aria-controls={props.open ? bodyId : undefined} onClick={() => props.onToggle(props.id)}>
-          <span class="more-group-title">{props.title}</span>
-          {!props.open && props.badge && <span class={'badge menu-badge' + (props.badgeTone === 'red' ? ' badge-next' : '')}>{props.badge}</span>}
-          <Chevron />
-        </button>
-      </h2>
+      <FoldHead
+        title={props.title}
+        open={props.open}
+        onToggle={() => props.onToggle(props.id)}
+        controls={bodyId}
+        badge={!props.open && props.badge ? <span class={'badge menu-badge' + (props.badgeTone === 'red' ? ' badge-next' : '')}>{props.badge}</span> : undefined}
+      />
       {props.open && (
         <div class="more-group-body" id={bodyId}>
           {props.children}
@@ -152,6 +160,29 @@ function Group(props: { id: GroupId; title: string; open: boolean; onToggle: (id
       )}
     </section>
   );
+}
+
+// --- Housemates and friends under Mijn profiel (V1, docs/specs/verbeterronde-1.md §1c) ----------
+
+/**
+ * One housemate (a member that is not the active profile), a size smaller than Mijn profiel. Under
+ * the name, with badges on and a level known: the level line as on Huishouden (a profile on this
+ * phone live via `useAvatarLevel`; a member on another phone from its last snapshot, without the
+ * "bijgewerkt" date); otherwise "via kaartje" / "met de hand", or nothing for a local profile.
+ */
+function MemberMenuRow(props: { member: Member; snapshot?: ProgressSnapshot }) {
+  const m = props.member;
+  const localLevel = useAvatarLevel(m.local ? m.id : null);
+  const level = badgesEnabled.value ? (m.local ? localLevel : props.snapshot?.level) : undefined;
+  const sub = level !== undefined ? levelTitleText(level) : m.local ? undefined : m.deviceId ? t('household.fromCard') : t('household.byHand');
+  return <MenuRow extraClass="row-member" icon={<Avatar profile={m} />} label={m.name} sub={sub} to="/more/household" />;
+}
+
+/** One friend (a snapshot kept with "Bewaar als vriend"): "Vriend", with badges on "· Level n · titel". */
+function FriendMenuRow(props: { snapshot: ProgressSnapshot }) {
+  const s = props.snapshot;
+  const sub = t('more.friend') + (badgesEnabled.value ? ' · ' + levelTitleText(s.level) : '');
+  return <MenuRow extraClass="row-member" icon={<Avatar profile={s} />} label={s.name} sub={sub} to="/more/household" />;
 }
 
 // --- Feedback (6A.7) ----------------------------------------------------------------------------
@@ -402,6 +433,9 @@ export function MoreScreen() {
   const [groups, setGroups] = useState<GroupState>(loadGroupState);
   const [feedback, setFeedback] = useState(false);
   const [links, setLinks] = useState(false);
+  // V1 §1c: the household setting and the progress snapshots, read once on mount (as Huishouden does).
+  const [householdSetting, setHouseholdSetting] = useState<HouseholdSetting | null>(null);
+  const [snapshots, setSnapshots] = useState<Record<string, ProgressSnapshot>>({});
   // 6D-S: the row Mijn profiel shows the level ring and, with badges on, the level title.
   const level = useAvatarLevel(active?.id);
 
@@ -422,6 +456,8 @@ export function MoreScreen() {
     void getFahrenheit().then(setF, (e: unknown) => console.error('getFahrenheit', e));
     void getHouseholdServings().then(setHousehold, (e: unknown) => console.error('getHouseholdServings', e));
     void refreshShareBadges();
+    void getHousehold().then(setHouseholdSetting, (e: unknown) => console.error('getHousehold', e));
+    void getProgressSnapshots().then(setSnapshots, (e: unknown) => console.error('getProgressSnapshots', e));
   }, []);
 
   function toggleGroup(id: GroupId) {
@@ -449,6 +485,14 @@ export function MoreScreen() {
   const builtin = baseDictionary().ingredients.length;
   // Badges on and the level known: "Level 5 · Boterhamsmeerder" under the name (badges off: no trace of XP).
   const levelSub = badgesEnabled.value && level !== undefined ? levelTitleText(level) : undefined;
+  // V1 §1c: every member except the active profile (local profiles and members by card or by hand),
+  // and the friends (a friend who has since become a member shows as a member only, as on Huishouden).
+  const profileList = profiles.value;
+  const members = householdSetting ? membersFrom(profileList, householdSetting) : profileList.map(memberFromProfile);
+  const housemates = members.filter((m) => m.id !== active?.id);
+  const friends = Object.values(snapshots)
+    .filter((s) => s.friend && !matchMemberForCard(members, s))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <>
@@ -469,11 +513,19 @@ export function MoreScreen() {
               sub={active ? levelSub : undefined}
               to="/more/profile"
             />
-            <MenuRow label={t('more.manageProfiles')} to="/more/profiles" />
-            {/* Phase 5 (docs/phase-5-spec.md A.8): the household (name + members). */}
-            <MenuRow label={t('more.householdRow')} sub={t('more.householdRowHint')} to="/more/household" />
-            {/* Phase 5 block C: only while the badges switch (under Instellingen) is on — off means no trace of gamification. */}
-            {badgesEnabled.value && <MenuRow label={`🏆 ${t('more.badges')}`} to="/more/badges" />}
+            {/* V1 §1c: the housemates, then the friends, right under Mijn profiel (→ Huishouden). */}
+            {housemates.map((m) => (
+              <MemberMenuRow key={m.id} member={m} snapshot={snapshots[m.id]} />
+            ))}
+            {friends.map((s) => (
+              <FriendMenuRow key={s.id} snapshot={s} />
+            ))}
+            {/* Phase 5 (docs/phase-5-spec.md A.8): the household (name + members); still called
+                Huishouden, so every "Meer → Huishouden" path stays right (V1). */}
+            <MenuRow label={t('more.householdRow')} sub={t(housemates.length > 0 ? 'more.householdRowHint' : 'more.householdRowEmpty')} to="/more/household" />
+            {/* V1 §1c point 5: the Profielen page only for a phone that already holds more than one
+                profile (from before V1); with exactly one there is no trace of it. */}
+            {profileList.length > 1 && <MenuRow label={t('more.profilesHere')} sub={t('more.profilesHereHint', { n: profileList.length })} to="/more/profiles" />}
             {/* 6D-4 (docs/specs/xp-levels.md §1j): the cooking calendar, ALWAYS (also with badges off: it is a log). */}
             <MenuRow label={`📅 ${t('more.calendar')}`} to="/more/calendar" />
             {/* 6D-S: avatar, sounds, confetti, typefaces and theme; always (the theme is not XP). */}

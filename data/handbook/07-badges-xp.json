@@ -259,13 +259,15 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Badges**.",
+          "Tik bovenaan op de rij met je naam.",
+          "Tik op **Mijn profiel** op de tegel **Badges**.",
           "Tik in de strook met tabs op een groep.",
           "Tik op een tegel."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Badges**.",
+          "Tap the row with your name at the top.",
+          "On **My profile**, tap the **Badges** tile.",
           "Tap a group in the strip of tabs.",
           "Tap a tile."
         ]
@@ -275,8 +277,8 @@
         "en": "At the top it says “… of … badges earned”. The badges are round tiles with only an icon; the ones you do not have yet are paler. A tap opens a window with the name, the explanation and how far you are."
       },
       "know": {
-        "nl": "De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. Je opent de badges ook via **Mijn profiel**. De app onthoudt de laatste groep die je bekeek.",
-        "en": "The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open the badges from **My profile**. The app remembers the last group you looked at."
+        "nl": "De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. De app onthoudt de laatste groep die je bekeek.",
+        "en": "The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. The app remembers the last group you looked at."
       },
       "route": "/more/badges",
       "platform": "all",
@@ -295,13 +297,15 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Badges**.",
+          "Tik bovenaan op de rij met je naam.",
+          "Tik op **Mijn profiel** op de tegel **Badges**.",
           "Tik op een tegel met een gekleurde ring.",
           "Tik bovenaan het venster op **Sluit**."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Badges**.",
+          "Tap the row with your name at the top.",
+          "On **My profile**, tap the **Badges** tile.",
           "Tap a tile with a coloured ring.",
           "Tap **Close** at the top of the window."
         ]
@@ -331,12 +335,14 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Badges**.",
+          "Tik bovenaan op de rij met je naam.",
+          "Tik op **Mijn profiel** op de tegel **Badges**.",
           "Tik in de strook met tabs op **Geheim**."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Badges**.",
+          "Tap the row with your name at the top.",
+          "On **My profile**, tap the **Badges** tile.",
           "Tap **Secret** in the strip of tabs."
         ]
       },
@@ -365,13 +371,15 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Badges**.",
+          "Tik bovenaan op de rij met je naam.",
+          "Tik op **Mijn profiel** op de tegel **Badges**.",
           "Tik bovenaan op **Samen**.",
           "Tik bovenaan op je eigen naam."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Badges**.",
+          "Tap the row with your name at the top.",
+          "On **My profile**, tap the **Badges** tile.",
           "Tap **Together** at the top.",
           "Tap your own name at the top."
         ]
@@ -856,8 +864,8 @@
         ]
       },
       "see": {
-        "nl": "De rij **Badges** in Meer verdwijnt, net als je level en de XP-balk. Er komen geen blokjes, meldingen, uitdagingen of level-vensters meer.",
-        "en": "The **Badges** row in More disappears, as do your level and the XP bar. No more chips, messages, challenges or level windows appear."
+        "nl": "De tegel **Badges** op **Mijn profiel** verdwijnt, net als je level en de XP-balk. Er komen geen blokjes, meldingen, uitdagingen of level-vensters meer.",
+        "en": "The **Badges** tile on **My profile** disappears, as do your level and the XP bar. No more chips, messages, challenges or level windows appear."
       },
       "know": {
         "nl": "Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti en geen schuddend scherm.",

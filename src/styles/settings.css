@@ -898,91 +898,18 @@ textarea.input.member-card-raw {
   margin: 14px 0 4px;
 }
 
-/* The head is an h2 (so it stays a heading for screen readers) wrapping a 44 px button. Since 8 nov
-   2026 (Stijn: "the heads and the rows look alike") it is a caption in the style of the shopping
-   list's aisle captions, only bigger: centred, cobalt, small capitals, between two rules drawn by
-   ::before/::after, with the badge of a closed group and the chevron right after the name. Rows stay
-   left-aligned in the ink colour, so a glance tells a head from an item. */
-.more-group .more-group-head {
+/* The group head is the shared <FoldHead/> (src/components/FoldHead.tsx, styled as .fold-head in
+   base.css; V1, docs/specs/verbeterronde-1.md §1a): the cobalt caption Meer got on 8 nov 2026.
+   On Meer it sits in a .section, whose `.section h2` (base.css, 0,1,1) would beat `.fold-head` (0,1,0)
+   and make it 17 px with a 10 px margin; this restores the 13 px / margin 0 caption of the handbook. */
+.more-group .fold-head {
   margin: 0;
   font-size: 13px;
-  border-bottom: 0;
-}
-
-.more-group-head > button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  min-height: 44px;
-  padding: 4px 0;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--cobalt);
-  font: inherit;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-}
-
-.more-group-head > button::before,
-.more-group-head > button::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--cobalt);
-  opacity: 0.35;
-}
-
-.more-group-head > button:active {
-  background: var(--press);
-}
-
-.more-group-head .more-group-title {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* The lone "Opslag & back-up" row sits between the groups with the same rhythm as a group body. */
 .more .more-storage {
   margin: 8px 0;
-}
-
-.more-group-head .menu-badge {
-  flex: none;
-  letter-spacing: 0;
-  text-transform: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.more-group-head .chev {
-  flex: none;
-  width: 16px;
-  height: 16px;
-  color: inherit;
-  opacity: 0.8;
-  transition: transform 0.15s;
-}
-
-.more-group.open .more-group-head .chev {
-  transform: rotate(90deg);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .more-group-head .chev {
-    transition: none;
-  }
 }
 
 .more-group-body {
@@ -1349,4 +1276,21 @@ textarea.input.member-card-raw {
 
 .menu .row.row-icon {
   gap: 12px;
+}
+
+/* V1 (docs/specs/verbeterronde-1.md §1c): housemates and friends right under Mijn profiel, a size
+   smaller — 44 px row, 28 px avatar, the name in 15 px at normal weight. */
+.menu .row.row-member {
+  min-height: 44px;
+}
+
+.menu .row.row-member .avatar {
+  width: 28px;
+  height: 28px;
+  font-size: 13px;
+}
+
+.menu .row.row-member .name {
+  font-size: 15px;
+  font-weight: 400;
 }

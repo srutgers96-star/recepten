@@ -124,6 +124,13 @@
   padding-bottom: 6px;
 }
 
+/* V1 (docs/specs/verbeterronde-1.md §1d): the small × after the text of a chosen filter chip. */
+.chip-x {
+  margin-left: 6px;
+  opacity: .85;
+  font-weight: 700;
+}
+
 .cooked-list {
   display: flex;
   flex-direction: column;

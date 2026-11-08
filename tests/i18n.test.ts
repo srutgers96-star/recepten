@@ -32,6 +32,8 @@ const SHORT_HINTS = [
   'more.badgesHint', 'more.readAloudHint', 'more.voiceCommandsHint', 'more.timerVibrateHint', 'more.timerSoundIOSHint',
   'more.storageHint', 'more.sendNewHint', 'more.dictHint', 'more.linksHint', 'more.styleHint',
   'more.householdRowHint', 'more.checkRecipesHint', 'more.inboxHint', 'more.donateHint',
+  // V1 (docs/specs/verbeterronde-1.md §1c)
+  'more.householdRowEmpty', 'more.profilesHereHint',
 ];
 
 describe('i18n dictionaries', () => {

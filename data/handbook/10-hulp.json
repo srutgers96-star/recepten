@@ -244,21 +244,25 @@
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik op het kopje **Hulp & over**.",
-          "Tik op **Handleiding**."
+          "Tik op **Handleiding**.",
+          "Tik op een kopje, bijvoorbeeld Recepten.",
+          "Tik op een rij."
         ],
         "en": [
           "Tap **More** at the bottom.",
           "Tap the **Help & about** heading.",
-          "Tap **Handbook**."
+          "Tap **Handbook**.",
+          "Tap a heading, for example Recipes.",
+          "Tap a row."
         ]
       },
       "see": {
-        "nl": "Bovenaan staan een zoekveld en een rij onderwerpen. Daaronder staan alle onderwerpen met hun rijen, ingeklapt.",
-        "en": "At the top are a search field and a row of topics. Below are all the topics with their rows, folded."
+        "nl": "Bovenaan staan een zoekveld en een rij onderwerpen. Daaronder staan tien kopjes, allemaal dicht. Tik op een kopje en de rijen van dat onderwerp verschijnen, ook dicht. Tik op een rij en de uitleg klapt open.",
+        "en": "At the top are a search field and a row of topics. Below are ten headings, all folded. Tap a heading and that topic's rows appear, folded too. Tap a row and its explanation folds open."
       },
       "know": {
-        "nl": "Tik op een rij om hem open te klappen.",
-        "en": "Tap a row to fold it open."
+        "nl": "Tik nog eens op het kopje om het onderwerp weer dicht te klappen. Na **Open** en terug staat alles nog zoals je het liet.",
+        "en": "Tap the heading again to fold the topic shut. After **Open** and back, everything is still as you left it."
       },
       "platform": "all",
       "keywords": {
@@ -303,12 +307,12 @@
         ]
       },
       "see": {
-        "nl": "Bij elke letter blijven alleen de passende rijen over, opengeklapt en per onderwerp. Vindt hij niets, dan zegt de handleiding dat.",
-        "en": "With every letter only the matching rows remain, folded open and grouped by topic. If nothing is found, the handbook says so."
+        "nl": "Bij elke letter blijven alleen de passende rijen over, opengeklapt en onder het kopje van hun onderwerp. Vindt hij niets, dan zegt de handleiding dat.",
+        "en": "With every letter only the matching rows remain, folded open and under their topic's heading. If nothing is found, the handbook says so."
       },
       "know": {
-        "nl": "Typ je meer woorden, dan moet elk woord in de rij voorkomen. Hoofdletters en accenten maken niet uit.",
-        "en": "If you type several words, each word must appear in the row. Capitals and accents do not matter."
+        "nl": "Typ je meer woorden, dan moet elk woord in de rij voorkomen. Hoofdletters en accenten maken niet uit. Tijdens het zoeken staan de kopjes open; zonder zoekwoord zijn ze weer dicht, behalve die je zelf opende.",
+        "en": "If you type several words, each word must appear in the row. Capitals and accents do not matter. While you search the headings stay open; without a search word they are folded again, except the ones you opened yourself."
       },
       "platform": "all",
       "keywords": {
@@ -337,8 +341,8 @@
         "en": "The topics and the Open button"
       },
       "what": {
-        "nl": "Met de rij onderwerpen spring je naar een onderwerp. Met **Open** ga je meteen naar het scherm waar een rij over gaat.",
-        "en": "The row of topics jumps you to a topic. **Open** takes you straight to the screen a row is about."
+        "nl": "Met de rij onderwerpen open je meteen een onderwerp. Met **Open** ga je meteen naar het scherm waar een rij over gaat.",
+        "en": "The row of topics opens a topic straight away. **Open** takes you straight to the screen a row is about."
       },
       "where": {
         "nl": [
@@ -353,8 +357,8 @@
         ]
       },
       "see": {
-        "nl": "De handleiding schuift naar dat onderwerp. Na **Open** zie je het scherm van die rij.",
-        "en": "The handbook scrolls to that topic. After **Open** you see that row's screen."
+        "nl": "Dat onderwerp klapt open en de handleiding schuift ernaartoe. Na **Open** zie je het scherm van die rij.",
+        "en": "That topic folds open and the handbook scrolls to it. After **Open** you see that row's screen."
       },
       "know": {
         "nl": "Niet elke rij heeft een knop **Open**. Een rij die alleen voor Android of alleen voor de iPhone geldt, heeft een klein label met die naam.",
