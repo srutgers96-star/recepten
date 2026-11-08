@@ -8,7 +8,7 @@ docs/specs/xp-levels.md (§1 "geen spoor van XP als badges uit staan", §1c–§
 **Kritische lezer (Fable, vooraf).** (1) Twee lagen, twee schakelaars: het **woord** hoort bij de viering en volgt de
 confetti-instelling (en `prefers-reduced-motion`); de **XP-strook** is XP en volgt de badges-schakelaar (badges uit = geen strook,
 geen spoor). (2) "Overcooked!" is geen vieringssoort maar de crit ×5 op een pop; die komt een tel ná "Gekookt!" uit de settle.
-Daarom begint het woord als "Gekookt!" en schakelt het om naar "Overcooked!" (met de bestaande schud-animatie) zodra zo'n pop
+Daarom begint het woord als "Cooked!" en schakelt het om naar "Overcooked!" (met de bestaande schud-animatie) zodra zo'n pop
 binnenkomt terwijl het woord nog staat. (3) De level-up-sheet opent nu meteen bij de settle; met de strook moet hij wachten tot de
 balk vol is gelopen, anders ziet niemand het volstromen. (4) De pops van 6D-1 blijven voor foto en beoordeling (Stijn 30 okt: te
 klein om een balk te tonen); voor koken, badges en uitdagingen gaat de som in de strook. (5) "Snelle vieringen" is een
@@ -43,7 +43,7 @@ koken en bij badges. 8 nov: "goed, gaan we zo doen."
 ### 1a. Het woord (bouwer B)
 
 - Nieuwe component `src/components/CelebrationWord.tsx`, één keer gemount in de shell direct ná <Confetti/>. Hij luistert naar
-  `celebration`: bij `kind === 'cooked'` toont hij **Gekookt!** (`celebrate.cooked` NL "Gekookt!" · EN "Cooked!") groot en
+  `celebration`: bij `kind === 'cooked'` toont hij **Cooked!** (`celebrate.cooked` NL én EN "Cooked!" — Stijn 8 nov: "doe maar gewoon Cooked en Overcooked, ook in de Nederlandse versie, is een beetje slang") groot en
   gecentreerd over het scherm (48 px, 800, goud `--celebrate-gold: #c9a227` met een donkere tekstschaduw voor leesbaarheid op licht
   én donker), in de kookletter als die aanstaat (`data-font` = de waarde van de setting `cook.font`, dezelfde CSS-regels als de
   kookkaart), met een korte schaal-animatie (0,8 → 1,0 in 180 ms) en vervagen aan het eind; totaal **1,4 s** (`WORD_MS = 1400`).
@@ -102,8 +102,8 @@ koken en bij badges. 8 nov: "goed, gaan we zo doen."
 ### 1d. Handboek (bouwer D: `data/handbook/07-badges-xp.json`, `docs/HANDLEIDING.md`, `docs/HANDBOOK.md`)
 
 `badges-xp.xp-verdienen` (bij koken, badges en uitdagingen schuift onderaan een strook in met je XP-balk die oploopt en "+42 XP";
-bij een foto of beoordeling het kleine "+n"), een nieuwe rij `badges-xp.gekookt-woord` ("Gekookt! groot in beeld": het woord in de
-confetti, Overcooked! bij een ×5, tikken versnelt), een nieuwe rij `badges-xp.snelle-vieringen` (ontgrendeling op level 30,
+bij een foto of beoordeling het kleine "+n"), een nieuwe rij `badges-xp.gekookt-woord` ("Cooked! groot in beeld": het woord in de
+confetti, ook in het Nederlands Engels omdat Stijn dat als slang wil, Overcooked! bij een ×5, tikken versnelt), een nieuwe rij `badges-xp.snelle-vieringen` (ontgrendeling op level 30,
 schakelaar in Jouw stijl onder Confetti), en de level-up-rij: het venster opent pas als de balk vol is. Daarna `npm run validate:data`
 en `node --experimental-strip-types tools/handbook-md.ts`.
 
