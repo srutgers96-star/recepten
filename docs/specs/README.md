@@ -59,7 +59,7 @@ spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
 | 13 | 13J iPhone-sheets afmaken | geen spec nodig (§1a) | 1 | ontbreekt bewust |
 | 13a | 13Q QR en link overal: elke deelknop krijgt "Deel via link" én "Toon QR" (QR uit Experimenten); nieuwe sleutel `#l=` voor een boodschappenlijst als link, ontvangst in In & uit ("Zet op mijn lijst") en op de iPhone-landing; te lange tokens → eerlijk "te groot voor QR, deel de link" | qr-link.md | 1 | compleet (Fable 8 nov) |
 | 13b | 6E Uitdagingen (challenges), vrij op level 20: aanbod van drie per week, één lopende, bonus-XP, badge Uitdager | challenges.md | 1 | compleet (Fable 8 nov) |
-| 13c | Opschoonronde: minder uitleg en tekst, rustiger (Stijn 30 okt) | STATUS.md "Opschoonronde" (Fable maakt de lijst tijdens het testen) | 1 | nog te schrijven |
+| 13c | Opschoonronde: minder uitleg en tekst, rustiger, losse eindjes van de lenzen (Stijn 30 okt) | opschoonronde.md | 1 | spec compleet (Fable 8 nov) |
 | 14 | Z handleiding | nog zonder spec (STATUS.md "Blok Z") | — | ontbreekt (Fable schrijft hem na 13J) |
 | 15 | Fable-eindcontrole | §5 hieronder | — | — |
 

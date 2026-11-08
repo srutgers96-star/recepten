@@ -5,7 +5,7 @@ Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee:
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
 ## 8 nov (Opus): 6E — Uitdagingen, vrij op level 20
-Gebouwd volgens docs/specs/challenges.md (bouwer A domein, B data en app-laag, C UI, integrator). Niet gecommit. Geen dependency,
+Gebouwd volgens docs/specs/challenges.md (bouwer A domein, B data en app-laag, C UI, integrator). Gecommit 8 nov (15e3364), live op main. Geen dependency,
 geen Dexie-versie, geen fragmentsleutel; `XP_RULES_VERSION` blijft 3 (zonder gehaalde uitdagingen is `deriveXp` byte-gelijk).
 - **Domein (A):** `src/domain/challenges.ts` (negen regelsoorten, `offerFor` deterministisch via hash32(weekKey + lid) met één per
   zwaarte en niets wat in de laatste 8 weken gehaald is, `termDeadline` week/maand/seizoen incl. jaarwissel, `progressFor` altijd uit de
@@ -895,9 +895,9 @@ voor de badgepagina en de avatar-maker; avatar mooier, groter, gedetailleerder; 
 **opschoonronde** aan het eind (minder uitleg en tekst, bv. niet overal "geel = niveau 1"; rustiger). Lijstje voor die
 ronde hieronder.
 
-### Opschoonronde — lijst (Fable vult aan tijdens het testen)
-- Badgekaart: "Niveau 1 · geel" → alleen de gekleurde ring; de kleurnaam alleen in de detailweergave (Stijn 30 okt).
-- Meer: kortere of geen hints onder de rijen; het profiel-blok bovenaan kleiner of weg zodra IDEAS 5 er is.
+### Opschoonronde — lijst (Fable vult aan tijdens het testen; spec: docs/specs/opschoonronde.md, 8 nov)
+- ✔ Gedaan in 6D-B (30 okt): badgekaart "Niveau 1 · geel" → alleen de gekleurde stip; de kleurnaam alleen als aria-tekst.
+- Meer: kortere of geen hints onder de rijen (→ spec §2A.1). ✔ Het profiel-blok bovenaan is weg sinds 6D-S (één rij Mijn profiel).
 - Level-up-venster: de lijst avatar-onderdelen inkorten ("+13 avatar-onderdelen" met uitklappen).
 - Enkelvoud "1 badge" / "1 kookdag" (6D-4b); kalender-legenda zonder "bijgewerkt" bij badges uit; inline
   kalender-stijlen naar xp.css.
