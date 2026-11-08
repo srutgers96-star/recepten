@@ -115,12 +115,14 @@ rand/achtergrond, tekst links, font inherit, zelfde maat als `.label`). En voor 
 ### 1c. Home en receptkop (bouwer C: `src/domain/tonight.ts`, `tests/tonight.test.ts`, `src/screens/HomeScreen.tsx`,
 `src/components/Header.tsx`, `src/screens/RecipeScreen.tsx`, `src/i18n/browse.ts`, `src/styles/home.css`, `src/styles/browse.css`)
 
-- **"Verder met"**: `continueWithId(last, now, known, hideId, cookedTodayAt, dismissedId)`: de regel toont alleen als `last.at`
-  **minder dan 3 uur** vóór `now` ligt (`CONTINUE_WINDOW_MS = 3 * 3_600_000`; vervangt "zelfde lokale dag") en `last.id !==
-  dismissedId`. Op Home krijgt de regel rechts een kleine × (`<button class="icon-btn home-continue-x">`, 32 px, aria-label
+- **"Verder met"**: `continueWithId(last, now, known, hideId, cookedTodayAt, dismissedId, totalMinutes)`: de regel toont alleen
+  als `last.at` minder dan **de totale bereidingstijd van het recept plus 3 uur** vóór `now` ligt (`CONTINUE_GRACE_MS = 3 *
+  3_600_000`; `totalMinutes` = `recipe.time.total ?? recipe.time.active ?? 0`, door Home meegegeven als functie
+  `(id) => number | null` of als getal voor `last.id`; vervangt "zelfde lokale dag". Stijn 8 nov: "soms moet je iets een dag
+  laten rusten", dus een recept van 24 uur blijft 27 uur staan) en `last.id !== dismissedId`. Op Home krijgt de regel rechts een kleine × (`<button class="icon-btn home-continue-x">`, 32 px, aria-label
   `common.close`) die het id in localStorage `recepten.home.continueDismissed` zet en de regel meteen verbergt; een later
-  bekeken ander recept toont de regel weer. tests/tonight.test.ts: binnen 3 uur ja, na 3 uur nee (ook al is het dezelfde dag),
-  weggeklikt nee, ander id na wegklikken ja.
+  bekeken ander recept toont de regel weer. tests/tonight.test.ts: recept van 55 min: na 2 uur ja, na 4 uur nee (ook al is het dezelfde dag); recept met
+  totaaltijd 24 uur: na 20 uur ja, na 28 uur nee; zonder tijden: 3 uur; weggeklikt nee, ander id na wegklikken ja.
 - **Datum → kookkalender:** `HeaderProps` krijgt `titleTo?: string`; met die prop rendert de Header de titel als
   `<a class="header-title header-title-link" href={'#' + titleTo}>` (zelfde opmaak als de gewone titel, geen onderstreping,
   `:active` → press-kleur) met `aria-label` uit een nieuwe prop `titleLabel?: string`. HomeScreen: `titleTo="/more/calendar"`,
@@ -193,7 +195,7 @@ boven 20, vast bij de start · 07/01 `mijn-profiel`: potlood rechtsonder op de a
 
 ## 2. Opus mag dit NIET zelf beslissen
 
-Het 3-uursvenster en het wegklik-gedrag van "Verder met" · de 100 g/100 ml-drempel · de 1 %-regel en het moment (start) ·
+Het venster van "Verder met" (totaaltijd + 3 uur) en het wegklik-gedrag · de 100 g/100 ml-drempel · de 1 %-regel en het moment (start) ·
 de volgorde en labels op Meer (§1a) · de drie temperatuurmodi en hun teksten · de knipoog (600 ms, ogen + tilt) · de ring
 in currentColor langs de clipvorm · nieuwe dependencies (nee) · teksten in de handleiding schrappen buiten §1g.
 
@@ -215,7 +217,7 @@ en de aanroepers van `shownStep`/`useFahrenheit` buiten MoreScreen (alleen de si
 profielblok, tussenkop Huishouden & vrienden, ledenrijen met label (maak via `#/more/profiles` even een tweede profiel voor een
 huisgenoot-rij en verwijder het weer), geen rij Jouw stijl; tik op het woord Confetti → Jouw stijl op het tabblad confetti, tik op
 Badges → Badges, schuifjes werken nog; Trillen zonder hint; Temperatuur °C | °F | beide en een stap met "180 °C" in de kookstand in
-de drie modi; Home: datum tikbaar → kalender, "Verder met" met × (na wegklikken weg; `last.at` 4 uur geleden → geen regel);
+de drie modi; Home: datum tikbaar → kalender, "Verder met" met × (na wegklikken weg; een recept van 55 min met `last.at` 4 uur geleden → geen regel);
 receptpagina: klokje + "20 min · 55 min totaal · klassieker"; Mijn profiel: potlood rechtsonder opent Naam & kleur, tik op de
 avatar knipoogt; Deel je nieuwe recepten: de ring van de gekozen chip volgt een zeshoek-lijst (zet via Jouw stijl → Lijst een
 zeshoek); Boodschappen: recept met "200 g bloem" → bloem op de gewone lijst, "2 el bloem" → Voorraad; Uitdagingen: aanbod toont
