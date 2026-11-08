@@ -22,7 +22,7 @@ klein, snel live, elk met een eigen spec. Dit is de voorgestelde volgorde; Stijn
 | **V2** | Delen zonder bestanden (links tot 20 KB, anders meerdere berichten; bestand alleen als laatste redmiddel) · bestandsnaam met de uitleg erin + knop "Stuur ook de uitleg" · Android-hint in In & uit · afzender met avatar op de inbox-kaarten · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | 13 + 12 | M | — (live op main 8 nov, spec verbeterronde-2.md) |
 | **V3** | Avatar-ronde (Stijn 8 nov, derde bericht): poppetje iets kleiner in de lijst zodat haar en hoeden niet achter de lijst vallen, niveauring alleen op de kale cirkel (het "rare dunne randje" wás die ring), haar-revamp, zes grappige brillen na level 30 (twee ingrediënt-gebonden), zes kook-onderdelen, vijftien onderdelen met een te lage zeldzaamheid hersteld (levelregel ongewijzigd), tegel Verras me per laag | nieuw (idee 14) | M | — (spec verbeterronde-3.md; de oude V3 (uitdagingen +1 %) zit in V1b) |
 | **V4** | Dopamine-kick bij Gekookt!: het woord groot, XP-balk die oploopt, ontgrendeling "Snelle vieringen" op level 30 | 9 | M | — (in aanbouw, spec verbeterronde-4.md) |
-| ~~V5~~ | Boodschappen terugkijken in de kalender — Stijn 8 nov: "laat maar zitten, te ingewikkeld om goed uit te voeren"; vervalt. Idee 2 (archief van afgevinkte boodschappen) blijft een los idee, niet gepland | 10 + 2 | — | vervallen |
+| **V5** | Vrijspeel-rijkdom (Stijn 8 nov, vierde bericht): confetti-ladder dubbel → trippel → quadruppel en acht nieuwe confetti-ontwerpen tot level 88; acht nieuwe timergeluiden die mensen herkennen of die steeds gekker worden (marimba, Ode an die Freude, Mozart, koekoek, haan, huilende baby, modem, misthoorn), gesynthetiseerd zoals de bestaande; het **gouden thema** (donkere basis, gouden accenten, goed leesbaar) als ontgrendeling op level 100 én als makers-ei: zeven keer tikken op Versie | nieuw (idee 15) | M–L | — (volgorde: na V3b en V4; de kalender-V5 verviel) |
 | **V6** | Gabi's WhatsApp-lijstje plakken met voorstellen (controlestap) · vooraf een data-ronde woordenlijst | 7 + 8 | M + S (data) | — (Stijn 8 nov: "is goed"; leren = ja) |
 | **V7** | Boodschappen-badges over de ingrediënten (Verzamelaar, Groenteboer, Kaasmeester, Kruidenkast, Alfabet, …) mét avatar-beloningen (vier badge-gebonden onderdelen, waaronder minstens één bril); daarna de 30-jaar-simulatie opnieuw draaien en zo nodig de curve bijstellen | 4 | M | — (Stijn 8 nov: "Heb ik al" telt niet; voorzichtig met badges over die producten; curve zo nodig tweaken) |
 | **V8** | Van links naar rechts swipen door de vijf tabbladen | 6 | S–M | doorlopen aan de randen? (voorstel: nee) |
@@ -523,3 +523,42 @@ alleen zonder lijst; vier dikke lijsten naar clip r 44; haar-revamp; zes brillen
 kook-onderdelen (garde, chili-speld, saussnor, vergiet, spaghettimond, spiegelei-ogen); zeldzaamheid: Stijn zag onderdelen bij Gewoon die pas op level 59
 vrijkomen — vijftien onderdelen stonden te laag (data-fout); ze krijgen de zeldzaamheid van de levelregel (t/m 20 · 50 · 80 blijft) en de
 validator verbiedt dat voortaan; tegel Verras me per laag.
+
+## 15. Vrijspeel-rijkdom: confetti-ladder, herkenbare timergeluiden, gouden thema (Stijn, 8 nov 2026)
+
+**Wens (letterlijk).** "maak nog maar een hoop meer confetti dingen in hogere levelklassen. misschien dat je dubbel, trippel,
+quadruppel zo veel confetti op die volgorde kan vrijspelen? en dan steeds grappigere/leukere dingen, of mooiere designs. mag ook bij
+geluidjes voor de timer: geluidjes die mensen herkennen, klassiek iphone, europees volkslied, mozart, huilende baby??? kan ook
+progressief grappig. en als ik 15 keer (of hoeveel dat bij android is) op versie druk, dan voor mij gold-theme vrijspelen, want ik ben
+de maker: een hele mooie maar goed leesbare en werkbare gold-theme, achtergrond donker, meer gouden accenten overal."
+
+**Wat er is (8 nov).** Confetti-stijlen (data/unlocks.json, kind `confetti`, getekend in src/components/Confetti.tsx): dubbel (3),
+groenten (7), feest (12), T-rex (25, episch), goud (40, legendarisch), sterren (50), vuur (badge Op dreef). Timergeluiden
+(src/sounds.ts, gesynthetiseerd met Web Audio, geen bestanden): piepjes, bel, melodie (basis), koebel (5), gong (10), keuken (15),
+fanfare (30). Thema: systeem/licht/donker (src/theme.ts, `data-theme`), de "gouden modus" stond gereserveerd in xp-levels.md voor
+een hoog level. Versie staat onder Meer → Hulp & over → Over.
+
+**Uitwerking (Fable, 8 nov 2026) — blok V5, M–L, drie bouwers + handboek.**
+- **Confetti-ladder en ontwerpen** (Confetti.tsx + unlocks.json): `confetti-triple` (level 22, drie keer zoveel snippers) en
+  `confetti-quadruple` (level 45, vier keer; met een lichte opbouw zodat het niet dichtslaat), in die volgorde ná dubbel. Nieuwe
+  ontwerpen: hartjes (17), herfstblaadjes die zweven (33), sneeuw (38, langzaam en wit, ook in licht thema zichtbaar met een randje),
+  pasta (56: farfalle, penne en spiralen), vuurwerk (62: snippers die uit drie punten barsten), bellen (68: doorzichtige cirkels die
+  omhoog gaan), lampionnen (77: rood-goud, langzaam), noorderlicht (88, legendarisch: lange slierten in groen en paars). Elke stijl =
+  één `look` in Confetti.tsx (vorm, kleuren, aantal, zwaartekracht/snelheid) + een regel in unlocks.json + validator kent de waarde.
+- **Timergeluiden** (sounds.ts, allemaal met oscillatoren zoals nu; geen opnames, geen bestanden, geen auteursrechtelijk beschermde
+  melodieën): marimba (8: een eigen vierklank "à la klassieke telefoon", niet de Apple-melodie), Ode an die Freude (21, Beethoven,
+  publiek domein, acht maten), Kleine Nachtmusik (27, Mozart, het openingsmotief), koekoeksklok (34), haan (42: glissando met
+  vibrato, grappig), huilende baby (48: wah-wah-formant, progressief grappig), modem (55: het inbelgeluid in drie seconden), misthoorn
+  (60). Elk geluid ≤ 4 s, test-knop in Jouw stijl zoals nu; `TimerSound` krijgt de nieuwe waarden.
+- **Gouden thema** (theme.ts + base.css + StyleScreen): `Theme` krijgt `'gold'`; `:root[data-theme='gold']`: papier #15120c (donker,
+  warm), kaart #1f1a10, inkt #f3e9c8, muted #c9b98a, kobalt → goud #d4a72c (knoppen, actieve tab, voortgangsbalken, de bijschriften
+  van Meer en de handleiding), on-cobalt #1a1406, lijn rgba(212,167,44,.22), press rgba(212,167,44,.16), rozemarijn (succes) #9fcf8a;
+  contrast: inkt op papier ≈ 14:1, goud op papier ≈ 8:1 (allebei ruim boven AA). Het thema-tegeltje **Goud** op Jouw stijl → Thema
+  verschijnt alleen als het vrij is. **Vrijspelen op twee manieren:** (1) ontgrendeling `gold-theme` in unlocks.json (kind `feature`,
+  level 100, legendarisch: de gereserveerde gouden modus); (2) het makers-ei: zeven keer achter elkaar (binnen vier seconden) tikken
+  op de regel **Versie** onder Meer → Hulp & over → Over (zeven, zoals Androids ontwikkelaarsmodus), met vanaf de vierde tik een kleine
+  telling ("nog 3 keer…") en daarna de toast "🏆 Gouden thema vrijgespeeld — jij bent de maker." Dat zet de toestel-instelling
+  `theme.goldUnlocked`; het tegeltje toont daarna ook de regel "vrijgespeeld als maker". Geen XP, geen badge (het is een ei).
+- **Handboek:** rijen over confetti-stijlen en timergeluiden (aantallen en levels), het gouden thema (level 100; het ei blijft
+  ongeschreven in de handleiding, wel in ACHTER-DE-SCHERMEN voor Stijn).
+- **Stijn beslist:** niets vooraf; Fable keurt de confetti-ontwerpen en geluiden in de dev-app.
