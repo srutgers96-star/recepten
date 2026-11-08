@@ -12,8 +12,11 @@
 // `LevelUpInfo.unlocked` (icon, name, description; announceUnlocks already left out what
 // `unlocks.announced` held, so nothing is announced twice), then the avatar parts of every level
 // in between (`unlock.level` === that level, from avatarParts(); badges-avatar.md §3d) as one line
-// "Nieuw voor je avatar: …", and at the bottom "Bekijk Vrijgespeeld" (→ #/more/unlocks) only when
-// something in `unlocked` came free. Several levels at once: settleXp merged their unlocks.
+// "Nieuw voor je avatar: …", and at the bottom "Bekijk Vrijgespeeld" (→ #/more/style since 6D-S) only
+// when something in `unlocked` came free. Several levels at once: settleXp merged their unlocks.
+// 6D-S (docs/specs/badges-avatar.md block 6D-S, S-B.3): before each unlock a `.rarity-dot` in its
+// rarity colour (every unlock, common in its grey too); the rarity's name is only its aria text,
+// never a colour name in the text (block 6D-B).
 import type { JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { avatarParts } from '@/avatar';
@@ -160,6 +163,7 @@ function LevelUpBody(props: { info: LevelUpInfo; onClose: () => void }) {
                 </h3>
                 {info.unlocked.map((u) => (
                   <div key={u.id} class="setting levelup-unlock">
+                    <i class="rarity-dot" data-rarity={u.rarity} role="img" aria-label={t('avatar.rarity.' + u.rarity)} />
                     <span class="unlock-icon" aria-hidden="true">
                       {u.icon}
                     </span>
@@ -179,7 +183,7 @@ function LevelUpBody(props: { info: LevelUpInfo; onClose: () => void }) {
                   class="btn btn-block"
                   onClick={() => {
                     onClose();
-                    navigate('/more/unlocks');
+                    navigate('/more/style');
                   }}
                 >
                   {t('levelup.seeUnlocks')}

@@ -8,6 +8,7 @@
 // what its local profiles unlocked (src/unlocks.ts `unlockedOnPhone`); the on/off switches are
 // per phone (`unlocks.disabled`). This module only answers "which ids does this person have" and
 // "which unlocks lie in this stretch of levels / come with this badge".
+import { isRarity, rarityForLevel, type Rarity } from './rarity.ts';
 import type { XpBadgeFact } from './xp.ts';
 
 export type UnlockKind = 'confetti' | 'timerSound' | 'cookedSound' | 'cookFont' | 'feature';
@@ -28,6 +29,8 @@ export interface Unlock {
   value: string;
   nl: { name: string; description: string };
   en: { name: string; description: string };
+  /** Block 6D-S: the explicit `rarity` of the data file, or `rarityForUnlock(by)` when it has none. */
+  rarity: Rarity;
 }
 
 /** Mirrors MAX_LEVEL in src/domain/levels.ts (not imported: that module imports data/levels.json). */
@@ -74,10 +77,21 @@ function normalizeBy(value: unknown): UnlockBy | null {
 }
 
 /**
+ * The default rarity of an unlock (block 6D-S, S-B): a level unlock by `rarityForLevel` (≤ 20
+ * common · ≤ 50 rare · ≤ 80 epic · else legendary); a badge unlock by the tier it needs (none = 1):
+ * ≤ 2 rare · 3–5 epic · ≥ 6 legendary. Only used when data/unlocks.json gives no valid `rarity`.
+ */
+export function rarityForUnlock(by: UnlockBy): Rarity {
+  if (!('badge' in by)) return rarityForLevel(by.level);
+  const tier = by.level ?? 1;
+  return tier <= 2 ? 'rare' : tier <= 5 ? 'epic' : 'legendary';
+}
+
+/**
  * Normalize the raw contents of data/unlocks.json. Tolerant, like normalizeBadges: unusable entries
  * are skipped (never an exception, never console output). An unlock is usable with a kebab-case
  * id, a known kind, a valid `by`, a non-empty icon and value, and both languages (name +
- * description). Duplicate ids: the first wins. File order is kept (the Unlocked page and the
+ * description). An explicit valid `rarity` wins, else `rarityForUnlock` (block 6D-S). Duplicate ids: the first wins. File order is kept (the Unlocked page and the
  * level-up sheet show unlocks in that order). Unknown keys are not carried over.
  */
 export function normalizeUnlocks(data: unknown): Unlock[] {
@@ -97,7 +111,9 @@ export function normalizeUnlocks(data: unknown): Unlock[] {
     if (typeof kind !== 'string' || !KIND_SET.has(kind)) continue;
     if (by === null || icon === null || value === null || nl === null || en === null) continue;
     seen.add(id);
-    out.push({ id, kind: kind as UnlockKind, by, icon, value, nl, en });
+    const explicit = raw['rarity'];
+    const rarity = isRarity(explicit) ? explicit : rarityForUnlock(by);
+    out.push({ id, kind: kind as UnlockKind, by, icon, value, nl, en, rarity });
   }
   return out;
 }

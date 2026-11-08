@@ -327,6 +327,17 @@ geluid, kookwekker heeft een slotje met Lv 20; (5) Confetti: kies T-rex → conf
 (6) Thema: Donker → de app wordt donker. STATUS-kop "… (Opus): 6D-S — Mijn profiel en Jouw stijl". README §2b: `confetti.style`,
 `recepten.style.tab`; `#/more/unlocks` als doorverwijzing. Acceptatie op 360/375 px, licht en donker, NL en EN; alle oude
 instellingen (geluid, lettertype, Gekookt!-geluid, thema) zijn nog instelbaar, nu via Jouw stijl.
+**Na de lens (besluit Fable, 8 nov):** (1) badges uit: Jouw stijl toont Geluiden (alleen de vier basisgeluiden) én Thema; de rest is
+XP en blijft weg — zo blijven alle oude instellingen instelbaar (Fable, in StyleScreen). (2) Een gekozen confetti-stijl wint van de
+mix (de mix geldt alleen voor "Verras me"): akkoord. (3) Knop in het level-up-venster: "Naar Jouw stijl" / "Open Your style".
+(4) De levelregel op Home linkt naar Mijn profiel. (5) Pull-down start alleen als het scrollende element (`.screen.home`) én alles
+erboven bovenaan staan (fixer): akkoord, dat is wat "alleen bovenaan" bedoelt. (6) Een gekozen geluid of lettertype dat (niet meer)
+ontgrendeld is blijft als gekozen tegel zichtbaar (fixer): akkoord. (7) Overige keuzes akkoord: leveltitel alleen in de XP-balk,
+na Verwijder naar Profielen beheren, de rij Jouw stijl in Meer ook met badges uit, `confetti.style` bewaart de stijlwaarde, kiezen
+zet een uitgezette ontgrendeling weer aan, grijs stipje bij gewone ontgrendelingen in het level-up-venster. DEVICE-TEST 97 en
+104 volgen de nieuwe route (Fable). Opschoonronde: ongebruikte keys `more.profile`, `more.switchTo`, `more.unlocks*`,
+`profiles.intro/use/edit`, `more.cookFont*`, `more.cookedSound*`, `.profile-chip(s)`, dubbele `--rarity-*` in avatar.css.
+Gebouwd: 8 nov 2026 (blok 6D-S, workflow wf_4494fb00-318; nabewerking (1), (3), (4) en de testrijen door Fable)
 
 ### Blok 6D-B — badgepagina als tegels: alleen de iconen, tik voor de details (Fable, 30 okt 2026)
 

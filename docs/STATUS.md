@@ -4,6 +4,41 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 6D-S — Mijn profiel en Jouw stijl
+Gebouwd volgens docs/specs/badges-avatar.md "Blok 6D-S" (bouwer S-A Mijn profiel/Home/Meer/Profielen beheren, S-B Jouw stijl +
+zeldzaamheid van ontgrendelingen + opruimen; integrator). Niet gecommit. Geen Dexie-versie, geen dependency. Nieuw: setting
+`confetti.style` (toestel-lokaal, in `DEVICE_LOCAL_SETTINGS`), localStorage `recepten.style.tab`; `#/more/unlocks` is nu een
+doorverwijzing (replace) naar `#/more/style?tab=confetti`. Groen: check, 1573 tests (68 bestanden; nieuw tests/pulldown.test.ts,
+tests/celebrate.test.ts, tests/style-screen.test.ts), build, build:next, validate:data (unlocks.json 15, 0 fouten; alleen de bekende
+4 swaps-waarschuwingen).
+- **Mijn profiel** (`#/more/profile`, `?id=` voor een ander profiel): grote avatar (60 %, max 220 px), naam, XP-balk met leveltitel en
+  reeks, vijf tegels (Jouw stijl · Badges · Deel mijn kaartje · Sync mijn voortgang · Naam & kleur). Ander profiel: alleen "Maak actief".
+  `ProfileEditFields` (naam, taal, kleur, avatar-rij, Verwijder) is uit ProfilesScreen gelicht. Home: `.home-hello` is één knop naar
+  Mijn profiel, plus pull-down (`src/pulldown.ts`, `usePullDown`). Meer: bovenaan één rij Mijn profiel, nieuwe rij 🎨 Jouw stijl;
+  het profiel-blok, Vrijgespeeld, Thema, Timergeluid, Lettertype kookstand en Geluid bij Gekookt! zijn weg. Profielen beheren is alleen
+  de lijst (rij → Mijn profiel van dat profiel).
+- **Jouw stijl** (`#/more/style`): tabs Avatar · Geluiden · Confetti · Letters · Thema, tegels in het maker-raster met zeldzaamheidsstipje
+  en slotje; tik op een geluid speelt het meteen, tik op een confettistijl zet `confetti.style` en speelt een voorproefje, lange druk of
+  het ☑/☐-hoekje zet een stijl in/uit de mix van Verras me. Zeldzaamheid op ontgrendelingen (`src/domain/rarity.ts`, `Unlock.rarity`,
+  alle 15 in data/unlocks.json expliciet), stipje in het level-up-venster. UnlocksScreen.tsx verwijderd, ongebruikte `unlocks.*`-keys weg.
+- **Dev-app (375 en 360 px, licht en donker, NL en EN):** Home-avatar → Mijn profiel; tegels 56 px; Naam & kleur klapt uit met de
+  avatar-knop; Meer en Profielen beheren zoals de spec; `#/more/unlocks` → Jouw stijl op Confetti; alle vijf tabs, vergrendelde tegel geeft
+  "Episch · Komt vrij op level 25."; Thema Donker/Licht werkt meteen; nergens horizontaal scrollen; geen consolefouten. Pull-down alleen
+  op een echte telefoon te testen. DEVICE-TEST: rij 96 en 98 aangepast, nieuwe rij 105.
+- **Open voor Fable/Stijn (niet zelf beslist):** (1) de spec zegt bij `confetti.style` zowel "is die stijl actief (`isActive`)" als "de
+  gekozen vaste stijl negeert de mix"; gebouwd is het tweede (een gekozen stijl blijft, ook uit de mix). (2) De knop in het level-up-venster
+  heet nog "Bekijk Vrijgespeeld" / "See Unlocked" maar gaat naar Jouw stijl: nieuwe tekst nodig. (3) Badges uit: Jouw stijl toont alleen
+  Thema, dus timergeluid en lettertype zijn dan niet instelbaar (botst met "alle oude instellingen … nog instelbaar"). (4) "`vt`-stijl
+  stipje voor badges" niet gebouwd (onduidelijk). (5) De levelregel op Home (`LevelLine`) linkt nog naar Profielen beheren. (6) De spec
+  noemt bij rij 105 "kookwekker … Lv 20"; in de data is Keukenwekker Lv 15 (Tadaa Lv 20): rij 105 volgt de data. (7) README §2b-register
+  (`confetti.style`, `recepten.style.tab`, `#/more/unlocks`) nog bijwerken (docs/specs/ is niet van de integrator). (8) DEVICE-TEST 97
+  stap 1 en 104 stap 3/6 noemen nog Profielen beheren → Deel mijn kaartje en "het rondje bij je profiel" in Meer: nu Mijn profiel.
+  Opschoonronde: ongebruikte keys (`more.profile`, `more.switchTo`, `more.unlocks*`, `profiles.intro/use/edit`, `more.cookFont*`,
+  `more.cookedSound*`), `.profile-chip(s)` in CSS, dubbele `--rarity-*` in avatar.css.
+
+- **Besluit Fable (8 nov, commit van 6D-S):** badges uit → Jouw stijl met Geluiden (basis) en Thema; gekozen confetti wint van de mix;
+  level-up-knop "Naar Jouw stijl"; levelregel op Home → Mijn profiel; fixer-fixes (pull-down alleen echt bovenaan, gekozen maar
+  vergrendelde tegel blijft gekozen) akkoord; DEVICE-TEST 97/104 op de nieuwe route; register §2b bijgewerkt.
 ## 8 nov (Opus): 13D blok 4 — varianten als tabs: tip van de maker, eigen versie, delen
 Gebouwd volgens docs/specs/varianten-tabs.md "Blok 4" (bouwer A editor + recept, B deelscherm, C i18n + In & uit + opruimen,
 extra bouwer D de besluiten 1 en 2 uit "Besluiten Fable na blok 3"; integrator). Niet gecommit. Geen Dexie-versie, geen setting,

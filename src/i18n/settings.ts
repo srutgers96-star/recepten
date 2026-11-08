@@ -437,4 +437,16 @@ export const settings: Dict = {
   'story.cookedHint': { nl: 'Tik in de kookstand op "Gekookt!" en de teller loopt op.', en: 'Tap "Cooked!" in cooking mode and the counter goes up.' },
   // --- Phase 5 block D (docs/phase-5-spec.md D.3): the household on the story page ---
   'story.members': { nl: 'Wie koken er mee', en: 'Who cooks along' },
+  // --- 6D-S (docs/specs/badges-avatar.md "S-A" point 6): Mijn profiel and the Meer rows ---
+  'profile.title': { nl: 'Mijn profiel', en: 'My profile' },
+  'profile.style': { nl: 'Jouw stijl', en: 'Your style' },
+  'profile.badges': { nl: 'Badges', en: 'Badges' },
+  'profile.shareCard': { nl: 'Deel mijn kaartje', en: 'Share my card' },
+  'profile.sync': { nl: 'Sync mijn voortgang', en: 'Sync my progress' },
+  'profile.edit': { nl: 'Naam & kleur', en: 'Name & colour' },
+  'profile.makeActive': { nl: 'Maak actief', en: 'Make active' },
+  'profile.active': { nl: 'Actief', en: 'Active' },
+  'more.myProfile': { nl: 'Mijn profiel', en: 'My profile' },
+  'more.style': { nl: 'Jouw stijl', en: 'Your style' },
+  'more.styleHint': { nl: 'Avatar, geluiden, confetti, letters en thema', en: 'Avatar, sounds, confetti, typefaces and theme' },
 };

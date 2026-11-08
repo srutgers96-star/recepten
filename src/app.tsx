@@ -10,8 +10,9 @@
 // 6D-1 (docs/specs/xp-levels.md §1c–§1e): <XpPop/> (the "+12" pops), <XpToast/> (the honest 0-XP
 // toast) and <LevelUpSheet/> next to <BadgeToast/>; checkRulesVersion() once at boot after the
 // badges setting is known (badges off = no trace of XP). 6D-3 unlocks (= 6D-4a, §1f): the route
-// '/more/unlocks' (Vrijgespeeld); checkRulesVersion also refreshes the phone-wide unlocks at boot.
-// 6D-4 (= 6D-4b, §1j): the route '/more/calendar' (Kookkalender).
+// '/more/unlocks' (Vrijgespeeld; since 6D-S a redirect to '/more/style?tab=confetti', Jouw stijl);
+// checkRulesVersion also refreshes the phone-wide unlocks at boot.
+// 6D-4 (= 6D-4b, §1j): the route '/more/calendar' (Kookkalender). 6D-S: '/more/profile' (Mijn profiel).
 import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, type NewBadge } from './badges';
@@ -44,6 +45,7 @@ import { HouseholdScreen } from './screens/HouseholdScreen';
 import { InboxScreen } from './screens/InboxScreen';
 import { MoreScreen } from './screens/MoreScreen';
 import { OnboardingScreen } from './screens/OnboardingScreen';
+import { ProfileScreen } from './screens/ProfileScreen';
 import { ProfilesScreen } from './screens/ProfilesScreen';
 import { RecipeScreen } from './screens/RecipeScreen';
 import { RecipesScreen } from './screens/RecipesScreen';
@@ -51,7 +53,7 @@ import { ShareScreen } from './screens/ShareScreen';
 import { ShoppingScreen } from './screens/ShoppingScreen';
 import { StorageScreen } from './screens/StorageScreen';
 import { StoryScreen } from './screens/StoryScreen';
-import { UnlocksScreen } from './screens/UnlocksScreen';
+import { StyleScreen } from './screens/StyleScreen';
 import { WeekScreen } from './screens/WeekScreen';
 import { startTestTimerTicker } from './testtimer';
 import { initTheme } from './theme';
@@ -151,6 +153,12 @@ function BadgeToast() {
   );
 }
 
+/** A route that moved: replaces the hash (no extra history entry) and renders nothing meanwhile. */
+function Redirect(props: { to: string }) {
+  useEffect(() => navigate(props.to, { replace: true }), [props.to]);
+  return null;
+}
+
 function NotFound() {
   return (
     <div class="screen">
@@ -193,6 +201,9 @@ function Screen(props: { r: Route }) {
           return <MoreScreen />;
         case 'profiles':
           return <ProfilesScreen />;
+        // 6D-S (docs/specs/badges-avatar.md "S-A"): Mijn profiel ('?id=' for another profile).
+        case 'profile':
+          return <ProfileScreen />;
         case 'storage':
           return <StorageScreen />;
         // Phase 5 (docs/phase-5-spec.md A.6 + A.8).
@@ -206,9 +217,12 @@ function Screen(props: { r: Route }) {
         // Phase 5 (docs/phase-5-spec.md C.2): badges per member + "Samen".
         case 'badges':
           return <BadgesScreen />;
-        // 6D-3 unlocks (docs/specs/xp-levels.md §1f): what this phone has unlocked, per kind.
+        // 6D-S (docs/specs/badges-avatar.md "S-B"): Jouw stijl (avatar, sounds, confetti, typefaces, theme).
+        case 'style':
+          return <StyleScreen />;
+        // The old Vrijgespeeld page (6D-4a) is gone since 6D-S: an old link lands on Jouw stijl → Confetti.
         case 'unlocks':
-          return <UnlocksScreen />;
+          return <Redirect to="/more/style?tab=confetti" />;
         // 6D-4 (docs/specs/xp-levels.md §1j): who cooked what, per day (local log + received snapshots).
         case 'calendar':
           return <CalendarScreen />;

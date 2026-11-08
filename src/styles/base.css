@@ -42,6 +42,11 @@
   --header-h: 56px;
   --radius: 14px;
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  /* Rarity (blocks 6D-R and 6D-S): avatar parts and unlocks. Common follows the theme's grey. */
+  --rarity-common: var(--muted);
+  --rarity-rare: #2b6fd6;
+  --rarity-epic: #7a5aa8;
+  --rarity-legendary: #c9a227;
 }
 
 /* System dark, unless the user forced light. */
@@ -69,6 +74,9 @@
     --diet-lactosevrij-ink: #e8eef6;
     --diet-personal-bg: #22365e;
     --diet-personal-ink: #dbe4fa;
+    --rarity-rare: #6f9fe8;
+    --rarity-epic: #ab93d8;
+    --rarity-legendary: #e4c45a;
   }
 }
 
@@ -97,6 +105,9 @@
   --diet-lactosevrij-ink: #e8eef6;
   --diet-personal-bg: #22365e;
   --diet-personal-ink: #dbe4fa;
+  --rarity-rare: #6f9fe8;
+  --rarity-epic: #ab93d8;
+  --rarity-legendary: #e4c45a;
 }
 
 :root[data-theme='light'] {

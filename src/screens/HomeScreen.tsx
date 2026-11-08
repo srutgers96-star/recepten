@@ -1,7 +1,8 @@
 // '#/' — Home "Vanavond?" (docs/specs/home-a-plus.md, Home A+ blocks 1 and 2). Top to bottom (§1a):
 //   header "Vanavond?" with the "+" (AddMenu: Plak · Zelf · AI · Bestand, the same sheet as Recipes),
 //   <TimerBar/> (13K puts its cooking bar in this slot), then .screen.home:
-//    1 greeting row: avatar circle + "Hoi Stijn, wat eten we vanavond?", and under it the level-row
+//    1 greeting row: avatar circle + the name, one button to Mijn profiel (6D-S; pulling Home down at
+//      the top does the same, src/pulldown.ts), and under it the level-row
 //      slot <HomeLevelRow/> (until 6D "🏆 Badges x/y ›", only with badges on)
 //    2 the card VANAVOND (<TonightCard/>: the week's next dish, or the dice with its filter chips)
 //    3 the line "Verder met: Goulash ›" (only for a recipe viewed today, not cooked today, and not the
@@ -38,6 +39,7 @@ function todayTitle(l: 'nl' | 'en'): string {
 }
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
 import { activeProfile, profiles } from '@/profile';
+import { usePullDown } from '@/pulldown';
 import { lastViewed } from '@/recent';
 import { navigate, navigateTab } from '@/router';
 import { Avatar, useAvatarLevel } from './ProfilesScreen';
@@ -65,6 +67,10 @@ export function HomeScreen() {
   useEffect(() => {
     void refreshShareBadges();
   }, []);
+
+  // 6D-S (docs/specs/badges-avatar.md "S-A" point 3): pull Home down (at the top) → Mijn profiel.
+  const openProfile = () => navigate('/more/profile');
+  const pullRef = usePullDown<HTMLDivElement>({ onPull: openProfile });
 
   const byId = useMemo(() => new Map((all ?? []).map((r) => [r.id, r] as const)), [all]);
   const knownIds = useMemo(() => new Set(byId.keys()), [byId]);
@@ -121,12 +127,14 @@ export function HomeScreen() {
         }
       />
       <TimerBar />
-      <div class="screen home">
-        <div class="home-hello">
+      <div class="screen home" ref={pullRef}>
+        {/* 6D-S: the whole greeting row is one button to Mijn profiel (no extra text). */}
+        <button type="button" class="home-hello" aria-label={t('profile.title')} onClick={openProfile}>
           {profile && <Avatar profile={profile} level={level} />}
           {/* Stijn 30 Oct: no "Hoi Stijn, wat eten we vanavond?" ("Vanavond" stood on Home three times); just the name. */}
-          <h2 class="home-greeting">{profile ? profile.name : t('home.greetingAnon')}</h2>
-        </div>
+          {/* A span, not an h2: a heading inside a button is invalid and dropped from the headings list. */}
+          <span class="home-greeting">{profile ? profile.name : t('home.greetingAnon')}</span>
+        </button>
         <HomeLevelRow profileId={pid} />
 
         <TonightCard recipes={all} plan={plan} onShown={setShownId} />

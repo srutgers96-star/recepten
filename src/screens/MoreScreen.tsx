@@ -2,12 +2,13 @@
 // phase 6 (docs/phase-6-spec.md 6A.6) — four collapsible groups whose open/closed state is kept per
 // device in localStorage, with the "Opslag & back-up" row (backup-due badge) as a plain row between
 // them (a group holding one row of the same name was two taps for one):
-//   "Jij & je huishouden"  active profile (switch, "+ profiel"), Profielen beheren, Huishouden,
-//                          🏆 Badges row (phase 5 block C, only while the badges switch is on),
+//   "Jij & je huishouden"  row Mijn profiel (6D-S: small avatar, name, level title → '/more/profile'),
+//                          Profielen beheren, Huishouden, 🏆 Badges row (phase 5 block C, only while
+//                          the badges switch is on), 📅 Kookkalender, 🎨 Jouw stijl ('/more/style'),
 //                          "Aantal personen" stepper (phase 4 week slots)
-//   "Instellingen"         language, theme, confetti, badges switch, °F, "Kookstand & timer"
-//                          (read-aloud, voice commands, timer sound & vibrate — phase 5 block B),
-//                          experiments switch (phase 5 block D)
+//   "Instellingen"         language, confetti, badges switch, °F, "Kookstand & timer" (read-aloud,
+//                          voice commands, timer vibrate — phase 5 block B), experiments switch
+//                          (phase 5 block D)
 //   "Recepten & delen"     "Deel je nieuwe recepten" (unsent badge), Controleer mijn recepten,
 //                          Woordenboek (counts → '/more/dictionary', phase 5 A-bis.6)
 //   — Opslag & back-up —   one row → '/more/storage'
@@ -16,16 +17,11 @@
 //                          Apparaatcheck, Het verhaal, and "Over" (version, channel, build, GitHub).
 //                          (The Curator page was removed in phase 6, docs/phase-6-spec.md open
 //                          question 7; a classic's English is improved via Bewerk on the recipe.)
-// 6D-4a unlocks (docs/specs/xp-levels.md §1f/§1g, "Blok 6D-3" there): "🎁 Vrijgespeeld" under the
-// Badges row (badges on only); under "Kookstand & timer" the timer-sound picker offers the basic
-// sounds plus the unlocked, switched-on ones (`activeTimerSounds()`), the switch "Geluid bij
-// Gekookt!" (with Probeer) appears once `sound-cooked-tada` is active, and the picker "Lettertype
-// kookstand" once at least one typeface is (`activeFonts()`).
+// 6D-S (docs/specs/badges-avatar.md "S-A" point 4): the profile block (big avatar, chips of the other
+// profiles) and the row "🎁 Vrijgespeeld" are gone; the timer sound, the cook-mode typeface, the
+// sound on Cooked! and the theme moved to Jouw stijl (src/screens/StyleScreen.tsx, "S-B").
 // 6D-4 (docs/specs/xp-levels.md §1j): "📅 Kookkalender" (→ '/more/calendar') closes the menu of
 // "Jij & je huishouden", always shown (the calendar is a log; only its levels need badges on).
-// 6D-3 (docs/specs/badges-avatar.md §1b): a tap on the big avatar circle of the profile card opens
-// the avatar maker (<AvatarSheet/>) from level 3 with badges on; below that, or with badges off, the
-// circle is not a button and a tap does nothing. The card's circle shows the level ring.
 // A closed group shows its badge (unsent) on the group head, so nothing gets lost. The group head
 // is an <h2> wrapping the toggle button (not a heading inside a button, which screen readers drop
 // from their headings list), the standard disclosure pattern.
@@ -34,37 +30,22 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgesEnabled, loadBadgeSettings, setBadgesEnabled, syncCatalogIfNeeded } from '@/badges';
 import { confettiEnabled, loadCelebrateSettings, setConfettiEnabled } from '@/celebrate';
 import { appInfo, isIOS } from '@/components/AppInfo';
-import { AvatarSheet } from '@/components/AvatarSheet';
 import { browserLabel, OpenInChrome } from '@/components/BrowserNotice';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
-import { COOKED_SOUND_UNLOCK } from '@/cooklog';
+import { levelTitleText } from '@/components/XpBar';
 import { getFahrenheit, getHouseholdServings, getSetting, setFahrenheit, setHouseholdServings, setSetting } from '@/db/repo';
 import { baseDictionary, userIngredients } from '@/dictionary';
-import { AVATAR_MAKER_LEVEL } from '@/domain/avatar';
 import type { Lang } from '@/domain/model';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
-import { activeProfile, profiles, setActiveProfile } from '@/profile';
+import { activeProfile } from '@/profile';
 import { browserName, isAndroid, isStandalone } from '@/pwa';
 import { navigate } from '@/router';
 import { copyText, shareText } from '@/share-actions';
-import {
-  cookedSound,
-  loadSoundSettings,
-  previewCookedSound,
-  previewTimerSound,
-  setCookedSound,
-  setTimerSound,
-  setTimerVibrate,
-  timerSound,
-  timerVibrate,
-  type TimerSound,
-} from '@/sounds';
+import { loadSoundSettings, setTimerVibrate, timerVibrate } from '@/sounds';
 import { canSpeak, loadSpeechSettings, readAloud, setReadAloud } from '@/speech';
-import { setTheme, theme, type Theme } from '@/theme';
-import { activeFonts, activeTimerSounds, COOK_FONT_SETTING, isActive, type CookFont } from '@/unlocks';
 import { canListen, commandsEnabled, loadVoiceSettings, setCommandsEnabled } from '@/voice';
 import { Avatar, useAvatarLevel } from './ProfilesScreen';
 
@@ -82,25 +63,6 @@ const MAX_HOUSEHOLD = 12;
  * Readers use getSetting('experiments', false); right now that is "Toon QR" on the share screen.
  */
 const EXPERIMENTS_KEY = 'experiments';
-/** 6D-4a (§2g): the cook-mode typefaces of the setting `cook.font`; CookScreen reads it for `.cook-card`. */
-const COOK_FONTS: readonly CookFont[] = ['default', 'chalk', 'hand'];
-
-function normalizeCookFont(v: unknown): CookFont {
-  return typeof v === 'string' && (COOK_FONTS as readonly string[]).includes(v) ? (v as CookFont) : 'default';
-}
-
-/**
- * The timer-sound pills (§1g): the basic sounds plus the unlocked, switched-on ones, 'off' last. A
- * sound chosen earlier that is no longer offered (badges off since) stays in the list, so the
- * picker shows what the timer really plays (the timer must not suddenly sound different).
- */
-function timerSoundChoices(current: TimerSound): TimerSound[] {
-  const list: TimerSound[] = activeTimerSounds().filter((s) => s !== 'off');
-  if (current !== 'off' && !list.includes(current)) list.push(current);
-  list.push('off');
-  return list;
-}
-
 // --- Collapsible groups (6A.6) ------------------------------------------------------------------
 
 type GroupId = 'you' | 'settings' | 'recipes' | 'help';
@@ -146,10 +108,21 @@ function Chevron() {
   );
 }
 
-function MenuRow(props: { label: string; to?: string; onClick?: () => void; sub?: string; badge?: string; badgeTone?: 'orange' | 'red' }) {
+function MenuRow(props: {
+  label: string;
+  to?: string;
+  onClick?: () => void;
+  sub?: string;
+  badge?: string;
+  badgeTone?: 'orange' | 'red';
+  /** 6D-S: an element before the label (the row Mijn profiel: the small avatar). */
+  icon?: ComponentChildren;
+  ariaLabel?: string;
+}) {
   const { to, onClick } = props;
   return (
-    <button type="button" class="row" onClick={onClick ?? (() => to && navigate(to))}>
+    <button type="button" class={'row' + (props.icon ? ' row-icon' : '')} aria-label={props.ariaLabel} onClick={onClick ?? (() => to && navigate(to))}>
+      {props.icon}
       <span class="name">
         {props.label}
         {props.sub && <span class="row-sub">{props.sub}</span>}
@@ -422,18 +395,14 @@ export function DonateBlock(props: { center?: boolean }) {
 
 export function MoreScreen() {
   const active = activeProfile.value;
-  const others = profiles.value.filter((p) => p.id !== active?.id);
   const [fahrenheit, setF] = useState(false);
   const [household, setHousehold] = useState<number | null>(null);
   const [experiments, setExperiments] = useState(false);
-  const [cookFont, setCookFont] = useState<CookFont>('default');
   const [groups, setGroups] = useState<GroupState>(loadGroupState);
   const [feedback, setFeedback] = useState(false);
   const [links, setLinks] = useState(false);
-  // 6D-3: the avatar maker for the active profile (level ring + gate from the derived XP level).
-  const [avatarOpen, setAvatarOpen] = useState(false);
+  // 6D-S: the row Mijn profiel shows the level ring and, with badges on, the level title.
   const level = useAvatarLevel(active?.id);
-  const canEditAvatar = badgesEnabled.value && level !== undefined && level >= AVATAR_MAKER_LEVEL;
 
   const unsent = unsentChanges.value;
   const unseen = inboxUnseen.value;
@@ -456,11 +425,6 @@ export function MoreScreen() {
       (v) => setExperiments(v === true),
       (e: unknown) => console.error('getExperiments', e),
     );
-    // 6D-4a: the cook-mode typeface (default 'default').
-    void getSetting<unknown>(COOK_FONT_SETTING, 'default').then(
-      (v) => setCookFont(normalizeCookFont(v)),
-      (e: unknown) => console.error('getCookFont', e),
-    );
     void refreshShareBadges();
   }, []);
 
@@ -478,11 +442,6 @@ export function MoreScreen() {
     void recordFeature('fahrenheit');
   }
 
-  function chooseCookFont(f: CookFont) {
-    setCookFont(f);
-    void setSetting(COOK_FONT_SETTING, f).catch((e: unknown) => console.error('setCookFont', e));
-  }
-
   function toggleExperiments(on: boolean) {
     setExperiments(on);
     void setSetting(EXPERIMENTS_KEY, on === true).catch((e: unknown) => console.error('setExperiments', e));
@@ -497,14 +456,8 @@ export function MoreScreen() {
 
   const own = userIngredients.value;
   const builtin = baseDictionary().ingredients.length;
-  // 6D-4a (§1g): what the cook-mode pickers offer (reads the unlock signals, so this re-renders).
-  const soundChoices = timerSoundChoices(timerSound.value);
-  const fonts = activeFonts();
-  // Only unlocked options are offered (§1g); a chosen typeface that is not among them shows the
-  // pill 'default' selected here (CookScreen itself keeps reading `cook.font`).
-  const shownFont: CookFont = fonts.includes(cookFont) ? cookFont : 'default';
-  // Badges off = nothing of the unlocks visible or audible (decision Fable 29 Oct, §1/§5.9 win over §1g for the ta-da).
-  const showCookedSound = badgesEnabled.value && isActive(COOKED_SOUND_UNLOCK);
+  // Badges on and the level known: "Level 5 · Boterhamsmeerder" under the name (badges off: no trace of XP).
+  const levelSub = badgesEnabled.value && level !== undefined ? levelTitleText(level) : undefined;
 
   return (
     <>
@@ -516,47 +469,24 @@ export function MoreScreen() {
         </section>
 
         <Group id="you" title={t('more.group.you')} open={groups.you} onToggle={toggleGroup}>
-          <div class="card">
-            <h2>{t('more.profile')}</h2>
-            {active ? (
-              <div class="profile-card">
-                {canEditAvatar ? (
-                  <button type="button" class="icon-btn avatar-open" style={{ padding: 0, borderRadius: '999px' }} aria-label={t('avatar.open')} onClick={() => setAvatarOpen(true)}>
-                    <Avatar profile={active} big level={level} />
-                  </button>
-                ) : (
-                  <Avatar profile={active} big level={level} />
-                )}
-                <div class="who">
-                  <strong>{active.name}</strong>
-                  <span class="muted small">{t(active.lang === 'nl' ? 'lang.nl' : 'lang.en')}</span>
-                </div>
-              </div>
-            ) : (
-              <div class="muted">{t('profiles.empty')}</div>
-            )}
-            <div class="profile-chips">
-              {others.map((p) => (
-                <button key={p.id} type="button" class="profile-chip" onClick={() => void setActiveProfile(p.id)} aria-label={`${t('more.switchTo')} ${p.name}`}>
-                  <Avatar profile={p} />
-                  <span>{p.name}</span>
-                </button>
-              ))}
-              <button type="button" class="profile-chip" onClick={() => navigate('/more/profiles?add=1')}>
-                <span style="padding-left:8px">{t('more.addProfile')}</span>
-              </button>
-            </div>
-            <div class="menu" style="margin-top:8px">
-              <MenuRow label={t('more.manageProfiles')} to="/more/profiles" />
-              {/* Phase 5 (docs/phase-5-spec.md A.8): the household (name + members). */}
-              <MenuRow label={t('more.householdRow')} sub={t('more.householdRowHint')} to="/more/household" />
-              {/* Phase 5 block C: only while the badges switch (under Instellingen) is on — off means no trace of gamification. */}
-              {badgesEnabled.value && <MenuRow label={`🏆 ${t('more.badges')}`} sub={t('more.badgesRowHint')} to="/more/badges" />}
-              {/* 6D-4a (docs/specs/xp-levels.md §1f): Vrijgespeeld, right under Badges, badges on only. */}
-              {badgesEnabled.value && <MenuRow label={`🎁 ${t('more.unlocks')}`} sub={t('more.unlocksHint')} to="/more/unlocks" />}
-              {/* 6D-4 (docs/specs/xp-levels.md §1j): the cooking calendar, ALWAYS (also with badges off: it is a log). */}
-              <MenuRow label={`📅 ${t('more.calendar')}`} sub={t('more.calendarHint')} to="/more/calendar" />
-            </div>
+          <div class="menu">
+            {/* 6D-S: one row for the active profile (small avatar, name, level title) → Mijn profiel. */}
+            <MenuRow
+              icon={active ? <Avatar profile={active} level={level} /> : undefined}
+              label={active ? active.name : t('more.myProfile')}
+              ariaLabel={active ? `${t('more.myProfile')}: ${active.name}${levelSub ? ', ' + levelSub : ''}` : undefined}
+              sub={active ? levelSub : undefined}
+              to="/more/profile"
+            />
+            <MenuRow label={t('more.manageProfiles')} to="/more/profiles" />
+            {/* Phase 5 (docs/phase-5-spec.md A.8): the household (name + members). */}
+            <MenuRow label={t('more.householdRow')} sub={t('more.householdRowHint')} to="/more/household" />
+            {/* Phase 5 block C: only while the badges switch (under Instellingen) is on — off means no trace of gamification. */}
+            {badgesEnabled.value && <MenuRow label={`🏆 ${t('more.badges')}`} sub={t('more.badgesRowHint')} to="/more/badges" />}
+            {/* 6D-4 (docs/specs/xp-levels.md §1j): the cooking calendar, ALWAYS (also with badges off: it is a log). */}
+            <MenuRow label={`📅 ${t('more.calendar')}`} sub={t('more.calendarHint')} to="/more/calendar" />
+            {/* 6D-S: avatar, sounds, confetti, typefaces and theme; always (the theme is not XP). */}
+            <MenuRow label={`🎨 ${t('more.style')}`} sub={t('more.styleHint')} to="/more/style" />
           </div>
           <div class="setting">
             <div class="label">
@@ -592,22 +522,6 @@ export function MoreScreen() {
               selected={[lang.value]}
               onChange={(v) => {
                 if (v[0]) chooseLang(v[0]);
-              }}
-            />
-          </div>
-          <div class="setting">
-            <div class="label">{t('more.theme')}</div>
-            <Segmented<Theme>
-              name="theme"
-              options={[
-                { value: 'system', label: t('more.theme.system') },
-                { value: 'light', label: t('more.theme.light') },
-                { value: 'dark', label: t('more.theme.dark') },
-              ]}
-              selected={[theme.value]}
-              onChange={(v) => {
-                if (v[0] && v[0] !== theme.value) void recordFeature('theme');
-                if (v[0]) void setTheme(v[0]);
               }}
             />
           </div>
@@ -689,26 +603,6 @@ export function MoreScreen() {
               <div class="label">{t('more.voiceUnavailable')}</div>
             </div>
           )}
-          <div class="setting setting-stack">
-            <div class="label">
-              {t('more.timerSound')}
-              {/* iOS only: the side silent switch mutes web audio; the notification is the only way (invariant 13). */}
-              {isIOS() && <small>{t('more.timerSoundIOSHint')}</small>}
-            </div>
-            <div class="timer-sound-row">
-              <Segmented<TimerSound>
-                name="timerSound"
-                options={soundChoices.map((s) => ({ value: s, label: t('more.timerSound.' + s) }))}
-                selected={[timerSound.value]}
-                onChange={(v) => {
-                  if (v[0]) void setTimerSound(v[0]);
-                }}
-              />
-              <button type="button" class="btn" disabled={timerSound.value === 'off'} onClick={() => previewTimerSound(timerSound.value)}>
-                {t('more.timerSoundPreview')}
-              </button>
-            </div>
-          </div>
           <label class="setting">
             <div class="label">
               {t('more.timerVibrate')}
@@ -719,37 +613,6 @@ export function MoreScreen() {
               <span class="track" />
             </span>
           </label>
-          {/* 6D-4a (§1g): the ta-da on Cooked!, only once `sound-cooked-tada` is unlocked and on. */}
-          {showCookedSound && (
-            <div class="setting">
-              <div class="label">
-                {t('more.cookedSound')}
-                <small>{t('more.cookedSoundHint')}</small>
-              </div>
-              <button type="button" class="btn btn-small" onClick={() => previewCookedSound()}>
-                {t('unlocks.try')}
-              </button>
-              <label class="switch">
-                <input type="checkbox" aria-label={t('more.cookedSound')} checked={cookedSound.value} onChange={(e) => void setCookedSound((e.currentTarget as HTMLInputElement).checked)} />
-                <span class="track" />
-              </label>
-            </div>
-          )}
-          {/* 6D-4a (§1g): the cook-mode typeface, only once at least one typeface is unlocked and on;
-              only the unlocked options. */}
-          {fonts.length > 1 && (
-            <div class="setting setting-stack">
-              <div class="label">{t('more.cookFont')}</div>
-              <Segmented<CookFont>
-                name="cookFont"
-                options={fonts.map((f) => ({ value: f, label: t('more.cookFont.' + f) }))}
-                selected={[shownFont]}
-                onChange={(v) => {
-                  if (v[0]) chooseCookFont(v[0]);
-                }}
-              />
-            </div>
-          )}
 
           {/* Phase 5 block D: experiments flag — features under construction (now: QR on the share screen). */}
           <label class="setting">
@@ -813,7 +676,6 @@ export function MoreScreen() {
       </div>
       {feedback && <FeedbackSheet onClose={() => setFeedback(false)} />}
       {links && <LinksSheet onClose={() => setLinks(false)} />}
-      {avatarOpen && active && <AvatarSheet profile={active} onClose={() => setAvatarOpen(false)} />}
     </>
   );
 }

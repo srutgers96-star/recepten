@@ -12,9 +12,10 @@
 //                again by normalizeAvatarParts below); a spec from someone else's card only selects
 //                ids and palette colours, it never brings markup of its own.
 //
-// Imports nothing but types: share.ts (the `#f=` card) uses normalizeAvatarSpec, and share.ts is in
+// Imports nothing but types (and the import-free ./rarity.ts): share.ts (the `#f=` card) uses normalizeAvatarSpec, and share.ts is in
 // the Safari landing bundle, which must not pull in the badge catalogue or the badge engine.
 import type { Badge, TIER_COLOURS } from './badges.ts';
+import { RARITIES, type Rarity } from './rarity.ts';
 
 // ---------------------------------------------------------------------------- model
 
@@ -49,15 +50,11 @@ export interface AvatarSpec {
  */
 export type AvatarUnlock = { level: number } | { badge: string; tier?: number };
 
-/**
- * How rare a part is (block 6D-R): a design trait Fable sets by hand per part in
- * data/avatar-parts.json, weighing both how hard the part is to unlock and how striking it is.
- * `rarityFor` is only the fallback for a part without the field.
- */
-export type Rarity = 'common' | 'rare' | 'epic' | 'legendary';
-
-/** The four rarities, from common to legendary (the order of the maker's groups). */
-export const RARITIES: readonly Rarity[] = ['common', 'rare', 'epic', 'legendary'];
+// How rare a part is (block 6D-R): a design trait Fable sets by hand per part in
+// data/avatar-parts.json, weighing both how hard the part is to unlock and how striking it is.
+// `rarityFor` is only the fallback for a part without the field. `Rarity` and `RARITIES` live in
+// ./rarity.ts since block 6D-S (unlocks have a rarity too); re-exported so existing imports work.
+export { RARITIES, type Rarity };
 
 export interface AvatarPart {
   /** '<layer>-<name>', kebab-case; forever (invariant 1 in spirit). */

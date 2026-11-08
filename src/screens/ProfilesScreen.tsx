@@ -1,40 +1,34 @@
-// '#/more/profiles' — list of profiles: add, edit, switch active, delete (confirm). `?add=1` opens
-// the add form at once ("+ profiel" in Meer). ProfileForm is reused by the onboarding screen.
-// Phase 5 block F: the ACTIVE profile has "Deel mijn kaartje" (<MemberCardPanel/>, also on the
-// Household screen): a `#f=` token with id, name, colour, language and this phone's stable id
-// (setting 'device.id', `ensureDeviceId`), shared as ONE text field (invariant 9), copied, or
-// shown as a QR behind the Experimenten flag. The panel says honestly that on an iPhone the
-// other person copies the message and pastes it into the app (invariants 5 + 13).
-// 6D-1: every profile card shows <XpBar/> (level, XP, streak) under name + language.
-// 6D-3 (docs/specs/badges-avatar.md §1b/§1c): <Avatar/> draws the profile's own avatar (SVG from
-// data/avatar-parts.json) when it has a complete one, else the letter circle; a card shows the
-// level ring. Editing the ACTIVE profile has a row "Avatar" under Colour that opens <AvatarSheet/>
-// from level 3 (AVATAR_MAKER_LEVEL); badges off = no row.
-// 6D-4 (docs/specs/xp-levels.md §1h): next to "Deel mijn kaartje" the ACTIVE profile has "Sync mijn
-// voortgang", which unfolds <ProgressSharePanel/> (a `#x=` snapshot); badges off = no button.
+// '#/more/profiles' — Profielen beheren (block 6D-S, docs/specs/badges-avatar.md "S-A" point 5): only
+// the list. Per profile one row with <Avatar/> (48 px, level ring), name, the compact <XpBar/> (badges
+// on) and "Actief" or "Maak actief"; a tap on the row opens Mijn profiel for that profile
+// ('#/more/profile?id=…', src/screens/ProfileScreen.tsx). "+ profiel" stays (`?add=1` opens the add
+// form at once). Editing (name, colour, language, avatar, delete) lives in <ProfileEditFields/>, the
+// card panel and the sync panel on Mijn profiel.
+// This module also keeps the shared pieces other screens import: <Avatar/>, useAvatarLevel,
+// hasAvatar, <ProfileForm/> (also onboarding), <MemberCardPanel/> ("Deel mijn kaartje", phase 5
+// block F: a `#f=` token shared as ONE text field, invariant 9; honest about iPhone, invariants 5 +
+// 13), ensureDeviceId and memberCardMessage.
 import type { ComponentChildren } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { avatarParts, avatarUid } from '@/avatar';
 import { badgesEnabled, loadBadgeSettings } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
-import { AvatarSheet } from '@/components/AvatarSheet';
 import { Header } from '@/components/Header';
-import { ProgressSharePanel } from '@/components/ProgressSharePanel';
 import { QrCode } from '@/components/QrCode';
 import { Segmented } from '@/components/Segmented';
 import { XpBar } from '@/components/XpBar';
 import { getSetting, logShareEvent, setSetting } from '@/db/repo';
-import { AVATAR_MAKER_LEVEL, isComplete, normalizeAvatarSpec, renderAvatarSvg } from '@/domain/avatar';
+import { isComplete, normalizeAvatarSpec, renderAvatarSvg } from '@/domain/avatar';
 import { cardFromMember } from '@/domain/household';
 import { nowIso, randomId, type Lang, type Profile } from '@/domain/model';
 import { buildMemberEnvelope, buildMemberShareMessage } from '@/domain/share';
 import { buildShareUrl, encodeToken } from '@/domain/token';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
-import { PROFILE_COLORS, activeProfile, createProfile, profiles, removeProfile, setActiveProfile, updateProfile } from '@/profile';
-import { route } from '@/router';
+import { PROFILE_COLORS, activeProfile, createProfile, profiles, setActiveProfile } from '@/profile';
+import { navigate, route } from '@/router';
 import { copyText, shareText } from '@/share-actions';
-import { markXpDirty, xpStateFor, xpStates } from '@/xp';
+import { xpStateFor, xpStates } from '@/xp';
 
 export interface ProfileValues {
   name: string;
@@ -141,25 +135,6 @@ export function useAvatarLevel(memberId: string | null | undefined): number | un
 function LevelAvatar(props: { profile: Profile; big?: boolean }) {
   const level = useAvatarLevel(props.profile.id);
   return <Avatar profile={props.profile} big={props.big} level={level} />;
-}
-
-/**
- * The row "Avatar" under Colour when editing the ACTIVE profile (§1b): "Maak je avatar" or, with an
- * avatar, "Pas je avatar aan". Below level 3 the button is disabled with "Komt vrij op level 3, ...";
- * while the level is still loading it is disabled without that line. The caller leaves the row out
- * with badges off and for other profiles (the level is per person).
- */
-function AvatarEditRow(props: { profile: Profile; level: number | undefined; onOpen: () => void }) {
-  const unlocked = props.level !== undefined && props.level >= AVATAR_MAKER_LEVEL;
-  return (
-    <div class="field avatar-edit-row">
-      <span>{t('avatar.row')}</span>
-      <button type="button" class="btn" disabled={!unlocked} onClick={props.onOpen}>
-        {t(hasAvatar(props.profile) ? 'avatar.change' : 'avatar.edit')}
-      </button>
-      {props.level !== undefined && !unlocked && <p class="muted small">{t('avatar.lockedHint')}</p>}
-    </div>
-  );
 }
 
 /**
@@ -368,103 +343,25 @@ export function ProfilesScreen() {
   const list = profiles.value;
   const active = activeProfile.value;
   const [adding, setAdding] = useState(route.value.query.get('add') === '1');
-  const [editing, setEditing] = useState<string | null>(null);
-  // Block F: "Deel mijn kaartje" unfolds the card panel under the ACTIVE profile.
-  const [sharing, setSharing] = useState(false);
-  // 6D-4: "Sync mijn voortgang" unfolds the progress panel under the ACTIVE profile.
-  const [syncing, setSyncing] = useState(false);
-  // 6D-3: the avatar maker is open for this profile id (only ever the active profile).
-  const [avatarFor, setAvatarFor] = useState<string | null>(null);
-  const activeLevel = useAvatarLevel(active?.id);
-  // The profile as it is NOW (the sheet saves via updateProfile, which refreshes the signal).
-  const avatarProfile = avatarFor ? list.find((x) => x.id === avatarFor) ?? null : null;
 
-  // "+ profiel" from Meer arrives with ?add=1; a later visit to the plain route closes the form.
+  // "+ profiel" arrives with ?add=1; a later visit to the plain route closes the form.
   useEffect(() => {
     if (route.value.query.get('add') === '1') setAdding(true);
   }, [route.value.query]);
-
-  async function remove(p: Profile) {
-    if (!confirm(t('profiles.deleteConfirm', { name: p.name }))) return;
-    await removeProfile(p.id);
-    if (editing === p.id) setEditing(null);
-  }
 
   return (
     <>
       <Header title={t('profiles.title')} back backLabel={t('common.back')} />
       <div class="screen form">
-        <p class="muted" style="padding-top:12px">
-          {t('profiles.intro')} <strong>{active?.name ?? '—'}</strong>
-        </p>
-
         {list.length === 0 && <div class="empty">{t('profiles.empty')}</div>}
 
-        {list.map((p) => (
-          <div class="card" key={p.id}>
-            {editing === p.id ? (
-              <ProfileForm
-                initial={p}
-                submitLabel={t('common.save')}
-                onSubmit={async (v) => {
-                  await updateProfile({ ...p, ...v });
-                  // 6D-1: own recipes count by author = profile name, so a rename changes XP (recomputed silently).
-                  markXpDirty(p.id);
-                  setEditing(null);
-                }}
-                onCancel={() => setEditing(null)}
-                afterColor={
-                  badgesEnabled.value && active?.id === p.id ? <AvatarEditRow profile={p} level={activeLevel} onOpen={() => setAvatarFor(p.id)} /> : undefined
-                }
-              />
-            ) : (
-              <>
-                <div class="profile-card">
-                  <LevelAvatar profile={p} />
-                  <div class="who">
-                    <strong>{p.name}</strong>
-                    <span class="muted small">
-                      {t(p.lang === 'nl' ? 'lang.nl' : 'lang.en')}
-                      {active?.id === p.id && (
-                        <>
-                          {' '}
-                          <span class="badge badge-green">{t('profiles.active')}</span>
-                        </>
-                      )}
-                    </span>
-                  </div>
-                </div>
-                {/* 6D-1 (docs/specs/xp-levels.md §1a): level, XP and streak; null with badges off. */}
-                <XpBar memberId={p.id} />
-                <div class="actions" style="margin-bottom:0">
-                  {active?.id !== p.id && (
-                    <button type="button" class="btn btn-primary btn-small" onClick={() => void setActiveProfile(p.id)}>
-                      {t('profiles.use')}
-                    </button>
-                  )}
-                  <button type="button" class="btn btn-small" onClick={() => setEditing(p.id)}>
-                    {t('profiles.edit')}
-                  </button>
-                  <button type="button" class="btn btn-small btn-danger" onClick={() => void remove(p)}>
-                    {t('profiles.delete')}
-                  </button>
-                  {active?.id === p.id && (
-                    <button type="button" class="btn btn-small" aria-expanded={sharing} onClick={() => setSharing((v) => !v)}>
-                      {t('household.shareCard')}
-                    </button>
-                  )}
-                  {active?.id === p.id && badgesEnabled.value && (
-                    <button type="button" class="btn btn-small" aria-expanded={syncing} onClick={() => setSyncing((v) => !v)}>
-                      {t('progress.share')}
-                    </button>
-                  )}
-                </div>
-                {active?.id === p.id && sharing && <MemberCardPanel profile={p} />}
-                {active?.id === p.id && syncing && badgesEnabled.value && <ProgressSharePanel profile={p} />}
-              </>
-            )}
+        {list.length > 0 && (
+          <div class="card profile-list">
+            {list.map((p) => (
+              <ProfileListRow key={p.id} profile={p} active={active?.id === p.id} />
+            ))}
           </div>
-        ))}
+        )}
 
         {adding ? (
           <div class="card">
@@ -485,7 +382,50 @@ export function ProfilesScreen() {
           </button>
         )}
       </div>
-      {avatarProfile && <AvatarSheet profile={avatarProfile} onClose={() => setAvatarFor(null)} />}
     </>
+  );
+}
+
+/**
+ * One row on Profielen (6D-S point 5): avatar (48 px, level ring), name, the compact XP bar (badges
+ * on; XpBar renders null otherwise) and "Actief" or the button "Maak actief". A tap on the row opens
+ * that profile's Mijn profiel (`?id=`); the button only switches (it does not also open the row).
+ */
+function ProfileListRow(props: { profile: Profile; active: boolean }) {
+  const p = props.profile;
+  const open = () => navigate('/more/profile?id=' + encodeURIComponent(p.id));
+  return (
+    <div
+      class="profile-row"
+      role="link"
+      tabIndex={0}
+      onClick={open}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          open();
+        }
+      }}
+    >
+      <LevelAvatar profile={p} />
+      <div class="who">
+        <strong>{p.name}</strong>
+        <XpBar memberId={p.id} compact />
+      </div>
+      {props.active ? (
+        <span class="badge badge-green">{t('profile.active')}</span>
+      ) : (
+        <button
+          type="button"
+          class="btn btn-primary btn-small"
+          onClick={(e) => {
+            e.stopPropagation();
+            void setActiveProfile(p.id);
+          }}
+        >
+          {t('profile.makeActive')}
+        </button>
+      )}
+    </div>
   );
 }

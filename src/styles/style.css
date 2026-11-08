@@ -1,0 +1,304 @@
+/* Jouw stijl (#/more/style, docs/specs/badges-avatar.md block 6D-S, builder S-B) and the shared
+   rarity dot. The tab strip reuses .badge-gtabs/.badge-gtab of badges.css; the tile grid follows
+   the avatar maker (avatar.css): repeat(auto-fill, minmax(64px, 1fr)), 64 px tiles, 8 px gap. The
+   --rarity-* tokens live in base.css (light and dark). */
+
+/* ---------- The rarity dot (Jouw stijl tiles, the level-up sheet) ---------- */
+
+[data-rarity='common'] {
+  --rarity: var(--rarity-common);
+}
+
+[data-rarity='rare'] {
+  --rarity: var(--rarity-rare);
+}
+
+[data-rarity='epic'] {
+  --rarity: var(--rarity-epic);
+}
+
+[data-rarity='legendary'] {
+  --rarity: var(--rarity-legendary);
+}
+
+/* 8 px in the rarity colour, like the maker's tile dot. */
+.rarity-dot {
+  flex: none;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--rarity, var(--muted));
+  vertical-align: middle;
+}
+
+/* ---------- The screen ---------- */
+
+.screen.style {
+  padding-bottom: 24px;
+}
+
+.style-panel {
+  padding-top: 12px;
+}
+
+.style-panel:focus {
+  outline: none;
+}
+
+.style-panel:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 2px;
+}
+
+.style-section + .style-section {
+  margin-top: 8px;
+}
+
+.style-head {
+  margin: 4px 0 8px;
+}
+
+.style-section + .style-section .style-head {
+  margin-top: 16px;
+}
+
+.style-hint {
+  margin: -4px 0 8px;
+}
+
+.style-phone-wide {
+  margin: 20px 0 0;
+}
+
+/* Avatar tab: the preview at 160 px and the maker button under it. */
+.style-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+  text-align: center;
+}
+
+.style-avatar-art .avatar {
+  width: 160px;
+  height: 160px;
+  font-size: 64px;
+}
+
+.style-avatar .btn {
+  min-height: 44px;
+}
+
+/* ---------- Tiles ---------- */
+
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 8px;
+  justify-items: center;
+}
+
+.style-tile-wrap {
+  position: relative;
+  width: 64px;
+}
+
+/* The whole tile (face + name) is one button. */
+.style-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 64px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.style-tile:focus-visible {
+  outline: none;
+}
+
+.style-tile:focus-visible .style-tile-face {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 2px;
+}
+
+.style-tile-face {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+}
+
+.style-tile:active .style-tile-face {
+  background: var(--press);
+}
+
+.style-tile.on .style-tile-face {
+  border-color: var(--cobalt);
+  box-shadow: 0 0 0 1px var(--cobalt);
+}
+
+.style-tile-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.style-tile.locked .style-tile-icon,
+.style-tile.locked .style-swatch-font,
+.style-tile.locked .style-swatch-theme {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+
+/* The short name under the face: 11 px, at most two lines. */
+.style-tile-name {
+  display: -webkit-box;
+  max-width: 64px;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 13px;
+  text-align: center;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.style-tile.locked .style-tile-name {
+  color: var(--muted);
+}
+
+/* The rarity dot top left, also on a locked tile (you see what is still to come). */
+.style-tile-rarity {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  pointer-events: none;
+}
+
+/* 🔒 + "Lv n" / the badge icon on a small label at the bottom of the face. */
+.style-tile-lock {
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  transform: translateX(-50%);
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 15px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ☑/☐ top right: in or out of the "Verras me" mix (a long press on the tile does the same). */
+.style-tile-mix {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.style-tile-mix span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: var(--card);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.style-tile-mix[aria-pressed='true'] span {
+  color: var(--cobalt);
+}
+
+.style-tile-mix:focus-visible {
+  outline: 2px solid var(--cobalt);
+  outline-offset: 0;
+}
+
+/* Typeface swatch: "Aa" in that typeface (the faces are declared in browse.css). */
+.style-swatch-font {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.style-swatch-font[data-font='chalk'] {
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #2f4f3a;
+  color: #f3efe4;
+  font-family: 'Cabin Sketch', var(--font);
+}
+
+.style-swatch-font[data-font='hand'] {
+  font-family: 'Patrick Hand', var(--font);
+  font-size: 26px;
+}
+
+/* Theme swatch: a small square in that theme's paper colour (system = half light, half dark). */
+.style-swatch-theme {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.style-swatch-theme[data-theme-swatch='light'] {
+  background: #eaf3fb;
+}
+
+.style-swatch-theme[data-theme-swatch='dark'] {
+  background: #0f1a2b;
+}
+
+.style-swatch-theme[data-theme-swatch='system'] {
+  background: linear-gradient(135deg, #eaf3fb 50%, #0f1a2b 50%);
+}
+
+/* The explanation of a tapped locked tile, under its grid, in the rarity colour's dot style. */
+.style-note {
+  margin: 8px 0 0;
+}
+
+/* Level-up sheet: the dot stands before the unlock's icon in the row. */
+.levelup-unlock .rarity-dot {
+  margin-right: -4px;
+}

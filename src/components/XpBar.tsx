@@ -151,10 +151,10 @@ export function LevelLine(props: { memberId: string; avatar?: boolean }): JSX.El
   return (
     <a
       class="home-level xp-line"
-      href="#/more/profiles"
+      href="#/more/profile"
       onClick={(e) => {
         e.preventDefault();
-        navigate('/more/profiles');
+        navigate('/more/profile');
       }}
     >
       {props.avatar !== false && <Avatar profile={profile} />}

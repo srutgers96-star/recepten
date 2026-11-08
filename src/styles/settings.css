@@ -1231,3 +1231,153 @@ textarea.input.member-card-raw {
   color: var(--tomato);
   line-height: 1.4;
 }
+
+/* ---------- Mijn profiel (block 6D-S, src/screens/ProfileScreen.tsx) ---------- */
+
+/* The avatar large: 60 % of the width, at most 220 px (the letter circle just as big); the name
+   centred under it in h1 style. These selectors outrank `.avatar.big` of avatar.css. */
+.profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16px;
+}
+
+.profile-hero .avatar.big {
+  width: 60%;
+  max-width: 220px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  font-size: clamp(48px, 18vw, 96px);
+}
+
+.profile-hero-name {
+  margin: 12px 0 0;
+  max-width: 100%;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Two columns of tiles, 56 px high: icon + text. */
+.profile-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 16px 0 12px;
+}
+
+.profile-tile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 56px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.profile-tile:active {
+  background: var(--press);
+}
+
+.profile-tile.on {
+  border-color: var(--cobalt);
+}
+
+.profile-tile-icon {
+  flex: none;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.profile-tile-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.profile-panel {
+  margin-top: 0;
+}
+
+.profile-delete {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.profile-make-active {
+  margin-top: 16px;
+}
+
+/* ---------- Profielen beheren: one row per profile (block 6D-S) ---------- */
+
+.card.profile-list {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.profile-row:last-child {
+  border-bottom: 0;
+}
+
+.profile-row:active {
+  background: var(--press);
+}
+
+.profile-row .avatar {
+  width: 48px;
+  height: 48px;
+  font-size: 21px;
+}
+
+.profile-row .who {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-row .who strong {
+  display: block;
+  font-size: 17px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-row > .btn,
+.profile-row > .badge {
+  flex: none;
+}
+
+/* ---------- Meer: the row Mijn profiel with the small avatar as icon (block 6D-S) ---------- */
+
+.menu .row.row-icon {
+  gap: 12px;
+}

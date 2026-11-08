@@ -14,7 +14,9 @@ import { afterEach, describe, expect, it } from 'vitest';
 import unlocksJson from '../data/unlocks.json';
 import { badgesEnabled } from '../src/badges';
 import { AVATAR_MAKER_LEVEL } from '../src/domain/avatar';
-import { UNLOCK_KINDS, normalizeUnlocks, unlockedIds, unlocksForBadge, unlocksForLevels, type Unlock } from '../src/domain/unlocks';
+import { RARITIES as AVATAR_RARITY_LIST } from '../src/domain/avatar';
+import { RARITIES, rarityForLevel } from '../src/domain/rarity';
+import { UNLOCK_KINDS, normalizeUnlocks, rarityForUnlock, unlockedIds, unlocksForBadge, unlocksForLevels, type Unlock } from '../src/domain/unlocks';
 import type { XpBadgeFact } from '../src/domain/xp';
 import {
   activeConfettiStyles,
@@ -25,7 +27,7 @@ import {
   unlockData,
   unlockedOnPhone,
 } from '../src/unlocks';
-import { UNLOCK_KIND_IDS, validateUnlocks } from '../tools/validate-data.ts';
+import { AVATAR_RARITIES, UNLOCK_KIND_IDS, validateUnlocks } from '../tools/validate-data.ts';
 
 type Obj = Record<string, unknown>;
 
@@ -326,5 +328,74 @@ describe('src/unlocks.ts (pure parts: the phone union, switches and active lists
     expect(activeConfettiStyles()).toEqual(['default']);
     expect(activeTimerSounds()).toEqual(['beeps', 'bell', 'melody', 'off']);
     expect(activeFonts()).toEqual(['default']);
+  });
+});
+
+// Block 6D-S (docs/specs/badges-avatar.md, S-B.3/S-B.6): every unlock has a rarity; the data file
+// sets it explicitly, the level/tier rule is the fallback.
+describe('rarity of unlocks (block 6D-S)', () => {
+  it('every unlock in data/unlocks.json has a valid explicit rarity, exactly as the block lists it', () => {
+    for (const raw of unlocksJson as Obj[]) expect(RARITIES).toContain(raw['rarity']);
+    const by = Object.fromEntries(UNLOCKS.map((u) => [u.id, u.rarity]));
+    expect(by).toEqual({
+      'confetti-double': 'common',
+      'avatar-maker': 'common',
+      'sound-cowbell': 'common',
+      'confetti-veggies': 'common',
+      'font-chalk': 'rare',
+      'sound-gong': 'rare',
+      'confetti-party': 'rare',
+      'sound-kitchen': 'rare',
+      'font-hand': 'rare',
+      'sound-cooked-tada': 'epic',
+      'confetti-trex': 'epic',
+      'sound-fanfare': 'epic',
+      'confetti-stars': 'epic',
+      'confetti-fire': 'epic',
+      'confetti-gold': 'legendary',
+    });
+  });
+
+  it('Rarity/RARITIES moved to src/domain/rarity.ts; avatar.ts and the validator still agree', () => {
+    expect([...RARITIES]).toEqual(['common', 'rare', 'epic', 'legendary']);
+    expect(AVATAR_RARITY_LIST).toBe(RARITIES);
+    expect([...AVATAR_RARITIES]).toEqual([...RARITIES]);
+  });
+
+  it('the level rule on its boundaries: 20/21, 50/51, 80/81', () => {
+    expect([20, 21, 50, 51, 80, 81, 100].map(rarityForLevel)).toEqual(['common', 'rare', 'rare', 'epic', 'epic', 'legendary', 'legendary']);
+    expect(rarityForUnlock({ level: 2 })).toBe('common');
+    expect(rarityForUnlock({ level: 21 })).toBe('rare');
+    expect(rarityForUnlock({ level: 81 })).toBe('legendary');
+  });
+
+  it('the badge rule: no tier or tier ≤ 2 rare · 3–5 epic · ≥ 6 legendary', () => {
+    expect(rarityForUnlock({ badge: 'op-dreef' })).toBe('rare');
+    expect([1, 2, 3, 5, 6, 8].map((level) => rarityForUnlock({ badge: 'op-dreef', level }))).toEqual(['rare', 'rare', 'epic', 'epic', 'legendary', 'legendary']);
+  });
+
+  it('normalizeUnlocks: an explicit valid rarity wins; missing or unknown falls back to the rule', () => {
+    const [explicit, missing, unknown, badgeTier] = normalizeUnlocks([
+      levelUnlock({ id: 'a', by: { level: 4 }, rarity: 'legendary' }),
+      levelUnlock({ id: 'b', by: { level: 60 } }),
+      levelUnlock({ id: 'c', by: { level: 30 }, rarity: 'mythic' }),
+      levelUnlock({ id: 'd', by: { badge: 'op-dreef', level: 4 } }),
+    ]);
+    expect(explicit?.rarity).toBe('legendary');
+    expect(missing?.rarity).toBe('epic');
+    expect(unknown?.rarity).toBe('rare');
+    expect(badgeTier?.rarity).toBe('epic');
+  });
+
+  it('the validator: a valid rarity passes without warnings, an invalid one is an error, a missing one is fine', () => {
+    const ok = validateUnlocks([levelUnlock({ rarity: 'rare' })], BADGE_IDS, RETIRED_IDS);
+    expect(ok.errors).toEqual([]);
+    expect(ok.warnings).toEqual([]);
+    expect(validateUnlocks([levelUnlock()], BADGE_IDS, RETIRED_IDS).errors).toEqual([]);
+    for (const rarity of ['mythic', '', 3, null]) {
+      const errors = validateUnlocks([levelUnlock({ rarity })], BADGE_IDS, RETIRED_IDS).errors;
+      expect(errors).toHaveLength(1);
+      expect(errors[0]).toMatch(/"rarity" must be one of/);
+    }
   });
 });

@@ -1221,11 +1221,12 @@ export function validateLevels(data: unknown): ValidationResult {
 // description } }; ids kebab-case and unique; `kind` from UNLOCK_KIND_IDS; `by` either
 // { level: integer 2…100 } or { badge: an id from data/badges.json, level?: tier 1…8 }; `icon` and
 // `value` non-empty strings; both languages with a non-empty name and description. Warnings: stray
-// keys, a badge unlock on a retired badge (it can not be earned any more).
+// keys, a badge unlock on a retired badge (it can not be earned any more). Block 6D-S: `rarity`, when
+// present, one of common/rare/epic/legendary (an error otherwise).
 
 /** Mirrors UNLOCK_KINDS in src/domain/unlocks.ts (tests/unlocks.test.ts pins that they are equal). */
 export const UNLOCK_KIND_IDS: readonly string[] = ['confetti', 'timerSound', 'cookedSound', 'cookFont', 'feature'];
-const UNLOCK_KEYS: ReadonlySet<string> = new Set(['id', 'kind', 'by', 'icon', 'value', 'nl', 'en']);
+const UNLOCK_KEYS: ReadonlySet<string> = new Set(['id', 'kind', 'by', 'icon', 'value', 'rarity', 'nl', 'en']);
 const UNLOCK_TEXT_KEYS: ReadonlySet<string> = new Set(['name', 'description']);
 /** A level unlock lies on 2…100: level 1 is where everyone starts, so it would set nothing free. */
 const UNLOCK_MIN_LEVEL = 2;
@@ -1291,6 +1292,13 @@ export function validateUnlocks(data: unknown, badgeIds: Iterable<string>, retir
     for (const field of ['icon', 'value'] as const) {
       const v = item[field];
       if (typeof v !== 'string' || v.trim() === '') errors.push(`${label}: "${field}" must be a non-empty string.`);
+    }
+
+    // Block 6D-S (S-B): `rarity`, when present, one of the four (like an avatar part; a missing one
+    // falls back to the level/tier rule in src/domain/unlocks.ts `rarityForUnlock`).
+    const rarity = item['rarity'];
+    if (rarity !== undefined && (typeof rarity !== 'string' || !AVATAR_RARITIES.includes(rarity))) {
+      errors.push(`${label}: "rarity" must be one of ${AVATAR_RARITIES.join(' | ')}, got ${JSON.stringify(rarity)}.`);
     }
 
     for (const lang of ['nl', 'en'] as const) {

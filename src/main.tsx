@@ -8,6 +8,7 @@ import './styles/week.css';
 import './styles/shopping.css';
 import './styles/badges.css';
 import './styles/avatar.css';
+import './styles/style.css';
 import './styles/xp.css';
 import './styles/print.css';
 import { App } from './app';

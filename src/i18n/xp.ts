@@ -2,7 +2,7 @@
 // (docs/specs/xp-levels.md §1a–§1e, block 6D-1; literal from the spec, NL and British English).
 // Merged in ./index.ts after badges. Level TITLES and NOTES come from data/levels.json
 // (src/domain/levels.ts), never from here. Block 6D-3 (unlocks, = 6D-4a) adds `unlocks.*`; 6D-4
-// adds `progress.*` and `calendar.*`. Numbers with thousands go through Intl.NumberFormat at the
+// adds `progress.*` and `calendar.*`; 6D-S adds `style.*`. Numbers with thousands go through Intl.NumberFormat at the
 // call site.
 import type { Dict } from './index';
 
@@ -22,7 +22,7 @@ export const xp: Dict = {
   // §1d the level-up sheet ("Ontgrendeld" + "Bekijk Vrijgespeeld" only show from 6D-3 on).
   'levelup.title': { nl: '🎉 Level {level}!', en: '🎉 Level {level}!' },
   'levelup.unlocked': { nl: 'Ontgrendeld', en: 'Unlocked' },
-  'levelup.seeUnlocks': { nl: 'Bekijk Vrijgespeeld', en: 'See Unlocked' },
+  'levelup.seeUnlocks': { nl: 'Naar Jouw stijl', en: 'Open Your style' },
   // §1e honest about 0 XP: the CookedSheet line, the two toasts and the rules-version toast.
   'xp.backdated': {
     nl: 'Langer dan een week geleden: telt voor je badges en de kalender, niet voor XP.',
@@ -34,22 +34,31 @@ export const xp: Dict = {
     nl: 'De XP-regels zijn vernieuwd; je level is opnieuw berekend.',
     en: 'The XP rules were updated; your level has been recalculated.',
   },
-  // §1f the Vrijgespeeld screen (#/more/unlocks, block 6D-3 = 6D-4a): one card per kind, a row per
-  // unlock; names and descriptions of the unlocks themselves come from data/unlocks.json.
-  'unlocks.title': { nl: 'Vrijgespeeld', en: 'Unlocked' },
-  'unlocks.kind.confetti': { nl: 'Confetti', en: 'Confetti' },
-  'unlocks.kind.timerSound': { nl: 'Timergeluiden', en: 'Timer sounds' },
-  'unlocks.kind.cookedSound': { nl: 'Geluid bij Gekookt!', en: 'Sound on Cooked!' },
-  'unlocks.kind.cookFont': { nl: 'Lettertype kookstand', en: 'Cook-mode typeface' },
-  'unlocks.kind.feature': { nl: "Extra's", en: 'Extras' },
-  'unlocks.try': { nl: 'Probeer', en: 'Try' },
-  'unlocks.atLevel': { nl: 'Level {level}', en: 'Level {level}' },
-  'unlocks.atBadge': { nl: 'Badge: {name}', en: 'Badge: {name}' },
-  'unlocks.soon': { nl: 'Binnenkort', en: 'Coming soon' },
+  // §1f unlocks (block 6D-3 = 6D-4a). The Vrijgespeeld screen went in 6D-S (Jouw stijl took over);
+  // the phone-wide line stays (Jouw stijl shows it at the bottom).
   'unlocks.phoneWide': {
     nl: 'Wat iemand op deze telefoon vrijspeelt, kan iedereen hier gebruiken. Aan/uit geldt voor deze telefoon.',
     en: 'Whatever anyone unlocks on this phone, everyone here can use. On/off applies to this phone.',
   },
+  // Block 6D-S (docs/specs/badges-avatar.md, S-B.5): Jouw stijl (#/more/style). Theme names reuse
+  // more.theme.*, timer-sound names more.timerSound.*, confetti names come from data/unlocks.json.
+  'style.title': { nl: 'Jouw stijl', en: 'Your style' },
+  'style.tab.avatar': { nl: 'Avatar', en: 'Avatar' },
+  'style.tab.sounds': { nl: 'Geluiden', en: 'Sounds' },
+  'style.tab.confetti': { nl: 'Confetti', en: 'Confetti' },
+  'style.tab.fonts': { nl: 'Letters', en: 'Typefaces' },
+  'style.tab.theme': { nl: 'Thema', en: 'Theme' },
+  'style.timerSound': { nl: 'Timergeluid', en: 'Timer sound' },
+  'style.cookedSound': { nl: 'Bij Gekookt!', en: 'On Cooked!' },
+  'style.random': { nl: 'Verras me', en: 'Surprise me' },
+  'style.inMix': { nl: 'In de mix', en: 'In the mix' },
+  'style.outOfMix': { nl: 'Niet in de mix', en: 'Not in the mix' },
+  'style.lockedLevel': { nl: 'Komt vrij op level {n}.', en: 'Unlocks at level {n}.' },
+  'style.lockedBadge': { nl: 'Komt vrij met de badge {badge}.', en: 'Unlocks with the badge {badge}.' },
+  'style.font.default': { nl: 'Standaard', en: 'Default' },
+  'style.font.chalk': { nl: 'Krijtbord', en: 'Chalkboard' },
+  'style.font.hand': { nl: 'Handschrift', en: 'Handwriting' },
+  'style.confetti.default': { nl: 'Gewoon', en: 'Plain' },
   // §1h "Sync mijn voortgang" (block 6D-4 = 6D-4b): the button on the active profile card and under
   // Huishouden → Mijn kaartje, and <ProgressSharePanel/> (the iPhone line reuses household.cardIosHint).
   'progress.share': { nl: 'Sync mijn voortgang', en: 'Sync my progress' },

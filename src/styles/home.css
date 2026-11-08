@@ -301,12 +301,29 @@
 /* ---------- Home A+ block 1 (docs/specs/home-a-plus.md §1c–1e) ---------- */
 
 /* Greeting row: the avatar circle (decoration) left, the greeting right. The row carries the
-   greeting's own margins (browse.css), so the h2 inside it has none. */
+   greeting's own margins (browse.css), so the name inside it has none. Since 6D-S the row is one
+   button to Mijn profiel (44 px target at least, no button chrome). */
 .home-hello {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
+  min-height: 44px;
   margin: 18px 0 12px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.home-hello:active {
+  opacity: 0.7;
 }
 
 .home-hello .home-greeting {
