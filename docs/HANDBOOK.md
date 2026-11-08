@@ -2047,7 +2047,7 @@ The line is crossed out and its box fills with colour. When an aisle is complete
 
 #### What it does
 
-Type what you need yourself, with an amount and a unit if you like. With commas you add several things at once.
+Type what you need yourself, with an amount and a unit if you like. One or two things, with a comma between them, go straight onto the list. With three or more, the app first shows what it recognises.
 
 #### Where you tap
 
@@ -2062,7 +2062,33 @@ The line sits in the right aisle, for example "200 g butter" under Dairy & eggs.
 
 #### Good to know
 
-If the app does not know the word, you choose **As text** or **New ingredient** under the box.
+If the app does not know the word, you choose **As text** or **New ingredient** under the box. If you type three or more things, the window **Put on the list?** opens first.
+
+(`#/shopping`)
+
+### Paste someone else's list
+
+#### What it does
+
+Paste a list from WhatsApp or a note. The app suggests something for each line, even if the list is in Dutch. You check it and put everything on the list with one tap.
+
+#### Where you tap
+
+1. Copy the list, for example in WhatsApp.
+2. Tap **Shopping** at the bottom.
+3. Tap the box "+ loo roll, milk …" and paste the list.
+4. Tap +.
+5. In the window **Put on the list?**, tap another choice if a suggestion is wrong.
+6. Tap **Search…** if you mean something else entirely.
+7. Tap **Put 5 lines on the list** at the bottom.
+
+#### What you then see
+
+Each line shows the words as pasted on the left and the suggestion on the right. A green choice is certain. An outlined choice is a guess, with one or two other choices next to it. If the app does not know the word, **As text** is chosen: the words go on the list as they are. Words such as "check" or "for breakfast" appear in italics underneath as a note.
+
+#### Good to know
+
+If you choose something other than the suggestion, the app remembers it on this phone. Next time that word is certain straight away. What the app learned this way is under **Dictionary** in **Learned from lists**; ✕ makes it forget. One or two things skip this window and go straight onto the list.
 
 (`#/shopping`)
 

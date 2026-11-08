@@ -4,6 +4,39 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 9 nov (Opus): V6 — Gabi's lijstje plakken met voorstellen (zeker/twijfel/onbekend in beide talen, notities, leren onder Woordenboek) en de woordenlijst-ronde
+Gebouwd volgens docs/specs/verbeterronde-6.md (lichte workflow, vier bouwers + integrator; run-id wf_323231d0-63a; na de lens: notitie als veld  zichtbaar achter de naam, twijfel-chip met één tik bevestigd, vaste score 1,0/0,9/≤0,8 met één treffer als twijfel vanaf 0,5).
+**Herkenner (A, src/domain/shopinput.ts):** `splitShopList`/`isShopList` splitsen ook op regeleinden en " · " (decimale komma blijft heel);
+`suggestShopLines(text, dict, lang, learned)` → per regel `ShopSuggestion` (raw, qty, unit, name, note, match, alternatives, status);
+notitiewoorden NL/EN vooraan of achteraan (kleine letters, meerdere met ", "); koppeling learned → `ingredientByName` in beide talen →
+`searchRanked` in beide talen met grenzen 0,85 / 1,5×; tests/shopinput.test.ts 17 → 28. **Venster en leren (B):** nieuw
+src/components/ShopPasteSheet.tsx (SheetPortal, Sluit rechts, radiogroup-chips, Zoek… via IngredientPicker, knop in een vaste voet onder
+de lijst), ExtraField opent het bij drie of meer delen (Enter/+ of direct bij plakken via het paste-event, want een eenregelig vak
+gooit de regeleinden weg); repo `shop.learned` + `getLearnedShopWords`/`learnShopWord`/`forgetShopWord` (in de back-up, niet in
+DEVICE_LOCAL_SETTINGS); Woordenboek-blok **Geleerd van lijstjes** met ✕ (aria `common.delete`); sleutels `shop.paste.*` in
+src/i18n/shopping.ts (daar staat `shop.*`), `dict.learnedTitle` in edit.ts. Geleerd wordt bij het plaatsen, niet bij de tik.
+**Woordenlijst (C):** 1603 → 1612 producten: de acht 13F-ids letterlijk plus `kvas`; aliassen coco acqua (kokoswater), varske (kwark),
+grietine (zure-room), burokeliai (biet), kokosroom (NL op santen); al aanwezig en dus niets toegevoegd: miso (`misopasta`), tempeh (`tempe`),
+za'atar (`zaatar`), pickles (augurk), tahini (tahin), udon/soba/rijstpapier en de rest van de lijst. Golden: alleen het aantal; 1432/1432
+regels ongewijzigd. **Handboek (D):** rij `zelf-toevoegen` bijgewerkt, nieuwe rij `week-en-boodschappen.lijstje-plakken`; handboek
+218 rijen, twee blijvende waarschuwingen ("Zet 5 regels op de lijst" / "Put 5 lines on the list": de validator vult `{n}` niet in).
+**Integrator:** check, test (1875), build, build:next en validate:data groen. Dev-app 375 px, NL en EN: Gabi's lijstje geplakt → venster
+met vijf regels, alle vijf zeker (kokoswater via de nieuwe alias, biet, ketchup met "Notitie: check", augurk, brood met "Notitie: for
+breakfast"); geplaatst bij hun gangpad; een onbekende regel als tekst onder Overig, "3 citroenen" met hoeveelheid; via Zoek…
+gekoppeld woord kwam onder Woordenboek → Geleerd van lijstjes en was de volgende keer zeker, ✕ vergat het en het blok verdween; "melk,
+2 eieren" ging direct zoals voorheen; geen horizontale scroll. DEVICE-TEST rij 115 (NL + EN, Gabi's lijst letterlijk) en rij 102 (Leeg
+de lijst: drie dingen in het vak openen nu eerst het venster) bijgewerkt.
+**Open voor Fable/Stijn (niet zelf beslist):** (1) `searchRanked` geeft geen score; A meet de grenzen op `shopMatchScore` = lengte
+zoektekst / lengte van de kortste naam, alias of id waarin hij staat (0..1); één enkele treffer is daardoor altijd maybe ("melkk" →
+maybe kefir). (2) "één of twee letters blijft unknown" geldt alleen voor het zoeken: "ui" en "ei" als exacte naam of geleerd woord
+blijven zeker. (3) De andere taal wint ook als hij een eenheid leest die `lang` mist ("2 cans of chickpeas" op een NL-lijst). (4) De
+notitie staat bij een gekoppelde regel in `label`, maar `renderListItem`/`itemName` (src/domain/aggregate.ts) negeren `label` als `ing`
+gezet is: de notitie is op de lijst nu niet zichtbaar. (5) README §3a.8 wil sheetknoppen in de kop, de spec "Knop onderaan" met alleen
+Sluit in de kop: de spec gevolgd. (6) Kale "sambal" niet gekoppeld (alleen sambal-oelek/-badjak/-manis); varske/grietine/burokeliai
+als EN-alias; kokosroom als NL-alias op santen. (7) Het venster opent ook op het tabblad Vaste lijst (zelfde ExtraField). (8) Twee
+geplakte regels (WhatsApp-regeleinden) gaan als vanouds het eenregelige vak in, waar de browser de regeleinden weghaalt; de spec zegt
+"gedrag als nu". (9) Na het plaatsen toont de bevestiging alleen het laatste ding ("Toegevoegd: brood").
+
 ## 8 nov (Opus): V5 — vrijspeel-rijkdom: tien confetti-stijlen (ladder dubbel → trippel → quadruppel), acht gesynthetiseerde timergeluiden, gouden thema (level 100 én makers-ei)
 Gebouwd volgens docs/specs/verbeterronde-5.md (lichte workflow wf_d95f9213-2e6, vijf bouwers + integrator; lens: drie open punten door Fable besloten — gouden thema zonder opstartflits via een localStorage-spiegel, met badges uit alleen via het makers-ei, Ode an die Freude ≤ 4 s; drie contrastplekken onder 4,5:1 bestaan ook in het donkere thema en wachten op een opschoonronde).
 **Confetti (A, src/components/Confetti.tsx):** tabel `LOOKS` met per look aantal, duurfactor en golven; triple 240 (golven 0/250 ms),

@@ -20,7 +20,7 @@
 // A unit is the first word after it when the dictionary knows it as a unit in the TYPING language,
 // a name follows, and that word is not the start of the product's own name ("blik tomaten",
 // "pak choi", "hand cream"). The caller looks the name up (dictionary search / ingredientByName).
-import { normalizeKey, type Dictionary, type Unit } from './dictionary.ts';
+import { normalizeKey, type Dictionary, type Ingredient, type Unit } from './dictionary.ts';
 import type { Lang } from './model.ts';
 import { parseQty } from './parser.ts';
 
@@ -33,20 +33,23 @@ export interface ShopInput {
   name: string;
 }
 
-/** A comma separates items, except between two digits ("1,5 liter melk" is one item). */
-const LIST_COMMA = /(?<!\d),|,(?!\d)/u;
+/**
+ * Item separators: a comma, except between two digits ("1,5 liter melk" is one item); a line break
+ * (a list pasted from WhatsApp); and " · " (spec V6 §1a, "Coco acqua · Beetroot · Check ketchup").
+ */
+const LIST_SEPARATOR = /(?<!\d),|,(?!\d)|\r?\n|\r|\s+·\s+/u;
 
-/** "melk, 2 eieren,1,5 l room" -> ["melk", "2 eieren", "1,5 l room"]. */
+/** "melk, 2 eieren,1,5 l room" -> ["melk", "2 eieren", "1,5 l room"]; also splits on line breaks and " · ". */
 export function splitShopList(text: string): string[] {
   return text
-    .split(LIST_COMMA)
+    .split(LIST_SEPARATOR)
     .map((s) => s.trim())
     .filter(Boolean);
 }
 
-/** True when the text holds more than one item (a comma that is not a decimal comma). */
+/** True when the text holds more than one item (a separator that is not a decimal comma). */
 export function isShopList(text: string): boolean {
-  return LIST_COMMA.test(text);
+  return LIST_SEPARATOR.test(text);
 }
 
 /** Unit words that mean something else on a shopping list: "1 blok kaas" is a piece, "1 strip paracetamol" no slice. */
@@ -148,4 +151,177 @@ export function parseShopInput(text: string, dict: Dictionary, lang: Lang): Shop
   // "een paar bananen", "a few apples": the article is no amount here.
   if (article) return plain;
   return { qty, unit: null, name };
+}
+
+// --- Suggestions for a pasted list (spec V6 §1a) -------------------------------------------------
+//
+// Gabi's WhatsApp list "Coco acqua · Beetroot · Check ketchup · Pickles · Bread for breakfast" on
+// Stijn's Dutch list: every line gets a proposal. Words like "check" or "for breakfast" become a
+// note; the name is looked up in what this device learned, then by exact name in both languages,
+// then by search in both languages. The raw line is always kept, so the caller can always place it
+// as plain text.
+
+export type ShopSuggestionStatus = 'sure' | 'maybe' | 'unknown';
+
+export interface ShopSuggestion {
+  /** The line as typed or pasted (trimmed), never changed. */
+  raw: string;
+  qty: number | null;
+  unit: string | null;
+  /** What was looked up: the line without amount, unit and note words. */
+  name: string;
+  /** Note words taken off the front or back ("check", "for breakfast"), lowercased; null when none. */
+  note: string | null;
+  /** Ingredient id of the proposal; null when unknown. */
+  match: string | null;
+  /** Other ingredient ids to offer (at most two for maybe, three for unknown, none for sure). */
+  alternatives: string[];
+  status: ShopSuggestionStatus;
+}
+
+/** Note words (spec V6 §1a; both languages are always tried). Longest first so "see if" beats nothing shorter. */
+const NOTE_PHRASES: readonly string[] = [
+  // NL
+  'check', 'controleer', 'kijken of', 'misschien', 'evt.', 'eventueel', 'als het kan',
+  // EN
+  'maybe', 'if possible', 'optional', 'see if', 'for breakfast', 'for lunch', 'for dinner',
+].sort((a, b) => b.length - a.length);
+
+const NOTE_ALT = NOTE_PHRASES.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+/** A note phrase at the start, then a space or ':' / '-' ("Check ketchup", "check: ketchup"). */
+const NOTE_FRONT = new RegExp(`^(${NOTE_ALT})(?:\\s*[:\\-–]\\s*|\\s+)`, 'iu');
+/** A note phrase at the end, after a space or ',' / '-' ("Bread for breakfast", "ketchup - maybe"). */
+const NOTE_BACK = new RegExp(`(?:\\s*[,\\-–]\\s*|\\s+)(${NOTE_ALT})[!?]?$`, 'iu');
+
+/** Takes note phrases off both ends of a line; the name never becomes empty ("Check" alone stays the name). */
+export function splitShopNote(text: string): { name: string; note: string | null } {
+  let name = text.trim();
+  const notes: string[] = [];
+  for (;;) {
+    const front = NOTE_FRONT.exec(name);
+    if (front && name.slice(front[0].length).trim()) {
+      notes.push((front[1] as string).toLowerCase());
+      name = name.slice(front[0].length).trim();
+      continue;
+    }
+    const back = NOTE_BACK.exec(name);
+    if (back && name.slice(0, back.index).trim()) {
+      notes.push((back[1] as string).toLowerCase());
+      name = name.slice(0, back.index).trim();
+      continue;
+    }
+    break;
+  }
+  return { name, note: notes.length ? notes.join(', ') : null };
+}
+
+/** Status boundaries (spec V6 §1a; Stijn decides changes, not the builder). */
+const MAYBE_SCORE = 0.85;
+const CLEAR_FACTOR = 1.5;
+/** The containment ratio never reaches the word-start score (0.9). */
+const SHOP_RATIO_CAP = 0.8;
+/** A single hit (no second to compare with) is a maybe only from this score on. */
+const SINGLE_HIT_SCORE = 0.5;
+
+/**
+ * How well a search query covers an ingredient, 0..1 (Fable, V6 lens), over every name, alias and
+ * the id in BOTH languages (`lang` is the list language; the score does not depend on it):
+ * - 1.0: the normalised query equals a name or alias (normally caught earlier by ingredientByName);
+ * - 0.9: a WORD of a name or alias starts with the query ("beet" -> "beetroot", "kip" -> "kipfilet");
+ * - otherwise the query's share of the shortest name, alias or id that contains it, capped at 0.8
+ *   ("kip" in "soepkip" = 0.43); 0 when nothing contains it.
+ * searchRanked only gives a rank, so this is the score the 0.85 / 1.5x boundaries are measured on.
+ */
+export function shopMatchScore(query: string, ing: Ingredient, lang: Lang): number {
+  const q = normalizeKey(query);
+  if (!q) return 0;
+  const names: string[] = [];
+  for (const l of [lang, otherLang(lang)]) {
+    const n = ing[l];
+    if (n?.one) names.push(n.one);
+    if (n?.many) names.push(n.many);
+    for (const a of ing.aliases?.[l] ?? []) names.push(a);
+  }
+  let best = 0;
+  for (const name of names) {
+    const k = normalizeKey(name);
+    if (!k) continue;
+    if (k === q) return 1;
+    if (k.startsWith(q) || k.split(/[^\p{L}\p{N}]+/u).some((w) => w.startsWith(q))) best = Math.max(best, 0.9);
+  }
+  if (best > 0) return best;
+  for (const name of [ing.id.replace(/-/g, ' '), ...names]) {
+    const k = normalizeKey(name);
+    if (k && k.includes(q)) best = Math.max(best, Math.min(SHOP_RATIO_CAP, q.length / k.length));
+  }
+  return best;
+}
+
+function otherLang(lang: Lang): Lang {
+  return lang === 'nl' ? 'en' : 'nl';
+}
+
+/** searchRanked in both languages, merged per ingredient, best score first (then rank, then name). */
+function rankedBoth(name: string, dict: Dictionary, lang: Lang): { id: string; score: number }[] {
+  const merged = new Map<string, { id: string; score: number; rank: number; label: string }>();
+  for (const l of [lang, otherLang(lang)]) {
+    for (const m of dict.searchRanked(name, l)) {
+      const prev = merged.get(m.ingredient.id);
+      if (prev) prev.rank = Math.min(prev.rank, m.rank);
+      else {
+        const label = m.ingredient[lang]?.one ?? m.ingredient.id;
+        merged.set(m.ingredient.id, { id: m.ingredient.id, score: shopMatchScore(name, m.ingredient, lang), rank: m.rank, label });
+      }
+    }
+  }
+  return [...merged.values()].sort((a, b) => b.score - a.score || a.rank - b.rank || a.label.localeCompare(b.label));
+}
+
+/** One line: note words, amount (in `lang`, else the other language), then the lookup. */
+function suggestLine(raw: string, dict: Dictionary, lang: Lang, learned: Readonly<Record<string, string>>): ShopSuggestion {
+  const { name: bare, note } = splitShopNote(raw);
+  // The other language also wins when it reads a unit that `lang` missed ("2 cans of chickpeas" on
+  // a Dutch list), unless the `lang` reading already names a known product ("2 blik tomaten").
+  let parsed = parseShopInput(bare, dict, lang);
+  if (parsed.qty === null || parsed.unit === null) {
+    const other = parseShopInput(bare, dict, otherLang(lang));
+    if (parsed.qty === null ? other.qty !== null : other.unit !== null && !dict.ingredientByName(parsed.name, lang)) parsed = other;
+  }
+  const { qty, unit, name } = parsed;
+  const base = { raw, qty, unit, name, note };
+  const key = normalizeKey(name);
+
+  // (1) What this device learned from earlier lists (an id that no longer exists is ignored).
+  const learnedId = key ? learned[key] : undefined;
+  if (learnedId && dict.get(learnedId)) return { ...base, match: learnedId, alternatives: [], status: 'sure' };
+
+  // (2) An exact name or alias, in `lang` or the other language.
+  const exact = dict.ingredientByName(name, lang) ?? dict.ingredientByName(name, otherLang(lang));
+  if (exact) return { ...base, match: exact.id, alternatives: [], status: 'sure' };
+
+  // A word of one or two letters is too short to guess at.
+  if (key.replace(/[^\p{L}\p{N}]/gu, '').length <= 2) return { ...base, match: null, alternatives: [], status: 'unknown' };
+
+  // (3) Search in both languages: a clear winner is a "maybe", otherwise only alternatives.
+  const hits = rankedBoth(name, dict, lang);
+  const first = hits[0];
+  const second = hits[1];
+  const clear = second ? first !== undefined && first.score >= CLEAR_FACTOR * second.score : (first?.score ?? 0) >= SINGLE_HIT_SCORE;
+  if (first && first.score > 0 && (first.score >= MAYBE_SCORE || clear)) {
+    return { ...base, match: first.id, alternatives: hits.slice(1, 3).map((h) => h.id), status: 'maybe' };
+  }
+  return { ...base, match: null, alternatives: hits.slice(0, 3).map((h) => h.id), status: 'unknown' };
+}
+
+/**
+ * Proposals for a pasted or typed list, one per item in the order of the text (spec V6 §1a).
+ * `learned` maps normalizeKey(name) -> ingredient id (the device setting `shop.learned`).
+ */
+export function suggestShopLines(
+  text: string,
+  dict: Dictionary,
+  lang: Lang,
+  learned: Readonly<Record<string, string>> = {},
+): ShopSuggestion[] {
+  return splitShopList(text).map((raw) => suggestLine(raw, dict, lang, learned));
 }

@@ -2133,6 +2133,56 @@ export async function setListItem(key: string, patch: ListItemPatch): Promise<vo
   });
 }
 
+/**
+ * Setting 'shop.learned' (V6, docs/specs/verbeterronde-6.md §1b): words of pasted shopping lists the
+ * user linked to another ingredient than the first suggestion, `normalizeKey(name)` -> ingredient id
+ * ("coco acqua" -> "kokoswater"). A phone setting (not the dictionary) that `suggestShopLines` consults
+ * first; it rides along in the backup (not in DEVICE_LOCAL_SETTINGS). Shown and forgettable under
+ * Woordenboek -> "Geleerd van lijstjes".
+ */
+export const SHOP_LEARNED_SETTING = 'shop.learned';
+
+function normalizeLearned(raw: unknown): Record<string, string> {
+  const out: Record<string, string> = {};
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    const key = normalizeKey(k);
+    if (key && typeof v === 'string' && v.trim()) out[key] = v.trim();
+  }
+  return out;
+}
+
+/** The learned words (an empty record when absent or unreadable). Never throws. */
+export async function getLearnedShopWords(): Promise<Record<string, string>> {
+  try {
+    return normalizeLearned(await getSetting<unknown>(SHOP_LEARNED_SETTING, null));
+  } catch {
+    return {};
+  }
+}
+
+/** Remembers `key` (normalised) -> ingredient `id`; an empty key or id is ignored. */
+export async function learnShopWord(key: string, id: string): Promise<void> {
+  const k = normalizeKey(key);
+  if (!k || !id.trim()) return;
+  await db.transaction('rw', db.settings, async () => {
+    const cur = normalizeLearned(await getSetting<unknown>(SHOP_LEARNED_SETTING, null));
+    if (cur[k] === id) return;
+    await setSetting(SHOP_LEARNED_SETTING, { ...cur, [k]: id });
+  });
+}
+
+/** Forgets the learned word `key` (no-op when it is not there). */
+export async function forgetShopWord(key: string): Promise<void> {
+  const k = normalizeKey(key);
+  await db.transaction('rw', db.settings, async () => {
+    const cur = normalizeLearned(await getSetting<unknown>(SHOP_LEARNED_SETTING, null));
+    if (!(k in cur)) return;
+    delete cur[k];
+    await setSetting(SHOP_LEARNED_SETTING, cur);
+  });
+}
+
 /** 6D-2c ("Hele cirkel"): the recipes on the shopping trail — a line of theirs was ticked off once. */
 export async function boughtRecipeIds(): Promise<Set<string>> {
   const trail = normalizeShopBought(await getSetting<unknown>(SHOP_BOUGHT_SETTING, null));

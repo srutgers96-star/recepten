@@ -76,6 +76,8 @@ export interface ListItem {
   adjusted?: number | null;
   /** Manual items without a dictionary id, and the raw text of unresolved lines. */
   label?: Text;
+  /** V6: a note from a pasted list ('check', 'for breakfast'), shown in brackets after the name. */
+  note?: string;
   /** Unresolved lines: the servings factor of the dish (shown as "×1,5", never applied). */
   factor?: number;
   /** True when every source measured in spoons, so a staple's hint reads "(≈ 3 el)" rather than ml. */
@@ -659,11 +661,17 @@ function aisleOrder(dict: Dictionary): Map<string, number> {
   return m;
 }
 
-/** The name an item sorts by in a language. */
+/** " (check)" for an item with a pasted-list note (V6); '' without one. Same words in both languages. */
+function noteSuffix(it: ListItem): string {
+  const note = typeof it.note === 'string' ? it.note.trim() : '';
+  return note ? ` (${note})` : '';
+}
+
+/** The name an item sorts by in a language; a dictionary item with a note gets it in brackets (V6). */
 export function itemName(it: ListItem, dict: Dictionary, lang: Lang): string {
   if (it.ing && dict.get(it.ing)) {
     const q = it.variant ? it.variant.split('+').map((id) => dict.qualifierName(id, lang)).join(' ') + ' ' : '';
-    return q + dict.ingredientName(it.ing, lang);
+    return q + dict.ingredientName(it.ing, lang) + noteSuffix(it);
   }
   return pickText(it.label, lang) || it.sources[0]?.raw || it.key;
 }
@@ -729,7 +737,8 @@ function nameText(it: ListItem, ing: Ingredient, dict: Dictionary, lang: Lang, q
     for (const [id, n] of Object.entries(it.qualCounts)) if (n >= qty - EPS) words.push(dict.qualifierName(id, lang));
   }
   words.push(name);
-  return words.join(' ');
+  // V6: the note of a pasted line ("ketchup (check)"), only for dictionary items (label lines keep their text).
+  return words.join(' ') + noteSuffix(it);
 }
 
 /** "(1 grote)" / "(1 large)": size qualifiers that apply to some of the pieces. */

@@ -1,10 +1,11 @@
 # Spec V6 — Gabi's lijstje plakken met voorstellen, en de woordenlijst-ronde (Stijn, 30 okt + 8 nov 2026)
 
-Status: in aanbouw (Fable, 8 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 7 (Stijn 30 okt:
+Status: compleet (Fable, 9 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 7 (Stijn 30 okt:
 Gabi's WhatsApp-lijstje "Coco acqua · Beetroot · Check ketchup · Pickles · Bread for breakfast" plakken en "dat de app gewoon de
 goede dingen voorstelt en dan aan kan nemen") en idee 8 (woordenlijst uitbreiden); 8 nov: "is goed, als je dat kan maken klinkt het
 geweldig"; leren van de keuzes = ja. Leidend bij tegenspraak: docs/specs/README.md §2–§4, CLAUDE.md invariant 2 (een rauwe regel
 wordt nooit weggegooid), docs/specs/handbook.md §4.
+Gebouwd: 9 nov 2026 (V6, lichte workflow wf_323231d0-63a; lens: vijf bevindingen — twee direct hersteld (een nieuw ingrediënt via Zoek… wiste de keuzes; getypte tekst verdween bij een plak), drie besluiten Fable: (1) een herkende regel krijgt een veld `note` dat de lijst tussen haakjes achter de naam toont, geen apart `raw`-veld; (2) de omlijnde twijfel-chip wordt met de eerste tik bevestigd, pas een tweede tik geeft Als tekst; (3) de score: exacte naam of alias 1,0, een woord dat met de tekst begint 0,9, anders de lengteverhouding tot 0,8, één enkele treffer is twijfel vanaf 0,5; woordenlijst 1603 → zie STATUS; de handboekwaarschuwing over "Zet 5 regels op de lijst" komt doordat de validator {n} niet invult)
 
 **Kritische lezer (Fable, vooraf).** (1) Het plakvak doet nu alles in één keer: herkennen en plaatsen. De controlestap komt er
 alleen bij een lijstje van drie of meer regels, zodat "melk" of "2 eieren" even snel blijft als nu. (2) Gabi schrijft Engels op

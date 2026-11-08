@@ -973,3 +973,104 @@
 .pr:has(+ .spr-actions) {
   border-bottom: 0;
 }
+
+/* V6 (docs/specs/verbeterronde-6.md §1b): "Zet op de lijst?" (ShopPasteSheet). Per line the raw text
+   left (muted) and the suggestion as radio chips right: filled green = sure (or the user's own choice),
+   outlined = doubt, "Als tekst" keeps the words; 44 px tap targets, 16 px text. The add button sits in
+   a foot outside the scrolling body, so it stays in view on the iPhone. */
+.spaste-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.spaste-row {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.spaste-row:last-child {
+  border-bottom: 0;
+}
+.spaste-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+.spaste-raw {
+  flex: 1 1 120px;
+  min-width: 0;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+.spaste-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  flex: 1 1 180px;
+}
+.spaste-chip {
+  min-height: 44px;
+  max-width: 100%;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.spaste-chip.on {
+  background: var(--rosemary);
+  border-color: var(--rosemary);
+  color: var(--on-rosemary);
+}
+.spaste-chip.maybe {
+  border: 2px solid var(--rosemary);
+  color: var(--rosemary);
+}
+.spaste-chip.text.on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+.spaste-chip:disabled,
+.spaste-search:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.spaste-search {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  background: none;
+  color: var(--cobalt);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+.spaste-note {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--muted);
+}
+.spaste-foot {
+  flex: none;
+  padding: 8px max(16px, var(--sar)) 0 max(16px, var(--sal));
+  border-top: 1px solid var(--line);
+}
+.spaste-foot .btn {
+  min-height: 44px;
+  font-size: 16px;
+}
+
+/* V6: Woordenboek → "Geleerd van lijstjes", the ✕ that forgets a learned word. */
+.dw-learned-x {
+  flex: none;
+  color: var(--muted);
+  font-size: 18px;
+}

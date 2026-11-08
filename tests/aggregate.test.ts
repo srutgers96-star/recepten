@@ -9,6 +9,7 @@ import {
   effectiveQty,
   groupByAisle,
   isoWeekNumber,
+  itemName,
   listAsText,
   renderListItem,
   roundForDisplay,
@@ -828,5 +829,21 @@ describe('standing lines: Klaar and sharing without a week plan (6C blok 3)', ()
     expect(lines.filter((l) => l.startsWith('—'))).toEqual(['— Pap']);
     expect(lines).toContain('☐ 3 l melk');
     expect(lines).toContain('☐ postzegels');
+  });
+});
+
+describe('a pasted-list note on a dictionary item (V6)', () => {
+  const ketchup: ListItem = { key: 'x|n1', ing: 'ketchup', aisle: 'sauzen-olie-azijn', section: 'main', sources: [], manual: true, note: 'check' };
+
+  it('renders and names the item with the note in brackets, in both languages', () => {
+    expect(nl(ketchup)).toBe('ketchup (check)');
+    expect(en(ketchup)).toBe('tomato ketchup (check)');
+    expect(itemName(ketchup, dict, 'nl')).toBe('ketchup (check)');
+    expect(nl({ ...ketchup, qty: 2, unit: 'fles' })).toMatch(/^2 .+ketchup \(check\)$/u);
+  });
+
+  it('a text line keeps its label without a note; no note means no brackets', () => {
+    expect(nl({ ...ketchup, note: undefined })).toBe('ketchup');
+    expect(nl({ key: 'x|n2', ing: null, aisle: 'overig', section: 'main', sources: [], manual: true, label: { nl: 'Check ketchup', en: '' } })).toBe('Check ketchup');
   });
 });

@@ -23,7 +23,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { IngredientPicker, ingredientLabel, uniqueIngredientId } from '@/components/IngredientPicker';
 import { MissingSheet, type MissingSheetRow } from '@/components/MissingSheet';
-import { deleteUserIngredient, findOwnDuplicates, linkUserRecipeLine, mergeIngredient, saveUserIngredient, undoMerge, userRecipes, type OwnDuplicate } from '@/db/repo';
+import { deleteUserIngredient, findOwnDuplicates, forgetShopWord, getLearnedShopWords, linkUserRecipeLine, mergeIngredient, saveUserIngredient, undoMerge, userRecipes, type OwnDuplicate } from '@/db/repo';
 import { baseDictionary, dictionary, isUserIngredientId, reloadDictionary, userIngredients } from '@/dictionary';
 import { normalizeKey, type Dictionary, type Ingredient } from '@/domain/dictionary';
 import { buildMissingPrompt, collectMissing, parseMissingAnswer, planMissingAnswer, refreshMissingItems, type MissingCreate, type MissingItem, type MissingPlan, type MissingUpdate } from '@/domain/dictionary-prompt';
@@ -609,6 +609,54 @@ function MissingCard(props: { own: readonly Ingredient[]; onDone: (text: string)
   );
 }
 
+/**
+ * V6 (docs/specs/verbeterronde-6.md §1b): "Geleerd van lijstjes" — the words of pasted shopping lists
+ * the user linked to another ingredient (setting `shop.learned`), one row "coco acqua → kokoswater"
+ * with a ✕ that forgets it. No learned words: the block is not there.
+ */
+function LearnedCard({ dict, l }: { dict: Dictionary; l: Lang }) {
+  const [learned, setLearned] = useState<Record<string, string> | null>(null);
+  useEffect(() => {
+    let alive = true;
+    void getLearnedShopWords().then((w) => {
+      if (alive) setLearned(w);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  const keys = learned ? Object.keys(learned).sort((a, b) => a.localeCompare(b, l)) : [];
+  if (!learned || keys.length === 0) return null;
+  async function forget(key: string) {
+    await forgetShopWord(key);
+    setLearned(await getLearnedShopWords());
+  }
+  return (
+    <section class="section dw-learned">
+      <h2>{t('dict.learnedTitle')}</h2>
+      <ul class="dw-list">
+        {keys.map((key) => {
+          const id = learned[key] ?? '';
+          const ing = dict.get(id);
+          const name = ing ? nameOf(ing, l) : id;
+          return (
+            <li key={key} class="dw-row">
+              <div class="dw-row-main">
+                <span class="dw-name">
+                  {key} → {name}
+                </span>
+                <button type="button" class="icon-btn dw-learned-x" aria-label={`${t('common.delete')}: ${key}`} onClick={() => void forget(key)}>
+                  ✕
+                </button>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
 export function DictionaryScreen() {
   const l = lang.value;
   const dict = dictionary.value;
@@ -882,6 +930,8 @@ export function DictionaryScreen() {
               )}
               <p class="muted small">{t('dict.searchHint', { n: dict.ingredients.length })}</p>
             </section>
+
+            <LearnedCard dict={dict} l={l} />
 
             <section class="card dw-cleanup">
               <h2>{t('dict.cleanup')}</h2>

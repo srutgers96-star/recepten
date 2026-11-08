@@ -336,8 +336,8 @@
       "id": "week-en-boodschappen.zelf-toevoegen",
       "title": { "nl": "Zelf iets op de lijst zetten", "en": "Add something yourself" },
       "what": {
-        "nl": "Typ zelf wat je nodig hebt, met een aantal en een eenheid als je wilt. Met komma's zet je meer dingen tegelijk op de lijst.",
-        "en": "Type what you need yourself, with an amount and a unit if you like. With commas you add several things at once."
+        "nl": "Typ zelf wat je nodig hebt, met een aantal en een eenheid als je wilt. Eén of twee dingen, met een komma ertussen, staan meteen op de lijst. Bij drie of meer laat de app eerst zien wat hij herkent.",
+        "en": "Type what you need yourself, with an amount and a unit if you like. One or two things, with a comma between them, go straight onto the list. With three or more, the app first shows what it recognises."
       },
       "where": {
         "nl": ["Tik onderaan op **Boodschappen**.", "Tik in het vak \"+ wc-papier, melk …\".", "Typ bijvoorbeeld 200 gram boter.", "Tik op + of op een suggestie onder het vak."],
@@ -348,12 +348,35 @@
         "en": "The line sits in the right aisle, for example \"200 g butter\" under Dairy & eggs."
       },
       "know": {
-        "nl": "Kent de app het woord niet, dan kies je onder het vak **Als tekst** of **Nieuw ingrediënt**.",
-        "en": "If the app does not know the word, you choose **As text** or **New ingredient** under the box."
+        "nl": "Kent de app het woord niet, dan kies je onder het vak **Als tekst** of **Nieuw ingrediënt**. Typ je drie of meer dingen, dan opent eerst het venster **Zet op de lijst?**.",
+        "en": "If the app does not know the word, you choose **As text** or **New ingredient** under the box. If you type three or more things, the window **Put on the list?** opens first."
       },
       "route": "/shopping",
       "platform": "all",
       "keywords": { "nl": ["toevoegen", "typen", "zelf", "aantal", "eenheid", "extra"], "en": ["add", "type", "yourself", "amount", "unit", "extra"] }
+    },
+    {
+      "id": "week-en-boodschappen.lijstje-plakken",
+      "title": { "nl": "Een lijstje van iemand anders plakken", "en": "Paste someone else's list" },
+      "what": {
+        "nl": "Plak een lijstje uit WhatsApp of een notitie. De app doet per regel een voorstel, ook als het lijstje in het Engels is. Jij kijkt het na en zet alles in één tik op de lijst.",
+        "en": "Paste a list from WhatsApp or a note. The app suggests something for each line, even if the list is in Dutch. You check it and put everything on the list with one tap."
+      },
+      "where": {
+        "nl": ["Kopieer het lijstje, bijvoorbeeld in WhatsApp.", "Tik onderaan op **Boodschappen**.", "Tik in het vak \"+ wc-papier, melk …\" en plak het lijstje.", "Tik op +.", "Tik in het venster **Zet op de lijst?** op een andere keuze als een voorstel niet klopt.", "Tik op **Zoek…** als je iets heel anders bedoelt.", "Tik onderaan op **Zet 5 regels op de lijst**."],
+        "en": ["Copy the list, for example in WhatsApp.", "Tap **Shopping** at the bottom.", "Tap the box \"+ loo roll, milk …\" and paste the list.", "Tap +.", "In the window **Put on the list?**, tap another choice if a suggestion is wrong.", "Tap **Search…** if you mean something else entirely.", "Tap **Put 5 lines on the list** at the bottom."]
+      },
+      "see": {
+        "nl": "Per regel staan links de woorden zoals ze geplakt zijn en rechts het voorstel. Een groene keuze is zeker. Een omlijnde keuze is twijfel, met een of twee andere keuzes ernaast. Kent de app het woord niet, dan staat **Als tekst** gekozen: de woorden komen dan zo op de lijst. Woorden als \"check\" of \"for breakfast\" staan schuin eronder als notitie.",
+        "en": "Each line shows the words as pasted on the left and the suggestion on the right. A green choice is certain. An outlined choice is a guess, with one or two other choices next to it. If the app does not know the word, **As text** is chosen: the words go on the list as they are. Words such as \"check\" or \"for breakfast\" appear in italics underneath as a note."
+      },
+      "know": {
+        "nl": "Kies je iets anders dan het voorstel, dan onthoudt de app dat op deze telefoon. De volgende keer is dat woord meteen zeker. Wat de app zo leerde, zie je onder **Woordenboek** bij **Geleerd van lijstjes**; met ✕ vergeet hij het weer. Eén of twee dingen gaan zonder dit venster meteen op de lijst.",
+        "en": "If you choose something other than the suggestion, the app remembers it on this phone. Next time that word is certain straight away. What the app learned this way is under **Dictionary** in **Learned from lists**; ✕ makes it forget. One or two things skip this window and go straight onto the list."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["plakken", "lijstje", "whatsapp", "voorstel", "herkennen", "leren", "geleerd", "engels"], "en": ["paste", "list", "whatsapp", "suggestion", "recognise", "learn", "learned", "dutch"] }
     },
     {
       "id": "week-en-boodschappen.regel-weg",

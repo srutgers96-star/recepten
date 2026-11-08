@@ -2047,7 +2047,7 @@ De regel is doorgestreept en het vakje kleurt mee. Is een gangpad helemaal af, d
 
 #### Wat het doet
 
-Typ zelf wat je nodig hebt, met een aantal en een eenheid als je wilt. Met komma's zet je meer dingen tegelijk op de lijst.
+Typ zelf wat je nodig hebt, met een aantal en een eenheid als je wilt. Eén of twee dingen, met een komma ertussen, staan meteen op de lijst. Bij drie of meer laat de app eerst zien wat hij herkent.
 
 #### Waar je tikt
 
@@ -2062,7 +2062,33 @@ De regel staat in het goede gangpad, bijvoorbeeld "200 g boter" bij Zuivel & eie
 
 #### Goed om te weten
 
-Kent de app het woord niet, dan kies je onder het vak **Als tekst** of **Nieuw ingrediënt**.
+Kent de app het woord niet, dan kies je onder het vak **Als tekst** of **Nieuw ingrediënt**. Typ je drie of meer dingen, dan opent eerst het venster **Zet op de lijst?**.
+
+(`#/shopping`)
+
+### Een lijstje van iemand anders plakken
+
+#### Wat het doet
+
+Plak een lijstje uit WhatsApp of een notitie. De app doet per regel een voorstel, ook als het lijstje in het Engels is. Jij kijkt het na en zet alles in één tik op de lijst.
+
+#### Waar je tikt
+
+1. Kopieer het lijstje, bijvoorbeeld in WhatsApp.
+2. Tik onderaan op **Boodschappen**.
+3. Tik in het vak "+ wc-papier, melk …" en plak het lijstje.
+4. Tik op +.
+5. Tik in het venster **Zet op de lijst?** op een andere keuze als een voorstel niet klopt.
+6. Tik op **Zoek…** als je iets heel anders bedoelt.
+7. Tik onderaan op **Zet 5 regels op de lijst**.
+
+#### Wat je dan ziet
+
+Per regel staan links de woorden zoals ze geplakt zijn en rechts het voorstel. Een groene keuze is zeker. Een omlijnde keuze is twijfel, met een of twee andere keuzes ernaast. Kent de app het woord niet, dan staat **Als tekst** gekozen: de woorden komen dan zo op de lijst. Woorden als "check" of "for breakfast" staan schuin eronder als notitie.
+
+#### Goed om te weten
+
+Kies je iets anders dan het voorstel, dan onthoudt de app dat op deze telefoon. De volgende keer is dat woord meteen zeker. Wat de app zo leerde, zie je onder **Woordenboek** bij **Geleerd van lijstjes**; met ✕ vergeet hij het weer. Eén of twee dingen gaan zonder dit venster meteen op de lijst.
 
 (`#/shopping`)
 

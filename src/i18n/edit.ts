@@ -533,6 +533,7 @@ export const edit: Dict = {
 
   // --- Woordenboek screen (/more/dictionary, docs/phase-5-spec.md A-bis.6) ---
   'dict.title': { nl: 'Woordenboek', en: 'Dictionary' },
+  'dict.learnedTitle': { nl: 'Geleerd van lijstjes', en: 'Learned from lists' }, // V6 §1b
   'dict.search': { nl: 'Zoek ingrediënt (NL of EN)', en: 'Search ingredient (NL or EN)' },
   'dict.counts': { nl: '{builtin} ingebouwd · {own} eigen', en: '{builtin} built-in · {own} own' },
   'dict.ownHeading': { nl: 'Eigen ingrediënten', en: 'Own ingredients' },

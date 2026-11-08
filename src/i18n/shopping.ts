@@ -78,6 +78,13 @@ export const shopping: Dict = {
   'shop.addNew': { nl: 'Nieuw ingrediënt: “{q}”', en: 'New ingredient: “{q}”' },
   'shop.addedSnack': { nl: 'Toegevoegd', en: 'Added' },
   'shop.recent': { nl: 'eerder', en: 'before' },
+  // V6 (docs/specs/verbeterronde-6.md §1b): the "Zet op de lijst?" sheet for a pasted list of three or more lines.
+  'shop.paste.title': { nl: 'Zet op de lijst?', en: 'Put on the list?' },
+  'shop.paste.asText': { nl: 'Als tekst', en: 'As text' },
+  'shop.paste.search': { nl: 'Zoek…', en: 'Search…' },
+  'shop.paste.note': { nl: 'Notitie: {note}', en: 'Note: {note}' },
+  'shop.paste.add': { nl: 'Zet {n} regels op de lijst', en: 'Put {n} lines on the list' },
+  'shop.paste.addOne': { nl: 'Zet 1 regel op de lijst', en: 'Put 1 line on the list' },
 
   // --- Sharing -------------------------------------------------------------------------------
   'shop.share': { nl: 'Deel lijst', en: 'Share list' },

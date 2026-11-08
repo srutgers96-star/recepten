@@ -96,7 +96,7 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 | V3b | Hoeden bedekken het haar: randlijn `brim` per hoed (17), haar alleen onder de rand; kroon, bloemenkrans en feesthoedje zonder | verbeterronde-3b.md | compleet (8 nov) |
 | V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | verbeterronde-4.md | compleet (8 nov) |
 | V5 | Vrijspeel-rijkdom: confetti-ladder (dubbel → trippel → quadruppel) + acht confetti-ontwerpen, acht herkenbare of steeds gekkere timergeluiden, gouden thema (level 100 én makers-ei: 33 keer op Versie) | verbeterronde-5.md | compleet (8 nov) |
-| V6 | Gabi's lijstje plakken met voorstellen · woordenlijst-ronde | verbeterronde-6.md | in aanbouw (8 nov) |
+| V6 | Gabi's lijstje plakken met voorstellen · woordenlijst-ronde | verbeterronde-6.md | compleet (9 nov) |
 | V7 | Boodschappen-badges over de ingrediënten, met vier avatar-beloningen (waaronder een bril) | — (IDEAS 4) | gepland |
 | V8 | Swipen tussen de vijf tabbladen | — (IDEAS 6) | gepland |
 | V9 | Voedingswaarden en macro's (drie stappen) | — (IDEAS 1) | gepland, laatste |

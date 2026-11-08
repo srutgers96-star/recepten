@@ -4,8 +4,13 @@
 // src/domain/shopinput.ts), commas for several plain-text items at once; an unknown name can go on
 // as plain text or become a user ingredient through the IngredientPicker ("Nieuw ingrediënt").
 // The caller persists the item (repo.addExtra).
+// V6 (docs/specs/verbeterronde-6.md §1b): a list of three or more parts (`splitShopList`, pasted or
+// typed) is not placed at once but opens the check step "Zet op de lijst?" (ShopPasteSheet); one or
+// two parts behave as before. A paste is read from the clipboard event, because a one-line input drops
+// the line breaks of a WhatsApp list.
 import { useMemo, useRef, useState } from 'preact/hooks';
 import { IngredientPicker } from '@/components/IngredientPicker';
+import { ShopPasteSheet } from '@/components/ShopPasteSheet';
 import { dictionary, type Dictionary } from '@/dictionary';
 import type { ListItem } from '@/domain/aggregate';
 import { pickText, type Lang } from '@/domain/model';
@@ -14,6 +19,8 @@ import { lang, t } from '@/i18n';
 
 const MAX_DICT = 6;
 const MAX_PREV = 3;
+/** From this many parts on, the list goes through the check step (§1b; decided by the spec). */
+const PASTE_SHEET_MIN = 3;
 
 export interface ExtraFieldProps {
   /** Extras of the current / previous list: their labels are offered again. */
@@ -44,6 +51,9 @@ export function ExtraField(props: ExtraFieldProps) {
   const [text, setText] = useState('');
   const [picker, setPicker] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [pasteText, setPasteText] = useState<string | null>(null);
+  /** The sheet holds the field's own text (Enter), not a paste beside it: only then is the field cleared after placing. */
+  const [pasteFromField, setPasteFromField] = useState(false);
   const input = useRef<HTMLInputElement>(null);
   const dict = dictionary.value;
   const l = lang.value;
@@ -117,6 +127,11 @@ export function ExtraField(props: ExtraFieldProps) {
 
   function onEnter() {
     if (!q) return;
+    if (splitShopList(text).length >= PASTE_SHEET_MIN) {
+      setPasteFromField(true);
+      setPasteText(text);
+      return;
+    }
     if (isShopList(text)) {
       void addText(text);
       return;
@@ -150,6 +165,14 @@ export function ExtraField(props: ExtraFieldProps) {
           value={text}
           disabled={busy}
           onInput={(e) => setText((e.currentTarget as HTMLInputElement).value)}
+          onPaste={(e) => {
+            const pasted = e.clipboardData?.getData('text/plain') ?? '';
+            if (splitShopList(pasted).length < PASTE_SHEET_MIN) return; // one or two parts: as before
+            e.preventDefault();
+            // The paste never reaches the field: text already typed there stays (and is not placed).
+            setPasteFromField(false);
+            setPasteText(pasted);
+          }}
         />
         <button type="submit" class="btn btn-primary" disabled={!q || busy} aria-label={t('shop.add')}>
           +
@@ -204,6 +227,16 @@ export function ExtraField(props: ExtraFieldProps) {
           )}
         </ul>
       )}
+      <ShopPasteSheet
+        text={pasteText}
+        onAdd={props.onAdd}
+        onDone={() => {
+          setPasteText(null);
+          if (pasteFromField) setText('');
+          input.current?.focus();
+        }}
+        onClose={() => setPasteText(null)}
+      />
       <IngredientPicker
         open={picker}
         initialQuery={q}
