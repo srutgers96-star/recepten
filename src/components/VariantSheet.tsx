@@ -295,7 +295,7 @@ export function VariantSheet(props: VariantSheetProps) {
                         <span>{oldText(row.line)}</span>
                         <span class="variant-check">{t('variant.check')}</span>
                         <p class="variant-note">
-                          {swap ? t('variant.checkSwap', { from: dict.ingredientName(swap.fromId, l), to: dict.ingredientName(swap.toId, l) }) : t('variant.checkHint')}
+                          {swap ? t('variant.checkSwap') : t('variant.checkHint')}
                         </p>
                         {swap?.note && pickText(swap.note, l) && <p class="variant-note">{pickText(swap.note, l)}</p>}
                         <label class="check variant-checked">

@@ -6,37 +6,22 @@ import type { Dict } from './index';
 export const settings: Dict = {
   // --- Meer -------------------------------------------------------------------------------------
   'more.title': { nl: 'Meer', en: 'More' },
-  'more.profile': { nl: 'Actief profiel', en: 'Active profile' },
-  'more.switchTo': { nl: 'Wissel naar', en: 'Switch to' },
   'more.addProfile': { nl: '+ profiel', en: '+ profile' },
   'more.manageProfiles': { nl: 'Profielen beheren', en: 'Manage profiles' },
   'more.settings': { nl: 'Instellingen', en: 'Settings' },
   'more.language': { nl: 'Taal', en: 'Language' },
-  'more.languageHint': { nl: 'Wordt onthouden op je profiel', en: 'Remembered on your profile' },
-  'more.theme': { nl: 'Thema', en: 'Theme' },
   'more.theme.system': { nl: 'Systeem', en: 'System' },
   'more.theme.light': { nl: 'Licht', en: 'Light' },
   'more.theme.dark': { nl: 'Donker', en: 'Dark' },
   'more.confetti': { nl: 'Confetti', en: 'Confetti' },
-  'more.confettiHint': { nl: 'Bij "Gekookt!" en je eerste eigen recept', en: 'On "Cooked!" and your first own recipe' },
   // --- Phase 5 block C: badges (PLAN §0 Gamification: both off = no gamification at all) ---
   'more.badges': { nl: 'Badges', en: 'Badges' },
-  'more.badgesHint': {
-    nl: 'Badgepagina en een melding bij een nieuwe badge. Badges én Confetti uit = nergens gamification.',
-    en: 'Badge page and a toast for a new badge. Badges and Confetti both off = no gamification anywhere.',
-  },
-  'more.badgesRowHint': { nl: 'Verdiend en nog te verdienen, per lid en Samen', en: 'Earned and still to earn, per member and Together' },
-  // --- 6D (docs/specs/xp-levels.md §1f, block 6D-3 = 6D-4a): the Vrijgespeeld row under Badges ---
-  'more.unlocks': { nl: 'Vrijgespeeld', en: 'Unlocked' },
-  'more.unlocksHint': { nl: 'Confetti, geluiden en lettertypes die je hebt verdiend', en: 'Confetti, sounds and typefaces you have earned' },
+  'more.badgesHint': { nl: 'Uitzetten verbergt ze alleen; je raakt niets kwijt.', en: 'Switching off only hides them; nothing is lost.' },
   'more.storage': { nl: 'Opslag & back-up', en: 'Storage & backup' },
   'more.storageHint': { nl: 'Back-up maken of terugzetten, foto’s, opslagruimte', en: 'Make or restore a backup, photos, storage space' },
   // Phase 6 (docs/phase-6-spec.md 6A.5): "Stuur nieuwe naar …" became "Deel je nieuwe recepten".
   'more.sendNew': { nl: 'Deel je nieuwe recepten', en: 'Share your new recipes' },
-  'more.sendNewHint': {
-    nl: 'Alles wat je sinds de vorige keer maakte of aanpaste, in één bericht',
-    en: 'Everything you made or changed since last time, in one message',
-  },
+  'more.sendNewHint': { nl: 'Alles nieuws sinds de vorige keer, in één bericht', en: 'Everything new since last time, in one message' },
   'more.backupDue': { nl: 'back-up nodig', en: 'backup due' },
   // --- Phase 6 (docs/phase-6-spec.md 6A.6): the Meer screen in collapsible groups ---
   'more.group.you': { nl: 'Jij & je huishouden', en: 'You & your household' },
@@ -44,7 +29,6 @@ export const settings: Dict = {
   'more.group.help': { nl: 'Hulp & over', en: 'Help & about' },
   // --- Phase 6 (docs/phase-6-spec.md 6A.7): feedback + the donate link ---
   'more.feedback': { nl: 'Feedback voor Stijn', en: 'Feedback for Stijn' },
-  'more.feedbackHint': { nl: 'Een idee, een fout of een compliment', en: 'An idea, a bug or a compliment' },
   'more.donate': { nl: '☕ Steun dit project', en: '☕ Support this project' },
   'more.donateHint': { nl: 'Vrijwillig; de app blijft gratis.', en: 'Voluntary; the app stays free.' },
   'feedback.intro': {
@@ -113,27 +97,14 @@ export const settings: Dict = {
   'more.build': { nl: 'Build', en: 'Build' },
   'more.github': { nl: 'Broncode op GitHub', en: 'Source code on GitHub' },
   'more.fahrenheit': { nl: '°F erbij', en: 'Show °F too' },
-  'more.fahrenheitHint': { nl: 'Oventemperaturen ook in Fahrenheit: 200 °C (400 °F)', en: 'Oven temperatures in Fahrenheit as well: 200 °C (400 °F)' },
   'more.dictionary': { nl: 'Woordenboek', en: 'Dictionary' },
   'more.dictCounts': { nl: '{builtin} ingrediënten · {own} eigen', en: '{builtin} ingredients · {own} own' },
   'more.dictHint': { nl: 'Eigen ingrediënten bekijken, bewerken en samenvoegen', en: 'View, edit and merge your own ingredients' },
-  'more.dictNone': {
-    nl: 'Nog geen eigen ingrediënten. Die maak je via "Koppel ingrediënt" → "Nieuw ingrediënt".',
-    en: 'No own ingredients yet. Create one via "Link ingredient" → "New ingredient".',
-  },
-  'more.dictDelete': { nl: 'Verwijder', en: 'Delete' },
-  'more.dictDeleteConfirm': {
-    nl: 'Ingrediënt "{name}" verwijderen? Regels die eraan gekoppeld zijn tonen daarna weer de losse tekst.',
-    en: 'Delete ingredient "{name}"? Lines linked to it will show their plain text again.',
-  },
 
   // --- Phase 5 block B: Kookstand & timer (docs/phase-5-spec.md B.1–B.3) ---
   'more.cookTimer': { nl: 'Kookstand & timer', en: 'Cook mode & timer' },
   'more.readAloud': { nl: 'Voorlezen', en: 'Read aloud' },
-  'more.readAloudHint': {
-    nl: 'Leest elke stap automatisch voor in de kookstand; 🔊 per stap blijft altijd werken',
-    en: 'Reads each step aloud automatically in cooking mode; 🔊 per step always keeps working',
-  },
+  'more.readAloudHint': { nl: 'Leest elke stap voor; 🔊 per stap werkt altijd.', en: 'Reads each step aloud; 🔊 per step always works.' },
   'more.readAloudUnavailable': {
     nl: 'Voorlezen is op dit toestel niet beschikbaar',
     en: 'Read-aloud is not available on this device',
@@ -141,15 +112,11 @@ export const settings: Dict = {
   'more.voiceCommands': { nl: 'Spraakcommando’s', en: 'Voice commands' },
   // Honest capability text (CLAUDE.md invariant 13), phrased platform-neutrally: Android recognises
   // through Google (internet required), iPhone through Apple dictation (can even work on-device).
-  'more.voiceCommandsHint': {
-    nl: 'Zeg "volgende", "vorige", "timer 10 minuten", "lees voor" of "stop" in de kookstand. Herkenning loopt via de spraakdienst van je telefoon en heeft meestal internet nodig.',
-    en: 'Say "next", "previous", "timer 10 minutes", "read" or "stop" in cooking mode. Recognition uses your phone’s speech service and usually needs internet.',
-  },
+  'more.voiceCommandsHint': { nl: 'Zeg "volgende" of "timer 10 minuten"; meestal met internet.', en: 'Say "next" or "timer 10 minutes"; usually needs internet.' },
   'more.voiceUnavailable': {
     nl: 'Spraakcommando’s werken alleen op Android; voorlezen werkt overal',
     en: 'Voice commands only work on Android; reading aloud works everywhere',
   },
-  'more.timerSound': { nl: 'Timergeluid', en: 'Timer sound' },
   'more.timerSound.beeps': { nl: 'Piepjes', en: 'Beeps' },
   'more.timerSound.bell': { nl: 'Belletje', en: 'Bell' },
   'more.timerSound.melody': { nl: 'Melodietje', en: 'Melody' },
@@ -160,32 +127,16 @@ export const settings: Dict = {
   'more.timerSound.gong': { nl: 'Gong', en: 'Gong' },
   'more.timerSound.kitchen': { nl: 'Keukenwekker', en: 'Kitchen timer' },
   'more.timerSound.fanfare': { nl: 'Fanfare', en: 'Fanfare' },
-  'more.cookFont': { nl: 'Lettertype kookstand', en: 'Cook-mode typeface' },
-  'more.cookFont.default': { nl: 'Standaard', en: 'Default' },
-  'more.cookFont.chalk': { nl: 'Krijtbord', en: 'Chalkboard' },
-  'more.cookFont.hand': { nl: 'Handschrift', en: 'Handwriting' },
-  'more.cookedSound': { nl: 'Geluid bij Gekookt!', en: 'Sound on Cooked!' },
-  'more.cookedSoundHint': { nl: 'Een kort tadaa als je een kookbeurt opslaat', en: 'A short ta-da when you save a cook' },
-  'more.timerSoundPreview': { nl: 'Luister', en: 'Listen' },
-  'more.timerSoundIOSHint': {
-    nl: 'iPhone: staat de stil-schakelaar aan de zijkant aan, dan is er geen geluid uit de app — de melding is dan de enige weg.',
-    en: 'iPhone: with the silent switch on the side on, the app cannot make a sound — the notification is then the only way.',
-  },
+  'more.timerSoundIOSHint': { nl: 'Met de stil-schakelaar aan waarschuwt alleen de melding.', en: 'With the silent switch on, only the notification alerts you.' },
   'more.timerVibrate': { nl: 'Trillen bij afloop', en: 'Vibrate when done' },
-  'more.timerVibrateHint': {
-    nl: 'iPhone kan niet trillen vanuit een web-app; daar trilt alleen de melding.',
-    en: 'An iPhone cannot vibrate from a web app; only the notification vibrates there.',
-  },
+  'more.timerVibrateHint': { nl: 'Op een iPhone trilt alleen de melding.', en: 'On an iPhone only the notification vibrates.' },
 
   // --- Phase 5: Meer rows (docs/phase-5-spec.md A.6 + A.8) ---
   'more.checkRecipes': { nl: 'Controleer mijn recepten', en: 'Check my recipes' },
   'more.checkRecipesHint': { nl: 'Voorstel voor categorie en dieet per eigen recept', en: 'Suggested category and diet per own recipe' },
   // --- Phase 5 block D (docs/phase-5-spec.md D.4): the experiments switch ---
   'more.experiments': { nl: 'Experimenten', en: 'Experiments' },
-  'more.experimentsHint': {
-    nl: 'Proeffuncties die nog niet af zijn. Staat uit, dan zie je er niets van.',
-    en: 'Trial features that are not finished yet. Switched off, nothing of them shows.',
-  },
+  'more.experimentsHint': { nl: 'Proeffuncties die nog niet af zijn.', en: 'Trial features that are not finished yet.' },
   'more.householdRow': { nl: 'Huishouden', en: 'Household' },
   'more.householdRowHint': { nl: 'Naam en wie er meekookt', en: 'Name and who cooks along' },
 
@@ -236,10 +187,6 @@ export const settings: Dict = {
     en: 'Android: the other person taps the link. iPhone: the link does not open the app — they copy the message and paste it into the app (Household → "Add a member via link or paste", or In & out).',
   },
   'household.cardQrAlt': { nl: 'QR-code met mijn kaartje', en: 'QR code with my card' },
-  'household.cardQrHint': {
-    nl: 'Scan met de camera-app van de andere telefoon. Android opent de app; een iPhone opent een voorproefpagina in Safari — kopieer daar de code en plak hem in de app.',
-    en: 'Scan with the other phone’s camera app. Android opens the app; an iPhone opens a preview page in Safari — copy the code there and paste it into the app.',
-  },
   'household.addViaLink': { nl: 'Voeg lid toe via link of plak', en: 'Add a member via link or paste' },
   // 13A: the box is the universal one; a recipe link or website text pasted here is named and sent on.
   'household.addViaLinkHint': {
@@ -267,24 +214,16 @@ export const settings: Dict = {
 
   // --- Profielen --------------------------------------------------------------------------------
   'profiles.title': { nl: 'Profielen', en: 'Profiles' },
-  'profiles.intro': {
-    nl: 'Iedereen heeft eigen favorieten en notities. Op deze telefoon ben je nu:',
-    en: 'Everyone has their own favourites and notes. On this phone you are now:',
-  },
   'profiles.name': { nl: 'Naam', en: 'Name' },
   'profiles.namePlaceholder': { nl: 'bv. Stijn', en: 'e.g. Emma' },
   'profiles.language': { nl: 'Taal', en: 'Language' },
   'profiles.color': { nl: 'Kleur', en: 'Colour' },
   'profiles.add': { nl: 'Profiel toevoegen', en: 'Add profile' },
-  'profiles.edit': { nl: 'Bewerk', en: 'Edit' },
-  'profiles.use': { nl: 'Gebruik', en: 'Use' },
-  'profiles.active': { nl: 'actief', en: 'active' },
   'profiles.delete': { nl: 'Verwijder', en: 'Delete' },
   'profiles.deleteConfirm': {
     nl: 'Profiel "{name}" verwijderen? De favorieten en notities van dit profiel verdwijnen ook.',
     en: 'Delete profile "{name}"? Its favourites and notes are removed as well.',
   },
-  'profiles.nameRequired': { nl: 'Geef een naam op', en: 'Enter a name' },
   'profiles.empty': { nl: 'Nog geen profielen', en: 'No profiles yet' },
 
   // --- Onboarding -------------------------------------------------------------------------------
@@ -345,15 +284,18 @@ export const settings: Dict = {
   'storage.ingredients': { nl: 'Eigen ingrediënten', en: 'Own ingredients' },
   'storage.unbacked': { nl: 'Sinds de laatste back-up', en: 'Since the last backup' },
   'storage.changes': { nl: '{n} wijzigingen', en: '{n} changes' },
+  'storage.changesOne': { nl: '1 wijziging', en: '1 change' },
   'storage.upToDate': { nl: 'Alles zit in de laatste back-up.', en: 'Everything is in the last backup.' },
   'storage.overdue': {
     nl: 'Je laatste back-up is meer dan 30 dagen oud en er zijn {n} wijzigingen die nog nergens anders staan. Maak nu een back-up.',
     en: 'Your last backup is more than 30 days old and {n} changes exist nowhere else yet. Make a backup now.',
   },
+  'storage.overdueOne': { nl: 'Je laatste back-up is meer dan 30 dagen oud en er is 1 wijziging die nog nergens anders staat. Maak nu een back-up.', en: 'Your last backup is more than 30 days old and 1 change exists nowhere else yet. Make a backup now.' },
   'storage.overdueNever': {
     nl: 'Nog nooit een back-up gemaakt en er zijn al {n} wijzigingen die nergens anders staan. Maak er nu een.',
     en: 'No backup ever made, and {n} changes exist nowhere else yet. Make one now.',
   },
+  'storage.overdueNeverOne': { nl: 'Nog nooit een back-up gemaakt en er is al 1 wijziging die nergens anders staat. Maak er nu een.', en: 'No backup ever made, and 1 change exists nowhere else yet. Make one now.' },
   'storage.restoredMore': {
     nl: 'Ook hersteld: {overrides} aangepaste klassiekers, {lineOverrides} gekoppelde regels, {ingredients} eigen ingrediënten.',
     en: 'Also restored: {overrides} adjusted classics, {lineOverrides} linked lines, {ingredients} own ingredients.',

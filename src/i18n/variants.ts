@@ -106,6 +106,7 @@ export const variants: Dict = {
   'inbox.withTip': { nl: 'met een tip van de maker', en: 'with a tip from the maker' },
   'inbox.withVariant1': { nl: 'met een goedgekeurde versie', en: 'with one approved version' },
   'inbox.withVariants': { nl: 'met {n} goedgekeurde versies', en: 'with {n} approved versions' },
+  'inbox.withVariantsOne': { nl: 'met 1 goedgekeurde versie', en: 'with 1 approved version' },
 
   // §1h "Recept bewerken" vs "Eigen versie maken" at the bottom of the recipe (.detail-manage).
   'recipe.edit': { nl: 'Recept bewerken', en: 'Edit this recipe' },

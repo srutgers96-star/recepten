@@ -332,8 +332,15 @@
   margin: 0;
 }
 
+/* The greeting's avatar is 72 px since 6D-UI (moved here from avatar.css in 13c §2A.6). */
+.home-hello .avatar {
+  width: 72px;
+  height: 72px;
+  font-size: 32px;
+}
+
 /* The level-row slot (HomeLevelRow; until 6D "🏆 Badges 7/40 ›"): one thin cobalt line, a full
-   44 px tap target. Directly under the greeting it lines up with the greeting text (40 px avatar +
+   44 px tap target. Directly under the greeting it lines up with the greeting text (72 px avatar +
    12 px gap) and pulls up into the greeting row's bottom margin. */
 .home-level {
   display: flex;
@@ -351,7 +358,7 @@
 }
 
 .home-hello + .home-level {
-  margin: -12px 0 0 52px;
+  margin: -12px 0 0 84px;
 }
 
 .home-level:active {

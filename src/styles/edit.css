@@ -374,18 +374,7 @@ div.inbox-shared-row:active {
   margin: 4px 0 8px;
 }
 
-.inbox-sender .avatar {
-  width: 26px;
-  height: 26px;
-  font-size: 13px;
-}
 
-/* Received list: the sender's avatar before the name when they are a member. */
-.inbox-row .avatar {
-  width: 32px;
-  height: 32px;
-  font-size: 15px;
-}
 
 /* ---------- Inbox: phase 3 — import preview, conflict card, result, history ---------- */
 

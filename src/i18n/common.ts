@@ -9,8 +9,6 @@ export const common: Dict = {
 
   'nav.home': { nl: 'Home', en: 'Home' },
   'nav.recipes': { nl: 'Recepten', en: 'Recipes' },
-  'nav.add': { nl: 'Toevoegen', en: 'Add' },
-  'nav.inbox': { nl: 'In & uit', en: 'In & out' },
   'nav.more': { nl: 'Meer', en: 'More' },
   'nav.main': { nl: 'Hoofdmenu', en: 'Main' },
   'header.lang': { nl: 'Taal: NL of EN', en: 'Language: NL or EN' },
@@ -21,11 +19,8 @@ export const common: Dict = {
   'common.save': { nl: 'Bewaar', en: 'Save' },
   'common.cancel': { nl: 'Annuleer', en: 'Cancel' },
   'common.delete': { nl: 'Verwijder', en: 'Delete' },
-  'common.edit': { nl: 'Bewerk', en: 'Edit' },
   'common.back': { nl: 'Terug', en: 'Back' },
   'common.close': { nl: 'Sluit', en: 'Close' },
-  'common.ok': { nl: 'Oké', en: 'OK' },
-  'common.confirm': { nl: 'Weet je het zeker?', en: 'Are you sure?' },
   'common.loading': { nl: 'Laden…', en: 'Loading…' },
   'common.error': { nl: 'Er ging iets mis', en: 'Something went wrong' },
   'common.yes': { nl: 'ja', en: 'yes' },
@@ -80,7 +75,6 @@ export const common: Dict = {
   'check.copyFailed': { nl: 'Kopiëren mislukt', en: 'Copy failed' },
   'check.reset': { nl: 'Wis antwoorden', en: 'Clear answers' },
   'check.report': { nl: 'Rapport als tekst', en: 'Report as text' },
-  'check.notifGranted': { nl: 'toegestaan', en: 'granted' },
 
   'install.ios.title': { nl: 'Zet me op je beginscherm', en: 'Add me to your Home Screen' },
   'install.ios.step1': { nl: 'Tik onderaan op Deel', en: 'Tap Share at the bottom' },

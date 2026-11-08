@@ -28,7 +28,7 @@
 // (`vt.version.<diet>`, lower case) after the dish of a line that came from a slot's diet version
 // (`ListSource.diet`); the line text itself is already the swapped one ("400 g glutenvrije pasta").
 // 13Q (docs/specs/qr-link.md §1c): the share card also offers the list as a LINK (`#l=`, built by
-// share.buildListEnvelope over the same lines as the text): "Deel link" / "Kopieer link" / "Toon QR"
+// share-list.buildListEnvelope over the same lines as the text): "Deel link" / "Kopieer link" / "Toon QR"
 // (QrPanel). Sharing the link logs one 'out' row (kind 'list'); the receiver gets "Zet op mijn lijst"
 // in In & uit.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
@@ -75,7 +75,8 @@ import { dictionary } from '@/dictionary';
 import { effectiveQty, groupByAisle, isoWeekNumber, itemName, listAsText, renderListItem, type AisleGroup, type ListItem } from '@/domain/aggregate';
 import type { Dictionary } from '@/domain/dictionary';
 import { nowIso, type Lang, type Text } from '@/domain/model';
-import { buildListEnvelope, planMessages, type ListShare } from '@/domain/share';
+import { planMessages, type ListShare } from '@/domain/share';
+import { buildListEnvelope, LIST_LINK_MESSAGE_LIMIT } from '@/domain/share-list';
 import { buildShareUrl, encodeToken } from '@/domain/token';
 import { recordFeature } from '@/features';
 import { lang, t, tIn } from '@/i18n';
@@ -504,11 +505,17 @@ export function ShoppingScreen() {
     (async () => {
       const title: Text = { nl: titleNl, en: titleEn };
       const env = buildListEnvelope(items, dict, by, { title, hideChecked: shareHideChecked, hideInHouse: true });
-      const [built, token] = await Promise.all([planMessages([env], appInfo.appUrl, { lang: shareLang, by, name: by }), encodeToken(env)]);
+      // 13c §2B.1: the link message gets LIST_LINK_MESSAGE_LIMIT (one `{ text }`, a WhatsApp message may
+      // be far longer than 3,500 characters), so a long list keeps its link; the QR stays bound to
+      // QR_MAX_URL_CHARS (QrPanel says "too big" then). The plain-text share keeps its own limit.
+      const [built, token] = await Promise.all([
+        planMessages([env], appInfo.appUrl, { lang: shareLang, by, name: by, limit: LIST_LINK_MESSAGE_LIMIT }),
+        encodeToken(env),
+      ]);
       if (cancelled) return;
       const lines = (env.l as ListShare | undefined)?.lines.length ?? 0;
-      // A list too long for one message comes back as a file (planMessages): then only the QR line
-      // (too big) is left; the link buttons stay disabled.
+      // Only a list beyond even that limit comes back as a file (planMessages): then the link buttons
+      // stay disabled.
       setLink({ message: 'text' in built ? built.text : '', url: buildShareUrl(appInfo.appUrl, 'l', token), lines });
     })().catch((e: unknown) => {
       console.error('list link', e);
@@ -928,7 +935,7 @@ export function ShoppingScreen() {
       </div>
 
       {menuItem && (
-        <SheetPortal>
+        <SheetPortal onEscape={() => setMenu(null)}>
           <div class="sheet-backdrop" onClick={() => setMenu(null)}>
             <div class="sheet shop-sheet" role="dialog" aria-modal="true" aria-label={itemName(menuItem, dict, l)} onClick={(e) => e.stopPropagation()}>
               <div class="sheet-head with-actions">

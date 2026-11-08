@@ -5,8 +5,6 @@ import type { Dict } from './index';
 
 export const browse: Dict = {
   // --- Home ("Vanavond?") ---
-  'home.title': { nl: 'Vanavond?', en: 'Tonight?' },
-  'home.greeting': { nl: 'Hoi {name}, wat eten we vanavond?', en: 'Hi {name}, what shall we cook tonight?' },
   'home.greetingAnon': { nl: 'Wat eten we vanavond?', en: 'What shall we cook tonight?' },
   'home.reroll': { nl: 'Nog een', en: 'Another' },
   'home.open': { nl: 'Open', en: 'Open' },
@@ -16,7 +14,6 @@ export const browse: Dict = {
   'home.noCooked': { nl: 'Nog niets gekookt. Open een recept en tik op Koken.', en: 'Nothing cooked yet. Open a recipe and tap Cook.' },
   // Phase 5 block C: "Badges 7/40" (names/descriptions live in data/badges.json); since Home A+ the
   // line "🏆 Badges 7/40 ›" under the greeting (src/components/HomeLevelRow.tsx).
-  'home.badges': { nl: 'Badges', en: 'Badges' },
   // Home A+ block 1 (docs/specs/home-a-plus.md §1d–1e): the rows In & uit, Mijn recepten, Het verhaal.
   'home.inOut': { nl: 'In & uit', en: 'In & out' },
   'home.inOutReceived': { nl: '{n} ontvangen', en: '{n} received' },
@@ -47,6 +44,7 @@ export const browse: Dict = {
   'list.received': { nl: 'ontvangen', en: 'received' },
   'list.favorite': { nl: 'favoriet', en: 'favourite' },
   'list.count': { nl: '{n} recepten', en: '{n} recipes' },
+  'list.countOne': { nl: '1 recept', en: '1 recipe' },
   // Phase 6 (6A.13): the "+" menu shows all four ways in at once, each with one line of explanation
   // (the menu title 'list.add' stays in week.ts).
   'list.addWrite': { nl: 'Zelf schrijven', en: 'Write it yourself' },
@@ -142,7 +140,6 @@ export const browse: Dict = {
   // chips by the tab row: its strings live in src/i18n/variants.ts (`vt.*`). These keys are still used by the
   // approve sheet (VariantSheet) and the "Versie van …" link.
   'recipe.variantOf': { nl: 'Versie van {name}', en: 'Version of {name}' },
-  'recipe.variants': { nl: 'Varianten', en: 'Variants' },
   'variant.check': { nl: 'controleer zelf', en: 'check yourself' },
   // A "controleer zelf" row of the approve sheet: no swap known (checkHint) or a swap the app could not
   // place in this line (checkSwap). One text for both ("Besluiten Fable na blok 2", point 7).
@@ -153,10 +150,6 @@ export const browse: Dict = {
   'variant.checkSwap': {
     nl: 'Dit ingrediënt past niet bij dit dieet. Controleer of vervang het zelf en vink het af.',
     en: 'This ingredient does not fit this diet. Check or replace it yourself and tick it off.',
-  },
-  'variant.onlyCheck': {
-    nl: 'De app kan hier niets automatisch vervangen. Je krijgt een kopie met het label; pas de regels daarna zelf aan.',
-    en: 'The app cannot replace anything here automatically. You get a copy with the label; adjust the lines yourself afterwards.',
   },
   'variant.saveFailed': { nl: 'Bewaren lukte niet. Probeer het nog eens.', en: 'Saving failed. Please try again.' },
   'variant.noProfile': { nl: 'Kies eerst een profiel (Meer) om een versie te maken.', en: 'Choose a profile first (More) to make a version.' },
@@ -235,7 +228,6 @@ export const browse: Dict = {
   'cook.readAloudStop': { nl: 'Stop voorlezen', en: 'Stop reading' },
   'cook.readAloudOn': { nl: 'Voorlezen staat aan', en: 'Reading aloud is on' },
   'cook.readAloudOnNote': { nl: 'Elke volgende stap wordt ook voorgelezen. Tik nog eens om het uit te zetten.', en: 'Every next step is read aloud too. Tap again to turn it off.' },
-  'cook.readAloudList': { nl: 'Ingrediënten voorlezen', en: 'Read the ingredients' },
   'cook.readAloudHint': { nl: 'Houd ingedrukt voor de ingrediënten', en: 'Hold to hear the ingredients' },
   'cook.mic': { nl: 'Spraakcommando’s', en: 'Voice commands' },
   'cook.micOff': { nl: 'Mic uit', en: 'Mic off' },
@@ -256,33 +248,23 @@ export const browse: Dict = {
     en: 'While the app reads aloud the mic pauses; wait until the voice has finished, then speak.',
   },
   'cook.cmd.next': { nl: 'Volgende stap', en: 'Next step' },
-  'cook.cmd.nextSay': { nl: 'volgende · volgende stap', en: 'next · next step' },
   'cook.cmd.prev': { nl: 'Vorige stap', en: 'Previous step' },
-  'cook.cmd.prevSay': { nl: 'vorige · ga terug', en: 'previous · go back' },
   'cook.cmd.read': { nl: 'Lees deze stap voor', en: 'Read this step' },
-  'cook.cmd.readSay': { nl: 'lees voor · voorlezen', en: 'read · read aloud' },
   'cook.cmd.repeat': { nl: 'Zeg het nog eens', en: 'Say that again' },
-  'cook.cmd.repeatSay': { nl: 'herhaal · nog een keer · wat zeg je?', en: 'repeat · again · say that again · what?' },
   'cook.cmd.ingredients': { nl: 'Lees de ingrediënten voor', en: 'Read the ingredients' },
-  'cook.cmd.ingredientsSay': { nl: 'ingrediënten · boodschappen', en: 'ingredients · read the ingredients' },
   'cook.cmd.timer': { nl: 'Zet een timer', en: 'Set a timer' },
-  'cook.cmd.timerSay': {
-    nl: 'timer 10 minuten · zet een timer voor een kwartier',
-    en: 'timer 10 minutes · set a timer for a quarter of an hour',
-  },
   'cook.cmd.quantities': {
     nl: 'Hoeveel van elk ingrediënt in deze stap (en zet Toon hoeveelheden aan)',
     en: 'How much of each ingredient this step uses (and turns on Show amounts)',
   },
-  'cook.cmd.quantitiesSay': { nl: 'hoeveel? · hoeveel heb ik nodig?', en: 'how much? · how many? · how much do I need?' },
   'cook.cmd.timeLeft': { nl: 'Hoe lang de timer nog loopt', en: 'How long the timer has left' },
-  'cook.cmd.timeLeftSay': { nl: 'hoe lang nog · hoeveel tijd nog', en: 'how long left · how much time' },
   'cook.cmd.stop': { nl: 'Stop met voorlezen', en: 'Stop reading' },
-  'cook.cmd.stopSay': { nl: 'stop', en: 'stop' },
   'cook.voice.noTimer': { nl: 'Er loopt geen timer voor dit recept.', en: 'No timer is running for this recipe.' },
   'cook.voice.leftMin': { nl: 'nog {n} minuten', en: '{n} minutes left' },
+  'cook.voice.leftMinOne': { nl: 'nog 1 minuut', en: '1 minute left' },
   'cook.voice.leftMin1': { nl: 'nog 1 minuut', en: '1 minute left' },
   'cook.voice.leftSec': { nl: 'nog {n} seconden', en: '{n} seconds left' },
+  'cook.voice.leftSecOne': { nl: 'nog 1 seconde', en: '1 second left' },
 
   // --- 13I: the ingredients a step names are green; a tap shows the amount, "Toon hoeveelheden"
   //     shows them all (remembered per device), "hoeveel?" reads them aloud. ---

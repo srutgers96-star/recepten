@@ -489,23 +489,22 @@ export function MoreScreen() {
             {/* Phase 5 (docs/phase-5-spec.md A.8): the household (name + members). */}
             <MenuRow label={t('more.householdRow')} sub={t('more.householdRowHint')} to="/more/household" />
             {/* Phase 5 block C: only while the badges switch (under Instellingen) is on — off means no trace of gamification. */}
-            {badgesEnabled.value && <MenuRow label={`🏆 ${t('more.badges')}`} sub={t('more.badgesRowHint')} to="/more/badges" />}
+            {badgesEnabled.value && <MenuRow label={`🏆 ${t('more.badges')}`} to="/more/badges" />}
             {/* 6D-4 (docs/specs/xp-levels.md §1j): the cooking calendar, ALWAYS (also with badges off: it is a log). */}
-            <MenuRow label={`📅 ${t('more.calendar')}`} sub={t('more.calendarHint')} to="/more/calendar" />
+            <MenuRow label={`📅 ${t('more.calendar')}`} to="/more/calendar" />
             {/* 6D-S: avatar, sounds, confetti, typefaces and theme; always (the theme is not XP). */}
             <MenuRow label={`🎨 ${t('more.style')}`} sub={t('more.styleHint')} to="/more/style" />
           </div>
           <div class="setting">
             <div class="label">
               {t('more.household')}
-              <small>{t('more.householdHint')}</small>
             </div>
             <div class="household-step" role="group" aria-label={t('more.household')}>
               <button type="button" class="servings-step" aria-label={t('more.householdLess')} disabled={household === null || household <= MIN_HOUSEHOLD} onClick={() => changeHousehold(-1)}>
                 −
               </button>
               <span class="value" aria-live="polite">
-                {household === null ? '…' : t('more.householdValue', { n: household })}
+                {household === null ? '…' : household === 1 ? t('more.householdValueOne') : t('more.householdValue', { n: household })}
               </span>
               <button type="button" class="servings-step" aria-label={t('more.householdMore')} disabled={household === null || household >= MAX_HOUSEHOLD} onClick={() => changeHousehold(1)}>
                 +
@@ -518,7 +517,6 @@ export function MoreScreen() {
           <div class="setting">
             <div class="label">
               {t('more.language')}
-              <small>{t('more.languageHint')}</small>
             </div>
             <Segmented<Lang>
               name="lang"
@@ -535,7 +533,6 @@ export function MoreScreen() {
           <label class="setting">
             <div class="label">
               {t('more.confetti')}
-              <small>{t('more.confettiHint')}</small>
             </div>
             <span class="switch">
               <input type="checkbox" checked={confettiEnabled.value} onChange={(e) => void setConfettiEnabled((e.currentTarget as HTMLInputElement).checked)} />
@@ -567,7 +564,6 @@ export function MoreScreen() {
           <label class="setting">
             <div class="label">
               {t('more.fahrenheit')}
-              <small>{t('more.fahrenheitHint')}</small>
             </div>
             <span class="switch">
               <input type="checkbox" checked={fahrenheit} onChange={(e) => toggleFahrenheit((e.currentTarget as HTMLInputElement).checked)} />
@@ -654,7 +650,7 @@ export function MoreScreen() {
         <Group id="help" title={t('more.group.help')} open={groups.help} onToggle={toggleGroup}>
           <div class="menu">
             {/* 6A.7: opens the feedback sheet below (no route: it is a small dialog, not a screen). */}
-            <MenuRow label={t('more.feedback')} sub={t('more.feedbackHint')} onClick={() => setFeedback(true)} />
+            <MenuRow label={t('more.feedback')} onClick={() => setFeedback(true)} />
           </div>
           <DonateBlock />
           <div class="menu">

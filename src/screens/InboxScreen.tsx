@@ -639,7 +639,7 @@ export function InboxScreen() {
     setCardBusy(true);
     try {
       const r = await addListLinesFromShare(received.lines, dictionary.value);
-      setListDone((prev) => ({ ...prev, [index]: t('shop.list.putSnack', { n: r.added, m: r.skipped }) }));
+      setListDone((prev) => ({ ...prev, [index]: r.added === 1 ? t('shop.list.putSnackOne', { m: r.skipped }) : t('shop.list.putSnack', { n: r.added, m: r.skipped }) }));
       void logShareEvent({ at: nowIso(), direction: 'in', kind: 'list', who: received.by || null, count: received.lines.length, recipeIds: [] }).catch((err: unknown) =>
         console.error('logShareEvent', err),
       );
@@ -776,7 +776,7 @@ export function InboxScreen() {
 
         {lists.map((sl, i) => (
           <section class="card inbox-plan inbox-list" key={'l' + i}>
-            <h3>{t('shop.list.received', { name: sl.by ?? '', n: sl.lines.length })}</h3>
+            <h3>{sl.lines.length === 1 ? t('shop.list.receivedOne', { name: sl.by ?? '' }) : t('shop.list.received', { name: sl.by ?? '', n: sl.lines.length })}</h3>
             {pickText(sl.title, ui) && <p class="muted small">{pickText(sl.title, ui)}</p>}
             <ul>
               {sl.lines.map((line, j) => (

@@ -22,21 +22,10 @@
 /* ---------- Avatar sizes (block 6D-UI, UI-C §5) ----------
    The avatar is bigger in view since round 2: Home greeting 72 px · Meer 64 px · Profielen rows
    56 px · Huishouden and In & uit 48 px · chips 36 px (the maker preview, 160 px, is in the maker
-   part below). These override the 6D-3 sizes of settings.css and edit.css (same selectors; this
-   file loads after them); the letter circle scales along. The Home level line (xp.css) keeps its
-   24 px. */
+   part below); the letter circle scales along. settings.css only holds the 40 px base circle and the
+   profile hero and Mijn profiel row, which set their own size. The Home level line (xp.css) keeps 24 px. */
 
-/* Home greeting. The level line under it keeps lining up with the greeting text (avatar + 12 px
-   gap, as home.css does for the 40 px circle). */
-.home-hello .avatar {
-  width: 72px;
-  height: 72px;
-  font-size: 32px;
-}
-
-.home-hello + .home-level {
-  margin-left: 84px;
-}
+/* The Home greeting's 72 px avatar is in home.css (13c §2A.6). */
 
 /* Meer: the profile card (the big circle, the maker opens from it). */
 .avatar.big {
@@ -63,8 +52,7 @@
   font-size: 21px;
 }
 
-/* Chips: other profiles on Meer, "Stuur nieuwe naar …", the members on Het verhaal. */
-.profile-chip .avatar,
+/* Chips: "Stuur nieuwe naar …" and the members on Het verhaal. */
 .delta .partner-chip .avatar,
 .story-members .member .avatar {
   width: 36px;
@@ -74,30 +62,7 @@
 
 /* ---------- The maker sheet ---------- */
 
-/* Rarity colours (block 6D-R, R-B.1), readable in light and dark: common is the muted grey (it
-   follows the theme through --muted), rare blue, epic purple, legendary gold. */
-:root {
-  --rarity-common: var(--muted);
-  --rarity-rare: #2b6fd6;
-  --rarity-epic: #7a5aa8;
-  --rarity-legendary: #c9a227;
-}
-
-/* System dark, unless the user forced light (same pattern as base.css). */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --rarity-rare: #6f9fe8;
-    --rarity-epic: #ab93d8;
-    --rarity-legendary: #e4c45a;
-  }
-}
-
-/* Forced dark (keep identical to the block above). */
-:root[data-theme='dark'] {
-  --rarity-rare: #6f9fe8;
-  --rarity-epic: #ab93d8;
-  --rarity-legendary: #e4c45a;
-}
+/* The --rarity-* tokens (block 6D-R) live in base.css, light and dark (13c §2A.6). */
 
 /* One rarity → its colour, for the group captions and the tile dots below. */
 .avatar-sheet [data-rarity='common'] {

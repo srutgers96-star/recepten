@@ -518,7 +518,7 @@ function GroupPanel(props: { view: BadgeGroupView; onOpen: (id: string, tile: HT
           <p class="muted badge-secret-note">{t('badges.secretNone')}</p>
         ) : (
           <>
-            <p class="badge-secret-note">{t('badges.secretCount', { n: g.shown.length })}</p>
+            <p class="badge-secret-note">{g.shown.length === 1 ? t('badges.secretCountOne') : t('badges.secretCount', { n: g.shown.length })}</p>
             <BadgeTiles statuses={g.shown} mystery={g.mystery} onOpen={props.onOpen} />
           </>
         )

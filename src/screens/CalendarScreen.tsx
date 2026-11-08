@@ -10,9 +10,12 @@
 // phone, from the snapshot for anyone else, then with "· bijgewerkt {date}".
 // The calendar is ALWAYS there, also with badges off (it is a log; §5.12): only the levels go.
 // Honest at the bottom: others are shown as they last shared (no backend, invariant 14).
+// 13c (docs/specs/opschoonronde.md §2A.4): with badges off there is no sync, so neither the
+// "· bijgewerkt {date}" in the legend nor the honest line at the bottom shows.
 // Opening this screen is never a reward moment: it reads (xpStateFor), it never settles XP (§5.11).
 //
-// Layout styles are inline (this block owns no stylesheet); colours come from the design tokens.
+// Layout lives in src/styles/xp.css (.cal-*); a person's colour reaches a dot as the custom
+// property --dot (13c §2A.4).
 import type { JSX } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { badgesEnabled, loadBadgeSettings } from '@/badges';
@@ -33,40 +36,10 @@ const DAY_MS = 86_400_000;
 /** At most this many dots under a day number (§1j). */
 const MAX_DOTS = 3;
 
-// ---------------------------------------------------------------------------- styles
-
-const S = {
-  nav: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '8px' },
-  navBtn: { minWidth: '44px', minHeight: '44px', justifyContent: 'center', fontSize: '22px' },
-  month: { margin: 0, textAlign: 'center', flex: '1 1 auto' },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: '2px' },
-  weekday: { textAlign: 'center', fontSize: '13px', color: 'var(--muted)', padding: '4px 0' },
-  cell: {
-    minHeight: '48px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '4px',
-    padding: '6px 0 4px',
-    border: '2px solid transparent',
-    borderRadius: '10px',
-    background: 'transparent',
-    color: 'var(--ink)',
-    font: 'inherit',
-    fontSize: '15px',
-    lineHeight: 1.1,
-    cursor: 'pointer',
-  },
-  today: { borderColor: 'var(--cobalt)', fontWeight: 700 },
-  selected: { background: 'var(--press)' },
-  future: { color: 'var(--muted)', opacity: 0.55 },
-  dots: { display: 'flex', gap: '3px', minHeight: '8px' },
-  dot: { width: '8px', height: '8px', borderRadius: '50%', flex: '0 0 auto' },
-  dayHead: { margin: '12px 0 4px', fontSize: '16px' },
-  list: { listStyle: 'none', margin: 0, padding: 0 },
-  item: { display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 0' },
-  legendDot: { width: '12px', height: '12px', borderRadius: '50%', flex: '0 0 auto' },
-} satisfies Record<string, JSX.CSSProperties>;
+/** A dot's colour as the custom property the .cal-dot / .cal-legend-dot classes read (13c §2A.4). */
+function dotStyle(color: string): JSX.CSSProperties {
+  return { '--dot': color } as JSX.CSSProperties;
+}
 
 // ---------------------------------------------------------------------------- data
 
@@ -241,14 +214,14 @@ export function CalendarScreen() {
   }
 
   /**
-   * "Level 6 · Oma" (badges on only), and for a snapshot "· bijgewerkt 12 okt" (how fresh the dots
-   * are: not XP, so also with badges off); '' without data.
+   * "Level 6 · Oma" and for a snapshot "· bijgewerkt 12 okt" (how fresh the dots are), both with
+   * badges on only: badges off = no sync (13c §2A.4); '' without data.
    */
   function levelLine(p: Person): string {
     const level = !levelsOn ? undefined : p.local ? localLevels.get(p.id) : p.snapshot?.level;
     const parts: string[] = [];
     if (level !== undefined) parts.push(t('xp.levelTitle', { level, title: titleFor(level, l) }));
-    if (p.snapshot) parts.push(t('progress.updatedAgo', { date: formatShortDate(p.snapshot.receivedAt, l) }));
+    if (p.snapshot && levelsOn) parts.push(t('progress.updatedAgo', { date: formatShortDate(p.snapshot.receivedAt, l) }));
     return parts.join(' ');
   }
 
@@ -256,21 +229,21 @@ export function CalendarScreen() {
     <>
       <Header title={t('more.calendar')} back backLabel={t('common.back')} />
       <div class="screen form">
-        <section class="card" style="margin-top:12px">
-          <div style={S.nav}>
-            <button type="button" class="icon-btn" style={S.navBtn} aria-label={t('calendar.prev')} onClick={() => goMonth(-1)}>
+        <section class="card cal-card">
+          <div class="cal-nav">
+            <button type="button" class="icon-btn" aria-label={t('calendar.prev')} onClick={() => goMonth(-1)}>
               <span aria-hidden="true">‹</span>
             </button>
-            <h2 style={S.month} aria-live="polite">
+            <h2 class="cal-month" aria-live="polite">
               {monthLabel(year, month, l)}
             </h2>
-            <button type="button" class="icon-btn" style={S.navBtn} aria-label={t('calendar.next')} onClick={() => goMonth(1)}>
+            <button type="button" class="icon-btn" aria-label={t('calendar.next')} onClick={() => goMonth(1)}>
               <span aria-hidden="true">›</span>
             </button>
           </div>
-          <div style={S.grid} aria-hidden="true">
+          <div class="cal-grid" aria-hidden="true">
             {weekdays.map((w) => (
-              <span key={w} style={S.weekday}>
+              <span key={w} class="cal-weekday">
                 {w}
               </span>
             ))}
@@ -278,7 +251,7 @@ export function CalendarScreen() {
           {!data ? (
             <p class="muted">{t('common.loading')}</p>
           ) : (
-            <div style={S.grid}>
+            <div class="cal-grid">
               {Array.from({ length: lead }, (_, i) => (
                 <span key={'lead' + i} aria-hidden="true" />
               ))}
@@ -286,27 +259,22 @@ export function CalendarScreen() {
                 const dom = i + 1;
                 const index = first + i;
                 const cooks = days.get(dom) ?? [];
-                const style: JSX.CSSProperties = {
-                  ...S.cell,
-                  ...(index === today ? S.today : null),
-                  ...(selected === dom ? S.selected : null),
-                  ...(index > today ? S.future : null),
-                };
+                const cls = 'cal-cell' + (index === today ? ' is-today' : '') + (selected === dom ? ' is-selected' : '') + (index > today ? ' is-future' : '');
                 const who = dotPeople(cooks);
                 return (
                   <button
                     key={dom}
                     type="button"
-                    style={style}
+                    class={cls}
                     aria-pressed={selected === dom}
                     aria-current={index === today ? 'date' : undefined}
                     aria-label={[dayLabel(index, l), ...who.map(personName)].join(', ')}
                     onClick={() => setSelected(selected === dom ? null : dom)}
                   >
                     <span>{dom}</span>
-                    <span style={S.dots} aria-hidden="true">
+                    <span class="cal-dots" aria-hidden="true">
                       {who.map((id) => (
-                        <span key={id} style={{ ...S.dot, background: personById.get(id)?.color ?? DEFAULT_MEMBER_COLOR }} />
+                        <span key={id} class="cal-dot" style={dotStyle(personById.get(id)?.color ?? DEFAULT_MEMBER_COLOR)} />
                       ))}
                     </span>
                   </button>
@@ -317,14 +285,14 @@ export function CalendarScreen() {
           {data && days.size === 0 && <p class="muted small">{t('calendar.emptyMonth')}</p>}
           {data && selected !== null && (
             <div role="region" aria-live="polite">
-              <h3 style={S.dayHead}>{dayLabel(first + selected - 1, l)}</h3>
+              <h3 class="cal-day-head">{dayLabel(first + selected - 1, l)}</h3>
               {selectedCooks.length === 0 ? (
                 <p class="muted small">{t('calendar.nothing')}</p>
               ) : (
-                <ul style={S.list}>
+                <ul class="cal-list">
                   {selectedCooks.map((c, i) => (
-                    <li key={i} style={S.item}>
-                      <span style={{ ...S.legendDot, background: personById.get(c.memberId)?.color ?? DEFAULT_MEMBER_COLOR }} aria-hidden="true" />
+                    <li key={i} class="cal-item">
+                      <span class="cal-legend-dot" style={dotStyle(personById.get(c.memberId)?.color ?? DEFAULT_MEMBER_COLOR)} aria-hidden="true" />
                       <span>
                         {personName(c.memberId)} — {recipeName(c.recipeId)}
                       </span>
@@ -338,12 +306,12 @@ export function CalendarScreen() {
 
         {people.length > 0 && (
           <section class="card">
-            <ul style={S.list}>
+            <ul class="cal-list">
               {people.map((p) => {
                 const level = levelLine(p);
                 return (
-                  <li key={p.id} style={S.item}>
-                    <span style={{ ...S.legendDot, background: p.color }} aria-hidden="true" />
+                  <li key={p.id} class="cal-item">
+                    <span class="cal-legend-dot" style={dotStyle(p.color)} aria-hidden="true" />
                     <span>
                       <strong>{p.name}</strong>
                       {level && (
@@ -360,7 +328,7 @@ export function CalendarScreen() {
           </section>
         )}
 
-        <p class="muted small">{t('calendar.honest')}</p>
+        {levelsOn && <p class="muted small">{t('calendar.honest')}</p>}
       </div>
     </>
   );

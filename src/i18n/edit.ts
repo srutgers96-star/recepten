@@ -8,7 +8,6 @@ export const edit: Dict = {
   // --- Editor (/add, /edit/:id) ---
   'edit.titleNew': { nl: 'Nieuw recept', en: 'New recipe' },
   'edit.titleEdit': { nl: 'Bewerk recept', en: 'Edit recipe' },
-  'edit.lang': { nl: 'Taal van het recept', en: 'Recipe language' },
   'edit.lang.nl': { nl: 'NL', en: 'NL' },
   'edit.lang.en': { nl: 'EN', en: 'EN' },
   'edit.lang.both': { nl: 'beide', en: 'both' },
@@ -42,6 +41,7 @@ export const edit: Dict = {
   'edit.split': { nl: 'Splits in stappen', en: 'Split into steps' },
   'edit.splitNone': { nl: 'Geen tekst om te splitsen.', en: 'No text to split.' },
   'edit.splitDone': { nl: '{n} stappen toegevoegd', en: '{n} steps added' },
+  'edit.splitDoneOne': { nl: '1 stap toegevoegd', en: '1 step added' },
   'edit.save': { nl: 'Bewaar', en: 'Save' },
   'edit.saving': { nl: 'Bewaren…', en: 'Saving…' },
   'edit.invalidHint': {
@@ -135,11 +135,6 @@ export const edit: Dict = {
     nl: 'Aantal stappen klopt niet: {got} in de vertaling, {expected} in het recept. Niets ingevuld.',
     en: 'Step count does not match: {got} in the translation, {expected} in the recipe. Nothing filled in.',
   },
-  'edit.translateLinesMismatch': {
-    nl: 'Aantal ingrediëntregels klopt niet: {got} in de vertaling, {expected} in het recept. Niets ingevuld.',
-    en: 'Ingredient line count does not match: {got} in the translation, {expected} in the recipe. Nothing filled in.',
-  },
-  'edit.translateDone': { nl: 'Vertaling ingevuld: {lines} regels, {steps} stappen', en: 'Translation filled in: {lines} lines, {steps} steps' },
   // PLAN §0 "Vertaling eigen recepten": the section in a single-column mode adds the other language.
   'edit.addEnglish': { nl: 'Engels toevoegen', en: 'Add English' },
   'edit.addDutch': { nl: 'Nederlands toevoegen', en: 'Add Dutch' },
@@ -181,6 +176,7 @@ export const edit: Dict = {
   'edit.switchToAi': { nl: 'Lukt plakken niet goed? Met AI →', en: 'Pasting not working well? With AI →' },
   'edit.pasteDone': { nl: '{lines} ingrediënten, {steps} stappen herkend', en: '{lines} ingredients, {steps} steps recognised' },
   'edit.pasteLeftovers': { nl: '{n} regels om te controleren', en: '{n} lines to check' },
+  'edit.pasteLeftoversOne': { nl: '1 regel om te controleren', en: '1 line to check' },
   'edit.pasteLow': { nl: 'twijfelgeval, kijk alles even na', en: 'not sure about this one, check everything' },
   // The "Controleer" box: lines of a pasted website text the app could not place (6A.17, "liever te veel dan te weinig").
   'edit.leftoverTitle': { nl: 'Controleer', en: 'Check' },
@@ -196,6 +192,7 @@ export const edit: Dict = {
   'edit.importNone': { nl: 'Geen recept herkend in de tekst.', en: 'No recipe recognised in the text.' },
   // "Toch proberen" on a text without ingredients or steps the app could read: the lines wait under "Controleer".
   'edit.importToCheck': { nl: 'Geen ingrediënten of stappen herkend — {n} regels staan onder "Controleer".', en: 'No ingredients or steps recognised — {n} lines are under "Check".' },
+  'edit.importToCheckOne': { nl: 'Geen ingrediënten of stappen herkend — 1 regel staat onder "Controleer".', en: 'No ingredients or steps recognised — 1 line is under "Check".' },
 
   // --- Universal paste box (src/components/UniversalPaste.tsx; src/paste.ts `summarizePaste`) ---
   'paste.label': { nl: 'Plakvak', en: 'Paste box' },
@@ -205,8 +202,10 @@ export const edit: Dict = {
   },
   'paste.link': { nl: '1 deellink herkend', en: '1 share link recognised' },
   'paste.links': { nl: '{n} deellinks herkend', en: '{n} share links recognised' },
+  'paste.linksOne': { nl: '1 deellink herkend', en: '1 share link recognised' },
   'paste.card': { nl: 'Kaartje van {name}', en: 'Card from {name}' },
   'paste.cards': { nl: '{n} kaartjes', en: '{n} cards' },
+  'paste.cardsOne': { nl: '1 kaartje', en: '1 card' },
   'paste.plan': { nl: 'een weekplan', en: 'a week plan' },
   // 6D-4 (docs/specs/xp-levels.md §3, bouwer B's summarizePaste label for a `#x=`).
   'paste.progress': { nl: 'Voortgang van {name}', en: "{name}'s progress" },
@@ -290,6 +289,7 @@ export const edit: Dict = {
   },
   'checkRecipes.empty': { nl: 'Nog geen eigen of ontvangen recepten.', en: 'No own or received recipes yet.' },
   'checkRecipes.allGood': { nl: 'Alles klopt: {n} recepten gecontroleerd, geen verschillen.', en: 'All good: {n} recipes checked, no differences.' },
+  'checkRecipes.allGoodOne': { nl: 'Alles klopt: 1 recept gecontroleerd, geen verschillen.', en: 'All good: 1 recipe checked, no differences.' },
   'checkRecipes.count': { nl: '{n} van {m} recepten wijken af', en: '{n} of {m} recipes differ' },
   'checkRecipes.current': { nl: 'Nu', en: 'Now' },
   'checkRecipes.suggested': { nl: 'Voorstel', en: 'Suggested' },
@@ -311,6 +311,7 @@ export const edit: Dict = {
     en: 'You chose this category or these labels by hand before; "Adopt all" leaves them alone. Adopting per recipe still works.',
   },
   'checkRecipes.done': { nl: '{n} recepten bijgewerkt', en: '{n} recipes updated' },
+  'checkRecipes.doneOne': { nl: '1 recept bijgewerkt', en: '1 recipe updated' },
   'checkRecipes.finished': { nl: 'Klaar — alles is overgenomen of overgeslagen.', en: 'Done — everything was adopted or skipped.' },
   'checkRecipes.skipped': { nl: '{n} overgeslagen', en: '{n} skipped' },
   'checkRecipes.showSkipped': { nl: 'Toon overgeslagen', en: 'Show skipped' },
@@ -327,7 +328,6 @@ export const edit: Dict = {
     nl: 'Kies eerst een profiel onder Meer, dan staat je naam in het bericht.',
     en: 'Choose a profile under More first, so your name is in the message.',
   },
-  'share.message': { nl: 'Bericht', en: 'Message' },
   'share.length': { nl: '{n} tekens', en: '{n} characters' },
   'share.whatsapp': { nl: 'Deel via WhatsApp', en: 'Share via WhatsApp' },
   'share.copy': { nl: 'Kopieer', en: 'Copy' },
@@ -346,8 +346,6 @@ export const edit: Dict = {
 
   // --- Share: QR (phase 5 block D.5; 13Q docs/specs/qr-link.md §1a/§1b: next to every share button) ---
   // share.qrShow / share.qrHide are no longer read since 13Q (the button is share.qr); kept, not removed.
-  'share.qrShow': { nl: 'Toon QR', en: 'Show QR' },
-  'share.qrHide': { nl: 'Verberg QR', en: 'Hide QR' },
   'share.qr': { nl: 'Toon QR', en: 'Show QR' },
   'share.qrHint': {
     nl: 'Laat de ander dit scannen met de camera van de telefoon.',
@@ -399,7 +397,9 @@ export const edit: Dict = {
   'inbox.unsupported': { nl: 'Update de app eerst (nieuwere versie van de code).', en: 'Update the app first (newer code version).' },
   'inbox.at': { nl: 'gedeeld op', en: 'shared on' },
   'inbox.ingredients': { nl: '{n} ingrediënten', en: '{n} ingredients' },
+  'inbox.ingredientsOne': { nl: '1 ingrediënt', en: '1 ingredient' },
   'inbox.steps': { nl: '{n} stappen', en: '{n} steps' },
+  'inbox.stepsOne': { nl: '1 stap', en: '1 step' },
   'inbox.open': { nl: 'Open', en: 'Open' },
   'inbox.fromShare': { nl: 'Ontvangen via het deelmenu', en: 'Received via the share sheet' },
   'inbox.pasteFailed': { nl: 'Plakken mislukt — plak in het tekstvak.', en: 'Paste failed — paste into the text box instead.' },
@@ -412,10 +412,13 @@ export const edit: Dict = {
   'inbox.found': { nl: 'Gevonden', en: 'Found' },
   'inbox.foundRecipe': { nl: '1 recept', en: '1 recipe' },
   'inbox.foundRecipes': { nl: '{n} recepten', en: '{n} recipes' },
+  'inbox.foundRecipesOne': { nl: '1 recept', en: '1 recipe' },
   'inbox.foundPatch': { nl: '1 aangepaste klassieker', en: '1 tweaked classic' },
   'inbox.foundPatches': { nl: '{n} aangepaste klassiekers', en: '{n} tweaked classics' },
+  'inbox.foundPatchesOne': { nl: '1 aangepaste klassieker', en: '1 tweaked classic' },
   'inbox.dictAdd1': { nl: '1 nieuw ingrediënt', en: '1 new ingredient' },
   'inbox.dictAddN': { nl: '{n} nieuwe ingrediënten', en: '{n} new ingredients' },
+  'inbox.dictAddNOne': { nl: '1 nieuw ingrediënt', en: '1 new ingredient' },
   'inbox.dictKnown': { nl: '{n} al bekend', en: '{n} already known' },
   'inbox.dictOnly': {
     nl: 'Alleen nieuwe ingrediënten voor het woordenboek; geen recepten.',
@@ -433,6 +436,7 @@ export const edit: Dict = {
   'inbox.patchAnon': { nl: 'aangepast', en: 'tweaked' },
   'inbox.patchFields': { nl: 'Gewijzigd: {fields}', en: 'Changed: {fields}' },
   'inbox.patchLinksOnly': { nl: 'Alleen gekoppelde ingrediënten ({n} regels)', en: 'Linked ingredients only ({n} lines)' },
+  'inbox.patchLinksOnlyOne': { nl: 'Alleen gekoppelde ingrediënten (1 regel)', en: 'Linked ingredients only (1 line)' },
   'inbox.unknownBase': {
     nl: 'Deze klassieker staat niet in deze versie van de app; de aanpassing kan niet worden toegepast.',
     en: 'This classic is not in this version of the app; the tweak cannot be applied.',
@@ -470,7 +474,9 @@ export const edit: Dict = {
   'inbox.allMine': { nl: 'Alles van mij', en: 'All mine' },
   'inbox.allTheirs': { nl: 'Alles van {name}', en: 'All {name}\'s' },
   'inbox.lineCount': { nl: '{n} regels', en: '{n} lines' },
+  'inbox.lineCountOne': { nl: '1 regel', en: '1 line' },
   'inbox.stepCount': { nl: '{n} stappen', en: '{n} steps' },
+  'inbox.stepCountOne': { nl: '1 stap', en: '1 step' },
   'inbox.openExisting': { nl: 'Open de bestaande', en: 'Open the existing one' },
   'inbox.import': { nl: 'Importeer', en: 'Import' },
   'inbox.importing': { nl: 'Importeren…', en: 'Importing…' },
@@ -482,6 +488,7 @@ export const edit: Dict = {
   'inbox.result': { nl: '{added} nieuw · {updated} bijgewerkt · {skipped} overgeslagen', en: '{added} new · {updated} updated · {skipped} skipped' },
   'inbox.resultCopies': { nl: '{n} als kopie', en: '{n} as a copy' },
   'inbox.resultIngredients': { nl: '{n} ingrediënten toegevoegd', en: '{n} ingredients added' },
+  'inbox.resultIngredientsOne': { nl: '1 ingrediënt toegevoegd', en: '1 ingredient added' },
   'inbox.undo': { nl: 'Maak ongedaan', en: 'Undo' },
   'inbox.undone': { nl: 'Import ongedaan gemaakt.', en: 'Import undone.' },
   'inbox.undoFailed': { nl: 'Niets om ongedaan te maken.', en: 'Nothing to undo.' },
@@ -542,6 +549,7 @@ export const edit: Dict = {
   },
   'dict.merged': { nl: 'Samengevoegd: {own} → {existing} ({recipes} recepten, {lines} regels)', en: 'Merged: {own} → {existing} ({recipes} recipes, {lines} lines)' },
   'dict.mergedAll': { nl: '{n} eigen ingrediënten samengevoegd', en: '{n} own ingredients merged' },
+  'dict.mergedAllOne': { nl: '1 eigen ingrediënt samengevoegd', en: '1 own ingredient merged' },
   'dict.mergeFailed': { nl: 'Samenvoegen mislukt', en: 'Merge failed' },
   'dict.undo': { nl: 'Ongedaan', en: 'Undo' },
   'dict.undone': { nl: 'Ongedaan gemaakt.', en: 'Undone.' },
@@ -553,6 +561,7 @@ export const edit: Dict = {
   },
   'dict.cleanupNone': { nl: 'Geen dubbele eigen ingrediënten gevonden.', en: 'No duplicate own ingredients found.' },
   'dict.cleanupCount': { nl: '{n} eigen ingrediënten bestaan al:', en: '{n} own ingredients already exist:' },
+  'dict.cleanupCountOne': { nl: '1 eigen ingrediënt bestaat al:', en: '1 own ingredient already exists:' },
   'dict.cleanupRow': { nl: '{own} → bestaat al als {existing}', en: '{own} → already exists as {existing}' },
   'dict.mergeAll': { nl: 'Fuseer alles', en: 'Merge all' },
   'dict.mergeAllConfirm': {

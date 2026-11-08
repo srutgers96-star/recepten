@@ -10,7 +10,6 @@ export const badges: Dict = {
   'badges.earnedOf': { nl: '{earned} van {total} badges verdiend', en: '{earned} of {total} badges earned' },
   'badges.earned': { nl: 'Verdiend', en: 'Earned' },
   'badges.locked': { nl: 'nog niet verdiend', en: 'not earned yet' },
-  'badges.progress': { nl: 'Voortgang', en: 'Progress' },
   'badges.toast': { nl: '🏆 Nieuwe badge: {name}', en: '🏆 New badge: {name}' },
   'badges.toastTogether': { nl: '🏆 Nieuwe badge samen: {name}', en: '🏆 New badge together: {name}' },
   'badges.toastOpen': { nl: 'Bekijk je badges', en: 'View your badges' },
@@ -47,16 +46,15 @@ export const badges: Dict = {
   'badges.unlocks': { nl: 'Geeft: {part}', en: 'Unlocks: {part}' },
   // 6D-2b: appended to `badges.unlocks` on a ladder; since 6D-B.6 after a dot in the tier colour
   // ("Geeft: Steelpan ● op niveau 5") instead of the colour name.
-  'badges.unlocksTier': { nl: 'op niveau {k}', en: 'at tier {k}' },
   'badges.unlocksAt': { nl: 'op', en: 'at' },
   'badges.tierWord': { nl: 'niveau {k}', en: 'tier {k}' },
   'badges.secretCount': { nl: '{n} geheime badges gevonden', en: '{n} secret badges found' },
+  'badges.secretCountOne': { nl: '1 geheime badge gevonden', en: '1 secret badge found' },
   'badges.secretNone': {
     nl: 'Nog geen geheime badge gevonden. Ontdek de app: sommige dingen die je doet leveren er een op.',
     en: 'No secret badge found yet. Explore the app: some things you do earn one.',
   },
   // 6D-2c (decision 29 Oct 2026): the description on a "?" card, a hidden badge not found yet.
-  'badges.secretHint': { nl: 'Nog te ontdekken.', en: 'Still to discover.' },
   'badges.toastTier': { nl: '🏆 {name} · niveau {k}', en: '🏆 {name} · tier {k}' },
   'badges.toastSecret': { nl: '🤫 Geheime badge: {name}', en: '🤫 Secret badge: {name}' },
   'badges.toastUnlock': { nl: 'Nieuw voor je avatar: {part}', en: 'New for your avatar: {part}' },

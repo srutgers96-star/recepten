@@ -4,6 +4,37 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 13c — Opschoonronde
+Gebouwd volgens docs/specs/opschoonronde.md (bouwer A tekst en rust, bouwer B losse eindjes, integrator; workflow wf_8661b993-08c). Geen dependency, geen Dexie-versie, geen fragmentsleutel; `XP_RULES_VERSION` en `DATA_VERSION` ongewijzigd.
+- **Tekst en rust (A):** de zeven hints uit §2A.1 weg (NL en EN), de blijvende hints één zin van hoogstens ±60 tekens; level-up-venster
+  toont twee avatar-onderdelen en dan "+{n}" (`levelup.moreParts`); enkelvoud voor `badges.secretCountOne`, `more.householdValueOne`,
+  `progress.cookDays30One`, `progress.streakBadgesOne` (de laatste twee door de integrator aangesloten in HouseholdScreen.tsx,
+  voortgangskaartje); kookkalender zonder inline stijlen (`.cal-*` in xp.css, kleur via `--dot`) en zonder "bijgewerkt" en de
+  sync-regel als badges uit staan; 59 ongebruikte sleutels weg (56 van §2A.5 plus `shop.collapse/expand/for` door de integrator);
+  `.profile-chip*`, dubbele `--rarity-*`-tokens en vijf dode avatar-maten weg, `.home-hello`-regels naar home.css.
+- **Losse eindjes (B):** lange boodschappenlijst houdt link (`LIST_LINK_MESSAGE_LIMIT = 20000`, tekst-deling ongewijzigd); `variant`
+  reist optioneel mee in `#l=` (één nieuw bevroren token in tests/token.test.ts, oude tokens byte-gelijk), "rode ui" komt naast "ui";
+  `buildListEnvelope` naar `src/domain/share-list.ts`, gedeelde chunk van de landing gzip 29,64 → 25,14 kB (som 37,36 → 32,85 kB);
+  `SheetPortal` `onEscape` alleen op het houd-menu en MetaSheet (met `stopPropagation`, zodat Escape bij Labels de selectie laat
+  staan); pure kernen `clearChecksIn`/`adoptStandingAdjustmentIn` met tests; `variant.checkSwap` zonder parameters.
+- **Gecontroleerd in de dev-app (375 px, NL en EN):** Meer zonder hint onder Taal/Confetti/°F, korte hints; kalender met stippen in
+  de kleur van de persoon en zonder level/sync-regel bij badges uit; Escape sluit houd-menu en labels-venster; Home-avatar 72 px,
+  niveauregel 84 px; rarity-tokens licht en donker gelijk. Groen: check, test (78 bestanden, 1719 tests), build, build:next,
+  validate:data. Geen DEVICE-TEST-rij (spec §4).
+- **Open voor Fable/Stijn:** (1) ruim 50 `{n}`-teksten zonder `…One`-zuster waarvan de aanroep buiten bouwer A lag (o.a.
+  `challenge.daysLeft` "nog 1 dagen", `shop.shareTitleServings` EN "1 people", `list.count`, `inbox.*`, `delta.*`, `week.dishes`);
+  de spec geeft daar geen letterlijke tekst, dus niet gebouwd. (2) `filter.clear`/`filter.label` bleven staan (samengesteld
+  `t('filter.' + id)`). (3) README §2b-regel voor het tokenveld `variant` op `#l=` niet gezet: spec §3 vraagt het de integrator,
+  README §3a.9 verbiedt wijzigingen in docs/specs/. (4) Het nieuwe bevroren `#l=`-token staat inline in tests/token.test.ts, niet in
+  tests/fixtures/frozen-share-tokens.ts. (5) Een onbekende ontvangen `variant`-id wordt niet aan het woordenboek getoetst.
+- **Besluit Fable (8 nov, na de lens en de fixer):** enkelvoud centraal in `t()`/`tIn()` (`vars.n === 1` → `<key>One` als die bestaat);
+  een Opus-afronder voegde de zusters toe voor de zichtbare teksten buiten bouwer A en herformuleerde `shop.list.putSnack` ("…, {m}
+  al aanwezig"; DEVICE-TEST 106 volgt); `filter.clear`/`filter.label` weg; Escape op Labels sluit alleen de sheet (akkoord); bevroren
+  token inline in token.test.ts (akkoord); eigen transactie van `adoptStandingAdjustment` (akkoord); ontvangen `variant` niet
+  getoetst (aanvaard); kalender zonder sync-regel bij badges uit (akkoord); tests/i18n.test.ts bewaakt voortaan dode sleutels;
+  README §2b heeft het tokenveld `variant`. Beeldvergelijking §2A.6 niet als screenshots: Stijn kijkt mee bij het testen.
+  Opschoonronde-lijst hieronder (sectie "Opschoonronde — lijst"): alles afgevinkt behalve wat in de handleiding (Z) opgaat.
+
 ## 8 nov (Opus): 6E — Uitdagingen, vrij op level 20
 Gebouwd volgens docs/specs/challenges.md (bouwer A domein, B data en app-laag, C UI, integrator). Gecommit 8 nov (15e3364), live op main. Geen dependency,
 geen Dexie-versie, geen fragmentsleutel; `XP_RULES_VERSION` blijft 3 (zonder gehaalde uitdagingen is `deriveXp` byte-gelijk).
@@ -897,10 +928,9 @@ ronde hieronder.
 
 ### Opschoonronde — lijst (Fable vult aan tijdens het testen; spec: docs/specs/opschoonronde.md, 8 nov)
 - ✔ Gedaan in 6D-B (30 okt): badgekaart "Niveau 1 · geel" → alleen de gekleurde stip; de kleurnaam alleen als aria-tekst.
-- Meer: kortere of geen hints onder de rijen (→ spec §2A.1). ✔ Het profiel-blok bovenaan is weg sinds 6D-S (één rij Mijn profiel).
-- Level-up-venster: de lijst avatar-onderdelen inkorten ("+13 avatar-onderdelen" met uitklappen).
-- Enkelvoud "1 badge" / "1 kookdag" (6D-4b); kalender-legenda zonder "bijgewerkt" bij badges uit; inline
-  kalender-stijlen naar xp.css.
+- ✔ Gedaan in 13c (8 nov): Meer zonder hints die het label herhalen, de rest één korte zin. ✔ Het profiel-blok bovenaan is weg sinds 6D-S (één rij Mijn profiel).
+- ✔ Gedaan in 13c (8 nov): level-up-venster toont twee avatar-onderdelen en dan "+n" met uitklappen.
+- ✔ Gedaan in 13c (8 nov): enkelvoud via `<key>One` in `t()`; kalender zonder sync-regel bij badges uit; kalender-stijlen in xp.css.
 - ✔ Gedaan 30 okt (Fable, direct): Home zei drie keer "vanavond" (kop "Vanavond?", begroeting, kaart). De kop is nu de dag
   ("Donderdag 30 oktober"), de begroeting alleen je naam; de kaart houdt "Vanavond". Keys home.title/home.greeting
   ongebruikt → opschoonronde.

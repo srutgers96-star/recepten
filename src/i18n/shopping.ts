@@ -16,8 +16,6 @@ export const shopping: Dict = {
   'shop.loading': { nl: 'Laden…', en: 'Loading…' },
   'shop.empty': { nl: 'De lijst is leeg. Voeg iets toe, of kies gerechten in Week.', en: 'The list is empty. Add something, or pick dishes in Week.' },
   'shop.allDone': { nl: 'Alles afgevinkt 🎉', en: 'Everything ticked 🎉' },
-  'shop.lines': { nl: '{n} regels', en: '{n} lines' },
-  'shop.lineOne': { nl: '1 regel', en: '1 line' },
 
   // --- Proto list ----------------------------------------------------------------------------
   'shop.proto.title': { nl: 'Controleer de lijst', en: 'Check the list' },
@@ -32,7 +30,6 @@ export const shopping: Dict = {
   'shop.zero': { nl: 'niet nodig', en: 'not needed' },
   'shop.less': { nl: 'Minder', en: 'Less' },
   'shop.more': { nl: 'Meer', en: 'More' },
-  'shop.for': { nl: 'Waarvoor', en: 'For' },
   'shop.noSources': { nl: 'Zelf toegevoegd', en: 'Added by hand' },
 
   // --- The list ------------------------------------------------------------------------------
@@ -58,8 +55,6 @@ export const shopping: Dict = {
   'shop.neededSnack': { nl: 'Weer op de lijst', en: 'Back on the list' },
   'shop.new': { nl: 'nieuw', en: 'new' },
   'shop.count': { nl: '{done}/{total}', en: '{done}/{total}' },
-  'shop.expand': { nl: 'Uitklappen', en: 'Expand' },
-  'shop.collapse': { nl: 'Inklappen', en: 'Collapse' },
   'shop.holdHint': { nl: 'Tik = afvinken · houd vast voor meer', en: 'Tap = tick · hold for more' },
 
   // --- Long-press menu -----------------------------------------------------------------------
@@ -96,8 +91,10 @@ export const shopping: Dict = {
   // The shared text's first line: "🛒 Boodschappen wk 39 · 7 gerechten · 4 pers." (PLAN.md §8), joined with " · ".
   'shop.shareTitle': { nl: '🛒 Boodschappen wk {week}', en: '🛒 Shopping wk {week}' },
   'shop.shareTitleDishes': { nl: '{n} gerechten', en: '{n} dishes' },
+  'shop.shareTitleDishesOne': { nl: '1 gerecht', en: '1 dish' },
   'shop.shareTitleDishOne': { nl: '1 gerecht', en: '1 dish' },
   'shop.shareTitleServings': { nl: '{n} pers.', en: '{n} people' },
+  'shop.shareTitleServingsOne': { nl: '1 pers.', en: '1 person' },
   'shop.textLang': { nl: 'Taal', en: 'Language' },
   'shop.noShareApi': { nl: 'Geen deelmenu op dit toestel; WhatsApp is geopend.', en: 'No share sheet on this device; WhatsApp was opened.' },
   'shop.shareError': { nl: 'Delen mislukt', en: 'Sharing failed' },
@@ -107,8 +104,10 @@ export const shopping: Dict = {
   'shop.shareLink': { nl: 'Deel link', en: 'Share link' },
   'shop.copyLink': { nl: 'Kopieer link', en: 'Copy link' },
   'shop.list.received': { nl: '🛒 Lijst van {name} · {n} regels', en: "🛒 {name}'s list · {n} lines" },
+  'shop.list.receivedOne': { nl: '🛒 Lijst van {name} · 1 regel', en: "🛒 {name}'s list · 1 line" },
   'shop.list.put': { nl: 'Zet op mijn lijst', en: 'Put on my list' },
-  'shop.list.putSnack': { nl: '{n} regels op je lijst gezet, {m} stonden er al', en: '{n} lines put on your list, {m} were already there' },
+  'shop.list.putSnack': { nl: '{n} regels op je lijst gezet, {m} al aanwezig', en: '{n} lines put on your list, {m} already there' },
+  'shop.list.putSnackOne': { nl: '1 regel op je lijst gezet, {m} al aanwezig', en: '1 line put on your list, {m} already there' },
 
   // --- Print & copy as text (docs/phase-5-spec.md block D.2) ----------------------------------
   'shop.print': { nl: 'Print', en: 'Print' },
@@ -121,13 +120,16 @@ export const shopping: Dict = {
   'inbox.plan.title': { nl: 'Weekplan van {name}: {n} gerechten', en: 'Week plan from {name}: {n} dishes' },
   'inbox.plan.titleOne': { nl: 'Weekplan van {name}: 1 gerecht', en: 'Week plan from {name}: 1 dish' },
   'inbox.plan.titleAnon': { nl: 'Weekplan: {n} gerechten', en: 'Week plan: {n} dishes' },
+  'inbox.plan.titleAnonOne': { nl: 'Weekplan: 1 gerecht', en: 'Week plan: 1 dish' },
   'inbox.plan.hint': { nl: 'Overnemen vervangt je huidige weekplan; Toevoegen zet alleen de ontbrekende gerechten erbij. Meegestuurde recepten worden eerst geïmporteerd.', en: 'Take over replaces your current week plan; Add appends only the missing dishes. Included recipes are imported first.' },
   'inbox.plan.take': { nl: 'Overnemen', en: 'Take over' },
   'inbox.plan.add': { nl: 'Toevoegen', en: 'Add' },
   'inbox.plan.unknown': { nl: '{n} gerechten ken je niet (niet meegestuurd); die slaan we over.', en: '{n} dishes are unknown here (not included); they are skipped.' },
   'inbox.plan.unknownOne': { nl: '1 gerecht ken je niet (niet meegestuurd); dat slaan we over.', en: '1 dish is unknown here (not included); it is skipped.' },
   'inbox.plan.taken': { nl: 'Weekplan overgenomen: {n} gerechten.', en: 'Week plan taken over: {n} dishes.' },
+  'inbox.plan.takenOne': { nl: 'Weekplan overgenomen: 1 gerecht.', en: 'Week plan taken over: 1 dish.' },
   'inbox.plan.added': { nl: '{n} gerechten toegevoegd aan je week.', en: '{n} dishes added to your week.' },
+  'inbox.plan.addedOne': { nl: '1 gerecht toegevoegd aan je week.', en: '1 dish added to your week.' },
   'inbox.plan.nothing': { nl: 'Niets toegevoegd: alles stond er al.', en: 'Nothing added: everything was already there.' },
   'inbox.plan.failed': { nl: 'Weekplan overnemen mislukt', en: 'Taking over the week plan failed' },
   'inbox.plan.toWeek': { nl: 'Naar Week', en: 'Go to Week' },

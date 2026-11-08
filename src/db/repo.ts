@@ -2128,10 +2128,11 @@ export async function addExtra(item: Partial<ListItem> & { key?: string }): Prom
 /**
  * 13Q (docs/specs/qr-link.md §1c/§2): which lines of a received shopping list (`#l=`) go onto the own
  * list as manual items, and how many are skipped. Pure (tests/list-share.test.ts). Rules:
- * - a line with an ingredient id the dictionary knows becomes `{ ing, qty, unit, aisle }` (qty only
- *   as a finite number > 0, a unit only when the dictionary knows it, aisle from the line or the
- *   ingredient); it is skipped when that ingredient is already on the list and not ticked
- *   (`items.some(it => it.ing === line.ing && !it.checked)`);
+ * - a line with an ingredient id the dictionary knows becomes `{ ing, variant?, qty, unit, aisle }`
+ *   (qty only as a finite number > 0, a unit only when the dictionary knows it, aisle from the line
+ *   or the ingredient); it is skipped when that ingredient WITH the same qualifier is already on the
+ *   list and not ticked (13c §2B.2: `ing` + `variant`, an empty variant = none, so "rode ui" is added
+ *   next to "ui"); the added item gets the qualifier back, so the line reads "rode ui";
  * - any other line is free text: `label` = the line's `raw` (both languages as received; the screen
  *   shows the UI language), no qty/unit (the raw text already says the amount), aisle from the line
  *   or 'overig'; it is skipped when an unticked item without ingredient has the same normalised text
@@ -2147,10 +2148,12 @@ export function listShareAdditions(current: readonly ListItem[], lines: readonly
     const k = normalizeKey(s);
     if (k) texts.add(k);
   };
+  // 13c §2B.2: an ingredient line is "already there" per ingredient + qualifier ('ui|' vs 'ui|rode').
+  const ingKey = (ing: string, variant: unknown): string => `${ing}|${typeof variant === 'string' ? variant.trim() : ''}`;
   for (const it of current) {
     if (it.checked) continue;
     if (it.ing) {
-      ings.add(it.ing);
+      ings.add(ingKey(it.ing, it.variant));
       continue;
     }
     addText(it.label?.nl);
@@ -2166,14 +2169,18 @@ export function listShareAdditions(current: readonly ListItem[], lines: readonly
     const ing = ingId ? dict.get(ingId) : undefined;
     const aisle = typeof line.aisle === 'string' && line.aisle.trim() ? line.aisle.trim() : null;
     if (ing) {
-      if (ings.has(ing.id)) {
+      const variant = typeof line.variant === 'string' && line.variant.trim() ? line.variant.trim() : null;
+      const key = ingKey(ing.id, variant);
+      if (ings.has(key)) {
         skipped++;
         continue;
       }
       const qty = typeof line.qty === 'number' && Number.isFinite(line.qty) && line.qty > 0 ? line.qty : null;
       const unit = qty !== null && typeof line.unit === 'string' && line.unit && dict.unit(line.unit) ? line.unit : null;
-      add.push({ ing: ing.id, aisle: aisle ?? ing.aisle ?? 'overig', qty, unit });
-      ings.add(ing.id);
+      const item: Partial<ListItem> = { ing: ing.id, aisle: aisle ?? ing.aisle ?? 'overig', qty, unit };
+      if (variant) item.variant = variant;
+      add.push(item);
+      ings.add(key);
       continue;
     }
     const keys = [raw.nl, raw.en].map((s) => normalizeKey(s)).filter((k) => k !== '');
@@ -2237,21 +2244,24 @@ export async function restoreListItem(item: ListItem): Promise<void> {
  * starts from the usual amounts ("Klaar" is the only "new week" moment, docs/specs/vaste-lijst.md §1d).
  */
 export async function clearChecks(): Promise<void> {
-  await updateList((list) => {
-    const clear = (it: ListItem): ListItem => {
-      const reset = it.standing === true && (it.inHouse !== undefined || it.adjusted !== undefined || it.section === 'inHouse');
-      if (!it.checked && !reset) return it;
-      const next = { ...it };
-      delete next.checked;
-      if (it.standing === true) {
-        delete next.inHouse;
-        delete next.adjusted;
-        if (next.section === 'inHouse') next.section = 'main';
-      }
-      return next;
-    };
-    return { ...list, items: list.items.map(clear), extras: list.extras.map(clear) };
-  });
+  await updateList((list) => clearChecksIn(list));
+}
+
+/** The pure core of "Klaar" (`clearChecks`, 13c §2B.5): the list with every check cleared (see there). */
+export function clearChecksIn(list: List): List {
+  const clear = (it: ListItem): ListItem => {
+    const reset = it.standing === true && (it.inHouse !== undefined || it.adjusted !== undefined || it.section === 'inHouse');
+    if (!it.checked && !reset) return it;
+    const next = { ...it };
+    delete next.checked;
+    if (it.standing === true) {
+      delete next.inHouse;
+      delete next.adjusted;
+      if (next.section === 'inHouse') next.section = 'main';
+    }
+    return next;
+  };
+  return { ...list, items: list.items.map(clear), extras: list.extras.map(clear) };
 }
 
 /**
@@ -2573,13 +2583,28 @@ export async function addLineToStanding(key: string): Promise<StandingItem | und
 export async function adoptStandingAdjustment(key: string): Promise<void> {
   await db.transaction('rw', db.settings, db.lists, async () => {
     const list = await getList();
-    const line = list?.items.find((it) => it.key === key);
-    if (!list || !line || !line.standing || !isStandingKey(key)) return;
-    const qty = standingQty(effectiveQty(line));
-    const id = `s:${key.slice(2)}`;
+    if (!list) return;
+    const r = adoptStandingAdjustmentIn(list, key);
+    if (!r) return;
     const cur = await getStandingList();
-    if (cur.items.some((s) => s.id === id)) await saveStandingList(cur.items.map((s) => (s.id === id ? { ...s, qty } : s)));
-    await saveList({
+    if (cur.items.some((s) => s.id === r.standingId)) await saveStandingList(cur.items.map((s) => (s.id === r.standingId ? { ...s, qty: r.qty } : s)));
+    await saveList(r.list);
+  });
+}
+
+/**
+ * The pure core of "Ook voortaan" (`adoptStandingAdjustment`, 13c §2B.5): null when `key` is no
+ * standing line on the list; otherwise the usual amount to store (`qty`: the line's effective amount,
+ * null for 0), the standing item's id and the list with that line's qty set and `adjusted` gone.
+ */
+export function adoptStandingAdjustmentIn(list: List, key: string): { list: List; qty: number | null; standingId: string } | null {
+  const line = list.items.find((it) => it.key === key);
+  if (!line || !line.standing || !isStandingKey(key)) return null;
+  const qty = standingQty(effectiveQty(line));
+  return {
+    qty,
+    standingId: `s:${key.slice(2)}`,
+    list: {
       ...list,
       items: list.items.map((it) => {
         if (it.key !== key) return it;
@@ -2587,8 +2612,8 @@ export async function adoptStandingAdjustment(key: string): Promise<void> {
         delete next.adjusted;
         return next;
       }),
-    });
-  });
+    },
+  };
 }
 
 /**

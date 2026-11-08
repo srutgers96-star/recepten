@@ -51,6 +51,10 @@ import {
   FROZEN_TOKEN_W_VARIANT,
   FROZEN_TOKEN_W_VARIANT_FFLATE,
 } from './fixtures/frozen-share-tokens';
+import { parseEnvelope as parseShareEnvelope } from '../src/domain/share';
+import { listShareAdditions } from '../src/db/repo';
+import { renderListItem, type ListItem } from '../src/domain/aggregate';
+import { defaultDictionary } from '../src/domain/data';
 
 const SOURCE = fileURLToPath(new URL('../data/source/recipes-recepten2.json', import.meta.url));
 const recipes = normalizeSource(JSON.parse(readFileSync(SOURCE, 'utf8')));
@@ -478,5 +482,54 @@ describe('recipe-source', () => {
   it('foldDiacritics keeps case and spacing', () => {
     expect(foldDiacritics('Crème brûlée à la Rösti')).toBe('Creme brulee a la Rosti');
     expect(foldDiacritics('Øl & œuf')).toBe('Ol & oeuf');
+  });
+});
+
+// docs/specs/opschoonronde.md §2B.2 (13c): `#l=` lines may carry the optional `variant` (the qualifier
+// ids, "rode"); no new fragment key, the frozen tokens above stay byte-for-byte. Frozen ONCE on 8 Nov
+// 2026 (native and fflate); never regenerate.
+const FROZEN_ENVELOPE_L_VARIANT: Envelope = {
+  v: 2,
+  t: 'l',
+  by: 'Stijn',
+  at: '2026-11-08T12:00:00.000Z',
+  l: {
+    title: { nl: '🛒 Boodschappen wk 46', en: '🛒 Shopping wk 46' },
+    lines: [
+      { raw: { nl: '2 rode uien', en: '2 red onions' }, ing: 'ui', variant: 'rode', qty: 2, aisle: 'groente-fruit' },
+      { raw: { nl: '3 uien', en: '3 onions' }, ing: 'ui', qty: 3, aisle: 'groente-fruit' },
+    ],
+  },
+};
+const FROZEN_TOKEN_L_VARIANT =
+  'dY9NasMwEIWvIt5aLmO5hKJlr5CsUrpQa9WZVowcWU4IxpfoNotcsUcoCk0gkO6GeXzvZ8IO1mhkWARovB1gscz8KdBw5WvILKq6ruhpVRtLZIkeiGgNjQA7IXMOvhwSYPFzOn6r5xjb4X3j-t6L2n-pxwU0vFzk5Sb2PUv3J80agcUPsC8TkttfvYxKsfVqZC8X3qjkWxWFowwFZOlgMTI0di6xk9K4UNDY5sN5muOhFESXopfsq480csasb8Oam5zmfsbZsvnX8nWefwE';
+const FROZEN_TOKEN_L_VARIANT_FFLATE =
+  'dU8xDsIwDPxK5JmiNEUIZeQLMIEYAg1gqJySpiBU9ROsDHyRJ-CgglQJJA_2ne_ObuAMWg0ggIYCBrC-cjMLeCAeTESVVOMkTRM5madKS8k1lFIumC9ANxAwFDY2xCM8H_ebmDqXV5u9KUtL4nIUozEvW_rQs70rS6RdR7VshGQr0MsGvLl8vZTwLreiRpZ2eoZsLhyhoyoK2YXRGpk_G4-G4sVRxcAp8C_8msEqHgg77ywFm2x9jYHF_bCsl5P9znhbZn8tV237Ag';
+
+describe('frozen #l= token with variant (13c)', () => {
+  for (const engine of ENGINES) {
+    it(`decodes and re-encodes byte-for-byte (engine ${engine})`, async () => {
+      expect(await decodeToken(FROZEN_TOKEN_L_VARIANT, { engine })).toEqual(FROZEN_ENVELOPE_L_VARIANT);
+      expect(await decodeToken(FROZEN_TOKEN_L_VARIANT_FFLATE, { engine })).toEqual(FROZEN_ENVELOPE_L_VARIANT);
+      expect(await encodeToken(FROZEN_ENVELOPE_L_VARIANT, { engine })).toBe(engine === 'native' ? FROZEN_TOKEN_L_VARIANT : FROZEN_TOKEN_L_VARIANT_FFLATE);
+    });
+  }
+
+  it('reads back as "rode ui"; the line without `variant` reads as before', async () => {
+    const parsed = parseShareEnvelope(await decodeToken(FROZEN_TOKEN_L_VARIANT));
+    const [red, plain] = parsed.list?.lines ?? [];
+    expect(red).toMatchObject({ ing: 'ui', variant: 'rode', qty: 2 });
+    expect(plain && 'variant' in plain).toBe(false);
+    const dict = defaultDictionary();
+    const { add } = listShareAdditions([], parsed.list!.lines, dict);
+    const items = add.map((a, i): ListItem => ({ key: `x|${i}`, section: 'main', sources: [], manual: true, aisle: 'overig', ...a }));
+    expect(items.map((it) => renderListItem(it, dict, 'nl'))).toEqual(['2 rode uien', '3 uien']);
+    expect(items.map((it) => renderListItem(it, dict, 'en'))).toEqual(['2 red onions', '3 onions']);
+  });
+
+  it('the older frozen #l= token (no variant) reads exactly as before', async () => {
+    const parsed = parseShareEnvelope(await decodeToken(FROZEN_TOKEN_L));
+    expect(parsed.list?.lines.some((x) => 'variant' in x)).toBe(false);
+    expect(parsed.list?.lines[1]).toMatchObject({ raw: { nl: '3 uien', en: '3 onions' }, ing: 'ui', qty: 3 });
   });
 });

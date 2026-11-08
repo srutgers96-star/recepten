@@ -444,7 +444,7 @@ export function RecipesScreen() {
           await saveUserRecipe({ ...r, category, tags, metaManual: true });
         }
       }
-      setSelectStatus(t('select.metaApplied', { n: selectedList.length }));
+      setSelectStatus(selectedList.length === 1 ? t('select.metaAppliedOne') : t('select.metaApplied', { n: selectedList.length }));
     } catch (e) {
       console.error('meta', e);
       setSelectStatus(`${t('common.error')}: ${String(e)}`);
@@ -469,7 +469,7 @@ export function RecipesScreen() {
         for (const r of own) next.delete(r.id);
         return next;
       });
-      setSelectStatus(t('select.deleted', { n: own.length }));
+      setSelectStatus(own.length === 1 ? t('select.deletedOne') : t('select.deleted', { n: own.length }));
     } catch (e) {
       console.error('deleteUserRecipe', e);
       setSelectStatus(`${t('common.error')}: ${String(e)}`);

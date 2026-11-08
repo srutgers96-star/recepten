@@ -41,7 +41,7 @@ function fieldSummary(f: ConflictField, mine: Recipe | undefined, theirs: Recipe
   if (!mine || !theirs) return '';
   const m = t('inbox.mine');
   if (f === 'name') return `${m}: ${pickText(mine.name, ui)} · ${who}: ${pickText(theirs.name, ui)}`;
-  if (f === 'lines') return `${m}: ${t('inbox.lineCount', { n: mine.lines.length })} · ${who}: ${t('inbox.lineCount', { n: theirs.lines.length })}`;
+  if (f === 'lines') return `${m}: ${lineCount(mine.lines.length)} · ${who}: ${lineCount(theirs.lines.length)}`;
   if (f === 'steps') return `${m}: ${t('inbox.stepCount', { n: mine.steps.length })} · ${who}: ${t('inbox.stepCount', { n: theirs.steps.length })}`;
   return t('inbox.field.metaHint');
 }
@@ -165,4 +165,8 @@ export function ConflictCard(props: ConflictCardProps) {
 export function itemName(item: ImportItem, ui: Lang): string {
   const text: Text | undefined = item.kind === 'recipe' ? item.incoming.name : (item.base?.name ?? item.incoming.name);
   return pickText(text, ui);
+}
+
+function lineCount(n: number): string {
+  return n === 1 ? t('inbox.lineCountOne') : t('inbox.lineCount', { n });
 }

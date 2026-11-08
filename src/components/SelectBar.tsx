@@ -175,7 +175,7 @@ function MetaSheet(props: { selected: readonly Recipe[]; onClose: () => void; on
   const dirty = touched.size > 0 || categoryChanged;
 
   return (
-    <SheetPortal>
+    <SheetPortal onEscape={props.onClose}>
       <div class="sheet-backdrop" onClick={props.onClose}>
         <div class="sheet" role="dialog" aria-modal="true" aria-label={t('select.metaTitle')} onClick={(e) => e.stopPropagation()}>
           <div class="sheet-head with-actions">

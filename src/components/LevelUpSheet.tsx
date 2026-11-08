@@ -17,6 +17,9 @@
 // 6D-S (docs/specs/badges-avatar.md block 6D-S, S-B.3): before each unlock a `.rarity-dot` in its
 // rarity colour (every unlock, common in its grey too); the rarity's name is only its aria text,
 // never a colour name in the text (block 6D-B).
+// 13c (docs/specs/opschoonronde.md §2A.2): the avatar line shows at most two names, then a link
+// button "+{n}" (aria `levelup.moreParts`) that unfolds the full list in the same line; the state
+// lives in the sheet and is not kept. Two parts or fewer: no button.
 import type { JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { avatarParts } from '@/avatar';
@@ -31,6 +34,18 @@ import { xpPopsActive } from './XpPop';
 
 /** How far (px) the sheet must be pulled down before letting go closes it (as CookedSheet/SideSheet). */
 const DISMISS_PX = 80;
+
+/** How many avatar-part names the level-up line shows before the "+{n}" button (§2A.2). */
+export const LEVELUP_PARTS_SHOWN = 2;
+
+/**
+ * The names the "Nieuw voor je avatar: …" line shows and how many stay behind the "+{n}" button:
+ * expanded or at most LEVELUP_PARTS_SHOWN names → all of them and 0; otherwise the first two and the rest.
+ */
+export function avatarPartsLine(names: readonly string[], expanded: boolean): { shown: string[]; more: number } {
+  if (expanded || names.length <= LEVELUP_PARTS_SHOWN) return { shown: [...names], more: 0 };
+  return { shown: names.slice(0, LEVELUP_PARTS_SHOWN), more: names.length - LEVELUP_PARTS_SHOWN };
+}
 
 /**
  * The avatar parts that come free on the levels from `fromExclusive` + 1 up to `toInclusive`: a level
@@ -83,6 +98,11 @@ function LevelUpBody(props: { info: LevelUpInfo; onClose: () => void }) {
   const title = titleFor(info.to, l);
   const note = noteFor(info.to, l);
   const parts = avatarPartsForLevels(avatarParts().values(), info.from, info.to);
+  const [partsOpen, setPartsOpen] = useState(false);
+  const partsLine = avatarPartsLine(
+    parts.map((p) => p[l]),
+    partsOpen,
+  );
   const closeBtn = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ y: number; id: number; dy: number } | null>(null);
@@ -173,7 +193,19 @@ function LevelUpBody(props: { info: LevelUpInfo; onClose: () => void }) {
                     </div>
                   </div>
                 ))}
-                {parts.length > 0 && <p class="muted small levelup-parts">{t('badges.toastUnlock', { part: parts.map((p) => p[l]).join(', ') })}</p>}
+                {parts.length > 0 && (
+                  <p class="muted small levelup-parts">
+                    {t('badges.toastUnlock', { part: partsLine.shown.join(', ') })}
+                    {partsLine.more > 0 && (
+                      <>
+                        {' '}
+                        <button type="button" class="link-btn" aria-label={t('levelup.moreParts', { n: parts.length })} onClick={() => setPartsOpen(true)}>
+                          +{partsLine.more}
+                        </button>
+                      </>
+                    )}
+                  </p>
+                )}
               </section>
             )}
             {info.unlocked.length > 0 && (

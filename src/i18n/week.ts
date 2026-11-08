@@ -15,8 +15,8 @@ export const week: Dict = {
 
   // --- Meer: household size (spec §0 "household.servings") ---
   'more.household': { nl: 'Aantal personen', en: 'Number of people' },
-  'more.householdHint': { nl: 'Nieuwe gerechten in je week starten met dit aantal personen.', en: 'New dishes in your week start with this many people.' },
   'more.householdValue': { nl: '{n} pers.', en: '{n} people' },
+  'more.householdValueOne': { nl: '1 pers.', en: '1 person' },
   'more.householdLess': { nl: 'Minder personen', en: 'Fewer people' },
   'more.householdMore': { nl: 'Meer personen', en: 'More people' },
 
@@ -34,7 +34,6 @@ export const week: Dict = {
   // --- Recipe detail ---
   'recipe.addToWeek': { nl: '+ Deze week', en: '+ This week' },
   'recipe.inWeek': { nl: '✓ Staat in je week', en: '✓ In your week' },
-  'recipe.addedToWeek': { nl: 'Toegevoegd aan deze week', en: 'Added to this week' },
 
   // --- Week screen ---
   'week.title': { nl: 'Deze week', en: 'This week' },
@@ -52,6 +51,7 @@ export const week: Dict = {
   'week.clear': { nl: 'Leeg', en: 'Clear' },
   'week.clearConfirm': { nl: 'De hele week leegmaken? De boodschappenlijst blijft staan.', en: 'Clear the whole week? The shopping list stays.' },
   'week.dishes': { nl: '{n} gerechten', en: '{n} dishes' },
+  'week.dishesOne': { nl: '1 gerecht', en: '1 dish' },
   'week.dish': { nl: '1 gerecht', en: '1 dish' },
   'week.cookedOf': { nl: '{n} van {total} gekookt', en: '{n} of {total} cooked' },
   'week.servings': { nl: '{n} pers.', en: '{n} serv.' },
@@ -67,6 +67,7 @@ export const week: Dict = {
   'week.missing': { nl: 'Recept niet gevonden', en: 'Recipe not found' },
   'week.noPool': { nl: 'Geen recepten binnen dit filter.', en: 'No recipes within this filter.' },
   'week.filterOn': { nl: 'Filter actief: {n} recepten', en: 'Filter on: {n} recipes' },
+  'week.filterOnOne': { nl: 'Filter actief: 1 recept', en: 'Filter on: 1 recipe' },
   'week.filterEdit': { nl: 'Filter', en: 'Filter' },
   'week.shareBuilding': { nl: 'Bericht maken…', en: 'Building the message…' },
   'week.shareTooLarge': { nl: 'Te groot voor één bericht ({n} tekens) — gaat als bestand.', en: 'Too big for one message ({n} characters) — sent as a file.' },
@@ -89,6 +90,7 @@ export const week: Dict = {
   },
   'week.removeSide': { nl: 'Bijgerecht weghalen', en: 'Remove side dish' },
   'week.sides': { nl: '{n} bijgerechten', en: '{n} side dishes' },
+  'week.sidesOne': { nl: '1 bijgerecht', en: '1 side dish' },
   'week.side': { nl: '1 bijgerecht', en: '1 side dish' },
 
   // --- Kies-N sheet ---
@@ -98,7 +100,6 @@ export const week: Dict = {
   'pick.clear': { nl: 'Filters wissen', en: 'Clear filters' },
   'pick.counter': { nl: '{n} van {total}', en: '{n} of {total}' },
   'pick.surprise': { nl: 'Verras me', en: 'Surprise me' },
-  'pick.surpriseHint': { nl: 'Vult de rest', en: 'Fills the rest' },
   'pick.add': { nl: 'Voeg {n} toe', en: 'Add {n}' },
   'pick.addNone': { nl: 'Kies een gerecht', en: 'Pick a dish' },
   'pick.none': { nl: 'Niets gevonden.', en: 'Nothing found.' },
@@ -106,8 +107,6 @@ export const week: Dict = {
   'pick.neverCooked': { nl: 'nog nooit gekookt', en: 'never cooked' },
   'pick.lastCooked': { nl: 'gekookt {date}', en: 'cooked {date}' },
   'pick.sortHint': { nl: 'Langst niet gegeten bovenaan', en: 'Longest not eaten first' },
-  'pick.select': { nl: 'Kies', en: 'Pick' },
-  'pick.deselect': { nl: 'Haal weg', en: 'Remove' },
   // The toggle chip right after the × (6B blok 4 §1c): the pickers also offer the non-main categories.
   'pick.all': { nl: 'ook bijgerechten & zoet', en: 'sides & sweet too' },
 

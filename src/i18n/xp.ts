@@ -23,6 +23,7 @@ export const xp: Dict = {
   'levelup.title': { nl: '🎉 Level {level}!', en: '🎉 Level {level}!' },
   'levelup.unlocked': { nl: 'Ontgrendeld', en: 'Unlocked' },
   'levelup.seeUnlocks': { nl: 'Naar Jouw stijl', en: 'Open Your style' },
+  'levelup.moreParts': { nl: 'Toon alle {n} nieuwe avatar-onderdelen', en: 'Show all {n} new avatar parts' },
   // §1e honest about 0 XP: the CookedSheet line, the two toasts and the rules-version toast.
   'xp.backdated': {
     nl: 'Langer dan een week geleden: telt voor je badges en de kalender, niet voor XP.',
@@ -77,7 +78,9 @@ export const xp: Dict = {
   // §1i receiving a `#x=` (In & uit card, the Household paste box, the member rows and Vrienden).
   'progress.from': { nl: 'Voortgang van {name}', en: "{name}'s progress" },
   'progress.streakBadges': { nl: '🔥 {streak} · {badges} badges', en: '🔥 {streak} · {badges} badges' },
+  'progress.streakBadgesOne': { nl: '🔥 {streak} · 1 badge', en: '🔥 {streak} · 1 badge' },
   'progress.cookDays30': { nl: '{n} kookdagen in de laatste 30 dagen', en: '{n} cooking days in the last 30 days' },
+  'progress.cookDays30One': { nl: '1 kookdag in de laatste 30 dagen', en: '1 cooking day in the last 30 days' },
   'progress.sentAt': { nl: 'gedeeld op {date}', en: 'shared on {date}' },
   'progress.update': { nl: 'Werk {name} bij', en: 'Update {name}' },
   'progress.updated': { nl: '{name} is bijgewerkt.', en: '{name} was updated.' },
@@ -91,7 +94,6 @@ export const xp: Dict = {
   // §1j the cooking calendar (#/more/calendar): always there, also with badges off (it is a log).
   // The Meer row lives here too (more.calendar*), next to the calendar's own strings.
   'more.calendar': { nl: 'Kookkalender', en: 'Cooking calendar' },
-  'more.calendarHint': { nl: 'Wie kookte wat, per dag', en: 'Who cooked what, by day' },
   'calendar.prev': { nl: 'Vorige maand', en: 'Previous month' },
   'calendar.next': { nl: 'Volgende maand', en: 'Next month' },
   'calendar.weekdays': { nl: 'ma di wo do vr za zo', en: 'Mo Tu We Th Fr Sa Su' },
@@ -121,6 +123,7 @@ export const xp: Dict = {
   'challenge.season.autumn': { nl: 'herfst', en: 'autumn' },
   'challenge.season.winter': { nl: 'winter', en: 'winter' },
   'challenge.daysLeft': { nl: 'nog {n} dagen', en: '{n} days left' },
+  'challenge.daysLeftOne': { nl: 'nog 1 dag', en: '1 day left' },
   'challenge.dayLeft': { nl: 'nog 1 dag', en: '1 day left' },
   'challenge.lastDay': { nl: 'laatste dag', en: 'last day' },
   'challenge.giveUp': { nl: 'Opgeven', en: 'Give up' },

@@ -7,6 +7,7 @@ tegenspraak: docs/specs/README.md §2, CLAUDE.md invarianten 3, 4, 5, 6 en 9. **
 tekst, dubbel werk of een los eindje weg; de vier afwerkpunten in §2B zijn kleine correcties die de lenzen al als "aanvaard voor
 nu" markeerden.
 
+
 **Kritische lezer.** (1) Een vertaalsleutel weghalen is alleen veilig als hij nergens letterlijk én nergens samengesteld
 (`'prefix.' + x`, `` `prefix.${x}` ``) wordt gebruikt; §2A.5 noemt de zekere lijst en de regel voor de rest. (2) Een token-veld
 toevoegen aan `#l=` (`variant`, §2B.2) is contract-werk: optioneel, onbekende sleutels blijven bewaard, bevroren tokens in
@@ -166,6 +167,22 @@ Dexie-versie, geen fragmentsleutel, `XP_RULES_VERSION` en `DATA_VERSION` ongewij
 - Een nieuwe fragmentsleutel, een bevroren token wijzigen, een dependency (ook geen pluralisatie-hulp).
 - `DEFAULT_MESSAGE_LIMIT` of `QR_MAX_URL_CHARS` veranderen; de tekst-deling anders laten terugvallen.
 - Iets visueels veranderen dat niet in §1 staat (kleuren, maten, volgorde van rijen).
+
+**Na de lens (besluit Fable, 8 nov):** (1) Enkelvoud centraal: `t()` en `tIn()` kiezen bij `vars.n === 1` de zuster `<key>One`
+als die bestaat (src/i18n/index.ts); zusters zijn daarmee woordenboekwerk, de losse branches van bouwers en fixer blijven werken.
+Een Opus-afronder voegde de zusters toe voor de zichtbare teksten die buiten bouwer A vielen (`challenge.daysLeft` "nog 1 dag",
+"{n} wijzigingen", `delta.*`, `week.*`, `list.count`, `inbox.*`, `shop.*` enz.) en herformuleerde `shop.list.putSnack` zonder
+werkwoord in de bijzin ("…, {m} al aanwezig"), zodat `{m}` = 1 ook klopt; DEVICE-TEST rij 106 volgt die tekst. (2) `filter.clear`
+en `filter.label` weg (geen tag heet zo). (3) Escape op het labels-venster sluit alleen de sheet, de selectie blijft
+(`stopPropagation` in SheetPortal): akkoord, één Escape = één laag. (4) Het nieuwe bevroren `#l=`-token staat inline in
+tests/token.test.ts: akkoord (CLAUDE.md invariant 4 noemt dat bestand). (5) `adoptStandingAdjustment` houdt zijn eigen transactie
+over lists én settings: akkoord, gedrag gelijk. (6) Een ontvangen `variant`-id wordt niet aan het woordenboek getoetst: aanvaard
+(lijsten komen uit dezelfde app; toetsen zou kwalificaties stil laten vallen). (7) Kalender: met badges uit vervalt de hele
+sync-regel, niet alleen "bijgewerkt": akkoord. (8) Tegen terugkerende dode sleutels bewaakt tests/i18n.test.ts voortaan dat elke
+sleutel letterlijk, samengesteld of als `…One`-zuster wordt gebruikt (kleine allowlist in de test). (9) De beeldvergelijking van
+§2A.6 is niet als screenshots gedaan (berekende maten en kleuren gelijk; elke weggehaalde regel was al overschreven): Stijn kijkt
+mee bij het testen. (10) README §2b: tokenveld `variant` op `#l=` (Fable).
+Gebouwd: 8 nov 2026 (13c, workflow wf_8661b993-08c; fixer-ronde en Opus-afronder (enkelvoud-regel, zusters, dode-sleuteltest), docs door Fable)
 
 ## 6. Niet in dit blok
 

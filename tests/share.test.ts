@@ -12,7 +12,6 @@ import { defaultDictionary } from '../src/domain/data';
 import { renderListItem, type ListItem } from '../src/domain/aggregate';
 import {
   buildBundleEnvelope,
-  buildListEnvelope,
   buildListShareMessage,
   buildMemberEnvelope,
   buildMemberShareMessage,
@@ -38,6 +37,7 @@ import {
   type PlanPayload,
   type ProgressCard,
 } from '../src/domain/share';
+import { buildListEnvelope } from '../src/domain/share-list';
 import { decodeToken, encodeToken, extractTokens, type Envelope } from '../src/domain/token';
 import type { AvatarSpec } from '../src/domain/avatar';
 import {

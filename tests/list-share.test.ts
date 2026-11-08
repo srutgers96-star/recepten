@@ -1,13 +1,14 @@
 // 13Q (docs/specs/qr-link.md §2/§5): a shopping list as a link (`#l=`). The envelope is built from the
-// list's own lines (share.buildListEnvelope), and "Zet op mijn lijst" puts the received lines on the
+// list's own lines (share-list.buildListEnvelope), and "Zet op mijn lijst" puts the received lines on the
 // own list through `listShareAdditions` (src/db/repo.ts, pure): the same ingredient (not ticked) or,
 // without an ingredient, the same normalised text is skipped; everything else is added as a manual
 // line. Nothing is summed. No database is opened: repo.ts is imported for its pure exports only.
 import { describe, expect, it } from 'vitest';
 import { listShareAdditions } from '../src/db/repo';
-import type { ListItem } from '../src/domain/aggregate';
+import { renderListItem, type ListItem } from '../src/domain/aggregate';
 import { defaultDictionary } from '../src/domain/data';
-import { buildListEnvelope, type ListShare, type ListShareLine } from '../src/domain/share';
+import type { ListShare, ListShareLine } from '../src/domain/share';
+import { buildListEnvelope } from '../src/domain/share-list';
 
 const dict = defaultDictionary();
 
@@ -81,5 +82,42 @@ describe('listShareAdditions: the skip rule of "Zet op mijn lijst"', () => {
   it('treats an ingredient id the dictionary does not know as free text', () => {
     const r = listShareAdditions([], [{ raw: { nl: 'drakenfruit' }, ing: 'u:onbekend' }], dict);
     expect(r.add).toEqual([{ ing: null, aisle: 'overig', qty: null, unit: null, label: { nl: 'drakenfruit', en: '' } }]);
+  });
+});
+
+// 13c (docs/specs/opschoonronde.md §2B.2): the qualifier travels as `variant`, so "rode ui" arrives as
+// "rode ui": it is matched on ingredient + qualifier (no qualifier = none) and the added item gets it back.
+describe('variant: "rode ui" travels and is added next to "ui" (13c)', () => {
+  const redOnion: ListItem = { key: 'ui|rode|stuk', ing: 'ui', variant: 'rode', qty: 2, unit: null, aisle: 'groente-fruit', section: 'main', sources: [] };
+
+  it('buildListEnvelope puts the qualifier on the line; a line without one has no `variant`', () => {
+    const l = buildListEnvelope([redOnion, onion], dict, 'Stijn', { title: { nl: 'Lijst' } }).l as ListShare;
+    const red = l.lines.find((x) => x.variant === 'rode');
+    expect(red?.ing).toBe('ui');
+    expect(red?.raw.nl).toBe('2 rode uien');
+    expect(red?.raw.en).toBe('2 red onions');
+    const plainOnion = l.lines.find((x) => x.ing === 'ui' && x !== red);
+    expect(plainOnion && 'variant' in plainOnion).toBe(false);
+  });
+
+  it('adds "rode ui" next to an existing "ui", with the qualifier, and skips a second "rode ui"', () => {
+    const line: ListShareLine = { raw: { nl: '2 rode uien', en: '2 red onions' }, ing: 'ui', variant: 'rode', qty: 2 };
+    const r = listShareAdditions([onion], [line, { ...line }], dict);
+    expect(r.add).toEqual([{ ing: 'ui', variant: 'rode', aisle: 'groente-fruit', qty: 2, unit: null }]);
+    expect(r.skipped).toBe(1);
+    const added: ListItem = { key: 'x|1', section: 'main', sources: [], manual: true, aisle: 'groente-fruit', ...r.add[0] };
+    expect(renderListItem(added, dict, 'nl')).toBe('2 rode uien');
+    expect(renderListItem(added, dict, 'en')).toBe('2 red onions');
+  });
+
+  it('skips "rode ui" when the list already has it, and adds a plain "ui" next to a "rode ui"', () => {
+    const red = listShareAdditions([redOnion], [{ raw: { nl: '1 rode ui' }, ing: 'ui', variant: 'rode', qty: 1 }], dict);
+    expect(red.add).toEqual([]);
+    expect(red.skipped).toBe(1);
+    const plainLine = listShareAdditions([redOnion], [{ raw: { nl: '3 uien' }, ing: 'ui', qty: 3 }], dict);
+    expect(plainLine.add).toEqual([{ ing: 'ui', aisle: 'groente-fruit', qty: 3, unit: null }]);
+    // An empty variant is no variant: it matches the plain "ui".
+    const empty = listShareAdditions([onion], [{ raw: { nl: '3 uien' }, ing: 'ui', variant: '', qty: 3 }], dict);
+    expect(empty.skipped).toBe(1);
   });
 });

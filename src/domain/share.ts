@@ -25,12 +25,17 @@
 //                                                            card fields plus level, XP, streak, badges and
 //                                                            the cook days of the last 90 days; aggregates
 //                                                            only (no notes, no stars, no photos)
-//   t: 'l'  l: { title: Text, lines: [{raw, ing?, qty?, unit?, aisle?}] }
+//   t: 'l'  l: { title: Text, lines: [{raw, ing?, variant?, qty?, unit?, aisle?}] }
 //                                                            a shopping list (`#l=`, docs/specs/qr-link.md
 //                                                            §2, block 13Q): the lines as the text share
 //                                                            shows them, per language; the receiver puts
 //                                                            them on its own list as manual lines ("Zet op
-//                                                            mijn lijst"); it plans nothing
+//                                                            mijn lijst"); it plans nothing; `variant`
+//                                                            (13c, docs/specs/opschoonronde.md §2B.2) =
+//                                                            the qualifier ids of the line ("rode"), so
+//                                                            "rode ui" arrives as "rode ui"; optional, an
+//                                                            older app ignores it. The builder
+//                                                            (`buildListEnvelope`) lives in share-list.ts
 //
 // Every envelope may carry `dict: { ing: Ingredient[] }`: the USER ingredients (ids the bundled
 // dictionary does not know) the payload references, so the receiver can add the missing ones.
@@ -38,8 +43,7 @@
 // 13D (docs/specs/varianten-tabs.md §2d): `r.variants`/`r.tip` and `p.patch.variants`/`p.patch.tip`
 // are ordinary optional keys in `v: 2` (normalised on the way in); an older app ignores them.
 import { normalizeAvatarSpec, type AvatarSpec } from './avatar.ts';
-import { effectiveQty, groupByAisle, renderListItem, type ListItem } from './aggregate.ts';
-import type { Dictionary, Ingredient } from './dictionary.ts';
+import type { Ingredient } from './dictionary.ts';
 import { nowIso, type Lang, type Line, type Recipe, type Text } from './model.ts';
 import { applyLineOverrides, type LineOverride, type RecipeOverride, type RecipePatch } from './overrides.ts';
 import { normalizeServings, type Plan } from './planner.ts';
@@ -198,6 +202,11 @@ export interface ListShareLine {
   raw: Text;
   /** Ingredient id when recognised. */
   ing?: string | null;
+  /**
+   * 13c (docs/specs/opschoonronde.md §2B.2): the qualifier ids of the line, as `ListItem.variant`
+   * carries them ("rode", several joined with '+'); only a non-empty string. Absent = no qualifier.
+   */
+  variant?: string | null;
   qty?: number | null;
   unit?: string | null;
   aisle?: string | null;
@@ -270,7 +279,8 @@ function isRecord(v: unknown): v is Dict {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
 
-function cleanString(v: unknown): string | undefined {
+/** Exported for share-list.ts (the list builder lives there, out of the Safari landing's chunk). */
+export function cleanString(v: unknown): string | undefined {
   return typeof v === 'string' && v.trim() !== '' ? v.trim() : undefined;
 }
 
@@ -344,7 +354,8 @@ function travelRecipe(recipe: Recipe, lineOverrides: readonly LineOverride[] | u
   return out;
 }
 
-function baseEnvelope(t: TokenKey, by: string): Envelope {
+/** `{v: 2, t, at, by?}`; exported for share-list.ts. */
+export function baseEnvelope(t: TokenKey, by: string): Envelope {
   const env: Envelope = { v: 2, t, at: nowIso() };
   const sender = by.trim();
   if (sender) env.by = sender;
@@ -525,68 +536,6 @@ export function buildProgressEnvelope(card: ProgressCard): Envelope {
   return env;
 }
 
-export interface ListEnvelopeOptions {
-  /** The list title in both languages ("Boodschappen week 46" / "Shopping week 46"). */
-  title: Text;
-  /** Leave checked lines out (the "verberg afgevinkt" switch of the text share). */
-  hideChecked?: boolean;
-  /** Leave "in huis" lines out. */
-  hideInHouse?: boolean;
-}
-
-/**
- * `{v: 2, t: 'l', by, at, l: {title, lines}}` (docs/specs/qr-link.md §2): the list as the text
- * share (`listAsText`) shows it: the same visible lines (checked ones out with `hideChecked`,
- * in-house ones out with `hideInHouse`, numeric lines at 0 always out), the aisle groups in data
- * order and the "Controleer zelf" lines last. Each line carries its text per language
- * (`renderListItem`) and, when known, the ingredient id, the effective amount, the unit and the
- * aisle. Within a group the lines follow the Dutch names (the receiver regroups by aisle anyway).
- * At most LIST_MAX_LINES lines.
- */
-export function buildListEnvelope(items: readonly ListItem[], dict: Dictionary, by: string, opts: ListEnvelopeOptions): Envelope {
-  const visible = (it: ListItem): boolean => {
-    if (it.checked && opts.hideChecked) return false;
-    if (it.inHouse && opts.hideInHouse) return false;
-    if (typeof it.qty === 'number') {
-      const eff = effectiveQty(it);
-      return eff !== null && eff > 0;
-    }
-    return true;
-  };
-  const listed = items.filter((it) => it.section !== 'check' && visible(it));
-  const ordered: ListItem[] = [];
-  for (const g of groupByAisle(listed, dict, 'nl')) ordered.push(...g.items);
-  ordered.push(...items.filter((it) => it.section === 'check' && visible(it)));
-  const lines: ListShareLine[] = [];
-  for (const it of ordered) {
-    if (lines.length >= LIST_MAX_LINES) break;
-    const raw: Text = {};
-    const nl = renderListItem(it, dict, 'nl').trim();
-    const en = renderListItem(it, dict, 'en').trim();
-    if (nl) raw.nl = nl;
-    if (en) raw.en = en;
-    if (!raw.nl && !raw.en) continue;
-    const line: ListShareLine = { raw };
-    if (typeof it.ing === 'string' && it.ing && dict.get(it.ing)) line.ing = it.ing;
-    const qty = effectiveQty(it);
-    if (qty !== null && Number.isFinite(qty) && qty > 0) {
-      line.qty = qty;
-      if (typeof it.unit === 'string' && it.unit) line.unit = it.unit;
-    }
-    if (typeof it.aisle === 'string' && it.aisle) line.aisle = it.aisle;
-    lines.push(line);
-  }
-  const title: Text = {};
-  const tnl = cleanString(opts.title.nl);
-  const ten = cleanString(opts.title.en);
-  if (tnl) title.nl = tnl;
-  if (ten) title.en = ten;
-  const l: ListShare = { title, lines };
-  const env = baseEnvelope('l', by);
-  env.l = l;
-  return env;
-}
-
 // --- Parsing ------------------------------------------------------------------------------------
 
 /**
@@ -675,7 +624,7 @@ function finiteOrNull(v: unknown): number | null {
  * A shopping-list payload (`#l=`, docs/specs/qr-link.md §2), tolerantly: `title` through the
  * `readOptionalText` rules (a plain string is Dutch; nothing usable gives `{}`); `lines` only
  * entries with a `raw` text in at least one language (a plain string is Dutch), at most
- * LIST_MAX_LINES; `ing`/`unit`/`aisle` only as non-empty strings, `qty` only as a finite number.
+ * LIST_MAX_LINES; `ing`/`variant`/`unit`/`aisle` only as non-empty strings, `qty` only as a finite number.
  * Unknown keys stay (on the list and on each line). Null when it is no object.
  */
 export function readListPayload(v: unknown): ListShare | null {
@@ -687,7 +636,7 @@ export function readListPayload(v: unknown): ListShare | null {
     const raw = readOptionalText(item.raw);
     if (!raw) continue;
     const line: ListShareLine = { ...item, raw };
-    for (const key of ['ing', 'unit', 'aisle'] as const) {
+    for (const key of ['ing', 'variant', 'unit', 'aisle'] as const) {
       const s = cleanString(item[key]);
       if (s) line[key] = s;
       else delete line[key];

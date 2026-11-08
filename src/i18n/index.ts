@@ -62,16 +62,25 @@ export function interpolate(template: string, vars?: Record<string, string | num
   return template.replace(/\{(\w+)\}/g, (match, key: string) => (key in vars ? String(vars[key]) : match));
 }
 
+/** Singular rule: with `vars.n === 1` a sister entry `key + 'One'` wins when it exists (t and tIn alike). */
+function entryFor(key: string, vars?: Record<string, string | number>): { nl: string; en: string } | undefined {
+  if (vars && vars.n === 1) {
+    const one = dict[key + 'One'];
+    if (one) return one;
+  }
+  return dict[key];
+}
+
 /** Translate a UI key in the current language (reads the `lang` signal). Missing key -> the key. */
 export function t(key: string, vars?: Record<string, string | number>): string {
-  const entry = dict[key];
+  const entry = entryFor(key, vars);
   if (!entry) return key;
   return interpolate(entry[lang.value] ?? entry.nl, vars);
 }
 
 /** Translate in an explicit language (share messages, notifications from the timer engine). */
 export function tIn(l: Lang, key: string, vars?: Record<string, string | number>): string {
-  const entry = dict[key];
+  const entry = entryFor(key, vars);
   if (!entry) return key;
   return interpolate(entry[l] ?? entry.nl, vars);
 }

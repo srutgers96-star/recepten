@@ -151,7 +151,7 @@ export function CheckRecipesScreen() {
         n.delete(row.recipe.id);
         return n;
       });
-      setStatus(t('checkRecipes.done', { n: 1 }));
+      setStatus(t('checkRecipes.doneOne'));
     }
     setBusy(false);
   }
@@ -169,7 +169,7 @@ export function CheckRecipesScreen() {
       }
     }
     setDone((s) => new Set([...s, ...ids]));
-    setStatus(t('checkRecipes.done', { n }));
+    setStatus(n === 1 ? t('checkRecipes.doneOne') : t('checkRecipes.done', { n }));
     setBusy(false);
   }
 
@@ -191,7 +191,7 @@ export function CheckRecipesScreen() {
     if (ok) {
       setDone((s) => new Set(s).add(row.recipe.id));
       setEditing(null);
-      setStatus(t('checkRecipes.done', { n: 1 }));
+      setStatus(t('checkRecipes.doneOne'));
     }
     setBusy(false);
   }

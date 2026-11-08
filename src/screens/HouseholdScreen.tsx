@@ -297,7 +297,8 @@ export function ProgressCardRow(props: {
   const status = props.done === 'local' ? 'local' : cardStatus(props.members, card);
   const name = card.name;
   const sent = formatShortDate(props.sentAt);
-  const line3 = [t('progress.cookDays30', { n: formatXp(cookDaysIn30(card, props.sentAt)) }), sent ? t('progress.sentAt', { date: sent }) : '']
+  const cookDays = cookDaysIn30(card, props.sentAt);
+  const line3 = [cookDays === 1 ? t('progress.cookDays30One') : t('progress.cookDays30', { n: formatXp(cookDays) }), sent ? t('progress.sentAt', { date: sent }) : '']
     .filter((s) => s !== '')
     .join(' · ');
   const doneText =
@@ -316,7 +317,9 @@ export function ProgressCardRow(props: {
           <strong>{t('progress.from', { name })}</strong>
           {badgesOn && (
             <span class="muted small">
-              {levelTitleText(card.level)} · {t('progress.streakBadges', { streak: formatXp(card.streak), badges: formatXp(card.badges.length) })}
+              {levelTitleText(card.level)} · {card.badges.length === 1
+                ? t('progress.streakBadgesOne', { streak: formatXp(card.streak) })
+                : t('progress.streakBadges', { streak: formatXp(card.streak), badges: formatXp(card.badges.length) })}
             </span>
           )}
           <span class="muted small">{line3}</span>
