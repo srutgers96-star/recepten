@@ -96,7 +96,7 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 | V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | — (IDEAS 9) | gepland |
 | V5 | Boodschappen terugkijken in de kalender | — (IDEAS 10 + 2) | vervallen (Stijn 8 nov) |
 | V6 | Gabi's lijstje plakken met voorstellen · data-ronde woordenlijst vooraf | — (IDEAS 7 + 8) | gepland |
-| V7 | Boodschappen-badges over de ingrediënten | — (IDEAS 4) | gepland |
+| V7 | Boodschappen-badges over de ingrediënten, met vier avatar-beloningen (waaronder een bril) | — (IDEAS 4) | gepland |
 | V8 | Swipen tussen de vijf tabbladen | — (IDEAS 6) | gepland |
 | V9 | Voedingswaarden en macro's (drie stappen) | — (IDEAS 1) | gepland, laatste |
 

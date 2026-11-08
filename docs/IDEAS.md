@@ -24,7 +24,7 @@ klein, snel live, elk met een eigen spec. Dit is de voorgestelde volgorde; Stijn
 | **V4** | Dopamine-kick bij Gekookt!: het woord groot, XP-balk die oploopt, ontgrendeling "Snelle vieringen" op level 30 | 9 | M | — (Stijn 8 nov: "goed, gaan we zo doen") |
 | ~~V5~~ | Boodschappen terugkijken in de kalender — Stijn 8 nov: "laat maar zitten, te ingewikkeld om goed uit te voeren"; vervalt. Idee 2 (archief van afgevinkte boodschappen) blijft een los idee, niet gepland | 10 + 2 | — | vervallen |
 | **V6** | Gabi's WhatsApp-lijstje plakken met voorstellen (controlestap) · vooraf een data-ronde woordenlijst | 7 + 8 | M + S (data) | — (Stijn 8 nov: "is goed"; leren = ja) |
-| **V7** | Boodschappen-badges over de ingrediënten (Verzamelaar, Groenteboer, Kaasmeester, Kruidenkast, Alfabet, …); daarna de 30-jaar-simulatie opnieuw draaien en zo nodig de curve bijstellen | 4 | M | — (Stijn 8 nov: "Heb ik al" telt niet; voorzichtig met badges over die producten; curve zo nodig tweaken) |
+| **V7** | Boodschappen-badges over de ingrediënten (Verzamelaar, Groenteboer, Kaasmeester, Kruidenkast, Alfabet, …) mét avatar-beloningen (vier badge-gebonden onderdelen, waaronder minstens één bril); daarna de 30-jaar-simulatie opnieuw draaien en zo nodig de curve bijstellen | 4 | M | — (Stijn 8 nov: "Heb ik al" telt niet; voorzichtig met badges over die producten; curve zo nodig tweaken) |
 | **V8** | Van links naar rechts swipen door de vijf tabbladen | 6 | S–M | doorlopen aan de randen? (voorstel: nee) |
 | **V9** | Voedingswaarden en macro's: eerst grammen-dekking (data), dan nutrition.json (data), dan één subtiele kcal-regel op de receptpagina met een uitklap voor de macro's | 1 | L (drie stappen) | — (Stijn 8 nov: subtiel, kcal in het recept, waarden bij de ingrediënten, details alleen in een uitklap; geen weektotalen) |
 
@@ -196,6 +196,11 @@ beginletter. Bronnen: `shop.bought.ings` + de woordenlijst (categorie per ingred
 - **Bestanden:** src/domain/shopbought.ts (`first`), src/domain/badges.ts, data/badges.json, tools/validate-data.ts (nieuwe
   regelsoorten), tests/badges.test.ts, tests/validate-badges.test.ts (aantallen), handboekrijen in 07. Geen UI-werk buiten de
   bestaande badge-schermen.
+- **Avatar-beloningen (Stijn 8 nov, later die avond: "de nieuwe boodschappen-badges misschien een paar leuke nieuwe items, of
+  linken met bestaande items, in ieder geval een bril"):** vier badge-gebonden onderdelen in data/avatar-parts.json
+  (`unlock: { badge: … }`, zoals pastafarian → spaghettihaar): Verzamelaar trede 3 → `glasses-shopping` (bril met een prijskaartje
+  aan de poot), Groenteboer → `pin-carrot` (wortelspeld), Kaasmeester → `hat-cheese` (kaaswig als hoedje), Alfabet (geheim) →
+  `glasses-letters` (glazen in de vorm van een A en een Z). Zeldzaamheid: badge-onderdelen minstens zeldzaam, geheim episch.
 - **Stijn (8 nov):** "Heb ik al" telt niet mee, en wees voorzichtig met badges over die producten (voorraadproducten als bloem
   en suiker dus niet als aparte badge-doelen). Na het bouwen de 30-jaar-simulatie (tests/xp.test.ts) opnieuw draaien: schuift
   level 100 meer dan ±10 % naar voren door de nieuwe badge-XP, dan de curve bijstellen (regelversie 4, eenmalige eerlijke melding).
