@@ -143,3 +143,13 @@ kan XP "kwijtraken" door een bug in het optellen. De regelversie is 3.
 - Een gedeelde code "van een nieuwere app": eerst de app vernieuwen, dan opnieuw plakken.
 - Iets anders: Meer → Hulp & over → Feedback voor Stijn maakt een bericht met de versie erbij; stuur dat door naar de Claude-sessie,
   dan zoek ik het uit.
+
+## Het makers-ei: het gouden thema (V5, 8 nov 2026)
+
+Het gouden thema (donkere basis, goud als accentkleur) komt voor iedereen vrij op level 100. Voor jou als maker is er een
+sluiproute die niet in de handleiding staat: ga naar **Meer → Hulp & over → Over** en tik **33 keer achter elkaar** op de regel
+**Versie** (steeds binnen twee seconden na de vorige tik; wacht je langer, dan begint de teller opnieuw). Vanaf de 25e tik zie je
+een klein regeltje "nog 8 keer…", bij de 33e "🏆 Gouden thema vrijgespeeld — jij bent de maker." Het thema wordt niet vanzelf
+aangezet: kies het daarna onder **Jouw stijl → Thema → Goud**. Technisch is het één toestel-instelling (`theme.goldUnlocked`), die
+niet in de back-up zit en dus per telefoon geldt; Gabi kan hetzelfde doen op haar iPhone. Het ei geeft geen XP en geen badge.
+Met badges uit blijft het ei werken; de gewone level-100-route niet (met badges uit toont de app niets van de ontgrendelingen).

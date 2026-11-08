@@ -56,7 +56,11 @@ describe('styleTiles', () => {
 
   it("Geluiden: every TimerSound, 'off' last, then the ta-da tile", () => {
     const tiles = styleTiles('sounds', atLevel(1));
-    expect(values(tiles.filter((x) => x.group === 'timerSound'))).toEqual(['beeps', 'bell', 'melody', 'cowbell', 'gong', 'kitchen', 'fanfare', 'off']);
+    expect(values(tiles.filter((x) => x.group === 'timerSound'))).toEqual([
+      'beeps', 'bell', 'melody',
+      'cowbell', 'marimba', 'gong', 'kitchen', 'ode', 'mozart', 'fanfare', 'cuckoo', 'rooster', 'baby', 'modem', 'foghorn',
+      'off',
+    ]);
     expect([...TIMER_SOUND_TILES].pop()).toBe('off');
     expect(tiles.at(-1)?.group).toBe('cookedSound');
     expect(tiles.at(-1)?.unlock?.id).toBe('sound-cooked-tada');
@@ -83,7 +87,10 @@ describe('styleTiles', () => {
 
   it("Confetti: 'Verras me', 'default', then every confetti unlock in file order", () => {
     const tiles = styleTiles('confetti', atLevel(1));
-    expect(values(tiles)).toEqual(['random', 'default', 'double', 'veggies', 'party', 'trex', 'gold', 'stars', 'fire']);
+    expect(values(tiles)).toEqual([
+      'random', 'default', 'double', 'veggies', 'party', 'hearts', 'triple', 'trex', 'leaves', 'snow', 'gold', 'quadruple',
+      'stars', 'pasta', 'fireworks', 'bubbles', 'lanterns', 'aurora', 'fire',
+    ]);
     expect(onValues(tiles)).toEqual(['random']);
     expect(find(tiles, 'trex').locked).toBe(true);
     expect(find(tiles, 'fire').unlock?.by).toEqual({ badge: 'op-dreef' });

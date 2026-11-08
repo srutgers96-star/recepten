@@ -15,7 +15,7 @@
 //     that style always (`confetti.style`) + a preview burst. A long press, or the small ☑/☐ corner,
 //     on an unlocked style takes it out of / puts it in the mix (`setUnlockEnabled`).
 //   - Letters: Standaard · Krijtbord · Handschrift ("Aa" in that typeface); tap = `cook.font`.
-//   - Thema: Systeem · Licht · Donker (a small swatch in that paper colour); tap = setTheme.
+//   - Thema: Systeem · Licht · Donker (a small swatch in that paper colour), plus Goud while it is free (V5 §1d); tap = setTheme.
 //   - At the bottom, muted, `unlocks.phoneWide`.
 // Badges off: only `badges.disabled` and the tab Thema (the theme has nothing to do with XP).
 // Opening this screen is never a reward moment: it reads, it never settles XP.
@@ -39,7 +39,7 @@ import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { navigate, route } from '@/router';
 import { cookedSound, loadSoundSettings, previewCookedSound, previewTimerSound, setCookedSound, setTimerSound, timerSound, type TimerSound } from '@/sounds';
-import { setTheme, theme, type Theme } from '@/theme';
+import { GOLD_THEME_UNLOCK, goldUnlockedByMaker, setTheme, theme, type Theme } from '@/theme';
 import { COOK_FONT_SETTING, disabledUnlocks, isActive, refreshUnlocks, setUnlockEnabled, unlockData, unlockedOnPhone, type CookFont } from '@/unlocks';
 import { Avatar, useAvatarLevel } from './ProfilesScreen';
 
@@ -99,12 +99,31 @@ export interface StyleState {
   confettiStyle: string;
   cookFont: CookFont;
   theme: Theme;
+  /** V5 §1d: `theme.goldUnlocked` — the maker's egg unlocked the gold theme on this phone. */
+  goldByMaker?: boolean;
 }
 
-/** Every TimerSound in tile order: the three standard ones, the four unlockable ones, 'off' last. */
-export const TIMER_SOUND_TILES: readonly TimerSound[] = ['beeps', 'bell', 'melody', 'cowbell', 'gong', 'kitchen', 'fanfare', 'off'];
+/**
+ * Every TimerSound in tile order: the three standard ones, the unlockable ones in level order (V5 §1b
+ * added eight), 'off' last.
+ */
+export const TIMER_SOUND_TILES: readonly TimerSound[] = [
+  'beeps', 'bell', 'melody',
+  'cowbell', 'marimba', 'gong', 'kitchen', 'ode', 'mozart', 'fanfare', 'cuckoo', 'rooster', 'baby', 'modem', 'foghorn',
+  'off',
+];
 const FONT_TILES: readonly CookFont[] = ['default', 'chalk', 'hand'];
-const THEME_TILES: readonly Theme[] = ['system', 'light', 'dark'];
+const THEME_TILES: readonly Theme[] = ['system', 'light', 'dark', 'gold'];
+
+/**
+ * V5 §1d: the gold tile exists only while gold is free on this phone: the level-100 unlock is active
+ * (unlocked and not switched off, as `isActive`) while badges are on (docs/specs/xp-levels.md: with
+ * badges off nothing from the unlocks shows), or the maker's egg was found (independent of badges).
+ * No locked gold tile.
+ */
+export function goldTileShown(s: StyleState): boolean {
+  return (s.badgesOn && s.unlocked.has(GOLD_THEME_UNLOCK) && !s.disabled.has(GOLD_THEME_UNLOCK)) || s.goldByMaker === true;
+}
 
 function unlockFor(s: StyleState, kind: Unlock['kind'], value: string): Unlock | null {
   return s.unlocks.find((u) => u.kind === kind && u.value === value) ?? null;
@@ -140,7 +159,7 @@ export function shownConfettiStyle(s: StyleState): string {
  * Thema is empty (the screen then only shows Thema).
  */
 export function styleTiles(tab: StyleTab, s: StyleState): StyleTile[] {
-  if (tab === 'theme') return THEME_TILES.map((v) => tile(s, 'theme', v, null, s.theme === v));
+  if (tab === 'theme') return THEME_TILES.filter((v) => v !== 'gold' || goldTileShown(s)).map((v) => tile(s, 'theme', v, null, s.theme === v));
   if (!s.badgesOn) {
     // Badges off (Fable, 8 Nov): the four base sounds stay choosable, nothing that is an unlock.
     if (tab !== 'sounds') return [];
@@ -187,7 +206,7 @@ function tileName(x: StyleTile, l: Lang): string {
     case 'font':
       return t('style.font.' + x.value);
     case 'theme':
-      return t('more.theme.' + x.value);
+      return x.value === 'gold' ? t('style.theme.gold') : t('more.theme.' + x.value);
     case 'confetti':
       if (x.value === RANDOM_CONFETTI_STYLE) return t('style.random');
       if (x.value === DEFAULT_CONFETTI_STYLE) return t('style.confetti.default');
@@ -398,6 +417,8 @@ function Tile(props: { x: StyleTile; l: Lang; onTap: (x: StyleTile) => void; onT
           <span aria-hidden="true">{x.inMix ? '☑' : '☐'}</span>
         </button>
       )}
+      {/* V5 §1d: under the gold tile, when the maker's egg unlocked it. */}
+      {x.group === 'theme' && x.value === 'gold' && goldUnlockedByMaker.value && <span class="style-tile-sub muted">{t('style.goldUnlockedMaker')}</span>}
     </div>
   );
 }
@@ -478,6 +499,7 @@ export function StyleScreen() {
     confettiStyle: confettiStyle.value,
     cookFont,
     theme: theme.value,
+    goldByMaker: goldUnlockedByMaker.value,
   };
   const tiles = styleTiles(shownTab, state);
   const note = tiles.find((x) => `${x.group}:${x.value}` === noteKey) ?? null;

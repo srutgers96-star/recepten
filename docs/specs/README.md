@@ -95,7 +95,7 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 | V3 | Avatar-ronde: poppetje iets kleiner in de lijst (niets valt meer weg), niveauring alleen op de kale cirkel, haar-revamp, zes brillen na level 30 en zes kook-onderdelen, vijftien onderdelen met een te lage zeldzaamheid hersteld, tegel Verras me per laag (de oude V3, uitdagingen +1 %, zit in V1b) | verbeterronde-3.md | compleet (8 nov) |
 | V3b | Hoeden bedekken het haar: randlijn `brim` per hoed (17), haar alleen onder de rand; kroon, bloemenkrans en feesthoedje zonder | verbeterronde-3b.md | compleet (8 nov) |
 | V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | verbeterronde-4.md | compleet (8 nov) |
-| V5 | Vrijspeel-rijkdom: confetti-ladder (dubbel → trippel → quadruppel) + acht confetti-ontwerpen, acht herkenbare of steeds gekkere timergeluiden, gouden thema (level 100 én makers-ei: 33 keer op Versie) | verbeterronde-5.md | in aanbouw (8 nov) |
+| V5 | Vrijspeel-rijkdom: confetti-ladder (dubbel → trippel → quadruppel) + acht confetti-ontwerpen, acht herkenbare of steeds gekkere timergeluiden, gouden thema (level 100 én makers-ei: 33 keer op Versie) | verbeterronde-5.md | compleet (8 nov) |
 | V6 | Gabi's lijstje plakken met voorstellen · data-ronde woordenlijst vooraf | — (IDEAS 7 + 8) | gepland |
 | V7 | Boodschappen-badges over de ingrediënten, met vier avatar-beloningen (waaronder een bril) | — (IDEAS 4) | gepland |
 | V8 | Swipen tussen de vijf tabbladen | — (IDEAS 6) | gepland |

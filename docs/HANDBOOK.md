@@ -3751,7 +3751,7 @@ Your profile colour always stays visible. With a see-through background your col
 
 #### What it does
 
-In **Your style** you choose the sound of your cooking timer. You unlock new sounds with levels.
+In **Your style** you choose the sound of your cooking timer. There are 15 sounds; you unlock new ones with levels.
 
 #### Where you tap
 
@@ -3767,7 +3767,7 @@ You hear the sound straight away and the tile is chosen. A sound with a padlock 
 
 #### Good to know
 
-From level 20 there is also **On Cooked!**: a short ta-da when you save a cook. On an iPhone with the silent switch on, only the notification alerts you.
+You can unlock cowbell (level 5), marimba (8), gong (10), kitchen timer (15), Ode to Joy (21) and A Little Night Music (27). Then fanfare (30), cuckoo clock (34), rooster (42), crying baby (48), dial-up modem (55) and foghorn (60). Every sound is made from tones; none is a recording. From level 20 there is also **On Cooked!**: a short ta-da when you save a cook. On an iPhone with the silent switch on, only the notification alerts you.
 
 (`#/more/style`)
 
@@ -3775,7 +3775,7 @@ From level 20 there is also **On Cooked!**: a short ta-da when you save a cook. 
 
 #### What it does
 
-You choose which confetti appears when you cook something. With **Surprise me** the app takes turns with all your confetti.
+You choose which confetti appears when you cook something. Besides **Plain** there are 17 confetti to unlock. With **Surprise me** the app takes turns with all your confetti.
 
 #### Where you tap
 
@@ -3791,7 +3791,7 @@ You see an example straight away and the tile is chosen. What you do not have ye
 
 #### Good to know
 
-Want a confetti out of the rotation? Press and hold that tile, or tap the ☑ corner at the top right; it then shows ☐. Whatever anyone unlocks on this phone, everyone here can use.
+The higher your level, the more pieces: double at level 3, triple at level 22 and quadruple at level 45. The designs: veggies (7), chickens and cakes (12), hearts (17), T-rex (25), autumn leaves (33), snow (38), gold (40) and stars (50). Then pasta (56), fireworks (62), bubbles (68), lanterns (77) and northern lights (88). You get flames with a badge. Want a confetti out of the rotation? Press and hold that tile, or tap the ☑ corner at the top right; it then shows ☐. Whatever anyone unlocks on this phone, everyone here can use.
 
 (`#/more/style`)
 
@@ -3860,6 +3860,10 @@ You choose whether the app is light or dark, or follows your phone. This always 
 #### What you then see
 
 The app changes colour straight away. **System** follows your phone's setting.
+
+#### Good to know
+
+At level 100 you unlock a fourth theme: **Gold**, dark with gold accents. Only then does the **Gold** tile appear.
 
 (`#/more/style`)
 

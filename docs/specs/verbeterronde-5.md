@@ -1,11 +1,12 @@
 # Spec V5 — Vrijspeel-rijkdom: confetti-ladder en -ontwerpen, herkenbare timergeluiden, gouden thema (Stijn, 8 nov 2026)
 
-Status: in aanbouw (Fable, 8 nov 2026). Eén blok, vijf bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 15 (Stijn 8 nov:
+Status: compleet (Fable, 8 nov 2026). Eén blok, vijf bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 15 (Stijn 8 nov:
 "een hoop meer confetti dingen in hogere levelklassen: dubbel, trippel, quadruppel … steeds grappigere/leukere dingen; mag ook bij
 geluidjes voor de timer: herkenbaar, progressief grappig; en 33 keer op Versie → gold-theme, want ik ben de maker: mooi, goed
 leesbaar, donkere achtergrond, gouden accenten"). Leidend bij tegenspraak: docs/specs/README.md §2–§4, docs/specs/xp-levels.md
 (§1g confetti, §3 geluiden, ontgrendelingen "rijk, niet spaarzaam"; "geen spoor van ontgrendelingen met badges uit"),
 docs/specs/badges-avatar.md (zeldzaamheid), docs/specs/handbook.md §4.
+Gebouwd: 8 nov 2026 (V5, lichte workflow wf_d95f9213-2e6; integrator: geluidstegels en `more.timerSound.*`-namen erbij, gold-tokens ook in xp.css en shopping.css, `theme.goldUnlocked` toestel-lokaal; lens: drie open punten, besluiten Fable: (1) geen systeemthema-flits bij een koude start — spiegel `recepten.theme.goldFree` in localStorage voor de eerste verf, (2) met badges uit is goud alleen via het makers-ei beschikbaar (xp-levels-regel), (3) Ode an die Freude blijft ≤ 4 s met 0,26 s per noot; drie contrastplekken onder 4,5:1 die de integrator vond bestaan ook in het donkere thema en horen bij een latere opschoonronde)
 
 **Kritische lezer (Fable, vooraf).** (1) Geen opnames en geen beschermde melodieën: alle geluiden zijn oscillator-recepten zoals de
 bestaande zeven (Web Audio), en "klassieke telefoon" wordt een eigen marimba-vierklank, niet de Apple-melodie. Ode an die Freude

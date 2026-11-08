@@ -114,6 +114,37 @@
   color-scheme: light;
 }
 
+/* V5 §1d: the gold theme (level 100 or the maker's egg). Gold is the accent; text stays light on dark.
+   diet-* and rarity-* copy the dark block, with a brighter legendary. */
+:root[data-theme='gold'] {
+  color-scheme: dark;
+  --paper: #15120c;
+  --card: #1f1a10;
+  --ink: #f3e9c8;
+  --muted: #c9b98a;
+  --cobalt: #d4a72c;
+  --tomato: #ef6a55;
+  --rosemary: #9fcf8a;
+  --orange: #e9a852;
+  --line: rgba(212, 167, 44, 0.22);
+  --press: rgba(212, 167, 44, 0.16);
+  --on-cobalt: #1a1406;
+  --on-rosemary: #15120c;
+  --diet-glutenvrij-bg: #5a4a10;
+  --diet-glutenvrij-ink: #f7e9a8;
+  --diet-vegetarisch-bg: #5c4028;
+  --diet-vegetarisch-ink: #eed5bb;
+  --diet-vegan-bg: #244d22;
+  --diet-vegan-ink: #cdeac6;
+  --diet-lactosevrij-bg: #1f2d44;
+  --diet-lactosevrij-ink: #e8eef6;
+  --diet-personal-bg: #22365e;
+  --diet-personal-ink: #dbe4fa;
+  --rarity-rare: #6f9fe8;
+  --rarity-epic: #ab93d8;
+  --rarity-legendary: #ffd75e;
+}
+
 * {
   box-sizing: border-box;
 }

@@ -3751,7 +3751,7 @@ Je profielkleur blijft altijd zichtbaar. Bij een doorschijnende achtergrond is j
 
 #### Wat het doet
 
-In **Jouw stijl** kies je het geluid van je kooktimer. Nieuwe geluiden speel je vrij met levels.
+In **Jouw stijl** kies je het geluid van je kooktimer. Er zijn 15 geluiden; nieuwe speel je vrij met levels.
 
 #### Waar je tikt
 
@@ -3767,7 +3767,7 @@ Je hoort het geluid meteen en de tegel is gekozen. Een geluid met een slotje too
 
 #### Goed om te weten
 
-Vanaf level 20 staat er ook **Bij Gekookt!**: een kort tadaa als je een kookbeurt bewaart. Op een iPhone met de stil-schakelaar aan waarschuwt alleen de melding.
+Vrij te spelen zijn koebel (level 5), marimba (8), gong (10), keukenwekker (15), Ode an die Freude (21) en Kleine Nachtmusik (27). Daarna fanfare (30), koekoeksklok (34), haan (42), huilende baby (48), inbelmodem (55) en misthoorn (60). Alle geluiden zijn gemaakt van toontjes; het zijn geen opnames. Vanaf level 20 staat er ook **Bij Gekookt!**: een kort tadaa als je een kookbeurt bewaart. Op een iPhone met de stil-schakelaar aan waarschuwt alleen de melding.
 
 (`#/more/style`)
 
@@ -3775,7 +3775,7 @@ Vanaf level 20 staat er ook **Bij Gekookt!**: een kort tadaa als je een kookbeur
 
 #### Wat het doet
 
-Je kiest welke confetti er komt als je iets kookt. Met **Verras me** wisselt de app af tussen al je confetti.
+Je kiest welke confetti er komt als je iets kookt. Naast **Gewoon** zijn er 17 confetti om vrij te spelen. Met **Verras me** wisselt de app af tussen al je confetti.
 
 #### Waar je tikt
 
@@ -3791,7 +3791,7 @@ Je ziet meteen een voorbeeld en de tegel is gekozen. Wat je nog niet hebt, heeft
 
 #### Goed om te weten
 
-Wil je een confetti niet meer in de afwisseling? Houd die tegel lang ingedrukt, of tik op het hoekje ☑ rechtsboven; dan staat er ☐. Wat iemand op deze telefoon vrijspeelt, kan iedereen hier gebruiken.
+Hoe hoger je level, hoe meer snippers: dubbel op level 3, trippel op level 22 en quadruppel op level 45. De ontwerpen: groente (7), kippen en taartjes (12), hartjes (17), T-rex (25), herfstblaadjes (33), sneeuw (38), goud (40) en sterren (50). Daarna pasta (56), vuurwerk (62), bellen (68), lampionnen (77) en noorderlicht (88). Vlammetjes krijg je met een badge. Wil je een confetti niet meer in de afwisseling? Houd die tegel lang ingedrukt, of tik op het hoekje ☑ rechtsboven; dan staat er ☐. Wat iemand op deze telefoon vrijspeelt, kan iedereen hier gebruiken.
 
 (`#/more/style`)
 
@@ -3860,6 +3860,10 @@ Je kiest of de app licht of donker is, of je telefoon volgt. Dit kan altijd, ook
 #### Wat je dan ziet
 
 De app verandert meteen van kleur. **Systeem** volgt de instelling van je telefoon.
+
+#### Goed om te weten
+
+Op level 100 speel je een vierde thema vrij: **Goud**, donker met gouden accenten. Pas dan staat de tegel **Goud** erbij.
 
 (`#/more/style`)
 

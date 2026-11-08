@@ -137,7 +137,9 @@
   }
 }
 
-:root[data-theme='dark'] {
+/* Forced dark; the gold theme (V5) is dark too. */
+:root[data-theme='dark'],
+:root[data-theme='gold'] {
   --aisle-groente-fruit: #7fc08a;
   --aisle-vlees-vis: #e08a8a;
   --aisle-zuivel-eieren: #dcc060;

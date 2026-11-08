@@ -60,6 +60,24 @@ export const xp: Dict = {
     nl: 'Alles op dubbele snelheid. Tikken tijdens een viering kan altijd.',
     en: 'Everything at double speed. Tapping during a celebration always works.',
   },
+  // V5 (docs/specs/verbeterronde-5.md §1c): the fourth theme Gold (Jouw stijl → Thema) and the maker's egg
+  // (Meer → Over, 33 taps on Versie). The theme is unlocked by `gold-theme` (level 100) or by the egg.
+  'style.theme.gold': { nl: 'Goud', en: 'Gold' },
+  'style.goldUnlockedMaker': { nl: 'vrijgespeeld als maker', en: 'unlocked as the maker' },
+  'more.goldCount': { nl: 'nog {n} keer…', en: '{n} more…' },
+  'more.goldCountOne': { nl: 'nog 1 keer…', en: '1 more…' },
+  'more.goldUnlocked': { nl: '🏆 Gouden thema vrijgespeeld — jij bent de maker.', en: '🏆 Gold theme unlocked — you are the maker.' },
+  'more.goldAlready': { nl: 'Het gouden thema is al vrij.', en: 'The gold theme is already unlocked.' },
+  // V5 §1b: tile names of the new timer sounds (StyleScreen reads `more.timerSound.<value>`); the names
+  // are the ones of §1b, the same as in data/unlocks.json.
+  'more.timerSound.marimba': { nl: 'Marimba', en: 'Marimba' },
+  'more.timerSound.ode': { nl: 'Ode an die Freude', en: 'Ode to Joy' },
+  'more.timerSound.mozart': { nl: 'Kleine Nachtmusik', en: 'A Little Night Music' },
+  'more.timerSound.cuckoo': { nl: 'Koekoeksklok', en: 'Cuckoo clock' },
+  'more.timerSound.rooster': { nl: 'Haan', en: 'Rooster' },
+  'more.timerSound.baby': { nl: 'Huilende baby', en: 'Crying baby' },
+  'more.timerSound.modem': { nl: 'Inbelmodem', en: 'Dial-up modem' },
+  'more.timerSound.foghorn': { nl: 'Misthoorn', en: 'Foghorn' },
   'style.timerSound': { nl: 'Timergeluid', en: 'Timer sound' },
   'style.cookedSound': { nl: 'Bij Gekookt!', en: 'On Cooked!' },
   'style.random': { nl: 'Verras me', en: 'Surprise me' },

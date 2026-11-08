@@ -4,8 +4,53 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): V5 — vrijspeel-rijkdom: tien confetti-stijlen (ladder dubbel → trippel → quadruppel), acht gesynthetiseerde timergeluiden, gouden thema (level 100 én makers-ei)
+Gebouwd volgens docs/specs/verbeterronde-5.md (lichte workflow wf_d95f9213-2e6, vijf bouwers + integrator; lens: drie open punten door Fable besloten — gouden thema zonder opstartflits via een localStorage-spiegel, met badges uit alleen via het makers-ei, Ode an die Freude ≤ 4 s; drie contrastplekken onder 4,5:1 bestaan ook in het donkere thema en wachten op een opschoonronde).
+**Confetti (A, src/components/Confetti.tsx):** tabel `LOOKS` met per look aantal, duurfactor en golven; triple 240 (golven 0/250 ms),
+quadruple 320 (0/200/400 ms, klasse `.quad` 8×14 px), hearts 70 (duur ×1,25), leaves 60 (×1,6, keyframe `confetti-sway`), snow 90
+(×1,8), pasta 60 inline-SVG-vormpjes, fireworks 3×50 vanuit 25/50/75 % × 30 % (150 ms na elkaar), bubbles 50 omhoog (×1,6), lanterns
+24 (×2), aurora 10 (×2, keyframe `confetti-aurora`). V4-snelheid en reduced motion ongewijzigd; het opruimen wacht nu `lookTotalMs`
+(basisduur × factor + laatste golf) + 100 ms, zodat de lange looks niet halverwege verdwijnen. Pure exports `lookDurationFactor`,
+`lookPieces`, `lookTotalMs`. **Geluiden (B, src/sounds.ts):** acht nieuwe `TimerSound`-waarden met elk een eigen functie (helpers
+`tone`, `vibrato`, `noise`); gemeten met een nep-AudioContext: alle ≤ 4 s, pieken ≤ 0,5. **Data (C):** data/unlocks.json 17 → 36
+(tien confetti, acht geluiden, `gold-theme` letterlijk), src/i18n/xp.ts de zes goud-sleutels letterlijk plus
+`more.timerSound.<8 nieuwe>` (tegelnamen, de namen van §1b; register §2b noemt `more.timerSound.*` in xp.ts), tests/unlocks.test.ts
+bijgewerkt. **Thema en ei (D):** `Theme` + 'gold' (`PAPER.gold`), `effectiveTheme` (niet-vrij goud → system; de opgeslagen keuze
+blijft), `goldThemeFree`, signal `goldUnlockedByMaker` (setting `theme.goldUnlocked`), `initTheme` past toe via een signals-effect;
+base.css-blok `:root[data-theme='gold']` met de spectokens; tegeltje Goud alleen als vrij, met "vrijgespeeld als maker" eronder na het
+ei; Versie in Over is een knop, `tapCounter` (venster < 2000 ms), vanaf tik 25 "nog n keer…", tik 33 schrijft de instelling en toont
+de melding (of "al vrij"); tests/theme.test.ts. **Handboek (E):** rijen stijl-confetti (17 stijlen + ladder), stijl-geluiden (15,
+toontjes), stijl-thema (Goud op level 100, niets over het ei); HANDLEIDING/HANDBOOK opnieuw gemaakt.
+**Integrator:** `TIMER_SOUND_TILES` in StyleScreen.tsx kreeg de acht nieuwe geluiden, in levelvolgorde tussen de bestaande
+(beeps, bell, melody, cowbell 5, marimba 8, gong 10, kitchen 15, ode 21, mozart 27, fanfare 30, cuckoo 34, rooster 42, baby 48, modem
+55, foghorn 60, off) — dezelfde regel als de confetti-tab (bestandsvolgorde = levelvolgorde); tests/style-screen.test.ts verwacht de
+nieuwe geluids- en confettilijsten. xp.css (`--gold`/`--on-gold`) en shopping.css (`--aisle-*`) kregen `:root[data-theme='gold']` naast
+het geforceerde donkere blok, anders kregen ze onder Goud met een licht systeem de lichte waarden op donker papier.
+`theme.goldUnlocked` staat in `DEVICE_LOCAL_SETTINGS` (src/db/repo.ts): de spec noemt het een toestel-instelling, dus een back-up
+terugzetten neemt het ei niet mee naar een andere telefoon. Dev-app (375 px, NL en EN; ontgrendelingen tijdelijk via de module
+`unlockedOnPhone` gezet, daarna `refreshUnlocks`): elke nieuwe confetti via de tegel (aantallen in de DOM kloppen: 70/240/60/90/320/
+60/150/50/24/10; leaves met `confetti-sway`, aurora met `confetti-aurora`), elk nieuw geluid via de tegel zonder consolefout (horen
+kon ik niet), Goud op Home, Recepten, een recept, kookstand, Boodschappen, Week, Meer, Handleiding, Mijn profiel en Badges met een
+contrastscan (< 4,5:1): alleen drie plekken die in Donker precies zo zijn (wit op `--orange` badge "eigen" 2,1:1, wit op `--tomato`
+"back-up nodig" 3,1:1, wit vinkje op de groene schapkleur 2,1:1) — bestaand, niet van V5. Ei: 24 tikken niets, tik 25 "nog 8 keer…",
+32 "nog 1 keer…", 3 s wachten + tik → teller weer 1; 33 → melding (role=status), tegeltje Goud verschijnt met "vrijgespeeld als
+maker"; nog eens 33 (EN) → "The gold theme is already unlocked."; opgeslagen 'gold' zonder vrij → `data-theme` weg (system).
+Testdata teruggezet (thema system, `theme.goldUnlocked` false, timergeluid beeps, confetti Verras me). check, 1860 tests, build,
+build:next en validate:data (36 ontgrendelingen, handboek 0 waarschuwingen) groen. DEVICE-TEST rij 114 (NL en EN, zonder het ei).
+**Open voor Fable:** (1) **Ode past niet**: 15 noten × 0,3 s = 4,5 s botst met ≤ 4 s; bouwer B zette `ODE_STEP` = 0,26 s (eind
+3,98 s). Andere keuze = één constante. (2) Namen, iconen en beschrijvingen van de tien confetti-regels in unlocks.json gaf de spec
+niet (bouwer C: Hartjesconfetti, Trippele confetti, Herfstblaadjes, Sneeuw, Quadruppele confetti, Pastaconfetti, Vuurwerk, Bellen,
+Lampionnen, Noorderlicht + EN). (3) Invullingen van bouwer A: quadruple 8×14 px, hearts ×1,25, bellenrand `rgba(140,170,200,.6)`,
+lampionnen rood met gouden randen #f2c14e en gloed, vuurwerkkleur uit de gewone kleuren, startpunt bellen/lampionnen 70/72 %.
+Bouwer B: modem-DTMF 1-5-9-0 en "brom" als toonpaar 1650+1850 Hz met ruis (klinkt eerder als fluit), Mozart lang-kort 1,5/0,5 tel,
+pauzes koekoek 0,7 s / baby 0,3 s / misthoorn 0,3 s. (4) Met **Badges uit** blijft het tegeltje Goud (en het thema) staan als level 100
+het vrijgaf; de spec zegt het niet, xp-levels zegt "geen spoor van ontgrendelingen met badges uit". (5) Precies 2000 ms tussen twee
+tikken telt als nieuwe start. (6) Bij het opstarten staat heel even het systeemthema tot `refreshUnlocks`/de ei-instelling gelezen is
+(geen "geladen"-signaal in unlocks.ts). (7) Na het ei komt een eerder opgeslagen 'gold' meteen terug (de keuze bleef bewaard); het ei
+zet het thema zelf niet. (8) Het handboek noemt de confetti-ontwerpen bij hun omschrijving, niet met de tegelnamen.
+
 ## 8 nov (Opus): V3b — hoeden bedekken het haar: randlijn brim per hoed, haar alleen onder de rand (Stijns bandana)
-Gebouwd volgens docs/specs/verbeterronde-3b.md (lichte workflow, twee bouwers + integrator; run-id: de workflow vult hem in).
+Gebouwd volgens docs/specs/verbeterronde-3b.md (lichte workflow wf_0092dc8f-9db, twee bouwers + integrator).
 **Renderer (A):** `AvatarPart.brim?: number` (src/domain/avatar.ts); de lezer neemt hem alleen over bij een hoed en als eindig
 getal 0–100, de renderer controleert opnieuw. Draagt de avatar een hoed met `brim`, dan krijgt `<defs>` ná de bestaande clipPath
 `<clipPath id="h-UID"><rect x="-10" y="BRIM" width="120" height="120"/></clipPath>` (BRIM op één decimaal) en wordt de haarlaag

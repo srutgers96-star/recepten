@@ -106,12 +106,16 @@ async function doRefresh(): Promise<void> {
     );
     const union = new Set<string>();
     for (const s of sets) for (const id of s) union.add(id);
-    if (!sameSet(union, unlockedOnPhone.value)) unlockedOnPhone.value = union;
+    // V5: the first refresh always publishes (also an empty set), so theme.ts can tell "not loaded
+    // yet" from "nothing unlocked" and drop its optimistic gold mirror when it should.
+    if (!publishedOnce || !sameSet(union, unlockedOnPhone.value)) unlockedOnPhone.value = union;
+    publishedOnce = true;
   } catch (e) {
     console.warn('refreshUnlocks', e);
   }
 }
 
+let publishedOnce = false;
 let running: Promise<void> | null = null;
 let queued: Promise<void> | null = null;
 

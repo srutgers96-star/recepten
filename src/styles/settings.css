@@ -1379,3 +1379,40 @@ textarea.input.member-card-raw {
   content: ' ›';
   color: var(--muted);
 }
+
+/* ---------- V5 §1d: the maker's egg (Versie in Over) and the gold theme swatch ---------- */
+
+/* The version is a button for the egg, but looks exactly like the other <dd> values (no button style). */
+.about dd .about-version {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: default;
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.about-egg {
+  margin: 8px 0 0;
+}
+
+/* Jouw stijl → Thema: the gold swatch is a dark square with a gold rim (style.css has the other three). */
+.style-swatch-theme[data-theme-swatch='gold'] {
+  background: #15120c;
+  box-shadow: inset 0 0 0 2px #d4a72c;
+}
+
+/* The line "vrijgespeeld als maker" under the gold tile (Jouw stijl → Thema). */
+.style-tile-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 13px;
+  text-align: center;
+}

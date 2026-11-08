@@ -55,6 +55,7 @@ import { navigate } from '@/router';
 import { copyText, shareText } from '@/share-actions';
 import { loadSoundSettings, setTimerVibrate, timerVibrate } from '@/sounds';
 import { canSpeak, loadSpeechSettings, readAloud, setReadAloud } from '@/speech';
+import { GOLD_COUNT_FROM, GOLD_TAPS, goldThemeFree, tapCounter, tapsLeft, unlockGoldByMaker, type TapCount } from '@/theme';
 import { canListen, commandsEnabled, loadVoiceSettings, setCommandsEnabled } from '@/voice';
 import { Avatar, useAvatarLevel } from './ProfilesScreen';
 
@@ -445,6 +446,26 @@ export function MoreScreen() {
   const [snapshots, setSnapshots] = useState<Record<string, ProgressSnapshot>>({});
   // 6D-S: the row Mijn profiel shows the level ring and, with badges on, the level title.
   const level = useAvatarLevel(active?.id);
+  // V5 §1d: the maker's egg — taps on Versie (less than 2 s apart) count; 33 unlocks the gold theme.
+  const taps = useRef<TapCount | null>(null);
+  const [egg, setEgg] = useState<{ kind: 'count'; left: number } | { kind: 'unlocked' | 'already' } | null>(null);
+
+  function onVersionTap() {
+    // The result stays until you leave the screen (§1d); later taps change nothing.
+    if (egg !== null && egg.kind !== 'count') return;
+    const next = tapCounter(taps.current, Date.now());
+    taps.current = next;
+    if (next.count >= GOLD_TAPS) {
+      if (goldThemeFree()) {
+        setEgg({ kind: 'already' });
+        return;
+      }
+      setEgg({ kind: 'unlocked' });
+      void unlockGoldByMaker().catch((e: unknown) => console.error('unlockGoldByMaker', e));
+      return;
+    }
+    setEgg(next.count >= GOLD_COUNT_FROM ? { kind: 'count', left: tapsLeft(next.count) } : null);
+  }
 
   const unsent = unsentChanges.value;
   const unseen = inboxUnseen.value;
@@ -708,12 +729,22 @@ export function MoreScreen() {
             <h3 class="more-sub">{t('more.about')}</h3>
             <dl>
               <dt>{t('more.version')}</dt>
-              <dd>{appInfo.version}</dd>
+              <dd>
+                <button type="button" class="about-version" onClick={onVersionTap}>
+                  {appInfo.version}
+                </button>
+              </dd>
               <dt>{t('more.channel')}</dt>
               <dd>{appInfo.channel}</dd>
               <dt>{t('more.build')}</dt>
               <dd>{appInfo.sha}</dd>
             </dl>
+            {egg?.kind === 'count' && <p class="muted small about-egg">{t('more.goldCount', { n: egg.left })}</p>}
+            {egg !== null && egg.kind !== 'count' && (
+              <p class="muted small about-egg" role="status">
+                {t(egg.kind === 'unlocked' ? 'more.goldUnlocked' : 'more.goldAlready')}
+              </p>
+            )}
             <div class="actions" style="margin-top:12px">
               <a class="btn" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
                 {t('more.github')}

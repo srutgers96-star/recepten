@@ -671,8 +671,8 @@
       "id": "badges-xp.stijl-geluiden",
       "title": { "nl": "Jouw stijl: geluiden", "en": "Your style: sounds" },
       "what": {
-        "nl": "In **Jouw stijl** kies je het geluid van je kooktimer. Nieuwe geluiden speel je vrij met levels.",
-        "en": "In **Your style** you choose the sound of your cooking timer. You unlock new sounds with levels."
+        "nl": "In **Jouw stijl** kies je het geluid van je kooktimer. Er zijn 15 geluiden; nieuwe speel je vrij met levels.",
+        "en": "In **Your style** you choose the sound of your cooking timer. There are 15 sounds; you unlock new ones with levels."
       },
       "where": {
         "nl": [
@@ -695,22 +695,22 @@
         "en": "You hear the sound straight away and the tile is chosen. A sound with a padlock shows the level at which it unlocks, such as “Lv 15”."
       },
       "know": {
-        "nl": "Vanaf level 20 staat er ook **Bij Gekookt!**: een kort tadaa als je een kookbeurt bewaart. Op een iPhone met de stil-schakelaar aan waarschuwt alleen de melding.",
-        "en": "From level 20 there is also **On Cooked!**: a short ta-da when you save a cook. On an iPhone with the silent switch on, only the notification alerts you."
+        "nl": "Vrij te spelen zijn koebel (level 5), marimba (8), gong (10), keukenwekker (15), Ode an die Freude (21) en Kleine Nachtmusik (27). Daarna fanfare (30), koekoeksklok (34), haan (42), huilende baby (48), inbelmodem (55) en misthoorn (60). Alle geluiden zijn gemaakt van toontjes; het zijn geen opnames. Vanaf level 20 staat er ook **Bij Gekookt!**: een kort tadaa als je een kookbeurt bewaart. Op een iPhone met de stil-schakelaar aan waarschuwt alleen de melding.",
+        "en": "You can unlock cowbell (level 5), marimba (8), gong (10), kitchen timer (15), Ode to Joy (21) and A Little Night Music (27). Then fanfare (30), cuckoo clock (34), rooster (42), crying baby (48), dial-up modem (55) and foghorn (60). Every sound is made from tones; none is a recording. From level 20 there is also **On Cooked!**: a short ta-da when you save a cook. On an iPhone with the silent switch on, only the notification alerts you."
       },
       "route": "/more/style",
       "platform": "all",
       "keywords": {
-        "nl": ["geluid", "timergeluid", "koebel", "wekker", "tadaa", "jouw stijl"],
-        "en": ["sound", "timer sound", "cowbell", "alarm", "ta-da", "your style"]
+        "nl": ["geluid", "timergeluid", "koebel", "wekker", "tadaa", "koekoek", "modem", "jouw stijl"],
+        "en": ["sound", "timer sound", "cowbell", "alarm", "ta-da", "cuckoo", "modem", "your style"]
       }
     },
     {
       "id": "badges-xp.stijl-confetti",
       "title": { "nl": "Jouw stijl: confetti", "en": "Your style: confetti" },
       "what": {
-        "nl": "Je kiest welke confetti er komt als je iets kookt. Met **Verras me** wisselt de app af tussen al je confetti.",
-        "en": "You choose which confetti appears when you cook something. With **Surprise me** the app takes turns with all your confetti."
+        "nl": "Je kiest welke confetti er komt als je iets kookt. Naast **Gewoon** zijn er 17 confetti om vrij te spelen. Met **Verras me** wisselt de app af tussen al je confetti.",
+        "en": "You choose which confetti appears when you cook something. Besides **Plain** there are 17 confetti to unlock. With **Surprise me** the app takes turns with all your confetti."
       },
       "where": {
         "nl": [
@@ -733,14 +733,14 @@
         "en": "You see an example straight away and the tile is chosen. What you do not have yet has a padlock with the level, such as “Lv 7”."
       },
       "know": {
-        "nl": "Wil je een confetti niet meer in de afwisseling? Houd die tegel lang ingedrukt, of tik op het hoekje ☑ rechtsboven; dan staat er ☐. Wat iemand op deze telefoon vrijspeelt, kan iedereen hier gebruiken.",
-        "en": "Want a confetti out of the rotation? Press and hold that tile, or tap the ☑ corner at the top right; it then shows ☐. Whatever anyone unlocks on this phone, everyone here can use."
+        "nl": "Hoe hoger je level, hoe meer snippers: dubbel op level 3, trippel op level 22 en quadruppel op level 45. De ontwerpen: groente (7), kippen en taartjes (12), hartjes (17), T-rex (25), herfstblaadjes (33), sneeuw (38), goud (40) en sterren (50). Daarna pasta (56), vuurwerk (62), bellen (68), lampionnen (77) en noorderlicht (88). Vlammetjes krijg je met een badge. Wil je een confetti niet meer in de afwisseling? Houd die tegel lang ingedrukt, of tik op het hoekje ☑ rechtsboven; dan staat er ☐. Wat iemand op deze telefoon vrijspeelt, kan iedereen hier gebruiken.",
+        "en": "The higher your level, the more pieces: double at level 3, triple at level 22 and quadruple at level 45. The designs: veggies (7), chickens and cakes (12), hearts (17), T-rex (25), autumn leaves (33), snow (38), gold (40) and stars (50). Then pasta (56), fireworks (62), bubbles (68), lanterns (77) and northern lights (88). You get flames with a badge. Want a confetti out of the rotation? Press and hold that tile, or tap the ☑ corner at the top right; it then shows ☐. Whatever anyone unlocks on this phone, everyone here can use."
       },
       "route": "/more/style",
       "platform": "all",
       "keywords": {
-        "nl": ["confetti", "feestje", "verras me", "afwisselen", "mix", "jouw stijl"],
-        "en": ["confetti", "celebration", "surprise me", "rotation", "mix", "your style"]
+        "nl": ["confetti", "feestje", "verras me", "afwisselen", "trippel", "quadruppel", "vuurwerk", "jouw stijl"],
+        "en": ["confetti", "celebration", "surprise me", "rotation", "triple", "quadruple", "fireworks", "your style"]
       }
     },
     {
@@ -846,11 +846,15 @@
         "nl": "De app verandert meteen van kleur. **Systeem** volgt de instelling van je telefoon.",
         "en": "The app changes colour straight away. **System** follows your phone's setting."
       },
+      "know": {
+        "nl": "Op level 100 speel je een vierde thema vrij: **Goud**, donker met gouden accenten. Pas dan staat de tegel **Goud** erbij.",
+        "en": "At level 100 you unlock a fourth theme: **Gold**, dark with gold accents. Only then does the **Gold** tile appear."
+      },
       "route": "/more/style",
       "platform": "all",
       "keywords": {
-        "nl": ["thema", "donker", "licht", "nachtmodus", "kleur", "systeem"],
-        "en": ["theme", "dark", "light", "night mode", "colour", "system"]
+        "nl": ["thema", "donker", "licht", "nachtmodus", "kleur", "systeem", "goud", "level 100"],
+        "en": ["theme", "dark", "light", "night mode", "colour", "system", "gold", "level 100"]
       }
     },
     {

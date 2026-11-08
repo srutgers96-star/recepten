@@ -53,11 +53,11 @@ const levelUnlock = (over: Obj = {}): Obj => ({
 });
 
 describe('data/unlocks.json', () => {
-  it('passes the validator: 17 unlocks, no errors, no warnings', () => {
+  it('passes the validator: 36 unlocks, no errors, no warnings', () => {
     const r = validateUnlocks(unlocksJson, BADGE_IDS, RETIRED_IDS);
     expect(r.errors).toEqual([]);
     expect(r.warnings).toEqual([]);
-    expect(r.stats.lines).toBe(17);
+    expect(r.stats.lines).toBe(36);
     // Normalizing the shipped file drops nothing and keeps the file order.
     expect(ids(UNLOCKS)).toEqual(unlocksJson.map((u) => u.id));
   });
@@ -70,17 +70,36 @@ describe('data/unlocks.json', () => {
       ['sound-cowbell', 'timerSound', { level: 5 }, 'cowbell', 'Koebel', 'Cowbell'],
       ['confetti-veggies', 'confetti', { level: 7 }, 'veggies', 'Groenteconfetti', 'Veggie confetti'],
       ['font-chalk', 'cookFont', { level: 8 }, 'chalk', 'Krijtbord', 'Chalkboard'],
+      ['sound-marimba', 'timerSound', { level: 8 }, 'marimba', 'Marimba', 'Marimba'],
       ['sound-gong', 'timerSound', { level: 10 }, 'gong', 'Gong', 'Gong'],
       ['confetti-party', 'confetti', { level: 12 }, 'party', 'Kippen en taartjes', 'Chickens and cakes'],
       ['sound-kitchen', 'timerSound', { level: 15 }, 'kitchen', 'Keukenwekker', 'Kitchen timer'],
+      ['confetti-hearts', 'confetti', { level: 17 }, 'hearts', 'Hartjesconfetti', 'Heart confetti'],
       ['font-hand', 'cookFont', { level: 18 }, 'hand', 'Handschrift', 'Handwriting'],
       ['sound-cooked-tada', 'cookedSound', { level: 20 }, 'tada', 'Tadaa bij Gekookt!', 'Ta-da on Cooked!'],
       ['challenges', 'feature', { level: 20 }, 'challenges', 'Uitdagingen', 'Challenges'],
+      ['sound-ode', 'timerSound', { level: 21 }, 'ode', 'Ode an die Freude', 'Ode to Joy'],
+      ['confetti-triple', 'confetti', { level: 22 }, 'triple', 'Trippele confetti', 'Triple confetti'],
       ['confetti-trex', 'confetti', { level: 25 }, 'trex', 'T-rex-confetti', 'T-rex confetti'],
+      ['sound-mozart', 'timerSound', { level: 27 }, 'mozart', 'Kleine Nachtmusik', 'A Little Night Music'],
       ['sound-fanfare', 'timerSound', { level: 30 }, 'fanfare', 'Fanfare', 'Fanfare'],
       ['fast-celebrations', 'feature', { level: 30 }, 'fast', 'Snelle vieringen', 'Fast celebrations'],
+      ['confetti-leaves', 'confetti', { level: 33 }, 'leaves', 'Herfstblaadjes', 'Autumn leaves'],
+      ['sound-cuckoo', 'timerSound', { level: 34 }, 'cuckoo', 'Koekoeksklok', 'Cuckoo clock'],
+      ['confetti-snow', 'confetti', { level: 38 }, 'snow', 'Sneeuw', 'Snow'],
       ['confetti-gold', 'confetti', { level: 40 }, 'gold', 'Gouden confetti', 'Golden confetti'],
+      ['sound-rooster', 'timerSound', { level: 42 }, 'rooster', 'Haan', 'Rooster'],
+      ['confetti-quadruple', 'confetti', { level: 45 }, 'quadruple', 'Quadruppele confetti', 'Quadruple confetti'],
+      ['sound-baby', 'timerSound', { level: 48 }, 'baby', 'Huilende baby', 'Crying baby'],
       ['confetti-stars', 'confetti', { level: 50 }, 'stars', 'Sterrenregen', 'Star shower'],
+      ['sound-modem', 'timerSound', { level: 55 }, 'modem', 'Inbelmodem', 'Dial-up modem'],
+      ['confetti-pasta', 'confetti', { level: 56 }, 'pasta', 'Pastaconfetti', 'Pasta confetti'],
+      ['sound-foghorn', 'timerSound', { level: 60 }, 'foghorn', 'Misthoorn', 'Foghorn'],
+      ['confetti-fireworks', 'confetti', { level: 62 }, 'fireworks', 'Vuurwerk', 'Fireworks'],
+      ['confetti-bubbles', 'confetti', { level: 68 }, 'bubbles', 'Bellen', 'Bubbles'],
+      ['confetti-lanterns', 'confetti', { level: 77 }, 'lanterns', 'Lampionnen', 'Lanterns'],
+      ['confetti-aurora', 'confetti', { level: 88 }, 'aurora', 'Noorderlicht', 'Northern lights'],
+      ['gold-theme', 'feature', { level: 100 }, 'gold', 'Gouden thema', 'Gold theme'],
       ['confetti-fire', 'confetti', { badge: 'op-dreef' }, 'fire', 'Vlammetjes', 'Flames'],
     ]);
   });
@@ -107,6 +126,26 @@ describe('data/unlocks.json', () => {
       'confetti-gold': ['Alles goud bij Gekookt!', 'All gold on Cooked!'],
       'confetti-stars': ['⭐✨ voor een sterrenkok.', '⭐✨ for a star cook.'],
       'confetti-fire': ['🔥 Zo heet als je streak.', '🔥 As hot as your streak.'],
+      // V5 (docs/specs/verbeterronde-5.md §1c)
+      'confetti-hearts': ['❤️🧡💛💗 dwarrelen omlaag.', '❤️🧡💛💗 drift down.'],
+      'confetti-triple': ['Drie keer zoveel snippers bij Gekookt!', 'Three times the pieces on Cooked!'],
+      'confetti-leaves': ['🍂🍁🍃 die zachtjes heen en weer zweven.', '🍂🍁🍃 swaying gently down.'],
+      'confetti-snow': ['Witte vlokjes die langzaam neerdalen.', 'White flakes falling slowly.'],
+      'confetti-quadruple': ['Vier keer zoveel snippers, in drie golven.', 'Four times the pieces, in three waves.'],
+      'confetti-pasta': ['Farfalle, penne en fusilli regenen uit de lucht.', 'Farfalle, penne and fusilli rain from the sky.'],
+      'confetti-fireworks': ['Drie knallende barsten in kleur.', 'Three bursts of colour.'],
+      'confetti-bubbles': ['Zeepbellen die omhoog zweven.', 'Soap bubbles floating up.'],
+      'confetti-lanterns': ['Rood-gouden lampionnen die langzaam opstijgen.', 'Red and gold lanterns rising slowly.'],
+      'confetti-aurora': ['Groene en paarse slierten die door het scherm golven.', 'Green and purple ribbons waving across the screen.'],
+      'sound-marimba': ['Een eigen vierklank op marimba, net een ouderwetse telefoon.', 'A four-note marimba ring, like an old-style phone.'],
+      'sound-ode': ['Beethovens Ode an die Freude als timergeluid.', "Beethoven's Ode to Joy as your timer sound."],
+      'sound-mozart': ['Het begin van Eine kleine Nachtmusik van Mozart.', "The opening of Mozart's Eine kleine Nachtmusik."],
+      'sound-cuckoo': ['Koekoek, koekoek: je eten is klaar.', 'Cuckoo, cuckoo: your food is ready.'],
+      'sound-rooster': ['Een kraaiende haan, voor als het écht tijd is.', 'A crowing rooster, for when it really is time.'],
+      'sound-baby': ['Een huilende baby: daar kom je wel voor van de bank.', 'A crying baby: that will get you off the sofa.'],
+      'sound-modem': ['Het piepen en kraken van een ouderwets inbelmodem.', 'The beeps and screeches of an old dial-up modem.'],
+      'sound-foghorn': ['Een diepe misthoorn: niet te missen.', 'A deep foghorn: impossible to miss.'],
+      'gold-theme': ['Donker met goud: het thema voor wie level 100 haalde.', 'Dark with gold: the theme for reaching level 100.'],
     });
     for (const u of UNLOCKS) expect(u.icon.trim()).not.toBe('');
   });
@@ -122,6 +161,40 @@ describe('data/unlocks.json', () => {
     expect(u).toMatchObject({ kind: 'feature', by: { level: 30 }, icon: '⚡', value: 'fast', rarity: 'rare' });
     expect(unlockedIds(UNLOCKS, { level: 29, badges: NO_BADGES }).has('fast-celebrations')).toBe(false);
     expect(unlockedIds(UNLOCKS, { level: 30, badges: NO_BADGES }).has('fast-celebrations')).toBe(true);
+  });
+
+  it('V5 §1c: gold-theme is a legendary 🏆 feature on level 100, literally as the spec has it', () => {
+    const raw = (unlocksJson as Obj[]).find((x) => x['id'] === 'gold-theme');
+    expect(raw).toEqual({
+      id: 'gold-theme',
+      kind: 'feature',
+      by: { level: 100 },
+      icon: '🏆',
+      value: 'gold',
+      rarity: 'legendary',
+      nl: { name: 'Gouden thema', description: 'Donker met goud: het thema voor wie level 100 haalde.' },
+      en: { name: 'Gold theme', description: 'Dark with gold: the theme for reaching level 100.' },
+    });
+    expect(unlockedIds(UNLOCKS, { level: 99, badges: NO_BADGES }).has('gold-theme')).toBe(false);
+    expect(unlockedIds(UNLOCKS, { level: 100, badges: NO_BADGES }).has('gold-theme')).toBe(true);
+  });
+
+  it('V5 §1a/§1b: the new confetti styles and timer sounds, with the rarity of their level', () => {
+    const NEW: Record<string, [string, number]> = {
+      hearts: ['confetti', 17], triple: ['confetti', 22], leaves: ['confetti', 33], snow: ['confetti', 38],
+      quadruple: ['confetti', 45], pasta: ['confetti', 56], fireworks: ['confetti', 62], bubbles: ['confetti', 68],
+      lanterns: ['confetti', 77], aurora: ['confetti', 88],
+      marimba: ['timerSound', 8], ode: ['timerSound', 21], mozart: ['timerSound', 27], cuckoo: ['timerSound', 34],
+      rooster: ['timerSound', 42], baby: ['timerSound', 48], modem: ['timerSound', 55], foghorn: ['timerSound', 60],
+    };
+    for (const [value, [kind, level]] of Object.entries(NEW)) {
+      const u = UNLOCKS.find((x) => x.kind === kind && x.value === value);
+      expect(u, value).toBeDefined();
+      expect(u?.by).toEqual({ level });
+      expect(u?.rarity).toBe(rarityForLevel(level));
+    }
+    expect(UNLOCKS.filter((u) => u.kind === 'confetti')).toHaveLength(17);
+    expect(UNLOCKS.filter((u) => u.kind === 'timerSound')).toHaveLength(12);
   });
 
   it('the validator mirrors the kinds of src/domain/unlocks.ts', () => {
@@ -176,22 +249,22 @@ describe('unlockedIds', () => {
     expect(unlockedIds(UNLOCKS, { level: 3, badges: NO_BADGES })).toEqual(new Set(['confetti-double', 'avatar-maker']));
   });
 
-  it('level 25 without badges → 12 ids', () => {
+  it('level 25 without badges → 16 ids', () => {
     const got = unlockedIds(UNLOCKS, { level: 25, badges: NO_BADGES });
-    expect(got.size).toBe(12);
+    expect(got.size).toBe(16);
     expect(got.has('confetti-trex')).toBe(true);
     expect(got.has('sound-fanfare')).toBe(false);
     expect(got.has('confetti-fire')).toBe(false);
   });
 
   it('the badge op-dreef adds confetti-fire (any tier, also on level 1)', () => {
-    expect(unlockedIds(UNLOCKS, { level: 25, badges: [badge('op-dreef')] }).size).toBe(13);
+    expect(unlockedIds(UNLOCKS, { level: 25, badges: [badge('op-dreef')] }).size).toBe(17);
     expect(unlockedIds(UNLOCKS, { level: 1, badges: [badge('op-dreef', 4)] })).toEqual(new Set(['confetti-fire']));
     expect(unlockedIds(UNLOCKS, { level: 1, badges: [badge('huiskok', 8)] })).toEqual(new Set());
   });
 
-  it('level 100 with op-dreef → all 17', () => {
-    expect(unlockedIds(UNLOCKS, { level: 100, badges: [badge('op-dreef')] }).size).toBe(17);
+  it('level 100 with op-dreef → all 36', () => {
+    expect(unlockedIds(UNLOCKS, { level: 100, badges: [badge('op-dreef')] }).size).toBe(36);
   });
 
   it('a badge unlock with a tier needs that tier', () => {
@@ -207,14 +280,14 @@ describe('unlocksForLevels', () => {
     expect(ids(unlocksForLevels(UNLOCKS, 1, 3))).toEqual(['confetti-double', 'avatar-maker']);
   });
 
-  it('(3, 8] → cowbell, veggie confetti, chalkboard, in file order', () => {
-    expect(ids(unlocksForLevels(UNLOCKS, 3, 8))).toEqual(['sound-cowbell', 'confetti-veggies', 'font-chalk']);
+  it('(3, 8] → cowbell, veggie confetti, chalkboard, marimba, in file order', () => {
+    expect(ids(unlocksForLevels(UNLOCKS, 3, 8))).toEqual(['sound-cowbell', 'confetti-veggies', 'font-chalk', 'sound-marimba']);
   });
 
   it('a level without an unlock gives nothing; badge unlocks are never in here', () => {
     expect(unlocksForLevels(UNLOCKS, 3, 4)).toEqual([]);
     expect(unlocksForLevels(UNLOCKS, 5, 5)).toEqual([]);
-    expect(ids(unlocksForLevels(UNLOCKS, 1, 100))).toHaveLength(16);
+    expect(ids(unlocksForLevels(UNLOCKS, 1, 100))).toHaveLength(35);
     expect(ids(unlocksForLevels(UNLOCKS, 1, 100))).not.toContain('confetti-fire');
   });
 });
@@ -320,16 +393,16 @@ describe('src/unlocks.ts (pure parts: the phone union, switches and active lists
 
   it('active = unlocked on this phone and not switched off; lists in file order', () => {
     unlockedOnPhone.value = unlockedIds(UNLOCKS, { level: 25, badges: [badge('op-dreef')] });
-    expect(activeConfettiStyles()).toEqual(['default', 'double', 'veggies', 'party', 'trex', 'fire']);
-    expect(activeTimerSounds()).toEqual(['beeps', 'bell', 'melody', 'off', 'cowbell', 'gong', 'kitchen']);
+    expect(activeConfettiStyles()).toEqual(['default', 'double', 'veggies', 'party', 'hearts', 'triple', 'trex', 'fire']);
+    expect(activeTimerSounds()).toEqual(['beeps', 'bell', 'melody', 'off', 'cowbell', 'marimba', 'gong', 'kitchen', 'ode']);
     expect(activeFonts()).toEqual(['default', 'chalk', 'hand']);
     expect(isActive('sound-cooked-tada')).toBe(true);
 
     disabledUnlocks.value = new Set(['confetti-double', 'sound-gong', 'font-chalk', 'sound-cooked-tada']);
     expect(isActive('confetti-double')).toBe(false);
     expect(isActive('sound-cooked-tada')).toBe(false);
-    expect(activeConfettiStyles()).toEqual(['default', 'veggies', 'party', 'trex', 'fire']);
-    expect(activeTimerSounds()).toEqual(['beeps', 'bell', 'melody', 'off', 'cowbell', 'kitchen']);
+    expect(activeConfettiStyles()).toEqual(['default', 'veggies', 'party', 'hearts', 'triple', 'trex', 'fire']);
+    expect(activeTimerSounds()).toEqual(['beeps', 'bell', 'melody', 'off', 'cowbell', 'marimba', 'kitchen', 'ode']);
     expect(activeFonts()).toEqual(['default', 'hand']);
   });
 
@@ -366,6 +439,26 @@ describe('rarity of unlocks (block 6D-S)', () => {
       'confetti-stars': 'epic',
       'confetti-fire': 'epic',
       'confetti-gold': 'legendary',
+      // V5 (docs/specs/verbeterronde-5.md §1c)
+      'confetti-hearts': 'common',
+      'confetti-triple': 'rare',
+      'confetti-leaves': 'rare',
+      'confetti-snow': 'rare',
+      'confetti-quadruple': 'rare',
+      'confetti-pasta': 'epic',
+      'confetti-fireworks': 'epic',
+      'confetti-bubbles': 'epic',
+      'confetti-lanterns': 'epic',
+      'confetti-aurora': 'legendary',
+      'sound-marimba': 'common',
+      'sound-ode': 'rare',
+      'sound-mozart': 'rare',
+      'sound-cuckoo': 'rare',
+      'sound-rooster': 'rare',
+      'sound-baby': 'rare',
+      'sound-modem': 'epic',
+      'sound-foghorn': 'epic',
+      'gold-theme': 'legendary',
     });
   });
 
