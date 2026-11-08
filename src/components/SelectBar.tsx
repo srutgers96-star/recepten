@@ -6,6 +6,7 @@
 import { useState } from 'preact/hooks';
 import { categoryLabel } from '@/components/FilterChips';
 import { META_TAG_IDS, metaTagLabel } from '@/components/MetaRows';
+import { SheetPortal } from '@/components/SheetPortal';
 import { dictionary } from '@/dictionary';
 import { DIET_TAGS, type DietTag } from '@/domain/diet';
 import type { Recipe } from '@/domain/model';
@@ -174,57 +175,62 @@ function MetaSheet(props: { selected: readonly Recipe[]; onClose: () => void; on
   const dirty = touched.size > 0 || categoryChanged;
 
   return (
-    <div class="sheet-backdrop" onClick={props.onClose}>
-      <div class="sheet" role="dialog" aria-modal="true" aria-label={t('select.metaTitle')} onClick={(e) => e.stopPropagation()}>
-        <div class="sheet-head">
-          <h2>{t('select.metaTitle')}</h2>
-          <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={props.onClose}>
-            ×
-          </button>
-        </div>
-        <div class="sheet-body">
-          <p class="muted small select-meta-hint">{t('select.metaHint', { n: props.selected.length })}</p>
-          <label class="field">
-            <span>{t('meta.category')}</span>
-            <select class="input" name="select-category" value={category} onChange={(e) => setCategory((e.currentTarget as HTMLSelectElement).value)}>
-              {common === undefined && <option value={KEEP}>{t('select.metaKeep')}</option>}
-              <option value="">{t('recipe.noCategory')}</option>
-              {dict.categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {categoryLabel(c, c.id)}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div class="field">
-            <span>{t('meta.tags')}</span>
-            <div class="select-tags" role="group" aria-label={t('meta.tags')}>
-              {META_TAG_IDS.map((tag) => {
-                const state = states[tag] ?? 'off';
-                const diet = DIET_TAGS.includes(tag as DietTag);
-                return (
-                  <button
-                    key={tag}
-                    type="button"
-                    class={'select-tag' + (state === 'on' ? ' on' : '') + (state === 'mixed' ? ' mixed' : '') + (diet ? ' diet' : '')}
-                    aria-pressed={state === 'mixed' ? 'mixed' : state === 'on'}
-                    onClick={() => toggle(tag)}
-                  >
-                    {metaTagLabel(tag)}
-                    {state === 'mixed' && <span class="select-tag-mixed">{t('select.metaMixed')}</span>}
-                  </button>
-                );
-              })}
-            </div>
-            <p class="muted small select-meta-hint">{t('select.metaTagsHint')}</p>
-          </div>
-          <div class="actions">
-            <button type="button" class="btn btn-primary btn-block" disabled={!dirty} onClick={apply}>
+    <SheetPortal>
+      <div class="sheet-backdrop" onClick={props.onClose}>
+        <div class="sheet" role="dialog" aria-modal="true" aria-label={t('select.metaTitle')} onClick={(e) => e.stopPropagation()}>
+          <div class="sheet-head with-actions">
+            <button type="button" class="sheet-head-btn" onClick={props.onClose}>
+              {t('common.cancel')}
+            </button>
+            <h2>{t('select.metaTitle')}</h2>
+            <button type="button" class="sheet-head-btn save" disabled={!dirty} onClick={apply}>
               {t('select.metaApply')}
             </button>
           </div>
+          <div class="sheet-body">
+            <p class="muted small select-meta-hint">{t('select.metaHint', { n: props.selected.length })}</p>
+            <label class="field">
+              <span>{t('meta.category')}</span>
+              <select class="input" name="select-category" value={category} onChange={(e) => setCategory((e.currentTarget as HTMLSelectElement).value)}>
+                {common === undefined && <option value={KEEP}>{t('select.metaKeep')}</option>}
+                <option value="">{t('recipe.noCategory')}</option>
+                {dict.categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {categoryLabel(c, c.id)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div class="field">
+              <span>{t('meta.tags')}</span>
+              <div class="select-tags" role="group" aria-label={t('meta.tags')}>
+                {META_TAG_IDS.map((tag) => {
+                  const state = states[tag] ?? 'off';
+                  const diet = DIET_TAGS.includes(tag as DietTag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      class={'select-tag' + (state === 'on' ? ' on' : '') + (state === 'mixed' ? ' mixed' : '') + (diet ? ' diet' : '')}
+                      aria-pressed={state === 'mixed' ? 'mixed' : state === 'on'}
+                      onClick={() => toggle(tag)}
+                    >
+                      {metaTagLabel(tag)}
+                      {state === 'mixed' && <span class="select-tag-mixed">{t('select.metaMixed')}</span>}
+                    </button>
+                  );
+                })}
+              </div>
+              <p class="muted small select-meta-hint">{t('select.metaTagsHint')}</p>
+            </div>
+            <div class="actions">
+              <button type="button" class="btn btn-primary btn-block" disabled={!dirty} onClick={apply}>
+                {t('select.metaApply')}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </SheetPortal>
   );
 }

@@ -1096,6 +1096,8 @@ button.row {
 }
 
 .sheet-head.with-actions h2 {
+  min-width: 0;
+  overflow-wrap: break-word;
   text-align: center;
 }
 

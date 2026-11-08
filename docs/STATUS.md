@@ -4,6 +4,36 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 13J — iPhone-sheets: Annuleer/Bewaar of Sluit bovenaan in elke resterende sheet
+Gebouwd volgens README §1a (geen eigen spec; bouwer A de kiezers, bouwer B de menu's en panelen, integrator). Niet gecommit. Geen
+datamodel, geen setting, geen nieuwe i18n-key, geen dependency.
+- **Inventaris (grep `sheet-backdrop` / `class="sheet`):** al met het patroon en ongemoeid: AvatarSheet, CookedSheet, LevelUpSheet,
+  MissingSheet, SideSheet, StandingSheet, VariantSheet, badge-sheet. Omgebouwd (× weg, `.sheet-head.with-actions`): **bewaren** →
+  Annuleer links + bewaarknop rechts met de bestaande tekst: WordPicker (Koppel zo), PickSheet (Kies een gerecht / Voeg N toe; de
+  `.pick-foot` is weg), IngredientPicker-formulier (Bewaar en koppel / Zet in woordenboek, submit via `form=`), SelectBar-MetaSheet
+  (Toepassen; de knop onderin blijft). **Kiezers zonder Bewaar** → Sluit rechts met een lege plek links: IngredientPicker (zoeken en
+  "Variant van …"), AddMenu, FeedbackSheet en LinksSheet (Meer), het houd-menu op Boodschappen (menu, Aantal aanpassen, Waarvoor is
+  dit?), "Bewaar of deel" (Opslag), VoiceHelp (kookstand). Filterpanelen als sheet bestaan niet; de foto-viewer is geen sheet.
+- **Integrator:** de zes panelen die nog in `.screen` stonden (houd-menu, Feedback, Links, Opslag-menu, VoiceHelp, MetaSheet) gaan nu
+  ook via `SheetPortal`, zodat de onderkant op de iPhone niet meer wegvalt (§1a "datzelfde patroon", rij 101 "niets valt onderaan uit
+  beeld"). Geen CSS hing aan de ouder; pulldown/RecipeScreen kijken alleen of een tik in `.sheet-backdrop` begon. base.css:
+  `.sheet-head.with-actions h2` kreeg `min-width: 0; overflow-wrap: break-word` (lange titel breekt af i.p.v. knoppen uit beeld).
+- **Groen:** check, 1649 tests (73 bestanden), build, build:next, validate:data (bekende 4 swaps-waarschuwingen).
+- **Dev-app (375 en 360 px, NL en EN):** woordkiezer, kies-7-kiezer, nieuw ingrediënt, feedback, links, houd-menu (+ Aantal
+  aanpassen): kop klopt, knoppen 44 px, sheet buiten `.screen` tot de onderrand, geen horizontaal schuiven; Escape, ernaast tikken en
+  Annuleer sluiten zonder te bewaren; bewaarknoppen grijs zonder keuze. Geen consolefouten. DEVICE-TEST rij 101 (NL en EN) staat na
+  rij 100 (de tabel loopt niet op volgorde: 102–106 staan vóór 92–100).
+- **Open voor Fable/Stijn (niet in §1a beslist):** (1) focus bij openen: de bestaande focus (eerste woord, zoekveld, Variant-knop) is
+  gebleven; Variant/CookedSheet zetten hem op Annuleer, AddMenu/Links op Sluit — één lijn kiezen? (2) feedbackvenster: Sluit rechts,
+  Verstuur/Kopieer onderin gebleven; of Verstuur in de kop hoort, beslist §1a niet. (3) lange bewaarteksten in de kop ("Kies een
+  gerecht", "Zet in woordenboek", "Bewaar en koppel") houden de titel smal (op 375 px "Kies gerechten 0 van 7" over drie regels);
+  `common.save` zou korter zijn. (4) `picker.cancel` ("Terug naar zoeken") wordt niet meer gebruikt (de kop zegt Annuleer, zelfde
+  gedrag); key blijft staan. (5) het houd-menu en MetaSheet reageren nog niet op Escape (niet toegevoegd; gedrag). (6) geen sleepgebaar
+  toegevoegd op de nieuwe koppen (alleen AddMenu had er al een). (7) IngredientPicker's Sluit is vet (`save`, zoals StandingSheet),
+  de andere Sluit-knoppen niet (zoals LevelUp/SideSheet/badge).
+
+- **Besluit Fable (8 nov, commit van 13J):** 'Terug naar zoeken' terug als linkerknop in het Nieuw-ingrediënt-formulier (niet
+  newOnly); overige keuzes akkoord; Escape op houd-menu/MetaSheet en kortere bewaarteksten → opschoonronde. 13J is compleet.
 ## 8 nov (Opus): 13Q — QR en link overal, de boodschappenlijst als link
 Gebouwd volgens docs/specs/qr-link.md (bouwer A contract en ontvangstpad, B `QrPanel` en de knoppen, C de lijst delen en ontvangen;
 integrator). Niet gecommit. Geen Dexie-versie, geen setting, geen dependency; `v` blijft 2.

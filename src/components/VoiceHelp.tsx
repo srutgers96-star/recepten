@@ -6,6 +6,7 @@
 import { useEffect } from 'preact/hooks';
 import type { VoiceCommand } from '@/domain/voice';
 import { t } from '@/i18n';
+import { SheetPortal } from '@/components/SheetPortal';
 
 interface HelpRow {
   kind: VoiceCommand['kind'];
@@ -41,27 +42,30 @@ export function VoiceHelp(props: { open: boolean; onClose: () => void }) {
 
   const title = t('cook.mic');
   return (
-    <div class="sheet-backdrop" onClick={props.onClose}>
-      <div class="sheet" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
-        <div class="sheet-head">
-          <h2>{title}</h2>
-          <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={props.onClose}>
-            ×
-          </button>
-        </div>
-        <div class="sheet-body">
-          <p class="muted small">{t('cook.helpIntro')}</p>
-          <ul class="voice-help">
-            {ROWS.map((r) => (
-              <li key={r.kind}>
-                <span class="vh-cmd">{t(r.name)}</span>
-                <span class="vh-say muted">{t(`${r.name}Say`)}</span>
-              </li>
-            ))}
-          </ul>
-          <p class="muted small">{t('cook.helpEcho')}</p>
+    <SheetPortal>
+      <div class="sheet-backdrop" onClick={props.onClose}>
+        <div class="sheet" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
+          <div class="sheet-head with-actions">
+            <span class="sheet-head-btn" aria-hidden="true" />
+            <h2>{title}</h2>
+            <button type="button" class="sheet-head-btn" onClick={props.onClose}>
+              {t('common.close')}
+            </button>
+          </div>
+          <div class="sheet-body">
+            <p class="muted small">{t('cook.helpIntro')}</p>
+            <ul class="voice-help">
+              {ROWS.map((r) => (
+                <li key={r.kind}>
+                  <span class="vh-cmd">{t(r.name)}</span>
+                  <span class="vh-say muted">{t(`${r.name}Say`)}</span>
+                </li>
+              ))}
+            </ul>
+            <p class="muted small">{t('cook.helpEcho')}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </SheetPortal>
   );
 }

@@ -5,11 +5,12 @@
 // (A-bis.9: a recipe/bundle/backup file goes to the Inbox, text to the Add screen's paste box via
 // src/paste.ts `openPastedText`; a failure shows `edit.fileEmpty` / `edit.fileFailed` under the rows).
 // A bottom sheet through SheetPortal (13J: inside `.screen` the iPhone cut off its bottom), with a
-// plain `.sheet-head` (title + ×): the menu stores nothing, so there is no Annuleer/Bewaar head.
-// Swiping it down (grab bar / head), tapping beside it, × and Escape close it without doing anything.
+// `.sheet-head.with-actions` head (13J): the menu stores nothing, so it is a picker with only Sluit on
+// the right (an empty spacer on the left keeps the title centred). Swiping it down (grab bar / head),
+// tapping beside it, Sluit and Escape close it without doing anything.
 // The swipe is the same pointer code as CookedSheet (the shared grab-bar classes `.cooked-drag` and
 // `.sheet-grab` live in browse.css). Every open starts fresh: the sheet mounts on open, so a status
-// line from an earlier attempt is gone and the × gets the focus.
+// line from an earlier attempt is gone and Sluit gets the focus.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { JSX } from 'preact';
 import { SheetPortal } from '@/components/SheetPortal';
@@ -40,7 +41,7 @@ function AddMenuSheet(props: { onClose: () => void }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  // aria-modal moves no focus by itself: put it on the × on open and hand it back on close (only
+  // aria-modal moves no focus by itself: put it on Sluit on open and hand it back on close (only
   // while the "+" is still there; a row that navigated away unmounted it).
   useEffect(() => {
     const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -120,10 +121,11 @@ function AddMenuSheet(props: { onClose: () => void }) {
             onPointerCancel={(e) => onDragEnd(e, true)}
           >
             <div class="sheet-grab" aria-hidden="true" />
-            <div class="sheet-head">
+            <div class="sheet-head with-actions">
+              <span class="sheet-head-btn" aria-hidden="true" />
               <h2>{title}</h2>
-              <button ref={closeBtn} type="button" class="icon-btn" aria-label={t('common.close')} onClick={onClose}>
-                ×
+              <button ref={closeBtn} type="button" class="sheet-head-btn" onClick={onClose}>
+                {t('common.close')}
               </button>
             </div>
           </div>

@@ -27,6 +27,7 @@ import { recheckActiveBadges, registerEarnedSilently, reloadBadgeSettings } from
 import { reloadCelebrateSettings } from '@/celebrate';
 import { isIOS } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
+import { SheetPortal } from '@/components/SheetPortal';
 import { reloadCooking } from '@/cooking';
 import type { BackupBundle } from '@/db/model';
 import { useLive } from '@/db/live';
@@ -144,7 +145,7 @@ export function StorageScreen() {
     };
   }, [withPhotos, photoCount, reloadTick]);
 
-  // Escape closes the choice sheet (the backdrop tap and the × do the same).
+  // Escape closes the choice sheet (the backdrop tap and Sluit do the same).
   useEffect(() => {
     if (!menu) return;
     const onKey = (e: KeyboardEvent) => {
@@ -611,29 +612,32 @@ export function StorageScreen() {
 
       {/* 13G: the "Bewaar of deel" choice — Delen / Download, one sentence each; same shell as the "+" menu. */}
       {menu && menuFile && (
-        <div class="sheet-backdrop" onClick={() => setMenu(null)}>
-          <div class="sheet" role="dialog" aria-modal="true" aria-label={menuTitle} onClick={(e) => e.stopPropagation()}>
-            <div class="sheet-head">
-              <h2>{menuTitle}</h2>
-              <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={() => setMenu(null)}>
-                ×
-              </button>
-            </div>
-            <div class="sheet-body add-menu save-menu">
-              <p class="muted small save-menu-file">
-                {menuFile.bytes === null ? t('storage.fileLineNoSize', { name: menuFile.name }) : t('storage.fileLine', { name: menuFile.name, size: formatBytes(menuFile.bytes) })}
-              </p>
-              <button type="button" class="add-menu-row" onClick={() => choose('share')}>
-                <strong>{t('storage.chooseShare')}</strong>
-                <span class="muted small">{t('storage.chooseShareHint')}</span>
-              </button>
-              <button type="button" class="add-menu-row" onClick={() => choose('download')}>
-                <strong>{t('storage.download')}</strong>
-                <span class="muted small">{downloadHint}</span>
-              </button>
+        <SheetPortal>
+          <div class="sheet-backdrop" onClick={() => setMenu(null)}>
+            <div class="sheet" role="dialog" aria-modal="true" aria-label={menuTitle} onClick={(e) => e.stopPropagation()}>
+              <div class="sheet-head with-actions">
+                <span class="sheet-head-btn" aria-hidden="true" />
+                <h2>{menuTitle}</h2>
+                <button type="button" class="sheet-head-btn" onClick={() => setMenu(null)}>
+                  {t('common.close')}
+                </button>
+              </div>
+              <div class="sheet-body add-menu save-menu">
+                <p class="muted small save-menu-file">
+                  {menuFile.bytes === null ? t('storage.fileLineNoSize', { name: menuFile.name }) : t('storage.fileLine', { name: menuFile.name, size: formatBytes(menuFile.bytes) })}
+                </p>
+                <button type="button" class="add-menu-row" onClick={() => choose('share')}>
+                  <strong>{t('storage.chooseShare')}</strong>
+                  <span class="muted small">{t('storage.chooseShareHint')}</span>
+                </button>
+                <button type="button" class="add-menu-row" onClick={() => choose('download')}>
+                  <strong>{t('storage.download')}</strong>
+                  <span class="muted small">{downloadHint}</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </SheetPortal>
       )}
     </>
   );

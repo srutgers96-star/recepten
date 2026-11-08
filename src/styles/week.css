@@ -597,13 +597,6 @@
   flex-direction: column;
 }
 
-.pick-foot {
-  flex: none;
-  padding: 8px max(16px, var(--sar)) 0 max(16px, var(--sal));
-  border-top: 1px solid var(--line);
-  background: var(--paper);
-}
-
 /* ---------- Home: "Deze week" card ---------- */
 
 .week-card {

@@ -42,6 +42,7 @@ import { Segmented } from '@/components/Segmented';
 import { StandingProtoRow, canKeepStanding } from '@/components/StandingProtoRow';
 import { StandingTab } from '@/components/StandingTab';
 import { TimerBar } from '@/components/TimerBar';
+import { SheetPortal } from '@/components/SheetPortal';
 import { useLive } from '@/db/live';
 import { mainItems } from '@/domain/planner';
 import type { List } from '@/db/model';
@@ -927,140 +928,143 @@ export function ShoppingScreen() {
       </div>
 
       {menuItem && (
-        <div class="sheet-backdrop" onClick={() => setMenu(null)}>
-          <div class="sheet shop-sheet" role="dialog" aria-modal="true" aria-label={itemName(menuItem, dict, l)} onClick={(e) => e.stopPropagation()}>
-            <div class="sheet-head">
-              <h2>{menu?.view === 'adjust' ? t('shop.menu.adjust') : menu?.view === 'sources' ? t('shop.menu.sources') : itemName(menuItem, dict, l)}</h2>
-              <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={() => setMenu(null)}>
-                ×
-              </button>
-            </div>
-            <div class="sheet-body">
-              {menu?.view === 'menu' && (
-                <>
-                  <p class="shop-sheet-sub">{lineText(menuItem, dict, l)}</p>
-                  {menuItem.standing && <p class="shop-sheet-sub standing-on-list">{t('shop.standing.onList')}</p>}
-                  <ul class="shop-menu">
-                    <li>
-                      {menuItem.inHouse ? (
-                        <button type="button" onClick={() => void setHave(menuItem, false)}>
-                          <span class="ico" aria-hidden="true">
-                            🛒
-                          </span>
-                          {t('shop.menu.needed')}
-                        </button>
-                      ) : (
-                        <button type="button" onClick={() => void setHave(menuItem, true)}>
-                          <span class="ico" aria-hidden="true">
-                            🏠
-                          </span>
-                          {t('shop.menu.inHouse')}
-                          {menuItem.standing ? (
-                            <small>{t('shop.standing.haveHint')}</small>
-                          ) : (
-                            menuItem.ing && !dict.get(menuItem.ing)?.perishable && <small>{t('shop.menu.inHouseHint')}</small>
-                          )}
-                        </button>
-                      )}
-                    </li>
-                    {menuItem.section !== 'check' && typeof menuItem.qty === 'number' && (
+        <SheetPortal>
+          <div class="sheet-backdrop" onClick={() => setMenu(null)}>
+            <div class="sheet shop-sheet" role="dialog" aria-modal="true" aria-label={itemName(menuItem, dict, l)} onClick={(e) => e.stopPropagation()}>
+              <div class="sheet-head with-actions">
+                <span class="sheet-head-btn" aria-hidden="true" />
+                <h2>{menu?.view === 'adjust' ? t('shop.menu.adjust') : menu?.view === 'sources' ? t('shop.menu.sources') : itemName(menuItem, dict, l)}</h2>
+                <button type="button" class="sheet-head-btn" onClick={() => setMenu(null)}>
+                  {t('common.close')}
+                </button>
+              </div>
+              <div class="sheet-body">
+                {menu?.view === 'menu' && (
+                  <>
+                    <p class="shop-sheet-sub">{lineText(menuItem, dict, l)}</p>
+                    {menuItem.standing && <p class="shop-sheet-sub standing-on-list">{t('shop.standing.onList')}</p>}
+                    <ul class="shop-menu">
                       <li>
-                        <button type="button" onClick={() => setMenu({ item: menuItem, view: 'adjust' })}>
-                          <span class="ico" aria-hidden="true">
-                            ±
-                          </span>
-                          {t('shop.menu.adjust')}
-                        </button>
-                      </li>
-                    )}
-                    {menuItem.standing ? (
-                      // 6C §1d: a standing line has no "Waarvoor is dit?" (the sub line says it) and no
-                      // "Verwijder" (that is Heb ik al for this list, or taking it off the standing list).
-                      <li>
-                        <button type="button" onClick={() => void fromStanding(menuItem)}>
-                          <span class="ico" aria-hidden="true">
-                            📌
-                          </span>
-                          {t('shop.menu.fromStanding')}
-                        </button>
-                      </li>
-                    ) : (
-                      <>
-                        <li>
-                          <button type="button" onClick={() => setMenu({ item: menuItem, view: 'sources' })}>
+                        {menuItem.inHouse ? (
+                          <button type="button" onClick={() => void setHave(menuItem, false)}>
                             <span class="ico" aria-hidden="true">
-                              ❓
+                              🛒
                             </span>
-                            {t('shop.menu.sources')}
+                            {t('shop.menu.needed')}
+                          </button>
+                        ) : (
+                          <button type="button" onClick={() => void setHave(menuItem, true)}>
+                            <span class="ico" aria-hidden="true">
+                              🏠
+                            </span>
+                            {t('shop.menu.inHouse')}
+                            {menuItem.standing ? (
+                              <small>{t('shop.standing.haveHint')}</small>
+                            ) : (
+                              menuItem.ing && !dict.get(menuItem.ing)?.perishable && <small>{t('shop.menu.inHouseHint')}</small>
+                            )}
+                          </button>
+                        )}
+                      </li>
+                      {menuItem.section !== 'check' && typeof menuItem.qty === 'number' && (
+                        <li>
+                          <button type="button" onClick={() => setMenu({ item: menuItem, view: 'adjust' })}>
+                            <span class="ico" aria-hidden="true">
+                              ±
+                            </span>
+                            {t('shop.menu.adjust')}
                           </button>
                         </li>
-                        {menuItem.section !== 'check' && (
+                      )}
+                      {menuItem.standing ? (
+                        // 6C §1d: a standing line has no "Waarvoor is dit?" (the sub line says it) and no
+                        // "Verwijder" (that is Heb ik al for this list, or taking it off the standing list).
+                        <li>
+                          <button type="button" onClick={() => void fromStanding(menuItem)}>
+                            <span class="ico" aria-hidden="true">
+                              📌
+                            </span>
+                            {t('shop.menu.fromStanding')}
+                          </button>
+                        </li>
+                      ) : (
+                        <>
                           <li>
-                            <button type="button" onClick={() => void toStanding(menuItem)}>
+                            <button type="button" onClick={() => setMenu({ item: menuItem, view: 'sources' })}>
                               <span class="ico" aria-hidden="true">
-                                📌
+                                ❓
                               </span>
-                              {t('shop.menu.toStanding')}
-                              <small>{t('shop.menu.toStandingHint')}</small>
+                              {t('shop.menu.sources')}
                             </button>
                           </li>
-                        )}
-                        <li>
-                          <button type="button" class="danger" onClick={() => void remove(menuItem)}>
-                            <span class="ico" aria-hidden="true">
-                              🗑
-                            </span>
-                            {t('shop.menu.remove')}
-                          </button>
-                        </li>
-                      </>
-                    )}
-                  </ul>
-                </>
-              )}
-              {menu?.view === 'adjust' && (
-                <>
-                  <ul class="list">
-                    <ProtoRow item={menuItem} dict={dict} lang={l} onAdjust={(item, a) => void adjust(item, a)} onTap={() => undefined} />
-                  </ul>
-                  <div class="actions">
-                    <button type="button" class="btn" onClick={() => setMenu({ item: menuItem, view: 'menu' })}>
-                      {t('shop.menu.back')}
-                    </button>
-                    {/* 6C §1d: a standing line gets "Ook voortaan" here, grey while the amount is unchanged. */}
-                    {menuItem.standing && (
-                      <button type="button" class="btn" disabled={!canKeepStanding(menuItem)} onClick={() => void keep(menuItem)}>
-                        {t('shop.standing.keep')}
+                          {menuItem.section !== 'check' && (
+                            <li>
+                              <button type="button" onClick={() => void toStanding(menuItem)}>
+                                <span class="ico" aria-hidden="true">
+                                  📌
+                                </span>
+                                {t('shop.menu.toStanding')}
+                                <small>{t('shop.menu.toStandingHint')}</small>
+                              </button>
+                            </li>
+                          )}
+                          <li>
+                            <button type="button" class="danger" onClick={() => void remove(menuItem)}>
+                              <span class="ico" aria-hidden="true">
+                                🗑
+                              </span>
+                              {t('shop.menu.remove')}
+                            </button>
+                          </li>
+                        </>
+                      )}
+                    </ul>
+                  </>
+                )}
+                {menu?.view === 'adjust' && (
+                  <>
+                    <ul class="list">
+                      <ProtoRow item={menuItem} dict={dict} lang={l} onAdjust={(item, a) => void adjust(item, a)} onTap={() => undefined} />
+                    </ul>
+                    <div class="actions">
+                      <button type="button" class="btn" onClick={() => setMenu({ item: menuItem, view: 'menu' })}>
+                        {t('shop.menu.back')}
                       </button>
-                    )}
-                    <button type="button" class="btn btn-primary" onClick={() => setMenu(null)}>
-                      {t('common.close')}
-                    </button>
-                  </div>
-                </>
-              )}
-              {menu?.view === 'sources' && (
-                <>
-                  <p class="shop-sheet-name">{lineText(menuItem, dict, l)}</p>
-                  <ul class="pr-sources">
-                    {menuLines.length === 0 && <li>{t('shop.noSources')}</li>}
-                    {menuLines.map((s) => (
-                      <li key={s.key}>
-                        <strong>{s.what}</strong> — {s.dish}
-                        {s.diet && ` (${t('vt.version.' + s.diet).toLocaleLowerCase()})`}
-                      </li>
-                    ))}
-                  </ul>
-                  <div class="actions">
-                    <button type="button" class="btn" onClick={() => setMenu({ item: menuItem, view: 'menu' })}>
-                      {t('shop.menu.back')}
-                    </button>
-                  </div>
-                </>
-              )}
+                      {/* 6C §1d: a standing line gets "Ook voortaan" here, grey while the amount is unchanged. */}
+                      {menuItem.standing && (
+                        <button type="button" class="btn" disabled={!canKeepStanding(menuItem)} onClick={() => void keep(menuItem)}>
+                          {t('shop.standing.keep')}
+                        </button>
+                      )}
+                      <button type="button" class="btn btn-primary" onClick={() => setMenu(null)}>
+                        {t('common.close')}
+                      </button>
+                    </div>
+                  </>
+                )}
+                {menu?.view === 'sources' && (
+                  <>
+                    <p class="shop-sheet-name">{lineText(menuItem, dict, l)}</p>
+                    <ul class="pr-sources">
+                      {menuLines.length === 0 && <li>{t('shop.noSources')}</li>}
+                      {menuLines.map((s) => (
+                        <li key={s.key}>
+                          <strong>{s.what}</strong> — {s.dish}
+                          {s.diet && ` (${t('vt.version.' + s.diet).toLocaleLowerCase()})`}
+                        </li>
+                      ))}
+                    </ul>
+                    <div class="actions">
+                      <button type="button" class="btn" onClick={() => setMenu({ item: menuItem, view: 'menu' })}>
+                        {t('shop.menu.back')}
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        </SheetPortal>
       )}
 
       {snack && (

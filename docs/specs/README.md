@@ -79,6 +79,7 @@ Gabi DEVICE-TEST rij 65 bevestigt. Regels: een sheet die iets opslaat heeft Annu
 bewaarknop rechts in de kop; een kiezer zonder Bewaar heeft Sluit rechts; wegvegen, ernaast tikken en
 Escape bewaren niets. Geen nieuwe teksten, geen datamodel. Eén Opus-workflow met twee bouwers +
 integrator; DEVICE-TEST-rij 101.
+Gebouwd: 8 nov 2026 (13J, workflow wf_f6a8f3ca-a39). Besluit Fable na de lens: in het formulier 'Nieuw ingrediënt' heet de linkerknop weer 'Terug naar zoeken' (picker.cancel) als de kiezer niet newOnly is — hij gaat immers terug naar zoeken; alleen bij newOnly 'Annuleer' (sluit). Bestaande focus bij openen blijft (zoekveld/eerste woord); Escape op het houd-menu en de MetaSheet en lange bewaarteksten in de kop → opschoonronde.
 
 ## 2. Besluiten van de kritische lezer (gelden over alle specs)
 

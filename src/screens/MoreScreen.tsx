@@ -34,6 +34,7 @@ import { browserLabel, OpenInChrome } from '@/components/BrowserNotice';
 import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
 import { levelTitleText } from '@/components/XpBar';
+import { SheetPortal } from '@/components/SheetPortal';
 import { getFahrenheit, getHouseholdServings, getSetting, setFahrenheit, setHouseholdServings, setSetting } from '@/db/repo';
 import { baseDictionary, userIngredients } from '@/dictionary';
 import type { Lang } from '@/domain/model';
@@ -260,38 +261,41 @@ function FeedbackSheet(props: { onClose: () => void }) {
   }
 
   return (
-    <div class="sheet-backdrop no-print" onClick={onClose}>
-      <div class="sheet feedback-sheet" role="dialog" aria-modal="true" aria-label={t('more.feedback')} onClick={(e) => e.stopPropagation()}>
-        <div class="sheet-head">
-          <h2>{t('more.feedback')}</h2>
-          <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={onClose}>
-            ×
-          </button>
-        </div>
-        <div class="sheet-body">
-          <p class="muted small feedback-intro">{t('feedback.intro')}</p>
-          <textarea ref={area} class="input" value={text} placeholder={t('feedback.placeholder')} aria-label={t('more.feedback')} onInput={(e) => setText((e.currentTarget as HTMLTextAreaElement).value)} />
-          <div class="feedback-auto" aria-label={t('feedback.auto')}>
-            <span class="feedback-auto-title">{t('feedback.auto')}</span>
-            {footer}
-          </div>
-          {!canShare && <p class="muted small">{t('feedback.noShare')}</p>}
-          <div class="actions">
-            {canShare && (
-              <button type="button" class="btn btn-primary btn-block" disabled={busy} onClick={send}>
-                {t('feedback.send')}
-              </button>
-            )}
-            <button type="button" class={'btn' + (canShare ? '' : ' btn-primary btn-block')} onClick={copy}>
-              {t('feedback.copy')}
+    <SheetPortal>
+      <div class="sheet-backdrop no-print" onClick={onClose}>
+        <div class="sheet feedback-sheet" role="dialog" aria-modal="true" aria-label={t('more.feedback')} onClick={(e) => e.stopPropagation()}>
+          <div class="sheet-head with-actions">
+            <span class="sheet-head-btn" aria-hidden="true" />
+            <h2>{t('more.feedback')}</h2>
+            <button type="button" class="sheet-head-btn" onClick={onClose}>
+              {t('common.close')}
             </button>
           </div>
-          <div class="status" role="status">
-            {status}
+          <div class="sheet-body">
+            <p class="muted small feedback-intro">{t('feedback.intro')}</p>
+            <textarea ref={area} class="input" value={text} placeholder={t('feedback.placeholder')} aria-label={t('more.feedback')} onInput={(e) => setText((e.currentTarget as HTMLTextAreaElement).value)} />
+            <div class="feedback-auto" aria-label={t('feedback.auto')}>
+              <span class="feedback-auto-title">{t('feedback.auto')}</span>
+              {footer}
+            </div>
+            {!canShare && <p class="muted small">{t('feedback.noShare')}</p>}
+            <div class="actions">
+              {canShare && (
+                <button type="button" class="btn btn-primary btn-block" disabled={busy} onClick={send}>
+                  {t('feedback.send')}
+                </button>
+              )}
+              <button type="button" class={'btn' + (canShare ? '' : ' btn-primary btn-block')} onClick={copy}>
+                {t('feedback.copy')}
+              </button>
+            </div>
+            <div class="status" role="status">
+              {status}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </SheetPortal>
   );
 }
 
@@ -360,22 +364,25 @@ function LinksSheet(props: { onClose: () => void }) {
   );
 
   return (
-    <div class="sheet-backdrop no-print" onClick={onClose}>
-      <div class="sheet links-sheet" role="dialog" aria-modal="true" aria-label={t('more.links')} onClick={(e) => e.stopPropagation()}>
-        <div class="sheet-head">
-          <h2>{t('more.links')}</h2>
-          <button ref={closeBtn} type="button" class="icon-btn" aria-label={t('common.close')} onClick={onClose}>
-            ×
-          </button>
-        </div>
-        <div class="sheet-body">
-          <p class="muted small links-intro">{t('links.intro')}</p>
-          {/* The phone in hand first; the other one below for whoever reads along. */}
-          {ios ? iphone : android}
-          {ios ? android : iphone}
+    <SheetPortal>
+      <div class="sheet-backdrop no-print" onClick={onClose}>
+        <div class="sheet links-sheet" role="dialog" aria-modal="true" aria-label={t('more.links')} onClick={(e) => e.stopPropagation()}>
+          <div class="sheet-head with-actions">
+            <span class="sheet-head-btn" aria-hidden="true" />
+            <h2>{t('more.links')}</h2>
+            <button ref={closeBtn} type="button" class="sheet-head-btn" onClick={onClose}>
+              {t('common.close')}
+            </button>
+          </div>
+          <div class="sheet-body">
+            <p class="muted small links-intro">{t('links.intro')}</p>
+            {/* The phone in hand first; the other one below for whoever reads along. */}
+            {ios ? iphone : android}
+            {ios ? android : iphone}
+          </div>
         </div>
       </div>
-    </div>
+    </SheetPortal>
   );
 }
 

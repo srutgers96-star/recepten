@@ -23,7 +23,13 @@
 // `tagsWithVariants(r)`: an approved diet tab counts as that diet's "-optie" tag (an approved
 // glutenvrij tab → 'glutenvrij-optie'; vegan also 'vega-optie'), so the diet chip with "ook als
 // optie" finds it. The stored `recipe.tags` never change.
+// 13J pattern (docs/specs/README.md §1a): the Kies sheet is rendered through <SheetPortal> with the
+// buttons in the head (`.sheet-head.with-actions`): Annuleer left, "Voeg N toe" (adds the chosen
+// dishes, the old foot button) right, so it never falls off the bottom edge on the iPhone. Escape and
+// tapping beside the sheet only close it (nothing is added). Focus goes to the search field on open
+// (as before) and back to the opener on close.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { SheetPortal } from '@/components/SheetPortal';
 import { formatShortDate } from '@/components/RecipeRow';
 import { CuisineChips, DIET_ROW_TAGS, DietChips, OPTIE_TAG, categoryLabel, isDietTag, tagChipLabel } from '@/components/FilterChips';
 import { dictionary } from '@/dictionary';
@@ -317,6 +323,13 @@ export function PickSheet(props: PickSheetProps) {
     return () => window.clearTimeout(id);
   }, [props.open]);
 
+  // Hand focus back to the opener on close (aria-modal moves no focus by itself).
+  useEffect(() => {
+    if (!props.open) return;
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    return () => opener?.focus({ preventScroll: true });
+  }, [props.open]);
+
   // Escape closes.
   useEffect(() => {
     if (!props.open) return;
@@ -356,76 +369,76 @@ export function PickSheet(props: PickSheetProps) {
   }
 
   return (
-    <div class="sheet-backdrop" onClick={props.onClose}>
-      <div class="sheet pick-sheet" role="dialog" aria-modal="true" aria-label={t('pick.title')} onClick={(e) => e.stopPropagation()}>
-        <div class="sheet-head">
-          <h2>
-            {t('pick.title')} <span class="pick-counter">{t('pick.counter', { n: selected.length, total: target })}</span>
-          </h2>
-          <button type="button" class="icon-btn" aria-label={t('common.close')} onClick={props.onClose}>
-            ×
-          </button>
-        </div>
-        <div class="pick-tools">
-          <input
-            ref={searchRef}
-            class="input"
-            type="search"
-            inputMode="search"
-            enterKeyHint="search"
-            autocomplete="off"
-            placeholder={t('pick.search')}
-            value={props.filter.query}
-            onInput={(e) => props.onFilter({ ...props.filter, query: (e.currentTarget as HTMLInputElement).value })}
-          />
-          <PickChips filter={props.filter} onChange={props.onFilter} tags={tags} cuisines={cuisines} noQuery mainOnlyToggle />
-          <div class="pick-sub muted small">
-            <span>{t('pick.sortHint')}</span>
-            <button type="button" class="btn btn-small btn-secondary" disabled={remaining === 0 || pool.length === 0} onClick={surprise}>
-              <ShuffleIcon /> {t('pick.surprise')} · {remaining}
+    <SheetPortal>
+      <div class="sheet-backdrop" onClick={props.onClose}>
+        <div class="sheet pick-sheet" role="dialog" aria-modal="true" aria-label={t('pick.title')} onClick={(e) => e.stopPropagation()}>
+          <div class="sheet-head with-actions">
+            <button type="button" class="sheet-head-btn" onClick={props.onClose}>
+              {t('common.cancel')}
+            </button>
+            <h2>
+              {t('pick.title')} <span class="pick-counter">{t('pick.counter', { n: selected.length, total: target })}</span>
+            </h2>
+            <button type="button" class="sheet-head-btn save" disabled={selected.length === 0} onClick={() => props.onConfirm(selected)}>
+              {selected.length === 0 ? t('pick.addNone') : t('pick.add', { n: selected.length })}
             </button>
           </div>
-        </div>
-        <div class="sheet-body pick-body">
-          {rows.length === 0 ? (
-            <div class="muted small picker-hint">{t('pick.none')}</div>
-          ) : (
-            <ul class="picker-list pick-list">
-              {rows.map((r) => {
-                const inPlan = existingIds.has(r.id);
-                const on = selectedSet.has(r.id);
-                const last = props.lastCooked.get(r.id);
-                const sub = inPlan ? t('pick.inPlan') : last ? t('pick.lastCooked', { date: formatShortDate(last, l) }) : t('pick.neverCooked');
-                return (
-                  <li key={r.id}>
-                    <button
-                      type="button"
-                      class={'picker-item pick-row' + (on ? ' on' : '') + (inPlan ? ' in-plan' : '')}
-                      role="checkbox"
-                      aria-checked={on}
-                      disabled={inPlan}
-                      onClick={() => toggleRow(r.id)}
-                    >
-                      <span class="pick-box" aria-hidden="true">
-                        {on || inPlan ? '✓' : ''}
-                      </span>
-                      <span class="pick-text">
-                        <span class="picker-name">{pickText(r.name, l)}</span>
-                        <span class="picker-sub muted small">{sub}</span>
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
-        <div class="pick-foot">
-          <button type="button" class="btn btn-primary btn-block" disabled={selected.length === 0} onClick={() => props.onConfirm(selected)}>
-            {selected.length === 0 ? t('pick.addNone') : t('pick.add', { n: selected.length })}
-          </button>
+          <div class="pick-tools">
+            <input
+              ref={searchRef}
+              class="input"
+              type="search"
+              inputMode="search"
+              enterKeyHint="search"
+              autocomplete="off"
+              placeholder={t('pick.search')}
+              value={props.filter.query}
+              onInput={(e) => props.onFilter({ ...props.filter, query: (e.currentTarget as HTMLInputElement).value })}
+            />
+            <PickChips filter={props.filter} onChange={props.onFilter} tags={tags} cuisines={cuisines} noQuery mainOnlyToggle />
+            <div class="pick-sub muted small">
+              <span>{t('pick.sortHint')}</span>
+              <button type="button" class="btn btn-small btn-secondary" disabled={remaining === 0 || pool.length === 0} onClick={surprise}>
+                <ShuffleIcon /> {t('pick.surprise')} · {remaining}
+              </button>
+            </div>
+          </div>
+          <div class="sheet-body pick-body">
+            {rows.length === 0 ? (
+              <div class="muted small picker-hint">{t('pick.none')}</div>
+            ) : (
+              <ul class="picker-list pick-list">
+                {rows.map((r) => {
+                  const inPlan = existingIds.has(r.id);
+                  const on = selectedSet.has(r.id);
+                  const last = props.lastCooked.get(r.id);
+                  const sub = inPlan ? t('pick.inPlan') : last ? t('pick.lastCooked', { date: formatShortDate(last, l) }) : t('pick.neverCooked');
+                  return (
+                    <li key={r.id}>
+                      <button
+                        type="button"
+                        class={'picker-item pick-row' + (on ? ' on' : '') + (inPlan ? ' in-plan' : '')}
+                        role="checkbox"
+                        aria-checked={on}
+                        disabled={inPlan}
+                        onClick={() => toggleRow(r.id)}
+                      >
+                        <span class="pick-box" aria-hidden="true">
+                          {on || inPlan ? '✓' : ''}
+                        </span>
+                        <span class="pick-text">
+                          <span class="picker-name">{pickText(r.name, l)}</span>
+                          <span class="picker-sub muted small">{sub}</span>
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </SheetPortal>
   );
 }
