@@ -101,7 +101,9 @@ export function StandingTab(props: StandingTabProps) {
     try {
       const removed = await removeStandingItem(item.id);
       if (!removed) return;
-      onSnack(t('shop.standing.removedSnack', { name: standingName(removed, dict, l) }), () => restoreStandingItem(removed));
+      onSnack(t('shop.standing.removedSnack', { name: standingName(removed.item, dict, l) }), () =>
+        restoreStandingItem(removed.item, removed.line),
+      );
     } catch (e) {
       onSnack(`${t('common.error')}: ${String((e as Error)?.message ?? e)}`);
     }

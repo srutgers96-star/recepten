@@ -4,6 +4,41 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 6C blok 3 — vaste lijst: vaste regels in de weeklijst, Ook voortaan, Klaar; badge Vaste klant
+Gebouwd volgens docs/specs/vaste-lijst.md "Blok 3" (bouwer A `StandingProtoRow.tsx` + `.spr-actions`, B ShoppingScreen proto-blok /
+Ook voortaan / Klaar-undo + ListRow, C tests, D Fable's besluiten (1) en (2) na blok 2; integrator). Niet gecommit. Geen Dexie-versie,
+geen dependency, geen tokenwijziging, geen nieuwe i18n-keys (alle keys van §1d stonden er sinds blok 2, NL en EN).
+- **Zichtbaar:** in "Controleer de lijst" staan de vaste regels niet meer in hun gangpad maar in een eigen blok **Vaste lijst** (EN
+  Every week) ná de gangpaden en vóór Voorraad, met de uitleg `shop.standing.protoHint`; per regel −/+ (alleen deze lijst), **Heb ik al**
+  (alleen deze lijst, nooit de voorraadkast) en, alleen bij een aangepast aantal ≠ 0, **Ook voortaan** → `adoptStandingAdjustment` + snack
+  "Nieuw standaardaantal: 2 potten mayonaise"; onder het blok "Beheer de vaste lijst ›" naar het tabblad. In de afvinklijst staan vaste
+  regels in hun gangpad met 📌 (ListRow toont het nu alleen bij `standing`, niet meer bij het oude `pinned`). Menu → Aantal aanpassen
+  heeft bij een vaste regel een knop **Ook voortaan**, grijs zolang het aantal niet is aangepast. **Klaar** wist bij vaste regels ook Heb
+  ik al en het aangepaste aantal (`clearChecks`, blok 1); Ongedaan zet vinkjes, Heb ik al en het aantal terug. Delen als tekst zonder
+  weekplan: geen codewijziging nodig (vaste regels zitten in `items`; titel zonder "— gerechten").
+- **Besluiten Fable na blok 2:** (1) `removeStandingItem` geeft `{ item, line? }`; `restoreStandingItem(item, line?)` zet de regel terug
+  met checked / inHouse / adjusted / section (ShoppingScreen `fromStanding` en StandingTab). (2) Badge **Vaste klant** / **Regular** 📌
+  (`vaste-klant`, groep koken, feature `standingList`, ladder 1-3-5-10-15-20-30-50) in data/badges.json; tellingen 144 → 145 actief, koken
+  34 → 35, zichtbaar totaal op de badgepagina 116 → 117.
+- **Integrator:** één CSS-regel `.pr:has(+ .spr-actions) { border-bottom: 0 }` (geen streep tussen een vaste proto-regel en zijn
+  knopregel).
+- **Groen:** check, 1624 tests (70 bestanden; nieuw tests/standing-list.test.ts, uitbreiding aggregate.test.ts), build, build:next,
+  validate:data (alleen de bekende 4 swaps-waarschuwingen).
+- **Dev-app (375 px, NL en EN):** proto-blok staat tussen de gangpaden en Voorraad; + op mayonaise → "2 potten mayonaise" + Ook voortaan
+  verschijnt; tik → snack "Nieuw standaardaantal: 2 potten mayonaise", vast item qty 2, knop weg; Heb ik al op boter → boter naar In huis;
+  Bevestig lijst → vaste regels in hun gangpad met 📌; Klaar → melk/mayonaise terug op standaard, niet in huis; Ongedaan → vinkje, Heb ik
+  al en aangepast aantal terug; EN-teksten (Every week, Already have it, Also from now on, Manage Every week ›) kloppen; de link opent het
+  tabblad; geen horizontaal scrollen. Het vasthouden-menu (Ook voortaan in Aantal aanpassen) niet met de hand geprobeerd (lang drukken
+  gaat niet in het paneel): op de telefoon via rij 90. De testgegevens staan nog in de dev-database (localhost).
+- **DEVICE-TEST:** rijen 90 en 91 (NL + EN) nieuw na rij 89. Blok 6C is daarmee compleet (blok 1–3).
+- **Open voor Fable (niet zelf beslist):** (1) Plaats van `vaste-klant` in badges.json: ná `hele-cirkel` i.p.v. direct na
+  `boodschapper`, omdat een 6D-2c-test eist dat `hele-cirkel` direct na `boodschapper` komt; de spec zegt niets over de plaats.
+  (2) Ongedaan na Klaar zet `section: 'inHouse'` niet letterlijk terug (`ListItemPatch` kent geen `section`); `inHouse` komt wel terug
+  en het scherm sorteert daarop, dus zichtbaar klopt het. (3) Ook voortaan heeft geen Ongedaan (spec noemt alleen een snack).
+  (4) `clearChecks` en `adoptStandingAdjustment` hebben geen eigen test (schrijven in Dexie); de tests bouwen hun regel na. Een pure
+  helper zoals `emptiedList` zou ze testbaar maken. (5) Remove/restore met staat is alleen door de typecheck en de dev-app gedekt.
+
+- **Besluit Fable (8 nov, commit van blok 3):** alle keuzes akkoord; 6C is compleet. Volgende: 13Q (spec qr-link.md), dan 13J.
 ## 8 nov (Opus): 6C blok 2 — vaste lijst: tabblad, bewerkvenster, menu
 Gebouwd volgens docs/specs/vaste-lijst.md "Blok 2" (bouwer A `StandingSheet.tsx`, B `StandingTab.tsx` + `placeholder`-prop van
 ExtraField, C ShoppingScreen-tabbladen/menu + i18n + CSS + Storage-telregel + Home-link, D Fable's besluiten (1) en (2) na blok 1;

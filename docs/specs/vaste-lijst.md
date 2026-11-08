@@ -495,6 +495,12 @@ voortaan in de aanpassen-stand + Klaar-undo + ListRow, C tests voor listAsText/c
 aggregate + DEVICE-TEST rijen 90–91; integrator). Af als: het proto-blok staat er
 met Heb ik al / Ook voortaan; Klaar reset vaste regels; delen als tekst klopt zonder weekplan; STATUS
 bijgewerkt.
+**Besluiten Fable na blok 3 (8 nov):** alle keuzes akkoord: badge `vaste-klant` staat na `hele-cirkel`; Ongedaan na Klaar zet
+`inHouse` terug (het scherm sorteert daarop; `section` niet letterlijk); "Ook voortaan" zonder Ongedaan; de snack na "Ook
+voortaan" noemt wat echt is opgeslagen (bij 0 "Nieuw standaardaantal: mayonaise" — aanvaard); "Zet op de vaste lijst" telt ook
+voor Vaste klant (fixer). Opschoonronde: `clearChecks`/`adoptStandingAdjustment` krijgen later een losse pure kern voor tests.
+6C is hiermee compleet.
+Gebouwd: 8 nov 2026 (6C blok 3, workflow wf_3bc07a4e-800)
 
 Geen van de drie blokken hoeft achter een vlag: blok 1 verandert niets zichtbaars behalve de
 pin-verhuizing, blok 2 en 3 zijn elk af als ze online gaan (`main` blijft bruikbaar op beide telefoons).

@@ -691,3 +691,131 @@ describe('standing lines', () => {
     expect(english).toContain('☐ 1 jar mayonnaise');
   });
 });
+
+// 6C blok 3 (docs/specs/vaste-lijst.md §1d, §4 "Blok 3", §6): the week list with standing lines.
+// "Klaar" (`clearChecks` in src/db/repo.ts) clears the ticks and, on standing lines only, also
+// `inHouse` and `adjusted` (section back to 'main'). That function writes Dexie, so its effect is
+// spelled out here as `klaar()` (the rule of §1d) and the tests check what aggregate and listAsText
+// make of a list in that state: the next list starts with the usual amounts.
+describe('standing lines: Klaar and sharing without a week plan (6C blok 3)', () => {
+  const st = (id: string, over: Partial<ListItem>): ListItem => ({ key: `s|${id}`, ing: null, qty: null, unit: null, aisle: 'overig', section: 'main', sources: [], standing: true, ...over });
+  const melk = st('k3m9x2ab', { ing: 'melk', qty: 3, unit: 'l', aisle: 'zuivel-eieren' });
+  const mayo = st('q7p1zz0c', { ing: 'mayonaise', qty: 1, unit: 'pot', aisle: 'sauzen-olie-azijn' });
+  const zegels = st('e5f6g7h8', { label: { nl: 'postzegels', en: 'stamps' } });
+  const byKey = (items: ListItem[], key: string) => items.find((it) => it.key === key);
+  const extra = (key: string, over: Partial<ListItem>): ListItem => ({ key, aisle: 'overig', section: 'main', sources: [], manual: true, ...over });
+  const aisleName = (id: string) => dict.aisle(id)?.nl;
+
+  /** The rule of §1d for "Klaar": ticks go; on standing lines also inHouse and adjusted. */
+  const klaar = (items: ListItem[]): ListItem[] =>
+    items.map((it) => {
+      const next = { ...it };
+      delete next.checked;
+      if (it.standing) {
+        delete next.inHouse;
+        delete next.adjusted;
+        if (next.section === 'inHouse') next.section = 'main';
+      }
+      return next;
+    });
+
+  const marked = (): ListItem[] =>
+    run([], [], {
+      standing: [melk, mayo],
+      previous: [
+        { ...melk, inHouse: true, section: 'inHouse' },
+        { ...mayo, adjusted: 1, checked: true },
+      ],
+    });
+
+  it('after Klaar a standing line is back in main with its usual amount, not in house', () => {
+    const before = marked();
+    expect(byKey(before, 's|k3m9x2ab')).toMatchObject({ inHouse: true, section: 'inHouse' });
+    expect(nl(byKey(before, 's|q7p1zz0c') as ListItem)).toBe('2 potten mayonaise');
+
+    const after = run([], [], { standing: [melk, mayo], previous: klaar(before) });
+    const m = byKey(after, 's|k3m9x2ab') as ListItem;
+    expect(m.section).toBe('main');
+    expect(m.inHouse).toBeUndefined();
+    expect(nl(m)).toBe('3 l melk');
+    const p = byKey(after, 's|q7p1zz0c') as ListItem;
+    expect(p.adjusted).toBeUndefined();
+    expect(p.checked).toBeUndefined();
+    expect(nl(p)).toBe('1 pot mayonaise');
+    expect(after.some((it) => it.fresh)).toBe(false);
+  });
+
+  it('Klaar keeps the in-house state of a recipe line (that is the pantry, not a standing flag)', () => {
+    const r = rec('b:pasta', 'Pasta', ['400 g pasta', '2 uien']);
+    const before = run([r], undefined, { standing: [melk], pantry: new Set(['ui']) });
+    expect(one(before, 'ui').section).toBe('inHouse');
+    const after = run([r], undefined, { standing: [melk], pantry: new Set(['ui']), previous: klaar(before) });
+    expect(one(after, 'ui').section).toBe('inHouse');
+  });
+
+  it('undo of Klaar (the old lines back) carries the ticks, "Heb ik al" and the adjusted amount again', () => {
+    const again = run([], [], { standing: [melk, mayo], previous: marked() });
+    expect(byKey(again, 's|k3m9x2ab')).toMatchObject({ inHouse: true, section: 'inHouse' });
+    expect(byKey(again, 's|q7p1zz0c')).toMatchObject({ adjusted: 1, checked: true });
+  });
+
+  it('without a week plan the shared text has the extras and the standing lines per aisle, and no "— …" line', () => {
+    const items = run([], [], {
+      extras: [extra('x|wc', { ing: 'wc-papier', qty: 1, unit: null, aisle: '' })],
+      standing: [zegels, mayo, melk],
+    });
+    const text = listAsText(items, dict, 'nl', { title: '🛒 Boodschappen wk 45' });
+    const lines = text.split('\n');
+    expect(lines[0]).toBe('🛒 Boodschappen wk 45');
+    expect(lines.some((l) => l.startsWith('—'))).toBe(false);
+    expect(text).not.toContain('(pm)');
+    expect(text).not.toContain('Controleer zelf');
+    for (const want of ['☐ 3 l melk', '☐ 1 pot mayonaise', '☐ postzegels']) expect(lines).toContain(want);
+    // Aisle order: dairy before sauces before "overig"; each line under its own aisle heading.
+    const iMelk = lines.indexOf('☐ 3 l melk');
+    const iMayo = lines.indexOf('☐ 1 pot mayonaise');
+    const iZegels = lines.indexOf('☐ postzegels');
+    expect(iMelk).toBeLessThan(iMayo);
+    expect(iMayo).toBeLessThan(iZegels);
+    expect(lines[iMelk - 1]).toBe(aisleName('zuivel-eieren'));
+    expect(lines[iMayo - 1]).toBe(aisleName('sauzen-olie-azijn'));
+
+    const english = listAsText(items, dict, 'en', { title: '🛒 Shopping wk 45' }).split('\n');
+    for (const want of ['☐ 3 l milk', '☐ 1 jar mayonnaise', '☐ stamps']) expect(english).toContain(want);
+    expect(english.some((l) => l.startsWith('—'))).toBe(false);
+  });
+
+  it('a list with only standing lines (no plan, no extras) shares as title + aisle + line', () => {
+    const items = run([], [], { standing: [melk] });
+    expect(listAsText(items, dict, 'nl', { title: 'T' }).split('\n')).toEqual(['T', aisleName('zuivel-eieren'), '☐ 3 l melk']);
+  });
+
+  it('sharing: hideInHouse drops a standing line marked "Heb ik al", hideChecked a ticked one, amount 0 always', () => {
+    const items = run([], [], {
+      standing: [melk, mayo, zegels],
+      previous: [
+        { ...melk, inHouse: true, section: 'inHouse' },
+        { ...mayo, checked: true },
+        { ...zegels },
+      ],
+    });
+    const all = listAsText(items, dict, 'nl', { title: 'T' });
+    expect(all).toContain('☐ 3 l melk (in huis)');
+    expect(all).toContain('☑ 1 pot mayonaise');
+    const shop = listAsText(items, dict, 'nl', { title: 'T', hideInHouse: true, hideChecked: true });
+    expect(shop).not.toContain('melk');
+    expect(shop).not.toContain('mayonaise');
+    expect(shop).toContain('☐ postzegels');
+    // An amount brought down to 0 for this week never shows.
+    const zero = run([], [], { standing: [melk], previous: [{ ...melk, adjusted: -3 }] });
+    expect(listAsText(zero, dict, 'nl', { title: 'T' })).not.toContain('melk');
+  });
+
+  it('with a week plan the standing lines join the dishes; the "— …" line names only the dishes', () => {
+    const items = run([rec('b:pap', 'Pap', ['250 ml melk'])], undefined, { standing: [melk, zegels] });
+    const lines = listAsText(items, dict, 'nl', { title: 'T' }).split('\n');
+    expect(lines.filter((l) => l.startsWith('—'))).toEqual(['— Pap']);
+    expect(lines).toContain('☐ 3 l melk');
+    expect(lines).toContain('☐ postzegels');
+  });
+});

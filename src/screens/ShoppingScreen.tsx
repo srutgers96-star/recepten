@@ -6,17 +6,21 @@
 //      no plan at all: the plain list (extras + the standing-list lines) with the add field;
 //   2. proto list (after "Maak de lijst", before confirming): per aisle `[−] qty name [+]`, staples
 //      at 0 in a small "Voorraad" block (tap → 1), "Controleer zelf" for unresolved lines, the
-//      extras field, "Bevestig lijst";
+//      extras field, "Bevestig lijst"; the standing-list lines sit in their own block "Vaste lijst"
+//      after the aisles and before "Voorraad" (6C §1d, StandingProtoRow: −/+ for this list only,
+//      Heb ik al for this list only, Ook voortaan → adoptStandingAdjustment; "Beheer de vaste lijst ›");
 //   3. the list: aisle sections in data order (collapsible, counter, collapsed once complete),
 //      tap = tick (strike-through, stays in place), "Verberg afgevinkt", undo snackbar (5 s),
 //      hold = menu (Heb ik al → in huis + pantry 21 days for non-perishables / Aantal aanpassen /
 //      Waarvoor is dit? / Verwijder / Zet op de vaste lijst; a standing line instead: Heb ik al for this
-//      list only (never the pantry) / Aantal aanpassen / Haal van de vaste lijst, no Waarvoor and no
-//      Verwijder), the stale banner "Weekplan gewijzigd — Bijwerken"
+//      list only (never the pantry) / Aantal aanpassen (+ Ook voortaan) / Haal van de vaste lijst, no
+//      Waarvoor and no Verwijder; in the list itself a standing line stays in its aisle with 📌),
+//      the stale banner "Weekplan gewijzigd — Bijwerken"
 //      (regenerate through the repo, checks survive; never automatic), "Deel lijst" (plain text
 //      NL/EN titled "🛒 Boodschappen wk 39 · 7 gerechten · 4 pers.", "Zonder afgevinkt" on by
 //      default → navigator.share({text}) with exactly one field, "Kopieer" fallback; "gedeeld om
-//      hh:mm" / "gewijzigd sinds delen"), "Klaar" (clear the ticks), "Leeg de lijst" (empty items
+//      hh:mm" / "gewijzigd sinds delen"), "Klaar" (clear the ticks, and "Heb ik al" + the changed
+//      amount of standing lines; its undo puts all three back), "Leeg de lijst" (empty items
 //      and extras, undo via the snack; also in the proto step) and "winkelstand" (wake lock).
 // `?proto=1` (the Week screen's "Boodschappenlijst maken") builds the list and opens the proto step.
 // All data goes through src/db/repo.ts; the dictionary comes from the `dictionary` signal.
@@ -30,6 +34,7 @@ import { Header } from '@/components/Header';
 import { ListRow } from '@/components/ListRow';
 import { ProtoRow, sourceLines } from '@/components/ProtoRow';
 import { Segmented } from '@/components/Segmented';
+import { StandingProtoRow, canKeepStanding } from '@/components/StandingProtoRow';
 import { StandingTab } from '@/components/StandingTab';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
@@ -38,6 +43,7 @@ import type { List } from '@/db/model';
 import {
   addExtra,
   addLineToStanding,
+  adoptStandingAdjustment,
   clearChecks,
   clearShoppingList,
   generateList,
@@ -55,6 +61,7 @@ import {
   restoreStandingItem,
   setInHouse,
   setListItem,
+  type ListItemPatch,
 } from '@/db/repo';
 import { recheckActiveBadges } from '@/badges';
 import { dictionary } from '@/dictionary';
@@ -340,6 +347,8 @@ export function ShoppingScreen() {
       await removeStandingItem(added.id);
       if (it.manual) await restoreListItem({ ...it });
     });
+    // Same feature hook as StandingTab's add (spec §0: 6D-2 counts both paths; badge vaste-klant).
+    void recordFeature('standingList');
   }
 
   /** "Haal van de vaste lijst" (6C §1d): removes the standing item and its line; undo brings both back. */
@@ -347,7 +356,18 @@ export function ShoppingScreen() {
     setMenu(null);
     const removed = await removeStandingItem(`s:${it.key.slice(2)}`);
     if (!removed) return;
-    showSnack(t('shop.standing.removedSnack', { name: itemName(it, dict, l) }), () => restoreStandingItem(removed));
+    showSnack(t('shop.standing.removedSnack', { name: itemName(it, dict, l) }), () => restoreStandingItem(removed.item, removed.line));
+  }
+
+  /** "Ook voortaan" (6C §1d): the amount changed on this list becomes the new usual amount of the
+   *  standing item; the snack names the line as it was saved ("2 potten mayonaise"). It is rendered
+   *  after adopting: an amount lowered to 0 is stored as "no amount", so the snack must not say "0". */
+  async function keep(it: ListItem) {
+    if (!it.standing || !canKeepStanding(it)) return;
+    await adoptStandingAdjustment(it.key);
+    const saved = (await getList())?.items.find((x) => x.key === it.key);
+    const text = renderListItem(saved ?? it, dict, l);
+    showSnack(t('shop.standing.keptSnack', { text }));
   }
 
   async function addItem(item: Partial<ListItem>) {
@@ -355,9 +375,20 @@ export function ShoppingScreen() {
     showSnack(`${t('shop.addedSnack')}: ${itemName(added, dict, l)}`, () => removeExtra(added.key));
   }
 
+  /** "Klaar": clears the ticks and, on standing lines, "Heb ik al" and the changed amount (6C §1d:
+   *  the next list starts from the usual amounts). The undo puts the ticks and those two fields back. */
   async function finish() {
     if (busy) return;
-    const checked = items.filter((it) => it.checked).map((it) => it.key);
+    const undo: Array<{ key: string; patch: ListItemPatch }> = [];
+    for (const it of items) {
+      const patch: ListItemPatch = {};
+      if (it.checked) patch.checked = true;
+      if (it.standing) {
+        if (it.inHouse) patch.inHouse = true;
+        if (typeof it.adjusted === 'number') patch.adjusted = it.adjusted;
+      }
+      if (Object.keys(patch).length > 0) undo.push({ key: it.key, patch });
+    }
     setBusy(true);
     try {
       await clearChecks();
@@ -366,7 +397,7 @@ export function ShoppingScreen() {
     }
     setOpen({});
     showSnack(t('shop.doneSnack'), async () => {
-      for (const key of checked) await setListItem(key, { checked: true });
+      for (const u of undo) await setListItem(u.key, u.patch);
     });
   }
 
@@ -468,6 +499,10 @@ export function ShoppingScreen() {
 
   const split = useMemo(() => splitItems(items), [items]);
   const groups: AisleGroup[] = useMemo(() => groupByAisle(split.main, dict, l), [split.main, dict, l]);
+  // 6C §1d: in the proto step the standing lines leave their aisle for the block "Vaste lijst" (after
+  // the aisles, before "Voorraad"); in the list itself they stay in their aisle (`groups`).
+  const protoStanding = useMemo(() => split.main.filter((it) => it.standing), [split.main]);
+  const protoGroups: AisleGroup[] = useMemo(() => groupByAisle(split.main.filter((it) => !it.standing), dict, l), [split.main, dict, l]);
   const total = split.main.length + split.check.length;
   const done = split.main.filter((it) => it.checked).length + split.check.filter((it) => it.checked).length;
   const allDone = total > 0 && done === total;
@@ -528,7 +563,7 @@ export function ShoppingScreen() {
     <>
       <h2 class="shop-top">{t('shop.proto.title')}</h2>
       <p class="muted small">{t('shop.proto.hint')}</p>
-      {groups.map((g) => (
+      {protoGroups.map((g) => (
         <section class="shop-aisle" data-aisle={g.id} key={g.id}>
           <div class="shop-aisle-head" role="heading" aria-level={3}>
             <i class="rule" aria-hidden="true" />
@@ -544,6 +579,35 @@ export function ShoppingScreen() {
         </section>
       ))}
       {split.main.length === 0 && split.check.length === 0 && <div class="empty">{t('shop.empty')}</div>}
+      {protoStanding.length > 0 && (
+        <section class="shop-block standing-proto">
+          <h3>{t('shop.standing.protoTitle')}</h3>
+          <p class="hint">{t('shop.standing.protoHint')}</p>
+          <ul class="list">
+            {protoStanding.map((it) => (
+              <StandingProtoRow
+                key={it.key}
+                item={it}
+                dict={dict}
+                lang={l}
+                onAdjust={(item, a) => void adjust(item, a)}
+                onHave={(item) => void setHave(item, true)}
+                onKeep={(item) => void keep(item)}
+              />
+            ))}
+          </ul>
+          <a
+            class="standing-home-link"
+            href="#/shopping?tab=standing"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/shopping?tab=standing');
+            }}
+          >
+            {t('shop.standing.manage')}
+          </a>
+        </section>
+      )}
       {split.staples.length > 0 && (
         <section class="shop-block">
           <h3>{t('shop.staples')}</h3>
@@ -872,6 +936,12 @@ export function ShoppingScreen() {
                     <button type="button" class="btn" onClick={() => setMenu({ item: menuItem, view: 'menu' })}>
                       {t('shop.menu.back')}
                     </button>
+                    {/* 6C §1d: a standing line gets "Ook voortaan" here, grey while the amount is unchanged. */}
+                    {menuItem.standing && (
+                      <button type="button" class="btn" disabled={!canKeepStanding(menuItem)} onClick={() => void keep(menuItem)}>
+                        {t('shop.standing.keep')}
+                      </button>
+                    )}
                     <button type="button" class="btn btn-primary" onClick={() => setMenu(null)}>
                       {t('common.close')}
                     </button>

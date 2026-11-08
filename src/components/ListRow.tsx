@@ -4,6 +4,8 @@
 // the row knows nothing about the dictionary. Pointer events only: a finger that moves more than
 // 10 px scrolls, and the click after a completed hold is swallowed. A small × on the right removes the
 // line without ticking it (Stijn 30 Oct: "ketchup heb ik niet meer nodig"); the caller shows the Undo snack.
+// A line from the standing list ("Vaste lijst", docs/specs/vaste-lijst.md §1d; `item.standing`) carries a
+// 📌 with the accessible name `shop.standing.badge`; the old `pinned` field no longer shows anything.
 import { useRef, useState } from 'preact/hooks';
 import type { ListItem } from '@/domain/aggregate';
 import { t } from '@/i18n';
@@ -90,7 +92,7 @@ export function ListRow(props: ListRowProps) {
         </span>
         <span class="lr-text">{props.text}</span>
         {/* `fresh` stays on the item (aggregate marks new lines) but shows no chip: it got in the way of shopping (Stijn 30 Oct). */}
-        {(item.pinned || item.standing) && (
+        {item.standing && (
           <span class="lr-pin" title={t('shop.standing.badge')} aria-label={t('shop.standing.badge')}>
             📌
           </span>

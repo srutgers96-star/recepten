@@ -1286,6 +1286,25 @@ describe('data/badges.json (catalogue smoke, §2d)', () => {
     expect(catalogue[i - 1]?.id).toBe('boodschapper');
   });
 
+  it('"Vaste klant" is the standingList feature ladder of 6C, after Boodschapper in Koken, and counts that feature', () => {
+    const i = catalogue.findIndex((b) => b.id === 'vaste-klant');
+    expect(catalogue[i]).toEqual({
+      id: 'vaste-klant',
+      nl: { name: 'Vaste klant', description: 'Zet {n} vaste boodschappen op je lijst' },
+      en: { name: 'Regular', description: 'Put {n} staples on your Every week list' },
+      icon: '📌',
+      rule: { kind: 'feature', id: 'standingList' },
+      group: 'koken',
+      tiers: [1, 3, 5, 10, 15, 20, 30, 50],
+    });
+    expect(i).toBeGreaterThan(catalogue.findIndex((b) => b.id === 'boodschapper'));
+    const def = catalogue[i] as Badge;
+    const at = (n: number) => evaluateBadges([def], facts({ features: { standingList: n } }))[0];
+    expect(at(0)).toMatchObject({ earned: false, current: 0 });
+    expect(at(1)).toMatchObject({ earned: true });
+    expect(evaluateBadges([def], facts({ features: { listMade: 9 } }))[0]).toMatchObject({ earned: false, current: 0 });
+  });
+
   it('evaluates as a whole on empty facts: retired ones left out, nothing earned', () => {
     const out = evaluateBadges(catalogue, facts());
     expect(out).toHaveLength(catalogue.filter((b) => b.retired !== true).length);

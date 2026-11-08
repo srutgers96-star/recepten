@@ -2366,24 +2366,38 @@ export async function updateStandingItem(id: string, patch: StandingPatch): Prom
   });
 }
 
-/** Removes the item and its line; returns the item for "Ongedaan" (`restoreStandingItem`). */
-export async function removeStandingItem(id: string): Promise<StandingItem | undefined> {
+/** What `removeStandingItem` took away: the item and, when it was on the list, its 's|' line. */
+export interface RemovedStanding {
+  item: StandingItem;
+  line?: ListItem;
+}
+
+/**
+ * Removes the item and its line; returns both for "Ongedaan" (`restoreStandingItem`), so the line can
+ * come back with its state (decision Fable after block 2 (1)).
+ */
+export async function removeStandingItem(id: string): Promise<RemovedStanding | undefined> {
   return db.transaction('rw', db.settings, db.lists, async () => {
     const cur = await getStandingList();
     const item = cur.items.find((s) => s.id === id);
     if (!item) return undefined;
+    const key = standingKey(id);
+    const list = await getList();
+    const found = list?.items.find((it) => it.key === key) ?? list?.extras.find((it) => it.key === key);
     await saveStandingList(cur.items.filter((s) => s.id !== id));
-    await patchList((list) => withoutLine(list, standingKey(id)));
-    return item;
+    await patchList((l) => withoutLine(l, key));
+    return found ? { item, line: { ...found } } : { item };
   });
 }
 
 /**
  * Undo of `removeStandingItem`: the item comes back with its own id, and its line when it is enabled.
- * An item with the same id is replaced; when another item for the same ingredient / text was added in
- * the meantime nothing is restored (never two of the same on the standing list).
+ * When the removed `line` is given, the new line takes over its `checked` / `inHouse` / `adjusted` /
+ * `section` (decision Fable after block 2 (1)). An item with the same id is replaced; when another
+ * item for the same ingredient / text was added in the meantime nothing is restored (never two of the
+ * same on the standing list).
  */
-export async function restoreStandingItem(item: StandingItem): Promise<void> {
+export async function restoreStandingItem(item: StandingItem, line?: ListItem): Promise<void> {
   await db.transaction('rw', db.settings, db.lists, async () => {
     const cur = await getStandingList();
     const restored = normalizeStandingList({ v: 1, items: [item], updatedAt: nowIso() }).items[0];
@@ -2391,8 +2405,24 @@ export async function restoreStandingItem(item: StandingItem): Promise<void> {
     const others = cur.items.filter((s) => s.id !== restored.id);
     if (findSameStanding(others, restored)) return;
     await saveStandingList([...others, restored]);
-    if (restored.enabled) await patchList((list) => withStandingLine(list, restored));
+    if (!restored.enabled) return;
+    await patchList((list) => {
+      const next = withStandingLine(list, restored);
+      if (!next || !line) return next;
+      const key = standingKey(restored.id);
+      return { ...next, items: next.items.map((it) => (it.key === key ? withLineState(it, line) : it)) };
+    });
   });
+}
+
+/** `fresh` with the user state of `old` (checked / inHouse / adjusted / section) copied over. */
+function withLineState(fresh: ListItem, old: ListItem): ListItem {
+  const it: ListItem = { ...fresh };
+  if (old.checked) it.checked = true;
+  if (old.inHouse) it.inHouse = true;
+  if (old.adjusted !== undefined) it.adjusted = old.adjusted;
+  if (old.section) it.section = old.section;
+  return it;
 }
 
 /**

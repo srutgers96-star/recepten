@@ -955,3 +955,19 @@
   color: var(--cobalt);
   text-decoration: none;
 }
+
+/* The button row under a standing line in the proto block (StandingProtoRow, §1d/§3): a second
+   <li> right after the ProtoRow's own <li class="pr">; "Heb ik al" · "Ook voortaan". */
+.spr-actions {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 4px 10px;
+  border-bottom: 1px solid var(--line);
+}
+/* No divider between a standing ProtoRow and its own button row: the pair reads as one line. */
+.pr:has(+ .spr-actions) {
+  border-bottom: 0;
+}
