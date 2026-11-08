@@ -834,3 +834,124 @@
 .inbox-plan .actions {
   margin: 12px 0 0;
 }
+
+/* ---------- Vaste lijst / Every week (6C, docs/specs/vaste-lijst.md §1) ---------- */
+
+/* The two tabs "Deze week" / "Vaste lijst" under the cooking bar (§1a): two equal pills, fit 360 px. */
+.standing-tabs {
+  margin: 12px 0 4px;
+}
+
+.standing-tabs .seg {
+  flex-wrap: nowrap;
+}
+
+.standing-tabs .seg label {
+  flex: 1 1 0;
+  min-width: 0;
+  justify-content: center;
+  text-align: center;
+}
+
+/* The tab "Vaste lijst" (StandingTab, §1b). */
+.standing-intro {
+  margin: 12px 0 10px;
+}
+
+.standing-empty {
+  margin-top: 12px;
+}
+
+.standing-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+}
+
+.standing-row-btn {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 4px;
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.standing-row-btn:active {
+  background: var(--press);
+}
+
+.standing-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* "Even niet meenemen": the line stays, grey, with "(staat uit)". */
+.standing-row.paused .standing-text,
+.standing-paused {
+  color: var(--muted);
+}
+
+.standing-paused {
+  font-size: 13px;
+}
+
+.standing-hint {
+  margin: 10px 0 0;
+}
+
+/* The edit sheet of one standing line (StandingSheet, §1c). */
+.standing-amount .stepper {
+  justify-content: space-between;
+}
+
+.standing-amount-value {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ten unit pills (stuks … l): they wrap, never scroll sideways at 360 px. */
+.standing-unit .seg {
+  gap: 6px;
+}
+
+.standing-unit .seg label {
+  padding: 0 12px;
+}
+
+.standing-pause-hint {
+  margin: 6px 0 0;
+}
+
+.standing-remove {
+  margin-top: 4px;
+}
+
+/* The long-press menu of a standing line: "Staat op je vaste lijst" under the line text (§1d). */
+.standing-on-list {
+  margin-top: -6px;
+}
+
+/* Home: the text link under the empty week card (decision D). */
+.standing-home-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -4px 0 8px;
+  padding: 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cobalt);
+  text-decoration: none;
+}

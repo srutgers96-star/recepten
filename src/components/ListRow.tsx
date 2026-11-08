@@ -1,6 +1,6 @@
 // One line of the shopping list (docs/phase-4-spec.md §3, state 3): tap = tick (strike-through,
 // the row stays where it is), hold ≈ 500 ms = the long-press menu (Heb ik al / Aantal aanpassen /
-// Waarvoor is dit? / Verwijder / Elke week). The caller renders the text (`renderListItem`) so
+// Waarvoor is dit? / Verwijder / Zet op de vaste lijst; 6C). The caller renders the text (`renderListItem`) so
 // the row knows nothing about the dictionary. Pointer events only: a finger that moves more than
 // 10 px scrolls, and the click after a completed hold is swallowed. A small × on the right removes the
 // line without ticking it (Stijn 30 Oct: "ketchup heb ik niet meer nodig"); the caller shows the Undo snack.
@@ -91,7 +91,7 @@ export function ListRow(props: ListRowProps) {
         <span class="lr-text">{props.text}</span>
         {/* `fresh` stays on the item (aggregate marks new lines) but shows no chip: it got in the way of shopping (Stijn 30 Oct). */}
         {(item.pinned || item.standing) && (
-          <span class="lr-pin" title={t('shop.pinned')} aria-label={t('shop.pinned')}>
+          <span class="lr-pin" title={t('shop.standing.badge')} aria-label={t('shop.standing.badge')}>
             📌
           </span>
         )}

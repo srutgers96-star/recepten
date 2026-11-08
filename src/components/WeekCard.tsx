@@ -1,6 +1,7 @@
 // The Home card "Deze week", compact (docs/specs/home-a-plus.md §1i, Home A+ block 2).
-// No slots → the existing empty card "Kies 7 voor deze week" (→ Week), unchanged; 6C block 2 adds
-// the text link `home.weekEmptyStanding` there later. Otherwise `.card.week-card.compact`:
+// No slots → the existing empty card "Kies 7 voor deze week" (→ Week), unchanged, with under it the
+// text link `home.weekEmptyStanding` "Alleen de vaste lijst ›" (→ Shopping, tab Vaste lijst; 6C block 2,
+// docs/specs/vaste-lijst.md decision D). Otherwise `.card.week-card.compact`:
 // - title row: "Deze week ›" (→ Week) with "{n} van {total} gekookt" on the right, also at 0;
 // - one line of names (→ Week): uncooked first in plan order, then the cooked ones struck through,
 //   at most 3 names + "+N", joined with " · " (`weekNames` + `weekLine`, src/domain/tonight.ts);
@@ -21,24 +22,35 @@ function toWeek(e: Event) {
   navigateTab('/week');
 }
 
+function toStanding(e: Event) {
+  e.preventDefault();
+  navigateTab('/shopping?tab=standing');
+}
+
 export function WeekCard(props: { plan: Plan; byId: ReadonlyMap<string, Recipe> }): JSX.Element {
   const { plan, byId } = props;
   const l = lang.value;
 
   if (plan.items.length === 0) {
     return (
-      <a class="card week-card week-card-empty" href="#/week" onClick={toWeek}>
-        <span class="week-card-icon" aria-hidden="true">
-          🗓️
-        </span>
-        <span class="week-card-text">
-          <strong>{t('home.weekEmpty')}</strong>
-          <span class="muted small">{t('home.weekEmptyHint')}</span>
-        </span>
-        <span class="chev" aria-hidden="true">
-          ›
-        </span>
-      </a>
+      <>
+        <a class="card week-card week-card-empty" href="#/week" onClick={toWeek}>
+          <span class="week-card-icon" aria-hidden="true">
+            🗓️
+          </span>
+          <span class="week-card-text">
+            <strong>{t('home.weekEmpty')}</strong>
+            <span class="muted small">{t('home.weekEmptyHint')}</span>
+          </span>
+          <span class="chev" aria-hidden="true">
+            ›
+          </span>
+        </a>
+        {/* Own link next to the card (a link inside the card's <a> is not allowed); styled in shopping.css. */}
+        <a class="standing-home-link" href="#/shopping?tab=standing" onClick={toStanding}>
+          {t('home.weekEmptyStanding')}
+        </a>
+      </>
     );
   }
 

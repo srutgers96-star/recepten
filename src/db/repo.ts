@@ -2138,23 +2138,6 @@ export async function restoreListItem(item: ListItem): Promise<void> {
   });
 }
 
-/** "Elke week": toggles the pin and returns the new state. A pinned item survives regeneration. */
-export async function togglePinned(key: string): Promise<boolean> {
-  let pinned = false;
-  await updateList((list) => {
-    const flip = (it: ListItem): ListItem => {
-      if (it.key !== key) return it;
-      pinned = !it.pinned;
-      const next = { ...it };
-      if (pinned) next.pinned = true;
-      else delete next.pinned;
-      return next;
-    };
-    return { ...list, items: list.items.map(flip), extras: list.extras.map(flip) };
-  });
-  return pinned;
-}
-
 /**
  * "Klaar": clears every check (the plan, the pins and the in-house flags stay). A standing-list line
  * (6C, `it.standing`) also loses `inHouse` and `adjusted` and returns to the main list: the next list
@@ -2413,9 +2396,10 @@ export async function restoreStandingItem(item: StandingItem): Promise<void> {
 }
 
 /**
- * "Zet op de vaste lijst" from a list line: `standingFromListItem` → `addStandingItem`. A manual
- * extra leaves `items` and `extras` and the new 's|' line takes over its checked / inHouse / adjusted;
- * a generated (recipe) line stays. Returns undefined for a 'check' line, a line that is already
+ * "Zet op de vaste lijst" from a list line: `standingFromListItem` → `addStandingItem`; the standing
+ * qty is the line's effective amount (decision Fable 8 nov (1)). A manual extra leaves `items` and
+ * `extras` and the new 's|' line takes over its checked / inHouse, but not `adjusted` (already in the
+ * standing qty); a generated (recipe) line stays. Returns undefined for a 'check' line, a line that is already
  * standing, or an unknown key; returns the existing item when the same one is already on the
  * standing list (nothing else changes then).
  */
@@ -2450,7 +2434,6 @@ export async function addLineToStanding(key: string): Promise<StandingItem | und
               line.inHouse = true;
               line.section = 'inHouse';
             }
-            if (typeof it.adjusted === 'number' && Number.isFinite(it.adjusted) && it.adjusted !== 0) line.adjusted = it.adjusted;
             return line;
           });
         return { ...l, items, extras: l.extras.filter((x) => x.key !== key) };
@@ -2487,8 +2470,10 @@ export async function adoptStandingAdjustment(key: string): Promise<void> {
 
 /**
  * Moves the old "Elke week" pins onto the standing list (`absorbPins` over the standing list and the
- * current list). Writes both only when something moved; returns how many moved. Idempotent: a second
- * run moves 0. Called on ShoppingScreen mount and at the start of `generateList`.
+ * current list). Writes as soon as a pin was handled (`changed` > 0: moved, absorbed by an item already
+ * on the standing list, or only unpinned), the standing setting only when something moved; returns how
+ * many moved (the snack counts only those). Idempotent: a second run changes nothing. Called on
+ * ShoppingScreen mount and at the start of `generateList`.
  */
 export async function migratePinsToStanding(): Promise<number> {
   return db.transaction('rw', db.settings, db.lists, async () => {
@@ -2496,8 +2481,8 @@ export async function migratePinsToStanding(): Promise<number> {
     if (!list) return 0;
     if (!list.items.some((it) => it.pinned) && !list.extras.some((it) => it.pinned)) return 0;
     const r = absorbPins(await getStandingList(), list, nowIso());
-    if (r.moved <= 0) return 0;
-    await setSetting(STANDING_LIST_KEY, r.standing);
+    if (r.changed <= 0) return 0;
+    if (r.moved > 0) await setSetting(STANDING_LIST_KEY, r.standing);
     await saveList({ ...list, items: r.items, extras: r.extras });
     return r.moved;
   });

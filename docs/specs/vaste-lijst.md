@@ -476,6 +476,19 @@ lijst" vervangt de pin; `togglePinned` en de vijf oude keys zijn weg; `?tab=stan
 DEVICE-TEST rij 89 en rij 28 (NL + EN) bijgewerkt: in de menuopsomming wordt
 "Elke week" → "Zet op de vaste lijst" / "Every week" → "Put on Every week"; de lege weekkaart op Home
 heeft de link "Alleen de vaste lijst ›" (besluit D). De open punten A–D zijn beslist (bovenaan).
+**Besluiten Fable na blok 2 (8 nov; voor blok 3, extra bouwer D):** (1) Ongedaan na "Haal van de vaste lijst" en na
+"Verwijder" in het tabblad zet de regel terug MET zijn staat: `removeStandingItem` geeft `{ item, line? }` terug (de
+verwijderde `s|`-regel), `restoreStandingItem(item, line?)` zet die regel terug met `checked`/`inHouse`/`adjusted`/`section`
+als hij er is (anders zoals nu); beide aanroepplekken (ShoppingScreen `fromStanding`, StandingTab) geven de regel door.
+(2) De badge `vaste-klant` komt er alsnog: data/badges.json, groep `koken`, icoon 📌, regel `{ kind: 'feature', id:
+'standingList' }`, ladder `tiers: [1, 3, 5, 10, 15, 20, 30, 50]`, NL "Vaste klant" / "Zet {n} vaste boodschappen op je lijst",
+EN "Regular" / "Put {n} staples on your Every week list"; tests met vaste aantallen (144 → 145 actieve badges, koken 34 → 35)
+aanpassen. (3) Iets toevoegen wat al op de vaste lijst staat: snack zonder Ongedaan, geen feature-telling — akkoord.
+(4) Het × op een vaste regel haalt hem alleen deze week uit de lijst (komt bij Bijwerken terug); het menu heeft "Haal van
+de vaste lijst" voor definitief — akkoord, geen wijziging. (5) `recordFeature('pantry')` bij "Heb ik al" op een vaste regel:
+aanvaard. (6) Eenheid wisselen rekent niet om; "Zet op de vaste lijst" niet in het menu van een controleer-regel; `storage.standing`
+in shopping.ts; D-nuance over een uitgezet bestaand item: alles akkoord.
+Gebouwd: 8 nov 2026 (6C blok 2, workflow wf_e74cd6bb-316)
 
 **Blok 3 — samenvoegen in de weeklijst** (A StandingProtoRow, B ShoppingScreen proto-blok + Ook
 voortaan in de aanpassen-stand + Klaar-undo + ListRow, C tests voor listAsText/clearChecks-gedrag via

@@ -37,6 +37,8 @@ export const browse: Dict = {
   'home.filters': { nl: 'filters', en: 'filters' },
   'home.filtersActive': { nl: 'filters ({n})', en: 'filters ({n})' },
   'home.continueWith': { nl: 'Verder met: {name} ›', en: 'Continue with: {name} ›' },
+  // 6C block 2 (docs/specs/vaste-lijst.md, decision D): text link under the empty week card on Home.
+  'home.weekEmptyStanding': { nl: 'Alleen de vaste lijst ›', en: 'Just the every-week list ›' },
 
   // --- A-Z list ---
   'list.title': { nl: 'Recepten', en: 'Recipes' },

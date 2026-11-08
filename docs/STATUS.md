@@ -4,6 +4,44 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 6C blok 2 — vaste lijst: tabblad, bewerkvenster, menu
+Gebouwd volgens docs/specs/vaste-lijst.md "Blok 2" (bouwer A `StandingSheet.tsx`, B `StandingTab.tsx` + `placeholder`-prop van
+ExtraField, C ShoppingScreen-tabbladen/menu + i18n + CSS + Storage-telregel + Home-link, D Fable's besluiten (1) en (2) na blok 1;
+integrator). Niet gecommit. Geen Dexie-versie, geen dependency, geen tokenwijziging.
+- **Zichtbaar:** Boodschappen heeft onder de kookbalk twee tabbladen **Deze week** / **Vaste lijst** (EN This week / Every week; niet
+  onthouden, `#/shopping?tab=standing` opent het tweede, de proto-stap toont geen tabbladen). Tabblad Vaste lijst: introzin, ExtraField met
+  eigen placeholder, regels per gangpad (uitgezet grijs met "(staat uit)"), tik-hint of lege tekst; toevoegen met snack + Ongedaan en
+  `recordFeature('standingList')` (besluit 8). `StandingSheet` (SheetPortal, Sluit in de kop, geen Bewaar): stepper met `standingStep`,
+  tien eenheid-pillen (vreemde eenheid = geen pil), Even niet meenemen / Weer meenemen, Verwijder met snack + Ongedaan. Menu bij vasthouden:
+  gewone regel → **Zet op de vaste lijst** (met uitleg; niet bij een Controleer-zelf-regel); vaste regel → subregel "Staat op je vaste
+  lijst", Heb ik al met "Alleen deze lijst; niet onthouden." (raakt de voorraadkast niet meer), Aantal aanpassen, **Haal van de vaste
+  lijst**; geen Waarvoor/Verwijder. `togglePinned` en de vijf pin-keys zijn weg; ListRow leest voor het 📌 nu `shop.standing.badge`
+  (integrator: anders bleef `shop.pinned` nodig, terwijl blok 2 de vijf keys weg wil; de voorwaarde `pinned || standing` laat blok 3
+  staan). `shop.noPlan` heeft de nieuwe tekst; Opslag & back-up telt "Vaste lijst (regels)"; de lege weekkaart op Home heeft de link
+  "Alleen de vaste lijst ›". Besluiten Fable (1)/(2): `adjusted` gaat niet meer mee naar een nieuwe `s|`-regel (zit in het vaste
+  aantal); een gepinde extra waarvan het ingrediënt al vast staat verdwijnt en geeft zijn status door; `absorbPins` geeft ook `changed`.
+- **Groen:** check, 1609 tests (69 bestanden), build, build:next, validate:data (alleen de bekende 4 swaps-waarschuwingen).
+- **Dev-app (375 en 360 px, NL en EN):** "2 melk" → "2 l melk", "200 gram boter" → "200 g boter" onder Zuivel & eieren; venster: Sluit
+  heeft de focus, + → "3 l melk", − tot "zonder aantal" (− grijs), + vanuit niets → "1 l", ernaast tikken en Escape sluiten; "mayonaise"
+  uit het lijstje → "1 mayonaise" (pil stuks), pot → "1 pot mayonaise", Even niet meenemen → grijs "(staat uit)" en weg uit Deze week;
+  Deze week zonder weekplan toont de vaste regels met 📌 en de nieuwe noPlan-tekst; menu van een vaste en een gewone regel zoals hierboven;
+  Haal van de vaste lijst + Ongedaan, Zet op de vaste lijst + Ongedaan (extra komt terug); Heb ik al op vaste melk laat "In huis
+  (voorraad)" op 0; Opslag-telregel klopt; Home-link opent het tabblad; 360 px: tabbladen 2 × 160 px, pillen in twee rijen, geen
+  horizontaal scrollen, rijen 44 px, invoer 16 px. Geen consolefouten. Checks 5–6 (proto-blok, Ook voortaan, Klaar) horen bij blok 3.
+  De testgegevens staan nog in de dev-database (localhost).
+- **DEVICE-TEST:** rij 89 (NL + EN) nieuw na rij 88; rij 28 (NL + EN) noemt in het menu nu "Zet op de vaste lijst" / "Put on Every week".
+- **Open voor Fable (niet zelf beslist):** (1) De badge `vaste-klant` (regel feature `standingList`) staat niet in data/badges.json;
+  de hook vuurt dus zonder badge (besluit 8: melden). (2) Iets typen of "Zet op de vaste lijst" tikken wat al vast staat: snack
+  "Op de vaste lijst gezet: …" zónder Ongedaan en zonder `recordFeature` (anders haalt Ongedaan het bestaande item weg); de spec zegt
+  niets. (3) De × per regel (ListRow onRemove, nieuwer dan de spec) haalt een vaste regel alleen uit deze lijst; bij de volgende keer
+  Bijwerken komt hij terug. (4) Heb ik al op een vaste regel roept nog `recordFeature('pantry')` aan (voorraad-badge; de voorraadkast
+  zelf wordt niet geraakt). (5) Besluit (2): een gepinde **receptregel** waarvan het ingrediënt al vast staat verliest alleen `pinned`
+  (status gaat niet mee); staat het bestaande vaste item uit, dan verdwijnt de gepinde extra zonder regel om zijn status naar door te
+  zetten (deze week dan niet op de lijst). (6) Wisselen van eenheid in het venster laat het getal staan (geen omrekening; spec zegt
+  niets). (7) ListRow-kopcommentaar en het label bijgewerkt; de rest van ListRow (alleen `standing`) blijft voor blok 3.
+
+- **Besluit Fable (8 nov, commit van blok 2):** Ongedaan zet de vaste regel terug mét staat (blok 3 D); badge `vaste-klant`
+  komt in blok 3 (ladder 1…50, 📌); overige keuzes akkoord. Alles in vaste-lijst.md onder "Besluiten Fable na blok 2".
 ## 8 nov (Opus): 6C blok 1 — vaste lijst: model, aggregate, repo en pin-migratie (onzichtbaar)
 Gebouwd volgens docs/specs/vaste-lijst.md "Blok 1" (bouwer A `src/domain/standing.ts` + tests/standing.test.ts, B `aggregate.ts`
 + tests/aggregate.test.ts, C repo/model; integrator). Niet gecommit. Geen Dexie-versie (blijft v7), geen dependency, geen tokenwijziging.

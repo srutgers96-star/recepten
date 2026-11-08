@@ -19,6 +19,8 @@ export interface ExtraFieldProps {
   /** Extras of the current / previous list: their labels are offered again. */
   previous: readonly ListItem[];
   onAdd: (item: Partial<ListItem>) => void | Promise<void>;
+  /** Placeholder of the input; default `shop.addPlaceholder` (the standing tab passes its own, 6C). */
+  placeholder?: string;
 }
 
 /** "200 g " / "3 " in front of a suggestion; '' without an amount. */
@@ -144,7 +146,7 @@ export function ExtraField(props: ExtraFieldProps) {
           autocapitalize="off"
           enterKeyHint="done"
           aria-label={t('shop.addLabel')}
-          placeholder={t('shop.addPlaceholder')}
+          placeholder={props.placeholder ?? t('shop.addPlaceholder')}
           value={text}
           disabled={busy}
           onInput={(e) => setText((e.currentTarget as HTMLInputElement).value)}

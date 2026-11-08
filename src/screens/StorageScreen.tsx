@@ -467,6 +467,8 @@ export function StorageScreen() {
             <dd>{show(week?.list)}</dd>
             <dt>{t('storage.pantry')}</dt>
             <dd>{show(week?.pantry)}</dd>
+            <dt>{t('storage.standing')}</dt>
+            <dd>{show(week?.standing)}</dd>
             <dt>{t('storage.photos')}</dt>
             <dd>{show(photoCount)}</dd>
           </dl>

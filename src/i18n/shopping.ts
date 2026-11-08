@@ -9,7 +9,7 @@ export const shopping: Dict = {
   'shop.planCard': { nl: 'Weekplan: {n} gerechten', en: 'Week plan: {n} dishes' },
   'shop.planCardOne': { nl: 'Weekplan: 1 gerecht', en: 'Week plan: 1 dish' },
   'shop.planCardHint': { nl: 'Nog geen lijst voor dit weekplan.', en: 'No list for this week plan yet.' },
-  'shop.noPlan': { nl: 'Geen weekplan. Dit is je losse boodschappenlijst: wat je toevoegt en wat elke week meegaat.', en: 'No week plan. This is your plain shopping list: what you add and what goes every week.' },
+  'shop.noPlan': { nl: 'Geen weekplan. Dit is je losse boodschappenlijst: wat je toevoegt en je vaste lijst.', en: 'No week plan. This is your plain shopping list: what you add plus your every-week list.' },
   'shop.toWeek': { nl: 'Naar Week', en: 'Go to Week' },
   'shop.make': { nl: 'Maak de lijst', en: 'Make the list' },
   'shop.making': { nl: 'Bezig…', en: 'Working…' },
@@ -56,10 +56,7 @@ export const shopping: Dict = {
   'shop.removeRow': { nl: 'Verwijder {name}', en: 'Remove {name}' },
   'shop.inHouseSnack': { nl: 'In huis gezet', en: 'Marked in stock' },
   'shop.neededSnack': { nl: 'Weer op de lijst', en: 'Back on the list' },
-  'shop.pinnedSnack': { nl: 'Gaat elke week mee', en: 'Goes every week' },
-  'shop.unpinnedSnack': { nl: 'Niet meer elke week', en: 'Not every week any more' },
   'shop.new': { nl: 'nieuw', en: 'new' },
-  'shop.pinned': { nl: 'elke week', en: 'every week' },
   'shop.count': { nl: '{done}/{total}', en: '{done}/{total}' },
   'shop.expand': { nl: 'Uitklappen', en: 'Expand' },
   'shop.collapse': { nl: 'Inklappen', en: 'Collapse' },
@@ -72,9 +69,11 @@ export const shopping: Dict = {
   'shop.menu.adjust': { nl: 'Aantal aanpassen', en: 'Adjust amount' },
   'shop.menu.sources': { nl: 'Waarvoor is dit?', en: 'What is this for?' },
   'shop.menu.remove': { nl: 'Verwijder', en: 'Remove' },
-  'shop.menu.pin': { nl: 'Elke week', en: 'Every week' },
-  'shop.menu.unpin': { nl: 'Niet meer elke week', en: 'Not every week' },
   'shop.menu.back': { nl: 'Terug', en: 'Back' },
+  // 6C (docs/specs/vaste-lijst.md §1d): these replace the old "Elke week" pin.
+  'shop.menu.toStanding': { nl: 'Zet op de vaste lijst', en: 'Put on Every week' },
+  'shop.menu.toStandingHint': { nl: 'Komt voortaan elke week op de lijst.', en: 'Goes on the list every week from now on.' },
+  'shop.menu.fromStanding': { nl: 'Haal van de vaste lijst', en: 'Take off Every week' },
 
   // --- Extras field --------------------------------------------------------------------------
   'shop.add': { nl: 'Toevoegen', en: 'Add' },
@@ -130,7 +129,37 @@ export const shopping: Dict = {
   'inbox.plan.servings': { nl: '{n} pers.', en: '{n} serv.' },
   'inbox.plan.unknownDish': { nl: 'onbekend gerecht', en: 'unknown dish' },
 
-  // --- Standing list ("Vaste lijst", docs/specs/vaste-lijst.md; 6C block 1: only the pin-migration snack) ---
+  // --- Standing list ("Vaste lijst", docs/specs/vaste-lijst.md §1) ------------------------------
+  // Tabs at the top of #/shopping (§1a).
+  'shop.tab.week': { nl: 'Deze week', en: 'This week' },
+  'shop.tab.standing': { nl: 'Vaste lijst', en: 'Every week' },
+  // The Vaste lijst tab (§1b).
+  'shop.standing.intro': { nl: 'Wat je elke week koopt, ook zonder weekplan. Dit komt bij elke boodschappenlijst erbij.', en: 'What you buy every week, with or without a week plan. It goes on every shopping list.' },
+  'shop.standing.addPlaceholder': { nl: '+ 1 pot mayonaise, 2 l melk …', en: '+ 1 jar mayonnaise, 2 l milk …' },
+  'shop.standing.addedSnack': { nl: 'Op de vaste lijst gezet: {name}', en: 'Put on Every week: {name}' },
+  'shop.standing.paused': { nl: '(staat uit)', en: '(paused)' },
+  'shop.standing.tapHint': { nl: 'Tik op een regel om het aantal of de eenheid te veranderen.', en: 'Tap a line to change the amount or the unit.' },
+  'shop.standing.empty': { nl: 'Nog niets. Typ hierboven wat je elke week koopt, bijvoorbeeld 2 l melk.', en: 'Nothing yet. Type above what you buy every week, for example 2 l milk.' },
+  // The edit sheet of one standing line (§1c, StandingSheet).
+  'shop.standing.edit.amount': { nl: 'Standaardaantal', en: 'Usual amount' },
+  'shop.standing.edit.noAmount': { nl: 'zonder aantal', en: 'no amount' },
+  'shop.standing.edit.unit': { nl: 'Eenheid', en: 'Unit' },
+  'shop.standing.edit.unitNone': { nl: 'stuks', en: 'pieces' },
+  'shop.standing.edit.pause': { nl: 'Even niet meenemen', en: 'Skip for now' },
+  'shop.standing.edit.resume': { nl: 'Weer meenemen', en: 'Include again' },
+  'shop.standing.edit.pauseHint': { nl: 'Blijft op de vaste lijst, maar komt niet op de boodschappenlijst tot je het weer aanzet.', en: 'Stays on Every week, but is left off the shopping list until you switch it back on.' },
+  'shop.standing.edit.remove': { nl: 'Verwijder van de vaste lijst', en: 'Remove from Every week' },
+  'shop.standing.removedSnack': { nl: 'Van de vaste lijst gehaald: {name}', en: 'Taken off Every week: {name}' },
+  // The weekly list (§1d): proto block, badge, long-press menu.
+  'shop.standing.protoTitle': { nl: 'Vaste lijst', en: 'Every week' },
+  'shop.standing.protoHint': { nl: 'Komt elke week erbij. Heb je het al in huis? Tik op Heb ik al: dat geldt alleen voor deze lijst, tot je op Klaar tikt. Een ander aantal geldt ook alleen nu; met Ook voortaan wordt het de nieuwe standaard.', en: 'Added every week. Already got it? Tap Already have it: that counts for this list only, until you tap Done. A different amount is for now only too; Also from now on makes it the new usual amount.' },
+  'shop.standing.keep': { nl: 'Ook voortaan', en: 'Also from now on' },
+  'shop.standing.keptSnack': { nl: 'Nieuw standaardaantal: {text}', en: 'New usual amount: {text}' },
+  'shop.standing.manage': { nl: 'Beheer de vaste lijst ›', en: 'Manage Every week ›' },
+  'shop.standing.badge': { nl: 'vaste lijst', en: 'every week' },
+  'shop.standing.haveHint': { nl: 'Alleen deze lijst; niet onthouden.', en: 'This list only; not remembered.' },
+  'shop.standing.onList': { nl: 'Staat op je vaste lijst', en: 'On your every-week list' },
+  // The one-off pin-migration snack (§1d, block 1).
   'shop.standing.migratedSnack': { nl: '{n} ‘Elke week’-regels staan nu op de vaste lijst', en: '{n} ‘Every week’ lines are now on the Every week list' },
   'shop.standing.migratedSnackOne': { nl: '1 ‘Elke week’-regel staat nu op de vaste lijst', en: '1 ‘Every week’ line is now on the Every week list' },
 
@@ -138,5 +167,6 @@ export const shopping: Dict = {
   'storage.plan': { nl: 'Weekplan (gerechten)', en: 'Week plan (dishes)' },
   'storage.list': { nl: 'Boodschappenlijst (regels)', en: 'Shopping list (lines)' },
   'storage.pantry': { nl: 'In huis (voorraad)', en: 'In stock (pantry)' },
+  'storage.standing': { nl: 'Vaste lijst (regels)', en: 'Every week (lines)' },
   'storage.restoredWeek': { nl: 'Weekplan: {plans} · boodschappenlijst: {lists} · voorraad: {pantry}', en: 'Week plan: {plans} · shopping list: {lists} · pantry: {pantry}' },
 };

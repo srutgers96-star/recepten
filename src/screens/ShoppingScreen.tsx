@@ -1,13 +1,18 @@
-// '#/shopping' — the shopping list (docs/phase-4-spec.md §3 "Boodschappen"), three states:
+// '#/shopping' — the shopping list (docs/phase-4-spec.md §3 "Boodschappen"). Two tabs at the top
+// (6C, docs/specs/vaste-lijst.md §1a): "Deze week" (the states below) and "Vaste lijst" (StandingTab:
+// what you buy every week; `?tab=standing` opens it; the choice is not stored; the proto step shows no
+// tabs). "Deze week" has three states:
 //   1. no list yet for the plan: card "Weekplan: N gerechten" + "Maak de lijst" (→ proto);
-//      no plan at all: the plain list (extras + "elke week" pins) with the add field;
+//      no plan at all: the plain list (extras + the standing-list lines) with the add field;
 //   2. proto list (after "Maak de lijst", before confirming): per aisle `[−] qty name [+]`, staples
 //      at 0 in a small "Voorraad" block (tap → 1), "Controleer zelf" for unresolved lines, the
 //      extras field, "Bevestig lijst";
 //   3. the list: aisle sections in data order (collapsible, counter, collapsed once complete),
 //      tap = tick (strike-through, stays in place), "Verberg afgevinkt", undo snackbar (5 s),
 //      hold = menu (Heb ik al → in huis + pantry 21 days for non-perishables / Aantal aanpassen /
-//      Waarvoor is dit? / Verwijder / Elke week), the stale banner "Weekplan gewijzigd — Bijwerken"
+//      Waarvoor is dit? / Verwijder / Zet op de vaste lijst; a standing line instead: Heb ik al for this
+//      list only (never the pantry) / Aantal aanpassen / Haal van de vaste lijst, no Waarvoor and no
+//      Verwijder), the stale banner "Weekplan gewijzigd — Bijwerken"
 //      (regenerate through the repo, checks survive; never automatic), "Deel lijst" (plain text
 //      NL/EN titled "🛒 Boodschappen wk 39 · 7 gerechten · 4 pers.", "Zonder afgevinkt" on by
 //      default → navigator.share({text}) with exactly one field, "Kopieer" fallback; "gedeeld om
@@ -25,27 +30,31 @@ import { Header } from '@/components/Header';
 import { ListRow } from '@/components/ListRow';
 import { ProtoRow, sourceLines } from '@/components/ProtoRow';
 import { Segmented } from '@/components/Segmented';
+import { StandingTab } from '@/components/StandingTab';
 import { TimerBar } from '@/components/TimerBar';
 import { useLive } from '@/db/live';
 import { mainItems } from '@/domain/planner';
 import type { List } from '@/db/model';
 import {
   addExtra,
+  addLineToStanding,
   clearChecks,
   clearShoppingList,
   generateList,
   getHouseholdServings,
   getList,
   getPlan,
+  getStandingList,
   isListStale,
   markListShared,
   migratePinsToStanding,
   removeExtra,
+  removeStandingItem,
   restoreListItem,
   restoreShoppingList,
+  restoreStandingItem,
   setInHouse,
   setListItem,
-  togglePinned,
 } from '@/db/repo';
 import { recheckActiveBadges } from '@/badges';
 import { dictionary } from '@/dictionary';
@@ -60,7 +69,8 @@ import { copyText, shareText } from '@/share-actions';
 
 const SNACK_MS = 5000;
 
-type Mode = 'list' | 'proto';
+/** 'list' and 'proto' are the tab "Deze week"; 'standing' is the tab "Vaste lijst" (6C). */
+type Mode = 'list' | 'proto' | 'standing';
 type MenuView = 'menu' | 'adjust' | 'sources';
 
 interface Snack {
@@ -153,7 +163,9 @@ export function ShoppingScreen() {
   const l = lang.value;
   const dict = dictionary.value;
   const protoRequested = route.value.query.get('proto') === '1';
-  const [mode, setMode] = useState<Mode>('list');
+  // 6C §1a: `#/shopping?tab=standing` opens the tab "Vaste lijst" (Home's empty week card, the proto block).
+  const standingRequested = !protoRequested && route.value.query.get('tab') === 'standing';
+  const [mode, setMode] = useState<Mode>(standingRequested ? 'standing' : 'list');
   const [busy, setBusy] = useState(false);
   const [hideChecked, setHideChecked] = useState(false);
   const [storeMode, setStoreMode] = useState(false);
@@ -243,6 +255,20 @@ export function ShoppingScreen() {
     }
   }
 
+  // ?tab=standing while the screen is already open (e.g. "Beheer de vaste lijst ›") switches the tab.
+  useEffect(() => {
+    if (standingRequested) setMode('standing');
+  }, [standingRequested]);
+
+  /** The tabs (§1a): a tap on the tab that is already on gives [] → nothing happens. */
+  function switchTab(next: Mode | undefined) {
+    if (!next || next === mode) return;
+    setMenu(null);
+    setMode(next);
+    // Leaving "Vaste lijst": drop ?tab=standing so the effect above does not flip it back on a re-render.
+    if (next !== 'standing' && standingRequested) navigate('/shopping', { replace: true });
+  }
+
   // ?proto=1 (Week → "Boodschappenlijst maken"): build when stale, then open the proto step.
   useEffect(() => {
     if (!protoRequested || autoProto.current || loading) return;
@@ -279,9 +305,10 @@ export function ShoppingScreen() {
   async function setHave(it: ListItem, on: boolean) {
     setMenu(null);
     await setListItem(it.key, on ? { inHouse: true, checked: undefined } : { inHouse: undefined });
-    if (it.ing) await setInHouse(it.ing, on, { perishable: dict.get(it.ing)?.perishable === true });
+    // 6C §5.4: a standing line's "Heb ik al" is for this list only and never touches the pantry.
+    if (it.ing && !it.standing) await setInHouse(it.ing, on, { perishable: dict.get(it.ing)?.perishable === true });
     if (it.ing && on) void recordFeature('pantry');
-    const ing = it.ing;
+    const ing = it.standing ? null : it.ing;
     showSnack(on ? t('shop.inHouseSnack') : t('shop.neededSnack'), async () => {
       await setListItem(it.key, on ? { inHouse: undefined } : { inHouse: true });
       if (ing) await setInHouse(ing, !on, { perishable: dict.get(ing)?.perishable === true });
@@ -296,10 +323,31 @@ export function ShoppingScreen() {
     showSnack(`${t('shop.removedSnack')}: ${itemName(it, dict, l)}`, () => restoreListItem({ ...it }));
   }
 
-  async function pin(it: ListItem) {
+  /** "Zet op de vaste lijst" (6C §1d): the line's ingredient goes on the standing list; a manual extra
+   *  is replaced by the new standing line, a recipe line stays. Undo takes the item off again and puts a
+   *  replaced extra back; when the item was already on the standing list nothing changed, so no undo. */
+  async function toStanding(it: ListItem) {
     setMenu(null);
-    const on = await togglePinned(it.key);
-    showSnack(on ? t('shop.pinnedSnack') : t('shop.unpinnedSnack'), () => togglePinned(it.key).then(() => undefined));
+    const before = new Set((await getStandingList()).items.map((s) => s.id));
+    const added = await addLineToStanding(it.key);
+    if (!added) return;
+    const name = itemName(it, dict, l);
+    if (before.has(added.id)) {
+      showSnack(t('shop.standing.addedSnack', { name }));
+      return;
+    }
+    showSnack(t('shop.standing.addedSnack', { name }), async () => {
+      await removeStandingItem(added.id);
+      if (it.manual) await restoreListItem({ ...it });
+    });
+  }
+
+  /** "Haal van de vaste lijst" (6C §1d): removes the standing item and its line; undo brings both back. */
+  async function fromStanding(it: ListItem) {
+    setMenu(null);
+    const removed = await removeStandingItem(`s:${it.key.slice(2)}`);
+    if (!removed) return;
+    showSnack(t('shop.standing.removedSnack', { name: itemName(it, dict, l) }), () => restoreStandingItem(removed));
   }
 
   async function addItem(item: Partial<ListItem>) {
@@ -699,8 +747,28 @@ export function ShoppingScreen() {
       <Header title={t('shop.title')} />
       <TimerBar />
       <div class="screen form shop">
-        {planCard}
-        {loading ? <div class="empty">{t('shop.loading')}</div> : mode === 'proto' ? protoView : listView}
+        {/* 6C §1a: the two tabs sit under the cooking bar; the proto step is an in-between step without tabs. */}
+        {mode !== 'proto' && (
+          <div class="standing-tabs">
+            <Segmented<'week' | 'standing'>
+              name="shop-tab"
+              options={[
+                { value: 'week', label: t('shop.tab.week') },
+                { value: 'standing', label: t('shop.tab.standing') },
+              ]}
+              selected={[mode === 'standing' ? 'standing' : 'week']}
+              onChange={(next) => switchTab(next[0] === 'standing' ? 'standing' : next[0] === 'week' ? 'list' : undefined)}
+            />
+          </div>
+        )}
+        {mode === 'standing' ? (
+          <StandingTab onSnack={showSnack} />
+        ) : (
+          <>
+            {planCard}
+            {loading ? <div class="empty">{t('shop.loading')}</div> : mode === 'proto' ? protoView : listView}
+          </>
+        )}
       </div>
 
       {menuItem && (
@@ -716,6 +784,7 @@ export function ShoppingScreen() {
               {menu?.view === 'menu' && (
                 <>
                   <p class="shop-sheet-sub">{lineText(menuItem, dict, l)}</p>
+                  {menuItem.standing && <p class="shop-sheet-sub standing-on-list">{t('shop.standing.onList')}</p>}
                   <ul class="shop-menu">
                     <li>
                       {menuItem.inHouse ? (
@@ -731,7 +800,11 @@ export function ShoppingScreen() {
                             🏠
                           </span>
                           {t('shop.menu.inHouse')}
-                          {menuItem.ing && !dict.get(menuItem.ing)?.perishable && <small>{t('shop.menu.inHouseHint')}</small>}
+                          {menuItem.standing ? (
+                            <small>{t('shop.standing.haveHint')}</small>
+                          ) : (
+                            menuItem.ing && !dict.get(menuItem.ing)?.perishable && <small>{t('shop.menu.inHouseHint')}</small>
+                          )}
                         </button>
                       )}
                     </li>
@@ -745,30 +818,48 @@ export function ShoppingScreen() {
                         </button>
                       </li>
                     )}
-                    <li>
-                      <button type="button" onClick={() => setMenu({ item: menuItem, view: 'sources' })}>
-                        <span class="ico" aria-hidden="true">
-                          ❓
-                        </span>
-                        {t('shop.menu.sources')}
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button" onClick={() => void pin(menuItem)}>
-                        <span class="ico" aria-hidden="true">
-                          📌
-                        </span>
-                        {menuItem.pinned ? t('shop.menu.unpin') : t('shop.menu.pin')}
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button" class="danger" onClick={() => void remove(menuItem)}>
-                        <span class="ico" aria-hidden="true">
-                          🗑
-                        </span>
-                        {t('shop.menu.remove')}
-                      </button>
-                    </li>
+                    {menuItem.standing ? (
+                      // 6C §1d: a standing line has no "Waarvoor is dit?" (the sub line says it) and no
+                      // "Verwijder" (that is Heb ik al for this list, or taking it off the standing list).
+                      <li>
+                        <button type="button" onClick={() => void fromStanding(menuItem)}>
+                          <span class="ico" aria-hidden="true">
+                            📌
+                          </span>
+                          {t('shop.menu.fromStanding')}
+                        </button>
+                      </li>
+                    ) : (
+                      <>
+                        <li>
+                          <button type="button" onClick={() => setMenu({ item: menuItem, view: 'sources' })}>
+                            <span class="ico" aria-hidden="true">
+                              ❓
+                            </span>
+                            {t('shop.menu.sources')}
+                          </button>
+                        </li>
+                        {menuItem.section !== 'check' && (
+                          <li>
+                            <button type="button" onClick={() => void toStanding(menuItem)}>
+                              <span class="ico" aria-hidden="true">
+                                📌
+                              </span>
+                              {t('shop.menu.toStanding')}
+                              <small>{t('shop.menu.toStandingHint')}</small>
+                            </button>
+                          </li>
+                        )}
+                        <li>
+                          <button type="button" class="danger" onClick={() => void remove(menuItem)}>
+                            <span class="ico" aria-hidden="true">
+                              🗑
+                            </span>
+                            {t('shop.menu.remove')}
+                          </button>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </>
               )}

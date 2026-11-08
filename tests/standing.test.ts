@@ -222,7 +222,7 @@ describe('absorbPins', () => {
   const pinnedRecipe = line({ key: 'melk||ml', ing: 'melk', pinned: true, qty: 250, unit: 'ml', aisle: 'zuivel-eieren', sources: [{ recipeId: 'r1', name: { nl: 'Pap' }, raw: '250 ml melk', scaled: '250 ml melk' }] });
   const plain = line({ key: 'ui||stuk', ing: 'ui', qty: 2, aisle: 'groente-fruit' });
 
-  it('pinned extra -> out of items and extras, an s| line with checked / inHouse / adjusted', () => {
+  it('pinned extra -> out of items and extras, an s| line with checked / inHouse, adjusted in the qty (no double count)', () => {
     const r = absorbPins(emptyStandingList(), { items: [plain, pinnedExtra], extras: [pinnedExtra] }, NOW);
     expect(r.moved).toBe(1);
     expect(r.extras).toEqual([]);
@@ -238,7 +238,8 @@ describe('absorbPins', () => {
     expect(sLine?.standing).toBe(true);
     expect(sLine?.checked).toBe(true);
     expect(sLine?.inHouse).toBe(true);
-    expect(sLine?.adjusted).toBe(1);
+    expect(sLine?.adjusted).toBeUndefined(); // the +1 is already in the standing qty (2 pot)
+    expect(r.changed).toBe(1);
     expect(r.items[0]).toBe(plain);
   });
 
@@ -259,6 +260,7 @@ describe('absorbPins', () => {
     expect(first.moved).toBe(2);
     const second = absorbPins(first.standing, { items: first.items, extras: first.extras }, '2026-11-09T10:00:00.000Z');
     expect(second.moved).toBe(0);
+    expect(second.changed).toBe(0);
     expect(second.standing).toBe(first.standing);
     expect(second.items).toEqual(first.items);
     expect(second.extras).toEqual(first.extras);
@@ -279,9 +281,44 @@ describe('absorbPins', () => {
     const standing = list([st({ id: 's:aaaaaaaa', ing: 'melk', qty: 2, unit: 'l', aisle: 'zuivel-eieren' })]);
     const r = absorbPins(standing, { items: [pinnedRecipe], extras: [] }, NOW);
     expect(r.moved).toBe(0);
+    expect(r.changed).toBe(1);
     expect(r.standing.items).toHaveLength(1);
     expect(r.items).toHaveLength(1);
     expect(r.items[0]?.pinned).toBeUndefined();
+  });
+
+  it('pinned extra milk while milk is already on the standing list -> extra gone, no duplicate, changed 1, moved 0', () => {
+    const milk = st({ id: 's:aaaaaaaa', ing: 'melk', qty: 2, unit: 'l', aisle: 'zuivel-eieren' });
+    const standing = list([milk]);
+    const sMilk = standingToListItem(milk);
+    const extraMilk = line({ key: 'x|melk', ing: 'melk', manual: true, pinned: true, qty: 1, unit: 'l', aisle: 'zuivel-eieren', checked: true, adjusted: 1 });
+    const r = absorbPins(standing, { items: [plain, sMilk, extraMilk], extras: [extraMilk] }, NOW);
+    expect(r.moved).toBe(0);
+    expect(r.changed).toBe(1);
+    expect(r.standing).toBe(standing);
+    expect(r.extras).toEqual([]);
+    expect(r.items.some((it) => it.key === 'x|melk')).toBe(false);
+    expect(r.items.filter((it) => it.ing === 'melk')).toHaveLength(1);
+    const kept = r.items.find((it) => it.key === standingKey(milk.id));
+    expect(kept?.checked).toBe(true);
+    expect(kept?.adjusted).toBe(1);
+    expect(kept?.qty).toBe(2);
+    // A second run changes nothing.
+    const second = absorbPins(r.standing, { items: r.items, extras: r.extras }, NOW);
+    expect(second.changed).toBe(0);
+    expect(second.items).toEqual(r.items);
+  });
+
+  it('absorbed extra does not overwrite state the existing s| line already has', () => {
+    const milk = st({ id: 's:aaaaaaaa', ing: 'melk', qty: 2, unit: 'l', aisle: 'zuivel-eieren' });
+    const sMilk = { ...standingToListItem(milk), adjusted: -1 };
+    const extraMilk = line({ key: 'x|melk', ing: 'melk', manual: true, pinned: true, qty: 1, unit: 'l', aisle: 'zuivel-eieren', inHouse: true, adjusted: 3 });
+    const r = absorbPins(list([milk]), { items: [sMilk, extraMilk], extras: [extraMilk] }, NOW);
+    const kept = r.items.find((it) => it.key === standingKey(milk.id));
+    expect(kept?.adjusted).toBe(-1);
+    expect(kept?.inHouse).toBe(true);
+    expect(kept?.section).toBe('inHouse');
+    expect(r.items).toHaveLength(1);
   });
 });
 

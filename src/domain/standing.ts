@@ -216,32 +216,44 @@ export function findSameStanding(items: readonly StandingItem[], probe: Pick<Sta
 export type ListLike = { items: ListItem[]; extras: ListItem[] };
 
 /**
- * Moves the old "Elke week" pins onto the standing list (spec §2 "Migratie"). Per pinned line in
- * `items` or `extras` (once per key): a standing item via standingFromListItem, unless one with the
- * same ing / label already exists; a new 's|' line takes the old line's checked / inHouse / adjusted;
- * a pinned manual line (extra) leaves `items` and `extras`, a pinned generated line stays but loses
- * `pinned`. A pin whose item is already on the standing list only loses `pinned` (no duplicate).
- * Idempotent: a second run moves 0. Without pins the result equals the input.
+ * Moves the old "Elke week" pins onto the standing list (spec §2 "Migratie"; decisions Fable 8 nov
+ * (1) and (2)). Per pinned line in `items` or `extras` (once per key):
+ * - not yet on the standing list: a standing item via standingFromListItem (its qty is the line's
+ *   effective amount); the new 's|' line takes the old line's checked / inHouse but NOT `adjusted`
+ *   (the adjustment is part of the standing qty). A pinned manual line (extra) leaves `items` and
+ *   `extras`; a pinned generated line stays but loses `pinned`.
+ * - already on the standing list (same ing / label): a pinned extra leaves `items` and `extras` as
+ *   in a real move, and its checked / inHouse / adjusted go to the existing 's|' line where that line
+ *   does not have them yet; a pinned generated line only loses `pinned`. Never a duplicate.
+ * `moved` counts new standing items, `changed` every pin handled (the caller writes when changed > 0).
+ * Idempotent: a second run changes 0. Without pins the result equals the input.
  */
 export function absorbPins(
   standing: StandingList,
   list: ListLike,
   now: string,
-): { standing: StandingList; items: ListItem[]; extras: ListItem[]; moved: number } {
+): { standing: StandingList; items: ListItem[]; extras: ListItem[]; moved: number; changed: number } {
   const pinned = new Map<string, ListItem>();
   for (const it of [...list.items, ...list.extras]) if (it.pinned && !pinned.has(it.key)) pinned.set(it.key, it);
-  if (pinned.size === 0) return { standing, items: [...list.items], extras: [...list.extras], moved: 0 };
+  if (pinned.size === 0) return { standing, items: [...list.items], extras: [...list.extras], moved: 0, changed: 0 };
 
   const sItems = [...standing.items];
   // Old key -> the new 's|' line (absent when nothing new was created for that pin).
   const created = new Map<string, ListItem>();
-  // Old keys whose pin is handled (moved, or the same item already on the standing list).
+  // Old keys of pinned extras absorbed by an item already on the standing list -> that item's line key.
+  const absorbed = new Map<string, string>();
+  // Old keys whose pin is handled (moved, absorbed, or only unpinned).
   const handled = new Set<string>();
   for (const [key, it] of pinned) {
     const s = standingFromListItem(it, now);
     if (!s) continue; // a 'check' line: nothing to move, left as it is
     handled.add(key);
-    if (findSameStanding(sItems, s)) continue; // no duplicates on the standing list
+    const same = findSameStanding(sItems, s);
+    if (same) {
+      // No duplicates on the standing list; a pinned extra goes into the existing line.
+      if (it.manual) absorbed.set(key, standingKey(same.id));
+      continue;
+    }
     sItems.push(s);
     const line = standingToListItem(s);
     if (it.checked) line.checked = true;
@@ -249,7 +261,6 @@ export function absorbPins(
       line.inHouse = true;
       line.section = 'inHouse';
     }
-    if (typeof it.adjusted === 'number' && Number.isFinite(it.adjusted) && it.adjusted !== 0) line.adjusted = it.adjusted;
     created.set(key, line);
   }
 
@@ -260,6 +271,7 @@ export function absorbPins(
       items.push(it);
       continue;
     }
+    if (absorbed.has(it.key)) continue; // the existing standing line takes over
     const line = created.get(it.key);
     if (it.manual) {
       // The standing line replaces the extra.
@@ -273,15 +285,31 @@ export function absorbPins(
   }
   for (const [key, line] of created) if (!placed.has(key)) items.push(line);
 
+  // checked / inHouse / adjusted of an absorbed extra go to the existing line where it lacks them.
+  for (const [oldKey, target] of absorbed) {
+    const src = pinned.get(oldKey)!;
+    const idx = items.findIndex((x) => x.key === target);
+    if (idx < 0) continue; // no line on the list (paused, or not there): nothing to carry over
+    const line: ListItem = { ...items[idx]! };
+    if (src.checked && !line.checked) line.checked = true;
+    if (src.inHouse && !line.inHouse) {
+      line.inHouse = true;
+      line.section = 'inHouse';
+    }
+    const hasAdj = typeof line.adjusted === 'number' && Number.isFinite(line.adjusted) && line.adjusted !== 0;
+    if (!hasAdj && typeof src.adjusted === 'number' && Number.isFinite(src.adjusted) && src.adjusted !== 0) line.adjusted = src.adjusted;
+    items[idx] = line;
+  }
+
   const extras: ListItem[] = [];
   for (const x of list.extras) {
     if (!handled.has(x.key)) extras.push(x);
-    else if (!created.has(x.key)) extras.push(unpin(x));
-    // else: moved to the standing list, the extra goes
+    else if (!created.has(x.key) && !absorbed.has(x.key)) extras.push(unpin(x));
+    // else: moved to (or absorbed by) the standing list, the extra goes
   }
 
   const moved = created.size;
-  return { standing: moved > 0 ? { v: 1, items: sItems, updatedAt: now } : standing, items, extras, moved };
+  return { standing: moved > 0 ? { v: 1, items: sItems, updatedAt: now } : standing, items, extras, moved, changed: handled.size };
 }
 
 function unpin(it: ListItem): ListItem {
