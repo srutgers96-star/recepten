@@ -4,6 +4,15 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Fable): eindcontrole — het plan is af
+Alle blokken van README §1 staan live op main (laatste: 13c, 6D-F, Z; commit 248e047). Fable's eindcontrole staat in README §5
+(uitkomst): mechanisch alles groen, geen open bugs; vier keuzes voor Stijn (Experimenten-schakelaar, pass/fail in de Apparaatcheck,
+ronde chip-ring bij een niet-ronde lijst, dubbele route naar de avatar-maker). CLAUDE.md-mappenlijst bijgewerkt (nieuwe schermen,
+handboekdata, DEVICE-TEST als bouwcontrolelijst). **Nu:** Stijn en Gabi testen op de telefoons met de handleiding (Meer → Hulp &
+over → Handleiding) en DEVICE-TEST 70–108; wat opvalt gaat in één verbeterronde. Daarna zijn de IDEAS (dopamine-kick op level 30,
+swipe-tabs, ingrediëntenherkenner, boodschappen-badges, Gabi's lijst) aan de beurt als Stijn dat zegt. Weekgebruik bij het
+stoppen: zie het verslag in de sessie (±33 %).
+
 ## 8 nov (Opus): Z — de handleiding
 Gebouwd volgens docs/specs/handbook.md (schrijvers W1–W4, UI-bouwer U, integrator; lichte modus). Geen dependency, geen Dexie-versie,
 geen setting, geen fragmentsleutel; `package.json` en `landing.ts` ongewijzigd.

@@ -333,79 +333,39 @@ spec; dit is de ontdubbelde kern.
     geen wijziging aan landing.ts, sw.ts, boot.ts behalve de `x`-regex in 6D-4b.
 14. Nooit een i18n-key verwijderen zonder Grep buiten src/i18n; de lijst "blijven" per spec respecteren.
 
-## 5. Master-controlelijst voor Fable (eindcontrole, na blok Z)
+## 5. Eindcontrole Fable (8 nov 2026, na blok Z) — uitkomst
 
-Gegroepeerd en ontdubbeld over de negen specs (de nummers verwijzen naar §7 van de spec).
+De master-controlelijst van 15–23 okt is afgewerkt en samengevat; de 13F-punten (id-migratie, Dexie v8, aliases, 236 recepten)
+vervielen met 13F (30 okt). Mechanisch nagelopen door Fable met een script over de werkmap; gedrag per blok is per blok al door
+de integrator in de dev-app gecontroleerd en door de lens gereproduceerd (zie de "Na de lens"-alinea's in elke spec). De telefoons
+zijn aan Stijn en Gabi: DEVICE-TEST 70–108 en de handleiding.
 
-**Hygiëne en invarianten**
-1. [ ] `src/db/db.ts` eindigt op `version(8)` (13F) zonder `.stores()`-wijziging; geen andere spec voegde
-       een versie toe. `DATA_VERSION === 10`, `data/recipes.json` 236 recepten, `npm run migrate` tweemaal
-       → alleen `generatedAt` verschilt; tests/migrate.test.ts op 10/236.
-2. [ ] package.json ongewijzigd (geen nieuwe dependency); `src/landing.ts` kent alleen de `x`-regex als
-       wijziging en schrijft niets; `sw.ts` onaangeraakt; share-chunk niet gegroeid door id-aliases.json.
-3. [ ] CLAUDE.md: invariant 7 en de tokenregel noemen `#x=`; ADR-0004 heeft de `x`-regel; de fonts hebben
-       een ADR-regel; CLAUDE.md-mappenlijst noemt de nieuwe domeinmodules niet verkeerd.
-4. [ ] Elke nieuwe i18n-key in NL én EN (grep per prefix uit §2b); geen key-naam zichtbaar bij taalwissel;
-       verwijderde keys nergens meer gebruikt; "Every week" consequent als Engelse naam van de vaste lijst.
-5. [ ] 360 px overal zonder horizontale scroll (kop Home, kookbalk-timerrij, tabrij varianten, chips,
-       badge-grid, avatar-tegels); tikdoelen ≥ 44 px; inputs ≥ 16 px; donker thema leesbaar (nieuwe tokens
-       in alle drie themablokken: `--diet-*`, `--gold`, `--lvl-1..8`).
-6. [ ] Elke nieuwe sheet (AddMenu, SideSheet, MissingSheet, VariantSheet, StandingSheet, LevelUpSheet,
-       AvatarSheet) via SheetPortal met knoppen in de kop; wegvegen/ernaast/Escape bewaart niets.
+**Hygiëne en invarianten** — ✔ Dexie eindigt op `version(7)`, geen `.stores()`-wijziging sinds 6C; 216 recepten; package.json:
+preact, @preact/signals, dexie, fflate, qrcode (ADR-0007), workbox-precaching/-routing — geen dependency zonder ADR; `src/landing.ts`
+noemt storage alleen in commentaar (invariant 6); `Math.random` in src/domain alleen als injecteerbare standaard in planner.ts en
+tonight.ts (weekkeuze), nergens in XP/badges/avatar; CLAUDE.md invariant 7 en de tokenregel noemen `#x=` en `#l=`; tests/i18n.test.ts
+bewaakt dat elke sleutel NL én EN heeft en gebruikt wordt (allowlist: negen `cook.cmd.*Say`); de SheetPortal-sheets hebben de knoppen
+in de kop (13J), Escape sluit ook houd-menu en labels-venster (13c).
 
-**Deelformaat (invariant 4)**
-7. [ ] Alle oude bevroren tokens byte-gelijk; nieuwe bevroren tokens W_SIDE, R_ALIAS, R/P/W_VARIANTS,
-       F_AVATAR, X decoderen op beide engines en `encodeToken` reproduceert ze; `TOKEN_RE` in vijf
-       bestanden bevat `x`; de "unknown kind"-tests gebruiken `z`.
-8. [ ] `recipeFingerprint`/`contentFingerprint` ongewijzigd (nu in fingerprints.ts, re-export in merge.ts);
-       `planHash` zonder variant byte-gelijk aan vroeger; `planDishCount` telt alleen hoofdgerechten.
-9. [ ] `#x=` bevat geen notes/stars/photos; max 90 dagen, 5 ids; badges als `id`/`id@k`.
+**Deelformaat (invariant 4)** — ✔ Bevroren tokens van alle versies byte-gelijk in tests/token.test.ts, incl. het 13c-token met
+`variant`; `TOKEN_RE` in token.ts, router.ts, boot.ts en landing.ts kent `x` en `l`; `#x=` zonder notities/sterren/foto's, 90 dagen;
+`#l=` met optioneel `variant`.
 
-**Data en migratie**
-10. [ ] data/ingredients.json: elke entry boolean `lactose`, validator-regels (vegan ⇒ niet true/unsure);
-        steekproef tests/lactose.test.ts groen; de 8 entries van 13F dragen de vlag.
-11. [ ] data/cuisines.json 18 keukens; meta.json 71 + 4 keukens, 5 categorieën, goesWith polenta;
-        categories.json orders 11–15; recipes.json telt 75 keukens.
-12. [ ] data/source/bijgerechten.json byte-gelijk aan bijgerechten.md §2g; golden 1443; de 20 onder
-        `excludeNonMain`; diet.test op BUILTIN_TIMESTAMP.
-13. [ ] data/id-aliases.json 21 sleutels/20 doelen; `applyAliases` puur en idempotent; `importBundle` mapt
-        vooraf; `ensureBuiltins` draait de run alleen bij een wissel en ruimt identieke `b:`-kopieën op;
-        tweede herstel van een oude back-up voegt niets toe; `generatedFrom` herrekend.
-14. [ ] Alle 11 herschreven bereidingen van 13F gelezen (NL én EN; Fat Duck en Lièvre extra kritisch; °C).
-15. [ ] data/levels.json 100 titels (anchors exact), data/unlocks.json 15 (avatar-maker level 3),
-        data/badges.json 144 actief + 6 retired, alle 44 oude ids aanwezig, data/avatar-parts.json 66
-        met `facial-*`-ids; `npm run validate:data` 0 errors.
+**Data** — ✔ `npm run validate:data` 0 fouten: 216 recepten, 152 badges (146 actief + 6 retired), 16 ontgrendelingen, 154
+avatar-onderdelen (12 lagen, 30 achtergronden waarvan 14 dekkend, 11 lijsten), 100 leveltitels, 30 uitdagingen, handboek 10
+onderwerpen / 217 rijen; 4 bekende waarschuwingen in swaps.json (tamari).
 
-**Gedrag per blok (steekproef in de dev-app en op de telefoons)**
-16. [ ] Home A+: volgorde §1a; AddMenu op Home én Recepten (Plak eerst); `?sort=` werkt; TonightCard drie
-        standen; WeekCard "n van N gekookt"; "Verder met" alleen vandaag; HomeLevelRow null bij badges uit.
-17. [ ] Kookbalk: sessie begint/eindigt volgens §1a; × alleen zonder lopende timer; kookstand opent op de
-        onthouden stap; `cook.sessions` in DEVICE_LOCAL_SETTINGS; current-timers "stap N"; rij 66 aangepast.
-18. [ ] 6B: vier dieetchips overal via `DietChips`; keukenrij alleen met aanwezige keukens; zoeken
-        "italiaans" → keukengroep eerst; Kies 7/Verras me/🎲/Kies-sheet/Home-dobbelsteen alleen
-        hoofdgerechten met `pick.all` als uitzondering; "+ bijgerecht" met cascades en `of` in `#w=`;
-        editor eindigt met Labels; woordenboek-prompt met limiet 40.
-19. [ ] 13F: credit op de receptpagina, kaart "Nieuw sinds de eerste druk", AliasNotice één keer; oude
-        `#r=` met u:-id → present of patch, nooit nieuw; oud `#w=` vult het plan (takePlan mapt).
-20. [ ] 13D: tabrij alleen als er iets te kiezen valt; stippel/vol/✓; goedkeuren pas na afvinken; `?v=` +
-        geheugen; kookstand, lijst (`ListSource.diet`), week en filters volgen de tab; tip reist, notitie
-        alleen met schakelaar; "Eigen versie maken" zet variantOf + basedOn; kookbalk onthoudt `variant`.
-21. [ ] 6C: pins verhuisd (idempotent); twee tabbladen; StandingSheet met Sluit; stap 1 l bij melk; "Heb
-        ik al" niet onthouden; Klaar reset; back-up/herstel merge; Home-link in de lege weekkaart.
-22. [ ] 6D-1: geen `Math.random`; pins (hash32, 94/505, curve, 491/level 4, 1.259.039) groen; 30-jaar-test
-        < 50 ms; invoerdag-plafond werkt; badges uit = geen spoor; `reloadXp` na herstel zonder pops;
-        `loggedAt` geschreven.
-23. [ ] 6D-2/3: acht groepen, ladders met `id@k`, Geheim toont nooit het totaal, toasts per hoogste niveau,
-        32 feature-hooks op de juiste momenten, `XP_RULES_VERSION === 2` met de melding (sinds 30 okt 3); avatar-maker vanaf
-        level 3, 66 onderdelen renderen, kaartje `#f=` met avatar, lokale leden tonen de avatar.
-24. [ ] 6D-4a/4b: Vrijgespeeld met aan/uit per telefoon (`unlocks.disabled` toestel-lokaal), geluiden en
-        lettertypes; `#x=` ontvangst met de drie uitkomsten; kalender met lokaal-wint-regel; landingspagina
-        voor `#x=` zonder storage.
+**Documentatie** — ✔ Elke spec heeft per gebouwd blok precies één "Gebouwd: …"-regel met run-id (badges-avatar 8, labels-categorieen
+6, varianten-tabs 4, xp-levels 3, vaste-lijst 3, home-a-plus 2, kookbalk 2, bijgerechten/challenges/frames/handbook/opschoonronde/
+qr-link 1; inbouwen.md 0 = vervallen); DEVICE-TEST NL en EN hebben dezelfde 104 rijen (1–108, zonder gaten in de nummers die
+bestaan), geen "[open punt]"; STATUS heeft per blok een alinea met de besluiten; IDEAS.md alleen met ideeën.
 
-**Documentatie**
-25. [ ] docs/DEVICE-TEST.md rijen 70–101 in NL én EN, nummers als §1, rijen 28 en 66 aangepast, geen
-        [open punt]-restjes; docs/STATUS.md per blok een alinea; elke spec heeft precies één
-        "Gebouwd: …"-regel en verder geen wijzigingen; docs/IDEAS.md onaangeraakt behalve nieuwe ideeën.
+**Gate op de laatste commit (248e047)** — ✔ `npm run check`, 1780 tests in 79 bestanden, `npm run build`, `npm run build:next`,
+`npm run validate:data`.
+
+**Open voor Stijn (geen bugs, wel keuzes)** — de schakelaar Experimenten doet niets meer; pass/fail in de Apparaatcheck zijn Engels;
+de ronde `box-shadow` van een gekozen chip in "Deel je nieuwe recepten" blijft rond bij een zeshoek- of gouden lijst; de knop
+"Maak je avatar" staat nog onder Naam & kleur én in Jouw stijl (twee routes). Alles wat in het testen opvalt → één verbeterronde.
 
 ## 6. Vragen aan Stijn vóór de bouw
 
