@@ -1,0 +1,849 @@
+{
+  "id": "delen-en-ontvangen",
+  "order": 5,
+  "title": { "nl": "Delen & ontvangen", "en": "Sharing & receiving" },
+  "intro": {
+    "nl": "Een recept, je weekplan, je kaartje of je voortgang stuur je met een paar tikken naar een ander. Hier lees je hoe je deelt en hoe je iets ontvangt, op Android en op de iPhone.",
+    "en": "You send a recipe, your week plan, your card or your progress to someone else in a few taps. Here you read how to share and how to receive, on Android and on the iPhone."
+  },
+  "entries": [
+    {
+      "id": "delen-en-ontvangen.wat-kun-je-delen",
+      "title": { "nl": "Wat je kunt delen", "en": "What you can share" },
+      "what": {
+        "nl": "Je kunt een recept, je weekplan, je boodschappenlijst, je kaartje en je voortgang delen. Meerdere recepten tegelijk gaan in één bericht of als bestand.",
+        "en": "You can share a recipe, your week plan, your shopping list, your card and your progress. Several recipes at once go in one message or as a file."
+      },
+      "where": {
+        "nl": [
+          "Open het recept, het weekplan, de lijst of het profiel dat je wilt delen.",
+          "Tik op de deelknop van dat scherm, bijvoorbeeld **Deel** of **Deel weekplan**.",
+          "Kies WhatsApp of een andere app."
+        ],
+        "en": [
+          "Open the recipe, week plan, list or profile you want to share.",
+          "Tap the share button on that screen, for example **Share** or **Share week plan**.",
+          "Choose WhatsApp or another app."
+        ]
+      },
+      "see": {
+        "nl": "Bijna overal staan drie knoppen naast elkaar: delen, kopiëren en **Toon QR**. Wat je deelt, is een kort bericht met één link.",
+        "en": "Almost everywhere three buttons sit side by side: share, copy and **Show QR**. What you share is a short message with one link."
+      },
+      "know": {
+        "nl": "De ontvanger heeft de app nodig om iets te bewaren. Voor mensen zonder de app is er bij een recept **Deel als tekst**.",
+        "en": "The receiver needs the app to keep anything. For people without the app, a recipe has **Share as text**."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["delen", "sturen", "versturen", "doorsturen", "whatsapp", "link"],
+        "en": ["share", "send", "forward", "whatsapp", "link", "pass on"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.recept-delen",
+      "title": { "nl": "Een recept delen", "en": "Share a recipe" },
+      "what": {
+        "nl": "Je stuurt één recept als WhatsApp-bericht met een link. De ander bewaart het met één tik in zijn eigen app.",
+        "en": "You send one recipe as a WhatsApp message with a link. The other person keeps it in their own app with one tap."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Tik op het recept dat je wilt delen.",
+          "Tik op **Deel**.",
+          "Tik op **Deel via WhatsApp**.",
+          "Kies WhatsApp en de persoon aan wie je het stuurt."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Tap the recipe you want to share.",
+          "Tap **Share**.",
+          "Tap **Share via WhatsApp**.",
+          "Choose WhatsApp and the person you are sending it to."
+        ]
+      },
+      "see": {
+        "nl": "Eerst zie je het bericht zoals het wordt verstuurd, met de link onderaan. Daarna opent het deelmenu van je telefoon.",
+        "en": "First you see the message as it will be sent, with the link at the bottom. Then your phone's share menu opens."
+      },
+      "know": {
+        "nl": "Heb je een klassieker aangepast? Dan reist alleen je aanpassing mee, zonder dubbel recept bij de ander. Heb je een eigen notitie bij het recept, dan kun je die met een schakelaar als tip van de maker meesturen.",
+        "en": "Have you adjusted a classic? Then only your adjustment travels, without a duplicate recipe for the other person. If you have a note of your own on the recipe, a switch lets you send it along as the maker's tip."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["recept delen", "recept sturen", "whatsapp", "link", "aangepaste klassieker", "tip van de maker"],
+        "en": ["share recipe", "send recipe", "whatsapp", "link", "adjusted classic", "maker's tip"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.qr",
+      "title": { "nl": "Een QR-code laten scannen", "en": "Let someone scan a QR code" },
+      "what": {
+        "nl": "Naast elke deelknop staat **Toon QR**. De ander scant de code met de camera van zijn telefoon en krijgt dezelfde link als in het bericht.",
+        "en": "Next to every share button there is **Show QR**. The other person scans the code with their phone camera and gets the same link as in the message."
+      },
+      "where": {
+        "nl": [
+          "Open het scherm waar je deelt, bijvoorbeeld **Delen** van een recept.",
+          "Tik op **Toon QR**.",
+          "Laat de ander de code scannen met de camera-app van zijn telefoon.",
+          "Tik nog eens op **Toon QR** om de code weg te halen."
+        ],
+        "en": [
+          "Open the screen where you share, for example **Share** for a recipe.",
+          "Tap **Show QR**.",
+          "Let the other person scan the code with their phone's camera app.",
+          "Tap **Show QR** again to put the code away."
+        ]
+      },
+      "see": {
+        "nl": "Onder de knoppen verschijnt een QR-code op een wit vlak, ook in het donkere thema. Eronder staat: “Laat de ander dit scannen met de camera van de telefoon.”",
+        "en": "Under the buttons a QR code appears on a white square, also in the dark theme. Under it: “Let the other person scan this with their phone camera.”"
+      },
+      "know": {
+        "nl": "Is de link langer dan 1.600 tekens, dan zie je geen code maar “Te groot voor een QR-code. Deel de link.” Dat gebeurt bij ongeveer de helft van de recepten. Op een iPhone opent de gescande code Safari, nooit de app zelf.",
+        "en": "If the link is longer than 1,600 characters, you see no code but “Too big for a QR code. Share the link instead.” That happens with about half of the recipes. On an iPhone the scanned code opens Safari, never the app itself."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["qr", "qr-code", "scannen", "camera", "te groot", "code"],
+        "en": ["qr", "qr code", "scan", "camera", "too big", "code"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.als-tekst",
+      "title": { "nl": "Een recept als gewone tekst delen", "en": "Share a recipe as plain text" },
+      "what": {
+        "nl": "Voor mensen zonder de app deel je het hele recept als leesbare tekst. De link staat onderaan, voor wie de app wel heeft.",
+        "en": "For people without the app you share the whole recipe as readable text. The link comes last, for anyone who does have the app."
+      },
+      "where": {
+        "nl": [
+          "Tik op een recept.",
+          "Tik op **Deel**.",
+          "Scrol naar beneden naar **Deel als tekst**.",
+          "Kies bij **Taal** de taal van de tekst, als die keuze er staat.",
+          "Tik op de knop **Deel als tekst**."
+        ],
+        "en": [
+          "Tap a recipe.",
+          "Tap **Share**.",
+          "Scroll down to **Share as text**.",
+          "Choose the language of the text under **Language**, if that choice is there.",
+          "Tap the **Share as text** button."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet het recept zoals de ander het leest: naam, ingrediënten en stappen. Met **Kopieer tekst** zet je het op je klembord.",
+        "en": "You see the recipe as the other person will read it: name, ingredients and steps. **Copy text** puts it on your clipboard."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["tekst", "leesbaar", "zonder app", "kopiëren", "taal", "recept als tekst"],
+        "en": ["text", "readable", "without the app", "copy", "language", "recipe as text"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.bestand",
+      "title": { "nl": "Te groot voor één bericht: een bestand", "en": "Too big for one message: a file" },
+      "what": {
+        "nl": "Een heel lang recept past niet in één WhatsApp-bericht. De app maakt er dan een bestand van, dat de ander in de app opent.",
+        "en": "A very long recipe does not fit in one WhatsApp message. The app then turns it into a file, which the other person opens in the app."
+      },
+      "where": {
+        "nl": [
+          "Tik op een recept.",
+          "Tik op **Deel**.",
+          "Tik op **Deel het bestand**.",
+          "Kies WhatsApp of een andere app."
+        ],
+        "en": [
+          "Tap a recipe.",
+          "Tap **Share**.",
+          "Tap **Share the file**.",
+          "Choose WhatsApp or another app."
+        ]
+      },
+      "see": {
+        "nl": "Bovenaan staat dat het recept te groot is voor één WhatsApp-bericht, met het aantal tekens. Met **Download** bewaar je het bestand in je Downloads.",
+        "en": "At the top it says the recipe is too large for one WhatsApp message, with the number of characters. **Download** saves the file in your Downloads."
+      },
+      "know": {
+        "nl": "De ander opent het bestand in de app via **In & uit** en **Kies bestand**.",
+        "en": "The other person opens the file in the app through **In & out** and **Choose file**."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["bestand", "te groot", "te lang", "downloaden", "json"],
+        "en": ["file", "too big", "too long", "download", "json"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.meerdere-recepten",
+      "title": { "nl": "Meerdere recepten tegelijk delen", "en": "Share several recipes at once" },
+      "what": {
+        "nl": "Je kiest een paar recepten uit de lijst en deelt ze in één keer. Past het niet in één bericht, dan gaan ze als bestand.",
+        "en": "You pick a few recipes from the list and share them in one go. If they do not fit in one message, they go as a file."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Tik rechtsboven op **Selecteer**.",
+          "Tik de recepten aan die je wilt delen.",
+          "Tik in de balk onderaan op **Deel**."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Tap **Select** at the top right.",
+          "Tap the recipes you want to share.",
+          "Tap **Share** in the bar at the bottom."
+        ]
+      },
+      "see": {
+        "nl": "Bovenaan staat hoeveel recepten je hebt geselecteerd. Na het delen staat er “Gedeeld”.",
+        "en": "At the top it says how many recipes you have selected. After sharing it says “Shared”."
+      },
+      "know": {
+        "nl": "**Exporteer** maakt altijd een bestand, ook bij een paar recepten. **Toon QR** past bij veel recepten meestal niet.",
+        "en": "**Export** always makes a file, even for a few recipes. **Show QR** usually does not fit for many recipes."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["meerdere", "selecteren", "selectie", "exporteren", "bestand", "alles delen"],
+        "en": ["several", "select", "selection", "export", "file", "share all"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.weekplan-delen",
+      "title": { "nl": "Je weekplan delen", "en": "Share your week plan" },
+      "what": {
+        "nl": "Je stuurt je weekplan in één bericht met één link. Je eigen recepten uit het plan reizen mee.",
+        "en": "You send your week plan in one message with one link. Your own recipes in the plan travel along."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Week**.",
+          "Scrol naar beneden naar **Deel weekplan**.",
+          "Tik op de knop **Deel weekplan**.",
+          "Kies WhatsApp en de persoon aan wie je het stuurt."
+        ],
+        "en": [
+          "Tap **Week** at the bottom.",
+          "Scroll down to **Share week plan**.",
+          "Tap the **Share week plan** button.",
+          "Choose WhatsApp and the person you are sending it to."
+        ]
+      },
+      "see": {
+        "nl": "Het bericht begint met “🗓️ Weekplan van”, je naam en het aantal gerechten. Daaronder staat één link.",
+        "en": "The message starts with “🗓️ Week plan from”, your name and the number of dishes. Under it is one link."
+      },
+      "know": {
+        "nl": "Alleen de gerechten die je nog niet hebt gekookt gaan mee. Is het te veel voor één bericht, dan gaat het als bestand.",
+        "en": "Only the dishes you have not cooked yet go along. If it is too much for one message, it goes as a file."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": {
+        "nl": ["weekplan", "week delen", "planning", "menu", "gerechten sturen"],
+        "en": ["week plan", "share week", "planning", "menu", "send dishes"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.weekplan-ontvangen",
+      "title": { "nl": "Een weekplan ontvangen", "en": "Receive a week plan" },
+      "what": {
+        "nl": "Een gedeeld weekplan komt binnen bij **In & uit**. Je kiest of het jouw week vervangt of aanvult.",
+        "en": "A shared week plan arrives in **In & out**. You choose whether it replaces or adds to your week."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **In & uit**.",
+          "Tik op **Plak van klembord**.",
+          "Tik op **Overnemen** of op **Toevoegen**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **In & out**.",
+          "Tap **Paste from clipboard**.",
+          "Tap **Take over** or **Add**."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet een kaart “Weekplan van” met de naam en de gerechten. **Overnemen** vervangt je huidige weekplan; **Toevoegen** zet alleen de ontbrekende gerechten erbij.",
+        "en": "You see a card “Week plan from” with the name and the dishes. **Take over** replaces your current week plan; **Add** only adds the dishes that are missing."
+      },
+      "know": {
+        "nl": "Meegestuurde eigen recepten worden eerst bewaard. Een gerecht dat je niet hebt en dat niet is meegestuurd, slaat de app over. Daarna brengt **Naar Week** je naar je weekplan.",
+        "en": "Own recipes that came along are saved first. A dish you do not have and that was not included is skipped. Then **Go to Week** takes you to your week plan."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": ["weekplan ontvangen", "overnemen", "toevoegen", "week van een ander", "plan"],
+        "en": ["receive week plan", "take over", "add", "someone else's week", "plan"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.link-android",
+      "title": { "nl": "Op Android: op de link tikken", "en": "On Android: tap the link" },
+      "what": {
+        "nl": "Op Android tik je in WhatsApp gewoon op de link. Wat erin zit, verschijnt bij **In & uit**.",
+        "en": "On Android you simply tap the link in WhatsApp. What it holds appears in **In & out**."
+      },
+      "where": {
+        "nl": [
+          "Tik in WhatsApp op de link.",
+          "Kijk wat er opent: de app of een tabblad in Chrome.",
+          "Tik op **Importeer**."
+        ],
+        "en": [
+          "Tap the link in WhatsApp.",
+          "Look at what opens: the app or a tab in Chrome.",
+          "Tap **Import**."
+        ]
+      },
+      "see": {
+        "nl": "Opent de app, dan staat het recept meteen bij **In & uit**, klaar om te importeren. Opent Chrome, dan zie je de app in een tabblad met hetzelfde recept.",
+        "en": "If the app opens, the recipe is right there in **In & out**, ready to import. If Chrome opens, you see the app in a tab with the same recipe."
+      },
+      "know": {
+        "nl": "Android beslist zelf of een link de app opent; de app kan dat niet afdwingen. Chrome en de app delen dezelfde opslag, dus via Chrome komt het recept ook in de app. Een andere browser, zoals Samsung Internet of Firefox, heeft een eigen opslag.",
+        "en": "Android itself decides whether a link opens the app; the app cannot force it. Chrome and the app share the same storage, so through Chrome the recipe also reaches the app. Another browser, such as Samsung Internet or Firefox, has storage of its own."
+      },
+      "route": "/inbox",
+      "platform": "android",
+      "keywords": {
+        "nl": ["link openen", "ontvangen", "android", "chrome", "link aantikken", "importeren"],
+        "en": ["open link", "receive", "android", "chrome", "tap link", "import"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.deelmenu-android",
+      "title": { "nl": "Op Android: via het deelmenu naar de app", "en": "On Android: to the app through the share menu" },
+      "what": {
+        "nl": "Op Android kun je een tekst vanuit een andere app naar Recepten sturen. Dat werkt voor een gedeeld bericht en ook voor een recept van een website.",
+        "en": "On Android you can send text from another app to Recipes. That works for a shared message and also for a recipe from a website."
+      },
+      "where": {
+        "nl": [
+          "Kies in de andere app de optie om te delen.",
+          "Kies de app Recepten in het rijtje apps.",
+          "Kijk bij **In & uit** wat de app heeft herkend."
+        ],
+        "en": [
+          "Choose the option to share in the other app.",
+          "Choose the Recipes app in the row of apps.",
+          "Look in **In & out** at what the app recognised."
+        ]
+      },
+      "see": {
+        "nl": "De app opent op **In & uit**, met de tekst in het plakvak en de regel “Ontvangen via het deelmenu”. Een recept van een website gaat verder met **Open in de editor**.",
+        "en": "The app opens on **In & out** with the text in the paste box. A line says it came in through the share menu. A recipe from a website carries on with **Open in the editor**."
+      },
+      "know": {
+        "nl": "Dit kan alleen met de app die je via Chrome hebt geïnstalleerd. Op de iPhone bestaat dit niet: daar kopieer en plak je.",
+        "en": "This only works with the app you installed through Chrome. It does not exist on the iPhone: there you copy and paste."
+      },
+      "route": "/inbox",
+      "platform": "android",
+      "keywords": {
+        "nl": ["deelmenu", "delen naar app", "android", "website", "ontvangen", "doorsturen"],
+        "en": ["share menu", "share to app", "android", "website", "receive", "forward"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.ontvangen-iphone",
+      "title": { "nl": "Op de iPhone: kopiëren en plakken", "en": "On the iPhone: copy and paste" },
+      "what": {
+        "nl": "Op de iPhone opent een link nooit vanzelf de app. Je kopieert het bericht, opent de app en plakt het.",
+        "en": "On the iPhone a link never opens the app by itself. You copy the message, open the app and paste it."
+      },
+      "where": {
+        "nl": [
+          "Houd het bericht in WhatsApp ingedrukt.",
+          "Tik op Kopieer.",
+          "Open de app via het icoon op je beginscherm.",
+          "Tik onderaan op **Meer**.",
+          "Tik op **In & uit**.",
+          "Tik op **Plak van klembord**.",
+          "Tik op **Importeer**."
+        ],
+        "en": [
+          "Press and hold the message in WhatsApp.",
+          "Tap Copy.",
+          "Open the app from the icon on your Home Screen.",
+          "Tap **More** at the bottom.",
+          "Tap **In & out**.",
+          "Tap **Paste from clipboard**.",
+          "Tap **Import**."
+        ]
+      },
+      "see": {
+        "nl": "Het recept verschijnt onder het plakvak, met een label zoals **Nieuw**. Na **Importeer** staat het tussen je recepten.",
+        "en": "The recipe appears under the paste box, with a label such as **New**. After **Import** it is among your recipes."
+      },
+      "know": {
+        "nl": "Vraagt de iPhone om toestemming, tik dan op Plak. Lukt het niet, houd dan het tekstvak ingedrukt en kies Plak. Zo ontvang je ook een kaartje, een weekplan, een lijst en voortgang.",
+        "en": "If the iPhone asks for permission, tap Paste. If that does not work, press and hold the text box and choose Paste. This is also how you receive a card, a week plan, a list and progress."
+      },
+      "route": "/inbox",
+      "platform": "ios",
+      "keywords": {
+        "nl": ["iphone", "plakken", "kopiëren", "klembord", "ontvangen", "safari"],
+        "en": ["iphone", "paste", "copy", "clipboard", "receive", "safari"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.link-iphone",
+      "title": { "nl": "Op de iPhone toch op de link getikt", "en": "Tapped the link on the iPhone anyway" },
+      "what": {
+        "nl": "Tik je op de iPhone op een link, dan opent Safari met een voorproefje. Daar kopieer je de code, en die plak je in de app.",
+        "en": "If you tap a link on the iPhone, Safari opens with a preview. You copy the code there and paste it into the app."
+      },
+      "where": {
+        "nl": [
+          "Tik in WhatsApp op de link.",
+          "Tik in Safari op **Kopieer receptcode**.",
+          "Open de app via het icoon op je beginscherm.",
+          "Tik onderaan op **Meer**.",
+          "Tik op **In & uit**.",
+          "Tik op **Plak van klembord**."
+        ],
+        "en": [
+          "Tap the link in WhatsApp.",
+          "Tap **Copy recipe code** in Safari.",
+          "Open the app from the icon on your Home Screen.",
+          "Tap **More** at the bottom.",
+          "Tap **In & out**.",
+          "Tap **Paste from clipboard**."
+        ]
+      },
+      "see": {
+        "nl": "Safari toont het recept om te lezen, met de blauwe knop **Kopieer receptcode**. Bij een kaartje, een lijst of voortgang heet de knop **Kopieer code**.",
+        "en": "Safari shows the recipe to read, with the blue **Copy recipe code** button. For a card, a list or progress the button is called **Copy code**."
+      },
+      "know": {
+        "nl": "Safari heeft een eigen opslag, los van de app. Wat je in Safari ziet, staat dus nog niet in de app.",
+        "en": "Safari has storage of its own, separate from the app. So what you see in Safari is not in the app yet."
+      },
+      "route": "/inbox",
+      "platform": "ios",
+      "keywords": {
+        "nl": ["iphone", "safari", "voorproefje", "link", "code kopiëren", "receptcode"],
+        "en": ["iphone", "safari", "preview", "link", "copy code", "recipe code"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.in-en-uit",
+      "title": { "nl": "In & uit: plakken wat je kreeg", "en": "In & out: paste what you got" },
+      "what": {
+        "nl": "**In & uit** is de plek voor alles wat je ontvangt en verstuurt. Je plakt er een bericht, een link, een kaartje of een receptbestand.",
+        "en": "**In & out** is the place for everything you receive and send. You paste a message, a link, a card or a recipe file there."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik bovenaan op **In & uit**.",
+          "Tik op **Plak van klembord**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **In & out** at the top.",
+          "Tap **Paste from clipboard**."
+        ]
+      },
+      "see": {
+        "nl": "Onder het plakvak staat wat de app herkent, zoals “1 deellink herkend”. Daaronder verschijnt wat je kunt bewaren.",
+        "en": "Under the paste box it says what the app recognises, such as “1 share link recognised”. Below that appears what you can keep."
+      },
+      "know": {
+        "nl": "Een getal op het tabblad **Meer** betekent dat er iets nieuws is ontvangen. Met **Wis** maak je het plakvak leeg.",
+        "en": "A number on the **More** tab means something new has come in. **Clear** empties the paste box."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": ["in & uit", "inbox", "plakken", "plakvak", "ontvangen", "klembord"],
+        "en": ["in & out", "inbox", "paste", "paste box", "receive", "clipboard"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.bestand-openen",
+      "title": { "nl": "Een receptbestand openen", "en": "Open a recipe file" },
+      "what": {
+        "nl": "Kreeg je een bestand met recepten, bijvoorbeeld via WhatsApp of in je Downloads? Dan open je het bij **In & uit**.",
+        "en": "Did you get a file with recipes, for example through WhatsApp or in your Downloads? Then you open it in **In & out**."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **In & uit**.",
+          "Tik op **Kies bestand**.",
+          "Kies het bestand op je telefoon.",
+          "Tik op **Importeer**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **In & out**.",
+          "Tap **Choose file**.",
+          "Choose the file on your phone.",
+          "Tap **Import**."
+        ]
+      },
+      "see": {
+        "nl": "Bovenaan staat wat er in het bestand zit, zoals “Gevonden: 3 recepten”. Daaronder staat elk recept met een label.",
+        "en": "At the top it says what is in the file, such as “Found: 3 recipes”. Below that each recipe has a label."
+      },
+      "know": {
+        "nl": "Het bestand eindigt op .json of .txt.",
+        "en": "The file ends in .json or .txt."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": ["bestand", "openen", "importeren", "receptbestand", "downloads", "json"],
+        "en": ["file", "open", "import", "recipe file", "downloads", "json"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.labels",
+      "title": { "nl": "De labels: Nieuw, Heb je al, Bijgewerkt", "en": "The labels: New, Already have it, Updated" },
+      "what": {
+        "nl": "Elk ontvangen recept krijgt een label. Daaraan zie je of het nieuw is, of je het al hebt, of dat het een nieuwere versie is.",
+        "en": "Every received recipe gets a label. It tells you whether it is new, whether you already have it, or whether it is a newer version."
+      },
+      "where": {
+        "nl": [
+          "Plak een bericht bij **In & uit**.",
+          "Kijk naar het label bij elk recept.",
+          "Kies bij een recept een knop, als die er staat.",
+          "Tik op **Importeer**."
+        ],
+        "en": [
+          "Paste a message in **In & out**.",
+          "Look at the label on each recipe.",
+          "Choose a button on a recipe, if there is one.",
+          "Tap **Import**."
+        ]
+      },
+      "see": {
+        "nl": "**Nieuw** heb je nog niet; **Heb je al** staat al precies zo op je telefoon. Bij **Bijgewerkt** kies je **Neem over** of **Sla over**. Bij “Lijkt op” kies je **Vervang**, **Bewaar beide** of **Sla over**.",
+        "en": "**New** you do not have yet; **Already have it** is already on your phone exactly like this. With **Updated** you choose **Take it** or **Skip**. With “Looks like” you choose **Replace**, **Keep both** or **Skip**."
+      },
+      "know": {
+        "nl": "Bij een nieuwere versie blijven je favorieten en notities staan. Na het importeren zet **Maak ongedaan** de laatste import terug.",
+        "en": "With a newer version your favourites and notes stay. After importing, **Undo** reverses the latest import."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": ["label", "nieuw", "heb je al", "bijgewerkt", "dubbel", "ongedaan maken"],
+        "en": ["label", "new", "already have it", "updated", "duplicate", "undo"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.conflict",
+      "title": { "nl": "Conflict: kies per onderdeel", "en": "Conflict: choose per part" },
+      "what": {
+        "nl": "Hebben jullie allebei hetzelfde recept veranderd, dan krijgt het het label **Conflict**. Je kiest dan per onderdeel welke versie je houdt.",
+        "en": "If you both changed the same recipe, it gets the **Conflict** label. You then choose for each part which version you keep."
+      },
+      "where": {
+        "nl": [
+          "Zoek bij **In & uit** het recept met het label **Conflict**.",
+          "Kies per onderdeel **Van mij**, de knop met de naam van de ander, of **Beide**.",
+          "Tik op **Importeer**."
+        ],
+        "en": [
+          "Find the recipe with the **Conflict** label in **In & out**.",
+          "For each part choose **Mine**, the button with the other person's name, or **Both**.",
+          "Tap **Import**."
+        ]
+      },
+      "see": {
+        "nl": "Per onderdeel (naam, ingrediënten, bereiding en overige) staan drie knopjes naast elkaar. Met **Alles van mij** kies je in één keer overal je eigen versie.",
+        "en": "For each part (name, ingredients, method and other) three small buttons sit side by side. **All mine** picks your own version everywhere at once."
+      },
+      "know": {
+        "nl": "**Beide** houdt jouw versie en zet die van de ander ernaast als kopie. **Importeer** past alleen toe wat je kiest; **Maak ongedaan** zet het terug.",
+        "en": "**Both** keeps your version and adds the other person's next to it as a copy. **Import** applies only what you choose; **Undo** puts it back."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": ["conflict", "kies een kant", "van mij", "beide", "allebei veranderd", "versie"],
+        "en": ["conflict", "pick a side", "mine", "both", "both changed", "version"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.ontvangen-en-gedeeld",
+      "title": { "nl": "Wat je ontving en wat je deelde", "en": "What you received and what you shared" },
+      "what": {
+        "nl": "Onder het plakvak staan twee tabbladen. **Ontvangen** toont wat binnenkwam, **Gedeeld** wat je vanaf deze telefoon verstuurde.",
+        "en": "Under the paste box there are two tabs. **Received** shows what came in, **Shared** what you sent from this phone."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **In & uit**.",
+          "Tik op **Gedeeld** of op **Ontvangen**.",
+          "Tik op een rij om het recept te openen."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **In & out**.",
+          "Tap **Shared** or **Received**.",
+          "Tap a row to open the recipe."
+        ]
+      },
+      "see": {
+        "nl": "Bij elke rij staat de datum en aan of van wie. Onder **Ontvangen** staat ook de **Importgeschiedenis**; tik op **Toon** om die te openen.",
+        "en": "Each row shows the date and to or from whom. Under **Received** there is also the **Import history**; tap **Show** to open it."
+      },
+      "know": {
+        "nl": "Alleen de laatste import kun je nog ongedaan maken.",
+        "en": "Only the latest import can still be undone."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": ["gedeeld", "ontvangen", "geschiedenis", "verstuurd", "importgeschiedenis", "overzicht"],
+        "en": ["shared", "received", "history", "sent", "import history", "overview"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.nieuwe-recepten",
+      "title": { "nl": "Deel je nieuwe recepten", "en": "Share your new recipes" },
+      "what": {
+        "nl": "Alles wat je sinds de vorige keer maakte of aanpaste, stuur je in één bericht naar één persoon. Zo blijven jullie recepten gelijk.",
+        "en": "Everything you made or changed since last time goes to one person in one message. That keeps your recipes in step."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Recepten & delen**.",
+          "Tik op **Deel je nieuwe recepten**.",
+          "Tik bij **Aan wie?** op een naam.",
+          "Tik op **Deel via WhatsApp**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Recipes & sharing**.",
+          "Tap **Share your new recipes**.",
+          "Tap a name under **To whom?**.",
+          "Tap **Share via WhatsApp**."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet hoe het bericht eruitziet en wat er meegaat, zoals het aantal recepten en nieuwe ingrediënten. Leden van je huishouden staan vooraan, met hun kleur.",
+        "en": "You see what the message looks like and what goes along, such as the number of recipes and new ingredients. Members of your household come first, with their colour."
+      },
+      "know": {
+        "nl": "Een getal bij **Deel je nieuwe recepten** zegt hoeveel recepten nog niet gedeeld zijn. Deelde je met **Kopieer**, tik dan daarna op **Markeer als verzonden**. Te veel voor één bericht? Dan gaat het als bestand.",
+        "en": "A number by **Share your new recipes** tells you how many recipes have not been shared yet. If you shared with **Copy**, tap **Mark as sent** afterwards. Too much for one message? Then it goes as a file."
+      },
+      "route": "/share",
+      "platform": "all",
+      "keywords": {
+        "nl": ["nieuwe recepten", "bijwerken", "gelijk houden", "stuur nieuwe", "huishouden", "getal"],
+        "en": ["new recipes", "update", "keep in step", "send new", "household", "number"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.kaartje-delen",
+      "title": { "nl": "Je kaartje delen", "en": "Share your card" },
+      "what": {
+        "nl": "Je kaartje is je naam, kleur, taal en avatar in één link. Wie het ontvangt, kan je toevoegen aan zijn huishouden.",
+        "en": "Your card is your name, colour, language and avatar in one link. Whoever receives it can add you to their household."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Huishouden**.",
+          "Tik onder **Mijn kaartje** op **Deel mijn kaartje**.",
+          "Kies WhatsApp en de persoon aan wie je het stuurt."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Household**.",
+          "Under **My card**, tap **Share my card**.",
+          "Choose WhatsApp and the person you are sending it to."
+        ]
+      },
+      "see": {
+        "nl": "WhatsApp opent met één zin, “👋 Kaartje van” en je naam, en daaronder één link. In de app staat onder de knoppen de uitleg voor Android en iPhone.",
+        "en": "WhatsApp opens with one sentence that starts with “👋” and your name, and under it one link. In the app the explanation for Android and iPhone sits under the buttons."
+      },
+      "know": {
+        "nl": "Dezelfde knop staat op **Mijn profiel**. Wat je daarna stuurt, krijgt bij de ander jouw naam en kleur.",
+        "en": "The same button is on **My profile**. What you send afterwards shows up with your name and colour for the other person."
+      },
+      "route": "/more/household",
+      "platform": "all",
+      "keywords": {
+        "nl": ["kaartje", "visitekaartje", "huishouden", "naam en kleur", "avatar", "voorstellen"],
+        "en": ["card", "contact card", "household", "name and colour", "avatar", "introduce"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.lid-toevoegen",
+      "title": { "nl": "Iemand toevoegen met een kaartje", "en": "Add someone with a card" },
+      "what": {
+        "nl": "Kreeg je een kaartje van iemand op een andere telefoon? Dan voeg je die persoon toe aan je huishouden.",
+        "en": "Did you get a card from someone on another phone? Then you add that person to your household."
+      },
+      "where": {
+        "nl": [
+          "Kopieer het bericht met het kaartje.",
+          "Tik onderaan op **Meer**.",
+          "Tik op **Huishouden**.",
+          "Scrol naar **Voeg lid toe via link of plak**.",
+          "Tik op **Plak van klembord**.",
+          "Tik op de knop “Voeg … toe aan je huishouden”, met de naam erin."
+        ],
+        "en": [
+          "Copy the message with the card.",
+          "Tap **More** at the bottom.",
+          "Tap **Household**.",
+          "Scroll to **Add a member via link or paste**.",
+          "Tap **Paste from clipboard**.",
+          "Tap the button “Add … to your household”, with the name in it."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet “Kaartje van” met de naam en een rondje in de kleur van die persoon. Daarna staat de persoon bij **Leden**, met “via kaartje”.",
+        "en": "You see “Card from” with the name and a circle in that person's colour. Afterwards the person is under **Members**, with “via card”."
+      },
+      "know": {
+        "nl": "Is iemand al lid, dan heet de knop “Werk … bij”; dan worden alleen naam, kleur en taal bijgewerkt. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.",
+        "en": "If someone is already a member, the button says “Update …”; then only name, colour and language are updated. Pasting in **In & out** works too. On Android you can tap the link, but Android itself decides whether the app opens."
+      },
+      "route": "/more/household",
+      "platform": "all",
+      "keywords": {
+        "nl": ["lid toevoegen", "kaartje", "huishouden", "plakken", "partner", "familie"],
+        "en": ["add member", "card", "household", "paste", "partner", "family"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.huishouden",
+      "title": { "nl": "Je huishouden: leden en kleuren", "en": "Your household: members and colours" },
+      "what": {
+        "nl": "In je huishouden staan de profielen op deze telefoon en de mensen op een andere telefoon. Iedereen heeft een eigen kleur.",
+        "en": "Your household holds the profiles on this phone and the people on another phone. Everyone has their own colour."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Huishouden**.",
+          "Tik onderaan op **Voeg lid toe**.",
+          "Typ een naam.",
+          "Tik op een kleur.",
+          "Tik op **Voeg lid toe** om te bewaren."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Household**.",
+          "Tap **Add member** at the bottom.",
+          "Type a name.",
+          "Tap a colour.",
+          "Tap **Add member** to save."
+        ]
+      },
+      "see": {
+        "nl": "Elk lid staat bij **Leden** met een rondje in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.",
+        "en": "Each member is under **Members** with a circle in their colour. You see whether someone is on this phone, came through a card or was added by hand."
+      },
+      "know": {
+        "nl": "Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. Profielen op deze telefoon regel je met **Profielen op deze telefoon beheren**. Leden staan vooraan bij **Deel je nieuwe recepten**.",
+        "en": "**Edit** and **Remove** change a member from another phone. You manage profiles on this phone with **Manage the profiles on this phone**. Members come first in **Share your new recipes**."
+      },
+      "route": "/more/household",
+      "platform": "all",
+      "keywords": {
+        "nl": ["huishouden", "leden", "kleur", "lid toevoegen", "gezin", "wie kookt mee"],
+        "en": ["household", "members", "colour", "add member", "family", "who cooks along"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.voortgang-delen",
+      "title": { "nl": "Sync mijn voortgang", "en": "Sync my progress" },
+      "what": {
+        "nl": "Je stuurt je level, je badges en je kookdagen van de laatste 90 dagen naar je huishouden of een vriend. Notities, sterren en foto's gaan niet mee.",
+        "en": "You send your level, your badges and your cooking days of the last 90 days to your household or a friend. Notes, stars and photos do not go along."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Huishouden**.",
+          "Tik onder **Mijn kaartje** op **Sync mijn voortgang**.",
+          "Tik op **Deel**.",
+          "Kies WhatsApp en de persoon aan wie je het stuurt."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Household**.",
+          "Under **My card**, tap **Sync my progress**.",
+          "Tap **Share**.",
+          "Choose WhatsApp and the person you are sending it to."
+        ]
+      },
+      "see": {
+        "nl": "Het bericht begint met “📈 Voortgang van”, je naam en je level, en eindigt met één link. Ook hier staan **Kopieer link** en **Toon QR**.",
+        "en": "The message starts with “📈”, your name and your level, and ends with one link. Here too you find **Copy link** and **Show QR**."
+      },
+      "know": {
+        "nl": "Het is een momentopname: de ander ziet wat je nu deelt, niet wat je later kookt. Deel het dus af en toe opnieuw. Met **Badges** uit staat deze knop er niet.",
+        "en": "It is a snapshot: the other person sees what you share now, not what you cook later. So share it again now and then. With **Badges** switched off, this button is not there."
+      },
+      "route": "/more/household",
+      "platform": "all",
+      "keywords": {
+        "nl": ["voortgang", "sync", "level delen", "badges delen", "kookdagen", "vriend"],
+        "en": ["progress", "sync", "share level", "share badges", "cooking days", "friend"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.voortgang-ontvangen",
+      "title": { "nl": "Voortgang van een ander ontvangen", "en": "Receive someone's progress" },
+      "what": {
+        "nl": "Een gedeelde voortgang laat je het level en de kookdagen van een ander zien. Je bewaart hem bij een lid of bij een vriend.",
+        "en": "Shared progress shows you someone else's level and cooking days. You keep it with a member or with a friend."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **In & uit**.",
+          "Tik op **Plak van klembord**.",
+          "Tik op de knop onder de kaart, bijvoorbeeld **Bewaar als vriend**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **In & out**.",
+          "Tap **Paste from clipboard**.",
+          "Tap the button under the card, for example **Save as a friend**."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet een kaart “Voortgang van” met de naam, het level, de badges en de kookdagen van de laatste 30 dagen. Is het een lid, dan heet de knop “Werk … bij”.",
+        "en": "You see a progress card with the name, the level, the badges and the cooking days of the last 30 days. If it is a member, the button says “Update …”."
+      },
+      "know": {
+        "nl": "Daarna staat het level onder de naam bij **Huishouden**, met de datum van bijwerken. Een vriend staat onder **Vrienden** en is geen lid. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.",
+        "en": "Afterwards the level shows under the name in **Household**, with the date it was updated. A friend is listed under **Friends** and is not a member. In the **Cooking calendar** you see others as they last shared."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": ["voortgang ontvangen", "vriend", "level van een ander", "bijwerken", "kookkalender"],
+        "en": ["receive progress", "friend", "someone's level", "update", "cooking calendar"]
+      }
+    }
+  ]
+}

@@ -64,7 +64,7 @@ per onderwerp hieronder; de schrijver voegt toe wat hij in de schermen en in DEV
 2. **recepten — Recepten / Recipes** (W2): bladeren, zoeken (naam, ingrediënt, keuken, categorie), sorteren, filters (dieetchips,
    labels, keukens met vlaggen, categorieën, bijgerechten); de receptpagina (porties schalen, °C/°F, foto's, groene ingrediënten in
    de stappen en de hoeveelheid met één tik, notities, favoriet, printen & kopiëren); versies als tabs (glutenvrij/vegetarisch/
-   vegan/lactosevrij: voorstel met stippellijn, goedkeuren, "Ook als …", de gekozen versie volgt je); eigen versie en Tip van de
+   vegan/lactosevrij: voorstel met stippellijn, goedkeuren, de gekozen versie volgt je; "Ook als …" bestaat niet meer sinds de tabs — correctie 8 nov); eigen versie en Tip van de
    maker; eigen recept maken (de +: de vier keuzes, de editor: ingrediëntregels, ?-chips en de woordkiezer "variant of nieuw?",
    stappen, Labels als laatste stap, de AI-prompt die keuken en categorie invult); plakken van een AI-antwoord of website (lege
    regels, haakjes, labels); Controleer mijn recepten; selecteren (labels, verwijderen, delen, QR); Engels toevoegen; klassiekers
@@ -203,6 +203,20 @@ De schrijvers werken tegen het datamodel van §3 zonder op de UI-bouwer te wacht
 - Een knopnaam anders schrijven dan src/i18n hem heeft; een jargonwoord toch gebruiken.
 - Een dependency (geen zoekbibliotheek, geen Markdown-renderer: de tekst kent alleen `**vet**`).
 - DEVICE-TEST.md inkorten of verwijderen (dat is een later besluit van Stijn).
+
+**Na de lens en Fable's lezing (besluit Fable, 8 nov):** 217 rijen in tien onderwerpen; Fable las de Nederlandse uitvoer
+helemaal. (1) Correcties door een Opus-afronder: de route naar de avatar-maker (hoofdroute Jouw stijl → Avatar → Avatar aanpassen; de knop onder Naam & kleur bestaat ook nog), de
+"dobbelsteen" in de kaart Vanavond (die knop bestaat niet meer), en drie verouderde DEVICE-TEST-rijen (29, 43, 64). (2) Lens:
+`firstSentence` knipte "The ? button" af → gerepareerd door de fixer. (3) Bijvangst uit 13c, hersteld door Fable: de negen
+`cook.cmd.*Say`-sleutels (voorbeeldzinnen in het ?-venster van de kookstand) waren weggehaald terwijl VoiceHelp ze samengesteld
+gebruikt; terug, met allowlist in tests/i18n.test.ts. (4) `dict.mergeAllConfirm` beloofde Ongedaan dat er niet is → tekst
+eerlijk (Fable). (5) De schakelaar Experimenten doet niets meer: de rij zegt dat eerlijk; weghalen of een nieuwe proeffunctie is
+aan Stijn (STATUS-lijst). (6) Keuzes van de UI-bouwer akkoord: schermcode én data lazy, × met `inbox.clear`, chips tonen tijdens
+zoeken alleen onderwerpen met treffers, validator weigert `?tab=`-routes. (7) Stijlkeuzes akkoord: knoppen met een getal of
+naam niet vet; `more.sendNew` heet "Deel je nieuwe recepten" (oranje getal). (8) Weggelaten omdat de schrijvers het niet zeker
+wisten (bewust): of iOS 26 Deel achter ⋯ verstopt, Chromes eigen installatiebanner, wat de iPhone over opslag vraagt, de
+crit-kansen, welke geheime badges niet op de iPhone kunnen. (9) docs/ACHTER-DE-SCHERMEN.md staat los (Fable, 8 nov).
+Gebouwd: 8 nov 2026 (Z, workflow wf_7127eacf-a23; fixer-ronde, Opus-afronder voor (1), docs en (3)–(4) door Fable)
 
 ## 8. Niet in dit blok
 

@@ -1,0 +1,508 @@
+{
+  "id": "eerste-keer",
+  "order": 1,
+  "title": { "nl": "Eerste keer", "en": "Getting started" },
+  "intro": {
+    "nl": "Zo zet je de app op je telefoon, vertel je wie je bent en vind je de weg.",
+    "en": "How to put the app on your phone, tell it who you are and find your way around."
+  },
+  "entries": [
+    {
+      "id": "eerste-keer.installeren-android",
+      "title": { "nl": "De app installeren op Android", "en": "Install the app on Android" },
+      "what": {
+        "nl": "Je zet de app als echte app op je telefoon. Dan opent hij zonder adresbalk en met een eigen icoon.",
+        "en": "You put the app on your phone as a real app. It then opens without an address bar and with its own icon."
+      },
+      "where": {
+        "nl": [
+          "Open de link naar de app in Chrome.",
+          "Tik rechtsboven op het menu ⋮.",
+          "Tik op **App installeren**.",
+          "Bevestig de vraag van Chrome.",
+          "Open de app voortaan via het icoon in je app-lade."
+        ],
+        "en": [
+          "Open the link to the app in Chrome.",
+          "Tap the ⋮ menu at the top right.",
+          "Tap **Install app**.",
+          "Confirm Chrome's question.",
+          "From now on, open the app from the icon in your app drawer."
+        ]
+      },
+      "see": {
+        "nl": "Het icoon Recepten staat in je app-lade. De app opent zonder adresbalk.",
+        "en": "The Recepten icon is in your app drawer. The app opens without an address bar."
+      },
+      "know": {
+        "nl": "Zet Chrome ook als standaardbrowser. Anders opent een link een andere browser met een eigen opslag, en wat je daar bewaart komt niet in de app.",
+        "en": "Make Chrome your default browser too. Otherwise a link opens another browser with storage of its own, and what you save there does not reach the app."
+      },
+      "platform": "android",
+      "keywords": {
+        "nl": ["installeren", "android", "chrome", "icoon", "app-lade", "downloaden"],
+        "en": ["install", "android", "chrome", "icon", "app drawer", "download"]
+      }
+    },
+    {
+      "id": "eerste-keer.installeren-iphone",
+      "title": { "nl": "De app installeren op de iPhone", "en": "Install the app on iPhone" },
+      "what": {
+        "nl": "Je zet de app op je beginscherm. Pas dan is het een echte app die je recepten bewaart.",
+        "en": "You add the app to your Home Screen. Only then is it a real app that keeps your recipes."
+      },
+      "where": {
+        "nl": [
+          "Open de link naar de app in Safari.",
+          "Tik onderaan op **Deel**.",
+          "Kies **Zet op beginscherm**.",
+          "Laat de schakelaar Open als webapp aan staan.",
+          "Tik op **Voeg toe**.",
+          "Open de app voortaan via het icoon op je beginscherm."
+        ],
+        "en": [
+          "Open the link to the app in Safari.",
+          "Tap **Share** at the bottom.",
+          "Choose **Add to Home Screen**.",
+          "Leave the Open as Web App switch on.",
+          "Tap **Add**.",
+          "From now on, open the app from the icon on your Home Screen."
+        ]
+      },
+      "see": {
+        "nl": "Het icoon staat op je beginscherm. De app opent zonder de balken van Safari.",
+        "en": "The icon is on your Home Screen. The app opens without Safari's bars."
+      },
+      "know": {
+        "nl": "Gebruik de app niet in Safari zelf: Safari kan je recepten na 7 dagen wissen. De app op het beginscherm kost nauwelijks ruimte (± 2 MB).",
+        "en": "Don't use the app inside Safari itself: Safari may delete your recipes after 7 days. The app on your Home Screen takes hardly any space (about 2 MB)."
+      },
+      "platform": "ios",
+      "keywords": {
+        "nl": ["installeren", "iphone", "safari", "beginscherm", "icoon", "zet op beginscherm"],
+        "en": ["install", "iphone", "safari", "home screen", "icon", "add to home screen"]
+      }
+    },
+    {
+      "id": "eerste-keer.wie-ben-jij",
+      "title": { "nl": "Je naam, taal en kleur", "en": "Your name, language and colour" },
+      "what": {
+        "nl": "Bij de eerste keer openen vraagt de app wie je bent. Je naam staat straks bij wat je deelt en kookt.",
+        "en": "The first time you open the app, it asks who you are. Your name goes with what you share and cook."
+      },
+      "where": {
+        "nl": [
+          "Open de app voor de eerste keer.",
+          "Typ je naam bij **Naam**.",
+          "Kies je taal bij **Taal**.",
+          "Tik bij **Kleur** op een kleur.",
+          "Tik op **Aan de slag**."
+        ],
+        "en": [
+          "Open the app for the first time.",
+          "Type your name under **Name**.",
+          "Choose your language under **Language**.",
+          "Tap a colour under **Colour**.",
+          "Tap **Let's go**."
+        ]
+      },
+      "see": {
+        "nl": "Het scherm **Wie ben jij?** verdwijnt en je komt op **Home**. Bovenaan staat je naam naast een rondje in jouw kleur.",
+        "en": "The **Who are you?** screen goes away and you land on **Home**. At the top you see your name next to a circle in your colour."
+      },
+      "know": {
+        "nl": "Favorieten en notities zijn per persoon. Wie de telefoon met je deelt, maakt later een eigen profiel.",
+        "en": "Favourites and notes are per person. Someone who shares the phone with you can add their own profile later."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["naam", "profiel", "kleur", "welkom", "begin", "wie ben jij"],
+        "en": ["name", "profile", "colour", "welcome", "start", "who are you"]
+      }
+    },
+    {
+      "id": "eerste-keer.naam-kleur-aanpassen",
+      "title": { "nl": "Je naam of kleur later aanpassen", "en": "Change your name or colour later" },
+      "what": {
+        "nl": "Je naam, taal en kleur kun je altijd veranderen. Dat doe je op **Mijn profiel**.",
+        "en": "You can change your name, language and colour at any time. You do that on **My profile**."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Tik bovenaan op je naam.",
+          "Tik op **Naam & kleur**.",
+          "Verander je naam, taal of kleur.",
+          "Tik op **Bewaar**."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "Tap your name at the top.",
+          "Tap **Name & colour**.",
+          "Change your name, language or colour.",
+          "Tap **Save**."
+        ]
+      },
+      "see": {
+        "nl": "Onder **Naam & kleur** klappen de velden open. Na **Bewaar** klappen ze dicht en zie je je nieuwe naam en kleur.",
+        "en": "Under **Name & colour** the fields fold open. After **Save** they fold shut and you see your new name and colour."
+      },
+      "route": "/more/profile",
+      "platform": "all",
+      "keywords": {
+        "nl": ["naam", "kleur", "aanpassen", "wijzigen", "profiel", "taal"],
+        "en": ["name", "colour", "change", "edit", "profile", "language"]
+      }
+    },
+    {
+      "id": "eerste-keer.taal",
+      "title": { "nl": "Nederlands of Engels", "en": "Dutch or English" },
+      "what": {
+        "nl": "De app werkt in het Nederlands en in het Engels. Je wisselt met één tik.",
+        "en": "The app works in Dutch and in English. You switch with one tap."
+      },
+      "where": {
+        "nl": ["Tik rechtsboven op **NL** of **EN**."],
+        "en": ["Tap **NL** or **EN** at the top right."]
+      },
+      "see": {
+        "nl": "Alle knoppen en teksten staan meteen in die taal.",
+        "en": "All buttons and texts switch to that language straight away."
+      },
+      "know": {
+        "nl": "De app onthoudt de taal bij je profiel. Wissel je van profiel, dan wisselt de taal mee. Dezelfde keuze staat in **Meer** onder **Instellingen**.",
+        "en": "The app remembers the language with your profile. Switch profile and the language switches too. The same choice is in **More** under **Settings**."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["taal", "engels", "nederlands", "vertalen", "nl", "en"],
+        "en": ["language", "english", "dutch", "translate", "nl", "en"]
+      }
+    },
+    {
+      "id": "eerste-keer.tabbladen",
+      "title": { "nl": "De vijf tabbladen", "en": "The five tabs" },
+      "what": {
+        "nl": "Onderaan staan vijf tabbladen. Daarmee kom je overal in de app.",
+        "en": "There are five tabs at the bottom. They take you everywhere in the app."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Home**, **Recepten**, **Week**, **Boodschappen** of **Meer**."],
+        "en": ["Tap **Home**, **Recipes**, **Week**, **Shopping** or **More** at the bottom."]
+      },
+      "see": {
+        "nl": "**Home** toont vandaag en **Recepten** het hele boek. **Week** is je weekplan en **Boodschappen** je lijst. **Meer** bevat je profiel, de instellingen, **In & uit** en hulp.",
+        "en": "**Home** shows today and **Recipes** the whole book. **Week** is your week plan and **Shopping** your list. **More** holds your profile, the settings, **In & out** and help."
+      },
+      "know": {
+        "nl": "Staat er een getal op **Meer**? Dan heb je iets nieuws ontvangen in **In & uit**.",
+        "en": "Is there a number on **More**? Then something new has arrived in **In & out**."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["tabblad", "menu", "onderaan", "navigatie", "knoppen", "meer"],
+        "en": ["tab", "menu", "bottom", "navigation", "buttons", "more"]
+      }
+    },
+    {
+      "id": "eerste-keer.home",
+      "title": { "nl": "Wat Home laat zien", "en": "What Home shows" },
+      "what": {
+        "nl": "Home is je startscherm voor vandaag. Je ziet in één keer wat je vanavond kookt en hoe je week ervoor staat.",
+        "en": "Home is your start screen for today. You see at a glance what to cook tonight and how your week is going."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Home**."],
+        "en": ["Tap **Home** at the bottom."]
+      },
+      "see": {
+        "nl": "Bovenaan staat de datum van vandaag, daaronder je avatar en je naam. Dan volgen de kaart **Vanavond**, de kaart **Deze week** en een paar rijen.",
+        "en": "At the top you see today's date, with your avatar and name below it. Then come the **Tonight** card, the **This week** card and a few rows."
+      },
+      "know": {
+        "nl": "Tik op je naam voor **Mijn profiel**. Bovenaan Home naar beneden trekken doet hetzelfde. Met badges aan staat onder je naam ook je level.",
+        "en": "Tap your name for **My profile**. Pulling Home down from the top does the same. With badges on, your level shows under your name too."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": {
+        "nl": ["home", "startscherm", "vandaag", "datum", "avatar", "begroeting"],
+        "en": ["home", "start screen", "today", "date", "avatar", "greeting"]
+      }
+    },
+    {
+      "id": "eerste-keer.vanavond",
+      "title": { "nl": "De kaart Vanavond", "en": "The Tonight card" },
+      "what": {
+        "nl": "De kaart **Vanavond** stelt één gerecht voor. Heb je een weekplan, dan is het het volgende gerecht uit je week.",
+        "en": "The **Tonight** card suggests one dish. If you have a week plan, it is the next dish from your week."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Tik in de kaart **Vanavond** op **Iets anders** voor het volgende gerecht uit je week.",
+          "Tik op **Iets buiten je week** voor een gerecht dat niet in je week staat.",
+          "Tik op **Nog een** voor weer een ander gerecht.",
+          "Tik op **Open** om het recept te openen."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "In the **Tonight** card, tap **Something else** for the next dish from your week.",
+          "Tap **Something outside your week** for a dish that is not in your week.",
+          "Tap **Another** for yet another dish.",
+          "Tap **Open** to open the recipe."
+        ]
+      },
+      "see": {
+        "nl": "Het gerecht staat in de kaart met de kooktijd en de categorie. Zonder weekplan kiest **Nog een** een los gerecht. Onder **filters** kies je waaruit **Nog een** mag kiezen.",
+        "en": "The card shows the dish with its cooking time and category. Without a week plan, **Another** picks a random dish. Under **filters** you choose what **Another** may pick from."
+      },
+      "know": {
+        "nl": "Met **Terug naar je week** kom je weer bij je weekplan. De filters gelden alleen voor **Nog een**, nooit voor je week.",
+        "en": "**Back to your week** takes you back to your week plan. The filters only apply to **Another**, never to your week."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": {
+        "nl": ["vanavond", "wat eten we", "dobbelsteen", "voorstel", "verras", "avondeten"],
+        "en": ["tonight", "what to cook", "dice", "suggestion", "surprise", "dinner"]
+      }
+    },
+    {
+      "id": "eerste-keer.deze-week",
+      "title": { "nl": "De kaart Deze week", "en": "The This week card" },
+      "what": {
+        "nl": "De kaart **Deze week** laat kort zien hoe je week ervoor staat.",
+        "en": "The **This week** card shows in short how your week is going."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Tik op de titel **Deze week** om je weekplan te openen.",
+          "Tik op **Boodschappenlijst** om je lijst te openen."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "Tap the **This week** title to open your week plan.",
+          "Tap **Shopping list** to open your list."
+        ]
+      },
+      "see": {
+        "nl": "Rechts staat hoeveel gerechten al gekookt zijn, bijvoorbeeld 2 van 7 gekookt. Daaronder staan de namen; wat je al kookte is doorgestreept.",
+        "en": "On the right it says how many dishes are cooked, for example 2 of 7 cooked. Below are the names; what you cooked is crossed out."
+      },
+      "know": {
+        "nl": "Nog geen weekplan? Dan staat er **Kies 7 voor deze week**. Is alles gekookt, dan staat er **Alles gekookt — kies nieuwe?**.",
+        "en": "No week plan yet? Then it says **Pick 7 for this week**. When everything is cooked, it says **All cooked — pick new ones?**."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": {
+        "nl": ["deze week", "weekplan", "gekookt", "boodschappenlijst", "kies 7", "overzicht"],
+        "en": ["this week", "week plan", "cooked", "shopping list", "pick 7", "overview"]
+      }
+    },
+    {
+      "id": "eerste-keer.home-rijen",
+      "title": { "nl": "De rijen onderaan Home", "en": "The rows lower down on Home" },
+      "what": {
+        "nl": "Onder de kaarten staan snelle wegen naar wat je vaak nodig hebt.",
+        "en": "Below the cards are quick ways to what you often need."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Scrol naar beneden.",
+          "Tik op een rij of een tegel."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "Scroll down.",
+          "Tap a row or a tile."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet **In & uit** met wat er nieuw is, je **Favorieten**, **Laatst gekookt** en een rij **Categorieën**. Helemaal onderaan staan **Mijn recepten** en **Het verhaal van dit boek**.",
+        "en": "You see **In & out** with what is new, your **Favourites**, **Recently cooked** and a row of **Categories**. At the very bottom are **My recipes** and **The story of this book**."
+      },
+      "know": {
+        "nl": "Bij een gerecht dat jij kookte zonder sterren staat **Beoordeel**. Tik erop om sterren te geven.",
+        "en": "A dish you cooked without stars shows **Rate**. Tap it to give stars."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": {
+        "nl": ["favorieten", "laatst gekookt", "categorieën", "mijn recepten", "beoordelen", "sterren"],
+        "en": ["favourites", "recently cooked", "categories", "my recipes", "rate", "stars"]
+      }
+    },
+    {
+      "id": "eerste-keer.nieuwe-versie",
+      "title": { "nl": "Een nieuwe versie van de app", "en": "A new version of the app" },
+      "what": {
+        "nl": "Soms is er een nieuwe versie van de app. De app vernieuwt nooit vanzelf; jij kiest het moment.",
+        "en": "Sometimes there is a new version of the app. The app never reloads by itself; you choose the moment."
+      },
+      "where": {
+        "nl": [
+          "Kijk onderaan, boven de tabbladen, of er een blauwe balk staat.",
+          "Tik in de balk op **Vernieuwen**."
+        ],
+        "en": [
+          "Look at the bottom, above the tabs, for a blue bar.",
+          "Tap **Reload** in the bar."
+        ]
+      },
+      "see": {
+        "nl": "De balk zegt **Nieuwe versie**. Na **Vernieuwen** laadt de app opnieuw, met je recepten en lijsten gewoon op hun plek.",
+        "en": "The bar says **New version**. After **Reload** the app loads again, with your recipes and lists still in place."
+      },
+      "know": {
+        "nl": "De balk blijft staan tot je erop tikt. Je kunt dus eerst rustig verder koken.",
+        "en": "The bar stays until you tap it. So you can finish cooking first."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["update", "nieuwe versie", "vernieuwen", "bijwerken", "balk", "herladen"],
+        "en": ["update", "new version", "reload", "refresh", "bar", "upgrade"]
+      }
+    },
+    {
+      "id": "eerste-keer.testversie",
+      "title": { "nl": "De testversie met het andere icoon", "en": "The test version with the other icon" },
+      "what": {
+        "nl": "Naast de gewone app bestaat een testversie om nieuwe dingen vooraf te proberen. Het is de testversie met het andere icoon en eigen gegevens.",
+        "en": "Next to the normal app there is a test version for trying new things early. It is the test version with the other icon and its own data."
+      },
+      "where": {
+        "nl": [
+          "Open de link naar de testversie die Stijn je stuurt.",
+          "Installeer hem zoals de gewone app.",
+          "Open hem voortaan via zijn eigen icoon."
+        ],
+        "en": [
+          "Open the link to the test version that Stijn sends you.",
+          "Install it like the normal app.",
+          "From now on, open it from its own icon."
+        ]
+      },
+      "see": {
+        "nl": "Je hebt twee iconen; onder het tweede staat Recepten NEXT. In de testversie staat rechtsboven het woord NEXT.",
+        "en": "You have two icons; the second one says Recepten NEXT. In the test version the word NEXT shows at the top right."
+      },
+      "know": {
+        "nl": "De testversie heeft eigen gegevens. Wat je daar bewaart, staat niet in de gewone app, en andersom ook niet. Bewaar je echte recepten dus in de gewone app.",
+        "en": "The test version has its own data. What you save there is not in the normal app, and the other way round. So keep your real recipes in the normal app."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["testversie", "next", "tweede icoon", "proberen", "test", "nieuw"],
+        "en": ["test version", "next", "second icon", "try out", "test", "new"]
+      }
+    },
+    {
+      "id": "eerste-keer.opslag-beschermen",
+      "title": { "nl": "Je gegevens beschermen", "en": "Protecting your data" },
+      "what": {
+        "nl": "Bij elke start vraagt de app de telefoon om je gegevens te beschermen. Beschermde opslag wordt niet zomaar gewist als de telefoon vol raakt.",
+        "en": "Every time it starts, the app asks the phone to protect your data. Protected storage is not cleared lightly when the phone fills up."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Opslag & back-up**.",
+          "Kijk onder **Status** bij **Opslag beschermd**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Storage & backup**.",
+          "Look under **Status** at **Storage protected**."
+        ]
+      },
+      "see": {
+        "nl": "Daar staat ja, nee of onbekend.",
+        "en": "It says yes, no or unknown."
+      },
+      "know": {
+        "nl": "Beschermd betekent niet dat je gegevens blijven als je de app verwijdert. Een back-up is de echte garantie.",
+        "en": "Protected does not mean your data stays when you remove the app. A backup is the real guarantee."
+      },
+      "route": "/more/storage",
+      "platform": "all",
+      "keywords": {
+        "nl": ["toestemming", "opslag", "beschermd", "veilig", "gegevens", "wissen"],
+        "en": ["permission", "storage", "protected", "safe", "data", "wiped"]
+      }
+    },
+    {
+      "id": "eerste-keer.browsermelding",
+      "title": { "nl": "De melding dat je in de browser zit", "en": "The notice that you are in the browser" },
+      "what": {
+        "nl": "Open je de app in een browser in plaats van via het icoon, dan zegt een kader bovenaan dat. Het legt uit hoe je de app installeert.",
+        "en": "If you open the app in a browser instead of from the icon, a box at the top says so. It explains how to install the app."
+      },
+      "where": {
+        "nl": [
+          "Open de app in de browser van je telefoon.",
+          "Lees het kader bovenaan.",
+          "Tik op **Toch in de browser** als je in de browser verder wilt."
+        ],
+        "en": [
+          "Open the app in your phone's browser.",
+          "Read the box at the top.",
+          "Tap **Stay in the browser** if you want to carry on in the browser."
+        ]
+      },
+      "see": {
+        "nl": "Het kader zegt dat je de app in de browser gebruikt, met de stappen voor jouw telefoon. Na **Toch in de browser** is het kader weg en staat er onderaan een klein kaartje.",
+        "en": "The box says you are using the app in the browser, with the steps for your phone. After **Stay in the browser** the box goes and a small card shows at the bottom."
+      },
+      "know": {
+        "nl": "Het kader komt na een week terug. Op Android in een andere browser dan Chrome komt het bij elke start terug. In de geïnstalleerde app zie je het nooit.",
+        "en": "The box comes back after a week. On Android in a browser other than Chrome, it comes back every time you open the page. In the installed app you never see it."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["browser", "melding", "kader", "installeren", "toch in de browser", "waarschuwing"],
+        "en": ["browser", "notice", "box", "install", "stay in the browser", "warning"]
+      }
+    },
+    {
+      "id": "eerste-keer.open-in-chrome",
+      "title": { "nl": "Open in Chrome", "en": "Open in Chrome" },
+      "what": {
+        "nl": "Een andere browser dan Chrome bewaart alles in een eigen opslag. Wat je daar bewaart, komt niet in de app. Met **Open in Chrome** ga je naar Chrome.",
+        "en": "A browser other than Chrome keeps everything in storage of its own. What you save there does not reach the app. **Open in Chrome** takes you to Chrome."
+      },
+      "where": {
+        "nl": [
+          "Kijk in het kader bovenaan.",
+          "Tik op **Open in Chrome**.",
+          "Gebeurt er niets? Tik dan op **Kopieer de link**.",
+          "Open Chrome.",
+          "Plak de link in de adresbalk."
+        ],
+        "en": [
+          "Look at the box at the top.",
+          "Tap **Open in Chrome**.",
+          "Nothing happens? Then tap **Copy the link**.",
+          "Open Chrome.",
+          "Paste the link into the address bar."
+        ]
+      },
+      "see": {
+        "nl": "Als je browser meewerkt, opent Chrome met dezelfde pagina. Na **Kopieer de link** staat onder de knoppen dat de link gekopieerd is.",
+        "en": "If your browser cooperates, Chrome opens with the same page. After **Copy the link** a line under the buttons says the link was copied."
+      },
+      "know": {
+        "nl": "Niet elke browser volgt de knop, en de app kan dat niet afdwingen. Kopiëren en plakken in Chrome is de zekere weg.",
+        "en": "Not every browser follows the button, and the app cannot force it. Copying and pasting into Chrome is the sure way."
+      },
+      "platform": "android",
+      "keywords": {
+        "nl": ["chrome", "andere browser", "opera", "samsung internet", "link kopiëren", "opslag"],
+        "en": ["chrome", "other browser", "opera", "samsung internet", "copy link", "storage"]
+      }
+    }
+  ]
+}

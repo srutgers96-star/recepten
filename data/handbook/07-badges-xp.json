@@ -1,0 +1,874 @@
+{
+  "id": "badges-xp",
+  "order": 7,
+  "title": { "nl": "Badges, XP en levels", "en": "Badges, XP and levels" },
+  "intro": {
+    "nl": "Koken levert XP op, met XP ga je een level omhoog, en badges en levels spelen leuke dingen vrij. Alles hier hoort bij de schakelaar **Badges**: zet je die uit, dan zie je er niets meer van.",
+    "en": "Cooking earns XP, XP takes you up a level, and badges and levels unlock fun extras. Everything here belongs to the **Badges** switch: switch it off and none of it shows."
+  },
+  "entries": [
+    {
+      "id": "badges-xp.xp-verdienen",
+      "title": { "nl": "Hoe je XP verdient", "en": "How you earn XP" },
+      "what": {
+        "nl": "Je verdient XP met koken, met een foto van je gerecht, met een eigen recept en met badges. Bladeren, zoeken, delen, plannen en boodschappen doen leveren geen XP op.",
+        "en": "You earn XP by cooking, with a photo of your dish, with a recipe of your own and with badges. Browsing, searching, sharing, planning and shopping earn no XP."
+      },
+      "where": {
+        "nl": [
+          "Tik op een recept.",
+          "Tik op **✓ Gekookt**.",
+          "Tik bovenaan op **Bewaar**.",
+          "Kijk rechtsboven in het scherm."
+        ],
+        "en": [
+          "Tap a recipe.",
+          "Tap **✓ Cooked**.",
+          "Tap **Save** at the top.",
+          "Look at the top right of the screen."
+        ]
+      },
+      "see": {
+        "nl": "Rechtsboven verschijnt kort een blauw blokje met de XP, bijvoorbeeld “+105”. Krijg je meer beloningen tegelijk, dan komen er een paar na elkaar, met eronder “samen +… XP”.",
+        "en": "A blue chip with the XP appears briefly at the top right, for example “+105”. If you get several rewards at once, a few follow each other, with “+… XP in total” under them."
+      },
+      "know": {
+        "nl": "De eerste keer dat je een recept kookt, geeft 100 XP; elke volgende keer 10 minder, maar nooit minder dan 50. Een recept met veel ingrediënten geeft tot 30 extra, sterren geven 5 extra. Een eerste foto van een gerecht geeft 30, een eigen recept 10, of 15 als het in twee talen is.",
+        "en": "The first time you cook a recipe gives 100 XP; each next time 10 less, but never less than 50. A recipe with many ingredients gives up to 30 extra, stars give 5 extra. A first photo of a dish gives 30, a recipe of your own 10, or 15 when it is in two languages."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["xp", "punten", "verdienen", "koken", "foto", "eigen recept"],
+        "en": ["xp", "points", "earn", "cooking", "photo", "own recipe"]
+      }
+    },
+    {
+      "id": "badges-xp.extra-xp",
+      "title": { "nl": "Extra XP: dagen op rij, een volle week en badges", "en": "Extra XP: days in a row, a full week and badges" },
+      "what": {
+        "nl": "Kook je meer dagen op rij, dan geeft koken meer XP. Een week waarin je elke dag kookt, geeft 50 XP extra, en elke badge geeft ook XP.",
+        "en": "Cook more days in a row and cooking gives more XP. A week in which you cook every day gives 50 extra XP, and every badge gives XP too."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Tik bovenaan op je avatar of je naam.",
+          "Kijk onder de XP-balk naar het vlammetje."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "Tap your avatar or your name at the top.",
+          "Look at the flame under the XP bar."
+        ]
+      },
+      "see": {
+        "nl": "Onder de balk staat “🔥 … dagen op rij”, of “🔥 vandaag gekookt” op je eerste dag. Heb je een dag overgeslagen, dan staat er “vrije dag gebruikt” achter.",
+        "en": "Under the bar it says “🔥 … days in a row”, or “🔥 cooked today” on your first day. If you skipped a day, “free day used” follows."
+      },
+      "know": {
+        "nl": "Vanaf 3 dagen op rij geeft koken 10 % extra, en dat loopt op tot het dubbele na een jaar. Eén dag per week overslaan mag. Een badge geeft 50 XP per niveau; een geheime badge 250. De week loopt van maandag tot en met zondag.",
+        "en": "From 3 days in a row cooking gives 10 % extra, rising to double after a year. Skipping one day a week is allowed. A badge gives 50 XP per tier; a secret badge 250. The week runs from Monday to Sunday."
+      },
+      "route": "/more/profile",
+      "platform": "all",
+      "keywords": {
+        "nl": ["reeks", "dagen op rij", "vlammetje", "vrije dag", "volle week", "bonus"],
+        "en": ["streak", "days in a row", "flame", "free day", "full week", "bonus"]
+      }
+    },
+    {
+      "id": "badges-xp.nul-xp",
+      "title": { "nl": "Waarom je soms 0 XP krijgt", "en": "Why you sometimes get 0 XP" },
+      "what": {
+        "nl": "Soms levert koken geen XP op, zodat het spel eerlijk blijft. De app zegt dat dan gewoon.",
+        "en": "Sometimes cooking earns no XP, so the game stays fair. The app simply tells you so."
+      },
+      "where": {
+        "nl": [
+          "Tik op een recept.",
+          "Tik op **✓ Gekookt**.",
+          "Tik bij **Wanneer?** op **Andere datum**.",
+          "Kies een dag van meer dan een week geleden.",
+          "Lees de regel onder de datum."
+        ],
+        "en": [
+          "Tap a recipe.",
+          "Tap **✓ Cooked**.",
+          "Under **When?**, tap **Another date**.",
+          "Choose a day more than a week ago.",
+          "Read the line under the date."
+        ]
+      },
+      "see": {
+        "nl": "Je leest “Langer dan een week geleden: telt voor je badges en de kalender, niet voor XP.” Na de zesde kookbeurt op één dag zie je “Genoeg gekookt voor vandaag — morgen weer XP.”",
+        "en": "You read “More than a week ago: counts for your badges and the calendar, not for XP.” After the sixth cook on one day you see “That's plenty for today — XP again tomorrow.”"
+      },
+      "know": {
+        "nl": "Hetzelfde recept telt één keer per dag. De vierde en vijfde kookbeurt op een dag geven de helft, vanaf de zesde niets. Kook je vier dagen op rij steeds vier keer of vaker, dan zie je “Drukke keukenweek! Morgen weer XP.” XP wordt nooit afgepakt.",
+        "en": "The same recipe counts once a day. The fourth and fifth cook on a day give half, from the sixth nothing. If you cook four or more times a day for four days in a row, you see “Busy kitchen week! XP again tomorrow.” XP is never taken away."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["0 xp", "geen xp", "terugdateren", "andere datum", "dagplafond", "eerlijk"],
+        "en": ["0 xp", "no xp", "backdate", "another date", "daily limit", "fair"]
+      }
+    },
+    {
+      "id": "badges-xp.blokjes",
+      "title": { "nl": "De blauwe, gouden en rode blokjes", "en": "The blue, gold and red chips" },
+      "what": {
+        "nl": "Na een beloning verschijnt rechtsboven kort een blokje met de XP. Soms is het extra veel: dat is geluk, geen fout.",
+        "en": "After a reward a chip with the XP appears briefly at the top right. Sometimes it is extra much: that is luck, not a mistake."
+      },
+      "where": {
+        "nl": [
+          "Tik op een recept.",
+          "Tik op **✓ Gekookt**.",
+          "Tik bovenaan op **Bewaar**."
+        ],
+        "en": [
+          "Tap a recipe.",
+          "Tap **✓ Cooked**.",
+          "Tap **Save** at the top."
+        ]
+      },
+      "see": {
+        "nl": "Meestal is het blokje blauw. Een gouden blokje met “Cooked!” betekent dubbele XP; een rood blokje met “OVERCOOKED!” vijf keer zoveel.",
+        "en": "Most of the time the chip is blue. A gold chip with “Cooked!” means double XP; a red chip with “OVERCOOKED!” five times as much."
+      },
+      "know": {
+        "nl": "Elke beloning schommelt een beetje, tot een vijfde meer of minder. Bij “OVERCOOKED!” schudt het scherm even, behalve als **Confetti** uit staat.",
+        "en": "Every reward varies a little, up to a fifth more or less. With “OVERCOOKED!” the screen shakes briefly, unless **Confetti** is switched off."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["blokje", "plus xp", "cooked", "overcooked", "dubbel", "geluk"],
+        "en": ["chip", "plus xp", "cooked", "overcooked", "double", "luck"]
+      }
+    },
+    {
+      "id": "badges-xp.levels",
+      "title": { "nl": "Levels en titels", "en": "Levels and titles" },
+      "what": {
+        "nl": "Met XP stijg je in level, van 1 tot 100. Elk level heeft een eigen titel, zoals Aardappelschiller.",
+        "en": "XP takes you up in level, from 1 to 100. Every level has its own title, such as Potato Peeler."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Tik bovenaan op je avatar of je naam.",
+          "Kijk onder je naam naar de XP-balk."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "Tap your avatar or your name at the top.",
+          "Look at the XP bar under your name."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet bijvoorbeeld “Level 3 · Aardappelschiller”, een balk en je XP naast de XP van het volgende level. Eronder staat hoeveel XP je nog nodig hebt.",
+        "en": "You see, for example, “Level 3 · Potato Peeler”, a bar and your XP next to the XP of the next level. Under it is how much XP you still need."
+      },
+      "know": {
+        "nl": "XP is per profiel: iedereen op deze telefoon heeft een eigen level. De eerste levels gaan snel, daarna duurt elk level langer. Op Home staat je level onder de begroeting.",
+        "en": "XP is per profile: everyone on this phone has their own level. The first levels go quickly, after that each level takes longer. On Home your level sits under the greeting."
+      },
+      "route": "/more/profile",
+      "platform": "all",
+      "keywords": {
+        "nl": ["level", "titel", "xp-balk", "niveau", "hoe ver", "voortgang"],
+        "en": ["level", "title", "xp bar", "rank", "how far", "progress"]
+      }
+    },
+    {
+      "id": "badges-xp.ring",
+      "title": { "nl": "De kleur van de ring om je avatar", "en": "The colour of the ring around your avatar" },
+      "what": {
+        "nl": "Vanaf level 5 krijgt je avatar een dunne ring in de kleur van je level. Zo zie je in één oogopslag hoe ver iemand is.",
+        "en": "From level 5 your avatar gets a thin ring in the colour of your level. That shows at a glance how far someone has come."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Kijk naar het rondje naast de begroeting."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "Look at the circle next to the greeting."
+        ]
+      },
+      "see": {
+        "nl": "Level 5 tot 9 is geel, 10 tot 19 groen, 20 tot 29 blauw en 30 tot 39 rood. Daarna komen brons vanaf 40, zilver vanaf 50, goud vanaf 60 en platina vanaf 80.",
+        "en": "Level 5 to 9 is yellow, 10 to 19 green, 20 to 29 blue and 30 to 39 red. Then come bronze from 40, silver from 50, gold from 60 and platinum from 80."
+      },
+      "know": {
+        "nl": "Onder level 5 is er geen ring. Heeft je avatar een lijst, dan loopt de ring langs de binnenkant van de lijst.",
+        "en": "Below level 5 there is no ring. If your avatar has a frame, the ring runs along the inside of the frame."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": {
+        "nl": ["ring", "rand", "kleur", "levelkleur", "avatar", "platina"],
+        "en": ["ring", "edge", "colour", "level colour", "avatar", "platinum"]
+      }
+    },
+    {
+      "id": "badges-xp.level-omhoog",
+      "title": { "nl": "Een level omhoog", "en": "Going up a level" },
+      "what": {
+        "nl": "Ga je een level omhoog, dan schuift er een venster omhoog met je nieuwe titel. Daarin staat ook wat je hebt vrijgespeeld.",
+        "en": "When you go up a level, a window slides up with your new title. It also shows what you have unlocked."
+      },
+      "where": {
+        "nl": [
+          "Tik op een recept.",
+          "Tik op **✓ Gekookt**.",
+          "Tik bovenaan op **Bewaar**.",
+          "Wacht tot de blokjes weg zijn.",
+          "Tik op **Naar Jouw stijl** om het nieuwe te proberen."
+        ],
+        "en": [
+          "Tap a recipe.",
+          "Tap **✓ Cooked**.",
+          "Tap **Save** at the top.",
+          "Wait until the chips have gone.",
+          "Tap **Open Your style** to try what is new."
+        ]
+      },
+      "see": {
+        "nl": "Bovenaan staat bijvoorbeeld “🎉 Level 3!”, met daaronder groot je nieuwe titel. Onder **Ontgrendeld** staan nieuwe confetti, geluiden of avatar-onderdelen.",
+        "en": "At the top it says, for example, “🎉 Level 3!”, with your new title large under it. Under **Unlocked** you find new confetti, sounds or avatar parts."
+      },
+      "know": {
+        "nl": "**Naar Jouw stijl** staat er alleen als je iets nieuws hebt vrijgespeeld. Met **Sluit** of door naar beneden te vegen sluit je het venster.",
+        "en": "**Open Your style** is only there when you have unlocked something new. **Close**, or swiping down, closes the window."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["level omhoog", "nieuw level", "ontgrendeld", "vrijgespeeld", "venster", "titel"],
+        "en": ["level up", "new level", "unlocked", "window", "title", "reward"]
+      }
+    },
+    {
+      "id": "badges-xp.badges-bekijken",
+      "title": { "nl": "Je badges bekijken", "en": "View your badges" },
+      "what": {
+        "nl": "Badges verdien je met koken, ontdekken, delen, foto's en meer. Ze staan in acht groepen, elk met een eigen tab.",
+        "en": "You earn badges by cooking, discovering, sharing, taking photos and more. They sit in eight groups, each with its own tab."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Badges**.",
+          "Tik in de strook met tabs op een groep.",
+          "Tik op een tegel."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Badges**.",
+          "Tap a group in the strip of tabs.",
+          "Tap a tile."
+        ]
+      },
+      "see": {
+        "nl": "Bovenaan staat “… van … badges verdiend”. De badges zijn ronde tegels met alleen een icoon; die je nog niet hebt, zijn lichter. Een tik opent een venster met de naam, de uitleg en hoe ver je bent.",
+        "en": "At the top it says “… of … badges earned”. The badges are round tiles with only an icon; the ones you do not have yet are paler. A tap opens a window with the name, the explanation and how far you are."
+      },
+      "know": {
+        "nl": "De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. Je opent de badges ook via **Mijn profiel**. De app onthoudt de laatste groep die je bekeek.",
+        "en": "The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open the badges from **My profile**. The app remembers the last group you looked at."
+      },
+      "route": "/more/badges",
+      "platform": "all",
+      "keywords": {
+        "nl": ["badges", "prijzen", "tegels", "groepen", "verdiend", "medailles"],
+        "en": ["badges", "awards", "tiles", "groups", "earned", "medals"]
+      }
+    },
+    {
+      "id": "badges-xp.niveaus",
+      "title": { "nl": "De acht niveaus en hun kleuren", "en": "The eight tiers and their colours" },
+      "what": {
+        "nl": "Veel badges hebben acht niveaus. Bij elk niveau krijgt de ring om de tegel een andere kleur.",
+        "en": "Many badges have eight tiers. With each tier the ring around the tile changes colour."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Badges**.",
+          "Tik op een tegel met een gekleurde ring.",
+          "Tik bovenaan het venster op **Sluit**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Badges**.",
+          "Tap a tile with a coloured ring.",
+          "Tap **Close** at the top of the window."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet acht gekleurde stipjes, het niveau dat je hebt, een balkje en “Volgende:” met het aantal voor het volgende niveau. Op het hoogste niveau staat “✓ Hoogste niveau”.",
+        "en": "You see eight coloured dots, the tier you have, a small bar and “Next:” with the number for the next tier. On the highest tier it says “✓ Top tier”."
+      },
+      "know": {
+        "nl": "De volgorde is geel, groen, blauw, rood, brons, zilver, goud en platina. Een badge zonder niveaus krijgt een gouden rand zodra je hem hebt.",
+        "en": "The order is yellow, green, blue, red, bronze, silver, gold and platinum. A badge without tiers gets a gold edge once you have it."
+      },
+      "route": "/more/badges",
+      "platform": "all",
+      "keywords": {
+        "nl": ["niveau", "kleuren", "stipjes", "volgende", "platina", "goud"],
+        "en": ["tier", "colours", "dots", "next", "platinum", "gold"]
+      }
+    },
+    {
+      "id": "badges-xp.geheim",
+      "title": { "nl": "Geheime badges", "en": "Secret badges" },
+      "what": {
+        "nl": "Sommige badges zijn geheim: je ontdekt ze door dingen in de app te doen. Tot je er een vindt, zie je alleen een tegel met een stippelrand.",
+        "en": "Some badges are secret: you discover them by doing things in the app. Until you find one, you only see a tile with a dotted edge."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Badges**.",
+          "Tik in de strook met tabs op **Geheim**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Badges**.",
+          "Tap **Secret** in the strip of tabs."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet hoeveel geheime badges je hebt gevonden en de tegels met een stippelrand. Een tik op zo'n tegel doet niets; de naam blijft geheim.",
+        "en": "You see how many secret badges you have found and the tiles with a dotted edge. Tapping such a tile does nothing; the name stays secret."
+      },
+      "know": {
+        "nl": "Het totaal staat nergens, zodat er altijd iets te ontdekken blijft. Ook bij **Samen & delen** staat zo'n tegel. Een gevonden geheime badge geeft 250 XP.",
+        "en": "The total is never shown, so there is always something left to discover. **Together & sharing** has such a tile too. A secret badge you find gives 250 XP."
+      },
+      "route": "/more/badges",
+      "platform": "all",
+      "keywords": {
+        "nl": ["geheim", "verborgen", "stippelrand", "ontdekken", "vraagteken", "verrassing"],
+        "en": ["secret", "hidden", "dotted edge", "discover", "question mark", "surprise"]
+      }
+    },
+    {
+      "id": "badges-xp.samen",
+      "title": { "nl": "Badges per persoon en samen", "en": "Badges per person and together" },
+      "what": {
+        "nl": "Bovenaan bij de badges staat een tab per lid van je huishouden en een tab **Samen**. Sommige badges haal je alleen samen.",
+        "en": "At the top of the badges there is a tab for each member of your household and a **Together** tab. Some badges you only earn together."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Badges**.",
+          "Tik bovenaan op **Samen**.",
+          "Tik bovenaan op je eigen naam."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Badges**.",
+          "Tap **Together** at the top.",
+          "Tap your own name at the top."
+        ]
+      },
+      "see": {
+        "nl": "Op **Samen** staan ook de badges voor het hele huishouden, zoals Huisgenoten. Op je eigen tab staan die niet.",
+        "en": "**Together** also shows the badges for the whole household, such as the one for housemates. Your own tab does not show those."
+      },
+      "know": {
+        "nl": "In het venster van zo'n badge staat “Telt voor het hele huishouden”.",
+        "en": "The window of such a badge says “Counts for the whole household”."
+      },
+      "route": "/more/badges",
+      "platform": "all",
+      "keywords": {
+        "nl": ["samen", "huishouden", "per persoon", "lid", "tab", "gezamenlijk"],
+        "en": ["together", "household", "per person", "member", "tab", "shared"]
+      }
+    },
+    {
+      "id": "badges-xp.melding",
+      "title": { "nl": "De melding van een nieuwe badge", "en": "The new-badge message" },
+      "what": {
+        "nl": "Haal je een badge of een hoger niveau, dan verschijnt onderaan een melding. Een tik erop opent die badge.",
+        "en": "When you earn a badge or a higher tier, a message appears at the bottom. Tapping it opens that badge."
+      },
+      "where": {
+        "nl": [
+          "Kijk onderaan, net boven de menubalk.",
+          "Tik op de melding."
+        ],
+        "en": [
+          "Look at the bottom, just above the menu bar.",
+          "Tap the message."
+        ]
+      },
+      "see": {
+        "nl": "Er staat bijvoorbeeld “🏆 Huiskok · niveau 1”, met een stipje in de kleur van het niveau. Na de tik opent **Badges** bij de goede groep.",
+        "en": "It says, for example, “🏆” with the badge name and “tier 1”, with a dot in the tier's colour. After the tap **Badges** opens on the right group."
+      },
+      "know": {
+        "nl": "Levert de badge iets op voor je avatar, dan staat dat op een tweede regel. De melding verdwijnt na een paar seconden vanzelf.",
+        "en": "If the badge brings something for your avatar, a second line says so. The message disappears by itself after a few seconds."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["melding", "nieuwe badge", "niveau omhoog", "trofee", "bericht onderaan"],
+        "en": ["message", "new badge", "tier up", "trophy", "notice at the bottom"]
+      }
+    },
+    {
+      "id": "badges-xp.mijn-profiel",
+      "title": { "nl": "Mijn profiel openen", "en": "Open My profile" },
+      "what": {
+        "nl": "**Mijn profiel** toont je avatar groot, met je naam, je level en de XP-balk. Daaronder staan tegels naar je stijl, je badges, je kaartje en je voortgang.",
+        "en": "**My profile** shows your avatar large, with your name, your level and the XP bar. Under it are tiles for your style, your badges, your card and your progress."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Tik bovenaan op je avatar of je naam."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "Tap your avatar or your name at the top."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet je avatar groot, je naam, je level en de balk. Daaronder staan de tegels **Jouw stijl**, **Badges**, **Deel mijn kaartje**, **Sync mijn voortgang** en **Naam & kleur**.",
+        "en": "You see your avatar large, your name, your level and the bar. Under it are the tiles **Your style**, **Badges**, **Share my card**, **Sync my progress** and **Name & colour**."
+      },
+      "know": {
+        "nl": "Je kunt ook helemaal bovenaan Home het scherm met je vinger omlaag trekken. In **Meer** brengt de bovenste rij met je naam je er ook. In de browser, niet in de app, kan omlaag trekken de pagina verversen.",
+        "en": "You can also pull the screen down with your finger at the very top of Home. In **More** the top row with your name takes you there too. In the browser, not in the app, pulling down may reload the page."
+      },
+      "route": "/more/profile",
+      "platform": "all",
+      "keywords": {
+        "nl": ["mijn profiel", "profiel", "avatar", "omlaag trekken", "level", "naam"],
+        "en": ["my profile", "profile", "avatar", "pull down", "level", "name"]
+      }
+    },
+    {
+      "id": "badges-xp.avatar-maken",
+      "title": { "nl": "Je avatar maken", "en": "Make your avatar" },
+      "what": {
+        "nl": "Vanaf level 3, na je eerste kookbeurt, maak je je eigen avatar. Die staat daarna op Home, in Meer en op je kaartje.",
+        "en": "From level 3, after your first cooked dish, you make your own avatar. It then shows on Home, in More and on your card."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik onder **Jij & je huishouden** op **Jouw stijl**.",
+          "Tik bovenaan op de tab **Avatar**.",
+          "Tik op **Avatar aanpassen**.",
+          "Tik in de strook met tabs op bijvoorbeeld **Haar**.",
+          "Tik op een tegel.",
+          "Tik bovenaan op **Bewaar**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Under **You & your household**, tap **Your style**.",
+          "Tap the **Avatar** tab at the top.",
+          "Tap **Edit avatar**.",
+          "Tap, for example, **Hair** in the strip of tabs.",
+          "Tap a tile.",
+          "Tap **Save** at the top."
+        ]
+      },
+      "see": {
+        "nl": "Er schuift een venster **Jouw avatar** omhoog, met bovenaan een groot voorbeeld. Elke tegel die je kiest, zie je meteen in het voorbeeld.",
+        "en": "A window **Your avatar** slides up, with a large preview at the top. Every tile you pick shows in the preview straight away."
+      },
+      "know": {
+        "nl": "Onder level 3 is **Avatar aanpassen** grijs en staat eronder “Komt vrij op level 3, na je eerste kookbeurt.” Ook **Jouw stijl** op **Mijn profiel** brengt je hier. Naar beneden vegen of **Annuleer** bewaart niets.",
+        "en": "Below level 3 **Edit avatar** is grey, with “Unlocks at level 3, after your first cooked dish.” under it. **Your style** on **My profile** brings you here too. Swiping down or **Cancel** saves nothing."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": ["avatar", "poppetje", "gezicht", "maken", "aanpassen", "plaatje"],
+        "en": ["avatar", "character", "face", "make", "change", "picture"]
+      }
+    },
+    {
+      "id": "badges-xp.avatar-zeldzaam",
+      "title": { "nl": "Zeldzame onderdelen en slotjes", "en": "Rare parts and padlocks" },
+      "what": {
+        "nl": "De onderdelen van je avatar staan in groepjes: Gewoon, Zeldzaam, Episch en Legendarisch. Wat je nog niet hebt, heeft een slotje.",
+        "en": "The parts of your avatar sit in groups: Common, Rare, Epic and Legendary. What you do not have yet has a padlock."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Jouw stijl**.",
+          "Tik bovenaan op de tab **Avatar**.",
+          "Tik op **Avatar aanpassen**.",
+          "Tik in de strook met tabs op **Hoofddeksel**.",
+          "Tik op een grijze tegel met een slotje."
+        ],
+        "en": [
+          "In **More**, tap **Your style**.",
+          "Tap the **Avatar** tab at the top.",
+          "Tap **Edit avatar**.",
+          "Tap **Headwear** in the strip of tabs.",
+          "Tap a grey tile with a padlock."
+        ]
+      },
+      "see": {
+        "nl": "Onder het groepje verschijnt een regel zoals “Zeldzaam · Komt vrij op level …” of “Komt vrij met de badge …”. Zeldzame, epische en legendarische tegels hebben linksboven een gekleurd stipje.",
+        "en": "Under the group a line appears such as “Rare · Unlocks at level …” or “Unlocks with the badge …”. Rare, epic and legendary tiles have a coloured dot at the top left."
+      },
+      "know": {
+        "nl": "Gewoon is grijs, Zeldzaam blauw, Episch paars en Legendarisch goud. Een tik op een tegel met een slotje verandert niets aan je avatar. Een pas vrijgespeelde tegel heeft een stipje tot je de maker sluit.",
+        "en": "Common is grey, Rare blue, Epic purple and Legendary gold. Tapping a tile with a padlock changes nothing about your avatar. A newly unlocked tile has a dot until you close the maker."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": ["zeldzaam", "episch", "legendarisch", "slotje", "vrijspelen", "op slot"],
+        "en": ["rare", "epic", "legendary", "padlock", "unlock", "locked"]
+      }
+    },
+    {
+      "id": "badges-xp.verras-me",
+      "title": { "nl": "Verras me, huid en haarkleur", "en": "Surprise me, skin and hair colour" },
+      "what": {
+        "nl": "**Verras me** maakt in één tik een avatar uit wat je al hebt vrijgespeeld. Huid en haarkleur kies je zelf; die zijn allemaal vrij.",
+        "en": "**Surprise me** makes an avatar in one tap from what you have already unlocked. You pick skin and hair colour yourself; they are all free."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Jouw stijl**.",
+          "Tik bovenaan op de tab **Avatar**.",
+          "Tik op **Avatar aanpassen**.",
+          "Tik op **Verras me**.",
+          "Tik in de strook met tabs op **Huid**.",
+          "Tik op een kleur.",
+          "Tik bovenaan op **Bewaar**."
+        ],
+        "en": [
+          "In **More**, tap **Your style**.",
+          "Tap the **Avatar** tab at the top.",
+          "Tap **Edit avatar**.",
+          "Tap **Surprise me**.",
+          "Tap **Skin** in the strip of tabs.",
+          "Tap a colour.",
+          "Tap **Save** at the top."
+        ]
+      },
+      "see": {
+        "nl": "Na **Verras me** staat er meteen een compleet gezicht met haar en kleding. Bij **Huid** en **Haarkleur** staan kleurrondjes, zonder groepjes of slotjes.",
+        "en": "After **Surprise me** a complete face with hair and clothes appears straight away. **Skin** and **Hair colour** show colour circles, without groups or padlocks."
+      },
+      "know": {
+        "nl": "**Haarkleur** werkt net zo als **Huid**. Niet blij met de keuze? Tik nog eens op **Verras me**, of op **Annuleer**. Met **Terug naar de beginletter** haal je je avatar weg.",
+        "en": "**Hair colour** works just like **Skin**. Not happy with it? Tap **Surprise me** again, or **Cancel**. **Back to the initial** removes your avatar."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": ["verras me", "willekeurig", "huidskleur", "haarkleur", "dobbelsteen", "beginletter"],
+        "en": ["surprise me", "random", "skin colour", "hair colour", "shuffle", "initial"]
+      }
+    },
+    {
+      "id": "badges-xp.lijst-en-achtergrond",
+      "title": { "nl": "Lijst en achtergrond", "en": "Frame and background" },
+      "what": {
+        "nl": "Met een lijst krijgt je avatar een andere rand, zoals een houten plank of een koekenpan. Een achtergrond zet er een plaatje achter.",
+        "en": "A frame gives your avatar a different edge, such as a wooden board or a frying pan. A background puts a picture behind it."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Jouw stijl**.",
+          "Tik bovenaan op de tab **Avatar**.",
+          "Tik op **Avatar aanpassen**.",
+          "Tik in de strook met tabs op **Achtergrond**.",
+          "Tik op een achtergrond.",
+          "Tik in de strook met tabs op **Lijst**, de laatste tab.",
+          "Tik op een lijst.",
+          "Tik bovenaan op **Bewaar**."
+        ],
+        "en": [
+          "In **More**, tap **Your style**.",
+          "Tap the **Avatar** tab at the top.",
+          "Tap **Edit avatar**.",
+          "Tap **Background** in the strip of tabs.",
+          "Tap a background.",
+          "Tap **Frame**, the last tab in the strip.",
+          "Tap a frame.",
+          "Tap **Save** at the top."
+        ]
+      },
+      "see": {
+        "nl": "De lijst vervangt de ronde rand, en je avatar wordt binnen de lijst afgesneden. Het dunne lijntje in je levelkleur loopt langs de binnenkant van de lijst.",
+        "en": "The frame replaces the round edge, and your avatar is cut off inside the frame. The thin line in your level colour runs along the inside of the frame."
+      },
+      "know": {
+        "nl": "Je profielkleur blijft altijd zichtbaar. Bij een doorschijnende achtergrond is je kleur de ondergrond; bij een dekkende achtergrond neemt de lijst je kleur over. Kies je dan geen lijst, dan krijg je vanzelf een ring in je profielkleur.",
+        "en": "Your profile colour always stays visible. With a see-through background your colour is underneath; with a solid background the frame takes on your colour. If you then choose no frame, you automatically get a ring in your profile colour."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": ["lijst", "rand", "achtergrond", "profielkleur", "houten plank", "koekenpan"],
+        "en": ["frame", "edge", "background", "profile colour", "wooden board", "frying pan"]
+      }
+    },
+    {
+      "id": "badges-xp.stijl-geluiden",
+      "title": { "nl": "Jouw stijl: geluiden", "en": "Your style: sounds" },
+      "what": {
+        "nl": "In **Jouw stijl** kies je het geluid van je kooktimer. Nieuwe geluiden speel je vrij met levels.",
+        "en": "In **Your style** you choose the sound of your cooking timer. You unlock new sounds with levels."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Jouw stijl**.",
+          "Tik op de tab **Geluiden**.",
+          "Tik onder **Timergeluid** op een geluid."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Your style**.",
+          "Tap the **Sounds** tab.",
+          "Tap a sound under **Timer sound**."
+        ]
+      },
+      "see": {
+        "nl": "Je hoort het geluid meteen en de tegel is gekozen. Een geluid met een slotje toont het level waarop het vrijkomt, zoals “Lv 15”.",
+        "en": "You hear the sound straight away and the tile is chosen. A sound with a padlock shows the level at which it unlocks, such as “Lv 15”."
+      },
+      "know": {
+        "nl": "Vanaf level 20 staat er ook **Bij Gekookt!**: een kort tadaa als je een kookbeurt bewaart. Op een iPhone met de stil-schakelaar aan waarschuwt alleen de melding.",
+        "en": "From level 20 there is also **On Cooked!**: a short ta-da when you save a cook. On an iPhone with the silent switch on, only the notification alerts you."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": ["geluid", "timergeluid", "koebel", "wekker", "tadaa", "jouw stijl"],
+        "en": ["sound", "timer sound", "cowbell", "alarm", "ta-da", "your style"]
+      }
+    },
+    {
+      "id": "badges-xp.stijl-confetti",
+      "title": { "nl": "Jouw stijl: confetti", "en": "Your style: confetti" },
+      "what": {
+        "nl": "Je kiest welke confetti er komt als je iets kookt. Met **Verras me** wisselt de app af tussen al je confetti.",
+        "en": "You choose which confetti appears when you cook something. With **Surprise me** the app takes turns with all your confetti."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Jouw stijl**.",
+          "Tik op de tab **Confetti**.",
+          "Tik op een confetti, of op **Verras me**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Your style**.",
+          "Tap the **Confetti** tab.",
+          "Tap a confetti, or **Surprise me**."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet meteen een voorbeeld en de tegel is gekozen. Wat je nog niet hebt, heeft een slotje met het level, zoals “Lv 7”.",
+        "en": "You see an example straight away and the tile is chosen. What you do not have yet has a padlock with the level, such as “Lv 7”."
+      },
+      "know": {
+        "nl": "Wil je een confetti niet meer in de afwisseling? Houd die tegel lang ingedrukt, of tik op het hoekje ☑ rechtsboven; dan staat er ☐. Wat iemand op deze telefoon vrijspeelt, kan iedereen hier gebruiken.",
+        "en": "Want a confetti out of the rotation? Press and hold that tile, or tap the ☑ corner at the top right; it then shows ☐. Whatever anyone unlocks on this phone, everyone here can use."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": ["confetti", "feestje", "verras me", "afwisselen", "mix", "jouw stijl"],
+        "en": ["confetti", "celebration", "surprise me", "rotation", "mix", "your style"]
+      }
+    },
+    {
+      "id": "badges-xp.stijl-letters",
+      "title": { "nl": "Jouw stijl: letters in de kookstand", "en": "Your style: typefaces in cook mode" },
+      "what": {
+        "nl": "Je kiest de letters van de stapkaart in de kookstand. **Krijtbord** en **Handschrift** speel je vrij.",
+        "en": "You choose the typeface of the step card in cook mode. You unlock **Chalkboard** and **Handwriting**."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Jouw stijl**.",
+          "Tik op de tab **Letters**.",
+          "Tik op **Standaard**, **Krijtbord** of **Handschrift**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Your style**.",
+          "Tap the **Typefaces** tab.",
+          "Tap **Default**, **Chalkboard** or **Handwriting**."
+        ]
+      },
+      "see": {
+        "nl": "Elke tegel toont “Aa” in die letters. Met **Krijtbord** is de stapkaart in de kookstand schoolbordgroen met krijtletters.",
+        "en": "Each tile shows “Aa” in that typeface. With **Chalkboard** the step card in cook mode is blackboard green with chalk letters."
+      },
+      "know": {
+        "nl": "**Krijtbord** komt vrij op level 8, **Handschrift** op level 18.",
+        "en": "**Chalkboard** unlocks at level 8, **Handwriting** at level 18."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": ["letters", "lettertype", "krijtbord", "handschrift", "kookstand", "stapkaart"],
+        "en": ["typeface", "font", "chalkboard", "handwriting", "cook mode", "step card"]
+      }
+    },
+    {
+      "id": "badges-xp.stijl-thema",
+      "title": { "nl": "Jouw stijl: thema", "en": "Your style: theme" },
+      "what": {
+        "nl": "Je kiest of de app licht of donker is, of je telefoon volgt. Dit kan altijd, ook met **Badges** uit.",
+        "en": "You choose whether the app is light or dark, or follows your phone. This always works, also with **Badges** switched off."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Jouw stijl**.",
+          "Tik op de tab **Thema**.",
+          "Tik op **Systeem**, **Licht** of **Donker**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Your style**.",
+          "Tap the **Theme** tab.",
+          "Tap **System**, **Light** or **Dark**."
+        ]
+      },
+      "see": {
+        "nl": "De app verandert meteen van kleur. **Systeem** volgt de instelling van je telefoon.",
+        "en": "The app changes colour straight away. **System** follows your phone's setting."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": ["thema", "donker", "licht", "nachtmodus", "kleur", "systeem"],
+        "en": ["theme", "dark", "light", "night mode", "colour", "system"]
+      }
+    },
+    {
+      "id": "badges-xp.uitdaging-kiezen",
+      "title": { "nl": "Een uitdaging kiezen", "en": "Pick a challenge" },
+      "what": {
+        "nl": "Vanaf level 20 kies je elke week een uitdaging, zoals een paar keer vegetarisch koken. Haal je hem, dan krijg je extra XP.",
+        "en": "From level 20 you pick a challenge every week, such as cooking vegetarian a few times. If you make it, you get extra XP."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Tik bovenaan op je avatar of je naam.",
+          "Tik in de kaart **🎯 Uitdaging** op **Kies**.",
+          "Tik op een van de drie kaarten.",
+          "Tik op **Start**."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "Tap your avatar or your name at the top.",
+          "In the **🎯 Challenge** card, tap **Pick**.",
+          "Tap one of the three cards.",
+          "Tap **Start**."
+        ]
+      },
+      "see": {
+        "nl": "De kaart toont je uitdaging met een balk zoals “0 van 2”, de tijd die nog over is en de beloning. Bij elke kookbeurt die past, loopt de balk op.",
+        "en": "The card shows your challenge with a bar such as “0 of 2”, the time left and the reward. With every cook that fits, the bar goes up."
+      },
+      "know": {
+        "nl": "Elke maandag komen er drie nieuwe uitdagingen; je doet er één tegelijk. Het aantal 🌶 zegt hoe zwaar hij is. Haal je hem, dan komt er confetti en een melding met de XP, en telt hij mee voor de badge Uitdager.",
+        "en": "Every Monday three new challenges arrive; you do one at a time. The number of 🌶 tells you how hard it is. If you make it, confetti and a message with the XP follow, and it counts towards the Challenger badge."
+      },
+      "route": "/more/profile",
+      "platform": "all",
+      "keywords": {
+        "nl": ["uitdaging", "doel", "weekuitdaging", "level 20", "extra xp", "uitdager"],
+        "en": ["challenge", "goal", "weekly challenge", "level 20", "extra xp", "challenger"]
+      }
+    },
+    {
+      "id": "badges-xp.uitdaging-opgeven",
+      "title": { "nl": "Een uitdaging opgeven", "en": "Give up a challenge" },
+      "what": {
+        "nl": "Past een uitdaging niet, dan geef je hem op zonder straf. Je kunt meteen een andere kiezen.",
+        "en": "If a challenge does not suit you, you give it up without penalty. You can pick another one straight away."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Home**.",
+          "Tik bovenaan op je avatar of je naam.",
+          "Tik in de kaart **🎯 Uitdaging** op **Opgeven**.",
+          "Bevestig de vraag."
+        ],
+        "en": [
+          "Tap **Home** at the bottom.",
+          "Tap your avatar or your name at the top.",
+          "In the **🎯 Challenge** card, tap **Give up**.",
+          "Confirm the question."
+        ]
+      },
+      "see": {
+        "nl": "De uitdaging verdwijnt. Je verliest geen XP, en het aanbod van deze week staat er nog.",
+        "en": "The challenge disappears. You lose no XP, and this week's offer is still there."
+      },
+      "know": {
+        "nl": "Verloopt de tijd zonder dat je het doel haalt, dan staat er “Niet gehaald, geen punt — kies een nieuwe.”",
+        "en": "If the time runs out before you reach the goal, it says “Not this time, no harm done — pick a new one.”"
+      },
+      "route": "/more/profile",
+      "platform": "all",
+      "keywords": {
+        "nl": ["opgeven", "stoppen", "uitdaging", "geen straf", "andere kiezen"],
+        "en": ["give up", "stop", "challenge", "no penalty", "pick another"]
+      }
+    },
+    {
+      "id": "badges-xp.uitzetten",
+      "title": { "nl": "Badges en XP uitzetten", "en": "Switch badges and XP off" },
+      "what": {
+        "nl": "Houd je niet van het spel? Met de schakelaar **Badges** zet je alle badges, XP en levels uit. Je raakt niets kwijt.",
+        "en": "Not keen on the game? The **Badges** switch turns off all badges, XP and levels. You lose nothing."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Instellingen**.",
+          "Zet de schakelaar **Badges** uit.",
+          "Zet ook **Confetti** uit, als je dat wilt."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Settings**.",
+          "Switch **Badges** off.",
+          "Switch **Confetti** off too, if you like."
+        ]
+      },
+      "see": {
+        "nl": "De rij **Badges** in Meer verdwijnt, net als je level en de XP-balk. Er komen geen blokjes, meldingen, uitdagingen of level-vensters meer.",
+        "en": "The **Badges** row in More disappears, as do your level and the XP bar. No more chips, messages, challenges or level windows appear."
+      },
+      "know": {
+        "nl": "Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti en geen schuddend scherm.",
+        "en": "Your avatar stays, as do the **Cooking calendar** and the **Theme** tab in **Your style**. Switch **Badges** back on and everything returns. **Confetti** off means no confetti and no shaking screen."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": ["uitzetten", "geen spel", "gamification", "badges uit", "confetti uit", "rustig"],
+        "en": ["switch off", "no game", "gamification", "badges off", "confetti off", "quiet"]
+      }
+    }
+  ]
+}

@@ -9,18 +9,20 @@
 // data/badges.json (docs/phase-5-spec.md "Block C", docs/specs/badges-avatar.md §2e), the avatar library
 // data/avatar-parts.json (docs/specs/badges-avatar.md §2f), the level titles data/levels.json, the
 // unlocks data/unlocks.json (docs/specs/xp-levels.md §2e), the challenges data/challenges.json (docs/specs/challenges.md §2)
-// and the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2).
+// the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2) and the handbook
+// data/handbook/*.json (docs/specs/handbook.md §3).
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
 // Exit:  1 when any error was found, 0 otherwise. Warnings never fail the run.
 //
 // Node 22 type-stripping rules apply: type-only syntax only, plain ESM, no enums/namespaces.
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import process from 'node:process';
 import { loadDictionary, normalizeKey, type DictionaryData } from '../src/domain/dictionary.ts';
+import { HANDBOOK_SECTION_IDS } from '../src/domain/handbook.ts';
 import type { Recipe } from '../src/domain/model.ts';
 import { readDictionaryData } from './build-dictionary-seed.ts';
 import { checkSides, readSides, SIDES_TIMESTAMP } from './sides.ts';
@@ -1621,6 +1623,253 @@ export function validateSwaps(data: unknown, ingredients: readonly Record<string
 }
 
 // ---------------------------------------------------------------------------
+// Handbook: data/handbook/<nn>-<id>.json (docs/specs/handbook.md §3, block Z)
+// ---------------------------------------------------------------------------
+//
+// Errors: a file that is not a topic object; a topic id outside the ten fixed topics (§2) or a file
+// name that is not `<nn>-<id>.json` with nn = order; `order` not unique or outside 1..10; an empty
+// title/intro; an entry id that is not `<topic id>.<kebab-case>` or not unique over all files;
+// `title`/`what`/`see` empty in nl or en; `where` not 1–8 steps per language or a different number
+// of steps in nl and en; `know` present in one language only; `route` outside HANDBOOK_ROUTES;
+// `platform` outside all | android | ios; `keywords` not 3–8 per language; a word from the jargon
+// list (§3, both languages). Warnings: a `**name**` that is not literally part of an i18n value of
+// that language (src/i18n/*.ts); an unexpected key. The "Markdown older than the data" warning is
+// a file-time check in `main()`.
+
+/** The routes a handbook row may open (the Feitencheck routes of the spec without `<id>`). */
+export const HANDBOOK_ROUTES: readonly string[] = [
+  '/',
+  '/recipes',
+  '/add',
+  '/share',
+  '/inbox',
+  '/week',
+  '/shopping',
+  '/more',
+  '/more/profiles',
+  '/more/profile',
+  '/more/storage',
+  '/more/check-recipes',
+  '/more/household',
+  '/more/dictionary',
+  '/more/badges',
+  '/more/style',
+  '/more/calendar',
+  '/story',
+  '/check',
+  '/onboarding',
+];
+
+/** Forbidden jargon (§3), checked case-insensitively in both languages. */
+export const HANDBOOK_JARGON: readonly string[] = ['service worker', 'standalone', 'token', 'bundle', 'override', 'sheet', 'cache', 'IndexedDB', 'manifest'];
+
+const HANDBOOK_PLATFORMS: ReadonlySet<string> = new Set(['all', 'android', 'ios']);
+const HANDBOOK_SECTION_KEYS: ReadonlySet<string> = new Set(['id', 'order', 'title', 'intro', 'entries']);
+const HANDBOOK_ENTRY_KEYS: ReadonlySet<string> = new Set(['id', 'title', 'what', 'where', 'see', 'know', 'route', 'platform', 'keywords']);
+const HANDBOOK_LANGS = ['nl', 'en'] as const;
+
+function jargonRe(term: string): RegExp {
+  const esc = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // "sheet" only as a whole word ("sheet"/"sheets"); the rest anywhere (also inside compounds).
+  return term === 'sheet' ? new RegExp('(?<!\\p{L})sheets?(?!\\p{L})', 'iu') : new RegExp(esc, 'i');
+}
+const JARGON_RES: readonly { term: string; re: RegExp }[] = HANDBOOK_JARGON.map((term) => ({ term, re: jargonRe(term) }));
+
+/** The UI texts per language, for the bold-name check (`readI18nValues` reads them from src/i18n). */
+export interface I18nValues {
+  nl: readonly string[];
+  en: readonly string[];
+}
+
+/** One quoted string literal: '…', "…" or a template without interpolation. */
+const I18N_VALUE_RE = /\b(nl|en):\s*('(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"|`(?:[^`\\]|\\.)*`)/g;
+
+/**
+ * Every `nl: '…'` / `en: '…'` string literal of the i18n dictionaries (src/i18n/*.ts minus index.ts),
+ * read as text: the dictionaries cannot be imported here (index.ts pulls in the signal library).
+ */
+export function readI18nValues(root: string): I18nValues {
+  const dir = join(root, 'src', 'i18n');
+  const out = { nl: [] as string[], en: [] as string[] };
+  for (const name of readdirSync(dir)) {
+    if (!name.endsWith('.ts') || name === 'index.ts') continue;
+    const src = readFileSync(join(dir, name), 'utf8');
+    for (const m of src.matchAll(I18N_VALUE_RE)) {
+      const raw = m[2]!.slice(1, -1).replace(/\\(.)/g, (_all, c: string) => (c === 'n' ? '\n' : c));
+      out[m[1] as 'nl' | 'en'].push(raw);
+    }
+  }
+  return out;
+}
+
+/** The `**…**` names in a text. */
+function boldNames(s: string): string[] {
+  const out: string[] = [];
+  for (const m of s.matchAll(/\*\*(.+?)\*\*/g)) out.push(m[1]!);
+  return out;
+}
+
+export interface HandbookFile {
+  /** File name, e.g. '02-recepten.json'. */
+  file: string;
+  data: unknown;
+}
+
+/**
+ * Validate the handbook files together. Pure: takes the parsed files (and optionally the i18n values
+ * for the bold-name warnings), returns errors/warnings. `stats.recipes` = topics, `stats.lines` = rows.
+ */
+export function validateHandbook(files: readonly HandbookFile[], i18n?: I18nValues): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const entryIds = new Map<string, string>();
+  const orders = new Map<number, string>();
+  const sectionIds = new Set<string>();
+  const warnedNames = new Set<string>();
+  let rows = 0;
+
+  const checkJargon = (where: string, lang: string, s: string) => {
+    for (const { term, re } of JARGON_RES) if (re.test(s)) errors.push(`${where}.${lang}: forbidden word ${JSON.stringify(term)} (say it in everyday words).`);
+  };
+  const checkBold = (where: string, lang: 'nl' | 'en', s: string) => {
+    if (!i18n) return;
+    for (const name of boldNames(s)) {
+      const key = `${lang}\u0000${name}`;
+      if (warnedNames.has(key)) continue;
+      if (i18n[lang].some((v) => v.includes(name))) continue;
+      warnedNames.add(key);
+      warnings.push(`${where}.${lang}: bold name ${JSON.stringify(name)} is not literally in any ${lang} UI text (src/i18n).`);
+    }
+  };
+  /** A {nl, en} text: both non-empty when present (always required unless `optional`). */
+  const checkText = (v: unknown, where: string, optional = false) => {
+    if (v === undefined && optional) return;
+    if (!isRecord(v)) {
+      errors.push(`${where} must be { nl, en }.`);
+      return;
+    }
+    for (const lang of HANDBOOK_LANGS) {
+      const s = v[lang];
+      if (typeof s !== 'string' || s.trim() === '') errors.push(`${where}.${lang} is missing or empty.`);
+      else {
+        checkJargon(where, lang, s);
+        checkBold(where, lang, s);
+      }
+    }
+  };
+  /** A {nl: string[], en: string[]} list with min..max non-empty items per language; returns the counts (-1 = not a list). */
+  const checkList = (v: unknown, where: string, min: number, max: number, bold: boolean): number[] => {
+    if (!isRecord(v)) {
+      errors.push(`${where} must be { nl: [...], en: [...] }.`);
+      return [];
+    }
+    return HANDBOOK_LANGS.map((lang) => {
+      const items = v[lang];
+      if (!isStringArray(items)) {
+        errors.push(`${where}.${lang} must be an array of strings.`);
+        return -1;
+      }
+      if (items.length < min || items.length > max) errors.push(`${where}.${lang} has ${items.length} item(s); ${min}–${max} expected.`);
+      items.forEach((s, i) => {
+        if (s.trim() === '') errors.push(`${where}.${lang}[${i}] is empty.`);
+        checkJargon(`${where}[${i}]`, lang, s);
+        if (bold) checkBold(`${where}[${i}]`, lang, s);
+      });
+      return items.length;
+    });
+  };
+
+  for (const { file, data } of files) {
+    if (!isRecord(data)) {
+      errors.push(`${file}: not a topic object.`);
+      continue;
+    }
+    const id = data['id'];
+    const order = data['order'];
+    if (typeof id !== 'string' || !HANDBOOK_SECTION_IDS.includes(id)) {
+      errors.push(`${file}: "id" ${JSON.stringify(id)} is not one of the ten topics (${HANDBOOK_SECTION_IDS.join(', ')}).`);
+    } else {
+      if (sectionIds.has(id)) errors.push(`${file}: topic id ${JSON.stringify(id)} appears in more than one file.`);
+      sectionIds.add(id);
+      const expectedOrder = HANDBOOK_SECTION_IDS.indexOf(id) + 1;
+      if (order !== expectedOrder) errors.push(`${file}: "order" must be ${expectedOrder} for topic ${JSON.stringify(id)} (has ${JSON.stringify(order)}).`);
+      const expectedFile = `${String(expectedOrder).padStart(2, '0')}-${id}.json`;
+      if (file !== expectedFile) errors.push(`${file}: file name must be ${expectedFile}.`);
+    }
+    if (typeof order !== 'number' || !Number.isInteger(order) || order < 1 || order > 10) {
+      errors.push(`${file}: "order" must be an integer 1..10.`);
+    } else {
+      const first = orders.get(order);
+      if (first !== undefined) errors.push(`${file}: "order" ${order} is also used by ${first}.`);
+      else orders.set(order, file);
+    }
+    checkText(data['title'], `${file} title`);
+    checkText(data['intro'], `${file} intro`);
+    for (const key of Object.keys(data)) if (!HANDBOOK_SECTION_KEYS.has(key)) warnings.push(`${file}: unexpected key ${JSON.stringify(key)}.`);
+
+    const entries = data['entries'];
+    if (!Array.isArray(entries) || entries.length === 0) {
+      errors.push(`${file}: "entries" must be a non-empty array.`);
+      continue;
+    }
+    entries.forEach((entry, i) => {
+      rows++;
+      if (!isRecord(entry)) {
+        errors.push(`${file} entries[${i}]: not an object.`);
+        return;
+      }
+      const eid = entry['id'];
+      const at = typeof eid === 'string' ? `${file} ${eid}` : `${file} entries[${i}]`;
+      const prefix = typeof id === 'string' ? `${id}.` : '';
+      if (typeof eid !== 'string' || !prefix || !eid.startsWith(prefix) || !ID_RE.test(eid.slice(prefix.length))) {
+        errors.push(`${at}: "id" must be "${prefix || '<topic>.'}<kebab-case>".`);
+      }
+      if (typeof eid === 'string') {
+        const first = entryIds.get(eid);
+        if (first !== undefined) errors.push(`${at}: duplicate id (also in ${first}).`);
+        else entryIds.set(eid, file);
+      }
+      checkText(entry['title'], `${at} title`);
+      checkText(entry['what'], `${at} what`);
+      checkText(entry['see'], `${at} see`);
+      checkText(entry['know'], `${at} know`, true);
+      const steps = checkList(entry['where'], `${at} where`, 1, 8, true);
+      if (steps.length === 2 && steps[0]! >= 0 && steps[1]! >= 0 && steps[0] !== steps[1]) {
+        errors.push(`${at}: "where" has ${steps[0]} step(s) in nl and ${steps[1]} in en; they must be equal.`);
+      }
+      checkList(entry['keywords'], `${at} keywords`, 3, 8, false);
+      const route = entry['route'];
+      if (route !== undefined && (typeof route !== 'string' || !HANDBOOK_ROUTES.includes(route))) {
+        errors.push(`${at}: "route" ${JSON.stringify(route)} is not one of ${HANDBOOK_ROUTES.join(' ')}.`);
+      }
+      const platform = entry['platform'];
+      if (platform !== undefined && (typeof platform !== 'string' || !HANDBOOK_PLATFORMS.has(platform))) {
+        errors.push(`${at}: "platform" must be all | android | ios.`);
+      }
+      for (const key of Object.keys(entry)) if (!HANDBOOK_ENTRY_KEYS.has(key)) warnings.push(`${at}: unexpected key ${JSON.stringify(key)}.`);
+    });
+  }
+
+  return { errors, warnings, stats: { recipes: files.length, lines: rows } };
+}
+
+/** The topic files of data/handbook (sorted by name), parsed; a file that is not JSON gives a parse error. */
+export function readHandbookFiles(root: string): { files: HandbookFile[]; parseErrors: string[] } {
+  const dir = join(root, 'data', 'handbook');
+  const files: HandbookFile[] = [];
+  const parseErrors: string[] = [];
+  if (!existsSync(dir)) return { files, parseErrors };
+  for (const name of readdirSync(dir).filter((n) => n.endsWith('.json')).sort()) {
+    try {
+      files.push({ file: name, data: JSON.parse(readFileSync(join(dir, name), 'utf8')) as unknown });
+    } catch (e) {
+      parseErrors.push(`${name}: not valid JSON (${String(e)}).`);
+    }
+  }
+  return { files, parseErrors };
+}
+
+// ---------------------------------------------------------------------------
 // CLI entry
 // ---------------------------------------------------------------------------
 
@@ -1731,6 +1980,26 @@ function main(): void {
   const swaps = validateSwaps(readJson(join(root, swapsRel)), dictData.ingredients as unknown as Record<string, unknown>[]);
   print(swapsRel, swaps, `${swaps.stats.lines} swaps`);
   if (swaps.errors.length > 0) failed = true;
+
+  // The handbook (docs/specs/handbook.md §3): the topic files, the bold names against src/i18n, and
+  // docs/HANDLEIDING.md + docs/HANDBOOK.md (tools/handbook-md.ts) not older than the newest data file.
+  const handbookRel = 'data/handbook/*.json';
+  const hb = readHandbookFiles(root);
+  if (hb.files.length === 0 && hb.parseErrors.length === 0) {
+    console.log(`${handbookRel}: not present (handbook checks skipped).`);
+  } else {
+    const handbook = validateHandbook(hb.files, readI18nValues(root));
+    handbook.errors.unshift(...hb.parseErrors);
+    const dataNames = readdirSync(join(root, 'data', 'handbook')).filter((n) => n.endsWith('.json'));
+    const newestData = Math.max(...dataNames.map((n) => statSync(join(root, 'data', 'handbook', n)).mtimeMs));
+    for (const md of ['docs/HANDLEIDING.md', 'docs/HANDBOOK.md']) {
+      const mdPath = join(root, md);
+      if (!existsSync(mdPath)) handbook.warnings.push(`${md} is not present; run node --experimental-strip-types tools/handbook-md.ts.`);
+      else if (statSync(mdPath).mtimeMs < newestData) handbook.warnings.push(`${md} is older than the newest data/handbook file; run node --experimental-strip-types tools/handbook-md.ts.`);
+    }
+    print(handbookRel, handbook, `${handbook.stats.recipes} topics, ${handbook.stats.lines} rows`);
+    if (handbook.errors.length > 0) failed = true;
+  }
 
   if (schema2Data !== undefined) {
     const schema2 = validateSchema2(schema2Data, refsFromData(dictData));

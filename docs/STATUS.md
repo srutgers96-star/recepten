@@ -4,6 +4,41 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): Z — de handleiding
+Gebouwd volgens docs/specs/handbook.md (schrijvers W1–W4, UI-bouwer U, integrator; lichte modus). Geen dependency, geen Dexie-versie,
+geen setting, geen fragmentsleutel; `package.json` en `landing.ts` ongewijzigd.
+- **In de app:** Meer → Hulp & over → 📖 Handleiding (eerste rij), route `#/more/handbook`. Zoekveld (16 px, wist met ×, filtert op
+  elke letter, accent-ongevoelig), tien onderwerp-chips (44 px) die naar hun onderwerp scrollen, rijen als `<details>` met de vier
+  kopjes, stappen genummerd, knop **Open** naar de route, chipje Android/iPhone. Scherm én data zijn eigen chunks (lazy).
+- **Data:** `data/handbook/01…10-*.json`, 217 rijen (W1 57, W2 57, W3 56, W4 47), NL en EN. `validateHandbook` in
+  `tools/validate-data.ts`: 0 fouten, 0 waarschuwingen (ook geen vette namen buiten i18n).
+- **Markdown:** `node --experimental-strip-types tools/handbook-md.ts` → docs/HANDLEIDING.md + docs/HANDBOOK.md (elk 217 rijen, met
+  inhoudsopgave). Na elke tekstwijziging opnieuw draaien; de validator waarschuwt als ze ouder zijn dan de data.
+- **Gate:** check, test (79 bestanden, 1779 tests), build, build:next, validate:data groen. Hoofdbundel +1,4 kB (+0,5 kB gzip: i18n-
+  teksten, lazy wrapper, Meer-rij), CSS +1,9 kB; landing-code byte-gelijk (alleen de hashes van gedeelde chunks verschuiven).
+- **Dev-app (375/360 px, NL+EN, licht+donker):** tien chips; chip Week & boodschappen scrollt; "QR" → 7 rijen uit 4 onderwerpen,
+  uitgeklapt; × → 217 ingeklapt; "afvinken" (NL) en "tick" (EN) vinden boodschappenrijen; onzin → "Niets gevonden voor '…'";
+  Open → `#/shopping`, Terug → handleiding met dezelfde zoekterm; geen horizontale scroll; geen consolefouten.
+- **Keuzes van U die de spec open liet:** het scherm zelf is ook lazy (niet alleen de data); × gebruikt het bestaande label
+  `inbox.clear`; tijdens zoeken tonen de chips alleen onderwerpen met treffers; de validator weigert routes met `?tab=` en
+  `/more/handbook`.
+- **Open voor Fable/Stijn:** (1) **Bug buiten Z:** 13c verwijderde de sleutels `cook.cmd.*Say`, maar `VoiceHelp.tsx` leest ze nog —
+  het ?-venster in de kookstand toont ruwe sleutels (`cook.cmd.nextSay`). Sleutels terug of kolom weg? (2) "Ook als …" (§2 punt 2)
+  bestaat niet meer sinds de versie-tabbladen; geen rij. (3) De schakelaar Experimenten doet nu niets; de rij zegt dat eerlijk.
+  (4) `dict.mergeAllConfirm` belooft dat de laatste fusie ongedaan kan, maar Fuseer alles toont geen Ongedaan. (5) DEVICE-TEST loopt
+  achter op de code (rij 29 "nieuw" na Bijwerken is onzichtbaar; rij 43 timergeluid zit nu in Jouw stijl → Geluiden; rij 64 Links
+  sluit met Sluit, niet ×); de handleiding volgt de code. (6) Weggelaten bij twijfel: iOS 26 Deel achter ⋯, Chromes eigen
+  installeerbanner, wat de iPhone vraagt bij opslag, kans op crits, welke geheime badges op de iPhone niet kunnen.
+  (7) Knoppen met een getal of naam (Kies 7, Voeg {name} toe) staan niet vet. (8) `more.sendNew` heet nu "Deel je nieuwe recepten"
+  en het getal is oranje; de tekst noemt geen kleur.
+
+- **Besluit Fable (8 nov, na de lens en eigen lezing van de NL-uitvoer):** correcties door een Opus-afronder (hoofdroute naar de
+  avatar-maker = Jouw stijl → Avatar, de knop onder Naam & kleur bestaat ook nog; "dobbelsteen" in de kaart Vanavond weg; DEVICE-TEST 29/43/64 bijgewerkt); bijvangst uit 13c
+  hersteld (negen `cook.cmd.*Say`-sleutels terug, allowlist in tests/i18n.test.ts); `dict.mergeAllConfirm` zonder valse
+  Ongedaan-belofte; keuzes UI-bouwer en stijlkeuzes akkoord; spec §2.2 zonder "Ook als …". **Voor Stijn (opschoonlijst):** de
+  schakelaar Experimenten doet niets meer (weghalen, of bewaren voor een volgende proeffunctie); de knopjes pass/fail in de
+  Apparaatcheck zijn Engels. Markdown-uitvoer: docs/HANDLEIDING.md en docs/HANDBOOK.md (217 rijen). docs/ACHTER-DE-SCHERMEN.md
+  is de versie voor Stijn (Fable).
 ## 8 nov (Opus): 6D-F — lijsten (frames) en vrijere achtergronden
 Gebouwd volgens docs/specs/frames.md (bouwer A domein/validator/tests/contactblad, bouwer B data, bouwer C maker/i18n, integrator;
 lichte modus). Geen dependency, geen Dexie-versie, geen setting, geen fragmentsleutel; `#f=`/`#x=` dragen een `frame-*`-id als gewoon

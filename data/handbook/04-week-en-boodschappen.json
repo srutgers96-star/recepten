@@ -1,0 +1,776 @@
+{
+  "id": "week-en-boodschappen",
+  "order": 4,
+  "title": { "nl": "Week & boodschappen", "en": "Week & shopping" },
+  "intro": {
+    "nl": "Kies een paar gerechten voor de week, zonder vaste dagen, en maak er in één tik een boodschappenlijst van.",
+    "en": "Pick a few dishes for the week, without fixed days, and turn them into a shopping list with one tap."
+  },
+  "entries": [
+    {
+      "id": "week-en-boodschappen.weekplan",
+      "title": { "nl": "Een weekplan maken", "en": "Make a week plan" },
+      "what": {
+        "nl": "Het weekplan is een lijstje gerechten voor deze week, zonder dagen. Je kiest zelf hoeveel gerechten je wilt.",
+        "en": "The week plan is a short list of dishes for this week, without days. You choose how many dishes you want."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik op − of + om het aantal gerechten te kiezen.", "Tik op **Kies** met het aantal erachter, bijvoorbeeld Kies 7.", "Tik in het venster de gerechten aan die je wilt.", "Tik rechtsboven in het venster op de knop met het aantal, bijvoorbeeld Voeg 7 toe."],
+        "en": ["Tap **Week** at the bottom.", "Tap − or + to choose the number of dishes.", "Tap **Pick** with the number after it, for example Pick 7.", "Tap the dishes you want in the window.", "Tap the button with the number at the top right of the window, for example Add 7."]
+      },
+      "see": {
+        "nl": "De gerechten staan als rijen in **Week**, elk met het aantal personen. Bovenaan staat hoeveel gerechten het zijn.",
+        "en": "The dishes show as rows in **Week**, each with the number of people. The top says how many dishes there are."
+      },
+      "know": {
+        "nl": "In het venster staan de gerechten die je het langst niet hebt gegeten bovenaan. Het aantal personen komt uit **Meer** → **Aantal personen**.",
+        "en": "In the window the dishes you have not eaten for the longest are at the top. The number of people comes from **More** → **Number of people**."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["weekplan", "week", "kies 7", "gerechten kiezen", "menu", "planning"], "en": ["week plan", "week", "pick 7", "choose dishes", "menu", "planning"] }
+    },
+    {
+      "id": "week-en-boodschappen.kies-venster",
+      "title": { "nl": "Zoeken en filteren bij het kiezen", "en": "Search and filter while picking" },
+      "what": {
+        "nl": "In het kiesvenster zoek je op naam of ingrediënt en beperk je de keuze met chips, zoals Vegetarisch of een keuken.",
+        "en": "In the pick window you search by name or ingredient and narrow the choice with chips, such as Vegetarian or a cuisine."
+      },
+      "where": {
+        "nl": ["Tik in **Week** op **Kies** met het aantal erachter.", "Typ een woord in het zoekveld.", "Tik op een chip om alleen die gerechten te zien.", "Tik op × bij de chips om alles weer te zien."],
+        "en": ["In **Week**, tap **Pick** with the number after it.", "Type a word in the search box.", "Tap a chip to see only those dishes.", "Tap × at the chips to see everything again."]
+      },
+      "see": {
+        "nl": "De lijst toont alleen wat past. Onder elk gerecht staat wanneer je het laatst kookte, of \"nog nooit gekookt\".",
+        "en": "The list only shows what fits. Under each dish it says when you last cooked it, or \"never cooked\"."
+      },
+      "know": {
+        "nl": "Je kiest standaard alleen hoofdgerechten. Wil je ook bijgerechten en toetjes, tik dan op de chip **ook bijgerechten & zoet**.",
+        "en": "By default you only pick main dishes. If you also want sides and desserts, tap the **sides & sweet too** chip."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["zoeken", "filter", "chips", "vegetarisch", "hoofdgerecht", "bijgerechten"], "en": ["search", "filter", "chips", "vegetarian", "main dish", "side dishes"] }
+    },
+    {
+      "id": "week-en-boodschappen.verras-me",
+      "title": { "nl": "Verras me", "en": "Surprise me" },
+      "what": {
+        "nl": "**Verras me** kiest de gerechten voor je. De app zorgt voor afwisseling en kiest niets wat je de laatste zes weken kookte.",
+        "en": "**Surprise me** picks the dishes for you. The app adds variety and picks nothing you cooked in the last six weeks."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik op **Verras me**."],
+        "en": ["Tap **Week** at the bottom.", "Tap **Surprise me**."]
+      },
+      "see": {
+        "nl": "Je week staat vol gerechten. Staat er al een plan, dan krijgen alleen de gerechten zonder slotje een nieuw gerecht.",
+        "en": "Your week fills with dishes. If there is already a plan, only the dishes without a lock get a new dish."
+      },
+      "know": {
+        "nl": "Als het kan: hoogstens twee keer pasta, hoogstens twee keer rijst en minstens één vegetarisch gerecht. Gekookte gerechten blijven staan.",
+        "en": "Where possible: at most two pasta dishes, at most two rice dishes and at least one vegetarian dish. Cooked dishes stay."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["verras me", "willekeurig", "toeval", "kiezen", "afwisseling"], "en": ["surprise me", "random", "chance", "pick", "variety"] }
+    },
+    {
+      "id": "week-en-boodschappen.kies-meer",
+      "title": { "nl": "Meer gerechten erbij", "en": "Add more dishes" },
+      "what": {
+        "nl": "Heb je al een weekplan, dan zet je er nog gerechten bij zonder de rest te veranderen.",
+        "en": "If you already have a week plan, you add more dishes without changing the rest."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik onder de lijst op **+ Kies meer**.", "Tik de gerechten aan die je erbij wilt.", "Tik rechtsboven in het venster op de knop met het aantal."],
+        "en": ["Tap **Week** at the bottom.", "Tap **+ Pick more** under the list.", "Tap the dishes you want to add.", "Tap the button with the number at the top right of the window."]
+      },
+      "see": {
+        "nl": "De nieuwe gerechten staan onderaan je week. Wat er al in stond, heeft in het venster \"al in je week\".",
+        "en": "The new dishes appear at the bottom of your week. What was already there shows \"already in your week\" in the window."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["kies meer", "toevoegen", "erbij", "extra gerecht", "uitbreiden"], "en": ["pick more", "add", "extra dish", "more dishes", "extend"] }
+    },
+    {
+      "id": "week-en-boodschappen.deze-week-knop",
+      "title": { "nl": "Een recept in je week zetten", "en": "Put a recipe in your week" },
+      "what": {
+        "nl": "Vanaf een recept zet je het gerecht met één tik in je weekplan.",
+        "en": "From a recipe you put the dish in your week plan with one tap."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik op **+ Deze week**."],
+        "en": ["Open a recipe.", "Tap **+ This week**."]
+      },
+      "see": {
+        "nl": "De knop heet nu **✓ Staat in je week**. Tik je er nog eens op, dan open je je week.",
+        "en": "The button now says **✓ In your week**. If you tap it again, your week opens."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["deze week", "toevoegen", "in je week", "plannen", "recept"], "en": ["this week", "add", "in your week", "plan", "recipe"] }
+    },
+    {
+      "id": "week-en-boodschappen.vastzetten",
+      "title": { "nl": "Een gerecht vastzetten", "en": "Lock a dish" },
+      "what": {
+        "nl": "Met het slotje zet je een gerecht vast. **Verras me** laat een vastgezet gerecht dan staan.",
+        "en": "With the lock you lock a dish. **Surprise me** then leaves a locked dish alone."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik bij een gerecht op het open slotje 🔓."],
+        "en": ["Tap **Week** at the bottom.", "Tap the open lock 🔓 at a dish."]
+      },
+      "see": {
+        "nl": "Het slotje is dicht 🔒 en onder de naam staat \"vast\". Tik nog eens om het weer los te maken.",
+        "en": "The lock is closed 🔒 and under the name it says \"locked\". Tap again to unlock it."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["slotje", "vastzetten", "vast", "houden", "losmaken"], "en": ["lock", "keep", "locked", "pin dish", "unlock"] }
+    },
+    {
+      "id": "week-en-boodschappen.wisselen",
+      "title": { "nl": "Eén gerecht wisselen", "en": "Swap one dish" },
+      "what": {
+        "nl": "Zin in iets anders? Wissel dan één gerecht voor een ander, zonder de rest van je week te veranderen.",
+        "en": "Fancy something else? Then swap one dish for another, without changing the rest of your week."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik bij een gerecht op het knopje met de twee gekruiste pijlen."],
+        "en": ["Tap **Week** at the bottom.", "Tap the button with the two crossed arrows at a dish."]
+      },
+      "see": {
+        "nl": "Op die plek staat een ander gerecht. Het is nooit een gerecht dat al in je week staat.",
+        "en": "A different dish takes that place. It is never a dish that is already in your week."
+      },
+      "know": {
+        "nl": "Het knopje werkt niet bij een gerecht met een slotje of een gerecht dat al gekookt is. Een bijgerecht eronder gaat mee weg.",
+        "en": "The button does not work on a locked dish or a dish that is already cooked. A side dish under it goes too."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["wisselen", "ander gerecht", "vervangen", "dobbelsteen", "pijlen"], "en": ["swap", "another dish", "replace", "dice", "arrows"] }
+    },
+    {
+      "id": "week-en-boodschappen.personen",
+      "title": { "nl": "Aantal personen per gerecht", "en": "Number of people per dish" },
+      "what": {
+        "nl": "Elk gerecht in je week heeft een eigen aantal personen. De boodschappenlijst rekent daarmee.",
+        "en": "Each dish in your week has its own number of people. The shopping list uses that number."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik bij een gerecht op − of + naast het aantal personen."],
+        "en": ["Tap **Week** at the bottom.", "Tap − or + next to the number of people at a dish."]
+      },
+      "see": {
+        "nl": "Het aantal verandert, bijvoorbeeld van \"4 pers.\" naar \"6 pers.\". Een bijgerecht volgt het aantal van zijn gerecht.",
+        "en": "The number changes, for example from \"4 serv.\" to \"6 serv.\". A side dish follows the number of its dish."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["personen", "porties", "aantal", "eters", "gasten"], "en": ["people", "servings", "portions", "number", "guests"] }
+    },
+    {
+      "id": "week-en-boodschappen.bijgerecht",
+      "title": { "nl": "Een bijgerecht erbij", "en": "Add a side dish" },
+      "what": {
+        "nl": "Onder een hoofdgerecht zet je een bijgerecht, zoals aardappelpuree. Het komt mee op je boodschappenlijst.",
+        "en": "Under a main dish you add a side dish, such as mashed potatoes. It goes on your shopping list too."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik onder een gerecht op **+ bijgerecht**.", "Tik op een bijgerecht onder **Past erbij** of **Alle bijgerechten**."],
+        "en": ["Tap **Week** at the bottom.", "Tap **+ side dish** under a dish.", "Tap a side dish under **Goes with it** or **All side dishes**."]
+      },
+      "see": {
+        "nl": "Onder het gerecht staat ingesprongen \"↳\" met het bijgerecht en een ×. Bovenaan staat er \"1 bijgerecht\" bij.",
+        "en": "Under the dish an indented \"↳\" row shows the side dish with an ×. The top now also says \"1 side dish\"."
+      },
+      "know": {
+        "nl": "Een bijgerecht heeft geen eigen aantal personen. Haal je het hoofdgerecht weg, dan gaat het bijgerecht mee.",
+        "en": "A side dish has no number of people of its own. If you remove the main dish, the side dish goes too."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["bijgerecht", "erbij", "puree", "salade", "kant"], "en": ["side dish", "side", "mash", "salad", "extra"] }
+    },
+    {
+      "id": "week-en-boodschappen.versie",
+      "title": { "nl": "De versie van een gerecht kiezen", "en": "Choose the version of a dish" },
+      "what": {
+        "nl": "Heeft een recept een goedgekeurde versie, zoals glutenvrij, dan kies je in je week welke versie je kookt.",
+        "en": "If a recipe has an approved version, such as gluten-free, you choose in your week which version you cook."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik onder de naam van het gerecht op het chipje, bijvoorbeeld **Origineel**.", "Tik op de versie die je wilt."],
+        "en": ["Tap **Week** at the bottom.", "Tap the small chip under the name of the dish, for example **Original**.", "Tap the version you want."]
+      },
+      "see": {
+        "nl": "Het chipje toont de gekozen versie. De boodschappenlijst gebruikt dan de ingrediënten van die versie.",
+        "en": "The chip shows the chosen version. The shopping list then uses the ingredients of that version."
+      },
+      "know": {
+        "nl": "Je ziet hier alleen goedgekeurde versies. Een versie keur je goed op het recept zelf.",
+        "en": "You only see approved versions here. You approve a version on the recipe itself."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["versie", "glutenvrij", "vegetarisch", "vegan", "lactosevrij"], "en": ["version", "gluten-free", "vegetarian", "vegan", "lactose-free"] }
+    },
+    {
+      "id": "week-en-boodschappen.gekookt-vinkje",
+      "title": { "nl": "Een gerecht afvinken als gekookt", "en": "Tick a dish as cooked" },
+      "what": {
+        "nl": "In je week vink je af wat je al gekookt hebt. Zo zie je wat er nog te gaan is.",
+        "en": "In your week you tick what you have already cooked. That way you see what is still to go."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik op het vakje vóór de naam van het gerecht."],
+        "en": ["Tap **Week** at the bottom.", "Tap the box in front of the name of the dish."]
+      },
+      "see": {
+        "nl": "Er komt een ✓ en de naam is doorgestreept. Bovenaan staat bijvoorbeeld \"2 van 7 gekookt\".",
+        "en": "A ✓ appears and the name is crossed out. The top says for example \"2 of 7 cooked\"."
+      },
+      "know": {
+        "nl": "Dit vinkje zet niets in je kooklog. **Gekookt!** in de kookstand en **✓ Gekookt** voor vandaag zetten het vinkje vanzelf.",
+        "en": "This tick adds nothing to your cook log. **Cooked!** in cook mode and **✓ Cooked** for today set the tick by themselves."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["gekookt", "afvinken", "vinkje", "doorgestreept", "klaar"], "en": ["cooked", "tick", "tick off", "crossed out", "done"] }
+    },
+    {
+      "id": "week-en-boodschappen.weghalen-leeg",
+      "title": { "nl": "Een gerecht weghalen of de week leegmaken", "en": "Remove a dish or clear the week" },
+      "what": {
+        "nl": "Je haalt één gerecht uit je week, of je maakt de hele week in één keer leeg.",
+        "en": "You remove one dish from your week, or you clear the whole week at once."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik bij een gerecht op × om alleen dat gerecht weg te halen.", "Of tik rechtsboven op **Leeg**.", "Tik op OK om te bevestigen."],
+        "en": ["Tap **Week** at the bottom.", "Tap × at a dish to remove only that dish.", "Or tap **Clear** at the top right.", "Tap OK to confirm."]
+      },
+      "see": {
+        "nl": "Het gerecht is weg. Na **Leeg** staat er weer \"Wat eten we deze week?\" met de knop om te kiezen.",
+        "en": "The dish is gone. After **Clear** it says \"What are we eating this week?\" again, with the button to pick."
+      },
+      "know": {
+        "nl": "Je boodschappenlijst blijft staan als je de week leegmaakt.",
+        "en": "Your shopping list stays when you clear the week."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["weghalen", "verwijderen", "leeg", "leegmaken", "opnieuw beginnen"], "en": ["remove", "delete", "clear", "empty", "start again"] }
+    },
+    {
+      "id": "week-en-boodschappen.lijst-maken",
+      "title": { "nl": "De boodschappenlijst maken", "en": "Make the shopping list" },
+      "what": {
+        "nl": "De app telt alle ingrediënten van je week bij elkaar en zet ze per gangpad. Eerst controleer je de lijst, dan bevestig je hem.",
+        "en": "The app adds up all the ingredients of your week and sorts them by aisle. First you check the list, then you confirm it."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Week**.", "Tik op **Boodschappenlijst maken**.", "Tik bij een regel op − of + om het aantal te veranderen.", "Tik onderaan op **Bevestig lijst**."],
+        "en": ["Tap **Week** at the bottom.", "Tap **Make the shopping list**.", "Tap − or + at a line to change the amount.", "Tap **Confirm list** at the bottom."]
+      },
+      "see": {
+        "nl": "Eerst zie je **Controleer de lijst** per gangpad. Na **Bevestig lijst** staat de lijst klaar, met per gangpad een teller zoals \"0/5\".",
+        "en": "First you see **Check the list** by aisle. After **Confirm list** the list is ready, with a counter per aisle such as \"0/5\"."
+      },
+      "know": {
+        "nl": "Onder **Voorraad** staan dingen die je meestal in huis hebt, op 0. Tik erop als je ze toch nodig hebt. Regels die de app niet kon lezen, staan onder **Controleer zelf**.",
+        "en": "Under **Staples** are things you usually have at home, at 0. Tap one if you need it after all. Lines the app could not read are under **Check yourself**."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["boodschappenlijst", "lijst maken", "boodschappen", "bevestig", "voorraad"], "en": ["shopping list", "make list", "groceries", "confirm", "staples"] }
+    },
+    {
+      "id": "week-en-boodschappen.waarvoor",
+      "title": { "nl": "Zien waarvoor iets op de lijst staat", "en": "See what a line is for" },
+      "what": {
+        "nl": "Bij elke regel zie je voor welk gerecht hij nodig is.",
+        "en": "For every line you can see which dish it is needed for."
+      },
+      "where": {
+        "nl": ["Tik bij **Controleer de lijst** op een regel.", "Of houd in de lijst een regel vast.", "Tik dan op **Waarvoor is dit?**."],
+        "en": ["In **Check the list**, tap a line.", "Or hold a line in the list.", "Then tap **What is this for?**."]
+      },
+      "see": {
+        "nl": "Je ziet de gerechten waar het voor is, met de hoeveelheid per gerecht. Een regel die je zelf typte, heeft \"Zelf toegevoegd\".",
+        "en": "You see the dishes it is for, with the amount per dish. A line you typed yourself says \"Added by hand\"."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["waarvoor", "welk gerecht", "bron", "waarom", "herkomst"], "en": ["what for", "which dish", "source", "why", "origin"] }
+    },
+    {
+      "id": "week-en-boodschappen.afvinken",
+      "title": { "nl": "Afvinken in de winkel", "en": "Tick lines in the shop" },
+      "what": {
+        "nl": "Tik op een regel als je hem in je mandje hebt. De regel blijft op zijn plek staan.",
+        "en": "Tap a line once it is in your basket. The line stays where it is."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik op een regel.", "Tik onderin op **Ongedaan** als je je vergiste."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap a line.", "Tap **Undo** at the bottom if you made a mistake."]
+      },
+      "see": {
+        "nl": "De regel is doorgestreept en het vakje kleurt mee. Is een gangpad helemaal af, dan klapt het vanzelf in.",
+        "en": "The line is crossed out and its box fills with colour. When an aisle is complete, it folds up by itself."
+      },
+      "know": {
+        "nl": "**Ongedaan** staat er een paar seconden. Tik op de naam van een gangpad om het weer open te klappen.",
+        "en": "**Undo** stays for a few seconds. Tap the name of an aisle to open it again."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["afvinken", "vinkje", "streep", "doorstrepen", "winkel", "mandje"], "en": ["tick", "tick off", "cross out", "strike", "shop", "basket"] }
+    },
+    {
+      "id": "week-en-boodschappen.zelf-toevoegen",
+      "title": { "nl": "Zelf iets op de lijst zetten", "en": "Add something yourself" },
+      "what": {
+        "nl": "Typ zelf wat je nodig hebt, met een aantal en een eenheid als je wilt. Met komma's zet je meer dingen tegelijk op de lijst.",
+        "en": "Type what you need yourself, with an amount and a unit if you like. With commas you add several things at once."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik in het vak \"+ wc-papier, melk …\".", "Typ bijvoorbeeld 200 gram boter.", "Tik op + of op een suggestie onder het vak."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap the box \"+ loo roll, milk …\".", "Type for example 200 g butter.", "Tap + or a suggestion under the box."]
+      },
+      "see": {
+        "nl": "De regel staat in het goede gangpad, bijvoorbeeld \"200 g boter\" bij Zuivel & eieren.",
+        "en": "The line sits in the right aisle, for example \"200 g butter\" under Dairy & eggs."
+      },
+      "know": {
+        "nl": "Kent de app het woord niet, dan kies je onder het vak **Als tekst** of **Nieuw ingrediënt**.",
+        "en": "If the app does not know the word, you choose **As text** or **New ingredient** under the box."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["toevoegen", "typen", "zelf", "aantal", "eenheid", "extra"], "en": ["add", "type", "yourself", "amount", "unit", "extra"] }
+    },
+    {
+      "id": "week-en-boodschappen.regel-weg",
+      "title": { "nl": "Een regel weghalen", "en": "Remove a line" },
+      "what": {
+        "nl": "Heb je iets toch niet nodig, dan haal je de regel met het × helemaal van de lijst.",
+        "en": "If you do not need something after all, the × removes the line from the list."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik rechts van een regel op ×."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap × on the right of a line."]
+      },
+      "see": {
+        "nl": "De regel is weg. Onderin staat \"Verwijderd\" met **Ongedaan**.",
+        "en": "The line is gone. At the bottom it says \"Removed\" with **Undo**."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["weghalen", "verwijderen", "kruisje", "niet nodig", "schrappen"], "en": ["remove", "delete", "cross", "not needed", "drop"] }
+    },
+    {
+      "id": "week-en-boodschappen.houd-menu",
+      "title": { "nl": "Een regel vasthouden voor meer", "en": "Hold a line for more" },
+      "what": {
+        "nl": "Houd een regel even vast voor een menu met meer keuzes.",
+        "en": "Hold a line for a moment to get a menu with more choices."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Houd een regel ongeveer een halve seconde vast.", "Tik op een keuze in het venster."],
+        "en": ["Tap **Shopping** at the bottom.", "Hold a line for about half a second.", "Tap a choice in the window."]
+      },
+      "see": {
+        "nl": "Een venster met **Heb ik al**, **Aantal aanpassen**, **Waarvoor is dit?**, **Zet op de vaste lijst** en **Verwijder**.",
+        "en": "A window with **Already have it**, **Adjust amount**, **What is this for?**, **Put on Every week** and **Remove**."
+      },
+      "know": {
+        "nl": "Bij een regel van je vaste lijst ziet het menu er anders uit: daar staat **Haal van de vaste lijst**.",
+        "en": "For a line from your every-week list the menu looks different: it shows **Take off Every week**."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["vasthouden", "lang indrukken", "menu", "meer opties", "houd-menu"], "en": ["hold", "long press", "menu", "more options", "press and hold"] }
+    },
+    {
+      "id": "week-en-boodschappen.heb-ik-al",
+      "title": { "nl": "Heb ik al", "en": "Already have it" },
+      "what": {
+        "nl": "Heb je iets nog in huis, dan zet je het opzij in het blok **In huis**. Houdbare dingen onthoudt de app drie weken.",
+        "en": "If you still have something at home, you move it to the **In stock** block. The app remembers long-life items for three weeks."
+      },
+      "where": {
+        "nl": ["Houd een regel vast.", "Tik op **Heb ik al**."],
+        "en": ["Hold a line.", "Tap **Already have it**."]
+      },
+      "see": {
+        "nl": "De regel verhuist naar **In huis** onderaan de lijst. Tik erop om hem weer op de lijst te zetten.",
+        "en": "The line moves to **In stock** at the bottom of the list. Tap it to put it back on the list."
+      },
+      "know": {
+        "nl": "Vers eten, zoals paprika, onthoudt de app niet: dat staat bij de volgende lijst weer gewoon op de lijst.",
+        "en": "The app does not remember fresh food, such as peppers: it is back on the next list as usual."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["heb ik al", "in huis", "voorraad", "nog thuis", "overslaan"], "en": ["already have it", "in stock", "pantry", "at home", "skip"] }
+    },
+    {
+      "id": "week-en-boodschappen.aantal-aanpassen",
+      "title": { "nl": "Het aantal van een regel aanpassen", "en": "Change the amount of a line" },
+      "what": {
+        "nl": "Wil je meer of minder kopen dan de app uitrekende, dan pas je het aantal aan.",
+        "en": "If you want to buy more or less than the app worked out, you change the amount."
+      },
+      "where": {
+        "nl": ["Houd een regel vast.", "Tik op **Aantal aanpassen**.", "Tik op − of +.", "Tik op **Sluit**."],
+        "en": ["Hold a line.", "Tap **Adjust amount**.", "Tap − or +.", "Tap **Close**."]
+      },
+      "see": {
+        "nl": "De regel toont het nieuwe aantal. Stuks gaan per één, grammen in grotere stappen.",
+        "en": "The line shows the new amount. Pieces go up by one, grams in bigger steps."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["aantal", "aanpassen", "meer", "minder", "hoeveelheid"], "en": ["amount", "adjust", "more", "less", "quantity"] }
+    },
+    {
+      "id": "week-en-boodschappen.gangpaden",
+      "title": { "nl": "Gangpaden en hun kleuren", "en": "Aisles and their colours" },
+      "what": {
+        "nl": "De lijst staat per gangpad, zoals Groente & fruit of Zuivel & eieren. Elk gangpad heeft een eigen kleur.",
+        "en": "The list is sorted by aisle, such as Fruit & vegetables or Dairy & eggs. Every aisle has its own colour."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik op de naam van een gangpad om het in of uit te klappen."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap the name of an aisle to fold or unfold it."]
+      },
+      "see": {
+        "nl": "De kop en de vakjes van een gangpad hebben de kleur van dat gangpad. De teller toont hoeveel je al hebt, bijvoorbeeld \"3/5\".",
+        "en": "The heading and the boxes of an aisle have that aisle's colour. The counter shows how many you have, for example \"3/5\"."
+      },
+      "know": {
+        "nl": "Bij welk gangpad een ingrediënt hoort, staat in het woordenboek.",
+        "en": "Which aisle an ingredient belongs to is set in the dictionary."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["gangpad", "categorie", "kleur", "volgorde", "afdeling"], "en": ["aisle", "category", "colour", "order", "section"] }
+    },
+    {
+      "id": "week-en-boodschappen.winkelstand",
+      "title": { "nl": "Winkelstand", "en": "Shop mode" },
+      "what": {
+        "nl": "In de winkelstand blijft het scherm aan, zodat je telefoon niet steeds op slot gaat in de winkel.",
+        "en": "In shop mode the screen stays on, so your phone does not keep locking in the shop."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik bovenaan op **Winkelstand**."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap **Shop mode** at the top."]
+      },
+      "see": {
+        "nl": "De knop is gekleurd en eronder staat \"Scherm blijft aan\". Tik nog eens om de winkelstand uit te zetten.",
+        "en": "The button is coloured and under it says \"Screen stays on\". Tap again to switch shop mode off."
+      },
+      "know": {
+        "nl": "Kan je telefoon dat niet, dan staat er \"Scherm-aan kan niet op dit toestel\".",
+        "en": "If your phone cannot do that, it says \"Keep-awake is not available on this device\"."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["winkelstand", "scherm aan", "winkel", "niet op slot", "supermarkt"], "en": ["shop mode", "screen on", "shop", "no lock", "supermarket"] }
+    },
+    {
+      "id": "week-en-boodschappen.verberg-afgevinkt",
+      "title": { "nl": "Afgevinkte regels verbergen", "en": "Hide ticked lines" },
+      "what": {
+        "nl": "Zie je liever alleen wat je nog moet halen? Verberg dan de afgevinkte regels.",
+        "en": "Would you rather only see what you still need? Then hide the ticked lines."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik bovenaan op **Verberg afgevinkt**."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap **Hide ticked** at the top."]
+      },
+      "see": {
+        "nl": "De afgevinkte regels zijn weg uit beeld. De knop heet nu **Toon afgevinkt**.",
+        "en": "The ticked lines are out of view. The button now says **Show ticked**."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["verbergen", "afgevinkt", "tonen", "overzicht", "wat nog"], "en": ["hide", "ticked", "show", "overview", "still to get"] }
+    },
+    {
+      "id": "week-en-boodschappen.klaar",
+      "title": { "nl": "Klaar met boodschappen", "en": "Done shopping" },
+      "what": {
+        "nl": "Na het boodschappen doen tik je op **Klaar**. Alle vinkjes gaan weg, zodat de lijst klaar is voor de volgende keer.",
+        "en": "After shopping you tap **Done**. All the ticks go, so the list is ready for next time."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik bovenaan op **Klaar**."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap **Done** at the top."]
+      },
+      "see": {
+        "nl": "Onderin staat \"Lijst afgerond, vinkjes gewist\" met **Ongedaan**. Ongedaan zet de vinkjes terug.",
+        "en": "At the bottom it says \"List finished, ticks cleared\" with **Undo**. Undo puts the ticks back."
+      },
+      "know": {
+        "nl": "**Klaar** werkt pas als je iets hebt afgevinkt. Wat je bij je vaste lijst op **Heb ik al** zette, staat daarna weer gewoon op de lijst.",
+        "en": "**Done** only works once you have ticked something. What you set to **Already have it** on your every-week list is back on the list afterwards."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["klaar", "afronden", "vinkjes weg", "nieuwe week", "gedaan"], "en": ["done", "finish", "clear ticks", "new week", "finished"] }
+    },
+    {
+      "id": "week-en-boodschappen.leeg-de-lijst",
+      "title": { "nl": "De lijst leegmaken", "en": "Clear the list" },
+      "what": {
+        "nl": "Met **Leeg de lijst** haal je alles in één tik van je boodschappenlijst. Je weekplan blijft staan.",
+        "en": "**Clear the list** removes everything from your shopping list with one tap. Your week plan stays."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik op **Leeg de lijst**."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap **Clear the list**."]
+      },
+      "see": {
+        "nl": "De lijst is meteen leeg, zonder vraag vooraf. Onderin staat \"Lijst geleegd\" met **Ongedaan**.",
+        "en": "The list is empty straight away, without a question first. At the bottom it says \"List cleared\" with **Undo**."
+      },
+      "know": {
+        "nl": "Heb je een weekplan, dan staat daarna de knop **Maak de lijst** weer klaar.",
+        "en": "If you have a week plan, the **Make the list** button is ready again afterwards."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["leeg", "leegmaken", "wissen", "alles weg", "opnieuw"], "en": ["clear", "empty", "wipe", "remove all", "start over"] }
+    },
+    {
+      "id": "week-en-boodschappen.bijwerken",
+      "title": { "nl": "Weekplan gewijzigd: de lijst bijwerken", "en": "Week plan changed: update the list" },
+      "what": {
+        "nl": "Verander je je week nadat de lijst al gemaakt is, dan werkt de app de lijst pas bij als jij dat zegt.",
+        "en": "If you change your week after the list was made, the app only updates the list when you say so."
+      },
+      "where": {
+        "nl": ["Verander iets in **Week**.", "Tik onderaan op **Boodschappen**.", "Tik in de balk **Weekplan gewijzigd** op **Bijwerken**."],
+        "en": ["Change something in **Week**.", "Tap **Shopping** at the bottom.", "Tap **Update** in the **Week plan changed** bar."]
+      },
+      "see": {
+        "nl": "Onderin staat \"Lijst bijgewerkt\". De lijst klopt weer met je week, en je vinkjes en aangepaste aantallen blijven staan.",
+        "en": "At the bottom it says \"List updated\". The list matches your week again, and your ticks and changed amounts stay."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["bijwerken", "weekplan gewijzigd", "verversen", "nieuw", "aanpassen"], "en": ["update", "week plan changed", "refresh", "new", "change"] }
+    },
+    {
+      "id": "week-en-boodschappen.zonder-weekplan",
+      "title": { "nl": "Een lijst zonder weekplan", "en": "A list without a week plan" },
+      "what": {
+        "nl": "Ook zonder weekplan heb je een boodschappenlijst: wat je zelf toevoegt, plus je vaste lijst.",
+        "en": "Even without a week plan you have a shopping list: what you add yourself, plus your every-week list."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Typ iets in het vak \"+ wc-papier, melk …\".", "Tik op +."],
+        "en": ["Tap **Shopping** at the bottom.", "Type something in the box \"+ loo roll, milk …\".", "Tap +."]
+      },
+      "see": {
+        "nl": "Boven de lijst staat \"Geen weekplan. Dit is je losse boodschappenlijst: wat je toevoegt en je vaste lijst.\"",
+        "en": "Above the list it says \"No week plan. This is your plain shopping list: what you add plus your every-week list.\""
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["losse lijst", "zonder weekplan", "geen plan", "boodschappen", "los"], "en": ["plain list", "without week plan", "no plan", "groceries", "loose"] }
+    },
+    {
+      "id": "week-en-boodschappen.vaste-lijst",
+      "title": { "nl": "De vaste lijst", "en": "The every-week list" },
+      "what": {
+        "nl": "Op de vaste lijst zet je wat je elke week koopt, zoals melk. Het komt vanzelf op elke boodschappenlijst.",
+        "en": "On the every-week list you put what you buy every week, such as milk. It goes on every shopping list by itself."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik bovenaan op **Vaste lijst**.", "Typ bijvoorbeeld 2 l melk in het vak.", "Tik op +."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap **Every week** at the top.", "Type for example 2 l milk in the box.", "Tap +."]
+      },
+      "see": {
+        "nl": "De regel staat onder zijn gangpad. In de gewone lijst staat hij met een 📌 erachter.",
+        "en": "The line sits under its aisle. In the normal list it shows with a 📌 after it."
+      },
+      "know": {
+        "nl": "Tik op **Deze week** om terug te gaan naar je gewone lijst.",
+        "en": "Tap **This week** to go back to your normal list."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["vaste lijst", "elke week", "standaard", "vast", "punaise"], "en": ["every week", "regular", "standard", "always", "pin"] }
+    },
+    {
+      "id": "week-en-boodschappen.vaste-regel",
+      "title": { "nl": "Een regel van de vaste lijst veranderen", "en": "Change a line on the every-week list" },
+      "what": {
+        "nl": "Je verandert het standaardaantal of de eenheid. Je kunt een regel ook even overslaan of helemaal weghalen.",
+        "en": "You change the usual amount or the unit. You can also skip a line for a while or remove it completely."
+      },
+      "where": {
+        "nl": ["Tik in **Vaste lijst** op een regel.", "Tik bij **Standaardaantal** op − of +.", "Tik bij **Eenheid** op een eenheid, zoals pot.", "Tik rechtsboven op **Sluit**."],
+        "en": ["In **Every week**, tap a line.", "Tap − or + at **Usual amount**.", "Tap a unit at **Unit**, such as jar.", "Tap **Close** at the top right."]
+      },
+      "see": {
+        "nl": "De regel toont het nieuwe aantal en de eenheid, bijvoorbeeld \"1 pot mayonaise\". Alles is meteen bewaard; er is geen Bewaar-knop.",
+        "en": "The line shows the new amount and unit, for example \"1 jar mayonnaise\". Everything is saved at once; there is no Save button."
+      },
+      "know": {
+        "nl": "Met **Even niet meenemen** blijft de regel staan maar komt hij niet op je lijst; je ziet \"(staat uit)\". **Weer meenemen** zet hem terug. **Verwijder van de vaste lijst** haalt hem weg.",
+        "en": "With **Skip for now** the line stays but is left off your list; you see \"(paused)\". **Include again** brings it back. **Remove from Every week** removes it."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["standaardaantal", "eenheid", "overslaan", "even niet", "aanpassen"], "en": ["usual amount", "unit", "skip", "pause", "change"] }
+    },
+    {
+      "id": "week-en-boodschappen.vaste-lijst-deze-week",
+      "title": { "nl": "De vaste lijst bij het maken van je lijst", "en": "The every-week list while making your list" },
+      "what": {
+        "nl": "Bij **Controleer de lijst** staan je vaste regels in een eigen blok. Wat je daar verandert, geldt alleen voor deze lijst.",
+        "en": "In **Check the list** your every-week lines have their own block. What you change there counts for this list only."
+      },
+      "where": {
+        "nl": ["Tik in **Week** op **Boodschappenlijst maken**.", "Scrol naar het blok **Vaste lijst**.", "Tik bij een regel op **Heb ik al** als je het nog hebt.", "Of tik bij een regel op +.", "Tik daarna op **Ook voortaan**."],
+        "en": ["In **Week**, tap **Make the shopping list**.", "Scroll to the **Every week** block.", "Tap **Already have it** at a line if you still have it.", "Or tap + at a line.", "Then tap **Also from now on**."]
+      },
+      "see": {
+        "nl": "Na **Heb ik al** staat de regel bij **In huis**. Na **Ook voortaan** staat er \"Nieuw standaardaantal\" en is het nieuwe aantal ook op je vaste lijst.",
+        "en": "After **Already have it** the line moves to **In stock**. After **Also from now on** it says \"New usual amount\" and the new amount is on your every-week list too."
+      },
+      "know": {
+        "nl": "**Heb ik al** voor een vaste regel geldt tot je op **Klaar** tikt. Daarna staat hij weer gewoon op de lijst.",
+        "en": "**Already have it** for an every-week line lasts until you tap **Done**. After that it is back on the list as usual."
+      },
+      "route": "/week",
+      "platform": "all",
+      "keywords": { "nl": ["vaste lijst", "ook voortaan", "heb ik al", "alleen deze lijst", "nieuw aantal"], "en": ["every week", "also from now on", "already have it", "this list only", "new amount"] }
+    },
+    {
+      "id": "week-en-boodschappen.op-vaste-lijst",
+      "title": { "nl": "Een regel op de vaste lijst zetten", "en": "Put a line on the every-week list" },
+      "what": {
+        "nl": "Een regel uit je gewone lijst zet je met een paar tikken op je vaste lijst. Dan komt hij voortaan elke week.",
+        "en": "With a few taps you put a line from your normal list on your every-week list. Then it comes every week from now on."
+      },
+      "where": {
+        "nl": ["Houd een regel vast.", "Tik op **Zet op de vaste lijst**."],
+        "en": ["Hold a line.", "Tap **Put on Every week**."]
+      },
+      "see": {
+        "nl": "De regel krijgt een 📌 en staat ook in het tabblad **Vaste lijst**.",
+        "en": "The line gets a 📌 and also shows in the **Every week** tab."
+      },
+      "know": {
+        "nl": "Houd een regel met 📌 vast en tik op **Haal van de vaste lijst** om hem er weer af te halen.",
+        "en": "Hold a line with 📌 and tap **Take off Every week** to take it off again."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["vaste lijst", "elke week", "punaise", "vastzetten", "voortaan"], "en": ["every week", "regular", "pin", "always", "from now on"] }
+    },
+    {
+      "id": "week-en-boodschappen.delen-tekst",
+      "title": { "nl": "De lijst delen als tekst", "en": "Share the list as text" },
+      "what": {
+        "nl": "Stuur je boodschappenlijst als gewone tekst, bijvoorbeeld via WhatsApp. De ander heeft de app niet nodig.",
+        "en": "Send your shopping list as plain text, for example by WhatsApp. The other person does not need the app."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik bovenaan op **Deel lijst**.", "Kies bij **Taal** NL of EN.", "Tik in het kader op **Deel lijst**.", "Kies WhatsApp.", "Kies de persoon."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap **Share list** at the top.", "Choose NL or EN at **Language**.", "Tap **Share list** in the box.", "Choose WhatsApp.", "Choose the person."]
+      },
+      "see": {
+        "nl": "De tekst begint met \"🛒 Boodschappen wk …\", met kopjes per gangpad en ☐ per regel. Daarna staat er \"gedeeld om\" met de tijd.",
+        "en": "The text starts with \"🛒 Shopping wk …\", with headings per aisle and ☐ per line. Afterwards it says \"shared at\" with the time."
+      },
+      "know": {
+        "nl": "Wat **In huis** is, gaat niet mee. Met **Zonder afgevinkt** aan, en dat is standaard, gaan afgevinkte regels ook niet mee. **Kopieer** zet de tekst op je klembord.",
+        "en": "What is **In stock** is left out. With **Without ticked lines** on, which is the default, ticked lines are left out too. **Copy** puts the text on your clipboard."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["delen", "whatsapp", "tekst", "sturen", "lijst delen"], "en": ["share", "whatsapp", "text", "send", "share list"] }
+    },
+    {
+      "id": "week-en-boodschappen.delen-link-qr",
+      "title": { "nl": "De lijst delen als link of QR", "en": "Share the list as a link or QR" },
+      "what": {
+        "nl": "Heeft de ander de app ook, deel de lijst dan als link of laat een QR-code scannen. Zo zet de ander de regels op zijn eigen lijst.",
+        "en": "If the other person has the app too, share the list as a link or let them scan a QR code. That way they put the lines on their own list."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik bovenaan op **Deel lijst**.", "Tik op **Deel link** of op **Toon QR**."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap **Share list** at the top.", "Tap **Share link** or **Show QR**."]
+      },
+      "see": {
+        "nl": "Na **Deel link** opent het deelmenu met een zin en de link. Na **Toon QR** staat er een QR-code die de ander scant met de camera van de telefoon.",
+        "en": "After **Share link** the share menu opens with a sentence and the link. After **Show QR** a QR code appears that the other person scans with the phone camera."
+      },
+      "know": {
+        "nl": "Is de lijst te lang voor een QR-code, dan staat er \"Te groot voor een QR-code. Deel de link.\" **Kopieer link** zet de link op je klembord.",
+        "en": "If the list is too long for a QR code, it says \"Too big for a QR code. Share the link instead.\" **Copy link** puts the link on your clipboard."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["link", "qr", "scannen", "delen", "camera"], "en": ["link", "qr", "scan", "share", "camera"] }
+    },
+    {
+      "id": "week-en-boodschappen.lijst-ontvangen",
+      "title": { "nl": "Een gedeelde lijst ontvangen", "en": "Receive a shared list" },
+      "what": {
+        "nl": "Kreeg je een lijst als link, dan zet je de regels met één tik op je eigen boodschappenlijst.",
+        "en": "If you got a list as a link, you put its lines on your own shopping list with one tap."
+      },
+      "where": {
+        "nl": ["Houd in WhatsApp het bericht met de link vast.", "Tik op Kopieer.", "Open de app.", "Tik onderaan op **Meer**.", "Tik bovenaan op **In & uit**.", "Tik op **Plak van klembord**.", "Tik bij de lijst op **Zet op mijn lijst**."],
+        "en": ["In WhatsApp, hold the message with the link.", "Tap Copy.", "Open the app.", "Tap **More** at the bottom.", "Tap **In & out** at the top.", "Tap **Paste from clipboard**.", "Tap **Put on my list** at the list."]
+      },
+      "see": {
+        "nl": "Eerst zie je een kaartje \"🛒 Lijst van …\" met de regels. Na de tik staat er hoeveel regels op je lijst kwamen en hoeveel er al stonden.",
+        "en": "First you see a card \"🛒 …'s list\" with the lines. After the tap it says how many lines went on your list and how many were already there."
+      },
+      "know": {
+        "nl": "Zo werkt het op elke telefoon. Op Android kun je ook op de link tikken; of die dan de app opent, verschilt per telefoon. Op de iPhone opent een link nooit de app.",
+        "en": "This works on every phone. On Android you can also tap the link; whether it then opens the app depends on the phone. On the iPhone a link never opens the app."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": { "nl": ["ontvangen", "zet op mijn lijst", "plakken", "klembord", "gedeelde lijst"], "en": ["receive", "put on my list", "paste", "clipboard", "shared list"] }
+    },
+    {
+      "id": "week-en-boodschappen.printen-kopieren",
+      "title": { "nl": "De lijst printen of kopiëren", "en": "Print or copy the list" },
+      "what": {
+        "nl": "Print je boodschappenlijst, of kopieer hem als tekst om hem ergens anders te plakken.",
+        "en": "Print your shopping list, or copy it as text to paste it somewhere else."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Boodschappen**.", "Tik bovenaan op **Print** of op **Kopieer als tekst**."],
+        "en": ["Tap **Shopping** at the bottom.", "Tap **Print** or **Copy as text** at the top."]
+      },
+      "see": {
+        "nl": "Na **Print** opent het printvenster van je telefoon. Na **Kopieer als tekst** staat er kort \"Gekopieerd ✓\".",
+        "en": "After **Print** your phone's print window opens. After **Copy as text** it briefly says \"Copied ✓\"."
+      },
+      "know": {
+        "nl": "Op de iPhone staat er geen **Print**-knop. Daar tik je op **Deel lijst** en kies je Print in het deelmenu.",
+        "en": "On the iPhone there is no **Print** button. There you tap **Share list** and choose Print in the share menu."
+      },
+      "route": "/shopping",
+      "platform": "all",
+      "keywords": { "nl": ["printen", "afdrukken", "kopiëren", "papier", "tekst"], "en": ["print", "printing", "copy", "paper", "text"] }
+    }
+  ]
+}

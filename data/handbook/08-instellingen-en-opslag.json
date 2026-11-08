@@ -1,0 +1,1160 @@
+{
+  "id": "instellingen-en-opslag",
+  "order": 8,
+  "title": {
+    "nl": "Instellingen & opslag",
+    "en": "Settings & storage"
+  },
+  "intro": {
+    "nl": "Wat je kunt instellen, hoe je een back-up maakt en terugzet, en hoe meer mensen één telefoon delen.",
+    "en": "What you can set, how to make and restore a backup, and how several people share one phone."
+  },
+  "entries": [
+    {
+      "id": "instellingen-en-opslag.instellingen",
+      "title": {
+        "nl": "De instellingen vinden",
+        "en": "Find the settings"
+      },
+      "what": {
+        "nl": "Alle schakelaars van de app staan bij elkaar onder één kopje in **Meer**.",
+        "en": "All the app's switches sit together under one heading in **More**."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading."
+        ]
+      },
+      "see": {
+        "nl": "Het kopje klapt open. Je ziet **Taal**, **Confetti**, **Badges**, **°F erbij**, het blok **Kookstand & timer** en **Experimenten**.",
+        "en": "The heading folds open. You see **Language**, **Confetti**, **Badges**, **Show °F too**, the **Cook mode & timer** block and **Experiments**."
+      },
+      "know": {
+        "nl": "De app onthoudt welke kopjes in **Meer** open staan. Het thema en het timergeluid staan in **Jouw stijl**.",
+        "en": "The app remembers which headings in **More** are open. The theme and the timer sound are in **Your style**."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "instellingen",
+          "schakelaars",
+          "opties",
+          "meer",
+          "aanpassen",
+          "voorkeuren"
+        ],
+        "en": [
+          "settings",
+          "switches",
+          "options",
+          "more",
+          "adjust",
+          "preferences"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.taal",
+      "title": {
+        "nl": "De taal van de app",
+        "en": "The app's language"
+      },
+      "what": {
+        "nl": "Je kiest of de app Nederlands of Engels praat.",
+        "en": "You choose whether the app speaks Dutch or English."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**.",
+          "Tik bij **Taal** op **NL** of **EN**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading.",
+          "Tap **NL** or **EN** next to **Language**."
+        ]
+      },
+      "see": {
+        "nl": "De hele app wisselt meteen van taal.",
+        "en": "The whole app switches language straight away."
+      },
+      "know": {
+        "nl": "Dit is dezelfde keuze als **NL** en **EN** rechtsboven in de meeste schermen. De taal wordt bij je profiel bewaard.",
+        "en": "This is the same choice as **NL** and **EN** at the top right of most screens. The language is kept with your profile."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "taal",
+          "engels",
+          "nederlands",
+          "nl",
+          "en",
+          "vertalen"
+        ],
+        "en": [
+          "language",
+          "english",
+          "dutch",
+          "nl",
+          "en",
+          "translate"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.thema",
+      "title": {
+        "nl": "Licht of donker thema",
+        "en": "Light or dark theme"
+      },
+      "what": {
+        "nl": "Je kiest of de app licht of donker is, of de telefoon volgt.",
+        "en": "You choose whether the app is light or dark, or follows the phone."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik onder **Jij & je huishouden** op **Jouw stijl**.",
+          "Tik op de tab **Thema**.",
+          "Tik op **Systeem**, **Licht** of **Donker**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Under **You & your household**, tap **Your style**.",
+          "Tap the **Theme** tab.",
+          "Tap **System**, **Light** or **Dark**."
+        ]
+      },
+      "see": {
+        "nl": "De kleuren van de app wisselen meteen. Bij **Systeem** volgt de app de instelling van je telefoon.",
+        "en": "The app's colours change straight away. With **System** the app follows your phone's setting."
+      },
+      "know": {
+        "nl": "De tab **Thema** is er ook als de badges uit staan.",
+        "en": "The **Theme** tab is there even with badges switched off."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "thema",
+          "donker",
+          "licht",
+          "nachtmodus",
+          "kleuren",
+          "systeem"
+        ],
+        "en": [
+          "theme",
+          "dark",
+          "light",
+          "dark mode",
+          "colours",
+          "system"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.fahrenheit",
+      "title": {
+        "nl": "Temperaturen ook in °F",
+        "en": "Temperatures in °F too"
+      },
+      "what": {
+        "nl": "Oventemperaturen staan in °C. Met deze schakelaar zie je er ook °F bij.",
+        "en": "Oven temperatures are in °C. With this switch you see °F next to them."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**.",
+          "Zet **°F erbij** aan."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading.",
+          "Switch **Show °F too** on."
+        ]
+      },
+      "see": {
+        "nl": "In de stappen staat dan bijvoorbeeld 200 °C (400 °F).",
+        "en": "The steps then say, for example, 200 °C (400 °F)."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "fahrenheit",
+          "celsius",
+          "graden",
+          "oven",
+          "temperatuur",
+          "°f"
+        ],
+        "en": [
+          "fahrenheit",
+          "celsius",
+          "degrees",
+          "oven",
+          "temperature",
+          "°f"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.confetti",
+      "title": {
+        "nl": "Confetti aan of uit",
+        "en": "Confetti on or off"
+      },
+      "what": {
+        "nl": "Bij een feestelijk moment, zoals een gekookt gerecht, regent het confetti. Dat kun je uitzetten.",
+        "en": "At a festive moment, such as a cooked dish, confetti rains down. You can switch that off."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**.",
+          "Zet **Confetti** uit of aan."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading.",
+          "Switch **Confetti** off or on."
+        ]
+      },
+      "see": {
+        "nl": "De schakelaar staat uit of aan. Uit betekent: geen confetti meer.",
+        "en": "The switch is off or on. Off means: no more confetti."
+      },
+      "know": {
+        "nl": "Welke soort confetti je ziet, kies je in **Jouw stijl**.",
+        "en": "Which kind of confetti you see is chosen in **Your style**."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "confetti",
+          "feest",
+          "uitzetten",
+          "animatie",
+          "rustig",
+          "effect"
+        ],
+        "en": [
+          "confetti",
+          "party",
+          "switch off",
+          "animation",
+          "quiet",
+          "effect"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.aantal-personen",
+      "title": {
+        "nl": "Aantal personen",
+        "en": "Number of people"
+      },
+      "what": {
+        "nl": "Je zegt met hoeveel personen je meestal eet. Een nieuw gerecht in je week begint met dat aantal porties.",
+        "en": "You say how many people usually eat. A new dish in your week starts with that many servings."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Zoek onder **Jij & je huishouden** de regel **Aantal personen**.",
+          "Tik op − of + tot het aantal klopt."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Under **You & your household**, find the line **Number of people**.",
+          "Tap − or + until the number is right."
+        ]
+      },
+      "see": {
+        "nl": "Tussen − en + staat het aantal, bijvoorbeeld 4 pers.",
+        "en": "Between − and + you see the number, for example 4 people."
+      },
+      "know": {
+        "nl": "Het kan van 1 tot 12.",
+        "en": "It goes from 1 to 12."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "personen",
+          "porties",
+          "huishouden",
+          "aantal",
+          "eters",
+          "gezin"
+        ],
+        "en": [
+          "people",
+          "servings",
+          "household",
+          "number",
+          "portions",
+          "family"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.timergeluid",
+      "title": {
+        "nl": "Timergeluid instellen",
+        "en": "Set the timer sound"
+      },
+      "what": {
+        "nl": "Je kiest welk geluid klinkt als een timer klaar is. Je kunt het geluid ook uitzetten.",
+        "en": "You choose which sound plays when a timer is done. You can also switch the sound off."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik onder **Jij & je huishouden** op **Jouw stijl**.",
+          "Tik op de tab **Geluiden**.",
+          "Tik onder **Timergeluid** op een tegel."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Under **You & your household**, tap **Your style**.",
+          "Tap the **Sounds** tab.",
+          "Under **Timer sound**, tap a tile."
+        ]
+      },
+      "see": {
+        "nl": "Je hoort het geluid meteen één keer. De gekozen tegel is gemarkeerd. Tegels met een slotje komen later vrij.",
+        "en": "You hear the sound once straight away. The chosen tile is marked. Tiles with a padlock unlock later."
+      },
+      "know": {
+        "nl": "Kies **Uit** voor geen geluid. Op een iPhone met de stil-schakelaar aan speelt het geluid niet af.",
+        "en": "Choose **Off** for no sound. On an iPhone with the silent switch on, the sound does not play."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "timergeluid",
+          "geluid",
+          "piepjes",
+          "belletje",
+          "wekker",
+          "stil"
+        ],
+        "en": [
+          "timer sound",
+          "sound",
+          "beeps",
+          "bell",
+          "alarm",
+          "silent"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.trillen",
+      "title": {
+        "nl": "Trillen bij afloop aan of uit",
+        "en": "Vibrate when done on or off"
+      },
+      "what": {
+        "nl": "De telefoon kan trillen als een timer klaar is.",
+        "en": "The phone can vibrate when a timer is done."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**.",
+          "Zet onder **Kookstand & timer** de schakelaar **Trillen bij afloop** aan of uit."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading.",
+          "Under **Cook mode & timer**, switch **Vibrate when done** on or off."
+        ]
+      },
+      "see": {
+        "nl": "Staat hij aan, dan trilt de telefoon kort een paar keer als de tijd om is.",
+        "en": "When it is on, the phone vibrates briefly a few times when the time is up."
+      },
+      "know": {
+        "nl": "Op een iPhone trilt de app zelf niet; alleen een melding kan trillen.",
+        "en": "On an iPhone the app itself does not vibrate; only a notification can."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "trillen",
+          "trilling",
+          "timer",
+          "afloop",
+          "zoemen",
+          "melding"
+        ],
+        "en": [
+          "vibrate",
+          "vibration",
+          "timer",
+          "done",
+          "buzz",
+          "notification"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.voorlezen",
+      "title": {
+        "nl": "Voorlezen aanzetten",
+        "en": "Switch reading aloud on"
+      },
+      "what": {
+        "nl": "In de kookstand kan de app elke stap vanzelf voorlezen. Dan hoef je niet op het scherm te kijken.",
+        "en": "In cook mode the app can read each step aloud by itself. Then you don't have to look at the screen."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**.",
+          "Zet onder **Kookstand & timer** de schakelaar **Voorlezen** aan."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading.",
+          "Under **Cook mode & timer**, switch **Read aloud** on."
+        ]
+      },
+      "see": {
+        "nl": "In de kookstand hoor je elke nieuwe stap.",
+        "en": "In cook mode you hear each new step."
+      },
+      "know": {
+        "nl": "Ook met de schakelaar uit kun je per stap op 🔊 tikken. Kan je telefoon niet voorlezen, dan staat dat op de plek van de schakelaar.",
+        "en": "Even with the switch off you can tap 🔊 on a step. If your phone cannot read aloud, that is said where the switch would be."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "voorlezen",
+          "spraak",
+          "hardop",
+          "luisteren",
+          "stem",
+          "kookstand"
+        ],
+        "en": [
+          "read aloud",
+          "speech",
+          "out loud",
+          "listen",
+          "voice",
+          "cook mode"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.spraak",
+      "title": {
+        "nl": "Spraakcommando’s aanzetten",
+        "en": "Switch voice commands on"
+      },
+      "what": {
+        "nl": "In de kookstand kun je de app met je stem bedienen. Zeg bijvoorbeeld volgende of timer 10 minuten.",
+        "en": "In cook mode you can control the app with your voice. Say, for example, next or timer 10 minutes."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**.",
+          "Zet onder **Kookstand & timer** de schakelaar **Spraakcommando’s** aan."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading.",
+          "Under **Cook mode & timer**, switch **Voice commands** on."
+        ]
+      },
+      "see": {
+        "nl": "De schakelaar staat aan. In de kookstand luistert de app dan naar je.",
+        "en": "The switch is on. In cook mode the app then listens to you."
+      },
+      "know": {
+        "nl": "Dit werkt alleen op Android, meestal met internet. Op een iPhone staat op die plek dat spraakcommando’s alleen op Android werken.",
+        "en": "This only works on Android, usually with internet. On an iPhone that spot says voice commands only work on Android."
+      },
+      "route": "/more",
+      "platform": "android",
+      "keywords": {
+        "nl": [
+          "spraak",
+          "stem",
+          "commando",
+          "microfoon",
+          "handsfree",
+          "volgende"
+        ],
+        "en": [
+          "voice",
+          "speech",
+          "command",
+          "microphone",
+          "hands-free",
+          "next"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.experimenten",
+      "title": {
+        "nl": "Experimenten",
+        "en": "Experiments"
+      },
+      "what": {
+        "nl": "Met deze schakelaar zet je proeffuncties aan die nog niet af zijn.",
+        "en": "This switch turns on trial features that are not finished yet."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**.",
+          "Zet **Experimenten** aan of uit."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading.",
+          "Switch **Experiments** on or off."
+        ]
+      },
+      "see": {
+        "nl": "De schakelaar staat aan of uit.",
+        "en": "The switch is on or off."
+      },
+      "know": {
+        "nl": "Op dit moment staat er geen proeffunctie klaar. De schakelaar verandert nu dus niets.",
+        "en": "Right now no trial feature is waiting. So the switch changes nothing for now."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "experimenten",
+          "proef",
+          "test",
+          "nieuw",
+          "uitproberen",
+          "schakelaar"
+        ],
+        "en": [
+          "experiments",
+          "trial",
+          "test",
+          "new",
+          "try out",
+          "switch"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.opslag",
+      "title": {
+        "nl": "Het scherm Opslag & back-up",
+        "en": "The Storage & backup screen"
+      },
+      "what": {
+        "nl": "Hier zie je wat er op deze telefoon staat en hoeveel ruimte de app gebruikt. Ook maak en herstel je hier een back-up.",
+        "en": "Here you see what is on this phone and how much space the app uses. You also make and restore a backup here."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Opslag & back-up**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Storage & backup**."
+        ]
+      },
+      "see": {
+        "nl": "Bovenaan staat **Status**: **Geïnstalleerd als app**, **Opslag beschermd** en **Gebruikt**. Daaronder telt **Inhoud** je recepten, favorieten, notities, foto’s en meer.",
+        "en": "At the top is **Status**: **Installed as an app**, **Storage protected** and **In use**. Below that, **Contents** counts your recipes, favourites, notes, photos and more."
+      },
+      "know": {
+        "nl": "Beschermde opslag wordt niet zomaar gewist, maar een back-up is de echte garantie.",
+        "en": "Protected storage is not cleared lightly, but a backup is the real guarantee."
+      },
+      "route": "/more/storage",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "opslag",
+          "ruimte",
+          "geheugen",
+          "status",
+          "inhoud",
+          "megabyte"
+        ],
+        "en": [
+          "storage",
+          "space",
+          "memory",
+          "status",
+          "contents",
+          "megabytes"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.backup-maken",
+      "title": {
+        "nl": "Een back-up maken",
+        "en": "Make a backup"
+      },
+      "what": {
+        "nl": "Een back-up is één bestand met alles op deze telefoon. Bewaar het buiten de app, dan raak je niets kwijt.",
+        "en": "A backup is one file with everything on this phone. Keep it outside the app and you lose nothing."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Opslag & back-up**.",
+          "Tik in het blok **Back-up voor mezelf** op **Bewaar of deel**.",
+          "Tik op **Delen** of op **Download**.",
+          "Kies bij Delen waar het bestand heen gaat, bijvoorbeeld WhatsApp aan jezelf of Drive."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Storage & backup**.",
+          "In the **Backup for myself** block, tap **Save or share**.",
+          "Tap **Share** or **Download**.",
+          "With Share, choose where the file goes, for example WhatsApp to yourself or Drive."
+        ]
+      },
+      "see": {
+        "nl": "Een venster toont de bestandsnaam en de grootte. Na het bewaren staat bij **Laatste back-up** de datum van nu en bij **Sinds de laatste back-up** 0 wijzigingen.",
+        "en": "A window shows the file name and size. After saving, **Last backup** shows today's date and **Since the last backup** shows 0 changes."
+      },
+      "know": {
+        "nl": "In de back-up zitten eigen en ontvangen recepten, favorieten, notities, kooklog, profielen en weekplan. Met **Download** komt het bestand op Android in Downloads, op de iPhone in Bestanden → Downloads.",
+        "en": "The backup holds own and received recipes, favourites, notes, cook log, profiles and week plan. With **Download** the file goes to Downloads on Android, and to Files → Downloads on the iPhone."
+      },
+      "route": "/more/storage",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "back-up",
+          "backup",
+          "bewaren",
+          "veiligstellen",
+          "bestand",
+          "downloaden"
+        ],
+        "en": [
+          "backup",
+          "back up",
+          "save",
+          "keep safe",
+          "file",
+          "download"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.backup-fotos",
+      "title": {
+        "nl": "Een back-up met foto’s",
+        "en": "A backup with photos"
+      },
+      "what": {
+        "nl": "Foto’s gaan niet vanzelf mee in de back-up. Met een schakelaar neem je ze toch mee.",
+        "en": "Photos do not go into the backup by themselves. A switch takes them along."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Opslag & back-up**.",
+          "Zet in **Back-up voor mezelf** de schakelaar **Met foto’s** aan.",
+          "Wacht tot onder de schakelaar staat hoe groot het bestand wordt.",
+          "Tik op **Bewaar of deel**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Storage & backup**.",
+          "In **Backup for myself**, switch **With photos** on.",
+          "Wait until the line under the switch says how large the file will be.",
+          "Tap **Save or share**."
+        ]
+      },
+      "see": {
+        "nl": "Onder de schakelaar staat eerst dat de foto’s worden ingepakt. Daarna staat er hoeveel foto’s meegaan en hoe groot het bestand wordt.",
+        "en": "Under the switch it first says the photos are being packed. Then it says how many photos go along and how large the file will be."
+      },
+      "know": {
+        "nl": "Foto’s maken het bestand flink groter. Zonder foto’s op deze telefoon staat de schakelaar grijs.",
+        "en": "Photos make the file much larger. With no photos on this phone, the switch is greyed out."
+      },
+      "route": "/more/storage",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "foto",
+          "foto’s",
+          "fotos",
+          "back-up",
+          "groot",
+          "afbeeldingen"
+        ],
+        "en": [
+          "photo",
+          "photos",
+          "pictures",
+          "backup",
+          "large",
+          "images"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.terugzetten",
+      "title": {
+        "nl": "Een back-up terugzetten",
+        "en": "Restore a backup"
+      },
+      "what": {
+        "nl": "Met een back-upbestand zet je alles terug, op deze telefoon of op een nieuwe.",
+        "en": "With a backup file you put everything back, on this phone or on a new one."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Opslag & back-up**.",
+          "Tik onder **Een back-up terugzetten** op **Herstel**.",
+          "Kies je back-upbestand; de naam begint met recepten-."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Storage & backup**.",
+          "Under **Put a backup back**, tap **Restore**.",
+          "Choose your backup file; its name starts with recepten-."
+        ]
+      },
+      "see": {
+        "nl": "Onder de knop staat hoeveel recepten, favorieten, notities, kookbeurten en profielen zijn teruggezet.",
+        "en": "Under the button it says how many recipes, favourites, notes, cooks and profiles were restored."
+      },
+      "know": {
+        "nl": "Wat in het bestand staat wordt toegevoegd of bijgewerkt; wat al op de telefoon staat blijft. Is het een receptenbestand van iemand anders, dan zegt de app dat en tik je op **Naar In & uit**.",
+        "en": "What is in the file is added or updated; what is already on the phone stays. If it is someone else's recipes file, the app says so and you tap **Go to In & out**."
+      },
+      "route": "/more/storage",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "terugzetten",
+          "herstellen",
+          "back-up",
+          "nieuwe telefoon",
+          "overzetten",
+          "bestand"
+        ],
+        "en": [
+          "restore",
+          "put back",
+          "backup",
+          "new phone",
+          "move",
+          "file"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.herinnering",
+      "title": {
+        "nl": "De back-upherinnering",
+        "en": "The backup reminder"
+      },
+      "what": {
+        "nl": "De app herinnert je aan een back-up zodra een wijziging al meer dan 30 dagen nergens anders staat.",
+        "en": "The app reminds you about a backup as soon as a change has existed nowhere else for more than 30 days."
+      },
+      "where": {
+        "nl": [
+          "Kijk op **Home** of er een kaart met 💾 staat.",
+          "Tik op de kaart.",
+          "Tik in **Back-up voor mezelf** op **Bewaar of deel**."
+        ],
+        "en": [
+          "Look on **Home** for a card with 💾.",
+          "Tap the card.",
+          "In **Backup for myself**, tap **Save or share**."
+        ]
+      },
+      "see": {
+        "nl": "Op **Home** staat de kaart met **Back-up maken**. In **Meer** staat het rode label back-up nodig, en in **Opslag & back-up** een rode regel.",
+        "en": "**Home** shows the card with **Make a backup**. **More** shows the red label backup due, and **Storage & backup** a red line."
+      },
+      "know": {
+        "nl": "Na een back-up verdwijnen de kaart, het label en de rode regel.",
+        "en": "After a backup, the card, the label and the red line disappear."
+      },
+      "route": "/more/storage",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "herinnering",
+          "back-up nodig",
+          "30 dagen",
+          "rood",
+          "melding",
+          "vergeten"
+        ],
+        "en": [
+          "reminder",
+          "backup due",
+          "30 days",
+          "red",
+          "notice",
+          "forgot"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.geven",
+      "title": {
+        "nl": "Al je recepten aan iemand geven",
+        "en": "Give all your recipes to someone"
+      },
+      "what": {
+        "nl": "Je maakt één bestand met je eigen en ontvangen recepten voor een ander. Er gaan geen favorieten of geschiedenis mee.",
+        "en": "You make one file with your own and received recipes for someone else. No favourites or history go along."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Opslag & back-up**.",
+          "Tik in **Mijn recepten aan iemand geven** op **Bewaar of deel**.",
+          "Tik op **Delen**.",
+          "Kies de ander, bijvoorbeeld in WhatsApp."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Storage & backup**.",
+          "In **Give my recipes to someone**, tap **Save or share**.",
+          "Tap **Share**.",
+          "Choose the other person, for example in WhatsApp."
+        ]
+      },
+      "see": {
+        "nl": "Een venster toont de bestandsnaam en de grootte. Na het delen staat onder de knop dat de recepten gedeeld zijn.",
+        "en": "A window shows the file name and size. After sharing, a line under the button says the recipes were shared."
+      },
+      "know": {
+        "nl": "De ander zet het bestand in de app via **In & uit**. Heb je nog geen eigen recepten, dan staat de knop grijs.",
+        "en": "The other person puts the file into the app through **In & out**. If you have no own recipes yet, the button is greyed out."
+      },
+      "route": "/more/storage",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "recepten geven",
+          "alles delen",
+          "bestand",
+          "overdragen",
+          "eigen recepten",
+          "ander"
+        ],
+        "en": [
+          "give recipes",
+          "share all",
+          "file",
+          "hand over",
+          "own recipes",
+          "someone else"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.resetten",
+      "title": {
+        "nl": "De app resetten",
+        "en": "Reset the app"
+      },
+      "what": {
+        "nl": "Resetten wist alles op deze telefoon en laat de app opnieuw beginnen. Doe dit alleen als je echt opnieuw wilt starten.",
+        "en": "Resetting wipes everything on this phone and starts the app over. Only do this if you really want a fresh start."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Opslag & back-up**.",
+          "Scrol naar beneden.",
+          "Tik op **App resetten**.",
+          "Tik op **Ja**, of op **Ja, maar deel eerst mijn recepten**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Storage & backup**.",
+          "Scroll down.",
+          "Tap **Reset app**.",
+          "Tap **Yes**, or **Yes, but share my recipes first**."
+        ]
+      },
+      "see": {
+        "nl": "De app start opnieuw bij **Wie ben jij?**. De klassiekers staan er weer; al het andere is weg.",
+        "en": "The app starts over at **Who are you?**. The classics are back; everything else is gone."
+      },
+      "know": {
+        "nl": "Je verliest eigen en ontvangen recepten, favorieten, notities, kooklog, profielen, week, boodschappenlijst, foto’s en instellingen. Annuleer je het delen, dan wordt er niets gewist. Met **Nee** gebeurt er niets.",
+        "en": "You lose own and received recipes, favourites, notes, cook log, profiles, week, shopping list, photos and settings. Cancel the sharing and nothing is wiped. With **No** nothing happens."
+      },
+      "route": "/more/storage",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "resetten",
+          "wissen",
+          "opnieuw beginnen",
+          "leegmaken",
+          "alles weg",
+          "fabrieksinstellingen"
+        ],
+        "en": [
+          "reset",
+          "wipe",
+          "start over",
+          "clear",
+          "delete everything",
+          "factory reset"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.profiel-toevoegen",
+      "title": {
+        "nl": "Meer mensen op één telefoon",
+        "en": "Several people on one phone"
+      },
+      "what": {
+        "nl": "Kookt er nog iemand op deze telefoon? Geef die persoon een eigen profiel.",
+        "en": "Does someone else cook on this phone too? Give that person their own profile."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Profielen beheren**.",
+          "Tik op **+ profiel**.",
+          "Typ een naam bij **Naam**.",
+          "Kies een taal bij **Taal**.",
+          "Tik bij **Kleur** op een kleur.",
+          "Tik op **Profiel toevoegen**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Manage profiles**.",
+          "Tap **+ profile**.",
+          "Type a name under **Name**.",
+          "Choose a language under **Language**.",
+          "Tap a colour under **Colour**.",
+          "Tap **Add profile**."
+        ]
+      },
+      "see": {
+        "nl": "Het nieuwe profiel staat in de lijst en is meteen actief.",
+        "en": "The new profile is in the list and active straight away."
+      },
+      "route": "/more/profiles",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "profiel",
+          "toevoegen",
+          "partner",
+          "gezin",
+          "meer mensen",
+          "gebruiker"
+        ],
+        "en": [
+          "profile",
+          "add",
+          "partner",
+          "family",
+          "several people",
+          "user"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.profiel-wisselen",
+      "title": {
+        "nl": "Van profiel wisselen",
+        "en": "Switch profile"
+      },
+      "what": {
+        "nl": "Het actieve profiel is wie de telefoon nu gebruikt. Wissel als iemand anders gaat koken.",
+        "en": "The active profile is who is using the phone now. Switch when someone else is going to cook."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Profielen beheren**.",
+          "Tik bij het andere profiel op **Maak actief**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Manage profiles**.",
+          "Next to the other profile, tap **Make active**."
+        ]
+      },
+      "see": {
+        "nl": "Bij dat profiel staat nu **Actief**. De app praat meteen de taal van dat profiel.",
+        "en": "That profile now shows **Active**. The app switches to that profile's language straight away."
+      },
+      "know": {
+        "nl": "Tik op de rij zelf om dat profiel eerst te bekijken.",
+        "en": "Tap the row itself to look at that profile first."
+      },
+      "route": "/more/profiles",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "wisselen",
+          "actief",
+          "profiel",
+          "andere persoon",
+          "inloggen",
+          "omschakelen"
+        ],
+        "en": [
+          "switch",
+          "active",
+          "profile",
+          "other person",
+          "log in",
+          "change user"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.per-profiel",
+      "title": {
+        "nl": "Wat per profiel is",
+        "en": "What belongs to each profile"
+      },
+      "what": {
+        "nl": "Elk profiel heeft een eigen naam, taal, kleur, avatar, favorieten en notities, en een eigen level en badges. Recepten, weekplan, boodschappenlijst en instellingen deel je.",
+        "en": "Each profile has its own name, language, colour, avatar, favourites and notes, and its own level and badges. Recipes, week plan, shopping list and settings are shared."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Profielen beheren**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Manage profiles**."
+        ]
+      },
+      "see": {
+        "nl": "Elk profiel staat op een rij met avatar en naam, en met badges aan een balk met punten. Rechts staat **Actief** of **Maak actief**.",
+        "en": "Each profile has a row with avatar and name, and with badges on a bar with points. On the right it says **Active** or **Make active**."
+      },
+      "know": {
+        "nl": "Kookt iemand op een eigen telefoon? Die maakt daar een eigen profiel. Via **Huishouden** horen jullie dan bij elkaar.",
+        "en": "Does someone cook on their own phone? They make their own profile there. Through **Household** you then belong together."
+      },
+      "route": "/more/profiles",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "per profiel",
+          "favorieten",
+          "notities",
+          "gedeeld",
+          "eigen",
+          "samen"
+        ],
+        "en": [
+          "per profile",
+          "favourites",
+          "notes",
+          "shared",
+          "own",
+          "together"
+        ]
+      }
+    },
+    {
+      "id": "instellingen-en-opslag.profiel-verwijderen",
+      "title": {
+        "nl": "Een profiel verwijderen",
+        "en": "Delete a profile"
+      },
+      "what": {
+        "nl": "Je haalt een profiel van deze telefoon. Zijn favorieten en notities verdwijnen mee.",
+        "en": "You remove a profile from this phone. Its favourites and notes go with it."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Profielen beheren**.",
+          "Tik bij het profiel op **Maak actief** als het nog niet actief is.",
+          "Tik op de rij van dat profiel.",
+          "Tik op **Naam & kleur**.",
+          "Tik onderaan op **Verwijder**.",
+          "Bevestig de vraag met OK."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Manage profiles**.",
+          "Next to the profile, tap **Make active** if it is not active yet.",
+          "Tap that profile's row.",
+          "Tap **Name & colour**.",
+          "Tap **Delete** at the bottom.",
+          "Confirm the question with OK."
+        ]
+      },
+      "see": {
+        "nl": "Je komt terug in **Profielen** en het profiel staat niet meer in de lijst.",
+        "en": "You return to **Profiles** and the profile is no longer in the list."
+      },
+      "know": {
+        "nl": "Je kunt alleen het actieve profiel aanpassen of verwijderen. Daarna wordt een ander profiel actief.",
+        "en": "You can only edit or delete the active profile. Afterwards another profile becomes active."
+      },
+      "route": "/more/profiles",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "verwijderen",
+          "profiel",
+          "weghalen",
+          "wissen",
+          "persoon",
+          "opruimen"
+        ],
+        "en": [
+          "delete",
+          "profile",
+          "remove",
+          "wipe",
+          "person",
+          "tidy up"
+        ]
+      }
+    }
+  ]
+}

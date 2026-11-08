@@ -1,0 +1,657 @@
+{
+  "id": "iphone-vs-android",
+  "order": 9,
+  "title": {
+    "nl": "iPhone en Android",
+    "en": "iPhone and Android"
+  },
+  "intro": {
+    "nl": "Het is één app, maar een iPhone en een Android-telefoon kunnen niet alles hetzelfde. Hier staat eerlijk wat verschilt.",
+    "en": "It is one app, but an iPhone and an Android phone cannot do everything the same way. Here is honestly what differs."
+  },
+  "entries": [
+    {
+      "id": "iphone-vs-android.ontvangen",
+      "title": {
+        "nl": "Een recept ontvangen",
+        "en": "Receive a recipe"
+      },
+      "what": {
+        "nl": "Op Android staat de app in het deelmenu van je telefoon. Op de iPhone kan dat niet: daar kopieer je het bericht en plak je het in de app.",
+        "en": "On Android the app appears in your phone's share menu. On the iPhone that is not possible: there you copy the message and paste it into the app."
+      },
+      "where": {
+        "nl": [
+          "Android: houd het bericht in WhatsApp ingedrukt.",
+          "Android: tik op het deelicoon.",
+          "Android: kies Recepten.",
+          "iPhone: houd het bericht in WhatsApp ingedrukt.",
+          "iPhone: tik op Kopieer.",
+          "iPhone: open de app via het icoon op je beginscherm.",
+          "iPhone: tik op **Home** op de rij **In & uit**.",
+          "iPhone: tik op **Plak van klembord**."
+        ],
+        "en": [
+          "Android: press and hold the message in WhatsApp.",
+          "Android: tap the share icon.",
+          "Android: choose Recepten.",
+          "iPhone: press and hold the message in WhatsApp.",
+          "iPhone: tap Copy.",
+          "iPhone: open the app from the icon on your Home Screen.",
+          "iPhone: on **Home**, tap the **In & out** row.",
+          "iPhone: tap **Paste from clipboard**."
+        ]
+      },
+      "see": {
+        "nl": "Op beide telefoons opent **In & uit** met een voorproefje van het recept. Tik op **Importeer** om het te bewaren.",
+        "en": "On both phones **In & out** opens with a preview of the recipe. Tap **Import** to keep it."
+      },
+      "know": {
+        "nl": "Op de iPhone kun je ook lang drukken in het grote tekstvak en Plak kiezen. Die weg blijft altijd in de app.",
+        "en": "On the iPhone you can also press and hold in the big text box and choose Paste. That route always stays in the app."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "ontvangen",
+          "deelmenu",
+          "plakken",
+          "kopiëren",
+          "whatsapp",
+          "klembord"
+        ],
+        "en": [
+          "receive",
+          "share menu",
+          "paste",
+          "copy",
+          "whatsapp",
+          "clipboard"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.links",
+      "title": {
+        "nl": "Opent een link de app?",
+        "en": "Does a link open the app?"
+      },
+      "what": {
+        "nl": "Op Android kan een deellink de app openen, als je telefoon goed staat ingesteld. Op een iPhone opent een link altijd Safari, nooit de app.",
+        "en": "On Android a share link can open the app, if your phone is set up for it. On an iPhone a link always opens Safari, never the app."
+      },
+      "where": {
+        "nl": [
+          "Android: tik in WhatsApp op de deellink.",
+          "iPhone: tik in WhatsApp op de deellink.",
+          "iPhone: tik in Safari op **Kopieer receptcode**.",
+          "iPhone: open de app via het icoon op je beginscherm.",
+          "iPhone: tik onderaan op **Meer**.",
+          "iPhone: tik op **In & uit**.",
+          "iPhone: tik op **Plak van klembord**."
+        ],
+        "en": [
+          "Android: tap the share link in WhatsApp.",
+          "iPhone: tap the share link in WhatsApp.",
+          "iPhone: tap **Copy recipe code** in Safari.",
+          "iPhone: open the app from the icon on your Home Screen.",
+          "iPhone: tap **More** at the bottom.",
+          "iPhone: tap **In & out**.",
+          "iPhone: tap **Paste from clipboard**."
+        ]
+      },
+      "see": {
+        "nl": "Op Android opent de app, of Chrome. Op de iPhone toont Safari een voorproefje van het recept; Safari bewaart zelf niets.",
+        "en": "On Android the app opens, or Chrome. On the iPhone Safari shows a preview of the recipe; Safari itself saves nothing."
+      },
+      "know": {
+        "nl": "Opent op Android toch Chrome? Geen ramp: Chrome en de app delen dezelfde opslag, dus het recept komt ook in de app. Android beslist zelf; de app kan het niet afdwingen.",
+        "en": "Does Chrome open on Android after all? No harm done: Chrome and the app share the same storage, so the recipe reaches the app too. Android decides; the app cannot force it."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "link",
+          "deellink",
+          "safari",
+          "chrome",
+          "openen",
+          "voorproefje"
+        ],
+        "en": [
+          "link",
+          "share link",
+          "safari",
+          "chrome",
+          "open",
+          "preview"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.links-venster",
+      "title": {
+        "nl": "Het venster Links openen in de app",
+        "en": "The Opening links in the app window"
+      },
+      "what": {
+        "nl": "In **Meer** staat een venster met de stappen per telefoon. De telefoon die je vasthoudt staat bovenaan.",
+        "en": "**More** has a window with the steps for each phone. The phone you are holding comes first."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Hulp & over**.",
+          "Tik op **Links openen in de app**.",
+          "Tik op **Sluit** als je klaar bent."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Help & about** heading.",
+          "Tap **Opening links in the app**.",
+          "Tap **Close** when you are done."
+        ]
+      },
+      "see": {
+        "nl": "Een venster met een deel Android en een deel iPhone, elk met genummerde stappen. Op Android in een andere browser staat er ook **Open in Chrome**.",
+        "en": "A window with an Android part and an iPhone part, each with numbered steps. On Android in another browser it also shows **Open in Chrome**."
+      },
+      "know": {
+        "nl": "Op Android zet je daar Chrome als standaardbrowser en zet je Ondersteunde links openen aan. Op de iPhone legt het de weg met kopiëren en plakken uit.",
+        "en": "On Android you make Chrome the default browser there and switch Open supported links on. On the iPhone it explains the copy-and-paste route."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "links",
+          "standaardbrowser",
+          "ondersteunde links",
+          "instellen",
+          "uitleg",
+          "venster"
+        ],
+        "en": [
+          "links",
+          "default browser",
+          "supported links",
+          "set up",
+          "explanation",
+          "window"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.timers",
+      "title": {
+        "nl": "Timers met het scherm uit",
+        "en": "Timers with the screen off"
+      },
+      "what": {
+        "nl": "Een timer loopt zeker zolang de app open is en het scherm aan staat. Met het scherm uit of de app op de achtergrond is dat niet zeker.",
+        "en": "A timer surely runs while the app is open and the screen is on. With the screen off or the app in the background, that is not certain."
+      },
+      "where": {
+        "nl": [
+          "Start een timer in een recept.",
+          "Laat de app open staan tot de tijd om is."
+        ],
+        "en": [
+          "Start a timer in a recipe.",
+          "Keep the app open until the time is up."
+        ]
+      },
+      "see": {
+        "nl": "Als de tijd om is, hoor je het timergeluid. In de kookstand blijft het scherm vanzelf aan.",
+        "en": "When the time is up, you hear the timer sound. In cook mode the screen stays on by itself."
+      },
+      "know": {
+        "nl": "Op Android ging een korte timer ook af met de app op de achtergrond; een lange is nog niet uitgeprobeerd. Op de iPhone is dat nog niet uitgeprobeerd. Zet bij een lange tijd ook een wekker op je telefoon.",
+        "en": "On Android a short timer also went off with the app in the background; a long one has not been tried yet. On the iPhone this has not been tried yet. For a long time, also set an alarm on your phone."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "timer",
+          "scherm uit",
+          "achtergrond",
+          "vergrendeld",
+          "wekker",
+          "melding"
+        ],
+        "en": [
+          "timer",
+          "screen off",
+          "background",
+          "locked",
+          "alarm",
+          "notification"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.trillen",
+      "title": {
+        "nl": "Trillen",
+        "en": "Vibration"
+      },
+      "what": {
+        "nl": "Op Android trilt de telefoon als een timer klaar is. Op een iPhone trilt de app zelf niet.",
+        "en": "On Android the phone vibrates when a timer is done. On an iPhone the app itself does not vibrate."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**.",
+          "Kijk onder **Kookstand & timer** bij **Trillen bij afloop**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading.",
+          "Look under **Cook mode & timer** at **Vibrate when done**."
+        ]
+      },
+      "see": {
+        "nl": "Onder de schakelaar staat: Op een iPhone trilt alleen de melding.",
+        "en": "Under the switch it says: On an iPhone only the notification vibrates."
+      },
+      "know": {
+        "nl": "Of die melding op de iPhone komt terwijl de app op de achtergrond staat, is nog niet uitgeprobeerd.",
+        "en": "Whether that notification arrives on the iPhone while the app is in the background has not been tried yet."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "trillen",
+          "trilling",
+          "iphone",
+          "android",
+          "timer",
+          "melding"
+        ],
+        "en": [
+          "vibrate",
+          "vibration",
+          "iphone",
+          "android",
+          "timer",
+          "notification"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.spraak",
+      "title": {
+        "nl": "Spraakcommando’s en voorlezen",
+        "en": "Voice commands and reading aloud"
+      },
+      "what": {
+        "nl": "Voorlezen werkt op beide telefoons. Spraakcommando’s, zoals volgende of timer 10 minuten, werken alleen op Android.",
+        "en": "Reading aloud works on both phones. Voice commands, such as next or timer 10 minutes, only work on Android."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op het kopje **Instellingen**.",
+          "Kijk onder **Kookstand & timer**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap the **Settings** heading.",
+          "Look under **Cook mode & timer**."
+        ]
+      },
+      "see": {
+        "nl": "Op Android staan de schakelaars **Voorlezen** en **Spraakcommando’s**. Op een iPhone staat in plaats van de tweede dat spraakcommando’s alleen op Android werken.",
+        "en": "On Android you see the switches **Read aloud** and **Voice commands**. On an iPhone, instead of the second, it says voice commands only work on Android."
+      },
+      "know": {
+        "nl": "Spraakcommando’s hebben meestal internet nodig.",
+        "en": "Voice commands usually need internet."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "spraak",
+          "stem",
+          "voorlezen",
+          "microfoon",
+          "iphone",
+          "android"
+        ],
+        "en": [
+          "voice",
+          "speech",
+          "read aloud",
+          "microphone",
+          "iphone",
+          "android"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.bestand-opslaan",
+      "title": {
+        "nl": "Een bestand opslaan",
+        "en": "Save a file"
+      },
+      "what": {
+        "nl": "Een back-up of receptenbestand kun je delen of downloaden. Waar een download terechtkomt, verschilt per telefoon.",
+        "en": "You can share or download a backup or recipes file. Where a download ends up differs per phone."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik op **Opslag & back-up**.",
+          "Tik op **Bewaar of deel**.",
+          "Tik op **Download**.",
+          "iPhone: tik op Download als de telefoon dat vraagt."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Storage & backup**.",
+          "Tap **Save or share**.",
+          "Tap **Download**.",
+          "iPhone: tap Download when the phone asks."
+        ]
+      },
+      "see": {
+        "nl": "Op Android staat het bestand in de map Downloads. Op de iPhone staat het in Bestanden → Downloads.",
+        "en": "On Android the file is in the Downloads folder. On the iPhone it is in Files → Downloads."
+      },
+      "know": {
+        "nl": "Met **Delen** kies je zelf waarheen, bijvoorbeeld WhatsApp aan jezelf, Drive of Bestanden. Dat werkt op beide telefoons.",
+        "en": "With **Share** you choose where it goes, for example WhatsApp to yourself, Drive or Files. That works on both phones."
+      },
+      "route": "/more/storage",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "bestand",
+          "opslaan",
+          "downloaden",
+          "bestanden",
+          "map",
+          "back-up"
+        ],
+        "en": [
+          "file",
+          "save",
+          "download",
+          "files",
+          "folder",
+          "backup"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.bestand-ontvangen",
+      "title": {
+        "nl": "Een bestand ontvangen",
+        "en": "Receive a file"
+      },
+      "what": {
+        "nl": "Krijg je een receptenbestand in WhatsApp? Op Android deel je het rechtstreeks naar de app. Op de iPhone bewaar je het eerst in Bestanden.",
+        "en": "Did you get a recipes file in WhatsApp? On Android you share it straight to the app. On the iPhone you save it in Files first."
+      },
+      "where": {
+        "nl": [
+          "Android: houd het bestand in WhatsApp ingedrukt.",
+          "Android: tik op het deelicoon.",
+          "Android: kies Recepten.",
+          "iPhone: bewaar het bestand vanuit WhatsApp in Bestanden.",
+          "iPhone: open de app via het icoon op je beginscherm.",
+          "iPhone: tik op **Home** op de rij **In & uit**.",
+          "iPhone: tik op **Kies bestand**.",
+          "iPhone: kies het bestand in Bestanden."
+        ],
+        "en": [
+          "Android: press and hold the file in WhatsApp.",
+          "Android: tap the share icon.",
+          "Android: choose Recepten.",
+          "iPhone: save the file from WhatsApp to Files.",
+          "iPhone: open the app from the icon on your Home Screen.",
+          "iPhone: on **Home**, tap the **In & out** row.",
+          "iPhone: tap **Choose file**.",
+          "iPhone: pick the file in Files."
+        ]
+      },
+      "see": {
+        "nl": "**In & uit** toont de recepten uit het bestand, elk met wat nieuw is. Tik op **Importeer** om ze te bewaren.",
+        "en": "**In & out** shows the recipes from the file, each with what is new. Tap **Import** to keep them."
+      },
+      "know": {
+        "nl": "**Kies bestand** werkt ook op Android.",
+        "en": "**Choose file** works on Android too."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "bestand",
+          "ontvangen",
+          "whatsapp",
+          "bestanden",
+          "kies bestand",
+          "importeren"
+        ],
+        "en": [
+          "file",
+          "receive",
+          "whatsapp",
+          "files",
+          "choose file",
+          "import"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.qr",
+      "title": {
+        "nl": "Een QR-code scannen",
+        "en": "Scan a QR code"
+      },
+      "what": {
+        "nl": "De app maakt QR-codes, maar scant ze zelf niet. Je scant altijd met de camera-app van je telefoon.",
+        "en": "The app makes QR codes but does not scan them itself. You always scan with your phone's camera app."
+      },
+      "where": {
+        "nl": [
+          "Open de camera-app van je telefoon.",
+          "Richt de camera op de QR-code.",
+          "Tik op de link die verschijnt."
+        ],
+        "en": [
+          "Open your phone's camera app.",
+          "Point the camera at the QR code.",
+          "Tap the link that appears."
+        ]
+      },
+      "see": {
+        "nl": "Op Android opent de app of Chrome, net als bij een deellink. Op de iPhone opent Safari met een voorproefje en **Kopieer receptcode**.",
+        "en": "On Android the app or Chrome opens, just like with a share link. On the iPhone Safari opens with a preview and **Copy recipe code**."
+      },
+      "know": {
+        "nl": "Op de iPhone kopieer je daarna de code en plak je hem in de app via **In & uit**.",
+        "en": "On the iPhone you then copy the code and paste it into the app through **In & out**."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "qr",
+          "qr-code",
+          "scannen",
+          "camera",
+          "code",
+          "naast elkaar"
+        ],
+        "en": [
+          "qr",
+          "qr code",
+          "scan",
+          "camera",
+          "code",
+          "side by side"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.installeren",
+      "title": {
+        "nl": "Installeren",
+        "en": "Installing"
+      },
+      "what": {
+        "nl": "Op Android installeer je de app via Chrome. Op de iPhone zet je hem via Safari op je beginscherm.",
+        "en": "On Android you install the app through Chrome. On the iPhone you add it to your Home Screen through Safari."
+      },
+      "where": {
+        "nl": [
+          "Android: open de link in Chrome.",
+          "Android: tik rechtsboven op het menu ⋮.",
+          "Android: tik op **App installeren**.",
+          "iPhone: open de link in Safari.",
+          "iPhone: tik onderaan op **Deel**.",
+          "iPhone: kies **Zet op beginscherm**."
+        ],
+        "en": [
+          "Android: open the link in Chrome.",
+          "Android: tap the ⋮ menu at the top right.",
+          "Android: tap **Install app**.",
+          "iPhone: open the link in Safari.",
+          "iPhone: tap **Share** at the bottom.",
+          "iPhone: choose **Add to Home Screen**."
+        ]
+      },
+      "see": {
+        "nl": "Op Android staat het icoon in je app-lade. Op de iPhone staat het op je beginscherm.",
+        "en": "On Android the icon is in your app drawer. On the iPhone it is on your Home Screen."
+      },
+      "know": {
+        "nl": "Op de iPhone heeft de app op het beginscherm een eigen opslag, los van Safari. Wat je in Safari bewaart, zie je in de app niet. Op Android delen Chrome en de app hun opslag.",
+        "en": "On the iPhone the Home Screen app has storage of its own, separate from Safari. What you save in Safari is not in the app. On Android Chrome and the app share their storage."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "installeren",
+          "beginscherm",
+          "app-lade",
+          "chrome",
+          "safari",
+          "opslag"
+        ],
+        "en": [
+          "install",
+          "home screen",
+          "app drawer",
+          "chrome",
+          "safari",
+          "storage"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.updaten",
+      "title": {
+        "nl": "Updaten",
+        "en": "Updating"
+      },
+      "what": {
+        "nl": "Updaten gaat op beide telefoons hetzelfde. De app laadt nooit vanzelf een nieuwe versie; jij tikt.",
+        "en": "Updating works the same on both phones. The app never loads a new version by itself; you tap."
+      },
+      "where": {
+        "nl": [
+          "Kijk onderaan, boven de tabbladen, of er een blauwe balk staat.",
+          "Tik op **Vernieuwen**."
+        ],
+        "en": [
+          "Look at the bottom, above the tabs, for a blue bar.",
+          "Tap **Reload**."
+        ]
+      },
+      "see": {
+        "nl": "De balk zegt **Nieuwe versie**. Na **Vernieuwen** laadt de app opnieuw.",
+        "en": "The bar says **New version**. After **Reload** the app loads again."
+      },
+      "know": {
+        "nl": "Je hoeft niets via een appwinkel bij te werken.",
+        "en": "You never need to update anything through an app store."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "update",
+          "updaten",
+          "nieuwe versie",
+          "vernieuwen",
+          "appwinkel",
+          "bijwerken"
+        ],
+        "en": [
+          "update",
+          "updating",
+          "new version",
+          "reload",
+          "app store",
+          "upgrade"
+        ]
+      }
+    },
+    {
+      "id": "iphone-vs-android.open-in-chrome",
+      "title": {
+        "nl": "De melding Open in Chrome",
+        "en": "The Open in Chrome notice"
+      },
+      "what": {
+        "nl": "Op Android in een andere browser dan Chrome toont de app de knop **Open in Chrome**. Op de iPhone komt die knop nooit.",
+        "en": "On Android in a browser other than Chrome, the app shows the **Open in Chrome** button. On the iPhone that button never shows."
+      },
+      "where": {
+        "nl": [
+          "Android: kijk in het kader bovenaan.",
+          "Android: tik op **Open in Chrome**.",
+          "iPhone: kijk in het kader bovenaan."
+        ],
+        "en": [
+          "Android: look at the box at the top.",
+          "Android: tap **Open in Chrome**.",
+          "iPhone: look at the box at the top."
+        ]
+      },
+      "see": {
+        "nl": "Op Android staan er twee knoppen: **Open in Chrome** en **Kopieer de link**. Op de iPhone zegt het kader dat je de app op je beginscherm zet.",
+        "en": "On Android there are two buttons: **Open in Chrome** and **Copy the link**. On the iPhone the box tells you to add the app to your Home Screen."
+      },
+      "know": {
+        "nl": "Een andere browser, zoals Opera of Samsung Internet, heeft een eigen opslag. Wat je daar bewaart, komt niet in de app.",
+        "en": "Another browser, such as Opera or Samsung Internet, has storage of its own. What you save there does not reach the app."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "open in chrome",
+          "andere browser",
+          "opera",
+          "samsung internet",
+          "melding",
+          "kader"
+        ],
+        "en": [
+          "open in chrome",
+          "other browser",
+          "opera",
+          "samsung internet",
+          "notice",
+          "box"
+        ]
+      }
+    }
+  ]
+}

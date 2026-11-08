@@ -1,0 +1,172 @@
+/* The handbook screen ('#/more/handbook', docs/specs/handbook.md §3; src/screens/HandbookScreen.tsx).
+   Mobile first: 360 px without sideways scrolling, 16 px search field (no iOS zoom), 44 px chips and
+   rows, dark theme through the existing tokens. The chip strip is the generic `.chips` (browse.css). */
+
+.hb-search {
+  position: relative;
+}
+
+.hb-search .input {
+  padding-right: 48px;
+}
+
+/* One clear button of our own; the native one would make two. */
+.hb-search .input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.hb-clear {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.hb-chips {
+  margin-top: 8px;
+  padding-bottom: 2px;
+}
+
+.handbook .hb-intro {
+  margin: 12px 0 0;
+}
+
+.hb-none {
+  margin: 20px 0;
+  overflow-wrap: anywhere;
+}
+
+.hb-section {
+  margin: 24px 0;
+  scroll-margin-top: 8px;
+}
+
+.hb-section h2 {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.hb-section-intro {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.hb-row {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+
+.hb-sum {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-height: 44px;
+  padding: 10px 14px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hb-sum::-webkit-details-marker {
+  display: none;
+}
+
+.hb-sum:active {
+  background: var(--press);
+  border-radius: var(--radius);
+}
+
+.hb-sum-title {
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* A small chevron that turns when the row unfolds. */
+.hb-sum-title::after {
+  content: '';
+  margin-left: auto;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+  flex: none;
+}
+
+.hb-row[open] .hb-sum-title::after {
+  transform: rotate(-135deg);
+}
+
+.hb-sum-what {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Unfolded, "Wat het doet" shows in full below, so the first sentence hides. */
+.hb-row[open] .hb-sum-what {
+  display: none;
+}
+
+.hb-platform {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hb-body {
+  padding: 0 14px 14px;
+}
+
+.hb-body h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cobalt);
+  margin: 12px 0 4px;
+}
+
+.hb-body p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.hb-body ol {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.hb-body li + li {
+  margin-top: 4px;
+}
+
+.handbook .btn-link {
+  margin-top: 14px;
+}

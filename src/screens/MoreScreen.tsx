@@ -649,6 +649,8 @@ export function MoreScreen() {
 
         <Group id="help" title={t('more.group.help')} open={groups.help} onToggle={toggleGroup}>
           <div class="menu">
+            {/* Block Z (docs/specs/handbook.md §1): the handbook, the first row of Hulp & over. */}
+            <MenuRow label={`📖 ${t('more.handbook')}`} to="/more/handbook" />
             {/* 6A.7: opens the feedback sheet below (no route: it is a small dialog, not a screen). */}
             <MenuRow label={t('more.feedback')} onClick={() => setFeedback(true)} />
           </div>

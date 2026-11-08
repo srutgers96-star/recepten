@@ -55,12 +55,12 @@ spec zegt dat het direct naar `main` mag. Eén regel per spec, met de status.
 | 12c | 6D-R zeldzaamheid van avatar-onderdelen (gewoon/zeldzaam/episch/legendarisch; moeilijkheid én uitstraling) | badges-avatar.md "Blok 6D-R" | 1 (klein) | compleet (Stijn 30 okt; direct ná 13D blok 1) |
 | 12c2 | 6D-B badgepagina als tegels (alleen iconen, tik voor details, net als de avatar-maker) | badges-avatar.md "Blok 6D-B" | 1 (klein) | compleet (Stijn 30 okt; direct ná 6D-R) |
 | 12d | 6D-S "Mijn profiel" + "Jouw stijl": profielscherm (grote avatar, level, vijf tegels; pull-down en tik op Home; Meer en Profielen beheren rustiger) en één personaliseer-menu (avatar · geluiden · confetti · letters · thema; zeldzaamheid op ontgrendelingen; Vrijgespeeld gaat erin op) | badges-avatar.md "Blok 6D-S" | 1 | compleet (Fable 8 nov) |
-| 12e | 6D-F avatar ronde 3: lijsten (frames) als twaalfde laag met eigen clipvorm, 11 lijsten + 17 achtergronden (12 dekkend), profielkleur altijd zichtbaar (impliciete ring) | frames.md | 1 | spec compleet (Fable 8 nov; ná 13c, vóór Z) |
+| 12e | 6D-F avatar ronde 3: lijsten (frames) als twaalfde laag met eigen clipvorm, 11 lijsten + 17 achtergronden (12 dekkend), profielkleur altijd zichtbaar (impliciete ring) | frames.md | 1 | compleet (Fable 8 nov) |
 | 13 | 13J iPhone-sheets afmaken | geen spec nodig (§1a) | 1 | ontbreekt bewust |
 | 13a | 13Q QR en link overal: elke deelknop krijgt "Deel via link" én "Toon QR" (QR uit Experimenten); nieuwe sleutel `#l=` voor een boodschappenlijst als link, ontvangst in In & uit ("Zet op mijn lijst") en op de iPhone-landing; te lange tokens → eerlijk "te groot voor QR, deel de link" | qr-link.md | 1 | compleet (Fable 8 nov) |
 | 13b | 6E Uitdagingen (challenges), vrij op level 20: aanbod van drie per week, één lopende, bonus-XP, badge Uitdager | challenges.md | 1 | compleet (Fable 8 nov) |
 | 13c | Opschoonronde: minder uitleg en tekst, rustiger, losse eindjes van de lenzen (Stijn 30 okt) | opschoonronde.md | 1 | spec compleet (Fable 8 nov) |
-| 14 | Z handleiding: Meer → Hulp & over → Handleiding (zoekveld, tien onderwerpen, per rij wat/waar/wat je ziet/goed om te weten/Open), data/handbook/*.json, Markdown-uitvoer docs/HANDLEIDING.md + HANDBOOK.md; ACHTER-DE-SCHERMEN.md door Fable | handbook.md | 1 | spec compleet (Fable 8 nov; ná 6D-F) |
+| 14 | Z handleiding: Meer → Hulp & over → Handleiding (zoekveld, tien onderwerpen, per rij wat/waar/wat je ziet/goed om te weten/Open), data/handbook/*.json, Markdown-uitvoer docs/HANDLEIDING.md + HANDBOOK.md; ACHTER-DE-SCHERMEN.md door Fable | handbook.md | 1 | compleet (Fable 8 nov) |
 | 15 | Fable-eindcontrole | §5 hieronder | — | — |
 
 Nummering 6D: de twee 6D-specs tellen hun blokken anders. Canoniek is de tabel: 6D-1 (xp-levels

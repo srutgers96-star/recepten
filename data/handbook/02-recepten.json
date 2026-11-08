@@ -1,0 +1,1407 @@
+{
+  "id": "recepten",
+  "order": 2,
+  "title": { "nl": "Recepten", "en": "Recipes" },
+  "intro": {
+    "nl": "Bladeren, zoeken en filteren, een recept lezen en aanpassen, versies voor een dieet, en zelf recepten toevoegen.",
+    "en": "Browsing, searching and filtering, reading and adjusting a recipe, versions for a diet, and adding recipes yourself."
+  },
+  "entries": [
+    {
+      "id": "recepten.bladeren",
+      "title": { "nl": "Door alle recepten bladeren", "en": "Browse all recipes" },
+      "what": {
+        "nl": "De lijst Recepten toont alle recepten van A tot Z, met een letter boven elke groep. Eigen en ontvangen recepten hebben een labeltje, je favorieten een ster.",
+        "en": "The Recipes list shows every recipe from A to Z, with a letter above each group. Own and received recipes carry a small label, your favourites a star."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Veeg omhoog en omlaag door de lijst.",
+          "Schuif met je vinger langs de letters rechts om naar een letter te springen.",
+          "Tik op een recept om het te openen."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Swipe up and down through the list.",
+          "Slide your finger along the letters on the right to jump to a letter.",
+          "Tap a recipe to open it."
+        ]
+      },
+      "see": {
+        "nl": "Bovenaan staat hoeveel recepten er zijn. Terwijl je langs de letters schuift, staat de letter groot in beeld.",
+        "en": "At the top you see how many recipes there are. While you slide along the letters, the letter shows large on the screen."
+      },
+      "know": {
+        "nl": "De letters rechts zie je alleen bij **A–Z** zonder filters of zoekwoord.",
+        "en": "The letters on the right only show with **A–Z**, without filters or a search word."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["bladeren", "lijst", "alfabet", "letters", "A tot Z", "alle recepten"],
+        "en": ["browse", "list", "alphabet", "letters", "A to Z", "all recipes"]
+      }
+    },
+    {
+      "id": "recepten.zoeken",
+      "title": { "nl": "Een recept zoeken", "en": "Find a recipe" },
+      "what": {
+        "nl": "Het zoekveld vindt recepten op naam, ingrediënt, categorie, keuken of label. Je mag Nederlands of Engels typen; accenten maken niet uit.",
+        "en": "The search box finds recipes by name, ingredient, category, cuisine or label. You can type Dutch or English; accents do not matter."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Tik bovenaan in het zoekveld.",
+          "Typ een woord, bijvoorbeeld ui, pasta of italiaans."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Tap the search box at the top.",
+          "Type a word, for example onion, pasta or Italian."
+        ]
+      },
+      "see": {
+        "nl": "De treffers staan in groepen: **Op naam**, **Met dit ingrediënt**, **Categorie** en **Kenmerk**. Elk recept staat maar in één groep.",
+        "en": "The results come in groups: **By name**, **With this ingredient**, **Category** and **Tag**. Each recipe shows in one group only."
+      },
+      "know": {
+        "nl": "Zoeken kijkt door alle recepten die bij je filters passen, ook als je op **Eigen** sorteert. Een keuken, zoals italiaans, vind je onder **Categorie**.",
+        "en": "Search looks through every recipe that fits your filters, also when you sort by **Own**. A cuisine, such as Italian, shows under **Category**."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["zoeken", "vinden", "zoekveld", "ingrediënt", "naam", "keuken"],
+        "en": ["search", "find", "search box", "ingredient", "name", "cuisine"]
+      }
+    },
+    {
+      "id": "recepten.sorteren",
+      "title": { "nl": "De volgorde van de lijst kiezen", "en": "Choose the order of the list" },
+      "what": {
+        "nl": "Boven de lijst kies je hoe de recepten staan: van A tot Z, wat je laatst bekeek, alleen je eigen recepten, of eigen en ontvangen samen.",
+        "en": "Above the list you choose how the recipes are ordered: A to Z, what you viewed last, only your own recipes, or own and received together."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Tik boven de lijst op **A–Z**, **Recent bekeken**, **Eigen** of **Eigen & ontvangen**."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Tap **A–Z**, **Recently viewed**, **Own** or **Own & received** above the list."
+        ]
+      },
+      "see": {
+        "nl": "Bij **Eigen** zie je alleen je eigen recepten, het laatst gewijzigde bovenaan. Bij **Recent bekeken** staat het recept dat je het laatst opende bovenaan.",
+        "en": "With **Own** you only see your own recipes, the most recently changed at the top. With **Recently viewed** the recipe you opened last is at the top."
+      },
+      "know": {
+        "nl": "De app onthoudt je keuze op deze telefoon. Wat je bekeek, telt alleen op deze telefoon. Een aangepaste klassieker telt niet als eigen recept.",
+        "en": "The app remembers your choice on this phone. What you viewed only counts on this phone. A tweaked classic does not count as an own recipe."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["sorteren", "volgorde", "recent", "eigen", "ontvangen", "laatst bekeken"],
+        "en": ["sort", "order", "recent", "own", "received", "recently viewed"]
+      }
+    },
+    {
+      "id": "recepten.dieetfilter",
+      "title": { "nl": "Filteren op dieet", "en": "Filter by diet" },
+      "what": {
+        "nl": "De rij Dieet toont alleen recepten die vegetarisch, vegan, glutenvrij of lactosevrij zijn. Met ook als optie komen recepten erbij die dat als optie hebben.",
+        "en": "The Diet row only shows recipes that are vegetarian, vegan, gluten-free or lactose-free. With options too, recipes that offer it as an option join in."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Tik in de rij **Dieet** op een knopje, bijvoorbeeld **Vegetarisch**.",
+          "Tik eventueel ook op **ook als optie**.",
+          "Tik op het kruisje × in de onderste rij knopjes om alle filters te wissen."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Tap a button in the **Diet** row, for example **Vegetarian**.",
+          "Tap **options too** as well, if you like.",
+          "Tap the cross × in the bottom row of buttons to clear all filters."
+        ]
+      },
+      "see": {
+        "nl": "De lijst wordt korter en bovenaan staat hoeveel van het totaal er overblijven. Het gekozen knopje is gekleurd.",
+        "en": "The list gets shorter and the top says how many of the total are left. The chosen button is coloured."
+      },
+      "know": {
+        "nl": "Kies je twee diëten, dan moet een recept bij allebei passen. **ook als optie** werkt pas als er een dieet aan staat. De app onthoudt je filters op deze telefoon.",
+        "en": "Choose two diets and a recipe must fit both. **options too** only works once a diet is on. The app remembers your filters on this phone."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["dieet", "vegetarisch", "vegan", "glutenvrij", "lactosevrij", "filter", "optie"],
+        "en": ["diet", "vegetarian", "vegan", "gluten-free", "lactose-free", "filter", "option"]
+      }
+    },
+    {
+      "id": "recepten.keukens",
+      "title": { "nl": "Filteren op keuken", "en": "Filter by cuisine" },
+      "what": {
+        "nl": "De rij Keuken toont keukens met een vlaggetje, zoals 🇮🇹 Italiaans. Zo zie je alleen gerechten uit dat land.",
+        "en": "The Cuisine row shows cuisines with a little flag, such as 🇮🇹 Italian. That way you only see dishes from that country."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Schuif de rij **Keuken** opzij tot je de keuken ziet.",
+          "Tik op een keuken, bijvoorbeeld 🇮🇹 Italiaans."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Slide the **Cuisine** row sideways until you see the cuisine.",
+          "Tap a cuisine, for example 🇮🇹 Italian."
+        ]
+      },
+      "see": {
+        "nl": "Alleen gerechten met die keuken blijven over. Kies je twee keukens, dan zie je de gerechten van allebei.",
+        "en": "Only dishes with that cuisine stay. Choose two cuisines and you see the dishes of both."
+      },
+      "know": {
+        "nl": "De rij toont alleen keukens die in je recepten voorkomen. Een recept zonder keuken valt weg zodra er een keuken aan staat.",
+        "en": "The row only shows cuisines that occur in your recipes. A recipe without a cuisine drops out once a cuisine is on."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["keuken", "land", "vlag", "italiaans", "wereld", "buitenland"],
+        "en": ["cuisine", "country", "flag", "Italian", "world", "foreign"]
+      }
+    },
+    {
+      "id": "recepten.labels-categorieen",
+      "title": { "nl": "Filteren op label of categorie", "en": "Filter by label or category" },
+      "what": {
+        "nl": "Onder Dieet en Keuken staat een rij met labels, zoals Snel en Oven, en categorieën, zoals Soep en Pasta.",
+        "en": "Below Diet and Cuisine there is a row of labels, such as Quick and Oven, and categories, such as Soup and Pasta."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Schuif de onderste rij knopjes opzij.",
+          "Tik op een label of een categorie.",
+          "Tik op het kruisje × aan het begin van die rij om alles te wissen."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Slide the bottom row of buttons sideways.",
+          "Tap a label or a category.",
+          "Tap the cross × at the start of that row to clear everything."
+        ]
+      },
+      "see": {
+        "nl": "Het knopje wordt gekleurd en de lijst wordt korter. Twee categorieën tonen ze allebei; twee labels moeten allebei passen.",
+        "en": "The button turns coloured and the list gets shorter. Two categories show both; two labels must both fit."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["categorie", "label", "snel", "soep", "filter", "wissen"],
+        "en": ["category", "label", "quick", "soup", "filter", "clear"]
+      }
+    },
+    {
+      "id": "recepten.bijgerechten",
+      "title": { "nl": "Bijgerechten", "en": "Side dishes" },
+      "what": {
+        "nl": "Bijgerechten zoals aardappelpuree of knoflookbrood hebben een eigen categorie. Op een receptpagina zie je welke gerechten erbij passen.",
+        "en": "Side dishes such as mashed potatoes or garlic bread have a category of their own. A recipe page shows which dishes go with it."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Tik in de onderste rij knopjes op Bijgerecht.",
+          "Open een bijgerecht.",
+          "Scrol naar **Bij dit gerecht**."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Tap Side dish in the bottom row of buttons.",
+          "Open a side dish.",
+          "Scroll to **Goes with**."
+        ]
+      },
+      "see": {
+        "nl": "Onder **Bij dit gerecht** staan de passende gerechten als knopjes. Tik op een knopje en dat recept opent.",
+        "en": "Under **Goes with** the matching dishes show as buttons. Tap one and that recipe opens."
+      },
+      "know": {
+        "nl": "De lijst Recepten toont altijd ook bijgerechten. Kiezen en verrassen in de week slaan ze over, tenzij je **ook bijgerechten & zoet** aanzet.",
+        "en": "The Recipes list always shows side dishes too. Picking and surprising in the week skip them, unless you switch on **sides & sweet too**."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["bijgerecht", "erbij", "bij dit gerecht", "aardappelpuree", "knoflookbrood"],
+        "en": ["side dish", "goes with", "side", "mashed potatoes", "garlic bread"]
+      }
+    },
+    {
+      "id": "recepten.receptpagina",
+      "title": { "nl": "Een recept bekijken", "en": "View a recipe" },
+      "what": {
+        "nl": "De receptpagina toont de naam, de dieetlabels, de categorie en keuken, de tijd en waar het recept vandaan komt. Daaronder staan de knoppen, de ingrediënten, de bereiding en je notities.",
+        "en": "The recipe page shows the name, the diet labels, the category and cuisine, the time and where the recipe comes from. Below are the buttons, the ingredients, the method and your notes."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Recepten**.", "Tik op een recept."],
+        "en": ["Tap **Recipes** at the bottom.", "Tap a recipe."]
+      },
+      "see": {
+        "nl": "Een regel noemt de tijd, of het een klassieker of eigen recept is, en hoe vaak je het kookte. Daaronder staan **Koken**, **✓ Gekookt**, **Deel** en **+ Deze week**.",
+        "en": "One line gives the time, whether it is a classic or your own recipe, and how often you cooked it. Below are **Cook**, **✓ Cooked**, **Share** and **+ This week**."
+      },
+      "know": {
+        "nl": "Staat er waarschijnlijk achter een dieetlabel, dan kent de app een ingrediënt niet zeker. Dat label is dan niet zeker.",
+        "en": "When a diet label says probably, the app is not sure about one ingredient. That label is then not certain."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["receptpagina", "recept openen", "details", "tijd", "herkomst", "dieetlabels"],
+        "en": ["recipe page", "open recipe", "details", "time", "origin", "diet labels"]
+      }
+    },
+    {
+      "id": "recepten.porties",
+      "title": { "nl": "Voor meer of minder personen", "en": "For more or fewer people" },
+      "what": {
+        "nl": "Met min en plus verander je het aantal personen. Alle hoeveelheden rekenen mee.",
+        "en": "With minus and plus you change the number of people. Every amount follows."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik onder het kopje **Ingrediënten** op − of +."],
+        "en": ["Open a recipe.", "Tap − or + under the heading **Ingredients**."]
+      },
+      "see": {
+        "nl": "Naast de knoppen staat het nieuwe aantal met het aantal van het recept erachter. Bij elke regel staat de oorspronkelijke hoeveelheid klein tussen haakjes.",
+        "en": "Next to the buttons you see the new number with the recipe's own number after it. Each line shows the original amount small in brackets."
+      },
+      "know": {
+        "nl": "De groene woorden in de stappen, **Kopieer als tekst** en **Koken** gebruiken het nieuwe aantal.",
+        "en": "The green words in the steps, **Copy as text** and **Cook** use the new number."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["porties", "personen", "schalen", "meer", "minder", "hoeveelheid"],
+        "en": ["servings", "people", "scale", "more", "fewer", "amount"]
+      }
+    },
+    {
+      "id": "recepten.fahrenheit",
+      "title": { "nl": "Oventemperatuur ook in °F", "en": "Oven temperature in °F too" },
+      "what": {
+        "nl": "Met **°F erbij** zie je bij elke oventemperatuur in de stappen ook graden Fahrenheit.",
+        "en": "With **Show °F too** every oven temperature in the steps also shows degrees Fahrenheit."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Meer**.", "Tik op **Instellingen**.", "Zet **°F erbij** aan."],
+        "en": ["Tap **More** at the bottom.", "Tap **Settings**.", "Switch on **Show °F too**."]
+      },
+      "see": {
+        "nl": "In de stappen staat achter elke temperatuur in °C de waarde in °F tussen haakjes.",
+        "en": "In the steps every temperature in °C has the °F value after it in brackets."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": ["fahrenheit", "celsius", "graden", "oven", "temperatuur"],
+        "en": ["fahrenheit", "celsius", "degrees", "oven", "temperature"]
+      }
+    },
+    {
+      "id": "recepten.groene-woorden",
+      "title": { "nl": "Groene ingrediënten in de stappen", "en": "Green ingredients in the steps" },
+      "what": {
+        "nl": "Ingrediënten die een stap noemt, zijn groen en onderstreept. Tik erop en je ziet hoeveel je ervan nodig hebt.",
+        "en": "Ingredients a step mentions are green and underlined. Tap one and you see how much of it you need."
+      },
+      "where": {
+        "nl": [
+          "Open een recept.",
+          "Scrol naar **Bereiding**.",
+          "Tik op een groen, onderstreept woord.",
+          "Tik er nog een keer op om de hoeveelheid te verbergen."
+        ],
+        "en": [
+          "Open a recipe.",
+          "Scroll to **Method**.",
+          "Tap a green, underlined word.",
+          "Tap it once more to hide the amount."
+        ]
+      },
+      "see": {
+        "nl": "Achter het woord verschijnt de hoeveelheid tussen haakjes, bijvoorbeeld (2 teentjes).",
+        "en": "The amount appears in brackets after the word, for example (2 cloves)."
+      },
+      "know": {
+        "nl": "Zet je in de kookstand **Toon hoeveelheden** aan, dan staan ze hier ook meteen bij.",
+        "en": "If you switch on **Show amounts** in cook mode, they show here straight away too."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["groen", "onderstreept", "hoeveelheid", "stappen", "hoeveel"],
+        "en": ["green", "underlined", "amount", "steps", "how much"]
+      }
+    },
+    {
+      "id": "recepten.favoriet",
+      "title": { "nl": "Een recept favoriet maken", "en": "Make a recipe a favourite" },
+      "what": {
+        "nl": "Met het sterretje maak je een recept favoriet. Je favorieten staan op Home onder **Favorieten**.",
+        "en": "The star makes a recipe a favourite. Your favourites are on Home under **Favourites**."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik op het sterretje ☆ naast de naam."],
+        "en": ["Open a recipe.", "Tap the star ☆ next to the name."]
+      },
+      "see": {
+        "nl": "Het sterretje wordt vol (★). In de lijst Recepten staat er een ster achter het recept.",
+        "en": "The star fills in (★). In the Recipes list a star shows after the recipe."
+      },
+      "know": {
+        "nl": "Favorieten horen bij je profiel. Zonder profiel kun je het sterretje niet aanzetten.",
+        "en": "Favourites belong to your profile. Without a profile you cannot switch the star on."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["favoriet", "ster", "sterretje", "lievelingsrecept"],
+        "en": ["favourite", "star", "favourites", "best-loved"]
+      }
+    },
+    {
+      "id": "recepten.fotos",
+      "title": { "nl": "Een foto bij een recept zetten", "en": "Add a photo to a recipe" },
+      "what": {
+        "nl": "Je kunt je eigen foto's bij een recept zetten. De nieuwste staat groot bovenaan het recept.",
+        "en": "You can add your own photos to a recipe. The newest one shows large at the top of the recipe."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik onder de tijdregel op **+ Foto**.", "Kies een foto of maak er een."],
+        "en": ["Open a recipe.", "Tap **+ Photo** under the time line.", "Choose a photo or take one."]
+      },
+      "see": {
+        "nl": "De foto staat groot bovenaan en klein in een strook, met een rondje in jouw kleur.",
+        "en": "The photo shows large at the top and small in a strip, with a circle in your colour."
+      },
+      "know": {
+        "nl": "Foto's reizen niet mee als je een recept deelt. Ze gaan alleen mee in een back-up met foto's.",
+        "en": "Photos do not travel when you share a recipe. They only go along in a backup with photos."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["foto", "plaatje", "camera", "afbeelding"],
+        "en": ["photo", "picture", "camera", "image"]
+      }
+    },
+    {
+      "id": "recepten.foto-verwijderen",
+      "title": { "nl": "Een foto verwijderen", "en": "Delete a photo" },
+      "what": {
+        "nl": "Een foto die je niet meer wilt, haal je weg in het grote beeld.",
+        "en": "A photo you no longer want is removed from the large view."
+      },
+      "where": {
+        "nl": [
+          "Open een recept met een foto.",
+          "Tik op het kleine fotootje in de strook.",
+          "Tik in het grote beeld op **Verwijder**.",
+          "Tik op **Ja, verwijder**."
+        ],
+        "en": [
+          "Open a recipe with a photo.",
+          "Tap the small photo in the strip.",
+          "Tap **Delete** in the large view.",
+          "Tap **Yes, delete**."
+        ]
+      },
+      "see": {
+        "nl": "De foto is weg, ook bovenaan het recept.",
+        "en": "The photo is gone, also at the top of the recipe."
+      },
+      "know": {
+        "nl": "Dit kun je niet ongedaan maken.",
+        "en": "This cannot be undone."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["foto verwijderen", "weghalen", "wissen", "foto"],
+        "en": ["delete photo", "remove", "erase", "photo"]
+      }
+    },
+    {
+      "id": "recepten.notities",
+      "title": { "nl": "Je eigen notitie bij een recept", "en": "Your own note on a recipe" },
+      "what": {
+        "nl": "Onder **Notities** schrijf je iets voor jezelf, zoals minder zout. Alleen jij ziet het en het wordt nooit vertaald.",
+        "en": "Under **Notes** you write something for yourself, such as less salt. Only you see it and it is never translated."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Scrol naar **Notities**.", "Typ je notitie in het vak."],
+        "en": ["Open a recipe.", "Scroll to **Notes**.", "Type your note in the box."]
+      },
+      "see": {
+        "nl": "Na even wachten verschijnt Bewaard. Je hoeft nergens op te tikken.",
+        "en": "After a moment Saved appears. You do not need to tap anything."
+      },
+      "know": {
+        "nl": "Een notitie hoort bij je profiel en reist niet mee als je deelt. Iets meegeven doe je met **Tip van de maker** in de editor.",
+        "en": "A note belongs to your profile and does not travel when you share. To pass something on, use **Maker's tip** in the editor."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["notitie", "aantekening", "opmerking", "privé"],
+        "en": ["note", "notes", "remark", "private"]
+      }
+    },
+    {
+      "id": "recepten.kopieren",
+      "title": { "nl": "Een recept als tekst kopiëren", "en": "Copy a recipe as text" },
+      "what": {
+        "nl": "**Kopieer als tekst** zet het recept als gewone tekst klaar om te plakken. Het staat in jouw taal en met jouw aantal personen.",
+        "en": "**Copy as text** puts the recipe on your clipboard as plain text. It is in your language and for your number of people."
+      },
+      "where": {
+        "nl": [
+          "Open een recept.",
+          "Tik op **Kopieer als tekst**.",
+          "Tik op **Heel recept** of **Alleen ingrediënten**.",
+          "Plak de tekst waar je wilt, bijvoorbeeld in WhatsApp."
+        ],
+        "en": [
+          "Open a recipe.",
+          "Tap **Copy as text**.",
+          "Tap **Whole recipe** or **Ingredients only**.",
+          "Paste the text wherever you like, for example in WhatsApp."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet kort Gekopieerd ✓. De tekst heeft de naam, de ingrediënten met streepjes en genummerde stappen.",
+        "en": "You briefly see Copied ✓. The text has the name, the ingredients with dashes and numbered steps."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["kopiëren", "tekst", "klembord", "plakken", "whatsapp"],
+        "en": ["copy", "text", "clipboard", "paste", "WhatsApp"]
+      }
+    },
+    {
+      "id": "recepten.printen",
+      "title": { "nl": "Een recept printen", "en": "Print a recipe" },
+      "what": {
+        "nl": "**Print** maakt een zwart-wit printversie van het recept, zonder knoppen of foto's.",
+        "en": "**Print** makes a black-and-white print version of the recipe, without buttons or photos."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik op **Print**.", "Tik op **Heel recept** of **Alleen ingrediënten**."],
+        "en": ["Open a recipe.", "Tap **Print**.", "Tap **Whole recipe** or **Ingredients only**."]
+      },
+      "see": {
+        "nl": "Het printvoorbeeld van je telefoon opent.",
+        "en": "Your phone's print preview opens."
+      },
+      "know": {
+        "nl": "Op de iPhone staat er geen knop Print. Daar staat de regel ‘Printen op iPhone: Deel → Print.’",
+        "en": "On the iPhone there is no Print button. Instead you see the line ‘To print on iPhone: Share → Print.’"
+      },
+      "platform": "android",
+      "keywords": {
+        "nl": ["printen", "afdrukken", "papier", "printer"],
+        "en": ["print", "printing", "paper", "printer"]
+      }
+    },
+    {
+      "id": "recepten.versies-tabs",
+      "title": { "nl": "Versies voor een dieet (glutenvrij, vegan …)", "en": "Versions for a diet (gluten-free, vegan …)" },
+      "what": {
+        "nl": "Boven de ingrediënten staat soms een rij knopjes: Origineel, Glutenvrij, Vegetarisch, Vegan en Lactosevrij. De app stelt zelf vervangingen voor, zoals glutenvrije pasta.",
+        "en": "Above the ingredients there is sometimes a row of buttons: Original, Gluten-free, Vegetarian, Vegan and Lactose-free. The app suggests swaps itself, such as gluten-free pasta."
+      },
+      "where": {
+        "nl": [
+          "Open een recept.",
+          "Tik boven **Ingrediënten** op een knopje, bijvoorbeeld **Glutenvrij**.",
+          "Veeg over de ingrediënten naar links om naar het volgende knopje te gaan."
+        ],
+        "en": [
+          "Open a recipe.",
+          "Tap a button above **Ingredients**, for example **Gluten-free**.",
+          "Swipe left across the ingredients to move to the next button."
+        ]
+      },
+      "see": {
+        "nl": "Een knopje met een stippellijn is nog een voorstel. Vervangen regels hebben een gekleurd streepje; een oranje stip betekent: controleer zelf.",
+        "en": "A button with a dashed outline is still a suggestion. Swapped lines have a coloured bar; an orange dot means: check yourself."
+      },
+      "know": {
+        "nl": "Is een recept al vegetarisch, dan staat er ✓ voor dat knopje en kun je het niet kiezen. De rij verschijnt alleen als er iets te kiezen is.",
+        "en": "If a recipe is already vegetarian, that button has a ✓ and cannot be chosen. The row only appears when there is something to choose."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["versie", "glutenvrij", "vegetarisch", "vegan", "lactosevrij", "vervangen", "tabblad"],
+        "en": ["version", "gluten-free", "vegetarian", "vegan", "lactose-free", "swap", "tab"]
+      }
+    },
+    {
+      "id": "recepten.versie-goedkeuren",
+      "title": { "nl": "Een versie goedkeuren", "en": "Approve a version" },
+      "what": {
+        "nl": "Een voorstel keur je één keer goed. Daarna is het een vaste versie van dit recept.",
+        "en": "You approve a suggestion once. After that it is a fixed version of this recipe."
+      },
+      "where": {
+        "nl": [
+          "Open een recept.",
+          "Tik op een knopje met een stippellijn, bijvoorbeeld **Glutenvrij**.",
+          "Tik op **Controleer en keur goed**.",
+          "Haal in het venster het vinkje weg bij wat je niet wilt vervangen.",
+          "Vink bij elke regel met een ! het vakje **Gecontroleerd** aan.",
+          "Tik bovenaan in het venster op **Goedkeuren**."
+        ],
+        "en": [
+          "Open a recipe.",
+          "Tap a button with a dashed outline, for example **Gluten-free**.",
+          "Tap **Check and approve**.",
+          "In the window, untick what you do not want swapped.",
+          "Tick the box **Checked** on every line with a !.",
+          "Tap **Approve** at the top of the window."
+        ]
+      },
+      "see": {
+        "nl": "Het knopje is nu gevuld en je ziet kort bijvoorbeeld ‘Glutenvrij versie goedgekeurd’. Boven de ingrediënten staat wie het goedkeurde en wanneer.",
+        "en": "The button is now filled in and you briefly see, for example, ‘Gluten-free version approved’. Above the ingredients it says who approved it and when."
+      },
+      "know": {
+        "nl": "Dit maakt geen nieuw recept. **Goedkeuren** werkt pas als elke regel met ! is aangevinkt. Verandert het recept later, dan vraagt de app om **Opnieuw controleren**; met **Intrekken** wordt het weer een voorstel.",
+        "en": "This does not make a new recipe. **Approve** only works once every line with ! is ticked. If the recipe changes later, the app asks you to **Check again**; **Withdraw** turns it back into a suggestion."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["goedkeuren", "controleren", "keur goed", "intrekken", "vervanging", "vinkje"],
+        "en": ["approve", "check", "confirm", "withdraw", "swap", "tick"]
+      }
+    },
+    {
+      "id": "recepten.versie-volgt-je",
+      "title": { "nl": "De gekozen versie gaat met je mee", "en": "The chosen version comes along" },
+      "what": {
+        "nl": "De app onthoudt per recept welk knopje je koos. Een goedgekeurde versie gaat mee naar de kookstand, je week en de boodschappenlijst.",
+        "en": "The app remembers which button you chose for each recipe. An approved version goes along to cook mode, your week and the shopping list."
+      },
+      "where": {
+        "nl": [
+          "Open een recept.",
+          "Tik op een goedgekeurde versie, bijvoorbeeld **Glutenvrij**.",
+          "Tik op **Koken** of op **+ Deze week**."
+        ],
+        "en": [
+          "Open a recipe.",
+          "Tap an approved version, for example **Gluten-free**.",
+          "Tap **Cook** or **+ This week**."
+        ]
+      },
+      "see": {
+        "nl": "De kookstand toont de vervangen regels, met de naam van de versie boven de stap. In je week staat onder het gerecht een knopje met de versie.",
+        "en": "Cook mode shows the swapped lines, with the name of the version above the step. In your week a button with the version shows under the dish."
+      },
+      "know": {
+        "nl": "Een versie die nog een voorstel is, gaat niet mee: dan kook je het origineel. De gekozen knop wordt op deze telefoon onthouden.",
+        "en": "A version that is still a suggestion does not go along: you then cook the original. The chosen button is remembered on this phone."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["versie", "onthouden", "koken", "week", "boodschappen", "kookstand"],
+        "en": ["version", "remember", "cook", "week", "shopping", "cook mode"]
+      }
+    },
+    {
+      "id": "recepten.eigen-versie",
+      "title": { "nl": "Je eigen versie van een recept", "en": "Your own version of a recipe" },
+      "what": {
+        "nl": "Met **Eigen versie maken** maak je je eigen variant van een recept. Het origineel blijft zoals het is.",
+        "en": "With **Make my own version** you make your own variant of a recipe. The original stays as it is."
+      },
+      "where": {
+        "nl": [
+          "Open een recept.",
+          "Scrol helemaal naar beneden.",
+          "Tik op **Eigen versie maken**.",
+          "Pas in de editor aan wat je wilt.",
+          "Tik op **Bewaar**."
+        ],
+        "en": [
+          "Open a recipe.",
+          "Scroll all the way down.",
+          "Tap **Make my own version**.",
+          "Change what you like in the editor.",
+          "Tap **Save**."
+        ]
+      },
+      "see": {
+        "nl": "Je versie heet bijvoorbeeld ‘Goulash (versie van Stijn)’ en heeft een knop terug naar het origineel. Op het origineel staat een knopje met jouw naam, met daarin **Open als recept**.",
+        "en": "Your version is called, for example, ‘Goulash (Stijn's version)’ and has a button back to the original. The original gets a button with your name, with **Open as a recipe** inside."
+      },
+      "know": {
+        "nl": "Je hebt een profiel nodig. Een eigen versie kun je apart delen.",
+        "en": "You need a profile. You can share your own version on its own."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["eigen versie", "variant", "aanpassen", "kopie", "origineel"],
+        "en": ["own version", "variant", "adjust", "copy", "original"]
+      }
+    },
+    {
+      "id": "recepten.tip-van-de-maker",
+      "title": { "nl": "Tip van de maker", "en": "Maker's tip" },
+      "what": {
+        "nl": "In het vak **Tip van de maker** schrijf je iets voor wie jouw recept krijgt. Die tip reist mee als je het recept deelt.",
+        "en": "In the box **Maker's tip** you write something for whoever gets your recipe. The tip travels with the recipe when you share it."
+      },
+      "where": {
+        "nl": [
+          "Open een recept.",
+          "Tik onderaan op **Recept bewerken**.",
+          "Typ je tip in het vak **Tip van de maker**.",
+          "Tik op **Bewaar**."
+        ],
+        "en": [
+          "Open a recipe.",
+          "Tap **Edit this recipe** at the bottom.",
+          "Type your tip in the box **Maker's tip**.",
+          "Tap **Save**."
+        ]
+      },
+      "see": {
+        "nl": "Onder de bereiding staat een kaartje met 💡, ‘Tip van’ en je naam, met jouw tekst.",
+        "en": "Below the method there is a card with 💡, ‘Tip from’ and your name, with your text."
+      },
+      "know": {
+        "nl": "Je privénotitie reist nooit mee. Bij **Deel** kun je je notitie wel één keer als tip meesturen.",
+        "en": "Your private note never travels. Under **Share** you can send your note along once as the tip."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["tip", "tip van de maker", "delen", "meegeven", "maker"],
+        "en": ["tip", "maker's tip", "share", "pass on", "maker"]
+      }
+    },
+    {
+      "id": "recepten.nieuw-recept",
+      "title": { "nl": "Een recept toevoegen (de +)", "en": "Add a recipe (the +)" },
+      "what": {
+        "nl": "Met de + rechtsboven voeg je een recept toe. Je kiest uit vier manieren.",
+        "en": "The + at the top right adds a recipe. You choose from four ways."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Recepten**.", "Tik rechtsboven op het plusteken +.", "Tik op een van de vier keuzes."],
+        "en": ["Tap **Recipes** at the bottom.", "Tap the plus sign + at the top right.", "Tap one of the four choices."]
+      },
+      "see": {
+        "nl": "Een venster schuift omhoog met **Plak een recept**, **Zelf schrijven**, **Met AI** en **Kies een bestand**, elk met één regel uitleg.",
+        "en": "A window slides up with **Paste a recipe**, **Write it yourself**, **With AI** and **Choose a file**, each with one line of explanation."
+      },
+      "know": {
+        "nl": "Op Home staat rechtsboven dezelfde +. **Sluit** of naar beneden vegen sluit het venster zonder iets te doen.",
+        "en": "Home has the same + at the top right. **Close** or swiping down closes the window without doing anything."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["nieuw recept", "toevoegen", "plus", "maken", "recept erbij"],
+        "en": ["new recipe", "add", "plus", "create", "add recipe"]
+      }
+    },
+    {
+      "id": "recepten.zelf-schrijven",
+      "title": { "nl": "Zelf een recept schrijven", "en": "Write a recipe yourself" },
+      "what": {
+        "nl": "In de editor typ je zelf de naam, het aantal personen, de ingrediënten en de stappen.",
+        "en": "In the editor you type the name, the number of people, the ingredients and the steps yourself."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Tik rechtsboven op het plusteken +.",
+          "Tik op **Zelf schrijven**.",
+          "Typ de naam in het vak **Naam**.",
+          "Typ bij **Ingrediënten** het eerste ingrediënt.",
+          "Tik op **+ regel** voor het volgende ingrediënt.",
+          "Typ bij **Bereiding** de eerste stap.",
+          "Tik bovenaan op **Bewaar**."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Tap the plus sign + at the top right.",
+          "Tap **Write it yourself**.",
+          "Type the name in the box **Name**.",
+          "Type the first ingredient under **Ingredients**.",
+          "Tap **+ line** for the next ingredient.",
+          "Type the first step under **Method**.",
+          "Tap **Save** at the top."
+        ]
+      },
+      "see": {
+        "nl": "Onder elk ingrediënt verschijnen chips: groen met ✓ als de app het kent, oranje met ? als niet. Na **Bewaar** opent je nieuwe recept.",
+        "en": "Chips appear under each ingredient: green with ✓ when the app knows it, orange with ? when it does not. After **Save** your new recipe opens."
+      },
+      "know": {
+        "nl": "Je hebt minstens een naam, één ingrediënt en één stap nodig. Een regel die eindigt op een dubbele punt wordt een kopje, zoals Dressing:.",
+        "en": "You need at least a name, one ingredient and one step. A line ending in a colon becomes a heading, such as Dressing:."
+      },
+      "route": "/add",
+      "platform": "all",
+      "keywords": {
+        "nl": ["zelf schrijven", "nieuw recept", "editor", "invoeren", "typen"],
+        "en": ["write yourself", "new recipe", "editor", "enter", "type"]
+      }
+    },
+    {
+      "id": "recepten.hele-bereiding",
+      "title": { "nl": "De hele bereiding in één keer plakken", "en": "Paste the whole method at once" },
+      "what": {
+        "nl": "Heb je de stappen als één lap tekst? Plak die in één keer; de app maakt er losse stappen van.",
+        "en": "Do you have the steps as one block of text? Paste it in one go; the app turns it into separate steps."
+      },
+      "where": {
+        "nl": [
+          "Open de editor van een nieuw of eigen recept.",
+          "Tik onder de stappen op **Plak hele bereiding**.",
+          "Plak de tekst in het vak.",
+          "Tik op **Splits in stappen**."
+        ],
+        "en": [
+          "Open the editor of a new or own recipe.",
+          "Tap **Paste whole method** under the steps.",
+          "Paste the text into the box.",
+          "Tap **Split into steps**."
+        ]
+      },
+      "see": {
+        "nl": "De stappen staan nu los onder **Bereiding**. Lege regels worden grenzen tussen stappen; lange alinea's worden gesplitst.",
+        "en": "The steps now stand separately under **Method**. Blank lines become step boundaries; long paragraphs are split."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["bereiding plakken", "stappen", "splitsen", "tekst"],
+        "en": ["paste method", "steps", "split", "text"]
+      }
+    },
+    {
+      "id": "recepten.taal-editor",
+      "title": { "nl": "De taal van een recept in de editor", "en": "The language of a recipe in the editor" },
+      "what": {
+        "nl": "Bovenaan de editor kies je of je in het Nederlands, het Engels of in allebei schrijft.",
+        "en": "At the top of the editor you choose whether you write in Dutch, in English or in both."
+      },
+      "where": {
+        "nl": ["Open de editor van een recept.", "Tik bovenaan op **NL**, **EN** of **beide**."],
+        "en": ["Open the editor of a recipe.", "Tap **NL**, **EN** or **both** at the top."]
+      },
+      "see": {
+        "nl": "Bij **beide** staan het Nederlands en het Engels naast elkaar. Herkende ingrediënten tonen in de andere kolom grijs de vertaling uit het woordenboek.",
+        "en": "With **both**, the Dutch and the English stand side by side. Recognised ingredients show the dictionary translation in grey in the other column."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["taal", "nederlands", "engels", "beide", "twee talen"],
+        "en": ["language", "Dutch", "English", "both", "two languages"]
+      }
+    },
+    {
+      "id": "recepten.regel-aanpassen",
+      "title": { "nl": "Een ingrediëntregel aanpassen met de chips", "en": "Adjust an ingredient line with the chips" },
+      "what": {
+        "nl": "Onder een herkend ingrediënt staan chips met de hoeveelheid, de eenheid en de naam. Tik erop om ze aan te passen.",
+        "en": "Under a recognised ingredient there are chips with the amount, the unit and the name. Tap them to adjust them."
+      },
+      "where": {
+        "nl": [
+          "Open de editor van een recept.",
+          "Tik onder een ingrediënt op een groene chip.",
+          "Pas **Hoeveelheid**, **Eenheid** of **Bewerking** aan.",
+          "Tik op **Pas toe**."
+        ],
+        "en": [
+          "Open the editor of a recipe.",
+          "Tap a green chip under an ingredient.",
+          "Change **Quantity**, **Unit** or **Preparation**.",
+          "Tap **Apply**."
+        ]
+      },
+      "see": {
+        "nl": "De tekst van de regel past zich aan je keuze aan.",
+        "en": "The text of the line follows your choice."
+      },
+      "know": {
+        "nl": "Met **Optioneel** geef je aan dat iets niet per se hoeft. Met **Ander ingrediënt** koppel je de regel aan iets anders.",
+        "en": "**Optional** marks something you can leave out. **Other ingredient** links the line to something else."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["chips", "hoeveelheid", "eenheid", "bewerking", "optioneel"],
+        "en": ["chips", "quantity", "unit", "preparation", "optional"]
+      }
+    },
+    {
+      "id": "recepten.welk-woord",
+      "title": { "nl": "Welk woord is het ingrediënt?", "en": "Which word is the ingredient?" },
+      "what": {
+        "nl": "Kent de app een regel niet, dan staat eronder een oranje chip met een vraagteken. Daarmee wijs je aan welk woord het ingrediënt is.",
+        "en": "When the app does not know a line, an orange chip with a question mark shows under it. With it you point out which word is the ingredient."
+      },
+      "where": {
+        "nl": [
+          "Open de editor van een recept.",
+          "Tik op de oranje chip met het vraagteken.",
+          "Tik op de woorden die geen ingrediënt zijn, zodat ze grijs worden.",
+          "Tik bovenaan in het venster op **Koppel zo**."
+        ],
+        "en": [
+          "Open the editor of a recipe.",
+          "Tap the orange chip with the question mark.",
+          "Tap the words that are not the ingredient, so they turn grey.",
+          "Tap **Link like this** at the top of the window."
+        ]
+      },
+      "see": {
+        "nl": "Het venster **Welk woord is het ingrediënt?** toont de woorden als knopjes: groen is het ingrediënt, grijs wordt een opmerking. Na **Koppel zo** zijn de chips groen.",
+        "en": "The window **Which word is the ingredient?** shows the words as buttons: green is the ingredient, grey becomes a note. After **Link like this** the chips are green."
+      },
+      "know": {
+        "nl": "De tekst die je typte verandert niet; alleen de koppeling. Vindt de app niets, tik dan op **Nieuw ingrediënt** of **Zelf zoeken**.",
+        "en": "The text you typed does not change; only the link does. If the app finds nothing, tap **New ingredient** or **Search instead**."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["vraagteken", "oranje", "niet herkend", "woord", "koppelen"],
+        "en": ["question mark", "orange", "not recognised", "word", "link"]
+      }
+    },
+    {
+      "id": "recepten.variant-of-nieuw",
+      "title": { "nl": "Variant of nieuw ingrediënt?", "en": "Variant or new ingredient?" },
+      "what": {
+        "nl": "Kent de app een deel van de naam, zoals bij lekkere Parmezaanse kaas, dan vraagt hij of het een variant is of iets nieuws.",
+        "en": "When the app knows part of the name, as with tasty Parmesan, it asks whether it is a variant or something new."
+      },
+      "where": {
+        "nl": [
+          "Open de editor van een recept.",
+          "Tik onder een regel met een ? op **Koppel**.",
+          "Tik op de knop die begint met Variant van, of op **Nieuw ingrediënt** of **Anders zoeken**."
+        ],
+        "en": [
+          "Open the editor of a recipe.",
+          "Tap **Link** under a line with a ?.",
+          "Tap the button that starts with Variant of, or **New ingredient** or **Search for something else**."
+        ]
+      },
+      "see": {
+        "nl": "Het venster vraagt: ‘Is dit een variant van …, of een heel nieuw ingrediënt?’ Bij een variant blijft je tekst staan en wordt het extra woord een opmerking.",
+        "en": "The window asks: ‘Is this a variant of …, or a completely new ingredient?’ With a variant your text stays and the extra word becomes a note."
+      },
+      "know": {
+        "nl": "Kent de app niets van de naam, dan opent meteen het zoekvak.",
+        "en": "If the app knows nothing of the name, the search box opens straight away."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["variant", "koppelen", "nieuw ingrediënt", "anders zoeken"],
+        "en": ["variant", "link", "new ingredient", "search"]
+      }
+    },
+    {
+      "id": "recepten.labels-editor",
+      "title": { "nl": "Categorie, keuken en labels kiezen", "en": "Choose category, cuisine and labels" },
+      "what": {
+        "nl": "De laatste kaart van de editor heet **Labels**. Daar kies je de categorie, de keuken en de dieetlabels.",
+        "en": "The last card of the editor is called **Labels**. There you choose the category, the cuisine and the diet labels."
+      },
+      "where": {
+        "nl": [
+          "Open de editor van een recept.",
+          "Scrol naar de kaart **Labels** boven **Bewaar**.",
+          "Kies bij **Categorie** een categorie.",
+          "Tik bij **Keuken** op een keuken.",
+          "Tik bij **Dieet & labels** op de labels die passen."
+        ],
+        "en": [
+          "Open the editor of a recipe.",
+          "Scroll to the card **Labels** above **Save**.",
+          "Choose a category under **Category**.",
+          "Tap a cuisine under **Cuisine**.",
+          "Tap the labels that fit under **Diet & labels**."
+        ]
+      },
+      "see": {
+        "nl": "Bij een nieuw recept vult de app een voorstel in op basis van de ingrediënten. Dat verandert mee tot je zelf iets kiest.",
+        "en": "For a new recipe the app fills in a suggestion based on the ingredients. It follows your edits until you choose yourself."
+      },
+      "know": {
+        "nl": "Een keuken stelt de app nooit zelf voor. Staat je keuken er niet bij, kies hem dan bij **Andere keuken…**. Waarschijnlijk bij een label betekent: niet zeker, tik om te bevestigen.",
+        "en": "The app never suggests a cuisine itself. If yours is missing, pick it under **Other cuisine…**. Probably on a label means: not certain, tap to confirm."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["labels", "categorie", "keuken", "dieet", "vegetarisch"],
+        "en": ["labels", "category", "cuisine", "diet", "vegetarian"]
+      }
+    },
+    {
+      "id": "recepten.categorie-snel",
+      "title": { "nl": "De categorie snel wijzigen", "en": "Quickly change the category" },
+      "what": {
+        "nl": "Op de receptpagina verander je de categorie zonder de editor te openen.",
+        "en": "On the recipe page you change the category without opening the editor."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik naast de categorie op **wijzig**.", "Kies een andere categorie in de lijst."],
+        "en": ["Open a recipe.", "Tap **change** next to the category.", "Choose another category from the list."]
+      },
+      "see": {
+        "nl": "De nieuwe categorie staat meteen onder de naam.",
+        "en": "The new category shows under the name straight away."
+      },
+      "know": {
+        "nl": "Bij een klassieker bewaart de app dit als jouw aanpassing; het origineel blijft bestaan.",
+        "en": "On a classic the app keeps this as your tweak; the original stays."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["categorie", "wijzigen", "veranderen", "soort gerecht"],
+        "en": ["category", "change", "edit", "kind of dish"]
+      }
+    },
+    {
+      "id": "recepten.plak-website",
+      "title": { "nl": "Een recept van een website plakken", "en": "Paste a recipe from a website" },
+      "what": {
+        "nl": "Plak de tekst van een receptwebsite of een bericht. De app zoekt zelf de naam, de personen, de ingrediënten en de stappen.",
+        "en": "Paste the text of a recipe website or a message. The app finds the name, the servings, the ingredients and the steps itself."
+      },
+      "where": {
+        "nl": [
+          "Kopieer op de website de hele pagina.",
+          "Tik in de app onderaan op **Recepten**.",
+          "Tik rechtsboven op het plusteken +.",
+          "Tik op **Plak een recept**.",
+          "Tik op **Plak van klembord**.",
+          "Tik op **Vul in**."
+        ],
+        "en": [
+          "Copy the whole page on the website.",
+          "Tap **Recipes** at the bottom of the app.",
+          "Tap the plus sign + at the top right.",
+          "Tap **Paste a recipe**.",
+          "Tap **Paste from clipboard**.",
+          "Tap **Fill in**."
+        ]
+      },
+      "see": {
+        "nl": "Onder het vak staat eerst bijvoorbeeld ‘Recept van een website: 8 ingrediënten, 6 stappen’. Na **Vul in** staat alles in het formulier.",
+        "en": "Under the box you first see, for example, ‘Recipe from a website: 8 ingredients, 6 steps’. After **Fill in** everything is in the form."
+      },
+      "know": {
+        "nl": "iPhone: lukt **Plak van klembord** niet, houd dan het tekstvak ingedrukt en tik op Plak. Lukt plakken niet goed, gebruik dan **Met AI**.",
+        "en": "iPhone: if **Paste from clipboard** does not work, press and hold the text box and tap Paste. If pasting does not work well, use **With AI**."
+      },
+      "route": "/add",
+      "platform": "all",
+      "keywords": {
+        "nl": ["plakken", "website", "kopiëren", "klembord", "internet"],
+        "en": ["paste", "website", "copy", "clipboard", "internet"]
+      }
+    },
+    {
+      "id": "recepten.controleer-kader",
+      "title": { "nl": "Het kader Controleer na het plakken", "en": "The Check box after pasting" },
+      "what": {
+        "nl": "Regels die de app na het plakken niet kon plaatsen, staan in het kader **Controleer**. Daar zet je ze goed of haal je ze weg.",
+        "en": "Lines the app could not place after pasting are in the box **Check**. There you put them in place or remove them."
+      },
+      "where": {
+        "nl": [
+          "Plak een recept van een website.",
+          "Zoek het kader **Controleer** boven het formulier.",
+          "Tik bij een regel op **→ ingrediënt**, **→ stap** of **weg**.",
+          "Tik op **Alles weg** om de rest weg te halen."
+        ],
+        "en": [
+          "Paste a recipe from a website.",
+          "Find the box **Check** above the form.",
+          "Tap **→ ingredient**, **→ step** or **remove** on a line.",
+          "Tap **Remove all** to clear the rest."
+        ]
+      },
+      "see": {
+        "nl": "Een regel met **→ stap** staat onderaan de bereiding; met **weg** is hij verdwenen. Is het kader leeg, dan verdwijnt het.",
+        "en": "A line with **→ step** goes to the end of the method; with **remove** it is gone. When the box is empty, it disappears."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["controleer", "overgebleven regels", "weghalen", "plaatsen"],
+        "en": ["check", "leftover lines", "remove", "place"]
+      }
+    },
+    {
+      "id": "recepten.met-ai",
+      "title": { "nl": "Een recept maken met AI", "en": "Make a recipe with AI" },
+      "what": {
+        "nl": "Met AI maak je een recept van een foto of tekst, via ChatGPT, Gemini of Claude. Het komt terug in het Nederlands én Engels, met categorie, keuken en labels.",
+        "en": "With AI you make a recipe from a photo or text, through ChatGPT, Gemini or Claude. It comes back in Dutch and English, with category, cuisine and labels."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Tik rechtsboven op het plusteken +.",
+          "Tik op **Met AI**.",
+          "Tik op **Kopieer opdracht**.",
+          "Plak de opdracht in je AI-app, samen met een foto of de tekst van het recept.",
+          "Tik in je AI-app op ‘Kopieer code’ onder het antwoord.",
+          "Tik in de app op **Plak van klembord**.",
+          "Tik op **Vul in**."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Tap the plus sign + at the top right.",
+          "Tap **With AI**.",
+          "Tap **Copy instruction**.",
+          "Paste the instruction into your AI app, together with a photo or the text of the recipe.",
+          "Tap ‘Copy code’ under the answer in your AI app.",
+          "Tap **Paste from clipboard** in the app.",
+          "Tap **Fill in**."
+        ]
+      },
+      "see": {
+        "nl": "Onder het vak staat ‘AI-antwoord herkend’. Na **Vul in** staat bovenaan hoeveel ingrediënten en stappen er in NL en EN zijn ingevuld.",
+        "en": "Under the box you see ‘AI answer recognised’. After **Fill in** the top says how many ingredients and steps were filled in, in NL and EN."
+      },
+      "know": {
+        "nl": "Kopieer het antwoord met de knop ‘Kopieer code’, dan blijven regels en haakjes heel. Lukt kopiëren niet, tik dan op **Toon de opdracht (om zelf te kopiëren)**.",
+        "en": "Copy the answer with the ‘Copy code’ button, so lines and brackets stay intact. If copying fails, tap **Show the prompt (to copy by hand)**."
+      },
+      "route": "/add",
+      "platform": "all",
+      "keywords": {
+        "nl": ["AI", "ChatGPT", "Gemini", "foto", "kookboek", "opdracht"],
+        "en": ["AI", "ChatGPT", "Gemini", "photo", "cookbook", "instruction"]
+      }
+    },
+    {
+      "id": "recepten.engels-toevoegen",
+      "title": { "nl": "Engels toevoegen aan je recept", "en": "Add the other language to your recipe" },
+      "what": {
+        "nl": "Heeft je eigen recept maar één taal, dan voeg je de andere toe via een AI. Wat er al staat, blijft staan.",
+        "en": "If your own recipe has only one language, you add the other through an AI. What is already there stays."
+      },
+      "where": {
+        "nl": [
+          "Open je eigen recept.",
+          "Tik onder de tijdregel op **Engels ontbreekt — toevoegen**.",
+          "Tik op **Kopieer voor vertaling**.",
+          "Plak de opdracht in je AI-app.",
+          "Kopieer het antwoord van je AI-app.",
+          "Tik in de app op **Plak vertaling**.",
+          "Plak het antwoord in het vak.",
+          "Tik op **Vul in**."
+        ],
+        "en": [
+          "Open your own recipe.",
+          "Tap **Dutch missing — add** under the time line.",
+          "Tap **Copy for translation**.",
+          "Paste the instruction into your AI app.",
+          "Copy the answer from your AI app.",
+          "Tap **Paste translation** in the app.",
+          "Paste the answer into the box.",
+          "Tap **Fill in**."
+        ]
+      },
+      "see": {
+        "nl": "De editor springt naar **Engels toevoegen**. Na **Vul in** staat de taalkeuze op **beide**, met het Engels naast het Nederlands.",
+        "en": "The editor jumps to **Add Dutch**. After **Fill in** the language choice is set to **both**, with the Dutch next to the English."
+      },
+      "know": {
+        "nl": "Tik daarna op **Bewaar**. Herkende ingrediënten vertaalt het woordenboek zelf. Mist het Nederlands, dan heet de knop **Nederlands ontbreekt — toevoegen**.",
+        "en": "Then tap **Save**. The dictionary translates recognised ingredients itself. If the English is missing, the button is called **English missing — add**."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["engels", "vertalen", "vertaling", "tweede taal", "AI"],
+        "en": ["Dutch", "English", "translate", "translation", "second language", "AI"]
+      }
+    },
+    {
+      "id": "recepten.controleer-mijn-recepten",
+      "title": { "nl": "Controleer mijn recepten", "en": "Check my recipes" },
+      "what": {
+        "nl": "Deze pagina vergelijkt de categorie en dieetlabels van je eigen en ontvangen recepten met wat de ingrediënten zeggen.",
+        "en": "This page compares the category and diet labels of your own and received recipes with what the ingredients say."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Tik onder **Recepten & delen** op **Controleer mijn recepten**.",
+          "Tik bij een recept op **Overnemen**, **Zelf kiezen** of **Sla over**."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Tap **Check my recipes** under **Recipes & sharing**.",
+          "Tap **Adopt**, **Choose myself** or **Skip** on a recipe."
+        ]
+      },
+      "see": {
+        "nl": "Per recept staan **Nu** en **Voorstel** onder elkaar. Met **Alles overnemen** neem je alle voorstellen in één keer over.",
+        "en": "Each recipe shows **Now** and **Suggested** one below the other. **Adopt all** takes every suggestion in one go."
+      },
+      "know": {
+        "nl": "Klassiekers staan hier niet bij. Een label met waarschijnlijk neemt de app nooit vanzelf over. Wat je eerder zelf koos, laat **Alles overnemen** met rust.",
+        "en": "Classics are not listed here. The app never adopts a label marked probably by itself. **Adopt all** leaves alone what you chose by hand before."
+      },
+      "route": "/more/check-recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["controleren", "categorie", "labels", "voorstel", "overnemen"],
+        "en": ["check", "category", "labels", "suggestion", "adopt"]
+      }
+    },
+    {
+      "id": "recepten.selecteren",
+      "title": { "nl": "Meerdere recepten selecteren", "en": "Select several recipes" },
+      "what": {
+        "nl": "In de selecteerstand kies je meerdere recepten tegelijk. Daarna deel je ze, zet je ze in je week, geef je ze labels of verwijder je ze.",
+        "en": "In select mode you pick several recipes at once. Then you share them, put them in your week, label them or delete them."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Recepten**.",
+          "Houd een recept even ingedrukt.",
+          "Tik op de andere recepten die je wilt.",
+          "Tik rechtsboven op **Klaar** als je klaar bent."
+        ],
+        "en": [
+          "Tap **Recipes** at the bottom.",
+          "Press and hold a recipe for a moment.",
+          "Tap the other recipes you want.",
+          "Tap **Done** at the top right when you are finished."
+        ]
+      },
+      "see": {
+        "nl": "Er verschijnen vinkjes, en bovenaan staat hoeveel je er koos. Onderaan staat een balk met **Deel**, **Deze week**, **Labels**, **Verwijder** en **Exporteer**.",
+        "en": "Ticks appear, and the top says how many you picked. At the bottom a bar shows **Share**, **This week**, **Labels**, **Delete** and **Export**."
+      },
+      "know": {
+        "nl": "Je kunt ook rechtsboven op **Selecteer** tikken in plaats van een recept ingedrukt te houden.",
+        "en": "You can also tap **Select** at the top right instead of pressing and holding a recipe."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["selecteren", "meerdere", "vinkjes", "tegelijk", "ingedrukt houden"],
+        "en": ["select", "several", "ticks", "at once", "press and hold"]
+      }
+    },
+    {
+      "id": "recepten.selectie-labels",
+      "title": { "nl": "Labels geven aan meerdere recepten", "en": "Label several recipes at once" },
+      "what": {
+        "nl": "Geef meerdere recepten in één keer dezelfde categorie of dezelfde labels.",
+        "en": "Give several recipes the same category or the same labels in one go."
+      },
+      "where": {
+        "nl": [
+          "Selecteer een paar recepten.",
+          "Tik in de balk onderaan op **Labels**.",
+          "Kies een categorie of tik op labels.",
+          "Tik bovenaan in het venster op **Toepassen**."
+        ],
+        "en": [
+          "Select a few recipes.",
+          "Tap **Labels** in the bar at the bottom.",
+          "Choose a category or tap labels.",
+          "Tap **Apply** at the top of the window."
+        ]
+      },
+      "see": {
+        "nl": "Het venster heet **Categorie en labels**. Daarna zie je even hoeveel recepten zijn bijgewerkt.",
+        "en": "The window is called **Category and labels**. Afterwards you briefly see how many recipes were updated."
+      },
+      "know": {
+        "nl": "Alleen de labels die je aantikt veranderen. Deels betekent dat een label niet bij alle gekozen recepten staat. Bij een klassieker wordt het een aanpassing.",
+        "en": "Only the labels you tap change. Some means a label is not on all the chosen recipes. On a classic it becomes a tweak."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["labels", "categorie", "meerdere", "tegelijk", "toepassen"],
+        "en": ["labels", "category", "several", "at once", "apply"]
+      }
+    },
+    {
+      "id": "recepten.selectie-verwijderen",
+      "title": { "nl": "Meerdere recepten verwijderen", "en": "Delete several recipes" },
+      "what": {
+        "nl": "Verwijder meerdere eigen of ontvangen recepten tegelijk.",
+        "en": "Delete several own or received recipes at once."
+      },
+      "where": {
+        "nl": [
+          "Selecteer de recepten die weg mogen.",
+          "Tik in de balk onderaan op **Verwijder**.",
+          "Tik op **Ja, verwijder**."
+        ],
+        "en": [
+          "Select the recipes that can go.",
+          "Tap **Delete** in the bar at the bottom.",
+          "Tap **Yes, delete**."
+        ]
+      },
+      "see": {
+        "nl": "De recepten zijn weg en je ziet even hoeveel er verwijderd zijn.",
+        "en": "The recipes are gone and you briefly see how many were deleted."
+      },
+      "know": {
+        "nl": "Klassiekers in je selectie blijven gewoon staan. Verwijderen kun je niet ongedaan maken.",
+        "en": "Classics in your selection simply stay. Deleting cannot be undone."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["verwijderen", "weggooien", "opruimen", "meerdere"],
+        "en": ["delete", "remove", "tidy up", "several"]
+      }
+    },
+    {
+      "id": "recepten.selectie-delen",
+      "title": { "nl": "Meerdere recepten delen", "en": "Share several recipes" },
+      "what": {
+        "nl": "Deel meerdere recepten in één keer, als bericht of als bestand.",
+        "en": "Share several recipes in one go, as a message or as a file."
+      },
+      "where": {
+        "nl": ["Selecteer de recepten die je wilt delen.", "Tik in de balk onderaan op **Deel**."],
+        "en": ["Select the recipes you want to share.", "Tap **Share** in the bar at the bottom."]
+      },
+      "see": {
+        "nl": "Het deelmenu van je telefoon opent met één bericht. Zijn het te veel recepten voor één bericht, dan wordt het één bestand.",
+        "en": "Your phone's share menu opens with one message. If there are too many recipes for one message, it becomes one file."
+      },
+      "know": {
+        "nl": "Met **Exporteer** maak je altijd één bestand. Met **Toon QR** laat je een code zien; voor veel recepten is die vaak te groot.",
+        "en": "**Export** always makes one file. **Show QR** shows a code; for many recipes it is often too big."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["delen", "meerdere", "bestand", "exporteren", "QR"],
+        "en": ["share", "several", "file", "export", "QR"]
+      }
+    },
+    {
+      "id": "recepten.soorten",
+      "title": { "nl": "Klassiekers, eigen en ontvangen recepten", "en": "Classics, own and received recipes" },
+      "what": {
+        "nl": "Klassiekers komen uit het boek en zitten in de app. Eigen recepten maak je zelf; ontvangen recepten kreeg je van iemand.",
+        "en": "Classics come from the book and are built into the app. Own recipes you make yourself; received recipes someone sent you."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Kijk naar de regel onder de categorie."],
+        "en": ["Open a recipe.", "Look at the line below the category."]
+      },
+      "see": {
+        "nl": "Daar staat klassieker uit het boek, eigen recept van … of ontvangen van …. In de lijst hebben eigen en ontvangen recepten een labeltje.",
+        "en": "It says classic from the book, own recipe by … or received from …. In the list, own and received recipes have a small label."
+      },
+      "know": {
+        "nl": "Een klassieker kun je aanpassen maar niet verwijderen. Eigen en ontvangen recepten kun je wel verwijderen.",
+        "en": "You can tweak a classic but not delete it. Own and received recipes you can delete."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["klassieker", "eigen recept", "ontvangen", "boek", "herkomst"],
+        "en": ["classic", "own recipe", "received", "book", "origin"]
+      }
+    },
+    {
+      "id": "recepten.klassieker-aanpassen",
+      "title": { "nl": "Een klassieker aanpassen", "en": "Tweak a classic" },
+      "what": {
+        "nl": "Een klassieker pas je aan zonder het origineel kwijt te raken. De app bewaart alleen wat je verandert.",
+        "en": "You tweak a classic without losing the original. The app only keeps what you change."
+      },
+      "where": {
+        "nl": [
+          "Open een klassieker.",
+          "Scrol helemaal naar beneden.",
+          "Tik op **Recept bewerken**.",
+          "Verander wat je wilt.",
+          "Tik op **Bewaar**."
+        ],
+        "en": [
+          "Open a classic.",
+          "Scroll all the way down.",
+          "Tap **Edit this recipe**.",
+          "Change what you like.",
+          "Tap **Save**."
+        ]
+      },
+      "see": {
+        "nl": "De editor heet **Aanpassing van klassieker**. Open je hem later weer, dan staat bovenaan de datum van je aanpassing met **Herstel origineel**.",
+        "en": "The editor is called **Tweak of a classic**. When you open it again later, the top shows the date of your tweak with **Restore original**."
+      },
+      "know": {
+        "nl": "Het aantal personen verander je hier niet; gebruik daarvoor **Maak eigen kopie**. **Herstel origineel** wist al je aanpassingen.",
+        "en": "You cannot change the servings here; use **Make my own copy** for that. **Restore original** removes all your tweaks."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["klassieker", "aanpassen", "herstel origineel", "eigen kopie", "bewerken"],
+        "en": ["classic", "tweak", "restore original", "own copy", "edit"]
+      }
+    },
+    {
+      "id": "recepten.verwijderen",
+      "title": { "nl": "Een eigen recept verwijderen", "en": "Delete an own recipe" },
+      "what": {
+        "nl": "Een eigen of ontvangen recept dat je niet meer wilt, verwijder je onderaan de receptpagina.",
+        "en": "An own or received recipe you no longer want is deleted at the bottom of the recipe page."
+      },
+      "where": {
+        "nl": [
+          "Open je eigen recept.",
+          "Scrol helemaal naar beneden.",
+          "Tik op **Verwijder**.",
+          "Tik op **Ja, verwijder**."
+        ],
+        "en": [
+          "Open your own recipe.",
+          "Scroll all the way down.",
+          "Tap **Delete**.",
+          "Tap **Yes, delete**."
+        ]
+      },
+      "see": {
+        "nl": "Het recept is weg uit de lijst.",
+        "en": "The recipe is gone from the list."
+      },
+      "know": {
+        "nl": "Een klassieker heeft geen knop **Verwijder**. Verwijderen kun je niet ongedaan maken.",
+        "en": "A classic has no **Delete** button. Deleting cannot be undone."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["verwijderen", "weggooien", "recept weg", "wissen"],
+        "en": ["delete", "remove", "get rid of", "erase"]
+      }
+    }
+  ]
+}

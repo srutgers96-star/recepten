@@ -1,0 +1,493 @@
+{
+  "id": "koken",
+  "order": 3,
+  "title": { "nl": "Koken", "en": "Cooking" },
+  "intro": {
+    "nl": "Koken met het recept stap voor stap op je scherm, met timers, voorlezen en een plek om bij te houden wat je kookte.",
+    "en": "Cook with the recipe on your screen step by step, with timers, reading aloud and a place to keep track of what you cooked."
+  },
+  "entries": [
+    {
+      "id": "koken.kookstand",
+      "title": { "nl": "Koken stap voor stap", "en": "Cook step by step" },
+      "what": {
+        "nl": "De kookstand toont één stap per scherm in grote letters. Eerst zet je alles klaar, daarna blader je door de stappen.",
+        "en": "Cook mode shows one step per screen in large type. First you set everything out, then you move through the steps."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Recepten**.", "Tik op een recept.", "Tik op **Koken**.", "Tik onderaan op **Begin**."],
+        "en": ["Tap **Recipes** at the bottom.", "Tap a recipe.", "Tap **Cook**.", "Tap **Start** at the bottom."]
+      },
+      "see": {
+        "nl": "Eerst zie je **Klaarzetten** met alle ingrediënten. Na **Begin** staat bovenaan \"Stap 1 van …\" met stipjes die laten zien waar je bent.",
+        "en": "First you see **Get ready** with all the ingredients. After **Start** the top says \"Step 1 of …\" with dots that show where you are."
+      },
+      "know": {
+        "nl": "Het scherm blijft aan zolang de kookstand open is. Kan je telefoon dat niet, dan staat er \"Scherm aan houden lukt niet op dit toestel\".",
+        "en": "The screen stays on while cook mode is open. If your phone cannot do that, it says \"Keeping the screen on is not supported on this phone\"."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["kookstand", "koken", "stappen", "bereiding", "scherm aan"], "en": ["cook mode", "cooking", "steps", "method", "screen on"] }
+    },
+    {
+      "id": "koken.klaarzetten",
+      "title": { "nl": "Klaarzetten en porties", "en": "Get ready and servings" },
+      "what": {
+        "nl": "Op de eerste pagina vink je af wat je al hebt klaargezet. Je kunt hier ook het aantal personen nog veranderen.",
+        "en": "On the first page you tick what you have already set out. You can also still change the number of people here."
+      },
+      "where": {
+        "nl": ["Tik in een recept op **Koken**.", "Tik op een ingrediënt om het af te vinken.", "Tik op − of + om het aantal personen te veranderen."],
+        "en": ["Tap **Cook** in a recipe.", "Tap an ingredient to tick it.", "Tap − or + to change the number of people."]
+      },
+      "see": {
+        "nl": "Boven de lijst staat hoeveel je al klaar hebt, bijvoorbeeld \"3 van 9 klaar\". De hoeveelheden rekenen mee met het aantal personen.",
+        "en": "Above the list it says how many are ready, for example \"3 of 9 ready\". The amounts change with the number of people."
+      },
+      "know": {
+        "nl": "Met **Alles klaar ✓** vink je alles in één keer af. Met **Alles uitvinken** haal je alle vinkjes weer weg.",
+        "en": "**All ready ✓** ticks everything at once. **Untick all** removes all the ticks again."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["klaarzetten", "afvinken", "porties", "personen", "ingrediënten"], "en": ["get ready", "tick", "servings", "people", "ingredients"] }
+    },
+    {
+      "id": "koken.bladeren",
+      "title": { "nl": "Naar de volgende stap", "en": "Go to the next step" },
+      "what": {
+        "nl": "Je bladert met een veeg over de stap of met de knoppen onderaan. Een lange stap kun je gewoon omhoog en omlaag scrollen.",
+        "en": "You move on by swiping across the step or with the buttons at the bottom. You can still scroll a long step up and down."
+      },
+      "where": {
+        "nl": ["Veeg van rechts naar links over de stap.", "Veeg van links naar rechts om terug te gaan.", "Of tik onderaan op **Volgende** of **Vorige**."],
+        "en": ["Swipe from right to left across the step.", "Swipe from left to right to go back.", "Or tap **Next** or **Previous** at the bottom."]
+      },
+      "see": {
+        "nl": "De volgende stap schuift in beeld. Bij de laatste stap heet de knop **Klaar**; daarna komt de pagina **Gekookt!**.",
+        "en": "The next step slides in. On the last step the button says **Done**; after that comes the **Cooked!** page."
+      },
+      "know": {
+        "nl": "Ga je naar Home en tik je later weer op **Koken**, dan opent de kookstand meteen op de stap waar je was.",
+        "en": "If you go to Home and later tap **Cook** again, cook mode opens straight on the step where you were."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["vegen", "swipen", "volgende", "vorige", "bladeren"], "en": ["swipe", "next", "previous", "page", "move on"] }
+    },
+    {
+      "id": "koken.groene-ingredienten",
+      "title": { "nl": "Groene ingrediënten in een stap", "en": "Green ingredients in a step" },
+      "what": {
+        "nl": "De ingrediënten die een stap noemt, zijn groen. Tik op een onderstreept groen woord en je ziet hoeveel je nodig hebt.",
+        "en": "The ingredients a step mentions are green. Tap an underlined green word and you see how much you need."
+      },
+      "where": {
+        "nl": ["Open een stap in de kookstand.", "Tik op een onderstreept groen woord.", "Of tik onder de stap op **Toon hoeveelheden**."],
+        "en": ["Open a step in cook mode.", "Tap an underlined green word.", "Or tap **Show amounts** under the step."]
+      },
+      "see": {
+        "nl": "Achter het woord verschijnt de hoeveelheid voor jouw aantal personen. Met **Toon hoeveelheden** staan ze er allemaal achter.",
+        "en": "The amount for your number of people appears after the word. With **Show amounts** they all show."
+      },
+      "know": {
+        "nl": "De knop heet daarna **Verberg hoeveelheden**. Je telefoon onthoudt je keuze voor de volgende stappen.",
+        "en": "The button then says **Hide amounts**. Your phone remembers the choice for the next steps."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["groen", "hoeveelheid", "hoeveel", "ingrediënt", "toon hoeveelheden"], "en": ["green", "amount", "how much", "ingredient", "show amounts"] }
+    },
+    {
+      "id": "koken.voorlezen",
+      "title": { "nl": "Een stap laten voorlezen", "en": "Have a step read aloud" },
+      "what": {
+        "nl": "De app leest de stap voor, zodat je niet op het scherm hoeft te kijken. Voorlezen blijft aan voor de volgende stappen tot je het uitzet.",
+        "en": "The app reads the step aloud, so you do not have to look at the screen. Reading stays on for the next steps until you switch it off."
+      },
+      "where": {
+        "nl": ["Open een stap in de kookstand.", "Tik onder de stap op 🔊 **Lees voor**.", "Tik nog eens op de knop om het uit te zetten."],
+        "en": ["Open a step in cook mode.", "Tap 🔊 **Read aloud** under the step.", "Tap the button again to switch it off."]
+      },
+      "see": {
+        "nl": "De stap wordt voorgelezen. De knop heet nu **Voorlezen staat aan**, met eronder \"Elke volgende stap wordt ook voorgelezen\".",
+        "en": "The step is read aloud. The button now says **Reading aloud is on**, with \"Every next step is read aloud too\" under it."
+      },
+      "know": {
+        "nl": "Houd de knop ingedrukt om de ingrediëntenlijst te horen. Ga je naar een ander scherm, dan stopt het voorlezen. Je zet het ook aan of uit via **Meer** → **Instellingen** → **Voorlezen**.",
+        "en": "Hold the button to hear the list of ingredients. Reading stops when you go to another screen. You can also switch it via **More** → **Settings** → **Read aloud**."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["voorlezen", "lees voor", "stem", "luidspreker", "horen"], "en": ["read aloud", "voice", "speaker", "listen", "hear"] }
+    },
+    {
+      "id": "koken.timer-starten",
+      "title": { "nl": "Een timer starten", "en": "Start a timer" },
+      "what": {
+        "nl": "Staat er een tijd in een stap, dan zie je een knopje met ⏱ en die tijd. Eén tik start de timer.",
+        "en": "When a step mentions a time, you see a small button with ⏱ and that time. One tap starts the timer."
+      },
+      "where": {
+        "nl": ["Open een recept of een stap in de kookstand.", "Tik bij de stap op het knopje met ⏱, bijvoorbeeld ⏱ 5 min."],
+        "en": ["Open a recipe or a step in cook mode.", "Tap the button with ⏱ at the step, for example ⏱ 5 min."]
+      },
+      "see": {
+        "nl": "Het knopje telt af. Bovenaan verschijnt de kookbalk met het recept, de stap en de tijd die nog over is.",
+        "en": "The button counts down. The cooking bar appears at the top with the recipe, the step and the time left."
+      },
+      "know": {
+        "nl": "Je kunt meer timers tegelijk laten lopen. Ze blijven lopen als je naar een ander scherm in de app gaat.",
+        "en": "You can run several timers at once. They keep running when you go to another screen in the app."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["timer", "wekker", "minuten", "aftellen", "klok"], "en": ["timer", "alarm", "minutes", "countdown", "clock"] }
+    },
+    {
+      "id": "koken.kookbalk",
+      "title": { "nl": "De kookbalk: zien waar je bent", "en": "The cooking bar: see where you are" },
+      "what": {
+        "nl": "Ben je aan het koken, dan staat bovenaan **Nu aan het koken** met het recept en de stap. Zo vind je je recept terug vanaf elk tabblad.",
+        "en": "While you cook, **Cooking now** shows at the top with the recipe and the step. That way you find your recipe again from any tab."
+      },
+      "where": {
+        "nl": ["Ga tijdens het koken naar **Home**, **Recepten**, **Week** of **Boodschappen**.", "Tik bovenaan op de rij met je recept, bijvoorbeeld \"Lasagne · stap 3 van 7\"."],
+        "en": ["While cooking, go to **Home**, **Recipes**, **Week** or **Shopping**.", "Tap the row with your recipe at the top, for example \"Lasagne · step 3 of 7\"."]
+      },
+      "see": {
+        "nl": "Je bent terug in de kookstand, op dezelfde stap. Lopende timers van dat recept staan onder de rij, met \"stap 3\".",
+        "en": "You are back in cook mode, on the same step. Running timers of that recipe sit under the row, with \"step 3\"."
+      },
+      "know": {
+        "nl": "De balk blijft staan als je de app sluit en weer opent. In de kookstand zelf zie je alleen de timers.",
+        "en": "The bar stays when you close and reopen the app. In cook mode itself you only see the timers."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": { "nl": ["kookbalk", "nu aan het koken", "verder koken", "terug naar recept", "balk"], "en": ["cooking bar", "cooking now", "continue", "back to recipe", "bar"] }
+    },
+    {
+      "id": "koken.timer-aanpassen",
+      "title": { "nl": "Een timer aanpassen of stoppen", "en": "Change or stop a timer" },
+      "what": {
+        "nl": "Elke timer in de balk heeft knopjes: een minuut eraf, een minuut erbij, opnieuw beginnen en stoppen.",
+        "en": "Every timer in the bar has small buttons: one minute less, one minute more, start again and stop."
+      },
+      "where": {
+        "nl": ["Kijk bovenaan in de balk naar de timer.", "Tik op −1 of +1 voor een minuut korter of langer.", "Tik op ↻ om opnieuw te beginnen.", "Tik op × om de timer te stoppen."],
+        "en": ["Look at the timer in the bar at the top.", "Tap −1 or +1 for one minute less or more.", "Tap ↻ to start again.", "Tap × to stop the timer."]
+      },
+      "see": {
+        "nl": "De tijd verandert meteen. Is de tijd om, dan staat er **Klaar!** tot je op × tikt.",
+        "en": "The time changes straight away. When time is up it says **Done!** until you tap ×."
+      },
+      "know": {
+        "nl": "Tik je op de naam van de timer, dan ga je naar de stap waar hij bij hoort.",
+        "en": "If you tap the name of the timer, you go to the step it belongs to."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": { "nl": ["timer stoppen", "minuut erbij", "langer", "korter", "opnieuw"], "en": ["stop timer", "extra minute", "longer", "shorter", "restart"] }
+    },
+    {
+      "id": "koken.twee-recepten",
+      "title": { "nl": "Twee recepten tegelijk en klaar met koken", "en": "Two recipes at once and done cooking" },
+      "what": {
+        "nl": "Kook je twee recepten, dan krijgt elk recept een eigen rij in de kookbalk. Ben je klaar, dan haal je de rij weg.",
+        "en": "If you cook two recipes, each recipe gets its own row in the cooking bar. When you are done, you remove the row."
+      },
+      "where": {
+        "nl": ["Open een tweede recept.", "Tik op **Koken**.", "Tik bovenaan bij een rij op × om dat recept te stoppen.", "Of tik aan het eind van de kookstand op **Gekookt!**."],
+        "en": ["Open a second recipe.", "Tap **Cook**.", "Tap × at a row at the top to stop that recipe.", "Or tap **Cooked!** at the end of cook mode."]
+      },
+      "see": {
+        "nl": "Na × of **Gekookt!** is die rij weg. Is er niets meer, dan verdwijnt de hele balk.",
+        "en": "After × or **Cooked!** that row is gone. When nothing is left, the whole bar disappears."
+      },
+      "know": {
+        "nl": "Het × staat er alleen als er van dat recept geen timer meer loopt. Een recept waar je acht uur niets mee deed, verdwijnt vanzelf.",
+        "en": "The × only shows when no timer of that recipe is still running. A recipe you have not touched for eight hours disappears by itself."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": { "nl": ["twee recepten", "tegelijk", "kookbalk", "stoppen", "klaar met koken"], "en": ["two recipes", "at once", "cooking bar", "stop", "done cooking"] }
+    },
+    {
+      "id": "koken.meldingen",
+      "title": { "nl": "Meldingen voor timers", "en": "Notifications for timers" },
+      "what": {
+        "nl": "Met meldingen zie je de minuten die nog over zijn in je meldingen. Is de timer klaar, dan krijg je een melding.",
+        "en": "With notifications you see the minutes left in your notifications. When the timer is done, you get a notification."
+      },
+      "where": {
+        "nl": ["Start je eerste timer.", "Tik in de balk op **Meldingen aanzetten**.", "Sta de meldingen toe als je telefoon erom vraagt."],
+        "en": ["Start your first timer.", "Tap **Turn on notifications** in the bar.", "Allow notifications when your phone asks."]
+      },
+      "see": {
+        "nl": "Zolang de app open staat, zie je in je meldingen \"nog 4 min\". Na afloop komt \"Timer klaar\" met de naam van de stap.",
+        "en": "While the app is open, your notifications show \"4 min left\". When it ends, \"Timer done\" arrives with the name of the step."
+      },
+      "know": {
+        "nl": "De app vraagt dit maar één keer. Tik je op **Niet nu**, dan vraagt hij het niet opnieuw.",
+        "en": "The app asks this only once. If you tap **Not now**, it does not ask again."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["meldingen", "melding", "notificatie", "timer klaar", "toestemming"], "en": ["notifications", "notification", "timer done", "permission", "alert"] }
+    },
+    {
+      "id": "koken.timer-achtergrond",
+      "title": { "nl": "Timers met het scherm uit of de app op de achtergrond", "en": "Timers with the screen off or the app in the background" },
+      "what": {
+        "nl": "Een timer is het zekerst als de app open staat. Wat er gebeurt met het scherm uit of in een andere app, verschilt per telefoon.",
+        "en": "A timer is most reliable while the app is open. What happens with the screen off or in another app depends on the phone."
+      },
+      "where": {
+        "nl": ["Start een timer.", "Laat de app open staan tot de timer klaar is."],
+        "en": ["Start a timer.", "Keep the app open until the timer is done."]
+      },
+      "see": {
+        "nl": "Met de app open hoor je het timergeluid als de tijd om is, en staat er **Klaar!** in de balk.",
+        "en": "With the app open you hear the timer sound when time is up, and the bar says **Done!**."
+      },
+      "know": {
+        "nl": "Op Android klonk een korte timer ook met de app op de achtergrond. Een lange timer met het scherm uit is nog niet getest, net als timers op de iPhone. Zet voor lange tijden ook de timer van je telefoon.",
+        "en": "On Android a short timer also sounded with the app in the background. A long timer with the screen off has not been tested yet, nor have timers on the iPhone. For long times, also set your phone's own timer."
+      },
+      "platform": "all",
+      "keywords": { "nl": ["achtergrond", "scherm uit", "vergrendeld", "lange timer", "wekker telefoon"], "en": ["background", "screen off", "locked", "long timer", "phone alarm"] }
+    },
+    {
+      "id": "koken.timergeluid",
+      "title": { "nl": "Het timergeluid kiezen", "en": "Choose the timer sound" },
+      "what": {
+        "nl": "Je kiest welk geluid een timer maakt als hij klaar is. In de kookbalk zet je het geluid snel uit of aan.",
+        "en": "You choose the sound a timer makes when it is done. In the cooking bar you quickly switch the sound off or on."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Meer**.", "Tik op **Jij & je huishouden** als die groep dicht is.", "Tik op 🎨 **Jouw stijl**.", "Tik op het tabblad **Geluiden**.", "Tik onder **Timergeluid** op een geluid."],
+        "en": ["Tap **More** at the bottom.", "Tap **You & your household** if that group is closed.", "Tap 🎨 **Your style**.", "Tap the **Sounds** tab.", "Tap a sound under **Timer sound**."]
+      },
+      "see": {
+        "nl": "Je hoort het geluid meteen en het tegeltje is gekozen. In de kookbalk staat 🔔 als het geluid aan is en 🔕 als het uit is.",
+        "en": "You hear the sound straight away and the tile is chosen. The cooking bar shows 🔔 when the sound is on and 🔕 when it is off."
+      },
+      "know": {
+        "nl": "Een tegeltje met een slotje kun je nog niet kiezen. Op de iPhone met de stil-schakelaar aan waarschuwt alleen de melding.",
+        "en": "You cannot choose a tile with a lock yet. On an iPhone with the silent switch on, only the notification alerts you."
+      },
+      "route": "/more/style",
+      "platform": "all",
+      "keywords": { "nl": ["timergeluid", "geluid", "belletje", "piepjes", "stil"], "en": ["timer sound", "sound", "bell", "beeps", "silent"] }
+    },
+    {
+      "id": "koken.trillen",
+      "title": { "nl": "Trillen als de timer klaar is", "en": "Vibrate when the timer is done" },
+      "what": {
+        "nl": "De telefoon kan trillen als een timer klaar is. Dat zet je aan of uit in de instellingen.",
+        "en": "The phone can vibrate when a timer is done. You switch this on or off in the settings."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Meer**.", "Tik op **Instellingen** als die groep dicht is.", "Tik onder **Kookstand & timer** op de schakelaar **Trillen bij afloop**."],
+        "en": ["Tap **More** at the bottom.", "Tap **Settings** if that group is closed.", "Under **Cook mode & timer**, tap the **Vibrate when done** switch."]
+      },
+      "see": {
+        "nl": "De schakelaar staat aan of uit. Bij de volgende timer trilt de telefoon wel of niet.",
+        "en": "The switch is on or off. At the next timer the phone vibrates or not."
+      },
+      "know": {
+        "nl": "Op een iPhone trilt alleen de melding.",
+        "en": "On an iPhone only the notification vibrates."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": { "nl": ["trillen", "trilling", "vibratie", "afloop", "timer"], "en": ["vibrate", "vibration", "buzz", "timer done", "timer"] }
+    },
+    {
+      "id": "koken.spraakcommandos",
+      "title": { "nl": "Spraakcommando's", "en": "Voice commands" },
+      "what": {
+        "nl": "Met vieze handen bedien je de kookstand met je stem. Zeg bijvoorbeeld \"volgende\", \"vorige\" of \"timer 10 minuten\".",
+        "en": "With messy hands you control cook mode with your voice. Say for example \"next\", \"previous\" or \"timer 10 minutes\"."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Meer**.", "Tik op **Instellingen** als die groep dicht is.", "Zet de schakelaar **Spraakcommando’s** aan.", "Open een recept.", "Tik op **Koken**.", "Tik onderaan op de microfoon 🎤.", "Zeg \"volgende\"."],
+        "en": ["Tap **More** at the bottom.", "Tap **Settings** if that group is closed.", "Switch **Voice commands** on.", "Open a recipe.", "Tap **Cook**.", "Tap the microphone 🎤 at the bottom.", "Say \"next\"."]
+      },
+      "see": {
+        "nl": "De microfoon luistert. Na \"volgende\" gaat de kookstand naar de volgende stap.",
+        "en": "The microphone listens. After \"next\" cook mode moves to the next step."
+      },
+      "know": {
+        "nl": "Dit werkt alleen op Android, en meestal alleen met internet. Terwijl de app voorleest, luistert de microfoon even niet.",
+        "en": "This only works on Android, and usually only with internet. While the app reads aloud, the microphone pauses."
+      },
+      "route": "/more",
+      "platform": "android",
+      "keywords": { "nl": ["spraak", "stem", "microfoon", "commando", "praten", "handsfree"], "en": ["voice", "speech", "microphone", "command", "talk", "hands-free"] }
+    },
+    {
+      "id": "koken.spraak-hulp",
+      "title": { "nl": "Welke commando's kan ik zeggen?", "en": "What can I say?" },
+      "what": {
+        "nl": "Het ?-knopje naast de microfoon toont alle spraakcommando's. Je kunt ook vragen hoe lang de timer nog loopt.",
+        "en": "The ? button next to the microphone shows all voice commands. You can also ask how long the timer has left."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik op **Koken**.", "Tik onderaan naast de microfoon op **?**.", "Tik rechtsboven in het venster op **Sluit**."],
+        "en": ["Open a recipe.", "Tap **Cook**.", "Tap **?** next to the microphone at the bottom.", "Tap **Close** at the top right of the window."]
+      },
+      "see": {
+        "nl": "Een venster met de titel **Spraakcommando’s** en de lijst: volgende, vorige, voorlezen, herhalen, ingrediënten, hoeveel, timer, hoe lang nog en stop.",
+        "en": "A window titled **Voice commands** with the list: next, previous, read, repeat, ingredients, how much, timer, how long left and stop."
+      },
+      "know": {
+        "nl": "Zeg \"hoe lang nog\" en de app zegt hoeveel tijd de timer van dit recept nog heeft. De microfoon verstaat de taal van je profiel.",
+        "en": "Say \"how long left\" and the app tells you how much time this recipe's timer has left. The microphone listens in the language of your profile."
+      },
+      "route": "/recipes",
+      "platform": "android",
+      "keywords": { "nl": ["commando's", "vraagteken", "hulp", "hoe lang nog", "herhaal"], "en": ["commands", "question mark", "help", "how long left", "repeat"] }
+    },
+    {
+      "id": "koken.gekookt-kookstand",
+      "title": { "nl": "Gekookt! aan het eind van de kookstand", "en": "Cooked! at the end of cook mode" },
+      "what": {
+        "nl": "Na de laatste stap zet je het gerecht in je kooklog. Je kunt sterren geven, een notitie schrijven en een foto toevoegen.",
+        "en": "After the last step you add the dish to your cook log. You can give stars, write a note and add a photo."
+      },
+      "where": {
+        "nl": ["Tik bij de laatste stap op **Klaar**.", "Tik op een ster als je wilt.", "Tik op 📷 **Foto toevoegen** als je wilt.", "Tik op **Gekookt!**."],
+        "en": ["Tap **Done** on the last step.", "Tap a star if you like.", "Tap 📷 **Add a photo** if you like.", "Tap **Cooked!**."]
+      },
+      "see": {
+        "nl": "Er komt confetti en je gaat terug naar waar je vandaan kwam. Het recept en zijn timers verdwijnen uit de kookbalk.",
+        "en": "Confetti appears and you go back to where you came from. The recipe and its timers disappear from the cooking bar."
+      },
+      "know": {
+        "nl": "Staat het gerecht in je week, dan krijgt het daar een vinkje. Nog niet klaar? Tik dan op **Nog niet klaar**.",
+        "en": "If the dish is in your week, it gets a tick there. Not finished yet? Then tap **Not done yet**."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["gekookt", "kooklog", "sterren", "notitie", "klaar"], "en": ["cooked", "cook log", "stars", "note", "done"] }
+    },
+    {
+      "id": "koken.gekookt-zonder-kookstand",
+      "title": { "nl": "Gekookt zonder de kookstand", "en": "Cooked without cook mode" },
+      "what": {
+        "nl": "Kookte je uit je hoofd? Dan zet je het gerecht toch in je kooklog, voor vandaag, gisteren of een andere dag.",
+        "en": "Did you cook from memory? You can still add the dish to your cook log, for today, yesterday or another day."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik op **✓ Gekookt**.", "Tik op **Vandaag** of **Gisteren**.", "Tik bovenaan in het venster op **Bewaar**."],
+        "en": ["Open a recipe.", "Tap **✓ Cooked**.", "Tap **Today** or **Yesterday**.", "Tap **Save** at the top of the window."]
+      },
+      "see": {
+        "nl": "Er komt confetti en onder de knoppen staat \"Gekookt ✓ — staat in je kooklog\". Onder de titel staat hoe vaak en wanneer je het kookte.",
+        "en": "Confetti appears and under the buttons it says \"Cooked ✓ — added to your cook log\". Under the title it says how often and when you cooked it."
+      },
+      "know": {
+        "nl": "Alleen **Bewaar** bewaart. Naar beneden vegen, ernaast tikken of **Annuleer** sluit het venster zonder iets te bewaren.",
+        "en": "Only **Save** saves. Swiping down, tapping beside it or **Cancel** closes the window without saving anything."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["gekookt", "uit het hoofd", "kooklog", "bewaar", "vinkje"], "en": ["cooked", "from memory", "cook log", "save", "tick"] }
+    },
+    {
+      "id": "koken.andere-datum",
+      "title": { "nl": "Gekookt op een andere dag", "en": "Cooked on another day" },
+      "what": {
+        "nl": "Vergeten iets in te vullen? Kies dan zelf de dag waarop je kookte. Een dag in de toekomst kan niet.",
+        "en": "Forgot to log something? Then choose the day you cooked yourself. A day in the future is not possible."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik op **✓ Gekookt**.", "Tik op **Andere datum**.", "Tik op het vak **Datum**.", "Kies een dag.", "Tik bovenaan op **Bewaar**."],
+        "en": ["Open a recipe.", "Tap **✓ Cooked**.", "Tap **Another date**.", "Tap the **Date** box.", "Choose a day.", "Tap **Save** at the top."]
+      },
+      "see": {
+        "nl": "De kookbeurt staat met die dag onder **Laatst gekookt** op Home. Zolang er geen datum staat, is **Bewaar** grijs.",
+        "en": "The cook shows with that day under **Recently cooked** on Home. As long as there is no date, **Save** is grey."
+      },
+      "know": {
+        "nl": "Alleen een kookbeurt van vandaag zet een vinkje in je week. Langer dan een week geleden telt wel voor je badges en de kalender, niet voor XP.",
+        "en": "Only a cook from today ticks the dish in your week. More than a week ago counts for your badges and the calendar, not for XP."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["datum", "andere dag", "vergeten", "gisteren", "vorige week"], "en": ["date", "another day", "forgot", "yesterday", "last week"] }
+    },
+    {
+      "id": "koken.foto-bij-gekookt",
+      "title": { "nl": "Een foto bij Gekookt", "en": "A photo with Cooked" },
+      "what": {
+        "nl": "Bij **✓ Gekookt** voeg je een foto van je gerecht toe. De foto wordt pas bewaard als je op **Bewaar** tikt.",
+        "en": "With **✓ Cooked** you add a photo of your dish. The photo is only saved when you tap **Save**."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Tik op **✓ Gekookt**.", "Tik onder de notitie op 📷 **Foto toevoegen**.", "Maak een foto of kies er een uit je bibliotheek.", "Tik bovenaan op **Bewaar**."],
+        "en": ["Open a recipe.", "Tap **✓ Cooked**.", "Tap 📷 **Add a photo** under the note.", "Take a photo or choose one from your library.", "Tap **Save** at the top."]
+      },
+      "see": {
+        "nl": "Voor het bewaren zie je een klein plaatje en de knop **Foto weghalen**. Daarna staat de foto bovenaan het recept.",
+        "en": "Before saving you see a small picture and the **Remove photo** button. Afterwards the photo shows at the top of the recipe."
+      },
+      "know": {
+        "nl": "Veeg je het venster weg, dan wordt er niets bewaard, ook de foto niet.",
+        "en": "If you swipe the window away, nothing is saved, not even the photo."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": { "nl": ["foto", "plaatje", "camera", "gekookt", "bibliotheek"], "en": ["photo", "picture", "camera", "cooked", "library"] }
+    },
+    {
+      "id": "koken.later-beoordelen",
+      "title": { "nl": "Later sterren geven", "en": "Give stars later" },
+      "what": {
+        "nl": "Gaf je nog geen sterren? Dan beoordeel je het gerecht later, vanaf het recept of vanaf Home.",
+        "en": "Did you not give stars yet? Then you rate the dish later, from the recipe or from Home."
+      },
+      "where": {
+        "nl": ["Open het recept dat je kookte.", "Tik onder de knoppen op de rij **Beoordeel**.", "Tik op een ster.", "Tik op **Bewaar beoordeling**."],
+        "en": ["Open the recipe you cooked.", "Tap the **Rate** row under the buttons.", "Tap a star.", "Tap **Save rating**."]
+      },
+      "see": {
+        "nl": "Er staat \"Beoordeling bewaard ✓\" en de rij **Beoordeel** is weg. Op Home staan de sterren bij die kookbeurt.",
+        "en": "It says \"Rating saved ✓\" and the **Rate** row is gone. On Home the stars show with that cook."
+      },
+      "know": {
+        "nl": "Op Home staat onder **Laatst gekookt** een ★ **Beoordeel** achter een kookbeurt zonder sterren. Een tik opent het recept met het venster al open.",
+        "en": "On Home, under **Recently cooked**, a ★ **Rate** sits after a cook without stars. A tap opens the recipe with the window already open."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": { "nl": ["beoordelen", "sterren", "later", "waardering", "cijfer"], "en": ["rate", "stars", "later", "rating", "score"] }
+    },
+    {
+      "id": "koken.kookkalender",
+      "title": { "nl": "De kookkalender", "en": "The cooking calendar" },
+      "what": {
+        "nl": "De kalender laat per maand zien wie wanneer kookte. Elke kok heeft stipjes in een eigen kleur.",
+        "en": "The calendar shows per month who cooked when. Every cook has dots in their own colour."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Meer**.", "Tik op **Jij & je huishouden** als die groep dicht is.", "Tik op 📅 **Kookkalender**.", "Tik op een dag met stipjes.", "Tik op ‹ of › voor een andere maand."],
+        "en": ["Tap **More** at the bottom.", "Tap **You & your household** if that group is closed.", "Tap 📅 **Cooking calendar**.", "Tap a day with dots.", "Tap ‹ or › for another month."]
+      },
+      "see": {
+        "nl": "Een maandrooster van maandag tot zondag; vandaag heeft een rand. Onder het rooster staat per kookbeurt \"naam — gerecht\".",
+        "en": "A month grid from Monday to Sunday; today has a border. Under the grid each cook shows as \"name — dish\"."
+      },
+      "know": {
+        "nl": "Kookte iemand iets wat jij niet hebt, dan staat er \"een recept\". Anderen zie je zoals ze het laatst deelden via Sync mijn voortgang.",
+        "en": "If someone cooked something you do not have, it says \"a recipe\". You see others as they last shared with Sync my progress."
+      },
+      "route": "/more/calendar",
+      "platform": "all",
+      "keywords": { "nl": ["kalender", "kookkalender", "maand", "wie kookte", "stipjes"], "en": ["calendar", "cooking calendar", "month", "who cooked", "dots"] }
+    }
+  ]
+}

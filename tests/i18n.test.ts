@@ -100,7 +100,16 @@ describe('singular rule in t and tIn', () => {
 // `prefix.${x}`), or when it is the …One sister of a used key. ALLOWED holds the few keys that are used in
 // a way this scan cannot see; each has a reason.
 const ALLOWED: Record<string, string> = {
-  // (empty on 8 Nov 2026: shop.lines / shop.lineOne were removed instead of allowed)
+  // Built as `${name}Say` in src/components/VoiceHelp.tsx (the example phrases next to each voice command).
+  'cook.cmd.nextSay': 'VoiceHelp builds the key as `${name}Say`',
+  'cook.cmd.prevSay': 'VoiceHelp builds the key as `${name}Say`',
+  'cook.cmd.readSay': 'VoiceHelp builds the key as `${name}Say`',
+  'cook.cmd.repeatSay': 'VoiceHelp builds the key as `${name}Say`',
+  'cook.cmd.ingredientsSay': 'VoiceHelp builds the key as `${name}Say`',
+  'cook.cmd.timerSay': 'VoiceHelp builds the key as `${name}Say`',
+  'cook.cmd.quantitiesSay': 'VoiceHelp builds the key as `${name}Say`',
+  'cook.cmd.timeLeftSay': 'VoiceHelp builds the key as `${name}Say`',
+  'cook.cmd.stopSay': 'VoiceHelp builds the key as `${name}Say`',
 };
 
 function sourceText(dir: string): string {

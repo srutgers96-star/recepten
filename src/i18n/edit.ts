@@ -565,8 +565,8 @@ export const edit: Dict = {
   'dict.cleanupRow': { nl: '{own} → bestaat al als {existing}', en: '{own} → already exists as {existing}' },
   'dict.mergeAll': { nl: 'Fuseer alles', en: 'Merge all' },
   'dict.mergeAllConfirm': {
-    nl: '{n} eigen ingrediënten fuseren met de bestaande? Alleen de laatste fusie kan daarna ongedaan gemaakt worden.',
-    en: 'Merge {n} own ingredients into the existing ones? Only the last merge can be undone afterwards.',
+    nl: '{n} eigen ingrediënten fuseren met de bestaande? Dit kun je daarna niet ongedaan maken.',
+    en: 'Merge {n} own ingredients into the existing ones? You cannot undo this afterwards.',
   },
   'dict.mergeOne': { nl: 'Fuseer', en: 'Merge' },
   'dict.save': { nl: 'Bewaar', en: 'Save' },

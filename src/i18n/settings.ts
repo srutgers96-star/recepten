@@ -391,4 +391,18 @@ export const settings: Dict = {
   'more.myProfile': { nl: 'Mijn profiel', en: 'My profile' },
   'more.style': { nl: 'Jouw stijl', en: 'Your style' },
   'more.styleHint': { nl: 'Avatar, geluiden, confetti, letters en thema', en: 'Avatar, sounds, confetti, typefaces and theme' },
+  // --- Block Z (docs/specs/handbook.md §3): the handbook (Meer → Hulp & over → Handleiding) ---
+  // src/domain/handbook.ts HANDBOOK_LABELS mirrors these for the Markdown tool (tests keep them equal).
+  'more.handbook': { nl: 'Handleiding', en: 'Handbook' },
+  'handbook.title': { nl: 'Handleiding', en: 'Handbook' },
+  'handbook.search': { nl: 'Zoek in de handleiding', en: 'Search the handbook' },
+  'handbook.none': { nl: "Niets gevonden voor '{q}'. Probeer een ander woord.", en: "Nothing found for '{q}'. Try another word." },
+  'handbook.what': { nl: 'Wat het doet', en: 'What it does' },
+  'handbook.where': { nl: 'Waar je tikt', en: 'Where you tap' },
+  'handbook.see': { nl: 'Wat je dan ziet', en: 'What you then see' },
+  'handbook.know': { nl: 'Goed om te weten', en: 'Good to know' },
+  'handbook.open': { nl: 'Open', en: 'Open' },
+  'handbook.platform.android': { nl: 'Android', en: 'Android' },
+  'handbook.platform.ios': { nl: 'iPhone', en: 'iPhone' },
+  'handbook.intro': { nl: 'Alles wat de app kan, per onderwerp. Typ een woord om te zoeken.', en: 'Everything the app can do, by topic. Type a word to search.' },
 };

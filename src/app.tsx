@@ -13,7 +13,8 @@
 // '/more/unlocks' (Vrijgespeeld; since 6D-S a redirect to '/more/style?tab=confetti', Jouw stijl);
 // checkRulesVersion also refreshes the phone-wide unlocks at boot.
 // 6D-4 (= 6D-4b, §1j): the route '/more/calendar' (Kookkalender). 6D-S: '/more/profile' (Mijn profiel).
-import type { ComponentChildren } from 'preact';
+// Block Z (docs/specs/handbook.md §3): '/more/handbook' (Handleiding), loaded on demand (own chunk).
+import type { ComponentChildren, ComponentType } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, type NewBadge } from './badges';
 import { loadCelebrateSettings } from './celebrate';
@@ -181,6 +182,34 @@ function Redirect(props: { to: string }) {
   return null;
 }
 
+/**
+ * Block Z: the handbook screen is imported on demand so it (and its data) stays out of the main
+ * bundle. Until the chunk is there the shell shows an empty screen with the loading line.
+ */
+function LazyHandbook() {
+  const [Comp, setComp] = useState<ComponentType | null>(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    import('./screens/HandbookScreen').then(
+      (m) => alive && setComp(() => m.HandbookScreen),
+      (e: unknown) => {
+        console.error('handbook', e);
+        if (alive) setFailed(true);
+      },
+    );
+    return () => {
+      alive = false;
+    };
+  }, []);
+  if (Comp) return <Comp />;
+  return (
+    <div class="screen">
+      <p class="muted">{t(failed ? 'common.error' : 'common.loading')}</p>
+    </div>
+  );
+}
+
 function NotFound() {
   return (
     <div class="screen">
@@ -248,6 +277,9 @@ function Screen(props: { r: Route }) {
         // 6D-4 (docs/specs/xp-levels.md §1j): who cooked what, per day (local log + received snapshots).
         case 'calendar':
           return <CalendarScreen />;
+        // Block Z (docs/specs/handbook.md §3): the searchable handbook; a separate chunk.
+        case 'handbook':
+          return <LazyHandbook />;
         default:
           return <NotFound />;
       }

@@ -1,0 +1,492 @@
+{
+  "id": "woordenboek",
+  "order": 6,
+  "title": { "nl": "Woordenboek", "en": "Dictionary" },
+  "intro": {
+    "nl": "Het woordenboek kent de ingrediënten, hun namen in twee talen, hun schap en hun eenheid. Hier lees je hoe je het bekijkt en aanvult.",
+    "en": "The dictionary knows the ingredients, their names in two languages, their aisle and their unit. Here you read how to look things up and add to it."
+  },
+  "entries": [
+    {
+      "id": "woordenboek.wat-is-het",
+      "title": { "nl": "Wat het woordenboek is", "en": "What the dictionary is" },
+      "what": {
+        "nl": "Het woordenboek kent meer dan 1500 ingrediënten, elk met een Nederlandse en Engelse naam, een schap en een standaard eenheid. Daarmee vertaalt de app ingrediëntregels, ook eenheden zoals el en tbsp.",
+        "en": "The dictionary knows more than 1500 ingredients, each with a Dutch and English name, an aisle and a default unit. With it the app translates ingredient lines, units too, such as tbsp and el."
+      },
+      "where": {
+        "nl": ["Tik onderaan op **Meer**.", "Tik onder **Recepten & delen** op **Woordenboek**."],
+        "en": ["Tap **More** at the bottom.", "Tap **Dictionary** under **Recipes & sharing**."]
+      },
+      "see": {
+        "nl": "Bovenaan staan een zoekvak, een teller met ingebouwde en eigen ingrediënten, en een rij schappen. Daaronder staan je eigen ingrediënten.",
+        "en": "At the top there is a search box, a counter of built-in and own ingredients, and a row of aisles. Below that are your own ingredients."
+      },
+      "know": {
+        "nl": "Ingebouwde ingrediënten kun je bekijken maar niet veranderen. Eigen ingrediënten kun je bewerken, samenvoegen en verwijderen.",
+        "en": "Built-in ingredients can be looked at but not changed. Own ingredients you can edit, merge and delete."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["woordenboek", "ingrediënten", "schap", "eenheid", "vertaling"],
+        "en": ["dictionary", "ingredients", "aisle", "unit", "translation"]
+      }
+    },
+    {
+      "id": "woordenboek.zoeken",
+      "title": { "nl": "Een ingrediënt opzoeken", "en": "Look up an ingredient" },
+      "what": {
+        "nl": "Zoek een ingrediënt op zijn Nederlandse of Engelse naam, of bekijk alles uit één schap.",
+        "en": "Search for an ingredient by its Dutch or English name, or look at everything in one aisle."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Woordenboek**.",
+          "Tik in het zoekvak.",
+          "Typ een paar letters, in het Nederlands of het Engels.",
+          "Tik eventueel op een schap in de rij onder het zoekvak.",
+          "Scrol naar het einde van de lijst.",
+          "Tik op **Toon meer** voor de volgende."
+        ],
+        "en": [
+          "Tap **Dictionary** in **More**.",
+          "Tap the search box.",
+          "Type a few letters, in Dutch or English.",
+          "Tap an aisle in the row under the search box, if you like.",
+          "Scroll to the end of the list.",
+          "Tap **Show more** for the next ones."
+        ]
+      },
+      "see": {
+        "nl": "Bovenaan staat hoeveel ingrediënten er gevonden zijn. Met een schap gekozen zie je alleen dat schap, van A tot Z.",
+        "en": "The top says how many ingredients were found. With an aisle chosen you only see that aisle, from A to Z."
+      },
+      "know": {
+        "nl": "Met **Alle** zie je weer alle schappen. Je mag zoeken en een schap tegelijk gebruiken.",
+        "en": "**All** shows every aisle again. You can search and use an aisle at the same time."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["zoeken", "schap", "opzoeken", "vinden", "toon meer"],
+        "en": ["search", "aisle", "look up", "find", "show more"]
+      }
+    },
+    {
+      "id": "woordenboek.details",
+      "title": { "nl": "Wat er over een ingrediënt bekend is", "en": "What is known about an ingredient" },
+      "what": {
+        "nl": "Tik op een ingrediënt en je ziet alles wat de app erover weet.",
+        "en": "Tap an ingredient and you see everything the app knows about it."
+      },
+      "where": {
+        "nl": ["Tik in **Meer** op **Woordenboek**.", "Zoek een ingrediënt.", "Tik op de naam."],
+        "en": ["Tap **Dictionary** in **More**.", "Search for an ingredient.", "Tap the name."]
+      },
+      "see": {
+        "nl": "Er klapt een vak open met de Nederlandse en Engelse naam, het meervoud, andere namen, het schap en de eenheid. Labeltjes tonen kenmerken zoals vegetarisch of bevat lactose.",
+        "en": "A box opens with the Dutch and English name, the plural, other names, the aisle and the unit. Small labels show properties such as vegetarian or contains lactose."
+      },
+      "know": {
+        "nl": "In dit vak kun je niets veranderen. Tik nog een keer op de naam om het te sluiten.",
+        "en": "You cannot change anything in this box. Tap the name once more to close it."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["details", "kenmerken", "lactose", "gluten", "meervoud", "schap"],
+        "en": ["details", "properties", "lactose", "gluten", "plural", "aisle"]
+      }
+    },
+    {
+      "id": "woordenboek.nieuw",
+      "title": { "nl": "Zelf een ingrediënt toevoegen", "en": "Add an ingredient yourself" },
+      "what": {
+        "nl": "Mist er een ingrediënt, dan maak je het zelf aan. Het krijgt het labeltje eigen.",
+        "en": "If an ingredient is missing, you create it yourself. It gets the small label own."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Woordenboek**.",
+          "Tik bovenaan op **+ Nieuw ingrediënt**.",
+          "Typ de Nederlandse naam.",
+          "Typ de Engelse naam.",
+          "Kies het **Schap in de supermarkt**.",
+          "Tik bovenaan in het venster op **Zet in woordenboek**."
+        ],
+        "en": [
+          "Tap **Dictionary** in **More**.",
+          "Tap **+ New ingredient** at the top.",
+          "Type the Dutch name.",
+          "Type the English name.",
+          "Choose the **Supermarket aisle**.",
+          "Tap **Add to dictionary** at the top of the window."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet even ‘Toegevoegd:’ met de naam. Het nieuwe ingrediënt staat open in de lijst, met eigen erbij.",
+        "en": "You briefly see ‘Added:’ with the name. The new ingredient is open in the list, marked own."
+      },
+      "know": {
+        "nl": "Eigen ingrediënten reizen mee als je een recept deelt dat ze gebruikt. **Annuleer** sluit het venster zonder iets te bewaren.",
+        "en": "Own ingredients travel along when you share a recipe that uses them. **Cancel** closes the window without saving anything."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["nieuw ingrediënt", "toevoegen", "eigen", "aanmaken"],
+        "en": ["new ingredient", "add", "own", "create"]
+      }
+    },
+    {
+      "id": "woordenboek.bestaat-al",
+      "title": { "nl": "Bestaat al: geen dubbele ingrediënten", "en": "Already exists: no double ingredients" },
+      "what": {
+        "nl": "Typ je een naam die al in het woordenboek staat, dan waarschuwt de app voordat je een dubbel ingrediënt maakt.",
+        "en": "If you type a name that is already in the dictionary, the app warns you before you make a double ingredient."
+      },
+      "where": {
+        "nl": [
+          "Tik op **+ Nieuw ingrediënt**.",
+          "Typ een naam, bijvoorbeeld aubergine.",
+          "Tik op **Gebruik** of op **Toch nieuw**."
+        ],
+        "en": [
+          "Tap **+ New ingredient**.",
+          "Type a name, for example aubergine.",
+          "Tap **Use it** or **Create anyway**."
+        ]
+      },
+      "see": {
+        "nl": "Boven het formulier staat ‘Bestaat al: … — die gebruiken?’. Met **Gebruik** kies je het bestaande ingrediënt en wordt er niets nieuws gemaakt.",
+        "en": "Above the form it says ‘Already exists: … — use it?’. With **Use it** you pick the existing ingredient and nothing new is made."
+      },
+      "know": {
+        "nl": "De app kijkt in beide talen, ook naar meervouden en andere namen.",
+        "en": "The app looks in both languages, at plurals and other names too."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["bestaat al", "dubbel", "dezelfde", "gebruiken"],
+        "en": ["already exists", "duplicate", "double", "use it"]
+      }
+    },
+    {
+      "id": "woordenboek.bewerken",
+      "title": { "nl": "Een eigen ingrediënt bewerken", "en": "Edit an own ingredient" },
+      "what": {
+        "nl": "Van je eigen ingrediënten verander je de namen, het schap, de eenheid en de dieetkenmerken.",
+        "en": "For your own ingredients you change the names, the aisle, the unit and the diet properties."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Woordenboek**.",
+          "Tik bij een eigen ingrediënt op **Bewerk**.",
+          "Pas aan wat niet klopt.",
+          "Tik op **Bewaar**."
+        ],
+        "en": [
+          "Tap **Dictionary** in **More**.",
+          "Tap **Edit** on an own ingredient.",
+          "Change what is not right.",
+          "Tap **Save**."
+        ]
+      },
+      "see": {
+        "nl": "Het formulier heeft de namen, het schap, **Standaard eenheid**, Vegetarisch, Vegan, Gluten en Lactose. Na **Bewaar** zie je even Bewaard.",
+        "en": "The form has the names, the aisle, **Default unit**, Vegetarian, Vegan, Gluten and Lactose. After **Save** you briefly see Saved."
+      },
+      "know": {
+        "nl": "Met **Hoef je meestal niet te kopen (zout, olie, kruiden …)** staat dit ingrediënt op de boodschappenlijst op 0 tot je het aanzet. Bij Vegan, Gluten en Lactose mag je ook weet ik niet kiezen.",
+        "en": "With **Usually already in the house (salt, oil, spices …)** this ingredient sits on the shopping list at 0 until you switch it on. For Vegan, Gluten and Lactose you may also pick not sure."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["bewerken", "aanpassen", "eenheid", "voorraadkast", "vegan", "gluten"],
+        "en": ["edit", "change", "unit", "pantry", "vegan", "gluten"]
+      }
+    },
+    {
+      "id": "woordenboek.fuseren",
+      "title": { "nl": "Een eigen ingrediënt samenvoegen met een bestaand", "en": "Merge an own ingredient into an existing one" },
+      "what": {
+        "nl": "Bestaat je eigen ingrediënt eigenlijk al, dan voeg je het samen. Alle recepten en boodschappen gaan dan naar het bestaande ingrediënt.",
+        "en": "If your own ingredient already exists after all, you merge it. Every recipe and shopping item then moves to the existing ingredient."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Woordenboek**.",
+          "Tik bij je eigen ingrediënt op **Fuseer met bestaand**.",
+          "Tik in het venster op het bestaande ingrediënt.",
+          "Bevestig de vraag."
+        ],
+        "en": [
+          "Tap **Dictionary** in **More**.",
+          "Tap **Merge into existing** on your own ingredient.",
+          "Tap the existing ingredient in the window.",
+          "Confirm the question."
+        ]
+      },
+      "see": {
+        "nl": "Je eigen ingrediënt is weg. Onderaan staat even ‘Samengevoegd: …’ met de knop **Ongedaan**.",
+        "en": "Your own ingredient is gone. At the bottom you briefly see ‘Merged: …’ with the button **Undo**."
+      },
+      "know": {
+        "nl": "Was het een vergissing, tik dan snel op **Ongedaan**. De melding verdwijnt na een paar seconden.",
+        "en": "If it was a mistake, tap **Undo** quickly. The message disappears after a few seconds."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["fuseren", "samenvoegen", "dubbel", "ongedaan"],
+        "en": ["merge", "combine", "duplicate", "undo"]
+      }
+    },
+    {
+      "id": "woordenboek.opruimen",
+      "title": { "nl": "Dubbele eigen ingrediënten opruimen", "en": "Clean up double own ingredients" },
+      "what": {
+        "nl": "**Opruimen** zoekt eigen ingrediënten waarvan de naam al in het woordenboek staat. Die voeg je één voor één of allemaal tegelijk samen.",
+        "en": "**Clean up** finds own ingredients whose name already exists in the dictionary. You merge them one by one or all at once."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Woordenboek**.",
+          "Scrol naar de kaart **Opruimen**.",
+          "Tik op de knop **Opruimen**.",
+          "Tik bij een regel op **Fuseer**, of tik op **Fuseer alles**."
+        ],
+        "en": [
+          "Tap **Dictionary** in **More**.",
+          "Scroll to the card **Clean up**.",
+          "Tap the button **Clean up**.",
+          "Tap **Merge** on a line, or tap **Merge all**."
+        ]
+      },
+      "see": {
+        "nl": "Je ziet regels als ‘aubergientje → bestaat al als aubergine’. Vindt de app niets, dan staat er dat er geen dubbele eigen ingrediënten zijn.",
+        "en": "You see lines such as ‘eggplant → already exists as aubergine’. If the app finds nothing, it says there are no duplicate own ingredients."
+      },
+      "know": {
+        "nl": "**Fuseer alles** vraagt eerst om bevestiging. Zie je de kaart niet, maak dan eerst het zoekvak leeg.",
+        "en": "**Merge all** asks for confirmation first. If you do not see the card, empty the search box first."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["opruimen", "dubbel", "fuseren", "schoonmaken"],
+        "en": ["clean up", "duplicate", "merge", "tidy"]
+      }
+    },
+    {
+      "id": "woordenboek.verwijderen",
+      "title": { "nl": "Een eigen ingrediënt verwijderen", "en": "Delete an own ingredient" },
+      "what": {
+        "nl": "Een eigen ingrediënt dat je niet meer nodig hebt, haal je weg.",
+        "en": "An own ingredient you no longer need can be removed."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Woordenboek**.",
+          "Tik bij een eigen ingrediënt op **Verwijder**.",
+          "Bevestig de vraag."
+        ],
+        "en": [
+          "Tap **Dictionary** in **More**.",
+          "Tap **Delete** on an own ingredient.",
+          "Confirm the question."
+        ]
+      },
+      "see": {
+        "nl": "Het ingrediënt is weg. Regels in recepten die het gebruikten, zijn weer niet herkend.",
+        "en": "The ingredient is gone. Lines in recipes that used it are not recognised any more."
+      },
+      "know": {
+        "nl": "Ingebouwde ingrediënten kun je niet verwijderen. Wil je de regels houden, kies dan liever **Fuseer met bestaand**.",
+        "en": "Built-in ingredients cannot be deleted. To keep the lines linked, choose **Merge into existing** instead."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["verwijderen", "weghalen", "wissen", "eigen ingrediënt"],
+        "en": ["delete", "remove", "erase", "own ingredient"]
+      }
+    },
+    {
+      "id": "woordenboek.ontbrekend-kopieren",
+      "title": { "nl": "Ontbrekende gegevens aanvullen met AI: de opdracht", "en": "Fill in missing details with AI: the instruction" },
+      "what": {
+        "nl": "De kaart verzamelt eigen ingrediënten zonder vertaling, schap of dieetgegevens. Ook regels die de app in je recepten niet herkent, staan erin.",
+        "en": "The card gathers own ingredients without a translation, aisle or diet details. Lines the app does not recognise in your recipes are in it too."
+      },
+      "where": {
+        "nl": [
+          "Tik in **Meer** op **Woordenboek**.",
+          "Scrol naar **Ontbrekende gegevens aanvullen met AI**.",
+          "Tik op **Kopieer prompt voor ontbrekende ingrediënten**.",
+          "Plak de opdracht in je AI-app.",
+          "Kopieer het antwoord van je AI-app."
+        ],
+        "en": [
+          "Tap **Dictionary** in **More**.",
+          "Scroll to **Fill in missing details with AI**.",
+          "Tap **Copy prompt for missing ingredients**.",
+          "Paste the instruction into your AI app.",
+          "Copy the answer from your AI app."
+        ]
+      },
+      "see": {
+        "nl": "De kaart zegt hoeveel er aan te vullen is. Na het kopiëren zie je Gekopieerd ✓, en de opdracht staat in het vak eronder.",
+        "en": "The card says how many there are to fill in. After copying you see Copied ✓, and the instruction is in the box below."
+      },
+      "know": {
+        "nl": "Staat er nog een woord in het zoekvak, maak het dan eerst leeg. Lukt kopiëren niet, selecteer de opdracht in het vak dan zelf.",
+        "en": "If there is still a word in the search box, empty it first. If copying fails, select the instruction in the box yourself."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["AI", "ontbrekend", "aanvullen", "prompt", "vertaling", "schap"],
+        "en": ["AI", "missing", "fill in", "prompt", "translation", "aisle"]
+      }
+    },
+    {
+      "id": "woordenboek.ontbrekend-plakken",
+      "title": { "nl": "Ontbrekende gegevens aanvullen met AI: het antwoord", "en": "Fill in missing details with AI: the answer" },
+      "what": {
+        "nl": "Plak het antwoord van je AI terug. Je ziet eerst wat er verandert en kiest zelf wat je bewaart.",
+        "en": "Paste your AI's answer back. You first see what changes and choose yourself what to keep."
+      },
+      "where": {
+        "nl": [
+          "Tik in de kaart op **Plak antwoord**.",
+          "Plak het antwoord van je AI in het vak.",
+          "Tik op **Bekijk voorstel**.",
+          "Haal in het venster het vinkje weg bij wat je niet wilt.",
+          "Tik bovenaan in het venster op **Zet in woordenboek**."
+        ],
+        "en": [
+          "Tap **Paste answer** in the card.",
+          "Paste your AI's answer into the box.",
+          "Tap **Review**.",
+          "Untick in the window what you do not want.",
+          "Tap **Add to dictionary** at the top of the window."
+        ]
+      },
+      "see": {
+        "nl": "Het venster toont per regel wat er verandert, bijvoorbeeld welke namen of kenmerken worden aangevuld. Daarna zie je hoeveel er zijn aangevuld, nieuw en gekoppeld.",
+        "en": "The window shows per line what changes, for example which names or properties are filled in. Afterwards you see how many were filled in, new and linked."
+      },
+      "know": {
+        "nl": "Herkent de app het antwoord niet, plak dan het hele antwoord met de nummers M1, M2 enzovoort. **Annuleer** sluit zonder iets te bewaren.",
+        "en": "If the app cannot read the answer, paste the whole answer with the numbers M1, M2 and so on. **Cancel** closes without saving anything."
+      },
+      "route": "/more/dictionary",
+      "platform": "all",
+      "keywords": {
+        "nl": ["AI", "antwoord", "plakken", "voorstel", "aanvullen"],
+        "en": ["AI", "answer", "paste", "review", "fill in"]
+      }
+    },
+    {
+      "id": "woordenboek.uit-de-editor",
+      "title": { "nl": "Een ingrediënt toevoegen vanuit een recept", "en": "Add an ingredient from a recipe" },
+      "what": {
+        "nl": "Kent de app een ingrediënt in je recept niet, dan maak je het meteen aan vanuit de editor.",
+        "en": "If the app does not know an ingredient in your recipe, you create it straight from the editor."
+      },
+      "where": {
+        "nl": [
+          "Open de editor van een recept.",
+          "Tik onder een regel met een ? op **Nieuw ingrediënt**.",
+          "Vul de Nederlandse en Engelse naam in.",
+          "Kies het **Schap in de supermarkt**.",
+          "Tik bovenaan in het venster op **Bewaar en koppel**."
+        ],
+        "en": [
+          "Open the editor of a recipe.",
+          "Tap **New ingredient** under a line with a ?.",
+          "Fill in the Dutch and English name.",
+          "Choose the **Supermarket aisle**.",
+          "Tap **Save and link** at the top of the window."
+        ]
+      },
+      "see": {
+        "nl": "Het venster sluit. De chip onder de regel is nu groen met een ✓.",
+        "en": "The window closes. The chip under the line is now green with a ✓."
+      },
+      "know": {
+        "nl": "Het ingrediënt staat daarna ook in het **Woordenboek**, met eigen erbij. Ook hier waarschuwt de app als de naam al bestaat.",
+        "en": "The ingredient is then in the **Dictionary** too, marked own. Here too the app warns you when the name already exists."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["nieuw ingrediënt", "vraagteken", "koppelen", "recept", "editor"],
+        "en": ["new ingredient", "question mark", "link", "recipe", "editor"]
+      }
+    },
+    {
+      "id": "woordenboek.koppelen-receptpagina",
+      "title": { "nl": "Een onbekende regel koppelen op de receptpagina", "en": "Link an unknown line on the recipe page" },
+      "what": {
+        "nl": "Ook op de receptpagina koppel je een onbekende regel aan een ingrediënt. Dan werken de vertaling en de boodschappenlijst voor die regel.",
+        "en": "On the recipe page you can also link an unknown line to an ingredient. Then translation and the shopping list work for that line."
+      },
+      "where": {
+        "nl": [
+          "Open een recept.",
+          "Tik achter een ingrediëntregel op het vraagteken ?.",
+          "Typ in het venster **Koppel ingrediënt** een paar letters.",
+          "Tik op het juiste ingrediënt."
+        ],
+        "en": [
+          "Open a recipe.",
+          "Tap the question mark ? after an ingredient line.",
+          "Type a few letters in the window **Link ingredient**.",
+          "Tap the right ingredient."
+        ]
+      },
+      "see": {
+        "nl": "Het venster sluit en het vraagteken achter de regel is weg.",
+        "en": "The window closes and the question mark after the line is gone."
+      },
+      "know": {
+        "nl": "Bij een klassieker onthoudt de app de koppeling apart; het recept zelf verandert niet. Staat het ingrediënt er niet bij, tik dan op **+ Nieuw ingrediënt**.",
+        "en": "On a classic the app keeps the link separately; the recipe itself does not change. If the ingredient is not there, tap **+ New ingredient**."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["koppelen", "vraagteken", "onbekend", "receptpagina", "ingrediënt"],
+        "en": ["link", "question mark", "unknown", "recipe page", "ingredient"]
+      }
+    },
+    {
+      "id": "woordenboek.kleuren",
+      "title": { "nl": "Waarom een regel groen, oranje of grijs is", "en": "Why a line is green, orange or grey" },
+      "what": {
+        "nl": "In de editor laten kleuren zien wat de app van een ingrediëntregel begrijpt.",
+        "en": "In the editor, colours show what the app understands of an ingredient line."
+      },
+      "where": {
+        "nl": ["Open de editor van een recept.", "Kijk naar de chips onder een ingrediëntregel."],
+        "en": ["Open the editor of a recipe.", "Look at the chips under an ingredient line."]
+      },
+      "see": {
+        "nl": "Groen met ✓: de app kent het ingrediënt. Oranje met ?: de app kent het niet; tik erop om het te koppelen. Grijs: een opmerking of bewerking, zoals fijngehakt.",
+        "en": "Green with ✓: the app knows the ingredient. Orange with ?: the app does not know it; tap it to link it. Grey: a note or preparation, such as finely chopped."
+      },
+      "know": {
+        "nl": "Grijze tekst tussen aanhalingstekens bestaat alleen in de andere taal; de app vertaalt die niet half. Bij **beide** is grijze tekst in de andere kolom de vertaling uit het woordenboek.",
+        "en": "Grey text in quotation marks only exists in the other language; the app never half-translates it. With **both**, grey text in the other column is the dictionary translation."
+      },
+      "platform": "all",
+      "keywords": {
+        "nl": ["groen", "oranje", "grijs", "kleur", "chip", "herkend"],
+        "en": ["green", "orange", "grey", "colour", "chip", "recognised"]
+      }
+    }
+  ]
+}
