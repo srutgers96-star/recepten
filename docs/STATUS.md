@@ -4,6 +4,14 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Fable): de kopjes op Meer als bijschrift
+Stijn: "de kopjes en de rijen op Meer lijken op elkaar, onduidelijk en druk." De vier groepskoppen (Jij & je huishouden,
+Instellingen, Recepten & delen, Hulp & over) zijn nu een bijschrift in de stijl van de gangpadkopjes op de boodschappenlijst,
+maar groter: gecentreerd, kobalt, kleine hoofdletters (13 px, 700, 0,08 em), tussen twee lijntjes (`::before`/`::after` op de
+knop), badge en pijltje direct achter de naam, 44 px tikvlak; de rijen blijven links in inktkleur. Het tussenkopje
+(`.more-sub`, "Kookstand & timer", "Over") ging van 13 naar 12 px zodat de volgorde bijschrift > tussenkopje > rij klopt.
+Alleen src/styles/settings.css; handboek en DEVICE-TEST 55 blijven kloppen ("vier kopjes met een pijltje").
+
 ## 8 nov (Fable): nabewerking — de schakelaar Experimenten is weg
 Stijns keuze op de eerste van de vier vragen uit de eindcontrole: weghalen. Sinds 13Q las niets de instelling `experiments`
 meer; de rij onder Meer → Instellingen, de sleutels `more.experiments`/`more.experimentsHint`, de handboekrij

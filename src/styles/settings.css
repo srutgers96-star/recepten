@@ -895,33 +895,50 @@ textarea.input.member-card-raw {
 /* ---------- Phase 6 (docs/phase-6-spec.md 6A.6): Meer in collapsible groups ---------- */
 
 .more .more-group {
-  margin: 8px 0;
+  margin: 14px 0 4px;
 }
 
-/* The head is an h2 (so it stays a heading for screen readers) wrapping a 48 px button: title,
-   the badge of a closed group, chevron (turns when open). Two classes beat base.css `.section h2`. */
+/* The head is an h2 (so it stays a heading for screen readers) wrapping a 44 px button. Since 8 nov
+   2026 (Stijn: "the heads and the rows look alike") it is a caption in the style of the shopping
+   list's aisle captions, only bigger: centred, cobalt, small capitals, between two rules drawn by
+   ::before/::after, with the badge of a closed group and the chevron right after the name. Rows stay
+   left-aligned in the ink colour, so a glance tells a head from an item. */
 .more-group .more-group-head {
   margin: 0;
-  font-size: 17px;
-  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  border-bottom: 0;
 }
 
 .more-group-head > button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   width: 100%;
-  min-height: 48px;
-  padding: 6px 4px;
+  min-height: 44px;
+  padding: 4px 0;
   border: 0;
+  border-radius: 8px;
   background: transparent;
-  color: inherit;
+  color: var(--cobalt);
   font: inherit;
-  text-align: left;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+}
+
+.more-group-head > button::before,
+.more-group-head > button::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--cobalt);
+  opacity: 0.35;
 }
 
 .more-group-head > button:active {
@@ -929,28 +946,32 @@ textarea.input.member-card-raw {
 }
 
 .more-group-head .more-group-title {
-  flex: 1;
+  flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* The lone "Opslag & back-up" row sits between the groups with the same rhythm as a group head. */
+/* The lone "Opslag & back-up" row sits between the groups with the same rhythm as a group body. */
 .more .more-storage {
   margin: 8px 0;
 }
 
 .more-group-head .menu-badge {
   flex: none;
+  letter-spacing: 0;
+  text-transform: none;
   user-select: none;
   -webkit-user-select: none;
 }
 
 .more-group-head .chev {
   flex: none;
-  color: var(--muted);
-  opacity: 0.6;
+  width: 16px;
+  height: 16px;
+  color: inherit;
+  opacity: 0.8;
   transition: transform 0.15s;
 }
 
@@ -975,7 +996,7 @@ textarea.input.member-card-raw {
 /* Sub-heading inside a group ("Kookstand & timer", "Over"). */
 .more-sub {
   margin: 18px 0 2px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
