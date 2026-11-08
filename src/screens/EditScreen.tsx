@@ -7,7 +7,7 @@
 // above the keyboard) and at the bottom, Verwijder for own recipes.
 //
 // A builtin opens in OVERRIDE mode: the classic itself is never modified; Bewaar stores only the
-// changed fields (name, servingTip, lines, steps) as a RecipeOverride patch (repo.saveOverride),
+// changed fields (name, servingTip, tip, lines, steps) as a RecipeOverride patch (repo.saveOverride),
 // "Herstel origineel" removes it. The structure of a line (qty, unit, ing, …) is re-derived from
 // its raw text whenever that text changes (invariant 2); a hand-linked ingredient wins.
 //
@@ -220,12 +220,15 @@ function sameTags(a: readonly string[], b: readonly string[]): boolean {
  */
 export function buildOverridePatch(draft: Recipe, base: Recipe, prev: RecipePatch | undefined, by?: string | null): RecipePatch {
   const patch: RecipePatch = { ...(prev ?? {}) };
-  const put = (k: 'name' | 'servingTip' | 'lines' | 'steps' | 'text' | 'category' | 'cuisine' | 'tags' | 'metaManual', changed: boolean, v: unknown) => {
+  const put = (k: 'name' | 'servingTip' | 'tip' | 'lines' | 'steps' | 'text' | 'category' | 'cuisine' | 'tags' | 'metaManual', changed: boolean, v: unknown) => {
     if (changed) (patch as Record<string, unknown>)[k] = v;
     else delete patch[k];
   };
   put('name', textKey(draft.name) !== textKey(base.name), draft.name);
   put('servingTip', textKey(draft.servingTip) !== textKey(base.servingTip), draft.servingTip ?? null);
+  // 13D blok 4 (varianten-tabs.md §1g): "Tip van de maker" rides in the patch when it differs from the
+  // shipped recipe. `prev.variants` (approved diet tabs) stays untouched: the spread above keeps it.
+  put('tip', textKey(draft.tip) !== textKey(base.tip), draft.tip ?? null);
   put('category', (draft.category ?? null) !== (base.category ?? null), draft.category ?? null);
   // 6B blok 3: the cuisine chosen in the Keuken row rides along as a patch key (like metaManual,
   // `applyOverride` copies an unknown key onto the recipe).
@@ -318,6 +321,9 @@ export function EditScreen(props: { id?: string }) {
   const [nameEn, setNameEn] = useState('');
   const [tipNl, setTipNl] = useState('');
   const [tipEn, setTipEn] = useState('');
+  // 13D blok 4: "Tip van de maker" (Recipe.tip; travels when shared). tipNl/tipEn are the serving tip.
+  const [makerTipNl, setMakerTipNl] = useState('');
+  const [makerTipEn, setMakerTipEn] = useState('');
   const [servingsText, setServingsText] = useState('4');
   const [lines, setLines] = useState<EditText[]>([]);
   const [steps, setSteps] = useState<EditText[]>([]);
@@ -424,6 +430,8 @@ export function EditScreen(props: { id?: string }) {
       setNameEn('');
       setTipNl('');
       setTipEn('');
+      setMakerTipNl('');
+      setMakerTipEn('');
       setServingsText('4');
       setLines([newEditText(), newEditText(), newEditText()]);
       setSteps([newEditText()]);
@@ -486,6 +494,8 @@ export function EditScreen(props: { id?: string }) {
       setNameEn(r.name.en ?? '');
       setTipNl(r.servingTip?.nl ?? '');
       setTipEn(r.servingTip?.en ?? '');
+      setMakerTipNl(r.tip?.nl ?? '');
+      setMakerTipEn(r.tip?.en ?? '');
       setServingsText(String(r.servings || 4));
       setLines(rowsOf(r.lines, (x) => x.raw, lineSrc.current));
       setSteps(rowsOf(r.steps, (s) => s.text, stepSrc.current));
@@ -641,6 +651,11 @@ export function EditScreen(props: { id?: string }) {
     if (metaManual) draft.metaManual = true;
     else delete draft.metaManual;
     if (descTr) draft.description = descTr;
+    // 13D blok 4: the maker's tip from the form; empty in both languages = no tip. `variants` (and any
+    // other key of the stored recipe) ride along through the `...src` spread.
+    const makerTip = textOf(makerTipNl, makerTipEn);
+    if (makerTip.nl || makerTip.en) draft.tip = makerTip;
+    else delete draft.tip;
     // 6A.17: the times a pasted website text carried (new recipe only; an existing recipe keeps its own).
     if (!existing && importTime) draft.time = importTime;
     return normalizeRecipe(draft);
@@ -1529,6 +1544,24 @@ export function EditScreen(props: { id?: string }) {
               />
             </div>
           ))}
+        </div>
+
+        {/* 13D blok 4 (varianten-tabs.md §1g): "Tip van de maker", travels with a share; the private note never does. */}
+        <div class="field edit-maker-tip">
+          <span>{t('edit.tip.label')}</span>
+          {langs.map((l) => (
+            <div class="edit-name" key={l}>
+              {langs.length > 1 && <span class="le-tag">{l.toUpperCase()}</span>}
+              <textarea
+                class="input"
+                rows={2}
+                value={l === 'nl' ? makerTipNl : makerTipEn}
+                placeholder={tIn(l, 'edit.tip.placeholder')}
+                onInput={(e) => (l === 'nl' ? setMakerTipNl : setMakerTipEn)((e.currentTarget as HTMLTextAreaElement).value)}
+              />
+            </div>
+          ))}
+          <p class="muted small">{t('edit.tip.hint')}</p>
         </div>
 
         {/* PLAN §0 "Vertaling eigen recepten" (1): in every column mode; NL mode adds English, EN mode adds Dutch. */}

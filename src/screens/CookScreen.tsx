@@ -27,6 +27,7 @@
 // "Toon hoeveelheden" and "hoeveel?", says "Glutenvrije versie" above the kicker, logs Gekookt! with
 // `variant` and keeps the version in the cooking session (the bar row reopens it with `&v=`). A `?v=`
 // that is not (or no longer) approved silently cooks the original, without the extra kicker line.
+// Without `?v=` the version of this recipe's live cooking session is used; an explicit `v` wins.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { celebrate } from '@/celebrate';
@@ -193,16 +194,25 @@ export function CookScreen(props: { id: string }) {
   // version mid-cook. Only a diet whose tab is approved on this recipe counts (parseVariantParam);
   // anything else is the original, silently.
   const [vParam] = useState(() => route.value.query.get('v'));
+  // Besluit Fable na blok 3 (1): without `?v=` (a timer notification, the timer line in the bar)
+  // cook mode falls back on the version of this recipe's LIVE cooking session, not the original;
+  // only an explicit `v` wins. Read from the signal, so it follows the store once it has loaded.
+  // The same approval check applies: a session version whose tab is no longer approved cooks the original.
+  const wantedVariant: string | null = vParam ?? sessionFor(id)?.variant ?? null;
   const approvedDiets = useMemo<VariantDiet[]>(
     () =>
-      recipe && vParam
+      recipe && wantedVariant
         ? variantTabs(lines, recipe.variants, swapsData, dict, 0)
             .diets.filter((d) => d.status === 'approved')
             .map((d) => d.diet)
         : [],
-    [recipe, lines, dict, vParam],
+    [recipe, lines, dict, wantedVariant],
   );
-  const variant = parseVariantParam(vParam, approvedDiets);
+  const variant = parseVariantParam(wantedVariant, approvedDiets);
+  // What the session writes: an explicit `?v=` (or a resolved version) is written as is; without one
+  // and nothing resolved (yet), e.g. a cold start before the store loaded, the session keeps its own
+  // version (undefined = keep), or the first step write would wipe it.
+  const touchVariant: VariantDiet | null | undefined = vParam !== null || variant ? variant : undefined;
   const view = useMemo(() => {
     if (!recipe || !variant) return null;
     const v = variantView(variant, lines, recipe.variants?.[variant], swapsData, dict);
@@ -330,8 +340,8 @@ export function CookScreen(props: { id: string }) {
   // session's own servings instead of wiping them.
   // 13D: the session also keeps the version shown here (null = the original), for the bar's `&v=`.
   useEffect(() => {
-    if (recipe && page >= 1 && page <= steps.length) void touchCooking(recipe, page, chosen, variant);
-  }, [page, loadedId, servings, variant]);
+    if (recipe && page >= 1 && page <= steps.length) void touchCooking(recipe, page, chosen, touchVariant);
+  }, [page, loadedId, servings, touchVariant]);
   // 13I: the current step as StepView shows it, with the ingredients it names. The same words feed
   // the "Toon hoeveelheden" button and the voice command "hoeveel?". 13D: the lines of the version.
   const currentStep = page > 0 && page <= steps.length ? steps[page - 1] : undefined;
@@ -505,7 +515,7 @@ export function CookScreen(props: { id: string }) {
       case 'timer':
         // 13K §1a: a timer means you are cooking: start or keep alive the session (on Klaarzetten at
         // page 0, on the Gekookt page at the last step).
-        void touchCooking(recipe, page <= steps.length ? page : steps.length, chosen, variant);
+        void touchCooking(recipe, page <= steps.length ? page : steps.length, chosen, touchVariant);
         void startTimer({
           durationMs: cmd.minutes * MINUTE_MS,
           label: onStep ? `${name} · ${t('cook.stepShort', { n: page })}` : name,
@@ -733,7 +743,7 @@ export function CookScreen(props: { id: string }) {
                     lines={shownLines}
                     factor={factor}
                     // 13K: a timer chip keeps the session alive (same page; only lastActiveAt moves).
-                    onTimerStart={() => void touchCooking(recipe, page, chosen, variant)}
+                    onTimerStart={() => void touchCooking(recipe, page, chosen, touchVariant)}
                   />
                   {(speechOk || amountsOffered) && (
                     <div class="cook-speak">

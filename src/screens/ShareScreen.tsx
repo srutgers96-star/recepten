@@ -12,16 +12,20 @@
 // A recipe too big for one message (> 3.5 KB) becomes a .json file instead (planMessages):
 // "Deel het bestand" first, "Download" second; a download reports "Opgeslagen als … in Downloads".
 // '#/share' without an id is "Stuur nieuwe naar …" (DeltaShareScreen; no router change).
+// 13D block 4 (docs/specs/varianten-tabs.md §1g): when the active profile has a private note on
+// this recipe, a switch "Mijn notitie meesturen als tip van de maker" (default off) puts the note
+// in THIS envelope as the maker's tip (`r.tip` on a copy of the recipe, `p.patch.tip` on a copy of
+// the patch) and in the readable text; the notes table and the stored recipe are never touched.
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { checkNewBadges, recheckActiveBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
 import { QrCode } from '@/components/QrCode';
 import { Segmented } from '@/components/Segmented';
-import { bumpSharedRecipes, getOverride, getRecipe, getSetting, isBuiltinId, listLineOverrides, listUserIngredients, logShareEvent } from '@/db/repo';
+import { bumpSharedRecipes, getNote, getOverride, getRecipe, getSetting, isBuiltinId, listLineOverrides, listUserIngredients, logShareEvent } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import type { Ingredient } from '@/domain/dictionary';
-import { nowIso, pickText, type Lang, type Recipe } from '@/domain/model';
+import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
 import { applyLineOverrides, type LineOverride, type RecipeOverride } from '@/domain/overrides';
 import { buildReadableRecipe, countIngredientLines, recipeHasLang } from '@/domain/message';
 import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
@@ -36,7 +40,7 @@ import { DeltaShareScreen } from './DeltaShareScreen';
 type TextLangs = 'nl' | 'en' | 'both';
 const TEXT_LANGS: Record<TextLangs, Lang[]> = { nl: ['nl'], en: ['en'], both: ['nl', 'en'] };
 
-interface Loaded {
+export interface Loaded {
   /** As stored: override patch applied for a classic, line overrides NOT yet folded in. */
   base: Recipe;
   /** What the reader sees: line overrides folded in. */
@@ -53,6 +57,38 @@ interface Loaded {
 function linksOnlyOverride(baseId: string, lineOverrides: LineOverride[]): RecipeOverride {
   const updatedAt = lineOverrides.reduce((max, o) => (o.updatedAt > max ? o.updatedAt : max), '');
   return { baseId, rev: 1, patch: {}, updatedAt };
+}
+
+/**
+ * 13D §1g: the maker's tip with the private note added in language `l`: the note alone, or after the
+ * existing tip in that language with an empty line between. The other language stays as it was.
+ * A blank note gives null (nothing to send). Pure; never writes anything.
+ */
+export function withNoteTip(existing: Text | null | undefined, note: string, l: Lang): Text | null {
+  const text = note.trim();
+  if (text === '') return null;
+  const out: Text = { ...(existing ?? {}) };
+  const prev = (out[l] ?? '').trim();
+  out[l] = prev ? `${prev}\n\n${text}` : text;
+  return out;
+}
+
+/**
+ * The envelope this screen sends. `noteTip` (from `withNoteTip`, only when the switch is on) goes on
+ * a COPY: `{ ...loaded.base, tip }` for `#r=`, `{ ...patch, tip }` for `#p=`; `loaded` itself is
+ * left untouched. Without `noteTip` the envelope is exactly what it was before 13D block 4.
+ */
+export function buildShareEnvelope(loaded: Loaded, by: string, noteTip: Text | null): Envelope {
+  const ctx = { by, userIngredients: loaded.userIngredients, lineOverrides: loaded.lineOverrides };
+  // A classic always sends its tip as a patch (§1g): an unadjusted classic is 'present' at the
+  // receiver, so a `#r=` with `r.tip` would never arrive. An empty override carries it then.
+  const tipOnClassic = !!noteTip && isBuiltinId(loaded.base.id);
+  const override = loaded.override ?? (loaded.linksOnly || tipOnClassic ? linksOnlyOverride(loaded.base.id, loaded.lineOverrides) : undefined);
+  if (override) {
+    const patch = noteTip ? { ...override, patch: { ...override.patch, tip: noteTip } } : override;
+    return buildPatchEnvelope(patch, { ...ctx, name: loaded.base.name });
+  }
+  return buildRecipeEnvelope(noteTip ? { ...loaded.base, tip: noteTip } : loaded.base, ctx);
 }
 
 interface Built {
@@ -112,7 +148,11 @@ function RecipeShareScreen(props: { id: string }) {
   // Phase 5 block D.5: "Toon QR" exists only while the Experimenten flag is on (flag off = no trace).
   const [experiments, setExperiments] = useState(false);
   const [showQr, setShowQr] = useState(false);
+  // 13D §1g: the active profile's private note on this recipe ('' = none, no switch) and the switch.
+  const [note, setNote] = useState('');
+  const [noteAsTip, setNoteAsTip] = useState(false);
   const by = activeProfile.value?.name ?? '';
+  const pid = activeProfile.value?.id ?? '';
   const ui = lang.value;
 
   useEffect(() => {
@@ -158,16 +198,33 @@ function RecipeShareScreen(props: { id: string }) {
     };
   }, [props.id]);
 
-  // The envelope + message; recomputed when the sender name or the UI language changes.
+  // 13D §1g: read (never write) the active profile's note; the switch starts off for every recipe.
+  useEffect(() => {
+    let cancelled = false;
+    setNote('');
+    setNoteAsTip(false);
+    if (!pid) return;
+    getNote(props.id, pid)
+      .then((text) => {
+        if (!cancelled) setNote(text);
+      })
+      .catch((e: unknown) => console.error('getNote', e));
+    return () => {
+      cancelled = true;
+    };
+  }, [props.id, pid]);
+
+  // The tip this link carries when the switch is on (UI language; added to an existing tip).
+  const noteTip = useMemo(() => (loaded && noteAsTip ? withNoteTip(loaded.base.tip, note, ui) : null), [loaded, noteAsTip, note, ui]);
+
+  // The envelope + message; recomputed when the sender name, the UI language or the note switch changes.
   useEffect(() => {
     if (!loaded) return;
     let cancelled = false;
     setBuilt(null);
     setError(null);
     (async () => {
-      const ctx = { by, userIngredients: loaded.userIngredients, lineOverrides: loaded.lineOverrides };
-      const patch = loaded.override ?? (loaded.linksOnly ? linksOnlyOverride(loaded.base.id, loaded.lineOverrides) : undefined);
-      const env = patch ? buildPatchEnvelope(patch, { ...ctx, name: loaded.base.name }) : buildRecipeEnvelope(loaded.base, ctx);
+      const env = buildShareEnvelope(loaded, by, noteTip);
       const [plan, token] = await Promise.all([planMessages([env], appInfo.appUrl, { lang: ui, by }), encodeToken(env)]);
       if (cancelled) return;
       setBuilt({ env, plan, url: buildShareUrl(appInfo.appUrl, env.t, token) });
@@ -177,9 +234,10 @@ function RecipeShareScreen(props: { id: string }) {
     return () => {
       cancelled = true;
     };
-  }, [loaded, by, ui]);
+  }, [loaded, by, ui, noteTip]);
 
-  const recipe = loaded?.effective;
+  // The readable text is built from `effective` (not from the envelope): the same tip on a copy.
+  const recipe = useMemo(() => (loaded ? (noteTip ? { ...loaded.effective, tip: noteTip } : loaded.effective) : undefined), [loaded, noteTip]);
   const message = built && 'text' in built.plan ? built.plan.text : '';
   const file = built && 'file' in built.plan ? built.plan.file : null;
   const dictCount = built && built.env.dict && Array.isArray((built.env.dict as { ing?: unknown[] }).ing) ? (built.env.dict as { ing: unknown[] }).ing.length : 0;
@@ -201,7 +259,7 @@ function RecipeShareScreen(props: { id: string }) {
 
   const name = recipe ? pickText(recipe.name, ui) : '';
   // 13A-2: what the log calls this share — an adjusted (or link-only) classic travels as a patch.
-  const asPatch = !!loaded && (!!loaded.override || loaded.linksOnly);
+  const asPatch = !!loaded && (!!loaded.override || loaded.linksOnly || (!!noteTip && isBuiltinId(loaded.base.id)));
 
   /** The share sheet reported 'shared': count it for the badge and write the "In & uit" row. */
   function onRecipeShared() {
@@ -264,6 +322,18 @@ function RecipeShareScreen(props: { id: string }) {
             {loaded.linksOnly && <p class="muted small">{t('share.linksNote')}</p>}
             {dictCount > 0 && <p class="muted small">{dictCount === 1 ? t('share.dictNoteOne') : t('share.dictNote', { n: dictCount })}</p>}
             <p class="muted small">{t('share.intro')}</p>
+            {note.trim() !== '' && (
+              <label class="setting share-note-tip">
+                <div class="label">
+                  {t('share.noteAsTip')}
+                  <small>{t('share.noteAsTipHint')}</small>
+                </div>
+                <span class="switch">
+                  <input type="checkbox" checked={noteAsTip} onChange={(e) => setNoteAsTip((e.currentTarget as HTMLInputElement).checked)} />
+                  <span class="track" />
+                </span>
+              </label>
+            )}
 
             {file ? (
               <>

@@ -1,9 +1,67 @@
-# Status — Rutgers' Recepten (bijgewerkt 30 oktober 2026)
+# Status — Rutgers' Recepten (bijgewerkt 8 november 2026)
 
 Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invarianten) en PLAN.md §0 (besluiten).
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 13D blok 4 — varianten als tabs: tip van de maker, eigen versie, delen
+Gebouwd volgens docs/specs/varianten-tabs.md "Blok 4" (bouwer A editor + recept, B deelscherm, C i18n + In & uit + opruimen,
+extra bouwer D de besluiten 1 en 2 uit "Besluiten Fable na blok 3"; integrator). Niet gecommit. Geen Dexie-versie, geen setting,
+geen localStorage-sleutel, geen dependency. Groen: check, 1541 tests (65 bestanden, nieuw: tests/share-note-tip.test.ts 10 en
+tests/import-preview-extras.test.ts 3), build, build:next, validate:data (alleen de bekende 4 swaps-waarschuwingen). Landing-chunk
+`share-*.js` 24,9 kB gzip (ongewijzigd). Eerst naar `/next/` (spec §4).
+- **Editor + recept (A):** in EditScreen onder "Serveertip" het veld "Tip van de maker" (NL/EN, eigen state `makerTipNl`/
+  `makerTipEn`; `tipNl`/`tipEn` blijven de serveertip), hint en placeholder uit §1g; leeg in beide talen = geen `tip`. In de
+  override-stand zet `buildOverridePatch` `tip` als hij afwijkt van het origineel (`prev.variants` blijft staan). Op het recept
+  onder de stappen het kaartje `.detail-tip` "💡 Tip van {naam}" (maker van eigen/ontvangen recept, `override.by` bij een
+  klassieker met tip in de patch, anders "Tip van de maker"); op een persoonlijke-versie-tab de tip van de versie (zoals besluit 6
+  na blok 2). Onder het notitievak de grijze regel `recipe.notesTipHint`. Onderaan §1h: **Recept bewerken** (klassieker: de
+  override-stand, nu dus ook zonder de EN-badge bereikbaar) · **Eigen versie maken** (`makeOwnVersion` → editor; dubbeltik-slot)
+  · Verwijder (alleen eigen/ontvangen), met `version.hint` of zonder profiel `version.noProfile`. `onCopy`/`duplicateAsOwn` weg uit
+  RecipeScreen.
+- **Deelscherm (B):** leest (nooit schrijft) `getNote(id, profiel)`; met een notitie staat boven het voorbeeld de schakelrij
+  "Mijn notitie meesturen als tip van de maker" (standaard uit, terug uit bij ander recept/profiel). Aan → `withNoteTip` plakt de
+  notitie in de UI-taal onder een bestaande tip (lege regel ertussen) op een **kopie**: `r.tip` bij `#r=`, `p.patch.tip` bij `#p=`
+  (ook de lege linksOnly-patch); dezelfde tip op een kopie van `effective` voor de leesbare tekst. `buildShareEnvelope` is
+  geëxporteerd en getest (zonder schakelaar envelop als vóór blok 4; geladen recept/override onveranderd).
+- **i18n, In & uit, opruimen (C):** alle keys van §1g/§1h in `src/i18n/variants.ts` (NL en EN letterlijk), ook
+  `recipe.notesTipHint` (stond niet in C's keylijst maar wel in §1g); `recipe.copy`, `recipe.copyHint`, `recipe.copyNoProfile` weg
+  (`recipe.copyAsText`/`recipe.copyFailed` blijven). ImportPreview: onder de telregel "met een tip van de maker" en/of "met een
+  goedgekeurde versie" / "met {n} goedgekeurde versies" (alleen bekende diëten met `approved === true`), ook bij een `#p=`-patch.
+- **Besluiten na blok 3 (D):** (1) CookScreen zonder `?v=` kookt de versie van de lopende kooksessie van dit recept (door
+  `parseVariantParam`, dus alleen als die tab nog goedgekeurd is); zolang er niets bekend is geeft hij `undefined` aan
+  `touchCooking` (de sessie houdt haar versie bij een koude start). (2) `dietChipsFor` toont geen "-optie"-chip voor een dieet dat
+  al als gewone chip staat; het filter (`tagsWithVariants`) kent beide nog.
+- **Integrator:** de knop Koken op de tab **Origineel** stuurt nu een expliciet lege `&v=` (= origineel), anders kookte hij na
+  besluit 1 de versie van een lopende glutenvrije sessie (`parseVariantParam('')` = origineel, en de sessie wordt op origineel
+  gezet). `db.notes` komt alleen via de schakelaar in een envelop (grep: alleen RecipeScreen en ShareScreen lezen `getNote`).
+- **Dev-app (375 px, NL en EN, vers profiel "Test"):** klassieker Spaghettischotel: onderaan Recept bewerken · Eigen versie maken
+  (44 px, geen Verwijder), hint, notitiehint. Eigen versie maken → editor `/edit/u:…` met "… (versie van Test)" / "Spaghetti bake
+  (Test's version)"; tip "Proef eerst" → bewaar → kaartje "💡 Tip van Test / Proef eerst", "Versie van Spaghettischotel uit de
+  oven", Verwijder erbij; op het origineel tabrij Origineel · Glutenvrij · Vegetarisch · Vegan · Lactosevrij · Test. Notitie
+  "alleen voor mij" → Deel: schakelrij verschijnt; leesbare tekst eindigt met "💡 Tip van de maker: Proef eerst"; aan → token
+  gedecodeerd: `r.tip = {nl: "Proef eerst
+
+alleen voor mij"}`; opgeslagen recept nog `{nl: "Proef eerst"}`, notitie
+  ongewijzigd. Link in In & uit → "met een tip van de maker" (status "Heb je al": `contentFingerprint` kijkt niet naar `tip`, zie
+  open punt 2). Klassieker → Recept bewerken → EN-tip → override `{patch: {tip: {en: …}}, by: "Test"}`, kaartje "Tip van Test".
+  EN: "Tip from Test", "Edit this recipe · Make my own version · Delete", hint, notitiehint, "Send my note along as the maker's
+  tip …", "with a tip from the maker". Viewport terug, server gestopt; de testdata blijft in de dev-database.
+- **DEVICE-TEST:** rij 88 (NL en EN) direct na rij 87, letterlijk uit §6c.
+- **Open voor Fable/Stijn:** (1) **Klassieker zonder override en zonder koppelingen** reist als `#r=`: de notitie-als-tip staat
+  dan op `r.tip`, maar bij de ontvanger is dat recept "Heb je al" en komt de tip niet aan. Moet de schakelaar dan een `#p=` met
+  alleen `patch.tip` maken (zoals linksOnly)? Niet zelf beslist. (2) Hetzelfde bij een eigen recept dat de ontvanger al heeft:
+  alleen een tip erbij geeft "Heb je al" (`contentFingerprint` = naam + regels); rij 88 stap 6 werkt alleen bij een ontvanger die
+  de versie nog niet heeft. (3) `recipe.notesTipHint` staat onder élk notitievak (elk recept heeft nu "Recept bewerken"); de spec
+  zegt "bij een bewerkbaar recept". (4) Mislukt `makeOwnVersion`, dan alleen `console.error` (de spec noemt geen foutsleutel).
+  (5) De "met …"-regels verschijnen ook bij een `#p=`-patch; §1g zegt "van een recept". (6) `dietChipsFor` (D) laat de -optie-
+  chip ook vallen als de gewone chip uit de ingrediënten is afgeleid (ook een onzekere). (7) Kookstand bij een koude start zonder
+  `?v=`: Klaarzetten kan heel even het origineel tonen tot de sessies geladen zijn. (8) Geen tests voor D's twee punten (logica
+  in de schermen). (9) Uit blok 3 nog open: `checkedIngs` in README §2b; `variant.onlyCheck`/`recipe.variants` opschonen.
+
+- **Besluit Fable (8 nov, commit van blok 4):** alle keuzes akkoord (zie "Besluiten Fable na blok 4" in de spec); 13D is
+  compleet. Eerlijke beperking: een eigen recept dat de ontvanger al heeft met alleen een andere tip blijft "Heb je al".
+  Volgende: 6D-S "Jouw stijl" + "Mijn profiel" (Fable schrijft eerst de spec), daarna 6C.
 ## 30 okt (Opus): 13D blok 3 — varianten als tabs: kookstand, lijst, week en filters volgen de tab
 Gebouwd volgens docs/specs/varianten-tabs.md "Blok 3" (bouwer A kookstand + CookedSheet + cooklog + badges + kookbalk, B week en
 In & uit, C filters en dieetchips, extra bouwer D de punten 2, 4 en 7 uit "Besluiten Fable na blok 2"; integrator). Niet

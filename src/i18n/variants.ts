@@ -76,4 +76,46 @@ export const variants: Dict = {
     nl: 'Alleen goedgekeurde versies; keur ze goed op het recept.',
     en: 'Only approved versions; approve them on the recipe.',
   },
+
+  // Block 4 (§1g) The maker's tip card under the steps. {name} = origin.author (own), origin.receivedFrom
+  // (received) or override.by (a classic with a tip in its patch); without a name the anonymous title.
+  'tip.title': { nl: 'Tip van {name}', en: 'Tip from {name}' },
+  'tip.titleAnon': { nl: 'Tip van de maker', en: "Maker's tip" },
+  // §1g The tip field in the editor, under "Serveertip".
+  'edit.tip.label': { nl: 'Tip van de maker', en: "Maker's tip" },
+  'edit.tip.hint': {
+    nl: 'Reist mee als je het recept deelt. Je privénotitie reist nooit mee.',
+    en: 'Travels with the recipe when you share it. Your private note never does.',
+  },
+  'edit.tip.placeholder': {
+    nl: 'Bv. Nog lekkerder na een dag in de koelkast.',
+    en: 'E.g. Even better after a day in the fridge.',
+  },
+  // §1g Second grey line under the notes box of an editable recipe.
+  'recipe.notesTipHint': {
+    nl: 'Iets meegeven aan wie dit recept krijgt? Zet het in ‘Tip van de maker’ (Bewerk).',
+    en: "Want to pass something on to whoever gets this recipe? Put it in ‘Maker's tip’ (Edit).",
+  },
+  // §1g The switch on the share screen (only when the active profile has a note on this recipe).
+  'share.noteAsTip': { nl: 'Mijn notitie meesturen als tip van de maker', en: "Send my note along as the maker's tip" },
+  'share.noteAsTipHint': {
+    nl: 'Je notitie blijft privé op deze telefoon; alleen deze link krijgt hem als tip.',
+    en: 'Your note stays private on this phone; only this link carries it as a tip.',
+  },
+  // §1g In & uit: small lines under the counts line of an incoming recipe.
+  'inbox.withTip': { nl: 'met een tip van de maker', en: 'with a tip from the maker' },
+  'inbox.withVariant1': { nl: 'met een goedgekeurde versie', en: 'with one approved version' },
+  'inbox.withVariants': { nl: 'met {n} goedgekeurde versies', en: 'with {n} approved versions' },
+
+  // §1h "Recept bewerken" vs "Eigen versie maken" at the bottom of the recipe (.detail-manage).
+  'recipe.edit': { nl: 'Recept bewerken', en: 'Edit this recipe' },
+  'version.make': { nl: 'Eigen versie maken', en: 'Make my own version' },
+  'version.hint': {
+    nl: 'Bewerken verandert dit recept. Een eigen versie laat het origineel staan, hangt eraan als tabblad en is apart te delen.',
+    en: 'Editing changes this recipe. Your own version leaves the original alone, hangs on it as a tab and can be shared on its own.',
+  },
+  'version.noProfile': {
+    nl: 'Kies eerst een profiel (Meer) om een eigen versie te maken.',
+    en: 'Choose a profile first (More) to make your own version.',
+  },
 };

@@ -794,6 +794,15 @@ zelf (RecipeScreen: `onCopy` wordt `makeOwnVersion` + navigate naar de editor) h
 die RecipeScreen in dit blok bezit.
 **Integrator blok 4**: smoke §6, DEVICE-TEST rij 88, STATUS; controleert dat de tabel `notes` nergens
 in een envelop terechtkomt behalve via de schakelaar.
+**Besluiten Fable na blok 4 (8 nov):** alle bouwerskeuzes akkoord: tipkaartje volgt de versie-tab; `recipe.notesTipHint` onder
+elk notitievak (elk recept heeft nu "Recept bewerken"); een mislukte `makeOwnVersion` logt alleen (geen foutsleutel nodig,
+de knop wordt weer bruikbaar); de "met …"-regels in In & uit ook bij een `#p=`-patch (een tip of versie op een klassieker is
+ook nieuws); `dietChipsFor` laat de -optie-chip ook weg als de gewone chip uit de ingrediënten is afgeleid; Koken op de tab
+Origineel stuurt een lege `&v=` zodat een lopende dieetsessie niet doorloopt (integrator); de fixer-fix (notitie-als-tip op
+een klassieker zonder override reist als `#p=` met `patch.tip`) is precies §1g. Eerlijke beperking, geen fix: een eigen recept
+dat de ontvanger al heeft met alleen een andere tip blijft "Heb je al" (contentFingerprint kijkt naar naam en regels); staat
+zo in rij 88. Opschoonronde: `variant.onlyCheck`, `recipe.variants`, `badges.secretHint` ongebruikt. 13D is hiermee compleet.
+Gebouwd: 8 nov 2026 (13D blok 4, workflow wf_3ccd5a7f-459)
 
 ### Blok 5 — vervallen (kritische lezer)
 

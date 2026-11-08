@@ -1522,3 +1522,21 @@ button.lc-unresolved.lc-tap:active {
 .picker-ask-stays {
   margin: 0;
 }
+
+/* ---------- 13D blok 4: "Tip van de maker" (varianten-tabs.md §1g) ---------- */
+
+.edit-maker-tip .edit-name {
+  align-items: flex-start;
+}
+
+.edit-maker-tip .le-tag {
+  margin-top: 12px;
+}
+
+.edit-maker-tip textarea.input {
+  min-height: 72px;
+}
+
+.edit-maker-tip p {
+  margin: 0;
+}

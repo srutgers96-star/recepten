@@ -6,6 +6,7 @@
 import { ConflictCard, itemName } from '@/components/ConflictCard';
 import { pickText, type Lang } from '@/domain/model';
 import { defaultChoice, type ImportChoice, type ImportChoices, type ImportItem, type ImportPlan } from '@/domain/merge';
+import { VARIANT_DIETS } from '@/domain/diets';
 import { t } from '@/i18n';
 
 export interface ImportPreviewProps {
@@ -70,6 +71,37 @@ function countsLine(item: ImportItem): string {
   return labels.length ? t('inbox.patchFields', { fields: labels.join(', ') }) : '';
 }
 
+/**
+ * 13D blok 4 (docs/specs/varianten-tabs.md §1g): what an incoming recipe (or a classic's patch)
+ * carries besides its lines — a maker's tip with text in a language, and the number of approved diet
+ * versions. A key that is not a known diet or a version that is not approved does not count.
+ */
+export function importExtras(item: ImportItem): { tip: boolean; approved: number } {
+  const src: { tip?: unknown; variants?: unknown } = item.kind === 'recipe' ? item.incoming : (item.incoming.patch ?? {});
+  const tip = src.tip;
+  const hasTip =
+    !!tip && typeof tip === 'object' && Object.values(tip as Record<string, unknown>).some((v) => typeof v === 'string' && v.trim() !== '');
+  let approved = 0;
+  const vs = src.variants;
+  if (vs && typeof vs === 'object') {
+    for (const diet of VARIANT_DIETS) {
+      const v = (vs as Record<string, unknown>)[diet];
+      if (v && typeof v === 'object' && (v as { approved?: unknown }).approved === true) approved++;
+    }
+  }
+  return { tip: hasTip, approved };
+}
+
+/** The small "met een tip van de maker" / "met n goedgekeurde versies" lines (§1g), in that order. */
+export function extrasLines(item: ImportItem): string[] {
+  const x = importExtras(item);
+  const out: string[] = [];
+  if (x.tip) out.push(t('inbox.withTip'));
+  if (x.approved === 1) out.push(t('inbox.withVariant1'));
+  else if (x.approved > 1) out.push(t('inbox.withVariants', { n: x.approved }));
+  return out;
+}
+
 function ItemCard(props: { item: ImportItem; choice: ImportChoice; by?: string; ui: Lang; onChoice: (c: ImportChoice) => void; onOpen: (id: string) => void }) {
   const { item, ui } = props;
   const name = itemName(item, ui);
@@ -90,6 +122,11 @@ function ItemCard(props: { item: ImportItem; choice: ImportChoice; by?: string; 
         <StatusChip item={item} by={props.by} ui={ui} />
       </div>
       <p class="muted small ip-counts">{countsLine(item)}</p>
+      {extrasLines(item).map((line) => (
+        <p key={line} class="muted small ip-counts ip-extra">
+          {line}
+        </p>
+      ))}
 
       {item.kind === 'patch' && item.problem === 'unknown-base' && <p class="bad small">{t('inbox.unknownBase')}</p>}
       {item.status === 'present' && !(item.kind === 'patch' && item.problem) && (

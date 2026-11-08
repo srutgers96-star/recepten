@@ -54,7 +54,6 @@ import {
   cookStats,
   deletePhoto,
   deleteUserRecipe,
-  duplicateAsOwn,
   getCookLogEntry,
   getHousehold,
   getNote,
@@ -65,6 +64,7 @@ import {
   latestCookFor,
   listFavorites,
   listPhotos,
+  makeOwnVersion,
   revokeVariant,
   saveOverride,
   saveUserRecipe,
@@ -127,7 +127,13 @@ function dietChipsFor(recipe: Recipe, lines: readonly Line[], dict: Dictionary, 
       else if (facts[tag] === true) out.push({ tag, unsure: facts.unsure.includes(tag as DietTag) });
     }
   }
-  for (const tag of DIET_TAGS) if (stored.has(OPTIE_TAG[tag])) out.push({ tag: OPTIE_TAG[tag], unsure: false });
+  // Besluit Fable na blok 3 (2): no "-optie" chip for a diet the recipe already shows as a plain chip
+  // (a vegetarian recipe with a vegan tab: "vegetarisch" + "vegan-optie", no "vega-optie"). Only the
+  // chips: the filter still knows both tags (tagsWithVariants).
+  const plain = new Set(out.map((c) => c.tag));
+  for (const tag of DIET_TAGS) {
+    if (stored.has(OPTIE_TAG[tag]) && !plain.has(tag)) out.push({ tag: OPTIE_TAG[tag], unsure: false });
+  }
   return out;
 }
 
@@ -276,6 +282,7 @@ export function RecipeScreen(props: { id: string }) {
   const fahrenheit = useFahrenheit();
   const dict = dictionary.value;
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [versionBusy, setVersionBusy] = useState(false);
   const [note, setNoteText] = useState('');
   const [noteSaved, setNoteSaved] = useState(false);
   const noteTimer = useRef<number | null>(null);
@@ -605,10 +612,21 @@ export function RecipeScreen(props: { id: string }) {
     await touchCooking(r, !s || s.page < page ? page : s.page, servings, cookVariant ?? undefined);
   }
 
-  async function onCopy() {
-    if (!recipe || !profile) return;
-    const copy = await duplicateAsOwn(recipe, profile);
-    navigate('/edit/' + copy.id);
+  /**
+   * 13D §1h "Eigen versie maken": a copy hung on this recipe (`variantOf`, `origin.basedOn`, name
+   * "<naam> (versie van <maker>)", without this recipe's variants and tip), opened in the editor.
+   * The live `versions` list shows it as a tab here as soon as it is stored.
+   */
+  async function onMakeVersion() {
+    if (!recipe || !profile || versionBusy) return;
+    setVersionBusy(true);
+    try {
+      const copy = await makeOwnVersion(recipe, profile);
+      navigate('/edit/' + copy.id);
+    } catch (e) {
+      console.error('makeOwnVersion', e);
+      setVersionBusy(false);
+    }
   }
 
   /**
@@ -760,6 +778,16 @@ export function RecipeScreen(props: { id: string }) {
   // The status line of a personal-version tab: "Versie van Dino", plus the version's own name when
   // it is not simply "<naam> (versie van Dino)" (an older diet copy: "Uiensoep (glutenvrij)").
   const versionMaker = version ? makerName(version) : null;
+  // 13D §1g: the maker's tip of the shown recipe and whose it is: the maker of an own / received
+  // recipe, the person behind the override of a classic whose patch carries the tip.
+  const makerTipText = shownRecipe ? pickText(shownRecipe.tip, l).trim() : '';
+  const makerTipBy = !shownRecipe
+    ? null
+    : shownRecipe.origin.kind === 'builtin' || isBuiltinId(shownRecipe.id)
+      ? override?.patch?.tip && typeof override.by === 'string' && override.by.trim()
+        ? override.by.trim()
+        : null
+      : makerName(shownRecipe);
   const versionTitle = version ? pickText(version.name, l) : '';
   const versionTitleDiffers =
     !!version && !!recipe && (!versionMaker || versionTitle !== pickText(versionName(recipe.name, versionMaker), l));
@@ -926,11 +954,13 @@ export function RecipeScreen(props: { id: string }) {
 
             <div class="detail-actions detail-actions-3 no-print">
               {/* 13D §1d: a diet tab cooks with ?v=<diet> (cook mode falls back to the original when it is
-                  not approved); a personal-version tab cooks, logs and shares the version itself. */}
+                  not approved); a personal-version tab cooks, logs and shares the version itself.
+                  Besluit Fable na blok 3 (1): cook mode without `v` follows the live cooking session, so
+                  the Origineel tab sends an explicit empty `v=` (= the original) and always wins. */}
               <button
                 type="button"
                 class="btn btn-primary"
-                onClick={() => navigate(`/cook/${targetId}?srv=${servings}` + (dietChoice ? `&v=${dietChoice}` : ''))}
+                onClick={() => navigate(`/cook/${targetId}?srv=${servings}&v=${dietChoice ?? ''}`)}
               >
                 {t('recipe.cook')}
               </button>
@@ -1093,6 +1123,19 @@ export function RecipeScreen(props: { id: string }) {
               )}
             </section>
 
+            {/* 13D §1g: "Tip van de maker" of the shown recipe (on a personal-version tab: the version's). */}
+            {makerTipText && (
+              <section class="section">
+                <div class="card detail-tip">
+                  <h2>
+                    <span aria-hidden="true">💡 </span>
+                    {makerTipBy ? t('tip.title', { name: makerTipBy }) : t('tip.titleAnon')}
+                  </h2>
+                  <p class="detail-tip-text">{makerTipText}</p>
+                </div>
+              </section>
+            )}
+
             {related.length > 0 && (
               <section class="section">
                 <h2>{t('recipe.goesWith')}</h2>
@@ -1128,42 +1171,45 @@ export function RecipeScreen(props: { id: string }) {
                     <span class="muted small">{t('recipe.notesHint', { name: profile?.name ?? '' })}</span>
                     {noteSaved && <span class="saved-flag">{t('recipe.saved')}</span>}
                   </div>
+                  {/* 13D §1g: the note stays private; what should travel goes in "Tip van de maker". */}
+                  <p class="muted small notes-tip-hint no-print">{t('recipe.notesTipHint')}</p>
                 </>
               ) : (
                 <p class="muted">{t('recipe.notesNoProfile')}</p>
               )}
             </section>
 
+            {/* 13D §1h: "Recept bewerken" (a classic: the override mode of the editor) · "Eigen versie maken"
+                (a tab on this recipe) · Verwijder (own / received only). */}
             <section class="section detail-manage">
-              {editable ? (
-                confirmDelete ? (
-                  <div class="confirm">
-                    <p>{t('recipe.deleteConfirm')}</p>
-                    <div class="actions">
-                      <button type="button" class="btn btn-danger" onClick={() => void onDelete()}>
-                        {t('recipe.deleteYes')}
-                      </button>
-                      <button type="button" class="btn" onClick={() => setConfirmDelete(false)}>
-                        {t('common.cancel')}
-                      </button>
-                    </div>
-                  </div>
-                ) : (
+              {editable && confirmDelete ? (
+                <div class="confirm">
+                  <p>{t('recipe.deleteConfirm')}</p>
                   <div class="actions">
-                    <button type="button" class="btn btn-secondary" onClick={() => navigate('/edit/' + id)}>
-                      {t('common.edit')}
+                    <button type="button" class="btn btn-danger" onClick={() => void onDelete()}>
+                      {t('recipe.deleteYes')}
                     </button>
-                    <button type="button" class="btn btn-danger" onClick={() => setConfirmDelete(true)}>
-                      {t('common.delete')}
+                    <button type="button" class="btn" onClick={() => setConfirmDelete(false)}>
+                      {t('common.cancel')}
                     </button>
                   </div>
-                )
+                </div>
               ) : (
                 <>
-                  <button type="button" class="btn btn-secondary btn-block" disabled={!profile} onClick={() => void onCopy()}>
-                    {t('recipe.copy')}
-                  </button>
-                  <p class="muted small copy-hint">{profile ? t('recipe.copyHint') : t('recipe.copyNoProfile')}</p>
+                  <div class="actions detail-manage-row">
+                    <button type="button" class="btn btn-secondary" onClick={() => navigate('/edit/' + id)}>
+                      {t('recipe.edit')}
+                    </button>
+                    <button type="button" class="btn btn-secondary" disabled={!profile || versionBusy} onClick={() => void onMakeVersion()}>
+                      {t('version.make')}
+                    </button>
+                    {editable && (
+                      <button type="button" class="btn btn-danger" onClick={() => setConfirmDelete(true)}>
+                        {t('common.delete')}
+                      </button>
+                    )}
+                  </div>
+                  <p class="muted small copy-hint">{profile ? t('version.hint') : t('version.noProfile')}</p>
                 </>
               )}
             </section>

@@ -93,9 +93,6 @@ export const browse: Dict = {
   'recipe.basedOn': { nl: 'gebaseerd op {name}', en: 'based on {name}' },
   'recipe.deleteConfirm': { nl: 'Dit recept verwijderen? Dit kan niet ongedaan worden gemaakt.', en: 'Delete this recipe? This cannot be undone.' },
   'recipe.deleteYes': { nl: 'Ja, verwijder', en: 'Yes, delete' },
-  'recipe.copy': { nl: 'Maak eigen kopie', en: 'Make my own copy' },
-  'recipe.copyHint': { nl: 'Klassiekers zijn vast; een kopie kun je bewerken.', en: 'Classics are fixed; a copy can be edited.' },
-  'recipe.copyNoProfile': { nl: 'Kies eerst een profiel (Meer) om een kopie te maken.', en: 'Choose a profile first (More) to make a copy.' },
   'recipe.notFound': { nl: 'Recept niet gevonden', en: 'Recipe not found' },
 
   // --- Detail, phase 2: category, tags, time, machine-translation badge (opens the editor) ---

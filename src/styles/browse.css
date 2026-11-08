@@ -2751,3 +2751,32 @@ button.recipe-cuisine:active {
   margin: 6px 0 0;
   text-align: center;
 }
+
+/* ---------- 13D blok 4: "Tip van de maker" and the manage row (varianten-tabs.md §1g, §1h) ---------- */
+
+.detail-tip {
+  margin: 0;
+  border-left: 4px solid var(--orange);
+}
+
+.detail-tip h2 {
+  margin: 0 0 6px;
+}
+
+.detail-tip-text {
+  margin: 0;
+  white-space: pre-line;
+  line-height: 1.45;
+}
+
+.notes-tip-hint {
+  margin: 6px 0 0;
+}
+
+.detail-manage-row {
+  margin-bottom: 0;
+}
+
+.detail-manage-row .btn {
+  min-height: 44px;
+}
