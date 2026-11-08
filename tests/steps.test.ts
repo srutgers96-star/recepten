@@ -1,6 +1,8 @@
 // splitSteps / joinSteps (docs/phase-1-spec.md §1).
 import { describe, expect, it } from 'vitest';
 import { joinSteps, MAX_STEP_CHARS, MIN_STEP_CHARS, splitSentences, splitSteps } from '../src/domain/steps';
+import { formatTemperatures } from '../src/components/StepView';
+import { temperatureModeFrom, type TemperatureMode } from '../src/db/repo';
 
 const S1 = 'Kook de aardappelen in ca. 20 minuten gaar en giet ze af in een vergiet.';
 const S2 = 'Bak de ui in de boter glazig en voeg de knoflook en de paprika toe.';
@@ -73,5 +75,58 @@ describe('joinSteps', () => {
   it('round-trips with splitSteps for normal steps', () => {
     const steps = [S1, S2, S3, S4];
     expect(splitSteps(joinSteps(steps))).toEqual(steps);
+  });
+});
+
+// V1b §1b: the temperature setting (units.temperature) in its three modes.
+describe('formatTemperatures', () => {
+  const OVEN = 'Verwarm de oven voor op 180 °C';
+  const MODES: TemperatureMode[] = ['c', 'f', 'both'];
+
+  it("'c' leaves the text unchanged", () => {
+    expect(formatTemperatures(OVEN, 'c')).toBe(OVEN);
+  });
+
+  it("'both' appends the °F value (the old °F-erbij behaviour)", () => {
+    expect(formatTemperatures(OVEN, 'both')).toBe('Verwarm de oven voor op 180 °C (350 °F)');
+  });
+
+  it("'f' replaces the °C value with the °F value", () => {
+    expect(formatTemperatures(OVEN, 'f')).toBe('Verwarm de oven voor op 350 °F');
+  });
+
+  it('recognises 180°C and 200 ℃ and rounds off-table values to 5 in every mode', () => {
+    expect(formatTemperatures('Bak op 180°C, daarna 200 ℃.', 'f')).toBe('Bak op 350 °F, daarna 400 °F.');
+    expect(formatTemperatures('Bak op 175 °C.', 'both')).toBe('Bak op 175 °C (345 °F).');
+    expect(formatTemperatures('Bak op 175 °C.', 'f')).toBe('Bak op 345 °F.');
+  });
+
+  it('a text without a temperature stays the same in every mode', () => {
+    const plain = 'Snijd de ui fijn en bak 5 minuten.';
+    for (const m of MODES) expect(formatTemperatures(plain, m)).toBe(plain);
+  });
+
+  it('a text that already carries °F stays the same in every mode', () => {
+    const done = 'Bak op 180 °C (350 °F).';
+    for (const m of MODES) expect(formatTemperatures(done, m)).toBe(done);
+  });
+});
+
+describe('temperatureModeFrom (translation of the old units.fahrenheit)', () => {
+  it('uses the new key when it is valid', () => {
+    expect(temperatureModeFrom('f', true)).toBe('f');
+    expect(temperatureModeFrom('c', true)).toBe('c');
+    expect(temperatureModeFrom('both', false)).toBe('both');
+  });
+
+  it("old true -> 'both', missing or false -> 'c'", () => {
+    expect(temperatureModeFrom(undefined, true)).toBe('both');
+    expect(temperatureModeFrom(undefined, undefined)).toBe('c');
+    expect(temperatureModeFrom(undefined, false)).toBe('c');
+  });
+
+  it('ignores an invalid new value', () => {
+    expect(temperatureModeFrom('kelvin', true)).toBe('both');
+    expect(temperatureModeFrom(42, false)).toBe('c');
   });
 });

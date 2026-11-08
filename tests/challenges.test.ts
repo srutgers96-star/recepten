@@ -13,6 +13,7 @@ import {
   normalizeDoneChallenges,
   offerFor,
   progressFor,
+  rewardFor,
   termDeadline,
   weekKey,
   type ActiveChallenge,
@@ -417,6 +418,30 @@ describe('history helpers', () => {
   it('normalizeActiveChallenges: memberId → a valid challenge or null', () => {
     expect(normalizeActiveChallenges({ 'p:a': ACTIVE, 'p:b': null, 'p:c': { id: 'x' }, '': ACTIVE })).toEqual({ 'p:a': ACTIVE, 'p:b': null, 'p:c': null });
     expect(normalizeActiveChallenges([])).toEqual({});
+  });
+
+  it('normalizeActiveChallenges keeps the reward fixed at the start (V1b), drops a bad one', () => {
+    expect(normalizeActiveChallenges({ 'p:a': { ...ACTIVE, xp: 280 } })).toEqual({ 'p:a': { ...ACTIVE, xp: 280 } });
+    expect(normalizeActiveChallenges({ 'p:a': { ...ACTIVE, xp: -5 } })).toEqual({ 'p:a': ACTIVE });
+    expect(normalizeActiveChallenges({ 'p:a': { ...ACTIVE, xp: '280' } })).toEqual({ 'p:a': ACTIVE });
+  });
+});
+
+// ---------------------------------------------------------------------------- reward per level (V1b §1f)
+
+describe('rewardFor: +1 % per level above 20, rounded to tens', () => {
+  it('the examples of the spec', () => {
+    expect(rewardFor(250, 20)).toBe(250);
+    expect(rewardFor(250, 30)).toBe(280); // 275 → 280
+    expect(rewardFor(250, 50)).toBe(330); // 325 → 330
+    expect(rewardFor(250, 100)).toBe(450);
+    expect(rewardFor(1500, 100)).toBe(2700);
+    expect(rewardFor(250, 5)).toBe(250);
+    expect(rewardFor(1500, 33)).toBe(1700); // 1695 → 1700 (no floating-point 1694.99…)
+  });
+
+  it('level 1 (no XP state yet) is the base', () => {
+    expect(rewardFor(250, 1)).toBe(250);
   });
 });
 

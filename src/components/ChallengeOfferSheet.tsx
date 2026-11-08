@@ -5,15 +5,17 @@
 // under it; Start starts it (`onStart`) and the caller closes the sheet. 13J pattern: SheetPortal with
 // only Sluit on the right of the head (`.sheet-head.with-actions`); Escape, tapping beside the sheet and
 // Sluit close it without starting anything. Focus goes to Sluit on open and back to the opener on close.
+// V1b §1f: the reward shown is `rewardFor(c.xp, level)` with the member's current level (the caller
+// passes it); the description keeps naming the base amount from the data.
 import type { JSX } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import type { Challenge } from '@/domain/challenges';
+import { rewardFor, type Challenge } from '@/domain/challenges';
 import { t } from '@/i18n';
 import { challengeDescription, challengeName, rewardText, termText, weightText } from './ChallengeCard';
 import { SheetPortal } from './SheetPortal';
 
-export function ChallengeOfferSheet(props: { offer: readonly Challenge[]; onStart: (id: string) => void; onClose: () => void }): JSX.Element {
-  const { offer, onStart, onClose } = props;
+export function ChallengeOfferSheet(props: { offer: readonly Challenge[]; level: number; onStart: (id: string) => void; onClose: () => void }): JSX.Element {
+  const { offer, level, onStart, onClose } = props;
   const [chosen, setChosen] = useState<string | null>(null);
   const closeBtn = useRef<HTMLButtonElement>(null);
   const heading = t('challenge.sheetTitle');
@@ -63,7 +65,7 @@ export function ChallengeOfferSheet(props: { offer: readonly Challenge[]; onStar
                     </span>
                     <span class="challenge-offer-desc">{challengeDescription(c)}</span>
                     <span class="challenge-offer-meta muted small">
-                      {termText(c.term)} · <span class="challenge-reward">{rewardText(c.xp)}</span>
+                      {termText(c.term)} · <span class="challenge-reward">{rewardText(rewardFor(c.xp, level))}</span>
                     </span>
                   </button>
                   {on && (

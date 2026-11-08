@@ -96,7 +96,7 @@ Je naam, taal en kleur kun je altijd veranderen. Dat doe je op **Mijn profiel**.
 
 1. Tik onderaan op **Home**.
 2. Tik bovenaan op je naam.
-3. Tik op **Naam & kleur**.
+3. Tik op het potlood rechtsonder op je avatar, of op de tegel **Naam & kleur**.
 4. Verander je naam, taal of kleur.
 5. Tik op **Bewaar**.
 
@@ -154,11 +154,11 @@ Home is je startscherm voor vandaag. Je ziet in één keer wat je vanavond kookt
 
 #### Wat je dan ziet
 
-Bovenaan staat de datum van vandaag, daaronder je avatar en je naam. Dan volgen de kaart **Vanavond**, de kaart **Deze week** en een paar rijen.
+Bovenaan staat de datum van vandaag; een tik erop opent de **Kookkalender**. Daaronder staan je avatar en je naam. Dan volgen de kaart **Vanavond**, de kaart **Deze week** en een paar rijen.
 
 #### Goed om te weten
 
-Tik op je naam voor **Mijn profiel**. Bovenaan Home naar beneden trekken doet hetzelfde. Met badges aan staat onder je naam ook je level.
+Tik op je naam voor **Mijn profiel**. Bovenaan Home naar beneden trekken doet hetzelfde. Met badges aan staat onder je naam ook je level. Bekeek je net een recept, dan staat er “Verder met:” en de naam. Die regel verdwijnt drie uur na de bereidingstijd van dat recept, of als je op het kruisje × tikt.
 
 (`#/`)
 
@@ -509,11 +509,11 @@ De receptpagina toont de naam, de dieetlabels, de categorie en keuken, de tijd e
 
 #### Wat je dan ziet
 
-Een regel noemt de tijd, of het een klassieker of eigen recept is, en hoe vaak je het kookte. Daaronder staan **Koken**, **✓ Gekookt**, **Deel** en **+ Deze week**.
+Een regel met een klokje noemt de tijd, zoals “20 min · 55 min totaal · klassieker”. Je ziet ook of het een eigen recept is en hoe vaak je het kookte. Daaronder staan **Koken**, **✓ Gekookt**, **Deel** en **+ Deze week**.
 
 #### Goed om te weten
 
-Staat er waarschijnlijk achter een dieetlabel, dan kent de app een ingrediënt niet zeker. Dat label is dan niet zeker.
+Staat er waarschijnlijk achter een dieetlabel, dan kent de app een ingrediënt niet zeker. Dat label is dan niet zeker. Bij de tijd is de eerste hoe lang je zelf bezig bent, de tweede de hele tijd met wachten erbij.
 
 (`#/recipes`)
 
@@ -536,21 +536,21 @@ Naast de knoppen staat het nieuwe aantal met het aantal van het recept erachter.
 
 De groene woorden in de stappen, **Kopieer als tekst** en **Koken** gebruiken het nieuwe aantal.
 
-### Oventemperatuur ook in °F
+### Oventemperatuur in °C, °F of beide
 
 #### Wat het doet
 
-Met **°F erbij** zie je bij elke oventemperatuur in de stappen ook graden Fahrenheit.
+Bij **Temperatuur** kies je of de oventemperaturen in de stappen in °C, in °F of in beide staan.
 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
 2. Tik op **Instellingen**.
-3. Zet **°F erbij** aan.
+3. Tik bij **Temperatuur** op **°F** of **beide**.
 
 #### Wat je dan ziet
 
-In de stappen staat achter elke temperatuur in °C de waarde in °F tussen haakjes.
+Bij **°F** staat in de stappen de waarde in °F in plaats van °C. Bij **beide** staat de °F-waarde tussen haakjes achter de °C.
 
 (`#/more`)
 
@@ -1195,7 +1195,7 @@ Klassiekers komen uit het boek en zitten in de app. Eigen recepten maak je zelf;
 
 #### Wat je dan ziet
 
-Daar staat klassieker uit het boek, eigen recept van … of ontvangen van …. In de lijst hebben eigen en ontvangen recepten een labeltje.
+Daar staat klassieker, eigen recept van … of ontvangen van …. In de lijst hebben eigen en ontvangen recepten een labeltje.
 
 #### Goed om te weten
 
@@ -1499,8 +1499,8 @@ Je kiest welk geluid een timer maakt als hij klaar is. In de kookbalk zet je het
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Jij & je huishouden** als die groep dicht is.
-3. Tik op 🎨 **Jouw stijl**.
+2. Tik bovenaan op je naam.
+3. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
 4. Tik op het tabblad **Geluiden**.
 5. Tik onder **Timergeluid** op een geluid.
 
@@ -1524,7 +1524,7 @@ De telefoon kan trillen als een timer klaar is. Dat zet je aan of uit in de inst
 
 1. Tik onderaan op **Meer**.
 2. Tik op **Instellingen** als die groep dicht is.
-3. Tik onder **Kookstand & timer** op de schakelaar **Trillen bij afloop**.
+3. Tik onder **Kookstand & timer** op de schakelaar **Trillen**.
 
 #### Wat je dan ziet
 
@@ -1999,7 +1999,7 @@ Eerst zie je **Controleer de lijst** per gangpad. Na **Bevestig lijst** staat de
 
 #### Goed om te weten
 
-Onder **Voorraad** staan dingen die je meestal in huis hebt, op 0. Tik erop als je ze toch nodig hebt. Regels die de app niet kon lezen, staan onder **Controleer zelf**.
+Onder **Voorraad** staan dingen die je meestal in huis hebt, op 0. Tik erop als je ze toch nodig hebt. Heb je in totaal 100 g of 100 ml of meer nodig, zoals 200 g bloem, dan staat het gewoon op de lijst. Regels die de app niet kon lezen, staan onder **Controleer zelf**.
 
 (`#/week`)
 
@@ -2888,7 +2888,7 @@ Je kaartje is je naam, kleur, taal en avatar in één link. Wie het ontvangt, ka
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.
+2. Tik onder je profiel op **Huishouden & vrienden**.
 3. Tik onder **Mijn kaartje** op **Deel mijn kaartje**.
 4. Kies WhatsApp en de persoon aan wie je het stuurt.
 
@@ -2912,7 +2912,7 @@ Kreeg je een kaartje van iemand op een andere telefoon? Dan voeg je die persoon 
 
 1. Kopieer het bericht met het kaartje.
 2. Tik onderaan op **Meer**.
-3. Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.
+3. Tik onder je profiel op **Huishouden & vrienden**.
 4. Scrol naar **Voeg lid toe via link of plak**.
 5. Tik op **Plak van klembord**.
 6. Tik op de knop “Voeg … toe aan je huishouden”, met de naam erin.
@@ -2936,7 +2936,7 @@ In je huishouden staan de mensen met wie je kookt, ook als ze een eigen telefoon
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.
+2. Tik onder je profiel op **Huishouden & vrienden**.
 3. Tik onderaan op **Voeg lid toe**.
 4. Typ een naam.
 5. Tik op een kleur.
@@ -2948,7 +2948,7 @@ Elk lid staat bij **Leden** met een rondje in zijn kleur. Je ziet of iemand op d
 
 #### Goed om te weten
 
-Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. Je huisgenoten en vrienden staan in **Meer** ook direct onder **Mijn profiel**; een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.
+Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. Een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.
 
 (`#/more/household`)
 
@@ -2961,7 +2961,7 @@ Je stuurt je level, je badges en je kookdagen van de laatste 90 dagen naar je hu
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik onder **Jij & je huishouden** op **Huishouden**, onder je huisgenoten.
+2. Tik onder je profiel op **Huishouden & vrienden**.
 3. Tik onder **Mijn kaartje** op **Sync mijn voortgang**.
 4. Tik op **Deel**.
 5. Kies WhatsApp en de persoon aan wie je het stuurt.
@@ -3486,7 +3486,7 @@ Badges verdien je met koken, ontdekken, delen, foto's en meer. Ze staan in acht 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik bovenaan op de rij met je naam.
+2. Tik bovenaan op je naam.
 3. Tik op **Mijn profiel** op de tegel **Badges**.
 4. Tik in de strook met tabs op een groep.
 5. Tik op een tegel.
@@ -3497,7 +3497,7 @@ Bovenaan staat “… van … badges verdiend”. De badges zijn ronde tegels me
 
 #### Goed om te weten
 
-De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. De app onthoudt de laatste groep die je bekeek.
+De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. Ook een tik op het woord **Badges** onder **Instellingen** in **Meer** brengt je hier. De app onthoudt de laatste groep die je bekeek.
 
 (`#/more/badges`)
 
@@ -3604,11 +3604,11 @@ Levert de badge iets op voor je avatar, dan staat dat op een tweede regel. De me
 
 #### Wat je dan ziet
 
-Je ziet je avatar groot, je naam, je level en de balk. Daaronder staan de tegels **Jouw stijl**, **Badges**, **Deel mijn kaartje**, **Sync mijn voortgang** en **Naam & kleur**.
+Je ziet je avatar groot, met rechtsonder een potlood, en je naam, je level en de balk. Daaronder staan de tegels **Jouw stijl**, **Badges**, **Deel mijn kaartje**, **Sync mijn voortgang** en **Naam & kleur**.
 
 #### Goed om te weten
 
-Je kunt ook helemaal bovenaan Home het scherm met je vinger omlaag trekken. In **Meer** brengt de bovenste rij met je naam je er ook. In de browser, niet in de app, kan omlaag trekken de pagina verversen.
+Tik op het potlood voor **Naam & kleur**. Tik op je grote avatar, dan knipoogt hij; een rondje met een letter wiebelt alleen. In **Meer** brengt je avatar bovenaan je hier ook. Je kunt ook helemaal bovenaan Home het scherm omlaag trekken. In de browser, niet in de app, kan omlaag trekken de pagina verversen.
 
 (`#/more/profile`)
 
@@ -3621,12 +3621,13 @@ Vanaf level 3, na je eerste kookbeurt, maak je je eigen avatar. Die staat daarna
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik onder **Jij & je huishouden** op **Jouw stijl**.
-3. Tik bovenaan op de tab **Avatar**.
-4. Tik op **Avatar aanpassen**.
-5. Tik in de strook met tabs op bijvoorbeeld **Haar**.
-6. Tik op een tegel.
-7. Tik bovenaan op **Bewaar**.
+2. Tik bovenaan op je naam.
+3. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
+4. Tik bovenaan op de tab **Avatar**.
+5. Tik op **Avatar aanpassen**.
+6. Tik in de strook met tabs op bijvoorbeeld **Haar**.
+7. Tik op een tegel.
+8. Tik bovenaan op **Bewaar**.
 
 #### Wat je dan ziet
 
@@ -3634,7 +3635,7 @@ Er schuift een venster **Jouw avatar** omhoog, met bovenaan een groot voorbeeld.
 
 #### Goed om te weten
 
-Onder level 3 is **Avatar aanpassen** grijs en staat eronder “Komt vrij op level 3, na je eerste kookbeurt.” Ook **Jouw stijl** op **Mijn profiel** brengt je hier. Naar beneden vegen of **Annuleer** bewaart niets.
+Onder level 3 is **Avatar aanpassen** grijs en staat eronder “Komt vrij op level 3, na je eerste kookbeurt.” Naar beneden vegen of **Annuleer** bewaart niets.
 
 (`#/more/style`)
 
@@ -3670,7 +3671,7 @@ Gewoon is grijs, Zeldzaam blauw, Episch paars en Legendarisch goud. Een tik op e
 
 #### Waar je tikt
 
-1. Tik in **Meer** op **Jouw stijl**.
+1. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
 2. Tik bovenaan op de tab **Avatar**.
 3. Tik op **Avatar aanpassen**.
 4. Tik op **Verras me**.
@@ -3696,7 +3697,7 @@ Met een lijst krijgt je avatar een andere rand, zoals een houten plank of een ko
 
 #### Waar je tikt
 
-1. Tik in **Meer** op **Jouw stijl**.
+1. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
 2. Tik bovenaan op de tab **Avatar**.
 3. Tik op **Avatar aanpassen**.
 4. Tik in de strook met tabs op **Achtergrond**.
@@ -3724,9 +3725,10 @@ In **Jouw stijl** kies je het geluid van je kooktimer. Nieuwe geluiden speel je 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Jouw stijl**.
-3. Tik op de tab **Geluiden**.
-4. Tik onder **Timergeluid** op een geluid.
+2. Tik bovenaan op je naam.
+3. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
+4. Tik op de tab **Geluiden**.
+5. Tik onder **Timergeluid** op een geluid.
 
 #### Wat je dan ziet
 
@@ -3747,9 +3749,10 @@ Je kiest welke confetti er komt als je iets kookt. Met **Verras me** wisselt de 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Jouw stijl**.
-3. Tik op de tab **Confetti**.
-4. Tik op een confetti, of op **Verras me**.
+2. Tik bovenaan op je naam.
+3. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
+4. Tik op de tab **Confetti**.
+5. Tik op een confetti, of op **Verras me**.
 
 #### Wat je dan ziet
 
@@ -3770,9 +3773,10 @@ Je kiest de letters van de stapkaart in de kookstand. **Krijtbord** en **Handsch
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Jouw stijl**.
-3. Tik op de tab **Letters**.
-4. Tik op **Standaard**, **Krijtbord** of **Handschrift**.
+2. Tik bovenaan op je naam.
+3. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
+4. Tik op de tab **Letters**.
+5. Tik op **Standaard**, **Krijtbord** of **Handschrift**.
 
 #### Wat je dan ziet
 
@@ -3793,9 +3797,10 @@ Je kiest of de app licht of donker is, of je telefoon volgt. Dit kan altijd, ook
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik op **Jouw stijl**.
-3. Tik op de tab **Thema**.
-4. Tik op **Systeem**, **Licht** of **Donker**.
+2. Tik bovenaan op je naam.
+3. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
+4. Tik op de tab **Thema**.
+5. Tik op **Systeem**, **Licht** of **Donker**.
 
 #### Wat je dan ziet
 
@@ -3823,7 +3828,7 @@ De kaart toont je uitdaging met een balk zoals “0 van 2”, de tijd die nog ov
 
 #### Goed om te weten
 
-Elke maandag komen er drie nieuwe uitdagingen; je doet er één tegelijk. Het aantal 🌶 zegt hoe zwaar hij is. Haal je hem, dan komt er confetti en een melding met de XP, en telt hij mee voor de badge Uitdager.
+Elke maandag komen er drie nieuwe uitdagingen; je doet er één tegelijk. Het aantal 🌶 zegt hoe zwaar hij is. Haal je hem, dan komt er confetti en een melding met de XP, en telt hij mee voor de badge Uitdager. De beloning groeit met 1 % per level boven level 20, en staat vast zodra je start.
 
 (`#/more/profile`)
 
@@ -3860,8 +3865,8 @@ Houd je niet van het spel? Met de schakelaar **Badges** zet je alle badges, XP e
 
 1. Tik onderaan op **Meer**.
 2. Tik op **Instellingen**.
-3. Zet de schakelaar **Badges** uit.
-4. Zet ook **Confetti** uit, als je dat wilt.
+3. Tik op de schakelaar rechts naast **Badges**.
+4. Zet ook de schakelaar naast **Confetti** uit, als je dat wilt.
 
 #### Wat je dan ziet
 
@@ -3869,7 +3874,7 @@ De tegel **Badges** op **Mijn profiel** verdwijnt, net als je level en de XP-bal
 
 #### Goed om te weten
 
-Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti en geen schuddend scherm.
+Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti en geen schuddend scherm. Tik je op het woord **Badges** in plaats van op de schakelaar, dan open je je badges.
 
 (`#/more`)
 
@@ -3883,7 +3888,7 @@ Wat je kunt instellen, hoe je een back-up maakt en terugzet, en hoe meer mensen 
 
 #### Wat het doet
 
-Alle schakelaars van de app staan bij elkaar onder één kopje in **Meer**.
+Alle schakelaars en keuzes van de app staan bij elkaar onder één kopje in **Meer**.
 
 #### Waar je tikt
 
@@ -3892,11 +3897,11 @@ Alle schakelaars van de app staan bij elkaar onder één kopje in **Meer**.
 
 #### Wat je dan ziet
 
-Het kopje klapt open. Je ziet **Taal**, **Confetti**, **Badges**, **°F erbij**, en het blok **Kookstand & timer**.
+Het kopje klapt open. Je ziet **Taal**, **Confetti**, **Badges**, **Temperatuur**, en het blok **Kookstand & timer**.
 
 #### Goed om te weten
 
-De app onthoudt welke kopjes in **Meer** open staan. Het thema en het timergeluid staan in **Jouw stijl**.
+De app onthoudt welke kopjes in **Meer** open staan. Het thema en het timergeluid staan in **Jouw stijl**, op **Mijn profiel**.
 
 (`#/more`)
 
@@ -3931,9 +3936,10 @@ Je kiest of de app licht of donker is, of de telefoon volgt.
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik onder **Jij & je huishouden** op **Jouw stijl**.
-3. Tik op de tab **Thema**.
-4. Tik op **Systeem**, **Licht** of **Donker**.
+2. Tik bovenaan op je naam.
+3. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
+4. Tik op de tab **Thema**.
+5. Tik op **Systeem**, **Licht** of **Donker**.
 
 #### Wat je dan ziet
 
@@ -3945,21 +3951,21 @@ De tab **Thema** is er ook als de badges uit staan.
 
 (`#/more/style`)
 
-### Temperaturen ook in °F
+### Temperatuur: °C, °F of beide
 
 #### Wat het doet
 
-Oventemperaturen staan in °C. Met deze schakelaar zie je er ook °F bij.
+Oventemperaturen staan in de recepten in °C. Je kiest of je ze in °C, in °F of in beide ziet.
 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
 2. Tik op het kopje **Instellingen**.
-3. Zet **°F erbij** aan.
+3. Tik bij **Temperatuur** op **°C**, **°F** of **beide**.
 
 #### Wat je dan ziet
 
-In de stappen staat dan bijvoorbeeld 200 °C (400 °F).
+Er is geen schakelaar maar een keuze uit drie; je keuze is gemarkeerd. In de stappen staat dan bijvoorbeeld 200 °C, 400 °F of 200 °C (400 °F).
 
 (`#/more`)
 
@@ -3973,7 +3979,7 @@ Bij een feestelijk moment, zoals een gekookt gerecht, regent het confetti. Dat k
 
 1. Tik onderaan op **Meer**.
 2. Tik op het kopje **Instellingen**.
-3. Zet **Confetti** uit of aan.
+3. Tik op de schakelaar rechts naast **Confetti**.
 
 #### Wat je dan ziet
 
@@ -3981,7 +3987,7 @@ De schakelaar staat uit of aan. Uit betekent: geen confetti meer.
 
 #### Goed om te weten
 
-Welke soort confetti je ziet, kies je in **Jouw stijl**.
+Tik je op het woord **Confetti** zelf, dan opent **Jouw stijl** bij de confetti. Daar kies je welke soort je ziet.
 
 (`#/more`)
 
@@ -4016,9 +4022,10 @@ Je kiest welk geluid klinkt als een timer klaar is. Je kunt het geluid ook uitze
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
-2. Tik onder **Jij & je huishouden** op **Jouw stijl**.
-3. Tik op de tab **Geluiden**.
-4. Tik onder **Timergeluid** op een tegel.
+2. Tik bovenaan op je naam.
+3. Tik op **Mijn profiel** op de tegel **Jouw stijl**.
+4. Tik op de tab **Geluiden**.
+5. Tik onder **Timergeluid** op een tegel.
 
 #### Wat je dan ziet
 
@@ -4030,7 +4037,7 @@ Kies **Uit** voor geen geluid. Op een iPhone met de stil-schakelaar aan speelt h
 
 (`#/more/style`)
 
-### Trillen bij afloop aan of uit
+### Trillen aan of uit
 
 #### Wat het doet
 
@@ -4040,7 +4047,7 @@ De telefoon kan trillen als een timer klaar is.
 
 1. Tik onderaan op **Meer**.
 2. Tik op het kopje **Instellingen**.
-3. Zet onder **Kookstand & timer** de schakelaar **Trillen bij afloop** aan of uit.
+3. Zet onder **Kookstand & timer** de schakelaar **Trillen** aan of uit.
 
 #### Wat je dan ziet
 
@@ -4436,11 +4443,11 @@ Op Android trilt de telefoon als een timer klaar is. Op een iPhone trilt de app 
 
 1. Tik onderaan op **Meer**.
 2. Tik op het kopje **Instellingen**.
-3. Kijk onder **Kookstand & timer** bij **Trillen bij afloop**.
+3. Kijk onder **Kookstand & timer** bij **Trillen**.
 
 #### Wat je dan ziet
 
-Onder de schakelaar staat: Op een iPhone trilt alleen de melding.
+Je ziet de schakelaar **Trillen**, zonder uitleg eronder. Op een iPhone trilt alleen de melding.
 
 #### Goed om te weten
 

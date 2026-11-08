@@ -5,8 +5,8 @@
 //      the top does the same, src/pulldown.ts), and under it the level-row
 //      slot <HomeLevelRow/> (until 6D "🏆 Badges x/y ›", only with badges on)
 //    2 the card VANAVOND (<TonightCard/>: the week's next dish, or the dice with its filter chips)
-//    3 the line "Verder met: Goulash ›" (only for a recipe viewed today, not cooked today, and not the
-//      dish the card shows)
+//    3 the line "Verder met: Goulash ›" with a × (only for a recipe viewed less than 3 hours ago, not
+//      cooked today, not dismissed with the ×, and not the dish the card shows; V1b)
 //    4 "Deze week", compact (<WeekCard/>: "n van 7 gekookt", one line of names, Boodschappenlijst;
 //      empty → "Kies 7 voor deze week")
 //    5 backup card (only while the backup is overdue)
@@ -48,6 +48,25 @@ function openRecipe(id: string) {
   navigate('/recipe/' + id);
 }
 
+/** V1b: the recipe id whose "Continue with" line was dismissed with the × (per phone). */
+const CONTINUE_DISMISSED_KEY = 'recepten.home.continueDismissed';
+
+function readContinueDismissed(): string | null {
+  try {
+    return localStorage.getItem(CONTINUE_DISMISSED_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function writeContinueDismissed(id: string): void {
+  try {
+    localStorage.setItem(CONTINUE_DISMISSED_KEY, id);
+  } catch {
+    // Storage blocked: the line still hides for this visit (state below).
+  }
+}
+
 export function HomeScreen() {
   const l = lang.value;
   const profile = activeProfile.value;
@@ -75,11 +94,12 @@ export function HomeScreen() {
   const byId = useMemo(() => new Map((all ?? []).map((r) => [r.id, r] as const)), [all]);
   const knownIds = useMemo(() => new Set(byId.keys()), [byId]);
 
-  // Line "Verder met" (§1h): the last viewed recipe (per phone, read once when Home mounts), only
-  // when it was viewed today, still exists, is not the dish the Tonight card shows (`shownId`, which
+  // Line "Verder met" (§1h; V1b): the last viewed recipe (per phone, read once when Home mounts), only
+  // when it was viewed less than its total time plus 3 hours ago (CONTINUE_GRACE_MS), was not dismissed with the ×, still exists, is not the dish the Tonight card shows (`shownId`, which
   // the card reports) and has no cook today (`latestCookFor`, live, so ticking Gekookt hides the
   // line). The cook query resolves to null for "no cook", undefined = loading.
   const [last] = useState(lastViewed);
+  const [dismissedId, setDismissedId] = useState<string | null>(readContinueDismissed);
   const lastId = last?.id ?? null;
   const lastCook = useLive(() => (lastId ? latestCookFor(lastId).then((e) => e ?? null) : Promise.resolve(null)), [lastId]);
   // The card reports its dish through `onShown` from a layout effect, which runs before the browser
@@ -89,9 +109,11 @@ export function HomeScreen() {
   // until the card's first report (null, "nothing shown", also counts): until then no line.
   const [shownId, setShownId] = useState<string | null | undefined>(undefined);
   const cardReady = all !== undefined && plan !== undefined;
+  const lastRecipe = lastId ? byId.get(lastId) : undefined;
+  const lastMinutes = lastRecipe ? (lastRecipe.time?.total ?? lastRecipe.time?.active ?? 0) : null;
   const continueId =
     shownId !== undefined && cardReady && lastCook !== undefined
-      ? continueWithId(last, new Date(), knownIds, shownId, lastCook?.at ?? null)
+      ? continueWithId(last, new Date(), knownIds, shownId, lastCook?.at ?? null, dismissedId, lastMinutes)
       : null;
   const continueRecipe = continueId ? byId.get(continueId) : undefined;
 
@@ -118,6 +140,8 @@ export function HomeScreen() {
     <>
       <Header
         title={todayTitle(lang.value)}
+        titleTo="/more/calendar"
+        titleLabel={t('home.openCalendar')}
         action={
           <button type="button" class="icon-btn list-add" aria-label={t('list.add')} aria-haspopup="dialog" onClick={() => setAddMenu(true)}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
@@ -140,16 +164,31 @@ export function HomeScreen() {
         <TonightCard recipes={all} plan={plan} onShown={setShownId} />
 
         {continueRecipe && (
-          <a
-            class="home-continue"
-            href={'#/recipe/' + continueRecipe.id}
-            onClick={(e) => {
-              e.preventDefault();
-              openRecipe(continueRecipe.id);
-            }}
-          >
-            {t('home.continueWith', { name: pickText(continueRecipe.name, l) })}
-          </a>
+          <div class="home-continue-row">
+            <a
+              class="home-continue"
+              href={'#/recipe/' + continueRecipe.id}
+              onClick={(e) => {
+                e.preventDefault();
+                openRecipe(continueRecipe.id);
+              }}
+            >
+              {t('home.continueWith', { name: pickText(continueRecipe.name, l) })}
+            </a>
+            <button
+              type="button"
+              class="icon-btn home-continue-x"
+              aria-label={t('common.close')}
+              onClick={() => {
+                writeContinueDismissed(continueRecipe.id);
+                setDismissedId(continueRecipe.id);
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          </div>
         )}
 
         {plan !== undefined && <WeekCard plan={plan} byId={byId} />}

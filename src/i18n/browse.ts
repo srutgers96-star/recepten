@@ -34,6 +34,7 @@ export const browse: Dict = {
   'home.filters': { nl: 'filters', en: 'filters' },
   'home.filtersActive': { nl: 'filters ({n})', en: 'filters ({n})' },
   'home.continueWith': { nl: 'Verder met: {name} ›', en: 'Continue with: {name} ›' },
+  'home.openCalendar': { nl: 'Open de kookkalender', en: 'Open the cooking calendar' },
   // 6C block 2 (docs/specs/vaste-lijst.md, decision D): text link under the empty week card on Home.
   'home.weekEmptyStanding': { nl: 'Alleen de vaste lijst ›', en: 'Just the every-week list ›' },
 
@@ -85,7 +86,7 @@ export const browse: Dict = {
   'recipe.cookedTimes': { nl: '{n}× gekookt', en: 'cooked {n}×' },
   'recipe.lastCooked': { nl: 'laatst {date}', en: 'last {date}' },
   'recipe.neverCooked': { nl: 'nog niet gekookt', en: 'not cooked yet' },
-  'recipe.classic': { nl: 'klassieker uit het boek', en: 'classic from the book' },
+  'recipe.classic': { nl: 'klassieker', en: 'classic' },
   'recipe.own': { nl: 'eigen recept', en: 'own recipe' },
   'recipe.ownBy': { nl: 'eigen recept van {name}', en: 'own recipe by {name}' },
   'recipe.received': { nl: 'ontvangen van {name}', en: 'received from {name}' },
@@ -101,7 +102,7 @@ export const browse: Dict = {
   'recipe.changeCategory': { nl: 'wijzig', en: 'change' },
   // 6B blok 3: visually hidden label of the cuisine chip next to the category.
   'recipe.cuisine': { nl: 'Keuken', en: 'Cuisine' },
-  'recipe.timeActive': { nl: '{n} min bezig', en: '{n} min hands-on' },
+  'recipe.timeActive': { nl: '{n} min', en: '{n} min' },
   'recipe.timeTotal': { nl: '{n} min totaal', en: '{n} min total' },
   'recipe.machineTranslation': { nl: 'Automatische vertaling — tik om te verbeteren', en: 'Machine translation — tap to improve' },
   // PLAN §0 "Vertaling eigen recepten" (3): an own/received recipe without its second language.

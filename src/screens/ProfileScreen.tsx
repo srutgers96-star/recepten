@@ -14,7 +14,10 @@
 // `challenges` active (level 20), the card <ChallengeCard/> sits under the XP bar, above the tiles,
 // but only when the shown member's OWN level reaches that unlock's level: the unlock is per phone
 // (another profile may have opened it), the challenge is per member. Below it: no card, no trace.
-import { useEffect, useState } from 'preact/hooks';
+// V1b §1d: for the active profile a round pencil button sits bottom right on the avatar
+// (`.profile-edit-fab`, the same as the ✏️ tile, then scrolls the panel into view); a tap on the
+// big avatar (any profile, no navigation) winks for 700 ms (class `wink`, CSS in avatar.css).
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgesEnabled, loadBadgeSettings } from '@/badges';
 import { ChallengeCard } from '@/components/ChallengeCard';
 import { Header } from '@/components/Header';
@@ -71,6 +74,32 @@ export function ProfileScreen() {
 
   const toggle = (p: Exclude<Panel, null>) => setPanel((cur) => (cur === p ? null : p));
 
+  // The pencil: same as the ✏️ tile, then the panel into view once it is rendered.
+  const editRef = useRef<HTMLDivElement>(null);
+  const [scrollEdit, setScrollEdit] = useState(0);
+  useEffect(() => {
+    if (scrollEdit > 0) editRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [scrollEdit]);
+  const onEditFab = () => {
+    toggle('edit');
+    setScrollEdit((n) => n + 1);
+  };
+
+  // The wink: 700 ms, no new one while one runs.
+  const [wink, setWink] = useState(false);
+  const winkTimer = useRef<number | null>(null);
+  useEffect(() => () => {
+    if (winkTimer.current !== null) window.clearTimeout(winkTimer.current);
+  }, []);
+  const onAvatarTap = () => {
+    if (winkTimer.current !== null) return;
+    setWink(true);
+    winkTimer.current = window.setTimeout(() => {
+      winkTimer.current = null;
+      setWink(false);
+    }, 700);
+  };
+
   return (
     <>
       <Header title={profile?.name ?? t('profile.title')} back backLabel={t('common.back')} />
@@ -78,7 +107,20 @@ export function ProfileScreen() {
         {profile && (
           <>
             <div class="profile-hero">
-              <Avatar profile={profile} big level={level} />
+              <div class="profile-hero-avatar">
+                <span class="profile-hero-tap" onClick={onAvatarTap}>
+                  <Avatar profile={profile} big level={level} wink={wink} />
+                </span>
+                {isActive && (
+                  <button type="button" class="profile-edit-fab" aria-label={t('profile.edit')} onClick={onEditFab}>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M4 20h4L19 9l-4-4L4 16z" />
+                      <path d="M13.5 6.5l4 4" />
+                    </svg>
+                  </button>
+                )}
+              </div>
               <h1 class="profile-hero-name">{profile.name}</h1>
             </div>
             {/* Badges off → XpBar renders null (no level, no bar). */}
@@ -105,7 +147,7 @@ export function ProfileScreen() {
                   </div>
                 )}
                 {panel === 'edit' && (
-                  <div class="card profile-panel">
+                  <div class="card profile-panel" ref={editRef}>
                     <ProfileEditFields profile={profile} onDone={() => setPanel(null)} />
                   </div>
                 )}

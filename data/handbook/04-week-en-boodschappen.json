@@ -283,8 +283,8 @@
         "en": "First you see **Check the list** by aisle. After **Confirm list** the list is ready, with a counter per aisle such as \"0/5\"."
       },
       "know": {
-        "nl": "Onder **Voorraad** staan dingen die je meestal in huis hebt, op 0. Tik erop als je ze toch nodig hebt. Regels die de app niet kon lezen, staan onder **Controleer zelf**.",
-        "en": "Under **Staples** are things you usually have at home, at 0. Tap one if you need it after all. Lines the app could not read are under **Check yourself**."
+        "nl": "Onder **Voorraad** staan dingen die je meestal in huis hebt, op 0. Tik erop als je ze toch nodig hebt. Heb je in totaal 100 g of 100 ml of meer nodig, zoals 200 g bloem, dan staat het gewoon op de lijst. Regels die de app niet kon lezen, staan onder **Controleer zelf**.",
+        "en": "Under **Staples** are things you usually have at home, at 0. Tap one if you need it after all. If you need 100 g or 100 ml or more in total, such as 200 g of flour, it is on the normal list. Lines the app could not read are under **Check yourself**."
       },
       "route": "/week",
       "platform": "all",

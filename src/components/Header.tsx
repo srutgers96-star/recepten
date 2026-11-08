@@ -29,6 +29,10 @@ export function LangToggle() {
 
 export interface HeaderProps {
   title: string;
+  /** V1b: render the title as a link to this route (e.g. '/more/calendar'), same look as the plain title. */
+  titleTo?: string;
+  /** Accessible name of the title link (only with titleTo). */
+  titleLabel?: string;
   /** Show the on-screen back button (iOS standalone has no back gesture). */
   back?: boolean;
   backLabel?: string;
@@ -52,7 +56,15 @@ export function Header(props: HeaderProps) {
             <span>{props.backLabel}</span>
           </button>
         )}
-        <h1>{props.title}</h1>
+        <h1>
+          {props.titleTo ? (
+            <a class="header-title header-title-link" href={'#' + props.titleTo} aria-label={props.titleLabel}>
+              {props.title}
+            </a>
+          ) : (
+            props.title
+          )}
+        </h1>
         {props.action && <div class="header-action">{props.action}</div>}
         <ChannelBadge />
         {!props.noLang && <LangToggle />}

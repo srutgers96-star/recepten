@@ -377,3 +377,86 @@
   font-weight: 600;
   text-align: center;
 }
+
+/* ---------- Mijn profiel: pencil and wink (V1b §1d, src/screens/ProfileScreen.tsx) ----------
+   `.profile-hero` itself lives in settings.css (another owner); the avatar now sits in a
+   `.profile-hero-avatar` box (relative) that takes the 60 % / 220 px size, so the round pencil
+   button can sit bottom right on it. These selectors outrank `.profile-hero .avatar.big`. */
+.profile-hero .profile-hero-avatar {
+  position: relative;
+  display: inline-block;
+  width: 60%;
+  max-width: 220px;
+}
+
+.profile-hero .profile-hero-avatar .avatar.big {
+  width: 100%;
+  max-width: none;
+}
+
+.profile-hero-tap {
+  display: block;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.profile-edit-fab {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  color: var(--ink);
+  cursor: pointer;
+  /* 40 px visible, 44 px to tap. */
+  touch-action: manipulation;
+}
+
+.profile-edit-fab::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+}
+
+.profile-edit-fab:active {
+  background: var(--press);
+}
+
+/* The wink: the eyes layer (renderAvatarSvg `<g data-layer="eyes">`) closes and opens, the whole
+   avatar tilts; the letter circle (no SVG) only tilts. Nothing under reduced motion. */
+.avatar.wink [data-layer="eyes"] {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: av-wink 600ms ease-in-out;
+}
+
+.avatar.wink .avatar-svg,
+.avatar.wink:not(.has-svg) {
+  animation: av-tilt 600ms ease-in-out;
+}
+
+@keyframes av-wink {
+  0%, 100% { transform: scaleY(1); }
+  40%, 60% { transform: scaleY(0.08); }
+}
+
+@keyframes av-tilt {
+  30% { transform: rotate(-5deg); }
+  70% { transform: rotate(4deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar.wink [data-layer="eyes"],
+  .avatar.wink .avatar-svg,
+  .avatar.wink:not(.has-svg) {
+    animation: none;
+  }
+}

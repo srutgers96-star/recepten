@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Recipe } from '../src/domain/model';
 import type { Plan, PlanItem } from '../src/domain/planner';
 import {
+  CONTINUE_GRACE_MS,
   continueWithId,
   currentPlanItem,
   isSameLocalDay,
@@ -319,6 +320,45 @@ describe('continueWithId', () => {
     expect(continueWithId(null, now, known, null, null)).toBeNull();
     expect(continueWithId({ id: GOULASH.id, at: 'x' }, now, known, null, null)).toBeNull();
   });
+
+  // V1b (docs/specs/verbeterronde-1b.md §1c): the recipe's total time plus 3 hours instead of
+  // "same local day", and the × on Home.
+  it('uses a grace of three hours', () => {
+    expect(CONTINUE_GRACE_MS).toBe(3 * 3_600_000);
+  });
+
+  const hoursAgo = (h: number) => ({ id: GOULASH.id, at: new Date(now.getTime() - h * 3_600_000).toISOString() });
+
+  it('a 55-minute recipe: shown after 2 hours, not after 4 hours (even on the same day)', () => {
+    expect(continueWithId(hoursAgo(2), now, known, null, null, null, 55)).toBe(GOULASH.id);
+    expect(continueWithId(hoursAgo(3.9), now, known, null, null, null, 55)).toBe(GOULASH.id);
+    expect(continueWithId(hoursAgo(4), now, known, null, null, null, 55)).toBeNull();
+  });
+
+  it('a recipe of 24 hours in total: shown after 20 hours, not after 28 hours', () => {
+    expect(continueWithId(hoursAgo(20), now, known, null, null, null, 24 * 60)).toBe(GOULASH.id);
+    expect(continueWithId(hoursAgo(26.9), now, known, null, null, null, 24 * 60)).toBe(GOULASH.id);
+    expect(continueWithId(hoursAgo(28), now, known, null, null, null, 24 * 60)).toBeNull();
+  });
+
+  it('without times the window is three hours', () => {
+    expect(continueWithId(hoursAgo(2.9), now, known, null, null)).toBe(GOULASH.id);
+    expect(continueWithId(hoursAgo(3), now, known, null, null)).toBeNull();
+    expect(continueWithId(hoursAgo(2.9), now, known, null, null, null, 0)).toBe(GOULASH.id);
+    expect(continueWithId(hoursAgo(3), now, known, null, null, null, null)).toBeNull();
+    expect(continueWithId(hoursAgo(9), now, known, null, null)).toBeNull();
+  });
+
+  it('shows across midnight while inside the window', () => {
+    const late = { id: GOULASH.id, at: new Date(2026, 9, 21, 23, 0).toISOString() };
+    expect(continueWithId(late, new Date(2026, 9, 22, 1, 0), known, null, null)).toBe(GOULASH.id);
+  });
+
+  it('gives null for the dismissed id, and the id again for another recipe viewed later', () => {
+    expect(continueWithId(last, now, known, null, null, GOULASH.id)).toBeNull();
+    expect(continueWithId({ id: DAHL.id, at: todayIso }, now, known, null, null, GOULASH.id)).toBe(DAHL.id);
+    expect(continueWithId(last, now, known, null, null, null)).toBe(GOULASH.id);
+  });
 });
 
 describe('recent.ts — the last viewed recipe', () => {
@@ -383,5 +423,17 @@ describe('recent.ts — the last viewed recipe', () => {
     expect(Date.parse(last?.at ?? '')).toBeGreaterThanOrEqual(before - 1000);
     expect(isSameLocalDay(last?.at ?? '', new Date())).toBe(true);
     expect(RECENT_LAST_KEY).toBe('recepten.recent.last');
+  });
+});
+
+describe('continueWithId: a cook at or after the view hides the line, also across midnight (V1b lens)', () => {
+  it('viewed 23:00, cooked 23:30, now 00:30 the next day: no line; a cook from before the view keeps it', () => {
+    const known = new Set([GOULASH.id]);
+    const viewed = new Date(2026, 10, 8, 23, 0).toISOString();
+    const cooked = new Date(2026, 10, 8, 23, 30).toISOString();
+    const now = new Date(2026, 10, 9, 0, 30);
+    expect(continueWithId({ id: GOULASH.id, at: viewed }, now, known, null, cooked, null, 120)).toBeNull();
+    const earlier = new Date(2026, 10, 7, 18, 0).toISOString();
+    expect(continueWithId({ id: GOULASH.id, at: viewed }, now, known, null, earlier, null, 120)).toBe(GOULASH.id);
   });
 });

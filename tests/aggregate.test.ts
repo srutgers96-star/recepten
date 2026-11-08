@@ -123,9 +123,20 @@ describe('worked examples from PLAN.md §8', () => {
     expect(boter.sources).toHaveLength(4);
     expect(nl(boter)).toBe('boter (≈ 85 g)');
     expect(en(boter)).toBe('butter (≈ 85 g)');
-    // Below the 250 g threshold it stays a staple; from 250 g it is a real line.
+    // Below the 100 g threshold it stays a staple; from 100 g it is a real line.
     expect(one(run([rec('b:c', 'C', ['300 g boter'])]), 'boter').section).toBe('main');
-    expect(STAPLE_THRESHOLD.g).toBe(250);
+    expect(one(run([rec('b:d', 'D', ['100 g boter'])]), 'boter').section).toBe('main');
+    expect(STAPLE_THRESHOLD).toEqual({ g: 100, ml: 100, count: 5, package: 1 });
+  });
+
+  it('V1b threshold: "200 g bloem" in one recipe -> main list with its amount; "2 el bloem" -> Voorraad at 0', () => {
+    const big = one(run([rec('b:a', 'A', ['200 g bloem'])]), 'bloem');
+    expect(big.section).toBe('main');
+    expect(big.qty).toBe(200);
+    expect(nl(big)).toBe('200 g bloem');
+    const small = one(run([rec('b:b', 'B', ['2 el bloem'])]), 'bloem');
+    expect(small.section).toBe('staples');
+    expect(small.qty).toBe(0);
   });
 
   it('rode peper: ½ rode peper + 1 Spaanse peper are chillies in groente-fruit, never black pepper', () => {
@@ -311,7 +322,7 @@ describe('rule 6: rounding for display', () => {
     expect(effectiveQty({ qty: null })).toBeNull();
     expect(effectiveQty({ qty: null, adjusted: 1 })).toBe(1);
     const items = run([rec('b:a', 'A', ['1,5 l melk', '1,3 kg aardappelen'])]);
-    // melk is a staple, but 1,5 l is far over the 250 ml threshold: a real line.
+    // melk is a staple, but 1,5 l is far over the 100 ml threshold: a real line.
     expect(one(items, 'melk').section).toBe('main');
     expect(nl(one(items, 'melk'))).toBe('1,5 l melk');
     // g/ml totals are whole numbers (PLAN §0 "Kleine wensen"): never "62¼ g" (boter is a staple: "(≈ 60 g)").

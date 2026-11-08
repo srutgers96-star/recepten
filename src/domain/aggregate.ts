@@ -106,8 +106,11 @@ export interface AggregateInput {
   previous?: ListItem[];
 }
 
-/** Sum from which a staple leaves "Voorraad" and joins the main list with its amount. */
-export const STAPLE_THRESHOLD = { g: 250, ml: 250, count: 5, package: 1 } as const;
+/**
+ * Sum from which a staple leaves "Voorraad" and joins the main list with its amount (V1b, 8 Nov
+ * 2026: 100 g / 100 ml, so "200 g bloem" is shopped for while "2 el bloem" stays a staple).
+ */
+export const STAPLE_THRESHOLD = { g: 100, ml: 100, count: 5, package: 1 } as const;
 
 const PM_UNIT = 'pm';
 const STUK = 'stuk';
@@ -407,8 +410,8 @@ function displayOf(baseQty: number | null, baseUnit: string | null | undefined, 
 }
 
 /**
- * True when a staple's summed amount is large enough to become a real shopping line: 250 g /
- * 250 ml, 5 pieces, one package, or one of the unit it is bought in ("1 bol knoflook").
+ * True when a staple's summed amount is large enough to become a real shopping line: 100 g /
+ * 100 ml, 5 pieces, one package, or one of the unit it is bought in ("1 bol knoflook").
  */
 function aboveStapleThreshold(e: Entry, dict: Dictionary): boolean {
   if (e.baseQty === null || e.baseUnit === PM_UNIT) return false;

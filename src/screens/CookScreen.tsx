@@ -34,7 +34,7 @@ import { celebrate } from '@/celebrate';
 import { Header } from '@/components/Header';
 import { IngredientList } from '@/components/LineView';
 import { parseServingsParam, rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
-import { hasAmountsToShow, shownStep, StepView, useFahrenheit } from '@/components/StepView';
+import { hasAmountsToShow, shownStep, StepView, useTemperatureMode } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { VoiceHelp } from '@/components/VoiceHelp';
 import { cookingLoaded, endCooking, sessionFor, touchCooking } from '@/cooking';
@@ -222,7 +222,7 @@ export function CookScreen(props: { id: string }) {
   const shownLines = view ? view.lines : lines;
   /** Swapped lines are derived from the original: no "Koppel ingrediënt" on them (§1b). */
   const lockedIndexes = useMemo(() => new Set(view?.swapped ?? []), [view]);
-  const fahrenheit = useFahrenheit();
+  const temperature = useTemperatureMode();
   const font = useCookFont();
   // Servings: the detail page passes its choice as ?srv=; else the session memory; else (13K) the
   // servings of the cooking session when the store is already loaded; else the recipe's.
@@ -346,8 +346,8 @@ export function CookScreen(props: { id: string }) {
   // the "Toon hoeveelheden" button and the voice command "hoeveel?". 13D: the lines of the version.
   const currentStep = page > 0 && page <= steps.length ? steps[page - 1] : undefined;
   const shown = useMemo(
-    () => (currentStep ? shownStep(currentStep, l, fahrenheit, shownLines, dict) : null),
-    [currentStep, l, fahrenheit, shownLines, dict],
+    () => (currentStep ? shownStep(currentStep, l, temperature, shownLines, dict) : null),
+    [currentStep, l, temperature, shownLines, dict],
   );
   const amountsOffered = !!shown && hasAmountsToShow(shown, shownLines, dict);
   const amountsOn = showAmounts.value;
@@ -739,7 +739,7 @@ export function CookScreen(props: { id: string }) {
                     recipeName={name}
                     index={stepIndex}
                     step={steps[stepIndex]!}
-                    fahrenheit={fahrenheit}
+                    temperature={temperature}
                     lines={shownLines}
                     factor={factor}
                     // 13K: a timer chip keeps the session alive (same page; only lastActiveAt moves).

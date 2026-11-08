@@ -390,6 +390,13 @@ export function randomAvatar(unlocked: AvatarPart[], seed: number): AvatarSpec {
 
 // ---------------------------------------------------------------------------- rendering
 
+/** One layer's markup in `<g data-layer="LAYER">` (V1b §1d): an addressable group for CSS (the wink
+ *  animates `[data-layer="eyes"]`); the part's own markup inside is unchanged. Markup only: nothing
+ *  of it is in the data or in the share codes. */
+function wrapLayer(layer: AvatarLayer, svg: string): string {
+  return `<g data-layer="${layer}">${svg}</g>`;
+}
+
 /**
  * The whole SVG as a string (no framework), exactly (docs/specs/frames.md §2b, block 6D-F):
  *   <svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:T;--hair:H[;--accent:A]" aria-hidden="true">
@@ -397,7 +404,11 @@ export function randomAvatar(unlocked: AvatarPart[], seed: number): AvatarSpec {
  *     <g clip-path="url(#c-UID)"><rect width="100" height="100" fill="COLOR"/>…layers bg … prop…</g>
  *     RING    (only from level 5)
  *     FRAME   (only with a frame)
+ *     HIGHLIGHT (only with opts.highlight, V1b)
  *   </svg>
+ * Every part layer (bg … prop, and the frame) is wrapped as `<g data-layer="LAYER">PART SVG</g>`.
+ * HIGHLIGHT is the clip shape once more, `fill="none" stroke="currentColor" stroke-width="3"`;
+ * without a frame the circle r 48, stroke-width 4.
  * CLIP is the chosen frame's `clip`, else the round clip r 46. RING without a frame is the plain
  * circle r 48, width 4 (as before 6D-F); with a frame it is the clip shape itself, stroked
  * `fill="none" stroke="RING" stroke-width="2"`. FRAME is the frame's own svg, not clipped, after the
@@ -413,7 +424,7 @@ export function randomAvatar(unlocked: AvatarPart[], seed: number): AvatarSpec {
  * knows is drawn; unknown ids are skipped. Tone and hair fall back to the palette defaults.
  */
 export function renderAvatarSvg(spec: AvatarSpec, parts: ReadonlyMap<string, AvatarPart>,
-  opts: { color: string; level: number; uid: string }): string {
+  opts: { color: string; level: number; uid: string; highlight?: boolean }): string {
   const uid = String(opts.uid).replace(/[^A-Za-z0-9_-]/g, '') || 'a';
   const tone = fromPalette(spec.tone, AVATAR_TONES) ?? AVATAR_TONES[1];
   const hair = fromPalette(spec.hair, AVATAR_HAIR) ?? AVATAR_HAIR[0];
@@ -428,7 +439,7 @@ export function renderAvatarSvg(spec: AvatarSpec, parts: ReadonlyMap<string, Ava
   let layers = '';
   for (const layer of LAYER_ORDER) {
     const part = byLayer.get(layer);
-    if (part && layer !== 'frame') layers += part.svg.replaceAll('__u', uid);
+    if (part && layer !== 'frame') layers += wrapLayer(layer, part.svg.replaceAll('__u', uid));
   }
 
   // The frame and the colour rule (§2c): a covering background hands the profile colour to the
@@ -448,14 +459,20 @@ export function renderAvatarSvg(spec: AvatarSpec, parts: ReadonlyMap<string, Ava
   if (ring && frame) ringSvg = clip.replace(/\s*\/>$/, ` fill="none" stroke="${RING_HEX[ring]}" stroke-width="2"/>`);
   else if (ring && fallbackRing) ringSvg = `<circle cx="50" cy="50" r="45" fill="none" stroke="${RING_HEX[ring]}" stroke-width="2"/>`;
   else if (ring) ringSvg = `<circle cx="50" cy="50" r="48" fill="none" stroke="${RING_HEX[ring]}" stroke-width="4"/>`;
-  const frameSvg = frame ? frame.svg.replaceAll('__u', uid)
+  const frameSvg = frame ? wrapLayer('frame', frame.svg.replaceAll('__u', uid))
     : fallbackRing ? `<circle cx="50" cy="50" r="48" fill="none" stroke="${color}" stroke-width="4"/>` : '';
+  // V1b §1d: the selection ring follows the clip shape (a square frame travels with it); its colour
+  // comes from CSS via currentColor. Without a frame the plain circle r 48, width 4.
+  const highlightSvg = !opts.highlight ? ''
+    : frame ? clip.replace(/\s*\/>$/, ' fill="none" stroke="currentColor" stroke-width="3"/>')
+    : '<circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="4"/>';
   return (
     `<svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:${tone};--hair:${hair}${accent ? `;--accent:${accent}` : ''}" aria-hidden="true">` +
     `<defs><clipPath id="c-${uid}">${clip}</clipPath></defs>` +
     `<g clip-path="url(#c-${uid})"><rect width="100" height="100" fill="${color}"/>${layers}</g>` +
     ringSvg +
     frameSvg +
+    highlightSvg +
     `</svg>`
   );
 }

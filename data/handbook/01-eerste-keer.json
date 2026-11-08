@@ -131,14 +131,14 @@
         "nl": [
           "Tik onderaan op **Home**.",
           "Tik bovenaan op je naam.",
-          "Tik op **Naam & kleur**.",
+          "Tik op het potlood rechtsonder op je avatar, of op de tegel **Naam & kleur**.",
           "Verander je naam, taal of kleur.",
           "Tik op **Bewaar**."
         ],
         "en": [
           "Tap **Home** at the bottom.",
           "Tap your name at the top.",
-          "Tap **Name & colour**.",
+          "Tap the pencil at the bottom right of your avatar, or the **Name & colour** tile.",
           "Change your name, language or colour.",
           "Tap **Save**."
         ]
@@ -216,12 +216,12 @@
         "en": ["Tap **Home** at the bottom."]
       },
       "see": {
-        "nl": "Bovenaan staat de datum van vandaag, daaronder je avatar en je naam. Dan volgen de kaart **Vanavond**, de kaart **Deze week** en een paar rijen.",
-        "en": "At the top you see today's date, with your avatar and name below it. Then come the **Tonight** card, the **This week** card and a few rows."
+        "nl": "Bovenaan staat de datum van vandaag; een tik erop opent de **Kookkalender**. Daaronder staan je avatar en je naam. Dan volgen de kaart **Vanavond**, de kaart **Deze week** en een paar rijen.",
+        "en": "At the top you see today's date; tapping it opens the **Cooking calendar**. Below it are your avatar and name. Then come the **Tonight** card, the **This week** card and a few rows."
       },
       "know": {
-        "nl": "Tik op je naam voor **Mijn profiel**. Bovenaan Home naar beneden trekken doet hetzelfde. Met badges aan staat onder je naam ook je level.",
-        "en": "Tap your name for **My profile**. Pulling Home down from the top does the same. With badges on, your level shows under your name too."
+        "nl": "Tik op je naam voor **Mijn profiel**. Bovenaan Home naar beneden trekken doet hetzelfde. Met badges aan staat onder je naam ook je level. Bekeek je net een recept, dan staat er “Verder met:” en de naam. Die regel verdwijnt drie uur na de bereidingstijd van dat recept, of als je op het kruisje × tikt.",
+        "en": "Tap your name for **My profile**. Pulling Home down from the top does the same. With badges on, your level shows under your name too. If you just looked at a recipe, it says “Continue with:” and its name. That line goes away three hours after that recipe’s preparation time, or when you tap the × cross."
       },
       "route": "/",
       "platform": "all",

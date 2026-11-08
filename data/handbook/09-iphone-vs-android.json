@@ -245,17 +245,17 @@
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik op het kopje **Instellingen**.",
-          "Kijk onder **Kookstand & timer** bij **Trillen bij afloop**."
+          "Kijk onder **Kookstand & timer** bij **Trillen**."
         ],
         "en": [
           "Tap **More** at the bottom.",
           "Tap the **Settings** heading.",
-          "Look under **Cook mode & timer** at **Vibrate when done**."
+          "Look under **Cook mode & timer** at **Vibrate**."
         ]
       },
       "see": {
-        "nl": "Onder de schakelaar staat: Op een iPhone trilt alleen de melding.",
-        "en": "Under the switch it says: On an iPhone only the notification vibrates."
+        "nl": "Je ziet de schakelaar **Trillen**, zonder uitleg eronder. Op een iPhone trilt alleen de melding.",
+        "en": "You see the **Vibrate** switch, with no explanation under it. On an iPhone only the notification vibrates."
       },
       "know": {
         "nl": "Of die melding op de iPhone komt terwijl de app op de achtergrond staat, is nog niet uitgeprobeerd.",

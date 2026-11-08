@@ -37,6 +37,7 @@ import {
   normalizeChallenges,
   offerFor,
   progressFor,
+  rewardFor,
   termDeadline,
   weekKey,
   type ActiveChallenge,
@@ -48,7 +49,7 @@ import {
 } from '@/domain/challenges';
 import type { Recipe } from '@/domain/model';
 import { activeProfile } from '@/profile';
-import { markXpDirty, settleXp } from '@/xp';
+import { markXpDirty, settleXp, xpStateFor } from '@/xp';
 
 export type { ActiveChallenge, Challenge, DoneChallenge };
 
@@ -194,7 +195,22 @@ export function startChallenge(id: string): Promise<void> {
     const done = (await getDoneChallenges()).filter((d) => d.memberId === memberId);
     if (!offerFor(challengeData(), weekKey(now), memberId, done).some((c) => c.id === id)) return;
     const startedAt = now.toISOString();
-    await setActiveChallenge(memberId, { id, memberId, startedAt, deadline: termDeadline(challenge.term, startedAt, seasonWindows()) });
+    // V1b §1f: the reward grows 1 % per level above 20, fixed here at the start (the member's level now;
+    // no XP state → level 1 → the base). deriveXp reads it back through DoneChallenge.xp.
+    const level = await xpStateFor(memberId).then(
+      (st) => st.level,
+      (e: unknown) => {
+        console.warn('startChallenge: xpStateFor', e);
+        return 1;
+      },
+    );
+    await setActiveChallenge(memberId, {
+      id,
+      memberId,
+      startedAt,
+      deadline: termDeadline(challenge.term, startedAt, seasonWindows()),
+      xp: rewardFor(challenge.xp, level),
+    });
     challengeExpired.value = false;
     await refreshChallenges();
   }).catch((e: unknown) => {
@@ -250,7 +266,9 @@ async function doSettleChallenges(memberId: string, quietAsked: boolean): Promis
   if (progress.done) {
     const end = Date.parse(active.deadline);
     const finishedAt = Number.isFinite(end) && now.getTime() > end ? active.deadline : now.toISOString();
-    const added = await finishChallenge({ id: active.id, memberId, startedAt: active.startedAt, finishedAt, xp: challenge.xp });
+    // The reward fixed at the start (V1b); a challenge started before V1b has none → the base.
+    const xp = active.xp ?? challenge.xp;
+    const added = await finishChallenge({ id: active.id, memberId, startedAt: active.startedAt, finishedAt, xp });
     if (memberId === activeProfile.value?.id) challengeExpired.value = false;
     await refreshChallenges();
     if (!added) return;
@@ -258,7 +276,7 @@ async function doSettleChallenges(memberId: string, quietAsked: boolean): Promis
     markXpDirty(memberId);
     void settleXp(memberId, quiet ? { quiet: true } : undefined);
     if (!quiet) {
-      challengeToast.value = { challenge, xp: challenge.xp, at: Date.now() };
+      challengeToast.value = { challenge, xp, at: Date.now() };
       celebrate('challenge');
       void checkNewBadges(memberId).catch((e: unknown) => console.warn('checkNewBadges', e));
     }

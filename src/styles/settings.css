@@ -585,7 +585,14 @@ textarea.input.member-card-raw {
   padding-left: 6px;
 }
 
-.delta .partner-chip.on .avatar {
+/* V1b §1d: the selection ring follows the frame shape (Avatar highlight draws it in currentColor);
+   the plain letter circle keeps its round ring and its white initial (the colour rule is limited to
+   .has-svg so dark mode's navy --on-cobalt never recolours the letter). */
+.delta .partner-chip.on .avatar.has-svg {
+  color: var(--on-cobalt);
+}
+
+.delta .partner-chip.on .avatar:not(.has-svg) {
   box-shadow: 0 0 0 2px var(--on-cobalt);
 }
 
@@ -1293,4 +1300,82 @@ textarea.input.member-card-raw {
 .menu .row.row-member .name {
   font-size: 15px;
   font-weight: 400;
+}
+
+/* ---------- Meer: V1b (docs/specs/verbeterronde-1b.md §1a) ---------- */
+
+/* The active profile as a centred block: avatar 48 px, name, level line. */
+.more-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 8px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.more-profile:active {
+  background: var(--press);
+}
+
+.more-profile .avatar {
+  width: 48px;
+  height: 48px;
+}
+
+.more-profile-name {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* The sub-head row "Huishouden & vrienden": the .more-sub style, a little lower than a row. */
+.menu .row.row-subhead {
+  min-height: 40px;
+}
+
+.menu .row.row-subhead .name {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* "huisgenoot" / "vriend" after a member's name. */
+.who-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+  vertical-align: middle;
+}
+
+/* Confetti / Badges: the word is a link button, the switch sits next to it. */
+.setting .label-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The › right after the title text (not after the Badges hint, which is a block below it). */
+.setting .label-link .label-link-title::after {
+  content: ' ›';
+  color: var(--muted);
 }

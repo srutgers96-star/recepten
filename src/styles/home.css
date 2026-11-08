@@ -526,6 +526,43 @@
   opacity: 0.6;
 }
 
+/* V1b: "Verder met" with a small × on the right (dismisses this recipe's line). */
+.home-continue-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 4px;
+}
+
+.home-continue-row .home-continue {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.home-continue-x {
+  flex: none;
+  min-width: 32px;
+  min-height: 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--muted);
+}
+
+/* V1b: the date in the Home header is a link to the cooking calendar; it looks like the plain title. */
+.header-title-link {
+  color: inherit;
+  text-decoration: none;
+  border-radius: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-title-link:active {
+  background: var(--press);
+}
+
 /* "Deze week", compact (WeekCard): title row with "3 van 7 gekookt" on the right, one line of
    names, the button. */
 .week-card.compact .week-card-title {

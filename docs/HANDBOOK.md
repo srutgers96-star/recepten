@@ -96,7 +96,7 @@ You can change your name, language and colour at any time. You do that on **My p
 
 1. Tap **Home** at the bottom.
 2. Tap your name at the top.
-3. Tap **Name & colour**.
+3. Tap the pencil at the bottom right of your avatar, or the **Name & colour** tile.
 4. Change your name, language or colour.
 5. Tap **Save**.
 
@@ -154,11 +154,11 @@ Home is your start screen for today. You see at a glance what to cook tonight an
 
 #### What you then see
 
-At the top you see today's date, with your avatar and name below it. Then come the **Tonight** card, the **This week** card and a few rows.
+At the top you see today's date; tapping it opens the **Cooking calendar**. Below it are your avatar and name. Then come the **Tonight** card, the **This week** card and a few rows.
 
 #### Good to know
 
-Tap your name for **My profile**. Pulling Home down from the top does the same. With badges on, your level shows under your name too.
+Tap your name for **My profile**. Pulling Home down from the top does the same. With badges on, your level shows under your name too. If you just looked at a recipe, it says “Continue with:” and its name. That line goes away three hours after that recipe’s preparation time, or when you tap the × cross.
 
 (`#/`)
 
@@ -509,11 +509,11 @@ The recipe page shows the name, the diet labels, the category and cuisine, the t
 
 #### What you then see
 
-One line gives the time, whether it is a classic or your own recipe, and how often you cooked it. Below are **Cook**, **✓ Cooked**, **Share** and **+ This week**.
+One line with a small clock gives the time, such as “20 min · 55 min total · classic”. You also see whether it is your own recipe and how often you cooked it. Below are **Cook**, **✓ Cooked**, **Share** and **+ This week**.
 
 #### Good to know
 
-When a diet label says probably, the app is not sure about one ingredient. That label is then not certain.
+When a diet label says probably, the app is not sure about one ingredient. That label is then not certain. In the time, the first is how long you are busy yourself; the second is the whole time, waiting included.
 
 (`#/recipes`)
 
@@ -536,21 +536,21 @@ Next to the buttons you see the new number with the recipe's own number after it
 
 The green words in the steps, **Copy as text** and **Cook** use the new number.
 
-### Oven temperature in °F too
+### Oven temperature in °C, °F or both
 
 #### What it does
 
-With **Show °F too** every oven temperature in the steps also shows degrees Fahrenheit.
+With **Temperature** you choose whether the oven temperatures in the steps show in °C, in °F or in both.
 
 #### Where you tap
 
 1. Tap **More** at the bottom.
 2. Tap **Settings**.
-3. Switch on **Show °F too**.
+3. Tap **°F** or **both** next to **Temperature**.
 
 #### What you then see
 
-In the steps every temperature in °C has the °F value after it in brackets.
+With **°F** the steps show the °F value instead of °C. With **both** the °F value follows the °C in brackets.
 
 (`#/more`)
 
@@ -1195,7 +1195,7 @@ Classics come from the book and are built into the app. Own recipes you make you
 
 #### What you then see
 
-It says classic from the book, own recipe by … or received from …. In the list, own and received recipes have a small label.
+It says classic, own recipe by … or received from …. In the list, own and received recipes have a small label.
 
 #### Good to know
 
@@ -1499,8 +1499,8 @@ You choose the sound a timer makes when it is done. In the cooking bar you quick
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **You & your household** if that group is closed.
-3. Tap 🎨 **Your style**.
+2. Tap your name at the top.
+3. On **My profile**, tap the **Your style** tile.
 4. Tap the **Sounds** tab.
 5. Tap a sound under **Timer sound**.
 
@@ -1524,7 +1524,7 @@ The phone can vibrate when a timer is done. You switch this on or off in the set
 
 1. Tap **More** at the bottom.
 2. Tap **Settings** if that group is closed.
-3. Under **Cook mode & timer**, tap the **Vibrate when done** switch.
+3. Under **Cook mode & timer**, tap the **Vibrate** switch.
 
 #### What you then see
 
@@ -1999,7 +1999,7 @@ First you see **Check the list** by aisle. After **Confirm list** the list is re
 
 #### Good to know
 
-Under **Staples** are things you usually have at home, at 0. Tap one if you need it after all. Lines the app could not read are under **Check yourself**.
+Under **Staples** are things you usually have at home, at 0. Tap one if you need it after all. If you need 100 g or 100 ml or more in total, such as 200 g of flour, it is on the normal list. Lines the app could not read are under **Check yourself**.
 
 (`#/week`)
 
@@ -2888,7 +2888,7 @@ Your card is your name, colour, language and avatar in one link. Whoever receive
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Under **You & your household**, tap **Household**, below your housemates.
+2. Under your profile, tap **Household & friends**.
 3. Under **My card**, tap **Share my card**.
 4. Choose WhatsApp and the person you are sending it to.
 
@@ -2912,7 +2912,7 @@ Did you get a card from someone on another phone? Then you add that person to yo
 
 1. Copy the message with the card.
 2. Tap **More** at the bottom.
-3. Under **You & your household**, tap **Household**, below your housemates.
+3. Under your profile, tap **Household & friends**.
 4. Scroll to **Add a member via link or paste**.
 5. Tap **Paste from clipboard**.
 6. Tap the button “Add … to your household”, with the name in it.
@@ -2936,7 +2936,7 @@ Your household holds the people you cook with, also when they have their own pho
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Under **You & your household**, tap **Household**, below your housemates.
+2. Under your profile, tap **Household & friends**.
 3. Tap **Add member** at the bottom.
 4. Type a name.
 5. Tap a colour.
@@ -2948,7 +2948,7 @@ Each member is under **Members** with a circle in their colour. You see whether 
 
 #### Good to know
 
-**Edit** and **Remove** change a member from another phone. Your housemates and friends also show in **More** straight under **My profile**; a tap brings you here. Members come first in **Share your new recipes**.
+**Edit** and **Remove** change a member from another phone. In **More** your housemates and friends are listed under **Household & friends**, each with the label housemate or friend. A tap brings you here. Members come first in **Share your new recipes**.
 
 (`#/more/household`)
 
@@ -2961,7 +2961,7 @@ You send your level, your badges and your cooking days of the last 90 days to yo
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Under **You & your household**, tap **Household**, below your housemates.
+2. Under your profile, tap **Household & friends**.
 3. Under **My card**, tap **Sync my progress**.
 4. Tap **Share**.
 5. Choose WhatsApp and the person you are sending it to.
@@ -3486,7 +3486,7 @@ You earn badges by cooking, discovering, sharing, taking photos and more. They s
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap the row with your name at the top.
+2. Tap your name at the top.
 3. On **My profile**, tap the **Badges** tile.
 4. Tap a group in the strip of tabs.
 5. Tap a tile.
@@ -3497,7 +3497,7 @@ At the top it says “… of … badges earned”. The badges are round tiles wi
 
 #### Good to know
 
-The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. The app remembers the last group you looked at.
+The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. Tapping the word **Badges** under **Settings** in **More** brings you here too. The app remembers the last group you looked at.
 
 (`#/more/badges`)
 
@@ -3604,11 +3604,11 @@ If the badge brings something for your avatar, a second line says so. The messag
 
 #### What you then see
 
-You see your avatar large, your name, your level and the bar. Under it are the tiles **Your style**, **Badges**, **Share my card**, **Sync my progress** and **Name & colour**.
+You see your avatar large, with a pencil at the bottom right, and your name, your level and the bar. Under it are the tiles **Your style**, **Badges**, **Share my card**, **Sync my progress** and **Name & colour**.
 
 #### Good to know
 
-You can also pull the screen down with your finger at the very top of Home. In **More** the top row with your name takes you there too. In the browser, not in the app, pulling down may reload the page.
+Tap the pencil for **Name & colour**. Tap your large avatar and it winks; a circle with a letter only wobbles. In **More** your avatar at the top takes you here too. You can also pull the screen down at the very top of Home. In the browser, not in the app, pulling down may reload the page.
 
 (`#/more/profile`)
 
@@ -3621,12 +3621,13 @@ From level 3, after your first cooked dish, you make your own avatar. It then sh
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Under **You & your household**, tap **Your style**.
-3. Tap the **Avatar** tab at the top.
-4. Tap **Edit avatar**.
-5. Tap, for example, **Hair** in the strip of tabs.
-6. Tap a tile.
-7. Tap **Save** at the top.
+2. Tap your name at the top.
+3. On **My profile**, tap the **Your style** tile.
+4. Tap the **Avatar** tab at the top.
+5. Tap **Edit avatar**.
+6. Tap, for example, **Hair** in the strip of tabs.
+7. Tap a tile.
+8. Tap **Save** at the top.
 
 #### What you then see
 
@@ -3634,7 +3635,7 @@ A window **Your avatar** slides up, with a large preview at the top. Every tile 
 
 #### Good to know
 
-Below level 3 **Edit avatar** is grey, with “Unlocks at level 3, after your first cooked dish.” under it. **Your style** on **My profile** brings you here too. Swiping down or **Cancel** saves nothing.
+Below level 3 **Edit avatar** is grey, with “Unlocks at level 3, after your first cooked dish.” under it. Swiping down or **Cancel** saves nothing.
 
 (`#/more/style`)
 
@@ -3670,7 +3671,7 @@ Common is grey, Rare blue, Epic purple and Legendary gold. Tapping a tile with a
 
 #### Where you tap
 
-1. In **More**, tap **Your style**.
+1. On **My profile**, tap the **Your style** tile.
 2. Tap the **Avatar** tab at the top.
 3. Tap **Edit avatar**.
 4. Tap **Surprise me**.
@@ -3696,7 +3697,7 @@ A frame gives your avatar a different edge, such as a wooden board or a frying p
 
 #### Where you tap
 
-1. In **More**, tap **Your style**.
+1. On **My profile**, tap the **Your style** tile.
 2. Tap the **Avatar** tab at the top.
 3. Tap **Edit avatar**.
 4. Tap **Background** in the strip of tabs.
@@ -3724,9 +3725,10 @@ In **Your style** you choose the sound of your cooking timer. You unlock new sou
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Your style**.
-3. Tap the **Sounds** tab.
-4. Tap a sound under **Timer sound**.
+2. Tap your name at the top.
+3. On **My profile**, tap the **Your style** tile.
+4. Tap the **Sounds** tab.
+5. Tap a sound under **Timer sound**.
 
 #### What you then see
 
@@ -3747,9 +3749,10 @@ You choose which confetti appears when you cook something. With **Surprise me** 
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Your style**.
-3. Tap the **Confetti** tab.
-4. Tap a confetti, or **Surprise me**.
+2. Tap your name at the top.
+3. On **My profile**, tap the **Your style** tile.
+4. Tap the **Confetti** tab.
+5. Tap a confetti, or **Surprise me**.
 
 #### What you then see
 
@@ -3770,9 +3773,10 @@ You choose the typeface of the step card in cook mode. You unlock **Chalkboard**
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Your style**.
-3. Tap the **Typefaces** tab.
-4. Tap **Default**, **Chalkboard** or **Handwriting**.
+2. Tap your name at the top.
+3. On **My profile**, tap the **Your style** tile.
+4. Tap the **Typefaces** tab.
+5. Tap **Default**, **Chalkboard** or **Handwriting**.
 
 #### What you then see
 
@@ -3793,9 +3797,10 @@ You choose whether the app is light or dark, or follows your phone. This always 
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Tap **Your style**.
-3. Tap the **Theme** tab.
-4. Tap **System**, **Light** or **Dark**.
+2. Tap your name at the top.
+3. On **My profile**, tap the **Your style** tile.
+4. Tap the **Theme** tab.
+5. Tap **System**, **Light** or **Dark**.
 
 #### What you then see
 
@@ -3823,7 +3828,7 @@ The card shows your challenge with a bar such as “0 of 2”, the time left and
 
 #### Good to know
 
-Every Monday three new challenges arrive; you do one at a time. The number of 🌶 tells you how hard it is. If you make it, confetti and a message with the XP follow, and it counts towards the Challenger badge.
+Every Monday three new challenges arrive; you do one at a time. The number of 🌶 tells you how hard it is. If you make it, confetti and a message with the XP follow, and it counts towards the Challenger badge. The reward grows by 1% for every level above 20, and is fixed once you start.
 
 (`#/more/profile`)
 
@@ -3860,8 +3865,8 @@ Not keen on the game? The **Badges** switch turns off all badges, XP and levels.
 
 1. Tap **More** at the bottom.
 2. Tap **Settings**.
-3. Switch **Badges** off.
-4. Switch **Confetti** off too, if you like.
+3. Tap the switch to the right of **Badges**.
+4. Turn off the switch next to **Confetti** too, if you like.
 
 #### What you then see
 
@@ -3869,7 +3874,7 @@ The **Badges** tile on **My profile** disappears, as do your level and the XP ba
 
 #### Good to know
 
-Your avatar stays, as do the **Cooking calendar** and the **Theme** tab in **Your style**. Switch **Badges** back on and everything returns. **Confetti** off means no confetti and no shaking screen.
+Your avatar stays, as do the **Cooking calendar** and the **Theme** tab in **Your style**. Switch **Badges** back on and everything returns. **Confetti** off means no confetti and no shaking screen. Tapping the word **Badges** instead of the switch opens your badges.
 
 (`#/more`)
 
@@ -3883,7 +3888,7 @@ What you can set, how to make and restore a backup, and how several people share
 
 #### What it does
 
-All the app's switches sit together under one heading in **More**.
+All the app's switches and choices sit together under one heading in **More**.
 
 #### Where you tap
 
@@ -3892,11 +3897,11 @@ All the app's switches sit together under one heading in **More**.
 
 #### What you then see
 
-The heading folds open. You see **Language**, **Confetti**, **Badges**, **Show °F too**, and the **Cook mode & timer** block.
+The heading folds open. You see **Language**, **Confetti**, **Badges**, **Temperature**, and the **Cook mode & timer** block.
 
 #### Good to know
 
-The app remembers which headings in **More** are open. The theme and the timer sound are in **Your style**.
+The app remembers which headings in **More** are open. The theme and the timer sound are in **Your style**, on **My profile**.
 
 (`#/more`)
 
@@ -3931,9 +3936,10 @@ You choose whether the app is light or dark, or follows the phone.
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Under **You & your household**, tap **Your style**.
-3. Tap the **Theme** tab.
-4. Tap **System**, **Light** or **Dark**.
+2. Tap your name at the top.
+3. On **My profile**, tap the **Your style** tile.
+4. Tap the **Theme** tab.
+5. Tap **System**, **Light** or **Dark**.
 
 #### What you then see
 
@@ -3945,21 +3951,21 @@ The **Theme** tab is there even with badges switched off.
 
 (`#/more/style`)
 
-### Temperatures in °F too
+### Temperature: °C, °F or both
 
 #### What it does
 
-Oven temperatures are in °C. With this switch you see °F next to them.
+Oven temperatures in the recipes are in °C. You choose whether you see them in °C, in °F or in both.
 
 #### Where you tap
 
 1. Tap **More** at the bottom.
 2. Tap the **Settings** heading.
-3. Switch **Show °F too** on.
+3. Tap **°C**, **°F** or **both** next to **Temperature**.
 
 #### What you then see
 
-The steps then say, for example, 200 °C (400 °F).
+There is no switch but a choice of three; your choice is highlighted. The steps then say, for example, 200 °C, 400 °F or 200 °C (400 °F).
 
 (`#/more`)
 
@@ -3973,7 +3979,7 @@ At a festive moment, such as a cooked dish, confetti rains down. You can switch 
 
 1. Tap **More** at the bottom.
 2. Tap the **Settings** heading.
-3. Switch **Confetti** off or on.
+3. Tap the switch to the right of **Confetti**.
 
 #### What you then see
 
@@ -3981,7 +3987,7 @@ The switch is off or on. Off means: no more confetti.
 
 #### Good to know
 
-Which kind of confetti you see is chosen in **Your style**.
+Tap the word **Confetti** itself and **Your style** opens at the confetti. There you choose which kind you see.
 
 (`#/more`)
 
@@ -4016,9 +4022,10 @@ You choose which sound plays when a timer is done. You can also switch the sound
 #### Where you tap
 
 1. Tap **More** at the bottom.
-2. Under **You & your household**, tap **Your style**.
-3. Tap the **Sounds** tab.
-4. Under **Timer sound**, tap a tile.
+2. Tap your name at the top.
+3. On **My profile**, tap the **Your style** tile.
+4. Tap the **Sounds** tab.
+5. Under **Timer sound**, tap a tile.
 
 #### What you then see
 
@@ -4030,7 +4037,7 @@ Choose **Off** for no sound. On an iPhone with the silent switch on, the sound d
 
 (`#/more/style`)
 
-### Vibrate when done on or off
+### Vibrate on or off
 
 #### What it does
 
@@ -4040,7 +4047,7 @@ The phone can vibrate when a timer is done.
 
 1. Tap **More** at the bottom.
 2. Tap the **Settings** heading.
-3. Under **Cook mode & timer**, switch **Vibrate when done** on or off.
+3. Under **Cook mode & timer**, switch **Vibrate** on or off.
 
 #### What you then see
 
@@ -4436,11 +4443,11 @@ On Android the phone vibrates when a timer is done. On an iPhone the app itself 
 
 1. Tap **More** at the bottom.
 2. Tap the **Settings** heading.
-3. Look under **Cook mode & timer** at **Vibrate when done**.
+3. Look under **Cook mode & timer** at **Vibrate**.
 
 #### What you then see
 
-Under the switch it says: On an iPhone only the notification vibrates.
+You see the **Vibrate** switch, with no explanation under it. On an iPhone only the notification vibrates.
 
 #### Good to know
 

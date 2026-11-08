@@ -29,9 +29,9 @@ const ADDED = [
 
 /** The hints under the More switches that stayed: one short sentence (§2A.1, ±60 characters). */
 const SHORT_HINTS = [
-  'more.badgesHint', 'more.readAloudHint', 'more.voiceCommandsHint', 'more.timerVibrateHint', 'more.timerSoundIOSHint',
-  'more.storageHint', 'more.sendNewHint', 'more.dictHint', 'more.linksHint', 'more.styleHint',
-  'more.householdRowHint', 'more.checkRecipesHint', 'more.inboxHint', 'more.donateHint',
+  'more.badgesHint', 'more.readAloudHint', 'more.voiceCommandsHint', 'more.timerSoundIOSHint',
+  'more.storageHint', 'more.sendNewHint', 'more.dictHint', 'more.linksHint',
+  'more.checkRecipesHint', 'more.inboxHint', 'more.donateHint',
   // V1 (docs/specs/verbeterronde-1.md §1c)
   'more.householdRowEmpty', 'more.profilesHereHint',
 ];

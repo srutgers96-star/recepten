@@ -95,7 +95,11 @@ export const settings: Dict = {
   'more.channel': { nl: 'Kanaal', en: 'Channel' },
   'more.build': { nl: 'Build', en: 'Build' },
   'more.github': { nl: 'Broncode op GitHub', en: 'Source code on GitHub' },
-  'more.fahrenheit': { nl: '°F erbij', en: 'Show °F too' },
+  // V1b (docs/specs/verbeterronde-1b.md §1a): °C | °F | both instead of the °F switch.
+  'more.temperature': { nl: 'Temperatuur', en: 'Temperature' },
+  'more.temperatureC': { nl: '°C', en: '°C' },
+  'more.temperatureF': { nl: '°F', en: '°F' },
+  'more.temperatureBoth': { nl: 'beide', en: 'both' },
   'more.dictionary': { nl: 'Woordenboek', en: 'Dictionary' },
   'more.dictCounts': { nl: '{builtin} ingrediënten · {own} eigen', en: '{builtin} ingredients · {own} own' },
   'more.dictHint': { nl: 'Eigen ingrediënten bekijken, bewerken en samenvoegen', en: 'View, edit and merge your own ingredients' },
@@ -127,17 +131,16 @@ export const settings: Dict = {
   'more.timerSound.kitchen': { nl: 'Keukenwekker', en: 'Kitchen timer' },
   'more.timerSound.fanfare': { nl: 'Fanfare', en: 'Fanfare' },
   'more.timerSoundIOSHint': { nl: 'Met de stil-schakelaar aan waarschuwt alleen de melding.', en: 'With the silent switch on, only the notification alerts you.' },
-  'more.timerVibrate': { nl: 'Trillen bij afloop', en: 'Vibrate when done' },
-  'more.timerVibrateHint': { nl: 'Op een iPhone trilt alleen de melding.', en: 'On an iPhone only the notification vibrates.' },
+  'more.timerVibrate': { nl: 'Trillen', en: 'Vibrate' },
 
   // --- Phase 5: Meer rows (docs/phase-5-spec.md A.6 + A.8) ---
   'more.checkRecipes': { nl: 'Controleer mijn recepten', en: 'Check my recipes' },
   'more.checkRecipesHint': { nl: 'Voorstel voor categorie en dieet per eigen recept', en: 'Suggested category and diet per own recipe' },
-  'more.householdRow': { nl: 'Huishouden', en: 'Household' },
-  // V1 (docs/specs/verbeterronde-1.md §1c): the Huishouden row under the housemates and friends.
-  'more.householdRowHint': { nl: 'Leden, vrienden en je kaartje', en: 'Members, friends and your card' },
+  // V1b (docs/specs/verbeterronde-1b.md §1a): the sub-head row and the tags after a member's name.
+  'more.householdFriends': { nl: 'Huishouden & vrienden', en: 'Household & friends' },
   'more.householdRowEmpty': { nl: 'Voeg een huisgenoot toe', en: 'Add a housemate' },
-  'more.friend': { nl: 'Vriend', en: 'Friend' },
+  'more.tagHousemate': { nl: 'huisgenoot', en: 'housemate' },
+  'more.friend': { nl: 'vriend', en: 'friend' },
   'more.profilesHere': { nl: 'Profielen op deze telefoon', en: 'Profiles on this phone' },
   'more.profilesHereHint': { nl: '{n} profielen · tik om te wisselen', en: '{n} profiles · tap to switch' },
 
@@ -390,8 +393,6 @@ export const settings: Dict = {
   'profile.makeActive': { nl: 'Maak actief', en: 'Make active' },
   'profile.active': { nl: 'Actief', en: 'Active' },
   'more.myProfile': { nl: 'Mijn profiel', en: 'My profile' },
-  'more.style': { nl: 'Jouw stijl', en: 'Your style' },
-  'more.styleHint': { nl: 'Avatar, geluiden, confetti, letters en thema', en: 'Avatar, sounds, confetti, typefaces and theme' },
   // --- Block Z (docs/specs/handbook.md §3): the handbook (Meer → Hulp & over → Handleiding) ---
   // src/domain/handbook.ts HANDBOOK_LABELS mirrors these for the Markdown tool (tests keep them equal).
   'more.handbook': { nl: 'Handleiding', en: 'Handbook' },

@@ -17,8 +17,8 @@
         "en": "Find the settings"
       },
       "what": {
-        "nl": "Alle schakelaars van de app staan bij elkaar onder één kopje in **Meer**.",
-        "en": "All the app's switches sit together under one heading in **More**."
+        "nl": "Alle schakelaars en keuzes van de app staan bij elkaar onder één kopje in **Meer**.",
+        "en": "All the app's switches and choices sit together under one heading in **More**."
       },
       "where": {
         "nl": [
@@ -31,12 +31,12 @@
         ]
       },
       "see": {
-        "nl": "Het kopje klapt open. Je ziet **Taal**, **Confetti**, **Badges**, **°F erbij**, en het blok **Kookstand & timer**.",
-        "en": "The heading folds open. You see **Language**, **Confetti**, **Badges**, **Show °F too**, and the **Cook mode & timer** block."
+        "nl": "Het kopje klapt open. Je ziet **Taal**, **Confetti**, **Badges**, **Temperatuur**, en het blok **Kookstand & timer**.",
+        "en": "The heading folds open. You see **Language**, **Confetti**, **Badges**, **Temperature**, and the **Cook mode & timer** block."
       },
       "know": {
-        "nl": "De app onthoudt welke kopjes in **Meer** open staan. Het thema en het timergeluid staan in **Jouw stijl**.",
-        "en": "The app remembers which headings in **More** are open. The theme and the timer sound are in **Your style**."
+        "nl": "De app onthoudt welke kopjes in **Meer** open staan. Het thema en het timergeluid staan in **Jouw stijl**, op **Mijn profiel**.",
+        "en": "The app remembers which headings in **More** are open. The theme and the timer sound are in **Your style**, on **My profile**."
       },
       "route": "/more",
       "platform": "all",
@@ -123,13 +123,15 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik onder **Jij & je huishouden** op **Jouw stijl**.",
+          "Tik bovenaan op je naam.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
           "Tik op de tab **Thema**.",
           "Tik op **Systeem**, **Licht** of **Donker**."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Under **You & your household**, tap **Your style**.",
+          "Tap your name at the top.",
+          "On **My profile**, tap the **Your style** tile.",
           "Tap the **Theme** tab.",
           "Tap **System**, **Light** or **Dark**."
         ]
@@ -166,28 +168,28 @@
     {
       "id": "instellingen-en-opslag.fahrenheit",
       "title": {
-        "nl": "Temperaturen ook in °F",
-        "en": "Temperatures in °F too"
+        "nl": "Temperatuur: °C, °F of beide",
+        "en": "Temperature: °C, °F or both"
       },
       "what": {
-        "nl": "Oventemperaturen staan in °C. Met deze schakelaar zie je er ook °F bij.",
-        "en": "Oven temperatures are in °C. With this switch you see °F next to them."
+        "nl": "Oventemperaturen staan in de recepten in °C. Je kiest of je ze in °C, in °F of in beide ziet.",
+        "en": "Oven temperatures in the recipes are in °C. You choose whether you see them in °C, in °F or in both."
       },
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik op het kopje **Instellingen**.",
-          "Zet **°F erbij** aan."
+          "Tik bij **Temperatuur** op **°C**, **°F** of **beide**."
         ],
         "en": [
           "Tap **More** at the bottom.",
           "Tap the **Settings** heading.",
-          "Switch **Show °F too** on."
+          "Tap **°C**, **°F** or **both** next to **Temperature**."
         ]
       },
       "see": {
-        "nl": "In de stappen staat dan bijvoorbeeld 200 °C (400 °F).",
-        "en": "The steps then say, for example, 200 °C (400 °F)."
+        "nl": "Er is geen schakelaar maar een keuze uit drie; je keuze is gemarkeerd. In de stappen staat dan bijvoorbeeld 200 °C, 400 °F of 200 °C (400 °F).",
+        "en": "There is no switch but a choice of three; your choice is highlighted. The steps then say, for example, 200 °C, 400 °F or 200 °C (400 °F)."
       },
       "route": "/more",
       "platform": "all",
@@ -224,12 +226,12 @@
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik op het kopje **Instellingen**.",
-          "Zet **Confetti** uit of aan."
+          "Tik op de schakelaar rechts naast **Confetti**."
         ],
         "en": [
           "Tap **More** at the bottom.",
           "Tap the **Settings** heading.",
-          "Switch **Confetti** off or on."
+          "Tap the switch to the right of **Confetti**."
         ]
       },
       "see": {
@@ -237,8 +239,8 @@
         "en": "The switch is off or on. Off means: no more confetti."
       },
       "know": {
-        "nl": "Welke soort confetti je ziet, kies je in **Jouw stijl**.",
-        "en": "Which kind of confetti you see is chosen in **Your style**."
+        "nl": "Tik je op het woord **Confetti** zelf, dan opent **Jouw stijl** bij de confetti. Daar kies je welke soort je ziet.",
+        "en": "Tap the word **Confetti** itself and **Your style** opens at the confetti. There you choose which kind you see."
       },
       "route": "/more",
       "platform": "all",
@@ -325,13 +327,15 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik onder **Jij & je huishouden** op **Jouw stijl**.",
+          "Tik bovenaan op je naam.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
           "Tik op de tab **Geluiden**.",
           "Tik onder **Timergeluid** op een tegel."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Under **You & your household**, tap **Your style**.",
+          "Tap your name at the top.",
+          "On **My profile**, tap the **Your style** tile.",
           "Tap the **Sounds** tab.",
           "Under **Timer sound**, tap a tile."
         ]
@@ -368,8 +372,8 @@
     {
       "id": "instellingen-en-opslag.trillen",
       "title": {
-        "nl": "Trillen bij afloop aan of uit",
-        "en": "Vibrate when done on or off"
+        "nl": "Trillen aan of uit",
+        "en": "Vibrate on or off"
       },
       "what": {
         "nl": "De telefoon kan trillen als een timer klaar is.",
@@ -379,12 +383,12 @@
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik op het kopje **Instellingen**.",
-          "Zet onder **Kookstand & timer** de schakelaar **Trillen bij afloop** aan of uit."
+          "Zet onder **Kookstand & timer** de schakelaar **Trillen** aan of uit."
         ],
         "en": [
           "Tap **More** at the bottom.",
           "Tap the **Settings** heading.",
-          "Under **Cook mode & timer**, switch **Vibrate when done** on or off."
+          "Under **Cook mode & timer**, switch **Vibrate** on or off."
         ]
       },
       "see": {

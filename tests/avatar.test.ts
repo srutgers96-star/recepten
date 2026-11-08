@@ -726,6 +726,26 @@ describe('renderAvatarSvg', () => {
     expect(svg).toContain('id="c-abc"');
   });
 
+  it('wraps every layer in <g data-layer="LAYER"> with the part markup unchanged inside (V1b §1d)', () => {
+    const svg = renderAvatarSvg(spec, BY_ID, { color: '#2b4fa8', level: 0, uid: 'x' });
+    for (const id of spec.parts) {
+      const p = part(id);
+      expect(svg, id).toContain(`<g data-layer="${p.layer}">${p.svg.replaceAll('__u', 'x')}</g>`);
+    }
+    // The eyes layer the wink animates (avatar.css `.avatar.wink [data-layer="eyes"]`).
+    expect(svg).toContain('<g data-layer="eyes">');
+    expect(svg.match(/data-layer=/g)?.length).toBe(spec.parts.length);
+  });
+
+  it('highlight: the selection ring in currentColor, circle r 48 width 4 without a frame; none without highlight (V1b §1d)', () => {
+    const ring = '<circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="4"/>';
+    const on = renderAvatarSvg(spec, BY_ID, { color: '#2b4fa8', level: 10, uid: 'h', highlight: true });
+    expect(on.endsWith(`${ring}</svg>`)).toBe(true);
+    const off = renderAvatarSvg(spec, BY_ID, { color: '#2b4fa8', level: 10, uid: 'h' });
+    expect(off).not.toContain('currentColor');
+    expect(renderAvatarSvg(spec, BY_ID, { color: '#2b4fa8', level: 10, uid: 'h', highlight: false })).toBe(off);
+  });
+
   it('every part of the library renders (one at a time), with every __u replaced', () => {
     for (const p of PARTS) {
       const svg = renderAvatarSvg({ v: 1, parts: [p.id] }, BY_ID, { color: '#eeeeee', level: 0, uid: 'p1' });
@@ -860,7 +880,7 @@ describe('block 6D-F: renderAvatarSvg with a frame (frames.md §2b, §6.1)', () 
     expect(svg).toContain('<g clip-path="url(#c-f1)"><rect width="100" height="100" fill="#d9402b"/>');
     const ring = '<polygon points="50,4 89.84,27 89.84,73 50,96 10.16,73 10.16,27" fill="none" stroke="#3d9a3a" stroke-width="2"/>';
     const frame = TEST_LIB.get('frame-hextest')!.svg.replaceAll('__u', 'f1');
-    expect(svg).toContain(`</g>${ring}${frame}</svg>`);
+    expect(svg).toContain(`</g>${ring}<g data-layer="frame">${frame}</g></svg>`);
     expect(svg).not.toContain('r="48" fill="none" stroke="#3d9a3a"');
     expect(svg).not.toContain('__u');
     // The frame is outside the clip group; nothing of it inside.
@@ -869,9 +889,17 @@ describe('block 6D-F: renderAvatarSvg with a frame (frames.md §2b, §6.1)', () 
     expect(outside).toContain(frame);
   });
 
+  it('highlight with a frame: the clip shape once more in currentColor, width 3, after the frame (V1b §1d)', () => {
+    const svg = renderAvatarSvg(withParts('frame-hextest'), TEST_LIB, { color: '#d9402b', level: 10, uid: 'f1', highlight: true });
+    const frame = TEST_LIB.get('frame-hextest')!.svg.replaceAll('__u', 'f1');
+    const hl = '<polygon points="50,4 89.84,27 89.84,73 50,96 10.16,73 10.16,27" fill="none" stroke="currentColor" stroke-width="3"/>';
+    expect(svg).toContain(`<g data-layer="frame">${frame}</g>${hl}</svg>`);
+    expect(renderAvatarSvg(withParts('frame-hextest'), TEST_LIB, { color: '#d9402b', level: 10, uid: 'f1' })).not.toContain('currentColor');
+  });
+
   it('a frame under level 5: no ring, the frame right after the clip group', () => {
     const svg = renderAvatarSvg(withParts('frame-ring'), TEST_LIB, { color: '#d9402b', level: 3, uid: 'f2' });
-    expect(svg).toContain(`</g>${TEST_RING_SVG}</svg>`);
+    expect(svg).toContain(`</g><g data-layer="frame">${TEST_RING_SVG}</g></svg>`);
     expect(svg).toContain(';--accent:#f4ede4"');
   });
 
@@ -893,7 +921,7 @@ describe('block 6D-F: renderAvatarSvg with a frame (frames.md §2b, §6.1)', () 
       const svg = renderAvatarSvg(spec, TEST_LIB, { color: '#aa3366', level: 10, uid: 'f5' });
       expect(svg).toContain(';--accent:#aa3366"');
       expect(svg).toContain('<clipPath id="c-f5"><circle cx="50" cy="50" r="46"/></clipPath>');
-      expect(svg).toContain(`</g><circle cx="50" cy="50" r="46" fill="none" stroke="#3d9a3a" stroke-width="2"/>${TEST_RING_SVG}</svg>`);
+      expect(svg).toContain(`</g><circle cx="50" cy="50" r="46" fill="none" stroke="#3d9a3a" stroke-width="2"/><g data-layer="frame">${TEST_RING_SVG}</g></svg>`);
     }
   });
 

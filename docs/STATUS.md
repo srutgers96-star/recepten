@@ -4,6 +4,34 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): V1b — verbeterronde 1b: Meer gecentreerd profiel en Huishouden & vrienden, temperatuurkeuze, Home-regel en datum, receptkop met klokje, profielknipoog en potlood, ring langs de lijstvorm, voorraaddrempel 100 g, uitdagingen +1 %/level
+Gebouwd volgens docs/specs/verbeterronde-1b.md (lichte workflow wf_1d9bf38d-541, zeven bouwers + integrator; lens: chip-letterkleur in
+donkere modus hersteld, en "Verder met" verbergt nu ook een gerecht dat op of na het bekijken gekookt is, over middernacht heen —
+keuze Fable). **Meer:** gecentreerd profielblok (`button.more-profile`, avatar 48 px) → Mijn profiel;
+tussenkop-rij Huishouden & vrienden (`row-subhead`); huisgenoten en vrienden met label `who-tag` (huisgenoot/vriend); rij Jouw
+stijl weg; Confetti/Badges als `div.setting` met woord-knop (→ Jouw stijl tab confetti / Badges) en los schuifje; Trillen zonder
+hint; Temperatuur °C | °F | beide (`Segmented`). **Temperatuur:** `units.temperature` ('c'|'f'|'both') in repo.ts, oude
+`units.fahrenheit` true → 'both' (niets teruggeschreven); StepView `formatTemperatures(text, mode)`. **Home:** "Verder met"
+staat er tot de totale bereidingstijd van het recept plus 3 uur (`CONTINUE_GRACE_MS`; de bouwer had nog het vaste venster van
+3 uur uit de eerdere spec-versie, de integrator heeft `continueWithId(…, dismissedId, totalMinutes)` en de tests naar commit
+2870029 gezet); × zet `recepten.home.continueDismissed`; de datum is een link naar `#/more/calendar`. **Receptkop:** klokje +
+"20 min · 55 min totaal · klassieker" (ook de tekstversie). **Mijn profiel:** potlood rechtsonder (`.profile-edit-fab`) opent Naam
+& kleur, tik op de avatar = knipoog (ogenlaag `data-layer="eyes"`, tilt; letterrondje alleen tilt). **Avatar:** elke laag in
+`<g data-layer>`; `highlight` tekent de clipvorm in currentColor (ring volgt de zeshoek in "Deel je nieuwe recepten").
+**Voorraad:** drempel 100 g / 100 ml. **Uitdagingen:** `rewardFor(base, level)` +1 %/level boven 20, vast bij de start
+(`ActiveChallenge.xp`); de integrator rekent in hele procenten zodat 1500 op level 33 netjes 1700 wordt (met
+`1 + 0.01·13` gaf zwevende komma 1694,99… → 1690). **i18n:** `more.temperatureC`/`more.temperatureF` ("°C"/"°F") erbij zodat de
+handleiding de knopnamen vet kan noemen (validate 0 waarschuwingen). **Afwijkingen bouwers, door de integrator aanvaard:** de ›
+achter Confetti/Badges hangt aan `.label-link-title::after` (anders viel hij onder de Badges-hint); de potloodpositie staat in
+avatar.css via een nieuw blok `.profile-hero-avatar` (de spec noemde het stylesheet van `.profile-hero`, dat is settings.css van
+bouwer A); `Avatar` kreeg naast `highlight` ook `wink`; StepView-prop `fahrenheit` heet nu `temperature`; bij alleen een
+totaaltijd toont de kop "55 min" via `recipe.timeActive`. Handleiding: rij 01 home zegt nu "drie uur na de bereidingstijd".
+DEVICE-TEST: rij 110 nieuw, rij 55 stap 1–2 en de rijen 43, 96, 98, 105 (pad naar Jouw stijl) bijgewerkt, NL én EN.
+Check/test (1802)/build/build:next/validate groen; acceptatie in de dev-app (375 px, NL en EN) gelopen; Boodschappen (200 g
+bloem) alleen via de unit-test. **Open voor Stijn:** met Badges uit is Jouw stijl alleen nog bereikbaar via het woord Confetti
+(de tegel op Mijn profiel staat er alleen met badges aan, de Meer-rij is weg); drie handleidingrijen (07 `stijl-thema`, 07
+`uitzetten`, 08 `thema`) zeggen nog dat Thema ook met badges uit werkt. Niet gecommit.
+
 ## 8 nov (Fable): V1b in aanbouw, en Stijns besluiten over het plan
 Tweede testronde van Stijn (na V1): Meer opnieuw ingedeeld (gecentreerd profielblok, tussenkop Huishouden & vrienden met
 gelabelde huisgenoten en vrienden, Jouw stijl-rij weg, Confetti/Badges-tekst opent de pagina, Trillen zonder hint, Temperatuur

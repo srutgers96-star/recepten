@@ -66,6 +66,8 @@ export interface ActiveChallenge {
   memberId: string;
   startedAt: string;
   deadline: string;
+  /** The reward as computed at the start (`rewardFor`, V1b §1f); missing on challenges started before V1b. */
+  xp?: number;
 }
 
 export interface DoneChallenge {
@@ -185,6 +187,18 @@ export function normalizeChallenges(v: unknown): Challenge[] {
   return out;
 }
 
+/**
+ * The reward of a challenge for a member on `level` (V1b §1f, Stijn 8 nov: "1% per level"): +1 % per
+ * level above 20 (the level where challenges come free), rounded to tens. Level 20 and below → the
+ * base. Fixed at the start (`ActiveChallenge.xp`), so a level-up during the term changes nothing.
+ */
+export function rewardFor(baseXp: number, level: number): number {
+  // Same formula as the spec, in whole percents so a half ten rounds up: 1500 × 1.13 is
+  // 1694.999… in floating point (→ 1690), while 1500 × 113 / 100 is exactly 1695 (→ 1700).
+  const percent = 100 + Math.max(0, level - 20);
+  return Math.round((baseXp * percent) / 100 / 10) * 10;
+}
+
 /** The stored `challenges.done` (any shape) → valid rows, deduplicated on id + startedAt (first one stays). */
 export function normalizeDoneChallenges(v: unknown): DoneChallenge[] {
   if (!Array.isArray(v)) return [];
@@ -226,7 +240,15 @@ export function normalizeActiveChallenges(v: unknown): Record<string, ActiveChal
     const memberId = nonEmptyString(raw['memberId']);
     const startedAt = nonEmptyString(raw['startedAt']);
     const deadline = nonEmptyString(raw['deadline']);
-    out[member] = id !== null && memberId !== null && startedAt !== null && deadline !== null ? { id, memberId, startedAt, deadline } : null;
+    const xp = raw['xp'];
+    if (id === null || memberId === null || startedAt === null || deadline === null) {
+      out[member] = null;
+      continue;
+    }
+    const active: ActiveChallenge = { id, memberId, startedAt, deadline };
+    // The reward fixed at the start (V1b): kept only when it is a usable amount, else the base applies.
+    if (typeof xp === 'number' && Number.isInteger(xp) && xp >= 0) active.xp = xp;
+    out[member] = active;
   }
   return out;
 }

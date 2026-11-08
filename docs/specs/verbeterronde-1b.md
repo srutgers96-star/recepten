@@ -1,8 +1,9 @@
 # Spec V1b — Verbeterronde 1b (Stijn, 8 nov 2026, tweede testronde)
 
-Status: in aanbouw (Fable, 8 nov 2026). Eén blok, zeven kleine bouwers + integrator (lichte modus). Bron: Stijns bericht van
+Status: compleet (Fable, 8 nov 2026). Eén blok, zeven kleine bouwers + integrator (lichte modus). Bron: Stijns bericht van
 8 nov na het bekijken van V1 (§0). Leidend bij tegenspraak: docs/specs/README.md §2–§4, CLAUDE.md, docs/specs/handbook.md §4,
 docs/specs/verbeterronde-1.md (V1: `FoldHead`, `row-member`, `PICK_FILTER_TTL_MS`).
+Gebouwd: 8 nov 2026 (V1b, lichte workflow wf_1d9bf38d-541; lens: twee bevindingen — de letterkleur van een gekozen chip zonder getekende avatar in donkere modus (hersteld: kleurregel alleen voor `.has-svg`) en "Verder met" dat na middernacht terugkwam voor een al gekookt gerecht (Fable koos optie A: een kookbeurt op of na het bekijken verbergt de regel, met test); afwijkingen aanvaard: › via `.label-link-title::after`, StepView-prop `temperature` i.p.v. `fahrenheit`, potlood-positie in avatar.css, `rewardFor` rekent in hele procenten tegen een afrondfout, sleutels `more.temperatureC/F`)
 
 **Kritische lezer (Fable, vooraf).** (1) De groep "Jij & je huishouden" wordt opnieuw ingedeeld; V1's ledenrijen (`row-member`)
 blijven, alleen hun plek en label veranderen. (2) "Verder met" op Home is de regel uit `continueWithId` (src/domain/tonight.ts:

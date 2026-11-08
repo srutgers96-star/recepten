@@ -90,7 +90,7 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 | Blok | Inhoud | Spec | Status |
 |---|---|---|---|
 | V1 | Handleiding ingeklapt en dubbel uitklapbaar · Meer opgeruimd (Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg) · gekozen chips vooraan met kruisje, na drie uur vergeten | verbeterronde-1.md | compleet (8 nov) |
-| V1b | Meer: gecentreerd profielblok, Huishouden & vrienden, Jouw stijl-rij weg, Confetti/Badges-tekst opent de pagina, Trillen, Temperatuur °C/°F/beide · Home: Verder met (3 uur, ×), datum → kalender · receptkop met klokje · profiel: potlood + knipoog · ring volgt de lijstvorm · voorraaddrempel 100 g · uitdagingen +1 %/level | verbeterronde-1b.md | in aanbouw (8 nov) |
+| V1b | Meer: gecentreerd profielblok, Huishouden & vrienden, Jouw stijl-rij weg, Confetti/Badges-tekst opent de pagina, Trillen, Temperatuur °C/°F/beide · Home: Verder met (3 uur, ×), datum → kalender · receptkop met klokje · profiel: potlood + knipoog · ring volgt de lijstvorm · voorraaddrempel 100 g · uitdagingen +1 %/level | verbeterronde-1b.md | compleet (8 nov) |
 | V2 | Delen zonder bestanden (links tot 20 KB, meerdere berichten) · bestandsnaam met uitleg + "Stuur ook de uitleg" · Android-hint · afzender met avatar in de inbox · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | — (IDEAS 12 + 13) | gepland, volgende |
 | V3 | Uitdagingen: beloning +1 % per level boven 20, vast bij de start | — (IDEAS 11) | opgenomen in V1b |
 | V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | — (IDEAS 9) | gepland |

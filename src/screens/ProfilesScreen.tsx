@@ -62,12 +62,13 @@ export function memberCardMessage(name: string, l: Lang, url: string): string {
  * letter circle). The stored spec is normalised again here (a restored backup or a card is never
  * trusted blindly); unknown part ids are skipped by `renderAvatarSvg`.
  */
-function avatarSvgFor(profile: Pick<Profile, 'color' | 'avatar'>, level: number, uid: string): string | null {
+function avatarSvgFor(profile: Pick<Profile, 'color' | 'avatar'>, level: number, uid: string,
+  highlight = false): string | null {
   const spec = normalizeAvatarSpec(profile.avatar);
   if (!spec) return null;
   const parts = avatarParts();
   if (!isComplete(spec, parts)) return null;
-  return renderAvatarSvg(spec, parts, { color: profile.color, level, uid });
+  return renderAvatarSvg(spec, parts, { color: profile.color, level, uid, highlight });
 }
 
 /** True when the profile has a complete avatar (the maker's button then says "Pas je avatar aan"). */
@@ -81,16 +82,21 @@ export function hasAvatar(profile: Pick<Profile, 'avatar'>): boolean {
  * existing `.avatar` circle (same size everywhere: 40/56 px, 32 px in chips), otherwise the coloured
  * circle with the first letter. `level` adds the ring of that level (from level 5, `ringForLevel`);
  * only the Home greeting, the Meer profile card and Profielen pass it. A member from another phone
- * has no level here, so no ring.
+ * has no level here, so no ring. `highlight` (V1b §1d) adds the selection ring along the clip shape
+ * in currentColor (the colour comes from CSS); `wink` puts the class `wink` on the circle for the
+ * wink animation of Mijn profiel (avatar.css).
  */
-export function Avatar(props: { profile: Pick<Profile, 'name' | 'color' | 'avatar'>; big?: boolean; level?: number }) {
+export function Avatar(props: {
+  profile: Pick<Profile, 'name' | 'color' | 'avatar'>; big?: boolean; level?: number; highlight?: boolean; wink?: boolean;
+}) {
   const { profile } = props;
   const level = props.level ?? 0;
   // One uid per mounted circle, so two avatars on one screen never share a clipPath/gradient id.
   const [uid] = useState(avatarUid);
   const specKey = JSON.stringify(profile.avatar ?? null);
-  const svg = useMemo(() => avatarSvgFor(profile, level, uid), [specKey, profile.color, level, uid]);
-  const cls = 'avatar' + (props.big ? ' big' : '');
+  const highlight = props.highlight === true;
+  const svg = useMemo(() => avatarSvgFor(profile, level, uid, highlight), [specKey, profile.color, level, uid, highlight]);
+  const cls = 'avatar' + (props.big ? ' big' : '') + (props.wink ? ' wink' : '');
   if (svg !== null) {
     // The markup comes ONLY from data/avatar-parts.json (checked by validateAvatarParts: no <script,
     // no href=, no style= except the tone/hair fills); the spec only picks part ids and palette

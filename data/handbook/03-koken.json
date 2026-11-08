@@ -267,8 +267,8 @@
         "en": "You choose the sound a timer makes when it is done. In the cooking bar you quickly switch the sound off or on."
       },
       "where": {
-        "nl": ["Tik onderaan op **Meer**.", "Tik op **Jij & je huishouden** als die groep dicht is.", "Tik op 🎨 **Jouw stijl**.", "Tik op het tabblad **Geluiden**.", "Tik onder **Timergeluid** op een geluid."],
-        "en": ["Tap **More** at the bottom.", "Tap **You & your household** if that group is closed.", "Tap 🎨 **Your style**.", "Tap the **Sounds** tab.", "Tap a sound under **Timer sound**."]
+        "nl": ["Tik onderaan op **Meer**.", "Tik bovenaan op je naam.", "Tik op **Mijn profiel** op de tegel **Jouw stijl**.", "Tik op het tabblad **Geluiden**.", "Tik onder **Timergeluid** op een geluid."],
+        "en": ["Tap **More** at the bottom.", "Tap your name at the top.", "On **My profile**, tap the **Your style** tile.", "Tap the **Sounds** tab.", "Tap a sound under **Timer sound**."]
       },
       "see": {
         "nl": "Je hoort het geluid meteen en het tegeltje is gekozen. In de kookbalk staat 🔔 als het geluid aan is en 🔕 als het uit is.",
@@ -290,8 +290,8 @@
         "en": "The phone can vibrate when a timer is done. You switch this on or off in the settings."
       },
       "where": {
-        "nl": ["Tik onderaan op **Meer**.", "Tik op **Instellingen** als die groep dicht is.", "Tik onder **Kookstand & timer** op de schakelaar **Trillen bij afloop**."],
-        "en": ["Tap **More** at the bottom.", "Tap **Settings** if that group is closed.", "Under **Cook mode & timer**, tap the **Vibrate when done** switch."]
+        "nl": ["Tik onderaan op **Meer**.", "Tik op **Instellingen** als die groep dicht is.", "Tik onder **Kookstand & timer** op de schakelaar **Trillen**."],
+        "en": ["Tap **More** at the bottom.", "Tap **Settings** if that group is closed.", "Under **Cook mode & timer**, tap the **Vibrate** switch."]
       },
       "see": {
         "nl": "De schakelaar staat aan of uit. Bij de volgende timer trilt de telefoon wel of niet.",

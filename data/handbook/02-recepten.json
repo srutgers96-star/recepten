@@ -263,12 +263,12 @@
         "en": ["Tap **Recipes** at the bottom.", "Tap a recipe."]
       },
       "see": {
-        "nl": "Een regel noemt de tijd, of het een klassieker of eigen recept is, en hoe vaak je het kookte. Daaronder staan **Koken**, **✓ Gekookt**, **Deel** en **+ Deze week**.",
-        "en": "One line gives the time, whether it is a classic or your own recipe, and how often you cooked it. Below are **Cook**, **✓ Cooked**, **Share** and **+ This week**."
+        "nl": "Een regel met een klokje noemt de tijd, zoals “20 min · 55 min totaal · klassieker”. Je ziet ook of het een eigen recept is en hoe vaak je het kookte. Daaronder staan **Koken**, **✓ Gekookt**, **Deel** en **+ Deze week**.",
+        "en": "One line with a small clock gives the time, such as “20 min · 55 min total · classic”. You also see whether it is your own recipe and how often you cooked it. Below are **Cook**, **✓ Cooked**, **Share** and **+ This week**."
       },
       "know": {
-        "nl": "Staat er waarschijnlijk achter een dieetlabel, dan kent de app een ingrediënt niet zeker. Dat label is dan niet zeker.",
-        "en": "When a diet label says probably, the app is not sure about one ingredient. That label is then not certain."
+        "nl": "Staat er waarschijnlijk achter een dieetlabel, dan kent de app een ingrediënt niet zeker. Dat label is dan niet zeker. Bij de tijd is de eerste hoe lang je zelf bezig bent, de tweede de hele tijd met wachten erbij.",
+        "en": "When a diet label says probably, the app is not sure about one ingredient. That label is then not certain. In the time, the first is how long you are busy yourself; the second is the whole time, waiting included."
       },
       "route": "/recipes",
       "platform": "all",
@@ -304,18 +304,18 @@
     },
     {
       "id": "recepten.fahrenheit",
-      "title": { "nl": "Oventemperatuur ook in °F", "en": "Oven temperature in °F too" },
+      "title": { "nl": "Oventemperatuur in °C, °F of beide", "en": "Oven temperature in °C, °F or both" },
       "what": {
-        "nl": "Met **°F erbij** zie je bij elke oventemperatuur in de stappen ook graden Fahrenheit.",
-        "en": "With **Show °F too** every oven temperature in the steps also shows degrees Fahrenheit."
+        "nl": "Bij **Temperatuur** kies je of de oventemperaturen in de stappen in °C, in °F of in beide staan.",
+        "en": "With **Temperature** you choose whether the oven temperatures in the steps show in °C, in °F or in both."
       },
       "where": {
-        "nl": ["Tik onderaan op **Meer**.", "Tik op **Instellingen**.", "Zet **°F erbij** aan."],
-        "en": ["Tap **More** at the bottom.", "Tap **Settings**.", "Switch on **Show °F too**."]
+        "nl": ["Tik onderaan op **Meer**.", "Tik op **Instellingen**.", "Tik bij **Temperatuur** op **°F** of **beide**."],
+        "en": ["Tap **More** at the bottom.", "Tap **Settings**.", "Tap **°F** or **both** next to **Temperature**."]
       },
       "see": {
-        "nl": "In de stappen staat achter elke temperatuur in °C de waarde in °F tussen haakjes.",
-        "en": "In the steps every temperature in °C has the °F value after it in brackets."
+        "nl": "Bij **°F** staat in de stappen de waarde in °F in plaats van °C. Bij **beide** staat de °F-waarde tussen haakjes achter de °C.",
+        "en": "With **°F** the steps show the °F value instead of °C. With **both** the °F value follows the °C in brackets."
       },
       "route": "/more",
       "platform": "all",
@@ -1322,8 +1322,8 @@
         "en": ["Open a recipe.", "Look at the line below the category."]
       },
       "see": {
-        "nl": "Daar staat klassieker uit het boek, eigen recept van … of ontvangen van …. In de lijst hebben eigen en ontvangen recepten een labeltje.",
-        "en": "It says classic from the book, own recipe by … or received from …. In the list, own and received recipes have a small label."
+        "nl": "Daar staat klassieker, eigen recept van … of ontvangen van …. In de lijst hebben eigen en ontvangen recepten een labeltje.",
+        "en": "It says classic, own recipe by … or received from …. In the list, own and received recipes have a small label."
       },
       "know": {
         "nl": "Een klassieker kun je aanpassen maar niet verwijderen. Eigen en ontvangen recepten kun je wel verwijderen.",

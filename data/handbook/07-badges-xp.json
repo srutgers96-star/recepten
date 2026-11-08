@@ -259,14 +259,14 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik bovenaan op de rij met je naam.",
+          "Tik bovenaan op je naam.",
           "Tik op **Mijn profiel** op de tegel **Badges**.",
           "Tik in de strook met tabs op een groep.",
           "Tik op een tegel."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap the row with your name at the top.",
+          "Tap your name at the top.",
           "On **My profile**, tap the **Badges** tile.",
           "Tap a group in the strip of tabs.",
           "Tap a tile."
@@ -277,8 +277,8 @@
         "en": "At the top it says “… of … badges earned”. The badges are round tiles with only an icon; the ones you do not have yet are paler. A tap opens a window with the name, the explanation and how far you are."
       },
       "know": {
-        "nl": "De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. De app onthoudt de laatste groep die je bekeek.",
-        "en": "The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. The app remembers the last group you looked at."
+        "nl": "De groepen zijn Koken, Ontdekken, Keukens van de wereld, Seizoenen, Samen & delen, Fotografie, Reeksen en Geheim. **Mijn profiel** open je ook door op **Home** op je avatar te tikken. Ook een tik op het woord **Badges** onder **Instellingen** in **Meer** brengt je hier. De app onthoudt de laatste groep die je bekeek.",
+        "en": "The groups are Cooking, Discovering, Cuisines of the world, Seasons, Together & sharing, Photography, Streaks and Secret. You can also open **My profile** by tapping your avatar on **Home**. Tapping the word **Badges** under **Settings** in **More** brings you here too. The app remembers the last group you looked at."
       },
       "route": "/more/badges",
       "platform": "all",
@@ -448,12 +448,12 @@
         ]
       },
       "see": {
-        "nl": "Je ziet je avatar groot, je naam, je level en de balk. Daaronder staan de tegels **Jouw stijl**, **Badges**, **Deel mijn kaartje**, **Sync mijn voortgang** en **Naam & kleur**.",
-        "en": "You see your avatar large, your name, your level and the bar. Under it are the tiles **Your style**, **Badges**, **Share my card**, **Sync my progress** and **Name & colour**."
+        "nl": "Je ziet je avatar groot, met rechtsonder een potlood, en je naam, je level en de balk. Daaronder staan de tegels **Jouw stijl**, **Badges**, **Deel mijn kaartje**, **Sync mijn voortgang** en **Naam & kleur**.",
+        "en": "You see your avatar large, with a pencil at the bottom right, and your name, your level and the bar. Under it are the tiles **Your style**, **Badges**, **Share my card**, **Sync my progress** and **Name & colour**."
       },
       "know": {
-        "nl": "Je kunt ook helemaal bovenaan Home het scherm met je vinger omlaag trekken. In **Meer** brengt de bovenste rij met je naam je er ook. In de browser, niet in de app, kan omlaag trekken de pagina verversen.",
-        "en": "You can also pull the screen down with your finger at the very top of Home. In **More** the top row with your name takes you there too. In the browser, not in the app, pulling down may reload the page."
+        "nl": "Tik op het potlood voor **Naam & kleur**. Tik op je grote avatar, dan knipoogt hij; een rondje met een letter wiebelt alleen. In **Meer** brengt je avatar bovenaan je hier ook. Je kunt ook helemaal bovenaan Home het scherm omlaag trekken. In de browser, niet in de app, kan omlaag trekken de pagina verversen.",
+        "en": "Tap the pencil for **Name & colour**. Tap your large avatar and it winks; a circle with a letter only wobbles. In **More** your avatar at the top takes you here too. You can also pull the screen down at the very top of Home. In the browser, not in the app, pulling down may reload the page."
       },
       "route": "/more/profile",
       "platform": "all",
@@ -472,7 +472,8 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik onder **Jij & je huishouden** op **Jouw stijl**.",
+          "Tik bovenaan op je naam.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
           "Tik bovenaan op de tab **Avatar**.",
           "Tik op **Avatar aanpassen**.",
           "Tik in de strook met tabs op bijvoorbeeld **Haar**.",
@@ -481,7 +482,8 @@
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Under **You & your household**, tap **Your style**.",
+          "Tap your name at the top.",
+          "On **My profile**, tap the **Your style** tile.",
           "Tap the **Avatar** tab at the top.",
           "Tap **Edit avatar**.",
           "Tap, for example, **Hair** in the strip of tabs.",
@@ -494,8 +496,8 @@
         "en": "A window **Your avatar** slides up, with a large preview at the top. Every tile you pick shows in the preview straight away."
       },
       "know": {
-        "nl": "Onder level 3 is **Avatar aanpassen** grijs en staat eronder “Komt vrij op level 3, na je eerste kookbeurt.” Ook **Jouw stijl** op **Mijn profiel** brengt je hier. Naar beneden vegen of **Annuleer** bewaart niets.",
-        "en": "Below level 3 **Edit avatar** is grey, with “Unlocks at level 3, after your first cooked dish.” under it. **Your style** on **My profile** brings you here too. Swiping down or **Cancel** saves nothing."
+        "nl": "Onder level 3 is **Avatar aanpassen** grijs en staat eronder “Komt vrij op level 3, na je eerste kookbeurt.” Naar beneden vegen of **Annuleer** bewaart niets.",
+        "en": "Below level 3 **Edit avatar** is grey, with “Unlocks at level 3, after your first cooked dish.” under it. Swiping down or **Cancel** saves nothing."
       },
       "route": "/more/style",
       "platform": "all",
@@ -551,7 +553,7 @@
       },
       "where": {
         "nl": [
-          "Tik in **Meer** op **Jouw stijl**.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
           "Tik bovenaan op de tab **Avatar**.",
           "Tik op **Avatar aanpassen**.",
           "Tik op **Verras me**.",
@@ -560,7 +562,7 @@
           "Tik bovenaan op **Bewaar**."
         ],
         "en": [
-          "In **More**, tap **Your style**.",
+          "On **My profile**, tap the **Your style** tile.",
           "Tap the **Avatar** tab at the top.",
           "Tap **Edit avatar**.",
           "Tap **Surprise me**.",
@@ -593,7 +595,7 @@
       },
       "where": {
         "nl": [
-          "Tik in **Meer** op **Jouw stijl**.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
           "Tik bovenaan op de tab **Avatar**.",
           "Tik op **Avatar aanpassen**.",
           "Tik in de strook met tabs op **Achtergrond**.",
@@ -603,7 +605,7 @@
           "Tik bovenaan op **Bewaar**."
         ],
         "en": [
-          "In **More**, tap **Your style**.",
+          "On **My profile**, tap the **Your style** tile.",
           "Tap the **Avatar** tab at the top.",
           "Tap **Edit avatar**.",
           "Tap **Background** in the strip of tabs.",
@@ -638,13 +640,15 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Jouw stijl**.",
+          "Tik bovenaan op je naam.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
           "Tik op de tab **Geluiden**.",
           "Tik onder **Timergeluid** op een geluid."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Your style**.",
+          "Tap your name at the top.",
+          "On **My profile**, tap the **Your style** tile.",
           "Tap the **Sounds** tab.",
           "Tap a sound under **Timer sound**."
         ]
@@ -674,13 +678,15 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Jouw stijl**.",
+          "Tik bovenaan op je naam.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
           "Tik op de tab **Confetti**.",
           "Tik op een confetti, of op **Verras me**."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Your style**.",
+          "Tap your name at the top.",
+          "On **My profile**, tap the **Your style** tile.",
           "Tap the **Confetti** tab.",
           "Tap a confetti, or **Surprise me**."
         ]
@@ -710,13 +716,15 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Jouw stijl**.",
+          "Tik bovenaan op je naam.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
           "Tik op de tab **Letters**.",
           "Tik op **Standaard**, **Krijtbord** of **Handschrift**."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Your style**.",
+          "Tap your name at the top.",
+          "On **My profile**, tap the **Your style** tile.",
           "Tap the **Typefaces** tab.",
           "Tap **Default**, **Chalkboard** or **Handwriting**."
         ]
@@ -746,13 +754,15 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
-          "Tik op **Jouw stijl**.",
+          "Tik bovenaan op je naam.",
+          "Tik op **Mijn profiel** op de tegel **Jouw stijl**.",
           "Tik op de tab **Thema**.",
           "Tik op **Systeem**, **Licht** of **Donker**."
         ],
         "en": [
           "Tap **More** at the bottom.",
-          "Tap **Your style**.",
+          "Tap your name at the top.",
+          "On **My profile**, tap the **Your style** tile.",
           "Tap the **Theme** tab.",
           "Tap **System**, **Light** or **Dark**."
         ]
@@ -796,8 +806,8 @@
         "en": "The card shows your challenge with a bar such as “0 of 2”, the time left and the reward. With every cook that fits, the bar goes up."
       },
       "know": {
-        "nl": "Elke maandag komen er drie nieuwe uitdagingen; je doet er één tegelijk. Het aantal 🌶 zegt hoe zwaar hij is. Haal je hem, dan komt er confetti en een melding met de XP, en telt hij mee voor de badge Uitdager.",
-        "en": "Every Monday three new challenges arrive; you do one at a time. The number of 🌶 tells you how hard it is. If you make it, confetti and a message with the XP follow, and it counts towards the Challenger badge."
+        "nl": "Elke maandag komen er drie nieuwe uitdagingen; je doet er één tegelijk. Het aantal 🌶 zegt hoe zwaar hij is. Haal je hem, dan komt er confetti en een melding met de XP, en telt hij mee voor de badge Uitdager. De beloning groeit met 1 % per level boven level 20, en staat vast zodra je start.",
+        "en": "Every Monday three new challenges arrive; you do one at a time. The number of 🌶 tells you how hard it is. If you make it, confetti and a message with the XP follow, and it counts towards the Challenger badge. The reward grows by 1% for every level above 20, and is fixed once you start."
       },
       "route": "/more/profile",
       "platform": "all",
@@ -853,14 +863,14 @@
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik op **Instellingen**.",
-          "Zet de schakelaar **Badges** uit.",
-          "Zet ook **Confetti** uit, als je dat wilt."
+          "Tik op de schakelaar rechts naast **Badges**.",
+          "Zet ook de schakelaar naast **Confetti** uit, als je dat wilt."
         ],
         "en": [
           "Tap **More** at the bottom.",
           "Tap **Settings**.",
-          "Switch **Badges** off.",
-          "Switch **Confetti** off too, if you like."
+          "Tap the switch to the right of **Badges**.",
+          "Turn off the switch next to **Confetti** too, if you like."
         ]
       },
       "see": {
@@ -868,8 +878,8 @@
         "en": "The **Badges** tile on **My profile** disappears, as do your level and the XP bar. No more chips, messages, challenges or level windows appear."
       },
       "know": {
-        "nl": "Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti en geen schuddend scherm.",
-        "en": "Your avatar stays, as do the **Cooking calendar** and the **Theme** tab in **Your style**. Switch **Badges** back on and everything returns. **Confetti** off means no confetti and no shaking screen."
+        "nl": "Je avatar blijft staan, net als de **Kookkalender** en de tab **Thema** in **Jouw stijl**. Zet je **Badges** weer aan, dan is alles terug. **Confetti** uit betekent: geen confetti en geen schuddend scherm. Tik je op het woord **Badges** in plaats van op de schakelaar, dan open je je badges.",
+        "en": "Your avatar stays, as do the **Cooking calendar** and the **Theme** tab in **Your style**. Switch **Badges** back on and everything returns. **Confetti** off means no confetti and no shaking screen. Tapping the word **Badges** instead of the switch opens your badges."
       },
       "route": "/more",
       "platform": "all",

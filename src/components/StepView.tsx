@@ -3,9 +3,10 @@
 // A chip starts a timer in the global store (src/timers.ts); while that timer runs the chip shows
 // the countdown instead, so a second tap never starts a duplicate.
 //
-// Phase 2: with the setting "°F erbij" (units.fahrenheit) on, oven temperatures in the text render
-// as "200 °C (400 °F)" (docs/phase-2-spec.md §5). The step text itself is never rewritten; the
-// conversion is applied at render time only.
+// Phase 2 / V1b: the setting Temperatuur (units.temperature: 'c' | 'f' | 'both') shows oven
+// temperatures as written ("200 °C"), as °F only ("400 °F") or as both ("200 °C (400 °F)")
+// (docs/phase-2-spec.md §5, docs/specs/verbeterronde-1b.md §1b). The step text itself is never
+// rewritten; the conversion is applied at render time only.
 //
 // 13I (docs/phase-6-spec.md): given the recipe's `lines`, the ingredients the step names are green
 // (src/domain/stepingredients.ts, matched on the DISPLAYED text). A green word whose amount is not
@@ -20,7 +21,7 @@
 import { Fragment } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { useLive } from '@/db/live';
-import { getFahrenheit } from '@/db/repo';
+import { getTemperatureMode, type TemperatureMode } from '@/db/repo';
 import { dictionary } from '@/dictionary';
 import type { Dictionary } from '@/domain/dictionary';
 import type { Lang, Line, Step, TimerSpec } from '@/domain/model';
@@ -53,17 +54,22 @@ export function celsiusToF(c: number): number {
 
 const TEMP_RE = /(\d{2,3})\s?(°C|℃)(?!\s?\()/gu;
 
-/** "200 °C" / "200°C" / "200 ℃" -> "200 °C (400 °F)"; text already carrying a °F stays as it is. */
-export function addFahrenheit(text: string): string {
+/**
+ * Oven temperatures in a step text for a temperature mode. 'c': the text unchanged. 'both':
+ * "200 °C" / "200°C" / "200 ℃" -> "200 °C (400 °F)". 'f': -> "400 °F". Text already carrying a
+ * "(… °F)" after the °C value stays as it is in every mode.
+ */
+export function formatTemperatures(text: string, mode: TemperatureMode): string {
+  if (mode !== 'f' && mode !== 'both') return text;
   return text.replace(TEMP_RE, (_m, num: string) => {
     const c = Number(num);
-    return `${c} °C (${celsiusToF(c)} °F)`;
+    return mode === 'f' ? `${celsiusToF(c)} °F` : `${c} °C (${celsiusToF(c)} °F)`;
   });
 }
 
-/** Live value of the setting units.fahrenheit (false until read). */
-export function useFahrenheit(): boolean {
-  return useLive(() => getFahrenheit(), []) === true;
+/** Live value of the setting units.temperature ('c' until read; translates the old units.fahrenheit). */
+export function useTemperatureMode(): TemperatureMode {
+  return useLive(() => getTemperatureMode(), []) ?? 'c';
 }
 
 export interface StepViewProps {
@@ -75,8 +81,8 @@ export interface StepViewProps {
   step: Step;
   /** Cook-mode typography (20-22 px). */
   big?: boolean;
-  /** Append °F to oven temperatures (setting units.fahrenheit). */
-  fahrenheit?: boolean;
+  /** How oven temperatures are shown (setting units.temperature; default 'c' = as written). */
+  temperature?: TemperatureMode;
   /** The recipe's (effective) ingredient lines: when given, the ingredients the step names are green (13I). */
   lines?: readonly Line[];
   /** Servings factor for the amounts behind a green word (chosen servings / recipe servings; default 1). */
@@ -85,11 +91,11 @@ export interface StepViewProps {
   onTimerStart?: (stepIndex: number) => void;
 }
 
-/** A step as it is shown: the text (with °F when that is on), the stored text and the language it is in. */
+/** A step as it is shown: the text (temperatures per the setting), the stored text and the language it is in. */
 export interface ShownStep {
   /** The step text in the active language, or the other one when that is empty (`pickText`). */
   source: string;
-  /** `source` as displayed: with "(400 °F)" after oven temperatures when that setting is on. */
+  /** `source` as displayed: oven temperatures formatted per the temperature mode (`formatTemperatures`). */
   text: string;
   /** The language `text` is written in (the fallback made explicit, as `pickSpoken` does). */
   lang: Lang;
@@ -101,9 +107,9 @@ export interface ShownStep {
  * The displayed text of a step and the ingredients it names (13I). Cook mode uses the same call for
  * the "Toon hoeveelheden" button and the voice command "hoeveel?", so all three agree on the words.
  */
-export function shownStep(step: Step, l: Lang, fahrenheit: boolean, lines: readonly Line[] | undefined, dict: Dictionary): ShownStep {
+export function shownStep(step: Step, l: Lang, mode: TemperatureMode, lines: readonly Line[] | undefined, dict: Dictionary): ShownStep {
   const picked = pickSpoken(step.text, l);
-  const text = fahrenheit ? addFahrenheit(picked.text) : picked.text;
+  const text = formatTemperatures(picked.text, mode);
   const matches = lines && lines.length ? findStepIngredients(text, lines, dict, picked.lang) : [];
   return { source: picked.text, text, lang: picked.lang, matches };
 }
@@ -227,8 +233,8 @@ export function StepView(props: StepViewProps) {
   const l = lang.value;
   const dict = dictionary.value;
   const { step, lines } = props;
-  const fahrenheit = !!props.fahrenheit;
-  const shown = useMemo(() => shownStep(step, l, fahrenheit, lines, dict), [step, l, fahrenheit, lines, dict]);
+  const temperature = props.temperature ?? 'c';
+  const shown = useMemo(() => shownStep(step, l, temperature, lines, dict), [step, l, temperature, lines, dict]);
   const specs = stepTimers(step, shown.source);
   const factor = props.factor && props.factor > 0 ? props.factor : 1;
   if (props.big) {

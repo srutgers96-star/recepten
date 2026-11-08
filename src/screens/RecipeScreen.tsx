@@ -40,7 +40,7 @@ import { Header } from '@/components/Header';
 import { IngredientList, type LineMark } from '@/components/LineView';
 import { formatShortDate } from '@/components/RecipeRow';
 import { rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
-import { hasAmountsToShow, shownStep, StepView, useFahrenheit } from '@/components/StepView';
+import { hasAmountsToShow, shownStep, StepView, useTemperatureMode } from '@/components/StepView';
 import { TimerBar } from '@/components/TimerBar';
 import { VariantSheet } from '@/components/VariantSheet';
 import { nextTabChoice, tabChoiceFromParam, tabChoiceToParam, VariantTabs, type TabChoice } from '@/components/VariantTabs';
@@ -135,6 +135,17 @@ function dietChipsFor(recipe: Recipe, lines: readonly Line[], dict: Dictionary, 
     if (stored.has(OPTIE_TAG[tag]) && !plain.has(tag)) out.push({ tag: OPTIE_TAG[tag], unsure: false });
   }
   return out;
+}
+
+/**
+ * V1b (docs/specs/verbeterronde-1b.md §1c): the compact time parts of the meta line and the text
+ * version — "20 min · 55 min totaal"; only a total, or active == total, gives just "55 min".
+ */
+function timeParts(r: Recipe): string[] {
+  const active = r.time?.active;
+  const total = r.time?.total;
+  if (active) return total && total !== active ? [t('recipe.timeActive', { n: active }), t('recipe.timeTotal', { n: total })] : [t('recipe.timeActive', { n: active })];
+  return total ? [t('recipe.timeActive', { n: total })] : [];
 }
 
 function originLine(r: Recipe, l: 'nl' | 'en', all: Recipe[] | undefined): string {
@@ -279,7 +290,7 @@ export function RecipeScreen(props: { id: string }) {
   const override = useLive(() => (isBuiltinId(id) ? getOverride(id) : Promise.resolve(undefined)), [id]);
   // (applyLineOverrides copies the array but keeps the untouched line objects, hence the per-line check.)
   const linesAdjusted = Array.isArray(override?.patch?.lines) || (!!recipe && lines.some((ln, i) => ln !== recipe.lines[i]));
-  const fahrenheit = useFahrenheit();
+  const temperature = useTemperatureMode();
   const dict = dictionary.value;
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [versionBusy, setVersionBusy] = useState(false);
@@ -546,10 +557,12 @@ export function RecipeScreen(props: { id: string }) {
     return out.sort((a, b) => pickText(a.name, l).localeCompare(pickText(b.name, l), l));
   }, [recipe, all, l]);
 
+  // V1b: compact meta line "⏱ 20 min · 55 min totaal · klassieker"; the clock only when there is a time.
   const meta: string[] = [];
+  let metaHasTime = false;
   if (recipe) {
-    if (recipe.time?.active) meta.push(t('recipe.timeActive', { n: recipe.time.active }));
-    if (recipe.time?.total && recipe.time.total !== recipe.time.active) meta.push(t('recipe.timeTotal', { n: recipe.time.total }));
+    metaHasTime = !!recipe.time?.active || !!recipe.time?.total;
+    meta.push(...timeParts(recipe));
     meta.push(originLine(recipe, l, all));
     if (stats) {
       if (stats.count > 0) {
@@ -571,8 +584,8 @@ export function RecipeScreen(props: { id: string }) {
   // there and a tap hides one (reading the signal here re-renders when it changes).
   const timersTappable = !!shownRecipe && shownRecipe.steps.some((s) => !!s.timers && s.timers.length > 0);
   const amountsTappable = useMemo(
-    () => !!shownRecipe && shownRecipe.steps.some((s) => hasAmountsToShow(shownStep(s, l, fahrenheit, shownLines, dict), shownLines, dict)),
-    [shownRecipe, l, fahrenheit, shownLines, dict],
+    () => !!shownRecipe && shownRecipe.steps.some((s) => hasAmountsToShow(shownStep(s, l, temperature, shownLines, dict), shownLines, dict)),
+    [shownRecipe, l, temperature, shownLines, dict],
   );
   const amountsHint = amountsTappable && !showAmounts.value;
   // Block F.2: the original of a personal version (when it still exists on this phone) for the
@@ -733,14 +746,12 @@ export function RecipeScreen(props: { id: string }) {
    * diet tab adds "(glutenvrije versie)" to the name, only in the text (13D §1d).
    */
   function asTextInput(r: Recipe): RecipeTextInput {
-    const timeParts: string[] = [];
-    if (r.time?.active) timeParts.push(t('recipe.timeActive', { n: r.time.active }));
-    if (r.time?.total && r.time.total !== r.time.active) timeParts.push(t('recipe.timeTotal', { n: r.time.total }));
+    const times = timeParts(r);
     const title = pickText(r.name, l);
     return {
       name: dietChoice ? `${title} (${dietVersionSuffix(dietChoice)})` : title,
       servings,
-      timeLabel: timeParts.length ? timeParts.join(' · ') : null,
+      timeLabel: times.length ? times.join(' · ') : null,
       lines: shownLines.map((ln) => ({ text: lineText(ln, l, factor).trim(), header: ln.kind === 'header' })).filter((x) => x.text !== ''),
       steps: r.steps.map((s) => pickText(s.text, l)).filter((s) => s !== ''),
       lang: l,
@@ -904,7 +915,15 @@ export function RecipeScreen(props: { id: string }) {
               )}
             </div>
 
-            <p class="detail-meta">{meta.join(' · ')}</p>
+            <p class="detail-meta recipe-meta">
+              {metaHasTime && (
+                <svg class="meta-clock" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 2" />
+                </svg>
+              )}
+              <span>{meta.join(' · ')}</span>
+            </p>
 
             {/* Phase 5 block F: a personal version links back to its original (13D: the original shows it as a tab). */}
             {original && (
@@ -1111,7 +1130,7 @@ export function RecipeScreen(props: { id: string }) {
                     recipeName={version ? versionTitle : name}
                     index={i}
                     step={s}
-                    fahrenheit={fahrenheit}
+                    temperature={temperature}
                     lines={shownLines}
                     factor={factor}
                     onTimerStart={(n) => void onTimerStart(n)}

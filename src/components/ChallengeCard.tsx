@@ -7,12 +7,13 @@
 //   ran out without the goal, the quiet line `challenge.expired` sits above it (no toast, no XP).
 // - a running challenge: icon + name, the description with the goal filled in, a progress bar
 //   ("2 van 3", always derived from the facts by src/challenges.ts, never added up here), the time left
-//   ("nog 4 dagen", "laatste dag"; further away "tot 30 nov") and the reward. A small Opgeven asks for
+//   ("nog 4 dagen", "laatste dag"; further away "tot 30 nov") and the reward (V1b: the amount fixed at
+//   the start, `active.xp`, else the base). A small Opgeven asks for
 //   confirmation first, then `giveUp()`: no history row, no penalty, the offer of the week stays.
 //   Reaching the goal (toast, confetti 'challenge', XP pop) is settleChallenges' job, not this card's.
 // - under it, when anything was done: a folding row "Gehaald: {n}" with the last five (name, date, XP).
 import type { JSX } from 'preact';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import {
   activeChallenge,
   challengeById,
@@ -28,6 +29,7 @@ import { formatShortDate } from '@/components/RecipeRow';
 import type { Challenge, ChallengeRule, ChallengeTerm } from '@/domain/challenges';
 import { dayIndexOfIso, localDayIndex } from '@/domain/days';
 import { lang, t } from '@/i18n';
+import { xpStateFor, xpStates } from '@/xp';
 import { ChallengeOfferSheet } from './ChallengeOfferSheet';
 import { formatXp } from './XpBar';
 
@@ -103,6 +105,12 @@ export function ChallengeCard(props: { memberId: string }): JSX.Element {
   const progress = active ? challengeProgress.value : null;
   const done = doneChallenges.value.filter((d) => d.memberId === props.memberId);
   const recent = [...done].sort((a, b) => b.finishedAt.localeCompare(a.finishedAt)).slice(0, HISTORY_ROWS);
+  // V1b §1f: the offer shows the reward for the member's level now (memoised XP state; asked once so
+  // it is there when the sheet opens; no state yet → level 1 → the base).
+  const level = xpStates.value.get(props.memberId)?.level ?? 1;
+  useEffect(() => {
+    void xpStateFor(props.memberId).catch((e: unknown) => console.warn('ChallengeCard: xpStateFor', e));
+  }, [props.memberId]);
 
   function onGiveUp() {
     if (!confirm(t('challenge.giveUpConfirm'))) return;
@@ -122,7 +130,7 @@ export function ChallengeCard(props: { memberId: string }): JSX.Element {
               {challenge.icon}
             </span>
             <strong class="challenge-name">{challengeName(challenge)}</strong>
-            <span class="challenge-reward small">{rewardText(challenge.xp)}</span>
+            <span class="challenge-reward small">{rewardText(active.xp ?? challenge.xp)}</span>
           </div>
           <p class="challenge-desc muted small">{challengeDescription(challenge)}</p>
           {progress && <ChallengeBar current={progress.current} target={progress.target} />}
@@ -167,6 +175,7 @@ export function ChallengeCard(props: { memberId: string }): JSX.Element {
       {sheet && (
         <ChallengeOfferSheet
           offer={challengeOffer.value}
+          level={level}
           onClose={() => setSheet(false)}
           onStart={(id) => {
             setSheet(false);

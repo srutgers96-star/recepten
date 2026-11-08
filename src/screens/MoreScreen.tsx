@@ -2,15 +2,17 @@
 // phase 6 (docs/phase-6-spec.md 6A.6) — four collapsible groups whose open/closed state is kept per
 // device in localStorage, with the "Opslag & back-up" row (backup-due badge) as a plain row between
 // them (a group holding one row of the same name was two taps for one):
-//   "Jij & je huishouden"  row Mijn profiel (6D-S: small avatar, name, level title → '/more/profile'),
-//                          then (V1, docs/specs/verbeterronde-1.md §1c) the housemates and the friends
-//                          as smaller rows (→ '/more/household'), the row Huishouden, the row
-//                          "Profielen op deze telefoon" (only with more than one profile), 📅
-//                          Kookkalender, 🎨 Jouw stijl ('/more/style'), "Aantal personen" stepper
-//                          (phase 4 week slots). The 🏆 Badges row went in V1: the badges are a tile on
-//                          Mijn profiel (the route '/more/badges' stays).
-//   "Instellingen"         language, confetti, badges switch, °F, "Kookstand & timer" (read-aloud,
-//                          voice commands, timer vibrate — phase 5 block B); the Experimenten switch
+//   "Jij & je huishouden"  (V1b, docs/specs/verbeterronde-1b.md §1a) a centred profile block (avatar,
+//                          name, level title → '/more/profile'), the sub-head row "Huishouden &
+//                          vrienden" (→ '/more/household'), the housemates and the friends as smaller
+//                          rows with a "huisgenoot"/"vriend" tag (or one "Voeg een huisgenoot toe"
+//                          row), the row "Profielen op deze telefoon" (only with more than one
+//                          profile), 📅 Kookkalender, "Aantal personen" stepper (phase 4 week slots).
+//                          The 🏆 Badges row went in V1 and 🎨 Jouw stijl in V1b: both are tiles on
+//                          Mijn profiel (the routes '/more/badges' and '/more/style' stay).
+//   "Instellingen"         language, confetti (the word opens the confetti styles), badges (the word
+//                          opens Badges), temperature °C | °F | both, "Kookstand & timer" (read-aloud,
+//                          voice commands, vibrate — phase 5 block B); the Experimenten switch
 //                          (phase 5 block D) went on 8 nov 2026: nothing read it any more since 13Q
 //   "Recepten & delen"     "Deel je nieuwe recepten" (unsent badge), Controleer mijn recepten,
 //                          Woordenboek (counts → '/more/dictionary', phase 5 A-bis.6)
@@ -39,7 +41,7 @@ import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
 import { levelTitleText } from '@/components/XpBar';
 import { SheetPortal } from '@/components/SheetPortal';
-import { getFahrenheit, getHousehold, getHouseholdServings, getProgressSnapshots, setFahrenheit, setHouseholdServings } from '@/db/repo';
+import { getHousehold, getHouseholdServings, getProgressSnapshots, getTemperatureMode, setHouseholdServings, setTemperatureMode, type TemperatureMode } from '@/db/repo';
 import { baseDictionary, userIngredients } from '@/dictionary';
 import { matchMemberForCard, memberFromProfile, membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
 import type { Lang } from '@/domain/model';
@@ -120,8 +122,11 @@ function MenuRow(props: {
   /** 6D-S: an element before the label (the row Mijn profiel: the small avatar). */
   icon?: ComponentChildren;
   ariaLabel?: string;
-  /** V1: an extra class on the row ('row-member': a housemate or friend, a size smaller). */
+  /** V1: an extra class on the row ('row-member': a housemate or friend, a size smaller; V1b
+   *  'row-subhead': the sub-head row "Huishouden & vrienden"). */
   extraClass?: string;
+  /** V1b: a small tag after the name ("huisgenoot" / "vriend"). */
+  tag?: string;
 }) {
   const { to, onClick } = props;
   return (
@@ -129,6 +134,7 @@ function MenuRow(props: {
       {props.icon}
       <span class="name">
         {props.label}
+        {props.tag && <span class="who-tag">{props.tag}</span>}
         {props.sub && <span class="row-sub">{props.sub}</span>}
       </span>
       {props.badge && <span class={'badge menu-badge' + (props.badgeTone === 'red' ? ' badge-next' : '')}>{props.badge}</span>}
@@ -162,10 +168,10 @@ function Group(props: { id: GroupId; title: string; open: boolean; onToggle: (id
   );
 }
 
-// --- Housemates and friends under Mijn profiel (V1, docs/specs/verbeterronde-1.md §1c) ----------
+// --- Housemates and friends under "Huishouden & vrienden" (V1 §1c, V1b §1a) -----------------------
 
 /**
- * One housemate (a member that is not the active profile), a size smaller than Mijn profiel. Under
+ * One housemate (a member that is not the active profile), a size smaller, tagged "huisgenoot". Under
  * the name, with badges on and a level known: the level line as on Huishouden (a profile on this
  * phone live via `useAvatarLevel`; a member on another phone from its last snapshot, without the
  * "bijgewerkt" date); otherwise "via kaartje" / "met de hand", or nothing for a local profile.
@@ -175,14 +181,14 @@ function MemberMenuRow(props: { member: Member; snapshot?: ProgressSnapshot }) {
   const localLevel = useAvatarLevel(m.local ? m.id : null);
   const level = badgesEnabled.value ? (m.local ? localLevel : props.snapshot?.level) : undefined;
   const sub = level !== undefined ? levelTitleText(level) : m.local ? undefined : m.deviceId ? t('household.fromCard') : t('household.byHand');
-  return <MenuRow extraClass="row-member" icon={<Avatar profile={m} />} label={m.name} sub={sub} to="/more/household" />;
+  return <MenuRow extraClass="row-member" icon={<Avatar profile={m} />} label={m.name} tag={t('more.tagHousemate')} sub={sub} to="/more/household" />;
 }
 
-/** One friend (a snapshot kept with "Bewaar als vriend"): "Vriend", with badges on "· Level n · titel". */
+/** One friend (a snapshot kept with "Bewaar als vriend"), tagged "vriend"; with badges on "Level n · titel" under it. */
 function FriendMenuRow(props: { snapshot: ProgressSnapshot }) {
   const s = props.snapshot;
-  const sub = t('more.friend') + (badgesEnabled.value ? ' · ' + levelTitleText(s.level) : '');
-  return <MenuRow extraClass="row-member" icon={<Avatar profile={s} />} label={s.name} sub={sub} to="/more/household" />;
+  const sub = badgesEnabled.value ? levelTitleText(s.level) : undefined;
+  return <MenuRow extraClass="row-member" icon={<Avatar profile={s} />} label={s.name} tag={t('more.friend')} sub={sub} to="/more/household" />;
 }
 
 // --- Feedback (6A.7) ----------------------------------------------------------------------------
@@ -428,7 +434,8 @@ export function DonateBlock(props: { center?: boolean }) {
 
 export function MoreScreen() {
   const active = activeProfile.value;
-  const [fahrenheit, setF] = useState(false);
+  // V1b §1a: °C | °F | both (null until read).
+  const [tempMode, setTempMode] = useState<TemperatureMode | null>(null);
   const [household, setHousehold] = useState<number | null>(null);
   const [groups, setGroups] = useState<GroupState>(loadGroupState);
   const [feedback, setFeedback] = useState(false);
@@ -453,7 +460,7 @@ export function MoreScreen() {
     void loadSpeechSettings();
     void loadVoiceSettings();
     void loadSoundSettings();
-    void getFahrenheit().then(setF, (e: unknown) => console.error('getFahrenheit', e));
+    void getTemperatureMode().then(setTempMode, (e: unknown) => console.error('getTemperatureMode', e));
     void getHouseholdServings().then(setHousehold, (e: unknown) => console.error('getHouseholdServings', e));
     void refreshShareBadges();
     void getHousehold().then(setHouseholdSetting, (e: unknown) => console.error('getHousehold', e));
@@ -468,10 +475,10 @@ export function MoreScreen() {
     });
   }
 
-  function toggleFahrenheit(on: boolean) {
-    setF(on);
-    void setFahrenheit(on).catch((e: unknown) => console.error('setFahrenheit', e));
-    void recordFeature('fahrenheit');
+  function chooseTemperature(mode: TemperatureMode) {
+    setTempMode(mode);
+    void setTemperatureMode(mode).catch((e: unknown) => console.error('setTemperatureMode', e));
+    if (mode !== 'c') void recordFeature('fahrenheit');
   }
 
   /** "Aantal personen": the servings a new week slot starts with (spec §0 `household.servings`). */
@@ -504,32 +511,33 @@ export function MoreScreen() {
         </section>
 
         <Group id="you" title={t('more.group.you')} open={groups.you} onToggle={toggleGroup}>
+          {/* V1b §1a: the active profile as a centred block (avatar, name, level title) → Mijn profiel. */}
+          <button
+            type="button"
+            class="more-profile"
+            aria-label={active ? `${t('more.myProfile')}: ${active.name}${levelSub ? ', ' + levelSub : ''}` : undefined}
+            onClick={() => navigate('/more/profile')}
+          >
+            {active && <Avatar profile={active} level={level} />}
+            <span class="more-profile-name">{active ? active.name : t('more.myProfile')}</span>
+            {active && levelSub && <span class="more-profile-level muted small">{levelSub}</span>}
+          </button>
           <div class="menu">
-            {/* 6D-S: one row for the active profile (small avatar, name, level title) → Mijn profiel. */}
-            <MenuRow
-              icon={active ? <Avatar profile={active} level={level} /> : undefined}
-              label={active ? active.name : t('more.myProfile')}
-              ariaLabel={active ? `${t('more.myProfile')}: ${active.name}${levelSub ? ', ' + levelSub : ''}` : undefined}
-              sub={active ? levelSub : undefined}
-              to="/more/profile"
-            />
-            {/* V1 §1c: the housemates, then the friends, right under Mijn profiel (→ Huishouden). */}
+            {/* V1b §1a: the sub-head row "Huishouden & vrienden" (→ Huishouden), then the housemates
+                and the friends, each with a small tag after the name. */}
+            <MenuRow extraClass="row-subhead" label={t('more.householdFriends')} to="/more/household" />
             {housemates.map((m) => (
               <MemberMenuRow key={m.id} member={m} snapshot={snapshots[m.id]} />
             ))}
             {friends.map((s) => (
               <FriendMenuRow key={s.id} snapshot={s} />
             ))}
-            {/* Phase 5 (docs/phase-5-spec.md A.8): the household (name + members); still called
-                Huishouden, so every "Meer → Huishouden" path stays right (V1). */}
-            <MenuRow label={t('more.householdRow')} sub={t(housemates.length > 0 ? 'more.householdRowHint' : 'more.householdRowEmpty')} to="/more/household" />
+            {housemates.length === 0 && friends.length === 0 && <MenuRow label={t('more.householdRowEmpty')} to="/more/household" />}
             {/* V1 §1c point 5: the Profielen page only for a phone that already holds more than one
                 profile (from before V1); with exactly one there is no trace of it. */}
             {profileList.length > 1 && <MenuRow label={t('more.profilesHere')} sub={t('more.profilesHereHint', { n: profileList.length })} to="/more/profiles" />}
             {/* 6D-4 (docs/specs/xp-levels.md §1j): the cooking calendar, ALWAYS (also with badges off: it is a log). */}
             <MenuRow label={`📅 ${t('more.calendar')}`} to="/more/calendar" />
-            {/* 6D-S: avatar, sounds, confetti, typefaces and theme; always (the theme is not XP). */}
-            <MenuRow label={`🎨 ${t('more.style')}`} sub={t('more.styleHint')} to="/more/style" />
           </div>
           <div class="setting">
             <div class="label">
@@ -566,24 +574,27 @@ export function MoreScreen() {
               }}
             />
           </div>
-          <label class="setting">
-            <div class="label">
-              {t('more.confetti')}
-            </div>
-            <span class="switch">
-              <input type="checkbox" checked={confettiEnabled.value} onChange={(e) => void setConfettiEnabled((e.currentTarget as HTMLInputElement).checked)} />
+          {/* V1b §1a: the word opens the confetti styles in Jouw stijl; the switch is a label of its own. */}
+          <div class="setting">
+            <button type="button" class="label label-link" onClick={() => navigate('/more/style?tab=confetti')}>
+              <span class="label-link-title">{t('more.confetti')}</span>
+            </button>
+            <label class="switch">
+              <input type="checkbox" aria-label={t('more.confetti')} checked={confettiEnabled.value} onChange={(e) => void setConfettiEnabled((e.currentTarget as HTMLInputElement).checked)} />
               <span class="track" />
-            </span>
-          </label>
-          {/* Phase 5 block C: badges off = no badge row, no Home card, no toast (PLAN §0 Gamification). */}
-          <label class="setting">
-            <div class="label">
-              {t('more.badges')}
+            </label>
+          </div>
+          {/* Phase 5 block C: badges off = no badge row, no Home card, no toast (PLAN §0 Gamification).
+              V1b §1a: the word opens Badges. */}
+          <div class="setting">
+            <button type="button" class="label label-link" onClick={() => navigate('/more/badges')}>
+              <span class="label-link-title">{t('more.badges')}</span>
               <small>{t('more.badgesHint')}</small>
-            </div>
-            <span class="switch">
+            </button>
+            <label class="switch">
               <input
                 type="checkbox"
+                aria-label={t('more.badges')}
                 checked={badgesEnabled.value}
                 onChange={(e) => {
                   const on = (e.currentTarget as HTMLInputElement).checked;
@@ -595,17 +606,26 @@ export function MoreScreen() {
                 }}
               />
               <span class="track" />
-            </span>
-          </label>
-          <label class="setting">
+            </label>
+          </div>
+          {/* V1b §1a: °C | °F | both instead of the "°F erbij" switch. */}
+          <div class="setting">
             <div class="label">
-              {t('more.fahrenheit')}
+              {t('more.temperature')}
             </div>
-            <span class="switch">
-              <input type="checkbox" checked={fahrenheit} onChange={(e) => toggleFahrenheit((e.currentTarget as HTMLInputElement).checked)} />
-              <span class="track" />
-            </span>
-          </label>
+            <Segmented<TemperatureMode>
+              name="temperature"
+              options={[
+                { value: 'c', label: t('more.temperatureC') },
+                { value: 'f', label: t('more.temperatureF') },
+                { value: 'both', label: t('more.temperatureBoth') },
+              ]}
+              selected={tempMode ? [tempMode] : []}
+              onChange={(v) => {
+                if (v[0]) chooseTemperature(v[0]);
+              }}
+            />
+          </div>
 
           {/* Phase 5 block B (docs/phase-5-spec.md B.1–B.3): read-aloud, voice commands, timer sound. */}
           <h3 class="more-sub">{t('more.cookTimer')}</h3>
@@ -645,7 +665,6 @@ export function MoreScreen() {
           <label class="setting">
             <div class="label">
               {t('more.timerVibrate')}
-              <small>{t('more.timerVibrateHint')}</small>
             </div>
             <span class="switch">
               <input type="checkbox" checked={timerVibrate.value} onChange={(e) => void setTimerVibrate((e.currentTarget as HTMLInputElement).checked)} />

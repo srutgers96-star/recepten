@@ -294,7 +294,7 @@ export function DeltaShareScreen() {
           <div class="partner-chips" role="group" aria-label={t('delta.partner')}>
             {members.map((m) => (
               <button key={m.id} type="button" class={'partner-chip member' + (chosen === foldName(m.name) ? ' on' : '')} onClick={() => choose(m.name)}>
-                <Avatar profile={m} />
+                <Avatar profile={m} highlight={chosen === foldName(m.name)} />
                 {m.name}
               </button>
             ))}

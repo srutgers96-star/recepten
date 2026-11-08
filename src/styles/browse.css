@@ -438,6 +438,21 @@
   margin: 0 0 14px;
 }
 
+/* V1b: compact meta line with a small clock in front ("⏱ 20 min · 55 min totaal · klassieker"). */
+.recipe-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.recipe-meta .meta-clock {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
 .detail-actions {
   display: flex;
   gap: 10px;

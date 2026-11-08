@@ -10,7 +10,7 @@
 //   outsideWeekIds  the dice pool without the week plan's dishes ("Iets buiten je week")
 //   tonightMeta     the grey meta line: the non-empty parts joined with " · "
 //   weekProgress / weekNames / weekLine   the compact week card
-//   isSameLocalDay / continueWithId       the "Continue with" line (today only)
+//   isSameLocalDay / continueWithId       the "Continue with" line (total time + 3 hours, V1b)
 import type { Recipe } from './model.ts';
 import type { Plan, PlanItem } from './planner.ts';
 
@@ -128,18 +128,43 @@ export function isSameLocalDay(iso: string, now: Date): boolean {
   return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
 }
 
-/** The id for "Continue with", or null (not today, unknown recipe, equal to hideId, or cooked today). */
+/**
+ * How long after the recipe's own preparation time Home still offers "Continue with" (V1b, Stijn
+ * 8 Nov: "today" was too long, but "sometimes a dish has to rest a day"): the window is the total
+ * time of the recipe plus these three hours, so a 24-hour recipe stays for 27 hours.
+ */
+export const CONTINUE_GRACE_MS = 3 * 3_600_000;
+
+/**
+ * The id for "Continue with", or null: viewed `totalMinutes` (the recipe's `time.total ??
+ * time.active ?? 0`) plus CONTINUE_GRACE_MS or longer ago (or in the future / invalid time),
+ * unknown recipe, equal to hideId, cooked today or cooked at/after the view (the window may cross
+ * midnight since V1b, so a dish cooked last night must not come back this morning), or dismissed
+ * with the × on Home (`dismissedId`; a later viewed other recipe shows the line again).
+ */
 export function continueWithId(
   last: LastViewed | null,
   now: Date,
   known: ReadonlySet<string>,
   hideId: string | null,
   cookedTodayAt: string | null,
+  dismissedId: string | null = null,
+  totalMinutes: number | null = null,
 ): string | null {
   if (!last || !last.id) return null;
-  if (!isSameLocalDay(last.at, now)) return null;
+  const at = typeof last.at === 'string' && last.at ? new Date(last.at).getTime() : NaN;
+  const nowMs = now.getTime();
+  if (Number.isNaN(at) || Number.isNaN(nowMs)) return null;
+  const age = nowMs - at;
+  const minutes = typeof totalMinutes === 'number' && Number.isFinite(totalMinutes) && totalMinutes > 0 ? totalMinutes : 0;
+  if (age < 0 || age >= minutes * 60_000 + CONTINUE_GRACE_MS) return null;
+  if (dismissedId !== null && last.id === dismissedId) return null;
   if (!known.has(last.id)) return null;
   if (hideId !== null && last.id === hideId) return null;
   if (cookedTodayAt && isSameLocalDay(cookedTodayAt, now)) return null;
+  if (cookedTodayAt) {
+    const cookedAt = new Date(cookedTodayAt).getTime();
+    if (!Number.isNaN(cookedAt) && cookedAt >= at) return null;
+  }
   return last.id;
 }

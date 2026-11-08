@@ -54,7 +54,11 @@ export { getSetting, setSetting };
 
 // --- Settings keys (phase 2) -------------------------------------------------------------------
 
-/** Setting 'units.fahrenheit' (boolean): append °F to oven temperatures in the English edition. */
+/**
+ * Setting 'units.fahrenheit' (boolean): append °F to oven temperatures in the English edition.
+ * Since V1b `units.temperature` (TEMPERATURE_KEY) is leading; this key is only still read to translate
+ * an old `true` into 'both' when the new key has never been written.
+ */
 export const FAHRENHEIT_KEY = 'units.fahrenheit';
 
 export async function getFahrenheit(): Promise<boolean> {
@@ -63,6 +67,36 @@ export async function getFahrenheit(): Promise<boolean> {
 
 export async function setFahrenheit(on: boolean): Promise<void> {
   await setSetting(FAHRENHEIT_KEY, on === true);
+}
+
+/** V1b: how oven temperatures in step texts are shown: as written (°C), as °F only, or both. */
+export type TemperatureMode = 'c' | 'f' | 'both';
+
+/** Setting 'units.temperature' (TemperatureMode); leading over the old boolean 'units.fahrenheit'. */
+export const TEMPERATURE_KEY = 'units.temperature';
+
+function isTemperatureMode(v: unknown): v is TemperatureMode {
+  return v === 'c' || v === 'f' || v === 'both';
+}
+
+/**
+ * The temperature mode from the stored values: the new key when it is valid; otherwise the old
+ * boolean `units.fahrenheit` (true -> 'both', anything else -> 'c'). Pure, so it is testable without Dexie.
+ */
+export function temperatureModeFrom(stored: unknown, oldFahrenheit: unknown): TemperatureMode {
+  if (isTemperatureMode(stored)) return stored;
+  return oldFahrenheit === true ? 'both' : 'c';
+}
+
+/** The temperature mode (V1b). Translates the old key on read; nothing is written back. */
+export async function getTemperatureMode(): Promise<TemperatureMode> {
+  const stored = await getSetting<unknown>(TEMPERATURE_KEY, undefined);
+  if (isTemperatureMode(stored)) return stored;
+  return temperatureModeFrom(stored, await getSetting<unknown>(FAHRENHEIT_KEY, false));
+}
+
+export async function setTemperatureMode(mode: TemperatureMode): Promise<void> {
+  await setSetting(TEMPERATURE_KEY, isTemperatureMode(mode) ? mode : 'c');
 }
 
 interface RecipesFile {
