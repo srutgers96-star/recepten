@@ -93,7 +93,7 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 | V1b | Meer: gecentreerd profielblok, Huishouden & vrienden, Jouw stijl-rij weg, Confetti/Badges-tekst opent de pagina, Trillen, Temperatuur °C/°F/beide · Home: Verder met (3 uur, ×), datum → kalender · receptkop met klokje · profiel: potlood + knipoog · ring volgt de lijstvorm · voorraaddrempel 100 g · uitdagingen +1 %/level | verbeterronde-1b.md | compleet (8 nov) |
 | V2 | Delen zonder bestanden (links tot 20 KB, meerdere berichten) · bestandsnaam met uitleg + "Stuur ook de uitleg" · Android-hint · afzender met avatar in de inbox · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | verbeterronde-2.md | compleet (8 nov) |
 | V3 | Avatar-ronde: poppetje iets kleiner in de lijst (niets valt meer weg), niveauring alleen op de kale cirkel, haar-revamp, zes brillen na level 30 en zes kook-onderdelen, vijftien onderdelen met een te lage zeldzaamheid hersteld, tegel Verras me per laag (de oude V3, uitdagingen +1 %, zit in V1b) | verbeterronde-3.md | compleet (8 nov) |
-| V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | — (IDEAS 9) | gepland |
+| V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | verbeterronde-4.md | in aanbouw (8 nov) |
 | V5 | Boodschappen terugkijken in de kalender | — (IDEAS 10 + 2) | vervallen (Stijn 8 nov) |
 | V6 | Gabi's lijstje plakken met voorstellen · data-ronde woordenlijst vooraf | — (IDEAS 7 + 8) | gepland |
 | V7 | Boodschappen-badges over de ingrediënten, met vier avatar-beloningen (waaronder een bril) | — (IDEAS 4) | gepland |
