@@ -24,6 +24,7 @@ import process from 'node:process';
 import { loadDictionary, normalizeKey, type DictionaryData } from '../src/domain/dictionary.ts';
 import { HANDBOOK_SECTION_IDS } from '../src/domain/handbook.ts';
 import type { Recipe } from '../src/domain/model.ts';
+import { rarityForLevel } from '../src/domain/rarity.ts';
 import { readDictionaryData } from './build-dictionary-seed.ts';
 import { checkSides, readSides, SIDES_TIMESTAMP } from './sides.ts';
 
@@ -1016,9 +1017,10 @@ export function validateBadges(data: unknown, refs?: DictionaryRefs, input: Badg
 // svg a string without `<script`, without `href=` and without `style=` other than the two allowed
 // `fill:var(--tone)` / `fill:var(--hair)`, every `id="…"` in it ends with `__u` and every `url(#…)`
 // points at such an id in the same svg; every layer in AVATAR_REQUIRED_LAYERS has a level-3 part;
-// `rarity`, when present, one of AVATAR_RARITIES (block 6D-R: only a valid value is demanded, never a
-// warning when it differs from the level/badge rule — differing is the point; a missing rarity falls
-// back to that rule in normalizeAvatarParts).
+// `rarity`, when present, one of AVATAR_RARITIES (block 6D-R: never a warning when it is HIGHER than
+// the level/badge rule — differing upwards is the point; a missing rarity falls back to that rule in
+// normalizeAvatarParts). Spec V3 §1b: on a level part a rarity BELOW rarityForLevel(unlock.level) is
+// an error ("rarity below the level rule"); badge parts are not checked against a rule here.
 // Block 6D-F (docs/specs/frames.md §2d): a `frame` needs `clip` (exactly one <circle|ellipse|rect|
 // polygon|path …/> with geometry attributes only) and `accent` (#rrggbb), and its svg uses
 // `var(--accent)` at least once; `clip`/`accent` on another layer are errors; `covers` only on `bg`,
@@ -1168,6 +1170,12 @@ export function validateAvatarParts(data: unknown, badges: unknown): ValidationR
     const rarity = part['rarity'];
     if (rarity !== undefined && (typeof rarity !== 'string' || !AVATAR_RARITIES.includes(rarity))) {
       errors.push(`${label}: "rarity" must be one of ${AVATAR_RARITIES.join(' | ')}, got ${JSON.stringify(rarity)}.`);
+    } else if (typeof rarity === 'string' && hasLevel && isIntIn(unlock['level'], AVATAR_MIN_LEVEL, AVATAR_MAX_LEVEL)) {
+      // Spec V3 §1b: an explicit rarity may sit above the level rule (that is the point of it), never below.
+      const rule = rarityForLevel(unlock['level'] as number);
+      if (AVATAR_RARITIES.indexOf(rarity) < AVATAR_RARITIES.indexOf(rule)) {
+        errors.push(`${label}: rarity below the level rule (${JSON.stringify(rarity)} on level ${unlock['level'] as number}; the rule gives ${JSON.stringify(rule)}).`);
+      }
     }
 
     const svg = part['svg'];

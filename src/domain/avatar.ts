@@ -124,8 +124,11 @@ const CLIP_ATTRIBUTES: ReadonlySet<string> = new Set(['cx', 'cy', 'r', 'rx', 'ry
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;
 /** The frame the renderer draws by itself on a covering background without a chosen frame (§2b). */
 const IMPLICIT_FRAME = 'frame-ring';
-/** The round clip and the plain level ring without a frame (unchanged since 6D-3). */
+/** The round clip without a frame (unchanged since 6D-3). */
 const ROUND_CLIP = '<circle cx="50" cy="50" r="46"/>';
+/** V3 §1a: the scale of everything but the rect and the bg layer, anchored on the bottom edge (50,100). */
+export const INNER_SCALE = 0.9;
+const INNER_TRANSFORM = `translate(50 100) scale(${INNER_SCALE}) translate(-50 -100)`;
 const RARITY_SET: ReadonlySet<string> = new Set(RARITIES);
 
 function isRecord(v: unknown): v is Record<string, unknown> {
@@ -398,25 +401,28 @@ function wrapLayer(layer: AvatarLayer, svg: string): string {
 }
 
 /**
- * The whole SVG as a string (no framework), exactly (docs/specs/frames.md §2b, block 6D-F):
+ * The whole SVG as a string (no framework), exactly (docs/specs/verbeterronde-3.md §1a, which
+ * replaces frames.md §2b):
  *   <svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:T;--hair:H[;--accent:A]" aria-hidden="true">
  *     <defs><clipPath id="c-UID">CLIP</clipPath></defs>
- *     <g clip-path="url(#c-UID)"><rect width="100" height="100" fill="COLOR"/>…layers bg … prop…</g>
- *     RING    (only from level 5)
- *     FRAME   (only with a frame)
+ *     <g clip-path="url(#c-UID)"><rect width="100" height="100" fill="COLOR"/>[bg layer]
+ *       <g class="av-inner" transform="translate(50 100) scale(0.9) translate(-50 -100)">…layers body … prop…</g></g>
+ *     RING    (only from level 5, and only without a frame and without a covering background)
+ *     FRAME   (only with a frame, or the implicit ring)
  *     HIGHLIGHT (only with opts.highlight, V1b)
  *   </svg>
- * Every part layer (bg … prop, and the frame) is wrapped as `<g data-layer="LAYER">PART SVG</g>`.
+ * Every part layer (bg … prop, and the frame) is wrapped as `<g data-layer="LAYER">PART SVG</g>`;
+ * the rect and the bg layer stay unscaled, everything else is scaled by INNER_SCALE around the
+ * bottom centre (the body still runs to the edge). The av-inner group is always there, even empty.
  * HIGHLIGHT is the clip shape once more, `fill="none" stroke="currentColor" stroke-width="3"`;
  * without a frame the circle r 48, stroke-width 4.
- * CLIP is the chosen frame's `clip`, else the round clip r 46. RING without a frame is the plain
- * circle r 48, width 4 (as before 6D-F); with a frame it is the clip shape itself, stroked
- * `fill="none" stroke="RING" stroke-width="2"`. FRAME is the frame's own svg, not clipped, after the
- * ring. `--accent` (the colour rule, §2c) is only there with a frame: the profile colour when the
- * background `covers`, else the frame's own `accent`; without a frame the style has no `--accent`.
+ * CLIP is the chosen frame's `clip`, else the round clip r 46. RING is the plain circle r 48,
+ * width 4. FRAME is the frame's own svg, not clipped. `--accent` (the colour rule, §2c) is only
+ * there with a frame: the profile colour when the background `covers`, else the frame's own
+ * `accent`; without a frame the style has no `--accent`.
  * Implicit ring: on a covering background without a (known) frame, the renderer draws as if
  * `frame-ring` were chosen with the profile colour as accent; if the library has no `frame-ring`, a
- * plain circle r 48 width 4 in the profile colour follows the level ring, which then is r 45 width 2.
+ * plain circle r 48 width 4 in the profile colour.
  *
  * `color` is the profile colour (a plain CSS colour, else cobalt); `level` gives the ring
  * (`ringForLevel`; pass 0 for no ring); `uid` replaces every `__u` and suffixes the clip path, so
@@ -436,11 +442,19 @@ export function renderAvatarSvg(spec: AvatarSpec, parts: ReadonlyMap<string, Ava
     const part = typeof id === 'string' ? parts.get(id) : undefined;
     if (part && !byLayer.has(part.layer)) byLayer.set(part.layer, part);
   }
-  let layers = '';
+  // V3 §1a: the profile-colour rect and the bg layer stay unscaled; every other layer (body … prop)
+  // sits in one group scaled by INNER_SCALE, anchored on the bottom edge, so nothing tall falls
+  // behind a frame's clip.
+  let bgLayer = '';
+  let inner = '';
   for (const layer of LAYER_ORDER) {
     const part = byLayer.get(layer);
-    if (part && layer !== 'frame') layers += wrapLayer(layer, part.svg.replaceAll('__u', uid));
+    if (!part || layer === 'frame') continue;
+    const wrapped = wrapLayer(layer, part.svg.replaceAll('__u', uid));
+    if (layer === 'bg') bgLayer += wrapped;
+    else inner += wrapped;
   }
+  const layers = bgLayer + `<g class="av-inner" transform="${INNER_TRANSFORM}">${inner}</g>`;
 
   // The frame and the colour rule (§2c): a covering background hands the profile colour to the
   // frame, and without a chosen frame it brings the plain ring of its own.
@@ -455,10 +469,10 @@ export function renderAvatarSvg(spec: AvatarSpec, parts: ReadonlyMap<string, Ava
 
   const clip = frame?.clip ?? ROUND_CLIP;
   const ring = ringForLevel(opts.level);
-  let ringSvg = '';
-  if (ring && frame) ringSvg = clip.replace(/\s*\/>$/, ` fill="none" stroke="${RING_HEX[ring]}" stroke-width="2"/>`);
-  else if (ring && fallbackRing) ringSvg = `<circle cx="50" cy="50" r="45" fill="none" stroke="${RING_HEX[ring]}" stroke-width="2"/>`;
-  else if (ring) ringSvg = `<circle cx="50" cy="50" r="48" fill="none" stroke="${RING_HEX[ring]}" stroke-width="4"/>`;
+  // V3 §1a: the level ring only on the bare round avatar (no frame, no covering background); along
+  // a frame it read as a thin stray line.
+  const ringSvg = ring && frame === null && !covers
+    ? `<circle cx="50" cy="50" r="48" fill="none" stroke="${RING_HEX[ring]}" stroke-width="4"/>` : '';
   const frameSvg = frame ? wrapLayer('frame', frame.svg.replaceAll('__u', uid))
     : fallbackRing ? `<circle cx="50" cy="50" r="48" fill="none" stroke="${color}" stroke-width="4"/>` : '';
   // V1b §1d: the selection ring follows the clip shape (a square frame travels with it); its colour

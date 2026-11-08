@@ -61,15 +61,16 @@ onderdelen van ronde 2 op level 3–60 vrijkomen en dat legendarisch ≤ 10 % va
 ```
 <svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:T;--hair:H;--accent:A" aria-hidden="true">
   <defs><clipPath id="c-UID">CLIP</clipPath></defs>
-  <g clip-path="url(#c-UID)"><rect width="100" height="100" fill="COLOR"/>LAGEN bg … prop</g>
+  <g clip-path="url(#c-UID)"><rect width="100" height="100" fill="COLOR"/>[LAAG bg]<g class="av-inner" transform="translate(50 100) scale(0.9) translate(-50 -100)">LAGEN body … prop</g></g>   (binnenschaal sinds V3, 8 nov 2026)
   RING
   FRAME
 </svg>
 ```
 - `CLIP` = de `clip` van de gekozen lijst, anders `<circle cx="50" cy="50" r="46"/>` (zelfde beeld als nu: de kleurcirkel is nu een
   rect binnen de clip).
-- `RING` (alleen vanaf level 5, `ringForLevel`): **zonder lijst** exact als nu (`<circle r="48" … stroke-width="4"/>`); **met lijst**
-  de clipvorm zelf, gestrookt: `clip` met toegevoegd `fill="none" stroke="RINGHEX" stroke-width="2"`.
+- `RING` (alleen vanaf level 5, `ringForLevel`): **sinds V3 (8 nov 2026) alleen zonder lijst én zonder dekkende achtergrond**:
+  `<circle r="48" … stroke-width="4"/>`. Met een lijst of een dekkende achtergrond is er geen niveauring meer (Stijn: het 2 px-lijntje
+  langs de lijst las als een foutje); de lijst zelf is de versiering. (Tot V3: met lijst de clipvorm gestrookt in 2 px.)
 - `FRAME` = de `svg` van de gekozen lijst (ongeclipt, `__u` vervangen), ná de ring.
 - `--accent` (kleurregel §2c): de profielkleur als de gekozen achtergrond `covers` is, anders de `accent` van de lijst; zonder lijst
   leeg (`--accent:` weggelaten mag ook, kies één vorm en pin die in de test).

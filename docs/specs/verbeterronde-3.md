@@ -1,9 +1,10 @@
 # Spec V3 — Avatar-ronde: meer ruimte in de lijst, haar-revamp, brillen, zeldzaamheid, Verras me per laag (Stijn, 8 nov 2026)
 
-Status: in aanbouw (Fable, 8 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: Stijns bericht van 8 nov (§0).
+Status: compleet (Fable, 8 nov 2026). Eén blok, vier bouwers + integrator (lichte modus). Bron: Stijns bericht van 8 nov (§0).
 Leidend bij tegenspraak: docs/specs/README.md §2–§4, docs/specs/frames.md (lijsten, kleurregel), docs/specs/badges-avatar.md
 (avatar-bibliotheek, zeldzaamheid), docs/specs/handbook.md §4. Fable keurt de tekeningen op het contactblad
 (`node --experimental-strip-types tools/avatar-sheet.ts` → scratch/avatar-sheet.html) ná de bouw.
+Gebouwd: 8 nov 2026 (V3, lichte workflow wf_9773f5af-bb0; elf nieuwe onderdelen in plaats van twaalf: `prop-whisk` bestond al (Garde, level 7), Fable: geen twaalfde onderdeel, de garde-op-22 vervalt; bibliotheek 154 → 165; lens: alleen die spec-tegenstrijdigheid)
 
 **Kritische lezer (Fable, vooraf).** (1) Het "rare dunne randje" is geen iPhone-fout maar de **niveauring** uit 6D-3: met een
 lijst wordt de clipvorm 2 px dik getekend in de levelkleur (level 30–39 rood/oranje → Stijns oranje randje; level 10–19 groen →

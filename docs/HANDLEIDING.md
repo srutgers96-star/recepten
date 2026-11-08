@@ -3447,7 +3447,7 @@ XP is per profiel: iedereen op deze telefoon heeft een eigen level. De eerste le
 
 #### Wat het doet
 
-Vanaf level 5 krijgt je avatar een dunne ring in de kleur van je level. Zo zie je in één oogopslag hoe ver iemand is.
+Vanaf level 5 krijgt je ronde avatar een ring in de kleur van je level. Zo zie je in één oogopslag hoe ver iemand is.
 
 #### Waar je tikt
 
@@ -3460,7 +3460,7 @@ Level 5 tot 9 is geel, 10 tot 19 groen, 20 tot 29 blauw en 30 tot 39 rood. Daarn
 
 #### Goed om te weten
 
-Onder level 5 is er geen ring. Heeft je avatar een lijst, dan loopt de ring langs de binnenkant van de lijst.
+Onder level 5 is er geen ring. De ring staat alleen om een avatar zonder lijst en zonder dekkende achtergrond. Met een lijst is de lijst zelf de versiering.
 
 (`#/`)
 
@@ -3644,7 +3644,7 @@ Er schuift een venster **Jouw avatar** omhoog, met bovenaan een groot voorbeeld.
 
 #### Goed om te weten
 
-Onder level 3 is **Avatar aanpassen** grijs en staat eronder “Komt vrij op level 3, na je eerste kookbeurt.” Naar beneden vegen of **Annuleer** bewaart niets.
+Onder level 3 is **Avatar aanpassen** grijs en staat eronder “Komt vrij op level 3, na je eerste kookbeurt.” Naar beneden vegen of **Annuleer** bewaart niets. Vooraan in elke tab staat een tegel **Verras me**. Die kiest iets anders dat je al hebt, alleen in die tab. De knop **Verras me** bovenaan verandert alles tegelijk.
 
 (`#/more/style`)
 
@@ -3717,7 +3717,7 @@ Met een lijst krijgt je avatar een andere rand, zoals een houten plank of een ko
 
 #### Wat je dan ziet
 
-De lijst vervangt de ronde rand, en je avatar wordt binnen de lijst afgesneden. Het dunne lijntje in je levelkleur loopt langs de binnenkant van de lijst.
+De lijst vervangt de ronde rand. Je poppetje staat in een lijst iets kleiner, zodat haar, hoed en spullen nooit achter de lijst wegvallen.
 
 #### Goed om te weten
 

@@ -3447,7 +3447,7 @@ XP is per profile: everyone on this phone has their own level. The first levels 
 
 #### What it does
 
-From level 5 your avatar gets a thin ring in the colour of your level. That shows at a glance how far someone has come.
+From level 5 your round avatar gets a ring in the colour of your level. That shows at a glance how far someone has come.
 
 #### Where you tap
 
@@ -3460,7 +3460,7 @@ Level 5 to 9 is yellow, 10 to 19 green, 20 to 29 blue and 30 to 39 red. Then com
 
 #### Good to know
 
-Below level 5 there is no ring. If your avatar has a frame, the ring runs along the inside of the frame.
+Below level 5 there is no ring. The ring only shows on an avatar without a frame and without a solid background. With a frame, the frame itself is the decoration.
 
 (`#/`)
 
@@ -3644,7 +3644,7 @@ A window **Your avatar** slides up, with a large preview at the top. Every tile 
 
 #### Good to know
 
-Below level 3 **Edit avatar** is grey, with “Unlocks at level 3, after your first cooked dish.” under it. Swiping down or **Cancel** saves nothing.
+Below level 3 **Edit avatar** is grey, with “Unlocks at level 3, after your first cooked dish.” under it. Swiping down or **Cancel** saves nothing. Each tab starts with a **Surprise me** tile. It picks something else you already have, in that tab only. The **Surprise me** button at the top changes everything at once.
 
 (`#/more/style`)
 
@@ -3717,7 +3717,7 @@ A frame gives your avatar a different edge, such as a wooden board or a frying p
 
 #### What you then see
 
-The frame replaces the round edge, and your avatar is cut off inside the frame. The thin line in your level colour runs along the inside of the frame.
+The frame replaces the round edge. Your character sits a little smaller inside a frame, so hair, hats and props never disappear behind it.
 
 #### Good to know
 

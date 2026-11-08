@@ -26,6 +26,10 @@
 // common carries an 8 px dot top left in its rarity colour, locked or not; its title and aria-label
 // start with the rarity ("Zeldzaam · Koksbuis"), and so does the line under the grid ("Zeldzaam ·
 // Komt vrij op level 35."), which stands under the grid of the group of its part.
+// Verras me per layer (spec V3 §1c): every panel starts with a "Verras me" tile (dashed like "geen",
+// shuffle icon + avatar.random), before "geen" or at the front; a tap picks one random unlocked part
+// of that layer other than the current one through pickPart, and in the two colour tabs a random
+// palette colour other than the current one. The 🎲 Verras me button above the tabs (all layers) stays.
 // Bewaar → updateProfile({ ...p, avatar }); a failure keeps the sheet open with `common.error`.
 // Annuleer, swiping down (grab bar / head), tapping beside the sheet and Escape save nothing (13J).
 // Who may open it (level ≥ AVATAR_MAKER_LEVEL, the active profile, badges on) is up to the caller.
@@ -350,6 +354,35 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
     setSpec((s) => ({ ...(s ?? defaultAvatar()), hair: hex }));
   }
 
+  /**
+   * The "Verras me" tile of one panel (spec V3 §1c): one random unlocked part of that layer that is
+   * not the current one (the only unlocked part when there is just one), picked through pickPart so
+   * saving and the "new" dot behave as for a normal tap. Retired parts never come up.
+   */
+  function surpriseLayer(layer: AvatarLayer) {
+    if (busy || !ready) return;
+    const free = (byLayer.get(layer) ?? []).filter((p) => ready.free.has(p.id));
+    if (free.length === 0) return;
+    const current = spec ? partOn(spec, layer, parts) : undefined;
+    const others = free.filter((p) => p.id !== current);
+    const pool = others.length > 0 ? others : free;
+    const part = pool[Math.floor(Math.random() * pool.length)];
+    if (part) pickPart(layer, part);
+  }
+
+  /** The "Verras me" tile of a colour panel: a random palette colour other than the current one. */
+  function surpriseColour(row: 'tone' | 'hairColor') {
+    if (busy) return;
+    const palette: readonly string[] = row === 'tone' ? AVATAR_TONES : AVATAR_HAIR;
+    const current = row === 'tone' ? tone : hair;
+    const others = palette.filter((hex) => hex !== current);
+    const pool = others.length > 0 ? others : palette;
+    const hex = pool[Math.floor(Math.random() * pool.length)];
+    if (hex === undefined) return;
+    if (row === 'tone') pickTone(hex);
+    else pickHair(hex);
+  }
+
   function surprise() {
     if (busy || !ready) return;
     const free = [...parts.values()].filter((p) => !isRetired(p) && ready.free.has(p.id));
@@ -482,17 +515,32 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
     );
   }
 
+  /** The "Verras me" tile (spec V3 §1c): looks like the "geen" tile, with the shuffle icon. */
+  function randomTile(onPick: () => void, disabled: boolean): JSX.Element {
+    const word = t('avatar.random');
+    return (
+      <button type="button" class="avatar-tile random" aria-label={word} title={word} disabled={busy || disabled} onClick={onPick}>
+        <span class="avatar-tile-none avatar-tile-random">
+          <ShuffleIcon size={18} />
+          <span class="avatar-tile-random-word">{word}</span>
+        </span>
+      </button>
+    );
+  }
+
   function partPanel(layer: AvatarLayer, r: Ready): JSX.Element {
     const groups = groupsByLayer.get(layer) ?? [];
     const selected = spec ? partOn(spec, layer, parts) : undefined;
     const noteId = notes[layer];
     const notePart = noteId ? parts.get(noteId) : undefined;
     const noneOn = spec !== null && selected === undefined;
+    const anyFree = (byLayer.get(layer) ?? []).some((p) => r.free.has(p.id));
     return (
       <div class="avatar-groups" role="radiogroup" aria-labelledby={tabId(layer)}>
-        {/* "geen" stands before the first rarity group, in a grid of its own. */}
-        {OPTIONAL.has(layer) && (
-          <div class="avatar-grid">
+        {/* "Verras me" and "geen" stand before the first rarity group, in a grid of their own. */}
+        <div class="avatar-grid">
+          {randomTile(() => surpriseLayer(layer), !anyFree)}
+          {OPTIONAL.has(layer) && (
             <button
               type="button"
               role="radio"
@@ -503,8 +551,8 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
             >
               <span class="avatar-tile-none">{t('avatar.none')}</span>
             </button>
-          </div>
-        )}
+          )}
+        </div>
         {groups.map((g) => {
           const headId = `${uid}-${layer}-${g.rarity}`;
           const noteHere = notePart !== undefined && g.parts.some((p) => p.id === notePart.id);
@@ -533,6 +581,7 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
     const label = t('avatar.layer.' + row);
     return (
       <div class="avatar-grid" role="radiogroup" aria-labelledby={tabId(row)}>
+        {randomTile(() => surpriseColour(row), false)}
         {palette.map((hex, i) => {
           const on = spec !== null && current === hex;
           return (

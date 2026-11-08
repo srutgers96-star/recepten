@@ -347,6 +347,30 @@
   pointer-events: none;
 }
 
+/* "Verras me" per layer (spec V3 §1c): like the "geen" tile, with a dashed border and the shuffle
+   icon centred above the word. */
+.avatar-tile.random {
+  border-style: dashed;
+}
+
+.avatar-tile-random {
+  flex-direction: column;
+  gap: 1px;
+  text-align: center;
+}
+
+/* Block, so the icon's inline vertical-align does not push it off centre. */
+.avatar-tile-random .shuffle-icon {
+  display: block;
+}
+
+.avatar-tile-random-word {
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.1;
+  max-width: 50px;
+}
+
 /* Skin and hair colour: a plain colour circle. */
 .avatar-swatch {
   display: block;

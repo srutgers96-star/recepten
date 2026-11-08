@@ -314,4 +314,66 @@ describe('validateAvatarParts (§2f)', () => {
   it('a duplicate id', () => {
     expect(errors([...BASE, part('face-a', 'face')])).toEqual(['avatar-parts.json "face-a": duplicate id.']);
   });
+
+  it('a rarity below the level rule is an error; on the rule or above it is fine (spec V3 §1b)', () => {
+    const rated = (level: number, rarity: string): Obj => ({ ...part('hat-a', 'hat', { level }), rarity });
+    expect(errors([...BASE, rated(59, 'common')])).toEqual([
+      'avatar-parts.json "hat-a": rarity below the level rule ("common" on level 59; the rule gives "epic").',
+    ]);
+    expect(errors([...BASE, rated(21, 'common')])).toEqual([
+      'avatar-parts.json "hat-a": rarity below the level rule ("common" on level 21; the rule gives "rare").',
+    ]);
+    expect(errors([...BASE, rated(81, 'epic')])).toHaveLength(1);
+    // On the rule, at the edges of each band.
+    for (const [level, rarity] of [[20, 'common'], [21, 'rare'], [50, 'rare'], [51, 'epic'], [80, 'epic'], [81, 'legendary']] as const) {
+      expect(errors([...BASE, rated(level, rarity)]), `${level} ${rarity}`).toEqual([]);
+    }
+    // Above the rule: allowed, without a warning (the dino hat is legendary on level 3).
+    expect(validateAvatarParts([...BASE, rated(3, 'legendary')], [])).toMatchObject({ errors: [], warnings: [] });
+    // A badge part is not held to a level rule; a missing rarity falls back to the rule.
+    expect(errors([...BASE, { ...part('hat-kaas', 'hat', { badge: 'kaasje' }), rarity: 'common' }], kaasBadge('hat-kaas'))).toEqual([]);
+    expect(errors([...BASE, part('hat-a', 'hat', { level: 70 })])).toEqual([]);
+  });
+});
+
+describe('the avatar library after spec V3 (§1b)', () => {
+  const byId = new Map(PARTS.map((p) => [String(p['id']), p]));
+  const get = (id: string): Obj => {
+    const p = byId.get(id);
+    if (!p) throw new Error(`no part ${id}`);
+    return p;
+  };
+
+  it('has 165 parts: 154 before, plus six glasses and five kitchen parts', () => {
+    expect(PARTS).toHaveLength(165);
+    expect(PARTS.filter((p) => p['layer'] === 'glasses')).toHaveLength(13);
+  });
+
+  it('the fifteen rarities below the level rule are fixed', () => {
+    for (const id of ['hair-braid', 'hair-ponytail', 'hair-afro', 'body-dress', 'body-raincoat', 'body-tee-avocado',
+      'prop-frying-pan', 'prop-ice-cream', 'prop-cupcake', 'prop-herbs', 'prop-chopsticks']) expect(get(id)['rarity'], id).toBe('rare');
+    for (const id of ['body-orange-shirt', 'body-christmas-jumper', 'prop-egg-timer', 'prop-leek']) expect(get(id)['rarity'], id).toBe('epic');
+  });
+
+  it('the new glasses and kitchen parts unlock on their level, rarity by the level rule, with NL and EN names', () => {
+    const NEW: Readonly<Record<string, number>> = {
+      'glasses-star': 31, 'glasses-heart': 34, 'glasses-3d': 37, 'glasses-carrot': 41, 'glasses-nerd': 45, 'glasses-olive': 48,
+      'pin-chili': 26, 'facial-sauce': 29, 'hat-colander': 36, 'mouth-spaghetti': 41, 'eyes-sunny': 43,
+    };
+    for (const [id, level] of Object.entries(NEW)) {
+      const p = get(id);
+      expect(p['unlock'], id).toEqual({ level });
+      expect(p['rarity'], id).toBe('rare');
+      expect(String(p['nl']).length, id).toBeGreaterThan(0);
+      expect(String(p['en']).length, id).toBeGreaterThan(0);
+    }
+    // prop-whisk already existed (level 7, round 1): its id and unlock stay.
+    expect(get('prop-whisk')['unlock']).toEqual({ level: 7 });
+  });
+
+  it('the four thick frames clip at r 44', () => {
+    for (const id of ['frame-plate', 'frame-board', 'frame-pan', 'frame-basket']) {
+      expect(get(id)['clip'], id).toBe('<circle cx="50" cy="50" r="44"/>');
+    }
+  });
 });

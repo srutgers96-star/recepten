@@ -4,6 +4,36 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): V3 — avatar-ronde: binnenschaal 0,9, niveauring alleen op de kale cirkel, lijsten dunner, haar-revamp, zes brillen en zes kook-onderdelen, vijftien zeldzaamheden hersteld, tegel Verras me per laag
+Gebouwd volgens docs/specs/verbeterronde-3.md (lichte workflow, vier bouwers + integrator; run-id: niet bekend bij de integrator,
+de workflow vult hem in). **Afwijking: vijf kook-onderdelen, niet zes** — zie open punt 1. **Renderer (A):** `INNER_SCALE = 0.9`
+in src/domain/avatar.ts; de rect in de profielkleur en de bg-laag blijven ongeschaald, alle andere lagen staan in
+`<g class="av-inner" transform="translate(50 100) scale(0.9) translate(-50 -100)">` (altijd aanwezig, ook leeg), binnen de
+clipgroep; de lijst erbuiten. De niveauring (r 48, 4 px) alleen zonder lijst én zonder dekkende achtergrond; de 2 px-clipring langs
+een lijst en de r 45-ring bij een dekkende achtergrond zijn weg; highlight en impliciete `frame-ring` ongewijzigd. Tests "V3 §1a"
+(structuur met/zonder bg, vier ringcombinaties, highlight, knipoog-laag). **Data (B):** `frame-plate`/`-board`/`-pan`/`-basket`
+clip r 44 met een rand tussen r 44 en 50; haar opnieuw getekend: mohawk, flame, curly, short (ook het standaardpoppetje), braid
+(vlecht over de schouder); zes brillen (`glasses-star` 31, `-heart` 34, `-3d` 37, `-carrot` 41, `-nerd` 45, `-olive` 48) en vijf
+kook-onderdelen (`pin-chili` 26, `facial-sauce` 29, `hat-colander` 36, `mouth-spaghetti` 41, `eyes-sunny` 43), alle `rare`;
+de vijftien zeldzaamheden onder de levelregel hersteld (elf → rare, body-orange-shirt/body-christmas-jumper/prop-egg-timer/prop-leek
+→ epic); validator: een `rarity` onder `rarityForLevel(unlock.level)` is een fout ("rarity below the level rule"), hoger mag
+(importeert `rarityForLevel` uit src/domain/rarity.ts). Bibliotheek 154 → 165 onderdelen; contactblad: 62 gewoon · 55 zeldzaam ·
+37 episch · 11 legendarisch, 20 met de hand boven de regel (de achttien plus frame-plate en frame-board), nul eronder. **Maker (C):**
+tegel `avatar-tile random` (schud-icoon + `avatar.random`, gestippelde rand) vooraan in elk paneel, vóór "geen"; tik → een ander
+vrijgespeeld onderdeel via `pickPart`, of een andere paletkleur in Huid/Haarkleur; uit als de laag niets vrij heeft. Geen nieuwe
+i18n-key. **Handboek (D):** `badges-xp.ring`, `avatar-maken`, `lijst-en-achtergrond` bijgewerkt; HANDLEIDING/HANDBOOK opnieuw
+gegenereerd. **Integrator:** check, 1831 tests, build, build:next en validate:data groen; DEVICE-TEST rij 112 (NL/EN) nieuw, rij 108
+(geen levellijntje langs de lijst; bij Verloop zonder lijst de levelring) bijgewerkt. Acceptatie in de dev-app (375 px, NL en EN):
+gemeten in de browser (punten op de randen van elk haar- en hoed-onderdeel tegen de clipvorm) valt geen enkel haar of hoofddeksel
+meer buiten bord, plank, pan, mand, zeshoek, schulp of goud; ring alleen op de kale cirkel vanaf level 5; elke tab (14) begint met
+Verras me en kiest steeds een ander vrij onderdeel; groepen kloppen (Preistaf bij Episch, Bril: 3 gewoon · 9 zeldzaam · 1 episch);
+"Surprise me" past op twee regels in de 64 px-tegel. **Open (voor Fable/Stijn):** (1) de spec vraagt een nieuwe `prop-whisk` (garde,
+level 22), maar dat id bestaat al (Garde, level 7, gewoon, ronde 1); ids veranderen nooit, dus niet gebouwd — kies een ander id
+(bv. `prop-whisk-xl`), een ander kook-onderdeel of niets; (2) `hair-curly`: "tot y≈12" uitgelegd als ná de schaal (top y 2–4 in het
+onderdeel-vak) — Fable op het contactblad; (3) de "geen"-tegel heeft een doorgetrokken rand, alleen Verras me is gestippeld (spec zegt
+"zoals geen, gestippeld"); (4) speldjes en lage accessoires (pin-chili, pin-leaf, prop-wine …) vallen in de zeshoek nog deels buiten de
+clip (zijkant onderaan; dat deden ze vóór V3 ook) — Fable kijkt of dat moet; (5) Fable past frames.md §2b en badges-avatar.md aan.
+
 ## 8 nov (Opus): V2 — delen zonder bestanden (links tot 20 KB in meerdere berichten, bestandsnaam met uitleg, Stuur ook de uitleg, Android-hint) en de afzender met avatar (inbox, voortgang, kalenderlegenda)
 Gebouwd volgens docs/specs/verbeterronde-2.md (lichte workflow, vier bouwers + integrator; run-id: niet bekend bij de integrator,
 de workflow vult hem in). **Domein (A):** `planMessages` heeft als standaard `RECIPE_LINK_MESSAGE_LIMIT = 20_000`

@@ -22,6 +22,7 @@ import {
   rarityFor,
   renderAvatarSvg,
   ringForLevel,
+  INNER_SCALE,
   type AvatarPart,
   type AvatarSpec,
   type Rarity,
@@ -73,7 +74,8 @@ const REFERENCES: Readonly<Record<string, string>> = {
   'face-round': '<circle cx="50" cy="42" r="30" style="fill:var(--tone)" stroke="#2a2420" stroke-width="1.5"/><ellipse cx="50" cy="58" rx="9" ry="3" fill="#2a2420" opacity=".08"/>',
   'eyes-dots': '<circle cx="39" cy="40" r="4.8" fill="#fff" opacity=".9"/><circle cx="61" cy="40" r="4.8" fill="#fff" opacity=".9"/><circle cx="39" cy="40" r="3.2" fill="#2a2420"/><circle cx="61" cy="40" r="3.2" fill="#2a2420"/><circle cx="40.1" cy="38.9" r="1" fill="#fff"/><circle cx="62.1" cy="38.9" r="1" fill="#fff"/>',
   'mouth-smile': '<path d="M41 54q9 9 18 0" fill="none" stroke="#2a2420" stroke-width="2.4" stroke-linecap="round"/>',
-  'hair-short': '<path d="M19 40q-3-24 15-27 5-9 16-9t16 9q18 3 15 27-7-10-31-10T19 40z" style="fill:var(--hair)" stroke="#2a2420" stroke-width="1.5" stroke-linejoin="round"/>',
+  // Spec V3 §1b: hair-short redrawn with a slightly higher hairline and some texture.
+  'hair-short': '<path d="M19.5 38q-3-23 14.5-25.5 5-9 16-9t16 9q17.5 2.5 14.5 25.5-7-11-31-11T19.5 38z" style="fill:var(--hair)" stroke="#2a2420" stroke-width="1.5" stroke-linejoin="round"/><path d="M36 16q3 5 2 10M50 12.5v13M64 16q-3 5-2 10" fill="none" stroke="#2a2420" stroke-width="1.2" opacity=".22" stroke-linecap="round"/><path d="M29 18q8-7 18-8" fill="none" stroke="#fff" stroke-width="2" opacity=".28" stroke-linecap="round"/>',
   'body-tee': '<path d="M44 68h12v9H44z" style="fill:var(--tone)"/><path d="M15 100V88q0-12 15-15l20 7 20-7q15 3 15 15v12z" fill="#f1e9dc" stroke="#2a2420" stroke-width="1.5" stroke-linejoin="round"/><path d="M50 80l-7 9h14z" fill="#d9d1c4"/>',
   'hat-toque': '<path d="M22 22q-2-16 28-16t28 16v6H22z" fill="#fff" stroke="#2a2420" stroke-width="1.5"/><rect x="24" y="26" width="52" height="9" rx="2" fill="#efefef" stroke="#2a2420" stroke-width="1.5"/>',
   'prop-wooden-spoon': '<path d="M83 82L79 64" stroke="#8a4a1f" stroke-width="6" stroke-linecap="round"/><ellipse cx="78" cy="56" rx="8" ry="11" fill="#c58a4a" stroke="#2a2420" stroke-width="1.5"/><ellipse cx="78" cy="55" rx="4" ry="6" fill="#a86f33"/>',
@@ -88,13 +90,14 @@ const REFERENCES: Readonly<Record<string, string>> = {
 const ROUND_3_FRAMES: Readonly<Record<string, { unlock: number | readonly [string, number]; rarity: Rarity; accent: string; clip: readonly [number, number, number] | 'hexagon' | 'gold-rect' }>> = {
   'frame-ring': { unlock: 3, rarity: 'common', accent: '#f4ede4', clip: [50, 50, 46] },
   'frame-dots': { unlock: 9, rarity: 'common', accent: '#ffffff', clip: [50, 50, 46] },
-  'frame-plate': { unlock: 18, rarity: 'rare', accent: '#ffffff', clip: [50, 50, 40] },
+  // Spec V3 §1b: plate, board, pan and basket clip at r 44 (were 40, 42, 43, 43).
+  'frame-plate': { unlock: 18, rarity: 'rare', accent: '#ffffff', clip: [50, 50, 44] },
   'frame-hexagon': { unlock: 24, rarity: 'rare', accent: '#6b7a90', clip: 'hexagon' },
   'frame-scallop': { unlock: 33, rarity: 'rare', accent: '#e07a5f', clip: [50, 50, 44] },
-  'frame-board': { unlock: 42, rarity: 'epic', accent: '#a9743f', clip: [50, 50, 42] },
-  'frame-pan': { unlock: 55, rarity: 'epic', accent: '#3b3f45', clip: [50, 50, 43] },
+  'frame-board': { unlock: 42, rarity: 'epic', accent: '#a9743f', clip: [50, 50, 44] },
+  'frame-pan': { unlock: 55, rarity: 'epic', accent: '#3b3f45', clip: [50, 50, 44] },
   'frame-laurel': { unlock: ['uitdager', 3], rarity: 'epic', accent: '#4f8a3c', clip: [50, 50, 44] },
-  'frame-basket': { unlock: ['vaste-klant', 5], rarity: 'epic', accent: '#b98a4a', clip: [50, 50, 43] },
+  'frame-basket': { unlock: ['vaste-klant', 5], rarity: 'epic', accent: '#b98a4a', clip: [50, 50, 44] },
   'frame-chefhat': { unlock: 70, rarity: 'legendary', accent: '#ffffff', clip: [50, 50, 44] },
   'frame-gold': { unlock: 85, rarity: 'legendary', accent: '#c9a227', clip: 'gold-rect' },
 };
@@ -469,9 +472,10 @@ describe('rarity (block 6D-R)', () => {
       'body-tuxedo', 'glasses-monocle', 'hair-spaghetti', 'hair-broccoli', 'bg-sunset'];
     for (const id of LEGENDARY) expect(part(id).rarity, id).toBe('legendary');
     for (const id of EPIC) expect(part(id).rarity, id).toBe('epic');
-    // Ordinary clothes and hair stay common, also when they come late.
-    expect(part('body-dress').rarity).toBe('common');
-    expect(part('hair-ponytail').rarity).toBe('common');
+    // Spec V3 §1b: a rarity is never below the level rule, so late ordinary clothes and hair follow it.
+    expect(part('body-dress').rarity).toBe('rare');
+    expect(part('hair-ponytail').rarity).toBe('rare');
+    expect(part('prop-leek').rarity).toBe('epic');
   });
 
   it('the balance: ≥ 75 % of the level commons on level ≤ 20, ≥ 75 % of the level rares on level ≤ 50', () => {
@@ -873,15 +877,14 @@ describe('block 6D-F: the frame layer and its fields (frames.md §2a, §6.2)', (
 });
 
 describe('block 6D-F: renderAvatarSvg with a frame (frames.md §2b, §6.1)', () => {
-  it('a frame: its clip, the level ring as the stroked clip shape, the frame after the ring, --accent its own colour', () => {
+  it('a frame: its clip, no level ring (V3 §1a), the frame right after the clip group, --accent its own colour', () => {
     const svg = renderAvatarSvg(withParts('frame-hextest'), TEST_LIB, { color: '#d9402b', level: 10, uid: 'f1' });
     expect(svg.startsWith('<svg viewBox="0 0 100 100" class="avatar-svg" style="--tone:#f3d2b3;--hair:#4a2c17;--accent:#6b7a90" aria-hidden="true">')).toBe(true);
     expect(svg).toContain(`<defs><clipPath id="c-f1">${HEX_CLIP}</clipPath></defs>`);
     expect(svg).toContain('<g clip-path="url(#c-f1)"><rect width="100" height="100" fill="#d9402b"/>');
-    const ring = '<polygon points="50,4 89.84,27 89.84,73 50,96 10.16,73 10.16,27" fill="none" stroke="#3d9a3a" stroke-width="2"/>';
     const frame = TEST_LIB.get('frame-hextest')!.svg.replaceAll('__u', 'f1');
-    expect(svg).toContain(`</g>${ring}<g data-layer="frame">${frame}</g></svg>`);
-    expect(svg).not.toContain('r="48" fill="none" stroke="#3d9a3a"');
+    expect(svg).toContain(`</g></g><g data-layer="frame">${frame}</g></svg>`);
+    expect(svg).not.toContain('#3d9a3a');
     expect(svg).not.toContain('__u');
     // The frame is outside the clip group; nothing of it inside.
     const { inside, outside } = splitClip(svg);
@@ -916,18 +919,20 @@ describe('block 6D-F: renderAvatarSvg with a frame (frames.md §2b, §6.1)', () 
     expect(svg).not.toContain('#6b7a90');
   });
 
-  it('implicit ring: a covering background without a frame draws frame-ring in the profile colour', () => {
+  it('implicit ring: a covering background without a frame draws frame-ring in the profile colour, no level ring (V3)', () => {
     for (const spec of [withParts('bg-cover'), withParts('bg-cover', 'frame-unknown')]) {
       const svg = renderAvatarSvg(spec, TEST_LIB, { color: '#aa3366', level: 10, uid: 'f5' });
       expect(svg).toContain(';--accent:#aa3366"');
       expect(svg).toContain('<clipPath id="c-f5"><circle cx="50" cy="50" r="46"/></clipPath>');
-      expect(svg).toContain(`</g><circle cx="50" cy="50" r="46" fill="none" stroke="#3d9a3a" stroke-width="2"/><g data-layer="frame">${TEST_RING_SVG}</g></svg>`);
+      expect(svg).toContain(`</g></g><g data-layer="frame">${TEST_RING_SVG}</g></svg>`);
+      expect(svg).not.toContain('#3d9a3a');
     }
   });
 
-  it('implicit ring without frame-ring in the library: a plain ring in the profile colour after a thin level ring', () => {
+  it('implicit ring without frame-ring in the library: a plain ring in the profile colour, no level ring (V3)', () => {
     const ten = renderAvatarSvg(withParts('bg-cover'), TEST_LIB_NO_RING, { color: '#aa3366', level: 10, uid: 'f6' });
-    expect(ten).toContain('</g><circle cx="50" cy="50" r="45" fill="none" stroke="#3d9a3a" stroke-width="2"/><circle cx="50" cy="50" r="48" fill="none" stroke="#aa3366" stroke-width="4"/></svg>');
+    expect(ten).toContain('</g></g><circle cx="50" cy="50" r="48" fill="none" stroke="#aa3366" stroke-width="4"/></svg>');
+    expect(ten).not.toContain('#3d9a3a');
     expect(ten).not.toContain('--accent');
     const three = renderAvatarSvg(withParts('bg-cover'), TEST_LIB_NO_RING, { color: '#aa3366', level: 3, uid: 'f6' });
     expect(three).toContain('</g><circle cx="50" cy="50" r="48" fill="none" stroke="#aa3366" stroke-width="4"/></svg>');
@@ -1073,8 +1078,8 @@ describe('block 6D-F: the validator (frames.md §2d, §6.5)', () => {
 });
 
 describe('block 6D-F: the real library of round 3 (frames.md §3, §4; needs the data of builder B)', () => {
-  it('has 154 parts: 30 backgrounds (14 covering), 11 frames; legendary 11 (≤ 10 %)', () => {
-    expect(PARTS).toHaveLength(154);
+  it('has 165 parts (154 + 11 of spec V3): 30 backgrounds (14 covering), 11 frames; legendary 11 (≤ 10 %)', () => {
+    expect(PARTS).toHaveLength(165);
     expect(PARTS.filter((p) => p.layer === 'bg')).toHaveLength(30);
     expect(PARTS.filter((p) => p.layer === 'bg' && p.covers === true)).toHaveLength(14);
     expect(PARTS.filter((p) => p.layer === 'frame')).toHaveLength(11);
@@ -1143,5 +1148,86 @@ describe('block 6D-F: the real library of round 3 (frames.md §3, §4; needs the
     const specs = Array.from({ length: 20 }, (_, i) => randomAvatar(PARTS, 2000 + i));
     expect(specs.some((s) => s.parts.some((id) => id.startsWith('frame-')))).toBe(true);
     for (const s of specs) expect(isComplete(s, BY_ID)).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------- V3 §1a: inner scale, level ring
+
+describe('V3 §1a: renderAvatarSvg inner scale and the level ring on the bare circle', () => {
+  const INNER_OPEN = '<g class="av-inner" transform="translate(50 100) scale(0.9) translate(-50 -100)">';
+  /** The content of the av-inner group (balanced), or null when it is missing. */
+  const innerOf = (svg: string): string | null => {
+    const start = svg.indexOf(INNER_OPEN);
+    if (start < 0) return null;
+    let depth = 0;
+    for (const m of svg.slice(start).matchAll(/<(\/?)g[\s>]/g)) {
+      depth += m[1] ? -1 : 1;
+      if (depth === 0) return svg.slice(start + INNER_OPEN.length, start + (m.index ?? 0));
+    }
+    throw new Error('unbalanced <g>');
+  };
+  const LEVEL_RING = '<circle cx="50" cy="50" r="48" fill="none" stroke="#3d9a3a" stroke-width="4"/>';
+
+  it('INNER_SCALE is 0.9', () => {
+    expect(INNER_SCALE).toBe(0.9);
+  });
+
+  it('structure with a bg layer: rect, bg unscaled, then av-inner with every other layer, closing the clip group', () => {
+    const spec: AvatarSpec = { v: 1, parts: ['hat-toque', 'face-round', 'eyes-happy', 'mouth-grin', 'body-apron', 'bg-gradient'], tone: '#e0b08a', hair: '#8a5a2b' };
+    const svg = renderAvatarSvg(spec, BY_ID, { color: '#d9402b', level: 0, uid: 's1' });
+    const bg = `<g data-layer="bg">${part('bg-gradient').svg.replaceAll('__u', 's1')}</g>`;
+    expect(svg).toContain(`<g clip-path="url(#c-s1)"><rect width="100" height="100" fill="#d9402b"/>${bg}${INNER_OPEN}<g data-layer="body">`);
+    const inner = innerOf(svg);
+    expect(inner).not.toBeNull();
+    expect(inner).not.toContain('data-layer="bg"');
+    for (const id of spec.parts.filter((x) => !x.startsWith('bg-'))) {
+      const p = part(id);
+      expect(inner, id).toContain(`<g data-layer="${p.layer}">${p.svg.replaceAll('__u', 's1')}</g>`);
+    }
+    expect(svg).toContain(`${inner}</g></g></svg>`);
+    expect(svg.match(/class="av-inner"/g)?.length).toBe(1);
+    // The wink layer is still addressable inside the inner group.
+    expect(inner).toContain('<g data-layer="eyes">');
+  });
+
+  it('structure without a bg layer: av-inner follows the rect directly', () => {
+    const svg = renderAvatarSvg(defaultAvatar(), BY_ID, { color: '#d9402b', level: 0, uid: 's2' });
+    expect(svg).toContain(`<g clip-path="url(#c-s2)"><rect width="100" height="100" fill="#d9402b"/>${INNER_OPEN}<g data-layer="body">`);
+    expect(svg).not.toContain('data-layer="bg"');
+    expect(innerOf(svg)).toContain('<g data-layer="eyes">');
+  });
+
+  it('a frame stays outside both the clip group and av-inner', () => {
+    const svg = renderAvatarSvg(withParts('bg-seethrough', 'frame-hextest'), TEST_LIB, { color: '#d9402b', level: 0, uid: 's3' });
+    const inner = innerOf(svg);
+    expect(inner).not.toContain('data-layer="frame"');
+    expect(inner).not.toContain('data-layer="bg"');
+    expect(splitClip(svg).outside).toContain('<g data-layer="frame">');
+  });
+
+  it('the level ring only without a frame and without a covering background (four combinations)', () => {
+    const cases: Array<[string[], boolean]> = [
+      [['bg-seethrough'], true], // no frame, see-through bg: the bare circle keeps its ring
+      [['bg-seethrough', 'frame-hextest'], false], // a frame: no ring
+      [['bg-cover'], false], // covering bg (implicit frame-ring): no ring
+      [['bg-cover', 'frame-hextest'], false], // both: no ring
+    ];
+    for (const [ids, ringed] of cases) {
+      for (const lib of [TEST_LIB, TEST_LIB_NO_RING]) {
+        const svg = renderAvatarSvg(withParts(...ids), lib, { color: '#aa3366', level: 10, uid: 'k4' });
+        const label = `${ids.join('+')}${lib === TEST_LIB ? '' : ' (no frame-ring)'}`;
+        if (ringed) expect(svg, label).toContain(`</g></g>${LEVEL_RING}</svg>`);
+        else expect(svg, label).not.toContain('#3d9a3a');
+      }
+    }
+    // No frame and no bg at all: the ring too.
+    expect(renderAvatarSvg(defaultAvatar(), TEST_LIB, { color: '#aa3366', level: 10, uid: 'k4' })).toContain(`</g></g>${LEVEL_RING}</svg>`);
+  });
+
+  it('highlight unchanged: currentColor on the clip shape with a frame, the r 48 circle without', () => {
+    const framed = renderAvatarSvg(withParts('frame-hextest'), TEST_LIB, { color: '#d9402b', level: 10, uid: 'h1', highlight: true });
+    expect(framed.endsWith('<polygon points="50,4 89.84,27 89.84,73 50,96 10.16,73 10.16,27" fill="none" stroke="currentColor" stroke-width="3"/></svg>')).toBe(true);
+    const bare = renderAvatarSvg(defaultAvatar(), TEST_LIB, { color: '#d9402b', level: 10, uid: 'h1', highlight: true });
+    expect(bare.endsWith(`${LEVEL_RING}<circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="4"/></svg>`)).toBe(true);
   });
 });

@@ -184,8 +184,8 @@
       "id": "badges-xp.ring",
       "title": { "nl": "De kleur van de ring om je avatar", "en": "The colour of the ring around your avatar" },
       "what": {
-        "nl": "Vanaf level 5 krijgt je avatar een dunne ring in de kleur van je level. Zo zie je in één oogopslag hoe ver iemand is.",
-        "en": "From level 5 your avatar gets a thin ring in the colour of your level. That shows at a glance how far someone has come."
+        "nl": "Vanaf level 5 krijgt je ronde avatar een ring in de kleur van je level. Zo zie je in één oogopslag hoe ver iemand is.",
+        "en": "From level 5 your round avatar gets a ring in the colour of your level. That shows at a glance how far someone has come."
       },
       "where": {
         "nl": [
@@ -202,8 +202,8 @@
         "en": "Level 5 to 9 is yellow, 10 to 19 green, 20 to 29 blue and 30 to 39 red. Then come bronze from 40, silver from 50, gold from 60 and platinum from 80."
       },
       "know": {
-        "nl": "Onder level 5 is er geen ring. Heeft je avatar een lijst, dan loopt de ring langs de binnenkant van de lijst.",
-        "en": "Below level 5 there is no ring. If your avatar has a frame, the ring runs along the inside of the frame."
+        "nl": "Onder level 5 is er geen ring. De ring staat alleen om een avatar zonder lijst en zonder dekkende achtergrond. Met een lijst is de lijst zelf de versiering.",
+        "en": "Below level 5 there is no ring. The ring only shows on an avatar without a frame and without a solid background. With a frame, the frame itself is the decoration."
       },
       "route": "/",
       "platform": "all",
@@ -496,8 +496,8 @@
         "en": "A window **Your avatar** slides up, with a large preview at the top. Every tile you pick shows in the preview straight away."
       },
       "know": {
-        "nl": "Onder level 3 is **Avatar aanpassen** grijs en staat eronder “Komt vrij op level 3, na je eerste kookbeurt.” Naar beneden vegen of **Annuleer** bewaart niets.",
-        "en": "Below level 3 **Edit avatar** is grey, with “Unlocks at level 3, after your first cooked dish.” under it. Swiping down or **Cancel** saves nothing."
+        "nl": "Onder level 3 is **Avatar aanpassen** grijs en staat eronder “Komt vrij op level 3, na je eerste kookbeurt.” Naar beneden vegen of **Annuleer** bewaart niets. Vooraan in elke tab staat een tegel **Verras me**. Die kiest iets anders dat je al hebt, alleen in die tab. De knop **Verras me** bovenaan verandert alles tegelijk.",
+        "en": "Below level 3 **Edit avatar** is grey, with “Unlocks at level 3, after your first cooked dish.” under it. Swiping down or **Cancel** saves nothing. Each tab starts with a **Surprise me** tile. It picks something else you already have, in that tab only. The **Surprise me** button at the top changes everything at once."
       },
       "route": "/more/style",
       "platform": "all",
@@ -616,8 +616,8 @@
         ]
       },
       "see": {
-        "nl": "De lijst vervangt de ronde rand, en je avatar wordt binnen de lijst afgesneden. Het dunne lijntje in je levelkleur loopt langs de binnenkant van de lijst.",
-        "en": "The frame replaces the round edge, and your avatar is cut off inside the frame. The thin line in your level colour runs along the inside of the frame."
+        "nl": "De lijst vervangt de ronde rand. Je poppetje staat in een lijst iets kleiner, zodat haar, hoed en spullen nooit achter de lijst wegvallen.",
+        "en": "The frame replaces the round edge. Your character sits a little smaller inside a frame, so hair, hats and props never disappear behind it."
       },
       "know": {
         "nl": "Je profielkleur blijft altijd zichtbaar. Bij een doorschijnende achtergrond is je kleur de ondergrond; bij een dekkende achtergrond neemt de lijst je kleur over. Kies je dan geen lijst, dan krijg je vanzelf een ring in je profielkleur.",
