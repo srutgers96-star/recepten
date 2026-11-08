@@ -6,10 +6,13 @@
 // same total on every phone. All numbers live in XP_RULES; nothing below hard-codes them.
 
 import { dayIndexOfIso, isoWeekMondayOf, localDayIndex } from './days';
+import type { DoneChallenge } from './challenges';
 
 /**
  * 1 = 6D-1; 2 = 6D-2a (badge catalogue with tiers and secret badges changes the badge XP, §2f);
  * 3 = the first ten levels thickened (`earlyBoostLevels`, Stijn + Fable 30 Oct 2026, §2b "Levelcurve").
+ * The challenge bonus (6E, docs/specs/challenges.md §2) is a new SOURCE, not a rule change: without done
+ * challenges nothing shifts, so the version stays 3.
  */
 export const XP_RULES_VERSION = 3 as const;
 
@@ -126,8 +129,10 @@ export interface XpFacts {
   photos: XpPhotoFact[];                             // this member only (Photo.memberId)
   ownRecipes: XpOwnRecipeFact[];                     // origin.kind 'user', author = this member, no variantOf/basedOn
   badges: XpBadgeFact[];                             // earned on the member's OWN tab (Together does not count)
+  /** 6E: this member's finished challenges (`challenges.done`); absent = none (state identical to before 6E). */
+  challenges?: readonly DoneChallenge[];
 }
-export type XpEventKind = 'cook' | 'week' | 'photo' | 'recipe' | 'badge';
+export type XpEventKind = 'cook' | 'week' | 'photo' | 'recipe' | 'badge' | 'challenge';
 export type XpZeroReason = 'dayCap' | 'sameRecipe' | 'backdated' | 'busyWeek' | 'samePhotoDay';
 export interface XpEvent {
   kind: XpEventKind; key: string;                    // key = seed (unique per event)
@@ -530,6 +535,18 @@ export function deriveXp(facts: XpFacts, rules: XpRules = XP_RULES, today: numbe
       const top = Math.max(1, Math.floor(b.level));
       for (let k = 1; k <= top; k++) addBadge('badge:' + b.id + '|' + k, rules.badgePerLevel * k);
     }
+  }
+
+  // ---- challenges (6E, docs/specs/challenges.md §2): one event per finished challenge on finishedAt,
+  // exactly its xp (no variation, no crit, no cap). Identity = id + startedAt (the history's dedupe key).
+  for (const ch of facts.challenges ?? []) {
+    const key = 'challenge:' + ch.id + '|' + ch.startedAt;
+    if (byKey.has(key)) continue;
+    const xp = Number.isFinite(ch.xp) ? Math.max(0, Math.round(ch.xp)) : 0;
+    const e: XpEvent = { kind: 'challenge', key, at: ch.finishedAt, base: xp, factor: 1, xp, crit: null, reason: null };
+    const day = dayIndexOfIso(ch.finishedAt);
+    if (day !== null) e.day = day;
+    push(e);
   }
 
   const level = levelForXp(total, rules);

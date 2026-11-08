@@ -10,8 +10,13 @@
 // stijl / Badges / Sync tile; the drawn avatar stays (§5b). No profile at all → '/more/profiles'.
 // Reached from Home (tap on the greeting, or pull Home down), from Meer (row Mijn profiel) and from
 // Profielen beheren (tap on a row).
+// 6E (docs/specs/challenges.md §1a): for the active profile, with badges on and the unlock
+// `challenges` active (level 20), the card <ChallengeCard/> sits under the XP bar, above the tiles,
+// but only when the shown member's OWN level reaches that unlock's level: the unlock is per phone
+// (another profile may have opened it), the challenge is per member. Below it: no card, no trace.
 import { useEffect, useState } from 'preact/hooks';
 import { badgesEnabled, loadBadgeSettings } from '@/badges';
+import { ChallengeCard } from '@/components/ChallengeCard';
 import { Header } from '@/components/Header';
 import { ProfileEditFields } from '@/components/ProfileEditFields';
 import { ProgressSharePanel } from '@/components/ProgressSharePanel';
@@ -19,9 +24,15 @@ import { XpBar } from '@/components/XpBar';
 import { t } from '@/i18n';
 import { activeProfile, profiles, profilesLoaded, setActiveProfile } from '@/profile';
 import { navigate, route } from '@/router';
+import { isActive as unlockActive, unlockData } from '@/unlocks';
 import { Avatar, MemberCardPanel, useAvatarLevel } from './ProfilesScreen';
 
 type Panel = 'card' | 'sync' | 'edit' | null;
+
+/** The level the unlock `challenges` asks for (data/unlocks.json; 20 per the spec as fallback). */
+function challengesLevel(): number {
+  return unlockData().find((u) => u.id === 'challenges')?.by.level ?? 20;
+}
 
 function Tile(props: { icon: string; label: string; onClick: () => void; expanded?: boolean }) {
   return (
@@ -75,6 +86,7 @@ export function ProfileScreen() {
 
             {isActive ? (
               <>
+                {badgesOn && unlockActive('challenges') && level !== undefined && level >= challengesLevel() && <ChallengeCard memberId={profile.id} />}
                 <div class="profile-tiles">
                   {badgesOn && <Tile icon="🎨" label={t('profile.style')} onClick={() => navigate('/more/style')} />}
                   {badgesOn && <Tile icon="🏆" label={t('profile.badges')} onClick={() => navigate('/more/badges?tab=' + encodeURIComponent(profile.id))} />}

@@ -16,13 +16,16 @@
 // style no longer usable) keeps the rotation over the mix (`activeConfettiStyles()`). The chosen
 // style ignores the mix ("De gekozen vaste stijl negeert de mix"): taking it out of "Verras me"
 // does not stop it. Jouw stijl's tiles pass `style` for their preview.
+//
+// 6E (docs/specs/challenges.md §1c): 'challenge' is the full burst of a challenge done, in the active
+// confetti style like 'cooked' and 'milestone' (src/challenges.ts settleChallenges fires it).
 import { signal } from '@preact/signals';
 import { badgesEnabled } from '@/badges';
 import { getSetting, setSetting } from '@/db/repo';
 import { hash32 } from '@/domain/xp';
 import { activeConfettiStyles, unlockData, unlockedOnPhone } from '@/unlocks';
 
-export type CelebrationKind = 'cooked' | 'firstRecipe' | 'milestone' | 'stars';
+export type CelebrationKind = 'cooked' | 'firstRecipe' | 'milestone' | 'stars' | 'challenge';
 
 export interface Celebration {
   kind: CelebrationKind;

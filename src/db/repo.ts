@@ -42,6 +42,7 @@ import { HOUSEHOLD_KEY, normalizeHousehold, type HouseholdSetting } from '@/doma
 import { normalizeSnapshots, type ProgressSnapshot } from '@/domain/progress';
 import { mergeDonateHearts, mergeEarned } from '@/domain/badges';
 import { mergeFeatureLogs, normalizeFeatureLog } from '@/domain/features';
+import { doneKey, mergeDoneChallenges, normalizeActiveChallenges, normalizeDoneChallenges, type ActiveChallenge, type DoneChallenge } from '@/domain/challenges';
 import { normalizeShopBought, recordBought } from '@/domain/shopbought';
 import { VARIANT_DIETS, variantView, versionName, type RecipeVariant, type RecipeVariants, type VariantDiet } from '@/domain/variants';
 import { activeProfile } from '@/profile';
@@ -1481,18 +1482,22 @@ function stringArray(v: unknown): string[] {
 const BADGES_EARNED_SETTING = 'badges.earned';
 const FEATURES_LOG_SETTING = 'features.log';
 const DONATE_HEARTS_SETTING = 'donate.hearts';
-const MERGED_ON_RESTORE = new Set([BADGES_EARNED_SETTING, FEATURES_LOG_SETTING, DONATE_HEARTS_SETTING]);
+// 6E: `challenges.done` only grows (docs/specs/challenges.md §2), so a restore merges it too.
+const CHALLENGES_DONE_KEY = 'challenges.done';
+const MERGED_ON_RESTORE = new Set([BADGES_EARNED_SETTING, FEATURES_LOG_SETTING, DONATE_HEARTS_SETTING, CHALLENGES_DONE_KEY]);
 
 /**
  * The value a restore writes for `key`, given what this phone has (`local`, undefined when absent)
  * and what the file brings: `badges.earned` = union per member (mergeEarned), `features.log` =
- * mergeFeatureLogs, `donate.hearts` = the max per member (mergeDonateHearts); any other key = the
+ * mergeFeatureLogs, `donate.hearts` = the max per member (mergeDonateHearts), `challenges.done` = the
+ * union on id + startedAt (mergeDoneChallenges, 6E); any other key = the
  * file's value. Pure (exported for tests); the merge rules themselves live in the domain.
  */
 export function mergeRestoredSetting(key: string, local: unknown, incoming: unknown): unknown {
   if (key === BADGES_EARNED_SETTING) return mergeEarned(local, incoming);
   if (key === FEATURES_LOG_SETTING) return mergeFeatureLogs(normalizeFeatureLog(local), normalizeFeatureLog(incoming));
   if (key === DONATE_HEARTS_SETTING) return mergeDonateHearts(local, incoming);
+  if (key === CHALLENGES_DONE_KEY) return mergeDoneChallenges(local, incoming);
   return incoming;
 }
 
@@ -2624,4 +2629,58 @@ export async function putTimer(t: RunningTimer): Promise<void> {
 
 export async function deleteTimer(id: string): Promise<void> {
   await db.timers.delete(id);
+}
+
+// --- Challenges (6E, docs/specs/challenges.md §2) ---------------------------------------------------
+//
+// Two settings, both per member and both in the backup: `challenges.active` =
+// Record<memberId, ActiveChallenge | null> (one running challenge per member) and `challenges.done` =
+// DoneChallenge[] (the history; it only grows, deduplicated on id + startedAt; the source of the
+// bonus XP). A restore merges `challenges.done` (union, see mergeRestoredSetting) so an older backup
+// never takes a done challenge away; `challenges.active` is the file's value like any other setting.
+
+export const CHALLENGES_ACTIVE_SETTING = 'challenges.active';
+export const CHALLENGES_DONE_SETTING = 'challenges.done';
+
+/** Every member's running challenge (normalised; empty when absent or unreadable). Never throws. */
+export async function getActiveChallenges(): Promise<Record<string, ActiveChallenge | null>> {
+  return normalizeActiveChallenges(await getSetting<unknown>(CHALLENGES_ACTIVE_SETTING, {}));
+}
+
+/** Sets (or with null clears) the running challenge of one member; the other members stay. */
+export async function setActiveChallenge(memberId: string, active: ActiveChallenge | null): Promise<void> {
+  await db.transaction('rw', db.settings, async () => {
+    const all = normalizeActiveChallenges((await db.settings.get(CHALLENGES_ACTIVE_SETTING))?.value);
+    all[memberId] = active;
+    await db.settings.put({ key: CHALLENGES_ACTIVE_SETTING, value: all });
+  });
+}
+
+/** The history of done challenges, every member (normalised; empty when absent or unreadable). Never throws. */
+export async function getDoneChallenges(): Promise<DoneChallenge[]> {
+  return normalizeDoneChallenges(await getSetting<unknown>(CHALLENGES_DONE_SETTING, []));
+}
+
+/**
+ * A challenge was reached: appends it to `challenges.done` (unless a row with the same id +
+ * startedAt is already there) and clears that member's running challenge when it is still this
+ * one, in one transaction. Returns whether a new history row was written.
+ */
+export async function finishChallenge(done: DoneChallenge): Promise<boolean> {
+  let added = false;
+  await db.transaction('rw', db.settings, async () => {
+    const list = normalizeDoneChallenges((await db.settings.get(CHALLENGES_DONE_SETTING))?.value);
+    if (!list.some((d) => doneKey(d) === doneKey(done))) {
+      list.push(done);
+      await db.settings.put({ key: CHALLENGES_DONE_SETTING, value: list });
+      added = true;
+    }
+    const all = normalizeActiveChallenges((await db.settings.get(CHALLENGES_ACTIVE_SETTING))?.value);
+    const cur = all[done.memberId];
+    if (cur && cur.id === done.id && cur.startedAt === done.startedAt) {
+      all[done.memberId] = null;
+      await db.settings.put({ key: CHALLENGES_ACTIVE_SETTING, value: all });
+    }
+  });
+  return added;
 }

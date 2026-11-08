@@ -81,15 +81,16 @@ describe('the real data (§2d, §2f)', () => {
     });
   });
 
-  it('has the group counts of §2d (Koken 35 with vaste-klant of 6C), all of Geheim hidden', () => {
+  it('has the group counts of §2d (Koken 36 with vaste-klant of 6C and uitdager of 6E), all of Geheim hidden', () => {
     const active = BADGES.filter((b) => b['retired'] !== true);
     const count = (g: string) => active.filter((b) => b['group'] === g).length;
-    expect(BADGE_GROUP_IDS.map(count)).toEqual([35, 31, 18, 13, 11, 4, 6, 27]);
-    expect(active).toHaveLength(145);
+    expect(BADGE_GROUP_IDS.map(count)).toEqual([36, 31, 18, 13, 11, 4, 6, 27]);
+    expect(active).toHaveLength(146);
     expect(active.filter((b) => b['group'] === 'geheim').every((b) => b['hidden'] === true)).toBe(true);
     // The heart is the one hidden badge outside Geheim.
     expect(active.filter((b) => b['hidden'] === true && b['group'] !== 'geheim').map((b) => b['id'])).toEqual(['hartje']);
     expect(active.find((b) => b['id'] === 'vaste-klant')?.['group']).toBe('koken');
+    expect(active.find((b) => b['id'] === 'uitdager')).toMatchObject({ group: 'koken', icon: '🎯', rule: { kind: 'challenges' }, tiers: [1, 3, 5, 10, 20, 35, 50, 75] });
   });
 
   // §2f had 66 parts (44 by level, 13 of them at level 3, 22 by badge). Round 2 (block 6D-UI, UI-C)

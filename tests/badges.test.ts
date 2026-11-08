@@ -1082,6 +1082,16 @@ describe('evaluateBadges: householdMembers, cooks, donor, overcooked', () => {
   }
   const event = (key: string, crit: XpEvent['crit']): XpEvent => ({ kind: 'cook', key, base: 100, factor: 1, xp: 100, crit, reason: null });
 
+  it('challenges reads facts.challengesDone (6E); absent = 0', () => {
+    const rule: BadgeRule = { kind: 'challenges' };
+    const tiers = [1, 3, 5, 10, 20, 35, 50, 75];
+    expect(status(rule, facts(), { tiers })).toMatchObject({ earned: false, tier: 0, current: 0, target: 1 });
+    expect(status(rule, facts({ challengesDone: 1 }), { tiers })).toMatchObject({ earned: true, tier: 1, current: 1, target: 3 });
+    expect(status(rule, facts({ challengesDone: 12 }), { tiers })).toMatchObject({ earned: true, tier: 4, current: 12, target: 20 });
+    expect(status({ kind: 'challenges', n: 2 }, facts({ challengesDone: 2 }))).toMatchObject({ earned: true, tier: 1, maxTier: 1 });
+    expect(normalizeBadges([{ ...badge(rule), tiers }])[0]?.rule).toEqual({ kind: 'challenges' });
+  });
+
   it("overcooked counts XP events with crit 'overcooked'; without facts.xp it is 0/1", () => {
     const rule: BadgeRule = { kind: 'overcooked', n: 1 };
     expect(status(rule, facts({ xp: xpState([event('a', 'overcooked')]) }))).toMatchObject({ earned: true, current: 1 });
@@ -1303,6 +1313,21 @@ describe('data/badges.json (catalogue smoke, §2d)', () => {
     expect(at(0)).toMatchObject({ earned: false, current: 0 });
     expect(at(1)).toMatchObject({ earned: true });
     expect(evaluateBadges([def], facts({ features: { listMade: 9 } }))[0]).toMatchObject({ earned: false, current: 0 });
+  });
+
+  it('"Uitdager" is the challenges ladder of 6E, right after Vaste klant in Koken', () => {
+    const i = catalogue.findIndex((b) => b.id === 'uitdager');
+    expect(catalogue[i]).toMatchObject({
+      id: 'uitdager',
+      icon: '🎯',
+      rule: { kind: 'challenges' },
+      group: 'koken',
+      tiers: [1, 3, 5, 10, 20, 35, 50, 75],
+    });
+    expect(catalogue[i - 1]?.id).toBe('vaste-klant');
+    const def = catalogue[i] as Badge;
+    expect(evaluateBadges([def], facts())[0]).toMatchObject({ earned: false, current: 0 });
+    expect(evaluateBadges([def], facts({ challengesDone: 3 }))[0]).toMatchObject({ earned: true, tier: 2 });
   });
 
   it('evaluates as a whole on empty facts: retired ones left out, nothing earned', () => {

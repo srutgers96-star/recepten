@@ -22,9 +22,15 @@
 // `announceUnlocks` (src/unlocks.ts) for what came free between the two levels and is not yet in
 // `unlocks.announced`; those fill `LevelUpInfo.unlocked`. After settles the phone-wide union of
 // unlocks is refreshed (`refreshUnlocks`), once per burst, and once at boot (checkRulesVersion).
+//
+// 6E challenges (docs/specs/challenges.md §2, §3): the member's done challenges (`challenges.done`)
+// are one more XP fact (one event 'challenge' per finished challenge, src/domain/xp.ts), and after
+// every settle `settleChallenges` (src/challenges.ts) looks whether the running challenge was reached
+// or ran out; checkRulesVersion starts the challenge signals at boot (`loadChallenges`).
 import { signal, type Signal } from '@preact/signals';
 import { badgesEnabled, badgeStatuses, loadBadgeSettings } from '@/badges';
-import { allRecipes, getSetting, listAllPhotosMeta, listCookLog, listProfiles, setSetting } from '@/db/repo';
+import { loadChallenges, refreshChallenges, settleChallenges } from '@/challenges';
+import { allRecipes, getDoneChallenges, getSetting, listAllPhotosMeta, listCookLog, listProfiles, setSetting } from '@/db/repo';
 import { hasLang, type Recipe } from '@/domain/model';
 import {
   deriveXp,
@@ -95,15 +101,17 @@ function isBilingual(r: Recipe): boolean {
  * earned badge is `{ id, level: tier, secret: hidden, xp: Badge.xp }` (§2f: ladder 50·k per reached
  * tier, one-off `xp ?? (hidden ? 250 : 50)`). The badges are evaluated WITHOUT this member's XP
  * state (`{ xp: false }`): badgeStatuses would otherwise ask xpStateFor for the state being derived
- * right here and wait for itself; a registered `overcooked` badge still counts (sticky).
+ * right here and wait for itself; a registered `overcooked` badge still counts (sticky). 6E: plus the
+ * member's finished challenges (`challenges.done`, the only source of the challenge bonus).
  */
 export async function buildXpFacts(memberId: string): Promise<XpFacts> {
-  const [recipes, log, photos, profiles, statuses] = await Promise.all([
+  const [recipes, log, photos, profiles, statuses, done] = await Promise.all([
     allRecipes(),
     listCookLog(),
     listAllPhotosMeta(),
     listProfiles(),
     badgeStatuses(memberId, { xp: false }),
+    getDoneChallenges(),
   ]);
   const lines = new Map<string, XpRecipeFact>();
   for (const r of recipes) {
@@ -124,6 +132,7 @@ export async function buildXpFacts(memberId: string): Promise<XpFacts> {
     photos: photos.filter((p) => p.memberId === memberId).map((p) => ({ recipeId: p.recipeId, at: p.at })),
     ownRecipes,
     badges: statuses.filter((s) => s.earned).map((s) => ({ id: s.badge.id, level: s.tier, secret: s.badge.hidden === true, xp: s.badge.xp })),
+    challenges: done.filter((d) => d.memberId === memberId),
   };
 }
 
@@ -290,8 +299,15 @@ let settling: Promise<unknown> = Promise.resolve();
  * (also what happens with badges off). Returns the delta, or null when quiet.
  */
 export function settleXp(memberId: string, opts?: { quiet?: boolean }): Promise<XpDelta | null> {
-  const run = settling.then(() => doSettle(memberId, opts?.quiet === true));
+  const quiet = opts?.quiet === true;
+  const run = settling.then(() => doSettle(memberId, quiet));
   settling = run.catch(() => undefined);
+  // 6E: after every settle the running challenge is looked at (reached → history + bonus settle;
+  // term over → cleared quietly). Outside the settle chain: settleChallenges may settle again.
+  void run.then(
+    () => settleChallenges(memberId, quiet ? { quiet: true } : undefined),
+    () => undefined,
+  );
   return run;
 }
 
@@ -339,6 +355,8 @@ export async function reloadXp(): Promise<void> {
   xpStates.value = new Map();
   const profiles = await listProfiles();
   await Promise.all(profiles.map((p) => settleXp(p.id, { quiet: true })));
+  // 6E: the restored `challenges.active` / `challenges.done` on the card.
+  void refreshChallenges();
   // The restored settings (`unlocks.disabled` stays device-local) and levels: one refresh.
   queueUnlockRefresh();
 }
@@ -363,6 +381,8 @@ export async function checkRulesVersion(): Promise<void> {
   } catch (e) {
     console.warn('checkRulesVersion', e);
   }
+  // 6E (§3 "loadChallenges() bij boot"): the challenge signals and their follow-ups.
+  void loadChallenges();
   // §3 "bij boot": the phone-wide unlocks, also on a phone without profiles yet (coalesced with
   // the refresh the quiet settles above already queued).
   queueUnlockRefresh();

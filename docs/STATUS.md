@@ -4,6 +4,49 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): 6E — Uitdagingen, vrij op level 20
+Gebouwd volgens docs/specs/challenges.md (bouwer A domein, B data en app-laag, C UI, integrator). Niet gecommit. Geen dependency,
+geen Dexie-versie, geen fragmentsleutel; `XP_RULES_VERSION` blijft 3 (zonder gehaalde uitdagingen is `deriveXp` byte-gelijk).
+- **Domein (A):** `src/domain/challenges.ts` (negen regelsoorten, `offerFor` deterministisch via hash32(weekKey + lid) met één per
+  zwaarte en niets wat in de laatste 8 weken gehaald is, `termDeadline` week/maand/seizoen incl. jaarwissel, `progressFor` altijd uit de
+  feiten in [startedAt, min(deadline, nu)]); `deriveXp` kent event 'challenge' (geen crit, geen cap); badgeregel `challenges`;
+  `validateChallenges` in tools/validate-data.ts.
+- **Data en app-laag (B):** data/challenges.json (30, letterlijk de lijst van §2; namen/omschrijvingen NL+EN en iconen door B
+  geschreven, ter keuring), badge `uitdager` na vaste-klant (146 badges), unlock `challenges` level 20 rare (16 unlocks);
+  `src/challenges.ts` (signals, `startChallenge`, `giveUp`, `settleChallenges` na elke settleXp, `loadChallenges` bij boot, stille
+  settle bij terugkomen naar de voorgrond); repo leest/schrijft `challenges.active` en `challenges.done` (done wordt bij terugzetten
+  samengevoegd op id+startedAt, zodat een oude back-up geen gehaalde uitdaging wist).
+- **UI (C):** ChallengeCard (onder de XP-balk, alleen eigen actief profiel, badges aan én `isActive('challenges')`), ChallengeOfferSheet
+  (SheetPortal, Sluit rechts), `celebrate('challenge')`, 27 `challenge.*`-keys NL+EN.
+- **Integrator:** tests/unlocks.test.ts bijgewerkt (15 → 16 unlocks, `challenges` in de vaste lijst, omschrijvingen en zeldzaamheid);
+  `src/badges.ts` vult `BadgeFacts.challengesDone` (per lid, 'all' = totaal) — anders was Uitdager nooit te halen; `<ChallengeToast/>`
+  in de shell (app.tsx, xp-toast-look, 6 s, schuift boven een tegelijk verschijnende badge-toast; CSS in xp.css).
+- **Groen:** check, 1687 tests (74 bestanden), build, build:next, validate:data (challenges 30/0 fouten, unlocks 16, badges 146).
+- **Dev-app (375 px, NL en EN):** testprofiel met 190 backdated kookbeurten → level 33; kaart zichtbaar, Kies → sheet met drie kaarten
+  (Sluit rechts, termijn "tot zondag" / "hele herfst", 🌶), Start → "0 van 2"; pasta gekookt + settleXp → "1 van 2" → "gehaald": confetti,
+  toast "🎯 Uitdaging gehaald: Pastaweek · +150 XP", XP-pop +150, badge Uitdager niveau 1, kaart terug op Kies met "Gehaald: 1";
+  Opgeven (bevestiging) → weg zonder geschiedenisregel, aanbod blijft; verlopen termijn → stille regel `challenge.expired`; badges uit →
+  geen kaart; level-up 19→20 noemt Uitdagingen; ander weekKey → ander aanbod. Geen consolefouten. DEVICE-TEST rij 107 (NL en EN) na 106.
+- **Open voor Fable/Stijn:** (1) **surpriseCooks is niet exact te tellen:** `features.log` bewaart per feature alleen n, first, last
+  (huishoudbreed) en een telling per lid, geen tijdstip per event; `CookLogEntry` heeft geen plan-herkomst en `PlanItem` geen
+  Verras-me-merk. De eerste bouw (surprise + planCook op dezelfde dag via first/last) telde andermans momenten mee en maakte
+  'verras-me-kookt' (2) onhaalbaar; vervangen door de planCook-variant uit de opdracht: een kookbeurt van dit lid in het venster
+  telt als ze past bij een weekgerecht dat als gekookt is afgevinkt (zelfde recept, `addedAt` vóór de kookbeurt; elk weekgerecht
+  één keer). Telt per lid, nooit andermans tik; wel telt een met de hand in de week gezet gerecht ook mee (PlanItem kent geen
+  herkomst), en een gewiste week verliest het bewijs. Kiezen: (a) zo laten en de tekst van 'verras-me-kookt' naar "uit je week"
+  zetten, of (b) een optioneel herkomstveld op PlanItem (`via: 'surprise'`, geen Dexie-versie) en alleen die tellen. (2)
+  **everyWeekday:** "elke dag ma–zo" botst met "alleen feiten binnen de termijn"; gestart na maandag is 'elke-dag-koken' niet te halen.
+  Kiezen: alleen op maandag aanbieden, de hele ISO-week tellen, of het doel = resterende dagen. (3) zwaartes: §2 zegt "gelijk verdeeld",
+  de lijst geeft 8×🌶, 15×🌶🌶, 7×🌶🌶🌶 (lijst gevolgd). (4) `isActive('challenges')` is telefoonbreed (§3), §1a zegt "onder level 20 geen
+  kaart": een profiel onder 20 ziet de kaart als een ander profiel op de telefoon 20 haalde. (5) een gehaalde uitdaging verdwijnt
+  meteen uit het aanbod van die week (8-wekenregel incl. huidige week), dus na "gehaald" verandert één van de drie. (6) teksten van B
+  en C ter keuring (30 namen/omschrijvingen, iconen, opgeef-bevestiging, seizoensnamen, resterende-tijd-teksten; "Vijf nieuwe recepten"
+  voor vijf-nieuwe-klassiekers omdat de regel niet op klassiekers filtert). (7) README §2b-register (`challenges.active`,
+  `challenges.done` met merge bij restore) en xp-levels.md §2b (event 'challenge') nog bijwerken: docs/specs/ mocht de integrator
+  niet aanraken.
+
+- **Besluit Fable (8 nov, na de lens):** `distinctDays` (Vijf dagen koken) i.p.v. everyWeekday; `plannedCooks` ("Uit je week") i.p.v.
+  surpriseCooks; kaart alleen bij eigen level ≥ 20; rest akkoord. Register §2b en xp-levels §2b bijgewerkt. Fixer draait; daarna commit.
 ## 8 nov (Opus): 13J — iPhone-sheets: Annuleer/Bewaar of Sluit bovenaan in elke resterende sheet
 Gebouwd volgens README §1a (geen eigen spec; bouwer A de kiezers, bouwer B de menu's en panelen, integrator). Niet gecommit. Geen
 datamodel, geen setting, geen nieuwe i18n-key, geen dependency.

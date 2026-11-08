@@ -464,6 +464,10 @@ zonder crit valt altijd in 80…120 (gemiddeld 100,02). Bekende crits voor tests
 `cook:b:test|2026-03-03T18:00:00.000Z#2` → cooked; `cook:b:test|2026-03-04T18:00:00.000Z#115` →
 overcooked; `photo:b:p|2026-04-01T12:00:00.000Z` → overcooked (base 30 → 175).
 
+**Bonus-XP uit uitdagingen (6E, 8 nov).** `deriveXp` krijgt de gehaalde uitdagingen (`challenges.done`) als extra invoer en telt per
+gehaalde uitdaging één event `{ kind: 'challenge', xp }` op `finishedAt` (geen crit, geen cap, geen variatie). Zonder gehaalde
+uitdagingen is het resultaat byte-gelijk; daarom blijft XP_RULES_VERSION 3. Zie docs/specs/challenges.md §2.
+
 **Levelcurve.** Basiscurve `base(L) = round(11 · (L−1)^2,5)` (0 voor L ≤ 1), met `inc(k) = base(k+1) −
 base(k)`. **Sinds regelversie 3** (besluit Stijn + Fable, 30 okt 2026: een nieuwe speler haalt in het begin veel
 eerste-keer-badges tegelijk en vloog zo door de eerste levels) zijn de eerste tien levels uitgedikt: het

@@ -26,6 +26,7 @@ import {
   type XpRecipeFact,
 } from '../src/domain/xp';
 import { simulate } from './fixtures/xp-sim';
+import type { DoneChallenge } from '../src/domain/challenges';
 
 // ---------------------------------------------------------------------------- helpers
 
@@ -52,6 +53,7 @@ function facts(over: Partial<XpFacts> & { lines?: Record<string, number> } = {})
     photos: over.photos ?? [],
     ownRecipes: over.ownRecipes ?? [],
     badges: over.badges ?? [],
+    ...(over.challenges ? { challenges: over.challenges } : {}),
   };
 }
 
@@ -549,6 +551,60 @@ describe('determinism', () => {
   });
 });
 
+// ---------------------------------------------------------------------------- challenges (6E)
+
+describe('challenges (6E, docs/specs/challenges.md §2)', () => {
+  const done = (id: string, startOffset: number, finishOffset: number, xp: number, memberId = 'p:aaaaaaaa'): DoneChallenge => ({
+    id,
+    memberId,
+    startedAt: janIso(startOffset, 9),
+    finishedAt: janIso(finishOffset, 19),
+    xp,
+  });
+
+  it('one event per done challenge on finishedAt: exactly its xp, no variation, no crit', () => {
+    const challenges = [done('drie-keer-vega', 0, 3, 250), done('wereldreis', 7, 20, 900)];
+    const s = deriveXp(facts({ challenges }), XP_RULES, 0);
+    expect(s.events).toEqual([
+      { kind: 'challenge', key: 'challenge:drie-keer-vega|' + janIso(0, 9), at: janIso(3, 19), day: dayIndexOfIso(janIso(3, 19)), base: 250, factor: 1, xp: 250, crit: null, reason: null },
+      { kind: 'challenge', key: 'challenge:wereldreis|' + janIso(7, 9), at: janIso(20, 19), day: dayIndexOfIso(janIso(20, 19)), base: 900, factor: 1, xp: 900, crit: null, reason: null },
+    ]);
+    expect(s.total).toBe(1150);
+  });
+
+  it('no cap: many challenges finished on one day all count in full', () => {
+    const challenges = Array.from({ length: 8 }, (_, i) => done('c' + i, 0, 1, 300));
+    expect(deriveXp(facts({ challenges }), XP_RULES, 0).total).toBe(2400);
+  });
+
+  it('the same challenge run (id + startedAt) twice counts once; another start of it counts again', () => {
+    const a = done('vijf-kookbeurten', 0, 4, 300);
+    const again = done('vijf-kookbeurten', 14, 16, 300);
+    expect(deriveXp(facts({ challenges: [a, { ...a }] }), XP_RULES, 0).total).toBe(300);
+    expect(deriveXp(facts({ challenges: [a, again] }), XP_RULES, 0).total).toBe(600);
+  });
+
+  it('without challenges (absent or empty) deriveXp is byte-identical to before 6E', () => {
+    nextId = 1;
+    const log = [entry('b:a', janIso(0, 18), 5), entry('b:b', janIso(1, 18)), entry('b:a', janIso(2, 18))];
+    const base = facts({ log, lines: { 'b:a': 9, 'b:b': 12 }, photos: [{ recipeId: 'b:a', at: janIso(0, 19) }] });
+    const before = deriveXp(base, XP_RULES, 3);
+    expect(deriveXp({ ...base, challenges: [] }, XP_RULES, 3)).toEqual(before);
+    expect(JSON.stringify({ ...deriveXp({ ...base, challenges: [] }, XP_RULES, 3), byKey: null })).toBe(JSON.stringify({ ...before, byKey: null }));
+    const sim = simulate({ years: 1 });
+    expect(JSON.stringify(deriveXp({ ...sim, challenges: [] }).events)).toBe(JSON.stringify(deriveXp(sim).events));
+  });
+
+  it('challenge XP adds to the total and can raise the level; diffXp pops it like a badge (+250, no crit)', () => {
+    const prev = deriveXp(facts(), XP_RULES, 0);
+    const next = deriveXp(facts({ challenges: [done('drie-keer-vega', 0, 2, 250)] }), XP_RULES, 0);
+    expect(next.level).toBe(levelForXp(250));
+    const delta = diffXp(prev, next);
+    expect(delta.pops).toEqual([{ xp: 250, crit: null, kind: 'challenge' }]);
+    expect(delta.amount).toBe(250);
+  });
+});
+
 // ---------------------------------------------------------------------------- 30-year simulation
 
 describe('30-year simulation (§6a)', () => {
@@ -576,6 +632,36 @@ describe('30-year simulation (§6a)', () => {
     // 53–61 ms with three builders running full suites at once; alone it runs in ~25 ms, spec §5.14 asks 50).
     const ms = Math.min(...times);
     console.log(`[xp] 30-year deriveXp best of 5: ${ms.toFixed(1)} ms (median ${median(times).toFixed(1)}; runs ${times.map((t) => t.toFixed(1)).join(', ')})`);
+    expect(ms).toBeLessThan(100);
+  });
+
+  it('30 years plus a challenge done every week (6E): the challenge XP adds up exactly, still under budget', () => {
+    const f = simulate({ years: 30 });
+    const plain = deriveXp(f);
+    const challenges: DoneChallenge[] = [];
+    let sum = 0;
+    for (let w = 0; w < Math.floor((30 * 365.25) / 7); w++) {
+      const startedAt = new Date(Date.UTC(2026, 0, 5) + w * 7 * DAY_MS + 8 * 3_600_000).toISOString();
+      const finishedAt = new Date(Date.UTC(2026, 0, 5) + (w * 7 + 5) * DAY_MS + 20 * 3_600_000).toISOString();
+      const xp = [250, 400, 1500][w % 3]!;
+      sum += xp;
+      challenges.push({ id: 'c' + (w % 30), memberId: 'p:aaaaaaaa', startedAt, finishedAt, xp });
+    }
+    const withChallenges = { ...f, challenges };
+    const s = deriveXp(withChallenges);
+    expect(kinds(s.events, 'challenge')).toHaveLength(challenges.length);
+    expect(s.total).toBe(plain.total + sum);
+    expect(s.events.slice(0, plain.events.length)).toEqual(plain.events);
+
+    deriveXp(withChallenges); // warm-up
+    const times: number[] = [];
+    for (let run = 0; run < 5; run++) {
+      const t0 = performance.now();
+      deriveXp(withChallenges);
+      times.push(performance.now() - t0);
+    }
+    const ms = Math.min(...times);
+    console.log(`[xp] 30-year deriveXp + ${challenges.length} challenges best of 5: ${ms.toFixed(1)} ms`);
     expect(ms).toBeLessThan(100);
   });
 

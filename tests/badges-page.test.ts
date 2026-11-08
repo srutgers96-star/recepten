@@ -29,7 +29,7 @@ describe('badgePageModel (§1a)', () => {
     const m = badgePageModel(none);
     expect(m.groups.map((g) => g.group)).toEqual([...BADGE_GROUPS]);
     expect(m.total).toBe(catalogue.filter((b) => b.hidden !== true).length);
-    expect(m.total).toBe(117);
+    expect(m.total).toBe(118);
     expect(m.earned).toBe(0);
     expect(m.secretFound).toBe(0);
     const secret = m.groups.find((g) => g.group === 'geheim')!;
@@ -43,7 +43,7 @@ describe('badgePageModel (§1a)', () => {
     const m = badgePageModel(none.map((s) => (s.badge.id === secretBadge.id ? status(s.badge, true) : s)));
     expect(m.secretFound).toBe(1);
     expect(m.groups.find((g) => g.group === 'geheim')!.shown.map((s) => s.badge.id)).toEqual([secretBadge.id]);
-    expect(m.total).toBe(117);
+    expect(m.total).toBe(118);
     expect(m.earned).toBe(0);
   });
 
@@ -84,7 +84,7 @@ describe('badgePageModel mystery cards (6D-2c)', () => {
     for (const g of m.groups) if (g.group !== 'geheim' && g.group !== 'samen') expect(g.mystery).toEqual([]);
     // Counts unchanged: a "?" card is never shown in full and never counted.
     expect(m.secretFound).toBe(0);
-    expect(m.total).toBe(117);
+    expect(m.total).toBe(118);
     expect(m.groups.find((g) => g.group === 'samen')!.total).toBe(catalogue.filter((b) => b.group === 'samen' && b.hidden !== true).length);
   });
 

@@ -5,6 +5,15 @@ Status: compleet (Fable, 8 nov 2026). Eén blok, drie bouwers + integrator (lich
 xp-levels.md §2 (XP is afgeleid, nooit opgeteld), badges-avatar.md (badgeregels, zeldzaamheid). Fable's antwoorden op de open
 vragen van idee 3: **één lopende uitdaging tegelijk; je kiest zelf uit een aanbod van drie dat elke maandag ververst; beloning =
 bonus-XP plus de ladderbadge Uitdager; avatar-onderdelen als beloning komen in een latere data-ronde.** Nooit verplicht, nooit straf.
+**Na de lens (besluit Fable, 8 nov):** (1) `everyWeekday` was onhaalbaar na maandag → regelsoort `distinctDays` (n verschillende
+kookdagen in het venster); de weekuitdaging heet "Vijf dagen koken" (n 5). (2) Feature-events hebben geen tijdstip, dus
+"Verras me kookt" is niet eerlijk te tellen → regelsoort `plannedCooks` (een kookbeurt van een gerecht dat in je weekplan stond,
+elk plangerecht telt één keer) met de eerlijke naam "Uit je week". (3) De kaart toont alleen als het level van het lid zelf ≥ 20
+is (niet alleen de telefoon-brede ontgrendeling). (4) Zwaartes 8/15/7 in plaats van gelijk verdeeld: aanvaard. (5) De 8-wekenregel
+telt de huidige week mee (anti-farming): akkoord. (6) `finishedAt` = deadline als de termijn al voorbij was; stille afronding bij
+boot/herstel zonder toast; foto's tellen alleen bij ooit gekookte gerechten: akkoord. (7) ChallengeToast van de integrator: akkoord.
+(8) Teksten van de 30 uitdagingen keurt Fable in de eindcontrole; "Vijf nieuwe recepten" i.p.v. "klassiekers" is juist.
+Gebouwd: 8 nov 2026 (6E, workflow wf_fcf20be5-f9c; nabewerking (1)–(3) door een Opus-fixer, docs door Fable)
 
 ## 1. Doel en gebruikersgedrag
 
@@ -49,9 +58,9 @@ export type ChallengeRule =
   | { kind: 'newCuisines'; n: number }                             // n keukens die dit lid vóór de start nog nooit kookte
   | { kind: 'newRecipes'; n: number }                              // n recepten die dit lid vóór de start nog nooit kookte
   | { kind: 'photos'; n: number }                                  // n foto's bij gekookte gerechten in het venster
-  | { kind: 'everyWeekday' }                                       // elke dag ma–zo minstens één kookbeurt (alleen term 'week')
+  | { kind: 'distinctDays'; n: number }                            // op n verschillende lokale dagen in het venster minstens één kookbeurt (besluit 8 nov)
   | { kind: 'categories'; categories: string[] }                   // uit elke genoemde categorie minstens één kookbeurt
-  | { kind: 'surpriseCooks'; n: number };                          // n kookbeurten van een gerecht dat via Verras me/🎲 in de week kwam (feature 'surprise' + planCook op dezelfde dag)
+  | { kind: 'plannedCooks'; n: number };                           // n kookbeurten van een gerecht dat in het weekplan stond (toegevoegd vóór de kookbeurt; elk plangerecht telt één keer; besluit 8 nov)
 export interface Challenge { id: string; nl: { name: string; description: string }; en: { name: string; description: string };
   rule: ChallengeRule; term: ChallengeTerm; xp: number; weight: 1 | 2 | 3; icon: string; }
 export interface ActiveChallenge { id: string; memberId: string; startedAt: string; deadline: string }
@@ -74,9 +83,9 @@ export interface ChallengeFacts { log: CookLogEntry[]; recipes: ReadonlyMap<stri
 - **Data:** data/challenges.json met 30 uitdagingen (ids kebab-case; NL én EN; `weight` 1/2/3 gelijk verdeeld; termijnen gemengd),
   inhoud uit IDEAS 3 en deze set, letterlijk over te nemen door bouwer B:
   week (w1): drie-keer-vega (cooksWithTag vegetarisch 3, 250 XP, 🌶), nieuwe-keuken (newCuisines 1, 200, 🌶), soep-en-salade
-  (categories [soep, salade], 250, 🌶🌶), nagerecht-en-bijgerecht (categories [nagerecht, bijgerecht], 250, 🌶🌶), elke-dag-koken
-  (everyWeekday, 400, 🌶🌶🌶), twee-nieuwe-recepten (newRecipes 2, 250, 🌶🌶), foto-bij-alles (photos 3, 200, 🌶), verras-me-kookt
-  (surpriseCooks 2, 250, 🌶🌶), glutenvrij-eens (cooksWithTag glutenvrij 1, 150, 🌶), vegan-dag (cooksWithTag vegan 1, 200, 🌶),
+  (categories [soep, salade], 250, 🌶🌶), nagerecht-en-bijgerecht (categories [nagerecht, bijgerecht], 250, 🌶🌶), vijf-dagen-koken
+  (distinctDays 5, 400, 🌶🌶🌶), twee-nieuwe-recepten (newRecipes 2, 250, 🌶🌶), foto-bij-alles (photos 3, 200, 🌶), uit-je-week
+  (plannedCooks 2, 250, 🌶🌶), glutenvrij-eens (cooksWithTag glutenvrij 1, 150, 🌶), vegan-dag (cooksWithTag vegan 1, 200, 🌶),
   pasta-week (cooksInCategory pasta 2, 150, 🌶), oven-week (cooksInCategory oven 2, 150, 🌶), vijf-kookbeurten (cooks 5, 300, 🌶🌶);
   maand (m): vijf-nieuwe-klassiekers (newRecipes 5, 600, 🌶🌶), drie-nieuwe-keukens (newCuisines 3, 600, 🌶🌶🌶), tien-kookbeurten
   (cooks 10, 500, 🌶🌶), foto-maand (photos 8, 500, 🌶🌶), vega-maand (cooksWithTag vegetarisch 6, 600, 🌶🌶), wereldreis (newCuisines
@@ -91,7 +100,7 @@ export interface ChallengeFacts { log: CookLogEntry[]; recipes: ReadonlyMap<stri
 
 **Bouwer A — domein** (`src/domain/challenges.ts` [nieuw], `src/domain/xp.ts` (alleen de invoer `challenges` en het event 'challenge'),
 `src/domain/badges.ts` (regelsoort `challenges`, `BadgeFacts.challengesDone`), `tools/validate-data.ts` (`validateChallenges`: unieke
-ids, NL/EN, bekende tag/categorie-ids, `everyWeekday` alleen bij week, xp 100–2000, weight 1–3, precies 30 stuks), `tests/challenges.test.ts`
+ids, NL/EN, bekende tag/categorie-ids, `distinctDays` n ≥ 2, xp 100–2000, weight 1–3, precies 30 stuks), `tests/challenges.test.ts`
 [nieuw; alle regelsoorten, `offerFor` deterministisch en zonder recent gehaalde, `termDeadline` per termijn incl. jaarwissel],
 `tests/xp.test.ts` (het challenge-event; de 30-jaar-simulatie blijft onder budget), `tests/badges.test.ts` (uitdager)).
 **Bouwer B — data en app-laag** (`data/challenges.json` [nieuw, §2], `data/badges.json` (uitdager, na vaste-klant), `data/unlocks.json`

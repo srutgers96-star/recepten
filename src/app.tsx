@@ -17,6 +17,7 @@ import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, type NewBadge } from './badges';
 import { loadCelebrateSettings } from './celebrate';
+import { challengeToast, dismissChallengeToast } from './challenges';
 import { BrowserNotice } from './components/BrowserNotice';
 import { Confetti } from './components/Confetti';
 import { InstallCard } from './components/InstallCard';
@@ -103,6 +104,27 @@ function badgeToastText(nb: NewBadge, l: Lang): ComponentChildren {
     );
   }
   return t(nb.memberId === 'all' ? 'badges.toastTogether' : 'badges.toast', { name });
+}
+
+/**
+ * 6E (docs/specs/challenges.md §1c): "🎯 Uitdaging gehaald: {name} · +{xp} XP", filled by
+ * settleChallenges (src/challenges.ts). Same look as the badge toast, not tappable, ~6 s; when the
+ * Uitdager badge toasts at the same moment it sits right above it (xp.css). Badges off → never set.
+ */
+function ChallengeToast() {
+  const ct = challengeToast.value;
+  useEffect(() => {
+    if (!ct) return;
+    const handle = setTimeout(() => {
+      if (challengeToast.value === ct) dismissChallengeToast();
+    }, BADGE_TOAST_MS);
+    return () => clearTimeout(handle);
+  }, [ct]);
+  return (
+    <div class="challenge-toast-wrap" aria-live="polite">
+      {ct && <div class="xp-toast">{t('challenge.doneToast', { name: ct.challenge[lang.value].name, xp: ct.xp })}</div>}
+    </div>
+  );
 }
 
 /**
@@ -329,6 +351,7 @@ export function App(props: { openImportFromHash: boolean }) {
       {!onboarding && <Nav />}
       <Confetti />
       <BadgeToast />
+      <ChallengeToast />
       <XpPop />
       <XpToast />
       <LevelUpSheet />

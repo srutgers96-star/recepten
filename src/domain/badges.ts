@@ -52,6 +52,8 @@
 //                      in facts.log AND a row in facts.photoRows (block 6D-2c, "Hele cirkel"). The
 //                      first three are household-wide; log and photoRows are already filtered to the
 //                      member ('all' = everyone, so a cook and a photo by different members count)
+// - challenges       = facts.challengesDone: finished challenges of the member ('all' = the total;
+//                      6E, docs/specs/challenges.md §2); 0 when absent
 // A recipeId that is not in `recipes` only counts for the kinds that need nothing but the log
 // itself (counts, stars, dates, streaks, per-recipeId runs); never for the kinds that read the
 // recipe (category, tag, ingredient, cuisine(s), letters, classics, allCategories). An unparsable
@@ -104,7 +106,8 @@ type CountKind =
   | 'cuisines'
   | 'householdMembers'
   | 'cooks'
-  | 'donor';
+  | 'donor'
+  | 'challenges';
 type IdKind = 'category' | 'tag' | 'ingredient' | 'cuisine';
 type PlainKind = 'letters' | 'allClassics' | 'halfClassics' | 'allCategories';
 type CalendarWhen = 'friday-13' | 'leap-day';
@@ -186,6 +189,8 @@ export interface BadgeFacts {
   sharedRecipeIds: ReadonlySet<string>;
   /** Household-wide (6D-2c): the recipes on the shopping trail (`shop.bought`): a line of theirs was ticked off. */
   boughtRecipeIds: ReadonlySet<string>;
+  /** 6E: number of finished challenges (`challenges.done`) of the member; 'all' = the total. Absent = 0. */
+  challengesDone?: number;
 }
 
 export interface BadgeStatus {
@@ -223,6 +228,7 @@ const COUNT_KINDS: ReadonlySet<string> = new Set<CountKind>([
   'householdMembers',
   'cooks',
   'donor',
+  'challenges',
 ]);
 const ID_KINDS: ReadonlySet<string> = new Set<IdKind>(['category', 'tag', 'ingredient', 'cuisine']);
 const PLAIN_KINDS: ReadonlySet<string> = new Set<PlainKind>(['letters', 'allClassics', 'halfClassics', 'allCategories']);
@@ -803,6 +809,8 @@ function measure(badge: Badge, facts: BadgeFacts, d: Derived): number {
       return d.cooks;
     case 'donor':
       return factCount(facts.donorLevel);
+    case 'challenges':
+      return factCount(facts.challengesDone);
     case 'category':
       return d.categoryCounts.get(rule.id) ?? 0;
     case 'tag':

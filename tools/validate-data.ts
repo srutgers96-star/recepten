@@ -8,7 +8,8 @@
 // `steps[].text.en` when `text.en` is set, categories, cuisines, tags, units and qualifiers), the badge catalogue
 // data/badges.json (docs/phase-5-spec.md "Block C", docs/specs/badges-avatar.md §2e), the avatar library
 // data/avatar-parts.json (docs/specs/badges-avatar.md §2f), the level titles data/levels.json, the
-// unlocks data/unlocks.json (docs/specs/xp-levels.md §2e) and the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2).
+// unlocks data/unlocks.json (docs/specs/xp-levels.md §2e), the challenges data/challenges.json (docs/specs/challenges.md §2)
+// and the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2).
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
 // Exit:  1 when any error was found, 0 otherwise. Warnings never fail the run.
@@ -736,6 +737,8 @@ export const BADGE_COUNT_KINDS: readonly string[] = [
   'donor',
   // 6D-2c "Hele cirkel": own AI-prompt recipes that were shared, bought, cooked and photographed.
   'fullCycle',
+  // 6E "Uitdager": finished challenges (docs/specs/challenges.md §2).
+  'challenges',
 ];
 /** Rule kinds that carry `{ id, n? }`, checked against the dictionary refs. */
 export const BADGE_REF_KINDS: readonly string[] = ['category', 'tag', 'ingredient', 'cuisine'];
@@ -1346,6 +1349,131 @@ const SWAP_RULES: Readonly<Record<string, { flag: string; toValue: boolean; from
 
 const SWAP_KEYS: ReadonlySet<string> = new Set(['from', 'to', 'diets', 'note']);
 
+// ---------------------------------------------------------------------------
+// data/challenges.json (docs/specs/challenges.md §2 + §3 "Bouwer A", block 6E)
+// ---------------------------------------------------------------------------
+
+/** Exactly this many challenges (§2). */
+export const CHALLENGE_COUNT = 30;
+/** Terms (src/domain/challenges.ts `ChallengeTerm`; mirrored, not imported, like the badge lists). */
+export const CHALLENGE_TERMS: readonly string[] = ['week', 'month', 'season'];
+/** Rule kinds and the fields each takes besides `kind` (src/domain/challenges.ts `ChallengeRule`). */
+export const CHALLENGE_RULE_FIELDS: Readonly<Record<string, readonly string[]>> = {
+  cooks: ['n'],
+  cooksWithTag: ['tag', 'n'],
+  cooksInCategory: ['category', 'n'],
+  newCuisines: ['n'],
+  newRecipes: ['n'],
+  photos: ['n'],
+  distinctDays: ['n'],
+  categories: ['categories'],
+  plannedCooks: ['n'],
+};
+const CHALLENGE_XP_MIN = 100;
+const CHALLENGE_XP_MAX = 2000;
+const CHALLENGE_KEYS: ReadonlySet<string> = new Set(['id', 'nl', 'en', 'rule', 'term', 'xp', 'weight', 'icon']);
+
+/**
+ * Validate data/challenges.json. Pure: takes the parsed JSON, returns errors/warnings. Errors: not
+ * exactly 30, a non-kebab or duplicate id, missing NL/EN name or description, a missing icon, an unknown
+ * term or rule kind, a rule field that is missing or wrong (n an integer >= 1, a non-empty categories
+ * list, `distinctDays` n >= 2), xp outside 100–2000, weight not 1/2/3; with `refs` also an
+ * unknown tag or category id. Warnings: unknown keys, and a rule with `n` whose description lacks `{n}`
+ * (§2: "met {n} waar het doel staat").
+ */
+export function validateChallenges(data: unknown, refs?: DictionaryRefs): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  if (!Array.isArray(data)) {
+    errors.push('challenges.json: must be an array of challenges.');
+    return { errors, warnings, stats: { recipes: 0, lines: 0 } };
+  }
+  if (data.length !== CHALLENGE_COUNT) errors.push(`challenges.json: must hold exactly ${CHALLENGE_COUNT} challenges, found ${data.length}.`);
+
+  const seen = new Map<string, number>();
+  data.forEach((item: unknown, index: number) => {
+    const where = `challenges.json[${index}]`;
+    if (!isRecord(item)) {
+      errors.push(`${where}: not an object.`);
+      return;
+    }
+    const id = item['id'];
+    const label = typeof id === 'string' && id !== '' ? `challenges.json ${JSON.stringify(id)}` : where;
+    if (typeof id !== 'string' || !ID_RE.test(id)) {
+      errors.push(`${where}: "id" must be a kebab-case slug (a-z, 0-9, dashes), got ${JSON.stringify(id)}.`);
+    } else {
+      const first = seen.get(id);
+      if (first !== undefined) errors.push(`${label}: duplicate id (also challenge #${first}).`);
+      else seen.set(id, index);
+    }
+    for (const key of Object.keys(item)) if (!CHALLENGE_KEYS.has(key)) warnings.push(`${label}: unknown key ${JSON.stringify(key)} is ignored.`);
+
+    for (const lang of ['nl', 'en'] as const) {
+      const text = item[lang];
+      if (!isRecord(text)) {
+        errors.push(`${label}: "${lang}" must be { name, description }.`);
+        continue;
+      }
+      for (const field of ['name', 'description'] as const) {
+        const v = text[field];
+        if (typeof v !== 'string' || v.trim() === '') errors.push(`${label}: "${lang}.${field}" must be a non-empty string.`);
+      }
+    }
+
+    const icon = item['icon'];
+    if (typeof icon !== 'string' || icon.trim() === '') errors.push(`${label}: "icon" must be a non-empty string.`);
+
+    const term = item['term'];
+    if (typeof term !== 'string' || !CHALLENGE_TERMS.includes(term)) errors.push(`${label}: "term" must be one of ${CHALLENGE_TERMS.join(' | ')}.`);
+
+    const xp = item['xp'];
+    if (!isIntIn(xp, CHALLENGE_XP_MIN, CHALLENGE_XP_MAX)) errors.push(`${label}: "xp" must be an integer ${CHALLENGE_XP_MIN}..${CHALLENGE_XP_MAX}, got ${JSON.stringify(xp)}.`);
+    const weight = item['weight'];
+    if (!isIntIn(weight, 1, 3)) errors.push(`${label}: "weight" must be 1, 2 or 3, got ${JSON.stringify(weight)}.`);
+
+    const rule = item['rule'];
+    const kinds = Object.keys(CHALLENGE_RULE_FIELDS);
+    if (!isRecord(rule) || typeof rule['kind'] !== 'string' || !kinds.includes(rule['kind'])) {
+      errors.push(`${label}: "rule.kind" must be one of ${kinds.join(' | ')}.`);
+      return;
+    }
+    const kind = rule['kind'];
+    const fields = CHALLENGE_RULE_FIELDS[kind]!;
+    for (const key of Object.keys(rule)) if (key !== 'kind' && !fields.includes(key)) warnings.push(`${label}: rule kind "${kind}" takes no ${JSON.stringify(key)}; it is ignored.`);
+    if (fields.includes('n') && !isIntIn(rule['n'], 1)) errors.push(`${label}: rule.n must be an integer >= 1 for kind "${kind}".`);
+    if (kind === 'distinctDays' && isIntIn(rule['n'], 1) && !isIntIn(rule['n'], 2)) errors.push(`${label}: rule.n must be an integer >= 2 for kind "distinctDays".`);
+    if (kind === 'cooksWithTag') {
+      const tag = rule['tag'];
+      if (typeof tag !== 'string' || tag === '') errors.push(`${label}: rule.tag must be a non-empty tag id.`);
+      else if (refs && !refs.tags.has(tag)) errors.push(`${label}: rule.tag ${JSON.stringify(tag)} is not a known tag id.`);
+    }
+    const categoryIds: unknown[] = [];
+    if (kind === 'cooksInCategory') categoryIds.push(rule['category']);
+    if (kind === 'categories') {
+      const list = rule['categories'];
+      if (!Array.isArray(list) || list.length === 0) {
+        errors.push(`${label}: rule.categories must be a non-empty array of category ids.`);
+      } else {
+        if (new Set(list).size !== list.length) errors.push(`${label}: rule.categories has a duplicate id.`);
+        categoryIds.push(...list);
+      }
+    }
+    for (const c of categoryIds) {
+      if (typeof c !== 'string' || c === '') errors.push(`${label}: a category id must be a non-empty string, got ${JSON.stringify(c)}.`);
+      else if (refs && !refs.categories.has(c)) errors.push(`${label}: category ${JSON.stringify(c)} is not a known category id.`);
+    }
+    if (fields.includes('n')) {
+      for (const lang of ['nl', 'en'] as const) {
+        const text = item[lang];
+        const description = isRecord(text) ? text['description'] : undefined;
+        if (typeof description === 'string' && !description.includes('{n}')) warnings.push(`${label}: ${lang}.description has no "{n}" for the goal.`);
+      }
+    }
+  });
+
+  return { errors, warnings, stats: { recipes: 0, lines: data.length } };
+}
+
 /**
  * Validate data/swaps.json against the ingredient entries. Pure: takes the parsed JSON and the
  * ingredient list (data/ingredients.json), returns errors/warnings.
@@ -1523,6 +1651,17 @@ function main(): void {
   const unlocks = validateUnlocks(readJson(join(root, unlocksRel)), badgeIds, retiredIds);
   print(unlocksRel, unlocks, `${unlocks.stats.lines} unlocks`);
   if (unlocks.errors.length > 0) failed = true;
+
+  // Challenges (docs/specs/challenges.md §2, 6E): tag and category ids against the dictionary refs.
+  const challengesRel = 'data/challenges.json';
+  const challengesPath = join(root, challengesRel);
+  if (!existsSync(challengesPath)) {
+    console.log(`${challengesRel}: not present (challenge checks skipped).`);
+  } else {
+    const challenges = validateChallenges(readJson(challengesPath), refsFromData(dictData));
+    print(challengesRel, challenges, `${challenges.stats.lines} challenges`);
+    if (challenges.errors.length > 0) failed = true;
+  }
 
   const swapsRel = 'data/swaps.json';
   const swaps = validateSwaps(readJson(join(root, swapsRel)), dictData.ingredients as unknown as Record<string, unknown>[]);

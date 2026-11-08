@@ -11,7 +11,7 @@ import { signal } from '@preact/signals';
 import badgesData from '@data/badges.json';
 import avatarPartsData from '@data/avatar-parts.json';
 import { celebrate, celebration } from './celebrate';
-import { allRecipes, boughtRecipeIds, getHousehold, getSetting, getSharedRecipes, listAllPhotosMeta, listCookLog, setSetting, sharedRecipeIds } from '@/db/repo';
+import { allRecipes, boughtRecipeIds, getDoneChallenges, getHousehold, getSetting, getSharedRecipes, listAllPhotosMeta, listCookLog, setSetting, sharedRecipeIds } from '@/db/repo';
 import { normalizeAvatarParts, type AvatarPart } from '@/domain/avatar';
 import { evaluateBadges, isLadder, normalizeBadges, normalizeEarned, type Badge, type BadgeFacts, type BadgeStatus } from '@/domain/badges';
 import { categoriesData } from '@/domain/data';
@@ -135,7 +135,7 @@ function donorLevelFor(raw: unknown, memberId: string | 'all'): number {
  * the two would wait on each other forever; there a registered `overcooked` still counts (sticky).
  */
 async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<BadgeFacts> {
-  const [recipes, log, shared, photoMeta, featuresRaw, household, heartsRaw, xp, sharedIds, boughtIds] = await Promise.all([
+  const [recipes, log, shared, photoMeta, featuresRaw, household, heartsRaw, xp, sharedIds, boughtIds, doneChallenges] = await Promise.all([
     allRecipes(),
     listCookLog(),
     getSharedRecipes(),
@@ -152,6 +152,8 @@ async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<Ba
     // 6D-2c (rule kind 'fullCycle'): household-wide, like the recipes and the share events.
     sharedRecipeIds(),
     boughtRecipeIds(),
+    // 6E (rule kind 'challenges'): the done history; per member, 'all' = the household total.
+    getDoneChallenges(),
   ]);
   const byId = new Map<string, Recipe>();
   let classicsTotal = 0;
@@ -181,6 +183,7 @@ async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<Ba
     xp,
     sharedRecipeIds: sharedIds,
     boughtRecipeIds: boughtIds,
+    challengesDone: memberId === 'all' ? doneChallenges.length : doneChallenges.filter((d) => d.memberId === memberId).length,
   };
 }
 

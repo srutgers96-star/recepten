@@ -277,6 +277,28 @@
   }
 }
 
+/* ---------- 6E: the "challenge done" toast (shell); the xp-toast look, its own slot ---------- */
+
+.challenge-toast-wrap {
+  position: fixed;
+  left: max(16px, var(--sal));
+  right: max(16px, var(--sar));
+  bottom: calc(var(--nav-h) + var(--sab) + 12px);
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* The Uitdager badge usually toasts at the same moment: sit right above it. */
+.shell:has(.badge-toast) .challenge-toast-wrap {
+  bottom: calc(var(--nav-h) + var(--sab) + 72px);
+}
+
+.shell:has(.select-bar) .challenge-toast-wrap {
+  bottom: calc(var(--nav-h) + var(--sab) + 101px);
+}
+
 /* ---------- Level-up sheet (§1d) ---------- */
 
 /* Only Sluit on the right: an equal spacer on the left keeps "🎉 Level 3!" centred. */
@@ -343,4 +365,179 @@
 
 .unlocks-phone-wide {
   margin: 4px 0 16px;
+}
+
+/* ---------- 6E challenges (docs/specs/challenges.md §1b–§1e): card on Mijn profiel + offer sheet ---------- */
+
+.challenge-card {
+  margin: 16px 0 0;
+}
+
+.card h2.challenge-title {
+  margin-bottom: 8px;
+}
+
+.challenge-pick {
+  margin: 0 0 10px;
+}
+
+.challenge-expired {
+  margin: 0 0 6px;
+}
+
+.challenge-running-top,
+.challenge-offer-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.challenge-icon {
+  flex: 0 0 auto;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.challenge-name,
+.challenge-offer-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.challenge-reward {
+  flex: 0 0 auto;
+  color: var(--cobalt);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.challenge-desc {
+  margin: 4px 0 0;
+}
+
+.challenge-bar {
+  display: block;
+  height: 10px;
+  margin: 10px 0 6px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.challenge-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cobalt);
+  transition: width 0.4s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .challenge-bar-fill {
+    transition: none;
+  }
+}
+
+.challenge-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.challenge-giveup {
+  background: transparent;
+  color: var(--muted);
+}
+
+.challenge-history {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 4px;
+}
+
+.challenge-history summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.challenge-history ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.challenge-history-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--line);
+}
+
+.challenge-history-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The offer sheet: three tappable cards, the chosen one with Start under it. */
+.challenge-offer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.challenge-offer-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  overflow: hidden;
+}
+
+.challenge-offer-card.on {
+  border-color: var(--cobalt);
+  box-shadow: 0 0 0 1px var(--cobalt);
+}
+
+.challenge-offer-pick {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.challenge-offer-pick:active {
+  background: var(--press);
+}
+
+.challenge-weight {
+  flex: 0 0 auto;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.challenge-offer-meta {
+  font-variant-numeric: tabular-nums;
+}
+
+.challenge-offer-card .challenge-start {
+  display: block;
+  width: calc(100% - 24px);
+  margin: 0 12px 12px;
 }
