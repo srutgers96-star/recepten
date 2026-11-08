@@ -214,35 +214,119 @@ geen datawijziging nu. Rij 96 mocht mee worden aangepast. Het contactblad houdt 
 afwijkingen (handig voor Stijn). Fixer-fixes (rij 96, grijs van het contactblad) blijven.
 Gebouwd: 30 okt 2026 (blok 6D-R, workflow wf_6657df6f-d3b)
 
-### Blok 6D-S — "Jouw stijl": één personaliseer-menu achter de avatar (plan Fable, 30 okt 2026; spec volgt bij de start)
+### Blok 6D-S — "Mijn profiel" en "Jouw stijl": één profielscherm, één personaliseer-menu (Fable, 8 nov 2026)
 
-Stijn (30 okt, avond): "kan eventueel ook met de belletjes en lettertypes van de app; misschien verdienen die een
-overzichtelijkere plaats, of gewoon achter de avatar, dat het een soort algemeen customize-menu wordt. Fable mag hier
-goed over nadenken." Fable's ontwerp, als blok ná 13D (blok 2–4) en vóór 6C:
-1. **Eén ingang:** tik op je avatar (Meer, Profielen, Home) → scherm **Jouw stijl** (`#/more/style`) met tabs:
-   **Avatar** (de maker van 6D-3/6D-UI, ongewijzigd, nu als eerste tab) · **Geluiden** (timergeluid, Gekookt!-geluid, met
-   "Probeer") · **Confetti** (kies een stijl of "verras me" = de huidige willekeur) · **Letters** (kookstand-lettertype) ·
-   **Thema** (systeem/licht/donker; later de gouden modus). Elke keuze is een tegel in hetzelfde raster als de avatar-maker,
-   met slotje + "Lv n"/badge voor wat nog vast zit en het zeldzaamheidsstipje van 6D-R.
-2. **Zeldzaamheid ook op ontgrendelingen:** `Unlock.rarity` in data/unlocks.json (zelfde vier niveaus, met de hand), getoond
-   op de tegels en in het level-up-venster ("🎉 Legendarisch: Gouden buis").
-3. **Meer wordt rustiger:** de rijen Timergeluid, Lettertype kookstand, Geluid bij Gekookt! en Thema verhuizen naar Jouw stijl;
-   in Meer blijft één rij "🎨 Jouw stijl" (plus Badges). De pagina **Vrijgespeeld** gaat erin op: de aan/uit-schakelaars
-   per ontgrendeling komen als "uit"-optie op de tegel (een ontgrendelde confetti die je niet wilt, zet je uit in Confetti).
-   `#/more/unlocks` blijft werken als doorverwijzing naar Jouw stijl (links in oude toasts).
-4. **Mijn profiel = de pull-down (Stijn 30 okt: "die avatar naar beneden slepen kan gemixt worden met profiel; zou het ook
-   opschonen"):** IDEAS 5 gaat op in dit blok. Omlaag trekken op Home (of tikken op je avatar) opent **Mijn profiel**
-   (`#/more/profile`): de avatar groot (±60 % van de breedte), naam, leveltitel, XP-balk en reeks, en daaronder de knoppen
-   🎨 Jouw stijl · 🏆 Badges · 📇 Deel mijn kaartje · 📈 Sync mijn voortgang · ✏️ Naam & kleur. Alles wat Profielen nu voor
-   het ACTIEVE profiel toont (XP-balk, avatar-rij, kaartje, sync) verhuist hierheen; **Profielen beheren** wordt alleen de
-   lijst (wisselen, toevoegen, verwijderen; tik op een ander profiel → diens Mijn profiel, zonder bewerken). In Meer blijft
-   één rij "Mijn profiel" met de kleine avatar; het profiel-blok bovenaan Meer verdwijnt. Pull-down: touch, drempel ±80 px,
-   alleen in standalone of als de browser-pull-to-refresh niet vuurt (anders alleen de tik); sluiten met omhoog vegen,
-   tik buiten, of Terug (hash-state zodat Terug op Android werkt); alleen transform/opacity animeren. De gouden modus
-   (6D-4a-besluit) komt als legendarische Thema-tegel in Jouw stijl.
-5. **Niet in dit blok:** nieuwe geluiden of lettertypes (data-rondes), challenges.
-Geen nieuwe tabel, geen nieuwe setting behalve `unlocks.disabled` die blijft; i18n `style.*` NL én EN. Spec met
-bestandsverdeling schrijft Fable bij de start (ná 13D).
+Status: compleet (Fable, 8 nov 2026). Vervangt het plan van 30 okt. Twee bouwers, strikte bestandsverdeling; wat hier niet
+staat, beslist Opus niet (README §2). Stijn (30 okt): "de belletjes en lettertypes verdienen een betere plek, misschien
+achter de avatar als algemeen customize-menu; de pull-down-avatar kan gemixt worden met profiel, dat ruimt op."
+
+**S-A — Mijn profiel, Home, Meer, Profielen beheren.** Bezit: `src/screens/ProfileScreen.tsx` (nieuw), `src/components/ProfileEditFields.tsx`
+(nieuw, uit ProfilesScreen gelicht), `src/pulldown.ts` (nieuw), `src/screens/HomeScreen.tsx` (alleen de hello-rij en de pull-down),
+`src/screens/MoreScreen.tsx`, `src/screens/ProfilesScreen.tsx`, `src/app.tsx` (alleen de route `/more/profile`), `src/i18n/settings.ts`
+(alleen toevoegen: `profile.*`), `src/styles/settings.css` en `src/styles/home.css` (alleen deze onderdelen), `tests/pulldown.test.ts` (nieuw).
+1. **Scherm Mijn profiel** (`#/more/profile`, optioneel `?id=<profielId>` voor een ander profiel; zonder id het actieve). Kop
+   met Terug en de naam van het profiel. Inhoud, van boven naar beneden: de avatar groot (`<Avatar big …/>` op 60 % van de
+   breedte, maximaal 220 px, met de levelring; zonder avatar het letterrondje even groot); daaronder gecentreerd de naam
+   (`h1`-stijl) en, met badges aan, de leveltitel ("Level 5 · Boterhamsmeerder") en de volledige `<XpBar/>` met reeks. Dan een
+   raster van 2 kolommen met knoptegels (56 px hoog, icoon + tekst): 🎨 **Jouw stijl** (→ `#/more/style`), 🏆 **Badges**
+   (→ `#/more/badges?tab=<id>`), 📇 **Deel mijn kaartje** (klapt `<MemberCardPanel/>` uit, bestaand), 📈 **Sync mijn voortgang**
+   (klapt `<ProgressSharePanel/>` uit, bestaand), ✏️ **Naam & kleur** (klapt `<ProfileEditFields/>` uit: naam, kleur, taal, en
+   onderaan "Verwijder profiel" met de bestaande regels en bevestiging). Niet het actieve profiel (`?id=` van een ander): alleen
+   avatar, naam, leveltitel en XP-balk, plus één knop "Maak actief" (`setActiveProfile`); geen tegels. Badges uit: geen
+   leveltitel, geen XP-balk, geen Jouw stijl/Badges/Sync-tegel; de getekende avatar blijft (§5b). Geen profiel (onboarding
+   niet gedaan): het scherm stuurt door naar `/more/profiles`.
+2. **`<ProfileEditFields profile />`**: precies de velden die ProfilesScreen nu toont bij "Bewerk" van het actieve profiel
+   (naam, kleur `PROFILE_COLORS`, taal, bewaren via `updateProfile`), plus de bestaande avatar-rij ("Avatar aanpassen", opent
+   `<AvatarSheet/>` vanaf level 3; onder level 3 de bestaande hint) en "Verwijder profiel" (bestaande `removeProfile`-regels).
+   Eén component, gebruikt door Mijn profiel; ProfilesScreen gebruikt hem niet meer.
+3. **Home**: tik op de avatar of de naam in `.home-hello` → `navigate('/more/profile')` (de rij wordt één knop, 44 px, zonder
+   extra tekst). **Pull-down**: `src/pulldown.ts` exporteert `usePullDown({ onPull, threshold = 80 })`: touch-only, start alleen
+   als `document.scrollingElement.scrollTop === 0`, verticaal ≥ threshold én verticaler dan horizontaal, één keer per gebaar;
+   negeert een start in een `input/textarea/select` of in `.sheet-backdrop`. Pure helper `pullDistance(start, now)` getest. Op
+   Home wordt de hook op `.screen.home` gezet en roept `navigate('/more/profile')`. In de browser (niet standalone) kan de
+   pull-to-refresh van Chrome eerder vuren: dat is aanvaard; de tik op de avatar is dan de weg. Geen animatie van de avatar
+   in dit blok (IDEAS 5 noemt die; later), alleen de navigatie.
+4. **Meer**: het profiel-blok (kop `more.profile`, grote avatar, `.profile-chips`, "Profielen beheren") verdwijnt. Ervoor in de
+   plaats, bovenaan het menu, één rij **Mijn profiel** met de kleine `<Avatar/>` van het actieve profiel als icoon, de naam
+   als label en de leveltitel als sub (badges aan) → `/more/profile`; daaronder de bestaande rijen Profielen beheren,
+   Huishouden, Badges, Kookkalender, en nieuw 🎨 **Jouw stijl** → `/more/style`. De rij 🎁 Vrijgespeeld vervalt. Uit het
+   instellingenblok verdwijnen: Timergeluid-kiezer, Lettertype kookstand, Geluid bij Gekookt! (+ Probeer) en Thema — die staan
+   in Jouw stijl (S-B). De overige instellingen blijven.
+5. **Profielen beheren** wordt alleen de lijst: per profiel een rij met `<Avatar/>` (48 px), naam, de compacte `<XpBar compact/>`
+   (badges aan) en "Actief" of de knop "Maak actief"; tik op de rij → `/more/profile?id=<id>`. "Nieuw profiel" blijft (met
+   `?add=1`). De bewerk-velden, de avatar-rij, het kaartje-paneel en het sync-paneel staan hier niet meer.
+6. i18n (`profile.*`, NL én EN): `profile.title` "Mijn profiel" · "My profile"; `profile.style` "Jouw stijl" · "Your style";
+   `profile.badges` "Badges" · "Badges"; `profile.shareCard` "Deel mijn kaartje" · "Share my card"; `profile.sync` "Sync mijn
+   voortgang" · "Sync my progress"; `profile.edit` "Naam & kleur" · "Name & colour"; `profile.makeActive` "Maak actief" ·
+   "Make active"; `profile.active` "Actief" · "Active"; `more.myProfile` "Mijn profiel" · "My profile"; `more.style` "Jouw stijl"
+   · "Your style"; `more.styleHint` "Avatar, geluiden, confetti, letters en thema" · "Avatar, sounds, confetti, typefaces and theme".
+
+**S-B — Jouw stijl, zeldzaamheid van ontgrendelingen, opruimen.** Bezit: `src/screens/StyleScreen.tsx` (nieuw), `src/styles/style.css`
+(nieuw; `src/main.tsx` importeert hem ná avatar.css), `src/domain/rarity.ts` (nieuw: `Rarity`, `RARITIES`, `rarityForLevel(level)`;
+`src/domain/avatar.ts` re-exporteert `Rarity`/`RARITIES` vanuit dit bestand zodat bestaande imports werken), `src/domain/unlocks.ts`
+(`Unlock.rarity: Rarity`, in `normalizeUnlocks` expliciet veld wint, anders regel: level ≤ 20 common, ≤ 50 rare, ≤ 80 epic, anders
+legendary; badge: tier ≤ 2 rare, 3–5 epic, ≥ 6 legendary), `data/unlocks.json` (alleen `rarity` erbij op alle 15: confetti-double,
+avatar-maker, sound-cowbell, confetti-veggies = common; font-chalk, sound-gong, confetti-party, sound-kitchen, font-hand = rare;
+sound-cooked-tada, confetti-trex, sound-fanfare, confetti-stars, confetti-fire = epic; confetti-gold = legendary), `tools/validate-data.ts`
+(`validateUnlocks`: geldige rarity), `src/celebrate.ts` (setting `confetti.style`), `src/components/LevelUpSheet.tsx` (alleen het
+zeldzaamheidsstipje vóór elke ontgrendeling), `src/screens/UnlocksScreen.tsx` (verwijderen), `src/app.tsx` (alleen de route
+`/more/style` en `/more/unlocks` → doorverwijzing naar `/more/style`), `src/i18n/xp.ts` (`style.*` toevoegen; `unlocks.*` die niemand
+meer gebruikt mogen weg), `src/db/repo.ts` (alleen `confetti.style` in `DEVICE_LOCAL_SETTINGS`), `tests/unlocks.test.ts`,
+`tests/celebrate.test.ts` (nieuw of bestaand), `tests/style-screen.test.ts` (nieuw, voor het pure tegelmodel).
+1. **Scherm Jouw stijl** (`#/more/style`): kop met Terug en "Jouw stijl"; daaronder dezelfde tabstrook als de badgepagina
+   (`role="tablist"`, horizontaal, 48 px, laatste tab in localStorage `recepten.style.tab`): **Avatar · Geluiden · Confetti ·
+   Letters · Thema**. Alle keuzes zijn tegels in het raster van de avatar-maker (`repeat(auto-fill, minmax(64px, 1fr))`, 64 px,
+   icoon of staal + korte naam eronder, 11 px), met het zeldzaamheidsstipje van 6D-R linksboven (gewoon = geen stipje) en op
+   vergrendelde tegels 🔒 + "Lv n" of het badge-icoon; tik op een vergrendelde tegel zet de uitlegregel onder het raster
+   ("Zeldzaam · Komt vrij op level 35." zoals de maker, met `vt`-stijl stipje voor badges). Een tegel met `.on` is de huidige
+   keuze. Badges uit: het scherm toont alleen `badges.disabled` plus de tab Thema (thema hoort niet bij XP).
+   - **Avatar**: het voorbeeld (160 px, `<Avatar big/>` van het actieve profiel) en de knop "Avatar aanpassen" (opent
+     `<AvatarSheet/>`, vanaf level 3; eronder de bestaande hint). Geen tegels.
+   - **Geluiden**: kop "Timergeluid" met tegels voor elk geluid uit `TimerSound` (beeps, bell, melody, de vier ontgrendelbare;
+     'off' als laatste tegel 🔇): tik = kiezen (`setTimerSound`) én meteen `previewTimerSound`. Daaronder kop "Bij Gekookt!" met
+     de tegel "Tadaa" (ontgrendeling `sound-cooked-tada`): tik wisselt aan/uit (`setCookedSound`) en speelt bij aanzetten
+     `previewCookedSound`; vergrendeld = 🔒.
+   - **Confetti**: eerste tegel "Verras me" (schud-icoon; = willekeur over de actieve stijlen, de huidige werking), dan de stijlen
+     'default' + elke confetti-ontgrendeling; tik op een stijl = die stijl altijd (`confetti.style` = id) én meteen
+     `celebrate('cooked', { style })` als voorproefje; "Verras me" zet `confetti.style` = 'random'. Lange druk (of een klein
+     ☑/☐ hoekje rechtsboven) op een ontgrendelde stijl haalt hem uit of zet hem in de mix van "Verras me" (dat is
+     `setUnlockEnabled`, de bestaande `unlocks.disabled`). De gekozen vaste stijl negeert de mix.
+   - **Letters**: tegels Standaard · Krijtbord · Handschrift (staal: "Aa" in dat lettertype), tik = `cook.font`.
+   - **Thema**: tegels Systeem · Licht · Donker (staal: een klein vlakje in de paper-kleur), tik = `setTheme`. Een vierde tegel
+     "Goud" 🔒 met "Komt later" staat er NIET: de gouden modus komt pas als ontgrendeling in zijn eigen ronde.
+   - Onderaan gedempt `unlocks.phoneWide` (bestaand): keuzes gelden per telefoon.
+2. **`confetti.style`**: nieuwe toestel-lokale setting ('random' | stijl-id; ontbreekt = 'random'), in `DEVICE_LOCAL_SETTINGS`
+   en in het README §2b-register (integrator). `celebrate()` zonder `style`-optie: is `confetti.style` een id én is die stijl
+   actief (`isActive`), dan die stijl; anders de huidige willekeur over `activeConfettiStyles()`. Pure keuzefunctie
+   `pickConfettiStyle(setting, active, at)` getest.
+3. **Zeldzaamheid op ontgrendelingen**: zie bezit; het level-up-venster toont vóór elke ontgrendeling het stipje in de
+   zeldzaamheidskleur (`.rarity-dot`, hergebruik van de maker-stijl uit avatar.css: zet de tokens `--rarity-*` in base.css als ze
+   daar nog niet staan). Geen kleurnamen in tekst (regel 6D-B).
+4. **Opruimen**: UnlocksScreen.tsx weg; `#/more/unlocks` navigeert (replace) naar `#/more/style?tab=confetti`; de toast- en
+   level-up-links die naar `/more/unlocks` wezen gaan naar `/more/style`. De i18n-keys `unlocks.*` die daarna nergens meer worden
+   gebruikt gaan weg (grep), `unlocks.phoneWide` blijft. De rij-logica van `setUnlockEnabled` (terugval naar 'beeps' / 'default')
+   blijft werken voor de confetti-mix en voor een gekozen geluid/lettertype dat via `unlocks.disabled` uit staat.
+5. i18n (`style.*`, NL én EN): `style.title` "Jouw stijl" · "Your style"; `style.tab.avatar` "Avatar" · "Avatar"; `style.tab.sounds`
+   "Geluiden" · "Sounds"; `style.tab.confetti` "Confetti" · "Confetti"; `style.tab.fonts` "Letters" · "Typefaces"; `style.tab.theme`
+   "Thema" · "Theme"; `style.timerSound` "Timergeluid" · "Timer sound"; `style.cookedSound` "Bij Gekookt!" · "On Cooked!";
+   `style.random` "Verras me" · "Surprise me"; `style.inMix` "In de mix" · "In the mix"; `style.outOfMix` "Niet in de mix" · "Not in
+   the mix"; `style.lockedLevel` "Komt vrij op level {n}." · "Unlocks at level {n}."; `style.lockedBadge` "Komt vrij met de badge
+   {badge}." · "Unlocks with the badge {badge}."; `style.font.default` "Standaard" · "Default"; `style.font.chalk` "Krijtbord" ·
+   "Chalkboard"; `style.font.hand` "Handschrift" · "Handwriting"; thema-namen hergebruiken `more.theme.*`; geluidsnamen hergebruiken
+   `more.timerSound.*`; confetti-namen uit data/unlocks.json (`nl`/`en`), 'default' = `style.confetti.default` "Gewoon" · "Plain".
+6. Tests: `tests/unlocks.test.ts` (elke unlock een geldige rarity, de regel op de grenzen, expliciet wint); `tests/celebrate.test.ts`
+   (`pickConfettiStyle`: 'random' → willekeur, id actief → id, id niet actief → willekeur); `tests/style-screen.test.ts` (pure
+   tegelmodel: welke tegels per tab, vergrendeld/ontgrendeld/gekozen, 'off' laatste; badges uit → alleen Thema).
+
+**Integrator.** DEVICE-TEST (NL én EN, beide tabellen): rij 96 stap 1–2 (de maker opent via Meer → Mijn profiel → Naam & kleur →
+Avatar aanpassen, of via Jouw stijl → Avatar); rij 98 (Vrijgespeeld → Jouw stijl; tegels in plaats van schakelaars; "in de mix"
+via lange druk); nieuwe rij 105 "Mijn profiel en Jouw stijl" na rij 104: (1) Home: tik op je avatar → Mijn profiel met grote
+avatar, level en vijf tegels; (2) trek Home omlaag → hetzelfde scherm (in de browser kan Chrome eerst verversen: dan tik);
+(3) Meer: bovenaan één rij Mijn profiel, geen grote avatar meer; (4) Jouw stijl → Geluiden: tik Koebel → hoort meteen het
+geluid, kookwekker heeft een slotje met Lv 20; (5) Confetti: kies T-rex → confetti speelt; Verras me kiezen → weer willekeur;
+(6) Thema: Donker → de app wordt donker. STATUS-kop "… (Opus): 6D-S — Mijn profiel en Jouw stijl". README §2b: `confetti.style`,
+`recepten.style.tab`; `#/more/unlocks` als doorverwijzing. Acceptatie op 360/375 px, licht en donker, NL en EN; alle oude
+instellingen (geluid, lettertype, Gekookt!-geluid, thema) zijn nog instelbaar, nu via Jouw stijl.
 
 ### Blok 6D-B — badgepagina als tegels: alleen de iconen, tik voor de details (Fable, 30 okt 2026)
 
