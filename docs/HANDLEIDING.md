@@ -3884,7 +3884,7 @@ Alle schakelaars van de app staan bij elkaar onder één kopje in **Meer**.
 
 #### Wat je dan ziet
 
-Het kopje klapt open. Je ziet **Taal**, **Confetti**, **Badges**, **°F erbij**, het blok **Kookstand & timer** en **Experimenten**.
+Het kopje klapt open. Je ziet **Taal**, **Confetti**, **Badges**, **°F erbij**, en het blok **Kookstand & timer**.
 
 #### Goed om te weten
 
@@ -4085,28 +4085,6 @@ De schakelaar staat aan. In de kookstand luistert de app dan naar je.
 #### Goed om te weten
 
 Dit werkt alleen op Android, meestal met internet. Op een iPhone staat op die plek dat spraakcommando’s alleen op Android werken.
-
-(`#/more`)
-
-### Experimenten
-
-#### Wat het doet
-
-Met deze schakelaar zet je proeffuncties aan die nog niet af zijn.
-
-#### Waar je tikt
-
-1. Tik onderaan op **Meer**.
-2. Tik op het kopje **Instellingen**.
-3. Zet **Experimenten** aan of uit.
-
-#### Wat je dan ziet
-
-De schakelaar staat aan of uit.
-
-#### Goed om te weten
-
-Op dit moment staat er geen proeffunctie klaar. De schakelaar verandert nu dus niets.
 
 (`#/more`)
 

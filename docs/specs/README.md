@@ -363,9 +363,10 @@ bestaan), geen "[open punt]"; STATUS heeft per blok een alinea met de besluiten;
 **Gate op de laatste commit (248e047)** — ✔ `npm run check`, 1780 tests in 79 bestanden, `npm run build`, `npm run build:next`,
 `npm run validate:data`.
 
-**Open voor Stijn (geen bugs, wel keuzes)** — de schakelaar Experimenten doet niets meer; pass/fail in de Apparaatcheck zijn Engels;
-de ronde `box-shadow` van een gekozen chip in "Deel je nieuwe recepten" blijft rond bij een zeshoek- of gouden lijst; de knop
-"Maak je avatar" staat nog onder Naam & kleur én in Jouw stijl (twee routes). Alles wat in het testen opvalt → één verbeterronde.
+**Open voor Stijn (geen bugs, wel keuzes)** — ~~de schakelaar Experimenten doet niets meer~~ (Stijn 8 nov: weghalen; gedaan, zie
+STATUS); pass/fail in de Apparaatcheck zijn Engels; de ronde `box-shadow` van een gekozen chip in "Deel je nieuwe recepten" blijft
+rond bij een zeshoek- of gouden lijst; de knop "Maak je avatar" staat nog onder Naam & kleur én in Jouw stijl (twee routes). Alles
+wat in het testen opvalt → één verbeterronde.
 
 ## 6. Vragen aan Stijn vóór de bouw
 

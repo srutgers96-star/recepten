@@ -7,8 +7,8 @@
 //                          the badges switch is on), 📅 Kookkalender, 🎨 Jouw stijl ('/more/style'),
 //                          "Aantal personen" stepper (phase 4 week slots)
 //   "Instellingen"         language, confetti, badges switch, °F, "Kookstand & timer" (read-aloud,
-//                          voice commands, timer vibrate — phase 5 block B), experiments switch
-//                          (phase 5 block D)
+//                          voice commands, timer vibrate — phase 5 block B); the Experimenten switch
+//                          (phase 5 block D) went on 8 nov 2026: nothing read it any more since 13Q
 //   "Recepten & delen"     "Deel je nieuwe recepten" (unsent badge), Controleer mijn recepten,
 //                          Woordenboek (counts → '/more/dictionary', phase 5 A-bis.6)
 //   — Opslag & back-up —   one row → '/more/storage'
@@ -35,7 +35,7 @@ import { Header, chooseLang } from '@/components/Header';
 import { Segmented } from '@/components/Segmented';
 import { levelTitleText } from '@/components/XpBar';
 import { SheetPortal } from '@/components/SheetPortal';
-import { getFahrenheit, getHouseholdServings, getSetting, setFahrenheit, setHouseholdServings, setSetting } from '@/db/repo';
+import { getFahrenheit, getHouseholdServings, setFahrenheit, setHouseholdServings } from '@/db/repo';
 import { baseDictionary, userIngredients } from '@/dictionary';
 import type { Lang } from '@/domain/model';
 import { recordFeature } from '@/features';
@@ -59,11 +59,6 @@ export const DONATE_URL = 'https://bunq.me/StijnRutgers';
 /** "Aantal personen" stepper range (a new week slot starts at this many servings). */
 const MIN_HOUSEHOLD = 1;
 const MAX_HOUSEHOLD = 12;
-/**
- * Phase 5 block D: features under construction sit behind this boolean setting (default off).
- * Readers use getSetting('experiments', false); right now that is "Toon QR" on the share screen.
- */
-const EXPERIMENTS_KEY = 'experiments';
 // --- Collapsible groups (6A.6) ------------------------------------------------------------------
 
 type GroupId = 'you' | 'settings' | 'recipes' | 'help';
@@ -404,7 +399,6 @@ export function MoreScreen() {
   const active = activeProfile.value;
   const [fahrenheit, setF] = useState(false);
   const [household, setHousehold] = useState<number | null>(null);
-  const [experiments, setExperiments] = useState(false);
   const [groups, setGroups] = useState<GroupState>(loadGroupState);
   const [feedback, setFeedback] = useState(false);
   const [links, setLinks] = useState(false);
@@ -427,11 +421,6 @@ export function MoreScreen() {
     void loadSoundSettings();
     void getFahrenheit().then(setF, (e: unknown) => console.error('getFahrenheit', e));
     void getHouseholdServings().then(setHousehold, (e: unknown) => console.error('getHouseholdServings', e));
-    // Phase 5 block D: the experiments flag (default off), same pattern as the °F switch.
-    void getSetting<unknown>(EXPERIMENTS_KEY, false).then(
-      (v) => setExperiments(v === true),
-      (e: unknown) => console.error('getExperiments', e),
-    );
     void refreshShareBadges();
   }, []);
 
@@ -447,11 +436,6 @@ export function MoreScreen() {
     setF(on);
     void setFahrenheit(on).catch((e: unknown) => console.error('setFahrenheit', e));
     void recordFeature('fahrenheit');
-  }
-
-  function toggleExperiments(on: boolean) {
-    setExperiments(on);
-    void setSetting(EXPERIMENTS_KEY, on === true).catch((e: unknown) => console.error('setExperiments', e));
   }
 
   /** "Aantal personen": the servings a new week slot starts with (spec §0 `household.servings`). */
@@ -613,18 +597,6 @@ export function MoreScreen() {
             </div>
             <span class="switch">
               <input type="checkbox" checked={timerVibrate.value} onChange={(e) => void setTimerVibrate((e.currentTarget as HTMLInputElement).checked)} />
-              <span class="track" />
-            </span>
-          </label>
-
-          {/* Phase 5 block D: experiments flag — features under construction (now: QR on the share screen). */}
-          <label class="setting">
-            <div class="label">
-              {t('more.experiments')}
-              <small>{t('more.experimentsHint')}</small>
-            </div>
-            <span class="switch">
-              <input type="checkbox" checked={experiments} onChange={(e) => toggleExperiments((e.currentTarget as HTMLInputElement).checked)} />
               <span class="track" />
             </span>
           </label>

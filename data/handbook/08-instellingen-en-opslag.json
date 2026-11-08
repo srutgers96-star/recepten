@@ -31,8 +31,8 @@
         ]
       },
       "see": {
-        "nl": "Het kopje klapt open. Je ziet **Taal**, **Confetti**, **Badges**, **°F erbij**, het blok **Kookstand & timer** en **Experimenten**.",
-        "en": "The heading folds open. You see **Language**, **Confetti**, **Badges**, **Show °F too**, the **Cook mode & timer** block and **Experiments**."
+        "nl": "Het kopje klapt open. Je ziet **Taal**, **Confetti**, **Badges**, **°F erbij**, en het blok **Kookstand & timer**.",
+        "en": "The heading folds open. You see **Language**, **Confetti**, **Badges**, **Show °F too**, and the **Cook mode & timer** block."
       },
       "know": {
         "nl": "De app onthoudt welke kopjes in **Meer** open staan. Het thema en het timergeluid staan in **Jouw stijl**.",
@@ -515,57 +515,6 @@
           "microphone",
           "hands-free",
           "next"
-        ]
-      }
-    },
-    {
-      "id": "instellingen-en-opslag.experimenten",
-      "title": {
-        "nl": "Experimenten",
-        "en": "Experiments"
-      },
-      "what": {
-        "nl": "Met deze schakelaar zet je proeffuncties aan die nog niet af zijn.",
-        "en": "This switch turns on trial features that are not finished yet."
-      },
-      "where": {
-        "nl": [
-          "Tik onderaan op **Meer**.",
-          "Tik op het kopje **Instellingen**.",
-          "Zet **Experimenten** aan of uit."
-        ],
-        "en": [
-          "Tap **More** at the bottom.",
-          "Tap the **Settings** heading.",
-          "Switch **Experiments** on or off."
-        ]
-      },
-      "see": {
-        "nl": "De schakelaar staat aan of uit.",
-        "en": "The switch is on or off."
-      },
-      "know": {
-        "nl": "Op dit moment staat er geen proeffunctie klaar. De schakelaar verandert nu dus niets.",
-        "en": "Right now no trial feature is waiting. So the switch changes nothing for now."
-      },
-      "route": "/more",
-      "platform": "all",
-      "keywords": {
-        "nl": [
-          "experimenten",
-          "proef",
-          "test",
-          "nieuw",
-          "uitproberen",
-          "schakelaar"
-        ],
-        "en": [
-          "experiments",
-          "trial",
-          "test",
-          "new",
-          "try out",
-          "switch"
         ]
       }
     },

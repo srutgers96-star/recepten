@@ -134,9 +134,6 @@ export const settings: Dict = {
   // --- Phase 5: Meer rows (docs/phase-5-spec.md A.6 + A.8) ---
   'more.checkRecipes': { nl: 'Controleer mijn recepten', en: 'Check my recipes' },
   'more.checkRecipesHint': { nl: 'Voorstel voor categorie en dieet per eigen recept', en: 'Suggested category and diet per own recipe' },
-  // --- Phase 5 block D (docs/phase-5-spec.md D.4): the experiments switch ---
-  'more.experiments': { nl: 'Experimenten', en: 'Experiments' },
-  'more.experimentsHint': { nl: 'Proeffuncties die nog niet af zijn.', en: 'Trial features that are not finished yet.' },
   'more.householdRow': { nl: 'Huishouden', en: 'Household' },
   'more.householdRowHint': { nl: 'Naam en wie er meekookt', en: 'Name and who cooks along' },
 

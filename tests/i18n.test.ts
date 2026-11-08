@@ -30,7 +30,7 @@ const ADDED = [
 /** The hints under the More switches that stayed: one short sentence (§2A.1, ±60 characters). */
 const SHORT_HINTS = [
   'more.badgesHint', 'more.readAloudHint', 'more.voiceCommandsHint', 'more.timerVibrateHint', 'more.timerSoundIOSHint',
-  'more.experimentsHint', 'more.storageHint', 'more.sendNewHint', 'more.dictHint', 'more.linksHint', 'more.styleHint',
+  'more.storageHint', 'more.sendNewHint', 'more.dictHint', 'more.linksHint', 'more.styleHint',
   'more.householdRowHint', 'more.checkRecipesHint', 'more.inboxHint', 'more.donateHint',
 ];
 

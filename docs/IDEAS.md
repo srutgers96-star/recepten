@@ -232,3 +232,26 @@ een nieuwe kind 'setting'; past bij het 24-okt-besluit "rijk, niet spaarzaam"). 
 NIET bij een foto of beoordeling (te klein om te laten zien), WEL bij koken en bij badges — badges geven meer XP naarmate je
 verder komt, dus daar is het verschil pas significant. Geen open vragen meer.
 
+
+## 10. Boodschappenlijstjes terugkijken in de kalender (Stijn, 8 nov 2026)
+
+**Wens.** "Kunnen gemaakte boodschappenlijstjes ook in de kalender? Dat je een beetje terug kan kijken?"
+
+**Wat er nu is.** De app bewaart precies één lijst (`lists`, id `current`): bij **Maak lijst** wordt hij opnieuw opgebouwd
+(vinkjes en aanpassingen overleven per regel), bij **Leeg de lijst** gaat hij leeg (Ongedaan alleen direct erna). Van vroegere
+lijsten blijft alleen een dun spoor over: `shop.bought` (6D-2c) onthoudt per recept het moment van het eerste vinkje en per
+ingrediënt hoe vaak het is afgevinkt — niet welke lijst op welke dag. De kalender (Meer → Kalender, 6D-4b) toont alleen wie
+wat kookte per dag, uit het kooklogboek.
+
+**Prioriteit.** Later; samen met idee 2 (archief van afgevinkte boodschappen, 25 okt): dezelfde gegevens, twee ingangen.
+
+**Aanpak in grote lijnen.** (1) Een momentopname van de lijst bewaren op een natuurlijk moment: bij **Deel lijst**, bij **Leeg
+de lijst** en bij **Maak lijst** als de vorige lijst vinkjes had (datum, regels met hoeveelheid en ✓/niet, aantal gerechten);
+toestel-lokaal (nieuwe tabel `listHistory` → Dexie v8, of een settings-sleutel), mee in de back-up, automatisch opschonen na
+bijvoorbeeld 26 weken. (2) In de kalender een 🛒 onder de dag; tik op de dag → onder de kooklijst de lijst van die dag
+(afgevinkt bovenaan, de rest grijs), met **Zet terug op mijn lijst** per regel. (3) Dezelfde geschiedenis als rij **Eerder**
+onder Boodschappen (idee 2), met zoeken. (4) Een eigen handboekrij en DEVICE-TEST-rij; geen XP of badge (een lijst bewaren is
+geen prestatie).
+
+**Open vragen.** Welk moment telt als "een lijstje": delen, legen, of elke dag waarop iets werd afgevinkt? Hoe lang bewaren?
+Per huishouden (de lijst is al huishoudbreed) of toch met de naam van wie afvinkte (`shop.bought.by` kent die al)?

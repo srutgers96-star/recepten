@@ -3884,7 +3884,7 @@ All the app's switches sit together under one heading in **More**.
 
 #### What you then see
 
-The heading folds open. You see **Language**, **Confetti**, **Badges**, **Show °F too**, the **Cook mode & timer** block and **Experiments**.
+The heading folds open. You see **Language**, **Confetti**, **Badges**, **Show °F too**, and the **Cook mode & timer** block.
 
 #### Good to know
 
@@ -4085,28 +4085,6 @@ The switch is on. In cook mode the app then listens to you.
 #### Good to know
 
 This only works on Android, usually with internet. On an iPhone that spot says voice commands only work on Android.
-
-(`#/more`)
-
-### Experiments
-
-#### What it does
-
-This switch turns on trial features that are not finished yet.
-
-#### Where you tap
-
-1. Tap **More** at the bottom.
-2. Tap the **Settings** heading.
-3. Switch **Experiments** on or off.
-
-#### What you then see
-
-The switch is on or off.
-
-#### Good to know
-
-Right now no trial feature is waiting. So the switch changes nothing for now.
 
 (`#/more`)
 

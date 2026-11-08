@@ -4,6 +4,13 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Fable): nabewerking — de schakelaar Experimenten is weg
+Stijns keuze op de eerste van de vier vragen uit de eindcontrole: weghalen. Sinds 13Q las niets de instelling `experiments`
+meer; de rij onder Meer → Instellingen, de sleutels `more.experiments`/`more.experimentsHint`, de handboekrij
+"Experimenten" (08, nu 216 rijen; Markdown opnieuw gegenereerd) en de vermeldingen in DEVICE-TEST 49/52/55 (NL en EN) zijn
+verwijderd. Een oude waarde `experiments` in de settings-tabel blijft onschadelijk staan (geen migratie nodig). Drie keuzes
+staan nog open (README §5). Nieuw idee 10 in IDEAS.md: boodschappenlijstjes terugkijken in de kalender (Stijn, 8 nov).
+
 ## 8 nov (Fable): eindcontrole — het plan is af
 Alle blokken van README §1 staan live op main (laatste: 13c, 6D-F, Z; commit 248e047). Fable's eindcontrole staat in README §5
 (uitkomst): mechanisch alles groen, geen open bugs; vier keuzes voor Stijn (Experimenten-schakelaar, pass/fail in de Apparaatcheck,
