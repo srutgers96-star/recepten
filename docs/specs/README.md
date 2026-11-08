@@ -81,6 +81,24 @@ Escape bewaren niets. Geen nieuwe teksten, geen datamodel. Eén Opus-workflow me
 integrator; DEVICE-TEST-rij 101.
 Gebouwd: 8 nov 2026 (13J, workflow wf_f6a8f3ca-a39). Besluit Fable na de lens: in het formulier 'Nieuw ingrediënt' heet de linkerknop weer 'Terug naar zoeken' (picker.cancel) als de kiezer niet newOnly is — hij gaat immers terug naar zoeken; alleen bij newOnly 'Annuleer' (sluit). Bestaande focus bij openen blijft (zoekveld/eerste woord); Escape op het houd-menu en de MetaSheet en lange bewaarteksten in de kop → opschoonronde.
 
+## 1b. Na het hoofdplan: de verbeterrondes (Fable, 8 nov 2026)
+
+Het hoofdplan hierboven is af. Wat Stijn na het testen vraagt, gaat in **V-blokken** (verbeterrondes): klein, eigen spec,
+lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan met groottes en beslispunten staan in
+**docs/IDEAS.md** (sectie "Plan: de ideeënronde"); hier alleen de rij per blok.
+
+| Blok | Inhoud | Spec | Status |
+|---|---|---|---|
+| V1 | Handleiding ingeklapt en dubbel uitklapbaar · Meer opgeruimd (Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg) · gekozen chips vooraan met kruisje, na drie uur vergeten | verbeterronde-1.md | in aanbouw (8 nov) |
+| V2 | Delen zonder bestanden (links tot 20 KB, meerdere berichten) · Android-hint voor een WhatsApp-bestand · afzender met avatar in de inbox · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | — (IDEAS 12 + 13) | gepland |
+| V3 | Uitdagingen: beloning +2 % per level boven 20, vast bij de start | — (IDEAS 11) | wacht op Stijns ja |
+| V4 | Dopamine-kick bij Gekookt!: woord groot, XP-balk die oploopt, "Snelle vieringen" op level 30 | — (IDEAS 9) | gepland |
+| V5 | Boodschappen terugkijken: momentopnames, 🛒 in de kalender, rij Eerder | — (IDEAS 10 + 2) | wacht op twee keuzes |
+| V6 | Gabi's lijstje plakken met voorstellen · data-ronde woordenlijst vooraf | — (IDEAS 7 + 8) | gepland |
+| V7 | Boodschappen-badges over de ingrediënten | — (IDEAS 4) | gepland |
+| V8 | Swipen tussen de vijf tabbladen | — (IDEAS 6) | gepland |
+| V9 | Voedingswaarden en macro's (drie stappen) | — (IDEAS 1) | gepland, laatste |
+
 ## 2. Besluiten van de kritische lezer (gelden over alle specs)
 
 ### 2a. Versies en tellingen

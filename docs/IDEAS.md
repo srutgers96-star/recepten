@@ -1,10 +1,38 @@
 # Ideeën voor later — Rutgers' Recepten
 
-Losse ideeën van Stijn (en Gabi) die nog **niet** gepland zijn. Geen volgorde, geen belofte.
-Een idee gaat pas naar `docs/phase-6-spec.md` (of een volgende fase) als Stijn zegt: dit gaan we bouwen.
+Losse ideeën van Stijn (en Gabi). Sinds 8 nov 2026 staat bovenaan **het plan** (Fable): welke ideeën in welke volgorde een
+bouwblok worden, hoe groot, wat eerst beslist moet worden. Een idee wordt pas gebouwd als Stijn zegt: dit gaan we bouwen;
+daarna krijgt het een spec in docs/specs/ en een rij in docs/specs/README.md §1b.
 
 **Nieuw idee?** Onderaan toevoegen met datum en van wie, in dit formaat:
-wens · prioriteit · wat we al weten · aanpak in grote lijnen · open vragen · hangt af van.
+wens · prioriteit · wat we al weten · aanpak in grote lijnen · open vragen · hangt af van. Fable vult daarna de
+**Uitwerking** aan (ontwerp, data, bestanden, grootte, wat Stijn moet beslissen).
+
+---
+
+## Plan: de ideeënronde (Fable, 8 nov 2026)
+
+Het hoofdplan (README §1, veertien blokken) is af sinds 8 nov. Wat Stijn daarna vraagt, gaat in **verbeterrondes** (V-blokken):
+klein, snel live, elk met een eigen spec. Dit is de voorgestelde volgorde; Stijn mag omgooien.
+
+| Blok | Inhoud | Uit idee | Grootte | Stijn beslist eerst |
+|---|---|---|---|---|
+| **V1** | Handleiding ingeklapt en dubbel uitklapbaar · Meer opgeruimd (Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg) · gekozen chips vooraan met kruisje, na drie uur vergeten | Stijns berichten 8 nov | M | — (in aanbouw, spec verbeterronde-1.md) |
+| **V2** | Delen zonder bestanden (links tot 20 KB, anders meerdere berichten; bestand alleen als laatste redmiddel) · Android-hint "houd het bestand ingedrukt → Delen → Rutgers' Recepten" · afzender met avatar op de inbox-kaarten · avatar uit een voortgangskaart overnemen · kalenderlegenda met mini-avatars | 13 + 12 | M | niets: Fable's keuzes staan in 12 en 13; één vraag bij 13 (bericht-grens 20 KB zoals de lijst) |
+| **V3** | Uitdagingen schalen met level: +2 % per level boven 20, vast bij de start van de uitdaging | 11 | S | **ja/nee op de regel** (of Stijns "20 % van de curve": ×3,1 op level 100 i.p.v. ×2,6) |
+| **V4** | Dopamine-kick bij Gekookt!: het woord groot, XP-balk die oploopt, ontgrendeling "Snelle vieringen" op level 30 | 9 | M | — (alles al besloten op 30 okt) |
+| **V5** | Boodschappen terugkijken: momentopnames van de lijst, 🛒 in de kalender, rij "Eerder" onder Boodschappen met "Zet terug" | 10 + 2 | M | welk moment een lijstje is; hoe lang bewaren (voorstel: delen/legen/opnieuw maken; 26 weken) |
+| **V6** | Gabi's WhatsApp-lijstje plakken met voorstellen (controlestap) · vooraf een data-ronde woordenlijst | 7 + 8 | M + S (data) | leert hij van de keuzes? (voorstel: ja, als alias in het eigen woordenboek) |
+| **V7** | Boodschappen-badges over de ingrediënten (Verzamelaar, Groenteboer, Kaasmeester, Kruidenkast, Alfabet, …) | 4 | M | telt "Heb ik al" mee? (voorstel: nee) |
+| **V8** | Van links naar rechts swipen door de vijf tabbladen | 6 | S–M | doorlopen aan de randen? (voorstel: nee) |
+| **V9** | Voedingswaarden en macro's: eerst grammen-dekking (data), dan nutrition.json (data), dan het uitklapmenu op de receptpagina | 1 | L (drie stappen) | standaard aan of uit; welke waarden in het menu; weektotalen |
+
+Afgerond en hier alleen nog als geschiedenis: **3** (uitdagingen, blok 6E) en **5** (swipe omlaag → Mijn profiel, blok 6D-S).
+Niet gepland (geen idee, wel een antwoord): nagerecht/gebak/ontbijt-lunch bestaan als categorie en chip sinds 6B, maar geen van
+de 216 recepten is er een (de lijsten "overig" en "oven" bevatten geen toetjes), dus er valt nu niets te labelen.
+
+Werkwijze per V-blok: Fable schrijft de spec (met "Opus mag dit NIET zelf beslissen"), Opus bouwt via de lichte workflow,
+Haiku-gate, direct naar main, handboekrij + DEVICE-TEST-rij, STATUS-alinea. Richtgetal: V2–V5 passen samen in één weekbudget.
 
 ---
 
@@ -63,6 +91,31 @@ Eigen ingrediënten hebben geen waarden, tot iemand ze invult.
 **Hangt af van.** XP/badges (6D) voor de badges. Het omrekenen naar grammen kan los en eerder, bijvoorbeeld
 als sjouwwerk voor Haiku, omdat het ook de boodschappenlijst helpt.
 
+**Uitwerking (Fable, 8 nov 2026) — blok V9, drie stappen, L.**
+- **Stap 1 · grammen-dekking (data, Haiku-sjouwwerk met Fable-controle).** Twee nieuwe velden in `data/ingredients.json`:
+  `gramsPerPiece` (één prei = 150 g, één laurierblad = 0,2 g) en `gramsPerMl` (dichtheid: olie 0,92, bloem 0,55, suiker
+  0,85; water-achtig = 1). Eerst de 371 ingrediënten die in de klassiekers voorkomen, daarna de rest in batches zoals de
+  vertalingen (tools/apply-llm-batch.ts als voorbeeld). Validator: dichtheid tussen 0,2 en 2, stukgewicht tussen 0,1 g en
+  5 kg. `tools/measure-parse.ts` krijgt een kolom "gram-dekking" (nu ±55 %, doel ≥ 95 %). Dit helpt meteen de
+  boodschappenlijst: "2 el olie + 50 ml olie" telt dan op.
+- **Stap 2 · nutrition.json (data).** `data/nutrition.json`: per ingrediënt-id `{ kcal, eiwit, vet, kh, vezels, zout,
+  bron }` per 100 g product zoals het in het recept staat (pasta en rijst droog, zoals NEVO ze ook geeft); `bron` = NEVO-code
+  of USDA-id. Validator: kcal binnen 15 % van 4·eiwit + 4·kh + 9·vet, geen negatieve waarden, elke id bestaat. Vullen in
+  batches, meest gebruikte eerst; bronvermelding NEVO/RIVM in Het verhaal en onder Over. Eigen waarden van de gebruiker:
+  per ingrediënt in het eigen woordenboek (6B), toestel-lokaal, mee in de back-up, winnen van de ingebouwde waarde.
+- **Stap 3 · tonen (code).** `src/domain/nutrition.ts` (framework-vrij): per recept per portie uit de effectieve regels
+  (dus na schalen, na een dieetversie, na eigen aanpassingen), met een dekkingspercentage (regels met bekende grammen én
+  waarden / alle regels met een hoeveelheid; "naar smaak" telt niet mee). Op de receptpagina onder de metadata één rustige
+  regel "≈ 620 kcal p.p. · 92 % bekend"; tik → uitklap met eiwit, vet, koolhydraten, vezels, zout per portie. Niet in de
+  kookstand. Schakelaar **Voedingswaarden** onder Meer → Instellingen (voorstel Fable: standaard aan; het is informatie, geen
+  oordeel). Weektotalen: pas als Stijn ze wil (ze zijn snel misleidend: wie eet welke portie).
+- **Later, apart:** badges "Eiwitkampioen" en "10.000 kcal gekookt" uit kooklog × portiewaarden (alleen gekookte porties, nooit
+  "weinig calorieën").
+- **Bestanden:** data/ingredients.json, data/nutrition.json [nieuw], tools/validate-data.ts, tools/measure-parse.ts,
+  src/domain/nutrition.ts [nieuw], src/screens/RecipeScreen.tsx (één regel + uitklap), src/i18n, tests/nutrition.test.ts.
+- **Stijn beslist:** de drie open vragen hierboven. Fable's voorstellen: kcal + eiwit/vet/kh + vezels + zout; geen weektotalen
+  in de eerste versie; standaard aan.
+
 ## 2. Archief van afgevinkte boodschappen (Stijn, 25 okt 2026)
 
 **Wens.** Wat ooit is afgevinkt mag "een soort archief" in, in plaats van voorgoed weg. Nu kost permanent verwijderen
@@ -78,10 +131,14 @@ vaak terugzet, is een kandidaat voor "elke week".
 
 **Open vragen.** Alleen afgevinkt of alles wat van de lijst ging? Per huishouden of per persoon? Hangt af van 6C.
 
-## 3. Challenges, vrij op level 20 (Stijn, 6 en 28 okt 2026) — GEPLAND, verzamelplek voor de inhoud
+**Uitwerking (Fable, 8 nov 2026).** Gaat op in **V5** samen met idee 10 (dezelfde gegevens, twee ingangen: de kalender en de
+rij "Eerder"). Zie de uitwerking bij 10.
 
-**Status.** Dit wordt gebouwd: eigen klein blok ná 6D-4 (zie docs/specs/xp-levels.md besluitblok 24 okt en
-docs/specs/README.md §1). Fable ontwerpt de eerste set; hier verzamelen we de ideeën tot het zover is.
+## 3. Challenges, vrij op level 20 (Stijn, 6 en 28 okt 2026) — GEBOUWD (6E, 8 nov 2026)
+
+**Status.** Gebouwd als blok 6E (docs/specs/challenges.md): één lopende uitdaging, elke maandag een aanbod van drie (licht,
+middel, zwaar), bonus-XP plus de ladderbadge Uitdager; avatar-onderdelen als beloning zijn nog niet gedaan. Het vervolg staat
+in idee 11 (beloningen die meegroeien met je level).
 
 **Wat het is.** Vanaf level 20 krijg je opdrachten met een eigen beloning (XP, een badge of een avatar-onderdeel):
 een doel, een termijn en een voortgangsbalk op je profiel; nooit verplicht, nooit een straf bij niet halen.
@@ -95,12 +152,9 @@ een doel, een termijn en een voortgangsbalk op je profiel; nooit verplicht, nooi
 - Verrassing: "de dobbelsteen kiest, jij kookt" (het eerste gerecht dat de dobbelsteen geeft).
 - Zeldzaam: "kook alle 20 bijgerechten" (lang), "een recept uit elke keuken die je in huis hebt".
 
-**Aanpak in grote lijnen.** data/challenges.json (id, nl/en, soort, doel, termijn, beloning, unlock-level), pure
-evaluatie uit kooklog/foto's zoals badges (`src/domain/challenges.ts`), een kaart op het profiel en in het
-level-up-overzicht; lopende challenge in `settings`, afgeronde in een lijstje dat mee gaat in de back-up.
-
-**Open vragen.** Hoeveel tegelijk (één lopende, of twee)? Zelf kiezen uit een aanbod of toegewezen? Beloning in
-XP alleen, of ook een avatar-onderdeel per challenge?
+**Nog open uit deze lijst (niet gebouwd):** samen-uitdagingen met een gezamenlijke teller (kan pas eerlijk als beide telefoons
+hun voortgang delen; dan telt elk zijn eigen deel en toont de kaart de som van de laatst gedeelde stand), en avatar-onderdelen
+als beloning (een data-ronde: per zware uitdaging één onderdeel in data/avatar-parts.json met `unlock: challenge:<id>`).
 
 ## 4. Boodschappen-badges over de 1600 ingrediënten (Stijn, 29 okt 2026)
 
@@ -119,29 +173,38 @@ beginletter. Bronnen: `shop.bought.ings` + de woordenlijst (categorie per ingred
 
 **Open vragen.** Telt "Heb ik al" (in huis) mee als gekocht? (Nu: nee.) Per huishouden of per lid? (Nu: beide geteld.)
 
-## 5. Swipe omlaag op Home: profiel bijna paginavullend, avatar heel groot (Stijn, 29 okt 2026)
+**Uitwerking (Fable, 8 nov 2026) — blok V7, M.**
+- **Bron van de feiten.** `shop.bought.ings` (src/domain/shopbought.ts) kent per ingrediënt-id het aantal vinkjes, totaal en
+  per lid (`by`). Daar komt één veld bij: `first` (ISO van het eerste vinkje per ingrediënt per lid) voor seizoensbadges en
+  "wanneer". Hoeveelheden worden niet bewaard, dus "1 kg boter in één lijst" vervalt (eerlijk: niet te tellen).
+- **Regels** (nieuw in src/domain/badges.ts, `BadgeFacts.bought`): `boughtDistinct { n, aisle? }` (verschillende ingrediënten,
+  optioneel binnen één gangpad uit data/aisles.json), `boughtGroup { ids: string[], n }` (n uit een vaste lijst, bv. tien
+  kaassoorten), `boughtRare` (een ingrediënt dat in precies één recept voorkomt), `boughtLetters { n }` (n verschillende
+  beginletters), `boughtInMonth { id, months }` (speculaaskruiden in december, aardbeien juni–augustus).
+- **Set (data/badges.json, groep "boodschappen", ±12):** Verzamelaar (ladder 10/25/50/100/200/350/500), Groenteboer (gangpad
+  groente-fruit 10/25/50), Kaasmeester (gangpad kaas 5/10), Slager (vlees-vis, vleessoorten 10), Vismarkt (vis 5), Kruidenkast
+  (kruiden-specerijen 10/25), Wereldwinkel (gangpad wereld 10), Zeldzaam (boughtRare, geheim), Alfabet (boughtLetters 26,
+  geheim), Speculaastijd (boughtInMonth), Zomerkoninkjes (aardbeien in de zomer). Zeldzaamheid en XP volgens badges-avatar.md
+  (ladder = 50 XP per trede, geheim = 250).
+- **Besluiten Fable:** "Heb ik al" telt niet (je kocht het niet); per lid tellen (wie afvinkt, krijgt het; zoals alle XP), de
+  huishoud-brede teller blijft voor statistiek. Alleen op Badges en in de toast; niets in de kalender.
+- **Bestanden:** src/domain/shopbought.ts (`first`), src/domain/badges.ts, data/badges.json, tools/validate-data.ts (nieuwe
+  regelsoorten), tests/badges.test.ts, tests/validate-badges.test.ts (aantallen), handboekrijen in 07. Geen UI-werk buiten de
+  bestaande badge-schermen.
+- **Stijn beslist:** alleen de "Heb ik al"-vraag (voorstel: nee).
 
-**Gepland (30 okt):** gaat op in blok 6D-S "Jouw stijl" als scherm **Mijn profiel** (badges-avatar.md, blok 6D-S punt 4):
-de pull-down én de profielpagina worden één scherm; Profielen beheren wordt alleen nog de lijst.
+## 5. Swipe omlaag op Home: profiel bijna paginavullend, avatar heel groot (Stijn, 29 okt 2026) — GEBOUWD (6D-S)
+
+**Status (8 nov 2026).** Gebouwd in blok 6D-S als het scherm **Mijn profiel**: Home omlaag trekken (of op de begroeting tikken)
+opent het, met de avatar op 60 % van de breedte, naam, level, XP-balk en de tegels. De aanvulling "Meer opschonen" gebeurt in
+V1 (8 nov): Badges-rij weg, huisgenoten onder Mijn profiel, Profielen-ingangen weg.
 
 **Wens.** Op Home naar beneden swipen (of vanaf de level-regel omlaag trekken) → het profiel vult bijna de hele pagina
 en de avatar wordt heel groot, "zodat je heel de avatar met al zijn ditjes en datjes goed kan zien": alle lagen
 (huid, haar, ogen, kleding, hoofddeksel, accessoire, achtergrond) op volle grootte, met naam, level, titel en XP-balk.
 
-**Prioriteit.** Later; ná 6D-3 (avatar-garderobe) en 6D-4 (unlocks), want dan is er iets om te bekijken.
-
-**Aanpak in grote lijnen.** Geen nieuwe route: een "sheet" die vanaf de bovenkant van Home opentrekt bij een
-pull-down-gebaar (touch, drempel ±80 px, niet in conflict met de browser-pull-to-refresh: in standalone staat die uit,
-in de browser alleen tonen via een tik op de avatar). De avatar-SVG schaalt naar ±70 % van de viewportbreedte; daaronder
-naam, titel, level, XP-balk, en de knoppen "Kleedkamer" (6D-3) en "Badges". Sluiten met swipe omhoog, tik buiten of
-de Terug-knop (hash-state zodat Terug op Android werkt). Houd 60 fps: alleen transform/opacity animeren.
-
-**Open vragen.** Alleen Home of ook op de Profielen-pagina? Ook voor de andere leden (tik op een ander lid → diens
-avatar groot)? Hoort hier ook de "gouden modus" (6D-4) bij als achtergrond?
-
-**Aanvulling Stijn (29 okt).** Als dit er is, is het profiel-blok bovenaan Meer waarschijnlijk overbodig: dat kan dan
-weg of kleiner, zodat Meer rustiger wordt. Bij het bouwen van dit idee dus meteen Meer opschonen (alleen nog een
-regel "Profielen" en "Badges" als ingang, geen tweede avatar + level).
+**Nog open uit dit idee:** een ander lid groot bekijken (tik op een huisgenoot → diens avatar groot). Klein; kan mee in V2
+(huisgenoten-rijen op Meer → Huishouden → tik op de avatar → groot in een sheet).
 
 ## 6. Van links naar rechts swipen door de hoofdpagina's (Stijn, 29 okt 2026)
 
@@ -159,6 +222,21 @@ Alleen op de vijf hoofdpagina's, niet in een recept, de editor of kookmodus.
 herkenning daarom pas ≥ 24 px van de schermrand. Niet laten botsen met de pull-down van idee 5.
 
 **Open vragen.** Volgorde = volgorde van de onderbalk? Doorlopen (Meer → Home) of stoppen aan de randen?
+
+**Uitwerking (Fable, 8 nov 2026) — blok V8, S–M.**
+- `src/swipe.ts` [nieuw]: één `touchstart`/`touchmove`/`touchend` op `.shell`, alleen als de route één van de vijf tabbladen
+  is (Home, Recepten, Week, Boodschappen, Meer) en niet in selectiestand of met een open sheet. Herkenning: start ≥ 24 px van
+  de linker- en rechterrand; |Δx| ≥ 60 px én |Δx| > 2·|Δy|; niet begonnen in een element dat zelf horizontaal scrolt
+  (`closest('.chips, .cook, .week-strip, [data-noswipe]')` of een element met `scrollWidth > clientWidth`). Daarna `navigate`
+  naar het buur-tabblad.
+- **Animatie:** de nieuwe pagina schuift 24 px in vanaf de kant van de beweging en vervaagt in 150 ms (alleen transform en
+  opacity; class `.screen.slide-left/.slide-right` op de nieuwe pagina, verwijderd na `animationend`); `prefers-reduced-motion`
+  → geen animatie.
+- **Besluiten Fable:** volgorde = de onderbalk; stoppen aan de randen (geen doorlopen); de pull-down van Mijn profiel wint als
+  de beweging eerst verticaal is (bestaande `usePullDown` meet dat al).
+- **Bestanden:** src/swipe.ts, src/app.tsx (één hook), src/styles/base.css (twee animaties), DEVICE-TEST-rij op beide telefoons
+  (iPhone-randswipe mag niet breken), handboekrij in 01 "De vijf tabbladen".
+- **Stijn beslist:** doorlopen aan de randen ja/nee (voorstel: nee).
 
 ## 7. Gabi's WhatsApp-boodschappenlijstje plakken met voorstellen (Stijn, 30 okt 2026)
 
@@ -184,6 +262,23 @@ kiezen. Woorden als "check" / "controleer" worden een notitie bij de regel, geen
 **Open vragen.** Alleen bij ≥ 3 regels of altijd? Ook voor de spraakinvoer? Leert hij van Gabi's keuzes (alias
 toevoegen aan de woordenlijst, zoals 6B "Zet in woordenboek")?
 
+**Uitwerking (Fable, 8 nov 2026) — blok V6, M (plus de data-ronde van idee 8 vooraf, S).**
+- **Domein:** `suggestShopLines(text, dict, lang)` in src/domain/shopinput.ts: per regel `{ raw, qty, unit, match: { id,
+  score } | null, alternatives: id[] (max 3, via de fuzzy index van search.ts over NL- én EN-namen en aliassen), note }`;
+  "check/controleer/kijken of" wordt `note` en verdwijnt uit de productnaam; een `score` ≥ 0,85 heet zeker (groen ✓),
+  0,5–0,85 twijfel (geel, alternatieven open), < 0,5 onbekend (grijs, "als tekst houden" standaard).
+- **UI:** `ShopPasteSheet.tsx` [nieuw] opent bij een plak of spraakinvoer met ≥ 3 herkende regels (bij 1–2 regels blijft het
+  directe gedrag, geen extra stap): per regel het voorstel als chip, bij twijfel twee of drie alternatieve chips, bij onbekend
+  "Als tekst" en "Zoek…" (IngredientPicker). Onderaan één knop "Zet 7 regels op de lijst". Bestaande `addListLinesFromShare`-
+  logica voor het plaatsen.
+- **Leren:** een gekozen alternatief wordt een alias in het eigen woordenboek (`userIngredients`, zoals 6B "Zet in
+  woordenboek"), zodat "coco acqua" de volgende keer meteen kokoswater is; zichtbaar en verwijderbaar onder Woordenboek.
+  Besluit Fable: altijd leren, geen vinkje per regel.
+- **Bestanden:** src/domain/shopinput.ts, src/domain/search.ts (alleen als de index een export mist), src/components/
+  ShopPasteSheet.tsx [nieuw], src/screens/ShoppingScreen.tsx, src/i18n (shop.paste.*), tests/shopinput.test.ts (Gabi's
+  voorbeeldlijst letterlijk als testgeval), handboekrij in 04.
+- **Stijn beslist:** leren ja/nee (voorstel: ja).
+
 ## 8. Ingrediënten-upgrade: de woordenlijst uitbreiden (Stijn, 30 okt 2026)
 
 **Wens.** Blok 13F (Stijns 22 recepten inbouwen) is vervallen (30 okt: "skipt weer een hoop en is niet nodig"), maar
@@ -206,6 +301,13 @@ uitbreidingsronde samen met de avatar-rondes.
 
 **Open vragen.** Alleen deze 8, of meteen een bredere ronde (Aziatische en Oost-Europese producten voor Gabi's
 Litouwse keuken)? Wie bepaalt de EN-namen?
+
+**Uitwerking (Fable, 8 nov 2026) — data-ronde vóór V6, S.** Steekproef 8 nov: kefir, boekweit, dille, zure room, haring,
+augurk, kwark, roggebrood, maanzaad, vissaus, kokosmelk, limoenblad, rijstazijn, sesamolie, tahin en harissa staan er al in;
+de lijst is breder dan gedacht. Aanpak: (1) de 8 ids uit 13F letterlijk; (2) Haiku maakt een kandidatenlijst van ±60 Litouwse,
+Baltische en Aziatische basisproducten en vergelijkt die met de 1603 (ook aliassen), Fable keurt wat overblijft; (3) EN-namen
+uit de Britse keuken (Gabi leest Engels); (4) `npm run validate:data` en `tools/gen-golden.ts`. Bijvangst: elke onbekende term
+uit Gabi's echte lijstjes (idee 7) komt als alias of product mee.
 
 ## 9. Dopamine-kick bij Gekookt!: het woord groot in de confetti en een XP-balk die oploopt (Stijn, 30 okt 2026)
 
@@ -232,6 +334,24 @@ een nieuwe kind 'setting'; past bij het 24-okt-besluit "rijk, niet spaarzaam"). 
 NIET bij een foto of beoordeling (te klein om te laten zien), WEL bij koken en bij badges — badges geven meer XP naarmate je
 verder komt, dus daar is het verschil pas significant. Geen open vragen meer.
 
+**Uitwerking (Fable, 8 nov 2026) — blok V4, M; niets hiervan is op 8 nov gebouwd (Stijn vroeg het: nee; de XP-pop is nog
+1,4 s klein rechtsonder en Gekookt! staat alleen in de toast).**
+- **Woord:** `src/components/CelebrationWord.tsx` [nieuw], gemount in de shell naast Confetti: bij `celebrate('cooked')` het
+  woord **Gekookt!** (EN **Cooked!**) 48 px, goud (`--gold`), in de kookstand-letter als die aanstaat, 1,4 s zichtbaar met
+  een korte schaal-animatie (0,8 → 1,0 in 180 ms, dan vervagen); bij `overcooked` **Overcooked!** met de bestaande
+  schud-animatie van de shell. `prefers-reduced-motion`: woord 1,4 s statisch, geen schaal.
+- **XP-strook:** `src/components/XpRise.tsx` [nieuw]: onderaan (boven de navigatiebalk) schuift een strook in met dezelfde
+  XpBar als op Mijn profiel, start op het oude totaal, loopt in 1,2 s naar het nieuwe, "+42 XP" ernaast; level-up: balk vol →
+  springt naar het nieuwe level (titel verandert) → dan pas het bestaande level-up-venster. `settleXp` (src/xp.ts) geeft
+  daarvoor `{ before, after }` terug (totaal, level, nextAt); de XpPop blijft voor foto en beoordeling, verdwijnt voor koken
+  en badges (de strook toont dan de som).
+- **Snelheid:** tik ergens tijdens de viering → alles ×2 (één keer per viering). Ontgrendeling **Snelle vieringen** op level 30
+  (data/unlocks.json, nieuwe kind `setting`, sleutel `celebrate.fast`): een tegel in Vrijgespeeld en een schakelaar op Jouw
+  stijl die standaard ×2 zet. Alleen met badges aan; met confetti uit blijft alleen de XP-strook (die is informatie).
+- **Bestanden:** src/celebrate.ts, src/components/CelebrationWord.tsx [nieuw], XpRise.tsx [nieuw], XpPop.tsx, src/xp.ts,
+  src/screens/StyleScreen.tsx (schakelaar), data/unlocks.json, tools/validate-data.ts (kind setting), src/styles/xp.css,
+  tests/xp.test.ts (before/after), handboekrijen in 07, DEVICE-TEST-rij op beide telefoons (60 fps, geluid op hetzelfde moment).
+- **Stijn beslist:** niets meer; dit is klaar voor een spec.
 
 ## 10. Boodschappenlijstjes terugkijken in de kalender (Stijn, 8 nov 2026)
 
@@ -245,13 +365,125 @@ wat kookte per dag, uit het kooklogboek.
 
 **Prioriteit.** Later; samen met idee 2 (archief van afgevinkte boodschappen, 25 okt): dezelfde gegevens, twee ingangen.
 
-**Aanpak in grote lijnen.** (1) Een momentopname van de lijst bewaren op een natuurlijk moment: bij **Deel lijst**, bij **Leeg
-de lijst** en bij **Maak lijst** als de vorige lijst vinkjes had (datum, regels met hoeveelheid en ✓/niet, aantal gerechten);
-toestel-lokaal (nieuwe tabel `listHistory` → Dexie v8, of een settings-sleutel), mee in de back-up, automatisch opschonen na
-bijvoorbeeld 26 weken. (2) In de kalender een 🛒 onder de dag; tik op de dag → onder de kooklijst de lijst van die dag
-(afgevinkt bovenaan, de rest grijs), met **Zet terug op mijn lijst** per regel. (3) Dezelfde geschiedenis als rij **Eerder**
-onder Boodschappen (idee 2), met zoeken. (4) Een eigen handboekrij en DEVICE-TEST-rij; geen XP of badge (een lijst bewaren is
-geen prestatie).
+**Uitwerking (Fable, 8 nov 2026) — blok V5 (met idee 2), M.**
+- **Momentopname.** Een rij in een nieuwe Dexie-tabel `listHistory` (`++id, at`; Dexie v8, geen migratie van bestaande data)
+  bij drie momenten: **Deel lijst**, **Leeg de lijst**, en **Maak lijst** als de vorige lijst minstens één vinkje had. Inhoud:
+  `at`, `reason` (shared/cleared/regenerated), het aantal gerechten in het plan, en de regels zoals ze waren: `{ key, ing,
+  label (nl/en), qty, unit, checked, by? }`. Nooit twee opnames binnen vijf minuten met dezelfde inhoud (hash) — dus geen
+  dubbele rij als je deelt en meteen leegt. Mee in de back-up (export/import zoals de andere tabellen). Opschonen bij het
+  openen van het scherm: ouder dan 26 weken weg (voorstel; Stijn beslist).
+- **Kalender.** Onder een dag met een opname een klein 🛒 naast de kookstippen (één icoon, ook bij twee opnames). Tik op de
+  dag → onder de kooklijst een blok "Boodschappen van {datum}": afgevinkte regels bovenaan met ✓, de rest grijs; per regel een
+  knop **Zet terug op mijn lijst** (voegt de regel toe aan de huidige lijst via de bestaande extra-regel-logica; bestaat de
+  regel al, dan alleen een melding).
+- **Rij Eerder.** Onder Boodschappen, onder de vaste lijst, een uitklaprij **Eerder** (idee 2): de laatste tien opnames
+  (datum, aantal regels, reden) met zoeken over alle bewaarde regels ("wanneer kocht ik voor het laatst kaneel?") en dezelfde
+  **Zet terug**-knop. Wat je vaak terugzet, krijgt het bestaande voorstel "Elke week?" (6C).
+- **Niet:** geen XP, geen badge (een lijst bewaren is geen prestatie); niets in de deelcodes (`#l=` blijft wat het is).
+- **Bestanden:** src/db/db.ts (v8), src/db/model.ts, src/db/repo.ts (snapshot schrijven in `markListShared`,
+  `clearShoppingList`, `generateList`; `listHistory`-lezen; back-up), src/domain/progress.ts (kalenderdag krijgt `shopped`),
+  src/screens/CalendarScreen.tsx, src/screens/ShoppingScreen.tsx (rij Eerder), src/i18n, tests/listhistory.test.ts [nieuw],
+  handboekrijen in 04 en 07 (kalender), DEVICE-TEST-rij.
+- **Stijn beslist:** de drie momenten (voorstel hierboven) en de bewaartermijn (voorstel 26 weken). Per huishouden (de lijst is
+  al huishoudbreed); `by` per regel komt mee uit het vinkje als dat bekend is.
 
-**Open vragen.** Welk moment telt als "een lijstje": delen, legen, of elke dag waarop iets werd afgevinkt? Hoe lang bewaren?
-Per huishouden (de lijst is al huishoudbreed) of toch met de naam van wie afvinkte (`shop.bought.by` kent die al)?
+## 11. Uitdagingen: beloningen die meegroeien met je level (Stijn, 8 nov 2026)
+
+**Wens.** "Misschien is het logisch dat als je hoger level bent, de beloningen voor challenges groter worden? Niet helemaal
+meegroeien met de levels maar wel enigszins, zoals de advanced badges ook meer opleveren. Anders zijn challenges al snel weinig
+waard. Maar dat ze voor 20 % meegroeien. Logisch of niet?"
+
+**Wat de cijfers zeggen (regelversie 3, nagerekend 8 nov).** De curve is 11·(level−1)^2,5 plus een vaste 1176 uit de
+beginversnelling. Een stap van level L naar L+1 kost:
+
+| Level | XP totaal | Stap naar het volgende level | Weekuitdaging van 250 XP = … van die stap |
+|---|---|---|---|
+| 10 | 3.768 | 887 | 28 % |
+| 20 | 18.485 | 2.368 | 10,6 % |
+| 30 | 50.994 | 4.407 | 5,7 % |
+| 50 | 186.053 | 9.577 | 2,6 % |
+| 75 | 519.346 | 17.683 | 1,4 % |
+| 99 | 1.046.998 | 26.884 | 0,9 % |
+
+Koken schaalt óók niet met je level (een kookbeurt is 50–100 XP, keer streak tot ×2), dus een level duurt bewust steeds
+langer: level 20 na ±4 maanden dagelijks koken, 1 jaar → 29, level 50 na ±4,4 jaar, level 100 na ±26 jaar (xp-levels.md
+§6). Ladderbadges geven wél meer per trede (50 × tredenummer), dus Stijns vergelijking klopt. Tegenover de levelbalk is een
+uitdaging op level 50 nog een kwart waard van wat ze op level 20 was, op level 99 een tiende. Tegenover koken blijft ze
+gelijk: 250 XP is altijd ongeveer twee kookdagen.
+
+**Uitwerking (Fable, 8 nov 2026) — blok V3, S. Antwoord: ja, logisch, mits gematigd.**
+- **Regel:** beloning × (1 + 0,02 × (level − 20)), met het level van het lid **op het moment van starten**; afgerond op
+  tientallen. Level 20 ×1,0 · 30 ×1,2 · 50 ×1,6 · 75 ×2,1 · 100 ×2,6. Stijns "20 % van de curve" (de stapgrootte voor 20 %
+  volgen) geeft ×1,6 op 50 en ×3,1 op 100: tot level 60 vrijwel hetzelfde, daarboven steiler. Fable kiest de lineaire regel
+  omdat hij in één zin past in de handleiding ("elke level boven de 20 maakt een uitdaging 2 % meer waard").
+- **Gevolg voor de tijd:** wie dagelijks kookt én elke week een uitdaging haalt, haalt level 100 nu na ±19 jaar in plaats van
+  ±26 (de uitdagingen tellen al mee); met de regel wordt dat ±16 jaar. "Bijna onhaalbaar" blijft waar; het verschil zit in
+  de jaren 10–20 van een kookleven.
+- **Techniek:** de factor wordt berekend bij **Start** (`startChallenge`: level uit `xpStateFor` op dat moment) en bewaard in
+  `ActiveChallenge.xp`; bij het halen schrijft `settleChallenges` dat bedrag in `DoneChallenge.xp`. `deriveXp` leest zoals nu
+  `DoneChallenge.xp`, dus niets verschuift met terugwerkende kracht en `XP_RULES_VERSION` blijft 3. De aanbodkaarten en de
+  lopende kaart tonen het geschaalde bedrag ("+400 XP"); de uitleg in data/challenges.json blijft het basisbedrag. Badge
+  Uitdager ongewijzigd.
+- **Bestanden:** src/domain/challenges.ts (`rewardFor(challenge, level)` + test), src/challenges.ts, src/components/
+  ChallengeCard.tsx en ChallengeOfferSheet.tsx (bedrag), tests/challenges.test.ts, handboekrij in 07, docs/specs/challenges.md
+  (§2 aanvulling), ACHTER-DE-SCHERMEN.md (rekenregel).
+- **Stijn beslist:** ja/nee, en lineair (+2 %/level) of "20 % van de curve".
+
+## 12. Avatar en level laten meereizen: bij voortgang én bij gedeelde recepten (Stijn, 8 nov 2026)
+
+**Wens.** "Bij 'share progress' worden de avatar en level niet meegedeeld, kan net zo goed erbij. Misschien ook wel bij het delen
+van recepten dat ie dan ook al de avatar meeneemt als dat mogelijk is."
+
+**Wat er al is (feitencheck 8 nov).** De voortgangskaart (`#x=`, src/domain/share.ts `ProgressCard`) reist al mét level, XP,
+streak, badges, kookdagen van 90 dagen én de avatar (`avatar?: AvatarSpec`, sinds 6D-3); het kaartje (`#f=`) ook. Het
+WhatsApp-zinnetje noemt "Level 12 · Soepkoker". Wat ontbreekt zit aan de **ontvangkant**: (a) een binnengekomen voortgang
+ververst de avatar van het huishoudlid niet (alleen het kaartje zet die), (b) de kalenderlegenda toont stippen en namen, geen
+avatars, (c) een gedeeld recept (`#r=`, `#b=`, `#p=`) draagt alleen de naam van de afzender (`by`), en de inbox toont die als
+tekst.
+
+**Uitwerking (Fable, 8 nov 2026) — in blok V2, S–M.**
+- **Voortgang → avatar overnemen:** `applyProgressCard` zet `member.avatar` (en kleur en naam) bij als de kaart ze meebrengt;
+  een vriend krijgt zijn avatar in de snapshot (al zo). De rij **Werk {naam} bij** in de inbox zegt erbij "ook de avatar".
+- **Kalenderlegenda:** per persoon een mini-avatar (20 px, met de profielkleur als rand) in plaats van een stip; de stippen
+  onder de dagen blijven stippen (ruimte). Huishouden en Vrienden tonen al avatars.
+- **Recepten:** NIET de avatar in de deelcode stoppen (een avatar is ±150 tekens; dat kost QR-ruimte en invariant 4 wil geen
+  halve codes). In plaats daarvan koppelt de inbox de afzender (`by`) aan een huishoudlid of vriend met `memberByName`
+  (src/domain/household.ts, al in gebruik voor weekplannen) en toont diens avatar en kleur op de kaart "Recept van Gabi"; geen
+  match → de beginletter in een grijs rondje zoals nu. Erbij: een optioneel veld `byId` (profiel-id van de afzender) in elke
+  envelop, zodat een naamsverandering de koppeling niet breekt — onbekende sleutels blijven bewaard (invariant 4), oude apps
+  negeren het.
+- **Bestanden:** src/db/repo.ts (`applyProgressCard`), src/screens/HouseholdScreen.tsx (tekst), src/screens/CalendarScreen.tsx
+  + xp.css (legenda), src/screens/InboxScreen.tsx (afzender-avatar), src/domain/share.ts (`byId` schrijven en lezen, bevroren
+  token erbij in tests/token.test.ts), handboekrijen in 05 en 07.
+- **Stijn beslist:** niets; dit zijn uitvoeringskeuzes.
+
+## 13. Een bestand uit WhatsApp openen is te moeilijk: structureel zonder bestanden (Stijn, 8 nov 2026)
+
+**Wens.** "Ik kreeg weer een json van Gabi over WhatsApp, heel vervelend want ik kan dat gedownloade json-bestand nooit vinden,
+en ik ben relatief handig, dus daar moet een structurele oplossing voor komen."
+
+**Wat er gebeurt (feitencheck 8 nov).** "Deel je nieuwe recepten" (en Deel bij meerdere recepten) maakt één WhatsApp-bericht met
+een link per recept zolang de tekst onder 3.500 tekens blijft (`DEFAULT_MESSAGE_LIMIT`, src/domain/share.ts `planMessages`);
+anders wordt het één bundelbestand `recepten-<naam>-<datum>.json`. Drie of vier recepten tegelijk zijn al te veel voor 3.500
+tekens, dus Gabi's deltas worden bijna altijd een bestand. Op Android download WhatsApp zo'n document naar een map die de
+bestandskiezer van "Kies bestand" niet vooraan zet; vandaar het zoeken. **Wat al werkt (DEVICE-TEST 9 en 17):** in WhatsApp het
+document ingedrukt houden → **Delen** → **Rutgers' Recepten**; de app ontvangt het bestand via het deelmenu (manifest
+`share_target` accepteert .json, sw.ts leest het) en opent In & uit met het voorproefje. Dat staat alleen nergens waar Stijn
+het ziet. Voor de boodschappenlijst gebruikt 13c al een grens van 20.000 tekens per link zonder problemen.
+
+**Uitwerking (Fable, 8 nov 2026) — in blok V2, S–M.**
+- **Links eerst, bestand als laatste redmiddel.** `planMessages` krijgt een grens van 20.000 tekens (zoals `LIST_LINK_MESSAGE_LIMIT`)
+  en splitst daarboven in **meerdere berichten** ("🍲 Recepten van Gabi, deel 1 van 2", elk met eigen kop en open-regel, elk
+  onder de grens, elk recept in precies één deel). "Deel je nieuwe recepten" en Deel bij een selectie verzenden de delen na
+  elkaar via het deelmenu (één `navigator.share({text})` per deel, elk vanuit een tik: knop **Deel deel 2 van 2**). Een
+  bestand alleen als één recept op zichzelf boven de grens komt (komt in de corpus niet voor) of als de gebruiker **Exporteer**
+  kiest. Patches (`#p=`) en weekplannen gaan mee in de delen.
+- **Hint waar het misgaat.** Onder **Kies bestand** in In & uit, alleen op Android: "Kreeg je een bestand in WhatsApp? Houd het
+  daar ingedrukt → Delen → Rutgers' Recepten." Op de iPhone blijft de bestaande uitleg (Bestanden → Kies bestand).
+- **Handboek:** rij "Een bestand uit WhatsApp openen" in 05 (Android via Delen, iPhone via Bestanden) en de rijen over "te groot
+  voor één bericht" aanpassen (meerdere berichten in plaats van een bestand).
+- **Bestanden:** src/domain/share.ts (`planMessages` → `MessagePlan` met `parts: string[]`), src/screens/DeltaShareScreen.tsx,
+  src/screens/RecipesScreen.tsx (selectie delen), src/screens/InboxScreen.tsx (hint), src/i18n, tests/share.test.ts
+  (splitsing: elk deel ≤ grens, elk recept precies één keer), DEVICE-TEST-rij met Gabi's echte delta.
+- **Stijn beslist:** de grens van 20.000 tekens per bericht (zoals de lijst) — of lager als een lang WhatsApp-bericht op de
+  iPhone lastig kopieert; dat is op haar telefoon te testen met de lijst-link van 13c.

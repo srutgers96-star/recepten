@@ -4,6 +4,35 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## 8 nov (Opus): V1 — verbeterronde 1: handleiding ingeklapt en dubbel uitklapbaar, Meer opgeruimd, gekozen chips vooraan
+Gebouwd volgens docs/specs/verbeterronde-1.md (lichte workflow wf_3ec5d3a4-1a9; vier bouwers + integrator; niet gecommit).
+Nieuwe gedeelde kop `src/components/FoldHead.tsx` (CSS `.fold-head` in base.css; de `.more-group-head`-regels in settings.css
+zijn weg). Handleiding: tien dichte bijschriften, onderwerp open → rijen dicht → rij open → uitleg; intro-alinea's alleen nog
+in de data/Markdown; open onderwerpen in een module-signal `openTopics` (niet bewaard); zoeken opent de getoonde onderwerpen;
+een onderwerpchip opent en scrollt. Meer → Jij & je huishouden: Mijn profiel, daaronder (row-member, 28 px avatar) de
+huisgenoten en vrienden, Huishouden (nieuwe hint), "Profielen op deze telefoon" alleen bij meer dan één profiel; geen rij
+Badges en geen rij Profielen beheren meer (pagina en route blijven); de knop op Huishouden ook alleen bij meer dan één
+profiel. Chips (PickChips/CuisineChips/DietChips): gekozen vooraan met een × erachter; `loadPickFilter` vergeet een keuze
+drie uur na de laatste wijziging (`PICK_FILTER_TTL_MS`, veld `at`; zonder `at` = verlopen) — raakt `recepten.filters`
+(Recepten) en `recepten.surpriseFilters` (dobbelsteen op Home). Handboek: 215 rijen (08: profiel-toevoegen + profiel-wisselen
+→ meer-profielen); bouwer D paste ook 07 niveaus/geheim/samen/uitzetten, 05 voortgang-delen en 02 dieetfilter aan (anders
+klopten ze niet) en zette de chiptekst in `recepten.labels-categorieen` i.p.v. `categorie-snel` (die rij gaat over de
+categorie van één recept). Integrator: `more.manageProfiles` verwijderd (de spec wilde hem houden "voor de knop op
+Huishouden", maar die knop gebruikt `household.manageProfiles`; de test "no unused i18n keys" verbiedt dode sleutels).
+DEVICE-TEST: nieuwe rij 109 (NL+EN), rij 55 stap 1 bijgewerkt, elk pad Meer → Badges nu via Mijn profiel (44, 45, 67, 94, 95,
+104), en de stappen met Meer → Profielen beheren (92, 99, 108) via Mijn profiel / Huishouden.
+check/test (1780)/build/build:next/validate:data groen; acceptatie in de dev-app (375 px, NL en EN) gelopen. Open voor Stijn:
+`.hb-section` houdt 24 px marge tussen de dichte bijschriften (Meer: 14 px) — de spec zegt er niets over.
+
+## 8 nov (Fable): verbeterronde V1 in aanbouw en het plan voor de ideeënronde
+Stijn testte en vroeg: handleiding standaard ingeklapt en dubbel uitklapbaar zonder intro's; Meer zonder Badges-rij, met de
+huisgenoten (en vrienden) direct onder Mijn profiel en zonder de Profielen-ingangen (de machinerie blijft; een telefoon met
+meer dan één profiel houdt één rij); gekozen chips op Recepten vooraan met een kruisje en na drie uur vergeten. Spec:
+docs/specs/verbeterronde-1.md; bouw via de lichte workflow (wf_3ec5d3a4-1a9). Daarnaast is docs/IDEAS.md uitgewerkt tot een
+plan (V2–V9, zie README §1b) met vier nieuwe ideeën van vandaag: 10 (boodschappen terugkijken), 11 (uitdagingen schalen met
+level, +2 %/level, wacht op Stijn), 12 (avatar meereizen: ontvangkant), 13 (geen bestanden meer via WhatsApp: links tot 20 KB
+in meerdere berichten + Android-hint). Antwoord op Stijns vraag: de dopamine-kick (idee 9) is NIET gebouwd op 8 nov.
+
 ## 8 nov (Fable): de kopjes op Meer als bijschrift
 Stijn: "de kopjes en de rijen op Meer lijken op elkaar, onduidelijk en druk." De vier groepskoppen (Jij & je huishouden,
 Instellingen, Recepten & delen, Hulp & over) zijn nu een bijschrift in de stijl van de gangpadkopjes op de boodschappenlijst,
