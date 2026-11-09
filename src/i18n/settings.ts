@@ -152,22 +152,35 @@ export const settings: Dict = {
   'more.profilesHereHint': { nl: '{n} profielen · tik om te wisselen', en: '{n} profiles · tap to switch' },
 
   // --- Phase 5: Huishouden (docs/phase-5-spec.md A.8) ---
-  'household.title': { nl: 'Huishouden', en: 'Household' },
+  'household.title': { nl: 'Huishouden & vrienden', en: 'Household & friends' },
   'household.intro': {
-    nl: 'Eén huishouden per telefoon. De profielen op deze telefoon zijn automatisch lid; wie op een andere telefoon kookt stuurt je een kaartje (of je typt de naam zelf).',
-    en: 'One household per phone. The profiles on this phone are members automatically; someone who cooks on another phone sends you a card (or you type the name yourself).',
+    nl: 'Eén huishouden per telefoon: de mensen met wie je kookt en boodschappen doet. De profielen op deze telefoon zijn automatisch huisgenoot; wie op een andere telefoon kookt stuurt je een kaartje, of je typt de naam zelf. Een vriend staat los van je huishouden: je ziet alleen zijn level en kookdagen.',
+    en: 'One household per phone: the people you cook and shop with. The profiles on this phone are housemates automatically; someone who cooks on another phone sends you a card, or you type the name yourself. A friend is separate from your household: you only see their level and cooking days.',
   },
   'household.name': { nl: 'Naam van het huishouden', en: 'Household name' },
   // The default household name is never stored (the setting keeps ''); it is rendered in the active language.
   'household.defaultName': { nl: 'Thuis', en: 'Home' },
-  'household.members': { nl: 'Leden', en: 'Members' },
-  'household.memberCount': { nl: '{n} leden', en: '{n} members' },
-  'household.memberOne': { nl: '1 lid', en: '1 member' },
+  'household.members': { nl: 'Huisgenoten', en: 'Housemates' },
+  'household.memberCount': { nl: '{n} huisgenoten', en: '{n} housemates' },
+  'household.memberOne': { nl: '1 huisgenoot', en: '1 housemate' },
   'household.local': { nl: 'op deze telefoon', en: 'on this phone' },
   'household.byHand': { nl: 'met de hand toegevoegd', en: 'added by hand' },
   'household.fromCard': { nl: 'via kaartje', en: 'via card' },
   'household.manageProfiles': { nl: 'Profielen op deze telefoon beheren', en: 'Manage the profiles on this phone' },
-  'household.add': { nl: 'Voeg lid toe', en: 'Add member' },
+  // V1c-1: the heading of the type-a-name card and the button at the bottom; the form's save label is addSubmit.
+  'household.add': { nl: 'Typ een huisgenoot', en: 'Type a housemate' },
+  'household.addHint': { nl: 'Voor iemand zonder de app, zodat die in de kookkalender kan.', en: 'For someone without the app, so they can be in the cook calendar.' },
+  'household.addSubmit': { nl: 'Voeg toe', en: 'Add' },
+  // V1c-1: the Vrienden card is always shown; "Voeg vriend toe" brings the paste box into view.
+  'household.friendsEmpty': {
+    nl: 'Nog geen vrienden. Een vriend voeg je toe met zijn gedeelde voortgang: hij tikt op Mijn profiel op Sync mijn voortgang en stuurt je het bericht.',
+    en: 'No friends yet. You add a friend with their shared progress: they tap Sync my progress on My profile and send you the message.',
+  },
+  'household.addFriend': { nl: 'Voeg vriend toe', en: 'Add friend' },
+  'household.friendHint': {
+    nl: 'Plak hier het voortgangsbericht van je vriend en kies dan Bewaar als vriend.',
+    en: "Paste your friend's progress message here and then choose Save as a friend.",
+  },
   'household.memberName': { nl: 'Naam', en: 'Name' },
   'household.memberNamePlaceholder': { nl: 'bv. Oma', en: 'e.g. Grandma' },
   'household.memberColor': { nl: 'Kleur', en: 'Colour' },
@@ -194,15 +207,15 @@ export const settings: Dict = {
   'household.cardBuildFailed': { nl: 'Kaartje kon niet worden gemaakt.', en: 'Could not create the card.' },
   // Honest (CLAUDE.md invariants 5 + 13): on an iPhone a link never opens the installed app.
   'household.cardIosHint': {
-    nl: 'Android: de ander tikt op de link. iPhone: de link opent de app niet — de ander kopieert het bericht en plakt het in de app (Huishouden → "Voeg lid toe via link of plak", of In & uit).',
-    en: 'Android: the other person taps the link. iPhone: the link does not open the app — they copy the message and paste it into the app (Household → "Add a member via link or paste", or In & out).',
+    nl: 'Android: de ander tikt op de link. iPhone: de link opent de app niet — de ander kopieert het bericht en plakt het in de app (Huishouden & vrienden → "Plak een kaartje of voortgang", of In & uit).',
+    en: 'Android: the other person taps the link. iPhone: the link does not open the app — they copy the message and paste it into the app (Household & friends → "Paste a card or progress", or In & out).',
   },
   'household.cardQrAlt': { nl: 'QR-code met mijn kaartje', en: 'QR code with my card' },
-  'household.addViaLink': { nl: 'Voeg lid toe via link of plak', en: 'Add a member via link or paste' },
+  'household.addViaLink': { nl: 'Plak een kaartje of voortgang', en: 'Paste a card or progress' },
   // 13A: the box is the universal one; a recipe link or website text pasted here is named and sent on.
   'household.addViaLinkHint': {
-    nl: 'Plak hier het kaartje-bericht (of alleen de link) dat de ander je stuurde. Iets anders geplakt? De app zegt wat het is en waar het heen kan.',
-    en: 'Paste the card message (or just the link) the other person sent you here. Pasted something else? The app says what it is and where it can go.',
+    nl: 'Plak hier het bericht dat de ander je stuurde. Een kaartje maakt iemand huisgenoot. Een gedeelde voortgang kun je als huisgenoot óf als vriend bewaren: een vriend staat niet in je lijstjes, je ziet alleen zijn level en kookdagen. Iets anders geplakt? De app zegt wat het is en waar het heen kan.',
+    en: 'Paste the message the other person sent you here. A card makes someone a housemate. Shared progress you can keep as a housemate or as a friend: a friend is not in your lists, you only see their level and cooking days. Pasted something else? The app says what it is and where it can go.',
   },
   'household.noCard': { nl: 'Geen kaartje gevonden in deze tekst.', en: 'No card found in this text.' },
   'household.cardFrom': { nl: 'Kaartje van {name}', en: 'Card from {name}' },

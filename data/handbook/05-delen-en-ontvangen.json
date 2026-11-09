@@ -744,7 +744,7 @@
     },
     {
       "id": "delen-en-ontvangen.lid-toevoegen",
-      "title": { "nl": "Iemand toevoegen met een kaartje", "en": "Add someone with a card" },
+      "title": { "nl": "Een huisgenoot toevoegen met een kaartje", "en": "Add a housemate with a card" },
       "what": {
         "nl": "Kreeg je een kaartje van iemand op een andere telefoon? Dan voeg je die persoon toe aan je huishouden.",
         "en": "Did you get a card from someone on another phone? Then you add that person to your household."
@@ -754,7 +754,7 @@
           "Kopieer het bericht met het kaartje.",
           "Tik onderaan op **Meer**.",
           "Tik onder je profiel op **Huishouden & vrienden**.",
-          "Scrol naar **Voeg lid toe via link of plak**.",
+          "Scrol naar **Plak een kaartje of voortgang**.",
           "Tik op **Plak van klembord**.",
           "Tik op de knop “Voeg … toe aan je huishouden”, met de naam erin."
         ],
@@ -762,14 +762,14 @@
           "Copy the message with the card.",
           "Tap **More** at the bottom.",
           "Under your profile, tap **Household & friends**.",
-          "Scroll to **Add a member via link or paste**.",
+          "Scroll to **Paste a card or progress**.",
           "Tap **Paste from clipboard**.",
           "Tap the button “Add … to your household”, with the name in it."
         ]
       },
       "see": {
-        "nl": "Je ziet “Kaartje van” met de naam en een rondje in de kleur van die persoon. Daarna staat de persoon bij **Leden**, met “via kaartje”.",
-        "en": "You see “Card from” with the name and a circle in that person's colour. Afterwards the person is under **Members**, with “via card”."
+        "nl": "Je ziet “Kaartje van” met de naam en een rondje in de kleur van die persoon. Daarna staat de persoon bij **Huisgenoten**, met “via kaartje”.",
+        "en": "You see “Card from” with the name and a circle in that person's colour. Afterwards the person is under **Housemates**, with “via card”."
       },
       "know": {
         "nl": "Is iemand al lid, dan heet de knop “Werk … bij”; dan worden naam, kleur, taal en avatar bijgewerkt. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.",
@@ -783,8 +783,48 @@
       }
     },
     {
+      "id": "delen-en-ontvangen.vriend-toevoegen",
+      "title": { "nl": "Een vriend toevoegen", "en": "Add a friend" },
+      "what": {
+        "nl": "Een vriend is iemand met wie je niet samen kookt, maar van wie je wel het level en de kookdagen wilt zien. Een vriend komt niet in je boodschappenlijst of je porties.",
+        "en": "A friend is someone you do not cook with, but whose level and cooking days you want to see. A friend does not appear in your shopping list or your servings."
+      },
+      "where": {
+        "nl": [
+          "Vraag je vriend om op **Mijn profiel** op **Sync mijn voortgang** te tikken en je het bericht te sturen.",
+          "Kopieer dat bericht.",
+          "Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.",
+          "Tik onder **Vrienden** op **Voeg vriend toe**.",
+          "Tik op **Plak van klembord**.",
+          "Tik onder de kaart op **Bewaar als vriend**."
+        ],
+        "en": [
+          "Ask your friend to tap **Sync my progress** on **My profile** and send you the message.",
+          "Copy that message.",
+          "Tap **More** at the bottom, then **Household & friends**.",
+          "Under **Friends**, tap **Add friend**.",
+          "Tap **Paste from clipboard**.",
+          "Under the card, tap **Save as a friend**."
+        ]
+      },
+      "see": {
+        "nl": "De app springt naar het plakvak met een blauwe regel die zegt wat je plakt. Na **Bewaar als vriend** staat de persoon onder **Vrienden**, met level en kookdagen.",
+        "en": "The app jumps to the paste box with a blue line saying what to paste. After **Save as a friend** the person is under **Friends**, with level and cooking days."
+      },
+      "know": {
+        "nl": "Een gewoon kaartje (**Deel mijn kaartje**) maakt iemand altijd huisgenoot, geen vriend. Wil je een vriend later toch als huisgenoot? Plak zijn voortgang nog eens en kies dan de andere knop.",
+        "en": "A plain card (**Share my card**) always makes someone a housemate, not a friend. Want a friend as a housemate after all? Paste their progress once more and choose the other button."
+      },
+      "route": "/more/household",
+      "platform": "all",
+      "keywords": {
+        "nl": ["vriend", "vriend toevoegen", "voortgang", "level van een ander", "huisgenoot"],
+        "en": ["friend", "add friend", "progress", "someone's level", "housemate"]
+      }
+    },
+    {
       "id": "delen-en-ontvangen.huishouden",
-      "title": { "nl": "Je huishouden: leden en kleuren", "en": "Your household: members and colours" },
+      "title": { "nl": "Je huishouden: huisgenoten en kleuren", "en": "Your household: housemates and colours" },
       "what": {
         "nl": "In je huishouden staan de mensen met wie je kookt, ook als ze een eigen telefoon hebben. Iedereen heeft een eigen kleur.",
         "en": "Your household holds the people you cook with, also when they have their own phone. Everyone has their own colour."
@@ -793,23 +833,23 @@
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik onder je profiel op **Huishouden & vrienden**.",
-          "Tik onderaan op **Voeg lid toe**.",
+          "Tik onderaan op **Typ een huisgenoot**.",
           "Typ een naam.",
           "Tik op een kleur.",
-          "Tik op **Voeg lid toe** om te bewaren."
+          "Tik op **Voeg toe** om te bewaren."
         ],
         "en": [
           "Tap **More** at the bottom.",
           "Under your profile, tap **Household & friends**.",
-          "Tap **Add member** at the bottom.",
+          "Tap **Type a housemate** at the bottom.",
           "Type a name.",
           "Tap a colour.",
-          "Tap **Add member** to save."
+          "Tap **Add** to save."
         ]
       },
       "see": {
-        "nl": "Elk lid staat bij **Leden** met zijn avatar, of een rondje met een letter in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.",
-        "en": "Each member is under **Members** with their avatar, or a circle with a letter in their colour. You see whether someone is on this phone, came through a card or was added by hand."
+        "nl": "Elke huisgenoot staat bij **Huisgenoten** met zijn avatar, of een rondje met een letter in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.",
+        "en": "Each housemate is under **Housemates** with their avatar, or a circle with a letter in their colour. You see whether someone is on this phone, came through a card or was added by hand."
       },
       "know": {
         "nl": "Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. De avatar van een lid op een andere telefoon reist mee met zijn kaartje en zijn voortgang, en wordt dan bijgewerkt. Een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.",
@@ -886,8 +926,8 @@
         "en": "You see a progress card with the name, the level, the badges and the cooking days of the last 30 days. If it is a member, the button says “Update …”. Under it you see what gets updated: level, streak, badges, cook days and avatar."
       },
       "know": {
-        "nl": "Daarna staat het level onder de naam bij **Huishouden**, met de datum van bijwerken. Een vriend staat onder **Vrienden** en is geen lid. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.",
-        "en": "Afterwards the level shows under the name in **Household**, with the date it was updated. A friend is listed under **Friends** and is not a member. In the **Cooking calendar** you see others as they last shared."
+        "nl": "Daarna staat het level onder de naam bij **Huishouden & vrienden**, met de datum van bijwerken. Een vriend staat onder **Vrienden** en is geen lid. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.",
+        "en": "Afterwards the level shows under the name in **Household & friends**, with the date it was updated. A friend is listed under **Friends** and is not a member. In the **Cooking calendar** you see others as they last shared."
       },
       "route": "/inbox",
       "platform": "all",

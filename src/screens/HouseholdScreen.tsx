@@ -460,6 +460,8 @@ export function HouseholdScreen() {
   const snapshots = useLive(getProgressSnapshots, []);
   const pasteSeq = useRef(0);
   const pasteBox = useRef<HTMLTextAreaElement>(null);
+  // V1c-1: "Voeg vriend toe" shows a blue line at the paste box until text arrives or a card is found.
+  const [friendHint, setFriendHint] = useState(false);
   const list = profiles.value;
   const me = activeProfile.value;
 
@@ -583,6 +585,7 @@ export function HouseholdScreen() {
    * shows its current status again.
    */
   function onPasteText(s: string) {
+    if (s.trim() !== '') setFriendHint(false);
     setPasteNotice('');
     setCardDone({});
     setProgressDone({});
@@ -625,6 +628,21 @@ export function HouseholdScreen() {
     } finally {
       setCardBusy(false);
     }
+  }
+
+  // V1c-1: text in the box (also a handed-over one) or a found card ends the friend hint for good.
+  useEffect(() => {
+    if (pasteText.trim() !== '' || found !== null) setFriendHint(false);
+  }, [pasteText, found, friendHint]);
+
+  /** V1c-1 "Voeg vriend toe": bring the paste box into view, focus it, show the blue line. */
+  function goAddFriend() {
+    setFriendHint(true);
+    const box = pasteBox.current;
+    if (!box) return;
+    const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    box.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+    box.focus({ preventScroll: true });
   }
 
   const takenFor = (except?: string) => members.filter((m) => m.id !== except).map((m) => m.name);
@@ -710,9 +728,10 @@ export function HouseholdScreen() {
           )}
         </section>
 
-        {friends.length > 0 && (
-          <section class="card friends">
-            <h2>{t('progress.friends')}</h2>
+        {/* V1c-1: the Vrienden card is always there, with "Voeg vriend toe" leading to the paste box. */}
+        <section class="card friends">
+          <h2>{t('progress.friends')}</h2>
+          {friends.length > 0 ? (
             <ul class="member-list">
               {friends.map((s) => (
                 <li key={s.id} class="member-row-wrap">
@@ -731,12 +750,24 @@ export function HouseholdScreen() {
                 </li>
               ))}
             </ul>
-          </section>
-        )}
+          ) : (
+            <p class="muted small">{t('household.friendsEmpty')}</p>
+          )}
+          <div class="actions">
+            <button type="button" class="btn btn-small" onClick={goAddFriend}>
+              {t('household.addFriend')}
+            </button>
+          </div>
+        </section>
 
         <section class="card member-paste">
           <h2>{t('household.addViaLink')}</h2>
           <p class="muted small">{t('household.addViaLinkHint')}</p>
+          {friendHint && pasteText.trim() === '' && (
+            <p class="small friend-hint" role="status">
+              {t('household.friendHint')}
+            </p>
+          )}
           {/* 13A: the universal paste box; cards are handled right here (no onMember = the rows below). */}
           <UniversalPaste
             defaultAction="member"
@@ -782,12 +813,16 @@ export function HouseholdScreen() {
         {adding ? (
           <section class="card">
             <h2>{t('household.add')}</h2>
-            <MemberForm autoFocus submitLabel={t('household.add')} taken={takenFor()} onSubmit={add} onCancel={() => setAdding(false)} />
+            <p class="muted small">{t('household.addHint')}</p>
+            <MemberForm autoFocus submitLabel={t('household.addSubmit')} taken={takenFor()} onSubmit={add} onCancel={() => setAdding(false)} />
           </section>
         ) : (
-          <button type="button" class="btn btn-block" disabled={!setting} onClick={() => setAdding(true)}>
-            {t('household.add')}
-          </button>
+          <>
+            <p class="muted small">{t('household.addHint')}</p>
+            <button type="button" class="btn btn-block" disabled={!setting} onClick={() => setAdding(true)}>
+              {t('household.add')}
+            </button>
+          </>
         )}
       </div>
     </>

@@ -2981,7 +2981,7 @@ Dezelfde knop staat op **Mijn profiel**. Wat je daarna stuurt, krijgt bij de and
 
 (`#/more/household`)
 
-### Iemand toevoegen met een kaartje
+### Een huisgenoot toevoegen met een kaartje
 
 #### Wat het doet
 
@@ -2992,13 +2992,13 @@ Kreeg je een kaartje van iemand op een andere telefoon? Dan voeg je die persoon 
 1. Kopieer het bericht met het kaartje.
 2. Tik onderaan op **Meer**.
 3. Tik onder je profiel op **Huishouden & vrienden**.
-4. Scrol naar **Voeg lid toe via link of plak**.
+4. Scrol naar **Plak een kaartje of voortgang**.
 5. Tik op **Plak van klembord**.
 6. Tik op de knop “Voeg … toe aan je huishouden”, met de naam erin.
 
 #### Wat je dan ziet
 
-Je ziet “Kaartje van” met de naam en een rondje in de kleur van die persoon. Daarna staat de persoon bij **Leden**, met “via kaartje”.
+Je ziet “Kaartje van” met de naam en een rondje in de kleur van die persoon. Daarna staat de persoon bij **Huisgenoten**, met “via kaartje”.
 
 #### Goed om te weten
 
@@ -3006,7 +3006,32 @@ Is iemand al lid, dan heet de knop “Werk … bij”; dan worden naam, kleur, t
 
 (`#/more/household`)
 
-### Je huishouden: leden en kleuren
+### Een vriend toevoegen
+
+#### Wat het doet
+
+Een vriend is iemand met wie je niet samen kookt, maar van wie je wel het level en de kookdagen wilt zien. Een vriend komt niet in je boodschappenlijst of je porties.
+
+#### Waar je tikt
+
+1. Vraag je vriend om op **Mijn profiel** op **Sync mijn voortgang** te tikken en je het bericht te sturen.
+2. Kopieer dat bericht.
+3. Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.
+4. Tik onder **Vrienden** op **Voeg vriend toe**.
+5. Tik op **Plak van klembord**.
+6. Tik onder de kaart op **Bewaar als vriend**.
+
+#### Wat je dan ziet
+
+De app springt naar het plakvak met een blauwe regel die zegt wat je plakt. Na **Bewaar als vriend** staat de persoon onder **Vrienden**, met level en kookdagen.
+
+#### Goed om te weten
+
+Een gewoon kaartje (**Deel mijn kaartje**) maakt iemand altijd huisgenoot, geen vriend. Wil je een vriend later toch als huisgenoot? Plak zijn voortgang nog eens en kies dan de andere knop.
+
+(`#/more/household`)
+
+### Je huishouden: huisgenoten en kleuren
 
 #### Wat het doet
 
@@ -3016,14 +3041,14 @@ In je huishouden staan de mensen met wie je kookt, ook als ze een eigen telefoon
 
 1. Tik onderaan op **Meer**.
 2. Tik onder je profiel op **Huishouden & vrienden**.
-3. Tik onderaan op **Voeg lid toe**.
+3. Tik onderaan op **Typ een huisgenoot**.
 4. Typ een naam.
 5. Tik op een kleur.
-6. Tik op **Voeg lid toe** om te bewaren.
+6. Tik op **Voeg toe** om te bewaren.
 
 #### Wat je dan ziet
 
-Elk lid staat bij **Leden** met zijn avatar, of een rondje met een letter in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.
+Elke huisgenoot staat bij **Huisgenoten** met zijn avatar, of een rondje met een letter in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.
 
 #### Goed om te weten
 
@@ -3074,7 +3099,7 @@ Je ziet een kaart “Voortgang van” met de naam, het level, de badges en de ko
 
 #### Goed om te weten
 
-Daarna staat het level onder de naam bij **Huishouden**, met de datum van bijwerken. Een vriend staat onder **Vrienden** en is geen lid. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.
+Daarna staat het level onder de naam bij **Huishouden & vrienden**, met de datum van bijwerken. Een vriend staat onder **Vrienden** en is geen lid. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.
 
 (`#/inbox`)
 

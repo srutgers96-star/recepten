@@ -1,6 +1,6 @@
 # Spec V1c — Testronde-feedback na V1–V9 (Stijn, vanaf 9 nov 2026)
 
-Status: punt 1 in aanbouw (optie A, Stijn 9 nov: "doe maar optie a"); de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
+Status: punt 1 compleet (optie A, Stijn 9 nov: "doe maar optie a"; live op main 9 nov); de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
 krijgt hieronder een eigen blok (V1c-1, V1c-2, …) met Kritische lezer, Feitencheck, §1 Gedrag, §2 en §3, en gaat door de lichte workflow.
 
 ## Verzamellijst
@@ -16,9 +16,9 @@ Alles uit DEVICE-TEST 109–119 dat niet klopt; de kcal-getallen bij bekende rec
 
 ## Blok V1c-1 — Huishouden & vrienden: duidelijk wie huisgenoot is en hoe een vriend erbij komt (optie A)
 
-Status: in aanbouw (Fable, 9 nov 2026). Eén bouwer + integrator (lichte modus). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
+Status: compleet (Fable, 9 nov 2026). Eén bouwer + integrator (lichte modus). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
 docs/specs/handbook.md §4, CLAUDE.md invariant 5 (iPhone: plakken blijft de weg).
-Gebouwd: 9 nov 2026 (V1c-1, lichte workflow; run-id in STATUS)
+Gebouwd: 9 nov 2026 (V1c-1, lichte workflow wf_b1b70b08-104; lens: geen bevindingen; integrator: de blauwe regel gaat ook uit als er al tekst in het vak stond bij de tik; bouwer: `focus({ preventScroll: true })` zodat de vloeiende scroll niet overslaat, rij 120 EN zelf vertaald; Fable na de gate: de oudere DEVICE-TEST-rijen 52, 58, 97, 99, 108 en 109 en de handboekrij voortgang-ontvangen zeggen nu ook **Huishouden & vrienden** / **Housemates**)
 
 **Kritische lezer (Fable, vooraf).** (1) Geen modelwijziging: `Member`, `HouseholdSetting` en `progress.snapshots` blijven zoals ze zijn; een
 vriend blijft een voortgangs-snapshot met `friend: true`. Alleen teksten, één altijd zichtbaar blok en één knop die naar het plakvak brengt.

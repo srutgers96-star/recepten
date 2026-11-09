@@ -2981,7 +2981,7 @@ The same button is on **My profile**. What you send afterwards shows up with you
 
 (`#/more/household`)
 
-### Add someone with a card
+### Add a housemate with a card
 
 #### What it does
 
@@ -2992,13 +2992,13 @@ Did you get a card from someone on another phone? Then you add that person to yo
 1. Copy the message with the card.
 2. Tap **More** at the bottom.
 3. Under your profile, tap **Household & friends**.
-4. Scroll to **Add a member via link or paste**.
+4. Scroll to **Paste a card or progress**.
 5. Tap **Paste from clipboard**.
 6. Tap the button “Add … to your household”, with the name in it.
 
 #### What you then see
 
-You see “Card from” with the name and a circle in that person's colour. Afterwards the person is under **Members**, with “via card”.
+You see “Card from” with the name and a circle in that person's colour. Afterwards the person is under **Housemates**, with “via card”.
 
 #### Good to know
 
@@ -3006,7 +3006,32 @@ If someone is already a member, the button says “Update …”; then name, col
 
 (`#/more/household`)
 
-### Your household: members and colours
+### Add a friend
+
+#### What it does
+
+A friend is someone you do not cook with, but whose level and cooking days you want to see. A friend does not appear in your shopping list or your servings.
+
+#### Where you tap
+
+1. Ask your friend to tap **Sync my progress** on **My profile** and send you the message.
+2. Copy that message.
+3. Tap **More** at the bottom, then **Household & friends**.
+4. Under **Friends**, tap **Add friend**.
+5. Tap **Paste from clipboard**.
+6. Under the card, tap **Save as a friend**.
+
+#### What you then see
+
+The app jumps to the paste box with a blue line saying what to paste. After **Save as a friend** the person is under **Friends**, with level and cooking days.
+
+#### Good to know
+
+A plain card (**Share my card**) always makes someone a housemate, not a friend. Want a friend as a housemate after all? Paste their progress once more and choose the other button.
+
+(`#/more/household`)
+
+### Your household: housemates and colours
 
 #### What it does
 
@@ -3016,14 +3041,14 @@ Your household holds the people you cook with, also when they have their own pho
 
 1. Tap **More** at the bottom.
 2. Under your profile, tap **Household & friends**.
-3. Tap **Add member** at the bottom.
+3. Tap **Type a housemate** at the bottom.
 4. Type a name.
 5. Tap a colour.
-6. Tap **Add member** to save.
+6. Tap **Add** to save.
 
 #### What you then see
 
-Each member is under **Members** with their avatar, or a circle with a letter in their colour. You see whether someone is on this phone, came through a card or was added by hand.
+Each housemate is under **Housemates** with their avatar, or a circle with a letter in their colour. You see whether someone is on this phone, came through a card or was added by hand.
 
 #### Good to know
 
@@ -3074,7 +3099,7 @@ You see a progress card with the name, the level, the badges and the cooking day
 
 #### Good to know
 
-Afterwards the level shows under the name in **Household**, with the date it was updated. A friend is listed under **Friends** and is not a member. In the **Cooking calendar** you see others as they last shared.
+Afterwards the level shows under the name in **Household & friends**, with the date it was updated. A friend is listed under **Friends** and is not a member. In the **Cooking calendar** you see others as they last shared.
 
 (`#/inbox`)
 
