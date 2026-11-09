@@ -219,6 +219,13 @@ a {
   padding-bottom: calc(40vh + var(--sab));
 }
 
+/* V8: a tab swipe slides the new page in from the side the finger came from (transform + opacity only, 150 ms). */
+.screen-wrap.slide-left { animation: tab-slide-left 0.15s ease-out; }
+.screen-wrap.slide-right { animation: tab-slide-right 0.15s ease-out; }
+@keyframes tab-slide-left { from { transform: translateX(24px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+@keyframes tab-slide-right { from { transform: translateX(-24px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .screen-wrap.slide-left, .screen-wrap.slide-right { animation: none; } }
+
 /* Minimal boot state (ensureBuiltins + loadProfiles) and a fatal boot error. */
 .boot {
   flex: 1;

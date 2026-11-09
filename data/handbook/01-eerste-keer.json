@@ -205,6 +205,32 @@
       }
     },
     {
+      "id": "eerste-keer.vegen",
+      "title": { "nl": "Vegen tussen de tabbladen", "en": "Swipe between the tabs" },
+      "what": {
+        "nl": "Je hoeft niet op de tabbladen te tikken: veeg over de pagina naar links voor het volgende tabblad en naar rechts voor het vorige. De volgorde is die van de balk onderaan: **Home**, **Recepten**, **Week**, **Boodschappen**, **Meer**.",
+        "en": "You do not have to tap the tabs: swipe left across the page for the next tab and right for the previous one. The order is that of the bar at the bottom: **Home**, **Recipes**, **Week**, **Shopping**, **More**."
+      },
+      "where": {
+        "nl": ["Open een van de vijf tabbladen onderaan.", "Leg je vinger ergens midden op de pagina.", "Veeg in één beweging duidelijk naar links of naar rechts."],
+        "en": ["Open one of the five tabs at the bottom.", "Put your finger somewhere in the middle of the page.", "Swipe clearly left or right in one movement."]
+      },
+      "see": {
+        "nl": "De volgende of vorige pagina schuift in beeld en het tabblad onderaan licht op. Bij **Home** gaat het niet verder naar rechts en bij **Meer** niet verder naar links.",
+        "en": "The next or previous page slides into view and the tab at the bottom lights up. **Home** goes no further right and **More** no further left."
+      },
+      "know": {
+        "nl": "Begin niet aan de rand van het scherm: daar zit de terug-beweging van je telefoon. Op een rij die zelf opzij schuift (zoals de keuzeknopjes boven de recepten) schuift die rij, niet de pagina. In een recept, de kookstand en bij het selecteren van recepten werkt het vegen niet.",
+        "en": "Do not start at the edge of the screen: that is where your phone's back gesture lives. On a row that slides sideways itself (like the little choice buttons above the recipes) that row slides, not the page. Inside a recipe, in cook mode and while selecting recipes, swiping does nothing."
+      },
+      "route": "/",
+      "platform": "all",
+      "keywords": {
+        "nl": ["vegen", "swipen", "tabbladen", "volgende pagina", "onderbalk"],
+        "en": ["swipe", "tabs", "next page", "bottom bar", "gesture"]
+      }
+    },
+    {
       "id": "eerste-keer.home",
       "title": { "nl": "Wat Home laat zien", "en": "What Home shows" },
       "what": {

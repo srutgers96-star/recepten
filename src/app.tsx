@@ -15,7 +15,7 @@
 // 6D-4 (= 6D-4b, §1j): the route '/more/calendar' (Kookkalender). 6D-S: '/more/profile' (Mijn profiel).
 // Block Z (docs/specs/handbook.md §3): '/more/handbook' (Handleiding), loaded on demand (own chunk).
 import type { ComponentChildren, ComponentType } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, type NewBadge } from './badges';
 import { loadCelebrateSettings } from './celebrate';
 import { challengeToast, dismissChallengeToast } from './challenges';
@@ -59,6 +59,7 @@ import { StorageScreen } from './screens/StorageScreen';
 import { StoryScreen } from './screens/StoryScreen';
 import { StyleScreen } from './screens/StyleScreen';
 import { WeekScreen } from './screens/WeekScreen';
+import { slide, useTabSwipe } from './tabswipe';
 import { startTestTimerTicker } from './testtimer';
 import { initTheme } from './theme';
 import { startTimerEngine } from './timers';
@@ -299,6 +300,9 @@ function Screen(props: { r: Route }) {
 export function App(props: { openImportFromHash: boolean }) {
   const [ready, setReady] = useState(false);
   const [bootError, setBootError] = useState<string | null>(null);
+  // V8: swipe between the five tabs on the screen wrapper (listeners only once the shell renders).
+  const wrapRef = useRef<HTMLDivElement>(null);
+  useTabSwipe(wrapRef, ready);
 
   useEffect(() => {
     document.documentElement.lang = lang.value;
@@ -379,7 +383,16 @@ export function App(props: { openImportFromHash: boolean }) {
       {/* 13B: in a browser tab on a phone this says so first, also during onboarding (the moment
           to install is before the first recipe is saved in the wrong storage). */}
       <BrowserNotice />
-      <div class="screen-wrap">{onboarding ? <OnboardingScreen /> : <Screen r={r} />}</div>
+      <div
+        ref={wrapRef}
+        class={'screen-wrap' + (slide.value ? ' slide-' + slide.value : '')}
+        onAnimationEnd={(e) => {
+          // Only the wrapper's own slide animation, not one bubbling up from a child.
+          if (e.target === e.currentTarget) slide.value = null;
+        }}
+      >
+        {onboarding ? <OnboardingScreen /> : <Screen r={r} />}
+      </div>
       <UpdateBar />
       <InstallCard />
       {!onboarding && <Nav />}

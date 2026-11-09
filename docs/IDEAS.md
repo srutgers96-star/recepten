@@ -248,7 +248,7 @@ herkenning daarom pas ≥ 24 px van de schermrand. Niet laten botsen met de pull
   de beweging eerst verticaal is (bestaande `usePullDown` meet dat al).
 - **Bestanden:** src/swipe.ts, src/app.tsx (één hook), src/styles/base.css (twee animaties), DEVICE-TEST-rij op beide telefoons
   (iPhone-randswipe mag niet breken), handboekrij in 01 "De vijf tabbladen".
-- **Stijn beslist:** doorlopen aan de randen ja/nee (voorstel: nee). **In aanbouw (9 nov): spec docs/specs/verbeterronde-8.md**; Fable koos nee (constante `WRAP_AROUND`).
+- **Stijn beslist:** doorlopen aan de randen ja/nee (voorstel: nee). **Live op main (9 nov): spec docs/specs/verbeterronde-8.md**; Fable koos nee (constante `WRAP_AROUND`).
 
 ## 7. Gabi's WhatsApp-boodschappenlijstje plakken met voorstellen (Stijn, 30 okt 2026)
 

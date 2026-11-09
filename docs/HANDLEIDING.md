@@ -142,6 +142,28 @@ Onderaan staan vijf tabbladen. Daarmee kom je overal in de app.
 
 Staat er een getal op **Meer**? Dan heb je iets nieuws ontvangen in **In & uit**.
 
+### Vegen tussen de tabbladen
+
+#### Wat het doet
+
+Je hoeft niet op de tabbladen te tikken: veeg over de pagina naar links voor het volgende tabblad en naar rechts voor het vorige. De volgorde is die van de balk onderaan: **Home**, **Recepten**, **Week**, **Boodschappen**, **Meer**.
+
+#### Waar je tikt
+
+1. Open een van de vijf tabbladen onderaan.
+2. Leg je vinger ergens midden op de pagina.
+3. Veeg in één beweging duidelijk naar links of naar rechts.
+
+#### Wat je dan ziet
+
+De volgende of vorige pagina schuift in beeld en het tabblad onderaan licht op. Bij **Home** gaat het niet verder naar rechts en bij **Meer** niet verder naar links.
+
+#### Goed om te weten
+
+Begin niet aan de rand van het scherm: daar zit de terug-beweging van je telefoon. Op een rij die zelf opzij schuift (zoals de keuzeknopjes boven de recepten) schuift die rij, niet de pagina. In een recept, de kookstand en bij het selecteren van recepten werkt het vegen niet.
+
+(`#/`)
+
 ### Wat Home laat zien
 
 #### Wat het doet

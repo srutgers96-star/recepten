@@ -142,6 +142,28 @@ There are five tabs at the bottom. They take you everywhere in the app.
 
 Is there a number on **More**? Then something new has arrived in **In & out**.
 
+### Swipe between the tabs
+
+#### What it does
+
+You do not have to tap the tabs: swipe left across the page for the next tab and right for the previous one. The order is that of the bar at the bottom: **Home**, **Recipes**, **Week**, **Shopping**, **More**.
+
+#### Where you tap
+
+1. Open one of the five tabs at the bottom.
+2. Put your finger somewhere in the middle of the page.
+3. Swipe clearly left or right in one movement.
+
+#### What you then see
+
+The next or previous page slides into view and the tab at the bottom lights up. **Home** goes no further right and **More** no further left.
+
+#### Good to know
+
+Do not start at the edge of the screen: that is where your phone's back gesture lives. On a row that slides sideways itself (like the little choice buttons above the recipes) that row slides, not the page. Inside a recipe, in cook mode and while selecting recipes, swiping does nothing.
+
+(`#/`)
+
 ### What Home shows
 
 #### What it does

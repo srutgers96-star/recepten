@@ -1,10 +1,10 @@
 # Spec V8 — Vegen tussen de vijf tabbladen (Stijn, 29 okt 2026)
 
-Status: in aanbouw (Fable, 9 nov 2026). Eén blok, twee bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 6 (Stijn 29 okt:
+Status: compleet (Fable, 9 nov 2026). Eén blok, twee bouwers + integrator (lichte modus). Bron: docs/IDEAS.md idee 6 (Stijn 29 okt:
 "horizontaal swipen om naar de volgende/vorige tab van de onderbalk te gaan, zoals in veel apps"). Leidend bij tegenspraak:
 docs/specs/README.md §2–§4, docs/specs/handbook.md §4 (handboekrijen), CLAUDE.md invariant 5 (iPhone: niets mag de rand-veeg van iOS
 breken) en de huisregel "alleen transform en opacity animeren".
-Gebouwd: 9 nov 2026 (V8, lichte workflow; run-id in STATUS)
+Gebouwd: 9 nov 2026 (V8, lichte workflow wf_bce03e41-f38; besluit Fable na de bouw: de grens is niet-strikt, |dx| ≥ 2·|dy| telt als veeg, zoals de testgevallen; de lens vond verder niets)
 
 **Kritische lezer (Fable, vooraf).** (1) Er bestaat al een veeg-helper, `src/swipe.ts` (`useHorizontalSwipe`, pointer-events) voor de
 kookstand en de varianten-tabs op de receptpagina. Die is hier NIET bruikbaar: pointer-events krijgen `pointercancel` zodra de browser
@@ -48,8 +48,8 @@ Framework-vrij (geen preact, geen dom-types nodig behalve getallen).
 - `export const SWIPE_MIN_PX = 60;` `export const SWIPE_RATIO = 2;` `export const EDGE_PX = 24;` `export const WRAP_AROUND = false;`
 - `export type TabSwipeDirection = 'left' | 'right';` — 'left' = de vinger ging naar links (volgend tabblad), 'right' = naar rechts (vorig).
 - `export function isTabPath(path: string): boolean` — exact één van `TAB_PATHS` (geen query: de aanroeper geeft `route.path`).
-- `export function tabSwipeDirection(dx: number, dy: number): TabSwipeDirection | null` — `|dx| >= SWIPE_MIN_PX` én `|dx| > SWIPE_RATIO · |dy|`,
-  anders null.
+- `export function tabSwipeDirection(dx: number, dy: number): TabSwipeDirection | null` — `|dx| >= SWIPE_MIN_PX` én `|dx| >= SWIPE_RATIO · |dy|`
+  (precies 2:1 telt als veeg; besluit Fable na de bouw), anders null.
 - `export function startsAtEdge(x: number, viewportWidth: number): boolean` — `x < EDGE_PX || x > viewportWidth - EDGE_PX`.
 - `export function neighbourTab(path: string, dir: TabSwipeDirection): string | null` — 'left' = de volgende in `TAB_PATHS`, 'right' = de
   vorige; voorbij het einde: `WRAP_AROUND` false → null (stoppen aan de randen), true → rond. Geen tab-pad → null.
