@@ -27,6 +27,7 @@ klein, snel live, elk met een eigen spec. Dit is de voorgestelde volgorde; Stijn
 | **V7** | Boodschappen-badges over de ingrediënten (Verzamelaar, Groenteboer, Kaasmeester, Kruidenkast, Alfabet, …) mét avatar-beloningen (vier badge-gebonden onderdelen, waaronder minstens één bril); daarna de 30-jaar-simulatie opnieuw draaien en zo nodig de curve bijstellen | 4 | M | — (live op main 9 nov, spec verbeterronde-7.md) |
 | **V8** | Van links naar rechts swipen door de vijf tabbladen | 6 | S–M | doorlopen aan de randen? (voorstel: nee) |
 | **V9** | Voedingswaarden en macro's: eerst grammen-dekking (data), dan nutrition.json (data), dan één subtiele kcal-regel op de receptpagina met een uitklap voor de macro's | 1 | L (drie stappen) | — (Stijn 8 nov: subtiel, kcal in het recept, waarden bij de ingrediënten, details alleen in een uitklap; geen weektotalen) |
+| **V9b** | Voedingswaarden van schatting naar tabelwaarde: USDA FoodData Central (publiek domein, CSV) en, als Stijn de RIVM-voorwaarden accepteert, NEVO-online 2025 voor de Nederlandse producten; Sonnet koppelt elke ingrediënt-id aan een tabelcode, een tool leest de waarden en vervangt alleen de items met `source: 'estimate'` | 1 (voorwerk Fable 9 nov) | M (data + één tool) | downloaden van de twee USDA-bestanden; NEVO zelf aanvragen (vinkje bij de voorwaarden) of overslaan |
 
 Afgerond en hier alleen nog als geschiedenis: **3** (uitdagingen, blok 6E) en **5** (swipe omlaag → Mijn profiel, blok 6D-S).
 Volgorde na V1b (Stijn 8 nov): **V2 → V4 → V6 → V7 → V8 → V9**. Open punten uit de eindcontrole: de Engelse pass/fail in de
@@ -118,6 +119,26 @@ als sjouwwerk voor Haiku, omdat het ook de boodschappenlijst helpt.
 - **Bestanden:** data/ingredients.json, data/nutrition.json [nieuw], tools/validate-data.ts, tools/measure-parse.ts,
   src/domain/nutrition.ts [nieuw], src/screens/RecipeScreen.tsx (één regel + uitklap), src/i18n, tests/nutrition.test.ts.
 - **Live op main (9 nov): spec docs/specs/verbeterronde-9.md.** Afwijkingen van de uitwerking hierboven: dichtheid in een eigen veld `gramsPerMl` (niet `gramsPer.ml`, zodat de boodschappenlijst niet verandert), stukgewichten in het bestaande `gramsPer`; een eigen tool `tools/measure-grams.ts` in plaats van een kolom in measure-parse; de waarden zijn schattingen van een taalmodel op NEVO/USDA-niveau (geen gedownloade tabel, geen codes), en de UI zegt dat.
+- **Voorwerk V9b (Fable, 9 nov, na Stijns vraag "kan je die niet alvast van internet afvissen"):** V9 gaf alle 216 klassiekers al een
+  kcal-regel en alle 1448 voedsel-ingrediënten waarden, maar als taalmodel-schatting. De upgrade naar echte tabelwaarden:
+  1. **Bronnen.** USDA FoodData Central: `FoodData_Central_sr_legacy_food_csv_2018-04.zip` (6,7 MB, 7.800 producten, bevroren sinds 2018)
+     en `FoodData_Central_foundation_food_csv_2026-10-29.zip` (4,1 MB, gemeten waarden), beide op fdc.nal.usda.gov/download-datasets,
+     Amerikaanse overheidsdata (publiek domein; bronvermelding doen we toch). NEVO-online 2025/9.0 (RIVM): de dataset komt pas na een
+     vinkje bij de gebruiksvoorwaarden op rivm.nl; de voorwaarden zeggen "alleen ongewijzigd en met bron en versienummer" — waarden per
+     100 g ongewijzigd overnemen met de verwijzing "NEVO-online versie 2025/9.0, RIVM, Bilthoven" past daarin, maar Stijn accepteert de
+     voorwaarden zelf. Zonder NEVO blijven typisch Nederlandse producten (rookworst, hagelslag, kwark, karnemelk, speculaaskruiden) een
+     schatting of een USDA-benadering.
+  2. **Koppelen.** Een Node-tool (`tools/nutrition-match.ts`) zoekt per ingrediënt-id de tien beste naamkandidaten in de tabel
+     (USDA: Engelse `description`; NEVO: Nederlandse naam) en schrijft `data/llm/nutrition/match-input-NN.json`; Sonnet kiest per id de
+     juiste code of "geen" (met één regel waarom), rekening houdend met rauw/droog zoals het in een recept staat; Fable keurt de
+     twijfelgevallen. Het resultaat: `data/nutrition-sources.json` `{ id: { usda?: fdcId, nevo?: code } }` (klein, in de repo; de
+     CSV's zelf niet).
+  3. **Toepassen.** `tools/apply-nutrition.ts` krijgt `--from-tables`: leest de CSV's uit `data/work/` (niet in git), neemt per gekozen
+     code kcal (1008), eiwit (1003), vet (1004), koolhydraten (1005), vezels (1079), natrium (1093, × 2,5 = zout) en alcohol (1018),
+     schrijft ze met `source: 'usda' | 'nevo'` en vervangt alleen items met `source: 'estimate'` (de regel bestaat al). Validator en UI
+     ongewijzigd; de bronregel onder Over noemt dan "waarden uit USDA en NEVO waar beschikbaar, anders een schatting"; het handboek ook.
+  4. **Grootte.** M: één tool, één Sonnet-ronde van ±19 batches, Fable-keuring. Geen nieuwe dependency (CSV lezen met een eigen parser
+     zoals de bestaande tools).
 - **Stijn (8 nov):** "subtiel met calorieën in recepten; de waarden bij de ingrediënten, verder niet standaard tonen; misschien bij
   calorieën een uitklap voor de macro's." Dus: één rustige kcal-regel op de receptpagina, de rest alleen in de uitklap, geen
   weektotalen, niets in lijsten of kookstand. Stap 1 en 2 zijn data-werk en kunnen eerder, los van de UI.
