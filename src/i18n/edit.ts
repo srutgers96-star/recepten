@@ -603,6 +603,8 @@ export const edit: Dict = {
     nl: '{kcal} kcal · eiwit {protein} g · vet {fat} g · koolhydraten {carbs} g',
     en: '{kcal} kcal · protein {protein} g · fat {fat} g · carbs {carbs} g',
   },
+  // V9b: second line under Per 100 g; {source} is nutri.source.* (browse.ts).
+  'dict.per100Source': { nl: 'Bron: {source}', en: 'Source: {source}' },
   'dict.pluralOf': { nl: 'meervoud: {many}', en: 'plural: {many}' },
   'dict.flags': { nl: 'Kenmerken', en: 'Properties' },
   'dict.flag.veg': { nl: 'vegetarisch', en: 'vegetarian' },

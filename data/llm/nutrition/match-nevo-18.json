@@ -1,0 +1,486 @@
+{
+ "batch": "18",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "volkorenmeel",
+   "choice": "222",
+   "confidence": "sure",
+   "why": "tarwe volkoren meel"
+  },
+  {
+   "id": "vruchtenhagel",
+   "choice": "442",
+   "confidence": "sure",
+   "why": "vruchtenhagelslag"
+  },
+  {
+   "id": "vruchtenkwark",
+   "choice": "931",
+   "confidence": "close",
+   "why": "vruchtenkwark, magere variant als gemiddelde"
+  },
+  {
+   "id": "vruchtensap",
+   "choice": "2507",
+   "confidence": "sure",
+   "why": "multivruchtensap"
+  },
+  {
+   "id": "vruchtenthee",
+   "choice": "645",
+   "confidence": "close",
+   "why": "thee bereid, 0 kcal"
+  },
+  {
+   "id": "vruchtenyoghurt",
+   "choice": "2501",
+   "confidence": "close",
+   "why": "vruchtenyoghurt halfvol"
+  },
+  {
+   "id": "wafel",
+   "choice": "2661",
+   "confidence": "close",
+   "why": "Luikse wafel als de wafel"
+  },
+  {
+   "id": "walnoot",
+   "choice": "206",
+   "confidence": "sure",
+   "why": "walnoten ongezouten"
+  },
+  {
+   "id": "walnootolie",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wasabi",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wasabinootje",
+   "choice": "546",
+   "confidence": "close",
+   "why": "omhuld borrelnootje"
+  },
+  {
+   "id": "waspeen",
+   "choice": "2726",
+   "confidence": "sure",
+   "why": "waspeen rauw"
+  },
+  {
+   "id": "water",
+   "choice": "1885",
+   "confidence": "sure",
+   "why": "water"
+  },
+  {
+   "id": "waterijsje",
+   "choice": "1474",
+   "confidence": "sure",
+   "why": "waterijs"
+  },
+  {
+   "id": "waterkastanje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "waterkers",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "watermeloen",
+   "choice": "1105",
+   "confidence": "sure",
+   "why": "watermeloen"
+  },
+  {
+   "id": "weetabix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "whisky",
+   "choice": "421",
+   "confidence": "sure",
+   "why": "whisky"
+  },
+  {
+   "id": "wijn",
+   "choice": "422",
+   "confidence": "close",
+   "why": "rode wijn als generieke wijn"
+  },
+  {
+   "id": "wijnazijn",
+   "choice": "2615",
+   "confidence": "close",
+   "why": "azijn generiek"
+  },
+  {
+   "id": "wilde-rijst",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wildfond",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "winegum",
+   "choice": "752",
+   "confidence": "sure",
+   "why": "winegum"
+  },
+  {
+   "id": "winterpeen",
+   "choice": "2728",
+   "confidence": "sure",
+   "why": "winterwortel rauw"
+  },
+  {
+   "id": "witbier",
+   "choice": "3214",
+   "confidence": "sure",
+   "why": "witbier"
+  },
+  {
+   "id": "witbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "witbroodkruim",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "witlof",
+   "choice": "67",
+   "confidence": "sure",
+   "why": "witlof rauw"
+  },
+  {
+   "id": "witte-bonen-in-tomatensaus",
+   "choice": "197",
+   "confidence": "sure",
+   "why": "witte bonen in tomatensaus blik"
+  },
+  {
+   "id": "witvis",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wodka",
+   "choice": "3215",
+   "confidence": "sure",
+   "why": "wodka"
+  },
+  {
+   "id": "wokgroente",
+   "choice": "5270",
+   "confidence": "close",
+   "why": "roerbakmix oosters rauw"
+  },
+  {
+   "id": "wokkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "woksaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wokvlees",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "worcestersaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "worstenbroodje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wortel",
+   "choice": "71",
+   "confidence": "sure",
+   "why": "wortel rauw gemiddeld"
+  },
+  {
+   "id": "wortelsap",
+   "choice": "1656",
+   "confidence": "sure",
+   "why": "wortelsap"
+  },
+  {
+   "id": "yoghurt",
+   "choice": "278",
+   "confidence": "close",
+   "why": "volle yoghurt natuur"
+  },
+  {
+   "id": "yoghurtdressing",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "yoghurtrozijn",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zaanse-mosterd",
+   "choice": "824",
+   "confidence": "close",
+   "why": "mosterd generiek"
+  },
+  {
+   "id": "zaatar",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zachte-tarwe",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zadenmix",
+   "choice": "5404",
+   "confidence": "close",
+   "why": "zaden en pitten gemiddeld"
+  },
+  {
+   "id": "zalm",
+   "choice": "1587",
+   "confidence": "sure",
+   "why": "zalm kweek rauw"
+  },
+  {
+   "id": "zalm-uit-blik",
+   "choice": "602",
+   "confidence": "sure",
+   "why": "zalm blik"
+  },
+  {
+   "id": "zalmfilet",
+   "choice": "1587",
+   "confidence": "sure",
+   "why": "zalm kweek rauw"
+  },
+  {
+   "id": "zalmsalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zalmsnippers",
+   "choice": "1096",
+   "confidence": "close",
+   "why": "snippers zijn doorgaans gerookte zalm"
+  },
+  {
+   "id": "zanddeeg",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zandkoekje",
+   "choice": "836",
+   "confidence": "sure",
+   "why": "zandkoekje"
+  },
+  {
+   "id": "zeebaars",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zeeduivel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zeekraal",
+   "choice": "3208",
+   "confidence": "sure",
+   "why": "zeekraal rauw"
+  },
+  {
+   "id": "zeevruchten",
+   "choice": "5266",
+   "confidence": "close",
+   "why": "zeevruchten bereid, zo verkocht"
+  },
+  {
+   "id": "zeewiersalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zeewiersnack",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zeezoutvlokken",
+   "choice": "2953",
+   "confidence": "sure",
+   "why": "zeezout"
+  },
+  {
+   "id": "zelfrijzend-bakmeel",
+   "choice": "1020",
+   "confidence": "sure",
+   "why": "zelfrijzend bakmeel"
+  },
+  {
+   "id": "zijden-tofu",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zilveruitje",
+   "choice": "1159",
+   "confidence": "close",
+   "why": "zilveruitjes zoetzuur uit glas"
+  },
+  {
+   "id": "zilvervliesrijst",
+   "choice": "712",
+   "confidence": "sure",
+   "why": "zilvervliesrijst rauw"
+  },
+  {
+   "id": "zoete-aardappel",
+   "choice": "671",
+   "confidence": "sure",
+   "why": "bataat rauw"
+  },
+  {
+   "id": "zoete-aardappelfriet",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zoethoutthee",
+   "choice": "645",
+   "confidence": "close",
+   "why": "thee bereid, 0 kcal"
+  },
+  {
+   "id": "zoetstof",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zoetzure-saus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zongedroogde-tomaat",
+   "choice": "2378",
+   "confidence": "sure",
+   "why": "zongedroogde tomaat"
+  },
+  {
+   "id": "zonnebloemolie",
+   "choice": "317",
+   "confidence": "sure",
+   "why": "zonnebloemolie"
+  },
+  {
+   "id": "zonnebloemolie-en-chilivlokken",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zonnebloempit",
+   "choice": "872",
+   "confidence": "sure",
+   "why": "zonnebloempitten"
+  },
+  {
+   "id": "zout",
+   "choice": "2953",
+   "confidence": "close",
+   "why": "zeezout als generiek zout"
+  },
+  {
+   "id": "zout-en-peper",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zoutje",
+   "choice": "264",
+   "confidence": "close",
+   "why": "zoute biscuit"
+  },
+  {
+   "id": "zoutstengel",
+   "choice": "267",
+   "confidence": "close",
+   "why": "pretzel sticks"
+  },
+  {
+   "id": "zure-bom",
+   "choice": "131",
+   "confidence": "sure",
+   "why": "augurk zuur = zure bom"
+  },
+  {
+   "id": "zure-room",
+   "choice": "812",
+   "confidence": "sure",
+   "why": "zure room"
+  }
+ ]
+}

@@ -1,0 +1,497 @@
+{
+  "batch": "06",
+  "source": "nevo",
+  "items": [
+    {"id":"gebraden-fricandeau","nl":"gebraden fricandeau","en":"sliced roast pork","aliasesEn":[],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":113,"protein":22.9,"fat":1.7,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"5524","name":"Varkensvlees gem rauw","name2":"Pork av raw","category":"Vlees en gevogelte","state":"raw","kcal":201,"protein":19,"fat":13.3,"carbs":1.2},
+      {"code":"1419","name":"Varkensfricandeau rauw","name2":"Pork fricandeau part of leg raw; Fricandeau varkens- rauw","category":"Vlees en gevogelte","state":"raw","kcal":120,"protein":22.9,"fat":3.2,"carbs":0},
+      {"code":"2899","name":"Balkenbrij","name2":"Scrapple, pork","category":"Vlees en gevogelte","state":"other","kcal":165,"protein":6.4,"fat":8.5,"carbs":14.9},
+      {"code":"1422","name":"Varkenshaas rauw","name2":"Pork tenderloin raw","category":"Vlees en gevogelte","state":"raw","kcal":105,"protein":22.4,"fat":1.7,"carbs":0},
+      {"code":"1410","name":"Runderrosbief rauw","name2":"Beef roast raw","category":"Vlees en gevogelte","state":"raw","kcal":122,"protein":22.9,"fat":3.4,"carbs":0},
+      {"code":"1901","name":"Nier varkens- rauw","name2":"Kidney pork raw","category":"Vlees en gevogelte","state":"raw","kcal":86,"protein":15.5,"fat":2.7,"carbs":0},
+      {"code":"1426","name":"Lever varkens- rauw","name2":"Liver pork raw; Varkenslever rauw","category":"Vlees en gevogelte","state":"raw","kcal":129,"protein":21.3,"fat":4.8,"carbs":0.2},
+      {"code":"1421","name":"Gehakt varkens- rauw","name2":"Minced pork raw; Varkensgehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":177,"protein":20.1,"fat":10.7,"carbs":0.3}
+    ] },
+    {"id":"gebraden-gehakt","nl":"gebraden gehakt","en":"sliced meatloaf","aliasesEn":[],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":190,"protein":15,"fat":13,"carbs":3,"source":"estimate"}, "candidates": [
+      {"code":"1155","name":"Gehakt gebraden (vleeswaar)","name2":"Meatloaf (processed meat product); Gebraden gehakt (vleeswaar)","category":"Vleeswaren","state":"other","kcal":304,"protein":12.8,"fat":25.6,"carbs":5.6},
+      {"code":"2333","name":"Gehakt rauw gem","name2":"Minced meat raw av","category":"Vlees en gevogelte","state":"raw","kcal":222,"protein":19.3,"fat":15.9,"carbs":0.2},
+      {"code":"1434","name":"Gehakt hoh rauw","name2":"Minced beef/pork raw; Half om half gehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":233,"protein":19.2,"fat":17.2,"carbs":0.3},
+      {"code":"3017","name":"Gehakt kalfs- rauw","name2":"Minced veal raw; Kalfsgehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":214,"protein":19,"fat":15.1,"carbs":0.3},
+      {"code":"1405","name":"Gehakt runder- rauw","name2":"Minced beef raw; Rundergehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":225,"protein":18.9,"fat":16.5,"carbs":0.2},
+      {"code":"3139","name":"Gehakt kippen- rauw","name2":"Mince chicken raw; Kippengehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":147,"protein":21.5,"fat":6.8,"carbs":0},
+      {"code":"1421","name":"Gehakt varkens- rauw","name2":"Minced pork raw; Varkensgehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":177,"protein":20.1,"fat":10.7,"carbs":0.3}
+    ] },
+    {"id":"gebrande-amandel","nl":"gebrande amandel","en":"caramelised almond","aliasesEn":["candied almonds","sugar-roasted almonds"],"defaultUnit":"g","aisle":"snacks-zoet","current":{"kcal":555,"protein":17,"fat":38,"carbs":36,"source":"estimate"}, "candidates": [
+      {"code":"5579","name":"Meel amandel-","name2":"Flour almond; Amandelmeel","category":"Graanproducten en meelsoorten","state":"other","kcal":638,"protein":25.3,"fat":55.8,"carbs":3.6}
+    ] },
+    {"id":"gecondenseerde-melk","nl":"gecondenseerde melk","en":"condensed milk","aliasesEn":["sweetened condensed milk"],"defaultUnit":"g","aisle":"bakken","current":{"kcal":321,"protein":7.9,"fat":8.7,"carbs":54.4,"source":"usda"}, "candidates": [
+      {"code":"270","name":"Melk rauwe","name2":"Milk raw","category":"Melk en melkproducten","state":"raw","kcal":71,"protein":3.4,"fat":4.4,"carbs":4.4},
+      {"code":"281","name":"Melk gecondenseerde m suiker","name2":"Milk condensed w sugar; Gecondenseerde melk met suiker","category":"Melk en melkproducten","state":"other","kcal":330,"protein":8.1,"fat":8.8,"carbs":54.7},
+      {"code":"279","name":"Melk volle","name2":"Milk whole","category":"Melk en melkproducten","state":"other","kcal":61,"protein":3.3,"fat":3.4,"carbs":4.5},
+      {"code":"294","name":"Melk magere","name2":"Milk skimmed","category":"Melk en melkproducten","state":"other","kcal":35,"protein":3.7,"fat":0.1,"carbs":4.9},
+      {"code":"297","name":"Melk moeder-","name2":"Milk human; Moedermelk/borstvoeding","category":"Melk en melkproducten","state":"other","kcal":66,"protein":1.1,"fat":3.5,"carbs":7.4},
+      {"code":"286","name":"Melk halfvolle","name2":"Milk semi-skimmed","category":"Melk en melkproducten","state":"other","kcal":45,"protein":3.4,"fat":1.4,"carbs":4.7},
+      {"code":"431","name":"Chocolade melk-","name2":"Chocolate milk; Melkchocolade","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":548,"protein":7,"fat":34.1,"carbs":52},
+      {"code":"2290","name":"Kokosmelk","name2":"Coconut milk; Klappermelk","category":"Vleesvervangers en zuivelvervangers","state":"other","kcal":173,"protein":1.4,"fat":17.4,"carbs":2.5}
+    ] },
+    {"id":"gedroogde-vijg","nl":"gedroogde vijg","en":"dried fig","aliasesEn":["soft dried figs"],"defaultUnit":"g","aisle":"bakken","current":{"kcal":249,"protein":3.3,"fat":0.9,"carbs":54.1,"source":"usda"}, "candidates": [
+      {"code":"193","name":"Vijgen gedroogd","name2":"Figs dried","category":"Fruit","state":"dried","kcal":259,"protein":3.3,"fat":0.9,"carbs":54.1},
+      {"code":"181","name":"Dadels gedroogd","name2":"Dates dried; Gedroogde dadels","category":"Fruit","state":"dried","kcal":305,"protein":2,"fat":0,"carbs":70.5},
+      {"code":"1025","name":"Gist gedroogd","name2":"Yeast dried","category":"Diversen","state":"dried","kcal":390,"protein":48,"fat":6,"carbs":36},
+      {"code":"187","name":"Peren gedroogd","name2":"Pear dried; Peer gedroogd","category":"Fruit","state":"dried","kcal":287,"protein":2,"fat":0,"carbs":65},
+      {"code":"1224","name":"Kervel gedroogd","name2":"Chervil dried","category":"Kruiden en specerijen","state":"dried","kcal":303,"protein":23,"fat":4,"carbs":38},
+      {"code":"1228","name":"Oregano gedroogd","name2":"Oregano dried","category":"Kruiden en specerijen","state":"dried","kcal":360,"protein":11,"fat":10,"carbs":49},
+      {"code":"185","name":"Krenten gedroogd","name2":"Currants dried","category":"Fruit","state":"dried","kcal":326,"protein":2,"fat":0,"carbs":75},
+      {"code":"1226","name":"Majoraan gedroogd","name2":"Marjoram dried; Marjolein gedroogd","category":"Kruiden en specerijen","state":"dried","kcal":319,"protein":13,"fat":7,"carbs":42}
+    ] },
+    {"id":"gehakt","nl":"gehakt","en":"mince","aliasesEn":["minced meat","ground meat","mince meat"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":230,"protein":18,"fat":17,"carbs":0,"source":"estimate"}, "candidates": [
+      {"code":"1434","name":"Gehakt hoh rauw","name2":"Minced beef/pork raw; Half om half gehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":233,"protein":19.2,"fat":17.2,"carbs":0.3},
+      {"code":"2333","name":"Gehakt rauw gem","name2":"Minced meat raw av","category":"Vlees en gevogelte","state":"raw","kcal":222,"protein":19.3,"fat":15.9,"carbs":0.2},
+      {"code":"1326","name":"Gehakt hoh rul gebakken","name2":"Minced beef/pork shallow fried; Half om half gehakt rul bereid","category":"Vlees en gevogelte","state":"cooked","kcal":317,"protein":30.1,"fat":21.6,"carbs":0.4},
+      {"code":"5457","name":"Burrito m gehakt","name2":"Burrito w minced meat; Enchilada m gehakt","category":"Samengestelde gerechten","state":"other","kcal":205,"protein":9.4,"fat":12.5,"carbs":12.5},
+      {"code":"1421","name":"Gehakt varkens- rauw","name2":"Minced pork raw; Varkensgehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":177,"protein":20.1,"fat":10.7,"carbs":0.3},
+      {"code":"3017","name":"Gehakt kalfs- rauw","name2":"Minced veal raw; Kalfsgehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":214,"protein":19,"fat":15.1,"carbs":0.3},
+      {"code":"1405","name":"Gehakt runder- rauw","name2":"Minced beef raw; Rundergehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":225,"protein":18.9,"fat":16.5,"carbs":0.2},
+      {"code":"3139","name":"Gehakt kippen- rauw","name2":"Mince chicken raw; Kippengehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":147,"protein":21.5,"fat":6.8,"carbs":0}
+    ] },
+    {"id":"gehaktbal","nl":"gehaktbal","en":"meatball","aliasesEn":["large meatball","large meatballs"],"defaultUnit":"stuk","aisle":"vlees-vis","current":{"kcal":210,"protein":16,"fat":15,"carbs":3,"source":"estimate"}, "candidates": [
+      {"code":"2619","name":"Berenklauw rauw","name2":"Meatball Berenklauw unprepared","category":"Hartige snacks en zoutjes","state":"raw","kcal":154,"protein":11.3,"fat":9.4,"carbs":5.4}
+    ] },
+    {"id":"gehaktballetje","nl":"gehaktballetje","en":"mini meatball","aliasesEn":["soup meatballs","cocktail meatballs"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":210,"protein":16,"fat":15,"carbs":3,"source":"estimate"}, "candidates": [
+      {"code":"908","name":"Soepballetjes blik","name2":"Forcemeat balls for soup canned; Gehaktballetjes soep- blik","category":"Vlees en gevogelte","state":"canned","kcal":189,"protein":10,"fat":15,"carbs":3.5},
+      {"code":"2619","name":"Berenklauw rauw","name2":"Meatball Berenklauw unprepared","category":"Hartige snacks en zoutjes","state":"raw","kcal":154,"protein":11.3,"fat":9.4,"carbs":5.4}
+    ] },
+    {"id":"gehaktkruiden","nl":"gehaktkruiden","en":"mince seasoning","aliasesEn":["meatball seasoning","mince spice mix"],"defaultUnit":"zakje","aisle":"kruiden-specerijen","current":{"kcal":250,"protein":9,"fat":4,"carbs":45,"source":"estimate"}, "candidates": [
+      {"code":"3139","name":"Gehakt kippen- rauw","name2":"Mince chicken raw; Kippengehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":147,"protein":21.5,"fat":6.8,"carbs":0},
+      {"code":"2613","name":"Mix seasoning Mexicaans onbereid","name2":"Mix seasoning Mexican unprepared; Seasoningmix mexicaans onbereid","category":"Kruiden en specerijen","state":"other","kcal":318,"protein":12,"fat":5.7,"carbs":48.8}
+    ] },
+    {"id":"geitenkaas","nl":"geitenkaas","en":"goat's cheese","aliasesEn":["goats cheese","goat cheese","chevre"],"defaultUnit":"g","aisle":"kaas","current":{"kcal":264,"protein":18.5,"fat":21.1,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"2518","name":"Kaas geiten- hard","name2":"Cheese goat hard; Geitenkaas hard","category":"Kaas","state":"other","kcal":396,"protein":22.4,"fat":32.5,"carbs":0.1},
+      {"code":"1650","name":"Kaas geiten- verse","name2":"Cheese goat fresh; Geitenkaas naturel vers","category":"Kaas","state":"other","kcal":207,"protein":13.4,"fat":16.6,"carbs":1},
+      {"code":"1723","name":"Kaas 20+","name2":"Cheese 20+","category":"Kaas","state":"other","kcal":246,"protein":34.5,"fat":12,"carbs":0},
+      {"code":"1724","name":"Kaas 50+","name2":"Cheese 50+","category":"Kaas","state":"other","kcal":380,"protein":22.9,"fat":32.1,"carbs":0},
+      {"code":"1809","name":"Kaas 45+","name2":"Cheese 45+","category":"Kaas","state":"other","kcal":357,"protein":25.4,"fat":27.3,"carbs":0},
+      {"code":"2264","name":"Kaas 10+","name2":"Cheese 10+","category":"Kaas","state":"other","kcal":187,"protein":32.2,"fat":6.4,"carbs":0.2},
+      {"code":"5575","name":"Kaas 35+","name2":"Cheese 35+","category":"Kaas","state":"other","kcal":302,"protein":27.3,"fat":20.4,"carbs":0},
+      {"code":"1382","name":"Kaas 30+ gem","name2":"Cheese 30+ av; Kaas 30+ Milner/Beemster/Linessa e.d.","category":"Kaas","state":"other","kcal":280,"protein":30.1,"fat":17.7,"carbs":0}
+    ] },
+    {"id":"geitenmelk","nl":"geitenmelk","en":"goat's milk","aliasesEn":["goat milk"],"defaultUnit":"ml","aisle":"zuivel-eieren","current":{"kcal":69,"protein":3.6,"fat":4.1,"carbs":4.5,"source":"usda"}, "candidates": [
+      {"code":"270","name":"Melk rauwe","name2":"Milk raw","category":"Melk en melkproducten","state":"raw","kcal":71,"protein":3.4,"fat":4.4,"carbs":4.4},
+      {"code":"2240","name":"Melk geiten- volle","name2":"Milk goats- full fat; Geitenmelk volle","category":"Melk en melkproducten","state":"other","kcal":64,"protein":3.3,"fat":3.7,"carbs":4.3},
+      {"code":"2290","name":"Kokosmelk","name2":"Coconut milk; Klappermelk","category":"Vleesvervangers en zuivelvervangers","state":"other","kcal":173,"protein":1.4,"fat":17.4,"carbs":2.5},
+      {"code":"279","name":"Melk volle","name2":"Milk whole","category":"Melk en melkproducten","state":"other","kcal":61,"protein":3.3,"fat":3.4,"carbs":4.5},
+      {"code":"294","name":"Melk magere","name2":"Milk skimmed","category":"Melk en melkproducten","state":"other","kcal":35,"protein":3.7,"fat":0.1,"carbs":4.9},
+      {"code":"297","name":"Melk moeder-","name2":"Milk human; Moedermelk/borstvoeding","category":"Melk en melkproducten","state":"other","kcal":66,"protein":1.1,"fat":3.5,"carbs":7.4},
+      {"code":"431","name":"Chocolade melk-","name2":"Chocolate milk; Melkchocolade","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":548,"protein":7,"fat":34.1,"carbs":52},
+      {"code":"1112","name":"Kaas rauwmelkse 48+","name2":"Cheese raw milk 48+; Boerenkaas 48+/Rauwmelkse kaas 48+","category":"Kaas","state":"raw","kcal":392,"protein":26,"fat":32,"carbs":0}
+    ] },
+    {"id":"geitenyoghurt","nl":"geitenyoghurt","en":"goat's milk yoghurt","aliasesEn":["goat's yoghurt","goat yoghurt"],"defaultUnit":"g","aisle":"zuivel-eieren","current":{"kcal":65,"protein":4,"fat":3.8,"carbs":4,"source":"estimate"}, "candidates": [
+      {"code":"270","name":"Melk rauwe","name2":"Milk raw","category":"Melk en melkproducten","state":"raw","kcal":71,"protein":3.4,"fat":4.4,"carbs":4.4},
+      {"code":"2240","name":"Melk geiten- volle","name2":"Milk goats- full fat; Geitenmelk volle","category":"Melk en melkproducten","state":"other","kcal":64,"protein":3.3,"fat":3.7,"carbs":4.3},
+      {"code":"300","name":"Yoghurt Bulgaarse volle","name2":"Yoghurt Bulgarian whole milk","category":"Melk en melkproducten","state":"other","kcal":77,"protein":4.5,"fat":4.3,"carbs":4.5},
+      {"code":"2290","name":"Kokosmelk","name2":"Coconut milk; Klappermelk","category":"Vleesvervangers en zuivelvervangers","state":"other","kcal":173,"protein":1.4,"fat":17.4,"carbs":2.5},
+      {"code":"279","name":"Melk volle","name2":"Milk whole","category":"Melk en melkproducten","state":"other","kcal":61,"protein":3.3,"fat":3.4,"carbs":4.5},
+      {"code":"294","name":"Melk magere","name2":"Milk skimmed","category":"Melk en melkproducten","state":"other","kcal":35,"protein":3.7,"fat":0.1,"carbs":4.9},
+      {"code":"297","name":"Melk moeder-","name2":"Milk human; Moedermelk/borstvoeding","category":"Melk en melkproducten","state":"other","kcal":66,"protein":1.1,"fat":3.5,"carbs":7.4},
+      {"code":"657","name":"Yoghurtdrank","name2":"Yoghurt drink; Drinkyoghurt","category":"Melk en melkproducten","state":"other","kcal":57,"protein":1.6,"fat":0.1,"carbs":12}
+    ] },
+    {"id":"gelatine","nl":"gelatine","en":"gelatine","aliasesEn":["gelatine leaves","leaf gelatine","gelatin","powdered gelatine"],"defaultUnit":"blad","aisle":"bakken","current":{"kcal":335,"protein":85.6,"fat":0.1,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"439","name":"Gelatine","name2":"Gelatin","category":"Diversen","state":"other","kcal":352,"protein":88,"fat":0,"carbs":0},
+      {"code":"2343","name":"Pudding gelatine-","name2":"Jelly; Gelatinepudding","category":"Melk en melkproducten","state":"other","kcal":59,"protein":1.8,"fat":0,"carbs":13}
+    ] },
+    {"id":"geleisuiker","nl":"geleisuiker","en":"jam sugar","aliasesEn":["preserving sugar"],"defaultUnit":"g","aisle":"bakken","current":{"kcal":387,"protein":0,"fat":0,"carbs":100,"source":"usda"}, "candidates": [
+      {"code":"445","name":"Jam","name2":"Jam; Huishoudjam","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":248,"protein":0.3,"fat":0.1,"carbs":60.8},
+      {"code":"2884","name":"Suiker riet-","name2":"Cane sugar; Rietsuiker","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":400,"protein":0.5,"fat":0,"carbs":99.5},
+      {"code":"5407","name":"Spread fruit-","name2":"Fruit spread; Jam 33% minder suiker/fruitspread","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":162,"protein":0.5,"fat":0.1,"carbs":38},
+      {"code":"381","name":"Stroop suiker-","name2":"Syrup sugar; Suikerstroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":300,"protein":0,"fat":0,"carbs":75},
+      {"code":"5089","name":"Suiker poeder-","name2":"Sugar powdered; Poedersuiker","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":396,"protein":0,"fat":0,"carbs":99},
+      {"code":"377","name":"Suiker kristal-","name2":"Sugar granulated; Tafelsuiker/kristalsuiker","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":400,"protein":0,"fat":0,"carbs":100},
+      {"code":"5122","name":"Glazuur suiker-","name2":"Icing (sugar)","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":354,"protein":0,"fat":0,"carbs":88.4},
+      {"code":"3351","name":"Marmelade","name2":"Marmalade; Jam marmelade","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":260,"protein":0.3,"fat":0.2,"carbs":63.9}
+    ] },
+    {"id":"gember","nl":"gember","en":"ginger","aliasesEn":["fresh ginger","root ginger","fresh root ginger"],"defaultUnit":"cm","aisle":"groente-fruit","current":{"kcal":80,"protein":1.8,"fat":0.8,"carbs":15.8,"source":"usda"}, "candidates": [
+      {"code":"832","name":"Gemberwortel","name2":"Ginger root","category":"Kruiden en specerijen","state":"other","kcal":81,"protein":1.8,"fat":0.8,"carbs":15.7},
+      {"code":"3357","name":"Siroop gember-","name2":"Syrup ginger; Gembersiroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":215,"protein":0,"fat":0.4,"carbs":52.2}
+    ] },
+    {"id":"gemberkoekje","nl":"gemberkoekje","en":"ginger biscuit","aliasesEn":["ginger nut","ginger nuts","ginger snaps"],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":440,"protein":5,"fat":12,"carbs":78,"source":"estimate"}, "candidates": [
+      {"code":"2609","name":"Koekje m noten","name2":"Biscuits w nuts","category":"Gebak en koek","state":"other","kcal":509,"protein":6.6,"fat":24.1,"carbs":64.9},
+      {"code":"252","name":"Biscuit","name2":"Biscuit; Mariakoekje/kaakje","category":"Gebak en koek","state":"other","kcal":437,"protein":7.6,"fat":11,"carbs":75.5},
+      {"code":"258","name":"Koekje gem","name2":"Biscuit av","category":"Gebak en koek","state":"other","kcal":475,"protein":5.7,"fat":20.7,"carbs":65.2},
+      {"code":"2607","name":"Koekje m noten en chocolade","name2":"Biscuit w nuts and chocolate","category":"Gebak en koek","state":"other","kcal":517,"protein":7.5,"fat":28.7,"carbs":55.5},
+      {"code":"2583","name":"Koek pinda-","name2":"Biscuit peanut; Pindakoek","category":"Gebak en koek","state":"other","kcal":513,"protein":10.6,"fat":28.4,"carbs":51.9},
+      {"code":"636","name":"Koek muesli-","name2":"Biscuit muesli; Mueslikoek","category":"Gebak en koek","state":"other","kcal":394,"protein":6.5,"fat":16.1,"carbs":54.1},
+      {"code":"832","name":"Gemberwortel","name2":"Ginger root","category":"Kruiden en specerijen","state":"other","kcal":81,"protein":1.8,"fat":0.8,"carbs":15.7},
+      {"code":"264","name":"Biscuit zoute","name2":"Biscuit salted; Tuc e.d. zout koekje","category":"Hartige snacks en zoutjes","state":"other","kcal":472,"protein":8.1,"fat":23,"carbs":56.7}
+    ] },
+    {"id":"gemberpoeder","nl":"gemberpoeder","en":"ground ginger","aliasesEn":["ginger powder","dried ginger"],"defaultUnit":"tl","aisle":"kruiden-specerijen","current":{"kcal":340,"protein":9,"fat":4,"carbs":71,"source":"estimate"}, "candidates": [
+      {"code":"3357","name":"Siroop gember-","name2":"Syrup ginger; Gembersiroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":215,"protein":0,"fat":0.4,"carbs":52.2},
+      {"code":"832","name":"Gemberwortel","name2":"Ginger root","category":"Kruiden en specerijen","state":"other","kcal":81,"protein":1.8,"fat":0.8,"carbs":15.7}
+    ] },
+    {"id":"gembersap","nl":"gembersap","en":"ginger juice","aliasesEn":[],"defaultUnit":"ml","aisle":"sauzen-olie-azijn","current":{"kcal":40,"protein":0.5,"fat":0.2,"carbs":9,"source":"estimate"}, "candidates": [
+      {"code":"383","name":"Sap appel-","name2":"Juice apple; Appelsap","category":"Niet-alcoholische dranken","state":"other","kcal":46,"protein":0.1,"fat":0,"carbs":11.2},
+      {"code":"923","name":"Sap peren-","name2":"Juice pear; Perensap","category":"Niet-alcoholische dranken","state":"other","kcal":39,"protein":0.1,"fat":0,"carbs":9.5},
+      {"code":"1462","name":"Sap ananas-","name2":"Juice pineapple; Ananassap","category":"Niet-alcoholische dranken","state":"other","kcal":47,"protein":0.5,"fat":0,"carbs":11.2},
+      {"code":"1656","name":"Sap wortel-","name2":"Juice carrot; Wortelsap","category":"Niet-alcoholische dranken","state":"other","kcal":29,"protein":0.4,"fat":0.2,"carbs":6.4},
+      {"code":"861","name":"Sap bieten-","name2":"Juice beetroot; Bietensap","category":"Niet-alcoholische dranken","state":"other","kcal":34,"protein":0.9,"fat":0,"carbs":7.7},
+      {"code":"396","name":"Sap druiven-","name2":"Juice grape; Druivensap","category":"Niet-alcoholische dranken","state":"other","kcal":65,"protein":0.2,"fat":0,"carbs":15.9},
+      {"code":"413","name":"Sap tomaten-","name2":"Tomato juice; Tomatensap","category":"Niet-alcoholische dranken","state":"other","kcal":16,"protein":0.7,"fat":0,"carbs":3.2},
+      {"code":"1657","name":"Sap zuurkool-","name2":"Juice sauerkraut; Zuurkoolsap","category":"Niet-alcoholische dranken","state":"other","kcal":7,"protein":0.7,"fat":0,"carbs":1.1}
+    ] },
+    {"id":"gembershot","nl":"gembershot","en":"ginger shot","aliasesEn":[],"defaultUnit":"fles","aisle":"groente-fruit","current":{"kcal":40,"protein":0.5,"fat":0.2,"carbs":8.5,"source":"estimate"}, "candidates": [
+      {"code":"3357","name":"Siroop gember-","name2":"Syrup ginger; Gembersiroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":215,"protein":0,"fat":0.4,"carbs":52.2},
+      {"code":"832","name":"Gemberwortel","name2":"Ginger root","category":"Kruiden en specerijen","state":"other","kcal":81,"protein":1.8,"fat":0.8,"carbs":15.7}
+    ] },
+    {"id":"gembersiroop","nl":"gembersiroop","en":"ginger syrup","aliasesEn":["stem ginger syrup"],"defaultUnit":"el","aisle":"sauzen-olie-azijn","current":{"kcal":280,"protein":0,"fat":0,"carbs":70,"source":"estimate"}, "candidates": [
+      {"code":"3357","name":"Siroop gember-","name2":"Syrup ginger; Gembersiroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":215,"protein":0,"fat":0.4,"carbs":52.2},
+      {"code":"440","name":"Gember op siroop blik/glas","name2":"Ginger stem in syrup tinned; Stemgember","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"canned","kcal":288,"protein":1.8,"fat":0,"carbs":69},
+      {"code":"3063","name":"Siroop ahorn-","name2":"Syrup maple; Maple syrup","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":269,"protein":0,"fat":0.1,"carbs":67.2},
+      {"code":"832","name":"Gemberwortel","name2":"Ginger root","category":"Kruiden en specerijen","state":"other","kcal":81,"protein":1.8,"fat":0.8,"carbs":15.7},
+      {"code":"378","name":"Stroop keuken-","name2":"Syrup Keukenstroop; Keukenstroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":328,"protein":0,"fat":0,"carbs":82},
+      {"code":"381","name":"Stroop suiker-","name2":"Syrup sugar; Suikerstroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":300,"protein":0,"fat":0,"carbs":75},
+      {"code":"1652","name":"Stroop maismout-","name2":"Syrup corn; Maismoutstroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":287,"protein":2.3,"fat":0,"carbs":69.4},
+      {"code":"713","name":"Wafel stroop- gem","name2":"Waffle syrup av; Stroopwafel gemiddeld","category":"Gebak en koek","state":"other","kcal":473,"protein":3.8,"fat":19.3,"carbs":70.2}
+    ] },
+    {"id":"gemberthee","nl":"gemberthee","en":"ginger tea","aliasesEn":[],"defaultUnit":"zakje","aisle":"dranken","current":{"kcal":0,"protein":0,"fat":0,"carbs":0,"source":"estimate"}, "candidates": [
+      {"code":"645","name":"Thee bereid","name2":"Tea prepared","category":"Niet-alcoholische dranken","state":"cooked","kcal":0,"protein":0,"fat":0,"carbs":0},
+      {"code":"3357","name":"Siroop gember-","name2":"Syrup ginger; Gembersiroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":215,"protein":0,"fat":0.4,"carbs":52.2},
+      {"code":"832","name":"Gemberwortel","name2":"Ginger root","category":"Kruiden en specerijen","state":"other","kcal":81,"protein":1.8,"fat":0.8,"carbs":15.7}
+    ] },
+    {"id":"gepofte-rijst","nl":"gepofte rijst","en":"puffed rice","aliasesEn":["rice pops","crisped rice","Rice Krispies"],"defaultUnit":"g","aisle":"brood-ontbijt","current":{"kcal":380,"protein":7,"fat":1,"carbs":83,"source":"estimate"}, "candidates": [
+      {"code":"3334","name":"Olie rijst-","name2":"Oil rice bran; Rijstolie/Rijstvliesolie","category":"Vetten en oliën","state":"other","kcal":900,"protein":0,"fat":100,"carbs":0},
+      {"code":"5","name":"Rijst witte rauw","name2":"Rice white raw; Witte rijst onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":352,"protein":7,"fat":1,"carbs":78},
+      {"code":"2049","name":"Rijst meergranen- rauw","name2":"Rice multi-grain raw; Meergranenrijst onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":351,"protein":9,"fat":1.5,"carbs":74},
+      {"code":"712","name":"Rijst zilvervlies- rauw","name2":"Rice brown raw; Zilvervliesrijst onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":357,"protein":8.3,"fat":2.6,"carbs":73.5},
+      {"code":"2376","name":"Chocolade melk- m gepofte rijst","name2":"Chocolate milk w puffed rice; Melkchocolade m crisp","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":531,"protein":7.1,"fat":30.7,"carbs":55.2},
+      {"code":"298","name":"Pap rijste-","name2":"Porridge rice; Rijstepap","category":"Melk en melkproducten","state":"other","kcal":86,"protein":3.1,"fat":2.9,"carbs":12},
+      {"code":"80","name":"Bloem rijste-","name2":"Flour rice; Rijstebloem","category":"Graanproducten en meelsoorten","state":"other","kcal":369,"protein":6.2,"fat":0.5,"carbs":83.9},
+      {"code":"2360","name":"Wafel rijst- m karamel","name2":"Rice cakes puffed w caramel; Karamelrijstwafel","category":"Brood","state":"other","kcal":394,"protein":5.5,"fat":2.4,"carbs":87}
+    ] },
+    {"id":"gestampte-muisjes","nl":"gestampte muisjes","en":"ground aniseed sprinkles","aliasesEn":[],"defaultUnit":"el","aisle":"brood-ontbijt","current":{"kcal":385,"protein":1,"fat":1,"carbs":93,"source":"estimate"}, "candidates": [
+      {"code":"1311","name":"Hagelslag chocolade- gem","name2":"Chocolate sprinkles av; Chocoladehagelslag gem","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":449,"protein":5.7,"fat":15.3,"carbs":69.3},
+      {"code":"3245","name":"Muisjes gestampte/roze&witte/blauwe&witte","name2":"Aniseed comfits crushed/pink&white/blue&white","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":402,"protein":2,"fat":2.4,"carbs":92}
+    ] },
+    {"id":"gevulde-druivenbladeren","nl":"gevulde druivenbladeren","en":"stuffed vine leaves","aliasesEn":["dolmades","dolmas"],"defaultUnit":"stuk","aisle":"wereld","current":{"kcal":150,"protein":3,"fat":8,"carbs":16,"source":"estimate"}, "candidates": [
+      {"code":"673","name":"Amsoi rauw","name2":"Mustard leaves raw; Mosterblad rauw","category":"Groente","state":"raw","kcal":32,"protein":2.5,"fat":0.3,"carbs":3.2},
+      {"code":"677","name":"Klaroen rauw","name2":"Amaranth leaves raw","category":"Groente","state":"raw","kcal":56,"protein":4,"fat":1,"carbs":7},
+      {"code":"1087","name":"Sla mol- rauw","name2":"Dandelion leaves raw; Molsla/ paardenbloemblad rauw","category":"Groente","state":"raw","kcal":55,"protein":3,"fat":1,"carbs":8},
+      {"code":"684","name":"Tajerblad rauw","name2":"Tannia leaves raw; Tayerblad/boterblad","category":"Groente","state":"raw","kcal":19,"protein":2,"fat":0,"carbs":2},
+      {"code":"257","name":"Koek gevulde gem","name2":"Almond paste filled tarts av; Pencee/kano/rondo/gevuld heertje","category":"Gebak en koek","state":"other","kcal":411,"protein":6.4,"fat":15.8,"carbs":59.9},
+      {"code":"2730","name":"Tomaat tros- rauw","name2":"Tomato vine raw; Trostomaat/trostomaten rauw","category":"Groente","state":"raw","kcal":22,"protein":0.7,"fat":0.5,"carbs":3},
+      {"code":"855","name":"Speculaas gevulde","name2":"Biscuit spiced Speculaas w almond paste","category":"Gebak en koek","state":"other","kcal":437,"protein":7.2,"fat":23.9,"carbs":47.1}
+    ] },
+    {"id":"gevulde-koek","nl":"gevulde koek","en":"almond-filled biscuit","aliasesEn":[],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":410,"protein":5,"fat":16,"carbs":62,"source":"estimate"}, "candidates": [
+      {"code":"257","name":"Koek gevulde gem","name2":"Almond paste filled tarts av; Pencee/kano/rondo/gevuld heertje","category":"Gebak en koek","state":"other","kcal":411,"protein":6.4,"fat":15.8,"carbs":59.9},
+      {"code":"2227","name":"Biscuit fourre","name2":"Biscuit filled; Sandwichbiscuit","category":"Gebak en koek","state":"other","kcal":473,"protein":5.5,"fat":17.1,"carbs":73.2},
+      {"code":"258","name":"Koekje gem","name2":"Biscuit av","category":"Gebak en koek","state":"other","kcal":475,"protein":5.7,"fat":20.7,"carbs":65.2},
+      {"code":"2761","name":"Koek gevulde m roomboter","name2":"Almond paste filled tarts w butter; Pencee/kano/rondo/gevuld heertje m roomboter","category":"Gebak en koek","state":"other","kcal":415,"protein":7.1,"fat":16.5,"carbs":58.7},
+      {"code":"2762","name":"Koek gevulde z roomboter","name2":"Almond paste filled tarts wo butter; Pencee/kano/rondo/gevuld heertje z roomboter","category":"Gebak en koek","state":"other","kcal":406,"protein":5.2,"fat":14.9,"carbs":61.7},
+      {"code":"252","name":"Biscuit","name2":"Biscuit; Mariakoekje/kaakje","category":"Gebak en koek","state":"other","kcal":437,"protein":7.6,"fat":11,"carbs":75.5},
+      {"code":"2891","name":"Koek jode-","name2":"Biscuit Dutch Jodekoek; Jodekoek","category":"Gebak en koek","state":"other","kcal":505,"protein":4.5,"fat":24.9,"carbs":65.2},
+      {"code":"2583","name":"Koek pinda-","name2":"Biscuit peanut; Pindakoek","category":"Gebak en koek","state":"other","kcal":513,"protein":10.6,"fat":28.4,"carbs":51.9}
+    ] },
+    {"id":"gevulde-speculaas","nl":"gevulde speculaas","en":"almond-filled speculaas","aliasesEn":[],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":420,"protein":5.5,"fat":17,"carbs":60,"source":"estimate"}, "candidates": [
+      {"code":"855","name":"Speculaas gevulde","name2":"Biscuit spiced Speculaas w almond paste","category":"Gebak en koek","state":"other","kcal":437,"protein":7.2,"fat":23.9,"carbs":47.1},
+      {"code":"257","name":"Koek gevulde gem","name2":"Almond paste filled tarts av; Pencee/kano/rondo/gevuld heertje","category":"Gebak en koek","state":"other","kcal":411,"protein":6.4,"fat":15.8,"carbs":59.9},
+      {"code":"261","name":"Speculaas gem","name2":"Biscuit spiced Speculaas av","category":"Gebak en koek","state":"other","kcal":469,"protein":5,"fat":20.3,"carbs":65.1},
+      {"code":"5579","name":"Meel amandel-","name2":"Flour almond; Amandelmeel","category":"Graanproducten en meelsoorten","state":"other","kcal":638,"protein":25.3,"fat":55.8,"carbs":3.6},
+      {"code":"2227","name":"Biscuit fourre","name2":"Biscuit filled; Sandwichbiscuit","category":"Gebak en koek","state":"other","kcal":473,"protein":5.5,"fat":17.1,"carbs":73.2}
+    ] },
+    {"id":"ghee","nl":"ghee","en":"ghee","aliasesEn":["clarified butter"],"defaultUnit":"g","aisle":"wereld","current":{"kcal":900,"protein":0,"fat":100,"carbs":0,"source":"usda"}, "candidates": [] },
+    {"id":"gierst","nl":"gierst","en":"millet","aliasesEn":[],"defaultUnit":"g","aisle":"droog","current":{"kcal":378,"protein":11,"fat":4.2,"carbs":64.4,"source":"usda"}, "candidates": [
+      {"code":"847","name":"Gierst rauw","name2":"Millet raw; Gierst onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":368,"protein":11.8,"fat":4.2,"carbs":69.4}
+    ] },
+    {"id":"gin","nl":"gin","en":"gin","aliasesEn":[],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":231,"protein":0,"fat":0,"carbs":0,"source":"estimate"}, "candidates": [] },
+    {"id":"ginger-ale","nl":"ginger ale","en":"ginger ale","aliasesEn":[],"defaultUnit":"fles","aisle":"dranken","current":{"kcal":35,"protein":0,"fat":0,"carbs":8.5,"source":"estimate"}, "candidates": [
+      {"code":"400","name":"Frisdrank m suiker z cafeine","name2":"Soft drink m sugar wo caffeine; Ginger ale/tonic","category":"Niet-alcoholische dranken","state":"other","kcal":37,"protein":0,"fat":0,"carbs":9.2},
+      {"code":"832","name":"Gemberwortel","name2":"Ginger root","category":"Kruiden en specerijen","state":"other","kcal":81,"protein":1.8,"fat":0.8,"carbs":15.7},
+      {"code":"3357","name":"Siroop gember-","name2":"Syrup ginger; Gembersiroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":215,"protein":0,"fat":0.4,"carbs":52.2}
+    ] },
+    {"id":"ginger-beer","nl":"ginger beer","en":"ginger beer","aliasesEn":[],"defaultUnit":"fles","aisle":"dranken","current":{"kcal":40,"protein":0,"fat":0,"carbs":10,"source":"estimate"}, "candidates": [
+      {"code":"3214","name":"Bier wit","name2":"Beer white; Witbier","category":"Alcoholische dranken","state":"other","kcal":47,"protein":0.5,"fat":0,"carbs":3.7},
+      {"code":"3268","name":"Bier bok-","name2":"Beer bock; Bokbier","category":"Alcoholische dranken","state":"other","kcal":61,"protein":0.6,"fat":0,"carbs":5.2},
+      {"code":"390","name":"Bier pils","name2":"Beer pilsner","category":"Alcoholische dranken","state":"other","kcal":44,"protein":0.4,"fat":0,"carbs":3},
+      {"code":"832","name":"Gemberwortel","name2":"Ginger root","category":"Kruiden en specerijen","state":"other","kcal":81,"protein":1.8,"fat":0.8,"carbs":15.7},
+      {"code":"3357","name":"Siroop gember-","name2":"Syrup ginger; Gembersiroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":215,"protein":0,"fat":0.4,"carbs":52.2}
+    ] },
+    {"id":"gist","nl":"gist","en":"yeast","aliasesEn":["dried yeast","fast-action yeast","instant yeast","baker's yeast","active dry yeast"],"defaultUnit":"zakje","aisle":"bakken","current":{"kcal":278,"protein":40,"fat":6,"carbs":16,"source":"estimate"}, "candidates": [
+      {"code":"1025","name":"Gist gedroogd","name2":"Yeast dried","category":"Diversen","state":"dried","kcal":390,"protein":48,"fat":6,"carbs":36},
+      {"code":"950","name":"Gist vers","name2":"Yeast fresh","category":"Diversen","state":"other","kcal":66,"protein":11.4,"fat":0.4,"carbs":1}
+    ] },
+    {"id":"glasnoedels","nl":"glasnoedels","en":"glass noodles","aliasesEn":["cellophane noodles","bean thread noodles","mung bean noodles"],"defaultUnit":"g","aisle":"wereld","current":{"kcal":351,"protein":0.2,"fat":0.1,"carbs":85.6,"source":"usda"}, "candidates": [] },
+    {"id":"glucosestroop","nl":"glucosestroop","en":"glucose syrup","aliasesEn":["liquid glucose","corn syrup"],"defaultUnit":"el","aisle":"bakken","current":{"kcal":283,"protein":0,"fat":0.2,"carbs":76.8,"source":"usda"}, "candidates": [
+      {"code":"1652","name":"Stroop maismout-","name2":"Syrup corn; Maismoutstroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":287,"protein":2.3,"fat":0,"carbs":69.4},
+      {"code":"3063","name":"Siroop ahorn-","name2":"Syrup maple; Maple syrup","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":269,"protein":0,"fat":0.1,"carbs":67.2},
+      {"code":"3357","name":"Siroop gember-","name2":"Syrup ginger; Gembersiroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":215,"protein":0,"fat":0.4,"carbs":52.2},
+      {"code":"378","name":"Stroop keuken-","name2":"Syrup Keukenstroop; Keukenstroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":328,"protein":0,"fat":0,"carbs":82},
+      {"code":"381","name":"Stroop suiker-","name2":"Syrup sugar; Suikerstroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":300,"protein":0,"fat":0,"carbs":75},
+      {"code":"713","name":"Wafel stroop- gem","name2":"Waffle syrup av; Stroopwafel gemiddeld","category":"Gebak en koek","state":"other","kcal":473,"protein":3.8,"fat":19.3,"carbs":70.2}
+    ] },
+    {"id":"gluhwein","nl":"glühwein","en":"mulled wine","aliasesEn":["glühwein"],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":90,"protein":0.1,"fat":0,"carbs":10,"source":"estimate"}, "candidates": [
+      {"code":"2610","name":"Wijn rose","name2":"Wine rose","category":"Alcoholische dranken","state":"other","kcal":71,"protein":0.1,"fat":0,"carbs":2.5},
+      {"code":"422","name":"Wijn rode","name2":"Wine red","category":"Alcoholische dranken","state":"other","kcal":76,"protein":0.1,"fat":0,"carbs":0.2},
+      {"code":"5246","name":"Wijn alcoholvrij","name2":"Wine alcohol free","category":"Niet-alcoholische dranken","state":"other","kcal":23,"protein":0.1,"fat":0.1,"carbs":5.3},
+      {"code":"930","name":"Wijn pleegzusterbloed-","name2":"Wine medicinal pleegzusterbloedwijn; Pleegzuster Bloedwijn","category":"Alcoholische dranken","state":"other","kcal":154,"protein":0,"fat":0,"carbs":14},
+      {"code":"407","name":"Port","name2":"Port wine","category":"Alcoholische dranken","state":"other","kcal":156,"protein":0,"fat":0,"carbs":13}
+    ] },
+    {"id":"glutenvrij-brood","nl":"glutenvrij brood","en":"gluten-free bread","aliasesEn":["gluten free bread","gluten-free loaf"],"defaultUnit":"snee","aisle":"brood-ontbijt","current":{"kcal":248,"protein":4.3,"fat":5.2,"carbs":41.5,"source":"usda"}, "candidates": [
+      {"code":"5412","name":"Glutenvrij brood licht","name2":"Gluten free bread light; Glutenvrij witbrood","category":"Brood","state":"other","kcal":212,"protein":4.1,"fat":3.1,"carbs":38.9},
+      {"code":"5411","name":"Glutenvrij brood donker","name2":"Gluten free bread dark; Glutenvrij bruinbrood","category":"Brood","state":"other","kcal":205,"protein":4.1,"fat":3.6,"carbs":35},
+      {"code":"5413","name":"Glutenvrij brood meerzaden","name2":"Gluten free bread multiseeds; Glutenvrij meerzadenbrood","category":"Brood","state":"other","kcal":236,"protein":5,"fat":7,"carbs":33.5},
+      {"code":"5414","name":"Glutenvrij brood zuurdesem","name2":"Gluten free bread sourdough; Glutenvrij zuurdesembrood","category":"Brood","state":"other","kcal":266,"protein":4.3,"fat":4.2,"carbs":49},
+      {"code":"2271","name":"Pasta glutenvrij rauw","name2":"Pasta gluten free raw; Macaroni/spaghetti glutenvrij onbereid Schar e.d.","category":"Graanproducten en meelsoorten","state":"raw","kcal":358,"protein":9,"fat":2.5,"carbs":73.7},
+      {"code":"5598","name":"Bakmix voor brood wit glutenvrij","name2":"Bakery mix for bread white gluten free; Broodmix wit glutenvrij","category":"Graanproducten en meelsoorten","state":"other","kcal":354,"protein":5.4,"fat":1.6,"carbs":77.5},
+      {"code":"3374","name":"Focaccia","name2":"Focaccia; Brood focaccia","category":"Brood","state":"other","kcal":266,"protein":7.7,"fat":8.7,"carbs":38.4},
+      {"code":"1013","name":"Paneermeel","name2":"Bread crumbs","category":"Graanproducten en meelsoorten","state":"other","kcal":357,"protein":11.6,"fat":1.6,"carbs":69.9}
+    ] },
+    {"id":"glutenvrij-paneermeel","nl":"glutenvrij paneermeel","en":"gluten-free breadcrumbs","aliasesEn":["gluten free breadcrumbs"],"defaultUnit":"el","aisle":"bakken","current":{"kcal":360,"protein":5,"fat":2,"carbs":78,"source":"estimate"}, "candidates": [
+      {"code":"2271","name":"Pasta glutenvrij rauw","name2":"Pasta gluten free raw; Macaroni/spaghetti glutenvrij onbereid Schar e.d.","category":"Graanproducten en meelsoorten","state":"raw","kcal":358,"protein":9,"fat":2.5,"carbs":73.7},
+      {"code":"1013","name":"Paneermeel","name2":"Bread crumbs","category":"Graanproducten en meelsoorten","state":"other","kcal":357,"protein":11.6,"fat":1.6,"carbs":69.9},
+      {"code":"5412","name":"Glutenvrij brood licht","name2":"Gluten free bread light; Glutenvrij witbrood","category":"Brood","state":"other","kcal":212,"protein":4.1,"fat":3.1,"carbs":38.9},
+      {"code":"5411","name":"Glutenvrij brood donker","name2":"Gluten free bread dark; Glutenvrij bruinbrood","category":"Brood","state":"other","kcal":205,"protein":4.1,"fat":3.6,"carbs":35},
+      {"code":"5413","name":"Glutenvrij brood meerzaden","name2":"Gluten free bread multiseeds; Glutenvrij meerzadenbrood","category":"Brood","state":"other","kcal":236,"protein":5,"fat":7,"carbs":33.5},
+      {"code":"5414","name":"Glutenvrij brood zuurdesem","name2":"Gluten free bread sourdough; Glutenvrij zuurdesembrood","category":"Brood","state":"other","kcal":266,"protein":4.3,"fat":4.2,"carbs":49},
+      {"code":"5256","name":"Paneermeel kruiden-","name2":"Bread crumbs w herbs; Kruidenpaneermeel","category":"Graanproducten en meelsoorten","state":"other","kcal":343,"protein":10.3,"fat":3.7,"carbs":65.1},
+      {"code":"3250","name":"Pasta glutenvrij gekookt","name2":"Pasta gluten free cooked; Macaroni/spaghetti glutenvrij gekookt Schar","category":"Graanproducten en meelsoorten","state":"cooked","kcal":143,"protein":3.6,"fat":1,"carbs":29.5}
+    ] },
+    {"id":"glutenvrije-bloem","nl":"glutenvrije bloem","en":"gluten-free flour","aliasesEn":["gluten free flour","gluten-free plain flour"],"defaultUnit":"g","aisle":"bakken","current":{"kcal":350,"protein":4,"fat":1.5,"carbs":78,"source":"estimate"}, "candidates": [
+      {"code":"2271","name":"Pasta glutenvrij rauw","name2":"Pasta gluten free raw; Macaroni/spaghetti glutenvrij onbereid Schar e.d.","category":"Graanproducten en meelsoorten","state":"raw","kcal":358,"protein":9,"fat":2.5,"carbs":73.7},
+      {"code":"5412","name":"Glutenvrij brood licht","name2":"Gluten free bread light; Glutenvrij witbrood","category":"Brood","state":"other","kcal":212,"protein":4.1,"fat":3.1,"carbs":38.9},
+      {"code":"5411","name":"Glutenvrij brood donker","name2":"Gluten free bread dark; Glutenvrij bruinbrood","category":"Brood","state":"other","kcal":205,"protein":4.1,"fat":3.6,"carbs":35},
+      {"code":"5413","name":"Glutenvrij brood meerzaden","name2":"Gluten free bread multiseeds; Glutenvrij meerzadenbrood","category":"Brood","state":"other","kcal":236,"protein":5,"fat":7,"carbs":33.5},
+      {"code":"5414","name":"Glutenvrij brood zuurdesem","name2":"Gluten free bread sourdough; Glutenvrij zuurdesembrood","category":"Brood","state":"other","kcal":266,"protein":4.3,"fat":4.2,"carbs":49},
+      {"code":"696","name":"Meel mais-","name2":"Flour corn; Maismeel","category":"Graanproducten en meelsoorten","state":"other","kcal":363,"protein":6.1,"fat":1.7,"carbs":76.7},
+      {"code":"869","name":"Meel soja-","name2":"Flour soya; Sojameel volvet","category":"Graanproducten en meelsoorten","state":"other","kcal":429,"protein":39.1,"fat":22.9,"carbs":7.6},
+      {"code":"218","name":"Meel rogge-","name2":"Flour rye wholemeal; Roggemeel","category":"Graanproducten en meelsoorten","state":"other","kcal":314,"protein":9.1,"fat":1.5,"carbs":56.6}
+    ] },
+    {"id":"glutenvrije-broodmix","nl":"glutenvrije broodmix","en":"gluten-free bread mix","aliasesEn":["gluten free bread mix"],"defaultUnit":"pak","aisle":"bakken","current":{"kcal":340,"protein":4,"fat":3,"carbs":73,"source":"estimate"}, "candidates": [
+      {"code":"5412","name":"Glutenvrij brood licht","name2":"Gluten free bread light; Glutenvrij witbrood","category":"Brood","state":"other","kcal":212,"protein":4.1,"fat":3.1,"carbs":38.9},
+      {"code":"5411","name":"Glutenvrij brood donker","name2":"Gluten free bread dark; Glutenvrij bruinbrood","category":"Brood","state":"other","kcal":205,"protein":4.1,"fat":3.6,"carbs":35},
+      {"code":"5413","name":"Glutenvrij brood meerzaden","name2":"Gluten free bread multiseeds; Glutenvrij meerzadenbrood","category":"Brood","state":"other","kcal":236,"protein":5,"fat":7,"carbs":33.5},
+      {"code":"5414","name":"Glutenvrij brood zuurdesem","name2":"Gluten free bread sourdough; Glutenvrij zuurdesembrood","category":"Brood","state":"other","kcal":266,"protein":4.3,"fat":4.2,"carbs":49},
+      {"code":"5598","name":"Bakmix voor brood wit glutenvrij","name2":"Bakery mix for bread white gluten free; Broodmix wit glutenvrij","category":"Graanproducten en meelsoorten","state":"other","kcal":354,"protein":5.4,"fat":1.6,"carbs":77.5},
+      {"code":"5599","name":"Bakmix voor brood bruin/meergranen glutenvrij","name2":"Bakery mix for bread brown/multigrain gluten free; Broodmix bruin/meergranen glutenvrij","category":"Graanproducten en meelsoorten","state":"other","kcal":369,"protein":6,"fat":3.4,"carbs":76.4},
+      {"code":"2271","name":"Pasta glutenvrij rauw","name2":"Pasta gluten free raw; Macaroni/spaghetti glutenvrij onbereid Schar e.d.","category":"Graanproducten en meelsoorten","state":"raw","kcal":358,"protein":9,"fat":2.5,"carbs":73.7},
+      {"code":"5585","name":"Bakmix voor pannenkoeken glutenvrij","name2":"Bakery mix for pancakes gluten free; Pannenkoekenmix glutenvrij","category":"Graanproducten en meelsoorten","state":"other","kcal":344,"protein":4.9,"fat":1,"carbs":78.4}
+    ] },
+    {"id":"glutenvrije-havermout","nl":"glutenvrije havermout","en":"gluten-free oats","aliasesEn":["gluten free oats","gluten-free porridge oats"],"defaultUnit":"g","aisle":"brood-ontbijt","current":{"kcal":365,"protein":13,"fat":7,"carbs":60,"source":"estimate"}, "candidates": [
+      {"code":"2271","name":"Pasta glutenvrij rauw","name2":"Pasta gluten free raw; Macaroni/spaghetti glutenvrij onbereid Schar e.d.","category":"Graanproducten en meelsoorten","state":"raw","kcal":358,"protein":9,"fat":2.5,"carbs":73.7},
+      {"code":"213","name":"Vlokken haver-","name2":"Oat flakes; Havermout/Mout haver-/Havervlokken","category":"Graanproducten en meelsoorten","state":"other","kcal":366,"protein":12.8,"fat":6.2,"carbs":59.2},
+      {"code":"5412","name":"Glutenvrij brood licht","name2":"Gluten free bread light; Glutenvrij witbrood","category":"Brood","state":"other","kcal":212,"protein":4.1,"fat":3.1,"carbs":38.9},
+      {"code":"5411","name":"Glutenvrij brood donker","name2":"Gluten free bread dark; Glutenvrij bruinbrood","category":"Brood","state":"other","kcal":205,"protein":4.1,"fat":3.6,"carbs":35},
+      {"code":"5413","name":"Glutenvrij brood meerzaden","name2":"Gluten free bread multiseeds; Glutenvrij meerzadenbrood","category":"Brood","state":"other","kcal":236,"protein":5,"fat":7,"carbs":33.5},
+      {"code":"5414","name":"Glutenvrij brood zuurdesem","name2":"Gluten free bread sourdough; Glutenvrij zuurdesembrood","category":"Brood","state":"other","kcal":266,"protein":4.3,"fat":4.2,"carbs":49},
+      {"code":"3058","name":"Zemelen haver-","name2":"Oat bran; Haverzemelen","category":"Graanproducten en meelsoorten","state":"other","kcal":375,"protein":16.2,"fat":7.4,"carbs":52.2},
+      {"code":"3250","name":"Pasta glutenvrij gekookt","name2":"Pasta gluten free cooked; Macaroni/spaghetti glutenvrij gekookt Schar","category":"Graanproducten en meelsoorten","state":"cooked","kcal":143,"protein":3.6,"fat":1,"carbs":29.5}
+    ] },
+    {"id":"glutenvrije-pasta","nl":"glutenvrije pasta","en":"gluten-free pasta","aliasesEn":["gluten free pasta"],"defaultUnit":"g","aisle":"droog","current":{"kcal":357,"protein":7.5,"fat":2.1,"carbs":68.3,"source":"usda"}, "candidates": [
+      {"code":"2271","name":"Pasta glutenvrij rauw","name2":"Pasta gluten free raw; Macaroni/spaghetti glutenvrij onbereid Schar e.d.","category":"Graanproducten en meelsoorten","state":"raw","kcal":358,"protein":9,"fat":2.5,"carbs":73.7},
+      {"code":"3250","name":"Pasta glutenvrij gekookt","name2":"Pasta gluten free cooked; Macaroni/spaghetti glutenvrij gekookt Schar","category":"Graanproducten en meelsoorten","state":"cooked","kcal":143,"protein":3.6,"fat":1,"carbs":29.5},
+      {"code":"5412","name":"Glutenvrij brood licht","name2":"Gluten free bread light; Glutenvrij witbrood","category":"Brood","state":"other","kcal":212,"protein":4.1,"fat":3.1,"carbs":38.9},
+      {"code":"5411","name":"Glutenvrij brood donker","name2":"Gluten free bread dark; Glutenvrij bruinbrood","category":"Brood","state":"other","kcal":205,"protein":4.1,"fat":3.6,"carbs":35},
+      {"code":"5413","name":"Glutenvrij brood meerzaden","name2":"Gluten free bread multiseeds; Glutenvrij meerzadenbrood","category":"Brood","state":"other","kcal":236,"protein":5,"fat":7,"carbs":33.5},
+      {"code":"5414","name":"Glutenvrij brood zuurdesem","name2":"Gluten free bread sourdough; Glutenvrij zuurdesembrood","category":"Brood","state":"other","kcal":266,"protein":4.3,"fat":4.2,"carbs":49},
+      {"code":"2489","name":"Pasta speculoos-","name2":"Spread speculaas flavoured; Speculoospasta/speculaaspasta","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":579,"protein":3.2,"fat":37.5,"carbs":56.6},
+      {"code":"4","name":"Pasta witte rauw","name2":"Pasta white raw; Macaroni/spaghetti/tagliatelle/noedels/mie/vermicelli witte onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":356,"protein":12.3,"fat":1.5,"carbs":72}
+    ] },
+    {"id":"gnocchi","nl":"gnocchi","en":"gnocchi","aliasesEn":["potato gnocchi"],"defaultUnit":"g","aisle":"droog","current":{"kcal":150,"protein":3.5,"fat":0.5,"carbs":33,"source":"estimate"}, "candidates": [
+      {"code":"5418","name":"Gnocchi onbereid","name2":"Gnocchi unprepared","category":"Aardappelen en knolgewassen","state":"other","kcal":174,"protein":3.9,"fat":0.3,"carbs":37.9}
+    ] },
+    {"id":"gochujang","nl":"gochujang","en":"gochujang","aliasesEn":["gochujang paste","Korean chilli paste"],"defaultUnit":"el","aisle":"wereld","current":{"kcal":220,"protein":5,"fat":1.5,"carbs":48,"source":"estimate"}, "candidates": [] },
+    {"id":"gojibes","nl":"gojibes","en":"goji berry","aliasesEn":["dried goji berries"],"defaultUnit":"g","aisle":"bakken","current":{"kcal":349,"protein":14.3,"fat":0.4,"carbs":64.1,"source":"usda"}, "candidates": [
+      {"code":"3445","name":"Bessen goji- gedroogd","name2":"Goji berries dried; Gojibessen","category":"Fruit","state":"dried","kcal":343,"protein":14.3,"fat":0.4,"carbs":64.1}
+    ] },
+    {"id":"gorgonzola","nl":"gorgonzola","en":"gorgonzola","aliasesEn":["gorgonzola cheese"],"defaultUnit":"g","aisle":"kaas","current":{"kcal":353,"protein":21.4,"fat":28.7,"carbs":2.3,"source":"usda"}, "candidates": [
+      {"code":"1939","name":"Kaas blauwschimmel Gorgonzola","name2":"Cheese Gorgonzola","category":"Kaas","state":"other","kcal":359,"protein":19.4,"fat":31.2,"carbs":0.1}
+    ] },
+    {"id":"gort","nl":"gort","en":"pearl barley","aliasesEn":["pot barley","barley"],"defaultUnit":"g","aisle":"droog","current":{"kcal":352,"protein":9.9,"fat":1.2,"carbs":62.1,"source":"usda"}, "candidates": [
+      {"code":"212","name":"Gort parel- rauw","name2":"Barley pearl raw; Parelgort/parelgerst onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":335,"protein":9.1,"fat":2,"carbs":63.5},
+      {"code":"5583","name":"Vlokken gerst-","name2":"Flakes barley; Gerstvlokken/Gerstevlokken","category":"Graanproducten en meelsoorten","state":"other","kcal":332,"protein":7.9,"fat":2.1,"carbs":63}
+    ] },
+    {"id":"goulashsoep","nl":"goulashsoep","en":"goulash soup","aliasesEn":["Hungarian goulash soup"],"defaultUnit":"blik","aisle":"blik-pot","current":{"kcal":55,"protein":2.5,"fat":2,"carbs":6,"source":"estimate"}, "candidates": [
+      {"code":"908","name":"Soepballetjes blik","name2":"Forcemeat balls for soup canned; Gehaktballetjes soep- blik","category":"Vlees en gevogelte","state":"canned","kcal":189,"protein":10,"fat":15,"carbs":3.5},
+      {"code":"788","name":"Goulash","name2":"Goulash","category":"Samengestelde gerechten","state":"other","kcal":112,"protein":10.5,"fat":6.6,"carbs":2.5}
+    ] },
+    {"id":"gourmetschotel","nl":"gourmetschotel","en":"gourmet meat platter","aliasesEn":["table-grill meat platter"],"defaultUnit":"stuk","aisle":"vlees-vis","current":{"kcal":190,"protein":17,"fat":13,"carbs":1,"source":"estimate"}, "candidates": [
+      {"code":"202","name":"Kokosnootvlees","name2":"Coconut meat; Cocosnoot/Klapper","category":"Fruit","state":"other","kcal":406,"protein":4,"fat":40,"carbs":3},
+      {"code":"2333","name":"Gehakt rauw gem","name2":"Minced meat raw av","category":"Vlees en gevogelte","state":"raw","kcal":222,"protein":19.3,"fat":15.9,"carbs":0.2},
+      {"code":"95","name":"Paardenvlees rauw","name2":"Horse meat raw","category":"Vlees en gevogelte","state":"raw","kcal":99,"protein":22.4,"fat":1,"carbs":0},
+      {"code":"1900","name":"Geitenvlees rauw gem","name2":"Goat meat raw av","category":"Vlees en gevogelte","state":"raw","kcal":103,"protein":20.6,"fat":2.3,"carbs":0},
+      {"code":"2335","name":"Vlees gem excl lever rauw","name2":"Meat av raw excl liver","category":"Vlees en gevogelte","state":"raw","kcal":181,"protein":19.9,"fat":10.8,"carbs":0.9},
+      {"code":"1877","name":"Salade vlees- lunch/borrel","name2":"Salad meat; Vleessalade lunch/borrel","category":"Hartig broodbeleg","state":"other","kcal":286,"protein":5,"fat":25.7,"carbs":8.2}
+    ] },
+    {"id":"grana-padano","nl":"grana padano","en":"Grana Padano","aliasesEn":[],"defaultUnit":"g","aisle":"kaas","current":{"kcal":390,"protein":33,"fat":28,"carbs":0,"source":"estimate"}, "candidates": [] },
+    {"id":"granaatappel","nl":"granaatappel","en":"pomegranate","aliasesEn":["pomegranate seeds","pomegranate arils"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":83,"protein":1.7,"fat":1.2,"carbs":14.7,"source":"usda"}, "candidates": [
+      {"code":"1007","name":"Granaatappel","name2":"Pomegranate","category":"Fruit","state":"other","kcal":91,"protein":1,"fat":1,"carbs":17}
+    ] },
+    {"id":"granaatappelmelasse","nl":"granaatappelmelasse","en":"pomegranate molasses","aliasesEn":[],"defaultUnit":"el","aisle":"wereld","current":{"kcal":250,"protein":0.5,"fat":0,"carbs":62,"source":"estimate"}, "candidates": [
+      {"code":"1007","name":"Granaatappel","name2":"Pomegranate","category":"Fruit","state":"other","kcal":91,"protein":1,"fat":1,"carbs":17}
+    ] },
+    {"id":"granaatappelsap","nl":"granaatappelsap","en":"pomegranate juice","aliasesEn":[],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":54,"protein":0.2,"fat":0.3,"carbs":13,"source":"usda"}, "candidates": [
+      {"code":"1007","name":"Granaatappel","name2":"Pomegranate","category":"Fruit","state":"other","kcal":91,"protein":1,"fat":1,"carbs":17},
+      {"code":"383","name":"Sap appel-","name2":"Juice apple; Appelsap","category":"Niet-alcoholische dranken","state":"other","kcal":46,"protein":0.1,"fat":0,"carbs":11.2},
+      {"code":"923","name":"Sap peren-","name2":"Juice pear; Perensap","category":"Niet-alcoholische dranken","state":"other","kcal":39,"protein":0.1,"fat":0,"carbs":9.5},
+      {"code":"1462","name":"Sap ananas-","name2":"Juice pineapple; Ananassap","category":"Niet-alcoholische dranken","state":"other","kcal":47,"protein":0.5,"fat":0,"carbs":11.2},
+      {"code":"1656","name":"Sap wortel-","name2":"Juice carrot; Wortelsap","category":"Niet-alcoholische dranken","state":"other","kcal":29,"protein":0.4,"fat":0.2,"carbs":6.4},
+      {"code":"861","name":"Sap bieten-","name2":"Juice beetroot; Bietensap","category":"Niet-alcoholische dranken","state":"other","kcal":34,"protein":0.9,"fat":0,"carbs":7.7},
+      {"code":"396","name":"Sap druiven-","name2":"Juice grape; Druivensap","category":"Niet-alcoholische dranken","state":"other","kcal":65,"protein":0.2,"fat":0,"carbs":15.9},
+      {"code":"413","name":"Sap tomaten-","name2":"Tomato juice; Tomatensap","category":"Niet-alcoholische dranken","state":"other","kcal":16,"protein":0.7,"fat":0,"carbs":3.2}
+    ] },
+    {"id":"granadilla","nl":"granadilla","en":"granadilla","aliasesEn":["sweet granadilla"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":65,"protein":2,"fat":0.6,"carbs":12.5,"source":"estimate"}, "candidates": [] },
+    {"id":"granola","nl":"granola","en":"granola","aliasesEn":["crunchy muesli"],"defaultUnit":"g","aisle":"brood-ontbijt","current":{"kcal":460,"protein":9,"fat":17,"carbs":65,"source":"estimate"}, "candidates": [
+      {"code":"5593","name":"Muesli krokante naturel","name2":"Muesli crunchy plain; Cruesli/Granola naturel","category":"Graanproducten en meelsoorten","state":"other","kcal":422,"protein":10.8,"fat":10.8,"carbs":66.1},
+      {"code":"2675","name":"Muesli krokante m noten","name2":"Muesli crunchy w nuts; Cruesli e.d. m noten/Granola m noten","category":"Graanproducten en meelsoorten","state":"other","kcal":454,"protein":10.2,"fat":17.5,"carbs":60.1},
+      {"code":"5594","name":"Muesli krokante m fruit","name2":"Muesli crunchy w fruit; Cruesli e.d. m fruit/Granola m fruit","category":"Graanproducten en meelsoorten","state":"other","kcal":419,"protein":8.9,"fat":11.3,"carbs":65.8},
+      {"code":"2676","name":"Muesli krokante m chocolade","name2":"Muesli crunchy w chocolate; Cruesli e.d. m chocolade/Granola m chocolade","category":"Graanproducten en meelsoorten","state":"other","kcal":445,"protein":10.2,"fat":16.1,"carbs":60.4},
+      {"code":"2677","name":"Muesli krokante m noten en chocolade","name2":"Muesli crunchy w nuts and chocolate; Cruesli e.d./granola m noten en chocolade","category":"Graanproducten en meelsoorten","state":"other","kcal":436,"protein":10.7,"fat":13.9,"carbs":63},
+      {"code":"5491","name":"Muesli krokante m fruit verrijkt m vezel","name2":"Muesli crunchy w fruit fortified w fibre; Cruesli e.d./granola m fruit verrijkt m vezel","category":"Graanproducten en meelsoorten","state":"other","kcal":430,"protein":8.2,"fat":15.1,"carbs":59.2},
+      {"code":"5495","name":"Muesli krokante m noten verrijkt m vezel","name2":"Muesli crunchy w nuts fortified w fibre; Cruesli e.d./granola m noten verrijkt m vezel","category":"Graanproducten en meelsoorten","state":"other","kcal":456,"protein":9.8,"fat":19.8,"carbs":53.6},
+      {"code":"5496","name":"Muesli krokante m chocolade verrijkt m vezel","name2":"Muesli crunchy w chocolate fortified w fibre; Cruesli e.d./granola m chocolade verrijkt m vezel","category":"Graanproducten en meelsoorten","state":"other","kcal":448,"protein":9.4,"fat":18.1,"carbs":55.8}
+    ] },
+    {"id":"grapefruit","nl":"grapefruit","en":"grapefruit","aliasesEn":[],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":32,"protein":0.6,"fat":0.1,"carbs":7,"source":"usda"}, "candidates": [
+      {"code":"162","name":"Grapefruit","name2":"Grapefruit","category":"Fruit","state":"other","kcal":37,"protein":0.9,"fat":0,"carbs":6.6},
+      {"code":"664","name":"Sap grapefruit-","name2":"Juice grapefruit; Grapefruitsap","category":"Niet-alcoholische dranken","state":"other","kcal":34,"protein":0.5,"fat":0,"carbs":7.3}
+    ] },
+    {"id":"grapefruitsap","nl":"grapefruitsap","en":"grapefruit juice","aliasesEn":[],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":39,"protein":0.5,"fat":0.1,"carbs":9.1,"source":"usda"}, "candidates": [
+      {"code":"664","name":"Sap grapefruit-","name2":"Juice grapefruit; Grapefruitsap","category":"Niet-alcoholische dranken","state":"other","kcal":34,"protein":0.5,"fat":0,"carbs":7.3},
+      {"code":"162","name":"Grapefruit","name2":"Grapefruit","category":"Fruit","state":"other","kcal":37,"protein":0.9,"fat":0,"carbs":6.6},
+      {"code":"383","name":"Sap appel-","name2":"Juice apple; Appelsap","category":"Niet-alcoholische dranken","state":"other","kcal":46,"protein":0.1,"fat":0,"carbs":11.2},
+      {"code":"923","name":"Sap peren-","name2":"Juice pear; Perensap","category":"Niet-alcoholische dranken","state":"other","kcal":39,"protein":0.1,"fat":0,"carbs":9.5},
+      {"code":"1462","name":"Sap ananas-","name2":"Juice pineapple; Ananassap","category":"Niet-alcoholische dranken","state":"other","kcal":47,"protein":0.5,"fat":0,"carbs":11.2},
+      {"code":"1656","name":"Sap wortel-","name2":"Juice carrot; Wortelsap","category":"Niet-alcoholische dranken","state":"other","kcal":29,"protein":0.4,"fat":0.2,"carbs":6.4},
+      {"code":"861","name":"Sap bieten-","name2":"Juice beetroot; Bietensap","category":"Niet-alcoholische dranken","state":"other","kcal":34,"protein":0.9,"fat":0,"carbs":7.7},
+      {"code":"396","name":"Sap druiven-","name2":"Juice grape; Druivensap","category":"Niet-alcoholische dranken","state":"other","kcal":65,"protein":0.2,"fat":0,"carbs":15.9}
+    ] },
+    {"id":"grappa","nl":"grappa","en":"grappa","aliasesEn":[],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":231,"protein":0,"fat":0,"carbs":0,"source":"estimate"}, "candidates": [] },
+    {"id":"gravad-lax","nl":"gravad lax","en":"gravlax","aliasesEn":["gravadlax","gravad lax"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":195,"protein":20,"fat":12,"carbs":2,"source":"estimate"}, "candidates": [] },
+    {"id":"grenadine","nl":"grenadine","en":"grenadine","aliasesEn":["grenadine syrup"],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":268,"protein":0,"fat":0,"carbs":66.9,"source":"usda"}, "candidates": [] },
+    {"id":"griekse-yoghurt","nl":"Griekse yoghurt","en":"Greek yoghurt","aliasesEn":["Greek yogurt","Greek-style yoghurt"],"defaultUnit":"g","aisle":"zuivel-eieren","current":{"kcal":97,"protein":9,"fat":5,"carbs":4,"source":"usda"}, "candidates": [
+      {"code":"5271","name":"Yoghurt Griekse magere","name2":"Yogurt Greek skimmed","category":"Melk en melkproducten","state":"other","kcal":56,"protein":8.2,"fat":0.1,"carbs":5},
+      {"code":"2503","name":"Yoghurt Griekse volle","name2":"Yoghurt Greek full fat","category":"Melk en melkproducten","state":"other","kcal":122,"protein":3.8,"fat":10,"carbs":3.8},
+      {"code":"3043","name":"Yoghurt Turkse 4% vet","name2":"Yoghurt Turkish 4% fat","category":"Melk en melkproducten","state":"other","kcal":69,"protein":3.9,"fat":4.2,"carbs":3.3},
+      {"code":"3047","name":"Yoghurt Turkse 10% vet","name2":"Yoghurt Turkish 10% fat","category":"Melk en melkproducten","state":"other","kcal":119,"protein":3.5,"fat":10.1,"carbs":3.1},
+      {"code":"657","name":"Yoghurtdrank","name2":"Yoghurt drink; Drinkyoghurt","category":"Melk en melkproducten","state":"other","kcal":57,"protein":1.6,"fat":0.1,"carbs":12},
+      {"code":"278","name":"Yoghurt volle","name2":"Yoghurt full fat","category":"Melk en melkproducten","state":"other","kcal":56,"protein":3.8,"fat":2.7,"carbs":3.4},
+      {"code":"301","name":"Yoghurt magere","name2":"Yoghurt low fat","category":"Melk en melkproducten","state":"other","kcal":37,"protein":4.1,"fat":0.2,"carbs":4},
+      {"code":"1502","name":"Yoghurt halfvolle","name2":"Yoghurt half fat","category":"Melk en melkproducten","state":"other","kcal":50,"protein":4.2,"fat":1.5,"carbs":4.3}
+    ] },
+    {"id":"griesmeel","nl":"griesmeel","en":"semolina","aliasesEn":["durum wheat semolina","fine semolina"],"defaultUnit":"g","aisle":"bakken","current":{"kcal":360,"protein":12.7,"fat":1.1,"carbs":68.9,"source":"usda"}, "candidates": [
+      {"code":"5580","name":"Meel tarwegries-","name2":"Semolina wheat; Meel gries- tarwe/Griesmeel tarwe-","category":"Graanproducten en meelsoorten","state":"other","kcal":338,"protein":10.8,"fat":0.9,"carbs":66.4},
+      {"code":"1722","name":"Pap griesmeel-","name2":"Porridge semolina; Griesmeelpap","category":"Melk en melkproducten","state":"other","kcal":93,"protein":3,"fat":2.9,"carbs":14}
+    ] },
+    {"id":"griesmeelpap","nl":"griesmeelpap","en":"semolina porridge","aliasesEn":[],"defaultUnit":"g","aisle":"zuivel-eieren","current":{"kcal":85,"protein":3.3,"fat":2,"carbs":13,"source":"estimate"}, "candidates": [
+      {"code":"1722","name":"Pap griesmeel-","name2":"Porridge semolina; Griesmeelpap","category":"Melk en melkproducten","state":"other","kcal":93,"protein":3,"fat":2.9,"carbs":14},
+      {"code":"298","name":"Pap rijste-","name2":"Porridge rice; Rijstepap","category":"Melk en melkproducten","state":"other","kcal":86,"protein":3.1,"fat":2.9,"carbs":12},
+      {"code":"5580","name":"Meel tarwegries-","name2":"Semolina wheat; Meel gries- tarwe/Griesmeel tarwe-","category":"Graanproducten en meelsoorten","state":"other","kcal":338,"protein":10.8,"fat":0.9,"carbs":66.4}
+    ] },
+    {"id":"griesmeelpudding","nl":"griesmeelpudding","en":"semolina pudding","aliasesEn":[],"defaultUnit":"bakje","aisle":"zuivel-eieren","current":{"kcal":100,"protein":3.2,"fat":2.2,"carbs":17,"source":"estimate"}, "candidates": [
+      {"code":"568","name":"Worst bloed-","name2":"Black pudding; Bloedworst","category":"Vlees en gevogelte","state":"other","kcal":386,"protein":12.4,"fat":32.6,"carbs":9.5},
+      {"code":"1722","name":"Pap griesmeel-","name2":"Porridge semolina; Griesmeelpap","category":"Melk en melkproducten","state":"other","kcal":93,"protein":3,"fat":2.9,"carbs":14},
+      {"code":"1945","name":"Broodje pudding-","name2":"Bun w vanilla custard; Puddingbroodje","category":"Gebak en koek","state":"other","kcal":214,"protein":5.2,"fat":4.3,"carbs":38},
+      {"code":"2520","name":"Pudding luchtige","name2":"Pudding airy; Bavarois/Chipolatapudding","category":"Melk en melkproducten","state":"other","kcal":179,"protein":4.2,"fat":8.1,"carbs":22},
+      {"code":"5580","name":"Meel tarwegries-","name2":"Semolina wheat; Meel gries- tarwe/Griesmeel tarwe-","category":"Graanproducten en meelsoorten","state":"other","kcal":338,"protein":10.8,"fat":0.9,"carbs":66.4},
+      {"code":"736","name":"Pudding vanille-","name2":"Blancmange vanilla; Vanillepudding","category":"Melk en melkproducten","state":"other","kcal":89,"protein":3.9,"fat":2,"carbs":13.7},
+      {"code":"2343","name":"Pudding gelatine-","name2":"Jelly; Gelatinepudding","category":"Melk en melkproducten","state":"other","kcal":59,"protein":1.8,"fat":0,"carbs":13},
+      {"code":"532","name":"Pudding chocolade-","name2":"Blancmange chocolate; Chocoladepudding","category":"Melk en melkproducten","state":"other","kcal":112,"protein":3.4,"fat":2,"carbs":19.3}
+    ] },
+    {"id":"groente","nl":"groente","en":"vegetable","aliasesEn":["veg","vegetables of your choice","seasonal vegetables"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":30,"protein":1.8,"fat":0.3,"carbs":4.5,"source":"estimate"}, "candidates": [
+      {"code":"1905","name":"Groenten rauw gem","name2":"Vegetables av raw","category":"Groente","state":"raw","kcal":20,"protein":1,"fat":0.4,"carbs":2.6},
+      {"code":"75","name":"Groente soep- rauw","name2":"Vegetable mix for soup raw; Soepgroente rauw","category":"Groente","state":"raw","kcal":32,"protein":1.5,"fat":0.2,"carbs":4.6},
+      {"code":"5448","name":"Groente hutspot- rauw","name2":"Vegetables mixed carrot-onion raw; Hutspotgroente rauw","category":"Groente","state":"raw","kcal":35,"protein":0.9,"fat":0.2,"carbs":5.9},
+      {"code":"127","name":"Rauwkost gem","name2":"Vegetables mixture raw av","category":"Groente","state":"raw","kcal":20,"protein":0.9,"fat":0.4,"carbs":2.5},
+      {"code":"5263","name":"Bamigroenten rauw","name2":"Bami vegetables raw; Bamipakket rauw","category":"Groente","state":"raw","kcal":27,"protein":1.8,"fat":0.1,"carbs":3.5},
+      {"code":"5041","name":"Olie plantaardig gem","name2":"Oil vegetable av","category":"Vetten en oliën","state":"other","kcal":898,"protein":0.1,"fat":99.7,"carbs":0}
+    ] },
+    {"id":"groentebouillon","nl":"groentebouillon","en":"vegetable stock","aliasesEn":["vegetable broth","veg stock","vegetable stock cube","vegetable stock cubes"],"defaultUnit":"ml","aisle":"kruiden-specerijen","current":{"kcal":3,"protein":0.1,"fat":0.1,"carbs":0.3,"source":"estimate"}, "candidates": [
+      {"code":"429","name":"Bouillonblokje","name2":"Stock cube","category":"Kruiden en specerijen","state":"other","kcal":273,"protein":8.1,"fat":17.2,"carbs":21.2},
+      {"code":"1905","name":"Groenten rauw gem","name2":"Vegetables av raw","category":"Groente","state":"raw","kcal":20,"protein":1,"fat":0.4,"carbs":2.6},
+      {"code":"75","name":"Groente soep- rauw","name2":"Vegetable mix for soup raw; Soepgroente rauw","category":"Groente","state":"raw","kcal":32,"protein":1.5,"fat":0.2,"carbs":4.6},
+      {"code":"5448","name":"Groente hutspot- rauw","name2":"Vegetables mixed carrot-onion raw; Hutspotgroente rauw","category":"Groente","state":"raw","kcal":35,"protein":0.9,"fat":0.2,"carbs":5.9},
+      {"code":"127","name":"Rauwkost gem","name2":"Vegetables mixture raw av","category":"Groente","state":"raw","kcal":20,"protein":0.9,"fat":0.4,"carbs":2.5},
+      {"code":"842","name":"Bouillonpoeder","name2":"Stock powder","category":"Kruiden en specerijen","state":"other","kcal":197,"protein":20.2,"fat":5.1,"carbs":17.8},
+      {"code":"5263","name":"Bamigroenten rauw","name2":"Bami vegetables raw; Bamipakket rauw","category":"Groente","state":"raw","kcal":27,"protein":1.8,"fat":0.1,"carbs":3.5},
+      {"code":"5041","name":"Olie plantaardig gem","name2":"Oil vegetable av","category":"Vetten en oliën","state":"other","kcal":898,"protein":0.1,"fat":99.7,"carbs":0}
+    ] },
+    {"id":"groentebouillonpoeder","nl":"groentebouillonpoeder","en":"vegetable stock powder","aliasesEn":["vegetable bouillon powder","vegetable stock granules"],"defaultUnit":"el","aisle":"kruiden-specerijen","current":{"kcal":200,"protein":7,"fat":8,"carbs":25,"source":"estimate"}, "candidates": [
+      {"code":"842","name":"Bouillonpoeder","name2":"Stock powder","category":"Kruiden en specerijen","state":"other","kcal":197,"protein":20.2,"fat":5.1,"carbs":17.8},
+      {"code":"1905","name":"Groenten rauw gem","name2":"Vegetables av raw","category":"Groente","state":"raw","kcal":20,"protein":1,"fat":0.4,"carbs":2.6},
+      {"code":"1883","name":"Bouillonpoeder natriumarm","name2":"Stock powder low sodium","category":"Kruiden en specerijen","state":"other","kcal":348,"protein":5.3,"fat":6.3,"carbs":67.4},
+      {"code":"1221","name":"Chilipoeder","name2":"Chilli powder","category":"Kruiden en specerijen","state":"other","kcal":373,"protein":12,"fat":17,"carbs":32},
+      {"code":"430","name":"Cacaopoeder","name2":"Cocoa powder","category":"Diversen","state":"other","kcal":379,"protein":18.5,"fat":21.7,"carbs":10.5},
+      {"code":"825","name":"Nootmuskaat","name2":"Nutmeg powder","category":"Kruiden en specerijen","state":"other","kcal":536,"protein":6,"fat":36,"carbs":45},
+      {"code":"127","name":"Rauwkost gem","name2":"Vegetables mixture raw av","category":"Groente","state":"raw","kcal":20,"protein":0.9,"fat":0.4,"carbs":2.5},
+      {"code":"1229","name":"Paprikapoeder","name2":"Paprika powder","category":"Kruiden en specerijen","state":"other","kcal":359,"protein":15,"fat":13,"carbs":35}
+    ] },
+    {"id":"groentechips","nl":"groentechips","en":"vegetable crisps","aliasesEn":["veg crisps","vegetable chips"],"defaultUnit":"g","aisle":"snacks-zoet","current":{"kcal":490,"protein":4,"fat":30,"carbs":52,"source":"estimate"}, "candidates": [
+      {"code":"122","name":"Chips gem","name2":"Crisps potato av","category":"Hartige snacks en zoutjes","state":"other","kcal":538,"protein":6.3,"fat":32.8,"carbs":52.3},
+      {"code":"1905","name":"Groenten rauw gem","name2":"Vegetables av raw","category":"Groente","state":"raw","kcal":20,"protein":1,"fat":0.4,"carbs":2.6},
+      {"code":"2529","name":"Chips oven-","name2":"Potato crisps oven baked; Ovenchips Lay's e.d.","category":"Hartige snacks en zoutjes","state":"other","kcal":411,"protein":6.4,"fat":9.3,"carbs":72.8},
+      {"code":"2923","name":"Chips naturel","name2":"Crisps potato unflavoured","category":"Hartige snacks en zoutjes","state":"other","kcal":541,"protein":6.4,"fat":33.5,"carbs":51.3},
+      {"code":"75","name":"Groente soep- rauw","name2":"Vegetable mix for soup raw; Soepgroente rauw","category":"Groente","state":"raw","kcal":32,"protein":1.5,"fat":0.2,"carbs":4.6},
+      {"code":"5448","name":"Groente hutspot- rauw","name2":"Vegetables mixed carrot-onion raw; Hutspotgroente rauw","category":"Groente","state":"raw","kcal":35,"protein":0.9,"fat":0.2,"carbs":5.9},
+      {"code":"127","name":"Rauwkost gem","name2":"Vegetables mixture raw av","category":"Groente","state":"raw","kcal":20,"protein":0.9,"fat":0.4,"carbs":2.5},
+      {"code":"5263","name":"Bamigroenten rauw","name2":"Bami vegetables raw; Bamipakket rauw","category":"Groente","state":"raw","kcal":27,"protein":1.8,"fat":0.1,"carbs":3.5}
+    ] },
+    {"id":"groentefond","nl":"groentefond","en":"concentrated vegetable stock","aliasesEn":["vegetable fond","vegetable stock concentrate"],"defaultUnit":"ml","aisle":"blik-pot","current":{"kcal":20,"protein":1,"fat":0.5,"carbs":3,"source":"estimate"}, "candidates": [
+      {"code":"1905","name":"Groenten rauw gem","name2":"Vegetables av raw","category":"Groente","state":"raw","kcal":20,"protein":1,"fat":0.4,"carbs":2.6},
+      {"code":"5499","name":"Bouillon geconcentreerd m groente of vlees pot","name2":"Stock concentrated w vegetables or meat pot","category":"Soepen","state":"canned","kcal":53,"protein":5.7,"fat":1.7,"carbs":3.3},
+      {"code":"75","name":"Groente soep- rauw","name2":"Vegetable mix for soup raw; Soepgroente rauw","category":"Groente","state":"raw","kcal":32,"protein":1.5,"fat":0.2,"carbs":4.6},
+      {"code":"5448","name":"Groente hutspot- rauw","name2":"Vegetables mixed carrot-onion raw; Hutspotgroente rauw","category":"Groente","state":"raw","kcal":35,"protein":0.9,"fat":0.2,"carbs":5.9},
+      {"code":"127","name":"Rauwkost gem","name2":"Vegetables mixture raw av","category":"Groente","state":"raw","kcal":20,"protein":0.9,"fat":0.4,"carbs":2.5},
+      {"code":"429","name":"Bouillonblokje","name2":"Stock cube","category":"Kruiden en specerijen","state":"other","kcal":273,"protein":8.1,"fat":17.2,"carbs":21.2},
+      {"code":"842","name":"Bouillonpoeder","name2":"Stock powder","category":"Kruiden en specerijen","state":"other","kcal":197,"protein":20.2,"fat":5.1,"carbs":17.8},
+      {"code":"5263","name":"Bamigroenten rauw","name2":"Bami vegetables raw; Bamipakket rauw","category":"Groente","state":"raw","kcal":27,"protein":1.8,"fat":0.1,"carbs":3.5}
+    ] },
+    {"id":"groentemix","nl":"groentemix","en":"mixed vegetables","aliasesEn":["mixed veg","frozen mixed vegetables","frozen vegetables"],"defaultUnit":"g","aisle":"diepvries","current":{"kcal":36,"protein":2.3,"fat":0.4,"carbs":5.5,"source":"estimate"}, "candidates": [
+      {"code":"1141","name":"Groentemix Mexico Melange diepvries onbereid","name2":"Vegetable mixed Mexico frozen unprepared","category":"Groente","state":"other","kcal":85,"protein":4.5,"fat":0.9,"carbs":12},
+      {"code":"1905","name":"Groenten rauw gem","name2":"Vegetables av raw","category":"Groente","state":"raw","kcal":20,"protein":1,"fat":0.4,"carbs":2.6},
+      {"code":"5448","name":"Groente hutspot- rauw","name2":"Vegetables mixed carrot-onion raw; Hutspotgroente rauw","category":"Groente","state":"raw","kcal":35,"protein":0.9,"fat":0.2,"carbs":5.9},
+      {"code":"127","name":"Rauwkost gem","name2":"Vegetables mixture raw av","category":"Groente","state":"raw","kcal":20,"protein":0.9,"fat":0.4,"carbs":2.5},
+      {"code":"5263","name":"Bamigroenten rauw","name2":"Bami vegetables raw; Bamipakket rauw","category":"Groente","state":"raw","kcal":27,"protein":1.8,"fat":0.1,"carbs":3.5},
+      {"code":"5041","name":"Olie plantaardig gem","name2":"Oil vegetable av","category":"Vetten en oliën","state":"other","kcal":898,"protein":0.1,"fat":99.7,"carbs":0}
+    ] },
+    {"id":"groentesap","nl":"groentesap","en":"vegetable juice","aliasesEn":[],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":20,"protein":0.8,"fat":0.1,"carbs":3.5,"source":"estimate"}, "candidates": [
+      {"code":"1132","name":"Sap tomatengroenten-","name2":"Juice tomato/vegetable; Tomatengroentensap","category":"Niet-alcoholische dranken","state":"other","kcal":21,"protein":1,"fat":0,"carbs":4},
+      {"code":"1905","name":"Groenten rauw gem","name2":"Vegetables av raw","category":"Groente","state":"raw","kcal":20,"protein":1,"fat":0.4,"carbs":2.6},
+      {"code":"383","name":"Sap appel-","name2":"Juice apple; Appelsap","category":"Niet-alcoholische dranken","state":"other","kcal":46,"protein":0.1,"fat":0,"carbs":11.2},
+      {"code":"923","name":"Sap peren-","name2":"Juice pear; Perensap","category":"Niet-alcoholische dranken","state":"other","kcal":39,"protein":0.1,"fat":0,"carbs":9.5},
+      {"code":"1462","name":"Sap ananas-","name2":"Juice pineapple; Ananassap","category":"Niet-alcoholische dranken","state":"other","kcal":47,"protein":0.5,"fat":0,"carbs":11.2},
+      {"code":"1656","name":"Sap wortel-","name2":"Juice carrot; Wortelsap","category":"Niet-alcoholische dranken","state":"other","kcal":29,"protein":0.4,"fat":0.2,"carbs":6.4},
+      {"code":"861","name":"Sap bieten-","name2":"Juice beetroot; Bietensap","category":"Niet-alcoholische dranken","state":"other","kcal":34,"protein":0.9,"fat":0,"carbs":7.7},
+      {"code":"127","name":"Rauwkost gem","name2":"Vegetables mixture raw av","category":"Groente","state":"raw","kcal":20,"protein":0.9,"fat":0.4,"carbs":2.5}
+    ] },
+    {"id":"groentesoep","nl":"groentesoep","en":"vegetable soup","aliasesEn":["vegetable soup with meatballs"],"defaultUnit":"blik","aisle":"blik-pot","current":{"kcal":39,"protein":1.1,"fat":0.4,"carbs":6.8,"source":"usda"}, "candidates": [
+      {"code":"75","name":"Groente soep- rauw","name2":"Vegetable mix for soup raw; Soepgroente rauw","category":"Groente","state":"raw","kcal":32,"protein":1.5,"fat":0.2,"carbs":4.6},
+      {"code":"3069","name":"Groente soep- gekookt","name2":"Vegetables for soup cooked; Soepgroente gekookt","category":"Groente","state":"cooked","kcal":31,"protein":1.1,"fat":0.3,"carbs":4.6},
+      {"code":"1144","name":"Groente soep- diepvries onbereid","name2":"Vegetables mixture for soup frozen unprepared; Soepgroente diepvries onbereid","category":"Groente","state":"other","kcal":25,"protein":2,"fat":0,"carbs":3},
+      {"code":"759","name":"Soep heldere m soepgroente","name2":"Soup clear w vegetables","category":"Soepen","state":"other","kcal":10,"protein":0.4,"fat":0.3,"carbs":1},
+      {"code":"763","name":"Soep gebonden m soepgroente","name2":"Soup thickened w vegetables","category":"Soepen","state":"other","kcal":36,"protein":0.7,"fat":2.4,"carbs":2.7},
+      {"code":"800","name":"Soep op groentebasis kant-en-klaar blik/zak/pak","name2":"Soup vegetable based ready-to-eat; Groentesoep blik/zak/pak kant-en-klaar","category":"Soepen","state":"canned","kcal":47,"protein":1.3,"fat":1.9,"carbs":5.7},
+      {"code":"1905","name":"Groenten rauw gem","name2":"Vegetables av raw","category":"Groente","state":"raw","kcal":20,"protein":1,"fat":0.4,"carbs":2.6},
+      {"code":"5041","name":"Olie plantaardig gem","name2":"Oil vegetable av","category":"Vetten en oliën","state":"other","kcal":898,"protein":0.1,"fat":99.7,"carbs":0}
+    ] },
+    {"id":"gruyere","nl":"gruyère","en":"Gruyère","aliasesEn":["Gruyère cheese"],"defaultUnit":"g","aisle":"kaas","current":{"kcal":413,"protein":29.8,"fat":32.3,"carbs":0.4,"source":"usda"}, "candidates": [
+      {"code":"722","name":"Kaas Gruyere","name2":"Cheese Gruyere","category":"Kaas","state":"other","kcal":433,"protein":29,"fat":34.5,"carbs":1.4}
+    ] },
+    {"id":"guacamole","nl":"guacamole","en":"guacamole","aliasesEn":["avocado dip"],"defaultUnit":"el","aisle":"groente-fruit","current":{"kcal":150,"protein":1.8,"fat":14,"carbs":3.5,"source":"estimate"}, "candidates": [
+      {"code":"5121","name":"Guacamole","name2":"Guacamole","category":"Hartige sauzen","state":"other","kcal":153,"protein":1.7,"fat":14.5,"carbs":2.5}
+    ] },
+    {"id":"guanciale","nl":"guanciale","en":"guanciale","aliasesEn":["cured pork cheek"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":748,"protein":5.1,"fat":80.5,"carbs":0,"source":"usda"}, "candidates": [] },
+    {"id":"guave","nl":"guave","en":"guava","aliasesEn":[],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":68,"protein":2.6,"fat":1,"carbs":8.9,"source":"usda"}, "candidates": [] },
+    {"id":"gummibeer","nl":"gummibeer","en":"gummy bear","aliasesEn":["jelly bears","gummies"],"defaultUnit":"g","aisle":"snacks-zoet","current":{"kcal":340,"protein":6.5,"fat":0.2,"carbs":77,"source":"estimate"}, "candidates": [] },
+    {"id":"gyoza","nl":"gyoza","en":"gyoza","aliasesEn":["gyozas","potstickers","Japanese dumplings"],"defaultUnit":"stuk","aisle":"diepvries","current":{"kcal":190,"protein":7,"fat":6,"carbs":27,"source":"estimate"}, "candidates": [] },
+    {"id":"gyros","nl":"gyros","en":"gyros meat","aliasesEn":["gyros","gyros strips"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":200,"protein":18,"fat":14,"carbs":1,"source":"estimate"}, "candidates": [
+      {"code":"202","name":"Kokosnootvlees","name2":"Coconut meat; Cocosnoot/Klapper","category":"Fruit","state":"other","kcal":406,"protein":4,"fat":40,"carbs":3},
+      {"code":"2333","name":"Gehakt rauw gem","name2":"Minced meat raw av","category":"Vlees en gevogelte","state":"raw","kcal":222,"protein":19.3,"fat":15.9,"carbs":0.2},
+      {"code":"95","name":"Paardenvlees rauw","name2":"Horse meat raw","category":"Vlees en gevogelte","state":"raw","kcal":99,"protein":22.4,"fat":1,"carbs":0},
+      {"code":"1900","name":"Geitenvlees rauw gem","name2":"Goat meat raw av","category":"Vlees en gevogelte","state":"raw","kcal":103,"protein":20.6,"fat":2.3,"carbs":0},
+      {"code":"2335","name":"Vlees gem excl lever rauw","name2":"Meat av raw excl liver","category":"Vlees en gevogelte","state":"raw","kcal":181,"protein":19.9,"fat":10.8,"carbs":0.9},
+      {"code":"1877","name":"Salade vlees- lunch/borrel","name2":"Salad meat; Vleessalade lunch/borrel","category":"Hartig broodbeleg","state":"other","kcal":286,"protein":5,"fat":25.7,"carbs":8.2}
+    ] },
+    {"id":"gyroskruiden","nl":"gyroskruiden","en":"gyros seasoning","aliasesEn":["gyros spice mix"],"defaultUnit":"tl","aisle":"kruiden-specerijen","current":{"kcal":270,"protein":10,"fat":8,"carbs":40,"source":"estimate"}, "candidates": [
+      {"code":"2613","name":"Mix seasoning Mexicaans onbereid","name2":"Mix seasoning Mexican unprepared; Seasoningmix mexicaans onbereid","category":"Kruiden en specerijen","state":"other","kcal":318,"protein":12,"fat":5.7,"carbs":48.8}
+    ] },
+    {"id":"haas","nl":"haas","en":"hare","aliasesEn":["saddle of hare","hare leg","hare legs"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":135,"protein":24,"fat":4,"carbs":0,"source":"estimate"}, "candidates": [
+      {"code":"107","name":"Haas rauw","name2":"Hare whole raw","category":"Vlees en gevogelte","state":"raw","kcal":115,"protein":22,"fat":3,"carbs":0}
+    ] }
+  ]
+}

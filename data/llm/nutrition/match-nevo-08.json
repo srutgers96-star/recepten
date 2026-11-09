@@ -1,0 +1,486 @@
+{
+ "batch": "08",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "kalamata-olijf",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen olijf; alleen olijfolie en kalfsvink"
+  },
+  {
+   "id": "kalfsfilet",
+   "choice": "5280",
+   "confidence": "close",
+   "why": "kalfsvlees gem rauw, generiek"
+  },
+  {
+   "id": "kalfsfond",
+   "choice": null,
+   "confidence": "none",
+   "why": "bouillonblokje 273 kcal vs 15 huidig; geen fond"
+  },
+  {
+   "id": "kalfslever",
+   "choice": "1439",
+   "confidence": "sure",
+   "why": "kalfslever rauw"
+  },
+  {
+   "id": "kalfsschenkel",
+   "choice": "1440",
+   "confidence": "sure",
+   "why": "kalfsschenkel rauw"
+  },
+  {
+   "id": "kalkoenfilet",
+   "choice": "1936",
+   "confidence": "sure",
+   "why": "kalkoenfilet rauw"
+  },
+  {
+   "id": "kalkoenrollade",
+   "choice": "1936",
+   "confidence": "close",
+   "why": "kalkoenfilet rauw als dichtstbijzijnde"
+  },
+  {
+   "id": "kamillethee",
+   "choice": "645",
+   "confidence": "sure",
+   "why": "thee bereid, 0 kcal"
+  },
+  {
+   "id": "kandijsuiker",
+   "choice": "377",
+   "confidence": "close",
+   "why": "kristalsuiker als familie"
+  },
+  {
+   "id": "kaneel",
+   "choice": "826",
+   "confidence": "sure",
+   "why": "kaneel"
+  },
+  {
+   "id": "kaneelbroodje",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen kaneelkruid; gebak ontbreekt"
+  },
+  {
+   "id": "kaneelstokje",
+   "choice": "826",
+   "confidence": "close",
+   "why": "kaneel"
+  },
+  {
+   "id": "kaneelsuiker",
+   "choice": null,
+   "confidence": "none",
+   "why": "mengsel; geen kandidaat"
+  },
+  {
+   "id": "kappertjes",
+   "choice": "2402",
+   "confidence": "sure",
+   "why": "kappertjes"
+  },
+  {
+   "id": "kapucijners",
+   "choice": "196",
+   "confidence": "sure",
+   "why": "kapucijners blik/glas"
+  },
+  {
+   "id": "karamelvla",
+   "choice": null,
+   "confidence": "none",
+   "why": "custardpoeder/banketbakkersroom zijn andere producten"
+  },
+  {
+   "id": "karbonade",
+   "choice": "1424",
+   "confidence": "close",
+   "why": "varkenshaaskarbonade rauw"
+  },
+  {
+   "id": "kardemom",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "karnemelk",
+   "choice": "289",
+   "confidence": "sure",
+   "why": "karnemelk"
+  },
+  {
+   "id": "karwijzaad",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen karwij; anijs is ander zaad"
+  },
+  {
+   "id": "kastanje",
+   "choice": "201",
+   "confidence": "close",
+   "why": "kastanje rauw; recept gebruikt vaak gegaard"
+  },
+  {
+   "id": "kastanjechampignon",
+   "choice": "19",
+   "confidence": "close",
+   "why": "champignon rauw"
+  },
+  {
+   "id": "katenspek",
+   "choice": "3002",
+   "confidence": "sure",
+   "why": "katenspek"
+  },
+  {
+   "id": "kauwgom",
+   "choice": "446",
+   "confidence": "sure",
+   "why": "kauwgom"
+  },
+  {
+   "id": "kaviaar",
+   "choice": "1629",
+   "confidence": "close",
+   "why": "viskuit gekleurd (lompvis-achtig)"
+  },
+  {
+   "id": "kebabkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "keelspek",
+   "choice": null,
+   "confidence": "none",
+   "why": "655 kcal vs 201 gem varkensvlees; geen keelspek"
+  },
+  {
+   "id": "kefir",
+   "choice": "1076",
+   "confidence": "sure",
+   "why": "kefir"
+  },
+  {
+   "id": "kemirinoot",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kerrie",
+   "choice": "1223",
+   "confidence": "close",
+   "why": "kerriepoeder djawa"
+  },
+  {
+   "id": "kers",
+   "choice": "163",
+   "confidence": "sure",
+   "why": "zoete kersen"
+  },
+  {
+   "id": "kersenjam",
+   "choice": "445",
+   "confidence": "close",
+   "why": "jam algemeen"
+  },
+  {
+   "id": "kersenvlaaivulling",
+   "choice": "749",
+   "confidence": "close",
+   "why": "vlaaivulling blik"
+  },
+  {
+   "id": "kerstkransje",
+   "choice": "258",
+   "confidence": "close",
+   "why": "koekje gemiddeld"
+  },
+  {
+   "id": "kerstomaat",
+   "choice": "2731",
+   "confidence": "sure",
+   "why": "kerstomaat rauw"
+  },
+  {
+   "id": "kervel",
+   "choice": "831",
+   "confidence": "close",
+   "why": "kervel vers; gedroogd ook in recepten"
+  },
+  {
+   "id": "ketchup",
+   "choice": "462",
+   "confidence": "sure",
+   "why": "tomatenketchup"
+  },
+  {
+   "id": "ketjap-asin",
+   "choice": "1213",
+   "confidence": "sure",
+   "why": "ketjap zout"
+  },
+  {
+   "id": "ketjap-manis",
+   "choice": "1215",
+   "confidence": "sure",
+   "why": "ketjap zoet"
+  },
+  {
+   "id": "ketoembar",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kibbeling",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kidneybonen",
+   "choice": "3184",
+   "confidence": "sure",
+   "why": "rode kidneybonen blik"
+  },
+  {
+   "id": "kikkererwt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kikkererwtenmeel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kikkererwtenmeel"
+  },
+  {
+   "id": "kikkererwtenpasta",
+   "choice": null,
+   "confidence": "none",
+   "why": "glutenvrije/tarwepasta is ander product"
+  },
+  {
+   "id": "kimchi",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kinderchampagne",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vergelijkbare drank"
+  },
+  {
+   "id": "kip",
+   "choice": null,
+   "confidence": "none",
+   "why": "generiek kip/stuk; geen passende kandidaat"
+  },
+  {
+   "id": "kip-kerriesalade",
+   "choice": "1498",
+   "confidence": "sure",
+   "why": "kip-kerriesalade"
+  },
+  {
+   "id": "kipblokjes",
+   "choice": "1634",
+   "confidence": "sure",
+   "why": "kipfilet rauw"
+  },
+  {
+   "id": "kipburger",
+   "choice": null,
+   "confidence": "none",
+   "why": "enige burger is gepaneerd, 307 vs 190 kcal"
+  },
+  {
+   "id": "kipcorn",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kipdijfilet",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen dijfilet; borstfilet is ander stuk"
+  },
+  {
+   "id": "kipfilet",
+   "choice": "1634",
+   "confidence": "sure",
+   "why": "kipfilet rauw"
+  },
+  {
+   "id": "kipgehakt",
+   "choice": "3139",
+   "confidence": "sure",
+   "why": "kippengehakt rauw"
+  },
+  {
+   "id": "kipgyros",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gyros-kandidaat"
+  },
+  {
+   "id": "kiphaasje",
+   "choice": "1634",
+   "confidence": "close",
+   "why": "kipfilet rauw"
+  },
+  {
+   "id": "kipkarbonade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kipkarbonade"
+  },
+  {
+   "id": "kipkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "mexicaanse mix is ander kruid"
+  },
+  {
+   "id": "kipnugget",
+   "choice": null,
+   "confidence": "none",
+   "why": "gepaneerd rauw 131 vs 255 kcal; geen nugget"
+  },
+  {
+   "id": "kippenbouillon",
+   "choice": "1528",
+   "confidence": "sure",
+   "why": "bouillon van blokje bereid"
+  },
+  {
+   "id": "kippenbouillonblokje",
+   "choice": "429",
+   "confidence": "sure",
+   "why": "bouillonblokje"
+  },
+  {
+   "id": "kippenbout",
+   "choice": "2090",
+   "confidence": "close",
+   "why": "drumstick m vel rauw"
+  },
+  {
+   "id": "kippenfond",
+   "choice": null,
+   "confidence": "none",
+   "why": "geconcentreerd 53 vs 13 kcal; geen fond"
+  },
+  {
+   "id": "kippenlever",
+   "choice": "475",
+   "confidence": "sure",
+   "why": "kippenlever rauw"
+  },
+  {
+   "id": "kippensoep",
+   "choice": "760",
+   "confidence": "close",
+   "why": "heldere soep m vlees en vermicelli"
+  },
+  {
+   "id": "kippenvleugel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vleugel"
+  },
+  {
+   "id": "kipreepjes",
+   "choice": "1634",
+   "confidence": "sure",
+   "why": "kipfilet rauw"
+  },
+  {
+   "id": "kipsate",
+   "choice": "865",
+   "confidence": "sure",
+   "why": "kipsate m saus bereid"
+  },
+  {
+   "id": "kipschnitzel",
+   "choice": "2364",
+   "confidence": "sure",
+   "why": "kipschnitzel gepaneerd rauw"
+  },
+  {
+   "id": "kipshoarma",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen shoarma"
+  },
+  {
+   "id": "kipspiesje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen spies"
+  },
+  {
+   "id": "kipworst",
+   "choice": "3223",
+   "confidence": "close",
+   "why": "grillworst kip"
+  },
+  {
+   "id": "kirsch",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kiwano",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kiwi",
+   "choice": "5120",
+   "confidence": "sure",
+   "why": "kiwi gem"
+  },
+  {
+   "id": "kiwibes",
+   "choice": "5120",
+   "confidence": "close",
+   "why": "kiwi gem"
+  },
+  {
+   "id": "klapstuk",
+   "choice": "1406",
+   "confidence": "sure",
+   "why": "runderklapstuk rauw"
+  },
+  {
+   "id": "kleefrijst",
+   "choice": "5",
+   "confidence": "close",
+   "why": "witte rijst rauw"
+  },
+  {
+   "id": "kletskop",
+   "choice": "2412",
+   "confidence": "sure",
+   "why": "kletskop"
+  }
+ ]
+}

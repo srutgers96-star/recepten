@@ -104,8 +104,8 @@ export const settings: Dict = {
   'more.nutrition': { nl: 'Voedingswaarden', en: 'Nutrition' },
   'more.nutritionHint': { nl: 'Een rustige regel met calorieën per portie op de receptpagina', en: 'A quiet line with calories per serving on the recipe page' },
   'more.nutritionSource': {
-    nl: 'Voedingswaarden zijn schattingen naar de openbare tabellen NEVO (RIVM) en USDA, niet van jouw merk.',
-    en: 'Nutrition values are estimates after the public NEVO (RIVM) and USDA tables, not your brand.',
+    nl: 'Gebaseerd op gegevens van NEVO-online versie 2025/9.0, RIVM, Bilthoven en andere gegevens (USDA FoodData Central; een schatting waar geen tabel het product kent); nooit merkwaarden.',
+    en: 'Based on data from NEVO-online version 2025/9.0, RIVM, Bilthoven and other data (USDA FoodData Central; an estimate where no table knows the product); never brand values.',
   },
   'more.dictionary': { nl: 'Woordenboek', en: 'Dictionary' },
   'more.dictCounts': { nl: '{builtin} ingrediënten · {own} eigen', en: '{builtin} ingredients · {own} own' },

@@ -1,0 +1,486 @@
+{
+ "batch": "14",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "rode-peper",
+   "choice": "2524",
+   "confidence": "close",
+   "why": "chilipeper rauw, andere variant"
+  },
+  {
+   "id": "roggebrood",
+   "choice": "242",
+   "confidence": "sure",
+   "why": "donker roggebrood"
+  },
+  {
+   "id": "roggemeel",
+   "choice": "218",
+   "confidence": "sure",
+   "why": "roggemeel volkoren"
+  },
+  {
+   "id": "rolcake",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "rolfondant",
+   "choice": "5122",
+   "confidence": "close",
+   "why": "suikerglazuur is de naaste suikerpasta"
+  },
+  {
+   "id": "rolmops",
+   "choice": "2947",
+   "confidence": "sure",
+   "why": "zelfde product"
+  },
+  {
+   "id": "romanesco",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "romeinse-sla",
+   "choice": "3332",
+   "confidence": "sure",
+   "why": "sla romaine rauw"
+  },
+  {
+   "id": "rood-fruit",
+   "choice": "5279",
+   "confidence": "sure",
+   "why": "bosvruchten/rood fruit gem"
+  },
+  {
+   "id": "rooibosthee",
+   "choice": "645",
+   "confidence": "close",
+   "why": "thee bereid, 0 kcal"
+  },
+  {
+   "id": "rookkaas",
+   "choice": "1104",
+   "confidence": "sure",
+   "why": "rookkaas"
+  },
+  {
+   "id": "rookvlees",
+   "choice": "340",
+   "confidence": "sure",
+   "why": "runderrookvlees"
+  },
+  {
+   "id": "rookworst",
+   "choice": "324",
+   "confidence": "sure",
+   "why": "rookworst gekookt gem"
+  },
+  {
+   "id": "room",
+   "choice": "2275",
+   "confidence": "close",
+   "why": "kookroom; current 340 is slagroom, 1,6x verschil"
+  },
+  {
+   "id": "roomijs",
+   "choice": "303",
+   "confidence": "sure",
+   "why": "roomijs/vanilleijs gem"
+  },
+  {
+   "id": "roomkaas",
+   "choice": "1302",
+   "confidence": "close",
+   "why": "natuur verse roomkaas Paturain"
+  },
+  {
+   "id": "roomkaas-met-gember",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen roomkaas met gember"
+  },
+  {
+   "id": "roomkaas-met-kruiden",
+   "choice": "3368",
+   "confidence": "sure",
+   "why": "roomkaas met kruiden"
+  },
+  {
+   "id": "roomlikeur",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen roomlikeur; advocaat is ander product"
+  },
+  {
+   "id": "roquefort",
+   "choice": "714",
+   "confidence": "sure",
+   "why": "roquefort"
+  },
+  {
+   "id": "rosbief",
+   "choice": "1410",
+   "confidence": "close",
+   "why": "rosbief rauw; verkocht als beleg is gaar"
+  },
+  {
+   "id": "rose",
+   "choice": "2610",
+   "confidence": "sure",
+   "why": "rosewijn"
+  },
+  {
+   "id": "rosti",
+   "choice": "856",
+   "confidence": "sure",
+   "why": "rosti onbereid"
+  },
+  {
+   "id": "rotivel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "roze-koek",
+   "choice": "2403",
+   "confidence": "sure",
+   "why": "name2 Roze koek"
+  },
+  {
+   "id": "roze-peper",
+   "choice": null,
+   "confidence": "none",
+   "why": "kandidaten zijn ander product"
+  },
+  {
+   "id": "rozemarijn",
+   "choice": null,
+   "confidence": "none",
+   "why": "enige kandidaat gedroogd, 374 vs 131 kcal"
+  },
+  {
+   "id": "rozenwater",
+   "choice": null,
+   "confidence": "none",
+   "why": "water/wijn is ander product"
+  },
+  {
+   "id": "rozijn",
+   "choice": "33",
+   "confidence": "sure",
+   "why": "rozijnen gedroogd"
+  },
+  {
+   "id": "rozijnenbrood",
+   "choice": "244",
+   "confidence": "sure",
+   "why": "rozijnenbrood wit"
+  },
+  {
+   "id": "rucola",
+   "choice": "2736",
+   "confidence": "sure",
+   "why": "rucola rauw"
+  },
+  {
+   "id": "rum",
+   "choice": "408",
+   "confidence": "sure",
+   "why": "rum"
+  },
+  {
+   "id": "rumaroma",
+   "choice": null,
+   "confidence": "none",
+   "why": "rum 234 kcal vs aroma 10"
+  },
+  {
+   "id": "runderbouillon",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen bouillon; blokje 273 vs 3 kcal"
+  },
+  {
+   "id": "runderbouillonblokje",
+   "choice": "429",
+   "confidence": "close",
+   "why": "bouillonblokje algemeen"
+  },
+  {
+   "id": "runderfond",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen fond"
+  },
+  {
+   "id": "rundergehakt",
+   "choice": "3034",
+   "confidence": "close",
+   "why": "mager rundergehakt rauw past bij current"
+  },
+  {
+   "id": "runderlap",
+   "choice": "1414",
+   "confidence": "close",
+   "why": "sukadelappen rauw"
+  },
+  {
+   "id": "runderpoulet",
+   "choice": "1408",
+   "confidence": "sure",
+   "why": "runderpoulet rauw"
+  },
+  {
+   "id": "runderreepjes",
+   "choice": "1400",
+   "confidence": "close",
+   "why": "biefstuk rauw als reepjes"
+  },
+  {
+   "id": "runderrollade",
+   "choice": "1409",
+   "confidence": "sure",
+   "why": "runderrollade rauw"
+  },
+  {
+   "id": "runderschenkel",
+   "choice": "1411",
+   "confidence": "sure",
+   "why": "runderschenkel rauw"
+  },
+  {
+   "id": "rundvlees",
+   "choice": "2336",
+   "confidence": "sure",
+   "why": "rundvlees gem rauw"
+  },
+  {
+   "id": "saffraan",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "sake",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "salami",
+   "choice": "1152",
+   "confidence": "sure",
+   "why": "worst salami"
+  },
+  {
+   "id": "salie",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "salsa",
+   "choice": "2614",
+   "confidence": "sure",
+   "why": "salsa tomatendipsaus"
+  },
+  {
+   "id": "sambal-badjak",
+   "choice": null,
+   "confidence": "none",
+   "why": "sambal oelek 36 vs 300 kcal"
+  },
+  {
+   "id": "sambal-manis",
+   "choice": null,
+   "confidence": "none",
+   "why": "sambal oelek 36 vs 150 kcal"
+  },
+  {
+   "id": "sambal-oelek",
+   "choice": "1232",
+   "confidence": "sure",
+   "why": "sambal oelek"
+  },
+  {
+   "id": "samosa",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "sandwich",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen broodje-kandidaat zacht wit"
+  },
+  {
+   "id": "sandwichspread",
+   "choice": "575",
+   "confidence": "sure",
+   "why": "sandwichspread naturel"
+  },
+  {
+   "id": "sangria",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "santen",
+   "choice": "2290",
+   "confidence": "close",
+   "why": "kokosmelk; blok 686 kcal past niet"
+  },
+  {
+   "id": "sardine",
+   "choice": "355",
+   "confidence": "sure",
+   "why": "sardines in olie blik"
+  },
+  {
+   "id": "satesaus",
+   "choice": "5469",
+   "confidence": "close",
+   "why": "satesaus geconcentreerd, 437 vs 257 kcal"
+  },
+  {
+   "id": "saucijs",
+   "choice": "1417",
+   "confidence": "sure",
+   "why": "varkenssaucijs rauw"
+  },
+  {
+   "id": "savooienkool",
+   "choice": "24",
+   "confidence": "sure",
+   "why": "kool savooie rauw"
+  },
+  {
+   "id": "scamorza",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "schapenkaas",
+   "choice": "804",
+   "confidence": "close",
+   "why": "schapenkaas vers"
+  },
+  {
+   "id": "schapenyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen schapenyoghurt"
+  },
+  {
+   "id": "schelpjesmacaroni",
+   "choice": "4",
+   "confidence": "sure",
+   "why": "pasta wit rauw"
+  },
+  {
+   "id": "schelvisfilet",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vis in kandidaten"
+  },
+  {
+   "id": "schenkstroop",
+   "choice": "3242",
+   "confidence": "sure",
+   "why": "schenkstroop"
+  },
+  {
+   "id": "schnitzel",
+   "choice": "1790",
+   "confidence": "close",
+   "why": "ongepaneerd rauw past bij current 120"
+  },
+  {
+   "id": "schol",
+   "choice": "813",
+   "confidence": "sure",
+   "why": "schol rauw"
+  },
+  {
+   "id": "schorseneer",
+   "choice": "45",
+   "confidence": "sure",
+   "why": "schorseneren rauw"
+  },
+  {
+   "id": "schouderham",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gekookte schouderham"
+  },
+  {
+   "id": "schrijfglazuur",
+   "choice": "5122",
+   "confidence": "close",
+   "why": "suikerglazuur"
+  },
+  {
+   "id": "seitan",
+   "choice": "1458",
+   "confidence": "close",
+   "why": "seitan gekruid"
+  },
+  {
+   "id": "selderij",
+   "choice": "1235",
+   "confidence": "sure",
+   "why": "selderij blad vers"
+  },
+  {
+   "id": "selderijsalade",
+   "choice": "852",
+   "confidence": "sure",
+   "why": "selderijsalade"
+  },
+  {
+   "id": "selderijzout",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen selderijzout"
+  },
+  {
+   "id": "seroendeng",
+   "choice": "5498",
+   "confidence": "sure",
+   "why": "seroendeng"
+  },
+  {
+   "id": "serranoham",
+   "choice": "328",
+   "confidence": "close",
+   "why": "rauwe ham, dichtste familie"
+  },
+  {
+   "id": "sesamolie",
+   "choice": "3376",
+   "confidence": "sure",
+   "why": "sesamolie"
+  },
+  {
+   "id": "sesamzaad",
+   "choice": "838",
+   "confidence": "sure",
+   "why": "sesamzaad zonder schil"
+  },
+  {
+   "id": "sherry",
+   "choice": "409",
+   "confidence": "sure",
+   "why": "sherry"
+  }
+ ]
+}

@@ -1,0 +1,486 @@
+{
+ "batch": "r04",
+ "source": "usda",
+ "items": [
+  {
+   "id": "gado-gado-saus",
+   "choice": "174070",
+   "confidence": "close",
+   "why": "pindasaus van pindakaas, zelfde waarden als huidig"
+  },
+  {
+   "id": "gamba",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "garnaal",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "garnalenkroket",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "gebakken-uitjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gebraden-gehakt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gebrande-amandel",
+   "choice": "168592",
+   "confidence": "close",
+   "why": "honing-geroosterde amandel, 594 vs 555 kcal"
+  },
+  {
+   "id": "gehakt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gehaktbal",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gehaktballetje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gehaktkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "geitenkaas",
+   "choice": "173435",
+   "confidence": "sure",
+   "why": "geitenkaas zacht, identieke waarden"
+  },
+  {
+   "id": "geitenyoghurt",
+   "choice": "171278",
+   "confidence": "close",
+   "why": "geitenmelk als naaste familie, 69 vs 65 kcal"
+  },
+  {
+   "id": "gelatine",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "geleisuiker",
+   "choice": "169655",
+   "confidence": "close",
+   "why": "kristalsuiker, gelijk aan huidig 387 kcal"
+  },
+  {
+   "id": "gemberkoekje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gemberpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gembersap",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gembershot",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gemberthee",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gepofte-rijst",
+   "choice": "173912",
+   "confidence": "close",
+   "why": "gepofte rijstontbijtgraan, 402 vs 380"
+  },
+  {
+   "id": "gestampte-muisjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gevulde-druivenbladeren",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gevulde-koek",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gevulde-speculaas",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gin",
+   "choice": "174815",
+   "confidence": "sure",
+   "why": "distilled 80 proof, 231 kcal gelijk"
+  },
+  {
+   "id": "ginger-ale",
+   "choice": "174846",
+   "confidence": "sure",
+   "why": "ginger ale, gelijke waarden"
+  },
+  {
+   "id": "ginger-beer",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gist",
+   "choice": "175043",
+   "confidence": "close",
+   "why": "actieve droge gist, zakje is droge gist"
+  },
+  {
+   "id": "glucosestroop",
+   "choice": "168837",
+   "confidence": "close",
+   "why": "light corn syrup, 283 kcal gelijk"
+  },
+  {
+   "id": "gluhwein",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "glutenvrij-brood",
+   "choice": "174100",
+   "confidence": "sure",
+   "why": "glutenvrij wit brood, 248 kcal gelijk"
+  },
+  {
+   "id": "glutenvrij-paneermeel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "glutenvrije-bloem",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "glutenvrije-broodmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "glutenvrije-havermout",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gnocchi",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "gorgonzola",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "gourmetschotel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "granaatappelmelasse",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "granadilla",
+   "choice": "169108",
+   "confidence": "sure",
+   "why": "passievrucht granadilla rauw"
+  },
+  {
+   "id": "granola",
+   "choice": "171646",
+   "confidence": "close",
+   "why": "granola, 489 vs 460"
+  },
+  {
+   "id": "griekse-yoghurt",
+   "choice": "171304",
+   "confidence": "sure",
+   "why": "Griekse yoghurt vol, 97 kcal gelijk"
+  },
+  {
+   "id": "groente",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "groentebouillon",
+   "choice": "171583",
+   "confidence": "sure",
+   "why": "groentebouillon kant-en-klaar"
+  },
+  {
+   "id": "groentebouillonpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "groentechips",
+   "choice": "174796",
+   "confidence": "close",
+   "why": "groentechips, 473 vs 490"
+  },
+  {
+   "id": "groentefond",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "groentemix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "groentesap",
+   "choice": "167708",
+   "confidence": "close",
+   "why": "tomaten-groentesap, 22 vs 20"
+  },
+  {
+   "id": "groentesoep",
+   "choice": "171559",
+   "confidence": "close",
+   "why": "groentesoep blik ready-to-serve, 39 kcal gelijk"
+  },
+  {
+   "id": "guacamole",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "guanciale",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "gummibeer",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gyoza",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "gyros",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "gyroskruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "haas",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "hacheekruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "hagelslag",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "halloumi",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "halva",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "halvanaise",
+   "choice": "171443",
+   "confidence": "sure",
+   "why": "mayonaise reduced fat, gelijk aan huidig"
+  },
+  {
+   "id": "halvarine",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "ham",
+   "choice": "173863",
+   "confidence": "sure",
+   "why": "gekookte ham 96% vetvrij, 107 kcal gelijk"
+  },
+  {
+   "id": "ham-preisalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "hamblokjes",
+   "choice": "173864",
+   "confidence": "close",
+   "why": "gesneden ham, 164 vs 107 kcal, wel zelfde familie"
+  },
+  {
+   "id": "hamburgerkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "hamschijf",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "hamworst",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "harissa",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "havermelk",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "havermout",
+   "choice": "173904",
+   "confidence": "sure",
+   "why": "havermout droog"
+  },
+  {
+   "id": "havermoutkoekje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "haverroom",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "haveryoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "hazelnoot",
+   "choice": "170581",
+   "confidence": "sure",
+   "why": "hazelnoten"
+  },
+  {
+   "id": "hazelnootdrink",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat of geen zelfde product"
+  },
+  {
+   "id": "heek",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  },
+  {
+   "id": "hertenvlees",
+   "choice": null,
+   "confidence": "none",
+   "why": "lege kandidatenlijst"
+  }
+ ]
+}

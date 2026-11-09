@@ -1,0 +1,486 @@
+{
+ "batch": "r07",
+ "source": "usda",
+ "items": [
+  {
+   "id": "maismeel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "maistortilla",
+   "choice": "175036",
+   "confidence": "sure",
+   "why": "corn tortilla, 218 kcal gelijk"
+  },
+  {
+   "id": "maiswafel",
+   "choice": "168857",
+   "confidence": "sure",
+   "why": "corn cakes snack"
+  },
+  {
+   "id": "maizena",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "majoraan",
+   "choice": "170928",
+   "confidence": "sure",
+   "why": "marjoram dried"
+  },
+  {
+   "id": "makreel-in-tomatensaus",
+   "choice": "175140",
+   "confidence": "close",
+   "why": "blik vis in tomatensaus, sardine i.p.v. makreel"
+  },
+  {
+   "id": "manchego",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "mariakaakje",
+   "choice": "171867",
+   "confidence": "sure",
+   "why": "Marie biscuit"
+  },
+  {
+   "id": "marmercake",
+   "choice": "172706",
+   "confidence": "close",
+   "why": "sponge cake commercieel, dichtst bij cake"
+  },
+  {
+   "id": "marmite",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "marsepein",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "marshmallow",
+   "choice": "167995",
+   "confidence": "sure",
+   "why": "marshmallows"
+  },
+  {
+   "id": "masala",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "matcha",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "mayonaise",
+   "choice": "171009",
+   "confidence": "sure",
+   "why": "mayonnaise regular"
+  },
+  {
+   "id": "meikaas",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "melk",
+   "choice": "171265",
+   "confidence": "sure",
+   "why": "volle melk"
+  },
+  {
+   "id": "melkchocolade",
+   "choice": "167587",
+   "confidence": "sure",
+   "why": "milk chocolate"
+  },
+  {
+   "id": "melkpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "meringue",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "metworst",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "mierikswortel",
+   "choice": "173472",
+   "confidence": "close",
+   "why": "bereide mierikswortel, geen rauwe in lijst"
+  },
+  {
+   "id": "mirin",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "mixdrank",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "mochi",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "mokkaboontje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "mon-chou",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "moorkop",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "morel",
+   "choice": "173954",
+   "confidence": "sure",
+   "why": "zure kers, kcal gelijk"
+  },
+  {
+   "id": "mossel",
+   "choice": "174216",
+   "confidence": "sure",
+   "why": "blauwe mossel rauw"
+  },
+  {
+   "id": "mosterd",
+   "choice": "172234",
+   "confidence": "sure",
+   "why": "prepared mustard"
+  },
+  {
+   "id": "mosterd-dillesaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "mosterdsaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "mosterdzaad",
+   "choice": "170929",
+   "confidence": "close",
+   "why": "mosterdzaad gemalen i.p.v. heel"
+  },
+  {
+   "id": "mousserende-wijn",
+   "choice": "174837",
+   "confidence": "close",
+   "why": "witte tafelwijn, geen mousserende in lijst"
+  },
+  {
+   "id": "mozzarella",
+   "choice": "170845",
+   "confidence": "close",
+   "why": "mozzarella volvet, kcal 299 vs 250"
+  },
+  {
+   "id": "mozzarellastick",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "mueslireep",
+   "choice": "167954",
+   "confidence": "close",
+   "why": "granola bar soft plain"
+  },
+  {
+   "id": "muffin",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "muisjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "multivitaminesap",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "munt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "muntthee",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "muscovadosuiker",
+   "choice": "168833",
+   "confidence": "close",
+   "why": "brown sugar"
+  },
+  {
+   "id": "nagelkaas",
+   "choice": "171241",
+   "confidence": "close",
+   "why": "Goudse kaas, identiek aan huidige waarden"
+  },
+  {
+   "id": "nasigroente",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "nduja",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "nigellazaad",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "noedelsoep",
+   "choice": "171177",
+   "confidence": "close",
+   "why": "ramen noodle dry, kcal gelijk"
+  },
+  {
+   "id": "noilly-prat",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "noorse-garnaal",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "noot",
+   "choice": "170587",
+   "confidence": "close",
+   "why": "gemengde noten, kcal 607 vs 620"
+  },
+  {
+   "id": "nootmuskaat",
+   "choice": "171326",
+   "confidence": "sure",
+   "why": "nutmeg ground"
+  },
+  {
+   "id": "nori",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "notenpasta",
+   "choice": "168588",
+   "confidence": "close",
+   "why": "amandelpasta zonder zout"
+  },
+  {
+   "id": "nougat",
+   "choice": "169060",
+   "confidence": "close",
+   "why": "nougat met amandel"
+  },
+  {
+   "id": "olie",
+   "choice": "171411",
+   "confidence": "close",
+   "why": "generieke plantaardige olie = sojaolie, 884"
+  },
+  {
+   "id": "olie-en-boter-om-in-te-bakken",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "oliebollenmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "olijven-gevuld-met-citroen",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "olijven-gevuld-met-paprika",
+   "choice": "169096",
+   "confidence": "close",
+   "why": "groene olijven op zuur, kcal gelijk"
+  },
+  {
+   "id": "ontbijtbiscuit",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "ontbijtgranen",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "ontbijtkoek",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ontbijtspek",
+   "choice": "168277",
+   "confidence": "close",
+   "why": "bacon ongebakken"
+  },
+  {
+   "id": "oploscappuccino",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "oploskoffie",
+   "choice": "171893",
+   "confidence": "close",
+   "why": "oploskoffie poeder; current 100 kcal wijkt af maar product is gelijk"
+  },
+  {
+   "id": "orecchiette",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "oregano",
+   "choice": "171328",
+   "confidence": "sure",
+   "why": "oregano dried"
+  },
+  {
+   "id": "orzo",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ossenhaas",
+   "choice": "173988",
+   "confidence": "sure",
+   "why": "tenderloin lean+fat rauw, 147 vs 153"
+  },
+  {
+   "id": "ossenstaart",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ossenworst",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ovengroente",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "paccheri",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "paellarijst",
+   "choice": "168931",
+   "confidence": "sure",
+   "why": "short-grain rijst rauw, 358 gelijk"
+  },
+  {
+   "id": "palmkool",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "palmsuiker",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "pancetta",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "pangasiusfilet",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  }
+ ]
+}

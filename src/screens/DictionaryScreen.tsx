@@ -159,6 +159,9 @@ function EntryDetail(props: { ing: Ingredient }) {
                 fat: formatNutrient(oneDecimal(per100.fat), l),
                 carbs: formatNutrient(oneDecimal(per100.carbs), l),
               })}
+              <br />
+              {/* V9b: where the values come from; a missing source is an estimate (V9). */}
+              <small>{t('dict.per100Source', { source: t('nutri.source.' + (per100.source ?? 'estimate')) })}</small>
             </dd>
           </>
         )}

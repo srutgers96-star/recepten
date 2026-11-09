@@ -1,0 +1,14 @@
+{
+  "batch": "19",
+  "source": "nevo",
+  "items": [
+    {"id":"zuurkool","choice":"73","confidence":"sure","why":"Kool zuur- rauw is zuurkool zoals verkocht."},
+    {"id":"zuurstok","choice":null,"confidence":"none","why":"Enige kandidaat is zoute pretzelsticks, geen snoep."},
+    {"id":"zuurtje","choice":"450","confidence":"sure","why":"Zuurtjes/boiled sweets, 380 kcal past bij 390 huidig."},
+    {"id":"zwaardvis","choice":null,"confidence":"none","why":"Geen kandidaten."},
+    {"id":"zwarte-bes","choice":"154","confidence":"sure","why":"Bessen zwarte = blackcurrants."},
+    {"id":"zwarte-boon","choice":"5176","confidence":"sure","why":"Zwarte bonen blik/glas, defaultUnit blik."},
+    {"id":"zwarte-ogenboon","choice":"685","confidence":"sure","why":"Black eyed gedroogd, droog zoals in de winkel (aisle droog)."},
+    {"id":"zwarte-peper","choice":"823","confidence":"sure","why":"Peper zwarte/witte is de specerij; 332 vs 240 huidige schatting is binnen 2x."}
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "batch": "19",
+  "source": "usda",
+  "items": [
+    {"id":"zuurkool","nl":"zuurkool","en":"sauerkraut","aliasesEn":[],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":19,"protein":0.9,"fat":0.1,"carbs":1.4,"source":"usda"}, "candidates": [
+      {"code":"169279","name":"Sauerkraut, canned, solids and liquids","category":"Vegetables and Vegetable Products","state":"canned","kcal":19,"protein":0.91,"fat":0.14,"carbs":4.28}
+    ] },
+    {"id":"zuurstok","nl":"zuurstok","en":"stick of rock","aliasesEn":["candy cane","candy canes","seaside rock"],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":385,"protein":0,"fat":0,"carbs":96,"source":"estimate"}, "candidates": [
+      {"code":"174929","name":"Bread, sticks, plain","category":"Baked Products","state":"other","kcal":412,"protein":12,"fat":9.5,"carbs":68.4},
+      {"code":"173581","name":"Butter, light, stick, with salt","category":"Fats and Oils","state":"other","kcal":499,"protein":3.3,"fat":55.1,"carbs":0},
+      {"code":"172344","name":"Butter, light, stick, without salt","category":"Fats and Oils","state":"other","kcal":499,"protein":3.3,"fat":55.1,"carbs":0},
+      {"code":"172346","name":"Margarine, regular, 80% fat, composite, stick, with salt","category":"Fats and Oils","state":"other","kcal":717,"protein":0.16,"fat":80.71,"carbs":0.7},
+      {"code":"173585","name":"Margarine, regular, 80% fat, composite, stick, without salt","category":"Fats and Oils","state":"other","kcal":717,"protein":0.16,"fat":80.71,"carbs":0.7},
+      {"code":"174599","name":"Sausage, summer, pork and beef, sticks, with cheddar cheese","category":"Sausages and Luncheon Meats","state":"other","kcal":426,"protein":19.43,"fat":37.91,"carbs":1.82},
+      {"code":"172352","name":"Margarine-like spread with yogurt, 70% fat, stick, with salt","category":"Fats and Oils","state":"other","kcal":630,"protein":0.3,"fat":70,"carbs":0.5},
+      {"code":"172348","name":"Margarine-like, vegetable oil spread, 60% fat, stick, with salt","category":"Fats and Oils","state":"other","kcal":537,"protein":0.12,"fat":60.39,"carbs":0.69}
+    ] },
+    {"id":"zuurtje","nl":"zuurtje","en":"boiled sweet","aliasesEn":["hard sweets","hard candy"],"defaultUnit":"g","aisle":"snacks-zoet","current":{"kcal":390,"protein":0,"fat":0,"carbs":97.5,"source":"estimate"}, "candidates": [
+      {"code":"170008","name":"Onions, sweet, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":32,"protein":0.8,"fat":0.08,"carbs":7.55},
+      {"code":"171719","name":"Cherries, sweet, raw","category":"Fruits and Fruit Juices","state":"raw","kcal":63,"protein":1.06,"fat":0.2,"carbs":16.01},
+      {"code":"168538","name":"Corn, sweet, white, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":86,"protein":3.22,"fat":1.18,"carbs":19.02},
+      {"code":"169998","name":"Corn, sweet, yellow, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":86,"protein":3.27,"fat":1.35,"carbs":18.7},
+      {"code":"170108","name":"Peppers, sweet, red, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":26,"protein":0.99,"fat":0.3,"carbs":6.03},
+      {"code":"170427","name":"Peppers, sweet, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":20,"protein":0.86,"fat":0.17,"carbs":4.64},
+      {"code":"169383","name":"Peppers, sweet, yellow, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":27,"protein":1,"fat":0.21,"carbs":6.32},
+      {"code":"167977","name":"Candies, sweet chocolate","category":"Sweets","state":"other","kcal":507,"protein":3.9,"fat":34.2,"carbs":60.4}
+    ] },
+    {"id":"zwaardvis","nl":"zwaardvis","en":"swordfish","aliasesEn":["swordfish steak","swordfish steaks"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":144,"protein":19.7,"fat":6.7,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"173703","name":"Fish, swordfish, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":144,"protein":19.66,"fat":6.65,"carbs":0},
+      {"code":"173704","name":"Fish, swordfish, cooked, dry heat","category":"Finfish and Shellfish Products","state":"cooked","kcal":172,"protein":23.45,"fat":7.93,"carbs":0}
+    ] },
+    {"id":"zwarte-bes","nl":"zwarte bes","en":"blackcurrant","aliasesEn":["black currant","black currants"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":63,"protein":1.4,"fat":0.4,"carbs":15.4,"source":"usda"}, "candidates": [] },
+    {"id":"zwarte-boon","nl":"zwarte boon","en":"black bean","aliasesEn":["tinned black beans","black turtle beans"],"defaultUnit":"blik","aisle":"blik-pot","current":{"kcal":91,"protein":6,"fat":0.3,"carbs":9.7,"source":"usda"}, "candidates": [
+      {"code":"175188","name":"Beans, black turtle, mature seeds, canned","category":"Legumes and Legume Products","state":"canned","kcal":91,"protein":6.03,"fat":0.29,"carbs":16.55},
+      {"code":"171141","name":"Soup, black bean, canned, condensed","category":"Soups, Sauces, and Gravies","state":"canned","kcal":91,"protein":4.83,"fat":1.32,"carbs":15.42},
+      {"code":"172903","name":"Soup, black bean, canned, prepared with equal volume water","category":"Soups, Sauces, and Gravies","state":"canned","kcal":46,"protein":2.42,"fat":0.66,"carbs":7.71},
+      {"code":"175186","name":"Beans, black turtle, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":339,"protein":21.25,"fat":0.9,"carbs":63.25},
+      {"code":"175238","name":"Beans, black, mature seeds, canned, low sodium","category":"Legumes and Legume Products","state":"canned","kcal":91,"protein":6.03,"fat":0.29,"carbs":16.55},
+      {"code":"175183","name":"Beans, baked, canned, with beef","category":"Legumes and Legume Products","state":"canned","kcal":121,"protein":6.38,"fat":3.45,"carbs":16.91},
+      {"code":"175185","name":"Beans, baked, canned, with pork","category":"Legumes and Legume Products","state":"canned","kcal":106,"protein":5.19,"fat":1.55,"carbs":19.99},
+      {"code":"173747","name":"Beans, navy, mature seeds, canned","category":"Legumes and Legume Products","state":"canned","kcal":113,"protein":7.53,"fat":0.43,"carbs":20.45}
+    ] },
+    {"id":"zwarte-ogenboon","nl":"zwarte-ogenboon","en":"black-eyed bean","aliasesEn":["black-eyed peas","black eye beans"],"defaultUnit":"g","aisle":"droog","current":{"kcal":336,"protein":23.5,"fat":1.3,"carbs":60,"source":"estimate"}, "candidates": [
+      {"code":"173734","name":"Beans, black, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":341,"protein":21.6,"fat":1.42,"carbs":62.36},
+      {"code":"175186","name":"Beans, black turtle, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":339,"protein":21.25,"fat":0.9,"carbs":63.25},
+      {"code":"169961","name":"Beans, snap, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":1.83,"fat":0.22,"carbs":6.97},
+      {"code":"168574","name":"Beans, fava, in pod, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":88,"protein":7.92,"fat":0.73,"carbs":17.63},
+      {"code":"169320","name":"Beans, snap, yellow, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":1.82,"fat":0.12,"carbs":7.13},
+      {"code":"173745","name":"Beans, navy, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":337,"protein":22.33,"fat":1.5,"carbs":60.75},
+      {"code":"173748","name":"Beans, pink, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":343,"protein":20.96,"fat":1.13,"carbs":64.19},
+      {"code":"175202","name":"Beans, white, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":333,"protein":23.36,"fat":0.85,"carbs":60.27}
+    ] },
+    {"id":"zwarte-peper","nl":"zwarte peper","en":"black pepper","aliasesEn":["freshly ground black pepper","ground black pepper"],"defaultUnit":"mp","aisle":"kruiden-specerijen","current":{"kcal":240,"protein":10.4,"fat":3.3,"carbs":40,"source":"estimate"}, "candidates": [
+      {"code":"169394","name":"Pepper, banana, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":27,"protein":1.66,"fat":0.45,"carbs":5.35},
+      {"code":"169395","name":"Peppers, serrano, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":32,"protein":1.74,"fat":0.44,"carbs":6.7},
+      {"code":"168576","name":"Peppers, jalapeno, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":29,"protein":0.91,"fat":0.37,"carbs":6.5},
+      {"code":"168578","name":"Peppers, hungarian, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":29,"protein":0.8,"fat":0.41,"carbs":6.7},
+      {"code":"170108","name":"Peppers, sweet, red, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":26,"protein":0.99,"fat":0.3,"carbs":6.03},
+      {"code":"170427","name":"Peppers, sweet, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":20,"protein":0.86,"fat":0.17,"carbs":4.64},
+      {"code":"169383","name":"Peppers, sweet, yellow, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":27,"protein":1,"fat":0.21,"carbs":6.32},
+      {"code":"170106","name":"Peppers, hot chili, red, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":40,"protein":1.87,"fat":0.44,"carbs":8.81}
+    ] }
+  ]
+}

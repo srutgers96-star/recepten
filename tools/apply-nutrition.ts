@@ -5,6 +5,7 @@
 //   node --experimental-strip-types tools/apply-nutrition.ts --check all
 //   node --experimental-strip-types tools/apply-nutrition.ts --apply data/llm/nutrition/batch-01.json …
 //   node --experimental-strip-types tools/apply-nutrition.ts --apply all      (all = data/llm/nutrition/batch-*.json)
+//   node --experimental-strip-types tools/apply-nutrition.ts --from-tables usda   (V9b; later: --from-tables nevo)
 //
 // Batch file: { "batch": "01", "items": [{ "id", "kcal", "protein", "fat", "carbs", "fibre", "salt",
 // "alcohol"?, "gramsPerMl"?, "pieceGrams"?, "unitGrams"?: { "<unit-id>": g } }] }.
@@ -25,6 +26,16 @@
 // Both files keep their style (ingredients.json one object per line; nutrition.json one item per line) so
 // the git diff stays readable. --check writes nothing and exits 1 when anything was refused.
 //
+// --from-tables <source> (docs/specs/verbeterronde-9b.md §1a, V9b): reads the normalised table
+// data/work/tables/<source>.csv and the matching round's answers data/llm/nutrition/match-<source>-NN.json
+// ({ "batch", "source", "items": [{ "id", "choice": "<code>" | null, "confidence": "sure" | "close" | "none", "why" }] }).
+// Every sure/close answer with a choice becomes the table row's values (`tableNutritionItem`: USDA carbs minus
+// fibre, salt = sodium × 2.5 / 1000, kcal from the macros when the table has none, one decimal, source + ref);
+// it replaces the existing item when the new source ranks at least as high (estimate 0 < usda 1 < nevo 2), else
+// the item is kept. Refused (with reason): code not in the table, id unknown or not food, protein + fat +
+// carbs + fibre > 101 after the conversion, a negative value. `none` answers leave the item as it is. Writes
+// data/nutrition.json (with the V9b `note`); never touches data/ingredients.json.
+//
 // Node 22 type-stripping rules apply: type-only syntax only, plain ESM, no enums/namespaces.
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -34,7 +45,8 @@ import process from 'node:process';
 import type { Ingredient, Unit } from '../src/domain/dictionary.ts';
 import { NON_FOOD_AISLES, type NutritionItem } from '../src/domain/nutrition.ts';
 import { formatIngredientsFile } from './apply-llm-batch.ts';
-import { checkNutritionItem, GRAMS_PER_ML_RANGE, GRAMS_PER_RANGE } from './validate-data.ts';
+import { checkNutritionItem, GRAMS_PER_ML_RANGE, GRAMS_PER_RANGE, isNutritionWarning } from './validate-data.ts';
+import { parseTable, type TableRow } from './nutrition-match.ts';
 
 // ---------------------------------------------------------------------------
 // Schema
@@ -82,7 +94,7 @@ const ML_UNIT = 'ml';
 
 const BATCH_ITEM_KEYS: ReadonlySet<string> = new Set(['id', ...NUTRIENT_KEYS, 'alcohol', 'gramsPerMl', 'pieceGrams', 'unitGrams']);
 /** Order of the keys of one nutrition.json item. */
-const ITEM_KEY_ORDER = ['kcal', 'protein', 'fat', 'carbs', 'fibre', 'salt', 'alcohol', 'source'];
+const ITEM_KEY_ORDER = ['kcal', 'protein', 'fat', 'carbs', 'fibre', 'salt', 'alcohol', 'source', 'ref'];
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -304,6 +316,195 @@ export function applyNutritionItems(
 }
 
 // ---------------------------------------------------------------------------
+// --from-tables <source> (V9b)
+// ---------------------------------------------------------------------------
+
+export type TableSource = 'usda' | 'nevo';
+
+/** Rank of a source: a new item replaces an existing one when its rank is at least as high. */
+export const SOURCE_RANK: Readonly<Record<string, number>> = { estimate: 0, usda: 1, nevo: 2 };
+
+/** The rank of an item's source (missing = estimate). */
+export function sourceRank(source: string | undefined): number {
+  return SOURCE_RANK[source ?? 'estimate'] ?? 0;
+}
+
+/** The `note` of data/nutrition.json since V9b (docs/specs/verbeterronde-9b.md §1a). */
+export const NUTRITION_NOTE: { readonly nl: string; readonly en: string } = {
+  nl: 'Gebaseerd op gegevens van NEVO-online versie 2025/9.0, RIVM, Bilthoven en andere gegevens. Waarden per 100 g product zoals het in het recept staat (pasta en rijst droog). Bron per item: NEVO-online versie 2025/9.0 (RIVM, Bilthoven), USDA FoodData Central SR Legacy (U.S. Department of Agriculture, 04/2018) of een schatting op dat niveau; nooit merkwaarden. Koolhydraten exclusief vezels.',
+  en: 'Based on data from NEVO-online version 2025/9.0, RIVM, Bilthoven and other data. Values per 100 g of the product as it appears in the recipe (pasta and rice dry). Source per item: NEVO-online version 2025/9.0 (RIVM, Bilthoven), USDA FoodData Central SR Legacy (U.S. Department of Agriculture, 04/2018) or an estimate at that level; never brand values. Carbohydrates exclude fibre.',
+};
+
+export type MatchConfidence = 'sure' | 'close' | 'none';
+
+/**
+ * The nutrition item of one table row, or the reasons to refuse it. `notes` gets one line per value that was
+ * missing in the table (fibre or sodium -> 0, kcal -> from the macros). USDA carbohydrates include fibre
+ * ("by difference"): they are reduced by the fibre so the file keeps one convention (exclusive); NEVO is
+ * taken as it is. Missing kcal -> 4·protein + 4·carbs + 9·fat + 7·alcohol (carbs after the conversion).
+ * Every number to one decimal. A row without protein, fat or carbs is refused (nothing to convert).
+ */
+export function tableNutritionItem(row: TableRow, source: TableSource): { item: NutritionItem | null; reasons: string[]; notes: string[] } {
+  const reasons: string[] = [];
+  const notes: string[] = [];
+  for (const k of ['kcal', 'protein', 'fat', 'carbs', 'fibre', 'sodium_mg', 'alcohol'] as const) {
+    const v = row[k];
+    if (v !== null && v < 0) reasons.push(`table value ${k} ${v} is negative.`);
+  }
+  for (const k of ['protein', 'fat', 'carbs'] as const) if (row[k] === null) reasons.push(`table row ${row.code} has no ${k}.`);
+  if (reasons.length) return { item: null, reasons, notes };
+  const protein = row.protein as number;
+  const fat = row.fat as number;
+  let fibre = row.fibre;
+  if (fibre === null) {
+    fibre = 0;
+    notes.push(`fibre missing in ${source} ${row.code}: 0.`);
+  }
+  let carbs = row.carbs as number;
+  if (source === 'usda') carbs = Math.max(0, carbs - fibre);
+  let salt = 0;
+  if (row.sodium_mg === null) notes.push(`sodium missing in ${source} ${row.code}: salt 0.`);
+  else salt = (row.sodium_mg * 2.5) / 1000;
+  const alcohol = row.alcohol ?? 0;
+  let kcal = row.kcal;
+  if (kcal === null) {
+    kcal = 4 * protein + 4 * carbs + 9 * fat + 7 * alcohol;
+    notes.push(`kcal missing in ${source} ${row.code}: ${round1(kcal)} from the macros.`);
+  }
+  const item: NutritionItem = {
+    kcal: round1(kcal),
+    protein: round1(protein),
+    fat: round1(fat),
+    carbs: round1(carbs),
+    fibre: round1(fibre),
+    salt: round1(salt),
+  };
+  if (alcohol > 0) item.alcohol = round1(alcohol);
+  item.source = source;
+  item.ref = row.code;
+  // The validator's rules (≤ 101 g, salt ≤ 100, ref); the kcal deviation is only a warning for a table source.
+  for (const p of checkNutritionItem(item)) if (!isNutritionWarning(p)) reasons.push(p.replace('per 100 g.', 'per 100 g after the conversion.'));
+  return reasons.length ? { item: null, reasons, notes } : { item, reasons, notes };
+}
+
+export interface TableMatchCheck {
+  /** Accepted answers (sure/close with a choice) with their new item. */
+  items: { id: string; confidence: 'sure' | 'close'; item: NutritionItem; notes: string[] }[];
+  /** Answers `none`: the item stays as it is. */
+  none: number;
+  refused: Refusal[];
+  /** File-level problems (not JSON of the right shape, wrong source): nothing of the file is used. */
+  errors: string[];
+}
+
+const CONFIDENCES: ReadonlySet<string> = new Set(['sure', 'close', 'none']);
+
+/**
+ * Check one parsed match file against the table and the dictionary. `seen` (id -> file) carries the ids
+ * answered earlier in the same run: a repeated id is refused.
+ */
+export function checkMatchFile(
+  raw: unknown,
+  file: string,
+  source: TableSource,
+  table: ReadonlyMap<string, TableRow>,
+  ingredients: ReadonlyMap<string, Ingredient>,
+  seen: Map<string, string> = new Map(),
+): TableMatchCheck {
+  const out: TableMatchCheck = { items: [], none: 0, refused: [], errors: [] };
+  if (!isRecord(raw) || !Array.isArray(raw['items'])) {
+    out.errors.push(`${file}: must be { "batch": "NN", "source": "${source}", "items": [ … ] }.`);
+    return out;
+  }
+  if (raw['source'] !== undefined && raw['source'] !== source) {
+    out.errors.push(`${file}: "source" is ${JSON.stringify(raw['source'])}, expected "${source}".`);
+    return out;
+  }
+  raw['items'].forEach((v: unknown, i: number) => {
+    if (!isRecord(v)) {
+      out.refused.push({ file, id: `#${i}`, reason: 'item must be an object.' });
+      return;
+    }
+    const id = typeof v['id'] === 'string' && v['id'] !== '' ? v['id'] : null;
+    const fail = (reason: string): void => {
+      out.refused.push({ file, id: id ?? `#${i}`, reason });
+    };
+    if (id === null) return fail('"id" must be a non-empty string.');
+    const before = seen.get(id);
+    if (before !== undefined) return fail(`duplicate id (already in ${before}).`);
+    seen.set(id, file);
+    const confidence = v['confidence'];
+    if (typeof confidence !== 'string' || !CONFIDENCES.has(confidence)) return fail(`"confidence" must be sure | close | none, got ${JSON.stringify(confidence)}.`);
+    const choice = v['choice'];
+    if (choice !== null && choice !== undefined && typeof choice !== 'string') return fail(`"choice" must be a table code or null, got ${JSON.stringify(choice)}.`);
+    const ing = ingredients.get(id);
+    if (!ing) return fail('unknown ingredient id.');
+    if (NON_FOOD_AISLES.has(ing.aisle)) return fail(`non-food entry (aisle ${ing.aisle}) gets no nutrition values.`);
+    if (confidence === 'none') {
+      out.none++;
+      return;
+    }
+    if (typeof choice !== 'string' || choice === '') return fail(`confidence ${confidence} without a choice.`);
+    const row = table.get(choice);
+    if (!row) return fail(`code ${JSON.stringify(choice)} is not in the ${source} table.`);
+    const r = tableNutritionItem(row, source);
+    if (!r.item) return fail(r.reasons.join(' '));
+    out.items.push({ id, confidence: confidence as 'sure' | 'close', item: r.item, notes: r.notes.map((n) => `${id}: ${n}`) });
+  });
+  return out;
+}
+
+export interface TableApplyStats {
+  /** Items written over an existing one (new rank ≥ old rank). */
+  replaced: number;
+  /** Items that did not exist yet. */
+  added: number;
+  /** Existing items of a higher source that were kept. */
+  kept: number;
+  /** Items per source after the merge (missing source counts as estimate). */
+  perSource: Record<string, number>;
+  notes: string[];
+}
+
+/** Merge table items into the nutrition file by source rank (pure: returns a new object); sets the V9b note. */
+export function applyTableItems(nutrition: NutritionFile, items: readonly { id: string; item: NutritionItem }[]): { nutrition: NutritionFile; stats: TableApplyStats } {
+  const stats: TableApplyStats = { replaced: 0, added: 0, kept: 0, perSource: {}, notes: [] };
+  const table: Record<string, NutritionItem> = { ...nutrition.items };
+  for (const { id, item } of items) {
+    const existing = table[id];
+    if (!existing) {
+      table[id] = item;
+      stats.added++;
+    } else if (sourceRank(item.source) >= sourceRank(existing.source)) {
+      table[id] = item;
+      stats.replaced++;
+    } else {
+      stats.kept++;
+      stats.notes.push(`${id}: kept (source ${existing.source ?? 'estimate'} ranks above ${item.source ?? 'estimate'}).`);
+    }
+  }
+  const sorted: Record<string, NutritionItem> = {};
+  for (const id of Object.keys(table).sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))) {
+    const it = table[id] as NutritionItem;
+    sorted[id] = it;
+    const s = it.source ?? 'estimate';
+    stats.perSource[s] = (stats.perSource[s] ?? 0) + 1;
+  }
+  return { nutrition: { ...nutrition, note: { nl: NUTRITION_NOTE.nl, en: NUTRITION_NOTE.en }, items: sorted }, stats };
+}
+
+/** data/llm/nutrition/match-<source>-NN.json in file-name order (not the match-input files). */
+export function matchFilePaths(root: string, source: string): string[] {
+  const dir = join(root, 'data', 'llm', 'nutrition');
+  if (!existsSync(dir)) return [];
+  const re = new RegExp(`^match-${source}-\\d+\\.json$`, 'i');
+  return readdirSync(dir)
+    .filter((f) => re.test(f))
+    .sort()
+    .map((f) => join(dir, f));
+}
+
+// ---------------------------------------------------------------------------
 // Files
 // ---------------------------------------------------------------------------
 
@@ -349,12 +550,78 @@ const EMPTY_NUTRITION: NutritionFile = { schema: 1, per: '100 g', items: {} };
 // CLI
 // ---------------------------------------------------------------------------
 
+function mainFromTables(root: string, source: string): void {
+  if (source !== 'usda' && source !== 'nevo') {
+    console.error('--from-tables knows usda and nevo');
+    process.exit(2);
+  }
+  const tableRel = `data/work/tables/${source}.csv`;
+  const tablePath = join(root, tableRel);
+  if (!existsSync(tablePath)) {
+    console.error(`missing ${tableRel}${source === 'usda' ? ' (npm run nutrition-match -- --normalize usda)' : ''}`);
+    process.exit(1);
+  }
+  const table = new Map(parseTable(readFileSync(tablePath, 'utf8')).map((r) => [r.code, r]));
+  const files = matchFilePaths(root, source);
+  if (files.length === 0) {
+    console.log(`no match-${source}-NN.json files in data/llm/nutrition/`);
+    process.exit(0);
+  }
+  const ingredients = readJson(join(root, 'data', 'ingredients.json')) as Ingredient[];
+  const ingById = new Map(ingredients.map((i) => [i.id, i]));
+  const nutritionPath = join(root, 'data', 'nutrition.json');
+  const nutrition = existsSync(nutritionPath) ? (readJson(nutritionPath) as NutritionFile) : { ...EMPTY_NUTRITION };
+
+  const seen = new Map<string, string>();
+  const accepted: { id: string; item: NutritionItem }[] = [];
+  const refused: Refusal[] = [];
+  const notes: string[] = [];
+  const answers = { sure: 0, close: 0, none: 0 };
+  let fileErrors = 0;
+  for (const file of files) {
+    const rel = file.startsWith(root) ? file.slice(root.length + 1).replace(/\\/g, '/') : file;
+    let raw: unknown;
+    try {
+      raw = readJson(file);
+    } catch (e) {
+      console.log(`${rel}: ERROR: not valid JSON (${String(e)})`);
+      fileErrors++;
+      continue;
+    }
+    const check = checkMatchFile(raw, rel, source, table, ingById, seen);
+    for (const e of check.errors) console.log(`  ERROR: ${e}`);
+    for (const r of check.refused) console.log(`  REFUSED: ${r.file} ${r.id}: ${r.reason}`);
+    if (check.errors.length) fileErrors++;
+    for (const it of check.items) {
+      answers[it.confidence]++;
+      accepted.push({ id: it.id, item: it.item });
+      notes.push(...it.notes);
+    }
+    answers.none += check.none;
+    refused.push(...check.refused);
+    console.log(`${rel}: ${check.errors.length ? 'FAIL' : 'OK'} — ${check.items.length} matched, ${check.none} none, ${check.refused.length} refused`);
+  }
+  for (const n of notes) console.log(`  note: ${n}`);
+  const result = applyTableItems(nutrition, accepted);
+  const s = result.stats;
+  for (const n of s.notes) console.log(`  note: ${n}`);
+  writeFileSync(nutritionPath, formatNutritionFile(result.nutrition), 'utf8');
+  console.log(`answers: ${answers.sure} sure, ${answers.close} close, ${answers.none} none; ${fileErrors} file error(s)`);
+  console.log(`${source}: ${s.replaced} replaced, ${s.added} added, ${s.kept} kept, ${refused.length} refused`);
+  const per = [...Object.keys(SOURCE_RANK), ...Object.keys(s.perSource).filter((k) => !(k in SOURCE_RANK))].map((k) => `${k} ${s.perSource[k] ?? 0}`).join(', ');
+  console.log(`items now: ${per} (${Object.keys(result.nutrition.items).length} in all)`);
+  console.log('written: data/nutrition.json');
+  console.log('next: npm run validate:data, npm run measure-grams, npm test');
+  process.exit(fileErrors ? 1 : 0);
+}
+
 function main(argv: string[]): void {
   const root = join(dirname(fileURLToPath(import.meta.url)), '..');
   const mode = argv[0];
   const targets = argv.slice(1);
+  if (mode === '--from-tables' && targets.length === 1) return mainFromTables(root, targets[0] as string);
   if ((mode !== '--check' && mode !== '--apply') || targets.length === 0) {
-    console.error('usage: apply-nutrition.ts --check <files…|all> | --apply <files…|all>');
+    console.error('usage: apply-nutrition.ts --check <files…|all> | --apply <files…|all> | --from-tables <usda|nevo>');
     process.exit(2);
   }
   const files = targets.length === 1 && targets[0] === 'all' ? nutritionBatchPaths(root) : targets.map((t) => resolve(root, t));

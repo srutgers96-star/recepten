@@ -1,0 +1,486 @@
+{
+ "batch": "r05",
+ "source": "usda",
+ "items": [
+  {
+   "id": "himalayazout",
+   "choice": "173468",
+   "confidence": "sure",
+   "why": "zout, tafelzout"
+  },
+  {
+   "id": "hollandse-garnaal",
+   "choice": "175179",
+   "confidence": "sure",
+   "why": "garnaal rauw, kcal gelijk"
+  },
+  {
+   "id": "honing-mosterdsaus",
+   "choice": "171043",
+   "confidence": "close",
+   "why": "honey mustard dressing regular; saus vs dressing"
+  },
+  {
+   "id": "hopje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen hopjessnoep als kandidaat"
+  },
+  {
+   "id": "hopjesvla",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen koffie-karamelvla; flan is alleen karamel"
+  },
+  {
+   "id": "hotdogbroodje",
+   "choice": "174089",
+   "confidence": "sure",
+   "why": "hotdogbroodje, waarden gelijk"
+  },
+  {
+   "id": "houdbare-melk",
+   "choice": "171266",
+   "confidence": "close",
+   "why": "volle koemelk 3,7 %, kcal gelijk"
+  },
+  {
+   "id": "hutspotgroente",
+   "choice": null,
+   "confidence": "none",
+   "why": "mix van wortel en ui; losse groenten zijn geen mix"
+  },
+  {
+   "id": "huzarensalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "samengestelde salade"
+  },
+  {
+   "id": "ijsblokje",
+   "choice": null,
+   "confidence": "none",
+   "why": "water; geen kandidaat"
+  },
+  {
+   "id": "ijskoffie",
+   "choice": "174119",
+   "confidence": "close",
+   "why": "iced coffee RTD met melk"
+  },
+  {
+   "id": "ijsthee",
+   "choice": "174144",
+   "confidence": "close",
+   "why": "thee RTD; kcal 0 vs 20 door suiker"
+  },
+  {
+   "id": "italiaanse-bol",
+   "choice": "172795",
+   "confidence": "close",
+   "why": "rolls french, waarden gelijk"
+  },
+  {
+   "id": "italiaanse-kruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kruidenmix als kandidaat"
+  },
+  {
+   "id": "japanse-mayonaise",
+   "choice": "171009",
+   "confidence": "close",
+   "why": "gewone mayonaise, kcal vrijwel gelijk"
+  },
+  {
+   "id": "japanse-mix",
+   "choice": "173161",
+   "confidence": "close",
+   "why": "rice crackers, waarden gelijk"
+  },
+  {
+   "id": "japanse-sojasaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen reduced-sodium hydrolysaat-variant, 90 vs 60 kcal"
+  },
+  {
+   "id": "jasmijnrijst",
+   "choice": "168877",
+   "confidence": "sure",
+   "why": "witte langkorrelrijst rauw, waarden gelijk"
+  },
+  {
+   "id": "jasmijnthee",
+   "choice": "171917",
+   "confidence": "close",
+   "why": "groene thee gezet"
+  },
+  {
+   "id": "jus",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen droge mixen of afwijkende kcal"
+  },
+  {
+   "id": "kaas",
+   "choice": "171241",
+   "confidence": "close",
+   "why": "generieke kaas = gouda, waarden gelijk"
+  },
+  {
+   "id": "kaasblokje",
+   "choice": "171241",
+   "confidence": "close",
+   "why": "gouda voor kaas"
+  },
+  {
+   "id": "kaasbroodje",
+   "choice": null,
+   "confidence": "none",
+   "why": "gebak, geen kaas of brood alleen"
+  },
+  {
+   "id": "kaasfondue",
+   "choice": null,
+   "confidence": "none",
+   "why": "gerecht"
+  },
+  {
+   "id": "kaassaus",
+   "choice": "171191",
+   "confidence": "sure",
+   "why": "cheese sauce ready-to-serve, waarden gelijk"
+  },
+  {
+   "id": "kaasschnitzel",
+   "choice": null,
+   "confidence": "none",
+   "why": "bereid gerecht"
+  },
+  {
+   "id": "kaassouffle",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kaasstengel",
+   "choice": null,
+   "confidence": "none",
+   "why": "gebak"
+  },
+  {
+   "id": "kaastortellini",
+   "choice": null,
+   "confidence": "none",
+   "why": "pasta met vulling; geen kandidaat"
+  },
+  {
+   "id": "kaki",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen sharonfruit"
+  },
+  {
+   "id": "kalamata-olijf",
+   "choice": "169094",
+   "confidence": "close",
+   "why": "olijven ripe canned, kcal gelijk"
+  },
+  {
+   "id": "kalfsfilet",
+   "choice": "173826",
+   "confidence": "sure",
+   "why": "kalf lende mager rauw, waarden gelijk"
+  },
+  {
+   "id": "kalfsfond",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen fond; kalfsvlees is ander product"
+  },
+  {
+   "id": "kamillethee",
+   "choice": "174156",
+   "confidence": "sure",
+   "why": "kamillethee gezet"
+  },
+  {
+   "id": "kandijsuiker",
+   "choice": "169655",
+   "confidence": "close",
+   "why": "kristalsuiker voor kandij"
+  },
+  {
+   "id": "kaneel",
+   "choice": "171320",
+   "confidence": "sure",
+   "why": "kaneel gemalen"
+  },
+  {
+   "id": "kaneelbroodje",
+   "choice": "167940",
+   "confidence": "sure",
+   "why": "cinnamon buns frosted, waarden gelijk"
+  },
+  {
+   "id": "kaneelstokje",
+   "choice": "171320",
+   "confidence": "close",
+   "why": "zelfde specerij, gemalen"
+  },
+  {
+   "id": "kaneelsuiker",
+   "choice": null,
+   "confidence": "none",
+   "why": "mengsel; geen kandidaat"
+  },
+  {
+   "id": "kapucijners",
+   "choice": "170104",
+   "confidence": "close",
+   "why": "groene erwten blik uitgelekt, kcal gelijk"
+  },
+  {
+   "id": "karamelvla",
+   "choice": "169621",
+   "confidence": "close",
+   "why": "karamelvla bereid met melk, kcal dichtbij"
+  },
+  {
+   "id": "kardemom",
+   "choice": "170919",
+   "confidence": "sure",
+   "why": "kardemom"
+  },
+  {
+   "id": "karnemelk",
+   "choice": "170874",
+   "confidence": "sure",
+   "why": "karnemelk halfvol, kcal dichtbij"
+  },
+  {
+   "id": "karwijzaad",
+   "choice": "170918",
+   "confidence": "sure",
+   "why": "karwijzaad"
+  },
+  {
+   "id": "katenspek",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gerookte gekookte spek"
+  },
+  {
+   "id": "kaviaar",
+   "choice": "174188",
+   "confidence": "close",
+   "why": "caviar black/red granular; 264 vs 143 kcal, twijfel"
+  },
+  {
+   "id": "kebabkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "poultry seasoning is andere mix"
+  },
+  {
+   "id": "kefir",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kemirinoot",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kerrie",
+   "choice": "170924",
+   "confidence": "sure",
+   "why": "kerriepoeder"
+  },
+  {
+   "id": "kersenjam",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kersenjam"
+  },
+  {
+   "id": "kervel",
+   "choice": "171318",
+   "confidence": "close",
+   "why": "kervel gedroogd i.p.v. vers"
+  },
+  {
+   "id": "ketchup",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen ketchup"
+  },
+  {
+   "id": "ketjap-asin",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ketjap-manis",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ketoembar",
+   "choice": "170922",
+   "confidence": "sure",
+   "why": "korianderzaad"
+  },
+  {
+   "id": "kibbeling",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kikkererwtenpasta",
+   "choice": null,
+   "confidence": "none",
+   "why": "tarwepasta is ander product"
+  },
+  {
+   "id": "kimchi",
+   "choice": "170392",
+   "confidence": "sure",
+   "why": "kimchi"
+  },
+  {
+   "id": "kinderchampagne",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat"
+  },
+  {
+   "id": "kipcorn",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kipkarbonade",
+   "choice": null,
+   "confidence": "none",
+   "why": "varkens- en lamskoteletten zijn ander product"
+  },
+  {
+   "id": "kippenbouillon",
+   "choice": "174536",
+   "confidence": "sure",
+   "why": "kippenbouillon kant-en-klaar"
+  },
+  {
+   "id": "kippensoep",
+   "choice": "171148",
+   "confidence": "close",
+   "why": "kippensoep (met noedels) uit blik, kcal gelijk"
+  },
+  {
+   "id": "kiwi",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kiwibes",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kletskop",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kleurstof",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kleurstof"
+  },
+  {
+   "id": "knackebrod",
+   "choice": "172739",
+   "confidence": "sure",
+   "why": "crispbread rye"
+  },
+  {
+   "id": "knakworst",
+   "choice": "172964",
+   "confidence": "sure",
+   "why": "frankfurter varken, waarden gelijk"
+  },
+  {
+   "id": "knijpfruit",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen fruitpuree"
+  },
+  {
+   "id": "knoflookpoeder",
+   "choice": "171325",
+   "confidence": "sure",
+   "why": "knoflookpoeder"
+  },
+  {
+   "id": "knoflookzout",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen knoflookzout"
+  },
+  {
+   "id": "koekje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passend koekje, kcal wijkt af"
+  },
+  {
+   "id": "koffie",
+   "choice": "171890",
+   "confidence": "close",
+   "why": "gezette koffie"
+  },
+  {
+   "id": "koffiecreamer",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen instantkoffiemixen"
+  },
+  {
+   "id": "koffiecup",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen capsule/ongezette koffie als zodanig"
+  },
+  {
+   "id": "koffiefilter",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen voedingsmiddel"
+  },
+  {
+   "id": "koffielikeur",
+   "choice": "173665",
+   "confidence": "close",
+   "why": "koffielikeur 63 proof, kcal 308 vs 235"
+  },
+  {
+   "id": "koffiemelk",
+   "choice": "171302",
+   "confidence": "close",
+   "why": "evaporated milk 2 %, waarden gelijk"
+  }
+ ]
+}

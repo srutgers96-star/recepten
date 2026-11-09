@@ -1,0 +1,486 @@
+{
+ "batch": "15",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "sherryazijn",
+   "choice": "2615",
+   "confidence": "close",
+   "why": "Generieke azijn, geen sherryazijn in NEVO"
+  },
+  {
+   "id": "shiitake",
+   "choice": null,
+   "confidence": "none",
+   "why": "Champignon/cantharel is ander product, kcal 18 vs 34"
+  },
+  {
+   "id": "shimeji",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen shimeji; champignon/cantharel anders"
+  },
+  {
+   "id": "shoarmakruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "Kandidaten zijn vlees of Mexicaanse mix"
+  },
+  {
+   "id": "shoarmavlees",
+   "choice": "3027",
+   "confidence": "close",
+   "why": "Varkensshoarmavlees rauw"
+  },
+  {
+   "id": "sichuanpeper",
+   "choice": null,
+   "confidence": "none",
+   "why": "Spaanse peper/paprika is ander product"
+  },
+  {
+   "id": "sinaasappel",
+   "choice": "171",
+   "confidence": "sure",
+   "why": "Sinaasappel"
+  },
+  {
+   "id": "sinaasappellikeur",
+   "choice": "1466",
+   "confidence": "sure",
+   "why": "Likeur incl. Cointreau/Grand Marnier"
+  },
+  {
+   "id": "sinaasappelsap",
+   "choice": "410",
+   "confidence": "sure",
+   "why": "Gepasteuriseerd sinaasappelsap zoals gekocht"
+  },
+  {
+   "id": "sinaasappelschil",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen hele sinaasappel, kcal 48 vs 97"
+  },
+  {
+   "id": "sinas",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen frisdrank; sinaasappel is fruit"
+  },
+  {
+   "id": "sint-jakobsschelp",
+   "choice": "1899",
+   "confidence": "sure",
+   "why": "Jacobsschelpen rauw"
+  },
+  {
+   "id": "sjalot",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "skyr",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "sla",
+   "choice": "2346",
+   "confidence": "sure",
+   "why": "Sla gemiddeld rauw"
+  },
+  {
+   "id": "slagroom",
+   "choice": "299",
+   "confidence": "sure",
+   "why": "Slagroom onbereid"
+  },
+  {
+   "id": "slagroomversteviger",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen versteviger"
+  },
+  {
+   "id": "slamelange",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen sla-mix; kandidaten ander product"
+  },
+  {
+   "id": "slasaus",
+   "choice": "458",
+   "confidence": "sure",
+   "why": "Slasaus 25% olie"
+  },
+  {
+   "id": "slavink",
+   "choice": "1431",
+   "confidence": "sure",
+   "why": "Slavink rauw"
+  },
+  {
+   "id": "smaakwater",
+   "choice": "1885",
+   "confidence": "close",
+   "why": "Water gem, vrijwel 0 kcal zoals smaakwater"
+  },
+  {
+   "id": "smeerkaas",
+   "choice": "2995",
+   "confidence": "close",
+   "why": "Smeerkaas 45+ als generieke variant"
+  },
+  {
+   "id": "smeerleverworst",
+   "choice": "1239",
+   "confidence": "sure",
+   "why": "Smeerleverworst"
+  },
+  {
+   "id": "smeltkaas",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen smeltkaas, alleen natuurlijke kaas"
+  },
+  {
+   "id": "smoothie",
+   "choice": "2639",
+   "confidence": "sure",
+   "why": "Smoothie vruchten"
+  },
+  {
+   "id": "smoothiemix",
+   "choice": null,
+   "confidence": "none",
+   "why": "Diepvriesmix van fruit niet aanwezig"
+  },
+  {
+   "id": "snackworstje",
+   "choice": "1152",
+   "confidence": "close",
+   "why": "Salamiworst, geen snackworstje"
+  },
+  {
+   "id": "snelkookrijst",
+   "choice": "5",
+   "confidence": "close",
+   "why": "Witte rijst rauw"
+  },
+  {
+   "id": "snijbiet",
+   "choice": "563",
+   "confidence": "sure",
+   "why": "Snijbiet rauw"
+  },
+  {
+   "id": "snijboon",
+   "choice": "49",
+   "confidence": "sure",
+   "why": "Snijbonen rauw"
+  },
+  {
+   "id": "snoekbaars",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "snoepje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen passend snoepje"
+  },
+  {
+   "id": "sobanoedels",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "soepgroenten",
+   "choice": "75",
+   "confidence": "sure",
+   "why": "Soepgroente rauw"
+  },
+  {
+   "id": "soepstengel",
+   "choice": "2369",
+   "confidence": "sure",
+   "why": "Soepstengel"
+  },
+  {
+   "id": "soepsterretjes",
+   "choice": "4",
+   "confidence": "close",
+   "why": "Witte pasta droog"
+  },
+  {
+   "id": "soepvlees",
+   "choice": "2336",
+   "confidence": "close",
+   "why": "Rundvlees gem rauw, huidig mager 128 vs 201"
+  },
+  {
+   "id": "soes",
+   "choice": "1915",
+   "confidence": "sure",
+   "why": "Soes ongevuld"
+  },
+  {
+   "id": "soffritto",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "sojadessert",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen sojadessert"
+  },
+  {
+   "id": "sojamelk",
+   "choice": "870",
+   "confidence": "sure",
+   "why": "Sojadrink naturel"
+  },
+  {
+   "id": "sojaroom",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen sojaroom; kookroom is zuivel"
+  },
+  {
+   "id": "sojasaus",
+   "choice": "5470",
+   "confidence": "sure",
+   "why": "Sojasaus"
+  },
+  {
+   "id": "sojayoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen sojayoghurt"
+  },
+  {
+   "id": "sopropo",
+   "choice": "683",
+   "confidence": "sure",
+   "why": "Sopropo rauw"
+  },
+  {
+   "id": "sorbetijs",
+   "choice": "3369",
+   "confidence": "sure",
+   "why": "Sorbetijs"
+  },
+  {
+   "id": "spaanse-peper",
+   "choice": "2524",
+   "confidence": "sure",
+   "why": "Spaanse peper rauw"
+  },
+  {
+   "id": "spaetzle",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "spaghetti",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "spaghettikruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "Kandidaten zijn pasta, geen kruiden"
+  },
+  {
+   "id": "spaghettimix",
+   "choice": null,
+   "confidence": "none",
+   "why": "Saus/snoepmix is ander product"
+  },
+  {
+   "id": "spaghettini",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "spaghettipompoen",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "spareribs",
+   "choice": "3031",
+   "confidence": "sure",
+   "why": "Spareribs varkens rauw"
+  },
+  {
+   "id": "speciaalbier",
+   "choice": "3214",
+   "confidence": "close",
+   "why": "Witbier als speciaalbier"
+  },
+  {
+   "id": "speculaas",
+   "choice": "261",
+   "confidence": "sure",
+   "why": "Speculaas gem"
+  },
+  {
+   "id": "speculaaskruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen speculaaskruiden"
+  },
+  {
+   "id": "speculoospasta",
+   "choice": "2489",
+   "confidence": "sure",
+   "why": "Speculoospasta"
+  },
+  {
+   "id": "spekblokjes",
+   "choice": "1432",
+   "confidence": "close",
+   "why": "Speklap rauw, vet spek"
+  },
+  {
+   "id": "spekkoek",
+   "choice": "2399",
+   "confidence": "sure",
+   "why": "Spekkoek"
+  },
+  {
+   "id": "speklap",
+   "choice": "1432",
+   "confidence": "sure",
+   "why": "Speklap rauw"
+  },
+  {
+   "id": "spekreepjes",
+   "choice": "639",
+   "confidence": "close",
+   "why": "Ontbijtspek"
+  },
+  {
+   "id": "spelt",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen speltmeel/vlokken, geen hele spelt"
+  },
+  {
+   "id": "speltbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen speltbrood"
+  },
+  {
+   "id": "speltmeel",
+   "choice": "5576",
+   "confidence": "close",
+   "why": "Speltmeel wit; ook volkoren mogelijk"
+  },
+  {
+   "id": "speltpasta",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen speltpasta"
+  },
+  {
+   "id": "speltvlokken",
+   "choice": "5582",
+   "confidence": "sure",
+   "why": "Speltvlokken"
+  },
+  {
+   "id": "sperzieboon",
+   "choice": "50",
+   "confidence": "sure",
+   "why": "Sperziebonen rauw"
+  },
+  {
+   "id": "spinazie",
+   "choice": "51",
+   "confidence": "sure",
+   "why": "Spinazie rauw"
+  },
+  {
+   "id": "spinazie-a-la-creme",
+   "choice": "651",
+   "confidence": "sure",
+   "why": "Spinazie a la creme diepvries"
+  },
+  {
+   "id": "spitskool",
+   "choice": "53",
+   "confidence": "sure",
+   "why": "Spitskool rauw"
+  },
+  {
+   "id": "spliterwt",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen gekookt of doperwten"
+  },
+  {
+   "id": "sportdrank",
+   "choice": "2646",
+   "confidence": "close",
+   "why": "Sportdrank generiek merk"
+  },
+  {
+   "id": "sprinkles",
+   "choice": "1311",
+   "confidence": "close",
+   "why": "Chocoladehagelslag"
+  },
+  {
+   "id": "sprits",
+   "choice": "262",
+   "confidence": "sure",
+   "why": "Sprits koekje"
+  },
+  {
+   "id": "spruitje",
+   "choice": "564",
+   "confidence": "sure",
+   "why": "Spruitjes rauw"
+  },
+  {
+   "id": "spuitslagroom",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen spuitbus slagroom"
+  },
+  {
+   "id": "spuitzak",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen voedingsmiddel"
+  },
+  {
+   "id": "sriracha",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten"
+  },
+  {
+   "id": "stapelchips",
+   "choice": "122",
+   "confidence": "close",
+   "why": "Chips gem"
+  }
+ ]
+}

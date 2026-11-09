@@ -1,0 +1,486 @@
+{
+ "batch": "02",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "baksoda",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bakspray",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "balsamicoazijn",
+   "choice": "5253",
+   "confidence": "sure",
+   "why": "balsamicoazijn"
+  },
+  {
+   "id": "balsamicocreme",
+   "choice": null,
+   "confidence": "none",
+   "why": "balsamicocreme 230 kcal vs 123 voor azijn, bijna 2x"
+  },
+  {
+   "id": "balti-kooksaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bamboescheuten",
+   "choice": "1187",
+   "confidence": "sure",
+   "why": "bamboescheuten uit blik"
+  },
+  {
+   "id": "bamischijf",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "banaan",
+   "choice": "151",
+   "confidence": "sure",
+   "why": "banaan"
+  },
+  {
+   "id": "bananenbrood",
+   "choice": "5255",
+   "confidence": "sure",
+   "why": "bananenbrood"
+  },
+  {
+   "id": "bananenchips",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bananensjalot",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bananenvla",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "banketbakkersroom",
+   "choice": "1469",
+   "confidence": "sure",
+   "why": "banketbakkersroom"
+  },
+  {
+   "id": "banketstaaf",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bapao",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "barbecuekruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "barbecuesaus",
+   "choice": "428",
+   "confidence": "sure",
+   "why": "barbecuesaus"
+  },
+  {
+   "id": "basilicum",
+   "choice": "2177",
+   "confidence": "sure",
+   "why": "verse basilicum"
+  },
+  {
+   "id": "basmatirijst",
+   "choice": "5",
+   "confidence": "close",
+   "why": "witte rijst rauw, basmati is een witte rijst"
+  },
+  {
+   "id": "basterdsuiker",
+   "choice": "375",
+   "confidence": "sure",
+   "why": "basterdsuiker wit"
+  },
+  {
+   "id": "bastognekoek",
+   "choice": "481",
+   "confidence": "sure",
+   "why": "Koek Bastogne"
+  },
+  {
+   "id": "bavarois",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bavette",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bearnaisesaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bechamelsaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "beef-jerky",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "beenham",
+   "choice": "328",
+   "confidence": "close",
+   "why": "rauwe ham, familie beenham"
+  },
+  {
+   "id": "belugalinze",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "berenburg",
+   "choice": "1134",
+   "confidence": "sure",
+   "why": "Berenburg"
+  },
+  {
+   "id": "berlinerbol",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "beschuit",
+   "choice": "227",
+   "confidence": "sure",
+   "why": "beschuit naturel"
+  },
+  {
+   "id": "bessengelei",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "biefstuk",
+   "choice": "1400",
+   "confidence": "close",
+   "why": "runderbiefstuk rauw, generiek"
+  },
+  {
+   "id": "bier",
+   "choice": "390",
+   "confidence": "close",
+   "why": "pils als standaardbier"
+  },
+  {
+   "id": "bieslook",
+   "choice": "829",
+   "confidence": "sure",
+   "why": "verse bieslook"
+  },
+  {
+   "id": "biet",
+   "choice": "12",
+   "confidence": "sure",
+   "why": "rode biet rauw"
+  },
+  {
+   "id": "bietensap",
+   "choice": "861",
+   "confidence": "sure",
+   "why": "bietensap"
+  },
+  {
+   "id": "bigarreaux",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bimi",
+   "choice": "921",
+   "confidence": "close",
+   "why": "broccoli rauw voor broccolini"
+  },
+  {
+   "id": "bitter-lemon",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bitterbal",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bitterkoekje",
+   "choice": "2696",
+   "confidence": "sure",
+   "why": "bitterkoekje"
+  },
+  {
+   "id": "bladerdeeg",
+   "choice": "5238",
+   "confidence": "close",
+   "why": "alleen bereid beschikbaar; rauw deeg ontbreekt"
+  },
+  {
+   "id": "blauwe-bes",
+   "choice": "152",
+   "confidence": "sure",
+   "why": "blauwe bessen"
+  },
+  {
+   "id": "blauwe-kaas",
+   "choice": "5234",
+   "confidence": "close",
+   "why": "Danish Blue als blauwschimmelkaas"
+  },
+  {
+   "id": "bleekselderij",
+   "choice": "557",
+   "confidence": "sure",
+   "why": "bleekselderij rauw"
+  },
+  {
+   "id": "blinde-vink",
+   "choice": "1437",
+   "confidence": "sure",
+   "why": "kalfsvink rauw"
+  },
+  {
+   "id": "bloedsinaasappel",
+   "choice": "171",
+   "confidence": "close",
+   "why": "sinaasappel generiek"
+  },
+  {
+   "id": "bloedworst",
+   "choice": "568",
+   "confidence": "sure",
+   "why": "bloedworst"
+  },
+  {
+   "id": "bloem",
+   "choice": "220",
+   "confidence": "sure",
+   "why": "tarwebloem"
+  },
+  {
+   "id": "bloem-tipo-00",
+   "choice": "220",
+   "confidence": "close",
+   "why": "tarwebloem voor tipo 00"
+  },
+  {
+   "id": "bloemen",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bloemkool",
+   "choice": "14",
+   "confidence": "sure",
+   "why": "bloemkool rauw"
+  },
+  {
+   "id": "bloemkoolrijst",
+   "choice": "14",
+   "confidence": "close",
+   "why": "bloemkool rauw"
+  },
+  {
+   "id": "boekweit",
+   "choice": "1019",
+   "confidence": "sure",
+   "why": "boekweitgrutten"
+  },
+  {
+   "id": "boekweitmeel",
+   "choice": "208",
+   "confidence": "sure",
+   "why": "boekweitmeel"
+  },
+  {
+   "id": "boemboe-bami-goreng",
+   "choice": null,
+   "confidence": "none",
+   "why": "kruidenmix 300 vs huidig 118, ruim 2x"
+  },
+  {
+   "id": "boemboe-nasi-goreng",
+   "choice": null,
+   "confidence": "none",
+   "why": "kruidenmix 300 vs huidig 126, ruim 2x"
+  },
+  {
+   "id": "boemboe-pinda-sate",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "boemboe-rendang",
+   "choice": null,
+   "confidence": "none",
+   "why": "pasta 306 vs huidig 136, ruim 2x"
+  },
+  {
+   "id": "boerenbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "boerenkool",
+   "choice": "959",
+   "confidence": "sure",
+   "why": "boerenkool rauw"
+  },
+  {
+   "id": "bokbier",
+   "choice": "3268",
+   "confidence": "sure",
+   "why": "bokbier"
+  },
+  {
+   "id": "bokkenpootje",
+   "choice": "633",
+   "confidence": "sure",
+   "why": "bokkenpootje"
+  },
+  {
+   "id": "bokking",
+   "choice": "347",
+   "confidence": "close",
+   "why": "gerookte haring"
+  },
+  {
+   "id": "bolletje",
+   "choice": "230",
+   "confidence": "close",
+   "why": "wit zacht broodje"
+  },
+  {
+   "id": "bonbon",
+   "choice": "1508",
+   "confidence": "sure",
+   "why": "bonbon"
+  },
+  {
+   "id": "bonenkruid",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "boon",
+   "choice": "3049",
+   "confidence": "close",
+   "why": "witte bonen uit blik; type onbekend"
+  },
+  {
+   "id": "borrelnootje",
+   "choice": "546",
+   "confidence": "close",
+   "why": "borrelnoten"
+  },
+  {
+   "id": "borstplaat",
+   "choice": "1507",
+   "confidence": "sure",
+   "why": "borstplaat"
+  },
+  {
+   "id": "bosbessenjam",
+   "choice": "445",
+   "confidence": "close",
+   "why": "jam generiek"
+  },
+  {
+   "id": "bospeen",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bosui",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "bosvruchtenjam",
+   "choice": "445",
+   "confidence": "close",
+   "why": "jam generiek"
+  },
+  {
+   "id": "bosvruchtenyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "roomyoghurt met fruit 141 vs 85, ander product"
+  },
+  {
+   "id": "boter",
+   "choice": "879",
+   "confidence": "close",
+   "why": "roomboter, gezouten of ongezouten gelijk"
+  },
+  {
+   "id": "boterhamworst",
+   "choice": "567",
+   "confidence": "sure",
+   "why": "boterhamworst"
+  },
+  {
+   "id": "boterkoek",
+   "choice": "789",
+   "confidence": "sure",
+   "why": "boterkoek"
+  },
+  {
+   "id": "boterkoekmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "cakemix naturel is geen boterkoekmix"
+  }
+ ]
+}

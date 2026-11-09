@@ -1,0 +1,486 @@
+{
+ "batch": "r06",
+ "source": "usda",
+ "items": [
+  {
+   "id": "koffiepad",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "koffiesiroop",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kokos",
+   "choice": "170170",
+   "confidence": "close",
+   "why": "ongezoete geraspte kokos; huidige waarde was de gezoete variant"
+  },
+  {
+   "id": "kokosbloesemsuiker",
+   "choice": "168833",
+   "confidence": "close",
+   "why": "bruine suiker, dichtste suikerfamilie"
+  },
+  {
+   "id": "kokosbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kokoschips",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kokosdrink",
+   "choice": "174116",
+   "confidence": "close",
+   "why": "kokosdrank met toegevoegd calcium"
+  },
+  {
+   "id": "kokoslikeur",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kokosmakroon",
+   "choice": "171847",
+   "confidence": "sure",
+   "why": "kokosmakroon"
+  },
+  {
+   "id": "kokosmeel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kokosmelk",
+   "choice": "170173",
+   "confidence": "sure",
+   "why": "kokosmelk uit blik"
+  },
+  {
+   "id": "kokosnoot",
+   "choice": "170169",
+   "confidence": "sure",
+   "why": "rauw kokosvlees"
+  },
+  {
+   "id": "kokoswater",
+   "choice": "174831",
+   "confidence": "sure",
+   "why": "kokoswater ongezoet"
+  },
+  {
+   "id": "kokosyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "komijn",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "komijnekaas",
+   "choice": "171241",
+   "confidence": "close",
+   "why": "Goudse kaas voor komijnekaas"
+  },
+  {
+   "id": "komijnzaad",
+   "choice": "170923",
+   "confidence": "sure",
+   "why": "komijnzaad"
+  },
+  {
+   "id": "komkommersalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "konijn",
+   "choice": "172521",
+   "confidence": "sure",
+   "why": "konijn gedomesticeerd rauw"
+  },
+  {
+   "id": "koningsoesterzwam",
+   "choice": "168580",
+   "confidence": "close",
+   "why": "oesterzwam rauw, zelfde familie"
+  },
+  {
+   "id": "kookroom",
+   "choice": "171255",
+   "confidence": "close",
+   "why": "half and half ~ kookroom, kcal gelijk aan huidige"
+  },
+  {
+   "id": "koolhydraatarm-brood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "koolraap",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "koolvisfilet",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "korianderzaad",
+   "choice": "170922",
+   "confidence": "sure",
+   "why": "korianderzaad"
+  },
+  {
+   "id": "kormasaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "krabsalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "krabvlees",
+   "choice": "174204",
+   "confidence": "close",
+   "why": "blauwe krab rauw"
+  },
+  {
+   "id": "krakeling",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kriek",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kroepoek",
+   "choice": "173160",
+   "confidence": "close",
+   "why": "garnalencracker"
+  },
+  {
+   "id": "kroepoek-atjar-en-seroendeng",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kroket",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kruidenazijn",
+   "choice": "172240",
+   "confidence": "close",
+   "why": "rode wijnazijn als azijn; kcal klein"
+  },
+  {
+   "id": "kruidenboter",
+   "choice": "173410",
+   "confidence": "close",
+   "why": "boter gezouten als basis"
+  },
+  {
+   "id": "kruidenbouillon",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kruidenbouillonpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kruidenkaas",
+   "choice": "171241",
+   "confidence": "close",
+   "why": "Goudse kaas als generieke kaas"
+  },
+  {
+   "id": "kruidenlikeur",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kruidenthee",
+   "choice": "174156",
+   "confidence": "close",
+   "why": "kruidenthee (kamille) gezet"
+  },
+  {
+   "id": "kruidenzout",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kruidnagelpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kruidnoot",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kruidnotenmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "kurkuma",
+   "choice": "172231",
+   "confidence": "sure",
+   "why": "kurkuma gemalen"
+  },
+  {
+   "id": "kwark",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kwarkje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kwarktaartmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "labneh",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "lactosevrije-melk",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "lactosevrije-yoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "lange-vinger",
+   "choice": "172706",
+   "confidence": "close",
+   "why": "biscuit/spons, vergelijkbaar"
+  },
+  {
+   "id": "langoustine",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "laos",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "lasagnemix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "laurierblad",
+   "choice": "170917",
+   "confidence": "sure",
+   "why": "laurierblad"
+  },
+  {
+   "id": "lavas",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "lemon-curd",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "lemon-lime",
+   "choice": "173217",
+   "confidence": "close",
+   "why": "limonade bereid"
+  },
+  {
+   "id": "leverpastei",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "leverworst",
+   "choice": "173870",
+   "confidence": "sure",
+   "why": "leverworst"
+  },
+  {
+   "id": "lijnzaad",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "likeur",
+   "choice": "173665",
+   "confidence": "close",
+   "why": "generieke likeur, koffielikeur als familie"
+  },
+  {
+   "id": "limoenblad",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "limoenschil",
+   "choice": "168155",
+   "confidence": "close",
+   "why": "limoen rauw, geen schil apart"
+  },
+  {
+   "id": "limonadesiroop",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "limoncello",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "linzenchips",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "linzenpasta",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "loempia",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "lychee",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "maanzaad",
+   "choice": "171330",
+   "confidence": "sure",
+   "why": "maanzaad"
+  },
+  {
+   "id": "maasdammer",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "macaronimix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "madame-jeanette",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "maggi",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "magnetronrijst",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "mais",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "maisbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "maiskolf",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  }
+ ]
+}

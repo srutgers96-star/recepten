@@ -576,7 +576,7 @@ The line unfolds into a small table per serving, with below it how many lines of
 
 #### Good to know
 
-They are estimates based on average values per ingredient, not your brand. Oil and marinade count in full, including what stays in the pan. If the app knows fewer than half of the lines, there is no line. You switch it off under **More** → **Nutrition**.
+They are average values per ingredient from the food tables of the US government (USDA) and the RIVM (NEVO), or an estimate at that level, not your brand. Oil and marinade count in full, including what stays in the pan. If the app knows fewer than half of the lines, there is no line. You switch it off under **More** → **Nutrition**.
 
 (`#/recipes`)
 
@@ -4140,7 +4140,7 @@ The kcal line disappears from every recipe page. Switch it back on and it is bac
 
 #### Good to know
 
-The setting travels with your backup. In the dictionary the values per 100 g stay visible.
+The setting travels with your backup. In the dictionary the values per 100 g stay visible, with their source (USDA, NEVO or estimate).
 
 (`#/more`)
 

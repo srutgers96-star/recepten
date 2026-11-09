@@ -1,0 +1,5817 @@
+{
+ "batch": "r08",
+ "source": "usda",
+ "items": [
+  {
+   "id": "panko",
+   "nl": "panko",
+   "en": "panko breadcrumbs",
+   "aliasesEn": [
+    "panko",
+    "japanese breadcrumbs"
+   ],
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "current": {
+    "kcal": 360,
+    "protein": 11,
+    "fat": 1.5,
+    "carbs": 75,
+    "source": "estimate"
+   },
+   "candidates": []
+  },
+  {
+   "id": "pannenkoek",
+   "nl": "pannenkoek",
+   "en": "pancake",
+   "aliasesEn": [
+    "Dutch pancake",
+    "Dutch pancakes"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "current": {
+    "kcal": 227,
+    "protein": 6.4,
+    "fat": 9.7,
+    "carbs": 28.3,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "174086",
+     "name": "Pancakes, plain, reduced fat",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 269,
+     "protein": 5.71,
+     "fat": 1.9,
+     "carbs": 57.32
+    },
+    {
+     "code": "169578",
+     "name": "Syrups, table blends, pancake",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 234,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 61.47
+    },
+    {
+     "code": "175009",
+     "name": "Pancakes, plain, prepared from recipe",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 227,
+     "protein": 6.4,
+     "fat": 9.7,
+     "carbs": 28.3
+    },
+    {
+     "code": "172773",
+     "name": "Pancakes, blueberry, prepared from recipe",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 222,
+     "protein": 6.1,
+     "fat": 9.2,
+     "carbs": 29
+    },
+    {
+     "code": "167584",
+     "name": "Syrups, table blends, pancake, with butter",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 291,
+     "protein": 0,
+     "fat": 0.09,
+     "carbs": 72.43
+    },
+    {
+     "code": "175047",
+     "name": "Pancakes, buttermilk, prepared from recipe",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 227,
+     "protein": 6.8,
+     "fat": 9.3,
+     "carbs": 28.7
+    },
+    {
+     "code": "168838",
+     "name": "Syrups, table blends, pancake, with 2% maple",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 265,
+     "protein": 0,
+     "fat": 0.1,
+     "carbs": 69.6
+    },
+    {
+     "code": "174106",
+     "name": "Pancakes, gluten-free, frozen, ready-to-heat",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 215,
+     "protein": 3.31,
+     "fat": 4.55,
+     "carbs": 40.32
+    }
+   ]
+  },
+  {
+   "id": "pannenkoekenmix",
+   "nl": "pannenkoekenmix",
+   "en": "pancake mix",
+   "aliasesEn": [
+    "pancake batter mix",
+    "Dutch pancake mix"
+   ],
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "current": {
+    "kcal": 349,
+    "protein": 8.9,
+    "fat": 1.4,
+    "carbs": 73.9,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "174086",
+     "name": "Pancakes, plain, reduced fat",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 269,
+     "protein": 5.71,
+     "fat": 1.9,
+     "carbs": 57.32
+    },
+    {
+     "code": "169578",
+     "name": "Syrups, table blends, pancake",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 234,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 61.47
+    },
+    {
+     "code": "172775",
+     "name": "Pancakes, special dietary, dry mix",
+     "category": "Baked Products",
+     "state": "dried",
+     "kcal": 349,
+     "protein": 8.9,
+     "fat": 1.4,
+     "carbs": 73.9
+    },
+    {
+     "code": "175009",
+     "name": "Pancakes, plain, prepared from recipe",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 227,
+     "protein": 6.4,
+     "fat": 9.7,
+     "carbs": 28.3
+    },
+    {
+     "code": "172774",
+     "name": "Pancakes, buckwheat, dry mix, incomplete",
+     "category": "Baked Products",
+     "state": "dried",
+     "kcal": 340,
+     "protein": 10.9,
+     "fat": 2.7,
+     "carbs": 71.3
+    },
+    {
+     "code": "172773",
+     "name": "Pancakes, blueberry, prepared from recipe",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 222,
+     "protein": 6.1,
+     "fat": 9.2,
+     "carbs": 29
+    },
+    {
+     "code": "167584",
+     "name": "Syrups, table blends, pancake, with butter",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 291,
+     "protein": 0,
+     "fat": 0.09,
+     "carbs": 72.43
+    },
+    {
+     "code": "171853",
+     "name": "Pancakes, whole wheat, dry mix, incomplete",
+     "category": "Baked Products",
+     "state": "dried",
+     "kcal": 350,
+     "protein": 10.53,
+     "fat": 1.32,
+     "carbs": 74.11
+    }
+   ]
+  },
+  {
+   "id": "pappardelle",
+   "nl": "pappardelle",
+   "en": "pappardelle",
+   "aliasesEn": [
+    "pappardelle pasta"
+   ],
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "current": {
+    "kcal": 371,
+    "protein": 13,
+    "fat": 1.5,
+    "carbs": 71.5,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "paprikapoeder",
+   "nl": "paprikapoeder",
+   "en": "paprika",
+   "aliasesEn": [
+    "paprika powder",
+    "ground paprika",
+    "smoked paprika",
+    "sweet paprika"
+   ],
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "current": {
+    "kcal": 285,
+    "protein": 14,
+    "fat": 13,
+    "carbs": 30,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171329",
+     "name": "Spices, paprika",
+     "category": "Spices and Herbs",
+     "state": "other",
+     "kcal": 282,
+     "protein": 14.14,
+     "fat": 12.89,
+     "carbs": 53.99
+    }
+   ]
+  },
+  {
+   "id": "paprikasaus",
+   "nl": "paprikasaus",
+   "en": "paprika sauce",
+   "aliasesEn": [],
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "current": {
+    "kcal": 100,
+    "protein": 1.2,
+    "fat": 8,
+    "carbs": 6,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171329",
+     "name": "Spices, paprika",
+     "category": "Spices and Herbs",
+     "state": "other",
+     "kcal": 282,
+     "protein": 14.14,
+     "fat": 12.89,
+     "carbs": 53.99
+    },
+    {
+     "code": "174523",
+     "name": "Sauce, barbecue",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 172,
+     "protein": 0.82,
+     "fat": 0.63,
+     "carbs": 40.77
+    },
+    {
+     "code": "171833",
+     "name": "Sauce, horseradish",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 503,
+     "protein": 1.09,
+     "fat": 50.89,
+     "carbs": 10.05
+    },
+    {
+     "code": "171610",
+     "name": "Sauce, worcestershire",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 77,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 19.17
+    },
+    {
+     "code": "171186",
+     "name": "Sauce, hot chile, sriracha",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 93,
+     "protein": 1.93,
+     "fat": 0.93,
+     "carbs": 19.16
+    },
+    {
+     "code": "171825",
+     "name": "Sauce, steak, tomato based",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 95,
+     "protein": 1.25,
+     "fat": 0.23,
+     "carbs": 22.04
+    },
+    {
+     "code": "171823",
+     "name": "Sauce, duck, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 245,
+     "protein": 0.36,
+     "fat": 0.13,
+     "carbs": 60.66
+    },
+    {
+     "code": "172879",
+     "name": "Sauce, plum, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 184,
+     "protein": 0.89,
+     "fat": 1.04,
+     "carbs": 42.81
+    }
+   ]
+  },
+  {
+   "id": "parelsuiker",
+   "nl": "parelsuiker",
+   "en": "pearl sugar",
+   "aliasesEn": [
+    "nib sugar",
+    "nibbed sugar",
+    "Belgian pearl sugar"
+   ],
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "current": {
+    "kcal": 387,
+    "protein": 0,
+    "fat": 0,
+    "carbs": 100,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "168833",
+     "name": "Sugars, brown",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 380,
+     "protein": 0.12,
+     "fat": 0,
+     "carbs": 98.09
+    },
+    {
+     "code": "169658",
+     "name": "Sugars, maple",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 354,
+     "protein": 0.1,
+     "fat": 0.2,
+     "carbs": 90.9
+    },
+    {
+     "code": "169656",
+     "name": "Sugars, powdered",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 389,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 99.77
+    },
+    {
+     "code": "170674",
+     "name": "Sugar, turbinado",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 399,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 99.8
+    },
+    {
+     "code": "169655",
+     "name": "Sugars, granulated",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 387,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 99.98
+    },
+    {
+     "code": "168175",
+     "name": "Sugar-apples, (sweetsop), raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 94,
+     "protein": 2.06,
+     "fat": 0.29,
+     "carbs": 23.64
+    },
+    {
+     "code": "174972",
+     "name": "Cookies, sugar, refrigerated dough",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 436,
+     "protein": 4,
+     "fat": 19.48,
+     "carbs": 61.22
+    },
+    {
+     "code": "175001",
+     "name": "Ice cream cones, sugar, rolled-type",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 402,
+     "protein": 7.9,
+     "fat": 3.8,
+     "carbs": 84.1
+    }
+   ]
+  },
+  {
+   "id": "parmaham",
+   "nl": "parmaham",
+   "en": "Parma ham",
+   "aliasesEn": [
+    "prosciutto",
+    "prosciutto crudo"
+   ],
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "current": {
+    "kcal": 235,
+    "protein": 27,
+    "fat": 14,
+    "carbs": 0,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "168282",
+     "name": "Pork, cured, ham, center slice, country-style, separable lean only, raw",
+     "category": "Pork Products",
+     "state": "raw",
+     "kcal": 195,
+     "protein": 27.8,
+     "fat": 8.32,
+     "carbs": 0.3
+    },
+    {
+     "code": "173865",
+     "name": "Ham, minced",
+     "category": "Sausages and Luncheon Meats",
+     "state": "other",
+     "kcal": 263,
+     "protein": 16.28,
+     "fat": 20.68,
+     "carbs": 1.84
+    },
+    {
+     "code": "167873",
+     "name": "Pork, cured, ham, patties, unheated",
+     "category": "Pork Products",
+     "state": "other",
+     "kcal": 315,
+     "protein": 12.78,
+     "fat": 28.19,
+     "carbs": 1.69
+    },
+    {
+     "code": "173881",
+     "name": "Ham, smoked, extra lean, low sodium",
+     "category": "Sausages and Luncheon Meats",
+     "state": "other",
+     "kcal": 141,
+     "protein": 18.52,
+     "fat": 2.71,
+     "carbs": 10.7
+    },
+    {
+     "code": "173864",
+     "name": "Ham, sliced, regular (approximately 11% fat)",
+     "category": "Sausages and Luncheon Meats",
+     "state": "other",
+     "kcal": 164,
+     "protein": 16.6,
+     "fat": 8.8,
+     "carbs": 3.63
+    },
+    {
+     "code": "169155",
+     "name": "Pork, cured, ham, separable fat, boneless, heated",
+     "category": "Pork Products",
+     "state": "other",
+     "kcal": 507,
+     "protein": 8.77,
+     "fat": 51.57,
+     "carbs": 2
+    },
+    {
+     "code": "169156",
+     "name": "Pork, cured, ham, separable fat, boneless, unheated",
+     "category": "Pork Products",
+     "state": "other",
+     "kcal": 515,
+     "protein": 7.5,
+     "fat": 53,
+     "carbs": 1.87
+    },
+    {
+     "code": "168092",
+     "name": "Ham, turkey, sliced, extra lean, prepackaged or deli",
+     "category": "Sausages and Luncheon Meats",
+     "state": "other",
+     "kcal": 134,
+     "protein": 19.6,
+     "fat": 5.8,
+     "carbs": 0.93
+    }
+   ]
+  },
+  {
+   "id": "pastasaus",
+   "nl": "pastasaus",
+   "en": "pasta sauce",
+   "aliasesEn": [
+    "tomato pasta sauce",
+    "jar of pasta sauce"
+   ],
+   "defaultUnit": "pot",
+   "aisle": "blik-pot",
+   "current": {
+    "kcal": 54,
+    "protein": 2.2,
+    "fat": 1.2,
+    "carbs": 6.7,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "169074",
+     "name": "Tomato sauce, canned, no salt added",
+     "category": "Vegetables and Vegetable Products",
+     "state": "canned",
+     "kcal": 24,
+     "protein": 1.2,
+     "fat": 0.3,
+     "carbs": 5.31
+    },
+    {
+     "code": "173733",
+     "name": "Beans, baked, canned, with pork and tomato sauce",
+     "category": "Legumes and Legume Products",
+     "state": "canned",
+     "kcal": 94,
+     "protein": 5.15,
+     "fat": 0.93,
+     "carbs": 18.69
+    },
+    {
+     "code": "172880",
+     "name": "Sauce, pizza, canned, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 54,
+     "protein": 2.18,
+     "fat": 1.15,
+     "carbs": 8.66
+    },
+    {
+     "code": "171604",
+     "name": "Sauce, peppers, hot, chili, mature red, canned",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 21,
+     "protein": 0.9,
+     "fat": 0.6,
+     "carbs": 3.9
+    },
+    {
+     "code": "171605",
+     "name": "Sauce, chili, peppers, hot, immature green, canned",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 20,
+     "protein": 0.7,
+     "fat": 0.1,
+     "carbs": 5
+    },
+    {
+     "code": "171825",
+     "name": "Sauce, steak, tomato based",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 95,
+     "protein": 1.25,
+     "fat": 0.23,
+     "carbs": 22.04
+    },
+    {
+     "code": "170054",
+     "name": "Tomato products, canned, sauce",
+     "category": "Vegetables and Vegetable Products",
+     "state": "canned",
+     "kcal": 24,
+     "protein": 1.2,
+     "fat": 0.3,
+     "carbs": 5.31
+    },
+    {
+     "code": "170056",
+     "name": "Tomato products, canned, sauce, with onions",
+     "category": "Vegetables and Vegetable Products",
+     "state": "canned",
+     "kcal": 42,
+     "protein": 1.56,
+     "fat": 0.19,
+     "carbs": 9.94
+    }
+   ]
+  },
+  {
+   "id": "pasteibakje",
+   "nl": "pasteibakje",
+   "en": "vol-au-vent case",
+   "aliasesEn": [
+    "vol-au-vent",
+    "vol-au-vents",
+    "puff pastry case"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "current": {
+    "kcal": 551,
+    "protein": 7.3,
+    "fat": 38.1,
+    "carbs": 43.6,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "170442",
+     "name": "Potatoes, au gratin, home-prepared from recipe using butter",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 134,
+     "protein": 5.06,
+     "fat": 7.59,
+     "carbs": 11.26
+    },
+    {
+     "code": "170524",
+     "name": "Potatoes, au gratin, home-prepared from recipe using margarine",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 132,
+     "protein": 5.06,
+     "fat": 7.59,
+     "carbs": 11.27
+    }
+   ]
+  },
+  {
+   "id": "pastrami",
+   "nl": "pastrami",
+   "en": "pastrami",
+   "aliasesEn": [],
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "current": {
+    "kcal": 95,
+    "protein": 19.6,
+    "fat": 1.2,
+    "carbs": 1.5,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "172927",
+     "name": "Pastrami, turkey",
+     "category": "Sausages and Luncheon Meats",
+     "state": "other",
+     "kcal": 139,
+     "protein": 16.3,
+     "fat": 6.21,
+     "carbs": 3.34
+    },
+    {
+     "code": "170204",
+     "name": "Beef, cured, pastrami",
+     "category": "Sausages and Luncheon Meats",
+     "state": "other",
+     "kcal": 147,
+     "protein": 21.8,
+     "fat": 5.82,
+     "carbs": 0.36
+    },
+    {
+     "code": "172959",
+     "name": "Pastrami, beef, 98% fat-free",
+     "category": "Sausages and Luncheon Meats",
+     "state": "other",
+     "kcal": 95,
+     "protein": 19.6,
+     "fat": 1.16,
+     "carbs": 1.54
+    }
+   ]
+  },
+  {
+   "id": "pecorino",
+   "nl": "pecorino",
+   "en": "pecorino",
+   "aliasesEn": [
+    "pecorino cheese",
+    "Pecorino Romano"
+   ],
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "current": {
+    "kcal": 387,
+    "protein": 31.8,
+    "fat": 26.9,
+    "carbs": 3.6,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "penne",
+   "nl": "penne",
+   "en": "penne",
+   "aliasesEn": [
+    "penne pasta"
+   ],
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "current": {
+    "kcal": 371,
+    "protein": 13,
+    "fat": 1.5,
+    "carbs": 71.5,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "peperkorrel",
+   "nl": "peperkorrel",
+   "en": "peppercorn",
+   "aliasesEn": [
+    "whole peppercorns"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "kruiden-specerijen",
+   "current": {
+    "kcal": 240,
+    "protein": 11,
+    "fat": 3.3,
+    "carbs": 40,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "168093",
+     "name": "Salad dressing, peppercorn dressing, commercial, regular",
+     "category": "Fats and Oils",
+     "state": "other",
+     "kcal": 564,
+     "protein": 1.2,
+     "fat": 61.4,
+     "carbs": 3.5
+    }
+   ]
+  },
+  {
+   "id": "pepersaus",
+   "nl": "pepersaus",
+   "en": "peppercorn sauce",
+   "aliasesEn": [
+    "pepper sauce"
+   ],
+   "defaultUnit": "ml",
+   "aisle": "sauzen-olie-azijn",
+   "current": {
+    "kcal": 90,
+    "protein": 1,
+    "fat": 8,
+    "carbs": 4,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "174527",
+     "name": "Sauce, ready-to-serve, pepper or hot",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 11,
+     "protein": 0.51,
+     "fat": 0.37,
+     "carbs": 1.75
+    },
+    {
+     "code": "174523",
+     "name": "Sauce, barbecue",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 172,
+     "protein": 0.82,
+     "fat": 0.63,
+     "carbs": 40.77
+    },
+    {
+     "code": "171833",
+     "name": "Sauce, horseradish",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 503,
+     "protein": 1.09,
+     "fat": 50.89,
+     "carbs": 10.05
+    },
+    {
+     "code": "171610",
+     "name": "Sauce, worcestershire",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 77,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 19.17
+    },
+    {
+     "code": "171186",
+     "name": "Sauce, hot chile, sriracha",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 93,
+     "protein": 1.93,
+     "fat": 0.93,
+     "carbs": 19.16
+    },
+    {
+     "code": "171825",
+     "name": "Sauce, steak, tomato based",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 95,
+     "protein": 1.25,
+     "fat": 0.23,
+     "carbs": 22.04
+    },
+    {
+     "code": "171823",
+     "name": "Sauce, duck, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 245,
+     "protein": 0.36,
+     "fat": 0.13,
+     "carbs": 60.66
+    },
+    {
+     "code": "172879",
+     "name": "Sauce, plum, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 184,
+     "protein": 0.89,
+     "fat": 1.04,
+     "carbs": 42.81
+    }
+   ]
+  },
+  {
+   "id": "peppadew",
+   "nl": "peppadew",
+   "en": "peppadew",
+   "aliasesEn": [
+    "piquanté pepper",
+    "piquanté peppers",
+    "sweet piquanté peppers"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "current": {
+    "kcal": 55,
+    "protein": 1,
+    "fat": 0.2,
+    "carbs": 12,
+    "source": "estimate"
+   },
+   "candidates": []
+  },
+  {
+   "id": "perensap",
+   "nl": "perensap",
+   "en": "pear juice",
+   "aliasesEn": [],
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "current": {
+    "kcal": 44,
+    "protein": 0.2,
+    "fat": 0.1,
+    "carbs": 10.5,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "169118",
+     "name": "Pears, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 57,
+     "protein": 0.36,
+     "fat": 0.14,
+     "carbs": 15.23
+    },
+    {
+     "code": "168177",
+     "name": "Pears, asian, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 42,
+     "protein": 0.5,
+     "fat": 0.23,
+     "carbs": 10.65
+    },
+    {
+     "code": "167777",
+     "name": "Pears, raw, red anjou",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 62,
+     "protein": 0.33,
+     "fat": 0.14,
+     "carbs": 14.94
+    },
+    {
+     "code": "168198",
+     "name": "Juice, apple, grape and pear blend, with added ascorbic acid and calcium",
+     "category": "Fruits and Fruit Juices",
+     "state": "other",
+     "kcal": 52,
+     "protein": 0.17,
+     "fat": 0.12,
+     "carbs": 12.96
+    },
+    {
+     "code": "168156",
+     "name": "Lime juice, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 25,
+     "protein": 0.42,
+     "fat": 0.07,
+     "carbs": 8.42
+    },
+    {
+     "code": "167747",
+     "name": "Lemon juice, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 22,
+     "protein": 0.35,
+     "fat": 0.24,
+     "carbs": 6.9
+    },
+    {
+     "code": "167750",
+     "name": "Prickly pears, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 41,
+     "protein": 0.73,
+     "fat": 0.51,
+     "carbs": 9.57
+    },
+    {
+     "code": "171687",
+     "name": "Acerola juice, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 23,
+     "protein": 0.4,
+     "fat": 0.3,
+     "carbs": 4.8
+    }
+   ]
+  },
+  {
+   "id": "pesto",
+   "nl": "pesto",
+   "en": "pesto",
+   "aliasesEn": [
+    "green pesto",
+    "red pesto",
+    "basil pesto"
+   ],
+   "defaultUnit": "el",
+   "aisle": "blik-pot",
+   "current": {
+    "kcal": 380,
+    "protein": 5,
+    "fat": 38,
+    "carbs": 4,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171579",
+     "name": "Sauce, pesto, ready-to-serve, refrigerated",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 418,
+     "protein": 9.83,
+     "fat": 37.6,
+     "carbs": 10.09
+    },
+    {
+     "code": "171580",
+     "name": "Sauce, pesto, ready-to-serve, shelf stable",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 426,
+     "protein": 5,
+     "fat": 42.42,
+     "carbs": 6.14
+    }
+   ]
+  },
+  {
+   "id": "peterseliewortel",
+   "nl": "peterseliewortel",
+   "en": "parsley root",
+   "aliasesEn": [
+    "Hamburg parsley"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "current": {
+    "kcal": 55,
+    "protein": 2.3,
+    "fat": 0.5,
+    "carbs": 10,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "168583",
+     "name": "Wasabi, root, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 109,
+     "protein": 4.8,
+     "fat": 0.63,
+     "carbs": 23.54
+    },
+    {
+     "code": "170416",
+     "name": "Parsley, fresh",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 36,
+     "protein": 2.97,
+     "fat": 0.79,
+     "carbs": 6.33
+    },
+    {
+     "code": "169250",
+     "name": "Lotus root, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 74,
+     "protein": 2.6,
+     "fat": 0.1,
+     "carbs": 17.23
+    },
+    {
+     "code": "169231",
+     "name": "Ginger root, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 80,
+     "protein": 1.82,
+     "fat": 0.75,
+     "carbs": 17.77
+    },
+    {
+     "code": "169974",
+     "name": "Burdock root, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 72,
+     "protein": 1.53,
+     "fat": 0.15,
+     "carbs": 17.34
+    },
+    {
+     "code": "169993",
+     "name": "Chicory roots, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 72,
+     "protein": 1.4,
+     "fat": 0.2,
+     "carbs": 17.51
+    },
+    {
+     "code": "170486",
+     "name": "Parsley, freeze-dried",
+     "category": "Vegetables and Vegetable Products",
+     "state": "dried",
+     "kcal": 271,
+     "protein": 31.3,
+     "fat": 5.2,
+     "carbs": 42.38
+    },
+    {
+     "code": "170930",
+     "name": "Spices, parsley, dried",
+     "category": "Spices and Herbs",
+     "state": "dried",
+     "kcal": 292,
+     "protein": 26.63,
+     "fat": 5.48,
+     "carbs": 50.64
+    }
+   ]
+  },
+  {
+   "id": "peultjes",
+   "nl": "peultje",
+   "en": "mangetout",
+   "aliasesEn": [
+    "sugar snap peas",
+    "snow peas",
+    "mange tout"
+   ],
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "current": {
+    "kcal": 42,
+    "protein": 2.8,
+    "fat": 0.2,
+    "carbs": 4.9,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "physalis",
+   "nl": "physalis",
+   "en": "physalis",
+   "aliasesEn": [
+    "cape gooseberry",
+    "cape gooseberries"
+   ],
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "current": {
+    "kcal": 53,
+    "protein": 1.9,
+    "fat": 0.7,
+    "carbs": 11.2,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "picanha",
+   "nl": "picanha",
+   "en": "picanha",
+   "aliasesEn": [
+    "rump cap",
+    "beef rump cap"
+   ],
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "current": {
+    "kcal": 179,
+    "protein": 20.1,
+    "fat": 10.9,
+    "carbs": 0,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "pijnboompit",
+   "nl": "pijnboompit",
+   "en": "pine nut",
+   "aliasesEn": [
+    "pine kernels",
+    "pinenuts"
+   ],
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "current": {
+    "kcal": 685,
+    "protein": 14,
+    "fat": 68,
+    "carbs": 4,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "170157",
+     "name": "Nuts, acorns, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 387,
+     "protein": 6.15,
+     "fat": 23.86,
+     "carbs": 40.75
+    },
+    {
+     "code": "170162",
+     "name": "Nuts, cashew nuts, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 553,
+     "protein": 18.22,
+     "fat": 43.85,
+     "carbs": 30.19
+    },
+    {
+     "code": "170584",
+     "name": "Nuts, ginkgo nuts, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 182,
+     "protein": 4.32,
+     "fat": 1.68,
+     "carbs": 37.6
+    },
+    {
+     "code": "170591",
+     "name": "Nuts, pine nuts, dried",
+     "category": "Nut and Seed Products",
+     "state": "dried",
+     "kcal": 673,
+     "protein": 13.69,
+     "fat": 68.37,
+     "carbs": 13.08
+    },
+    {
+     "code": "170169",
+     "name": "Nuts, coconut meat, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 354,
+     "protein": 3.33,
+     "fat": 33.49,
+     "carbs": 15.23
+    },
+    {
+     "code": "170178",
+     "name": "Nuts, macadamia nuts, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 718,
+     "protein": 7.91,
+     "fat": 75.77,
+     "carbs": 13.82
+    },
+    {
+     "code": "170184",
+     "name": "Nuts, pistachio nuts, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 560,
+     "protein": 20.16,
+     "fat": 45.32,
+     "carbs": 27.17
+    },
+    {
+     "code": "170164",
+     "name": "Nuts, chestnuts, chinese, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 224,
+     "protein": 4.2,
+     "fat": 1.11,
+     "carbs": 49.07
+    }
+   ]
+  },
+  {
+   "id": "piment",
+   "nl": "piment",
+   "en": "allspice",
+   "aliasesEn": [
+    "allspice berries",
+    "ground allspice",
+    "pimento"
+   ],
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "current": {
+    "kcal": 270,
+    "protein": 6,
+    "fat": 9,
+    "carbs": 45,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171315",
+     "name": "Spices, allspice, ground",
+     "category": "Spices and Herbs",
+     "state": "other",
+     "kcal": 263,
+     "protein": 6.09,
+     "fat": 8.69,
+     "carbs": 72.12
+    }
+   ]
+  },
+  {
+   "id": "pindakaas",
+   "nl": "pindakaas",
+   "en": "peanut butter",
+   "aliasesEn": [],
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "current": {
+    "kcal": 598,
+    "protein": 22.2,
+    "fat": 51.4,
+    "carbs": 17.3,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "169869",
+     "name": "Peanut butter, reduced sodium",
+     "category": "Legumes and Legume Products",
+     "state": "other",
+     "kcal": 590,
+     "protein": 24,
+     "fat": 49.9,
+     "carbs": 21.83
+    },
+    {
+     "code": "172458",
+     "name": "Peanut butter, smooth, reduced fat",
+     "category": "Legumes and Legume Products",
+     "state": "other",
+     "kcal": 520,
+     "protein": 25.9,
+     "fat": 34,
+     "carbs": 35.65
+    },
+    {
+     "code": "174265",
+     "name": "Peanut butter, chunk style, with salt",
+     "category": "Legumes and Legume Products",
+     "state": "other",
+     "kcal": 589,
+     "protein": 24.06,
+     "fat": 49.94,
+     "carbs": 21.57
+    },
+    {
+     "code": "172469",
+     "name": "Peanut butter, chunk style, without salt",
+     "category": "Legumes and Legume Products",
+     "state": "other",
+     "kcal": 589,
+     "protein": 24.06,
+     "fat": 49.94,
+     "carbs": 21.57
+    },
+    {
+     "code": "167546",
+     "name": "Candies, honey-combed, with peanut butter",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 473,
+     "protein": 8.72,
+     "fat": 20.18,
+     "carbs": 67.41
+    },
+    {
+     "code": "169681",
+     "name": "Snacks, granola bars, hard, peanut butter",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 483,
+     "protein": 9.8,
+     "fat": 23.8,
+     "carbs": 62.3
+    },
+    {
+     "code": "172470",
+     "name": "Peanut butter, smooth style, without salt",
+     "category": "Legumes and Legume Products",
+     "state": "other",
+     "kcal": 598,
+     "protein": 22.21,
+     "fat": 51.36,
+     "carbs": 22.31
+    },
+    {
+     "code": "173252",
+     "name": "Archway Home Style Cookies, Peanut Butter",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 480,
+     "protein": 9,
+     "fat": 24.28,
+     "carbs": 58.48
+    }
+   ]
+  },
+  {
+   "id": "pindarotsje",
+   "nl": "pindarotsje",
+   "en": "chocolate peanut cluster",
+   "aliasesEn": [],
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "current": {
+    "kcal": 520,
+    "protein": 9,
+    "fat": 30,
+    "carbs": 52,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "174263",
+     "name": "Peanuts, spanish, raw",
+     "category": "Legumes and Legume Products",
+     "state": "raw",
+     "kcal": 570,
+     "protein": 26.15,
+     "fat": 49.6,
+     "carbs": 15.83
+    },
+    {
+     "code": "172432",
+     "name": "Peanuts, valencia, raw",
+     "category": "Legumes and Legume Products",
+     "state": "raw",
+     "kcal": 570,
+     "protein": 25.09,
+     "fat": 47.58,
+     "carbs": 20.91
+    },
+    {
+     "code": "172434",
+     "name": "Peanuts, virginia, raw",
+     "category": "Legumes and Legume Products",
+     "state": "raw",
+     "kcal": 563,
+     "protein": 25.19,
+     "fat": 48.75,
+     "carbs": 16.54
+    },
+    {
+     "code": "172430",
+     "name": "Peanuts, all types, raw",
+     "category": "Legumes and Legume Products",
+     "state": "raw",
+     "kcal": 567,
+     "protein": 25.8,
+     "fat": 49.24,
+     "carbs": 16.13
+    },
+    {
+     "code": "168809",
+     "name": "Ice creams, chocolate",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 216,
+     "protein": 3.8,
+     "fat": 11,
+     "carbs": 28.2
+    },
+    {
+     "code": "168104",
+     "name": "Frozen yogurts, chocolate",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 131,
+     "protein": 3,
+     "fat": 3.6,
+     "carbs": 21.6
+    },
+    {
+     "code": "168136",
+     "name": "Ice creams, chocolate, rich",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 251,
+     "protein": 4.72,
+     "fat": 16.98,
+     "carbs": 19.78
+    },
+    {
+     "code": "167585",
+     "name": "Ice creams, chocolate, light",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 187,
+     "protein": 5,
+     "fat": 7.19,
+     "carbs": 25.7
+    }
+   ]
+  },
+  {
+   "id": "pistolet",
+   "nl": "pistolet",
+   "en": "crusty roll",
+   "aliasesEn": [
+    "petit pain",
+    "crusty white roll"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "current": {
+    "kcal": 277,
+    "protein": 8.6,
+    "fat": 4.3,
+    "carbs": 47,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "168008",
+     "name": "Schar, Gluten-Free, Classic White Rolls",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 239,
+     "protein": 3.34,
+     "fat": 2.65,
+     "carbs": 50.47
+    },
+    {
+     "code": "174094",
+     "name": "Rolls, hamburger, whole grain white, calcium-fortified",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 255,
+     "protein": 9.3,
+     "fat": 3.49,
+     "carbs": 46.5
+    },
+    {
+     "code": "171862",
+     "name": "Rolls, gluten-free, white, made with rice flour, rice starch, and corn starch",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 239,
+     "protein": 3.34,
+     "fat": 2.65,
+     "carbs": 50.47
+    },
+    {
+     "code": "171861",
+     "name": "Rolls, gluten-free, white, made with brown rice flour, tapioca starch, and potato starch",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 310,
+     "protein": 7.99,
+     "fat": 6.4,
+     "carbs": 55.1
+    },
+    {
+     "code": "171863",
+     "name": "Rolls, gluten-free, white, made with brown rice flour, tapioca starch, and sorghum flour",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 257,
+     "protein": 5.65,
+     "fat": 8.2,
+     "carbs": 40.24
+    },
+    {
+     "code": "172795",
+     "name": "Rolls, french",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 277,
+     "protein": 8.6,
+     "fat": 4.3,
+     "carbs": 50.2
+    },
+    {
+     "code": "175027",
+     "name": "Rolls, dinner, egg",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 307,
+     "protein": 9.5,
+     "fat": 6.4,
+     "carbs": 52
+    },
+    {
+     "code": "175029",
+     "name": "Rolls, dinner, rye",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 286,
+     "protein": 10.3,
+     "fat": 3.4,
+     "carbs": 53.1
+    }
+   ]
+  },
+  {
+   "id": "pizza",
+   "nl": "pizza",
+   "en": "pizza",
+   "aliasesEn": [
+    "frozen pizza",
+    "frozen pizzas"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "current": {
+    "kcal": 240,
+    "protein": 10,
+    "fat": 9,
+    "carbs": 30,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "167596",
+     "name": "Pepperidge Farm, Goldfish, Baked Snack Crackers, Pizza",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 469,
+     "protein": 9.67,
+     "fat": 18.93,
+     "carbs": 65.11
+    },
+    {
+     "code": "172880",
+     "name": "Sauce, pizza, canned, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 54,
+     "protein": 2.18,
+     "fat": 1.15,
+     "carbs": 8.66
+    },
+    {
+     "code": "168006",
+     "name": "Pepperidge Farm, Goldfish, Baked Snack Crackers, Explosive Pizza",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 458,
+     "protein": 9.56,
+     "fat": 16.82,
+     "carbs": 67.2
+    }
+   ]
+  },
+  {
+   "id": "pizzabodem",
+   "nl": "pizzabodem",
+   "en": "pizza base",
+   "aliasesEn": [
+    "ready-made pizza base",
+    "pizza crust"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "droog",
+   "current": {
+    "kcal": 295,
+    "protein": 9,
+    "fat": 4,
+    "carbs": 56,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "172880",
+     "name": "Sauce, pizza, canned, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 54,
+     "protein": 2.18,
+     "fat": 1.15,
+     "carbs": 8.66
+    },
+    {
+     "code": "167596",
+     "name": "Pepperidge Farm, Goldfish, Baked Snack Crackers, Pizza",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 469,
+     "protein": 9.67,
+     "fat": 18.93,
+     "carbs": 65.11
+    },
+    {
+     "code": "168006",
+     "name": "Pepperidge Farm, Goldfish, Baked Snack Crackers, Explosive Pizza",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 458,
+     "protein": 9.56,
+     "fat": 16.82,
+     "carbs": 67.2
+    }
+   ]
+  },
+  {
+   "id": "pizzadeeg",
+   "nl": "pizzadeeg",
+   "en": "pizza dough",
+   "aliasesEn": [
+    "ready-rolled pizza dough",
+    "fresh pizza dough"
+   ],
+   "defaultUnit": "pak",
+   "aisle": "zuivel-eieren",
+   "current": {
+    "kcal": 270,
+    "protein": 8,
+    "fat": 4,
+    "carbs": 50,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "172880",
+     "name": "Sauce, pizza, canned, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 54,
+     "protein": 2.18,
+     "fat": 1.15,
+     "carbs": 8.66
+    },
+    {
+     "code": "167596",
+     "name": "Pepperidge Farm, Goldfish, Baked Snack Crackers, Pizza",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 469,
+     "protein": 9.67,
+     "fat": 18.93,
+     "carbs": 65.11
+    },
+    {
+     "code": "172791",
+     "name": "Phyllo dough",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 299,
+     "protein": 7.1,
+     "fat": 6,
+     "carbs": 52.6
+    },
+    {
+     "code": "174972",
+     "name": "Cookies, sugar, refrigerated dough",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 436,
+     "protein": 4,
+     "fat": 19.48,
+     "carbs": 61.22
+    },
+    {
+     "code": "174961",
+     "name": "Cookies, oatmeal, refrigerated dough",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 424,
+     "protein": 5.4,
+     "fat": 18.9,
+     "carbs": 59.1
+    },
+    {
+     "code": "172671",
+     "name": "Biscuits, mixed grain, refrigerated dough",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 263,
+     "protein": 6.1,
+     "fat": 5.6,
+     "carbs": 47.4
+    },
+    {
+     "code": "172735",
+     "name": "Cookies, sugar, refrigerated dough, baked",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 489,
+     "protein": 4.7,
+     "fat": 23.1,
+     "carbs": 65.6
+    },
+    {
+     "code": "172729",
+     "name": "Cookies, peanut butter, refrigerated dough",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 458,
+     "protein": 8.2,
+     "fat": 25,
+     "carbs": 52.1
+    }
+   ]
+  },
+  {
+   "id": "pizzadeegmix",
+   "nl": "pizzadeegmix",
+   "en": "pizza base mix",
+   "aliasesEn": [
+    "pizza dough mix"
+   ],
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "current": {
+    "kcal": 350,
+    "protein": 11,
+    "fat": 2,
+    "carbs": 72,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "167596",
+     "name": "Pepperidge Farm, Goldfish, Baked Snack Crackers, Pizza",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 469,
+     "protein": 9.67,
+     "fat": 18.93,
+     "carbs": 65.11
+    },
+    {
+     "code": "171165",
+     "name": "Soup, onion, dry, mix",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 293,
+     "protein": 7.48,
+     "fat": 0.34,
+     "carbs": 65.07
+    },
+    {
+     "code": "171172",
+     "name": "Gravy, onion, dry, mix",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 322,
+     "protein": 9,
+     "fat": 3,
+     "carbs": 67.64
+    },
+    {
+     "code": "171571",
+     "name": "Soup, chicken noodle, dry, mix",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 377,
+     "protein": 15.42,
+     "fat": 6.51,
+     "carbs": 62.32
+    },
+    {
+     "code": "172880",
+     "name": "Sauce, pizza, canned, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 54,
+     "protein": 2.18,
+     "fat": 1.15,
+     "carbs": 8.66
+    },
+    {
+     "code": "174568",
+     "name": "Soup, onion, dry, mix, prepared with water",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 12,
+     "protein": 0.32,
+     "fat": 0.01,
+     "carbs": 2.77
+    },
+    {
+     "code": "174569",
+     "name": "Soup, tomato, dry, mix, prepared with water",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 38,
+     "protein": 0.93,
+     "fat": 0.61,
+     "carbs": 7.17
+    },
+    {
+     "code": "172925",
+     "name": "Soup, chicken noodle, dry, mix, prepared with water",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 23,
+     "protein": 0.84,
+     "fat": 0.55,
+     "carbs": 3.67
+    }
+   ]
+  },
+  {
+   "id": "pizzakaas",
+   "nl": "pizzakaas",
+   "en": "grated pizza cheese",
+   "aliasesEn": [
+    "pizza cheese"
+   ],
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "current": {
+    "kcal": 300,
+    "protein": 22,
+    "fat": 23,
+    "carbs": 1,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171247",
+     "name": "Cheese, parmesan, grated",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 420,
+     "protein": 28.42,
+     "fat": 27.84,
+     "carbs": 13.91
+    },
+    {
+     "code": "172175",
+     "name": "Cheese, blue",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 353,
+     "protein": 21.4,
+     "fat": 28.74,
+     "carbs": 2.34
+    },
+    {
+     "code": "172177",
+     "name": "Cheese, brie",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 334,
+     "protein": 20.75,
+     "fat": 27.68,
+     "carbs": 0.45
+    },
+    {
+     "code": "173419",
+     "name": "Cheese, edam",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 357,
+     "protein": 24.99,
+     "fat": 28.57,
+     "carbs": 1.43
+    },
+    {
+     "code": "173420",
+     "name": "Cheese, feta",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 265,
+     "protein": 14.21,
+     "fat": 21.49,
+     "carbs": 3.88
+    },
+    {
+     "code": "167944",
+     "name": "Bread, cheese",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 408,
+     "protein": 10.42,
+     "fat": 20.83,
+     "carbs": 44.83
+    },
+    {
+     "code": "171241",
+     "name": "Cheese, gouda",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 356,
+     "protein": 24.94,
+     "fat": 27.44,
+     "carbs": 2.22
+    },
+    {
+     "code": "171251",
+     "name": "Cheese, swiss",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 393,
+     "protein": 26.96,
+     "fat": 30.99,
+     "carbs": 1.44
+    }
+   ]
+  },
+  {
+   "id": "pizzakruiden",
+   "nl": "pizzakruiden",
+   "en": "pizza seasoning",
+   "aliasesEn": [
+    "pizza herbs"
+   ],
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "current": {
+    "kcal": 270,
+    "protein": 12,
+    "fat": 6,
+    "carbs": 45,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "167596",
+     "name": "Pepperidge Farm, Goldfish, Baked Snack Crackers, Pizza",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 469,
+     "protein": 9.67,
+     "fat": 18.93,
+     "carbs": 65.11
+    },
+    {
+     "code": "172880",
+     "name": "Sauce, pizza, canned, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 54,
+     "protein": 2.18,
+     "fat": 1.15,
+     "carbs": 8.66
+    },
+    {
+     "code": "171331",
+     "name": "Spices, poultry seasoning",
+     "category": "Spices and Herbs",
+     "state": "other",
+     "kcal": 307,
+     "protein": 9.59,
+     "fat": 7.53,
+     "carbs": 65.59
+    },
+    {
+     "code": "168006",
+     "name": "Pepperidge Farm, Goldfish, Baked Snack Crackers, Explosive Pizza",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 458,
+     "protein": 9.56,
+     "fat": 16.82,
+     "carbs": 67.2
+    }
+   ]
+  },
+  {
+   "id": "pizzasaus",
+   "nl": "pizzasaus",
+   "en": "pizza sauce",
+   "aliasesEn": [
+    "pizza topping sauce"
+   ],
+   "defaultUnit": "el",
+   "aisle": "blik-pot",
+   "current": {
+    "kcal": 58,
+    "protein": 1.5,
+    "fat": 2,
+    "carbs": 8,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "174523",
+     "name": "Sauce, barbecue",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 172,
+     "protein": 0.82,
+     "fat": 0.63,
+     "carbs": 40.77
+    },
+    {
+     "code": "171833",
+     "name": "Sauce, horseradish",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 503,
+     "protein": 1.09,
+     "fat": 50.89,
+     "carbs": 10.05
+    },
+    {
+     "code": "171610",
+     "name": "Sauce, worcestershire",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 77,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 19.17
+    },
+    {
+     "code": "171186",
+     "name": "Sauce, hot chile, sriracha",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 93,
+     "protein": 1.93,
+     "fat": 0.93,
+     "carbs": 19.16
+    },
+    {
+     "code": "171825",
+     "name": "Sauce, steak, tomato based",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 95,
+     "protein": 1.25,
+     "fat": 0.23,
+     "carbs": 22.04
+    },
+    {
+     "code": "171823",
+     "name": "Sauce, duck, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 245,
+     "protein": 0.36,
+     "fat": 0.13,
+     "carbs": 60.66
+    },
+    {
+     "code": "172879",
+     "name": "Sauce, plum, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 184,
+     "protein": 0.89,
+     "fat": 1.04,
+     "carbs": 42.81
+    },
+    {
+     "code": "174531",
+     "name": "Sauce, fish, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 35,
+     "protein": 5.06,
+     "fat": 0.01,
+     "carbs": 3.64
+    }
+   ]
+  },
+  {
+   "id": "platte-perzik",
+   "nl": "platte perzik",
+   "en": "flat peach",
+   "aliasesEn": [
+    "doughnut peach",
+    "doughnut peaches",
+    "donut peach",
+    "donut peaches",
+    "Saturn peach",
+    "Saturn peaches",
+    "paraguayo"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "current": {
+    "kcal": 39,
+    "protein": 0.9,
+    "fat": 0.3,
+    "carbs": 8,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "169928",
+     "name": "Peaches, yellow, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 39,
+     "protein": 0.91,
+     "fat": 0.25,
+     "carbs": 9.54
+    },
+    {
+     "code": "173080",
+     "name": "Beef, New Zealand, imported, flat, separable lean only, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 154,
+     "protein": 21.3,
+     "fat": 7.69,
+     "carbs": 0
+    },
+    {
+     "code": "173103",
+     "name": "Beef, New Zealand, imported, flat, separable lean and fat, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 177,
+     "protein": 20.57,
+     "fat": 10.55,
+     "carbs": 0
+    },
+    {
+     "code": "175020",
+     "name": "Pie, peach",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 224,
+     "protein": 1.9,
+     "fat": 10,
+     "carbs": 32.9
+    },
+    {
+     "code": "174478",
+     "name": "Emu, flat fillet, raw",
+     "category": "Poultry Products",
+     "state": "raw",
+     "kcal": 102,
+     "protein": 22.25,
+     "fat": 0.74,
+     "carbs": 0
+    },
+    {
+     "code": "169116",
+     "name": "Peaches, frozen, sliced, sweetened",
+     "category": "Fruits and Fruit Juices",
+     "state": "other",
+     "kcal": 94,
+     "protein": 0.63,
+     "fat": 0.13,
+     "carbs": 23.98
+    },
+    {
+     "code": "169735",
+     "name": "Noodles, flat, crunchy, Chinese restaurant",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 521,
+     "protein": 10.33,
+     "fat": 31.72,
+     "carbs": 51.9
+    },
+    {
+     "code": "174855",
+     "name": "Beverages, tea, black, ready-to-drink, peach, diet",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 1,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 0.25
+    }
+   ]
+  },
+  {
+   "id": "poffertjesmix",
+   "nl": "poffertjesmix",
+   "en": "mini pancake mix",
+   "aliasesEn": [
+    "poffertjes mix"
+   ],
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "current": {
+    "kcal": 358,
+    "protein": 9,
+    "fat": 2,
+    "carbs": 76,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "174086",
+     "name": "Pancakes, plain, reduced fat",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 269,
+     "protein": 5.71,
+     "fat": 1.9,
+     "carbs": 57.32
+    },
+    {
+     "code": "169578",
+     "name": "Syrups, table blends, pancake",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 234,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 61.47
+    },
+    {
+     "code": "172775",
+     "name": "Pancakes, special dietary, dry mix",
+     "category": "Baked Products",
+     "state": "dried",
+     "kcal": 349,
+     "protein": 8.9,
+     "fat": 1.4,
+     "carbs": 73.9
+    },
+    {
+     "code": "175009",
+     "name": "Pancakes, plain, prepared from recipe",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 227,
+     "protein": 6.4,
+     "fat": 9.7,
+     "carbs": 28.3
+    },
+    {
+     "code": "172774",
+     "name": "Pancakes, buckwheat, dry mix, incomplete",
+     "category": "Baked Products",
+     "state": "dried",
+     "kcal": 340,
+     "protein": 10.9,
+     "fat": 2.7,
+     "carbs": 71.3
+    },
+    {
+     "code": "172773",
+     "name": "Pancakes, blueberry, prepared from recipe",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 222,
+     "protein": 6.1,
+     "fat": 9.2,
+     "carbs": 29
+    },
+    {
+     "code": "167584",
+     "name": "Syrups, table blends, pancake, with butter",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 291,
+     "protein": 0,
+     "fat": 0.09,
+     "carbs": 72.43
+    },
+    {
+     "code": "171853",
+     "name": "Pancakes, whole wheat, dry mix, incomplete",
+     "category": "Baked Products",
+     "state": "dried",
+     "kcal": 350,
+     "protein": 10.53,
+     "fat": 1.32,
+     "carbs": 74.11
+    }
+   ]
+  },
+  {
+   "id": "polenta",
+   "nl": "polenta",
+   "en": "polenta",
+   "aliasesEn": [
+    "cornmeal",
+    "instant polenta"
+   ],
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "current": {
+    "kcal": 370,
+    "protein": 7.1,
+    "fat": 1.8,
+    "carbs": 75.6,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "pommes-duchesse",
+   "nl": "pommes duchesse",
+   "en": "duchess potatoes",
+   "aliasesEn": [
+    "duchesse potatoes"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "current": {
+    "kcal": 150,
+    "protein": 2.5,
+    "fat": 8,
+    "carbs": 17,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "170032",
+     "name": "Potatoes, raw, skin",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 58,
+     "protein": 2.57,
+     "fat": 0.1,
+     "carbs": 12.44
+    },
+    {
+     "code": "170026",
+     "name": "Potatoes, flesh and skin, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 77,
+     "protein": 2.05,
+     "fat": 0.09,
+     "carbs": 17.49
+    },
+    {
+     "code": "170029",
+     "name": "Potatoes, red, flesh and skin, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 70,
+     "protein": 1.89,
+     "fat": 0.14,
+     "carbs": 15.9
+    },
+    {
+     "code": "170028",
+     "name": "Potatoes, white, flesh and skin, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 69,
+     "protein": 1.68,
+     "fat": 0.1,
+     "carbs": 15.71
+    },
+    {
+     "code": "167943",
+     "name": "Bread, potato",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 266,
+     "protein": 12.5,
+     "fat": 3.13,
+     "carbs": 47.07
+    },
+    {
+     "code": "169768",
+     "name": "Potatoes, mashed, ready-to-eat",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 106,
+     "protein": 1.97,
+     "fat": 5.01,
+     "carbs": 13.29
+    },
+    {
+     "code": "170498",
+     "name": "Potatoes, o'brien, home-prepared",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 81,
+     "protein": 2.35,
+     "fat": 1.28,
+     "carbs": 15.47
+    },
+    {
+     "code": "170112",
+     "name": "Potatoes, baked, flesh, with salt",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 93,
+     "protein": 1.96,
+     "fat": 0.1,
+     "carbs": 21.55
+    }
+   ]
+  },
+  {
+   "id": "pompoenpit",
+   "nl": "pompoenpit",
+   "en": "pumpkin seed",
+   "aliasesEn": [
+    "pepitas"
+   ],
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "current": {
+    "kcal": 574,
+    "protein": 29.8,
+    "fat": 49.1,
+    "carbs": 8.2,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "175151",
+     "name": "Fish, sunfish, pumpkin seed, raw",
+     "category": "Finfish and Shellfish Products",
+     "state": "raw",
+     "kcal": 89,
+     "protein": 19.4,
+     "fat": 0.7,
+     "carbs": 0
+    },
+    {
+     "code": "168448",
+     "name": "Pumpkin, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 26,
+     "protein": 1,
+     "fat": 0.1,
+     "carbs": 6.5
+    },
+    {
+     "code": "168591",
+     "name": "Seeds, lotus seeds, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 89,
+     "protein": 4.13,
+     "fat": 0.53,
+     "carbs": 17.28
+    },
+    {
+     "code": "170144",
+     "name": "Seeds, breadfruit seeds, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 191,
+     "protein": 7.4,
+     "fat": 5.59,
+     "carbs": 29.24
+    },
+    {
+     "code": "170552",
+     "name": "Seeds, breadnut tree seeds, raw",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 217,
+     "protein": 5.97,
+     "fat": 0.99,
+     "carbs": 46.28
+    },
+    {
+     "code": "169410",
+     "name": "Seeds, sesame butter, tahini, from raw and stone ground kernels",
+     "category": "Nut and Seed Products",
+     "state": "raw",
+     "kcal": 570,
+     "protein": 17.81,
+     "fat": 48,
+     "carbs": 26.19
+    },
+    {
+     "code": "172003",
+     "name": "Fish, sunfish, pumpkin seed, cooked, dry heat",
+     "category": "Finfish and Shellfish Products",
+     "state": "cooked",
+     "kcal": 114,
+     "protein": 24.87,
+     "fat": 0.9,
+     "carbs": 0
+    },
+    {
+     "code": "170188",
+     "name": "Seeds, pumpkin and squash seeds, whole, roasted, without salt",
+     "category": "Nut and Seed Products",
+     "state": "other",
+     "kcal": 446,
+     "protein": 18.55,
+     "fat": 19.4,
+     "carbs": 53.75
+    }
+   ]
+  },
+  {
+   "id": "popcorn",
+   "nl": "popcorn",
+   "en": "popcorn",
+   "aliasesEn": [
+    "popping corn",
+    "microwave popcorn"
+   ],
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "current": {
+    "kcal": 370,
+    "protein": 11,
+    "fat": 5,
+    "carbs": 70,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "174778",
+     "name": "Snacks, popcorn, microwave, low fat",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 424,
+     "protein": 12.6,
+     "fat": 9.5,
+     "carbs": 72
+    },
+    {
+     "code": "168139",
+     "name": "Popcorn, microwave, low fat and sodium",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 429,
+     "protein": 12.6,
+     "fat": 9.5,
+     "carbs": 73.39
+    },
+    {
+     "code": "173131",
+     "name": "Snacks, popcorn, microwave, 94% fat free",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 402,
+     "protein": 10.72,
+     "fat": 6.1,
+     "carbs": 76.04
+    },
+    {
+     "code": "173141",
+     "name": "Popcorn, microwave, regular (butter) flavor, made with palm oil",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 535,
+     "protein": 8.38,
+     "fat": 30.22,
+     "carbs": 57.26
+    },
+    {
+     "code": "167549",
+     "name": "Snacks, popcorn, oil-popped, microwave, regular flavor, no trans fat",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 583,
+     "protein": 7.29,
+     "fat": 43.55,
+     "carbs": 45.06
+    },
+    {
+     "code": "174785",
+     "name": "Snacks, popcorn, microwave, regular (butter) flavor, made with partially hydrogenated oil",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 557,
+     "protein": 7.5,
+     "fat": 34.02,
+     "carbs": 55.16
+    },
+    {
+     "code": "167550",
+     "name": "Snacks, popcorn, cakes",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 384,
+     "protein": 9.7,
+     "fat": 3.1,
+     "carbs": 80.1
+    },
+    {
+     "code": "167959",
+     "name": "Snacks, popcorn, air-popped",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 387,
+     "protein": 12.94,
+     "fat": 4.54,
+     "carbs": 77.78
+    }
+   ]
+  },
+  {
+   "id": "probiotisch-drankje",
+   "nl": "probiotisch drankje",
+   "en": "probiotic drink",
+   "aliasesEn": [
+    "probiotic yoghurt drink",
+    "Yakult",
+    "Actimel"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "zuivel-eieren",
+   "current": {
+    "kcal": 70,
+    "protein": 1.5,
+    "fat": 1,
+    "carbs": 14,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "174108",
+     "name": "Beverages,  Energy drink, Citrus",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 45,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 11.27
+    },
+    {
+     "code": "174822",
+     "name": "Beverages, Energy Drink, sugar free",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 4,
+     "protein": 0.42,
+     "fat": 0,
+     "carbs": 0.42
+    },
+    {
+     "code": "171873",
+     "name": "Beverages, chocolate drink, milk and soy based, ready to drink, fortified",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 101,
+     "protein": 4.22,
+     "fat": 1.69,
+     "carbs": 17.3
+    },
+    {
+     "code": "171935",
+     "name": "Beverages, Energy Drink, Monster, fortified with vitamins C, B2, B3, B6, B12",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 47,
+     "protein": 0.47,
+     "fat": 0,
+     "carbs": 11.28
+    },
+    {
+     "code": "175100",
+     "name": "Beverages, Orange drink, breakfast type, with juice and pulp, frozen concentrate",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 153,
+     "protein": 0.4,
+     "fat": 0,
+     "carbs": 39
+    },
+    {
+     "code": "175101",
+     "name": "Beverages, Orange drink, breakfast type, with juice and pulp, frozen concentrate, prepared with water",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 45,
+     "protein": 0.12,
+     "fat": 0,
+     "carbs": 11.32
+    }
+   ]
+  },
+  {
+   "id": "proteinepudding",
+   "nl": "proteïnepudding",
+   "en": "protein pudding",
+   "aliasesEn": [],
+   "defaultUnit": "beker",
+   "aisle": "zuivel-eieren",
+   "current": {
+    "kcal": 69,
+    "protein": 10,
+    "fat": 1,
+    "carbs": 5,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "168782",
+     "name": "Puddings, rice, ready-to-eat",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 108,
+     "protein": 3.23,
+     "fat": 2.15,
+     "carbs": 18.39
+    },
+    {
+     "code": "169608",
+     "name": "Puddings, vanilla, ready-to-eat",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 130,
+     "protein": 1.45,
+     "fat": 3.78,
+     "carbs": 22.6
+    },
+    {
+     "code": "169614",
+     "name": "Puddings, tapioca, ready-to-eat",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 130,
+     "protein": 1.95,
+     "fat": 3.88,
+     "carbs": 21.69
+    },
+    {
+     "code": "168778",
+     "name": "Puddings, chocolate, ready-to-eat",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 142,
+     "protein": 2.09,
+     "fat": 4.6,
+     "carbs": 23.01
+    },
+    {
+     "code": "168797",
+     "name": "Puddings, vanilla, ready-to-eat, fat free",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 89,
+     "protein": 2.02,
+     "fat": 0,
+     "carbs": 20.16
+    },
+    {
+     "code": "168798",
+     "name": "Puddings, tapioca, ready-to-eat, fat free",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 94,
+     "protein": 1.44,
+     "fat": 0.35,
+     "carbs": 21.31
+    },
+    {
+     "code": "172809",
+     "name": "Bread, protein, (includes gluten), toasted",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 270,
+     "protein": 13.2,
+     "fat": 2.4,
+     "carbs": 48.1
+    },
+    {
+     "code": "168799",
+     "name": "Puddings, chocolate, ready-to-eat, fat free",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 93,
+     "protein": 1.93,
+     "fat": 0.3,
+     "carbs": 20.87
+    }
+   ]
+  },
+  {
+   "id": "proteineshake",
+   "nl": "proteïneshake",
+   "en": "protein shake",
+   "aliasesEn": [
+    "protein drink"
+   ],
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "current": {
+    "kcal": 54,
+    "protein": 8,
+    "fat": 1,
+    "carbs": 3,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "173226",
+     "name": "Shake, fast food, vanilla",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 148,
+     "protein": 3.37,
+     "fat": 6.52,
+     "carbs": 19.59
+    },
+    {
+     "code": "175102",
+     "name": "Beverages, shake, fast food, strawberry",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 113,
+     "protein": 3.4,
+     "fat": 2.8,
+     "carbs": 18.9
+    },
+    {
+     "code": "172809",
+     "name": "Bread, protein, (includes gluten), toasted",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 270,
+     "protein": 13.2,
+     "fat": 2.4,
+     "carbs": 48.1
+    },
+    {
+     "code": "172016",
+     "name": "Wheat flour, white (industrial), 9% protein, bleached, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 367,
+     "protein": 8.89,
+     "fat": 1.43,
+     "carbs": 77.32
+    },
+    {
+     "code": "168942",
+     "name": "Wheat flour, white (industrial), 13% protein, bleached, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 362,
+     "protein": 13.07,
+     "fat": 1.38,
+     "carbs": 72.2
+    },
+    {
+     "code": "172018",
+     "name": "Wheat flour, white (industrial), 10% protein, bleached, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 366,
+     "protein": 9.71,
+     "fat": 1.48,
+     "carbs": 76.22
+    },
+    {
+     "code": "172021",
+     "name": "Wheat flour, white (industrial), 15% protein, bleached, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 362,
+     "protein": 15.33,
+     "fat": 1.41,
+     "carbs": 69.88
+    },
+    {
+     "code": "172017",
+     "name": "Wheat flour, white (industrial), 9% protein, bleached, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 367,
+     "protein": 8.89,
+     "fat": 1.43,
+     "carbs": 77.32
+    }
+   ]
+  },
+  {
+   "id": "provencaalse-kruiden",
+   "nl": "Provençaalse kruiden",
+   "en": "herbes de Provence",
+   "aliasesEn": [
+    "Provencal herbs",
+    "mixed dried herbs"
+   ],
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "current": {
+    "kcal": 270,
+    "protein": 10,
+    "fat": 6,
+    "carbs": 45,
+    "source": "estimate"
+   },
+   "candidates": []
+  },
+  {
+   "id": "provolone",
+   "nl": "provolone",
+   "en": "provolone",
+   "aliasesEn": [],
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "current": {
+    "kcal": 350,
+    "protein": 25,
+    "fat": 27,
+    "carbs": 2,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "170850",
+     "name": "Cheese, provolone",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 351,
+     "protein": 25.58,
+     "fat": 26.62,
+     "carbs": 2.14
+    },
+    {
+     "code": "172215",
+     "name": "Cheese, provolone, reduced fat",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 274,
+     "protein": 24.7,
+     "fat": 17.6,
+     "carbs": 3.5
+    }
+   ]
+  },
+  {
+   "id": "pul-biber",
+   "nl": "pul biber",
+   "en": "pul biber",
+   "aliasesEn": [
+    "Aleppo pepper",
+    "Turkish chilli flakes"
+   ],
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "current": {
+    "kcal": 295,
+    "protein": 12,
+    "fat": 10,
+    "carbs": 40,
+    "source": "estimate"
+   },
+   "candidates": []
+  },
+  {
+   "id": "pulled-pork",
+   "nl": "pulled pork",
+   "en": "pulled pork",
+   "aliasesEn": [],
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "current": {
+    "kcal": 187,
+    "protein": 20,
+    "fat": 10,
+    "carbs": 4,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "167812",
+     "name": "Pork, fresh, belly, raw",
+     "category": "Pork Products",
+     "state": "raw",
+     "kcal": 518,
+     "protein": 9.34,
+     "fat": 53.01,
+     "carbs": 0
+    },
+    {
+     "code": "167902",
+     "name": "Pork, fresh, ground, raw",
+     "category": "Pork Products",
+     "state": "raw",
+     "kcal": 263,
+     "protein": 16.88,
+     "fat": 21.19,
+     "carbs": 0
+    },
+    {
+     "code": "167811",
+     "name": "Pork, fresh, backfat, raw",
+     "category": "Pork Products",
+     "state": "raw",
+     "kcal": 812,
+     "protein": 2.92,
+     "fat": 88.69,
+     "carbs": 0
+    },
+    {
+     "code": "171619",
+     "name": "Bockwurst, pork, veal, raw",
+     "category": "Sausages and Luncheon Meats",
+     "state": "raw",
+     "kcal": 301,
+     "protein": 14.03,
+     "fat": 25.87,
+     "carbs": 2.95
+    },
+    {
+     "code": "168287",
+     "name": "Pork, cured, salt pork, raw",
+     "category": "Pork Products",
+     "state": "raw",
+     "kcal": 748,
+     "protein": 5.05,
+     "fat": 80.5,
+     "carbs": 0
+    },
+    {
+     "code": "167813",
+     "name": "Pork, fresh, separable fat, raw",
+     "category": "Pork Products",
+     "state": "raw",
+     "kcal": 632,
+     "protein": 9.25,
+     "fat": 65.7,
+     "carbs": 0
+    },
+    {
+     "code": "171631",
+     "name": "Sausage, Italian, pork, mild, raw",
+     "category": "Sausages and Luncheon Meats",
+     "state": "raw",
+     "kcal": 290,
+     "protein": 13.9,
+     "fat": 24.26,
+     "carbs": 2.97
+    },
+    {
+     "code": "169190",
+     "name": "Pork, ground, 96% lean / 4% fat, raw",
+     "category": "Pork Products",
+     "state": "raw",
+     "kcal": 121,
+     "protein": 21.1,
+     "fat": 4,
+     "carbs": 0.21
+    }
+   ]
+  },
+  {
+   "id": "pure-chocolade",
+   "nl": "pure chocolade",
+   "en": "dark chocolate",
+   "aliasesEn": [
+    "plain chocolate"
+   ],
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "current": {
+    "kcal": 579,
+    "protein": 6.1,
+    "fat": 38.3,
+    "carbs": 44.4,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "170272",
+     "name": "Chocolate, dark, 60-69% cacao solids",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 579,
+     "protein": 6.12,
+     "fat": 38.31,
+     "carbs": 52.42
+    },
+    {
+     "code": "170273",
+     "name": "Chocolate, dark, 70-85% cacao solids",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 598,
+     "protein": 7.79,
+     "fat": 42.63,
+     "carbs": 45.9
+    },
+    {
+     "code": "170271",
+     "name": "Chocolate, dark, 45- 59% cacao solids",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 546,
+     "protein": 4.88,
+     "fat": 31.28,
+     "carbs": 61.17
+    },
+    {
+     "code": "174991",
+     "name": "Doughnuts, cake-type, plain, chocolate-coated or frosted",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 452,
+     "protein": 4.93,
+     "fat": 25.25,
+     "carbs": 51.33
+    },
+    {
+     "code": "168885",
+     "name": "Rye flour, dark",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 325,
+     "protein": 15.91,
+     "fat": 2.22,
+     "carbs": 68.63
+    },
+    {
+     "code": "168836",
+     "name": "Syrups, corn, dark",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 286,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 77.59
+    },
+    {
+     "code": "168809",
+     "name": "Ice creams, chocolate",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 216,
+     "protein": 3.8,
+     "fat": 11,
+     "carbs": 28.2
+    },
+    {
+     "code": "168104",
+     "name": "Frozen yogurts, chocolate",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 131,
+     "protein": 3,
+     "fat": 3.6,
+     "carbs": 21.6
+    }
+   ]
+  },
+  {
+   "id": "raclettekaas",
+   "nl": "raclettekaas",
+   "en": "raclette cheese",
+   "aliasesEn": [
+    "raclette"
+   ],
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "current": {
+    "kcal": 340,
+    "protein": 24,
+    "fat": 27,
+    "carbs": 0.5,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "172175",
+     "name": "Cheese, blue",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 353,
+     "protein": 21.4,
+     "fat": 28.74,
+     "carbs": 2.34
+    },
+    {
+     "code": "172177",
+     "name": "Cheese, brie",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 334,
+     "protein": 20.75,
+     "fat": 27.68,
+     "carbs": 0.45
+    },
+    {
+     "code": "173419",
+     "name": "Cheese, edam",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 357,
+     "protein": 24.99,
+     "fat": 28.57,
+     "carbs": 1.43
+    },
+    {
+     "code": "173420",
+     "name": "Cheese, feta",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 265,
+     "protein": 14.21,
+     "fat": 21.49,
+     "carbs": 3.88
+    },
+    {
+     "code": "167944",
+     "name": "Bread, cheese",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 408,
+     "protein": 10.42,
+     "fat": 20.83,
+     "carbs": 44.83
+    },
+    {
+     "code": "171241",
+     "name": "Cheese, gouda",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 356,
+     "protein": 24.94,
+     "fat": 27.44,
+     "carbs": 2.22
+    },
+    {
+     "code": "171251",
+     "name": "Cheese, swiss",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 393,
+     "protein": 26.96,
+     "fat": 30.99,
+     "carbs": 1.44
+    },
+    {
+     "code": "172176",
+     "name": "Cheese, brick",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 371,
+     "protein": 23.24,
+     "fat": 29.68,
+     "carbs": 2.79
+    }
+   ]
+  },
+  {
+   "id": "radler",
+   "nl": "radler",
+   "en": "shandy",
+   "aliasesEn": [
+    "radler",
+    "lemon shandy"
+   ],
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "current": {
+    "kcal": 42,
+    "protein": 0.2,
+    "fat": 0,
+    "carbs": 8,
+    "source": "estimate"
+   },
+   "candidates": []
+  },
+  {
+   "id": "ragout",
+   "nl": "ragout",
+   "en": "chicken ragout",
+   "aliasesEn": [
+    "creamy chicken ragout",
+    "vol-au-vent filling"
+   ],
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "current": {
+    "kcal": 89,
+    "protein": 6,
+    "fat": 5,
+    "carbs": 5,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171110",
+     "name": "Chicken, canned, no broth",
+     "category": "Poultry Products",
+     "state": "canned",
+     "kcal": 185,
+     "protein": 25.3,
+     "fat": 8.1,
+     "carbs": 0.9
+    },
+    {
+     "code": "171099",
+     "name": "Chicken, canned, meat only, with broth",
+     "category": "Poultry Products",
+     "state": "canned",
+     "kcal": 165,
+     "protein": 21.77,
+     "fat": 7.95,
+     "carbs": 0
+    },
+    {
+     "code": "172942",
+     "name": "Sausage, Vienna, canned, chicken, beef, pork",
+     "category": "Sausages and Luncheon Meats",
+     "state": "canned",
+     "kcal": 230,
+     "protein": 10.5,
+     "fat": 19.4,
+     "carbs": 2.6
+    },
+    {
+     "code": "171145",
+     "name": "Soup, chicken, canned, chunky, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 71,
+     "protein": 5.06,
+     "fat": 2.64,
+     "carbs": 6.88
+    },
+    {
+     "code": "171566",
+     "name": "Gravy, chicken, canned or bottled, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "canned",
+     "kcal": 48,
+     "protein": 0.71,
+     "fat": 2.62,
+     "carbs": 5.29
+    },
+    {
+     "code": "173564",
+     "name": "Fat, chicken",
+     "category": "Fats and Oils",
+     "state": "other",
+     "kcal": 900,
+     "protein": 0,
+     "fat": 99.8,
+     "carbs": 0
+    },
+    {
+     "code": "169886",
+     "name": "Chicken, meatless",
+     "category": "Legumes and Legume Products",
+     "state": "other",
+     "kcal": 224,
+     "protein": 23.64,
+     "fat": 12.73,
+     "carbs": 3.64
+    },
+    {
+     "code": "171116",
+     "name": "Chicken, ground, raw",
+     "category": "Poultry Products",
+     "state": "raw",
+     "kcal": 143,
+     "protein": 17.44,
+     "fat": 8.1,
+     "carbs": 0.04
+    }
+   ]
+  },
+  {
+   "id": "ramen-noedels",
+   "nl": "ramen noedels",
+   "en": "ramen noodles",
+   "aliasesEn": [
+    "ramen"
+   ],
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "current": {
+    "kcal": 360,
+    "protein": 11,
+    "fat": 2,
+    "carbs": 74,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171177",
+     "name": "Soup, ramen noodle, any flavor, dry",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 440,
+     "protein": 10.17,
+     "fat": 17.59,
+     "carbs": 60.26
+    },
+    {
+     "code": "171614",
+     "name": "Soup, ramen noodle, beef flavor, dry",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 441,
+     "protein": 10.06,
+     "fat": 17.73,
+     "carbs": 60.34
+    },
+    {
+     "code": "171615",
+     "name": "Soup, ramen noodle, chicken flavor, dry",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 439,
+     "protein": 10.22,
+     "fat": 17.52,
+     "carbs": 60.23
+    },
+    {
+     "code": "171822",
+     "name": "Soup, ramen noodle, dry, any flavor, reduced fat, reduced sodium",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "dried",
+     "kcal": 350,
+     "protein": 10.89,
+     "fat": 2.5,
+     "carbs": 70.95
+    },
+    {
+     "code": "168905",
+     "name": "Noodles, chinese, chow mein",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 471,
+     "protein": 10.88,
+     "fat": 21.24,
+     "carbs": 63.64
+    },
+    {
+     "code": "169735",
+     "name": "Noodles, flat, crunchy, Chinese restaurant",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 521,
+     "protein": 10.33,
+     "fat": 31.72,
+     "carbs": 51.9
+    },
+    {
+     "code": "174258",
+     "name": "Noodles, chinese, cellophane or long rice (mung beans), dehydrated",
+     "category": "Legumes and Legume Products",
+     "state": "other",
+     "kcal": 351,
+     "protein": 0.16,
+     "fat": 0.06,
+     "carbs": 86.09
+    },
+    {
+     "code": "169731",
+     "name": "Noodles, egg, dry, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "dried",
+     "kcal": 384,
+     "protein": 14.16,
+     "fat": 4.44,
+     "carbs": 71.27
+    }
+   ]
+  },
+  {
+   "id": "rammenas",
+   "nl": "rammenas",
+   "en": "mooli",
+   "aliasesEn": [
+    "daikon",
+    "white radish"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "current": {
+    "kcal": 14,
+    "protein": 1.1,
+    "fat": 0.1,
+    "carbs": 1.2,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "rauwkost",
+   "nl": "rauwkost",
+   "en": "raw vegetable salad",
+   "aliasesEn": [
+    "raw veg salad"
+   ],
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "current": {
+    "kcal": 34,
+    "protein": 1,
+    "fat": 0.2,
+    "carbs": 7,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "170071",
+     "name": "Yam, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 118,
+     "protein": 1.53,
+     "fat": 0.17,
+     "carbs": 27.88
+    },
+    {
+     "code": "168421",
+     "name": "Kale, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 35,
+     "protein": 2.92,
+     "fat": 1.49,
+     "carbs": 4.42
+    },
+    {
+     "code": "169260",
+     "name": "Okra, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 33,
+     "protein": 1.93,
+     "fat": 0.19,
+     "carbs": 7.45
+    },
+    {
+     "code": "169308",
+     "name": "Taro, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 112,
+     "protein": 1.5,
+     "fat": 0.2,
+     "carbs": 26.46
+    },
+    {
+     "code": "170076",
+     "name": "Dock, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 22,
+     "protein": 2,
+     "fat": 0.7,
+     "carbs": 3.2
+    },
+    {
+     "code": "173021",
+     "name": "Figs, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 74,
+     "protein": 0.75,
+     "fat": 0.3,
+     "carbs": 19.18
+    },
+    {
+     "code": "167783",
+     "name": "Rowal, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 111,
+     "protein": 2.3,
+     "fat": 2,
+     "carbs": 23.9
+    },
+    {
+     "code": "168155",
+     "name": "Limes, raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 30,
+     "protein": 0.7,
+     "fat": 0.2,
+     "carbs": 10.54
+    }
+   ]
+  },
+  {
+   "id": "rawit",
+   "nl": "rawit",
+   "en": "bird's eye chilli",
+   "aliasesEn": [
+    "Thai chilli",
+    "Thai chillies",
+    "bird's eye chili"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "current": {
+    "kcal": 40,
+    "protein": 1.9,
+    "fat": 0.4,
+    "carbs": 7.3,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "169437",
+     "name": "Beef, rib, eye, small end (ribs 10-12), separable lean only, trimmed to 0\" fat, choice, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 161,
+     "protein": 20.13,
+     "fat": 8.3,
+     "carbs": 0
+    },
+    {
+     "code": "168612",
+     "name": "Beef, rib, eye, small end (ribs 10-12), separable lean and fat, trimmed to 0\" fat, choice, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 274,
+     "protein": 17.51,
+     "fat": 22.07,
+     "carbs": 0
+    },
+    {
+     "code": "174722",
+     "name": "Beef, New Zealand, imported, eye round, separable lean only, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 116,
+     "protein": 20.15,
+     "fat": 3.35,
+     "carbs": 1.35
+    },
+    {
+     "code": "174744",
+     "name": "Beef, New Zealand, imported, eye round, separable lean and fat, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 129,
+     "protein": 19.88,
+     "fat": 4.92,
+     "carbs": 1.32
+    },
+    {
+     "code": "171819",
+     "name": "Beef, round, eye of round, roast, separable lean only, trimmed to 1/8\" fat, choice, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 128,
+     "protein": 22.88,
+     "fat": 3.38,
+     "carbs": 0
+    },
+    {
+     "code": "173120",
+     "name": "Beef, round, eye of round, roast, separable lean only, trimmed to 1/8\" fat, select, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 119,
+     "protein": 22.31,
+     "fat": 2.62,
+     "carbs": 0
+    },
+    {
+     "code": "168621",
+     "name": "Beef, rib eye, small end (ribs 10-12), separable lean only, trimmed to 0\" fat, select, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 149,
+     "protein": 21.17,
+     "fat": 6.57,
+     "carbs": 0
+    },
+    {
+     "code": "168701",
+     "name": "Beef, round, eye of round, roast, separable lean and fat, trimmed to 1/8\" fat, choice, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 173,
+     "protein": 21.68,
+     "fat": 8.91,
+     "carbs": 0
+    }
+   ]
+  },
+  {
+   "id": "relish",
+   "nl": "relish",
+   "en": "relish",
+   "aliasesEn": [
+    "pickle relish",
+    "gherkin relish",
+    "burger relish"
+   ],
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "current": {
+    "kcal": 130,
+    "protein": 0.4,
+    "fat": 0.5,
+    "carbs": 34,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "168561",
+     "name": "Pickle relish, sweet",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 130,
+     "protein": 0.37,
+     "fat": 0.47,
+     "carbs": 35.06
+    },
+    {
+     "code": "168560",
+     "name": "Pickle relish, hot dog",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 91,
+     "protein": 1.5,
+     "fat": 0.46,
+     "carbs": 23.35
+    },
+    {
+     "code": "169386",
+     "name": "Pickle relish, hamburger",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 129,
+     "protein": 0.63,
+     "fat": 0.54,
+     "carbs": 34.48
+    }
+   ]
+  },
+  {
+   "id": "reuzel",
+   "nl": "reuzel",
+   "en": "lard",
+   "aliasesEn": [
+    "pork lard",
+    "dripping"
+   ],
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "current": {
+    "kcal": 900,
+    "protein": 0,
+    "fat": 100,
+    "carbs": 0,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171401",
+     "name": "Lard",
+     "category": "Fats and Oils",
+     "state": "other",
+     "kcal": 902,
+     "protein": 0,
+     "fat": 100,
+     "carbs": 0
+    }
+   ]
+  },
+  {
+   "id": "ribeye",
+   "nl": "ribeye",
+   "en": "rib-eye steak",
+   "aliasesEn": [
+    "ribeye",
+    "rib eye steak",
+    "ribeye steak"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "current": {
+    "kcal": 208,
+    "protein": 20.1,
+    "fat": 14.1,
+    "carbs": 0,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "173380",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0\" fat, choice, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 162,
+     "protein": 21.44,
+     "fat": 8.5,
+     "carbs": 0
+    },
+    {
+     "code": "173382",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0\" fat, select, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 142,
+     "protein": 22.46,
+     "fat": 5.78,
+     "carbs": 0
+    },
+    {
+     "code": "173403",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean and fat, trimmed to 0\" fat, choice, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 241,
+     "protein": 18.69,
+     "fat": 18.43,
+     "carbs": 0.2
+    },
+    {
+     "code": "173404",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean and fat, trimmed to 0\" fat, select, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 208,
+     "protein": 20.12,
+     "fat": 14.14,
+     "carbs": 0
+    },
+    {
+     "code": "172143",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0\" fat, all grades, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 154,
+     "protein": 21.85,
+     "fat": 7.41,
+     "carbs": 0
+    },
+    {
+     "code": "173402",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean and fat, trimmed to 0\" fat, all grades, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 228,
+     "protein": 19.26,
+     "fat": 16.71,
+     "carbs": 0.12
+    },
+    {
+     "code": "170838",
+     "name": "Beef, rib eye steak/roast, bone-in, lip-on, separable lean only, trimmed to 1/8\" fat, select, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 155,
+     "protein": 21.65,
+     "fat": 7.64,
+     "carbs": 0
+    },
+    {
+     "code": "171235",
+     "name": "Beef, rib eye steak/roast, bone-in, lip-on, separable lean only, trimmed to 1/8\" fat, choice, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 173,
+     "protein": 20.93,
+     "fat": 9.97,
+     "carbs": 0
+    }
+   ]
+  },
+  {
+   "id": "riblap",
+   "nl": "riblap",
+   "en": "braising rib steak",
+   "aliasesEn": [
+    "thin rib steak",
+    "thin rib steaks"
+   ],
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "current": {
+    "kcal": 147,
+    "protein": 21,
+    "fat": 7,
+    "carbs": 0,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "173380",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0\" fat, choice, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 162,
+     "protein": 21.44,
+     "fat": 8.5,
+     "carbs": 0
+    },
+    {
+     "code": "173382",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0\" fat, select, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 142,
+     "protein": 22.46,
+     "fat": 5.78,
+     "carbs": 0
+    },
+    {
+     "code": "173403",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean and fat, trimmed to 0\" fat, choice, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 241,
+     "protein": 18.69,
+     "fat": 18.43,
+     "carbs": 0.2
+    },
+    {
+     "code": "173404",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean and fat, trimmed to 0\" fat, select, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 208,
+     "protein": 20.12,
+     "fat": 14.14,
+     "carbs": 0
+    },
+    {
+     "code": "172143",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean only, trimmed to 0\" fat, all grades, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 154,
+     "protein": 21.85,
+     "fat": 7.41,
+     "carbs": 0
+    },
+    {
+     "code": "173402",
+     "name": "Beef, rib eye steak, boneless, lip off, separable lean and fat, trimmed to 0\" fat, all grades, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 228,
+     "protein": 19.26,
+     "fat": 16.71,
+     "carbs": 0.12
+    },
+    {
+     "code": "171735",
+     "name": "Beef, Australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean only, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 160,
+     "protein": 21.47,
+     "fat": 8.2,
+     "carbs": 0
+    },
+    {
+     "code": "173975",
+     "name": "Beef, Australian, imported, grass-fed, rib, ribeye steak/roast lip-on, boneless, separable lean and fat, raw",
+     "category": "Beef Products",
+     "state": "raw",
+     "kcal": 217,
+     "protein": 19.8,
+     "fat": 15.21,
+     "carbs": 0.11
+    }
+   ]
+  },
+  {
+   "id": "ricotta",
+   "nl": "ricotta",
+   "en": "ricotta",
+   "aliasesEn": [],
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "current": {
+    "kcal": 143,
+    "protein": 8,
+    "fat": 11,
+    "carbs": 3,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "170851",
+     "name": "Cheese, ricotta, whole milk",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 150,
+     "protein": 7.54,
+     "fat": 10.18,
+     "carbs": 7.27
+    },
+    {
+     "code": "171248",
+     "name": "Cheese, ricotta, part skim milk",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 138,
+     "protein": 11.39,
+     "fat": 7.91,
+     "carbs": 5.14
+    }
+   ]
+  },
+  {
+   "id": "rietsuiker",
+   "nl": "rietsuiker",
+   "en": "cane sugar",
+   "aliasesEn": [
+    "demerara sugar",
+    "raw cane sugar",
+    "golden granulated sugar"
+   ],
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "current": {
+    "kcal": 387,
+    "protein": 0,
+    "fat": 0,
+    "carbs": 100,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "169655",
+     "name": "Sugars, granulated",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 387,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 99.98
+    },
+    {
+     "code": "168175",
+     "name": "Sugar-apples, (sweetsop), raw",
+     "category": "Fruits and Fruit Juices",
+     "state": "raw",
+     "kcal": 94,
+     "protein": 2.06,
+     "fat": 0.29,
+     "carbs": 23.64
+    },
+    {
+     "code": "167743",
+     "name": "Syrup, Cane",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 269,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 73.14
+    },
+    {
+     "code": "168833",
+     "name": "Sugars, brown",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 380,
+     "protein": 0.12,
+     "fat": 0,
+     "carbs": 98.09
+    },
+    {
+     "code": "169658",
+     "name": "Sugars, maple",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 354,
+     "protein": 0.1,
+     "fat": 0.2,
+     "carbs": 90.9
+    },
+    {
+     "code": "169656",
+     "name": "Sugars, powdered",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 389,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 99.77
+    },
+    {
+     "code": "170674",
+     "name": "Sugar, turbinado",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 399,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 99.8
+    },
+    {
+     "code": "174972",
+     "name": "Cookies, sugar, refrigerated dough",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 436,
+     "protein": 4,
+     "fat": 19.48,
+     "carbs": 61.22
+    }
+   ]
+  },
+  {
+   "id": "rigatoni",
+   "nl": "rigatoni",
+   "en": "rigatoni",
+   "aliasesEn": [
+    "rigatoni pasta"
+   ],
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "current": {
+    "kcal": 371,
+    "protein": 13,
+    "fat": 1.5,
+    "carbs": 71.5,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "rijstazijn",
+   "nl": "rijstazijn",
+   "en": "rice vinegar",
+   "aliasesEn": [
+    "rice wine vinegar",
+    "sushi vinegar"
+   ],
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "current": {
+    "kcal": 18,
+    "protein": 0,
+    "fat": 0,
+    "carbs": 4,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "168879",
+     "name": "Rice, white, medium-grain, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168931",
+     "name": "Rice, white, short-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 358,
+     "protein": 6.5,
+     "fat": 0.52,
+     "carbs": 79.15
+    },
+    {
+     "code": "169760",
+     "name": "Rice, white, medium-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168877",
+     "name": "Rice, white, long-grain, regular, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "169756",
+     "name": "Rice, white, long-grain, regular, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "172240",
+     "name": "Vinegar, red wine",
+     "category": "Spices and Herbs",
+     "state": "other",
+     "kcal": 19,
+     "protein": 0.04,
+     "fat": 0,
+     "carbs": 0.27
+    },
+    {
+     "code": "169726",
+     "name": "Wild rice, raw",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 357,
+     "protein": 14.73,
+     "fat": 1.08,
+     "carbs": 74.9
+    },
+    {
+     "code": "173469",
+     "name": "Vinegar, cider",
+     "category": "Spices and Herbs",
+     "state": "other",
+     "kcal": 21,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 0.93
+    }
+   ]
+  },
+  {
+   "id": "rijstepap",
+   "nl": "rijstepap",
+   "en": "rice pudding",
+   "aliasesEn": [],
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "current": {
+    "kcal": 98,
+    "protein": 3,
+    "fat": 2,
+    "carbs": 17,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "168879",
+     "name": "Rice, white, medium-grain, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168931",
+     "name": "Rice, white, short-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 358,
+     "protein": 6.5,
+     "fat": 0.52,
+     "carbs": 79.15
+    },
+    {
+     "code": "169760",
+     "name": "Rice, white, medium-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168877",
+     "name": "Rice, white, long-grain, regular, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "169756",
+     "name": "Rice, white, long-grain, regular, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "168782",
+     "name": "Puddings, rice, ready-to-eat",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 108,
+     "protein": 3.23,
+     "fat": 2.15,
+     "carbs": 18.39
+    },
+    {
+     "code": "169726",
+     "name": "Wild rice, raw",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 357,
+     "protein": 14.73,
+     "fat": 1.08,
+     "carbs": 74.9
+    },
+    {
+     "code": "168783",
+     "name": "Puddings, rice, dry mix",
+     "category": "Sweets",
+     "state": "dried",
+     "kcal": 376,
+     "protein": 2.7,
+     "fat": 0.1,
+     "carbs": 91.2
+    }
+   ]
+  },
+  {
+   "id": "rijstmelk",
+   "nl": "rijstmelk",
+   "en": "rice milk",
+   "aliasesEn": [
+    "rice drink"
+   ],
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "current": {
+    "kcal": 49,
+    "protein": 0.1,
+    "fat": 1,
+    "carbs": 10,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171942",
+     "name": "Beverages, rice milk, unsweetened",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 47,
+     "protein": 0.28,
+     "fat": 0.97,
+     "carbs": 9.17
+    },
+    {
+     "code": "168879",
+     "name": "Rice, white, medium-grain, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168931",
+     "name": "Rice, white, short-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 358,
+     "protein": 6.5,
+     "fat": 0.52,
+     "carbs": 79.15
+    },
+    {
+     "code": "169760",
+     "name": "Rice, white, medium-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168877",
+     "name": "Rice, white, long-grain, regular, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "169756",
+     "name": "Rice, white, long-grain, regular, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "169726",
+     "name": "Wild rice, raw",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 357,
+     "protein": 14.73,
+     "fat": 1.08,
+     "carbs": 74.9
+    },
+    {
+     "code": "174980",
+     "name": "Crackers, milk",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 446,
+     "protein": 7.6,
+     "fat": 13.77,
+     "carbs": 71.73
+    }
+   ]
+  },
+  {
+   "id": "rijstpapiervel",
+   "nl": "rijstpapiervel",
+   "en": "rice paper wrapper",
+   "aliasesEn": [
+    "rice paper",
+    "rice paper sheet",
+    "rice paper sheets"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "wereld",
+   "current": {
+    "kcal": 330,
+    "protein": 1,
+    "fat": 0.2,
+    "carbs": 81,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "168879",
+     "name": "Rice, white, medium-grain, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168931",
+     "name": "Rice, white, short-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 358,
+     "protein": 6.5,
+     "fat": 0.52,
+     "carbs": 79.15
+    },
+    {
+     "code": "169760",
+     "name": "Rice, white, medium-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168877",
+     "name": "Rice, white, long-grain, regular, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "169756",
+     "name": "Rice, white, long-grain, regular, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "169726",
+     "name": "Wild rice, raw",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 357,
+     "protein": 14.73,
+     "fat": 1.08,
+     "carbs": 74.9
+    },
+    {
+     "code": "168782",
+     "name": "Puddings, rice, ready-to-eat",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 108,
+     "protein": 3.23,
+     "fat": 2.15,
+     "carbs": 18.39
+    },
+    {
+     "code": "169712",
+     "name": "Rice, white, steamed, Chinese restaurant",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 151,
+     "protein": 3.2,
+     "fat": 0.27,
+     "carbs": 33.88
+    }
+   ]
+  },
+  {
+   "id": "rijststroop",
+   "nl": "rijststroop",
+   "en": "rice syrup",
+   "aliasesEn": [
+    "brown rice syrup",
+    "rice malt syrup"
+   ],
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "current": {
+    "kcal": 302,
+    "protein": 0.1,
+    "fat": 0,
+    "carbs": 76,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "168855",
+     "name": "Snacks, rice cakes, brown rice, rye",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 386,
+     "protein": 8.1,
+     "fat": 3.8,
+     "carbs": 79.9
+    },
+    {
+     "code": "169679",
+     "name": "Snacks, rice cakes, brown rice, corn",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 385,
+     "protein": 8.4,
+     "fat": 3.2,
+     "carbs": 81.2
+    },
+    {
+     "code": "167967",
+     "name": "Snacks, rice cakes, brown rice, buckwheat",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 380,
+     "protein": 9,
+     "fat": 3.5,
+     "carbs": 80.1
+    },
+    {
+     "code": "169680",
+     "name": "Snacks, rice cakes, brown rice, multigrain",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 387,
+     "protein": 8.5,
+     "fat": 3.5,
+     "carbs": 80.1
+    },
+    {
+     "code": "167557",
+     "name": "Snacks, rice cakes, brown rice, sesame seed",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 392,
+     "protein": 7.6,
+     "fat": 3.8,
+     "carbs": 81.5
+    },
+    {
+     "code": "170250",
+     "name": "Snacks, rice cakes, brown rice, plain, unsalted",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 387,
+     "protein": 8.2,
+     "fat": 2.8,
+     "carbs": 81.5
+    },
+    {
+     "code": "170251",
+     "name": "Snacks, rice cakes, brown rice, buckwheat, unsalted",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 380,
+     "protein": 9,
+     "fat": 3.5,
+     "carbs": 80.1
+    },
+    {
+     "code": "170252",
+     "name": "Snacks, rice cakes, brown rice, multigrain, unsalted",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 387,
+     "protein": 8.5,
+     "fat": 3.5,
+     "carbs": 80.1
+    }
+   ]
+  },
+  {
+   "id": "risottorijst",
+   "nl": "risottorijst",
+   "en": "risotto rice",
+   "aliasesEn": [
+    "arborio rice",
+    "arborio",
+    "carnaroli rice"
+   ],
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "current": {
+    "kcal": 360,
+    "protein": 6.6,
+    "fat": 0.6,
+    "carbs": 79.3,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "168879",
+     "name": "Rice, white, medium-grain, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168931",
+     "name": "Rice, white, short-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 358,
+     "protein": 6.5,
+     "fat": 0.52,
+     "carbs": 79.15
+    },
+    {
+     "code": "169760",
+     "name": "Rice, white, medium-grain, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 360,
+     "protein": 6.61,
+     "fat": 0.58,
+     "carbs": 79.34
+    },
+    {
+     "code": "168877",
+     "name": "Rice, white, long-grain, regular, raw, enriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "169756",
+     "name": "Rice, white, long-grain, regular, raw, unenriched",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 365,
+     "protein": 7.13,
+     "fat": 0.66,
+     "carbs": 79.95
+    },
+    {
+     "code": "169726",
+     "name": "Wild rice, raw",
+     "category": "Cereal Grains and Pasta",
+     "state": "raw",
+     "kcal": 357,
+     "protein": 14.73,
+     "fat": 1.08,
+     "carbs": 74.9
+    },
+    {
+     "code": "168782",
+     "name": "Puddings, rice, ready-to-eat",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 108,
+     "protein": 3.23,
+     "fat": 2.15,
+     "carbs": 18.39
+    },
+    {
+     "code": "169712",
+     "name": "Rice, white, steamed, Chinese restaurant",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 151,
+     "protein": 3.2,
+     "fat": 0.27,
+     "carbs": 33.88
+    }
+   ]
+  },
+  {
+   "id": "rode-bes",
+   "nl": "rode bes",
+   "en": "redcurrant",
+   "aliasesEn": [
+    "red currant",
+    "red currants"
+   ],
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "current": {
+    "kcal": 56,
+    "protein": 1.4,
+    "fat": 0.2,
+    "carbs": 9.5,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "rode-kool-met-appel",
+   "nl": "rode kool met appel",
+   "en": "red cabbage with apple",
+   "aliasesEn": [
+    "braised red cabbage",
+    "spiced red cabbage with apple"
+   ],
+   "defaultUnit": "pot",
+   "aisle": "blik-pot",
+   "current": {
+    "kcal": 70,
+    "protein": 1,
+    "fat": 2,
+    "carbs": 12,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "168822",
+     "name": "Pie fillings, apple, canned",
+     "category": "Sweets",
+     "state": "canned",
+     "kcal": 100,
+     "protein": 0.1,
+     "fat": 0.1,
+     "carbs": 26.1
+    },
+    {
+     "code": "170052",
+     "name": "Tomatoes, red, ripe, canned, stewed",
+     "category": "Vegetables and Vegetable Products",
+     "state": "canned",
+     "kcal": 26,
+     "protein": 0.91,
+     "fat": 0.19,
+     "carbs": 6.19
+    },
+    {
+     "code": "168546",
+     "name": "Peppers, sweet, red, canned, solids and liquids",
+     "category": "Vegetables and Vegetable Products",
+     "state": "canned",
+     "kcal": 18,
+     "protein": 0.8,
+     "fat": 0.3,
+     "carbs": 3.9
+    },
+    {
+     "code": "170053",
+     "name": "Tomatoes, red, ripe, canned, with green chilies",
+     "category": "Vegetables and Vegetable Products",
+     "state": "canned",
+     "kcal": 15,
+     "protein": 0.69,
+     "fat": 0.08,
+     "carbs": 3.62
+    },
+    {
+     "code": "173930",
+     "name": "Apples, canned, sweetened, sliced, drained, heated",
+     "category": "Fruits and Fruit Juices",
+     "state": "canned",
+     "kcal": 67,
+     "protein": 0.18,
+     "fat": 0.43,
+     "carbs": 16.84
+    },
+    {
+     "code": "170051",
+     "name": "Tomatoes, red, ripe, canned, packed in tomato juice",
+     "category": "Vegetables and Vegetable Products",
+     "state": "canned",
+     "kcal": 16,
+     "protein": 0.79,
+     "fat": 0.25,
+     "carbs": 3.47
+    },
+    {
+     "code": "172466",
+     "name": "Frijoles rojos volteados (Refried beans, red, canned)",
+     "category": "Legumes and Legume Products",
+     "state": "canned",
+     "kcal": 144,
+     "protein": 5,
+     "fat": 6.93,
+     "carbs": 15.47
+    },
+    {
+     "code": "174285",
+     "name": "Beans, kidney, red, mature seeds, canned, drained solids",
+     "category": "Legumes and Legume Products",
+     "state": "canned",
+     "kcal": 124,
+     "protein": 7.98,
+     "fat": 1.05,
+     "carbs": 21.49
+    }
+   ]
+  },
+  {
+   "id": "roggemeel",
+   "nl": "roggemeel",
+   "en": "rye flour",
+   "aliasesEn": [],
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "current": {
+    "kcal": 349,
+    "protein": 10.9,
+    "fat": 1.5,
+    "carbs": 63.6,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "168885",
+     "name": "Rye flour, dark",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 325,
+     "protein": 15.91,
+     "fat": 2.22,
+     "carbs": 68.63
+    },
+    {
+     "code": "168887",
+     "name": "Rye flour, light",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 357,
+     "protein": 9.82,
+     "fat": 1.33,
+     "carbs": 76.68
+    },
+    {
+     "code": "168886",
+     "name": "Rye flour, medium",
+     "category": "Cereal Grains and Pasta",
+     "state": "other",
+     "kcal": 349,
+     "protein": 10.88,
+     "fat": 1.52,
+     "carbs": 75.43
+    },
+    {
+     "code": "172684",
+     "name": "Bread, rye",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 259,
+     "protein": 8.5,
+     "fat": 3.3,
+     "carbs": 48.3
+    },
+    {
+     "code": "175029",
+     "name": "Rolls, dinner, rye",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 286,
+     "protein": 10.3,
+     "fat": 3.4,
+     "carbs": 53.1
+    },
+    {
+     "code": "172685",
+     "name": "Bread, rye, toasted",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 284,
+     "protein": 9.4,
+     "fat": 3.6,
+     "carbs": 53.1
+    },
+    {
+     "code": "174273",
+     "name": "Soy flour, full-fat, raw",
+     "category": "Legumes and Legume Products",
+     "state": "raw",
+     "kcal": 434,
+     "protein": 37.81,
+     "fat": 20.65,
+     "carbs": 31.92
+    },
+    {
+     "code": "172739",
+     "name": "Crackers, crispbread, rye",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 366,
+     "protein": 7.9,
+     "fat": 1.3,
+     "carbs": 82.2
+    }
+   ]
+  },
+  {
+   "id": "rolcake",
+   "nl": "rolcake",
+   "en": "Swiss roll",
+   "aliasesEn": [],
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "current": {
+    "kcal": 380,
+    "protein": 5,
+    "fat": 15,
+    "carbs": 55,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "169991",
+     "name": "Chard, swiss, raw",
+     "category": "Vegetables and Vegetable Products",
+     "state": "raw",
+     "kcal": 19,
+     "protein": 1.8,
+     "fat": 0.2,
+     "carbs": 3.74
+    },
+    {
+     "code": "171251",
+     "name": "Cheese, swiss",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 393,
+     "protein": 26.96,
+     "fat": 30.99,
+     "carbs": 1.44
+    },
+    {
+     "code": "172795",
+     "name": "Rolls, french",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 277,
+     "protein": 8.6,
+     "fat": 4.3,
+     "carbs": 50.2
+    },
+    {
+     "code": "175027",
+     "name": "Rolls, dinner, egg",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 307,
+     "protein": 9.5,
+     "fat": 6.4,
+     "carbs": 52
+    },
+    {
+     "code": "175029",
+     "name": "Rolls, dinner, rye",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 286,
+     "protein": 10.3,
+     "fat": 3.4,
+     "carbs": 53.1
+    },
+    {
+     "code": "168126",
+     "name": "Rolls, pumpernickel",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 276,
+     "protein": 10.8,
+     "fat": 2.8,
+     "carbs": 51.87
+    },
+    {
+     "code": "174107",
+     "name": "Rolls, dinner, sweet",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 321,
+     "protein": 10.04,
+     "fat": 7.37,
+     "carbs": 53.58
+    },
+    {
+     "code": "175030",
+     "name": "Rolls, dinner, wheat",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 273,
+     "protein": 8.6,
+     "fat": 6.3,
+     "carbs": 46
+    }
+   ]
+  },
+  {
+   "id": "rolfondant",
+   "nl": "rolfondant",
+   "en": "ready-to-roll icing",
+   "aliasesEn": [
+    "fondant icing",
+    "sugarpaste",
+    "rolled fondant"
+   ],
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "current": {
+    "kcal": 390,
+    "protein": 0,
+    "fat": 2,
+    "carbs": 92,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "171823",
+     "name": "Sauce, duck, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 245,
+     "protein": 0.36,
+     "fat": 0.13,
+     "carbs": 60.66
+    },
+    {
+     "code": "172879",
+     "name": "Sauce, plum, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 184,
+     "protein": 0.89,
+     "fat": 1.04,
+     "carbs": 42.81
+    },
+    {
+     "code": "174531",
+     "name": "Sauce, fish, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 35,
+     "protein": 5.06,
+     "fat": 0.01,
+     "carbs": 3.64
+    },
+    {
+     "code": "168782",
+     "name": "Puddings, rice, ready-to-eat",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 108,
+     "protein": 3.23,
+     "fat": 2.15,
+     "carbs": 18.39
+    },
+    {
+     "code": "174524",
+     "name": "Sauce, salsa, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 29,
+     "protein": 1.52,
+     "fat": 0.17,
+     "carbs": 6.64
+    },
+    {
+     "code": "171191",
+     "name": "Sauce, cheese, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 174,
+     "protein": 6.71,
+     "fat": 13.29,
+     "carbs": 6.83
+    },
+    {
+     "code": "171826",
+     "name": "Sauce, tartar, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 211,
+     "protein": 1,
+     "fat": 16.7,
+     "carbs": 13.3
+    },
+    {
+     "code": "172886",
+     "name": "Sauce, hoisin, ready-to-serve",
+     "category": "Soups, Sauces, and Gravies",
+     "state": "other",
+     "kcal": 220,
+     "protein": 3.31,
+     "fat": 3.39,
+     "carbs": 44.08
+    }
+   ]
+  },
+  {
+   "id": "rolmops",
+   "nl": "rolmops",
+   "en": "rollmop",
+   "aliasesEn": [
+    "rollmop herring",
+    "pickled herring"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "current": {
+    "kcal": 158,
+    "protein": 18,
+    "fat": 9,
+    "carbs": 0,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "romanesco",
+   "nl": "romanesco",
+   "en": "romanesco",
+   "aliasesEn": [
+    "romanesco broccoli",
+    "romanesco cauliflower"
+   ],
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "current": {
+    "kcal": 25,
+    "protein": 1.9,
+    "fat": 0.3,
+    "carbs": 3,
+    "source": "usda"
+   },
+   "candidates": []
+  },
+  {
+   "id": "rood-fruit",
+   "nl": "rood fruit",
+   "en": "mixed berries",
+   "aliasesEn": [
+    "summer fruits",
+    "frozen berries",
+    "frozen mixed berries",
+    "forest fruits"
+   ],
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "current": {
+    "kcal": 40,
+    "protein": 0.8,
+    "fat": 0.3,
+    "carbs": 7.5,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "174803",
+     "name": "Snack, Mixed Berry Bar",
+     "category": "Snacks",
+     "state": "other",
+     "kcal": 383,
+     "protein": 13.16,
+     "fat": 10.53,
+     "carbs": 58.84
+    },
+    {
+     "code": "170471",
+     "name": "Vegetables, mixed, frozen, unprepared",
+     "category": "Vegetables and Vegetable Products",
+     "state": "other",
+     "kcal": 72,
+     "protein": 3.33,
+     "fat": 0.52,
+     "carbs": 13.47
+    },
+    {
+     "code": "174193",
+     "name": "Fish, eel, mixed species, raw",
+     "category": "Finfish and Shellfish Products",
+     "state": "raw",
+     "kcal": 184,
+     "protein": 18.44,
+     "fat": 11.66,
+     "carbs": 0
+    },
+    {
+     "code": "175132",
+     "name": "Fish, roe, mixed species, raw",
+     "category": "Finfish and Shellfish Products",
+     "state": "raw",
+     "kcal": 143,
+     "protein": 22.32,
+     "fat": 6.42,
+     "carbs": 1.5
+    },
+    {
+     "code": "173678",
+     "name": "Fish, perch, mixed species, raw",
+     "category": "Finfish and Shellfish Products",
+     "state": "raw",
+     "kcal": 91,
+     "protein": 19.39,
+     "fat": 0.92,
+     "carbs": 0
+    },
+    {
+     "code": "173697",
+     "name": "Fish, shark, mixed species, raw",
+     "category": "Finfish and Shellfish Products",
+     "state": "raw",
+     "kcal": 130,
+     "protein": 20.98,
+     "fat": 4.51,
+     "carbs": 0
+    },
+    {
+     "code": "175153",
+     "name": "Fish, trout, mixed species, raw",
+     "category": "Finfish and Shellfish Products",
+     "state": "raw",
+     "kcal": 148,
+     "protein": 20.77,
+     "fat": 6.61,
+     "carbs": 0
+    },
+    {
+     "code": "171962",
+     "name": "Fish, grouper, mixed species, raw",
+     "category": "Finfish and Shellfish Products",
+     "state": "raw",
+     "kcal": 92,
+     "protein": 19.38,
+     "fat": 1.02,
+     "carbs": 0
+    }
+   ]
+  },
+  {
+   "id": "rooibosthee",
+   "nl": "rooibosthee",
+   "en": "rooibos tea",
+   "aliasesEn": [
+    "redbush tea",
+    "rooibos"
+   ],
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "current": {
+    "kcal": 0,
+    "protein": 0,
+    "fat": 0,
+    "carbs": 0,
+    "source": "estimate"
+   },
+   "candidates": [
+    {
+     "code": "174120",
+     "name": "Beverages, tea, Oolong, brewed",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 1,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 0.15
+    },
+    {
+     "code": "171946",
+     "name": "Beverages, tea, hibiscus, brewed",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 0,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 0
+    },
+    {
+     "code": "173231",
+     "name": "Beverages, tea, instant, lemon, diet",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 2,
+     "protein": 0.02,
+     "fat": 0,
+     "carbs": 0.44
+    },
+    {
+     "code": "174144",
+     "name": "Beverages, tea, black, ready to drink",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 0,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 0
+    },
+    {
+     "code": "171917",
+     "name": "Beverages, tea, green, brewed, regular",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 1,
+     "protein": 0.22,
+     "fat": 0,
+     "carbs": 0
+    },
+    {
+     "code": "174156",
+     "name": "Beverages, tea, herb, brewed, chamomile",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 1,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 0.2
+    },
+    {
+     "code": "171885",
+     "name": "Beverages, tea, green, ready-to-drink, diet",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 4,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 0.93
+    },
+    {
+     "code": "174129",
+     "name": "Beverages, tea, ready-to-drink, lemon, diet",
+     "category": "Beverages",
+     "state": "other",
+     "kcal": 2,
+     "protein": 0,
+     "fat": 0,
+     "carbs": 0.41
+    }
+   ]
+  },
+  {
+   "id": "rookkaas",
+   "nl": "rookkaas",
+   "en": "smoked cheese",
+   "aliasesEn": [
+    "smoked Dutch cheese"
+   ],
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "current": {
+    "kcal": 356,
+    "protein": 24.9,
+    "fat": 27.4,
+    "carbs": 2.2,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "172175",
+     "name": "Cheese, blue",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 353,
+     "protein": 21.4,
+     "fat": 28.74,
+     "carbs": 2.34
+    },
+    {
+     "code": "172177",
+     "name": "Cheese, brie",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 334,
+     "protein": 20.75,
+     "fat": 27.68,
+     "carbs": 0.45
+    },
+    {
+     "code": "173419",
+     "name": "Cheese, edam",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 357,
+     "protein": 24.99,
+     "fat": 28.57,
+     "carbs": 1.43
+    },
+    {
+     "code": "173420",
+     "name": "Cheese, feta",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 265,
+     "protein": 14.21,
+     "fat": 21.49,
+     "carbs": 3.88
+    },
+    {
+     "code": "167944",
+     "name": "Bread, cheese",
+     "category": "Baked Products",
+     "state": "other",
+     "kcal": 408,
+     "protein": 10.42,
+     "fat": 20.83,
+     "carbs": 44.83
+    },
+    {
+     "code": "171241",
+     "name": "Cheese, gouda",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 356,
+     "protein": 24.94,
+     "fat": 27.44,
+     "carbs": 2.22
+    },
+    {
+     "code": "171251",
+     "name": "Cheese, swiss",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 393,
+     "protein": 26.96,
+     "fat": 30.99,
+     "carbs": 1.44
+    },
+    {
+     "code": "172176",
+     "name": "Cheese, brick",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 371,
+     "protein": 23.24,
+     "fat": 29.68,
+     "carbs": 2.79
+    }
+   ]
+  },
+  {
+   "id": "room",
+   "nl": "room",
+   "en": "cream",
+   "aliasesEn": [
+    "single cream",
+    "double cream",
+    "cooking cream"
+   ],
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "current": {
+    "kcal": 340,
+    "protein": 2.8,
+    "fat": 36.1,
+    "carbs": 2.8,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "173418",
+     "name": "Cheese, cream",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 350,
+     "protein": 6.15,
+     "fat": 34.44,
+     "carbs": 5.52
+    },
+    {
+     "code": "171257",
+     "name": "Cream, sour, cultured",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 198,
+     "protein": 2.44,
+     "fat": 19.35,
+     "carbs": 4.63
+    },
+    {
+     "code": "169079",
+     "name": "Cheese, cream, low fat",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 208,
+     "protein": 7.85,
+     "fat": 16.67,
+     "carbs": 6.73
+    },
+    {
+     "code": "172207",
+     "name": "Cheese, cream, fat free",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 105,
+     "protein": 15.69,
+     "fat": 1,
+     "carbs": 7.66
+    },
+    {
+     "code": "171255",
+     "name": "Cream, fluid, half and half",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 131,
+     "protein": 3.13,
+     "fat": 11.5,
+     "carbs": 4.3
+    },
+    {
+     "code": "170858",
+     "name": "Cream, fluid, light whipping",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 292,
+     "protein": 2.17,
+     "fat": 30.91,
+     "carbs": 2.96
+    },
+    {
+     "code": "170859",
+     "name": "Cream, fluid, heavy whipping",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 340,
+     "protein": 2.84,
+     "fat": 36.08,
+     "carbs": 2.84
+    },
+    {
+     "code": "171308",
+     "name": "Cream, half and half, lowfat",
+     "category": "Dairy and Egg Products",
+     "state": "other",
+     "kcal": 72,
+     "protein": 3.33,
+     "fat": 5,
+     "carbs": 3.33
+    }
+   ]
+  },
+  {
+   "id": "roomijs",
+   "nl": "roomijs",
+   "en": "ice cream",
+   "aliasesEn": [
+    "vanilla ice cream",
+    "dairy ice cream"
+   ],
+   "defaultUnit": "bakje",
+   "aisle": "diepvries",
+   "current": {
+    "kcal": 207,
+    "protein": 3.5,
+    "fat": 11,
+    "carbs": 22.9,
+    "source": "usda"
+   },
+   "candidates": [
+    {
+     "code": "167683",
+     "name": "Frozen novelties, ice cream type, vanilla ice cream, light, no sugar added, chocolate coated",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 221,
+     "protein": 6.4,
+     "fat": 10.1,
+     "carbs": 26.11
+    },
+    {
+     "code": "167575",
+     "name": "Ice creams, vanilla",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 207,
+     "protein": 3.5,
+     "fat": 11,
+     "carbs": 23.6
+    },
+    {
+     "code": "167573",
+     "name": "Ice creams, vanilla, rich",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 249,
+     "protein": 3.5,
+     "fat": 16.2,
+     "carbs": 22.29
+    },
+    {
+     "code": "167572",
+     "name": "Ice creams, vanilla, light",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 180,
+     "protein": 4.78,
+     "fat": 4.83,
+     "carbs": 29.46
+    },
+    {
+     "code": "170659",
+     "name": "Ice creams, vanilla, fat free",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 138,
+     "protein": 4.48,
+     "fat": 0,
+     "carbs": 30.06
+    },
+    {
+     "code": "167576",
+     "name": "Ice creams, vanilla, light, soft-serve",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 126,
+     "protein": 4.9,
+     "fat": 2.6,
+     "carbs": 21.8
+    },
+    {
+     "code": "167981",
+     "name": "Ice creams, french vanilla, soft-serve",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 222,
+     "protein": 4.1,
+     "fat": 13,
+     "carbs": 22.2
+    },
+    {
+     "code": "169631",
+     "name": "Ice creams, vanilla, light, no sugar added",
+     "category": "Sweets",
+     "state": "other",
+     "kcal": 169,
+     "protein": 3.97,
+     "fat": 7.45,
+     "carbs": 21.42
+    }
+   ]
+  }
+ ]
+}

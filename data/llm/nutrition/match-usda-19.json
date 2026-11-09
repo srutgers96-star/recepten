@@ -1,0 +1,14 @@
+{
+ "batch": "19",
+ "source": "usda",
+ "items": [
+  {"id": "zuurkool", "choice": "169279", "confidence": "sure", "why": "Sauerkraut in blik, kcal komt overeen met de schatting."},
+  {"id": "zuurstok", "choice": null, "confidence": "none", "why": "geen kandidaat is hetzelfde product"},
+  {"id": "zuurtje", "choice": null, "confidence": "none", "why": "geen kandidaat is hetzelfde product"},
+  {"id": "zwaardvis", "choice": "173703", "confidence": "sure", "why": "Swordfish raw, zelfde vis en toestand."},
+  {"id": "zwarte-bes", "choice": null, "confidence": "none", "why": "geen kandidaat is hetzelfde product"},
+  {"id": "zwarte-boon", "choice": "175188", "confidence": "sure", "why": "Black turtle beans canned, kcal 91 gelijk aan de schatting."},
+  {"id": "zwarte-ogenboon", "choice": null, "confidence": "none", "why": "geen kandidaat is hetzelfde product"},
+  {"id": "zwarte-peper", "choice": null, "confidence": "none", "why": "Kandidaten zijn paprika/pepers (groenten), geen gemalen kruid; kcal 25 tegen 240."}
+ ]
+}

@@ -1,0 +1,626 @@
+{
+  "batch": "15",
+  "source": "usda",
+  "items": [
+    {"id":"sherryazijn","nl":"sherryazijn","en":"sherry vinegar","aliasesEn":[],"defaultUnit":"el","aisle":"sauzen-olie-azijn","current":{"kcal":19,"protein":0,"fat":0,"carbs":0.3,"source":"usda"}, "candidates": [
+      {"code":"173469","name":"Vinegar, cider","category":"Spices and Herbs","state":"other","kcal":21,"protein":0,"fat":0,"carbs":0.93},
+      {"code":"172240","name":"Vinegar, red wine","category":"Spices and Herbs","state":"other","kcal":19,"protein":0.04,"fat":0,"carbs":0.27},
+      {"code":"172241","name":"Vinegar, balsamic","category":"Spices and Herbs","state":"other","kcal":88,"protein":0.49,"fat":0,"carbs":17.03},
+      {"code":"172237","name":"Vinegar, distilled","category":"Spices and Herbs","state":"other","kcal":18,"protein":0,"fat":0,"carbs":0.04},
+      {"code":"171417","name":"Salad dressing, home recipe, vinegar and oil","category":"Fats and Oils","state":"other","kcal":449,"protein":0,"fat":50.1,"carbs":2.5}
+    ] },
+    {"id":"shiitake","nl":"shiitake","en":"shiitake mushroom","aliasesEn":["shiitake"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":34,"protein":2.2,"fat":0.5,"carbs":4.3,"source":"usda"}, "candidates": [
+      {"code":"169242","name":"Mushrooms, shiitake, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":34,"protein":2.24,"fat":0.49,"carbs":6.79},
+      {"code":"168423","name":"Mushrooms, morel, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":3.12,"fat":0.57,"carbs":5.1},
+      {"code":"169251","name":"Mushrooms, white, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":22,"protein":3.09,"fat":0.34,"carbs":3.26},
+      {"code":"169382","name":"Mushrooms, enoki, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":37,"protein":2.66,"fat":0.29,"carbs":7.81},
+      {"code":"168580","name":"Mushrooms, oyster, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":33,"protein":3.31,"fat":0.41,"carbs":6.09},
+      {"code":"169403","name":"Mushrooms, maitake, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":1.94,"fat":0.19,"carbs":6.97},
+      {"code":"169255","name":"Mushrooms, portabella, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":22,"protein":2.11,"fat":0.35,"carbs":3.87},
+      {"code":"168422","name":"Mushrooms, Chanterelle, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":32,"protein":1.49,"fat":0.53,"carbs":6.86}
+    ] },
+    {"id":"shimeji","nl":"shimeji","en":"shimeji mushroom","aliasesEn":["shimeji","beech mushrooms","brown beech mushrooms"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":33,"protein":3.3,"fat":0.4,"carbs":3.8,"source":"usda"}, "candidates": [
+      {"code":"168434","name":"Mushrooms, brown, italian, or crimini, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":22,"protein":2.5,"fat":0.1,"carbs":4.3},
+      {"code":"168557","name":"Mushrooms, brown, italian, or crimini, exposed to ultraviolet light, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":22,"protein":2.5,"fat":0.1,"carbs":4.3},
+      {"code":"168423","name":"Mushrooms, morel, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":3.12,"fat":0.57,"carbs":5.1},
+      {"code":"169251","name":"Mushrooms, white, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":22,"protein":3.09,"fat":0.34,"carbs":3.26},
+      {"code":"169382","name":"Mushrooms, enoki, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":37,"protein":2.66,"fat":0.29,"carbs":7.81},
+      {"code":"168580","name":"Mushrooms, oyster, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":33,"protein":3.31,"fat":0.41,"carbs":6.09},
+      {"code":"169403","name":"Mushrooms, maitake, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":1.94,"fat":0.19,"carbs":6.97},
+      {"code":"169242","name":"Mushrooms, shiitake, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":34,"protein":2.24,"fat":0.49,"carbs":6.79}
+    ] },
+    {"id":"shoarmakruiden","nl":"shoarmakruiden","en":"shawarma seasoning","aliasesEn":["shawarma spice mix","shawarma spices"],"defaultUnit":"el","aisle":"kruiden-specerijen","current":{"kcal":270,"protein":10,"fat":8,"carbs":40,"source":"estimate"}, "candidates": [
+      {"code":"172243","name":"Seasoning mix, dry, taco, original","category":"Spices and Herbs","state":"dried","kcal":322,"protein":4.5,"fat":0,"carbs":58},
+      {"code":"173476","name":"Seasoning mix, dry, chili, original","category":"Spices and Herbs","state":"dried","kcal":335,"protein":10.82,"fat":7.3,"carbs":56.56},
+      {"code":"172242","name":"Seasoning mix, dry, sazon, coriander & annatto","category":"Spices and Herbs","state":"dried","kcal":0,"protein":0,"fat":0,"carbs":0},
+      {"code":"171331","name":"Spices, poultry seasoning","category":"Spices and Herbs","state":"other","kcal":307,"protein":9.59,"fat":7.53,"carbs":65.59}
+    ] },
+    {"id":"shoarmavlees","nl":"shoarmavlees","en":"shawarma meat","aliasesEn":["shawarma","shawarma strips"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":220,"protein":17,"fat":16,"carbs":2,"source":"estimate"}, "candidates": [
+      {"code":"172968","name":"Frankfurter, meat","category":"Sausages and Luncheon Meats","state":"other","kcal":290,"protein":10.26,"fat":25.76,"carbs":4.17},
+      {"code":"175301","name":"Game meat, elk, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":111,"protein":22.95,"fat":1.45,"carbs":0},
+      {"code":"173845","name":"Game meat, bear, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":161,"protein":20.1,"fat":8.3,"carbs":0},
+      {"code":"173855","name":"Game meat, deer, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":120,"protein":22.96,"fat":2.42,"carbs":0},
+      {"code":"175303","name":"Game meat, goat, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":109,"protein":20.6,"fat":2.31,"carbs":0},
+      {"code":"172419","name":"Quail, meat only, raw","category":"Poultry Products","state":"raw","kcal":134,"protein":21.76,"fat":4.53,"carbs":0},
+      {"code":"174344","name":"Game meat, moose, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":102,"protein":22.24,"fat":0.74,"carbs":0},
+      {"code":"175086","name":"Game meat, horse, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":133,"protein":21.39,"fat":4.6,"carbs":0}
+    ] },
+    {"id":"sichuanpeper","nl":"Sichuanpeper","en":"Sichuan pepper","aliasesEn":["Szechuan pepper","Sichuan peppercorns"],"defaultUnit":"tl","aisle":"kruiden-specerijen","current":{"kcal":300,"protein":10,"fat":8,"carbs":47,"source":"estimate"}, "candidates": [
+      {"code":"169394","name":"Pepper, banana, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":27,"protein":1.66,"fat":0.45,"carbs":5.35},
+      {"code":"169395","name":"Peppers, serrano, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":32,"protein":1.74,"fat":0.44,"carbs":6.7},
+      {"code":"168576","name":"Peppers, jalapeno, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":29,"protein":0.91,"fat":0.37,"carbs":6.5},
+      {"code":"168578","name":"Peppers, hungarian, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":29,"protein":0.8,"fat":0.41,"carbs":6.7},
+      {"code":"170108","name":"Peppers, sweet, red, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":26,"protein":0.99,"fat":0.3,"carbs":6.03},
+      {"code":"170427","name":"Peppers, sweet, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":20,"protein":0.86,"fat":0.17,"carbs":4.64},
+      {"code":"169383","name":"Peppers, sweet, yellow, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":27,"protein":1,"fat":0.21,"carbs":6.32},
+      {"code":"170106","name":"Peppers, hot chili, red, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":40,"protein":1.87,"fat":0.44,"carbs":8.81}
+    ] },
+    {"id":"sinaasappel","nl":"sinaasappel","en":"orange","aliasesEn":["navel orange","navel oranges","juicing oranges"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":47,"protein":0.9,"fat":0.1,"carbs":9.4,"source":"usda"}, "candidates": [
+      {"code":"169918","name":"Oranges, raw, Florida","category":"Fruits and Fruit Juices","state":"raw","kcal":46,"protein":0.7,"fat":0.21,"carbs":11.54},
+      {"code":"170502","name":"Tomatoes, orange, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":16,"protein":1.16,"fat":0.19,"carbs":3.18},
+      {"code":"169919","name":"Oranges, raw, with peel","category":"Fruits and Fruit Juices","state":"raw","kcal":63,"protein":1.3,"fat":0.3,"carbs":15.5},
+      {"code":"175133","name":"Fish, roughy, orange, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":76,"protein":16.41,"fat":0.7,"carbs":0},
+      {"code":"169916","name":"Oranges, raw, California, valencias","category":"Fruits and Fruit Juices","state":"raw","kcal":49,"protein":1.04,"fat":0.3,"carbs":11.89},
+      {"code":"169097","name":"Oranges, raw, all commercial varieties","category":"Fruits and Fruit Juices","state":"raw","kcal":47,"protein":0.94,"fat":0.12,"carbs":11.75},
+      {"code":"167577","name":"Sherbet, orange","category":"Sweets","state":"other","kcal":144,"protein":1.1,"fat":2,"carbs":30.4},
+      {"code":"169103","name":"Orange peel, raw","category":"Fruits and Fruit Juices","state":"raw","kcal":97,"protein":1.5,"fat":0.2,"carbs":25}
+    ] },
+    {"id":"sinaasappellikeur","nl":"sinaasappellikeur","en":"orange liqueur","aliasesEn":["Cointreau","triple sec","Grand Marnier","curaçao","blue curaçao"],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":270,"protein":0,"fat":0,"carbs":25,"source":"estimate"}, "candidates": [
+      {"code":"169918","name":"Oranges, raw, Florida","category":"Fruits and Fruit Juices","state":"raw","kcal":46,"protein":0.7,"fat":0.21,"carbs":11.54},
+      {"code":"170502","name":"Tomatoes, orange, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":16,"protein":1.16,"fat":0.19,"carbs":3.18},
+      {"code":"169919","name":"Oranges, raw, with peel","category":"Fruits and Fruit Juices","state":"raw","kcal":63,"protein":1.3,"fat":0.3,"carbs":15.5},
+      {"code":"175133","name":"Fish, roughy, orange, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":76,"protein":16.41,"fat":0.7,"carbs":0},
+      {"code":"169916","name":"Oranges, raw, California, valencias","category":"Fruits and Fruit Juices","state":"raw","kcal":49,"protein":1.04,"fat":0.3,"carbs":11.89},
+      {"code":"169097","name":"Oranges, raw, all commercial varieties","category":"Fruits and Fruit Juices","state":"raw","kcal":47,"protein":0.94,"fat":0.12,"carbs":11.75},
+      {"code":"167577","name":"Sherbet, orange","category":"Sweets","state":"other","kcal":144,"protein":1.1,"fat":2,"carbs":30.4},
+      {"code":"169103","name":"Orange peel, raw","category":"Fruits and Fruit Juices","state":"raw","kcal":97,"protein":1.5,"fat":0.2,"carbs":25}
+    ] },
+    {"id":"sinaasappelsap","nl":"sinaasappelsap","en":"orange juice","aliasesEn":[],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":45,"protein":0.7,"fat":0.2,"carbs":10.2,"source":"usda"}, "candidates": [
+      {"code":"173178","name":"Beverages, Orange juice, light, No pulp","category":"Beverages","state":"other","kcal":21,"protein":0.21,"fat":0,"carbs":5.42},
+      {"code":"169100","name":"Orange juice, chilled, includes from concentrate","category":"Fruits and Fruit Juices","state":"other","kcal":49,"protein":0.68,"fat":0.12,"carbs":11.54},
+      {"code":"169923","name":"Orange juice, frozen concentrate, unsweetened, undiluted","category":"Fruits and Fruit Juices","state":"other","kcal":148,"protein":2.4,"fat":0.25,"carbs":35.19},
+      {"code":"169920","name":"Orange juice, chilled, includes from concentrate, with added calcium","category":"Fruits and Fruit Juices","state":"other","kcal":47,"protein":0.68,"fat":0.12,"carbs":11.27},
+      {"code":"169102","name":"Orange juice, frozen concentrate, unsweetened, diluted with 3 volume water","category":"Fruits and Fruit Juices","state":"other","kcal":37,"protein":0.6,"fat":0.06,"carbs":8.8},
+      {"code":"169922","name":"Orange juice, frozen concentrate, unsweetened, undiluted, with added calcium","category":"Fruits and Fruit Juices","state":"other","kcal":147,"protein":2.4,"fat":0.25,"carbs":33.86},
+      {"code":"169101","name":"Orange juice, chilled, includes from concentrate, with added calcium and vitamin D","category":"Fruits and Fruit Juices","state":"other","kcal":47,"protein":0.68,"fat":0.12,"carbs":11.27},
+      {"code":"167794","name":"Orange juice, chilled, includes from concentrate, with added calcium and vitamins A, D, E","category":"Fruits and Fruit Juices","state":"other","kcal":49,"protein":0.68,"fat":0.12,"carbs":11.54}
+    ] },
+    {"id":"sinaasappelschil","nl":"sinaasappelschil","en":"orange zest","aliasesEn":["orange peel","orange rind","grated orange zest"],"defaultUnit":"tl","aisle":"groente-fruit","current":{"kcal":97,"protein":1.5,"fat":0.2,"carbs":14.4,"source":"usda"}, "candidates": [
+      {"code":"169103","name":"Orange peel, raw","category":"Fruits and Fruit Juices","state":"raw","kcal":97,"protein":1.5,"fat":0.2,"carbs":25},
+      {"code":"169919","name":"Oranges, raw, with peel","category":"Fruits and Fruit Juices","state":"raw","kcal":63,"protein":1.3,"fat":0.3,"carbs":15.5},
+      {"code":"169918","name":"Oranges, raw, Florida","category":"Fruits and Fruit Juices","state":"raw","kcal":46,"protein":0.7,"fat":0.21,"carbs":11.54},
+      {"code":"170502","name":"Tomatoes, orange, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":16,"protein":1.16,"fat":0.19,"carbs":3.18},
+      {"code":"175133","name":"Fish, roughy, orange, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":76,"protein":16.41,"fat":0.7,"carbs":0},
+      {"code":"169916","name":"Oranges, raw, California, valencias","category":"Fruits and Fruit Juices","state":"raw","kcal":49,"protein":1.04,"fat":0.3,"carbs":11.89},
+      {"code":"169097","name":"Oranges, raw, all commercial varieties","category":"Fruits and Fruit Juices","state":"raw","kcal":47,"protein":0.94,"fat":0.12,"carbs":11.75},
+      {"code":"167577","name":"Sherbet, orange","category":"Sweets","state":"other","kcal":144,"protein":1.1,"fat":2,"carbs":30.4}
+    ] },
+    {"id":"sinas","nl":"sinas","en":"fizzy orange","aliasesEn":["orangeade","orange soda","Fanta"],"defaultUnit":"fles","aisle":"dranken","current":{"kcal":42,"protein":0,"fat":0,"carbs":10.5,"source":"estimate"}, "candidates": [
+      {"code":"169918","name":"Oranges, raw, Florida","category":"Fruits and Fruit Juices","state":"raw","kcal":46,"protein":0.7,"fat":0.21,"carbs":11.54},
+      {"code":"170502","name":"Tomatoes, orange, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":16,"protein":1.16,"fat":0.19,"carbs":3.18},
+      {"code":"169919","name":"Oranges, raw, with peel","category":"Fruits and Fruit Juices","state":"raw","kcal":63,"protein":1.3,"fat":0.3,"carbs":15.5},
+      {"code":"175133","name":"Fish, roughy, orange, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":76,"protein":16.41,"fat":0.7,"carbs":0},
+      {"code":"169916","name":"Oranges, raw, California, valencias","category":"Fruits and Fruit Juices","state":"raw","kcal":49,"protein":1.04,"fat":0.3,"carbs":11.89},
+      {"code":"169097","name":"Oranges, raw, all commercial varieties","category":"Fruits and Fruit Juices","state":"raw","kcal":47,"protein":0.94,"fat":0.12,"carbs":11.75},
+      {"code":"167577","name":"Sherbet, orange","category":"Sweets","state":"other","kcal":144,"protein":1.1,"fat":2,"carbs":30.4},
+      {"code":"169103","name":"Orange peel, raw","category":"Fruits and Fruit Juices","state":"raw","kcal":97,"protein":1.5,"fat":0.2,"carbs":25}
+    ] },
+    {"id":"sint-jakobsschelp","nl":"sint-jakobsschelp","en":"scallop","aliasesEn":["king scallop","king scallops"],"defaultUnit":"stuk","aisle":"vlees-vis","current":{"kcal":69,"protein":12.1,"fat":0.5,"carbs":3.2,"source":"usda"}, "candidates": [
+      {"code":"169289","name":"Squash, summer, scallop, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":18,"protein":1.2,"fat":0.2,"carbs":3.84},
+      {"code":"174220","name":"Mollusks, scallop, mixed species, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":69,"protein":12.06,"fat":0.49,"carbs":3.18},
+      {"code":"174222","name":"Mollusks, scallop, mixed species, imitation, made from surimi","category":"Finfish and Shellfish Products","state":"other","kcal":99,"protein":12.77,"fat":0.41,"carbs":10.62},
+      {"code":"167742","name":"Mollusks, scallop, (bay and sea), cooked, steamed","category":"Finfish and Shellfish Products","state":"cooked","kcal":111,"protein":20.54,"fat":0.84,"carbs":5.41},
+      {"code":"170533","name":"Squash, summer, scallop, cooked, boiled, drained, with salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":16,"protein":1.03,"fat":0.17,"carbs":3.3},
+      {"code":"174221","name":"Mollusks, scallop, mixed species, cooked, breaded and fried","category":"Finfish and Shellfish Products","state":"cooked","kcal":216,"protein":18.07,"fat":10.94,"carbs":10.13},
+      {"code":"169290","name":"Squash, summer, scallop, cooked, boiled, drained, without salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":16,"protein":1.03,"fat":0.17,"carbs":3.3}
+    ] },
+    {"id":"sjalot","nl":"sjalot","en":"shallot","aliasesEn":[],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":72,"protein":2.5,"fat":0.1,"carbs":13.6,"source":"usda"}, "candidates": [
+      {"code":"170499","name":"Shallots, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":72,"protein":2.5,"fat":0.1,"carbs":16.8},
+      {"code":"170082","name":"Shallots, freeze-dried","category":"Vegetables and Vegetable Products","state":"dried","kcal":348,"protein":12.3,"fat":0.5,"carbs":80.7}
+    ] },
+    {"id":"skyr","nl":"skyr","en":"skyr","aliasesEn":["Icelandic yoghurt"],"defaultUnit":"g","aisle":"zuivel-eieren","current":{"kcal":62,"protein":11,"fat":0.2,"carbs":4,"source":"estimate"}, "candidates": [] },
+    {"id":"sla","nl":"sla","en":"lettuce","aliasesEn":["salad leaves","lettuce leaves"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":13,"protein":1.4,"fat":0.2,"carbs":1.1,"source":"usda"}, "candidates": [
+      {"code":"168431","name":"Lettuce, red leaf, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":13,"protein":1.33,"fat":0.22,"carbs":2.26},
+      {"code":"169249","name":"Lettuce, green leaf, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":15,"protein":1.36,"fat":0.15,"carbs":2.87},
+      {"code":"169247","name":"Lettuce, cos or romaine, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":17,"protein":1.23,"fat":0.3,"carbs":3.29},
+      {"code":"169248","name":"Lettuce, iceberg (includes crisphead types), raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":14,"protein":0.9,"fat":0.14,"carbs":2.97},
+      {"code":"168429","name":"Lettuce, butterhead (includes boston and bibb types), raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":13,"protein":1.35,"fat":0.22,"carbs":2.23}
+    ] },
+    {"id":"slagroom","nl":"slagroom","en":"double cream","aliasesEn":["heavy cream","whipping cream","heavy whipping cream"],"defaultUnit":"ml","aisle":"zuivel-eieren","current":{"kcal":340,"protein":2.8,"fat":36.1,"carbs":2.8,"source":"usda"}, "candidates": [
+      {"code":"170859","name":"Cream, fluid, heavy whipping","category":"Dairy and Egg Products","state":"other","kcal":340,"protein":2.84,"fat":36.08,"carbs":2.84},
+      {"code":"170858","name":"Cream, fluid, light whipping","category":"Dairy and Egg Products","state":"other","kcal":292,"protein":2.17,"fat":30.91,"carbs":2.96},
+      {"code":"173418","name":"Cheese, cream","category":"Dairy and Egg Products","state":"other","kcal":350,"protein":6.15,"fat":34.44,"carbs":5.52},
+      {"code":"171257","name":"Cream, sour, cultured","category":"Dairy and Egg Products","state":"other","kcal":198,"protein":2.44,"fat":19.35,"carbs":4.63},
+      {"code":"169079","name":"Cheese, cream, low fat","category":"Dairy and Egg Products","state":"other","kcal":208,"protein":7.85,"fat":16.67,"carbs":6.73},
+      {"code":"172207","name":"Cheese, cream, fat free","category":"Dairy and Egg Products","state":"other","kcal":105,"protein":15.69,"fat":1,"carbs":7.66},
+      {"code":"171255","name":"Cream, fluid, half and half","category":"Dairy and Egg Products","state":"other","kcal":131,"protein":3.13,"fat":11.5,"carbs":4.3},
+      {"code":"171308","name":"Cream, half and half, lowfat","category":"Dairy and Egg Products","state":"other","kcal":72,"protein":3.33,"fat":5,"carbs":3.33}
+    ] },
+    {"id":"slagroomversteviger","nl":"slagroomversteviger","en":"whipped cream stabiliser","aliasesEn":["cream stiffener","whip it"],"defaultUnit":"zakje","aisle":"bakken","current":{"kcal":344,"protein":0,"fat":0.5,"carbs":85,"source":"estimate"}, "candidates": [
+      {"code":"170860","name":"Cream, whipped, cream topping, pressurized","category":"Dairy and Egg Products","state":"other","kcal":257,"protein":3.2,"fat":22.22,"carbs":12.49},
+      {"code":"169899","name":"Whipped cream substitute, dietetic, made from powdered mix","category":"Dairy and Egg Products","state":"other","kcal":100,"protein":0.9,"fat":6,"carbs":10.6},
+      {"code":"173418","name":"Cheese, cream","category":"Dairy and Egg Products","state":"other","kcal":350,"protein":6.15,"fat":34.44,"carbs":5.52},
+      {"code":"171257","name":"Cream, sour, cultured","category":"Dairy and Egg Products","state":"other","kcal":198,"protein":2.44,"fat":19.35,"carbs":4.63},
+      {"code":"169079","name":"Cheese, cream, low fat","category":"Dairy and Egg Products","state":"other","kcal":208,"protein":7.85,"fat":16.67,"carbs":6.73},
+      {"code":"172207","name":"Cheese, cream, fat free","category":"Dairy and Egg Products","state":"other","kcal":105,"protein":15.69,"fat":1,"carbs":7.66},
+      {"code":"173411","name":"Butter, whipped, with salt","category":"Dairy and Egg Products","state":"other","kcal":731,"protein":0.49,"fat":78.3,"carbs":0},
+      {"code":"171255","name":"Cream, fluid, half and half","category":"Dairy and Egg Products","state":"other","kcal":131,"protein":3.13,"fat":11.5,"carbs":4.3}
+    ] },
+    {"id":"slamelange","nl":"slamelange","en":"mixed salad leaves","aliasesEn":["salad mix","mixed leaf salad","mixed leaves","salad leaves"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":16,"protein":1.5,"fat":0.2,"carbs":2,"source":"estimate"}, "candidates": [
+      {"code":"169329","name":"Broccoli, leaves, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":28,"protein":2.98,"fat":0.35,"carbs":5.06},
+      {"code":"169399","name":"Fireweed, leaves, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":103,"protein":4.71,"fat":2.75,"carbs":19.22},
+      {"code":"168487","name":"Taro leaves, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":42,"protein":4.98,"fat":0.74,"carbs":6.7},
+      {"code":"168575","name":"Grape leaves, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":93,"protein":5.6,"fat":2.12,"carbs":17.31},
+      {"code":"169272","name":"Pumpkin leaves, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":19,"protein":3.15,"fat":0.4,"carbs":2.33},
+      {"code":"168385","name":"Amaranth leaves, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":23,"protein":2.46,"fat":0.33,"carbs":4.02},
+      {"code":"168416","name":"Drumstick leaves, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":64,"protein":9.4,"fat":1.4,"carbs":8.28},
+      {"code":"168491","name":"Chrysanthemum leaves, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":24,"protein":3.36,"fat":0.56,"carbs":3.01}
+    ] },
+    {"id":"slasaus","nl":"slasaus","en":"salad cream","aliasesEn":[],"defaultUnit":"el","aisle":"sauzen-olie-azijn","current":{"kcal":268,"protein":0.8,"fat":25,"carbs":10,"source":"estimate"}, "candidates": [
+      {"code":"173418","name":"Cheese, cream","category":"Dairy and Egg Products","state":"other","kcal":350,"protein":6.15,"fat":34.44,"carbs":5.52},
+      {"code":"171257","name":"Cream, sour, cultured","category":"Dairy and Egg Products","state":"other","kcal":198,"protein":2.44,"fat":19.35,"carbs":4.63},
+      {"code":"169079","name":"Cheese, cream, low fat","category":"Dairy and Egg Products","state":"other","kcal":208,"protein":7.85,"fat":16.67,"carbs":6.73},
+      {"code":"172207","name":"Cheese, cream, fat free","category":"Dairy and Egg Products","state":"other","kcal":105,"protein":15.69,"fat":1,"carbs":7.66},
+      {"code":"171255","name":"Cream, fluid, half and half","category":"Dairy and Egg Products","state":"other","kcal":131,"protein":3.13,"fat":11.5,"carbs":4.3},
+      {"code":"170858","name":"Cream, fluid, light whipping","category":"Dairy and Egg Products","state":"other","kcal":292,"protein":2.17,"fat":30.91,"carbs":2.96},
+      {"code":"170859","name":"Cream, fluid, heavy whipping","category":"Dairy and Egg Products","state":"other","kcal":340,"protein":2.84,"fat":36.08,"carbs":2.84},
+      {"code":"171308","name":"Cream, half and half, lowfat","category":"Dairy and Egg Products","state":"other","kcal":72,"protein":3.33,"fat":5,"carbs":3.33}
+    ] },
+    {"id":"slavink","nl":"slavink","en":"slavink","aliasesEn":["bacon-wrapped mince roll","bacon-wrapped mince rolls"],"defaultUnit":"stuk","aisle":"vlees-vis","current":{"kcal":266,"protein":14,"fat":22,"carbs":3,"source":"estimate"}, "candidates": [] },
+    {"id":"smaakwater","nl":"smaakwater","en":"flavoured water","aliasesEn":["flavored water","fruit-flavoured water"],"defaultUnit":"fles","aisle":"dranken","current":{"kcal":1,"protein":0,"fat":0,"carbs":0.1,"source":"usda"}, "candidates": [
+      {"code":"171940","name":"Water, with corn syrup and/or sugar and low calorie sweetener, fruit flavored","category":"Beverages","state":"other","kcal":18,"protein":0,"fat":0,"carbs":4.5},
+      {"code":"175299","name":"Game meat, buffalo, water, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":99,"protein":20.39,"fat":1.37,"carbs":0},
+      {"code":"171926","name":"Water, non-carbonated, bottles, natural fruit flavors, sweetened with low calorie sweetener","category":"Beverages","state":"other","kcal":1,"protein":0,"fat":0,"carbs":0.13},
+      {"code":"169301","name":"Water convolvulus,raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":19,"protein":2.6,"fat":0.2,"carbs":3.13},
+      {"code":"174158","name":"Water, bottled, generic","category":"Beverages","state":"other","kcal":0,"protein":0,"fat":0,"carbs":0},
+      {"code":"175096","name":"Beverages, water, tap, well","category":"Beverages","state":"other","kcal":0,"protein":0,"fat":0,"carbs":0},
+      {"code":"173647","name":"Beverages, water, tap, drinking","category":"Beverages","state":"other","kcal":0,"protein":0,"fat":0,"carbs":0},
+      {"code":"175103","name":"Beverages, water, tap, municipal","category":"Beverages","state":"other","kcal":0,"protein":0,"fat":0,"carbs":0}
+    ] },
+    {"id":"smeerkaas","nl":"smeerkaas","en":"cheese spread","aliasesEn":["spreadable cheese"],"defaultUnit":"g","aisle":"kaas","current":{"kcal":295,"protein":7.1,"fat":28.6,"carbs":3.5,"source":"usda"}, "candidates": [
+      {"code":"169081","name":"Cheese spread, cream cheese base","category":"Dairy and Egg Products","state":"other","kcal":295,"protein":7.1,"fat":28.6,"carbs":3.5},
+      {"code":"171254","name":"Cheese spread, pasteurized process, American","category":"Dairy and Egg Products","state":"other","kcal":290,"protein":16.41,"fat":21.23,"carbs":8.73},
+      {"code":"170896","name":"Cheese spread, American or Cheddar cheese base, reduced fat","category":"Dairy and Egg Products","state":"other","kcal":176,"protein":13.41,"fat":8.88,"carbs":10.71},
+      {"code":"171629","name":"Ham and cheese spread","category":"Sausages and Luncheon Meats","state":"other","kcal":245,"protein":16.18,"fat":18.53,"carbs":2.28},
+      {"code":"172175","name":"Cheese, blue","category":"Dairy and Egg Products","state":"other","kcal":353,"protein":21.4,"fat":28.74,"carbs":2.34},
+      {"code":"172177","name":"Cheese, brie","category":"Dairy and Egg Products","state":"other","kcal":334,"protein":20.75,"fat":27.68,"carbs":0.45},
+      {"code":"173419","name":"Cheese, edam","category":"Dairy and Egg Products","state":"other","kcal":357,"protein":24.99,"fat":28.57,"carbs":1.43},
+      {"code":"173420","name":"Cheese, feta","category":"Dairy and Egg Products","state":"other","kcal":265,"protein":14.21,"fat":21.49,"carbs":3.88}
+    ] },
+    {"id":"smeerleverworst","nl":"smeerleverworst","en":"liver sausage","aliasesEn":["liverwurst","smooth liver sausage"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":326,"protein":14.1,"fat":28.5,"carbs":2.2,"source":"usda"}, "candidates": [
+      {"code":"173870","name":"Liver sausage, liverwurst, pork","category":"Sausages and Luncheon Meats","state":"other","kcal":326,"protein":14.1,"fat":28.5,"carbs":2.2},
+      {"code":"172415","name":"Goose, liver, raw","category":"Poultry Products","state":"raw","kcal":133,"protein":16.37,"fat":4.28,"carbs":6.32},
+      {"code":"174617","name":"Sausage, turkey, fresh, raw","category":"Sausages and Luncheon Meats","state":"raw","kcal":155,"protein":18.79,"fat":8.08,"carbs":0.47},
+      {"code":"174467","name":"Duck, domesticated, liver, raw","category":"Poultry Products","state":"raw","kcal":136,"protein":18.74,"fat":4.64,"carbs":3.53},
+      {"code":"171486","name":"Turkey, all classes, liver, raw","category":"Poultry Products","state":"raw","kcal":128,"protein":18.26,"fat":5.5,"carbs":0},
+      {"code":"171060","name":"Chicken, liver, all classes, raw","category":"Poultry Products","state":"raw","kcal":119,"protein":16.92,"fat":4.83,"carbs":0.73},
+      {"code":"171631","name":"Sausage, Italian, pork, mild, raw","category":"Sausages and Luncheon Meats","state":"raw","kcal":290,"protein":13.9,"fat":24.26,"carbs":2.97},
+      {"code":"172615","name":"Lamb, New Zealand, imported, liver, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":136,"protein":20.7,"fat":4.92,"carbs":2.22}
+    ] },
+    {"id":"smeltkaas","nl":"smeltkaas","en":"processed cheese","aliasesEn":["processed cheese slices","burger cheese slices"],"defaultUnit":"plak","aisle":"kaas","current":{"kcal":274,"protein":16,"fat":22,"carbs":3,"source":"estimate"}, "candidates": [
+      {"code":"172175","name":"Cheese, blue","category":"Dairy and Egg Products","state":"other","kcal":353,"protein":21.4,"fat":28.74,"carbs":2.34},
+      {"code":"172177","name":"Cheese, brie","category":"Dairy and Egg Products","state":"other","kcal":334,"protein":20.75,"fat":27.68,"carbs":0.45},
+      {"code":"173419","name":"Cheese, edam","category":"Dairy and Egg Products","state":"other","kcal":357,"protein":24.99,"fat":28.57,"carbs":1.43},
+      {"code":"173420","name":"Cheese, feta","category":"Dairy and Egg Products","state":"other","kcal":265,"protein":14.21,"fat":21.49,"carbs":3.88},
+      {"code":"167944","name":"Bread, cheese","category":"Baked Products","state":"other","kcal":408,"protein":10.42,"fat":20.83,"carbs":44.83},
+      {"code":"171241","name":"Cheese, gouda","category":"Dairy and Egg Products","state":"other","kcal":356,"protein":24.94,"fat":27.44,"carbs":2.22},
+      {"code":"171251","name":"Cheese, swiss","category":"Dairy and Egg Products","state":"other","kcal":393,"protein":26.96,"fat":30.99,"carbs":1.44},
+      {"code":"172176","name":"Cheese, brick","category":"Dairy and Egg Products","state":"other","kcal":371,"protein":23.24,"fat":29.68,"carbs":2.79}
+    ] },
+    {"id":"smoothie","nl":"smoothie","en":"smoothie","aliasesEn":[],"defaultUnit":"fles","aisle":"groente-fruit","current":{"kcal":53,"protein":0.7,"fat":0.2,"carbs":12,"source":"estimate"}, "candidates": [] },
+    {"id":"smoothiemix","nl":"smoothiemix","en":"smoothie mix","aliasesEn":["frozen smoothie mix","frozen fruit for smoothies"],"defaultUnit":"g","aisle":"diepvries","current":{"kcal":52,"protein":0.8,"fat":0.3,"carbs":11.5,"source":"estimate"}, "candidates": [
+      {"code":"171165","name":"Soup, onion, dry, mix","category":"Soups, Sauces, and Gravies","state":"dried","kcal":293,"protein":7.48,"fat":0.34,"carbs":65.07},
+      {"code":"171172","name":"Gravy, onion, dry, mix","category":"Soups, Sauces, and Gravies","state":"dried","kcal":322,"protein":9,"fat":3,"carbs":67.64},
+      {"code":"171571","name":"Soup, chicken noodle, dry, mix","category":"Soups, Sauces, and Gravies","state":"dried","kcal":377,"protein":15.42,"fat":6.51,"carbs":62.32},
+      {"code":"174568","name":"Soup, onion, dry, mix, prepared with water","category":"Soups, Sauces, and Gravies","state":"dried","kcal":12,"protein":0.32,"fat":0.01,"carbs":2.77},
+      {"code":"174569","name":"Soup, tomato, dry, mix, prepared with water","category":"Soups, Sauces, and Gravies","state":"dried","kcal":38,"protein":0.93,"fat":0.61,"carbs":7.17},
+      {"code":"172925","name":"Soup, chicken noodle, dry, mix, prepared with water","category":"Soups, Sauces, and Gravies","state":"dried","kcal":23,"protein":0.84,"fat":0.55,"carbs":3.67},
+      {"code":"174567","name":"Soup, cream of chicken, dry, mix, prepared with water","category":"Soups, Sauces, and Gravies","state":"dried","kcal":41,"protein":0.68,"fat":2.04,"carbs":5.11},
+      {"code":"167739","name":"Beverages, Cocktail mix, non-alcoholic, concentrated, frozen","category":"Beverages","state":"other","kcal":287,"protein":0.08,"fat":0.01,"carbs":71.6}
+    ] },
+    {"id":"snackworstje","nl":"snackworstje","en":"salami stick","aliasesEn":["snack salami","mini salami sticks"],"defaultUnit":"stuk","aisle":"vlees-vis","current":{"kcal":425,"protein":21.7,"fat":37,"carbs":1.2,"source":"usda"}, "candidates": [
+      {"code":"168854","name":"Snacks, potato sticks","category":"Snacks","state":"other","kcal":522,"protein":6.7,"fat":34.4,"carbs":53.3},
+      {"code":"168850","name":"Snacks, beef sticks, smoked","category":"Snacks","state":"other","kcal":550,"protein":21.5,"fat":49.6,"carbs":5.4},
+      {"code":"168856","name":"Snacks, sesame sticks, wheat-based, salted","category":"Snacks","state":"other","kcal":541,"protein":10.9,"fat":36.7,"carbs":46.5},
+      {"code":"170653","name":"Snacks, sesame sticks, wheat-based, unsalted","category":"Snacks","state":"other","kcal":541,"protein":10.9,"fat":36.7,"carbs":46.5},
+      {"code":"174929","name":"Bread, sticks, plain","category":"Baked Products","state":"other","kcal":412,"protein":12,"fat":9.5,"carbs":68.4},
+      {"code":"174603","name":"Salami, Italian, pork","category":"Sausages and Luncheon Meats","state":"other","kcal":425,"protein":21.7,"fat":37,"carbs":1.2},
+      {"code":"173581","name":"Butter, light, stick, with salt","category":"Fats and Oils","state":"other","kcal":499,"protein":3.3,"fat":55.1,"carbs":0},
+      {"code":"174598","name":"Salami, pork, beef, less sodium","category":"Sausages and Luncheon Meats","state":"other","kcal":396,"protein":15.01,"fat":30.5,"carbs":15.38}
+    ] },
+    {"id":"snelkookrijst","nl":"snelkookrijst","en":"easy-cook rice","aliasesEn":["quick-cook rice","boil-in-the-bag rice"],"defaultUnit":"g","aisle":"droog","current":{"kcal":365,"protein":7.1,"fat":0.7,"carbs":78.7,"source":"usda"}, "candidates": [
+      {"code":"168879","name":"Rice, white, medium-grain, raw, enriched","category":"Cereal Grains and Pasta","state":"raw","kcal":360,"protein":6.61,"fat":0.58,"carbs":79.34},
+      {"code":"168931","name":"Rice, white, short-grain, raw, unenriched","category":"Cereal Grains and Pasta","state":"raw","kcal":358,"protein":6.5,"fat":0.52,"carbs":79.15},
+      {"code":"169760","name":"Rice, white, medium-grain, raw, unenriched","category":"Cereal Grains and Pasta","state":"raw","kcal":360,"protein":6.61,"fat":0.58,"carbs":79.34},
+      {"code":"168877","name":"Rice, white, long-grain, regular, raw, enriched","category":"Cereal Grains and Pasta","state":"raw","kcal":365,"protein":7.13,"fat":0.66,"carbs":79.95},
+      {"code":"169756","name":"Rice, white, long-grain, regular, raw, unenriched","category":"Cereal Grains and Pasta","state":"raw","kcal":365,"protein":7.13,"fat":0.66,"carbs":79.95},
+      {"code":"169726","name":"Wild rice, raw","category":"Cereal Grains and Pasta","state":"raw","kcal":357,"protein":14.73,"fat":1.08,"carbs":74.9},
+      {"code":"168782","name":"Puddings, rice, ready-to-eat","category":"Sweets","state":"other","kcal":108,"protein":3.23,"fat":2.15,"carbs":18.39},
+      {"code":"169712","name":"Rice, white, steamed, Chinese restaurant","category":"Cereal Grains and Pasta","state":"other","kcal":151,"protein":3.2,"fat":0.27,"carbs":33.88}
+    ] },
+    {"id":"snijbiet","nl":"snijbiet","en":"Swiss chard","aliasesEn":["chard","rainbow chard"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":19,"protein":1.8,"fat":0.2,"carbs":2.1,"source":"usda"}, "candidates": [
+      {"code":"169991","name":"Chard, swiss, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":19,"protein":1.8,"fat":0.2,"carbs":3.74},
+      {"code":"171251","name":"Cheese, swiss","category":"Dairy and Egg Products","state":"other","kcal":393,"protein":26.96,"fat":30.99,"carbs":1.44},
+      {"code":"168141","name":"Cheese, swiss, low fat","category":"Dairy and Egg Products","state":"other","kcal":179,"protein":28.4,"fat":5.1,"carbs":3.4},
+      {"code":"168124","name":"Cheese, swiss, low sodium","category":"Dairy and Egg Products","state":"other","kcal":374,"protein":28.4,"fat":27.4,"carbs":3.4},
+      {"code":"170897","name":"Cheese, Swiss, nonfat or fat free","category":"Dairy and Egg Products","state":"other","kcal":127,"protein":28.4,"fat":0,"carbs":3.4},
+      {"code":"170855","name":"Cheese, pasteurized process, swiss","category":"Dairy and Egg Products","state":"other","kcal":334,"protein":24.73,"fat":25.01,"carbs":2.1},
+      {"code":"171253","name":"Cheese food, pasteurized process, swiss","category":"Dairy and Egg Products","state":"other","kcal":323,"protein":21.92,"fat":24.14,"carbs":4.5},
+      {"code":"169343","name":"Chard, swiss, cooked, boiled, drained, with salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":20,"protein":1.88,"fat":0.08,"carbs":4.13}
+    ] },
+    {"id":"snijboon","nl":"snijboon","en":"runner bean","aliasesEn":[],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":31,"protein":1.8,"fat":0.2,"carbs":4.3,"source":"usda"}, "candidates": [
+      {"code":"169961","name":"Beans, snap, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":1.83,"fat":0.22,"carbs":6.97},
+      {"code":"168574","name":"Beans, fava, in pod, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":88,"protein":7.92,"fat":0.73,"carbs":17.63},
+      {"code":"169320","name":"Beans, snap, yellow, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":1.82,"fat":0.12,"carbs":7.13},
+      {"code":"173745","name":"Beans, navy, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":337,"protein":22.33,"fat":1.5,"carbs":60.75},
+      {"code":"173748","name":"Beans, pink, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":343,"protein":20.96,"fat":1.13,"carbs":64.19},
+      {"code":"173734","name":"Beans, black, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":341,"protein":21.6,"fat":1.42,"carbs":62.36},
+      {"code":"175202","name":"Beans, white, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":333,"protein":23.36,"fat":0.85,"carbs":60.27},
+      {"code":"173727","name":"Beans, adzuki, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":329,"protein":19.87,"fat":0.53,"carbs":62.9}
+    ] },
+    {"id":"snoekbaars","nl":"snoekbaars","en":"pike-perch","aliasesEn":["zander","pikeperch","pike-perch fillet"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":93,"protein":19.1,"fat":1.2,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"175128","name":"Fish, pike, walleye, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":93,"protein":19.14,"fat":1.22,"carbs":0},
+      {"code":"173680","name":"Fish, pike, northern, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":88,"protein":19.26,"fat":0.69,"carbs":0},
+      {"code":"173678","name":"Fish, perch, mixed species, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":91,"protein":19.39,"fat":0.92,"carbs":0},
+      {"code":"175125","name":"Fish, ocean perch, Atlantic, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":79,"protein":15.31,"fat":1.54,"carbs":0},
+      {"code":"171997","name":"Fish, pike, walleye, cooked, dry heat","category":"Finfish and Shellfish Products","state":"cooked","kcal":119,"protein":24.54,"fat":1.56,"carbs":0},
+      {"code":"175127","name":"Fish, pike, northern, cooked, dry heat","category":"Finfish and Shellfish Products","state":"cooked","kcal":113,"protein":24.69,"fat":0.88,"carbs":0},
+      {"code":"173679","name":"Fish, perch, mixed species, cooked, dry heat","category":"Finfish and Shellfish Products","state":"cooked","kcal":117,"protein":24.86,"fat":1.18,"carbs":0}
+    ] },
+    {"id":"snoepje","nl":"snoepje","en":"sweet","aliasesEn":["candy","sweeties"],"defaultUnit":"g","aisle":"snacks-zoet","current":{"kcal":366,"protein":2,"fat":2,"carbs":85,"source":"estimate"}, "candidates": [
+      {"code":"170008","name":"Onions, sweet, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":32,"protein":0.8,"fat":0.08,"carbs":7.55},
+      {"code":"171719","name":"Cherries, sweet, raw","category":"Fruits and Fruit Juices","state":"raw","kcal":63,"protein":1.06,"fat":0.2,"carbs":16.01},
+      {"code":"168538","name":"Corn, sweet, white, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":86,"protein":3.22,"fat":1.18,"carbs":19.02},
+      {"code":"169998","name":"Corn, sweet, yellow, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":86,"protein":3.27,"fat":1.35,"carbs":18.7},
+      {"code":"170108","name":"Peppers, sweet, red, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":26,"protein":0.99,"fat":0.3,"carbs":6.03},
+      {"code":"170427","name":"Peppers, sweet, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":20,"protein":0.86,"fat":0.17,"carbs":4.64},
+      {"code":"169383","name":"Peppers, sweet, yellow, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":27,"protein":1,"fat":0.21,"carbs":6.32},
+      {"code":"167977","name":"Candies, sweet chocolate","category":"Sweets","state":"other","kcal":507,"protein":3.9,"fat":34.2,"carbs":60.4}
+    ] },
+    {"id":"sobanoedels","nl":"sobanoedels","en":"soba noodles","aliasesEn":["soba","buckwheat noodles"],"defaultUnit":"g","aisle":"wereld","current":{"kcal":336,"protein":14.4,"fat":0.7,"carbs":74.6,"source":"usda"}, "candidates": [
+      {"code":"168905","name":"Noodles, chinese, chow mein","category":"Cereal Grains and Pasta","state":"other","kcal":471,"protein":10.88,"fat":21.24,"carbs":63.64},
+      {"code":"168906","name":"Noodles, japanese, soba, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":336,"protein":14.38,"fat":0.71,"carbs":74.62},
+      {"code":"169735","name":"Noodles, flat, crunchy, Chinese restaurant","category":"Cereal Grains and Pasta","state":"other","kcal":521,"protein":10.33,"fat":31.72,"carbs":51.9},
+      {"code":"174258","name":"Noodles, chinese, cellophane or long rice (mung beans), dehydrated","category":"Legumes and Legume Products","state":"other","kcal":351,"protein":0.16,"fat":0.06,"carbs":86.09},
+      {"code":"169731","name":"Noodles, egg, dry, enriched","category":"Cereal Grains and Pasta","state":"dried","kcal":384,"protein":14.16,"fat":4.44,"carbs":71.27},
+      {"code":"168908","name":"Noodles, japanese, somen, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":356,"protein":11.35,"fat":0.81,"carbs":74.1},
+      {"code":"169755","name":"Noodles, egg, dry, unenriched","category":"Cereal Grains and Pasta","state":"dried","kcal":384,"protein":14.16,"fat":4.44,"carbs":71.27},
+      {"code":"168907","name":"Noodles, japanese, soba, cooked","category":"Cereal Grains and Pasta","state":"cooked","kcal":99,"protein":5.06,"fat":0.1,"carbs":21.44}
+    ] },
+    {"id":"soepgroenten","nl":"soepgroenten","en":"soup vegetables","aliasesEn":["soup vegetable mix"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":28,"protein":1.3,"fat":0.3,"carbs":5,"source":"estimate"}, "candidates": [
+      {"code":"171594","name":"Soup, vegetable soup, condensed, low sodium, prepared with equal volume water","category":"Soups, Sauces, and Gravies","state":"other","kcal":33,"protein":1.1,"fat":0.45,"carbs":6.06},
+      {"code":"171583","name":"Soup, vegetable broth, ready to serve","category":"Soups, Sauces, and Gravies","state":"other","kcal":5,"protein":0.24,"fat":0.07,"carbs":0.93},
+      {"code":"171189","name":"Soup, vegetable beef, microwavable, ready-to-serve, single brand","category":"Soups, Sauces, and Gravies","state":"other","kcal":44,"protein":6.2,"fat":0.7,"carbs":3.3},
+      {"code":"172892","name":"Soup, chicken vegetable with potato and cheese, chunky, ready-to-serve","category":"Soups, Sauces, and Gravies","state":"other","kcal":65,"protein":1.16,"fat":4.46,"carbs":5.2},
+      {"code":"171165","name":"Soup, onion, dry, mix","category":"Soups, Sauces, and Gravies","state":"dried","kcal":293,"protein":7.48,"fat":0.34,"carbs":65.07},
+      {"code":"171571","name":"Soup, chicken noodle, dry, mix","category":"Soups, Sauces, and Gravies","state":"dried","kcal":377,"protein":15.42,"fat":6.51,"carbs":62.32},
+      {"code":"169078","name":"Cheese, cottage, with vegetables","category":"Dairy and Egg Products","state":"other","kcal":95,"protein":10.9,"fat":4.2,"carbs":3},
+      {"code":"169277","name":"Salsify, (vegetable oyster), raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":82,"protein":3.3,"fat":0.2,"carbs":18.6}
+    ] },
+    {"id":"soepstengel","nl":"soepstengel","en":"breadstick","aliasesEn":["grissini","bread sticks"],"defaultUnit":"stuk","aisle":"brood-ontbijt","current":{"kcal":412,"protein":12,"fat":9.5,"carbs":65.4,"source":"usda"}, "candidates": [] },
+    {"id":"soepsterretjes","nl":"soepsterretjes","en":"soup pasta stars","aliasesEn":["pastina"],"defaultUnit":"g","aisle":"droog","current":{"kcal":349,"protein":12,"fat":1.5,"carbs":72,"source":"estimate"}, "candidates": [
+      {"code":"171821","name":"Soup, wonton, Chinese restaurant","category":"Soups, Sauces, and Gravies","state":"other","kcal":32,"protein":2.08,"fat":0.26,"carbs":5.25},
+      {"code":"172883","name":"Soup, stock, beef, home-prepared","category":"Soups, Sauces, and Gravies","state":"other","kcal":13,"protein":1.97,"fat":0.09,"carbs":1.2},
+      {"code":"172885","name":"Soup, stock, fish, home-prepared","category":"Soups, Sauces, and Gravies","state":"other","kcal":16,"protein":2.26,"fat":0.81,"carbs":0},
+      {"code":"174073","name":"Soup, beef barley, ready to serve","category":"Soups, Sauces, and Gravies","state":"other","kcal":52,"protein":2.81,"fat":0.96,"carbs":7.94},
+      {"code":"174807","name":"Soup, egg drop, Chinese restaurant","category":"Soups, Sauces, and Gravies","state":"other","kcal":27,"protein":1.16,"fat":0.61,"carbs":4.29},
+      {"code":"172884","name":"Soup, stock, chicken, home-prepared","category":"Soups, Sauces, and Gravies","state":"other","kcal":36,"protein":2.52,"fat":1.2,"carbs":3.53},
+      {"code":"174536","name":"Soup, chicken broth, ready-to-serve","category":"Soups, Sauces, and Gravies","state":"other","kcal":6,"protein":0.64,"fat":0.21,"carbs":0.44},
+      {"code":"171591","name":"Soup, tomato, low sodium, with water","category":"Soups, Sauces, and Gravies","state":"other","kcal":30,"protein":0.79,"fat":0.28,"carbs":6.57}
+    ] },
+    {"id":"soepvlees","nl":"soepvlees","en":"soup beef","aliasesEn":["beef for soup"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":128,"protein":21.8,"fat":4.5,"carbs":0.2,"source":"usda"}, "candidates": [
+      {"code":"170809","name":"Beef, chuck for stew, separable lean and fat, select, raw","category":"Beef Products","state":"raw","kcal":124,"protein":21.9,"fat":3.99,"carbs":0.21},
+      {"code":"170810","name":"Beef, chuck for stew, separable lean and fat, choice, raw","category":"Beef Products","state":"raw","kcal":130,"protein":21.64,"fat":4.81,"carbs":0.12},
+      {"code":"171206","name":"Beef, chuck for stew, separable lean and fat, all grades, raw","category":"Beef Products","state":"raw","kcal":128,"protein":21.75,"fat":4.48,"carbs":0.16},
+      {"code":"168608","name":"Beef, grass-fed, ground, raw","category":"Beef Products","state":"raw","kcal":198,"protein":19.42,"fat":12.73,"carbs":0},
+      {"code":"168605","name":"Beef, retail cuts, separable fat, raw","category":"Beef Products","state":"raw","kcal":674,"protein":8.21,"fat":70.89,"carbs":0},
+      {"code":"170199","name":"Beef, cured, corned beef, brisket, raw","category":"Beef Products","state":"raw","kcal":198,"protein":14.68,"fat":14.9,"carbs":0.14},
+      {"code":"174726","name":"Beef, New Zealand, imported, inside, raw","category":"Beef Products","state":"raw","kcal":128,"protein":22.16,"fat":4.36,"carbs":0.1},
+      {"code":"171790","name":"Beef, ground, 95% lean meat / 5% fat, raw","category":"Beef Products","state":"raw","kcal":137,"protein":21.41,"fat":5,"carbs":0}
+    ] },
+    {"id":"soes","nl":"soes","en":"cream puff","aliasesEn":["choux bun","choux buns","profiterole","profiteroles"],"defaultUnit":"stuk","aisle":"brood-ontbijt","current":{"kcal":360,"protein":9,"fat":25.9,"carbs":22,"source":"usda"}, "candidates": [
+      {"code":"167534","name":"Cream puff, eclair, custard or cream filled, iced","category":"Baked Products","state":"other","kcal":334,"protein":4.41,"fat":18.52,"carbs":37.43},
+      {"code":"174986","name":"Cream puff shell, prepared from recipe","category":"Baked Products","state":"other","kcal":360,"protein":9,"fat":25.9,"carbs":22.8},
+      {"code":"173418","name":"Cheese, cream","category":"Dairy and Egg Products","state":"other","kcal":350,"protein":6.15,"fat":34.44,"carbs":5.52},
+      {"code":"171257","name":"Cream, sour, cultured","category":"Dairy and Egg Products","state":"other","kcal":198,"protein":2.44,"fat":19.35,"carbs":4.63},
+      {"code":"169079","name":"Cheese, cream, low fat","category":"Dairy and Egg Products","state":"other","kcal":208,"protein":7.85,"fat":16.67,"carbs":6.73},
+      {"code":"172207","name":"Cheese, cream, fat free","category":"Dairy and Egg Products","state":"other","kcal":105,"protein":15.69,"fat":1,"carbs":7.66},
+      {"code":"171255","name":"Cream, fluid, half and half","category":"Dairy and Egg Products","state":"other","kcal":131,"protein":3.13,"fat":11.5,"carbs":4.3},
+      {"code":"170858","name":"Cream, fluid, light whipping","category":"Dairy and Egg Products","state":"other","kcal":292,"protein":2.17,"fat":30.91,"carbs":2.96}
+    ] },
+    {"id":"soffritto","nl":"soffritto","en":"soffritto","aliasesEn":["soffritto mix","mirepoix"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":34,"protein":1,"fat":0.2,"carbs":7,"source":"estimate"}, "candidates": [] },
+    {"id":"sojadessert","nl":"sojadessert","en":"soya dessert","aliasesEn":["soya custard"],"defaultUnit":"bakje","aisle":"zuivel-eieren","current":{"kcal":77,"protein":3.3,"fat":1.8,"carbs":12,"source":"estimate"}, "candidates": [
+      {"code":"169595","name":"Desserts, egg custard, baked, prepared-from-recipe","category":"Sweets","state":"other","kcal":104,"protein":5.02,"fat":4.58,"carbs":11},
+      {"code":"167574","name":"Desserts, flan, caramel custard, prepared-from-recipe","category":"Sweets","state":"other","kcal":145,"protein":4.53,"fat":4.03,"carbs":22.78},
+      {"code":"168794","name":"Desserts, rennin, tablets, unsweetened","category":"Sweets","state":"other","kcal":84,"protein":1,"fat":0.1,"carbs":19.8},
+      {"code":"173176","name":"Alcoholic beverage, wine, dessert, sweet","category":"Beverages","state":"other","kcal":160,"protein":0.2,"fat":0,"carbs":13.69},
+      {"code":"169601","name":"Desserts, apple crisp, prepared-from-recipe","category":"Sweets","state":"other","kcal":161,"protein":1.75,"fat":3.43,"carbs":30.84},
+      {"code":"168777","name":"Desserts, mousse, chocolate, prepared-from-recipe","category":"Sweets","state":"other","kcal":225,"protein":4.14,"fat":16,"carbs":16.07},
+      {"code":"168792","name":"Desserts, rennin, vanilla, dry mix","category":"Sweets","state":"dried","kcal":383,"protein":0,"fat":0,"carbs":99},
+      {"code":"169616","name":"Desserts, rennin, chocolate, dry mix","category":"Sweets","state":"dried","kcal":363,"protein":2.4,"fat":3.3,"carbs":91.5}
+    ] },
+    {"id":"sojamelk","nl":"sojamelk","en":"soya milk","aliasesEn":["soy milk","soya drink"],"defaultUnit":"ml","aisle":"zuivel-eieren","current":{"kcal":32,"protein":3.3,"fat":1.8,"carbs":0.5,"source":"estimate"}, "candidates": [
+      {"code":"171873","name":"Beverages, chocolate drink, milk and soy based, ready to drink, fortified","category":"Beverages","state":"other","kcal":101,"protein":4.22,"fat":1.69,"carbs":17.3},
+      {"code":"167730","name":"Milk, imitation, non-soy","category":"Dairy and Egg Products","state":"other","kcal":46,"protein":1.6,"fat":2,"carbs":5.3},
+      {"code":"174980","name":"Crackers, milk","category":"Baked Products","state":"other","kcal":446,"protein":7.6,"fat":13.77,"carbs":71.73},
+      {"code":"170882","name":"Milk, sheep, fluid","category":"Dairy and Egg Products","state":"other","kcal":108,"protein":5.98,"fat":7,"carbs":5.36},
+      {"code":"170875","name":"Milk, low sodium, fluid","category":"Dairy and Egg Products","state":"other","kcal":61,"protein":3.1,"fat":3.46,"carbs":4.46},
+      {"code":"171279","name":"Milk, human, mature, fluid","category":"Dairy and Egg Products","state":"other","kcal":70,"protein":1.03,"fat":4.38,"carbs":6.89},
+      {"code":"171280","name":"Milk, indian buffalo, fluid","category":"Dairy and Egg Products","state":"other","kcal":97,"protein":3.75,"fat":6.89,"carbs":5.18},
+      {"code":"172225","name":"Milk, buttermilk, fluid, whole","category":"Dairy and Egg Products","state":"other","kcal":62,"protein":3.21,"fat":3.31,"carbs":4.88}
+    ] },
+    {"id":"sojaroom","nl":"sojaroom","en":"soya cream","aliasesEn":["soy cream","soya cooking cream"],"defaultUnit":"ml","aisle":"zuivel-eieren","current":{"kcal":155,"protein":1.5,"fat":15,"carbs":3,"source":"estimate"}, "candidates": [
+      {"code":"173418","name":"Cheese, cream","category":"Dairy and Egg Products","state":"other","kcal":350,"protein":6.15,"fat":34.44,"carbs":5.52},
+      {"code":"171257","name":"Cream, sour, cultured","category":"Dairy and Egg Products","state":"other","kcal":198,"protein":2.44,"fat":19.35,"carbs":4.63},
+      {"code":"169079","name":"Cheese, cream, low fat","category":"Dairy and Egg Products","state":"other","kcal":208,"protein":7.85,"fat":16.67,"carbs":6.73},
+      {"code":"172207","name":"Cheese, cream, fat free","category":"Dairy and Egg Products","state":"other","kcal":105,"protein":15.69,"fat":1,"carbs":7.66},
+      {"code":"171255","name":"Cream, fluid, half and half","category":"Dairy and Egg Products","state":"other","kcal":131,"protein":3.13,"fat":11.5,"carbs":4.3},
+      {"code":"170858","name":"Cream, fluid, light whipping","category":"Dairy and Egg Products","state":"other","kcal":292,"protein":2.17,"fat":30.91,"carbs":2.96},
+      {"code":"170859","name":"Cream, fluid, heavy whipping","category":"Dairy and Egg Products","state":"other","kcal":340,"protein":2.84,"fat":36.08,"carbs":2.84},
+      {"code":"171308","name":"Cream, half and half, lowfat","category":"Dairy and Egg Products","state":"other","kcal":72,"protein":3.33,"fat":5,"carbs":3.33}
+    ] },
+    {"id":"sojasaus","nl":"sojasaus","en":"soy sauce","aliasesEn":["soya sauce"],"defaultUnit":"el","aisle":"wereld","current":{"kcal":90,"protein":8.2,"fat":0.3,"carbs":14.1,"source":"usda"}, "candidates": [
+      {"code":"174070","name":"Sauce, peanut, made from peanut butter, water, soy sauce","category":"Soups, Sauces, and Gravies","state":"other","kcal":257,"protein":6.31,"fat":16.02,"carbs":22.02},
+      {"code":"172474","name":"Soy sauce, reduced sodium, made from hydrolyzed vegetable protein","category":"Legumes and Legume Products","state":"other","kcal":90,"protein":8.19,"fat":0.31,"carbs":14.44},
+      {"code":"174523","name":"Sauce, barbecue","category":"Soups, Sauces, and Gravies","state":"other","kcal":172,"protein":0.82,"fat":0.63,"carbs":40.77},
+      {"code":"171833","name":"Sauce, horseradish","category":"Soups, Sauces, and Gravies","state":"other","kcal":503,"protein":1.09,"fat":50.89,"carbs":10.05},
+      {"code":"171610","name":"Sauce, worcestershire","category":"Soups, Sauces, and Gravies","state":"other","kcal":77,"protein":0,"fat":0,"carbs":19.17},
+      {"code":"172445","name":"Soy meal, defatted, raw","category":"Legumes and Legume Products","state":"raw","kcal":337,"protein":49.2,"fat":2.39,"carbs":35.89},
+      {"code":"174273","name":"Soy flour, full-fat, raw","category":"Legumes and Legume Products","state":"raw","kcal":434,"protein":37.81,"fat":20.65,"carbs":31.92},
+      {"code":"171186","name":"Sauce, hot chile, sriracha","category":"Soups, Sauces, and Gravies","state":"other","kcal":93,"protein":1.93,"fat":0.93,"carbs":19.16}
+    ] },
+    {"id":"sojayoghurt","nl":"sojayoghurt","en":"soya yoghurt","aliasesEn":["soy yoghurt"],"defaultUnit":"g","aisle":"zuivel-eieren","current":{"kcal":48,"protein":3.5,"fat":2.2,"carbs":3,"source":"estimate"}, "candidates": [] },
+    {"id":"sopropo","nl":"sopropo","en":"bitter gourd","aliasesEn":["bitter melon","karela"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":17,"protein":1,"fat":0.2,"carbs":0.9,"source":"usda"}, "candidates": [
+      {"code":"168414","name":"Gourd, dishcloth (towelgourd), raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":20,"protein":1.2,"fat":0.2,"carbs":4.35},
+      {"code":"169232","name":"Gourd, white-flowered (calabash), raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":14,"protein":0.62,"fat":0.02,"carbs":3.39},
+      {"code":"168393","name":"Balsam-pear (bitter gourd), pods, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":17,"protein":1,"fat":0.17,"carbs":3.7},
+      {"code":"168391","name":"Balsam-pear (bitter gourd), leafy tips, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":30,"protein":5.3,"fat":0.69,"carbs":3.29},
+      {"code":"168530","name":"Gourd, dishcloth (towelgourd), cooked, boiled, drained, with salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":54,"protein":0.66,"fat":0.34,"carbs":13.75},
+      {"code":"168415","name":"Gourd, dishcloth (towelgourd), cooked, boiled, drained, without salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":56,"protein":0.66,"fat":0.34,"carbs":14.34},
+      {"code":"169353","name":"Gourd, white-flowered (calabash), cooked, boiled, drained, with salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":13,"protein":0.6,"fat":0.02,"carbs":3.1},
+      {"code":"169233","name":"Gourd, white-flowered (calabash), cooked, boiled, drained, without salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":15,"protein":0.6,"fat":0.02,"carbs":3.69}
+    ] },
+    {"id":"sorbetijs","nl":"sorbetijs","en":"sorbet","aliasesEn":["fruit sorbet"],"defaultUnit":"bakje","aisle":"diepvries","current":{"kcal":124,"protein":0.5,"fat":0.2,"carbs":30,"source":"estimate"}, "candidates": [] },
+    {"id":"spaanse-peper","nl":"Spaanse peper","en":"chilli","aliasesEn":["chilli pepper","chilli peppers","chili","chile","fresh chilli"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":40,"protein":1.9,"fat":0.4,"carbs":7.3,"source":"usda"}, "candidates": [] },
+    {"id":"spaetzle","nl":"spätzle","en":"spaetzle","aliasesEn":["spätzle","German egg noodles"],"defaultUnit":"g","aisle":"droog","current":{"kcal":359,"protein":13,"fat":3,"carbs":70,"source":"estimate"}, "candidates": [] },
+    {"id":"spaghetti","nl":"spaghetti","en":"spaghetti","aliasesEn":[],"defaultUnit":"g","aisle":"droog","current":{"kcal":354,"protein":12.5,"fat":1.8,"carbs":72,"source":"estimate"}, "candidates": [
+      {"code":"169298","name":"Squash, winter, spaghetti, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":0.64,"fat":0.57,"carbs":6.91},
+      {"code":"168911","name":"Spaghetti, spinach, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":372,"protein":13.35,"fat":1.57,"carbs":74.81},
+      {"code":"168937","name":"Spaghetti, protein-fortified, dry, enriched (n x 6.25)","category":"Cereal Grains and Pasta","state":"dried","kcal":374,"protein":21.78,"fat":2.23,"carbs":65.65},
+      {"code":"168912","name":"Spaghetti, spinach, cooked","category":"Cereal Grains and Pasta","state":"cooked","kcal":130,"protein":4.58,"fat":0.63,"carbs":26.15},
+      {"code":"171192","name":"Sauce, pasta, spaghetti/marinara, ready-to-serve","category":"Soups, Sauces, and Gravies","state":"other","kcal":50,"protein":1.39,"fat":1.61,"carbs":7.43},
+      {"code":"168934","name":"Spaghetti, protein-fortified, cooked, enriched (n x 6.25)","category":"Cereal Grains and Pasta","state":"cooked","kcal":164,"protein":8.86,"fat":0.21,"carbs":30.88},
+      {"code":"171597","name":"Sauce, pasta, spaghetti/marinara, ready-to-serve, low sodium","category":"Soups, Sauces, and Gravies","state":"other","kcal":51,"protein":1.41,"fat":1.48,"carbs":8.06},
+      {"code":"170539","name":"Squash, winter, spaghetti, cooked, boiled, drained, or baked, with salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":27,"protein":0.66,"fat":0.26,"carbs":6.46}
+    ] },
+    {"id":"spaghettikruiden","nl":"spaghettikruiden","en":"spaghetti seasoning","aliasesEn":["pasta seasoning"],"defaultUnit":"tl","aisle":"kruiden-specerijen","current":{"kcal":245,"protein":10,"fat":5,"carbs":40,"source":"estimate"}, "candidates": [
+      {"code":"169298","name":"Squash, winter, spaghetti, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":0.64,"fat":0.57,"carbs":6.91},
+      {"code":"171192","name":"Sauce, pasta, spaghetti/marinara, ready-to-serve","category":"Soups, Sauces, and Gravies","state":"other","kcal":50,"protein":1.39,"fat":1.61,"carbs":7.43},
+      {"code":"171597","name":"Sauce, pasta, spaghetti/marinara, ready-to-serve, low sodium","category":"Soups, Sauces, and Gravies","state":"other","kcal":51,"protein":1.41,"fat":1.48,"carbs":8.06},
+      {"code":"168911","name":"Spaghetti, spinach, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":372,"protein":13.35,"fat":1.57,"carbs":74.81},
+      {"code":"168937","name":"Spaghetti, protein-fortified, dry, enriched (n x 6.25)","category":"Cereal Grains and Pasta","state":"dried","kcal":374,"protein":21.78,"fat":2.23,"carbs":65.65},
+      {"code":"171331","name":"Spices, poultry seasoning","category":"Spices and Herbs","state":"other","kcal":307,"protein":9.59,"fat":7.53,"carbs":65.59},
+      {"code":"168912","name":"Spaghetti, spinach, cooked","category":"Cereal Grains and Pasta","state":"cooked","kcal":130,"protein":4.58,"fat":0.63,"carbs":26.15},
+      {"code":"168934","name":"Spaghetti, protein-fortified, cooked, enriched (n x 6.25)","category":"Cereal Grains and Pasta","state":"cooked","kcal":164,"protein":8.86,"fat":0.21,"carbs":30.88}
+    ] },
+    {"id":"spaghettimix","nl":"spaghettimix","en":"spaghetti bolognese mix","aliasesEn":["spaghetti sauce mix"],"defaultUnit":"zakje","aisle":"kruiden-specerijen","current":{"kcal":320,"protein":8,"fat":3,"carbs":65,"source":"estimate"}, "candidates": [
+      {"code":"169298","name":"Squash, winter, spaghetti, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":0.64,"fat":0.57,"carbs":6.91},
+      {"code":"171192","name":"Sauce, pasta, spaghetti/marinara, ready-to-serve","category":"Soups, Sauces, and Gravies","state":"other","kcal":50,"protein":1.39,"fat":1.61,"carbs":7.43},
+      {"code":"171597","name":"Sauce, pasta, spaghetti/marinara, ready-to-serve, low sodium","category":"Soups, Sauces, and Gravies","state":"other","kcal":51,"protein":1.41,"fat":1.48,"carbs":8.06},
+      {"code":"171603","name":"Sauce, alfredo mix, dry","category":"Soups, Sauces, and Gravies","state":"dried","kcal":535,"protein":15.32,"fat":36.35,"carbs":36.52},
+      {"code":"171584","name":"Sauce, cheese sauce mix, dry","category":"Soups, Sauces, and Gravies","state":"dried","kcal":438,"protein":7.68,"fat":18.33,"carbs":60.52},
+      {"code":"171165","name":"Soup, onion, dry, mix","category":"Soups, Sauces, and Gravies","state":"dried","kcal":293,"protein":7.48,"fat":0.34,"carbs":65.07},
+      {"code":"171172","name":"Gravy, onion, dry, mix","category":"Soups, Sauces, and Gravies","state":"dried","kcal":322,"protein":9,"fat":3,"carbs":67.64},
+      {"code":"168911","name":"Spaghetti, spinach, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":372,"protein":13.35,"fat":1.57,"carbs":74.81}
+    ] },
+    {"id":"spaghettini","nl":"spaghettini","en":"spaghettini","aliasesEn":["thin spaghetti"],"defaultUnit":"g","aisle":"droog","current":{"kcal":354,"protein":12.5,"fat":1.8,"carbs":72,"source":"estimate"}, "candidates": [] },
+    {"id":"spaghettipompoen","nl":"spaghettipompoen","en":"spaghetti squash","aliasesEn":[],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":31,"protein":0.6,"fat":0.6,"carbs":5.4,"source":"usda"}, "candidates": [
+      {"code":"169298","name":"Squash, winter, spaghetti, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":0.64,"fat":0.57,"carbs":6.91},
+      {"code":"168472","name":"Squash, winter, acorn, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":40,"protein":0.8,"fat":0.1,"carbs":10.42},
+      {"code":"168565","name":"Squash, zucchini, baby, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":21,"protein":2.71,"fat":0.4,"carbs":3.11},
+      {"code":"168475","name":"Squash, winter, hubbard, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":40,"protein":2,"fat":0.5,"carbs":8.7},
+      {"code":"169289","name":"Squash, summer, scallop, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":18,"protein":1.2,"fat":0.2,"carbs":3.84},
+      {"code":"169295","name":"Squash, winter, butternut, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":45,"protein":1,"fat":0.1,"carbs":11.69},
+      {"code":"170487","name":"Squash, summer, all varieties, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":16,"protein":1.21,"fat":0.18,"carbs":3.35},
+      {"code":"170489","name":"Squash, winter, all varieties, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":34,"protein":0.95,"fat":0.13,"carbs":8.59}
+    ] },
+    {"id":"spareribs","nl":"spareribs","en":"spare ribs","aliasesEn":["spareribs","pork ribs","pork spare ribs"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":277,"protein":15.5,"fat":23.4,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"168305","name":"Pork, fresh, loin, country-style ribs, separable lean only, raw","category":"Pork Products","state":"raw","kcal":140,"protein":20.76,"fat":5.64,"carbs":0},
+      {"code":"167895","name":"Pork, fresh, loin, country-style ribs, separable lean and fat, raw","category":"Pork Products","state":"raw","kcal":189,"protein":19.34,"fat":11.82,"carbs":0},
+      {"code":"167833","name":"Pork, fresh, loin, center rib (chops or roasts), bone-in, separable lean only, raw","category":"Pork Products","state":"raw","kcal":136,"protein":21.79,"fat":4.8,"carbs":0},
+      {"code":"168302","name":"Pork, fresh, loin, center rib (chops or roasts), boneless, separable lean only, raw","category":"Pork Products","state":"raw","kcal":152,"protein":21.8,"fat":6.48,"carbs":0},
+      {"code":"168242","name":"Pork, fresh, loin, center rib (chops or roasts), bone-in, separable lean and fat, raw","category":"Pork Products","state":"raw","kcal":186,"protein":20.28,"fat":11.04,"carbs":0},
+      {"code":"167889","name":"Pork, fresh, loin, center rib (chops or roasts), boneless, separable lean and fat, raw","category":"Pork Products","state":"raw","kcal":211,"protein":19.9,"fat":14.01,"carbs":0},
+      {"code":"173828","name":"Veal, rib, separable lean only, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":120,"protein":19.97,"fat":3.89,"carbs":0},
+      {"code":"175275","name":"Veal, rib, separable lean and fat, raw","category":"Lamb, Veal, and Game Products","state":"raw","kcal":162,"protein":18.86,"fat":9.01,"carbs":0}
+    ] },
+    {"id":"speciaalbier","nl":"speciaalbier","en":"craft beer","aliasesEn":["speciality beer"],"defaultUnit":"fles","aisle":"dranken","current":{"kcal":52,"protein":0.5,"fat":0,"carbs":3.5,"source":"estimate"}, "candidates": [
+      {"code":"168749","name":"Alcoholic beverage, beer, light","category":"Beverages","state":"other","kcal":29,"protein":0.24,"fat":0,"carbs":1.64},
+      {"code":"168746","name":"Alcoholic beverage, beer, regular, all","category":"Beverages","state":"other","kcal":43,"protein":0.46,"fat":0,"carbs":3.55},
+      {"code":"169575","name":"Alcoholic beverage, beer, light, low carb","category":"Beverages","state":"other","kcal":27,"protein":0.17,"fat":0,"carbs":0.73},
+      {"code":"171906","name":"Alcoholic beverages, beer, higher alcohol","category":"Beverages","state":"other","kcal":58,"protein":0.9,"fat":0,"carbs":0.27},
+      {"code":"174145","name":"Alcoholic beverage, beer, light, higher alcohol","category":"Beverages","state":"other","kcal":46,"protein":0.25,"fat":0,"carbs":0.77},
+      {"code":"171616","name":"Beerwurst, beer salami, pork","category":"Sausages and Luncheon Meats","state":"other","kcal":238,"protein":14.24,"fat":18.8,"carbs":2.06},
+      {"code":"171871","name":"Beverages, carbonated, root beer","category":"Beverages","state":"other","kcal":41,"protein":0,"fat":0,"carbs":10.6},
+      {"code":"172011","name":"Beerwurst, beer salami, pork and beef","category":"Sausages and Luncheon Meats","state":"other","kcal":277,"protein":14,"fat":22.53,"carbs":3.76}
+    ] },
+    {"id":"speculaas","nl":"speculaas","en":"speculaas","aliasesEn":["speculoos","spiced biscuit","spiced biscuits"],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":460,"protein":5,"fat":16,"carbs":74,"source":"estimate"}, "candidates": [] },
+    {"id":"speculaaskruiden","nl":"speculaaskruiden","en":"mixed spice","aliasesEn":["speculaas spices","Dutch mixed spice"],"defaultUnit":"tl","aisle":"bakken","current":{"kcal":285,"protein":4,"fat":4,"carbs":55,"source":"estimate"}, "candidates": [
+      {"code":"170934","name":"Spices, saffron","category":"Spices and Herbs","state":"other","kcal":310,"protein":11.43,"fat":5.85,"carbs":65.37},
+      {"code":"171329","name":"Spices, paprika","category":"Spices and Herbs","state":"other","kcal":282,"protein":14.14,"fat":12.89,"carbs":53.99},
+      {"code":"170917","name":"Spices, bay leaf","category":"Spices and Herbs","state":"other","kcal":313,"protein":7.61,"fat":8.36,"carbs":74.97},
+      {"code":"170919","name":"Spices, cardamom","category":"Spices and Herbs","state":"other","kcal":311,"protein":10.76,"fat":6.7,"carbs":68.47},
+      {"code":"170925","name":"Spices, dill seed","category":"Spices and Herbs","state":"other","kcal":305,"protein":15.98,"fat":14.54,"carbs":55.17},
+      {"code":"170923","name":"Spices, cumin seed","category":"Spices and Herbs","state":"other","kcal":375,"protein":17.81,"fat":22.27,"carbs":44.24},
+      {"code":"171316","name":"Spices, anise seed","category":"Spices and Herbs","state":"other","kcal":337,"protein":17.6,"fat":15.9,"carbs":50.02},
+      {"code":"171330","name":"Spices, poppy seed","category":"Spices and Herbs","state":"other","kcal":525,"protein":17.99,"fat":41.56,"carbs":28.13}
+    ] },
+    {"id":"speculoospasta","nl":"speculoospasta","en":"speculoos spread","aliasesEn":["Biscoff spread","cookie butter","caramelised biscuit spread"],"defaultUnit":"el","aisle":"brood-ontbijt","current":{"kcal":530,"protein":3,"fat":30,"carbs":62,"source":"estimate"}, "candidates": [
+      {"code":"171415","name":"Margarine,spread, 35-39% fat, tub","category":"Fats and Oils","state":"other","kcal":349,"protein":0.23,"fat":37.98,"carbs":1.52},
+      {"code":"167691","name":"Vegetable oil-butter spread, reduced calorie","category":"Fats and Oils","state":"other","kcal":465,"protein":0,"fat":53,"carbs":0},
+      {"code":"173580","name":"Margarine-like, vegetable oil-butter spread, tub, with salt","category":"Fats and Oils","state":"other","kcal":362,"protein":1,"fat":40,"carbs":1},
+      {"code":"169053","name":"Margarine-like, vegetable oil-butter spread, reduced calorie, tub, with salt","category":"Fats and Oils","state":"other","kcal":450,"protein":1,"fat":50,"carbs":1},
+      {"code":"173858","name":"Chicken spread","category":"Sausages and Luncheon Meats","state":"other","kcal":158,"protein":18.01,"fat":17.56,"carbs":4.05},
+      {"code":"174596","name":"Liverwurst spread","category":"Sausages and Luncheon Meats","state":"other","kcal":305,"protein":12.38,"fat":25.45,"carbs":5.89},
+      {"code":"169069","name":"Sandwich spread, meatless","category":"Legumes and Legume Products","state":"other","kcal":149,"protein":8,"fat":9,"carbs":9},
+      {"code":"174583","name":"Sandwich spread, pork, beef","category":"Sausages and Luncheon Meats","state":"other","kcal":235,"protein":7.66,"fat":17.34,"carbs":11.94}
+    ] },
+    {"id":"spekblokjes","nl":"spekblokjes","en":"bacon lardons","aliasesEn":["lardons","diced bacon","bacon cubes"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":407,"protein":12.5,"fat":39.3,"carbs":0.8,"source":"usda"}, "candidates": [
+      {"code":"172439","name":"Bacon, meatless","category":"Legumes and Legume Products","state":"other","kcal":309,"protein":11.69,"fat":29.52,"carbs":5.31},
+      {"code":"171639","name":"Bacon, turkey, microwaved","category":"Sausages and Luncheon Meats","state":"other","kcal":368,"protein":29.5,"fat":25.87,"carbs":4.24},
+      {"code":"171640","name":"Bacon, turkey, low sodium","category":"Sausages and Luncheon Meats","state":"other","kcal":253,"protein":13.33,"fat":20,"carbs":4.8},
+      {"code":"174592","name":"Bacon, turkey, unprepared","category":"Sausages and Luncheon Meats","state":"other","kcal":226,"protein":15.94,"fat":16.93,"carbs":1.89},
+      {"code":"168277","name":"Pork, cured, bacon, unprepared","category":"Pork Products","state":"other","kcal":393,"protein":13.66,"fat":37.13,"carbs":0},
+      {"code":"168382","name":"Bacon, pre-sliced, reduced/low sodium, unprepared","category":"Pork Products","state":"other","kcal":407,"protein":12.53,"fat":39.27,"carbs":0.83},
+      {"code":"169893","name":"Bacon bits, meatless","category":"Legumes and Legume Products","state":"other","kcal":476,"protein":32,"fat":25.9,"carbs":28.6},
+      {"code":"172345","name":"Animal fat, bacon grease","category":"Fats and Oils","state":"other","kcal":897,"protein":0,"fat":99.5,"carbs":0}
+    ] },
+    {"id":"spekkoek","nl":"spekkoek","en":"spekkoek","aliasesEn":["Indonesian layer cake","lapis legit"],"defaultUnit":"plak","aisle":"snacks-zoet","current":{"kcal":384,"protein":4,"fat":12,"carbs":65,"source":"estimate"}, "candidates": [] },
+    {"id":"speklap","nl":"speklap","en":"pork belly slice","aliasesEn":["belly pork slice","belly pork slices"],"defaultUnit":"stuk","aisle":"vlees-vis","current":{"kcal":518,"protein":9.3,"fat":53,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"167812","name":"Pork, fresh, belly, raw","category":"Pork Products","state":"raw","kcal":518,"protein":9.34,"fat":53.01,"carbs":0},
+      {"code":"168282","name":"Pork, cured, ham, center slice, country-style, separable lean only, raw","category":"Pork Products","state":"raw","kcal":195,"protein":27.8,"fat":8.32,"carbs":0.3},
+      {"code":"167902","name":"Pork, fresh, ground, raw","category":"Pork Products","state":"raw","kcal":263,"protein":16.88,"fat":21.19,"carbs":0},
+      {"code":"167811","name":"Pork, fresh, backfat, raw","category":"Pork Products","state":"raw","kcal":812,"protein":2.92,"fat":88.69,"carbs":0},
+      {"code":"171619","name":"Bockwurst, pork, veal, raw","category":"Sausages and Luncheon Meats","state":"raw","kcal":301,"protein":14.03,"fat":25.87,"carbs":2.95},
+      {"code":"168287","name":"Pork, cured, salt pork, raw","category":"Pork Products","state":"raw","kcal":748,"protein":5.05,"fat":80.5,"carbs":0},
+      {"code":"167813","name":"Pork, fresh, separable fat, raw","category":"Pork Products","state":"raw","kcal":632,"protein":9.25,"fat":65.7,"carbs":0},
+      {"code":"171631","name":"Sausage, Italian, pork, mild, raw","category":"Sausages and Luncheon Meats","state":"raw","kcal":290,"protein":13.9,"fat":24.26,"carbs":2.97}
+    ] },
+    {"id":"spekreepjes","nl":"spekreepjes","en":"bacon strips","aliasesEn":["streaky bacon strips"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":407,"protein":12.5,"fat":39.3,"carbs":0.8,"source":"usda"}, "candidates": [
+      {"code":"172439","name":"Bacon, meatless","category":"Legumes and Legume Products","state":"other","kcal":309,"protein":11.69,"fat":29.52,"carbs":5.31},
+      {"code":"171639","name":"Bacon, turkey, microwaved","category":"Sausages and Luncheon Meats","state":"other","kcal":368,"protein":29.5,"fat":25.87,"carbs":4.24},
+      {"code":"171640","name":"Bacon, turkey, low sodium","category":"Sausages and Luncheon Meats","state":"other","kcal":253,"protein":13.33,"fat":20,"carbs":4.8},
+      {"code":"174592","name":"Bacon, turkey, unprepared","category":"Sausages and Luncheon Meats","state":"other","kcal":226,"protein":15.94,"fat":16.93,"carbs":1.89},
+      {"code":"172841","name":"Ostrich, inside strip, raw","category":"Poultry Products","state":"raw","kcal":127,"protein":23.69,"fat":2.87,"carbs":0},
+      {"code":"174485","name":"Ostrich, outside strip, raw","category":"Poultry Products","state":"raw","kcal":120,"protein":23.36,"fat":2.21,"carbs":0},
+      {"code":"168277","name":"Pork, cured, bacon, unprepared","category":"Pork Products","state":"other","kcal":393,"protein":13.66,"fat":37.13,"carbs":0},
+      {"code":"169429","name":"Beef, grass-fed, strip steaks, lean only, raw","category":"Beef Products","state":"raw","kcal":117,"protein":23.07,"fat":2.69,"carbs":0}
+    ] },
+    {"id":"spelt","nl":"spelt","en":"spelt","aliasesEn":["spelt grain","pearled spelt"],"defaultUnit":"g","aisle":"droog","current":{"kcal":338,"protein":14.6,"fat":2.4,"carbs":59.5,"source":"usda"}, "candidates": [
+      {"code":"169745","name":"Spelt, uncooked","category":"Cereal Grains and Pasta","state":"other","kcal":338,"protein":14.57,"fat":2.43,"carbs":70.19},
+      {"code":"169746","name":"Spelt, cooked","category":"Cereal Grains and Pasta","state":"cooked","kcal":127,"protein":5.5,"fat":0.85,"carbs":26.44}
+    ] },
+    {"id":"speltbrood","nl":"speltbrood","en":"spelt bread","aliasesEn":["spelt loaf"],"defaultUnit":"snee","aisle":"brood-ontbijt","current":{"kcal":274,"protein":10.7,"fat":4.5,"carbs":43.5,"source":"usda"}, "candidates": [
+      {"code":"172673","name":"Bread, egg","category":"Baked Products","state":"other","kcal":287,"protein":9.5,"fat":6,"carbs":47.8},
+      {"code":"172684","name":"Bread, rye","category":"Baked Products","state":"other","kcal":259,"protein":8.5,"fat":3.3,"carbs":48.3},
+      {"code":"172686","name":"Bread, wheat","category":"Baked Products","state":"other","kcal":274,"protein":10.67,"fat":4.53,"carbs":47.54},
+      {"code":"167943","name":"Bread, potato","category":"Baked Products","state":"other","kcal":266,"protein":12.5,"fat":3.13,"carbs":47.07},
+      {"code":"167944","name":"Bread, cheese","category":"Baked Products","state":"other","kcal":408,"protein":10.42,"fat":20.83,"carbs":44.83},
+      {"code":"172678","name":"Bread, oatmeal","category":"Baked Products","state":"other","kcal":269,"protein":8.4,"fat":4.4,"carbs":48.5},
+      {"code":"174913","name":"Bread, Italian","category":"Baked Products","state":"other","kcal":259,"protein":9.49,"fat":2.73,"carbs":48.11},
+      {"code":"169745","name":"Spelt, uncooked","category":"Cereal Grains and Pasta","state":"other","kcal":338,"protein":14.57,"fat":2.43,"carbs":70.19}
+    ] },
+    {"id":"speltmeel","nl":"speltmeel","en":"spelt flour","aliasesEn":[],"defaultUnit":"g","aisle":"bakken","current":{"kcal":338,"protein":14.6,"fat":2.4,"carbs":59.5,"source":"usda"}, "candidates": [
+      {"code":"169745","name":"Spelt, uncooked","category":"Cereal Grains and Pasta","state":"other","kcal":338,"protein":14.57,"fat":2.43,"carbs":70.19},
+      {"code":"174273","name":"Soy flour, full-fat, raw","category":"Legumes and Legume Products","state":"raw","kcal":434,"protein":37.81,"fat":20.65,"carbs":31.92},
+      {"code":"167535","name":"Tortillas, ready-to-bake or -fry, flour, shelf stable","category":"Baked Products","state":"other","kcal":297,"protein":8.01,"fat":7.58,"carbs":49.27},
+      {"code":"175037","name":"Tortillas, ready-to-bake or -fry, flour, refrigerated","category":"Baked Products","state":"other","kcal":306,"protein":8.2,"fat":7.99,"carbs":49.38},
+      {"code":"173242","name":"Tortillas, ready-to-bake or -fry, flour, without added calcium","category":"Baked Products","state":"other","kcal":325,"protein":8.7,"fat":7.1,"carbs":55.6},
+      {"code":"173755","name":"Carob flour","category":"Legumes and Legume Products","state":"other","kcal":222,"protein":4.62,"fat":0.65,"carbs":88.88},
+      {"code":"168446","name":"Potato flour","category":"Vegetables and Vegetable Products","state":"other","kcal":357,"protein":6.9,"fat":0.34,"carbs":83.1},
+      {"code":"172023","name":"Millet flour","category":"Cereal Grains and Pasta","state":"other","kcal":382,"protein":10.75,"fat":4.25,"carbs":75.12}
+    ] },
+    {"id":"speltpasta","nl":"speltpasta","en":"spelt pasta","aliasesEn":[],"defaultUnit":"g","aisle":"droog","current":{"kcal":371,"protein":13,"fat":1.5,"carbs":71.5,"source":"usda"}, "candidates": [
+      {"code":"169745","name":"Spelt, uncooked","category":"Cereal Grains and Pasta","state":"other","kcal":338,"protein":14.57,"fat":2.43,"carbs":70.19},
+      {"code":"169727","name":"Pasta, fresh-refrigerated, plain, as purchased","category":"Cereal Grains and Pasta","state":"other","kcal":288,"protein":11.31,"fat":2.3,"carbs":54.73},
+      {"code":"169729","name":"Pasta, fresh-refrigerated, spinach, as purchased","category":"Cereal Grains and Pasta","state":"other","kcal":289,"protein":11.26,"fat":2.1,"carbs":55.72},
+      {"code":"171192","name":"Sauce, pasta, spaghetti/marinara, ready-to-serve","category":"Soups, Sauces, and Gravies","state":"other","kcal":50,"protein":1.39,"fat":1.61,"carbs":7.43},
+      {"code":"171597","name":"Sauce, pasta, spaghetti/marinara, ready-to-serve, low sodium","category":"Soups, Sauces, and Gravies","state":"other","kcal":51,"protein":1.41,"fat":1.48,"carbs":8.06},
+      {"code":"169736","name":"Pasta, dry, enriched","category":"Cereal Grains and Pasta","state":"dried","kcal":371,"protein":13.04,"fat":1.51,"carbs":74.67},
+      {"code":"168927","name":"Pasta, dry, unenriched","category":"Cereal Grains and Pasta","state":"dried","kcal":371,"protein":13.04,"fat":1.51,"carbs":74.67},
+      {"code":"168899","name":"Pasta, gluten-free, corn, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":357,"protein":7.46,"fat":2.08,"carbs":79.26}
+    ] },
+    {"id":"speltvlokken","nl":"speltvlokken","en":"spelt flakes","aliasesEn":[],"defaultUnit":"g","aisle":"brood-ontbijt","current":{"kcal":338,"protein":14.6,"fat":2.4,"carbs":59.5,"source":"usda"}, "candidates": [
+      {"code":"169745","name":"Spelt, uncooked","category":"Cereal Grains and Pasta","state":"other","kcal":338,"protein":14.57,"fat":2.43,"carbs":70.19},
+      {"code":"173426","name":"Egg, white, dried, flakes, stabilized, glucose reduced","category":"Dairy and Egg Products","state":"dried","kcal":351,"protein":76.92,"fat":0.04,"carbs":4.17},
+      {"code":"169746","name":"Spelt, cooked","category":"Cereal Grains and Pasta","state":"cooked","kcal":127,"protein":5.5,"fat":0.85,"carbs":26.44},
+      {"code":"170002","name":"Onions, dehydrated flakes","category":"Vegetables and Vegetable Products","state":"other","kcal":349,"protein":8.95,"fat":0.46,"carbs":83.28}
+    ] },
+    {"id":"sperzieboon","nl":"sperzieboon","en":"green bean","aliasesEn":["French beans"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":31,"protein":1.8,"fat":0.2,"carbs":4.3,"source":"usda"}, "candidates": [
+      {"code":"169961","name":"Beans, snap, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":1.83,"fat":0.22,"carbs":6.97},
+      {"code":"173738","name":"Beans, french, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":343,"protein":18.81,"fat":2.02,"carbs":64.11},
+      {"code":"170419","name":"Peas, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":81,"protein":5.42,"fat":0.4,"carbs":14.45},
+      {"code":"167745","name":"Turtle, green, raw","category":"Finfish and Shellfish Products","state":"raw","kcal":89,"protein":19.8,"fat":0.5,"carbs":0},
+      {"code":"169282","name":"Soybeans, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":147,"protein":12.95,"fat":6.8,"carbs":11.05},
+      {"code":"170456","name":"Tomatoes, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":23,"protein":1.2,"fat":0.2,"carbs":5.1},
+      {"code":"168153","name":"Kiwifruit, green, raw","category":"Fruits and Fruit Juices","state":"raw","kcal":61,"protein":1.14,"fat":0.52,"carbs":14.66},
+      {"code":"168215","name":"Plantains, green, raw","category":"Fruits and Fruit Juices","state":"raw","kcal":152,"protein":1.25,"fat":0.07,"carbs":36.66}
+    ] },
+    {"id":"spinazie","nl":"spinazie","en":"spinach","aliasesEn":[],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":23,"protein":2.9,"fat":0.4,"carbs":1.4,"source":"usda"}, "candidates": [
+      {"code":"168462","name":"Spinach, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":23,"protein":2.86,"fat":0.39,"carbs":3.63},
+      {"code":"168438","name":"Mustard spinach, (tendergreen), raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":22,"protein":2.2,"fat":0.3,"carbs":3.9},
+      {"code":"169729","name":"Pasta, fresh-refrigerated, spinach, as purchased","category":"Cereal Grains and Pasta","state":"other","kcal":289,"protein":11.26,"fat":2.1,"carbs":55.72},
+      {"code":"168911","name":"Spaghetti, spinach, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":372,"protein":13.35,"fat":1.57,"carbs":74.81},
+      {"code":"169733","name":"Noodles, egg, spinach, enriched, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":382,"protein":14.61,"fat":4.55,"carbs":70.32},
+      {"code":"169286","name":"Spinach, canned, regular pack, drained solids","category":"Vegetables and Vegetable Products","state":"canned","kcal":23,"protein":2.81,"fat":0.5,"carbs":3.4},
+      {"code":"169285","name":"Spinach, canned, regular pack, solids and liquids","category":"Vegetables and Vegetable Products","state":"canned","kcal":19,"protein":2.11,"fat":0.37,"carbs":2.92},
+      {"code":"170123","name":"Spinach, canned, no salt added, solids and liquids","category":"Vegetables and Vegetable Products","state":"canned","kcal":19,"protein":2.11,"fat":0.37,"carbs":2.92}
+    ] },
+    {"id":"spinazie-a-la-creme","nl":"spinazie à la crème","en":"creamed spinach","aliasesEn":["frozen creamed spinach"],"defaultUnit":"g","aisle":"diepvries","current":{"kcal":62,"protein":2.5,"fat":4,"carbs":4,"source":"estimate"}, "candidates": [
+      {"code":"168462","name":"Spinach, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":23,"protein":2.86,"fat":0.39,"carbs":3.63},
+      {"code":"168438","name":"Mustard spinach, (tendergreen), raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":22,"protein":2.2,"fat":0.3,"carbs":3.9},
+      {"code":"172180","name":"Cheese, cottage, creamed, with fruit","category":"Dairy and Egg Products","state":"other","kcal":97,"protein":10.69,"fat":3.85,"carbs":4.61},
+      {"code":"172179","name":"Cheese, cottage, creamed, large or small curd","category":"Dairy and Egg Products","state":"other","kcal":98,"protein":11.12,"fat":4.3,"carbs":3.38},
+      {"code":"169729","name":"Pasta, fresh-refrigerated, spinach, as purchased","category":"Cereal Grains and Pasta","state":"other","kcal":289,"protein":11.26,"fat":2.1,"carbs":55.72},
+      {"code":"168911","name":"Spaghetti, spinach, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":372,"protein":13.35,"fat":1.57,"carbs":74.81},
+      {"code":"169733","name":"Noodles, egg, spinach, enriched, dry","category":"Cereal Grains and Pasta","state":"dried","kcal":382,"protein":14.61,"fat":4.55,"carbs":70.32},
+      {"code":"169286","name":"Spinach, canned, regular pack, drained solids","category":"Vegetables and Vegetable Products","state":"canned","kcal":23,"protein":2.81,"fat":0.5,"carbs":3.4}
+    ] },
+    {"id":"spitskool","nl":"spitskool","en":"pointed cabbage","aliasesEn":["sweetheart cabbage","hispi cabbage"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":24,"protein":1.2,"fat":0.2,"carbs":3.1,"source":"usda"}, "candidates": [
+      {"code":"169336","name":"Cabbage, common (danish, domestic, and pointed types), stored, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":24,"protein":1.21,"fat":0.18,"carbs":5.37},
+      {"code":"169335","name":"Cabbage, common (danish, domestic, and pointed types), freshly harvest, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":24,"protein":1.21,"fat":0.18,"carbs":5.37},
+      {"code":"169975","name":"Cabbage, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":25,"protein":1.28,"fat":0.1,"carbs":5.8},
+      {"code":"169977","name":"Cabbage, red, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":31,"protein":1.43,"fat":0.16,"carbs":7.37},
+      {"code":"170388","name":"Cabbage, savoy, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":27,"protein":2,"fat":0.1,"carbs":6.1},
+      {"code":"169979","name":"Cabbage, chinese (pe-tsai), raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":16,"protein":1.2,"fat":0.2,"carbs":3.23},
+      {"code":"170390","name":"Cabbage, chinese (pak-choi), raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":13,"protein":1.5,"fat":0.2,"carbs":2.18},
+      {"code":"170392","name":"Cabbage, kimchi","category":"Vegetables and Vegetable Products","state":"other","kcal":15,"protein":1.1,"fat":0.5,"carbs":2.4}
+    ] },
+    {"id":"spliterwt","nl":"spliterwt","en":"split pea","aliasesEn":[],"defaultUnit":"g","aisle":"droog","current":{"kcal":364,"protein":23.1,"fat":3.9,"carbs":39.4,"source":"usda"}, "candidates": [
+      {"code":"172428","name":"Peas, green, split, mature seeds, raw","category":"Legumes and Legume Products","state":"raw","kcal":364,"protein":23.12,"fat":3.89,"carbs":61.63},
+      {"code":"170419","name":"Peas, green, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":81,"protein":5.42,"fat":0.4,"carbs":14.45},
+      {"code":"170010","name":"Peas, edible-podded, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":42,"protein":2.8,"fat":0.2,"carbs":7.55},
+      {"code":"170422","name":"Peas, mature seeds, sprouted, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":124,"protein":8.8,"fat":0.68,"carbs":27.11},
+      {"code":"173157","name":"Snacks, peas, roasted, wasabi-flavored","category":"Snacks","state":"other","kcal":432,"protein":14.11,"fat":14.11,"carbs":62.2},
+      {"code":"170012","name":"Peas, edible-podded, frozen, unprepared","category":"Vegetables and Vegetable Products","state":"other","kcal":42,"protein":2.8,"fat":0.3,"carbs":7.2},
+      {"code":"171157","name":"Soup, pea, split with ham, canned, condensed","category":"Soups, Sauces, and Gravies","state":"canned","kcal":141,"protein":7.68,"fat":3.28,"carbs":20.81},
+      {"code":"171592","name":"Soup, pea, low sodium, prepared with equal volume water","category":"Soups, Sauces, and Gravies","state":"other","kcal":62,"protein":3.2,"fat":1.09,"carbs":9.88}
+    ] },
+    {"id":"sportdrank","nl":"sportdrank","en":"sports drink","aliasesEn":["isotonic drink","isotonic sports drink"],"defaultUnit":"fles","aisle":"dranken","current":{"kcal":24,"protein":0,"fat":0,"carbs":6,"source":"estimate"}, "candidates": [
+      {"code":"174108","name":"Beverages,  Energy drink, Citrus","category":"Beverages","state":"other","kcal":45,"protein":0,"fat":0,"carbs":11.27},
+      {"code":"174822","name":"Beverages, Energy Drink, sugar free","category":"Beverages","state":"other","kcal":4,"protein":0.42,"fat":0,"carbs":0.42},
+      {"code":"171873","name":"Beverages, chocolate drink, milk and soy based, ready to drink, fortified","category":"Beverages","state":"other","kcal":101,"protein":4.22,"fat":1.69,"carbs":17.3},
+      {"code":"171935","name":"Beverages, Energy Drink, Monster, fortified with vitamins C, B2, B3, B6, B12","category":"Beverages","state":"other","kcal":47,"protein":0.47,"fat":0,"carbs":11.28},
+      {"code":"175100","name":"Beverages, Orange drink, breakfast type, with juice and pulp, frozen concentrate","category":"Beverages","state":"other","kcal":153,"protein":0.4,"fat":0,"carbs":39},
+      {"code":"175101","name":"Beverages, Orange drink, breakfast type, with juice and pulp, frozen concentrate, prepared with water","category":"Beverages","state":"other","kcal":45,"protein":0.12,"fat":0,"carbs":11.32}
+    ] },
+    {"id":"sprinkles","nl":"sprinkles","en":"sprinkles","aliasesEn":["hundreds and thousands","sugar strands"],"defaultUnit":"el","aisle":"bakken","current":{"kcal":387,"protein":0.5,"fat":5,"carbs":85,"source":"estimate"}, "candidates": [] },
+    {"id":"sprits","nl":"sprits","en":"sprits","aliasesEn":["piped butter biscuit","piped butter biscuits"],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":477,"protein":5,"fat":25,"carbs":58,"source":"estimate"}, "candidates": [] },
+    {"id":"spruitje","nl":"spruitje","en":"Brussels sprout","aliasesEn":["sprouts","brussel sprouts"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":43,"protein":3.4,"fat":0.3,"carbs":5.1,"source":"usda"}, "candidates": [
+      {"code":"170383","name":"Brussels sprouts, raw","category":"Vegetables and Vegetable Products","state":"raw","kcal":43,"protein":3.38,"fat":0.3,"carbs":8.95},
+      {"code":"169972","name":"Brussels sprouts, frozen, unprepared","category":"Vegetables and Vegetable Products","state":"other","kcal":41,"protein":3.78,"fat":0.41,"carbs":7.86},
+      {"code":"168513","name":"Brussels sprouts, cooked, boiled, drained, with salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":36,"protein":2.55,"fat":0.5,"carbs":7.1},
+      {"code":"169971","name":"Brussels sprouts, cooked, boiled, drained, without salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":36,"protein":2.55,"fat":0.5,"carbs":7.1},
+      {"code":"169332","name":"Brussels sprouts, frozen, cooked, boiled, drained, with salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":42,"protein":3.64,"fat":0.39,"carbs":8.32},
+      {"code":"169973","name":"Brussels sprouts, frozen, cooked, boiled, drained, without salt","category":"Vegetables and Vegetable Products","state":"cooked","kcal":42,"protein":3.64,"fat":0.39,"carbs":8.32}
+    ] },
+    {"id":"spuitslagroom","nl":"spuitslagroom","en":"squirty cream","aliasesEn":["aerosol cream","spray cream"],"defaultUnit":"stuk","aisle":"zuivel-eieren","current":{"kcal":257,"protein":3.2,"fat":22.2,"carbs":12.5,"source":"usda"}, "candidates": [
+      {"code":"173418","name":"Cheese, cream","category":"Dairy and Egg Products","state":"other","kcal":350,"protein":6.15,"fat":34.44,"carbs":5.52},
+      {"code":"171257","name":"Cream, sour, cultured","category":"Dairy and Egg Products","state":"other","kcal":198,"protein":2.44,"fat":19.35,"carbs":4.63},
+      {"code":"169079","name":"Cheese, cream, low fat","category":"Dairy and Egg Products","state":"other","kcal":208,"protein":7.85,"fat":16.67,"carbs":6.73},
+      {"code":"172207","name":"Cheese, cream, fat free","category":"Dairy and Egg Products","state":"other","kcal":105,"protein":15.69,"fat":1,"carbs":7.66},
+      {"code":"171255","name":"Cream, fluid, half and half","category":"Dairy and Egg Products","state":"other","kcal":131,"protein":3.13,"fat":11.5,"carbs":4.3},
+      {"code":"170858","name":"Cream, fluid, light whipping","category":"Dairy and Egg Products","state":"other","kcal":292,"protein":2.17,"fat":30.91,"carbs":2.96},
+      {"code":"170859","name":"Cream, fluid, heavy whipping","category":"Dairy and Egg Products","state":"other","kcal":340,"protein":2.84,"fat":36.08,"carbs":2.84},
+      {"code":"171308","name":"Cream, half and half, lowfat","category":"Dairy and Egg Products","state":"other","kcal":72,"protein":3.33,"fat":5,"carbs":3.33}
+    ] },
+    {"id":"spuitzak","nl":"spuitzak","en":"piping bag","aliasesEn":["icing bag","disposable piping bags"],"defaultUnit":"stuk","aisle":"bakken","current":{"kcal":0,"protein":0,"fat":0,"carbs":0,"source":"estimate"}, "candidates": [] },
+    {"id":"sriracha","nl":"sriracha","en":"sriracha","aliasesEn":["sriracha sauce","sriracha chilli sauce"],"defaultUnit":"tl","aisle":"wereld","current":{"kcal":93,"protein":1.9,"fat":0.9,"carbs":17,"source":"usda"}, "candidates": [
+      {"code":"171186","name":"Sauce, hot chile, sriracha","category":"Soups, Sauces, and Gravies","state":"other","kcal":93,"protein":1.93,"fat":0.93,"carbs":19.16}
+    ] },
+    {"id":"stapelchips","nl":"stapelchips","en":"stackable crisps","aliasesEn":["crisps in a tube"],"defaultUnit":"g","aisle":"snacks-zoet","current":{"kcal":510,"protein":5,"fat":30,"carbs":55,"source":"estimate"}, "candidates": [
+      {"code":"174628","name":"Cereals ready-to-eat, Post, Waffle Crisp","category":"Breakfast Cereals","state":"other","kcal":390,"protein":6.6,"fat":5,"carbs":83},
+      {"code":"169601","name":"Desserts, apple crisp, prepared-from-recipe","category":"Sweets","state":"other","kcal":161,"protein":1.75,"fat":3.43,"carbs":30.84}
+    ] }
+  ]
+}

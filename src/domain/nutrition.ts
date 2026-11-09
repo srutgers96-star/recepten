@@ -21,6 +21,8 @@ export interface Nutrients {
 export interface NutritionItem extends Nutrients {
   alcohol?: number;
   source?: 'estimate' | 'nevo' | 'usda';
+  /** The code in the source table (USDA fdc_id, NEVO code); only with source usda / nevo (V9b). */
+  ref?: string;
 }
 
 export type NutritionTable = Readonly<Record<string, NutritionItem>>;

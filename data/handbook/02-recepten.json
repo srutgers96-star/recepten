@@ -318,8 +318,8 @@
         "en": "The line unfolds into a small table per serving, with below it how many lines of the ingredient list were counted. Another tap folds it away."
       },
       "know": {
-        "nl": "Het zijn schattingen op basis van gemiddelde waarden per ingrediënt, niet van jouw merk. Olie en marinade tellen helemaal mee, ook wat in de pan achterblijft. Kent de app minder dan de helft van de regels, dan staat er geen regel. Je zet de regel uit onder **Meer** → **Voedingswaarden**.",
-        "en": "They are estimates based on average values per ingredient, not your brand. Oil and marinade count in full, including what stays in the pan. If the app knows fewer than half of the lines, there is no line. You switch it off under **More** → **Nutrition**."
+        "nl": "Het zijn gemiddelde waarden per ingrediënt uit de voedingstabellen van de Amerikaanse overheid (USDA) en het RIVM (NEVO), of een schatting op dat niveau, niet van jouw merk. Olie en marinade tellen helemaal mee, ook wat in de pan achterblijft. Kent de app minder dan de helft van de regels, dan staat er geen regel. Je zet de regel uit onder **Meer** → **Voedingswaarden**.",
+        "en": "They are average values per ingredient from the food tables of the US government (USDA) and the RIVM (NEVO), or an estimate at that level, not your brand. Oil and marinade count in full, including what stays in the pan. If the app knows fewer than half of the lines, there is no line. You switch it off under **More** → **Nutrition**."
       },
       "route": "/recipes",
       "platform": "all",

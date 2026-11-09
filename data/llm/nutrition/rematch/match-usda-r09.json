@@ -1,0 +1,486 @@
+{
+ "batch": "r09",
+ "source": "usda",
+ "items": [
+  {
+   "id": "roomkaas-met-gember",
+   "choice": "173418",
+   "confidence": "close",
+   "why": "roomkaas, smaakvariant"
+  },
+  {
+   "id": "roomkaas-met-kruiden",
+   "choice": "173418",
+   "confidence": "close",
+   "why": "roomkaas, smaakvariant"
+  },
+  {
+   "id": "roomlikeur",
+   "choice": "175098",
+   "confidence": "close",
+   "why": "roomlikeur met koffie, zelfde familie"
+  },
+  {
+   "id": "rose",
+   "choice": "171908",
+   "confidence": "sure",
+   "why": "rosewijn"
+  },
+  {
+   "id": "rosti",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "rotivel",
+   "choice": "171844",
+   "confidence": "close",
+   "why": "roti, zelfde product"
+  },
+  {
+   "id": "roze-koek",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "roze-peper",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "rozenwater",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "rozijn",
+   "choice": "168166",
+   "confidence": "sure",
+   "why": "rozijnen"
+  },
+  {
+   "id": "rucola",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "rum",
+   "choice": "174817",
+   "confidence": "sure",
+   "why": "rum 80 proof"
+  },
+  {
+   "id": "rumaroma",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "runderbouillon",
+   "choice": "172923",
+   "confidence": "close",
+   "why": "runderbouillonblokje bereid met water"
+  },
+  {
+   "id": "saffraan",
+   "choice": "170934",
+   "confidence": "sure",
+   "why": "saffraan"
+  },
+  {
+   "id": "sake",
+   "choice": "167723",
+   "confidence": "sure",
+   "why": "sake"
+  },
+  {
+   "id": "salie",
+   "choice": "170935",
+   "confidence": "close",
+   "why": "salie gemalen; huidige waarde waarschijnlijk vers"
+  },
+  {
+   "id": "salsa",
+   "choice": "174524",
+   "confidence": "sure",
+   "why": "salsasaus"
+  },
+  {
+   "id": "sambal-manis",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "samosa",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sandwich",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sandwichspread",
+   "choice": "171409",
+   "confidence": "close",
+   "why": "sandwichspread met augurk, vetter dan huidige"
+  },
+  {
+   "id": "santen",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sardine",
+   "choice": "175139",
+   "confidence": "sure",
+   "why": "sardine blik uitgelekt"
+  },
+  {
+   "id": "satesaus",
+   "choice": "174070",
+   "confidence": "sure",
+   "why": "pindasaus, kcal gelijk"
+  },
+  {
+   "id": "schapenkaas",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "schapenyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "schnitzel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "schol",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "schrijfglazuur",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "seitan",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "selderij",
+   "choice": "169988",
+   "confidence": "sure",
+   "why": "selderij rauw"
+  },
+  {
+   "id": "selderijsalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "selderijzout",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "seroendeng",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "serranoham",
+   "choice": "168282",
+   "confidence": "close",
+   "why": "rauwe gedroogde hamschijf, zelfde familie"
+  },
+  {
+   "id": "sesamzaad",
+   "choice": "170150",
+   "confidence": "sure",
+   "why": "sesamzaad gedroogd"
+  },
+  {
+   "id": "sherryazijn",
+   "choice": "172240",
+   "confidence": "close",
+   "why": "wijnazijn, zelfde familie"
+  },
+  {
+   "id": "shoarmakruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "shoarmavlees",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sinaasappellikeur",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sinaasappelsap",
+   "choice": "169100",
+   "confidence": "sure",
+   "why": "sinaasappelsap"
+  },
+  {
+   "id": "sinas",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sla",
+   "choice": "168429",
+   "confidence": "close",
+   "why": "kropsla"
+  },
+  {
+   "id": "slagroomversteviger",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "slamelange",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "slasaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "slavink",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "smaakwater",
+   "choice": "171926",
+   "confidence": "close",
+   "why": "water met fruitsmaak"
+  },
+  {
+   "id": "smeltkaas",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "smoothiemix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "snackworstje",
+   "choice": "174603",
+   "confidence": "close",
+   "why": "gedroogde worst, kcal gelijk"
+  },
+  {
+   "id": "snelkookrijst",
+   "choice": "168877",
+   "confidence": "close",
+   "why": "witte rijst droog, instant niet apart"
+  },
+  {
+   "id": "snoekbaars",
+   "choice": "175128",
+   "confidence": "close",
+   "why": "walleye is verwant aan zander"
+  },
+  {
+   "id": "snoepje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "soepgroenten",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "soepstengel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "soepsterretjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "soepvlees",
+   "choice": "171206",
+   "confidence": "sure",
+   "why": "stoofvlees rauw"
+  },
+  {
+   "id": "soes",
+   "choice": "174986",
+   "confidence": "close",
+   "why": "soesjesdeeg"
+  },
+  {
+   "id": "soffritto",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sojadessert",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sojamelk",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sojaroom",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sojasaus",
+   "choice": "172474",
+   "confidence": "close",
+   "why": "sojasaus, natriumarm"
+  },
+  {
+   "id": "sojayoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "sorbetijs",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "spaanse-peper",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "spaetzle",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "spaghetti",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "spaghettikruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "spaghettimix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "spaghettini",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "spareribs",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "speciaalbier",
+   "choice": "171906",
+   "confidence": "close",
+   "why": "bier met hoger alcoholgehalte"
+  },
+  {
+   "id": "speculaas",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "speculoospasta",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "spekblokjes",
+   "choice": "168277",
+   "confidence": "close",
+   "why": "bacon ongebakken"
+  },
+  {
+   "id": "spekkoek",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "speklap",
+   "choice": "167812",
+   "confidence": "sure",
+   "why": "buikspek rauw"
+  }
+ ]
+}

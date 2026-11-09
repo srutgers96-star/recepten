@@ -1,0 +1,486 @@
+{
+ "batch": "06",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "gebraden-fricandeau",
+   "choice": "1419",
+   "confidence": "close",
+   "why": "Fricandeau rauw, zelfde stuk varkensvlees; gebraden alleen niet als kandidaat, kcal klopt"
+  },
+  {
+   "id": "gebraden-gehakt",
+   "choice": "1155",
+   "confidence": "sure",
+   "why": "Gehakt gebraden (vleeswaar) is precies dit product"
+  },
+  {
+   "id": "gebrande-amandel",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen amandelmeel, geen gebrande amandel"
+  },
+  {
+   "id": "gecondenseerde-melk",
+   "choice": "281",
+   "confidence": "sure",
+   "why": "gecondenseerde melk met suiker"
+  },
+  {
+   "id": "gedroogde-vijg",
+   "choice": "193",
+   "confidence": "sure",
+   "why": "vijgen gedroogd"
+  },
+  {
+   "id": "gehakt",
+   "choice": "2333",
+   "confidence": "sure",
+   "why": "gehakt rauw gemiddeld"
+  },
+  {
+   "id": "gehaktbal",
+   "choice": null,
+   "confidence": "none",
+   "why": "enige kandidaat is een snack (Berenklauw)"
+  },
+  {
+   "id": "gehaktballetje",
+   "choice": "908",
+   "confidence": "close",
+   "why": "soepballetjes blik, zelfde soort balletjes in toestand uit blik"
+  },
+  {
+   "id": "gehaktkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kruidenmix voor gehakt; kandidaten zijn kippengehakt en Mexicaanse mix"
+  },
+  {
+   "id": "geitenkaas",
+   "choice": "1650",
+   "confidence": "close",
+   "why": "verse geitenkaas; hard is 396 kcal, huidige 264 ligt dichter bij vers"
+  },
+  {
+   "id": "geitenmelk",
+   "choice": "2240",
+   "confidence": "sure",
+   "why": "geitenmelk volle"
+  },
+  {
+   "id": "geitenyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen geitenyoghurt; geitenmelk is een ander product"
+  },
+  {
+   "id": "gelatine",
+   "choice": "439",
+   "confidence": "sure",
+   "why": "gelatine"
+  },
+  {
+   "id": "geleisuiker",
+   "choice": "377",
+   "confidence": "close",
+   "why": "kristalsuiker, geleisuiker is suiker plus pectine"
+  },
+  {
+   "id": "gember",
+   "choice": "832",
+   "confidence": "sure",
+   "why": "gemberwortel"
+  },
+  {
+   "id": "gemberkoekje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gemberkoekje; generiek koekje zou gokken zijn"
+  },
+  {
+   "id": "gemberpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen verse wortel (81 kcal) en siroop, geen gedroogd poeder (huidig 340)"
+  },
+  {
+   "id": "gembersap",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gembersap onder de kandidaten"
+  },
+  {
+   "id": "gembershot",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gembershot; wortel en siroop zijn andere producten"
+  },
+  {
+   "id": "gembersiroop",
+   "choice": "440",
+   "confidence": "close",
+   "why": "gember op siroop (stemgember), 288 kcal tegen 280 huidig"
+  },
+  {
+   "id": "gemberthee",
+   "choice": "645",
+   "confidence": "close",
+   "why": "thee bereid, 0 kcal zoals huidig"
+  },
+  {
+   "id": "gepofte-rijst",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gepofte rijst; rauwe rijst is 352 maar andere toestand"
+  },
+  {
+   "id": "gestampte-muisjes",
+   "choice": "3245",
+   "confidence": "sure",
+   "why": "gestampte muisjes"
+  },
+  {
+   "id": "gevulde-druivenbladeren",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is gevulde druivenbladeren"
+  },
+  {
+   "id": "gevulde-koek",
+   "choice": "257",
+   "confidence": "sure",
+   "why": "gevulde koek gemiddeld"
+  },
+  {
+   "id": "gevulde-speculaas",
+   "choice": "855",
+   "confidence": "sure",
+   "why": "gevulde speculaas"
+  },
+  {
+   "id": "ghee",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "gierst",
+   "choice": "847",
+   "confidence": "sure",
+   "why": "gierst rauw"
+  },
+  {
+   "id": "gin",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ginger-ale",
+   "choice": "400",
+   "confidence": "sure",
+   "why": "NEVO noemt ginger ale/tonic expliciet"
+  },
+  {
+   "id": "ginger-beer",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen ginger beer; bier en gember zijn andere producten"
+  },
+  {
+   "id": "gist",
+   "choice": "1025",
+   "confidence": "sure",
+   "why": "droge gist (zakje), vers is 66 kcal"
+  },
+  {
+   "id": "glasnoedels",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "glucosestroop",
+   "choice": "1652",
+   "confidence": "close",
+   "why": "maismoutstroop, 287 tegen 283 huidig"
+  },
+  {
+   "id": "gluhwein",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen glühwein; rode wijn 76 is andere drank"
+  },
+  {
+   "id": "glutenvrij-brood",
+   "choice": "5412",
+   "confidence": "close",
+   "why": "glutenvrij witbrood, 212 tegen 248 huidig"
+  },
+  {
+   "id": "glutenvrij-paneermeel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen glutenvrij paneermeel; gewoon paneermeel bevat gluten"
+  },
+  {
+   "id": "glutenvrije-bloem",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen glutenvrije bloem; kandidaten zijn pasta, brood en andere meel"
+  },
+  {
+   "id": "glutenvrije-broodmix",
+   "choice": "5598",
+   "confidence": "close",
+   "why": "bakmix glutenvrij witbrood, 354 tegen 340"
+  },
+  {
+   "id": "glutenvrije-havermout",
+   "choice": "213",
+   "confidence": "close",
+   "why": "gewone havervlokken, zelfde product zonder glutenvrij-label"
+  },
+  {
+   "id": "glutenvrije-pasta",
+   "choice": "2271",
+   "confidence": "sure",
+   "why": "pasta glutenvrij rauw (droog)"
+  },
+  {
+   "id": "gnocchi",
+   "choice": "5418",
+   "confidence": "sure",
+   "why": "gnocchi onbereid"
+  },
+  {
+   "id": "gochujang",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "gojibes",
+   "choice": "3445",
+   "confidence": "sure",
+   "why": "gojibessen gedroogd"
+  },
+  {
+   "id": "gorgonzola",
+   "choice": "1939",
+   "confidence": "sure",
+   "why": "kaas blauwschimmel Gorgonzola"
+  },
+  {
+   "id": "gort",
+   "choice": "212",
+   "confidence": "sure",
+   "why": "parelgort rauw"
+  },
+  {
+   "id": "goulashsoep",
+   "choice": null,
+   "confidence": "none",
+   "why": "goulash is een gerecht, geen soep uit blik (huidig 55 kcal)"
+  },
+  {
+   "id": "gourmetschotel",
+   "choice": null,
+   "confidence": "none",
+   "why": "samengestelde schotel; geen kandidaat past"
+  },
+  {
+   "id": "grana-padano",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "granaatappel",
+   "choice": "1007",
+   "confidence": "sure",
+   "why": "granaatappel"
+  },
+  {
+   "id": "granaatappelmelasse",
+   "choice": null,
+   "confidence": "none",
+   "why": "melasse is ingedikt sap, vers fruit 91 kcal past niet bij 250"
+  },
+  {
+   "id": "granaatappelsap",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen granaatappelsap; vruchtvlees 91 kcal tegen 54 huidig"
+  },
+  {
+   "id": "granadilla",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "granola",
+   "choice": "5593",
+   "confidence": "close",
+   "why": "granola naturel, 422 tegen 460 huidig"
+  },
+  {
+   "id": "grapefruit",
+   "choice": "162",
+   "confidence": "sure",
+   "why": "grapefruit"
+  },
+  {
+   "id": "grapefruitsap",
+   "choice": "664",
+   "confidence": "sure",
+   "why": "grapefruitsap"
+  },
+  {
+   "id": "grappa",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "gravad-lax",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "grenadine",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "griekse-yoghurt",
+   "choice": "2503",
+   "confidence": "close",
+   "why": "Griekse yoghurt volle; eiwit in NEVO laag (3.8 tegen 9) maar vetgehalte en soort kloppen"
+  },
+  {
+   "id": "griesmeel",
+   "choice": "5580",
+   "confidence": "sure",
+   "why": "griesmeel van tarwe"
+  },
+  {
+   "id": "griesmeelpap",
+   "choice": "1722",
+   "confidence": "sure",
+   "why": "griesmeelpap"
+  },
+  {
+   "id": "griesmeelpudding",
+   "choice": "1722",
+   "confidence": "close",
+   "why": "griesmeelpap als dichtstbijzijnde, 93 tegen 100 kcal"
+  },
+  {
+   "id": "groente",
+   "choice": "1905",
+   "confidence": "close",
+   "why": "groenten rauw gemiddeld"
+  },
+  {
+   "id": "groentebouillon",
+   "choice": null,
+   "confidence": "none",
+   "why": "huidige 3 kcal is bereide bouillon; blokje (273) is ander product"
+  },
+  {
+   "id": "groentebouillonpoeder",
+   "choice": "842",
+   "confidence": "close",
+   "why": "bouillonpoeder, 197 tegen 200 kcal, eiwit hoger"
+  },
+  {
+   "id": "groentechips",
+   "choice": "122",
+   "confidence": "close",
+   "why": "aardappelchips gemiddeld als dichtste snackfamilie, 538 tegen 490"
+  },
+  {
+   "id": "groentefond",
+   "choice": null,
+   "confidence": "none",
+   "why": "geconcentreerde bouillon 53 kcal is ruim 2x de huidige 20"
+  },
+  {
+   "id": "groentemix",
+   "choice": "1905",
+   "confidence": "close",
+   "why": "groenten rauw gemiddeld; diepvries-mix Mexico (85) is 2x te hoog"
+  },
+  {
+   "id": "groentesap",
+   "choice": "1132",
+   "confidence": "close",
+   "why": "tomaten/groentesap, 21 tegen 20 kcal"
+  },
+  {
+   "id": "groentesoep",
+   "choice": "800",
+   "confidence": "close",
+   "why": "groentesoep kant-en-klaar blik, 47 tegen 39"
+  },
+  {
+   "id": "gruyere",
+   "choice": "722",
+   "confidence": "sure",
+   "why": "Gruyere"
+  },
+  {
+   "id": "guacamole",
+   "choice": "5121",
+   "confidence": "sure",
+   "why": "guacamole"
+  },
+  {
+   "id": "guanciale",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "guave",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "gummibeer",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "gyoza",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "gyros",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gyrosvlees; kandidaten zijn generiek vlees"
+  },
+  {
+   "id": "gyroskruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kruidenmix voor gyros; Mexicaanse mix is anders"
+  },
+  {
+   "id": "haas",
+   "choice": "107",
+   "confidence": "sure",
+   "why": "haas rauw"
+  }
+ ]
+}

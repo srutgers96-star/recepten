@@ -239,8 +239,8 @@
         "en": "The kcal line disappears from every recipe page. Switch it back on and it is back."
       },
       "know": {
-        "nl": "De instelling gaat mee in je back-up. In het woordenboek blijven de waarden per 100 g gewoon zichtbaar.",
-        "en": "The setting travels with your backup. In the dictionary the values per 100 g stay visible."
+        "nl": "De instelling gaat mee in je back-up. In het woordenboek blijven de waarden per 100 g zichtbaar, met de bron erbij (USDA, NEVO of schatting).",
+        "en": "The setting travels with your backup. In the dictionary the values per 100 g stay visible, with their source (USDA, NEVO or estimate)."
       },
       "route": "/more",
       "platform": "all",

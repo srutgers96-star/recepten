@@ -1,0 +1,57 @@
+{
+  "batch": "19",
+  "source": "nevo",
+  "items": [
+    {"id":"zuurkool","nl":"zuurkool","en":"sauerkraut","aliasesEn":[],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":19,"protein":0.9,"fat":0.1,"carbs":1.4,"source":"usda"}, "candidates": [
+      {"code":"1657","name":"Sap zuurkool-","name2":"Juice sauerkraut; Zuurkoolsap","category":"Niet-alcoholische dranken","state":"other","kcal":7,"protein":0.7,"fat":0,"carbs":1.1},
+      {"code":"73","name":"Kool zuur- rauw","name2":"Cabbage sauerkraut raw; Zuurkool rauw","category":"Groente","state":"raw","kcal":13,"protein":1.1,"fat":0,"carbs":0.6}
+    ] },
+    {"id":"zuurstok","nl":"zuurstok","en":"stick of rock","aliasesEn":["candy cane","candy canes","seaside rock"],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":385,"protein":0,"fat":0,"carbs":96,"source":"estimate"}, "candidates": [
+      {"code":"267","name":"Pepsels","name2":"Pretzel sticks; Zoute sticks/stokjes","category":"Hartige snacks en zoutjes","state":"other","kcal":382,"protein":11.9,"fat":5.3,"carbs":69.5}
+    ] },
+    {"id":"zuurtje","nl":"zuurtje","en":"boiled sweet","aliasesEn":["hard sweets","hard candy"],"defaultUnit":"g","aisle":"snacks-zoet","current":{"kcal":390,"protein":0,"fat":0,"carbs":97.5,"source":"estimate"}, "candidates": [
+      {"code":"450","name":"Zuurtjes","name2":"Sweets boiled; Hoestbonbon/rang e.d. snoepjes","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"cooked","kcal":380,"protein":0,"fat":0,"carbs":95},
+      {"code":"3067","name":"Snoepje room- hard","name2":"Sweets cream hard; Karamelsnoepje hard","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":414,"protein":0.5,"fat":8.6,"carbs":83.9},
+      {"code":"2743","name":"Paprika gekookt gem","name2":"Sweet pepper av boiled","category":"Groente","state":"cooked","kcal":27,"protein":0.9,"fat":0.1,"carbs":4.8},
+      {"code":"2112","name":"Aardappel zoete gekookt","name2":"Potato sweet boiled; Bataat zoete gekookt","category":"Aardappelen en knolgewassen","state":"cooked","kcal":63,"protein":1.7,"fat":0.2,"carbs":12.3},
+      {"code":"163","name":"Kersen zoete","name2":"Cherries sweet","category":"Fruit","state":"other","kcal":57,"protein":0.9,"fat":0.4,"carbs":11.5},
+      {"code":"2742","name":"Paprika rauw gem","name2":"Sweet pepper av raw","category":"Groente","state":"raw","kcal":25,"protein":0.8,"fat":0.1,"carbs":4.2},
+      {"code":"464","name":"Broodbeleg zoet gem","name2":"Spread sweet av","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":422,"protein":3,"fat":16.5,"carbs":64.2},
+      {"code":"671","name":"Aardappel zoete rauw","name2":"Potato sweet raw; Bataat zoete rauw","category":"Aardappelen en knolgewassen","state":"raw","kcal":91,"protein":1.2,"fat":0.3,"carbs":19.7}
+    ] },
+    {"id":"zwaardvis","nl":"zwaardvis","en":"swordfish","aliasesEn":["swordfish steak","swordfish steaks"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":144,"protein":19.7,"fat":6.7,"carbs":0,"source":"usda"}, "candidates": [] },
+    {"id":"zwarte-bes","nl":"zwarte bes","en":"blackcurrant","aliasesEn":["black currant","black currants"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":63,"protein":1.4,"fat":0.4,"carbs":15.4,"source":"usda"}, "candidates": [
+      {"code":"154","name":"Bessen zwarte","name2":"Blackcurrants; Zwarte bessen","category":"Fruit","state":"other","kcal":53,"protein":0.9,"fat":0,"carbs":8},
+      {"code":"387","name":"Vruchtendrank zwarte bessen","name2":"Fruit juice drink blackcurrant; Zwarte bessendrank","category":"Niet-alcoholische dranken","state":"other","kcal":61,"protein":0,"fat":0,"carbs":15}
+    ] },
+    {"id":"zwarte-boon","nl":"zwarte boon","en":"black bean","aliasesEn":["tinned black beans","black turtle beans"],"defaultUnit":"blik","aisle":"blik-pot","current":{"kcal":91,"protein":6,"fat":0.3,"carbs":9.7,"source":"usda"}, "candidates": [
+      {"code":"5176","name":"Bonen zwarte blik/glas","name2":"Beans black canned; Zwarte bonen blik/glas","category":"Peulvruchten","state":"canned","kcal":113,"protein":7.9,"fat":1,"carbs":14.1},
+      {"code":"5167","name":"Bonen black eyed blik/glas","name2":"Beans black eyed canned; Zwartoogbonen blik/glas","category":"Peulvruchten","state":"canned","kcal":126,"protein":7.8,"fat":0.9,"carbs":18.9},
+      {"code":"138","name":"Bonen snij- blik/glas","name2":"Beans runner tinned; Snijbonen blik/glas","category":"Groente","state":"canned","kcal":20,"protein":1.1,"fat":0.3,"carbs":2.3},
+      {"code":"142","name":"Bonen tuin- blik/glas","name2":"Beans broad tinned; Tuinbonen blik/glas","category":"Groente","state":"canned","kcal":73,"protein":5.8,"fat":0.6,"carbs":8.5},
+      {"code":"139","name":"Bonen sperzie- blik/glas","name2":"Beans French tinned; Sperziebonen/haricots verts blik/glas","category":"Groente","state":"canned","kcal":26,"protein":1.6,"fat":0.3,"carbs":2.9},
+      {"code":"197","name":"Bonen witte in tomatensaus blik/glas","name2":"Beans white baked in tomato sauce canned; Witte bonen in tomatensaus","category":"Peulvruchten","state":"canned","kcal":101,"protein":5.7,"fat":0.6,"carbs":15.2},
+      {"code":"3049","name":"Bonen witte blik/glas","name2":"Beans white canned; Witte bonen blik/glas","category":"Peulvruchten","state":"canned","kcal":105,"protein":6.9,"fat":0.8,"carbs":14},
+      {"code":"5171","name":"Bonen chili- blik/glas","name2":"Beans chilli canned; Chilibonen blik/glas","category":"Peulvruchten","state":"canned","kcal":106,"protein":6.3,"fat":0.8,"carbs":15.8}
+    ] },
+    {"id":"zwarte-ogenboon","nl":"zwarte-ogenboon","en":"black-eyed bean","aliasesEn":["black-eyed peas","black eye beans"],"defaultUnit":"g","aisle":"droog","current":{"kcal":336,"protein":23.5,"fat":1.3,"carbs":60,"source":"estimate"}, "candidates": [
+      {"code":"685","name":"Bonen black eyed gedroogd","name2":"Beans black eyed dried","category":"Peulvruchten","state":"dried","kcal":367,"protein":23,"fat":2,"carbs":62},
+      {"code":"5167","name":"Bonen black eyed blik/glas","name2":"Beans black eyed canned; Zwartoogbonen blik/glas","category":"Peulvruchten","state":"canned","kcal":126,"protein":7.8,"fat":0.9,"carbs":18.9},
+      {"code":"5176","name":"Bonen zwarte blik/glas","name2":"Beans black canned; Zwarte bonen blik/glas","category":"Peulvruchten","state":"canned","kcal":113,"protein":7.9,"fat":1,"carbs":14.1},
+      {"code":"49","name":"Bonen snij- rauw","name2":"Beans runner raw; Snijbonen rauw","category":"Groente","state":"raw","kcal":22,"protein":1.9,"fat":0.1,"carbs":2},
+      {"code":"62","name":"Bonen tuin- rauw","name2":"Beans broad raw; Tuinbonen rauw","category":"Groente","state":"raw","kcal":51,"protein":5,"fat":0,"carbs":4},
+      {"code":"50","name":"Bonen sperzie- rauw","name2":"Beans French raw; Sperziebonen/haricots verts rauw","category":"Groente","state":"raw","kcal":25,"protein":2.3,"fat":0.2,"carbs":1.8},
+      {"code":"58","name":"Tauge rauw","name2":"Bean sprouts raw","category":"Groente","state":"raw","kcal":25,"protein":2.2,"fat":0.1,"carbs":3.2},
+      {"code":"568","name":"Worst bloed-","name2":"Black pudding; Bloedworst","category":"Vlees en gevogelte","state":"other","kcal":386,"protein":12.4,"fat":32.6,"carbs":9.5}
+    ] },
+    {"id":"zwarte-peper","nl":"zwarte peper","en":"black pepper","aliasesEn":["freshly ground black pepper","ground black pepper"],"defaultUnit":"mp","aisle":"kruiden-specerijen","current":{"kcal":240,"protein":10.4,"fat":3.3,"carbs":40,"source":"estimate"}, "candidates": [
+      {"code":"823","name":"Peper zwarte/witte","name2":"Pepper black/white","category":"Kruiden en specerijen","state":"other","kcal":332,"protein":11,"fat":3,"carbs":52},
+      {"code":"2524","name":"Peper Spaanse rauw","name2":"Chili pepper raw; Chilipeper rauw","category":"Groente","state":"raw","kcal":30,"protein":1.8,"fat":0.3,"carbs":4.2},
+      {"code":"568","name":"Worst bloed-","name2":"Black pudding; Bloedworst","category":"Vlees en gevogelte","state":"other","kcal":386,"protein":12.4,"fat":32.6,"carbs":9.5},
+      {"code":"125","name":"Rammenas rauw","name2":"Radish black raw","category":"Groente","state":"raw","kcal":30,"protein":2,"fat":0,"carbs":5},
+      {"code":"154","name":"Bessen zwarte","name2":"Blackcurrants; Zwarte bessen","category":"Fruit","state":"other","kcal":53,"protein":0.9,"fat":0,"carbs":8},
+      {"code":"2742","name":"Paprika rauw gem","name2":"Sweet pepper av raw","category":"Groente","state":"raw","kcal":25,"protein":0.8,"fat":0.1,"carbs":4.2},
+      {"code":"672","name":"Agoemawiwiri rauw","name2":"Black nightshade raw","category":"Groente","state":"raw","kcal":60,"protein":5,"fat":1,"carbs":7}
+    ] }
+  ]
+}

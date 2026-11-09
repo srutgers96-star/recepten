@@ -1,0 +1,462 @@
+{
+ "batch": "r11",
+ "source": "usda",
+ "items": [
+  {
+   "id": "vega-spekjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vegagehakt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vegan-boter",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vegaschnitzel",
+   "choice": "169068",
+   "confidence": "close",
+   "why": "Vegetarian fillets, zelfde familie"
+  },
+  {
+   "id": "vegaworstje",
+   "choice": "174269",
+   "confidence": "sure",
+   "why": "Sausage, meatless"
+  },
+  {
+   "id": "venkelthee",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "venkelzaad",
+   "choice": "171323",
+   "confidence": "sure",
+   "why": "Spices, fennel seed"
+  },
+  {
+   "id": "vermicelli",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vijfkruidenpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vinaigrette",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "visstick",
+   "choice": "174195",
+   "confidence": "close",
+   "why": "fish sticks frozen prepared"
+  },
+  {
+   "id": "vitaminewater",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vla",
+   "choice": "169595",
+   "confidence": "close",
+   "why": "egg custard baked, zelfde familie"
+  },
+  {
+   "id": "vlaai",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vlammetje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vlees",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vleesvervanger",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vleeswaren",
+   "choice": "173863",
+   "confidence": "close",
+   "why": "ham in plakjes als generieke vleeswaar"
+  },
+  {
+   "id": "vlierbloesemsiroop",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vloeibare-margarine",
+   "choice": "172347",
+   "confidence": "close",
+   "why": "margarine 80% vet tub, kcal gelijk aan huidig"
+  },
+  {
+   "id": "volkorenmeel",
+   "choice": "168944",
+   "confidence": "sure",
+   "why": "whole-grain wheat flour"
+  },
+  {
+   "id": "vruchtenhagel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vruchtenkwark",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vruchtensap",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vruchtenthee",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "vruchtenyoghurt",
+   "choice": "170889",
+   "confidence": "close",
+   "why": "yoghurt met fruit, magere variant"
+  },
+  {
+   "id": "wafel",
+   "choice": "175039",
+   "confidence": "sure",
+   "why": "waffles plain"
+  },
+  {
+   "id": "walnoot",
+   "choice": "170187",
+   "confidence": "sure",
+   "why": "walnuts english"
+  },
+  {
+   "id": "wasabi",
+   "choice": "168583",
+   "confidence": "close",
+   "why": "wasabi root raw, kcal gelijk aan huidig; pasta onzeker"
+  },
+  {
+   "id": "wasabinootje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "waterijsje",
+   "choice": "168813",
+   "confidence": "close",
+   "why": "frozen novelties ice type pop"
+  },
+  {
+   "id": "waterkastanje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "weetabix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wijn",
+   "choice": "173185",
+   "confidence": "close",
+   "why": "wine table all, generiek"
+  },
+  {
+   "id": "winegum",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "witbier",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "witbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "witbroodkruim",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wodka",
+   "choice": "174818",
+   "confidence": "sure",
+   "why": "vodka 80 proof"
+  },
+  {
+   "id": "wokgroente",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wokkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "wokvlees",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "yoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "yoghurtdressing",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "yoghurtrozijn",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zaanse-mosterd",
+   "choice": "172234",
+   "confidence": "close",
+   "why": "mustard prepared yellow"
+  },
+  {
+   "id": "zachte-tarwe",
+   "choice": "169720",
+   "confidence": "close",
+   "why": "wheat soft white"
+  },
+  {
+   "id": "zadenmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zalm",
+   "choice": "175167",
+   "confidence": "close",
+   "why": "Atlantic farmed raw, gangbare supermarktzalm"
+  },
+  {
+   "id": "zalmfilet",
+   "choice": "175167",
+   "confidence": "close",
+   "why": "Atlantic farmed raw"
+  },
+  {
+   "id": "zalmsalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zalmsnippers",
+   "choice": "175167",
+   "confidence": "close",
+   "why": "Atlantic farmed raw"
+  },
+  {
+   "id": "zanddeeg",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zandkoekje",
+   "choice": "174967",
+   "confidence": "sure",
+   "why": "shortbread plain"
+  },
+  {
+   "id": "zeebaars",
+   "choice": "175142",
+   "confidence": "sure",
+   "why": "sea bass raw"
+  },
+  {
+   "id": "zeeduivel",
+   "choice": "173676",
+   "confidence": "sure",
+   "why": "monkfish raw"
+  },
+  {
+   "id": "zeekraal",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zeewiersalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zeezoutvlokken",
+   "choice": "173468",
+   "confidence": "sure",
+   "why": "Salt, table"
+  },
+  {
+   "id": "zelfrijzend-bakmeel",
+   "choice": "168895",
+   "confidence": "sure",
+   "why": "self-rising wheat flour"
+  },
+  {
+   "id": "zilvervliesrijst",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zoete-aardappel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zoete-aardappelfriet",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zoethoutthee",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zoetstof",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zoetzure-saus",
+   "choice": "174066",
+   "confidence": "sure",
+   "why": "sweet and sour sauce ready-to-serve"
+  },
+  {
+   "id": "zongedroogde-tomaat",
+   "choice": "169384",
+   "confidence": "close",
+   "why": "op olie, uitgelekt; kcal gelijk aan huidig"
+  },
+  {
+   "id": "zout",
+   "choice": "173468",
+   "confidence": "sure",
+   "why": "Salt, table"
+  },
+  {
+   "id": "zoutje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zoutstengel",
+   "choice": "167555",
+   "confidence": "close",
+   "why": "pretzels hard plain salted"
+  },
+  {
+   "id": "zure-bom",
+   "choice": "169379",
+   "confidence": "close",
+   "why": "Pickles cucumber sour"
+  },
+  {
+   "id": "zure-room",
+   "choice": "171257",
+   "confidence": "sure",
+   "why": "Cream, sour, cultured"
+  },
+  {
+   "id": "zuurstok",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zuurtje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zwarte-bes",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  },
+  {
+   "id": "zwarte-ogenboon",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat is hetzelfde product"
+  }
+ ]
+}

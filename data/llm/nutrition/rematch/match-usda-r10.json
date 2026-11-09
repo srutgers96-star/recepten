@@ -1,0 +1,486 @@
+{
+ "batch": "r10",
+ "source": "usda",
+ "items": [
+  {
+   "id": "spekreepjes",
+   "choice": "168277",
+   "confidence": "close",
+   "why": "gerookt/gezouten spek rauw"
+  },
+  {
+   "id": "speltmeel",
+   "choice": "169745",
+   "confidence": "close",
+   "why": "spelt als graan, meel zelfde familie"
+  },
+  {
+   "id": "speltpasta",
+   "choice": "169736",
+   "confidence": "close",
+   "why": "droge pasta, kcal gelijk aan huidig"
+  },
+  {
+   "id": "speltvlokken",
+   "choice": "169745",
+   "confidence": "close",
+   "why": "spelt ongekookt"
+  },
+  {
+   "id": "spinazie-a-la-creme",
+   "choice": null,
+   "confidence": "none",
+   "why": "samengesteld gerecht"
+  },
+  {
+   "id": "sportdrank",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen sportdrank in kandidaten"
+  },
+  {
+   "id": "sprinkles",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "sprits",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "spuitslagroom",
+   "choice": "170858",
+   "confidence": "close",
+   "why": "light whipping cream als dichtstbijzijnde"
+  },
+  {
+   "id": "stapelchips",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen chips"
+  },
+  {
+   "id": "steakkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen vlees, geen kruiden"
+  },
+  {
+   "id": "steranijs",
+   "choice": "171316",
+   "confidence": "close",
+   "why": "anijszaad, verwante specerij"
+  },
+  {
+   "id": "stervrucht",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen carambola"
+  },
+  {
+   "id": "stokbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "stol",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "stoofvlees",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen rund/stooflapje; kip is ander product"
+  },
+  {
+   "id": "stroopwafel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "studentenhaver",
+   "choice": "167561",
+   "confidence": "close",
+   "why": "trail mix regular"
+  },
+  {
+   "id": "suikerklontje",
+   "choice": "169655",
+   "confidence": "sure",
+   "why": "kristalsuiker"
+  },
+  {
+   "id": "sukade",
+   "choice": "167781",
+   "confidence": "close",
+   "why": "gekonfijt fruit"
+  },
+  {
+   "id": "sultana",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "surimi",
+   "choice": "174203",
+   "confidence": "sure",
+   "why": "imitatiekrab uit surimi"
+  },
+  {
+   "id": "sushigember",
+   "choice": null,
+   "confidence": "none",
+   "why": "verse gember 80 kcal vs 20 ingelegd"
+  },
+  {
+   "id": "sushirijst",
+   "choice": "168879",
+   "confidence": "sure",
+   "why": "medium-grain rijst rauw"
+  },
+  {
+   "id": "taart",
+   "choice": null,
+   "confidence": "none",
+   "why": "te algemeen"
+  },
+  {
+   "id": "taartbodem",
+   "choice": "172706",
+   "confidence": "close",
+   "why": "biscuitcake"
+  },
+  {
+   "id": "taartgelei",
+   "choice": "169668",
+   "confidence": "close",
+   "why": "glazuur, kcal gelijk"
+  },
+  {
+   "id": "tabasco",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "tacosaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen tacosaus; tomatensaus 2x minder kcal"
+  },
+  {
+   "id": "tamarillo",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "tamarinde",
+   "choice": "167763",
+   "confidence": "sure",
+   "why": "tamarind raw"
+  },
+  {
+   "id": "tandoorikruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "tandooripasta",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "tapenade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "tapiocameel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen tapiocameel"
+  },
+  {
+   "id": "tauge",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "thaise-basilicum",
+   "choice": "172232",
+   "confidence": "close",
+   "why": "verse basilicum"
+  },
+  {
+   "id": "thee",
+   "choice": "171917",
+   "confidence": "close",
+   "why": "groene thee gezet, 0 kcal"
+  },
+  {
+   "id": "tijm",
+   "choice": "170938",
+   "confidence": "sure",
+   "why": "gedroogde tijm, tl"
+  },
+  {
+   "id": "tikka-masala-saus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat"
+  },
+  {
+   "id": "toastje",
+   "choice": "174977",
+   "confidence": "close",
+   "why": "melba toast"
+  },
+  {
+   "id": "toffee",
+   "choice": "169671",
+   "confidence": "close",
+   "why": "toffee uit recept"
+  },
+  {
+   "id": "tofu",
+   "choice": "172475",
+   "confidence": "close",
+   "why": "stevige tofu"
+  },
+  {
+   "id": "tomaten-uit-blik",
+   "choice": "170051",
+   "confidence": "sure",
+   "why": "tomaat blik in sap"
+  },
+  {
+   "id": "tomatenblokjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen blokjes; crushed 2x kcal"
+  },
+  {
+   "id": "tomatenpuree",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen tomatenpuree"
+  },
+  {
+   "id": "tomatensaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "tomatensoep",
+   "choice": null,
+   "confidence": "none",
+   "why": "soep is samengesteld"
+  },
+  {
+   "id": "tomatentapenade",
+   "choice": "169384",
+   "confidence": "close",
+   "why": "zongedroogde tomaat in olie, kcal gelijk"
+  },
+  {
+   "id": "tompouce",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "tong",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "tonic",
+   "choice": "171869",
+   "confidence": "sure",
+   "why": "tonic water"
+  },
+  {
+   "id": "tonijn",
+   "choice": "175158",
+   "confidence": "close",
+   "why": "tonijn blik in water"
+  },
+  {
+   "id": "tonijn-in-olie",
+   "choice": "173708",
+   "confidence": "sure",
+   "why": "light tuna in olie uitgelekt"
+  },
+  {
+   "id": "tonijn-in-water",
+   "choice": "175158",
+   "confidence": "sure",
+   "why": "tonijn in water uitgelekt"
+  },
+  {
+   "id": "tonijnfilet",
+   "choice": "175159",
+   "confidence": "sure",
+   "why": "yellowfin rauw"
+  },
+  {
+   "id": "tonijnsalade",
+   "choice": null,
+   "confidence": "none",
+   "why": "salade is samengesteld"
+  },
+  {
+   "id": "tortiglioni",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "tortilla-chips",
+   "choice": "167558",
+   "confidence": "sure",
+   "why": "tortillachips plain gezouten"
+  },
+  {
+   "id": "trappist",
+   "choice": "171906",
+   "confidence": "close",
+   "why": "bier met hoger alcoholpercentage"
+  },
+  {
+   "id": "trassi",
+   "choice": null,
+   "confidence": "none",
+   "why": "garnalen zijn ander product"
+  },
+  {
+   "id": "trofie",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "trostomaat",
+   "choice": "170457",
+   "confidence": "sure",
+   "why": "rode tomaat rauw"
+  },
+  {
+   "id": "truffel",
+   "choice": null,
+   "confidence": "none",
+   "why": "chocoladetruffel is ander product dan paddenstoel"
+  },
+  {
+   "id": "truffelmayonaise",
+   "choice": "171009",
+   "confidence": "close",
+   "why": "gewone mayonaise"
+  },
+  {
+   "id": "tutti-frutti",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gedroogd fruitmengsel"
+  },
+  {
+   "id": "uienpoeder",
+   "choice": "171327",
+   "confidence": "sure",
+   "why": "onion powder"
+  },
+  {
+   "id": "vanillekwark",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kwark; yoghurt is ander product"
+  },
+  {
+   "id": "vanillepudding",
+   "choice": "169608",
+   "confidence": "sure",
+   "why": "vanillepudding"
+  },
+  {
+   "id": "vanillesaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vanillesaus"
+  },
+  {
+   "id": "vanillestokje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vanilleboon"
+  },
+  {
+   "id": "vanillesuiker",
+   "choice": "169655",
+   "confidence": "close",
+   "why": "kristalsuiker"
+  },
+  {
+   "id": "vanillevla",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vla"
+  },
+  {
+   "id": "vanillewafel",
+   "choice": "174974",
+   "confidence": "close",
+   "why": "vanilla wafers"
+  },
+  {
+   "id": "vanilleyoghurt",
+   "choice": "170888",
+   "confidence": "close",
+   "why": "vanille yoghurt low fat"
+  },
+  {
+   "id": "varkenspoulet",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen magere varkensdobbelsteen; kandidaten vet of gehakt"
+  },
+  {
+   "id": "varkenssate",
+   "choice": null,
+   "confidence": "none",
+   "why": "samengesteld"
+  },
+  {
+   "id": "varkenswang",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "vega-nugget",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  },
+  {
+   "id": "vega-shoarma",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen passende kandidaat"
+  }
+ ]
+}

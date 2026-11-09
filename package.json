@@ -17,6 +17,7 @@
     "measure-parse": "node --experimental-strip-types tools/measure-parse.ts",
     "measure-grams": "node --experimental-strip-types tools/measure-grams.ts",
     "apply-nutrition": "node --experimental-strip-types tools/apply-nutrition.ts",
+    "nutrition-match": "node --experimental-strip-types tools/nutrition-match.ts",
     "icons": "python tools/make-icons.py"
   },
   "dependencies": {

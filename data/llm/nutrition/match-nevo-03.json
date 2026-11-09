@@ -1,0 +1,486 @@
+{
+ "batch": "03",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "botersla",
+   "choice": "46",
+   "confidence": "sure",
+   "why": "Sla krop- rauw = botersla rauw"
+  },
+  {
+   "id": "bouillon",
+   "choice": null,
+   "confidence": "none",
+   "why": "vloeibare bouillon (3 kcal); blokje/poeder is ruim 50x hoger"
+  },
+  {
+   "id": "bouillonblokje",
+   "choice": "429",
+   "confidence": "sure",
+   "why": "Bouillonblokje"
+  },
+  {
+   "id": "bouillonpoeder",
+   "choice": "842",
+   "confidence": "sure",
+   "why": "Bouillonpoeder"
+  },
+  {
+   "id": "bouquet-garni",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "braadkip",
+   "choice": null,
+   "confidence": "none",
+   "why": "hele kip; alleen filet/rollade/ei beschikbaar"
+  },
+  {
+   "id": "braadworst",
+   "choice": "1417",
+   "confidence": "sure",
+   "why": "Varkensbraadworst rauw"
+  },
+  {
+   "id": "braam",
+   "choice": "157",
+   "confidence": "sure",
+   "why": "Bramen"
+  },
+  {
+   "id": "breekbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen brood in kandidaten"
+  },
+  {
+   "id": "brezel",
+   "choice": null,
+   "confidence": "none",
+   "why": "pepsels zijn zoute sticks, geen zachte brezel"
+  },
+  {
+   "id": "brie",
+   "choice": "593",
+   "confidence": "close",
+   "why": "Brie 50+; 60+ is vetter"
+  },
+  {
+   "id": "brinta",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen ontbijtpap/tarwegrutten-product"
+  },
+  {
+   "id": "brioche",
+   "choice": "2876",
+   "confidence": "sure",
+   "why": "Brioche"
+  },
+  {
+   "id": "broccoli",
+   "choice": "921",
+   "confidence": "sure",
+   "why": "Broccoli rauw"
+  },
+  {
+   "id": "brokkelkaas",
+   "choice": "513",
+   "confidence": "close",
+   "why": "Goudse 48+ voor oude Goudse"
+  },
+  {
+   "id": "brood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen generiek brood; kandidaten zijn andere producten"
+  },
+  {
+   "id": "broodkruim",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "broodmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen glutenvrije bakmix of afgebakken brood"
+  },
+  {
+   "id": "brownie",
+   "choice": "3238",
+   "confidence": "sure",
+   "why": "Brownie ongevuld"
+  },
+  {
+   "id": "browniemix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen browniemix"
+  },
+  {
+   "id": "bruine-bonensoep",
+   "choice": null,
+   "confidence": "none",
+   "why": "soep; kandidaten zijn bonen, geen soep"
+  },
+  {
+   "id": "bruine-boon",
+   "choice": "660",
+   "confidence": "sure",
+   "why": "Bruine bonen blik/glas"
+  },
+  {
+   "id": "bruiswater",
+   "choice": "747",
+   "confidence": "close",
+   "why": "mineraalwater met en zonder koolzuur, 0 kcal"
+  },
+  {
+   "id": "bucatini",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "buikspek",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen buikspek; varkensvlees gem is veel magerder (201 vs 518)"
+  },
+  {
+   "id": "bulgaarse-yoghurt",
+   "choice": "300",
+   "confidence": "sure",
+   "why": "Yoghurt Bulgaarse volle"
+  },
+  {
+   "id": "bulgur",
+   "choice": "1015",
+   "confidence": "sure",
+   "why": "Bulgur onbereid"
+  },
+  {
+   "id": "burgerbroodje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "burgersaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vergelijkbare saus"
+  },
+  {
+   "id": "burrata",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "butter-chicken-saus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kooksaus; botersaus is ander product"
+  },
+  {
+   "id": "cacaonibs",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "cacaopoeder",
+   "choice": "430",
+   "confidence": "sure",
+   "why": "Cacaopoeder"
+  },
+  {
+   "id": "caesardressing",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen Caesar-dressing"
+  },
+  {
+   "id": "cafeinevrije-koffie",
+   "choice": null,
+   "confidence": "none",
+   "why": "koffie bereid is 1 kcal, current is poeder; geen match"
+  },
+  {
+   "id": "cajunkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "Mexicaanse mix is ander mengsel"
+  },
+  {
+   "id": "cake",
+   "choice": "5237",
+   "confidence": "close",
+   "why": "Cake naturel gem voor Madeira/pound cake"
+  },
+  {
+   "id": "cakemix",
+   "choice": "5262",
+   "confidence": "sure",
+   "why": "Bakmix voor cake naturel"
+  },
+  {
+   "id": "calamares",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "calvados",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "camembert",
+   "choice": "556",
+   "confidence": "close",
+   "why": "Camembert 45+ (306 kcal) dicht bij current"
+  },
+  {
+   "id": "campari",
+   "choice": "392",
+   "confidence": "sure",
+   "why": "Campari"
+  },
+  {
+   "id": "cannelliniboon",
+   "choice": "5170",
+   "confidence": "sure",
+   "why": "Cannellini blik/glas"
+  },
+  {
+   "id": "cannelloni",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "cantharel",
+   "choice": "17",
+   "confidence": "sure",
+   "why": "Cantharel rauw"
+  },
+  {
+   "id": "cantuccini",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "capellini",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "carbonarasaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "huishoudelijke saus 284 kcal vs 130 voor potsaus: ruim 2x"
+  },
+  {
+   "id": "carpaccio",
+   "choice": "1410",
+   "confidence": "close",
+   "why": "rosbief rauw (122 kcal) als carpaccio-vlees"
+  },
+  {
+   "id": "casarecce",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "cashewnoot",
+   "choice": "199",
+   "confidence": "sure",
+   "why": "Cashewnoten ongezouten"
+  },
+  {
+   "id": "casinobrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "cassave",
+   "choice": "667",
+   "confidence": "sure",
+   "why": "Cassave rauw"
+  },
+  {
+   "id": "cassavechips",
+   "choice": null,
+   "confidence": "none",
+   "why": "aardappelchips/cassave rauw zijn ander product"
+  },
+  {
+   "id": "casselerrib",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gerookte varkenslende; rauwe varkenscuts zijn ander product"
+  },
+  {
+   "id": "cassis",
+   "choice": "387",
+   "confidence": "close",
+   "why": "Vruchtendrank zwarte bessen"
+  },
+  {
+   "id": "cayennepeper",
+   "choice": "1225",
+   "confidence": "sure",
+   "why": "Cayennepeper rode"
+  },
+  {
+   "id": "cervelaatworst",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "chai",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "champagne",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "champignon",
+   "choice": "19",
+   "confidence": "sure",
+   "why": "Champignon rauw"
+  },
+  {
+   "id": "champignonsaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen champignonsaus"
+  },
+  {
+   "id": "champignonsoep",
+   "choice": null,
+   "confidence": "none",
+   "why": "soep; alleen rauwe/blik champignons"
+  },
+  {
+   "id": "cheddar",
+   "choice": "725",
+   "confidence": "sure",
+   "why": "Kaas Cheddar"
+  },
+  {
+   "id": "cherimoya",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "chiazaad",
+   "choice": "3447",
+   "confidence": "sure",
+   "why": "Chiazaad gedroogd"
+  },
+  {
+   "id": "chili-con-carne-kruidenmix",
+   "choice": "1501",
+   "confidence": "close",
+   "why": "mix voor chili con carne, onbereid"
+  },
+  {
+   "id": "chili-olie",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen chilli-olie; neutrale olie is andere smaakolie"
+  },
+  {
+   "id": "chilibonen",
+   "choice": "5171",
+   "confidence": "sure",
+   "why": "Chilibonen blik/glas"
+  },
+  {
+   "id": "chilipoeder",
+   "choice": "1221",
+   "confidence": "sure",
+   "why": "Chilipoeder"
+  },
+  {
+   "id": "chilisaus",
+   "choice": "3343",
+   "confidence": "close",
+   "why": "Chilisaus (149 vs 93 kcal)"
+  },
+  {
+   "id": "chilivlokken",
+   "choice": "1221",
+   "confidence": "close",
+   "why": "gedroogde chili als poeder; geen vlokken"
+  },
+  {
+   "id": "chinese-kool",
+   "choice": "21",
+   "confidence": "sure",
+   "why": "Kool Chinese rauw"
+  },
+  {
+   "id": "chipolata",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "chips",
+   "choice": "122",
+   "confidence": "sure",
+   "why": "Chips gem"
+  },
+  {
+   "id": "chocolade",
+   "choice": "431",
+   "confidence": "close",
+   "why": "Melkchocolade, dicht bij current 546"
+  },
+  {
+   "id": "chocoladebiscuit",
+   "choice": "2775",
+   "confidence": "sure",
+   "why": "Biscuit digestive m chocolade"
+  },
+  {
+   "id": "chocoladecroissant",
+   "choice": "2400",
+   "confidence": "sure",
+   "why": "Chocoladecroissant"
+  },
+  {
+   "id": "chocoladedrops",
+   "choice": "432",
+   "confidence": "close",
+   "why": "Pure chocolade; geen drops in NEVO"
+  },
+  {
+   "id": "chocoladeflik",
+   "choice": "431",
+   "confidence": "close",
+   "why": "Melkchocolade; geen flikken"
+  }
+ ]
+}

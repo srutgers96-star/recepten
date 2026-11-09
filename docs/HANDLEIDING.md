@@ -576,7 +576,7 @@ De regel klapt uit tot een klein tabelletje per portie, met eronder hoeveel rege
 
 #### Goed om te weten
 
-Het zijn schattingen op basis van gemiddelde waarden per ingrediënt, niet van jouw merk. Olie en marinade tellen helemaal mee, ook wat in de pan achterblijft. Kent de app minder dan de helft van de regels, dan staat er geen regel. Je zet de regel uit onder **Meer** → **Voedingswaarden**.
+Het zijn gemiddelde waarden per ingrediënt uit de voedingstabellen van de Amerikaanse overheid (USDA) en het RIVM (NEVO), of een schatting op dat niveau, niet van jouw merk. Olie en marinade tellen helemaal mee, ook wat in de pan achterblijft. Kent de app minder dan de helft van de regels, dan staat er geen regel. Je zet de regel uit onder **Meer** → **Voedingswaarden**.
 
 (`#/recipes`)
 
@@ -4140,7 +4140,7 @@ De regel met kcal verdwijnt van elke receptpagina. Zet je de schakelaar weer aan
 
 #### Goed om te weten
 
-De instelling gaat mee in je back-up. In het woordenboek blijven de waarden per 100 g gewoon zichtbaar.
+De instelling gaat mee in je back-up. In het woordenboek blijven de waarden per 100 g zichtbaar, met de bron erbij (USDA, NEVO of schatting).
 
 (`#/more`)
 

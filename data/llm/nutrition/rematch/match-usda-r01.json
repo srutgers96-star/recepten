@@ -1,0 +1,486 @@
+{
+ "batch": "r01",
+ "source": "usda",
+ "items": [
+  {
+   "id": "aardappelkroketje",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "aardappelkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "aardappelpartjes",
+   "choice": "168946",
+   "confidence": "close",
+   "why": "frozen wedge-cut fries, same product family"
+  },
+  {
+   "id": "aardappelpuree",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "aardappelzetmeel",
+   "choice": "168446",
+   "confidence": "close",
+   "why": "potato flour for starch, 357 kcal equal"
+  },
+  {
+   "id": "aardbeienjam",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "aardbeienyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "abdijbier",
+   "choice": "171906",
+   "confidence": "close",
+   "why": "higher-alcohol beer fits abbey ale"
+  },
+  {
+   "id": "advocaat",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "afbakstokbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "agar-agar",
+   "choice": "170090",
+   "confidence": "sure",
+   "why": "agar dried powder"
+  },
+  {
+   "id": "agavesiroop",
+   "choice": "170277",
+   "confidence": "sure",
+   "why": "agave syrup"
+  },
+  {
+   "id": "aioli",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "ajvar",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "alcoholvrij-bier",
+   "choice": "174863",
+   "confidence": "close",
+   "why": "non-alcoholic malt beverage; 37 vs 17 kcal"
+  },
+  {
+   "id": "alcoholvrije-wijn",
+   "choice": "174157",
+   "confidence": "close",
+   "why": "non-alcoholic wine; 6 vs 18 kcal"
+  },
+  {
+   "id": "allesbinder",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "amandel",
+   "choice": "170567",
+   "confidence": "sure",
+   "why": "almonds"
+  },
+  {
+   "id": "amandelaroma",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "amandelmeel",
+   "choice": null,
+   "confidence": "none",
+   "why": "candidates are ground meats, not almond flour"
+  },
+  {
+   "id": "amandelmelk",
+   "choice": "174832",
+   "confidence": "close",
+   "why": "unsweetened almond milk"
+  },
+  {
+   "id": "amandelspijs",
+   "choice": "170160",
+   "confidence": "sure",
+   "why": "almond paste"
+  },
+  {
+   "id": "amandelyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "american-pancake",
+   "choice": "175009",
+   "confidence": "sure",
+   "why": "plain pancakes from recipe, 227 kcal"
+  },
+  {
+   "id": "anijszaad",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "ansjovis",
+   "choice": "174183",
+   "confidence": "sure",
+   "why": "anchovy canned in oil, drained"
+  },
+  {
+   "id": "apenootje",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "appel",
+   "choice": "171689",
+   "confidence": "close",
+   "why": "raw apple"
+  },
+  {
+   "id": "appelbol",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "appelchips",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "appelmoes",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "appelring",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "appelstroop",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "appeltaart",
+   "choice": "167522",
+   "confidence": "sure",
+   "why": "Dutch apple pie"
+  },
+  {
+   "id": "appeltaartmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "artisjokhart",
+   "choice": "169205",
+   "confidence": "close",
+   "why": "raw artichoke, no canned hearts candidate"
+  },
+  {
+   "id": "atjar",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "aubergine",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "augurk",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "augurkennat",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "ayran",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "babi-pangang-saus",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bacon",
+   "choice": "168277",
+   "confidence": "sure",
+   "why": "cured pork bacon"
+  },
+  {
+   "id": "bakgember",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bakkeljauw",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bakpoeder",
+   "choice": "172803",
+   "confidence": "close",
+   "why": "double-acting baking powder"
+  },
+  {
+   "id": "baksoda",
+   "choice": "175040",
+   "confidence": "sure",
+   "why": "baking soda"
+  },
+  {
+   "id": "bakspray",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "balsamicocreme",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "balti-kooksaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bamischijf",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "bananenchips",
+   "choice": "168849",
+   "confidence": "sure",
+   "why": "banana chips"
+  },
+  {
+   "id": "bananenvla",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "banketbakkersroom",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "banketstaaf",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "barbecuekruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "basmatirijst",
+   "choice": "168877",
+   "confidence": "close",
+   "why": "long-grain white rice raw"
+  },
+  {
+   "id": "bavarois",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bavette",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "beef-jerky",
+   "choice": "167536",
+   "confidence": "sure",
+   "why": "beef jerky"
+  },
+  {
+   "id": "beenham",
+   "choice": "169177",
+   "confidence": "close",
+   "why": "bone-in cured ham slice, lean and fat"
+  },
+  {
+   "id": "belugalinze",
+   "choice": "172420",
+   "confidence": "close",
+   "why": "lentils raw"
+  },
+  {
+   "id": "berlinerbol",
+   "choice": "172757",
+   "confidence": "close",
+   "why": "yeast doughnut with creme filling"
+  },
+  {
+   "id": "beschuit",
+   "choice": "174981",
+   "confidence": "sure",
+   "why": "rusk toast"
+  },
+  {
+   "id": "bessengelei",
+   "choice": "169642",
+   "confidence": "close",
+   "why": "generic jelly"
+  },
+  {
+   "id": "biefstuk",
+   "choice": "171804",
+   "confidence": "close",
+   "why": "top sirloin steak lean raw"
+  },
+  {
+   "id": "bier",
+   "choice": "168746",
+   "confidence": "sure",
+   "why": "regular beer"
+  },
+  {
+   "id": "biet",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidates"
+  },
+  {
+   "id": "bietensap",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bigarreaux",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bimi",
+   "choice": "170379",
+   "confidence": "close",
+   "why": "broccoli raw for broccolini"
+  },
+  {
+   "id": "bitter-lemon",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bitterkoekje",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bladerdeeg",
+   "choice": "172790",
+   "confidence": "sure",
+   "why": "frozen puff pastry"
+  },
+  {
+   "id": "blinde-vink",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bloedsinaasappel",
+   "choice": "169097",
+   "confidence": "close",
+   "why": "oranges raw"
+  },
+  {
+   "id": "bloedworst",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bloem-tipo-00",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bloemen",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "bloemkoolrijst",
+   "choice": "169986",
+   "confidence": "close",
+   "why": "cauliflower raw"
+  }
+ ]
+}

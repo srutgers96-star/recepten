@@ -1,0 +1,486 @@
+{
+ "batch": "07",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "hacheekruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "Hachee is een gerecht, geen kruidenmix"
+  },
+  {
+   "id": "hacheevlees",
+   "choice": "1414",
+   "confidence": "sure",
+   "why": "Rundersukadelappen rauw = stoofvlees"
+  },
+  {
+   "id": "hagelslag",
+   "choice": "1311",
+   "confidence": "sure",
+   "why": "Chocoladehagelslag gem"
+  },
+  {
+   "id": "halloumi",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "halva",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "halvanaise",
+   "choice": "729",
+   "confidence": "sure",
+   "why": "Halvanaise"
+  },
+  {
+   "id": "halvarine",
+   "choice": "5424",
+   "confidence": "sure",
+   "why": "Halvarine Jumbo"
+  },
+  {
+   "id": "ham",
+   "choice": "784",
+   "confidence": "close",
+   "why": "Achterham = gekookte ham"
+  },
+  {
+   "id": "ham-preisalade",
+   "choice": "1497",
+   "confidence": "sure",
+   "why": "Salade ham-prei"
+  },
+  {
+   "id": "hamblokjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen rauwe gerookte ham (188 kcal vs 107 huidig, ruim 1,7x)"
+  },
+  {
+   "id": "hamburger",
+   "choice": "1435",
+   "confidence": "sure",
+   "why": "Hamburger rauw"
+  },
+  {
+   "id": "hamburgerkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "hamschijf",
+   "choice": "1423",
+   "confidence": "close",
+   "why": "Varkenshamschijf rauw; huidige waarde is gekookte ham"
+  },
+  {
+   "id": "hamworst",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen hamworst; buren zijn ander product"
+  },
+  {
+   "id": "haricots-verts",
+   "choice": "50",
+   "confidence": "sure",
+   "why": "Sperziebonen/haricots verts rauw"
+  },
+  {
+   "id": "haring",
+   "choice": "350",
+   "confidence": "sure",
+   "why": "Hollandse nieuwe/maatjesharing"
+  },
+  {
+   "id": "harissa",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "havermelk",
+   "choice": "5463",
+   "confidence": "sure",
+   "why": "Haverdrink zonder suiker"
+  },
+  {
+   "id": "havermout",
+   "choice": "213",
+   "confidence": "sure",
+   "why": "Havervlokken/havermout"
+  },
+  {
+   "id": "havermoutkoekje",
+   "choice": "258",
+   "confidence": "close",
+   "why": "Generiek koekje gem, zelfde familie"
+  },
+  {
+   "id": "haverroom",
+   "choice": null,
+   "confidence": "none",
+   "why": "Kookroom is zuivel, geen havervariant"
+  },
+  {
+   "id": "haveryoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen plantaardige yoghurt"
+  },
+  {
+   "id": "haverzemelen",
+   "choice": "3058",
+   "confidence": "sure",
+   "why": "Haverzemelen"
+  },
+  {
+   "id": "hazelnoot",
+   "choice": "200",
+   "confidence": "sure",
+   "why": "Hazelnoten ongezouten"
+  },
+  {
+   "id": "hazelnootdrink",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen hazelnootdrink"
+  },
+  {
+   "id": "heek",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "heilbot",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen gerookte heilbot (211 kcal vs 91)"
+  },
+  {
+   "id": "hertenvlees",
+   "choice": "339",
+   "confidence": "close",
+   "why": "Ree wild rauw, wildvlees"
+  },
+  {
+   "id": "himalayazout",
+   "choice": "2953",
+   "confidence": "close",
+   "why": "Zeezout, 0 kcal zout"
+  },
+  {
+   "id": "hoisinsaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen hoisin; buren andere sauzen"
+  },
+  {
+   "id": "hokkien-mie",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "hollandaisesaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen hollandaise; botersaus is andere saus"
+  },
+  {
+   "id": "hollandse-garnaal",
+   "choice": "348",
+   "confidence": "sure",
+   "why": "Hollandse garnalen gekookt, zo verkocht"
+  },
+  {
+   "id": "honing",
+   "choice": "443",
+   "confidence": "sure",
+   "why": "Honing"
+  },
+  {
+   "id": "honing-mosterdsaus",
+   "choice": "2468",
+   "confidence": "sure",
+   "why": "Dressing honing/mosterd"
+  },
+  {
+   "id": "hopje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen hopje/koffiesnoep"
+  },
+  {
+   "id": "hopjesvla",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen hopjesvla"
+  },
+  {
+   "id": "hotdogbroodje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Puddingbroodje is ander product"
+  },
+  {
+   "id": "houdbare-melk",
+   "choice": "279",
+   "confidence": "close",
+   "why": "Volle melk; UHT niet apart"
+  },
+  {
+   "id": "hummus",
+   "choice": "3207",
+   "confidence": "sure",
+   "why": "Hummus naturel"
+  },
+  {
+   "id": "hutspotgroente",
+   "choice": "5448",
+   "confidence": "sure",
+   "why": "Hutspotgroente rauw"
+  },
+  {
+   "id": "huttenkase",
+   "choice": "654",
+   "confidence": "sure",
+   "why": "Kaas huttenkase"
+  },
+  {
+   "id": "huzarensalade",
+   "choice": "577",
+   "confidence": "sure",
+   "why": "Huzarensalade"
+  },
+  {
+   "id": "ijsbergsla",
+   "choice": "1399",
+   "confidence": "sure",
+   "why": "IJsbergsla rauw"
+  },
+  {
+   "id": "ijsblokje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "ijshoorntje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen hoorntje; roomijs is ander product"
+  },
+  {
+   "id": "ijsje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Roomijs 216 vs 331 huidig, ander product"
+  },
+  {
+   "id": "ijskoffie",
+   "choice": "2835",
+   "confidence": "sure",
+   "why": "IJskoffie"
+  },
+  {
+   "id": "ijstaart",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen ijstaart"
+  },
+  {
+   "id": "ijsthee",
+   "choice": "2088",
+   "confidence": "sure",
+   "why": "IJsthee met suiker en zoetstof"
+  },
+  {
+   "id": "inktvis",
+   "choice": "1098",
+   "confidence": "sure",
+   "why": "Inktvis rauw"
+  },
+  {
+   "id": "ipa",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen bier-kandidaat"
+  },
+  {
+   "id": "italiaanse-bol",
+   "choice": null,
+   "confidence": "none",
+   "why": "Berliner bol is gebak"
+  },
+  {
+   "id": "italiaanse-kruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kruidenmix"
+  },
+  {
+   "id": "jalapeno",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "jam",
+   "choice": "445",
+   "confidence": "sure",
+   "why": "Jam"
+  },
+  {
+   "id": "japanse-mayonaise",
+   "choice": "451",
+   "confidence": "close",
+   "why": "Mayonaise, zelfde familie"
+  },
+  {
+   "id": "japanse-mix",
+   "choice": "1943",
+   "confidence": "close",
+   "why": "Japanse mix met pinda's; ook variant zonder pinda's bestaat"
+  },
+  {
+   "id": "japanse-sojasaus",
+   "choice": "5470",
+   "confidence": "sure",
+   "why": "Sojasaus"
+  },
+  {
+   "id": "jasmijnrijst",
+   "choice": "5",
+   "confidence": "close",
+   "why": "Witte rijst onbereid, geen jasmijn apart"
+  },
+  {
+   "id": "jasmijnthee",
+   "choice": "645",
+   "confidence": "close",
+   "why": "Thee bereid, 0 kcal"
+  },
+  {
+   "id": "jelly-beans",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "jenever",
+   "choice": "402",
+   "confidence": "close",
+   "why": "Oude jenever (jonge 401 even goed)"
+  },
+  {
+   "id": "jeneverbes",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "jodenkoek",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "joppiesaus",
+   "choice": "2611",
+   "confidence": "sure",
+   "why": "Joppiesaus"
+  },
+  {
+   "id": "jus",
+   "choice": null,
+   "confidence": "none",
+   "why": "Juspoeder 342 kcal is droog, huidige waarde is bereid"
+  },
+  {
+   "id": "kaas",
+   "choice": "513",
+   "confidence": "sure",
+   "why": "Goudse 48+ gem"
+  },
+  {
+   "id": "kaasblokje",
+   "choice": "1809",
+   "confidence": "close",
+   "why": "Kaas 45+, generiek"
+  },
+  {
+   "id": "kaasbroodje",
+   "choice": "2553",
+   "confidence": "sure",
+   "why": "Kaasbroodje v bladerdeeg"
+  },
+  {
+   "id": "kaasfondue",
+   "choice": "5244",
+   "confidence": "close",
+   "why": "Kaasfondue huishoudelijk bereid"
+  },
+  {
+   "id": "kaaskoekje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kaaskoekje"
+  },
+  {
+   "id": "kaassaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen kaas zelf, geen saus"
+  },
+  {
+   "id": "kaasschnitzel",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kaasschnitzel"
+  },
+  {
+   "id": "kaassouffle",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "kaasstengel",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen kaas, geen kaasstengel"
+  },
+  {
+   "id": "kaastortellini",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen kaas, geen pasta"
+  },
+  {
+   "id": "kabeljauwfilet",
+   "choice": "820",
+   "confidence": "sure",
+   "why": "Kabeljauw rauw"
+  },
+  {
+   "id": "kaiserbroodje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaat"
+  },
+  {
+   "id": "kaki",
+   "choice": "1057",
+   "confidence": "sure",
+   "why": "Kaki/Sharonvrucht"
+  }
+ ]
+}

@@ -1,0 +1,486 @@
+{
+ "batch": "r02",
+ "source": "usda",
+ "items": [
+  {
+   "id": "boerenbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen vleesbroden, geen brood."
+  },
+  {
+   "id": "bokbier",
+   "choice": "171906",
+   "confidence": "close",
+   "why": "Beer met hoger alcoholgehalte, 58 kcal past bij bokbier (55)."
+  },
+  {
+   "id": "bokking",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "bolletje",
+   "choice": "172795",
+   "confidence": "close",
+   "why": "Rolls, french: zelfde broodjesfamilie, zelfde kcal als huidig."
+  },
+  {
+   "id": "bonbon",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen ijs/yoghurt, geen bonbons."
+  },
+  {
+   "id": "bonenkruid",
+   "choice": "170936",
+   "confidence": "sure",
+   "why": "Savory, ground = gedroogd bonenkruid."
+  },
+  {
+   "id": "borrelnootje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen rauwe pinda, geen gecoate; 570 vs 500 kcal."
+  },
+  {
+   "id": "borstplaat",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "bosbessenjam",
+   "choice": null,
+   "confidence": "none",
+   "why": "Jam 151 vs 278 kcal (bijna 2x), rest vers fruit of gebak."
+  },
+  {
+   "id": "bosui",
+   "choice": "170007",
+   "confidence": "close",
+   "why": "Welsh onion raw is de dichtstbijzijnde lenteui (34 kcal)."
+  },
+  {
+   "id": "bosvruchtenjam",
+   "choice": "170280",
+   "confidence": "close",
+   "why": "Generieke jam met fruitsap gezoet, 212 vs 278 kcal; zelfde familie."
+  },
+  {
+   "id": "bosvruchtenyoghurt",
+   "choice": "170889",
+   "confidence": "close",
+   "why": "Vruchtenyoghurt low fat, 99 vs 85 kcal."
+  },
+  {
+   "id": "boterkoek",
+   "choice": "172704",
+   "confidence": "close",
+   "why": "Pound cake met boter, dichtste boterkoek-achtige cake."
+  },
+  {
+   "id": "boterkoekmix",
+   "choice": "173244",
+   "confidence": "close",
+   "why": "Cake dry mix als familie van droge cakemix, 404 vs 390 kcal."
+  },
+  {
+   "id": "bouillon",
+   "choice": null,
+   "confidence": "none",
+   "why": "Stock 13-36 kcal vs 3: veel te ver."
+  },
+  {
+   "id": "bouillonblokje",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen low-sodium blokje 438 vs 230 kcal (ca. 2x)."
+  },
+  {
+   "id": "bouillonpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen bouillonpoeder, alleen andere poeders."
+  },
+  {
+   "id": "braadkip",
+   "choice": "172394",
+   "confidence": "sure",
+   "why": "Roasting chicken met vel en organen rauw, zelfde als huidig (213)."
+  },
+  {
+   "id": "braadworst",
+   "choice": "172934",
+   "confidence": "sure",
+   "why": "Pork sausage link/patty rauw, zelfde als huidig."
+  },
+  {
+   "id": "brinta",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen instant tarwepap."
+  },
+  {
+   "id": "brioche",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "brokkelkaas",
+   "choice": "171241",
+   "confidence": "close",
+   "why": "Gouda, geen oude Goudse apart; 356 vs 400 kcal."
+  },
+  {
+   "id": "broodkruim",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "broodmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen broodmix, alleen brood/bloem."
+  },
+  {
+   "id": "brownie",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "browniemix",
+   "choice": "174935",
+   "confidence": "close",
+   "why": "Chocolade pudding-type cake dry mix, dichtste droge chocolademix."
+  },
+  {
+   "id": "bruiswater",
+   "choice": "174158",
+   "confidence": "close",
+   "why": "Gewoon flessenwater, 0 kcal, voeding gelijk aan bruiswater."
+  },
+  {
+   "id": "bucatini",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "bulgaarse-yoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "bulgur",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen bulgur; durum tarwe is ander product."
+  },
+  {
+   "id": "butter-chicken-saus",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen currysaus, alleen tomaat/kip."
+  },
+  {
+   "id": "cacaonibs",
+   "choice": null,
+   "confidence": "none",
+   "why": "Chocolade is een ander product dan nibs."
+  },
+  {
+   "id": "cafeinevrije-koffie",
+   "choice": "174133",
+   "confidence": "sure",
+   "why": "Instant decaf poeder."
+  },
+  {
+   "id": "cajunkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen Cajun-mix."
+  },
+  {
+   "id": "cake",
+   "choice": "172704",
+   "confidence": "close",
+   "why": "Pound cake met boter, 353 kcal = huidig."
+  },
+  {
+   "id": "cakemix",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen gebakken cake, geen droge mix."
+  },
+  {
+   "id": "calamares",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "calvados",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "capellini",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "carbonarasaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen tomatensauzen."
+  },
+  {
+   "id": "casarecce",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "casinobrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen witbrood, alleen crackers/glutenvrij."
+  },
+  {
+   "id": "cassavechips",
+   "choice": "173152",
+   "confidence": "sure",
+   "why": "Yucca (cassava) chips gezouten, 515 vs 520."
+  },
+  {
+   "id": "cervelaatworst",
+   "choice": "172940",
+   "confidence": "sure",
+   "why": "Thuringer cervelat."
+  },
+  {
+   "id": "chai",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "cheddar",
+   "choice": "170899",
+   "confidence": "sure",
+   "why": "Cheddar sharp, 410 vs 403 kcal."
+  },
+  {
+   "id": "chili-con-carne-kruidenmix",
+   "choice": "173476",
+   "confidence": "sure",
+   "why": "Seasoning mix chili original, identiek aan huidig."
+  },
+  {
+   "id": "chilipoeder",
+   "choice": "171319",
+   "confidence": "sure",
+   "why": "Spices, chili powder."
+  },
+  {
+   "id": "chilisaus",
+   "choice": "171186",
+   "confidence": "close",
+   "why": "Hot chile sauce sriracha, 93 kcal = huidig."
+  },
+  {
+   "id": "chilivlokken",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen chilivlokken."
+  },
+  {
+   "id": "chipolata",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "chips",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen aardappelchips."
+  },
+  {
+   "id": "chocolade",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen ijs/yoghurt/drank, geen chocolade."
+  },
+  {
+   "id": "chocoladebiscuit",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen ijs/yoghurt."
+  },
+  {
+   "id": "chocoladecroissant",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen aardappel au gratin."
+  },
+  {
+   "id": "chocoladedrops",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen koekjes/repen, geen chocolate chips."
+  },
+  {
+   "id": "chocoladeflik",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen ijs/yoghurt."
+  },
+  {
+   "id": "chocoladeglazuur",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen glazuur apart, alleen cakes/koekjes."
+  },
+  {
+   "id": "chocoladekruidnoot",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kruidnoot; coating-koekjes zijn ander product."
+  },
+  {
+   "id": "chocoladekussentjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen gevulde ontbijtgranen."
+  },
+  {
+   "id": "chocoladeletter",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen ijs/yoghurt."
+  },
+  {
+   "id": "chocolademelk",
+   "choice": "170910",
+   "confidence": "close",
+   "why": "Chocolademelk halfvol/reduced sugar, 57 vs 76 kcal."
+  },
+  {
+   "id": "chocolademelkpoeder",
+   "choice": "174824",
+   "confidence": "close",
+   "why": "Chocoladepoeder zonder suiker, 350 vs 376 kcal; koolhydraten lager."
+  },
+  {
+   "id": "chocolademousse",
+   "choice": "168777",
+   "confidence": "sure",
+   "why": "Mousse chocolate."
+  },
+  {
+   "id": "chocolademunt",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen ijs/yoghurt."
+  },
+  {
+   "id": "chocoladepinda",
+   "choice": "168001",
+   "confidence": "sure",
+   "why": "Milk chocolate coated peanuts."
+  },
+  {
+   "id": "chocoladepudding",
+   "choice": "168778",
+   "confidence": "sure",
+   "why": "Puddings chocolate ready-to-eat, identiek aan huidig."
+  },
+  {
+   "id": "chocoladereep",
+   "choice": "167587",
+   "confidence": "sure",
+   "why": "Candies milk chocolate."
+  },
+  {
+   "id": "chocoladerozijn",
+   "choice": "169576",
+   "confidence": "sure",
+   "why": "Milk chocolate coated raisins."
+  },
+  {
+   "id": "chocoladevla",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen ijs/yoghurt."
+  },
+  {
+   "id": "chocoladevlokken",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen ijs/yoghurt."
+  },
+  {
+   "id": "chocoladezoen",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen schuimzoen, alleen fudge/koekjes."
+  },
+  {
+   "id": "chocolate-chip-cookie",
+   "choice": "172717",
+   "confidence": "sure",
+   "why": "Chocolate chip cookies soft-type, 444 kcal = huidig."
+  },
+  {
+   "id": "chorizo",
+   "choice": "173859",
+   "confidence": "sure",
+   "why": "Chorizo rauw."
+  },
+  {
+   "id": "ciabatta",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "cider",
+   "choice": null,
+   "confidence": "none",
+   "why": "Alleen azijn, geen cider."
+  },
+  {
+   "id": "citroenaroma",
+   "choice": null,
+   "confidence": "none",
+   "why": "Citroen zelf is geen aroma (90 vs 29 kcal)."
+  },
+  {
+   "id": "citroengras",
+   "choice": null,
+   "confidence": "none",
+   "why": "Geen kandidaten."
+  },
+  {
+   "id": "citroenmelisse",
+   "choice": null,
+   "confidence": "none",
+   "why": "Citroen is een ander kruid/product."
+  },
+  {
+   "id": "clotted-cream",
+   "choice": null,
+   "confidence": "none",
+   "why": "Room 340 vs 590 kcal, geen clotted cream."
+  }
+ ]
+}

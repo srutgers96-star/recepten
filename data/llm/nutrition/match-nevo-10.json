@@ -1,0 +1,486 @@
+{
+ "batch": "10",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "kwarkje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "kwarktaartmix",
+   "choice": "5300",
+   "confidence": "sure",
+   "why": "bakmix voor kwarktaart, zelfde product"
+  },
+  {
+   "id": "kwartelei",
+   "choice": null,
+   "confidence": "none",
+   "why": "enige kandidaat is eiersalade"
+  },
+  {
+   "id": "kweepeer",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "labneh",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "lactosevrije-melk",
+   "choice": "3240",
+   "confidence": "close",
+   "why": "halfvolle lactosevrije melk, kcal dicht bij current"
+  },
+  {
+   "id": "lactosevrije-yoghurt",
+   "choice": "3282",
+   "confidence": "close",
+   "why": "halfvolle lactosevrije yoghurt"
+  },
+  {
+   "id": "lamsbout",
+   "choice": "1443",
+   "confidence": "sure",
+   "why": "lamsbout rauw"
+  },
+  {
+   "id": "lamsfilet",
+   "choice": "1443",
+   "confidence": "close",
+   "why": "geen lamsfilet; lamsbout rauw als naaste mager lamsdeel"
+  },
+  {
+   "id": "lamsfond",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen vlees en bouillonblokjes, geen fond"
+  },
+  {
+   "id": "lamsgehakt",
+   "choice": "1444",
+   "confidence": "sure",
+   "why": "lamsgehakt rauw"
+  },
+  {
+   "id": "lamskotelet",
+   "choice": "1445",
+   "confidence": "sure",
+   "why": "lamskotelet rauw"
+  },
+  {
+   "id": "lamsrack",
+   "choice": "1445",
+   "confidence": "close",
+   "why": "lamskarbonade rauw is het rack-deel"
+  },
+  {
+   "id": "lamsschenkel",
+   "choice": "1443",
+   "confidence": "close",
+   "why": "geen lamsschenkel; lamsbout rauw, kcal dicht bij current"
+  },
+  {
+   "id": "lamsschouder",
+   "choice": "1447",
+   "confidence": "sure",
+   "why": "lamsschouder rauw"
+  },
+  {
+   "id": "lamsvlees",
+   "choice": "1443",
+   "confidence": "close",
+   "why": "generiek lamsvlees: lamsbout rauw"
+  },
+  {
+   "id": "lange-vinger",
+   "choice": "260",
+   "confidence": "sure",
+   "why": "lange vingers"
+  },
+  {
+   "id": "langoustine",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "laos",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "lasagnebladen",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "lasagnemix",
+   "choice": null,
+   "confidence": "none",
+   "why": "kandidaten zijn andere mixen"
+  },
+  {
+   "id": "laurierblad",
+   "choice": null,
+   "confidence": "none",
+   "why": "enige kandidaat is dagoeblad, ander product"
+  },
+  {
+   "id": "lavas",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "lekkerbekje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gepaneerde vis in kandidaten"
+  },
+  {
+   "id": "lemon-curd",
+   "choice": null,
+   "confidence": "none",
+   "why": "kandidaten zijn citroen en tongschar"
+  },
+  {
+   "id": "lemon-lime",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen limonade in kandidaten"
+  },
+  {
+   "id": "leverpastei",
+   "choice": "335",
+   "confidence": "sure",
+   "why": "leverpastei"
+  },
+  {
+   "id": "leverworst",
+   "choice": "640",
+   "confidence": "sure",
+   "why": "leverworst"
+  },
+  {
+   "id": "lijnzaad",
+   "choice": "867",
+   "confidence": "sure",
+   "why": "lijnzaad"
+  },
+  {
+   "id": "likeur",
+   "choice": null,
+   "confidence": "none",
+   "why": "advocaat is geen generieke likeur"
+  },
+  {
+   "id": "limoen",
+   "choice": "691",
+   "confidence": "sure",
+   "why": "limoen"
+  },
+  {
+   "id": "limoenblad",
+   "choice": null,
+   "confidence": "none",
+   "why": "limoen is vrucht, dagoeblad is ander blad"
+  },
+  {
+   "id": "limoensap",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen limoensap; limoen heel is andere vorm"
+  },
+  {
+   "id": "limoenschil",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen hele limoen"
+  },
+  {
+   "id": "limonadesiroop",
+   "choice": "463",
+   "confidence": "close",
+   "why": "limonadesiroop onverdund; current lijkt verdund (233 vs 135 kcal)"
+  },
+  {
+   "id": "limoncello",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "linguine",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "linze",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "linzenchips",
+   "choice": null,
+   "confidence": "none",
+   "why": "aardappelchips is ander product"
+  },
+  {
+   "id": "linzenpasta",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen linzenpasta; gekookte linzen en tarwepasta zijn ander product"
+  },
+  {
+   "id": "loempia",
+   "choice": "2549",
+   "confidence": "close",
+   "why": "diepvries loempia onbereid, kcal 152 vs 200"
+  },
+  {
+   "id": "loempiavel",
+   "choice": null,
+   "confidence": "none",
+   "why": "gevulde loempia is geen vel"
+  },
+  {
+   "id": "lollo-rosso",
+   "choice": "2708",
+   "confidence": "close",
+   "why": "rode sla rauw, naaste soort"
+  },
+  {
+   "id": "lolly",
+   "choice": null,
+   "confidence": "none",
+   "why": "waterijs en salmiaklolly kloppen niet"
+  },
+  {
+   "id": "lychee",
+   "choice": "1090",
+   "confidence": "sure",
+   "why": "lychee"
+  },
+  {
+   "id": "maanzaad",
+   "choice": "2805",
+   "confidence": "sure",
+   "why": "maanzaad"
+  },
+  {
+   "id": "maasdammer",
+   "choice": "1725",
+   "confidence": "close",
+   "why": "hollandse gatenkaas Maasdammer 45+"
+  },
+  {
+   "id": "macadamianoot",
+   "choice": "2844",
+   "confidence": "sure",
+   "why": "macadamia ongezouten"
+  },
+  {
+   "id": "macaroni",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "macaronimix",
+   "choice": null,
+   "confidence": "none",
+   "why": "kandidaten zijn andere mixen"
+  },
+  {
+   "id": "madame-jeanette",
+   "choice": null,
+   "confidence": "none",
+   "why": "chilipoeder/saus zijn andere producten"
+  },
+  {
+   "id": "madeira",
+   "choice": "857",
+   "confidence": "sure",
+   "why": "madeira"
+  },
+  {
+   "id": "madeleine",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "maggi",
+   "choice": "859",
+   "confidence": "sure",
+   "why": "Maggi vloeibaar aroma"
+  },
+  {
+   "id": "magnetronrijst",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen rauwe rijst, geen gekookte rijst"
+  },
+  {
+   "id": "mais",
+   "choice": "2900",
+   "confidence": "sure",
+   "why": "suikermais blik"
+  },
+  {
+   "id": "maisbrood",
+   "choice": "2785",
+   "confidence": "close",
+   "why": "tarwemaisbrood wit, kcal 261 vs 250"
+  },
+  {
+   "id": "maiskiemolie",
+   "choice": "608",
+   "confidence": "sure",
+   "why": "maiskiemolie"
+  },
+  {
+   "id": "maiskolf",
+   "choice": null,
+   "confidence": "none",
+   "why": "meel/zetmeel zijn geen maiskolf"
+  },
+  {
+   "id": "maismeel",
+   "choice": "696",
+   "confidence": "sure",
+   "why": "maismeel"
+  },
+  {
+   "id": "maistortilla",
+   "choice": null,
+   "confidence": "none",
+   "why": "meel is geen tortilla"
+  },
+  {
+   "id": "maiswafel",
+   "choice": "5462",
+   "confidence": "sure",
+   "why": "maiswafel"
+  },
+  {
+   "id": "maizena",
+   "choice": "215",
+   "confidence": "sure",
+   "why": "maiszetmeel"
+  },
+  {
+   "id": "majoraan",
+   "choice": "1226",
+   "confidence": "sure",
+   "why": "majoraan gedroogd"
+  },
+  {
+   "id": "makreel",
+   "choice": "353",
+   "confidence": "sure",
+   "why": "makreel rauw"
+  },
+  {
+   "id": "makreel-in-tomatensaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "haring in tomatensaus is andere vis, makreel in olie 267 vs 175 kcal"
+  },
+  {
+   "id": "manchego",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "mandarijn",
+   "choice": "165",
+   "confidence": "sure",
+   "why": "mandarijn"
+  },
+  {
+   "id": "mandarijnen-op-siroop",
+   "choice": "186",
+   "confidence": "sure",
+   "why": "mandarijnen op siroop blik"
+  },
+  {
+   "id": "mango",
+   "choice": "692",
+   "confidence": "sure",
+   "why": "mango"
+  },
+  {
+   "id": "mango-chutney",
+   "choice": "1886",
+   "confidence": "sure",
+   "why": "mangochutney"
+  },
+  {
+   "id": "mangosap",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen mangosap; hele mango is andere vorm"
+  },
+  {
+   "id": "mangosteen",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "margarine",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "mariakaakje",
+   "choice": "252",
+   "confidence": "sure",
+   "why": "Mariakoekje"
+  },
+  {
+   "id": "marmelade",
+   "choice": "3351",
+   "confidence": "sure",
+   "why": "marmelade"
+  },
+  {
+   "id": "marmercake",
+   "choice": "2391",
+   "confidence": "sure",
+   "why": "marmercake"
+  },
+  {
+   "id": "marmite",
+   "choice": "441",
+   "confidence": "sure",
+   "why": "Marmite gistextract"
+  },
+  {
+   "id": "marsala",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "marsepein",
+   "choice": "1256",
+   "confidence": "sure",
+   "why": "marsepein"
+  }
+ ]
+}

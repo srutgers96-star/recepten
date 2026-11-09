@@ -1,0 +1,486 @@
+{
+ "batch": "r08",
+ "source": "usda",
+ "items": [
+  {
+   "id": "panko",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pannenkoek",
+   "choice": "175009",
+   "confidence": "sure",
+   "why": "pancake, plain, same kcal"
+  },
+  {
+   "id": "pannenkoekenmix",
+   "choice": "172775",
+   "confidence": "close",
+   "why": "dry pancake mix (special dietary)"
+  },
+  {
+   "id": "pappardelle",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "paprikapoeder",
+   "choice": "171329",
+   "confidence": "sure",
+   "why": "spices, paprika"
+  },
+  {
+   "id": "paprikasaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "parelsuiker",
+   "choice": "169655",
+   "confidence": "close",
+   "why": "granulated sugar as nearest sugar"
+  },
+  {
+   "id": "parmaham",
+   "choice": "168282",
+   "confidence": "close",
+   "why": "dry-cured country ham, raw lean only; leaner than Parma ham"
+  },
+  {
+   "id": "pastasaus",
+   "choice": "172880",
+   "confidence": "close",
+   "why": "tomato-based canned sauce, same kcal 54"
+  },
+  {
+   "id": "pasteibakje",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pastrami",
+   "choice": "170204",
+   "confidence": "sure",
+   "why": "beef pastrami regular"
+  },
+  {
+   "id": "pecorino",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "penne",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "peperkorrel",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pepersaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "peppadew",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "perensap",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pesto",
+   "choice": "171579",
+   "confidence": "sure",
+   "why": "pesto refrigerated"
+  },
+  {
+   "id": "peterseliewortel",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "peultjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "physalis",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "picanha",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pijnboompit",
+   "choice": "170591",
+   "confidence": "sure",
+   "why": "pine nuts"
+  },
+  {
+   "id": "piment",
+   "choice": "171315",
+   "confidence": "sure",
+   "why": "allspice ground"
+  },
+  {
+   "id": "pindakaas",
+   "choice": "172470",
+   "confidence": "sure",
+   "why": "smooth peanut butter, same kcal"
+  },
+  {
+   "id": "pindarotsje",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pistolet",
+   "choice": "172795",
+   "confidence": "close",
+   "why": "french rolls = crusty roll"
+  },
+  {
+   "id": "pizza",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pizzabodem",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pizzadeeg",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pizzadeegmix",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pizzakaas",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pizzakruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pizzasaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "platte-perzik",
+   "choice": "169928",
+   "confidence": "sure",
+   "why": "peaches raw"
+  },
+  {
+   "id": "poffertjesmix",
+   "choice": "172775",
+   "confidence": "close",
+   "why": "dry pancake mix"
+  },
+  {
+   "id": "polenta",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pommes-duchesse",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pompoenpit",
+   "choice": null,
+   "confidence": "none",
+   "why": "only roasted seeds in list (446 vs 574 kcal)"
+  },
+  {
+   "id": "popcorn",
+   "choice": "167959",
+   "confidence": "sure",
+   "why": "air-popped popcorn"
+  },
+  {
+   "id": "probiotisch-drankje",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "proteinepudding",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "proteineshake",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "provencaalse-kruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "provolone",
+   "choice": "170850",
+   "confidence": "sure",
+   "why": "provolone"
+  },
+  {
+   "id": "pul-biber",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pulled-pork",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "pure-chocolade",
+   "choice": "170272",
+   "confidence": "sure",
+   "why": "dark chocolate 60-69%"
+  },
+  {
+   "id": "raclettekaas",
+   "choice": "171251",
+   "confidence": "close",
+   "why": "Swiss cheese as nearest melting alpine cheese"
+  },
+  {
+   "id": "radler",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "ragout",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "ramen-noedels",
+   "choice": "169731",
+   "confidence": "close",
+   "why": "dry egg noodles; ramen soup candidates include seasoning"
+  },
+  {
+   "id": "rammenas",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rauwkost",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rawit",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "relish",
+   "choice": "168561",
+   "confidence": "sure",
+   "why": "pickle relish sweet"
+  },
+  {
+   "id": "reuzel",
+   "choice": "171401",
+   "confidence": "sure",
+   "why": "lard"
+  },
+  {
+   "id": "ribeye",
+   "choice": "173404",
+   "confidence": "sure",
+   "why": "rib eye lean+fat, same kcal 208"
+  },
+  {
+   "id": "riblap",
+   "choice": null,
+   "confidence": "none",
+   "why": "only ribeye cuts, a different cut"
+  },
+  {
+   "id": "ricotta",
+   "choice": "170851",
+   "confidence": "sure",
+   "why": "ricotta whole milk"
+  },
+  {
+   "id": "rietsuiker",
+   "choice": "169655",
+   "confidence": "sure",
+   "why": "granulated sugar"
+  },
+  {
+   "id": "rigatoni",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rijstazijn",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rijstepap",
+   "choice": "168782",
+   "confidence": "sure",
+   "why": "rice pudding ready-to-eat"
+  },
+  {
+   "id": "rijstmelk",
+   "choice": "171942",
+   "confidence": "sure",
+   "why": "rice milk"
+  },
+  {
+   "id": "rijstpapiervel",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rijststroop",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "risottorijst",
+   "choice": "168879",
+   "confidence": "sure",
+   "why": "medium-grain white rice raw"
+  },
+  {
+   "id": "rode-bes",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rode-kool-met-appel",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "roggemeel",
+   "choice": "168886",
+   "confidence": "sure",
+   "why": "rye flour medium, same kcal"
+  },
+  {
+   "id": "rolcake",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rolfondant",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rolmops",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "romanesco",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rood-fruit",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "rooibosthee",
+   "choice": "174156",
+   "confidence": "close",
+   "why": "brewed herbal tea, ~0 kcal"
+  },
+  {
+   "id": "rookkaas",
+   "choice": "171241",
+   "confidence": "close",
+   "why": "gouda for smoked cheese, same kcal"
+  },
+  {
+   "id": "room",
+   "choice": "170859",
+   "confidence": "sure",
+   "why": "heavy whipping cream, 340 kcal"
+  },
+  {
+   "id": "roomijs",
+   "choice": "167575",
+   "confidence": "sure",
+   "why": "ice cream vanilla"
+  }
+ ]
+}

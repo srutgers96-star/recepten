@@ -37,23 +37,23 @@ Gegenereerd door `npm run measure-grams` (tools/measure-grams.ts) op 2026-11-09;
 
 | Recept | Id | Geteld | Dekking | kcal p.p. |
 |---|---|---:|---:|---:|
-| Goulash-maaltijdsoep | `b:goulash-maaltijdsoep` | 19/19 | 100 % | 760 |
-| Miesalade met rundvlees | `b:miesalade-met-rundvlees` | 18/18 | 100 % | 570 |
-| Dahl van rode linzen & boerenkool | `b:dahl-van-rode-linzen-boerenkool` | 16/16 | 100 % | 490 |
-| Fusilli con polpettine | `b:fusilli-con-polpettine` | 16/16 | 100 % | 1000 |
-| Mexicaanse ovenschotel met zoete aardappel | `b:mexicaanse-ovenschotel-met-zoete-aardappel` | 16/16 | 100 % | 560 |
-| Rendang met zelfgemaakt boemboe | `b:rendang-met-zelfgemaakt-boemboe` | 16/16 | 100 % | 950 |
-| Zalm teriyaki met pindaboontjes en noedels | `b:zalm-teriyaki-met-pindaboontjes-en-noedels` | 16/16 | 100 % | 1090 |
-| Zuid-Afrikaanse gehaktschotel | `b:zuid-afrikaanse-gehaktschotel` | 16/16 | 100 % | 680 |
+| Goulash-maaltijdsoep | `b:goulash-maaltijdsoep` | 19/19 | 100 % | 750 |
+| Miesalade met rundvlees | `b:miesalade-met-rundvlees` | 18/18 | 100 % | 550 |
+| Dahl van rode linzen & boerenkool | `b:dahl-van-rode-linzen-boerenkool` | 16/16 | 100 % | 520 |
+| Fusilli con polpettine | `b:fusilli-con-polpettine` | 16/16 | 100 % | 1020 |
+| Mexicaanse ovenschotel met zoete aardappel | `b:mexicaanse-ovenschotel-met-zoete-aardappel` | 16/16 | 100 % | 600 |
+| Rendang met zelfgemaakt boemboe | `b:rendang-met-zelfgemaakt-boemboe` | 16/16 | 100 % | 910 |
+| Zalm teriyaki met pindaboontjes en noedels | `b:zalm-teriyaki-met-pindaboontjes-en-noedels` | 16/16 | 100 % | 1100 |
+| Zuid-Afrikaanse gehaktschotel | `b:zuid-afrikaanse-gehaktschotel` | 16/16 | 100 % | 690 |
 | Groentecurry | `b:groentecurry` | 15/15 | 100 % | 310 |
-| Italiaans gehaktbrood met yoghurtsaus | `b:italiaans-gehaktbrood-met-yoghurtsaus` | 15/15 | 100 % | 520 |
+| Italiaans gehaktbrood met yoghurtsaus | `b:italiaans-gehaktbrood-met-yoghurtsaus` | 15/15 | 100 % | 490 |
 | Klassieke lasagne | `b:klassieke-lasagne` | 15/15 | 100 % | 1130 |
 | Schelvis in ratatouillesaus | `b:schelvis-in-ratatouillesaus` | 15/15 | 100 % | 330 |
-| Sticky chicken | `b:sticky-chicken` | 15/15 | 100 % | 1380 |
-| Vegetarische ramen | `b:vegetarische-ramen` | 15/15 | 100 % | 550 |
-| Gemarineerde speklapjes met mie | `b:gemarineerde-speklapjes-met-mie` | 14/14 | 100 % | 890 |
-| Lasagne met courgette en kaassaus | `b:lasagne-met-courgette-en-kaassaus` | 14/14 | 100 % | 890 |
+| Sticky chicken | `b:sticky-chicken` | 15/15 | 100 % | 1390 |
+| Vegetarische ramen | `b:vegetarische-ramen` | 15/15 | 100 % | 560 |
+| Gemarineerde speklapjes met mie | `b:gemarineerde-speklapjes-met-mie` | 14/14 | 100 % | 900 |
+| Lasagne met courgette en kaassaus | `b:lasagne-met-courgette-en-kaassaus` | 14/14 | 100 % | 920 |
 | Moussaka | `b:moussaka` | 14/14 | 100 % | 690 |
-| Noorse visschotel | `b:noorse-visschotel` | 14/14 | 100 % | 400 |
-| Rijst-ratatouille met ham en Mon Chou | `b:rijst-ratatouille-met-ham-en-mon-chou` | 14/14 | 100 % | 610 |
-| Gebakken rijst met pikante Chinese kool | `b:gebakken-rijst-met-pikante-chinese-kool` | 13/13 | 100 % | 640 |
+| Noorse visschotel | `b:noorse-visschotel` | 14/14 | 100 % | 390 |
+| Rijst-ratatouille met ham en Mon Chou | `b:rijst-ratatouille-met-ham-en-mon-chou` | 14/14 | 100 % | 680 |
+| Gebakken rijst met pikante Chinese kool | `b:gebakken-rijst-met-pikante-chinese-kool` | 13/13 | 100 % | 630 |

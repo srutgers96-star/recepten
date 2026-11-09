@@ -1,0 +1,423 @@
+{
+  "batch": "10",
+  "source": "nevo",
+  "items": [
+    {"id":"kwarkje","nl":"kwarkje","en":"kids' fromage frais","aliasesEn":["fromage frais pot","fromage frais pots","Petits Filous"],"defaultUnit":"stuk","aisle":"zuivel-eieren","current":{"kcal":103,"protein":6,"fat":3.5,"carbs":12,"source":"estimate"}, "candidates": [] },
+    {"id":"kwarktaartmix","nl":"kwarktaartmix","en":"cheesecake mix","aliasesEn":["no-bake cheesecake mix"],"defaultUnit":"pak","aisle":"bakken","current":{"kcal":372,"protein":5,"fat":8,"carbs":70,"source":"estimate"}, "candidates": [
+      {"code":"5300","name":"Bakmix voor kwarktaart","name2":"Bakery mix for cheesecake; Kwarktaartmix","category":"Graanproducten en meelsoorten","state":"other","kcal":438,"protein":7.7,"fat":10.6,"carbs":77.5},
+      {"code":"5248","name":"Cheesecake","name2":"Cheesecake; Taart met kwark/roomkaas uit de oven","category":"Gebak en koek","state":"other","kcal":320,"protein":5.4,"fat":22.3,"carbs":24},
+      {"code":"5372","name":"Snoepmix","name2":"Candy mix","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":328,"protein":5.8,"fat":0.3,"carbs":75.3}
+    ] },
+    {"id":"kwartelei","nl":"kwartelei","en":"quail's egg","aliasesEn":["quail egg","quail eggs"],"defaultUnit":"stuk","aisle":"zuivel-eieren","current":{"kcal":158,"protein":13.1,"fat":11.1,"carbs":0.4,"source":"usda"}, "candidates": [
+      {"code":"1499","name":"Salade ei- lunch/borrel","name2":"Salad egg; Eiersalade/eisalade lunch/borrel","category":"Hartig broodbeleg","state":"other","kcal":255,"protein":7.3,"fat":22.3,"carbs":5.6}
+    ] },
+    {"id":"kweepeer","nl":"kweepeer","en":"quince","aliasesEn":[],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":57,"protein":0.4,"fat":0.1,"carbs":13.4,"source":"usda"}, "candidates": [] },
+    {"id":"labneh","nl":"labneh","en":"labneh","aliasesEn":["labne","strained yoghurt cheese"],"defaultUnit":"g","aisle":"zuivel-eieren","current":{"kcal":188,"protein":7,"fat":16,"carbs":4,"source":"estimate"}, "candidates": [] },
+    {"id":"lactosevrije-melk","nl":"lactosevrije melk","en":"lactose-free milk","aliasesEn":[],"defaultUnit":"ml","aisle":"zuivel-eieren","current":{"kcal":47,"protein":3.5,"fat":1.6,"carbs":4.8,"source":"estimate"}, "candidates": [
+      {"code":"5306","name":"Melk volle lactosevrij","name2":"Milk whole lactose free; Melk lactosevrij vol","category":"Melk en melkproducten","state":"other","kcal":64,"protein":3.4,"fat":3.6,"carbs":4.6},
+      {"code":"3240","name":"Melk halfvolle lactosevrij","name2":"Milk semi-skimmed lactose free; Melk lactosevrij halfvol","category":"Melk en melkproducten","state":"other","kcal":44,"protein":3.4,"fat":1.5,"carbs":4.4},
+      {"code":"270","name":"Melk rauwe","name2":"Milk raw","category":"Melk en melkproducten","state":"raw","kcal":71,"protein":3.4,"fat":4.4,"carbs":4.4},
+      {"code":"929","name":"Chocolade melk- suikervrij","name2":"Chocolate milk sugar-free; Suikervrije melkchocolade","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":485,"protein":7.1,"fat":34.7,"carbs":47.8},
+      {"code":"279","name":"Melk volle","name2":"Milk whole","category":"Melk en melkproducten","state":"other","kcal":61,"protein":3.3,"fat":3.4,"carbs":4.5},
+      {"code":"294","name":"Melk magere","name2":"Milk skimmed","category":"Melk en melkproducten","state":"other","kcal":35,"protein":3.7,"fat":0.1,"carbs":4.9},
+      {"code":"297","name":"Melk moeder-","name2":"Milk human; Moedermelk/borstvoeding","category":"Melk en melkproducten","state":"other","kcal":66,"protein":1.1,"fat":3.5,"carbs":7.4},
+      {"code":"286","name":"Melk halfvolle","name2":"Milk semi-skimmed","category":"Melk en melkproducten","state":"other","kcal":45,"protein":3.4,"fat":1.4,"carbs":4.7}
+    ] },
+    {"id":"lactosevrije-yoghurt","nl":"lactosevrije yoghurt","en":"lactose-free yoghurt","aliasesEn":[],"defaultUnit":"ml","aisle":"zuivel-eieren","current":{"kcal":50,"protein":4,"fat":1.5,"carbs":5,"source":"estimate"}, "candidates": [
+      {"code":"3282","name":"Yoghurt halfvolle lactosevrij","name2":"Yoghurt semi-skimmed lactose free","category":"Melk en melkproducten","state":"other","kcal":42,"protein":4.5,"fat":1.5,"carbs":2},
+      {"code":"5306","name":"Melk volle lactosevrij","name2":"Milk whole lactose free; Melk lactosevrij vol","category":"Melk en melkproducten","state":"other","kcal":64,"protein":3.4,"fat":3.6,"carbs":4.6},
+      {"code":"657","name":"Yoghurtdrank","name2":"Yoghurt drink; Drinkyoghurt","category":"Melk en melkproducten","state":"other","kcal":57,"protein":1.6,"fat":0.1,"carbs":12},
+      {"code":"278","name":"Yoghurt volle","name2":"Yoghurt full fat","category":"Melk en melkproducten","state":"other","kcal":56,"protein":3.8,"fat":2.7,"carbs":3.4},
+      {"code":"301","name":"Yoghurt magere","name2":"Yoghurt low fat","category":"Melk en melkproducten","state":"other","kcal":37,"protein":4.1,"fat":0.2,"carbs":4},
+      {"code":"1502","name":"Yoghurt halfvolle","name2":"Yoghurt half fat","category":"Melk en melkproducten","state":"other","kcal":50,"protein":4.2,"fat":1.5,"carbs":4.3}
+    ] },
+    {"id":"lamsbout","nl":"lamsbout","en":"leg of lamb","aliasesEn":["lamb leg","boned leg of lamb","leg of lamb (boned)"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":201,"protein":18.6,"fat":13.5,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"1443","name":"Lamsbout rauw","name2":"Lamb leg raw","category":"Vlees en gevogelte","state":"raw","kcal":174,"protein":19.2,"fat":10.8,"carbs":0},
+      {"code":"1575","name":"Lamsbout bereid","name2":"Lamb leg prepared","category":"Vlees en gevogelte","state":"cooked","kcal":256,"protein":25.6,"fat":17.1,"carbs":0},
+      {"code":"1903","name":"Nier lams- rauw","name2":"Kidney lamb raw","category":"Vlees en gevogelte","state":"raw","kcal":91,"protein":17,"fat":2.6,"carbs":0},
+      {"code":"1446","name":"Lamszadel rauw","name2":"Lamb saddle raw","category":"Vlees en gevogelte","state":"raw","kcal":256,"protein":18.6,"fat":20.2,"carbs":0},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"1447","name":"Lamsschouder rauw","name2":"Lamb shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":187,"protein":20,"fat":11.9,"carbs":0},
+      {"code":"1445","name":"Lamskarbonade rauw","name2":"Lamb chop raw; Lamskotelet rauw","category":"Vlees en gevogelte","state":"raw","kcal":223,"protein":19.2,"fat":16.3,"carbs":0}
+    ] },
+    {"id":"lamsfilet","nl":"lamsfilet","en":"lamb loin fillet","aliasesEn":["lamb fillet","lamb loin"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":143,"protein":20.9,"fat":5.9,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"1443","name":"Lamsbout rauw","name2":"Lamb leg raw","category":"Vlees en gevogelte","state":"raw","kcal":174,"protein":19.2,"fat":10.8,"carbs":0},
+      {"code":"1634","name":"Kipfilet rauw","name2":"Chicken fillet raw","category":"Vlees en gevogelte","state":"raw","kcal":109,"protein":23.3,"fat":1.8,"carbs":0},
+      {"code":"1446","name":"Lamszadel rauw","name2":"Lamb saddle raw","category":"Vlees en gevogelte","state":"raw","kcal":256,"protein":18.6,"fat":20.2,"carbs":0},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"1903","name":"Nier lams- rauw","name2":"Kidney lamb raw","category":"Vlees en gevogelte","state":"raw","kcal":91,"protein":17,"fat":2.6,"carbs":0},
+      {"code":"1447","name":"Lamsschouder rauw","name2":"Lamb shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":187,"protein":20,"fat":11.9,"carbs":0},
+      {"code":"1936","name":"Kalkoenfilet rauw","name2":"Turkey fillet raw","category":"Vlees en gevogelte","state":"raw","kcal":110,"protein":24.8,"fat":1.2,"carbs":0},
+      {"code":"1445","name":"Lamskarbonade rauw","name2":"Lamb chop raw; Lamskotelet rauw","category":"Vlees en gevogelte","state":"raw","kcal":223,"protein":19.2,"fat":16.3,"carbs":0}
+    ] },
+    {"id":"lamsfond","nl":"lamsfond","en":"concentrated lamb stock","aliasesEn":["lamb fond","lamb stock","lamb stock concentrate"],"defaultUnit":"ml","aisle":"blik-pot","current":{"kcal":16,"protein":1,"fat":0.5,"carbs":2,"source":"estimate"}, "candidates": [
+      {"code":"1903","name":"Nier lams- rauw","name2":"Kidney lamb raw","category":"Vlees en gevogelte","state":"raw","kcal":91,"protein":17,"fat":2.6,"carbs":0},
+      {"code":"1443","name":"Lamsbout rauw","name2":"Lamb leg raw","category":"Vlees en gevogelte","state":"raw","kcal":174,"protein":19.2,"fat":10.8,"carbs":0},
+      {"code":"1446","name":"Lamszadel rauw","name2":"Lamb saddle raw","category":"Vlees en gevogelte","state":"raw","kcal":256,"protein":18.6,"fat":20.2,"carbs":0},
+      {"code":"429","name":"Bouillonblokje","name2":"Stock cube","category":"Kruiden en specerijen","state":"other","kcal":273,"protein":8.1,"fat":17.2,"carbs":21.2},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"842","name":"Bouillonpoeder","name2":"Stock powder","category":"Kruiden en specerijen","state":"other","kcal":197,"protein":20.2,"fat":5.1,"carbs":17.8},
+      {"code":"1447","name":"Lamsschouder rauw","name2":"Lamb shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":187,"protein":20,"fat":11.9,"carbs":0},
+      {"code":"1445","name":"Lamskarbonade rauw","name2":"Lamb chop raw; Lamskotelet rauw","category":"Vlees en gevogelte","state":"raw","kcal":223,"protein":19.2,"fat":16.3,"carbs":0}
+    ] },
+    {"id":"lamsgehakt","nl":"lamsgehakt","en":"lamb mince","aliasesEn":["minced lamb","ground lamb"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":282,"protein":16.6,"fat":23.4,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"1444","name":"Gehakt lams-/schapen- rauw","name2":"Minced lamb raw; Lamsgehakt/schapengehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":218,"protein":19.3,"fat":15.7,"carbs":0},
+      {"code":"1576","name":"Gehakt lams- gebakken","name2":"Minced lamb prepared; Lamsgehakt bereid","category":"Vlees en gevogelte","state":"cooked","kcal":252,"protein":30.4,"fat":14.4,"carbs":0.3},
+      {"code":"1903","name":"Nier lams- rauw","name2":"Kidney lamb raw","category":"Vlees en gevogelte","state":"raw","kcal":91,"protein":17,"fat":2.6,"carbs":0},
+      {"code":"3139","name":"Gehakt kippen- rauw","name2":"Mince chicken raw; Kippengehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":147,"protein":21.5,"fat":6.8,"carbs":0},
+      {"code":"1443","name":"Lamsbout rauw","name2":"Lamb leg raw","category":"Vlees en gevogelte","state":"raw","kcal":174,"protein":19.2,"fat":10.8,"carbs":0},
+      {"code":"1446","name":"Lamszadel rauw","name2":"Lamb saddle raw","category":"Vlees en gevogelte","state":"raw","kcal":256,"protein":18.6,"fat":20.2,"carbs":0},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"1447","name":"Lamsschouder rauw","name2":"Lamb shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":187,"protein":20,"fat":11.9,"carbs":0}
+    ] },
+    {"id":"lamskotelet","nl":"lamskotelet","en":"lamb chop","aliasesEn":["lamb cutlet","lamb cutlets"],"defaultUnit":"stuk","aisle":"vlees-vis","current":{"kcal":298,"protein":15.4,"fat":26.2,"carbs":0.2,"source":"usda"}, "candidates": [
+      {"code":"1445","name":"Lamskarbonade rauw","name2":"Lamb chop raw; Lamskotelet rauw","category":"Vlees en gevogelte","state":"raw","kcal":223,"protein":19.2,"fat":16.3,"carbs":0},
+      {"code":"1577","name":"Lamskarbonade bereid","name2":"Lamb chop prepared; Lamskotelet bereid","category":"Vlees en gevogelte","state":"cooked","kcal":350,"protein":25.8,"fat":27.5,"carbs":0},
+      {"code":"1443","name":"Lamsbout rauw","name2":"Lamb leg raw","category":"Vlees en gevogelte","state":"raw","kcal":174,"protein":19.2,"fat":10.8,"carbs":0},
+      {"code":"1446","name":"Lamszadel rauw","name2":"Lamb saddle raw","category":"Vlees en gevogelte","state":"raw","kcal":256,"protein":18.6,"fat":20.2,"carbs":0},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"1903","name":"Nier lams- rauw","name2":"Kidney lamb raw","category":"Vlees en gevogelte","state":"raw","kcal":91,"protein":17,"fat":2.6,"carbs":0},
+      {"code":"1447","name":"Lamsschouder rauw","name2":"Lamb shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":187,"protein":20,"fat":11.9,"carbs":0},
+      {"code":"1420","name":"Varkenshamlappen rauw","name2":"Pork chop raw","category":"Vlees en gevogelte","state":"raw","kcal":114,"protein":22.2,"fat":2.8,"carbs":0}
+    ] },
+    {"id":"lamsrack","nl":"lamsrack","en":"rack of lamb","aliasesEn":["lamb rack","French-trimmed rack of lamb"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":237,"protein":21.3,"fat":16.9,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"1443","name":"Lamsbout rauw","name2":"Lamb leg raw","category":"Vlees en gevogelte","state":"raw","kcal":174,"protein":19.2,"fat":10.8,"carbs":0},
+      {"code":"1446","name":"Lamszadel rauw","name2":"Lamb saddle raw","category":"Vlees en gevogelte","state":"raw","kcal":256,"protein":18.6,"fat":20.2,"carbs":0},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"1903","name":"Nier lams- rauw","name2":"Kidney lamb raw","category":"Vlees en gevogelte","state":"raw","kcal":91,"protein":17,"fat":2.6,"carbs":0},
+      {"code":"1447","name":"Lamsschouder rauw","name2":"Lamb shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":187,"protein":20,"fat":11.9,"carbs":0},
+      {"code":"1445","name":"Lamskarbonade rauw","name2":"Lamb chop raw; Lamskotelet rauw","category":"Vlees en gevogelte","state":"raw","kcal":223,"protein":19.2,"fat":16.3,"carbs":0},
+      {"code":"1444","name":"Gehakt lams-/schapen- rauw","name2":"Minced lamb raw; Lamsgehakt/schapengehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":218,"protein":19.3,"fat":15.7,"carbs":0}
+    ] },
+    {"id":"lamsschenkel","nl":"lamsschenkel","en":"lamb shank","aliasesEn":[],"defaultUnit":"stuk","aisle":"vlees-vis","current":{"kcal":183,"protein":20.1,"fat":11.4,"carbs":0.1,"source":"usda"}, "candidates": [
+      {"code":"1443","name":"Lamsbout rauw","name2":"Lamb leg raw","category":"Vlees en gevogelte","state":"raw","kcal":174,"protein":19.2,"fat":10.8,"carbs":0},
+      {"code":"1446","name":"Lamszadel rauw","name2":"Lamb saddle raw","category":"Vlees en gevogelte","state":"raw","kcal":256,"protein":18.6,"fat":20.2,"carbs":0},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"1903","name":"Nier lams- rauw","name2":"Kidney lamb raw","category":"Vlees en gevogelte","state":"raw","kcal":91,"protein":17,"fat":2.6,"carbs":0},
+      {"code":"1447","name":"Lamsschouder rauw","name2":"Lamb shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":187,"protein":20,"fat":11.9,"carbs":0},
+      {"code":"1440","name":"Kalfsschenkel rauw","name2":"Veal shank raw","category":"Vlees en gevogelte","state":"raw","kcal":112,"protein":21.3,"fat":2.9,"carbs":0},
+      {"code":"1445","name":"Lamskarbonade rauw","name2":"Lamb chop raw; Lamskotelet rauw","category":"Vlees en gevogelte","state":"raw","kcal":223,"protein":19.2,"fat":16.3,"carbs":0},
+      {"code":"1411","name":"Runderschenkel rauw","name2":"Beef shank raw","category":"Vlees en gevogelte","state":"raw","kcal":117,"protein":22.6,"fat":3,"carbs":0}
+    ] },
+    {"id":"lamsschouder","nl":"lamsschouder","en":"lamb shoulder","aliasesEn":["shoulder of lamb"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":260,"protein":16.8,"fat":20.9,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"1447","name":"Lamsschouder rauw","name2":"Lamb shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":187,"protein":20,"fat":11.9,"carbs":0},
+      {"code":"1579","name":"Lamsschouder bereid","name2":"Lamb shoulder prepared","category":"Vlees en gevogelte","state":"cooked","kcal":284,"protein":27.9,"fat":19.1,"carbs":0},
+      {"code":"1443","name":"Lamsbout rauw","name2":"Lamb leg raw","category":"Vlees en gevogelte","state":"raw","kcal":174,"protein":19.2,"fat":10.8,"carbs":0},
+      {"code":"1446","name":"Lamszadel rauw","name2":"Lamb saddle raw","category":"Vlees en gevogelte","state":"raw","kcal":256,"protein":18.6,"fat":20.2,"carbs":0},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"1903","name":"Nier lams- rauw","name2":"Kidney lamb raw","category":"Vlees en gevogelte","state":"raw","kcal":91,"protein":17,"fat":2.6,"carbs":0},
+      {"code":"1445","name":"Lamskarbonade rauw","name2":"Lamb chop raw; Lamskotelet rauw","category":"Vlees en gevogelte","state":"raw","kcal":223,"protein":19.2,"fat":16.3,"carbs":0},
+      {"code":"1430","name":"Varkensschouderlappen rauw","name2":"Pork shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":133,"protein":20.7,"fat":5.5,"carbs":0}
+    ] },
+    {"id":"lamsvlees","nl":"lamsvlees","en":"lamb","aliasesEn":["lamb meat"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":200,"protein":20,"fat":13,"carbs":0,"source":"estimate"}, "candidates": [
+      {"code":"1443","name":"Lamsbout rauw","name2":"Lamb leg raw","category":"Vlees en gevogelte","state":"raw","kcal":174,"protein":19.2,"fat":10.8,"carbs":0},
+      {"code":"1446","name":"Lamszadel rauw","name2":"Lamb saddle raw","category":"Vlees en gevogelte","state":"raw","kcal":256,"protein":18.6,"fat":20.2,"carbs":0},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"1903","name":"Nier lams- rauw","name2":"Kidney lamb raw","category":"Vlees en gevogelte","state":"raw","kcal":91,"protein":17,"fat":2.6,"carbs":0},
+      {"code":"1447","name":"Lamsschouder rauw","name2":"Lamb shoulder raw","category":"Vlees en gevogelte","state":"raw","kcal":187,"protein":20,"fat":11.9,"carbs":0},
+      {"code":"1445","name":"Lamskarbonade rauw","name2":"Lamb chop raw; Lamskotelet rauw","category":"Vlees en gevogelte","state":"raw","kcal":223,"protein":19.2,"fat":16.3,"carbs":0},
+      {"code":"1444","name":"Gehakt lams-/schapen- rauw","name2":"Minced lamb raw; Lamsgehakt/schapengehakt rauw","category":"Vlees en gevogelte","state":"raw","kcal":218,"protein":19.3,"fat":15.7,"carbs":0}
+    ] },
+    {"id":"lange-vinger","nl":"lange vinger","en":"sponge finger","aliasesEn":["ladyfinger","ladyfingers","savoiardi","boudoir biscuits"],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":390,"protein":8,"fat":4,"carbs":82,"source":"estimate"}, "candidates": [
+      {"code":"260","name":"Lange vingers","name2":"Biscuit sponge fingers","category":"Gebak en koek","state":"other","kcal":402,"protein":7.2,"fat":3.5,"carbs":84.8},
+      {"code":"2272","name":"Taartbodem v biscuitdeeg","name2":"Fatless sponge","category":"Gebak en koek","state":"other","kcal":263,"protein":7.5,"fat":4.2,"carbs":48.4}
+    ] },
+    {"id":"langoustine","nl":"langoustine","en":"langoustine","aliasesEn":["Dublin Bay prawn","Dublin Bay prawns","Norway lobster"],"defaultUnit":"stuk","aisle":"vlees-vis","current":{"kcal":77,"protein":16.5,"fat":0.8,"carbs":0,"source":"usda"}, "candidates": [] },
+    {"id":"laos","nl":"laos","en":"galangal","aliasesEn":["galangal powder","ground galangal","laos powder","laos"],"defaultUnit":"tl","aisle":"kruiden-specerijen","current":{"kcal":72,"protein":1.2,"fat":0.8,"carbs":15,"source":"estimate"}, "candidates": [] },
+    {"id":"lasagnebladen","nl":"lasagneblad","en":"lasagne sheet","aliasesEn":["lasagna sheets","dried lasagne sheets","lasagna sheet"],"defaultUnit":"g","aisle":"droog","current":{"kcal":350,"protein":12,"fat":1.5,"carbs":71,"source":"estimate"}, "candidates": [] },
+    {"id":"lasagnemix","nl":"lasagnemix","en":"lasagne seasoning mix","aliasesEn":["lasagne mix"],"defaultUnit":"zakje","aisle":"kruiden-specerijen","current":{"kcal":295,"protein":8,"fat":3,"carbs":58,"source":"estimate"}, "candidates": [
+      {"code":"2613","name":"Mix seasoning Mexicaans onbereid","name2":"Mix seasoning Mexican unprepared; Seasoningmix mexicaans onbereid","category":"Kruiden en specerijen","state":"other","kcal":318,"protein":12,"fat":5.7,"carbs":48.8},
+      {"code":"5372","name":"Snoepmix","name2":"Candy mix","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":328,"protein":5.8,"fat":0.3,"carbs":75.3}
+    ] },
+    {"id":"laurierblad","nl":"laurierblad","en":"bay leaf","aliasesEn":["bay","bayleaf","bay leafs","dried bay leaves"],"defaultUnit":"stuk","aisle":"kruiden-specerijen","current":{"kcal":305,"protein":7.6,"fat":8.4,"carbs":49,"source":"estimate"}, "candidates": [
+      {"code":"675","name":"Dagoeblad rauw","name2":"Dagoe leaf raw; Waterspinazie/kangkoeng rauw","category":"Groente","state":"raw","kcal":34,"protein":3,"fat":0,"carbs":5}
+    ] },
+    {"id":"lavas","nl":"lavas","en":"lovage","aliasesEn":["lovage leaves"],"defaultUnit":"el","aisle":"groente-fruit","current":{"kcal":40,"protein":3,"fat":0.6,"carbs":6,"source":"estimate"}, "candidates": [] },
+    {"id":"lekkerbekje","nl":"lekkerbekje","en":"battered fish fillet","aliasesEn":["lekkerbekje"],"defaultUnit":"stuk","aisle":"diepvries","current":{"kcal":200,"protein":12,"fat":10,"carbs":16,"source":"estimate"}, "candidates": [
+      {"code":"1634","name":"Kipfilet rauw","name2":"Chicken fillet raw","category":"Vlees en gevogelte","state":"raw","kcal":109,"protein":23.3,"fat":1.8,"carbs":0},
+      {"code":"1936","name":"Kalkoenfilet rauw","name2":"Turkey fillet raw","category":"Vlees en gevogelte","state":"raw","kcal":110,"protein":24.8,"fat":1.2,"carbs":0},
+      {"code":"1418","name":"Varkensfiletlappen rauw","name2":"Pork fillet raw","category":"Vlees en gevogelte","state":"raw","kcal":128,"protein":23.3,"fat":3.9,"carbs":0},
+      {"code":"1496","name":"Salade vis- lunch/borrel","name2":"Salad fish; Vissalade lunch/borrel","category":"Hartig broodbeleg","state":"other","kcal":304,"protein":8.6,"fat":26.8,"carbs":6.9}
+    ] },
+    {"id":"lemon-curd","nl":"lemon curd","en":"lemon curd","aliasesEn":[],"defaultUnit":"el","aisle":"brood-ontbijt","current":{"kcal":285,"protein":0.8,"fat":8,"carbs":52,"source":"estimate"}, "candidates": [
+      {"code":"158","name":"Citroen","name2":"Lemon","category":"Fruit","state":"other","kcal":36,"protein":0.8,"fat":0.3,"carbs":3},
+      {"code":"3321","name":"Tongschar rauw","name2":"Lemon sole raw","category":"Vis, schaal- en schelpdieren","state":"raw","kcal":73,"protein":16.7,"fat":0.7,"carbs":0}
+    ] },
+    {"id":"lemon-lime","nl":"lemon-lime","en":"lemonade","aliasesEn":["lemon-lime soda","fizzy lemonade","Sprite","7Up"],"defaultUnit":"fles","aisle":"dranken","current":{"kcal":38,"protein":0,"fat":0,"carbs":9.3,"source":"estimate"}, "candidates": [
+      {"code":"158","name":"Citroen","name2":"Lemon","category":"Fruit","state":"other","kcal":36,"protein":0.8,"fat":0.3,"carbs":3},
+      {"code":"691","name":"Limoen","name2":"Lime; Lemmetje","category":"Fruit","state":"other","kcal":41,"protein":0.7,"fat":0.2,"carbs":7.7},
+      {"code":"393","name":"Jenever citroen-","name2":"Gin Dutch lemon flavoured; Citroenjenever","category":"Alcoholische dranken","state":"other","kcal":180,"protein":0,"fat":0,"carbs":3},
+      {"code":"3321","name":"Tongschar rauw","name2":"Lemon sole raw","category":"Vis, schaal- en schelpdieren","state":"raw","kcal":73,"protein":16.7,"fat":0.7,"carbs":0}
+    ] },
+    {"id":"leverpastei","nl":"leverpastei","en":"liver pâté","aliasesEn":["liver paste"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":319,"protein":14.2,"fat":28,"carbs":1.5,"source":"usda"}, "candidates": [
+      {"code":"335","name":"Pastei lever-","name2":"Liver pate; Leverpastei","category":"Vleeswaren","state":"other","kcal":318,"protein":14.2,"fat":28.3,"carbs":1.7},
+      {"code":"1239","name":"Worst smeerlever-","name2":"Liver pate sausage; Smeerleverworst","category":"Vleeswaren","state":"other","kcal":319,"protein":12.3,"fat":28.6,"carbs":3},
+      {"code":"1771","name":"Leverkaas/Berliner leverworst","name2":"Liver pate/Berliner liver sausage","category":"Vleeswaren","state":"other","kcal":319,"protein":12.3,"fat":27.6,"carbs":4.5},
+      {"code":"642","name":"Pate room-","name2":"Pate; Roompate","category":"Vleeswaren","state":"other","kcal":360,"protein":9.6,"fat":33,"carbs":5.7},
+      {"code":"640","name":"Worst lever-","name2":"Liver sausage; Leverworst","category":"Vleeswaren","state":"other","kcal":294,"protein":14.5,"fat":25.3,"carbs":1.8},
+      {"code":"1407","name":"Lever runder- rauw","name2":"Liver ox raw; Runderlever rauw","category":"Vlees en gevogelte","state":"raw","kcal":129,"protein":21,"fat":4.2,"carbs":1.9},
+      {"code":"475","name":"Lever kippen- rauw","name2":"Liver chicken raw; Kippenlever rauw","category":"Vlees en gevogelte","state":"raw","kcal":128,"protein":19.1,"fat":5.4,"carbs":1},
+      {"code":"1426","name":"Lever varkens- rauw","name2":"Liver pork raw; Varkenslever rauw","category":"Vlees en gevogelte","state":"raw","kcal":129,"protein":21.3,"fat":4.8,"carbs":0.2}
+    ] },
+    {"id":"leverworst","nl":"leverworst","en":"Dutch liver sausage","aliasesEn":[],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":326,"protein":14.1,"fat":28.5,"carbs":2.2,"source":"usda"}, "candidates": [
+      {"code":"640","name":"Worst lever-","name2":"Liver sausage; Leverworst","category":"Vleeswaren","state":"other","kcal":294,"protein":14.5,"fat":25.3,"carbs":1.8},
+      {"code":"1239","name":"Worst smeerlever-","name2":"Liver pate sausage; Smeerleverworst","category":"Vleeswaren","state":"other","kcal":319,"protein":12.3,"fat":28.6,"carbs":3},
+      {"code":"1909","name":"Worst excl leverproducten gem","name2":"Sausage excl liver products av","category":"Vleeswaren","state":"other","kcal":352,"protein":16.3,"fat":30.7,"carbs":2.5},
+      {"code":"796","name":"Worst incl leverproducten gem","name2":"Sausage incl liver products av","category":"Vleeswaren","state":"other","kcal":343,"protein":15.7,"fat":29.9,"carbs":2.5},
+      {"code":"1238","name":"Worst lever- hausmacher","name2":"Liver sausage coarse hausmacher; Leverworst hausmacher","category":"Vleeswaren","state":"other","kcal":266,"protein":15.4,"fat":20.4,"carbs":5.2},
+      {"code":"1771","name":"Leverkaas/Berliner leverworst","name2":"Liver pate/Berliner liver sausage","category":"Vleeswaren","state":"other","kcal":319,"protein":12.3,"fat":27.6,"carbs":4.5},
+      {"code":"1152","name":"Worst salami","name2":"Sausage salami","category":"Vleeswaren","state":"other","kcal":392,"protein":18.7,"fat":34.8,"carbs":0.9},
+      {"code":"2768","name":"Worst ossen-","name2":"Sausage raw beef; Ossenworst","category":"Vleeswaren","state":"raw","kcal":166,"protein":18.6,"fat":9.4,"carbs":1.1}
+    ] },
+    {"id":"lijnzaad","nl":"lijnzaad","en":"linseed","aliasesEn":["flaxseed","flax seeds","linseeds"],"defaultUnit":"el","aisle":"bakken","current":{"kcal":534,"protein":18.3,"fat":42.2,"carbs":1.6,"source":"usda"}, "candidates": [
+      {"code":"867","name":"Lijnzaad","name2":"Linseeds","category":"Noten en zaden","state":"other","kcal":477,"protein":19,"fat":31,"carbs":13},
+      {"code":"3051","name":"Olie lijnzaad-","name2":"Oil linseed; Lijnzaadolie","category":"Vetten en oliën","state":"other","kcal":900,"protein":0,"fat":100,"carbs":0}
+    ] },
+    {"id":"likeur","nl":"likeur","en":"liqueur","aliasesEn":[],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":280,"protein":0,"fat":0,"carbs":35,"source":"estimate"}, "candidates": [
+      {"code":"382","name":"Advocaat","name2":"Advocaat liqueur","category":"Alcoholische dranken","state":"other","kcal":236,"protein":4.3,"fat":3.2,"carbs":23.6}
+    ] },
+    {"id":"limoen","nl":"limoen","en":"lime","aliasesEn":[],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":30,"protein":0.7,"fat":0.2,"carbs":7.7,"source":"usda"}, "candidates": [
+      {"code":"691","name":"Limoen","name2":"Lime; Lemmetje","category":"Fruit","state":"other","kcal":41,"protein":0.7,"fat":0.2,"carbs":7.7}
+    ] },
+    {"id":"limoenblad","nl":"limoenblad","en":"lime leaf","aliasesEn":["kaffir lime leaf","kaffir lime leaves","makrut lime leaves"],"defaultUnit":"blad","aisle":"wereld","current":{"kcal":60,"protein":3,"fat":1,"carbs":10,"source":"estimate"}, "candidates": [
+      {"code":"691","name":"Limoen","name2":"Lime; Lemmetje","category":"Fruit","state":"other","kcal":41,"protein":0.7,"fat":0.2,"carbs":7.7},
+      {"code":"675","name":"Dagoeblad rauw","name2":"Dagoe leaf raw; Waterspinazie/kangkoeng rauw","category":"Groente","state":"raw","kcal":34,"protein":3,"fat":0,"carbs":5}
+    ] },
+    {"id":"limoensap","nl":"limoensap","en":"lime juice","aliasesEn":[],"defaultUnit":"el","aisle":"groente-fruit","current":{"kcal":25,"protein":0.4,"fat":0.1,"carbs":8,"source":"usda"}, "candidates": [
+      {"code":"691","name":"Limoen","name2":"Lime; Lemmetje","category":"Fruit","state":"other","kcal":41,"protein":0.7,"fat":0.2,"carbs":7.7},
+      {"code":"383","name":"Sap appel-","name2":"Juice apple; Appelsap","category":"Niet-alcoholische dranken","state":"other","kcal":46,"protein":0.1,"fat":0,"carbs":11.2},
+      {"code":"923","name":"Sap peren-","name2":"Juice pear; Perensap","category":"Niet-alcoholische dranken","state":"other","kcal":39,"protein":0.1,"fat":0,"carbs":9.5},
+      {"code":"1462","name":"Sap ananas-","name2":"Juice pineapple; Ananassap","category":"Niet-alcoholische dranken","state":"other","kcal":47,"protein":0.5,"fat":0,"carbs":11.2},
+      {"code":"1656","name":"Sap wortel-","name2":"Juice carrot; Wortelsap","category":"Niet-alcoholische dranken","state":"other","kcal":29,"protein":0.4,"fat":0.2,"carbs":6.4},
+      {"code":"861","name":"Sap bieten-","name2":"Juice beetroot; Bietensap","category":"Niet-alcoholische dranken","state":"other","kcal":34,"protein":0.9,"fat":0,"carbs":7.7},
+      {"code":"396","name":"Sap druiven-","name2":"Juice grape; Druivensap","category":"Niet-alcoholische dranken","state":"other","kcal":65,"protein":0.2,"fat":0,"carbs":15.9},
+      {"code":"413","name":"Sap tomaten-","name2":"Tomato juice; Tomatensap","category":"Niet-alcoholische dranken","state":"other","kcal":16,"protein":0.7,"fat":0,"carbs":3.2}
+    ] },
+    {"id":"limoenschil","nl":"limoenschil","en":"lime zest","aliasesEn":["lime peel","lime rind","grated lime zest"],"defaultUnit":"tl","aisle":"groente-fruit","current":{"kcal":30,"protein":1.5,"fat":0.3,"carbs":5.4,"source":"estimate"}, "candidates": [
+      {"code":"691","name":"Limoen","name2":"Lime; Lemmetje","category":"Fruit","state":"other","kcal":41,"protein":0.7,"fat":0.2,"carbs":7.7}
+    ] },
+    {"id":"limonadesiroop","nl":"limonadesiroop","en":"fruit squash","aliasesEn":["squash concentrate","orange squash","cordial","fruit cordial"],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":135,"protein":0,"fat":0,"carbs":33,"source":"estimate"}, "candidates": [
+      {"code":"463","name":"Siroop vruchtenlimonade-","name2":"Fruit drink concentrate undiluted; Limonadesiroop/ranja","category":"Niet-alcoholische dranken","state":"other","kcal":233,"protein":0,"fat":0,"carbs":58.2},
+      {"code":"2289","name":"Siroop vruchtenlimonade- light","name2":"Fruit drink concentrate light; Limonadesiroop/ranja light","category":"Niet-alcoholische dranken","state":"other","kcal":8,"protein":0,"fat":0,"carbs":1.8},
+      {"code":"1810","name":"Siroop vruchtenlimonade- Karvan Cevitam","name2":"Fruit drink concentrate Karvan Cevitam; Limonadesiroop/ranja Karvan Cevitam","category":"Niet-alcoholische dranken","state":"other","kcal":177,"protein":0.1,"fat":0,"carbs":44},
+      {"code":"5120","name":"Kiwi gem","name2":"Kiwi fruit av","category":"Fruit","state":"other","kcal":64,"protein":1,"fat":0.6,"carbs":11.4},
+      {"code":"1364","name":"Turks fruit","name2":"Turkish Delight; Turkisch delight/helva/lokum","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":372,"protein":0,"fat":0,"carbs":92.9},
+      {"code":"1074","name":"Passievrucht","name2":"Passion fruit; Maracuja","category":"Fruit","state":"other","kcal":52,"protein":2.6,"fat":0.4,"carbs":5.7},
+      {"code":"5407","name":"Spread fruit-","name2":"Fruit spread; Jam 33% minder suiker/fruitspread","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":162,"protein":0.5,"fat":0.1,"carbs":38},
+      {"code":"2232","name":"Biscuit fruit-","name2":"Biscuit fruit; Fruitbiscuit sultana e.d.","category":"Gebak en koek","state":"other","kcal":396,"protein":5.5,"fat":7.1,"carbs":76.3}
+    ] },
+    {"id":"limoncello","nl":"limoncello","en":"limoncello","aliasesEn":["lemon liqueur"],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":230,"protein":0,"fat":0,"carbs":24,"source":"estimate"}, "candidates": [] },
+    {"id":"linguine","nl":"linguine","en":"linguine","aliasesEn":[],"defaultUnit":"g","aisle":"droog","current":{"kcal":355,"protein":12.5,"fat":1.5,"carbs":71,"source":"estimate"}, "candidates": [] },
+    {"id":"linze","nl":"linze","en":"lentil","aliasesEn":[],"defaultUnit":"g","aisle":"droog","current":{"kcal":352,"protein":24.6,"fat":1.1,"carbs":52.7,"source":"usda"}, "candidates": [] },
+    {"id":"linzenchips","nl":"linzenchips","en":"lentil crisps","aliasesEn":["lentil chips"],"defaultUnit":"g","aisle":"snacks-zoet","current":{"kcal":440,"protein":20,"fat":15,"carbs":55,"source":"estimate"}, "candidates": [
+      {"code":"122","name":"Chips gem","name2":"Crisps potato av","category":"Hartige snacks en zoutjes","state":"other","kcal":538,"protein":6.3,"fat":32.8,"carbs":52.3},
+      {"code":"2529","name":"Chips oven-","name2":"Potato crisps oven baked; Ovenchips Lay's e.d.","category":"Hartige snacks en zoutjes","state":"other","kcal":411,"protein":6.4,"fat":9.3,"carbs":72.8},
+      {"code":"2923","name":"Chips naturel","name2":"Crisps potato unflavoured","category":"Hartige snacks en zoutjes","state":"other","kcal":541,"protein":6.4,"fat":33.5,"carbs":51.3}
+    ] },
+    {"id":"linzenpasta","nl":"linzenpasta","en":"lentil pasta","aliasesEn":["red lentil pasta"],"defaultUnit":"g","aisle":"droog","current":{"kcal":330,"protein":25,"fat":2,"carbs":50,"source":"estimate"}, "candidates": [
+      {"code":"5174","name":"Linzen rode gekookt","name2":"Lentils red boiled","category":"Peulvruchten","state":"cooked","kcal":110,"protein":7.7,"fat":0.6,"carbs":16.1},
+      {"code":"2489","name":"Pasta speculoos-","name2":"Spread speculaas flavoured; Speculoospasta/speculaaspasta","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":579,"protein":3.2,"fat":37.5,"carbs":56.6},
+      {"code":"4","name":"Pasta witte rauw","name2":"Pasta white raw; Macaroni/spaghetti/tagliatelle/noedels/mie/vermicelli witte onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":356,"protein":12.3,"fat":1.5,"carbs":72},
+      {"code":"811","name":"Pasta volkoren rauw","name2":"Pasta wholemeal raw; Macaroni/spaghetti volkoren onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":344,"protein":13.3,"fat":2.2,"carbs":64},
+      {"code":"2271","name":"Pasta glutenvrij rauw","name2":"Pasta gluten free raw; Macaroni/spaghetti glutenvrij onbereid Schar e.d.","category":"Graanproducten en meelsoorten","state":"raw","kcal":358,"protein":9,"fat":2.5,"carbs":73.7}
+    ] },
+    {"id":"loempia","nl":"loempia","en":"spring roll","aliasesEn":["loempia","egg roll","egg rolls"],"defaultUnit":"stuk","aisle":"diepvries","current":{"kcal":200,"protein":5,"fat":9,"carbs":24,"source":"estimate"}, "candidates": [
+      {"code":"2549","name":"Loempia diepvries onbereid","name2":"Spring roll frozen unprepared; Maaltijdloempia diepvries onbereid","category":"Hartige snacks en zoutjes","state":"other","kcal":152,"protein":6.1,"fat":4.5,"carbs":21.2}
+    ] },
+    {"id":"loempiavel","nl":"loempiavel","en":"spring roll wrapper","aliasesEn":["spring roll pastry","spring roll sheets"],"defaultUnit":"stuk","aisle":"diepvries","current":{"kcal":290,"protein":8,"fat":1,"carbs":60,"source":"estimate"}, "candidates": [
+      {"code":"2549","name":"Loempia diepvries onbereid","name2":"Spring roll frozen unprepared; Maaltijdloempia diepvries onbereid","category":"Hartige snacks en zoutjes","state":"other","kcal":152,"protein":6.1,"fat":4.5,"carbs":21.2}
+    ] },
+    {"id":"lollo-rosso","nl":"lollo rosso","en":"lollo rosso lettuce","aliasesEn":["lollo rosso"],"defaultUnit":"krop","aisle":"groente-fruit","current":{"kcal":13,"protein":1.3,"fat":0.2,"carbs":1.4,"source":"usda"}, "candidates": [
+      {"code":"2346","name":"Sla gem rauw","name2":"Lettuce av raw","category":"Groente","state":"raw","kcal":16,"protein":1.6,"fat":0.3,"carbs":1},
+      {"code":"2708","name":"Sla rode rauw","name2":"Lettuce red raw","category":"Groente","state":"raw","kcal":18,"protein":1.3,"fat":0.2,"carbs":2.3},
+      {"code":"46","name":"Sla krop- rauw","name2":"Lettuce butterhead raw; Kropsla/botersla rauw","category":"Groente","state":"raw","kcal":13,"protein":1.4,"fat":0.4,"carbs":0.3},
+      {"code":"65","name":"Sla veld- rauw","name2":"Lettuce lambs raw; Veldsla rauw","category":"Groente","state":"raw","kcal":18,"protein":2.6,"fat":0.2,"carbs":0.5},
+      {"code":"3332","name":"Sla romaine rauw","name2":"Lettuce romaine raw; Bindsla/Sla bind-/Sla Romaanse/Sla Romeinse","category":"Groente","state":"raw","kcal":17,"protein":1.2,"fat":0.3,"carbs":1.2},
+      {"code":"1399","name":"Sla ijsberg- rauw","name2":"Lettuce iceberg raw; Ijsbergsla rauw","category":"Groente","state":"raw","kcal":14,"protein":1,"fat":0.2,"carbs":1.4}
+    ] },
+    {"id":"lolly","nl":"lolly","en":"lollipop","aliasesEn":[],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":388,"protein":0,"fat":0,"carbs":97,"source":"estimate"}, "candidates": [
+      {"code":"1474","name":"IJs water-","name2":"Ice lolly; Waterijs","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":75,"protein":0.2,"fat":0.2,"carbs":18},
+      {"code":"2385","name":"Salmiakkogel/-lolly","name2":"Salty liquorice lolly","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":375,"protein":1.2,"fat":0,"carbs":92.3}
+    ] },
+    {"id":"lychee","nl":"lychee","en":"lychee","aliasesEn":["litchi","litchis"],"defaultUnit":"g","aisle":"groente-fruit","current":{"kcal":66,"protein":0.8,"fat":0.4,"carbs":15.2,"source":"usda"}, "candidates": [
+      {"code":"1090","name":"Lychee","name2":"Lychees","category":"Fruit","state":"other","kcal":72,"protein":0.9,"fat":0.1,"carbs":16.1}
+    ] },
+    {"id":"maanzaad","nl":"maanzaad","en":"poppy seeds","aliasesEn":["poppy seed","blue poppy seeds"],"defaultUnit":"el","aisle":"bakken","current":{"kcal":515,"protein":18,"fat":42,"carbs":10,"source":"estimate"}, "candidates": [
+      {"code":"2805","name":"Maanzaad","name2":"Poppy seeds","category":"Noten en zaden","state":"other","kcal":455,"protein":19.2,"fat":35.6,"carbs":2.4},
+      {"code":"5156","name":"Anijszaad","name2":"Anise seed","category":"Kruiden en specerijen","state":"other","kcal":384,"protein":17.6,"fat":15.9,"carbs":35.4},
+      {"code":"3446","name":"Hennepzaad","name2":"Hemp seed","category":"Noten en zaden","state":"other","kcal":592,"protein":31.6,"fat":48.8,"carbs":4.7},
+      {"code":"2806","name":"Pompoenpitten","name2":"Pumpkin seeds","category":"Noten en zaden","state":"other","kcal":574,"protein":30.3,"fat":47.2,"carbs":2.7},
+      {"code":"872","name":"Zonnebloempitten","name2":"Sunflower seeds","category":"Noten en zaden","state":"other","kcal":647,"protein":18,"fat":56.5,"carbs":13},
+      {"code":"5404","name":"Zaden en pitten gem","name2":"Seeds and kernels av","category":"Noten en zaden","state":"other","kcal":562,"protein":19.1,"fat":44.8,"carbs":10.5}
+    ] },
+    {"id":"maasdammer","nl":"maasdammer","en":"Maasdam","aliasesEn":["Maasdam cheese"],"defaultUnit":"g","aisle":"kaas","current":{"kcal":393,"protein":27,"fat":31,"carbs":1.4,"source":"usda"}, "candidates": [
+      {"code":"1725","name":"Kaas gaten- Hollandse 45+","name2":"Cheese Dutch in Swiss-style 45+; Hollandse gatenkaas Maasdammer/Leerdammer e.d.","category":"Kaas","state":"other","kcal":370,"protein":27.6,"fat":28.5,"carbs":0}
+    ] },
+    {"id":"macadamianoot","nl":"macadamianoot","en":"macadamia nut","aliasesEn":["macadamia","macadamias"],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":718,"protein":7.9,"fat":75.8,"carbs":5.2,"source":"usda"}, "candidates": [
+      {"code":"5111","name":"Noten macadamia gezouten","name2":"Nuts macadamia salted; Macadamianoten gezouten","category":"Noten en zaden","state":"other","kcal":753,"protein":7.8,"fat":76.1,"carbs":5.4},
+      {"code":"2844","name":"Noten macadamia- ongezouten","name2":"Nuts macadamia unsalted; Macademianoten ongezouten","category":"Noten en zaden","state":"other","kcal":753,"protein":7.8,"fat":76.1,"carbs":5.4},
+      {"code":"2432","name":"Taart noten-","name2":"Nuts cake; Notengebak","category":"Gebak en koek","state":"other","kcal":467,"protein":7.6,"fat":27.2,"carbs":46.7},
+      {"code":"570","name":"Candybar Nuts","name2":"Candybar Nuts","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":497,"protein":4.6,"fat":24.8,"carbs":62.3},
+      {"code":"2176","name":"Pijnboompitten","name2":"Pine nuts; Noten pijnboompitten","category":"Noten en zaden","state":"other","kcal":675,"protein":16.5,"fat":61.9,"carbs":9.8}
+    ] },
+    {"id":"macaroni","nl":"macaroni","en":"macaroni","aliasesEn":[],"defaultUnit":"g","aisle":"droog","current":{"kcal":355,"protein":12.5,"fat":1.5,"carbs":71,"source":"estimate"}, "candidates": [] },
+    {"id":"macaronimix","nl":"macaronimix","en":"macaroni seasoning mix","aliasesEn":["macaroni mix"],"defaultUnit":"zakje","aisle":"kruiden-specerijen","current":{"kcal":320,"protein":10,"fat":4,"carbs":60,"source":"estimate"}, "candidates": [
+      {"code":"2613","name":"Mix seasoning Mexicaans onbereid","name2":"Mix seasoning Mexican unprepared; Seasoningmix mexicaans onbereid","category":"Kruiden en specerijen","state":"other","kcal":318,"protein":12,"fat":5.7,"carbs":48.8},
+      {"code":"5372","name":"Snoepmix","name2":"Candy mix","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":328,"protein":5.8,"fat":0.3,"carbs":75.3}
+    ] },
+    {"id":"madame-jeanette","nl":"Madame Jeanette","en":"Madame Jeanette chilli","aliasesEn":["adjuma pepper","yellow lantern chilli"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":40,"protein":1.9,"fat":0.4,"carbs":7.3,"source":"usda"}, "candidates": [
+      {"code":"1221","name":"Chilipoeder","name2":"Chilli powder","category":"Kruiden en specerijen","state":"other","kcal":373,"protein":12,"fat":17,"carbs":32},
+      {"code":"3343","name":"Saus chili-","name2":"Sauce chilli; Chilisaus","category":"Hartige sauzen","state":"other","kcal":149,"protein":0.3,"fat":0.3,"carbs":35.8}
+    ] },
+    {"id":"madeira","nl":"madeira","en":"Madeira","aliasesEn":["Madeira wine"],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":125,"protein":0,"fat":0,"carbs":6,"source":"estimate"}, "candidates": [
+      {"code":"857","name":"Madeira","name2":"Madeira","category":"Alcoholische dranken","state":"other","kcal":166,"protein":0,"fat":0,"carbs":10}
+    ] },
+    {"id":"madeleine","nl":"madeleine","en":"madeleine","aliasesEn":[],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":430,"protein":6,"fat":21,"carbs":54,"source":"estimate"}, "candidates": [] },
+    {"id":"maggi","nl":"Maggi","en":"Maggi seasoning","aliasesEn":["Maggi liquid seasoning"],"defaultUnit":"druppel","aisle":"sauzen-olie-azijn","current":{"kcal":45,"protein":6,"fat":0,"carbs":5.5,"source":"estimate"}, "candidates": [
+      {"code":"859","name":"Aroma vloeibaar","name2":"Seasoning flavoured liquid; Maggi e.d. vloeibaar aroma","category":"Kruiden en specerijen","state":"other","kcal":70,"protein":10.6,"fat":0.1,"carbs":6.4},
+      {"code":"860","name":"Aroma strooi-","name2":"Seasoning flavoured powder; Aromat e.d. strooiaroma","category":"Kruiden en specerijen","state":"other","kcal":176,"protein":9.9,"fat":3.9,"carbs":25}
+    ] },
+    {"id":"magnetronrijst","nl":"magnetronrijst","en":"microwave rice","aliasesEn":["ready rice","pouch rice"],"defaultUnit":"zakje","aisle":"droog","current":{"kcal":140,"protein":3,"fat":2,"carbs":27,"source":"estimate"}, "candidates": [
+      {"code":"3334","name":"Olie rijst-","name2":"Oil rice bran; Rijstolie/Rijstvliesolie","category":"Vetten en oliën","state":"other","kcal":900,"protein":0,"fat":100,"carbs":0},
+      {"code":"5","name":"Rijst witte rauw","name2":"Rice white raw; Witte rijst onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":352,"protein":7,"fat":1,"carbs":78},
+      {"code":"2049","name":"Rijst meergranen- rauw","name2":"Rice multi-grain raw; Meergranenrijst onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":351,"protein":9,"fat":1.5,"carbs":74},
+      {"code":"712","name":"Rijst zilvervlies- rauw","name2":"Rice brown raw; Zilvervliesrijst onbereid","category":"Graanproducten en meelsoorten","state":"raw","kcal":357,"protein":8.3,"fat":2.6,"carbs":73.5},
+      {"code":"298","name":"Pap rijste-","name2":"Porridge rice; Rijstepap","category":"Melk en melkproducten","state":"other","kcal":86,"protein":3.1,"fat":2.9,"carbs":12},
+      {"code":"80","name":"Bloem rijste-","name2":"Flour rice; Rijstebloem","category":"Graanproducten en meelsoorten","state":"other","kcal":369,"protein":6.2,"fat":0.5,"carbs":83.9}
+    ] },
+    {"id":"mais","nl":"maïs","en":"sweetcorn","aliasesEn":["corn","tinned sweetcorn","sweetcorn kernels"],"defaultUnit":"blik","aisle":"blik-pot","current":{"kcal":67,"protein":2.3,"fat":1.2,"carbs":12.3,"source":"usda"}, "candidates": [
+      {"code":"2900","name":"Mais blik/glas","name2":"Sweetcorn tinned; Suikermais blik/glas","category":"Groente","state":"canned","kcal":91,"protein":2.9,"fat":1.5,"carbs":14.8},
+      {"code":"696","name":"Meel mais-","name2":"Flour corn; Maismeel","category":"Graanproducten en meelsoorten","state":"other","kcal":363,"protein":6.1,"fat":1.7,"carbs":76.7}
+    ] },
+    {"id":"maisbrood","nl":"maïsbrood","en":"maize bread","aliasesEn":["maize loaf","corn bread"],"defaultUnit":"snee","aisle":"brood-ontbijt","current":{"kcal":250,"protein":6,"fat":3,"carbs":50,"source":"estimate"}, "candidates": [
+      {"code":"2785","name":"Tarwemaisbrood wit","name2":"Wheat corn bread white; Maisbrood wit","category":"Brood","state":"other","kcal":261,"protein":10.8,"fat":3.2,"carbs":44.9},
+      {"code":"1013","name":"Paneermeel","name2":"Bread crumbs","category":"Graanproducten en meelsoorten","state":"other","kcal":357,"protein":11.6,"fat":1.6,"carbs":69.9},
+      {"code":"5255","name":"Bananenbrood","name2":"Banana bread; Banana bread","category":"Gebak en koek","state":"other","kcal":298,"protein":4.7,"fat":13.2,"carbs":38.9}
+    ] },
+    {"id":"maiskiemolie","nl":"maïskiemolie","en":"corn oil","aliasesEn":["maize oil"],"defaultUnit":"el","aisle":"sauzen-olie-azijn","current":{"kcal":900,"protein":0,"fat":100,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"608","name":"Olie mais/maiskiem-","name2":"Oil corn; Maiskiemolie/maisolie","category":"Vetten en oliën","state":"other","kcal":900,"protein":0,"fat":100,"carbs":0},
+      {"code":"2472","name":"Olie wok-","name2":"Oil wok; Wokolie","category":"Vetten en oliën","state":"other","kcal":900,"protein":0,"fat":100,"carbs":0},
+      {"code":"313","name":"Olie soja-","name2":"Oil soya; Sojaolie","category":"Vetten en oliën","state":"other","kcal":894,"protein":0.3,"fat":99.2,"carbs":0},
+      {"code":"3451","name":"Olie palm-","name2":"Oil palm; Palmolie/Palmvet","category":"Vetten en oliën","state":"other","kcal":899,"protein":0,"fat":99.9,"carbs":0},
+      {"code":"3243","name":"Olie kokos-","name2":"Oil coconut; Kokosolie/Kokosvet","category":"Vetten en oliën","state":"other","kcal":892,"protein":0,"fat":99.1,"carbs":0},
+      {"code":"3334","name":"Olie rijst-","name2":"Oil rice bran; Rijstolie/Rijstvliesolie","category":"Vetten en oliën","state":"other","kcal":900,"protein":0,"fat":100,"carbs":0},
+      {"code":"3376","name":"Olie sesam-","name2":"Oil sesame; Sesamolie","category":"Vetten en oliën","state":"other","kcal":898,"protein":0.2,"fat":99.7,"carbs":0},
+      {"code":"601","name":"Olie olijf-","name2":"Oil olive; Olijfolie","category":"Vetten en oliën","state":"other","kcal":900,"protein":0,"fat":100,"carbs":0}
+    ] },
+    {"id":"maiskolf","nl":"maïskolf","en":"corn cob","aliasesEn":["corn on the cob","sweetcorn cob","sweetcorn cobs"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":86,"protein":3.3,"fat":1.4,"carbs":16.7,"source":"usda"}, "candidates": [
+      {"code":"215","name":"Maizena","name2":"Corn starch; Maiszetmeel","category":"Graanproducten en meelsoorten","state":"other","kcal":354,"protein":0.3,"fat":0.4,"carbs":86.9},
+      {"code":"696","name":"Meel mais-","name2":"Flour corn; Maismeel","category":"Graanproducten en meelsoorten","state":"other","kcal":363,"protein":6.1,"fat":1.7,"carbs":76.7},
+      {"code":"1652","name":"Stroop maismout-","name2":"Syrup corn; Maismoutstroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":287,"protein":2.3,"fat":0,"carbs":69.4},
+      {"code":"608","name":"Olie mais/maiskiem-","name2":"Oil corn; Maiskiemolie/maisolie","category":"Vetten en oliën","state":"other","kcal":900,"protein":0,"fat":100,"carbs":0}
+    ] },
+    {"id":"maismeel","nl":"maïsmeel","en":"maize flour","aliasesEn":["fine maize flour"],"defaultUnit":"g","aisle":"bakken","current":{"kcal":360,"protein":7,"fat":3,"carbs":76,"source":"estimate"}, "candidates": [
+      {"code":"696","name":"Meel mais-","name2":"Flour corn; Maismeel","category":"Graanproducten en meelsoorten","state":"other","kcal":363,"protein":6.1,"fat":1.7,"carbs":76.7},
+      {"code":"869","name":"Meel soja-","name2":"Flour soya; Sojameel volvet","category":"Graanproducten en meelsoorten","state":"other","kcal":429,"protein":39.1,"fat":22.9,"carbs":7.6},
+      {"code":"5586","name":"Meel kokos-","name2":"Flour coconut; Kokosmeel","category":"Graanproducten en meelsoorten","state":"other","kcal":343,"protein":20.1,"fat":12.8,"carbs":18},
+      {"code":"217","name":"Bloem rogge-","name2":"Flour rye; Roggebloem","category":"Graanproducten en meelsoorten","state":"other","kcal":332,"protein":5.8,"fat":1.2,"carbs":69},
+      {"code":"5576","name":"Bloem spelt-","name2":"Flour spelt; Speltbloem/Speltmeel wit","category":"Graanproducten en meelsoorten","state":"other","kcal":348,"protein":13.2,"fat":1.7,"carbs":67.4},
+      {"code":"5579","name":"Meel amandel-","name2":"Flour almond; Amandelmeel","category":"Graanproducten en meelsoorten","state":"other","kcal":638,"protein":25.3,"fat":55.8,"carbs":3.6},
+      {"code":"695","name":"Meel cassave-","name2":"Flour cassava; Cassavemeel","category":"Graanproducten en meelsoorten","state":"other","kcal":354,"protein":0.9,"fat":0.5,"carbs":82.7},
+      {"code":"80","name":"Bloem rijste-","name2":"Flour rice; Rijstebloem","category":"Graanproducten en meelsoorten","state":"other","kcal":369,"protein":6.2,"fat":0.5,"carbs":83.9}
+    ] },
+    {"id":"maistortilla","nl":"maïstortilla","en":"corn tortilla","aliasesEn":[],"defaultUnit":"stuk","aisle":"wereld","current":{"kcal":218,"protein":5.7,"fat":2.9,"carbs":38.3,"source":"usda"}, "candidates": [
+      {"code":"696","name":"Meel mais-","name2":"Flour corn; Maismeel","category":"Graanproducten en meelsoorten","state":"other","kcal":363,"protein":6.1,"fat":1.7,"carbs":76.7},
+      {"code":"215","name":"Maizena","name2":"Corn starch; Maiszetmeel","category":"Graanproducten en meelsoorten","state":"other","kcal":354,"protein":0.3,"fat":0.4,"carbs":86.9},
+      {"code":"1652","name":"Stroop maismout-","name2":"Syrup corn; Maismoutstroop","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":287,"protein":2.3,"fat":0,"carbs":69.4}
+    ] },
+    {"id":"maiswafel","nl":"maïswafel","en":"corn cake","aliasesEn":["puffed corn cake","puffed corn cakes"],"defaultUnit":"stuk","aisle":"brood-ontbijt","current":{"kcal":385,"protein":8,"fat":3,"carbs":80,"source":"estimate"}, "candidates": [
+      {"code":"5462","name":"Wafel mais- naturel m zout","name2":"Corn cakes puffed plain w salt; Maiswafel m zout","category":"Brood","state":"other","kcal":385,"protein":7.4,"fat":1.1,"carbs":85},
+      {"code":"215","name":"Maizena","name2":"Corn starch; Maiszetmeel","category":"Graanproducten en meelsoorten","state":"other","kcal":354,"protein":0.3,"fat":0.4,"carbs":86.9},
+      {"code":"5254","name":"Carrotcake","name2":"Carrot cake; Worteltaart","category":"Gebak en koek","state":"other","kcal":357,"protein":4.5,"fat":20.9,"carbs":36.9},
+      {"code":"696","name":"Meel mais-","name2":"Flour corn; Maismeel","category":"Graanproducten en meelsoorten","state":"other","kcal":363,"protein":6.1,"fat":1.7,"carbs":76.7},
+      {"code":"2391","name":"Cake marmer-","name2":"Cake marble-; Marmercake","category":"Gebak en koek","state":"other","kcal":396,"protein":5.6,"fat":21.2,"carbs":44.9},
+      {"code":"2432","name":"Taart noten-","name2":"Nuts cake; Notengebak","category":"Gebak en koek","state":"other","kcal":467,"protein":7.6,"fat":27.2,"carbs":46.7},
+      {"code":"2893","name":"Cake Indische","name2":"Cake Indonesian","category":"Gebak en koek","state":"other","kcal":313,"protein":4.3,"fat":5.7,"carbs":60.8},
+      {"code":"2393","name":"Cake rozijnen-","name2":"Cake raisins-; Rozijnencake","category":"Gebak en koek","state":"other","kcal":384,"protein":5.3,"fat":19.1,"carbs":47.1}
+    ] },
+    {"id":"maizena","nl":"maïzena","en":"cornflour","aliasesEn":["cornstarch","corn starch","corn flour"],"defaultUnit":"el","aisle":"bakken","current":{"kcal":355,"protein":0.3,"fat":0.1,"carbs":88,"source":"estimate"}, "candidates": [
+      {"code":"215","name":"Maizena","name2":"Corn starch; Maiszetmeel","category":"Graanproducten en meelsoorten","state":"other","kcal":354,"protein":0.3,"fat":0.4,"carbs":86.9}
+    ] },
+    {"id":"majoraan","nl":"majoraan","en":"marjoram","aliasesEn":["dried marjoram"],"defaultUnit":"tl","aisle":"kruiden-specerijen","current":{"kcal":270,"protein":12,"fat":7,"carbs":42,"source":"estimate"}, "candidates": [
+      {"code":"1226","name":"Majoraan gedroogd","name2":"Marjoram dried; Marjolein gedroogd","category":"Kruiden en specerijen","state":"dried","kcal":319,"protein":13,"fat":7,"carbs":42}
+    ] },
+    {"id":"makreel","nl":"makreel","en":"mackerel","aliasesEn":["mackerel fillet"],"defaultUnit":"g","aisle":"vlees-vis","current":{"kcal":205,"protein":18.6,"fat":13.9,"carbs":0,"source":"usda"}, "candidates": [
+      {"code":"1586","name":"Makreelfilet gerookt","name2":"Mackerel fillet smoked","category":"Vis, schaal- en schelpdieren","state":"other","kcal":301,"protein":21.1,"fat":24.1,"carbs":0},
+      {"code":"353","name":"Makreel rauw","name2":"Mackerel raw","category":"Vis, schaal- en schelpdieren","state":"raw","kcal":233,"protein":18,"fat":17.9,"carbs":0}
+    ] },
+    {"id":"makreel-in-tomatensaus","nl":"makreel in tomatensaus","en":"mackerel in tomato sauce","aliasesEn":["tinned mackerel","mackerel fillets in tomato sauce"],"defaultUnit":"blik","aisle":"blik-pot","current":{"kcal":175,"protein":13,"fat":12,"carbs":3,"source":"estimate"}, "candidates": [
+      {"code":"349","name":"Haringfilet in tomatensaus blik","name2":"Herring fillet in tomato sauce tinned","category":"Vis, schaal- en schelpdieren","state":"canned","kcal":201,"protein":12,"fat":14.6,"carbs":5.4},
+      {"code":"1609","name":"Makreel in olie blik","name2":"Mackerel in oil tinned","category":"Vis, schaal- en schelpdieren","state":"canned","kcal":267,"protein":20,"fat":20.7,"carbs":0.1},
+      {"code":"1255","name":"Makreel in water blik","name2":"Mackerel in water tinned","category":"Vis, schaal- en schelpdieren","state":"canned","kcal":257,"protein":18.6,"fat":20.3,"carbs":0},
+      {"code":"2293","name":"Tomaat in blik","name2":"Tomatoes tinned; Tomaatblokjes in blik/tomaten hele in blik","category":"Groente","state":"canned","kcal":24,"protein":1.1,"fat":0.4,"carbs":3.7},
+      {"code":"179","name":"Appelmoes blik/glas","name2":"Apple sauce tinned; Appelcompote blik/glas","category":"Fruit","state":"canned","kcal":76,"protein":0.2,"fat":0.1,"carbs":17.6},
+      {"code":"197","name":"Bonen witte in tomatensaus blik/glas","name2":"Beans white baked in tomato sauce canned; Witte bonen in tomatensaus","category":"Peulvruchten","state":"canned","kcal":101,"protein":5.7,"fat":0.6,"carbs":15.2},
+      {"code":"351","name":"Krab in water blik","name2":"Crab in water tinned","category":"Vis, schaal- en schelpdieren","state":"canned","kcal":85,"protein":18.1,"fat":1.4,"carbs":0},
+      {"code":"1589","name":"Tonijn in olie blik","name2":"Tuna in oil tinned","category":"Vis, schaal- en schelpdieren","state":"canned","kcal":206,"protein":27,"fat":10.8,"carbs":0.1}
+    ] },
+    {"id":"manchego","nl":"manchego","en":"Manchego","aliasesEn":["Manchego cheese"],"defaultUnit":"g","aisle":"kaas","current":{"kcal":400,"protein":26,"fat":33,"carbs":0,"source":"estimate"}, "candidates": [] },
+    {"id":"mandarijn","nl":"mandarijn","en":"mandarin","aliasesEn":["clementine","clementines","satsuma","satsumas","tangerine","tangerines","easy peeler","easy peelers"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":53,"protein":0.8,"fat":0.3,"carbs":11.5,"source":"usda"}, "candidates": [
+      {"code":"165","name":"Mandarijn","name2":"Manderins","category":"Fruit","state":"other","kcal":46,"protein":0.7,"fat":0.1,"carbs":9.9}
+    ] },
+    {"id":"mandarijnen-op-siroop","nl":"mandarijnen op siroop","en":"tinned mandarins","aliasesEn":["mandarin segments in syrup","canned mandarin oranges","mandarin oranges in syrup"],"defaultUnit":"blik","aisle":"blik-pot","current":{"kcal":61,"protein":0.5,"fat":0.1,"carbs":15.5,"source":"usda"}, "candidates": [
+      {"code":"186","name":"Mandarijnen op siroop blik/glas","name2":"Tangerines in syrup tinned","category":"Fruit","state":"canned","kcal":59,"protein":0.5,"fat":0,"carbs":14},
+      {"code":"188","name":"Peren op siroop blik/glas","name2":"Pears in syrup tinned; Peer op siroop blik/glas","category":"Fruit","state":"canned","kcal":64,"protein":0.3,"fat":0,"carbs":14.7},
+      {"code":"1116","name":"Meloen op siroop blik/glas","name2":"Melon in syrup canned","category":"Fruit","state":"canned","kcal":80,"protein":0.5,"fat":0,"carbs":19},
+      {"code":"177","name":"Ananas op siroop blik/glas","name2":"Pineapple in syrup tinned","category":"Fruit","state":"canned","kcal":69,"protein":0.3,"fat":0.1,"carbs":16.1},
+      {"code":"184","name":"Kersen op siroop blik/glas","name2":"Cherries in syrup tinned","category":"Fruit","state":"canned","kcal":63,"protein":0.6,"fat":0.3,"carbs":14.2},
+      {"code":"440","name":"Gember op siroop blik/glas","name2":"Ginger stem in syrup tinned; Stemgember","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"canned","kcal":288,"protein":1.8,"fat":0,"carbs":69},
+      {"code":"191","name":"Pruimen op siroop blik/glas","name2":"Plums in syrup tinned; Pruim op siroop blik/glas","category":"Fruit","state":"canned","kcal":65,"protein":0.3,"fat":0,"carbs":15.5},
+      {"code":"189","name":"Perziken op siroop blik/glas","name2":"Peaches in syrup tinned","category":"Fruit","state":"canned","kcal":62,"protein":0.4,"fat":0,"carbs":14.6}
+    ] },
+    {"id":"mango","nl":"mango","en":"mango","aliasesEn":["mangos"],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":60,"protein":0.8,"fat":0.4,"carbs":13.4,"source":"usda"}, "candidates": [
+      {"code":"692","name":"Mango","name2":"Mango","category":"Fruit","state":"other","kcal":66,"protein":0.6,"fat":0.2,"carbs":14.3},
+      {"code":"1886","name":"Chutney mango-","name2":"Mango chutney; Mangochutney","category":"Hartige sauzen","state":"other","kcal":215,"protein":0.7,"fat":0.1,"carbs":52}
+    ] },
+    {"id":"mango-chutney","nl":"mango-chutney","en":"mango chutney","aliasesEn":[],"defaultUnit":"el","aisle":"wereld","current":{"kcal":195,"protein":0.5,"fat":0.2,"carbs":48,"source":"estimate"}, "candidates": [
+      {"code":"1886","name":"Chutney mango-","name2":"Mango chutney; Mangochutney","category":"Hartige sauzen","state":"other","kcal":215,"protein":0.7,"fat":0.1,"carbs":52},
+      {"code":"692","name":"Mango","name2":"Mango","category":"Fruit","state":"other","kcal":66,"protein":0.6,"fat":0.2,"carbs":14.3}
+    ] },
+    {"id":"mangosap","nl":"mangosap","en":"mango juice","aliasesEn":[],"defaultUnit":"ml","aisle":"dranken","current":{"kcal":55,"protein":0.3,"fat":0.1,"carbs":13,"source":"estimate"}, "candidates": [
+      {"code":"692","name":"Mango","name2":"Mango","category":"Fruit","state":"other","kcal":66,"protein":0.6,"fat":0.2,"carbs":14.3},
+      {"code":"383","name":"Sap appel-","name2":"Juice apple; Appelsap","category":"Niet-alcoholische dranken","state":"other","kcal":46,"protein":0.1,"fat":0,"carbs":11.2},
+      {"code":"923","name":"Sap peren-","name2":"Juice pear; Perensap","category":"Niet-alcoholische dranken","state":"other","kcal":39,"protein":0.1,"fat":0,"carbs":9.5},
+      {"code":"1462","name":"Sap ananas-","name2":"Juice pineapple; Ananassap","category":"Niet-alcoholische dranken","state":"other","kcal":47,"protein":0.5,"fat":0,"carbs":11.2},
+      {"code":"1656","name":"Sap wortel-","name2":"Juice carrot; Wortelsap","category":"Niet-alcoholische dranken","state":"other","kcal":29,"protein":0.4,"fat":0.2,"carbs":6.4},
+      {"code":"861","name":"Sap bieten-","name2":"Juice beetroot; Bietensap","category":"Niet-alcoholische dranken","state":"other","kcal":34,"protein":0.9,"fat":0,"carbs":7.7},
+      {"code":"396","name":"Sap druiven-","name2":"Juice grape; Druivensap","category":"Niet-alcoholische dranken","state":"other","kcal":65,"protein":0.2,"fat":0,"carbs":15.9},
+      {"code":"413","name":"Sap tomaten-","name2":"Tomato juice; Tomatensap","category":"Niet-alcoholische dranken","state":"other","kcal":16,"protein":0.7,"fat":0,"carbs":3.2}
+    ] },
+    {"id":"mangosteen","nl":"mangosteen","en":"mangosteen","aliasesEn":[],"defaultUnit":"stuk","aisle":"groente-fruit","current":{"kcal":73,"protein":0.4,"fat":0.6,"carbs":18,"source":"estimate"}, "candidates": [] },
+    {"id":"margarine","nl":"margarine","en":"margarine","aliasesEn":["baking margarine"],"defaultUnit":"g","aisle":"zuivel-eieren","current":{"kcal":713,"protein":0.2,"fat":80.2,"carbs":0.8,"source":"usda"}, "candidates": [] },
+    {"id":"mariakaakje","nl":"mariakaakje","en":"Marie biscuit","aliasesEn":["Maria biscuit","Maria biscuits","rich tea biscuits"],"defaultUnit":"stuk","aisle":"snacks-zoet","current":{"kcal":430,"protein":7,"fat":11,"carbs":74,"source":"estimate"}, "candidates": [
+      {"code":"252","name":"Biscuit","name2":"Biscuit; Mariakoekje/kaakje","category":"Gebak en koek","state":"other","kcal":437,"protein":7.6,"fat":11,"carbs":75.5},
+      {"code":"258","name":"Koekje gem","name2":"Biscuit av","category":"Gebak en koek","state":"other","kcal":475,"protein":5.7,"fat":20.7,"carbs":65.2},
+      {"code":"2583","name":"Koek pinda-","name2":"Biscuit peanut; Pindakoek","category":"Gebak en koek","state":"other","kcal":513,"protein":10.6,"fat":28.4,"carbs":51.9},
+      {"code":"636","name":"Koek muesli-","name2":"Biscuit muesli; Mueslikoek","category":"Gebak en koek","state":"other","kcal":394,"protein":6.5,"fat":16.1,"carbs":54.1},
+      {"code":"264","name":"Biscuit zoute","name2":"Biscuit salted; Tuc e.d. zout koekje","category":"Hartige snacks en zoutjes","state":"other","kcal":472,"protein":8.1,"fat":23,"carbs":56.7},
+      {"code":"2227","name":"Biscuit fourre","name2":"Biscuit filled; Sandwichbiscuit","category":"Gebak en koek","state":"other","kcal":473,"protein":5.5,"fat":17.1,"carbs":73.2},
+      {"code":"2232","name":"Biscuit fruit-","name2":"Biscuit fruit; Fruitbiscuit sultana e.d.","category":"Gebak en koek","state":"other","kcal":396,"protein":5.5,"fat":7.1,"carbs":76.3},
+      {"code":"2894","name":"Biscuit digestive-","name2":"Biscuit digestive","category":"Gebak en koek","state":"other","kcal":492,"protein":6.7,"fat":21.8,"carbs":65.4}
+    ] },
+    {"id":"marmelade","nl":"marmelade","en":"marmalade","aliasesEn":["orange marmalade"],"defaultUnit":"el","aisle":"brood-ontbijt","current":{"kcal":246,"protein":0.3,"fat":0,"carbs":65.6,"source":"usda"}, "candidates": [
+      {"code":"3351","name":"Marmelade","name2":"Marmalade; Jam marmelade","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":260,"protein":0.3,"fat":0.2,"carbs":63.9}
+    ] },
+    {"id":"marmercake","nl":"marmercake","en":"marble cake","aliasesEn":[],"defaultUnit":"plak","aisle":"snacks-zoet","current":{"kcal":290,"protein":5.4,"fat":2.7,"carbs":60.5,"source":"usda"}, "candidates": [
+      {"code":"2391","name":"Cake marmer-","name2":"Cake marble-; Marmercake","category":"Gebak en koek","state":"other","kcal":396,"protein":5.6,"fat":21.2,"carbs":44.9},
+      {"code":"5254","name":"Carrotcake","name2":"Carrot cake; Worteltaart","category":"Gebak en koek","state":"other","kcal":357,"protein":4.5,"fat":20.9,"carbs":36.9},
+      {"code":"2432","name":"Taart noten-","name2":"Nuts cake; Notengebak","category":"Gebak en koek","state":"other","kcal":467,"protein":7.6,"fat":27.2,"carbs":46.7},
+      {"code":"2893","name":"Cake Indische","name2":"Cake Indonesian","category":"Gebak en koek","state":"other","kcal":313,"protein":4.3,"fat":5.7,"carbs":60.8},
+      {"code":"2393","name":"Cake rozijnen-","name2":"Cake raisins-; Rozijnencake","category":"Gebak en koek","state":"other","kcal":384,"protein":5.3,"fat":19.1,"carbs":47.1},
+      {"code":"5239","name":"Cake appel- gem","name2":"Cake apple av; Appelcake gemiddeld","category":"Gebak en koek","state":"other","kcal":261,"protein":3.5,"fat":13.5,"carbs":30.5},
+      {"code":"5237","name":"Cake naturel gem","name2":"Cake plain av","category":"Gebak en koek","state":"other","kcal":398,"protein":5.7,"fat":22.5,"carbs":42.8},
+      {"code":"2571","name":"Cake bitterkoekjes-","name2":"Cake w Dutch Amaretti Bitterkoekjes; Bitterkoekjescake","category":"Gebak en koek","state":"other","kcal":398,"protein":5.8,"fat":21.3,"carbs":45.3}
+    ] },
+    {"id":"marmite","nl":"Marmite","en":"Marmite","aliasesEn":["yeast extract","yeast extract spread"],"defaultUnit":"tl","aisle":"wereld","current":{"kcal":185,"protein":23.9,"fat":0.9,"carbs":13.9,"source":"usda"}, "candidates": [
+      {"code":"441","name":"Gistextract Marmite","name2":"Yeast extract Marmite","category":"Diversen","state":"other","kcal":238,"protein":38.4,"fat":0.1,"carbs":19.2}
+    ] },
+    {"id":"marsala","nl":"marsala","en":"Marsala","aliasesEn":["Marsala wine"],"defaultUnit":"el","aisle":"dranken","current":{"kcal":140,"protein":0,"fat":0,"carbs":8,"source":"estimate"}, "candidates": [] },
+    {"id":"marsepein","nl":"marsepein","en":"marzipan","aliasesEn":["marzipan sweets"],"defaultUnit":"g","aisle":"snacks-zoet","current":{"kcal":460,"protein":9,"fat":25,"carbs":50,"source":"estimate"}, "candidates": [
+      {"code":"1256","name":"Marsepein","name2":"Marzipan","category":"Suiker, snoep, zoet beleg en zoete sauzen","state":"other","kcal":420,"protein":5.3,"fat":15.3,"carbs":64.2}
+    ] }
+  ]
+}

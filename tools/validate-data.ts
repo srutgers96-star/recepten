@@ -2023,12 +2023,24 @@ export function readHandbookFiles(root: string): { files: HandbookFile[]; parseE
 export const NUTRITION_REQUIRED_KEYS: readonly string[] = ['kcal', 'protein', 'fat', 'carbs', 'fibre', 'salt'];
 /** Allowed `source` values of a nutrition item. */
 export const NUTRITION_SOURCES: readonly string[] = ['estimate', 'nevo', 'usda'];
-const NUTRITION_ITEM_KEYS: ReadonlySet<string> = new Set([...NUTRITION_REQUIRED_KEYS, 'alcohol', 'source']);
+/** Sources whose kcal is authoritative (a table): a kcal deviation from the macros is only a warning (V9b). */
+export const NUTRITION_TABLE_SOURCES: readonly string[] = ['nevo', 'usda'];
+const NUTRITION_ITEM_KEYS: ReadonlySet<string> = new Set([...NUTRITION_REQUIRED_KEYS, 'alcohol', 'source', 'ref']);
+/** Prefix of a problem of `checkNutritionItem` that is a warning, not an error (docs/specs/verbeterronde-9b.md §1a). */
+export const NUTRITION_WARN_PREFIX = 'warn: ';
+
+/** True when a problem of `checkNutritionItem` is a warning (prefix NUTRITION_WARN_PREFIX). */
+export function isNutritionWarning(problem: string): boolean {
+  return problem.startsWith(NUTRITION_WARN_PREFIX);
+}
 
 /**
  * The problems of one nutrition item (per 100 g), or [] when it is fine: every required number ≥ 0,
  * `alcohol` optional and ≥ 0, protein + fat + carbs + fibre ≤ 101, salt ≤ 100, kcal within max(15 %, 20 kcal)
- * of 4·protein + 4·carbs + 9·fat + 7·alcohol, `source` one of NUTRITION_SOURCES. Shared with tools/apply-nutrition.ts.
+ * of 4·protein + 4·carbs + 9·fat + 7·alcohol, `source` one of NUTRITION_SOURCES, `ref` (the code in the
+ * source table) a string of 1–16 characters and only with a table source (nevo / usda). The kcal deviation
+ * is an error for an estimate (or no source) and a WARNING for a table source, returned with the prefix
+ * NUTRITION_WARN_PREFIX (the table's kcal is authoritative: fibre, polyols …). Shared with tools/apply-nutrition.ts.
  */
 export function checkNutritionItem(item: unknown): string[] {
   if (!isRecord(item)) return ['must be an object.'];
@@ -2041,6 +2053,12 @@ export function checkNutritionItem(item: unknown): string[] {
   if (item['alcohol'] !== undefined && num('alcohol') === null) problems.push(`"alcohol" must be a number ≥ 0 when present, got ${JSON.stringify(item['alcohol'])}.`);
   if (item['source'] !== undefined && (typeof item['source'] !== 'string' || !NUTRITION_SOURCES.includes(item['source']))) {
     problems.push(`"source" must be ${NUTRITION_SOURCES.join(' | ')}, got ${JSON.stringify(item['source'])}.`);
+  }
+  const tableSource = typeof item['source'] === 'string' && NUTRITION_TABLE_SOURCES.includes(item['source']);
+  const ref = item['ref'];
+  if (ref !== undefined) {
+    if (typeof ref !== 'string' || ref.length < 1 || ref.length > 16) problems.push(`"ref" must be a string of 1–16 characters, got ${JSON.stringify(ref)}.`);
+    else if (!tableSource) problems.push(`"ref" is only allowed with a table source (${NUTRITION_TABLE_SOURCES.join(' | ')}), source is ${JSON.stringify(item['source'])}.`);
   }
   for (const k of Object.keys(item)) if (!NUTRITION_ITEM_KEYS.has(k)) problems.push(`unknown key "${k}".`);
   if (problems.length) return problems;
@@ -2057,7 +2075,7 @@ export function checkNutritionItem(item: unknown): string[] {
   const expected = 4 * protein + 4 * carbs + 9 * fat + 7 * alcohol;
   const tolerance = Math.max(0.15 * expected, 20);
   if (Math.abs(kcal - expected) > tolerance) {
-    problems.push(`kcal ${kcal} does not match 4·protein + 4·carbs + 9·fat + 7·alcohol = ${round1(expected)} (allowed ± ${round1(tolerance)}).`);
+    problems.push(`${tableSource ? NUTRITION_WARN_PREFIX : ''}kcal ${kcal} does not match 4·protein + 4·carbs + 9·fat + 7·alcohol = ${round1(expected)} (allowed ± ${round1(tolerance)}).`);
   }
   return problems;
 }
@@ -2069,7 +2087,7 @@ function round1(v: number): number {
 /**
  * Validate data/nutrition.json: schema 1; every item id exists in the dictionary (`ingredientIds`) and is
  * food (not in `nonFoodIds`, the entries of the aisles huishoudelijk / drogisterij); every item passes
- * `checkNutritionItem`. Items out of id order give a warning (tools/apply-nutrition.ts writes them sorted).
+ * `checkNutritionItem` (its warnings, the kcal deviation of a table item, are counted in `warnings`). Items out of id order give a warning (tools/apply-nutrition.ts writes them sorted).
  */
 export function validateNutrition(data: unknown, ingredientIds: ReadonlySet<string>, nonFoodIds: ReadonlySet<string>): ValidationResult {
   const errors: string[] = [];
@@ -2089,7 +2107,10 @@ export function validateNutrition(data: unknown, ingredientIds: ReadonlySet<stri
     const label = `nutrition.json ${JSON.stringify(id)}`;
     if (!ingredientIds.has(id)) errors.push(`${label}: not an ingredient id of the dictionary.`);
     else if (nonFoodIds.has(id)) errors.push(`${label}: a non-food entry (aisle huishoudelijk / drogisterij) gets no nutrition values.`);
-    for (const p of checkNutritionItem(items[id])) errors.push(`${label}: ${p}`);
+    for (const p of checkNutritionItem(items[id])) {
+      if (isNutritionWarning(p)) warnings.push(`${label}: ${p.slice(NUTRITION_WARN_PREFIX.length)}`);
+      else errors.push(`${label}: ${p}`);
+    }
   }
   const sorted = [...ids].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
   if (sorted.some((id, i) => id !== ids[i])) warnings.push('nutrition.json: items are not sorted by id (npm run apply-nutrition writes them sorted).');

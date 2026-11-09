@@ -1,0 +1,486 @@
+{
+ "batch": "r03",
+ "source": "usda",
+ "items": [
+  {
+   "id": "cola",
+   "choice": "174852",
+   "confidence": "sure",
+   "why": "regular cola"
+  },
+  {
+   "id": "cola-zero",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "comte",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "conchiglioni",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "cordon-bleu",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "corned-beef",
+   "choice": "170602",
+   "confidence": "close",
+   "why": "canned corned beef is what is bought; raw brisket is the alternative"
+  },
+  {
+   "id": "cornflakes",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "cote-de-boeuf",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "courgette",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "courgetti",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "cracker",
+   "choice": "174980",
+   "confidence": "close",
+   "why": "generic cracker; milk crackers match current kcal"
+  },
+  {
+   "id": "cranberry",
+   "choice": "171722",
+   "confidence": "close",
+   "why": "raw cranberries; current 308 suggests dried was meant"
+  },
+  {
+   "id": "cranberrysap",
+   "choice": "168117",
+   "confidence": "sure",
+   "why": "cranberry juice unsweetened"
+  },
+  {
+   "id": "cream-cracker",
+   "choice": "167530",
+   "confidence": "close",
+   "why": "cream crackers, same family"
+  },
+  {
+   "id": "creme-brulee",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "creme-de-cassis",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "creme-fraiche",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "croissantdeeg",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "crouton",
+   "choice": "172751",
+   "confidence": "close",
+   "why": "plain croutons"
+  },
+  {
+   "id": "cupcake",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "cupcakevormpje",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "curryketchup",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "currypasta",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "dadelstroop",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "danish-blue",
+   "choice": "172175",
+   "confidence": "close",
+   "why": "Cheese, blue same family"
+  },
+  {
+   "id": "daslook",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "deeg-voor-hartige-taart",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "dessertrijst",
+   "choice": "168931",
+   "confidence": "sure",
+   "why": "short-grain rice raw"
+  },
+  {
+   "id": "dessertwijn",
+   "choice": "173176",
+   "confidence": "sure",
+   "why": "dessert wine sweet"
+  },
+  {
+   "id": "diepvriesspinazie",
+   "choice": "169288",
+   "confidence": "close",
+   "why": "frozen spinach (only cooked variant offered)"
+  },
+  {
+   "id": "dijonmosterd",
+   "choice": "172234",
+   "confidence": "close",
+   "why": "prepared mustard, same family"
+  },
+  {
+   "id": "diksap",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "dipsaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "donker-bier",
+   "choice": "168746",
+   "confidence": "close",
+   "why": "regular beer, no dark beer candidate"
+  },
+  {
+   "id": "dorade",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "dragon",
+   "choice": "170937",
+   "confidence": "close",
+   "why": "dried tarragon"
+  },
+  {
+   "id": "dragonazijn",
+   "choice": "172240",
+   "confidence": "close",
+   "why": "wine vinegar, same family"
+  },
+  {
+   "id": "drakenvrucht",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "drinkontbijt",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "drinkpakje",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "drinkyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "druivenblad",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "duan-salam",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "dubbeldrank",
+   "choice": "174176",
+   "confidence": "close",
+   "why": "fruit juice drink, matches current kcal"
+  },
+  {
+   "id": "earl-grey",
+   "choice": "174144",
+   "confidence": "close",
+   "why": "black tea, ~0 kcal"
+  },
+  {
+   "id": "edamame",
+   "choice": "168410",
+   "confidence": "close",
+   "why": "frozen unprepared edamame"
+  },
+  {
+   "id": "edelgistvlokken",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "eekhoorntjesbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "eendenborst",
+   "choice": "174469",
+   "confidence": "close",
+   "why": "duck breast raw (wild)"
+  },
+  {
+   "id": "eendenbout",
+   "choice": "172410",
+   "confidence": "close",
+   "why": "domesticated duck meat only raw"
+  },
+  {
+   "id": "eetbare-bloem",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "eikenbladsla",
+   "choice": "169249",
+   "confidence": "close",
+   "why": "green leaf lettuce"
+  },
+  {
+   "id": "eiwitreep",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "emmentaler",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "emping",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "energiedrank",
+   "choice": "174108",
+   "confidence": "close",
+   "why": "energy drink citrus"
+  },
+  {
+   "id": "entrecote",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "erwtendrink",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "espresso",
+   "choice": "171891",
+   "confidence": "sure",
+   "why": "brewed espresso"
+  },
+  {
+   "id": "fajitakruiden",
+   "choice": "172243",
+   "confidence": "close",
+   "why": "taco seasoning mix, same family"
+  },
+  {
+   "id": "farfalle",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "fenegriek",
+   "choice": "171324",
+   "confidence": "sure",
+   "why": "fenugreek seed"
+  },
+  {
+   "id": "fettuccine",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "filodeeg",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "flatbread",
+   "choice": "167945",
+   "confidence": "close",
+   "why": "Italian flatbread focaccia"
+  },
+  {
+   "id": "flensje",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "foelie",
+   "choice": "170927",
+   "confidence": "sure",
+   "why": "mace ground"
+  },
+  {
+   "id": "foie-gras",
+   "choice": "171100",
+   "confidence": "close",
+   "why": "pate de foie gras"
+  },
+  {
+   "id": "frambozenjam",
+   "choice": "170280",
+   "confidence": "close",
+   "why": "jam with fruit juice; no regular jam candidate"
+  },
+  {
+   "id": "franse-tuinkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "friet",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "frisdrank",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "fritessaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "frituurolie",
+   "choice": "172359",
+   "confidence": "close",
+   "why": "industrial canola frying oil"
+  },
+  {
+   "id": "frituurvet",
+   "choice": "171400",
+   "confidence": "close",
+   "why": "beef tallow"
+  },
+  {
+   "id": "fruit",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "fruitbiscuit",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "fruitreep",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  },
+  {
+   "id": "fruitsalade",
+   "choice": "174670",
+   "confidence": "close",
+   "why": "canned fruit salad juice pack"
+  },
+  {
+   "id": "fusilli",
+   "choice": null,
+   "confidence": "none",
+   "why": "no candidate is the same product"
+  }
+ ]
+}

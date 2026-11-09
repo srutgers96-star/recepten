@@ -1,11 +1,11 @@
 # Spec V9b — Voedingswaarden van schatting naar tabelwaarde (USDA nu, NEVO zodra Stijn het bestand heeft) (Stijn, 9 nov 2026)
 
-Status: in aanbouw (Fable, 9 nov 2026). Eén blok, twee bouwers + integrator + Sonnet-koppelronde (negentien batches) + toepasser (lichte
+Status: compleet (Fable, 9 nov 2026; USDA én NEVO toegepast). Eén blok, twee bouwers + integrator + Sonnet-koppelronde (negentien batches) + toepasser (lichte
 modus met data-fase, zoals V9). Bron: docs/IDEAS.md idee 1, "Voorwerk V9b" (Stijn 9 nov: "kan je die niet alvast van internet afvissen en
 met Sonnet integreren?", daarna "V9b klinkt goed", en hij zet zelf het vinkje bij de NEVO-voorwaarden). Leidend bij tegenspraak:
 docs/specs/README.md §2–§4, docs/specs/verbeterronde-9.md (het model, de tools en de UI die dit blok uitbreidt), CLAUDE.md invariant 14
 (de tabel zit in de app, geen backend) en 15 (geen dependency: CSV lezen met een eigen parser).
-Gebouwd: 9 nov 2026 (V9b, lichte workflow met data-fase; run-id in STATUS)
+Gebouwd: 9 nov 2026 (V9b, lichte workflow met data-fase wf_454c9c2e-ac0, tweede data-ronde wf_436cc33b-93b; besluiten Fable na de lens: (1) de puntentelling is herzien — het hoofddeel is het komma-deel met de meeste treffers (USDA zet het groepswoord vooraan: "Spices, cinnamon, ground"), de synoniemen van `name2` tellen als eigen delen, een kandidaat moet minstens één woord van de hoofdnaam bevatten (anker), merkregels (HOOFDLETTERS) zijn nooit kandidaat, NEVO-vulwoorden (gem, bereid, av) en Engelse meervouden (tomatoes → tomato) worden netjes behandeld; daarna zijn 876 USDA-ids herkoppeld; (2) de NEVO-ronde over alle 1448 ids: 543 sure, 284 close, 621 none; (3) eindstand: 825 nevo, 254 usda, 369 schatting; dekking 99,8 %; de validator geeft 29 waarschuwingen (kcal met vezelenergie bij kruiden en zaden, zoals verwacht); (4) de verplichte RIVM-zin "Gebaseerd op gegevens van NEVO-online versie 2025/9.0, RIVM, Bilthoven en andere gegevens" staat onder Over, in de voetnoot en in de note van nutrition.json; (5) DEVICE-TEST rij 119 gebruikt ui (NEVO), kikkererwt (USDA) en speculaaskruiden (schatting); rij 118 houdt 900 kcal voor olijfolie (NEVO); (6) bouwerskeuzes bevestigd: gekookt +2, pot = blik, meervouden in de zoekvraag, diakrieten weg, toestand-voorrang, tabelregel zonder macro's geweigerd)
 
 **Kritische lezer (Fable, vooraf).** (1) V9 gaf alle 1448 voedsel-ingrediënten waarden met `source: 'estimate'`; `apply-nutrition`
 vervangt zo'n item al wanneer er een beter komt. Dit blok voegt twee bronnen toe en laat de rest staan: de UI, de drempel en de regel
@@ -60,11 +60,13 @@ items: { id: {…} } }`, 1448 items, één per regel. `src/screens/DictionaryScr
     "Restaurant Foods", "Baby Foods", "Meals, Entrees, and Side Dishes", "Quality Control Materials", "American Indian/Alaska Native Foods"
     worden overgeslagen (merk- en maaltijdproducten koppelen nooit aan een ingrediënt). Streamt food_nutrient.csv regel voor regel (36 MB).
   - `--candidates <bron>`: leest `data/work/tables/<bron>.csv`, `data/ingredients.json` en `data/nutrition.json`; voor elk voedsel-ingrediënt
-    (geen huishoudelijk/drogisterij) de acht beste kandidaten. Score (pure functie `scoreCandidate(query, row)`, met tests): tokens van onze
+    (geen huishoudelijk/drogisterij) de acht beste kandidaten. Score (pure functie `scoreCandidate(query, row)`, met tests; herzien na de lens): tokens van onze
     Engelse naam + Engelse aliassen (voor NEVO ook de Nederlandse naam + aliassen) tegen de tokens van `name` en `name2` (kleine letters,
-    splitsen op niet-letters, stopwoorden the/and/with/of/or/zonder/met weg, enkelvoud door een s aan het eind te negeren): +3 per gedeeld
-    token in het eerste komma-deel van de naam, +1 per gedeeld token elders, −2 per token van de kandidaat dat NIET in de vraag zit en in het
-    eerste komma-deel staat (zodat "Onions, raw" boven "Onions, spring or scallions" komt bij "onion"), +2 voor `state` raw, −2 voor cooked,
+    splitsen op niet-letters, stopwoorden the/and/with/of/or/zonder/met en NEVO-vulwoorden gem/bereid/av weg, Engels enkelvoud: tomatoes →
+    tomato, cherries → cherry): de delen zijn de komma-delen van `name` plus elk `;`-synoniem van `name2`; het hoofddeel is het deel met de
+    meeste treffers (gelijk → het eerste); +3 per gedeeld token in het hoofddeel, +1 per gedeeld token elders, −2 per token van het hoofddeel
+    dat NIET in de vraag zit; een kandidaat zonder enig token van de hoofdnaam (`anchors`: en.one, voor NEVO ook nl.one) valt af, net als een
+    merkregel (een woord in HOOFDLETTERS: RED BULL, HEINZ); +2 voor `state` raw, −2 voor cooked,
     −1 voor canned en dried — tenzij de id-naam zelf blik/ingeblikt/uit-blik/gedroogd/gekookt bevat of `defaultUnit` blik/pot is, dan +2
     voor canned resp. dried en 0 voor raw. Gelijke score: kortere naam eerst. Schrijft `data/llm/nutrition/match-input-<bron>-NN.json`
     (80 ids per batch, op id): `{ "batch": "NN", "source": "<bron>", "items": [{ "id", "nl", "en", "aliasesEn": [], "defaultUnit", "aisle",
@@ -92,12 +94,14 @@ items: { id: {…} } }`, 1448 items, één per regel. `src/screens/DictionaryScr
 ### 1b. UI-teksten en handboek (bouwer B: `src/i18n/browse.ts`, `src/i18n/settings.ts`, `src/i18n/edit.ts`, `src/screens/DictionaryScreen.tsx`,
 `data/handbook/02-recepten.json`, `data/handbook/08-instellingen-en-opslag.json`, `docs/HANDLEIDING.md` + `docs/HANDBOOK.md`, `docs/DEVICE-TEST.md`)
 
-- i18n, letterlijk: `recipe.nutriNote` wordt "Gemiddelde waarden per ingrediënt uit de tabellen van USDA en NEVO, of een schatting; niet van
-  jouw merk. {counted} van de {total} regels geteld." · "Average values per ingredient from the USDA and NEVO tables, or an estimate; not your
-  brand. {counted} of {total} lines counted."; `more.nutritionSource` wordt "Voedingswaarden komen uit USDA FoodData Central en NEVO-online
-  versie 2025/9.0 (RIVM, Bilthoven) waar die een product kennen, anders uit een schatting op dat niveau; nooit merkwaarden." · "Nutrition
-  values come from USDA FoodData Central and NEVO-online version 2025/9.0 (RIVM, Bilthoven) where they know a product, otherwise from an
-  estimate at that level; never brand values."; nieuw `dict.per100Source`: "Bron: {source}" · "Source: {source}"; `nutri.source.estimate`:
+- i18n, letterlijk (na de NEVO-voorwaarden, "Bronvermelding": de zin "Gebaseerd op gegevens van NEVO-online versie 2025/9.0, RIVM,
+  Bilthoven en andere gegevens" is verplicht bij berekende output): `recipe.nutriNote` wordt "Gebaseerd op gegevens van NEVO-online versie
+  2025/9.0, RIVM, Bilthoven en andere gegevens (USDA, schattingen); gemiddelde waarden per ingrediënt, niet van jouw merk. {counted} van de
+  {total} regels geteld." · "Based on data from NEVO-online version 2025/9.0, RIVM, Bilthoven and other data (USDA, estimates); average values
+  per ingredient, not your brand. {counted} of {total} lines counted."; `more.nutritionSource` wordt "Gebaseerd op gegevens van NEVO-online
+  versie 2025/9.0, RIVM, Bilthoven en andere gegevens (USDA FoodData Central; een schatting waar geen tabel het product kent); nooit
+  merkwaarden." · "Based on data from NEVO-online version 2025/9.0, RIVM, Bilthoven and other data (USDA FoodData Central; an estimate where no
+  table knows the product); never brand values."; nieuw `dict.per100Source`: "Bron: {source}" · "Source: {source}"; `nutri.source.estimate`:
   "schatting" · "estimate"; `nutri.source.usda`: "USDA" · "USDA"; `nutri.source.nevo`: "NEVO (RIVM)" · "NEVO (RIVM)".
 - DictionaryScreen `EntryDetail`: onder de regel Per 100 g dezelfde `dd` krijgt een tweede regel `<small>` met `dict.per100Source`
   (`nutri.source.<source>`, ontbrekende source = estimate).

@@ -1,0 +1,486 @@
+{
+ "batch": "01",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "aardappel",
+   "choice": "1",
+   "confidence": "sure",
+   "why": "aardappelen rauw"
+  },
+  {
+   "id": "aardappelkroketje",
+   "choice": "2326",
+   "confidence": "sure",
+   "why": "kroketten diepvries onbereid"
+  },
+  {
+   "id": "aardappelkruiden",
+   "choice": null,
+   "confidence": "none",
+   "why": "kruidenmix, geen kandidaat"
+  },
+  {
+   "id": "aardappelpartjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen rauwe aardappel; diepvriespartjes zijn gebakken/voorgebakken (129 vs 88 kcal)"
+  },
+  {
+   "id": "aardappelpuree",
+   "choice": "1455",
+   "confidence": "sure",
+   "why": "puree-poeder, zakje droog"
+  },
+  {
+   "id": "aardappelsalade",
+   "choice": "5533",
+   "confidence": "sure",
+   "why": "aardappelsalade"
+  },
+  {
+   "id": "aardappelzetmeel",
+   "choice": "226",
+   "confidence": "sure",
+   "why": "aardappelzetmeel"
+  },
+  {
+   "id": "aardbei",
+   "choice": "148",
+   "confidence": "sure",
+   "why": "aardbeien"
+  },
+  {
+   "id": "aardbeienjam",
+   "choice": "445",
+   "confidence": "close",
+   "why": "generieke jam"
+  },
+  {
+   "id": "aardbeienyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vruchtenyoghurt; kandidaten zijn fruit of naturel"
+  },
+  {
+   "id": "aardpeer",
+   "choice": "5364",
+   "confidence": "sure",
+   "why": "aardpeer rauw"
+  },
+  {
+   "id": "abdijbier",
+   "choice": "3268",
+   "confidence": "close",
+   "why": "bokbier: sterk speciaalbier, kcal ongeveer gelijk"
+  },
+  {
+   "id": "abrikoos",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen gedroogd (285 vs 48 kcal)"
+  },
+  {
+   "id": "abrikozen-op-siroop",
+   "choice": "176",
+   "confidence": "sure",
+   "why": "abrikozen op siroop blik"
+  },
+  {
+   "id": "abrikozenjam",
+   "choice": "445",
+   "confidence": "close",
+   "why": "generieke jam"
+  },
+  {
+   "id": "adukiboon",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen bonen/peulvruchten droog bij kandidaten"
+  },
+  {
+   "id": "advocaat",
+   "choice": "382",
+   "confidence": "sure",
+   "why": "advocaat"
+  },
+  {
+   "id": "afbakstokbrood",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "agar-agar",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "agavesiroop",
+   "choice": null,
+   "confidence": "none",
+   "why": "ahornsiroop is ander product"
+  },
+  {
+   "id": "ahornsiroop",
+   "choice": "3063",
+   "confidence": "sure",
+   "why": "ahornsiroop"
+  },
+  {
+   "id": "aioli",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ajvar",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "alcoholvrij-bier",
+   "choice": "1519",
+   "confidence": "close",
+   "why": "bier alcoholvrij; NEVO-variant is maltbier-achtig"
+  },
+  {
+   "id": "alcoholvrije-wijn",
+   "choice": "5246",
+   "confidence": "sure",
+   "why": "wijn alcoholvrij"
+  },
+  {
+   "id": "alfalfa",
+   "choice": null,
+   "confidence": "none",
+   "why": "taugé is ander product"
+  },
+  {
+   "id": "allesbinder",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "aloe-vera-drank",
+   "choice": null,
+   "confidence": "none",
+   "why": "yoghurtdrank is ander product"
+  },
+  {
+   "id": "amandel",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen amandelmeel, niet hetzelfde"
+  },
+  {
+   "id": "amandelaroma",
+   "choice": null,
+   "confidence": "none",
+   "why": "amandelmeel is ander product (638 vs 245 kcal)"
+  },
+  {
+   "id": "amandelmeel",
+   "choice": "5579",
+   "confidence": "sure",
+   "why": "amandelmeel"
+  },
+  {
+   "id": "amandelmelk",
+   "choice": "5464",
+   "confidence": "sure",
+   "why": "amandeldrink zonder suiker"
+  },
+  {
+   "id": "amandelspijs",
+   "choice": "2807",
+   "confidence": "sure",
+   "why": "amandelspijs/banketspijs"
+  },
+  {
+   "id": "amandelyoghurt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen plantaardige yoghurt bij kandidaten"
+  },
+  {
+   "id": "amaretto",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "american-pancake",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "amsterdamse-uitjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen rauwe/gekookte ui, geen ingelegde"
+  },
+  {
+   "id": "ananas",
+   "choice": "150",
+   "confidence": "sure",
+   "why": "ananas"
+  },
+  {
+   "id": "ananas-op-sap",
+   "choice": "2843",
+   "confidence": "sure",
+   "why": "ananas op eigen sap blik"
+  },
+  {
+   "id": "ananassap",
+   "choice": "1462",
+   "confidence": "sure",
+   "why": "ananassap"
+  },
+  {
+   "id": "andalousesaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vergelijkbare saus"
+  },
+  {
+   "id": "andijvie",
+   "choice": "7",
+   "confidence": "sure",
+   "why": "andijvie rauw"
+  },
+  {
+   "id": "anijshagel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "anijszaad",
+   "choice": "5156",
+   "confidence": "sure",
+   "why": "anijszaad"
+  },
+  {
+   "id": "ansjovis",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen rauwe ansjovis (125 vs 210 kcal), gezouten ingelegd is ander product"
+  },
+  {
+   "id": "apenootje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen pinda in de schaal bij kandidaten"
+  },
+  {
+   "id": "aperol",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "appel",
+   "choice": "2751",
+   "confidence": "close",
+   "why": "Elstar met schil als generieke appel"
+  },
+  {
+   "id": "appelazijn",
+   "choice": "2615",
+   "confidence": "close",
+   "why": "generieke azijn"
+  },
+  {
+   "id": "appelbol",
+   "choice": null,
+   "confidence": "none",
+   "why": "appelflap/appelcarre zijn ander gebak"
+  },
+  {
+   "id": "appelchips",
+   "choice": null,
+   "confidence": "none",
+   "why": "aardappelchips zijn ander product"
+  },
+  {
+   "id": "appelmoes",
+   "choice": "179",
+   "confidence": "sure",
+   "why": "appelmoes blik/glas"
+  },
+  {
+   "id": "appelring",
+   "choice": "178",
+   "confidence": "sure",
+   "why": "appeltjes gedroogd"
+  },
+  {
+   "id": "appelsap",
+   "choice": "383",
+   "confidence": "sure",
+   "why": "appelsap"
+  },
+  {
+   "id": "appelstroop",
+   "choice": "427",
+   "confidence": "sure",
+   "why": "appelstroop"
+  },
+  {
+   "id": "appeltaart",
+   "choice": "5236",
+   "confidence": "sure",
+   "why": "appeltaart gemiddeld"
+  },
+  {
+   "id": "appeltaartmix",
+   "choice": "5299",
+   "confidence": "sure",
+   "why": "bakmix appeltaart"
+  },
+  {
+   "id": "arachideolie",
+   "choice": "308",
+   "confidence": "sure",
+   "why": "arachideolie"
+  },
+  {
+   "id": "aromat",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "arretjescake",
+   "choice": null,
+   "confidence": "none",
+   "why": "chocoladecake/biscuit niet hetzelfde"
+  },
+  {
+   "id": "artisjok",
+   "choice": "1021",
+   "confidence": "sure",
+   "why": "artisjok rauw"
+  },
+  {
+   "id": "artisjokhart",
+   "choice": "3331",
+   "confidence": "close",
+   "why": "artisjokharten blik/glas (ingelegd in olie: iets vetter)"
+  },
+  {
+   "id": "asperge",
+   "choice": "3220",
+   "confidence": "close",
+   "why": "groene asperge rauw (eiwit past bij current); wit ook mogelijk"
+  },
+  {
+   "id": "aspergesoep",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "atjar",
+   "choice": "850",
+   "confidence": "sure",
+   "why": "atjar tjampoer"
+  },
+  {
+   "id": "aubergine",
+   "choice": "10",
+   "confidence": "sure",
+   "why": "aubergine rauw"
+  },
+  {
+   "id": "augurk",
+   "choice": "131",
+   "confidence": "close",
+   "why": "augurk zuur; zoetzuur ook mogelijk"
+  },
+  {
+   "id": "augurkennat",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "avocado",
+   "choice": "689",
+   "confidence": "sure",
+   "why": "avocado"
+  },
+  {
+   "id": "avocado-olie",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen avocadoolie; avocado zelf is ander product"
+  },
+  {
+   "id": "ayran",
+   "choice": "3201",
+   "confidence": "sure",
+   "why": "ayran"
+  },
+  {
+   "id": "azijn",
+   "choice": "2615",
+   "confidence": "sure",
+   "why": "azijn"
+  },
+  {
+   "id": "babi-pangang-saus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen vergelijkbare saus"
+  },
+  {
+   "id": "babybel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "bacon",
+   "choice": "639",
+   "confidence": "sure",
+   "why": "ontbijtspek streaky"
+  },
+  {
+   "id": "bagel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "bakbanaan",
+   "choice": "665",
+   "confidence": "sure",
+   "why": "bakbanaan rijp rauw"
+  },
+  {
+   "id": "bakgember",
+   "choice": "440",
+   "confidence": "close",
+   "why": "stemgember op siroop"
+  },
+  {
+   "id": "bakkeljauw",
+   "choice": "703",
+   "confidence": "sure",
+   "why": "bakkeljauw gedroogd gezouten"
+  },
+  {
+   "id": "bakpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen bakpoeder bij kandidaten"
+  }
+ ]
+}

@@ -146,8 +146,8 @@ export const browse: Dict = {
   'recipe.nutriKnown': { nl: '{pct} % bekend', en: '{pct} % known' },
   'recipe.nutriTitle': { nl: 'Per portie', en: 'Per serving' },
   'recipe.nutriNote': {
-    nl: 'Schatting op basis van gemiddelde waarden per ingrediënt, niet van jouw merk. {counted} van de {total} regels geteld.',
-    en: 'An estimate based on average values per ingredient, not your brand. {counted} of {total} lines counted.',
+    nl: 'Gebaseerd op gegevens van NEVO-online versie 2025/9.0, RIVM, Bilthoven en andere gegevens (USDA, schattingen); gemiddelde waarden per ingrediënt, niet van jouw merk. {counted} van de {total} regels geteld.',
+    en: 'Based on data from NEVO-online version 2025/9.0, RIVM, Bilthoven and other data (USDA, estimates); average values per ingredient, not your brand. {counted} of {total} lines counted.',
   },
   'nutri.kcal': { nl: 'Energie', en: 'Energy' },
   'nutri.protein': { nl: 'Eiwit', en: 'Protein' },
@@ -155,6 +155,10 @@ export const browse: Dict = {
   'nutri.carbs': { nl: 'Koolhydraten', en: 'Carbohydrates' },
   'nutri.fibre': { nl: 'Vezels', en: 'Fibre' },
   'nutri.salt': { nl: 'Zout', en: 'Salt' },
+  // V9b (docs/specs/verbeterronde-9b.md §1b): the source of a value per 100 g in the dictionary detail.
+  'nutri.source.estimate': { nl: 'schatting', en: 'estimate' },
+  'nutri.source.usda': { nl: 'USDA', en: 'USDA' },
+  'nutri.source.nevo': { nl: 'NEVO (RIVM)', en: 'NEVO (RIVM)' },
   'variant.check': { nl: 'controleer zelf', en: 'check yourself' },
   // A "controleer zelf" row of the approve sheet: no swap known (checkHint) or a swap the app could not
   // place in this line (checkSwap). One text for both ("Besluiten Fable na blok 2", point 7).

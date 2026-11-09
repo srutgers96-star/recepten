@@ -1,0 +1,486 @@
+{
+ "batch": "04",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "chocoladeglazuur",
+   "choice": null,
+   "confidence": "none",
+   "why": "suikerglazuur is geen chocoladeglazuur"
+  },
+  {
+   "id": "chocoladekruidnoot",
+   "choice": "2952",
+   "confidence": "sure",
+   "why": "Kruidnoten met chocolade"
+  },
+  {
+   "id": "chocoladekussentjes",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen gevuld chocoladekussen"
+  },
+  {
+   "id": "chocoladeletter",
+   "choice": "431",
+   "confidence": "close",
+   "why": "melkchocolade, letter is meestal melk"
+  },
+  {
+   "id": "chocolademelk",
+   "choice": null,
+   "confidence": "none",
+   "why": "drank niet beschikbaar, kandidaten zijn chocolade of melk"
+  },
+  {
+   "id": "chocolademelkpoeder",
+   "choice": null,
+   "confidence": "none",
+   "why": "puddingpoeder is ander product"
+  },
+  {
+   "id": "chocolademousse",
+   "choice": "767",
+   "confidence": "close",
+   "why": "huishoudelijk bereide chocolademousse, 301 vs 190 kcal"
+  },
+  {
+   "id": "chocolademunt",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen chocolademunt"
+  },
+  {
+   "id": "chocoladepinda",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen gezoete/gezouten pinda, geen chocolade-omhuld"
+  },
+  {
+   "id": "chocoladepudding",
+   "choice": "532",
+   "confidence": "sure",
+   "why": "Pudding chocolade"
+  },
+  {
+   "id": "chocoladereep",
+   "choice": "431",
+   "confidence": "close",
+   "why": "melkchocolade als reep"
+  },
+  {
+   "id": "chocoladerozijn",
+   "choice": "2374",
+   "confidence": "close",
+   "why": "melkchocolade met rozijnen"
+  },
+  {
+   "id": "chocoladevla",
+   "choice": "276",
+   "confidence": "sure",
+   "why": "Vla chocolade volle"
+  },
+  {
+   "id": "chocoladevlokken",
+   "choice": "2531",
+   "confidence": "sure",
+   "why": "Chocoladevlokken gemiddeld"
+  },
+  {
+   "id": "chocoladezoen",
+   "choice": "2410",
+   "confidence": "sure",
+   "why": "schuimzoenen met chocolade"
+  },
+  {
+   "id": "chocolate-chip-cookie",
+   "choice": "2405",
+   "confidence": "sure",
+   "why": "chocolate chip cookie"
+  },
+  {
+   "id": "chocopasta",
+   "choice": "436",
+   "confidence": "close",
+   "why": "hazelnootchocopasta, gangbare chocopasta"
+  },
+  {
+   "id": "chorizo",
+   "choice": "2996",
+   "confidence": "sure",
+   "why": "Worst Chorizo"
+  },
+  {
+   "id": "churro",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ciabatta",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "cider",
+   "choice": "2513",
+   "confidence": "sure",
+   "why": "Cider"
+  },
+  {
+   "id": "citroen",
+   "choice": "158",
+   "confidence": "sure",
+   "why": "Citroen"
+  },
+  {
+   "id": "citroenaroma",
+   "choice": null,
+   "confidence": "none",
+   "why": "aroma is geen citroen"
+  },
+  {
+   "id": "citroengras",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen poeder, huidig is vers"
+  },
+  {
+   "id": "citroenmelisse",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kruid-kandidaat"
+  },
+  {
+   "id": "citroenpeper",
+   "choice": null,
+   "confidence": "none",
+   "why": "kruidenmengsel, geen kandidaat"
+  },
+  {
+   "id": "citroensap",
+   "choice": "1127",
+   "confidence": "sure",
+   "why": "Sap citroen vers"
+  },
+  {
+   "id": "citroenschil",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen hele citroen"
+  },
+  {
+   "id": "clotted-cream",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen clotted cream, zure room niet gelijk"
+  },
+  {
+   "id": "cocktailsaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen cocktailsaus"
+  },
+  {
+   "id": "cognac",
+   "choice": "394",
+   "confidence": "sure",
+   "why": "Cognac"
+  },
+  {
+   "id": "cola",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "cola-zero",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen cola met suiker"
+  },
+  {
+   "id": "comte",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "conchiglioni",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "cordon-bleu",
+   "choice": "2365",
+   "confidence": "close",
+   "why": "kip cordon bleu rauw, 150 vs 240 kcal"
+  },
+  {
+   "id": "corned-beef",
+   "choice": "319",
+   "confidence": "sure",
+   "why": "Cornedbeef"
+  },
+  {
+   "id": "cornflakes",
+   "choice": "2081",
+   "confidence": "sure",
+   "why": "Cornflakes"
+  },
+  {
+   "id": "cote-de-boeuf",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen ossenhaas, ander stuk (116 vs 260 kcal)"
+  },
+  {
+   "id": "courgette",
+   "choice": "922",
+   "confidence": "sure",
+   "why": "Courgette rauw"
+  },
+  {
+   "id": "courgetti",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "couscous",
+   "choice": "1889",
+   "confidence": "sure",
+   "why": "Couscous onbereid"
+  },
+  {
+   "id": "cracker",
+   "choice": "228",
+   "confidence": "close",
+   "why": "generieke cracker (creamcracker)"
+  },
+  {
+   "id": "cranberry",
+   "choice": "2890",
+   "confidence": "close",
+   "why": "gedroogd gezoet past bij huidige 308 kcal"
+  },
+  {
+   "id": "cranberrysap",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen cranberrysap"
+  },
+  {
+   "id": "cranberrysaus",
+   "choice": "2885",
+   "confidence": "close",
+   "why": "cranberrycompote gezoet"
+  },
+  {
+   "id": "cream-cracker",
+   "choice": "228",
+   "confidence": "sure",
+   "why": "Cracker cream"
+  },
+  {
+   "id": "creme-brulee",
+   "choice": null,
+   "confidence": "none",
+   "why": "crème fraîche is ander product"
+  },
+  {
+   "id": "creme-de-cassis",
+   "choice": null,
+   "confidence": "none",
+   "why": "crème fraîche is ander product"
+  },
+  {
+   "id": "creme-fraiche",
+   "choice": "1808",
+   "confidence": "sure",
+   "why": "Creme fraiche"
+  },
+  {
+   "id": "creme-honing",
+   "choice": "443",
+   "confidence": "close",
+   "why": "honing voor cremehoning"
+  },
+  {
+   "id": "croissant",
+   "choice": "2818",
+   "confidence": "sure",
+   "why": "Croissant gem"
+  },
+  {
+   "id": "croissantdeeg",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen afgebakken croissants"
+  },
+  {
+   "id": "crouton",
+   "choice": "2528",
+   "confidence": "sure",
+   "why": "Croutons"
+  },
+  {
+   "id": "crumpet",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "cupcake",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "cupcakevormpje",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen voedsel"
+  },
+  {
+   "id": "curryketchup",
+   "choice": "584",
+   "confidence": "sure",
+   "why": "Ketchup curry"
+  },
+  {
+   "id": "currypasta",
+   "choice": null,
+   "confidence": "none",
+   "why": "curryketchup is ander product"
+  },
+  {
+   "id": "dadel",
+   "choice": "181",
+   "confidence": "close",
+   "why": "gedroogde dadels past bij 277 kcal"
+  },
+  {
+   "id": "dadelstroop",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen dadelstroop"
+  },
+  {
+   "id": "danish-blue",
+   "choice": "5234",
+   "confidence": "sure",
+   "why": "Kaas Danish Blue"
+  },
+  {
+   "id": "daslook",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat"
+  },
+  {
+   "id": "deeg-voor-hartige-taart",
+   "choice": null,
+   "confidence": "none",
+   "why": "pizzadeeg 231 vs 380 kcal, ander deeg"
+  },
+  {
+   "id": "desembrood",
+   "choice": "2788",
+   "confidence": "close",
+   "why": "tarwezuurdesembrood volkoren"
+  },
+  {
+   "id": "dessertrijst",
+   "choice": "5",
+   "confidence": "close",
+   "why": "witte rijst rauw voor puddingrijst"
+  },
+  {
+   "id": "dessertwijn",
+   "choice": "2142",
+   "confidence": "close",
+   "why": "zoete witte wijn"
+  },
+  {
+   "id": "diepvriesspinazie",
+   "choice": "1146",
+   "confidence": "sure",
+   "why": "spinazie diepvries onbereid"
+  },
+  {
+   "id": "digestive",
+   "choice": "2894",
+   "confidence": "sure",
+   "why": "Biscuit digestive"
+  },
+  {
+   "id": "dijonmosterd",
+   "choice": "824",
+   "confidence": "close",
+   "why": "gewone mosterd"
+  },
+  {
+   "id": "diksap",
+   "choice": "1655",
+   "confidence": "sure",
+   "why": "Diksap geconcentreerd"
+  },
+  {
+   "id": "dille",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "dim-sum",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "dipsaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "donker-bier",
+   "choice": "389",
+   "confidence": "close",
+   "why": "oud bruin bier"
+  },
+  {
+   "id": "donut",
+   "choice": "1473",
+   "confidence": "close",
+   "why": "Donut ongevuld"
+  },
+  {
+   "id": "doperwt",
+   "choice": "23",
+   "confidence": "sure",
+   "why": "Doperwten rauw"
+  },
+  {
+   "id": "doperwten-en-wortelen",
+   "choice": "1139",
+   "confidence": "sure",
+   "why": "doperwten met wortelen diepvries onbereid"
+  },
+  {
+   "id": "dorade",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaat"
+  },
+  {
+   "id": "dragon",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  }
+ ]
+}

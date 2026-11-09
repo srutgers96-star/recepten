@@ -1,0 +1,486 @@
+{
+ "batch": "12",
+ "source": "nevo",
+ "items": [
+  {
+   "id": "ontbijtgranen",
+   "choice": "2081",
+   "confidence": "close",
+   "why": "cornflakes als generiek ontbijtgraan, kcal 373 vs 370"
+  },
+  {
+   "id": "ontbijtkoek",
+   "choice": "240",
+   "confidence": "sure",
+   "why": "ontbijtkoek"
+  },
+  {
+   "id": "ontbijtspek",
+   "choice": "639",
+   "confidence": "sure",
+   "why": "ontbijtspek"
+  },
+  {
+   "id": "oploscappuccino",
+   "choice": "2478",
+   "confidence": "sure",
+   "why": "poeder, zoals verkocht"
+  },
+  {
+   "id": "oploskoffie",
+   "choice": "2633",
+   "confidence": "sure",
+   "why": "oploskoffie poeder"
+  },
+  {
+   "id": "orecchiette",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "oregano",
+   "choice": "1228",
+   "confidence": "sure",
+   "why": "oregano gedroogd"
+  },
+  {
+   "id": "orzo",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ossenhaas",
+   "choice": "1401",
+   "confidence": "sure",
+   "why": "runderbiefstuk van de haas rauw"
+  },
+  {
+   "id": "ossenstaart",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ossenstaartsoep",
+   "choice": null,
+   "confidence": "none",
+   "why": "kandidaten zijn heldere soepen met groente, geen ossenstaartsoep"
+  },
+  {
+   "id": "ossenworst",
+   "choice": "2768",
+   "confidence": "sure",
+   "why": "ossenworst rauw"
+  },
+  {
+   "id": "ouzo",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "ovengroente",
+   "choice": "1905",
+   "confidence": "close",
+   "why": "groenten rauw gemiddeld als generieke groentemix"
+  },
+  {
+   "id": "paaseitje",
+   "choice": "431",
+   "confidence": "close",
+   "why": "melkchocolade als basis van chocolade paaseitjes"
+  },
+  {
+   "id": "paccheri",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "paddenstoelenmix",
+   "choice": "19",
+   "confidence": "close",
+   "why": "champignon rauw als generieke paddenstoel"
+  },
+  {
+   "id": "padronpeper",
+   "choice": "2524",
+   "confidence": "close",
+   "why": "Spaanse peper rauw, kleine groene peper; kcal 30 vs 27"
+  },
+  {
+   "id": "paellarijst",
+   "choice": "5",
+   "confidence": "close",
+   "why": "witte rijst rauw, kortkorrelig paellarijst"
+  },
+  {
+   "id": "paksoi",
+   "choice": "1892",
+   "confidence": "sure",
+   "why": "paksoi rauw"
+  },
+  {
+   "id": "paling",
+   "choice": "112",
+   "confidence": "close",
+   "why": "paling rauw; NEVO 372 kcal is 2x current maar paling is erg vet"
+  },
+  {
+   "id": "palmkool",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "palmsuiker",
+   "choice": null,
+   "confidence": "none",
+   "why": "alleen riet- en andere suikers, geen palmsuiker"
+  },
+  {
+   "id": "pancetta",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "paneer",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "paneermeel",
+   "choice": "1013",
+   "confidence": "sure",
+   "why": "paneermeel"
+  },
+  {
+   "id": "pangasiusfilet",
+   "choice": "3322",
+   "confidence": "sure",
+   "why": "pangasius rauw"
+  },
+  {
+   "id": "panini",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "panko",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "panna-cotta",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "pannenkoek",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "pannenkoekenmix",
+   "choice": "530",
+   "confidence": "sure",
+   "why": "pannenkoekenmix"
+  },
+  {
+   "id": "papadum",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "papaja",
+   "choice": "693",
+   "confidence": "sure",
+   "why": "papaja"
+  },
+  {
+   "id": "pappardelle",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "paprika",
+   "choice": "2742",
+   "confidence": "sure",
+   "why": "paprika rauw gemiddeld"
+  },
+  {
+   "id": "paprikapoeder",
+   "choice": "1229",
+   "confidence": "sure",
+   "why": "paprikapoeder"
+  },
+  {
+   "id": "paprikasaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen paprikasaus; paprika rauw is een ander product"
+  },
+  {
+   "id": "paranoot",
+   "choice": "203",
+   "confidence": "sure",
+   "why": "paranoten ongezouten"
+  },
+  {
+   "id": "parelcouscous",
+   "choice": "1889",
+   "confidence": "close",
+   "why": "couscous onbereid, zelfde familie"
+  },
+  {
+   "id": "parelhoen",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "parelsuiker",
+   "choice": "377",
+   "confidence": "close",
+   "why": "kristalsuiker als dichtstbijzijnde suiker"
+  },
+  {
+   "id": "parmaham",
+   "choice": "328",
+   "confidence": "close",
+   "why": "rauwe ham, zelfde familie; 188 vs 235 kcal"
+  },
+  {
+   "id": "parmezaanse-kaas",
+   "choice": "718",
+   "confidence": "sure",
+   "why": "Parmezaanse kaas"
+  },
+  {
+   "id": "passievrucht",
+   "choice": "1074",
+   "confidence": "sure",
+   "why": "passievrucht"
+  },
+  {
+   "id": "pasta",
+   "choice": "4",
+   "confidence": "sure",
+   "why": "witte pasta rauw"
+  },
+  {
+   "id": "pastasaus",
+   "choice": "1524",
+   "confidence": "sure",
+   "why": "tomatensaus kant-en-klaar glas"
+  },
+  {
+   "id": "pasteibakje",
+   "choice": "898",
+   "confidence": "close",
+   "why": "pasteibakje roomboter, ongevuld"
+  },
+  {
+   "id": "pastinaak",
+   "choice": "3127",
+   "confidence": "sure",
+   "why": "pastinaak rauw"
+  },
+  {
+   "id": "pastis",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "pastrami",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "pate",
+   "choice": "335",
+   "confidence": "close",
+   "why": "leverpastei als generieke paté, 318 vs 319 kcal"
+  },
+  {
+   "id": "pecannoot",
+   "choice": "1895",
+   "confidence": "sure",
+   "why": "pecannoten ongezouten"
+  },
+  {
+   "id": "pecorino",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "peer",
+   "choice": "2748",
+   "confidence": "sure",
+   "why": "peer met schil"
+  },
+  {
+   "id": "pekelvlees",
+   "choice": "338",
+   "confidence": "sure",
+   "why": "pekelvlees"
+  },
+  {
+   "id": "penne",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "peper",
+   "choice": null,
+   "confidence": "none",
+   "why": "kandidaten zijn Spaanse peper en paprika, geen zwarte peper"
+  },
+  {
+   "id": "peperkorrel",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "pepermix",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "pepermunt",
+   "choice": "453",
+   "confidence": "sure",
+   "why": "pepermunt"
+  },
+  {
+   "id": "pepersaus",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen pepersaus onder de kandidaten"
+  },
+  {
+   "id": "peppadew",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "pepperoni",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "peren-op-siroop",
+   "choice": "188",
+   "confidence": "sure",
+   "why": "peren op siroop blik/glas"
+  },
+  {
+   "id": "perensap",
+   "choice": "923",
+   "confidence": "sure",
+   "why": "perensap"
+  },
+  {
+   "id": "perzik",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "perziken-op-siroop",
+   "choice": "189",
+   "confidence": "sure",
+   "why": "perziken op siroop blik/glas"
+  },
+  {
+   "id": "pesto",
+   "choice": "2178",
+   "confidence": "close",
+   "why": "groene pesto als standaardpesto; rode is 368 kcal"
+  },
+  {
+   "id": "peterselie",
+   "choice": "128",
+   "confidence": "sure",
+   "why": "peterselie vers"
+  },
+  {
+   "id": "peterseliewortel",
+   "choice": null,
+   "confidence": "none",
+   "why": "gemberwortel en peterselie blad zijn andere producten"
+  },
+  {
+   "id": "petitfour",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "peultjes",
+   "choice": "35",
+   "confidence": "sure",
+   "why": "peultjes rauw"
+  },
+  {
+   "id": "physalis",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "picanha",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "piccalilly",
+   "choice": "454",
+   "confidence": "sure",
+   "why": "piccalilly"
+  },
+  {
+   "id": "pied-de-mouton",
+   "choice": null,
+   "confidence": "none",
+   "why": "champignon en cantharel zijn andere paddenstoelen"
+  },
+  {
+   "id": "pijnboompit",
+   "choice": "2176",
+   "confidence": "sure",
+   "why": "pijnboompitten"
+  },
+  {
+   "id": "piment",
+   "choice": null,
+   "confidence": "none",
+   "why": "geen kandidaten"
+  },
+  {
+   "id": "pinda",
+   "choice": "204",
+   "confidence": "close",
+   "why": "pinda's ongezouten; aliassen omvatten gezouten en geroosterd"
+  }
+ ]
+}
