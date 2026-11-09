@@ -558,6 +558,28 @@ Naast de knoppen staat het nieuwe aantal met het aantal van het recept erachter.
 
 De groene woorden in de stappen, **Kopieer als tekst** en **Koken** gebruiken het nieuwe aantal.
 
+### Calorieën en voedingswaarden
+
+#### Wat het doet
+
+Onder de tijd en de herkomst van een recept staat een rustige regel met ongeveer het aantal calorieën per portie en hoeveel procent van de ingrediënten de app kent. Tik erop voor eiwit, vet, koolhydraten, vezels en zout per portie.
+
+#### Waar je tikt
+
+1. Open een recept.
+2. Kijk onder de regel met de tijd.
+3. Tik op de regel met kcal.
+
+#### Wat je dan ziet
+
+De regel klapt uit tot een klein tabelletje per portie, met eronder hoeveel regels van de ingrediëntenlijst meegeteld zijn. Nog een tik klapt het dicht.
+
+#### Goed om te weten
+
+Het zijn schattingen op basis van gemiddelde waarden per ingrediënt, niet van jouw merk. Olie en marinade tellen helemaal mee, ook wat in de pan achterblijft. Kent de app minder dan de helft van de regels, dan staat er geen regel. Je zet de regel uit onder **Meer** → **Voedingswaarden**.
+
+(`#/recipes`)
+
 ### Oventemperatuur in °C, °F of beide
 
 #### Wat het doet
@@ -4097,6 +4119,28 @@ Oventemperaturen staan in de recepten in °C. Je kiest of je ze in °C, in °F o
 #### Wat je dan ziet
 
 Er is geen schakelaar maar een keuze uit drie; je keuze is gemarkeerd. In de stappen staat dan bijvoorbeeld 200 °C, 400 °F of 200 °C (400 °F).
+
+(`#/more`)
+
+### De regel met calorieën uitzetten
+
+#### Wat het doet
+
+De regel met calorieën op de receptpagina staat standaard aan. Wil je hem niet zien, dan zet je hem hier uit.
+
+#### Waar je tikt
+
+1. Tik onderaan op **Meer**.
+2. Zoek onder Instellingen de schakelaar **Voedingswaarden**.
+3. Zet hem uit.
+
+#### Wat je dan ziet
+
+De regel met kcal verdwijnt van elke receptpagina. Zet je de schakelaar weer aan, dan staat hij er weer.
+
+#### Goed om te weten
+
+De instelling gaat mee in je back-up. In het woordenboek blijven de waarden per 100 g gewoon zichtbaar.
 
 (`#/more`)
 

@@ -1,0 +1,769 @@
+{
+ "batch": "13",
+ "items": [
+  {
+   "id": "pindakaas",
+   "kcal": 595,
+   "protein": 25,
+   "fat": 50,
+   "carbs": 10,
+   "fibre": 6,
+   "salt": 1.0,
+   "gramsPerMl": 1.1
+  },
+  {
+   "id": "pindarotsje",
+   "kcal": 520,
+   "protein": 9,
+   "fat": 30,
+   "carbs": 52,
+   "fibre": 3,
+   "salt": 0.1,
+   "pieceGrams": 8
+  },
+  {
+   "id": "piri-piri-saus",
+   "kcal": 40,
+   "protein": 1,
+   "fat": 1,
+   "carbs": 7,
+   "fibre": 1,
+   "salt": 2.5,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "pistachenoot",
+   "kcal": 600,
+   "protein": 21,
+   "fat": 52,
+   "carbs": 8,
+   "fibre": 10,
+   "salt": 0.0,
+   "gramsPerMl": 0.6
+  },
+  {
+   "id": "pistolet",
+   "kcal": 260,
+   "protein": 9,
+   "fat": 1.5,
+   "carbs": 52,
+   "fibre": 3,
+   "salt": 1.2
+  },
+  {
+   "id": "pitabroodje",
+   "kcal": 260,
+   "protein": 9,
+   "fat": 1.5,
+   "carbs": 52,
+   "fibre": 3,
+   "salt": 1.2
+  },
+  {
+   "id": "pizza",
+   "kcal": 240,
+   "protein": 10,
+   "fat": 9,
+   "carbs": 30,
+   "fibre": 2,
+   "salt": 1.3,
+   "pieceGrams": 350
+  },
+  {
+   "id": "pizzabodem",
+   "kcal": 295,
+   "protein": 9,
+   "fat": 4,
+   "carbs": 56,
+   "fibre": 3,
+   "salt": 1.2,
+   "pieceGrams": 150
+  },
+  {
+   "id": "pizzadeeg",
+   "kcal": 270,
+   "protein": 8,
+   "fat": 4,
+   "carbs": 50,
+   "fibre": 2.5,
+   "salt": 1.5
+  },
+  {
+   "id": "pizzadeegmix",
+   "kcal": 350,
+   "protein": 11,
+   "fat": 2,
+   "carbs": 72,
+   "fibre": 3,
+   "salt": 2.0,
+   "gramsPerMl": 0.55
+  },
+  {
+   "id": "pizzakaas",
+   "kcal": 300,
+   "protein": 22,
+   "fat": 23,
+   "carbs": 1,
+   "fibre": 0,
+   "salt": 1.6,
+   "gramsPerMl": 0.4
+  },
+  {
+   "id": "pizzakruiden",
+   "kcal": 270,
+   "protein": 12,
+   "fat": 6,
+   "carbs": 45,
+   "fibre": 25,
+   "salt": 0.1,
+   "gramsPerMl": 0.3
+  },
+  {
+   "id": "pizzasaus",
+   "kcal": 58,
+   "protein": 1.5,
+   "fat": 2,
+   "carbs": 8,
+   "fibre": 1.5,
+   "salt": 1.0,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "platte-perzik",
+   "kcal": 41,
+   "protein": 1,
+   "fat": 0.1,
+   "carbs": 9,
+   "fibre": 1.5,
+   "salt": 0.0
+  },
+  {
+   "id": "poedersuiker",
+   "kcal": 395,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 99.5,
+   "fibre": 0,
+   "salt": 0.0,
+   "gramsPerMl": 0.5
+  },
+  {
+   "id": "poffertjesmix",
+   "kcal": 358,
+   "protein": 9,
+   "fat": 2,
+   "carbs": 76,
+   "fibre": 2,
+   "salt": 1.0,
+   "gramsPerMl": 0.55
+  },
+  {
+   "id": "polenta",
+   "kcal": 350,
+   "protein": 8,
+   "fat": 1.5,
+   "carbs": 76,
+   "fibre": 3,
+   "salt": 0.0,
+   "gramsPerMl": 0.7
+  },
+  {
+   "id": "pomelo",
+   "kcal": 39,
+   "protein": 0.8,
+   "fat": 0.1,
+   "carbs": 9,
+   "fibre": 1,
+   "salt": 0.0
+  },
+  {
+   "id": "pommes-duchesse",
+   "kcal": 150,
+   "protein": 2.5,
+   "fat": 8,
+   "carbs": 17,
+   "fibre": 1.5,
+   "salt": 0.8,
+   "pieceGrams": 30
+  },
+  {
+   "id": "pompernikkel",
+   "kcal": 195,
+   "protein": 6,
+   "fat": 1,
+   "carbs": 40,
+   "fibre": 8,
+   "salt": 1.0
+  },
+  {
+   "id": "pompoen",
+   "kcal": 25,
+   "protein": 1,
+   "fat": 0.1,
+   "carbs": 5,
+   "fibre": 1.5,
+   "salt": 0.0,
+   "pieceGrams": 1500
+  },
+  {
+   "id": "pompoenpit",
+   "kcal": 570,
+   "protein": 30,
+   "fat": 46,
+   "carbs": 10,
+   "fibre": 6,
+   "salt": 0.0,
+   "gramsPerMl": 0.6
+  },
+  {
+   "id": "popcorn",
+   "kcal": 370,
+   "protein": 11,
+   "fat": 5,
+   "carbs": 70,
+   "fibre": 12,
+   "salt": 0.5
+  },
+  {
+   "id": "port",
+   "kcal": 155,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 12,
+   "fibre": 0,
+   "salt": 0.0,
+   "alcohol": 16,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "portobello",
+   "kcal": 24,
+   "protein": 2.5,
+   "fat": 0.3,
+   "carbs": 3,
+   "fibre": 1.5,
+   "salt": 0.0
+  },
+  {
+   "id": "postelein",
+   "kcal": 21,
+   "protein": 2,
+   "fat": 0.4,
+   "carbs": 2.5,
+   "fibre": 1.5,
+   "salt": 0.3
+  },
+  {
+   "id": "prei",
+   "kcal": 29,
+   "protein": 2,
+   "fat": 0.3,
+   "carbs": 4.5,
+   "fibre": 2.5,
+   "salt": 0.1,
+   "pieceGrams": 150
+  },
+  {
+   "id": "probiotisch-drankje",
+   "kcal": 70,
+   "protein": 1.5,
+   "fat": 1,
+   "carbs": 14,
+   "fibre": 0,
+   "salt": 0.1,
+   "pieceGrams": 100
+  },
+  {
+   "id": "procureur",
+   "kcal": 190,
+   "protein": 19,
+   "fat": 12.5,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.2
+  },
+  {
+   "id": "prosecco",
+   "kcal": 68,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 1.5,
+   "fibre": 0,
+   "salt": 0.0,
+   "alcohol": 8.8,
+   "gramsPerMl": 0.99
+  },
+  {
+   "id": "proteinepudding",
+   "kcal": 69,
+   "protein": 10,
+   "fat": 1,
+   "carbs": 5,
+   "fibre": 0.5,
+   "salt": 0.2
+  },
+  {
+   "id": "proteineshake",
+   "kcal": 54,
+   "protein": 8,
+   "fat": 1,
+   "carbs": 3,
+   "fibre": 0.5,
+   "salt": 0.2,
+   "gramsPerMl": 1.03
+  },
+  {
+   "id": "provencaalse-kruiden",
+   "kcal": 270,
+   "protein": 10,
+   "fat": 6,
+   "carbs": 45,
+   "fibre": 25,
+   "salt": 0.1,
+   "gramsPerMl": 0.3
+  },
+  {
+   "id": "provolone",
+   "kcal": 350,
+   "protein": 25,
+   "fat": 27,
+   "carbs": 2,
+   "fibre": 0,
+   "salt": 2.0
+  },
+  {
+   "id": "pruim",
+   "kcal": 45,
+   "protein": 0.7,
+   "fat": 0.3,
+   "carbs": 10,
+   "fibre": 1.5,
+   "salt": 0.0
+  },
+  {
+   "id": "pruimedant",
+   "kcal": 240,
+   "protein": 2.2,
+   "fat": 0.4,
+   "carbs": 57,
+   "fibre": 7,
+   "salt": 0.0,
+   "gramsPerMl": 0.65
+  },
+  {
+   "id": "pruimtomaat",
+   "kcal": 17,
+   "protein": 0.9,
+   "fat": 0.2,
+   "carbs": 3,
+   "fibre": 1.2,
+   "salt": 0.0
+  },
+  {
+   "id": "pudding",
+   "kcal": 110,
+   "protein": 3,
+   "fat": 2.5,
+   "carbs": 19,
+   "fibre": 0,
+   "salt": 0.1
+  },
+  {
+   "id": "pul-biber",
+   "kcal": 295,
+   "protein": 12,
+   "fat": 10,
+   "carbs": 40,
+   "fibre": 25,
+   "salt": 2.0,
+   "gramsPerMl": 0.45
+  },
+  {
+   "id": "pulled-pork",
+   "kcal": 187,
+   "protein": 20,
+   "fat": 10,
+   "carbs": 4,
+   "fibre": 0.2,
+   "salt": 1.2
+  },
+  {
+   "id": "pure-chocolade",
+   "kcal": 540,
+   "protein": 7,
+   "fat": 38,
+   "carbs": 42,
+   "fibre": 11,
+   "salt": 0.0
+  },
+  {
+   "id": "quinoa",
+   "kcal": 358,
+   "protein": 14,
+   "fat": 6,
+   "carbs": 62,
+   "fibre": 7,
+   "salt": 0.0,
+   "gramsPerMl": 0.75
+  },
+  {
+   "id": "raap",
+   "kcal": 27,
+   "protein": 0.9,
+   "fat": 0.1,
+   "carbs": 5.5,
+   "fibre": 2,
+   "salt": 0.1
+  },
+  {
+   "id": "raapstelen",
+   "kcal": 25,
+   "protein": 3,
+   "fat": 0.4,
+   "carbs": 2.5,
+   "fibre": 3,
+   "salt": 0.1
+  },
+  {
+   "id": "rabarber",
+   "kcal": 20,
+   "protein": 0.9,
+   "fat": 0.2,
+   "carbs": 3.5,
+   "fibre": 1.8,
+   "salt": 0.0
+  },
+  {
+   "id": "raclettekaas",
+   "kcal": 340,
+   "protein": 24,
+   "fat": 27,
+   "carbs": 0.5,
+   "fibre": 0,
+   "salt": 1.8
+  },
+  {
+   "id": "radicchio",
+   "kcal": 22,
+   "protein": 1.4,
+   "fat": 0.2,
+   "carbs": 3.5,
+   "fibre": 3,
+   "salt": 0.1
+  },
+  {
+   "id": "radijs",
+   "kcal": 14,
+   "protein": 0.7,
+   "fat": 0.1,
+   "carbs": 2.5,
+   "fibre": 1.5,
+   "salt": 0.1,
+   "pieceGrams": 10
+  },
+  {
+   "id": "radler",
+   "kcal": 42,
+   "protein": 0.2,
+   "fat": 0,
+   "carbs": 8,
+   "fibre": 0,
+   "salt": 0.0,
+   "alcohol": 1.6,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "ragout",
+   "kcal": 89,
+   "protein": 6,
+   "fat": 5,
+   "carbs": 5,
+   "fibre": 0.5,
+   "salt": 0.8,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "rambutan",
+   "kcal": 69,
+   "protein": 0.9,
+   "fat": 0.2,
+   "carbs": 16,
+   "fibre": 0.9,
+   "salt": 0.0,
+   "pieceGrams": 30
+  },
+  {
+   "id": "ramen-noedels",
+   "kcal": 360,
+   "protein": 11,
+   "fat": 2,
+   "carbs": 74,
+   "fibre": 3,
+   "salt": 1.5
+  },
+  {
+   "id": "rammenas",
+   "kcal": 17,
+   "protein": 0.7,
+   "fat": 0.1,
+   "carbs": 3,
+   "fibre": 1.5,
+   "salt": 0.1
+  },
+  {
+   "id": "ras-el-hanout",
+   "kcal": 305,
+   "protein": 10,
+   "fat": 12,
+   "carbs": 40,
+   "fibre": 25,
+   "salt": 0.1,
+   "gramsPerMl": 0.45
+  },
+  {
+   "id": "rauwkost",
+   "kcal": 34,
+   "protein": 1,
+   "fat": 0.2,
+   "carbs": 7,
+   "fibre": 2.5,
+   "salt": 0.2
+  },
+  {
+   "id": "ravioli",
+   "kcal": 221,
+   "protein": 9,
+   "fat": 5,
+   "carbs": 35,
+   "fibre": 2,
+   "salt": 1.0
+  },
+  {
+   "id": "rawit",
+   "kcal": 40,
+   "protein": 2,
+   "fat": 0.4,
+   "carbs": 7,
+   "fibre": 3,
+   "salt": 0.0
+  },
+  {
+   "id": "refried-beans",
+   "kcal": 94,
+   "protein": 5,
+   "fat": 2,
+   "carbs": 14,
+   "fibre": 5,
+   "salt": 1.0,
+   "gramsPerMl": 1.1
+  },
+  {
+   "id": "reine-claude",
+   "kcal": 48,
+   "protein": 0.7,
+   "fat": 0.2,
+   "carbs": 11,
+   "fibre": 1.5,
+   "salt": 0.0
+  },
+  {
+   "id": "relish",
+   "kcal": 109,
+   "protein": 0.5,
+   "fat": 0.3,
+   "carbs": 26,
+   "fibre": 1,
+   "salt": 1.8,
+   "gramsPerMl": 1.2
+  },
+  {
+   "id": "reuzel",
+   "kcal": 900,
+   "protein": 0,
+   "fat": 100,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.0,
+   "gramsPerMl": 0.92
+  },
+  {
+   "id": "ribeye",
+   "kcal": 188,
+   "protein": 20,
+   "fat": 12,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.15
+  },
+  {
+   "id": "riblap",
+   "kcal": 147,
+   "protein": 21,
+   "fat": 7,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.2
+  },
+  {
+   "id": "ricotta",
+   "kcal": 143,
+   "protein": 8,
+   "fat": 11,
+   "carbs": 3,
+   "fibre": 0,
+   "salt": 0.3
+  },
+  {
+   "id": "rietsuiker",
+   "kcal": 396,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 99,
+   "fibre": 0,
+   "salt": 0.0,
+   "gramsPerMl": 0.85
+  },
+  {
+   "id": "rigatoni",
+   "kcal": 345,
+   "protein": 12.5,
+   "fat": 1.5,
+   "carbs": 70,
+   "fibre": 3,
+   "salt": 0.0
+  },
+  {
+   "id": "rijst",
+   "kcal": 347,
+   "protein": 7,
+   "fat": 0.6,
+   "carbs": 78,
+   "fibre": 1,
+   "salt": 0.0,
+   "gramsPerMl": 0.85
+  },
+  {
+   "id": "rijstazijn",
+   "kcal": 18,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 4,
+   "fibre": 0,
+   "salt": 0.5,
+   "gramsPerMl": 1.01
+  },
+  {
+   "id": "rijstcracker",
+   "kcal": 392,
+   "protein": 8,
+   "fat": 3,
+   "carbs": 84,
+   "fibre": 1,
+   "salt": 1.0
+  },
+  {
+   "id": "rijstepap",
+   "kcal": 98,
+   "protein": 3,
+   "fat": 2,
+   "carbs": 17,
+   "fibre": 0.2,
+   "salt": 0.1
+  },
+  {
+   "id": "rijstmeel",
+   "kcal": 353,
+   "protein": 6,
+   "fat": 1,
+   "carbs": 80,
+   "fibre": 2,
+   "salt": 0.0,
+   "gramsPerMl": 0.55
+  },
+  {
+   "id": "rijstmelk",
+   "kcal": 49,
+   "protein": 0.1,
+   "fat": 1,
+   "carbs": 10,
+   "fibre": 0.1,
+   "salt": 0.1,
+   "gramsPerMl": 1.03
+  },
+  {
+   "id": "rijstnoedels",
+   "kcal": 350,
+   "protein": 6,
+   "fat": 0.5,
+   "carbs": 80,
+   "fibre": 2,
+   "salt": 0.1
+  },
+  {
+   "id": "rijstpapiervel",
+   "kcal": 330,
+   "protein": 1,
+   "fat": 0.2,
+   "carbs": 81,
+   "fibre": 1,
+   "salt": 0.5,
+   "pieceGrams": 8
+  },
+  {
+   "id": "rijststroop",
+   "kcal": 302,
+   "protein": 0.1,
+   "fat": 0,
+   "carbs": 76,
+   "fibre": 0,
+   "salt": 0.1,
+   "gramsPerMl": 1.4
+  },
+  {
+   "id": "rijstwafel",
+   "kcal": 385,
+   "protein": 8,
+   "fat": 3,
+   "carbs": 82,
+   "fibre": 3,
+   "salt": 0.5
+  },
+  {
+   "id": "risottorijst",
+   "kcal": 347,
+   "protein": 7,
+   "fat": 0.6,
+   "carbs": 78,
+   "fibre": 1,
+   "salt": 0.0,
+   "gramsPerMl": 0.85
+  },
+  {
+   "id": "rivierkreeft",
+   "kcal": 78,
+   "protein": 17,
+   "fat": 1,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.3
+  },
+  {
+   "id": "rode-bes",
+   "kcal": 43,
+   "protein": 1.1,
+   "fat": 0.2,
+   "carbs": 9,
+   "fibre": 4.3,
+   "salt": 0.0
+  },
+  {
+   "id": "rode-kool-met-appel",
+   "kcal": 70,
+   "protein": 1,
+   "fat": 2,
+   "carbs": 12,
+   "fibre": 2,
+   "salt": 0.7
+  }
+ ]
+}

@@ -303,6 +303,32 @@
       }
     },
     {
+      "id": "recepten.voedingswaarden",
+      "title": { "nl": "Calorieën en voedingswaarden", "en": "Calories and nutrition" },
+      "what": {
+        "nl": "Onder de tijd en de herkomst van een recept staat een rustige regel met ongeveer het aantal calorieën per portie en hoeveel procent van de ingrediënten de app kent. Tik erop voor eiwit, vet, koolhydraten, vezels en zout per portie.",
+        "en": "Below a recipe's time and origin there is a quiet line with roughly the calories per serving and what percentage of the ingredients the app knows. Tap it for protein, fat, carbohydrates, fibre and salt per serving."
+      },
+      "where": {
+        "nl": ["Open een recept.", "Kijk onder de regel met de tijd.", "Tik op de regel met kcal."],
+        "en": ["Open a recipe.", "Look under the line with the time.", "Tap the line with kcal."]
+      },
+      "see": {
+        "nl": "De regel klapt uit tot een klein tabelletje per portie, met eronder hoeveel regels van de ingrediëntenlijst meegeteld zijn. Nog een tik klapt het dicht.",
+        "en": "The line unfolds into a small table per serving, with below it how many lines of the ingredient list were counted. Another tap folds it away."
+      },
+      "know": {
+        "nl": "Het zijn schattingen op basis van gemiddelde waarden per ingrediënt, niet van jouw merk. Olie en marinade tellen helemaal mee, ook wat in de pan achterblijft. Kent de app minder dan de helft van de regels, dan staat er geen regel. Je zet de regel uit onder **Meer** → **Voedingswaarden**.",
+        "en": "They are estimates based on average values per ingredient, not your brand. Oil and marinade count in full, including what stays in the pan. If the app knows fewer than half of the lines, there is no line. You switch it off under **More** → **Nutrition**."
+      },
+      "route": "/recipes",
+      "platform": "all",
+      "keywords": {
+        "nl": ["calorieën", "kcal", "voedingswaarden", "eiwit", "koolhydraten", "macro's"],
+        "en": ["calories", "kcal", "nutrition", "protein", "carbs", "macros"]
+      }
+    },
+    {
       "id": "recepten.fahrenheit",
       "title": { "nl": "Oventemperatuur in °C, °F of beide", "en": "Oven temperature in °C, °F or both" },
       "what": {

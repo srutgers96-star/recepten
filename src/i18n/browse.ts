@@ -141,6 +141,20 @@ export const browse: Dict = {
   // chips by the tab row: its strings live in src/i18n/variants.ts (`vt.*`). These keys are still used by the
   // approve sheet (VariantSheet) and the "Versie van …" link.
   'recipe.variantOf': { nl: 'Versie van {name}', en: 'Version of {name}' },
+  // --- V9 (docs/specs/verbeterronde-9.md §1b): the quiet kcal line per serving with its fold-out ---
+  'recipe.kcalLine': { nl: '≈ {kcal} kcal p.p.', en: '≈ {kcal} kcal per serving' },
+  'recipe.nutriKnown': { nl: '{pct} % bekend', en: '{pct} % known' },
+  'recipe.nutriTitle': { nl: 'Per portie', en: 'Per serving' },
+  'recipe.nutriNote': {
+    nl: 'Schatting op basis van gemiddelde waarden per ingrediënt, niet van jouw merk. {counted} van de {total} regels geteld.',
+    en: 'An estimate based on average values per ingredient, not your brand. {counted} of {total} lines counted.',
+  },
+  'nutri.kcal': { nl: 'Energie', en: 'Energy' },
+  'nutri.protein': { nl: 'Eiwit', en: 'Protein' },
+  'nutri.fat': { nl: 'Vet', en: 'Fat' },
+  'nutri.carbs': { nl: 'Koolhydraten', en: 'Carbohydrates' },
+  'nutri.fibre': { nl: 'Vezels', en: 'Fibre' },
+  'nutri.salt': { nl: 'Zout', en: 'Salt' },
   'variant.check': { nl: 'controleer zelf', en: 'check yourself' },
   // A "controleer zelf" row of the approve sheet: no swap known (checkHint) or a swap the app could not
   // place in this line (checkSwap). One text for both ("Besluiten Fable na blok 2", point 7).

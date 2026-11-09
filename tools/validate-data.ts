@@ -9,8 +9,9 @@
 // data/badges.json (docs/phase-5-spec.md "Block C", docs/specs/badges-avatar.md §2e), the avatar library
 // data/avatar-parts.json (docs/specs/badges-avatar.md §2f), the level titles data/levels.json, the
 // unlocks data/unlocks.json (docs/specs/xp-levels.md §2e), the challenges data/challenges.json (docs/specs/challenges.md §2)
-// the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2) and the handbook
-// data/handbook/*.json (docs/specs/handbook.md §3).
+// the diet swaps data/swaps.json (docs/phase-5-spec.md "Block F" item 2), the handbook
+// data/handbook/*.json (docs/specs/handbook.md §3) and the nutrition table data/nutrition.json
+// (docs/specs/verbeterronde-9.md §1a; also the gramsPer / gramsPerMl ranges of the dictionary).
 //
 // Run:   node --experimental-strip-types tools/validate-data.ts   (or: npm run validate:data)
 // Exit:  1 when any error was found, 0 otherwise. Warnings never fail the run.
@@ -23,6 +24,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import process from 'node:process';
 import { loadDictionary, normalizeKey, type DictionaryData } from '../src/domain/dictionary.ts';
 import { HANDBOOK_SECTION_IDS } from '../src/domain/handbook.ts';
+import { NON_FOOD_AISLES } from '../src/domain/nutrition.ts';
 import type { Recipe } from '../src/domain/model.ts';
 import { rarityForLevel } from '../src/domain/rarity.ts';
 import { readDictionaryData } from './build-dictionary-seed.ts';
@@ -501,6 +503,11 @@ function hasName(v: unknown): boolean {
   return isRecord(v) && typeof v['one'] === 'string' && (v['one'] as string).trim() !== '';
 }
 
+/** Allowed `gramsPer` values in grams (a bay leaf 0.2 g, a pumpkin 1500 g; docs/specs/verbeterronde-9.md §1a). */
+export const GRAMS_PER_RANGE: readonly [number, number] = [0.05, 5000];
+/** Allowed `gramsPerMl` densities in g/ml (docs/specs/verbeterronde-9.md §1a). */
+export const GRAMS_PER_ML_RANGE: readonly [number, number] = [0.05, 2.0];
+
 /** Validate the dictionary files together. Pure: takes the loaded data, returns errors/warnings. */
 export function validateDictionary(data: DictionaryData): ValidationResult {
   const errors: string[] = [];
@@ -606,7 +613,15 @@ export function validateDictionary(data: DictionaryData): ValidationResult {
     const gramsPer = ing['gramsPer'];
     if (gramsPer !== undefined) {
       if (!isRecord(gramsPer)) errors.push(`${label}: gramsPer must be an object.`);
-      else for (const [k, v] of Object.entries(gramsPer)) if (!unitOrPiece(k) || typeof v !== 'number' || !(v > 0)) errors.push(`${label}: gramsPer.${k} must map a unit id (or "stuk") to a positive number.`);
+      else for (const [k, v] of Object.entries(gramsPer)) {
+        if (!unitOrPiece(k) || typeof v !== 'number' || !(v > 0)) errors.push(`${label}: gramsPer.${k} must map a unit id (or "stuk") to a positive number.`);
+        else if (v < GRAMS_PER_RANGE[0] || v > GRAMS_PER_RANGE[1]) errors.push(`${label}: gramsPer.${k} = ${v} is outside [${GRAMS_PER_RANGE[0]}, ${GRAMS_PER_RANGE[1]}] g.`);
+      }
+    }
+    // Density for the nutrition count only (docs/specs/verbeterronde-9.md §1a), never `gramsPer.ml`.
+    const gramsPerMl = ing['gramsPerMl'];
+    if (gramsPerMl !== undefined && (typeof gramsPerMl !== 'number' || !(gramsPerMl >= GRAMS_PER_ML_RANGE[0] && gramsPerMl <= GRAMS_PER_ML_RANGE[1]))) {
+      errors.push(`${label}: gramsPerMl must be a number in [${GRAMS_PER_ML_RANGE[0]}, ${GRAMS_PER_ML_RANGE[1]}] g/ml, got ${JSON.stringify(gramsPerMl)}.`);
     }
     for (const k of ['staple', 'veg']) if (typeof ing[k] !== 'boolean') errors.push(`${label}: "${k}" must be a boolean.`);
     for (const k of [...INGREDIENT_DIET_FLAGS, 'glutenUnsure', 'lactoseUnsure', 'perishable']) {
@@ -2001,6 +2016,98 @@ export function readHandbookFiles(root: string): { files: HandbookFile[]; parseE
 }
 
 // ---------------------------------------------------------------------------
+// Nutrition: data/nutrition.json (docs/specs/verbeterronde-9.md §1a, V9)
+// ---------------------------------------------------------------------------
+
+/** The required nutrient numbers of a nutrition item (per 100 g). */
+export const NUTRITION_REQUIRED_KEYS: readonly string[] = ['kcal', 'protein', 'fat', 'carbs', 'fibre', 'salt'];
+/** Allowed `source` values of a nutrition item. */
+export const NUTRITION_SOURCES: readonly string[] = ['estimate', 'nevo', 'usda'];
+const NUTRITION_ITEM_KEYS: ReadonlySet<string> = new Set([...NUTRITION_REQUIRED_KEYS, 'alcohol', 'source']);
+
+/**
+ * The problems of one nutrition item (per 100 g), or [] when it is fine: every required number ≥ 0,
+ * `alcohol` optional and ≥ 0, protein + fat + carbs + fibre ≤ 101, salt ≤ 100, kcal within max(15 %, 20 kcal)
+ * of 4·protein + 4·carbs + 9·fat + 7·alcohol, `source` one of NUTRITION_SOURCES. Shared with tools/apply-nutrition.ts.
+ */
+export function checkNutritionItem(item: unknown): string[] {
+  if (!isRecord(item)) return ['must be an object.'];
+  const problems: string[] = [];
+  const num = (k: string): number | null => {
+    const v = item[k];
+    return typeof v === 'number' && Number.isFinite(v) && v >= 0 ? v : null;
+  };
+  for (const k of NUTRITION_REQUIRED_KEYS) if (num(k) === null) problems.push(`"${k}" must be a number ≥ 0, got ${JSON.stringify(item[k])}.`);
+  if (item['alcohol'] !== undefined && num('alcohol') === null) problems.push(`"alcohol" must be a number ≥ 0 when present, got ${JSON.stringify(item['alcohol'])}.`);
+  if (item['source'] !== undefined && (typeof item['source'] !== 'string' || !NUTRITION_SOURCES.includes(item['source']))) {
+    problems.push(`"source" must be ${NUTRITION_SOURCES.join(' | ')}, got ${JSON.stringify(item['source'])}.`);
+  }
+  for (const k of Object.keys(item)) if (!NUTRITION_ITEM_KEYS.has(k)) problems.push(`unknown key "${k}".`);
+  if (problems.length) return problems;
+  const kcal = num('kcal') ?? 0;
+  const protein = num('protein') ?? 0;
+  const fat = num('fat') ?? 0;
+  const carbs = num('carbs') ?? 0;
+  const fibre = num('fibre') ?? 0;
+  const salt = num('salt') ?? 0;
+  const alcohol = num('alcohol') ?? 0;
+  const mass = protein + fat + carbs + fibre;
+  if (mass > 101) problems.push(`protein + fat + carbs + fibre = ${round1(mass)} g is more than 101 g per 100 g.`);
+  if (salt > 100) problems.push(`salt ${salt} g is more than 100 g per 100 g.`);
+  const expected = 4 * protein + 4 * carbs + 9 * fat + 7 * alcohol;
+  const tolerance = Math.max(0.15 * expected, 20);
+  if (Math.abs(kcal - expected) > tolerance) {
+    problems.push(`kcal ${kcal} does not match 4·protein + 4·carbs + 9·fat + 7·alcohol = ${round1(expected)} (allowed ± ${round1(tolerance)}).`);
+  }
+  return problems;
+}
+
+function round1(v: number): number {
+  return Math.round(v * 10) / 10;
+}
+
+/**
+ * Validate data/nutrition.json: schema 1; every item id exists in the dictionary (`ingredientIds`) and is
+ * food (not in `nonFoodIds`, the entries of the aisles huishoudelijk / drogisterij); every item passes
+ * `checkNutritionItem`. Items out of id order give a warning (tools/apply-nutrition.ts writes them sorted).
+ */
+export function validateNutrition(data: unknown, ingredientIds: ReadonlySet<string>, nonFoodIds: ReadonlySet<string>): ValidationResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  if (!isRecord(data)) return { errors: ['nutrition.json: must be an object.'], warnings, stats: { recipes: 0, lines: 0 } };
+  if (data['schema'] !== 1) errors.push(`nutrition.json: "schema" must be 1, got ${JSON.stringify(data['schema'])}.`);
+  if (data['per'] !== undefined && data['per'] !== '100 g') errors.push(`nutrition.json: "per" must be "100 g", got ${JSON.stringify(data['per'])}.`);
+  const note = data['note'];
+  if (note !== undefined && (!isRecord(note) || typeof note['nl'] !== 'string' || typeof note['en'] !== 'string')) errors.push('nutrition.json: "note" must be { nl, en } with strings.');
+  const items = data['items'];
+  if (!isRecord(items)) {
+    errors.push('nutrition.json: "items" must be an object keyed by ingredient id.');
+    return { errors, warnings, stats: { recipes: 0, lines: 0 } };
+  }
+  const ids = Object.keys(items);
+  for (const id of ids) {
+    const label = `nutrition.json ${JSON.stringify(id)}`;
+    if (!ingredientIds.has(id)) errors.push(`${label}: not an ingredient id of the dictionary.`);
+    else if (nonFoodIds.has(id)) errors.push(`${label}: a non-food entry (aisle huishoudelijk / drogisterij) gets no nutrition values.`);
+    for (const p of checkNutritionItem(items[id])) errors.push(`${label}: ${p}`);
+  }
+  const sorted = [...ids].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  if (sorted.some((id, i) => id !== ids[i])) warnings.push('nutrition.json: items are not sorted by id (npm run apply-nutrition writes them sorted).');
+  return { errors, warnings, stats: { recipes: 0, lines: ids.length } };
+}
+
+/** Ingredient ids and non-food ids (aisles of NON_FOOD_AISLES) of the dictionary data, for validateNutrition. */
+export function nutritionRefs(data: DictionaryData): { ingredientIds: Set<string>; nonFoodIds: Set<string> } {
+  const ingredientIds = new Set<string>();
+  const nonFoodIds = new Set<string>();
+  for (const i of data.ingredients) {
+    ingredientIds.add(i.id);
+    if (NON_FOOD_AISLES.has(i.aisle)) nonFoodIds.add(i.id);
+  }
+  return { ingredientIds, nonFoodIds };
+}
+
+// ---------------------------------------------------------------------------
 // CLI entry
 // ---------------------------------------------------------------------------
 
@@ -2130,6 +2237,18 @@ function main(): void {
     }
     print(handbookRel, handbook, `${handbook.stats.recipes} topics, ${handbook.stats.lines} rows`);
     if (handbook.errors.length > 0) failed = true;
+  }
+
+  // Nutrition (docs/specs/verbeterronde-9.md §1a): only when the file exists.
+  const nutritionRel = 'data/nutrition.json';
+  const nutritionPath = join(root, nutritionRel);
+  if (!existsSync(nutritionPath)) {
+    console.log(`${nutritionRel}: not present (nutrition checks skipped).`);
+  } else {
+    const refs = nutritionRefs(dictData);
+    const nutrition = validateNutrition(readJson(nutritionPath), refs.ingredientIds, refs.nonFoodIds);
+    print(nutritionRel, nutrition, `${nutrition.stats.lines} items`);
+    if (nutrition.errors.length > 0) failed = true;
   }
 
   if (schema2Data !== undefined) {

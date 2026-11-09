@@ -49,6 +49,7 @@ import type { ProgressSnapshot } from '@/domain/progress';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
+import { loadNutritionSetting, nutritionEnabled, setNutritionEnabled } from '@/nutrition';
 import { activeProfile, profiles } from '@/profile';
 import { browserName, isAndroid, isStandalone } from '@/pwa';
 import { navigate } from '@/router';
@@ -475,6 +476,7 @@ export function MoreScreen() {
 
   useEffect(() => {
     void loadCelebrateSettings();
+    void loadNutritionSetting();
     // Phase 5 block C: the badges switch mirrors the setting 'badges.enabled' (idempotent load).
     void loadBadgeSettings();
     // Phase 5 block B: read-aloud, voice commands, timer sound & vibrate (all idempotent loads).
@@ -647,6 +649,17 @@ export function MoreScreen() {
               }}
             />
           </div>
+          {/* V9 §1b: the quiet kcal line on the recipe page (default on; rides along in the backup). */}
+          <div class="setting">
+            <div class="label">
+              {t('more.nutrition')}
+              <small>{t('more.nutritionHint')}</small>
+            </div>
+            <label class="switch">
+              <input type="checkbox" aria-label={t('more.nutrition')} checked={nutritionEnabled.value} onChange={(e) => void setNutritionEnabled((e.currentTarget as HTMLInputElement).checked).catch((err: unknown) => console.error('setNutritionEnabled', err))} />
+              <span class="track" />
+            </label>
+          </div>
 
           {/* Phase 5 block B (docs/phase-5-spec.md B.1–B.3): read-aloud, voice commands, timer sound. */}
           <h3 class="more-sub">{t('more.cookTimer')}</h3>
@@ -745,6 +758,7 @@ export function MoreScreen() {
                 {t(egg.kind === 'unlocked' ? 'more.goldUnlocked' : 'more.goldAlready')}
               </p>
             )}
+            <p class="muted small">{t('more.nutritionSource')}</p>
             <div class="actions" style="margin-top:12px">
               <a class="btn" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
                 {t('more.github')}

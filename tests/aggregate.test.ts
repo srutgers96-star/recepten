@@ -193,15 +193,20 @@ describe('rule 2: unresolved lines and pm', () => {
     expect(run([foreign])[0]?.section).toBe('check');
   });
 
-  it('qty = max ?? min ("2-3" -> 3); no quantity -> "pm" without a number', () => {
-    const items = run([rec('b:a', 'A', ['2-3 uien', 'rookworst'])]);
+  it('qty = max ?? min ("2-3" -> 3); no quantity -> "pm" without a number; a bare piece with a known weight is 1 (V9)', () => {
+    const items = run([rec('b:a', 'A', ['2-3 uien', 'rookworst', 'slagroom'])]);
     expect(one(items, 'ui').qty).toBe(3);
+    const pm = one(items, 'slagroom');
+    expect(pm.qty).toBeNull();
+    expect(pm.baseQty).toBeNull();
+    expect(pm.section).toBe('main');
+    expect(nl(pm)).toBe('slagroom (pm)');
+    expect(en(pm)).toBe('double cream (as needed)');
+    // V9 (docs/specs/verbeterronde-9.md, decision Fable after the data round): rookworst now has a piece
+    // weight (gramsPer.stuk 250), so a bare "rookworst" counts as one sausage, as braadworst already did.
     const worst = one(items, 'rookworst');
-    expect(worst.qty).toBeNull();
-    expect(worst.baseQty).toBeNull();
-    expect(worst.section).toBe('main');
-    expect(nl(worst)).toBe('rookworst (pm)');
-    expect(en(worst)).toBe('smoked sausage (as needed)');
+    expect(worst.qty).toBe(1);
+    expect(nl(worst)).toBe('1 rookworst');
   });
 });
 

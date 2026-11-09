@@ -558,6 +558,28 @@ Next to the buttons you see the new number with the recipe's own number after it
 
 The green words in the steps, **Copy as text** and **Cook** use the new number.
 
+### Calories and nutrition
+
+#### What it does
+
+Below a recipe's time and origin there is a quiet line with roughly the calories per serving and what percentage of the ingredients the app knows. Tap it for protein, fat, carbohydrates, fibre and salt per serving.
+
+#### Where you tap
+
+1. Open a recipe.
+2. Look under the line with the time.
+3. Tap the line with kcal.
+
+#### What you then see
+
+The line unfolds into a small table per serving, with below it how many lines of the ingredient list were counted. Another tap folds it away.
+
+#### Good to know
+
+They are estimates based on average values per ingredient, not your brand. Oil and marinade count in full, including what stays in the pan. If the app knows fewer than half of the lines, there is no line. You switch it off under **More** → **Nutrition**.
+
+(`#/recipes`)
+
 ### Oven temperature in °C, °F or both
 
 #### What it does
@@ -4097,6 +4119,28 @@ Oven temperatures in the recipes are in °C. You choose whether you see them in 
 #### What you then see
 
 There is no switch but a choice of three; your choice is highlighted. The steps then say, for example, 200 °C, 400 °F or 200 °C (400 °F).
+
+(`#/more`)
+
+### Switching the calorie line off
+
+#### What it does
+
+The calorie line on the recipe page is on by default. If you would rather not see it, switch it off here.
+
+#### Where you tap
+
+1. Tap **More** at the bottom.
+2. Under Settings find the switch **Nutrition**.
+3. Switch it off.
+
+#### What you then see
+
+The kcal line disappears from every recipe page. Switch it back on and it is back.
+
+#### Good to know
+
+The setting travels with your backup. In the dictionary the values per 100 g stay visible.
 
 (`#/more`)
 

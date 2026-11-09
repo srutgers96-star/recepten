@@ -99,6 +99,17 @@ export async function setTemperatureMode(mode: TemperatureMode): Promise<void> {
   await setSetting(TEMPERATURE_KEY, isTemperatureMode(mode) ? mode : 'c');
 }
 
+/** V9: setting 'nutrition.show' (boolean, default true): the kcal line on the recipe page. Rides along in the backup. */
+export const NUTRITION_KEY = 'nutrition.show';
+
+export async function getNutritionEnabled(): Promise<boolean> {
+  return (await getSetting<unknown>(NUTRITION_KEY, true)) !== false;
+}
+
+export async function setNutritionEnabled(on: boolean): Promise<void> {
+  await setSetting(NUTRITION_KEY, on !== false);
+}
+
 interface RecipesFile {
   schema: 2;
   dataVersion: number;

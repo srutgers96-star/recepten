@@ -1,12 +1,12 @@
 # Spec V9 — Voedingswaarden: één rustige kcal-regel per portie, met uitklap voor de macro's (Stijn, 17 okt + 8 nov 2026)
 
-Status: in aanbouw (Fable, 9 nov 2026). Eén blok, drie bouwers + data-ronde (Sonnet, negentien batches van ±80 ingrediënten: 1448 voedsel-ids) + integrator + toepasser (lichte
+Status: compleet (Fable, 9 nov 2026). Eén blok, drie bouwers + data-ronde (Sonnet, negentien batches van ±80 ingrediënten: 1448 voedsel-ids) + integrator + toepasser (lichte
 modus met een extra data-fase). Bron: docs/IDEAS.md idee 1 (Stijn 17 okt: "klein ≈ 620 kcal p.p. met een subtiel uitklapmenu voor
 eiwit, vet, koolhydraten en meer; klein en rustig"; 8 nov: "subtiel met calorieën in recepten; de waarden bij de ingrediënten, verder
 niet standaard tonen; misschien bij calorieën een uitklap voor de macro's"). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
 docs/specs/handbook.md §4, CLAUDE.md invarianten 2 (een ruwe regel wordt nooit verwijderd), 4 (de deellink verandert niet: niets van
 dit blok reist mee in een token) en 14 (geen backend: de tabel zit in de app).
-Gebouwd: 9 nov 2026 (V9, lichte workflow met data-fase; run-id in STATUS)
+Gebouwd: 9 nov 2026 (V9, lichte workflow met data-fase wf_28d14a9f-685; besluiten Fable na de bouw: (1) een regel zonder getal van een product dat nu een stukgewicht heeft telt als 1 op de lijst ("1 rookworst", drie regels in de klassiekers; test aangepast); (2) olijfolie 900 kcal (de batchwaarde, NEVO-niveau) in plaats van de 884 uit het skelet, testrij en spec aangepast; (3) de twaalf kruiden en zaden die de validator weigerde omdat de vezels ook in de koolhydraten zaten: koolhydraten exclusief vezels en kcal herrekend uit de macro's (kaneel 35 kcal: onderschat, maar in theelepels verwaarloosbaar); (4) de dichtheidsondergrens van 0,2 naar 0,05 g/ml voor verse kruiden en cornflakes; daarna 1448 van 1448 items aanvaard, dekking 99,8 % (1928 van 1932 regels), alle 216 klassiekers boven de drempel; bouwerskeuzes bevestigd: snufje zonder getal = 1, niet-voedsel telt niet, dubbele id geweigerd, één decimaal, zichtbare titel Per portie, 44 px tikvlak, decimale komma in NL; lens: de tool kan geen gramsPer.ml meer schrijven)
 
 **Kritische lezer (Fable, vooraf).** (1) Het moeilijke is niet de voedingstabel maar grammen per regel. Meting 9 nov over
 data/recipes.json (216 recepten, 2010 regels, 104 zonder hoeveelheid): 1114 van de 1906 regels met een hoeveelheid zijn nu in grammen
@@ -16,7 +16,9 @@ olijf 7, …) en 96 regels van 59 (ingrediënt, eenheid)-paren zonder gewicht (t
 cayennepeper 2, …). (2) Dichtheid komt in een EIGEN veld `gramsPerMl` en niet in `gramsPer.ml`: `aggregate.ts` vouwt ml-regels naar
 grammen zodra `gramsPer.ml` bestaat (`gramsOf`), en dan verandert de boodschappenlijst ("113 g olijfolie"). Stukgewichten en
 eenheidsgewichten gaan wél in het bestaande `gramsPer` (dat is precies waar de lijst ze ook voor gebruikt: "1 prei" blijft 1 prei, de
-lijst verandert alleen bij een gewichtsproduct dat in stuks staat, zoals nu al bij kipfilet). (3) De waarden per 100 g worden door een
+lijst verandert alleen bij een gewichtsproduct dat in stuks staat, zoals nu al bij kipfilet — én, zo bleek na de data-ronde, bij een
+regel zónder getal van een product dat nu een stukgewicht heeft: "rookworst" wordt "1 rookworst" in plaats van "rookworst (pm)", zoals
+braadworst al deed; besluit Fable: aanvaard, drie regels in de klassiekers). (3) De waarden per 100 g worden door een
 taalmodel ingevuld als SCHATTING op het niveau van de openbare tabellen (NEVO van het RIVM, USDA); we downloaden geen tabel en verzinnen
 geen NEVO-codes. De validator eist consistentie (kcal ≈ 4·eiwit + 4·koolhydraten + 9·vet + 7·alcohol, binnen 15 % of 20 kcal), de UI
 zegt "≈", toont het dekkingspercentage en noemt het in de uitklap een schatting. Stijn kan later per ingrediënt eigen waarden geven
@@ -55,7 +57,7 @@ dict.* in src/i18n/edit.ts, more.* in src/i18n/settings.ts. `tools/apply-llm-bat
 `tools/apply-nutrition.ts` [nieuw], `tools/measure-grams.ts` [nieuw], `package.json` (twee scripts; geen dependency), `tests/nutrition.test.ts` [nieuw],
 `tests/validate-nutrition.test.ts` [nieuw], `data/nutrition.json` [nieuw, leeg skelet])
 
-- `Ingredient.gramsPerMl?: number` — dichtheid in g/ml (olie 0,92, bloem 0,55, melk 1,03, honing 1,42). Validator: getal in [0,2, 2,0].
+- `Ingredient.gramsPerMl?: number` — dichtheid in g/ml (olie 0,92, bloem 0,55, melk 1,03, honing 1,42). Validator: getal in [0,05, 2,0] (verse kruiden en cornflakes zitten rond 0,1; besluit Fable na de data-ronde, was 0,2).
   `gramsPer`-waarden: getal in [0,05, 5000] (laurierblad 0,2 g, een pompoen 1500 g); controleer dat de bestaande data daaraan voldoet.
 - `data/nutrition.json`:
   ```json
@@ -100,7 +102,7 @@ dict.* in src/i18n/edit.ts, more.* in src/i18n/settings.ts. `tools/apply-llm-bat
 - `tools/apply-nutrition.ts`: `--check <files…> | --apply <files…> | --apply all` (all = data/llm/nutrition/batch-*.json). Batchbestand:
   `{ "batch": "01", "items": [{ "id", "kcal", "protein", "fat", "carbs", "fibre", "salt", "alcohol"?, "gramsPerMl"?, "pieceGrams"?,
   "unitGrams"?: { "<unit-id>": g } }] }`. Controle per item: id bestaat en is voedsel; de nutritiegetallen volgens `validateNutrition`
-  (met `source: 'estimate'`); `gramsPerMl` in [0,2, 2,0]; `pieceGrams` in [0,05, 5000]; `unitGrams`-sleutels bestaan in units.json.
+  (met `source: 'estimate'`); `gramsPerMl` in [0,05, 2,0]; `pieceGrams` in [0,05, 5000]; `unitGrams`-sleutels bestaan in units.json.
   Toepassen: nutritie → `data/nutrition.json` items (een bestaand item wordt alleen vervangen als het `source: 'estimate'` heeft);
   `gramsPerMl` → `ingredients[id].gramsPerMl` alleen als het ontbreekt; `pieceGrams` → `gramsPer.stuk` als `defaultUnit` 'stuk' of null is,
   anders `gramsPer[defaultUnit]` als dat een telwoord is — alleen als die sleutel ontbreekt; `unitGrams` → `gramsPer[unit]` alleen als de
@@ -190,7 +192,7 @@ dict.* in src/i18n/edit.ts, more.* in src/i18n/settings.ts. `tools/apply-llm-bat
   grijs "≈ … kcal p.p. · … % bekend" met een pijltje; het getal is een rond tiental. 2. Een klein tabelletje klapt uit: Energie, Eiwit, Vet,
   Koolhydraten, Vezels, Zout per portie, met eronder "Schatting op basis van gemiddelde waarden per ingrediënt, niet van jouw merk. … van de
   … regels geteld."; de tweede tik klapt het dicht. 3. De regel verandert niet: het is per portie. 4. In de kookstand staat geen kcal-regel.
-  5. Geen kcal-regel (minder dan de helft van de regels bekend). 6. In het detail staat "Per 100 g: 884 kcal · eiwit 0 g · vet 100 g ·
+  5. Geen kcal-regel (minder dan de helft van de regels bekend). 6. In het detail staat "Per 100 g: 900 kcal · eiwit 0 g · vet 100 g ·
   koolhydraten 0 g". 7. De regel is weg; na het aanzetten staat hij er weer. 8. "≈ … kcal per serving · … % known", de tabel heet Per serving
   met Energy, Protein, Fat, Carbohydrates, Fibre, Salt. Onder **Over** staat in beide talen de bronregel over NEVO en USDA.
 

@@ -69,6 +69,12 @@ export interface Ingredient {
   defaultUnit: string | null;
   buyUnit?: string;
   gramsPer?: Record<string, number>;
+  /**
+   * Density in g/ml (oil 0.92, flour 0.55, milk 1.03, honey 1.42), used ONLY by the nutrition count
+   * (src/domain/nutrition.ts, docs/specs/verbeterronde-9.md). Deliberately not `gramsPer.ml`: aggregate.ts
+   * folds ml lines to grams as soon as `gramsPer.ml` exists, which would change the shopping list.
+   */
+  gramsPerMl?: number;
   staple: boolean;
   veg: boolean;
   /** Diet flags (docs/phase-5-spec.md block A.1): plant-based; contains gluten. Missing = unknown (`diet.ts` says "unsure"). */

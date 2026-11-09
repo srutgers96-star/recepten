@@ -15,6 +15,8 @@
     "validate:data": "node --experimental-strip-types tools/validate-data.ts",
     "migrate": "node --experimental-strip-types tools/migrate-from-recepten2.ts",
     "measure-parse": "node --experimental-strip-types tools/measure-parse.ts",
+    "measure-grams": "node --experimental-strip-types tools/measure-grams.ts",
+    "apply-nutrition": "node --experimental-strip-types tools/apply-nutrition.ts",
     "icons": "python tools/make-icons.py"
   },
   "dependencies": {

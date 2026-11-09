@@ -1,0 +1,795 @@
+{
+ "batch": "09",
+ "items": [
+  {
+   "id": "kleurstof",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "knackebrod",
+   "kcal": 325,
+   "protein": 10,
+   "fat": 1.5,
+   "carbs": 66,
+   "fibre": 14,
+   "salt": 1.2
+  },
+  {
+   "id": "knakworst",
+   "kcal": 250,
+   "protein": 12,
+   "fat": 22,
+   "carbs": 2,
+   "fibre": 0,
+   "salt": 2.3,
+   "pieceGrams": 45
+  },
+  {
+   "id": "knijpfruit",
+   "kcal": 60,
+   "protein": 0.5,
+   "fat": 0.2,
+   "carbs": 13,
+   "fibre": 1.5,
+   "salt": 0,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "knoflook",
+   "kcal": 135,
+   "protein": 6.4,
+   "fat": 0.5,
+   "carbs": 25,
+   "fibre": 2.1,
+   "salt": 0
+  },
+  {
+   "id": "knoflookpoeder",
+   "kcal": 335,
+   "protein": 17,
+   "fat": 0.7,
+   "carbs": 66,
+   "fibre": 9,
+   "salt": 0.1,
+   "gramsPerMl": 0.6
+  },
+  {
+   "id": "knoflooksaus",
+   "kcal": 350,
+   "protein": 1,
+   "fat": 36,
+   "carbs": 5,
+   "fibre": 0,
+   "salt": 1.5,
+   "gramsPerMl": 0.95
+  },
+  {
+   "id": "knoflookzout",
+   "kcal": 12,
+   "protein": 1,
+   "fat": 0.1,
+   "carbs": 2,
+   "fibre": 0.5,
+   "salt": 80,
+   "gramsPerMl": 1.1
+  },
+  {
+   "id": "knolselderij",
+   "kcal": 38,
+   "protein": 1.5,
+   "fat": 0.3,
+   "carbs": 6,
+   "fibre": 4.3,
+   "salt": 0.2
+  },
+  {
+   "id": "koekje",
+   "kcal": 478,
+   "protein": 6,
+   "fat": 20,
+   "carbs": 68,
+   "fibre": 2,
+   "salt": 0.5,
+   "pieceGrams": 8
+  },
+  {
+   "id": "koffie",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "koffieboon",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 0.6
+  },
+  {
+   "id": "koffiebroodje",
+   "kcal": 380,
+   "protein": 7,
+   "fat": 18,
+   "carbs": 48,
+   "fibre": 2,
+   "salt": 0.9
+  },
+  {
+   "id": "koffiecreamer",
+   "kcal": 535,
+   "protein": 1,
+   "fat": 35,
+   "carbs": 53,
+   "fibre": 0,
+   "salt": 0.5,
+   "gramsPerMl": 0.5
+  },
+  {
+   "id": "koffiecup",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "pieceGrams": 6
+  },
+  {
+   "id": "koffiefilter",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0
+  },
+  {
+   "id": "koffielikeur",
+   "kcal": 235,
+   "protein": 0.2,
+   "fat": 0.2,
+   "carbs": 30,
+   "fibre": 0,
+   "salt": 0,
+   "alcohol": 16,
+   "gramsPerMl": 1.1
+  },
+  {
+   "id": "koffiemelk",
+   "kcal": 135,
+   "protein": 7,
+   "fat": 7.5,
+   "carbs": 9.5,
+   "fibre": 0,
+   "salt": 0.25,
+   "gramsPerMl": 1.07
+  },
+  {
+   "id": "koffiepad",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "pieceGrams": 7
+  },
+  {
+   "id": "koffiesiroop",
+   "kcal": 280,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 70,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 1.3
+  },
+  {
+   "id": "kokos",
+   "kcal": 620,
+   "protein": 6.5,
+   "fat": 62,
+   "carbs": 6,
+   "fibre": 16,
+   "salt": 0.05,
+   "gramsPerMl": 0.35
+  },
+  {
+   "id": "kokosbloesemsuiker",
+   "kcal": 378,
+   "protein": 1,
+   "fat": 0.2,
+   "carbs": 93,
+   "fibre": 0,
+   "salt": 0.1,
+   "gramsPerMl": 0.7
+  },
+  {
+   "id": "kokosbrood",
+   "kcal": 278,
+   "protein": 7,
+   "fat": 10,
+   "carbs": 40,
+   "fibre": 4,
+   "salt": 1.0
+  },
+  {
+   "id": "kokoschips",
+   "kcal": 607,
+   "protein": 6,
+   "fat": 55,
+   "carbs": 22,
+   "fibre": 12,
+   "salt": 0.05,
+   "gramsPerMl": 0.3
+  },
+  {
+   "id": "kokosdrink",
+   "kcal": 24,
+   "protein": 0.2,
+   "fat": 1.2,
+   "carbs": 3,
+   "fibre": 0.3,
+   "salt": 0.1,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "kokoslikeur",
+   "kcal": 228,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 28,
+   "fibre": 0,
+   "salt": 0,
+   "alcohol": 16.5,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "kokosmakroon",
+   "kcal": 480,
+   "protein": 5,
+   "fat": 28,
+   "carbs": 52,
+   "fibre": 6,
+   "salt": 0.1,
+   "pieceGrams": 15
+  },
+  {
+   "id": "kokosmeel",
+   "kcal": 300,
+   "protein": 17,
+   "fat": 13,
+   "carbs": 24,
+   "fibre": 38,
+   "salt": 0.1,
+   "gramsPerMl": 0.45
+  },
+  {
+   "id": "kokosmelk",
+   "kcal": 175,
+   "protein": 1.5,
+   "fat": 17,
+   "carbs": 2.5,
+   "fibre": 0.5,
+   "salt": 0.05,
+   "gramsPerMl": 0.97
+  },
+  {
+   "id": "kokosnoot",
+   "kcal": 335,
+   "protein": 3.3,
+   "fat": 33,
+   "carbs": 6,
+   "fibre": 9,
+   "salt": 0.05,
+   "pieceGrams": 450
+  },
+  {
+   "id": "kokosolie",
+   "kcal": 895,
+   "protein": 0,
+   "fat": 99.9,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 0.92
+  },
+  {
+   "id": "kokoswater",
+   "kcal": 19,
+   "protein": 0.7,
+   "fat": 0.2,
+   "carbs": 3.7,
+   "fibre": 1.1,
+   "salt": 0.07,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "kokosyoghurt",
+   "kcal": 129,
+   "protein": 1,
+   "fat": 9,
+   "carbs": 11,
+   "fibre": 1,
+   "salt": 0.1,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "kombucha",
+   "kcal": 14,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 3.5,
+   "fibre": 0,
+   "salt": 0.01,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "komijn",
+   "kcal": 390,
+   "protein": 18,
+   "fat": 22,
+   "carbs": 34,
+   "fibre": 11,
+   "salt": 0.5,
+   "gramsPerMl": 0.45
+  },
+  {
+   "id": "komijnekaas",
+   "kcal": 363,
+   "protein": 25,
+   "fat": 29,
+   "carbs": 0.5,
+   "fibre": 0,
+   "salt": 1.8,
+   "gramsPerMl": 0.4
+  },
+  {
+   "id": "komijnzaad",
+   "kcal": 390,
+   "protein": 18,
+   "fat": 22,
+   "carbs": 34,
+   "fibre": 11,
+   "salt": 0.5,
+   "gramsPerMl": 0.5
+  },
+  {
+   "id": "komkommer",
+   "kcal": 11,
+   "protein": 0.7,
+   "fat": 0.1,
+   "carbs": 1.8,
+   "fibre": 0.6,
+   "salt": 0.01
+  },
+  {
+   "id": "komkommersalade",
+   "kcal": 89,
+   "protein": 1.5,
+   "fat": 7,
+   "carbs": 5,
+   "fibre": 0.5,
+   "salt": 0.8,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "konijn",
+   "kcal": 129,
+   "protein": 22,
+   "fat": 4.5,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.15
+  },
+  {
+   "id": "koningsoesterzwam",
+   "kcal": 35,
+   "protein": 3,
+   "fat": 0.4,
+   "carbs": 5,
+   "fibre": 2.5,
+   "salt": 0.01
+  },
+  {
+   "id": "kookroom",
+   "kcal": 160,
+   "protein": 2.5,
+   "fat": 15,
+   "carbs": 3.5,
+   "fibre": 0,
+   "salt": 0.1,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "kool",
+   "kcal": 24,
+   "protein": 1.5,
+   "fat": 0.2,
+   "carbs": 4,
+   "fibre": 2.5,
+   "salt": 0.05
+  },
+  {
+   "id": "koolhydraatarm-brood",
+   "kcal": 200,
+   "protein": 22,
+   "fat": 9,
+   "carbs": 6,
+   "fibre": 9,
+   "salt": 1.1,
+   "pieceGrams": 35
+  },
+  {
+   "id": "koolraap",
+   "kcal": 29,
+   "protein": 1.1,
+   "fat": 0.2,
+   "carbs": 5.5,
+   "fibre": 2.2,
+   "salt": 0.05
+  },
+  {
+   "id": "koolrabi",
+   "kcal": 26,
+   "protein": 1.7,
+   "fat": 0.1,
+   "carbs": 4.5,
+   "fibre": 3.6,
+   "salt": 0.03
+  },
+  {
+   "id": "koolvisfilet",
+   "kcal": 79,
+   "protein": 18,
+   "fat": 0.8,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.3,
+   "pieceGrams": 100
+  },
+  {
+   "id": "koolzaadolie",
+   "kcal": 900,
+   "protein": 0,
+   "fat": 100,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 0.92
+  },
+  {
+   "id": "koriander",
+   "kcal": 25,
+   "protein": 2.1,
+   "fat": 0.5,
+   "carbs": 3.7,
+   "fibre": 2.8,
+   "salt": 0.1,
+   "gramsPerMl": 0.25
+  },
+  {
+   "id": "korianderzaad",
+   "kcal": 280,
+   "protein": 12,
+   "fat": 18,
+   "carbs": 15,
+   "fibre": 41,
+   "salt": 0.1,
+   "gramsPerMl": 0.4
+  },
+  {
+   "id": "kormasaus",
+   "kcal": 127,
+   "protein": 1.5,
+   "fat": 9,
+   "carbs": 10,
+   "fibre": 1,
+   "salt": 1.1,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "kousenband",
+   "kcal": 29,
+   "protein": 1.8,
+   "fat": 0.2,
+   "carbs": 4.5,
+   "fibre": 2.5,
+   "salt": 0.01
+  },
+  {
+   "id": "krabsalade",
+   "kcal": 160,
+   "protein": 5,
+   "fat": 12,
+   "carbs": 8,
+   "fibre": 0.3,
+   "salt": 1.0,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "krabvlees",
+   "kcal": 85,
+   "protein": 17,
+   "fat": 1,
+   "carbs": 2,
+   "fibre": 0,
+   "salt": 1.0
+  },
+  {
+   "id": "krakeling",
+   "kcal": 439,
+   "protein": 8,
+   "fat": 15,
+   "carbs": 68,
+   "fibre": 3,
+   "salt": 1.0,
+   "pieceGrams": 20
+  },
+  {
+   "id": "kreeft",
+   "kcal": 88,
+   "protein": 19,
+   "fat": 1,
+   "carbs": 0.5,
+   "fibre": 0,
+   "salt": 0.8
+  },
+  {
+   "id": "krent",
+   "kcal": 270,
+   "protein": 1.5,
+   "fat": 0.4,
+   "carbs": 65,
+   "fibre": 6,
+   "salt": 0.03,
+   "gramsPerMl": 0.6
+  },
+  {
+   "id": "krentenbol",
+   "kcal": 288,
+   "protein": 8,
+   "fat": 4,
+   "carbs": 55,
+   "fibre": 3,
+   "salt": 0.9
+  },
+  {
+   "id": "kriek",
+   "kcal": 48,
+   "protein": 0.3,
+   "fat": 0,
+   "carbs": 6,
+   "fibre": 0,
+   "salt": 0,
+   "alcohol": 3.2,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "krieltjes",
+   "kcal": 69,
+   "protein": 2,
+   "fat": 0.1,
+   "carbs": 15,
+   "fibre": 1.8,
+   "salt": 0.01
+  },
+  {
+   "id": "kroepoek",
+   "kcal": 514,
+   "protein": 3,
+   "fat": 30,
+   "carbs": 58,
+   "fibre": 1,
+   "salt": 1.5,
+   "pieceGrams": 3
+  },
+  {
+   "id": "kroepoek-atjar-en-seroendeng",
+   "kcal": 295,
+   "protein": 5,
+   "fat": 15,
+   "carbs": 35,
+   "fibre": 3,
+   "salt": 1.5,
+   "pieceGrams": 50
+  },
+  {
+   "id": "kroket",
+   "kcal": 239,
+   "protein": 7,
+   "fat": 15,
+   "carbs": 19,
+   "fibre": 1,
+   "salt": 1.1,
+   "pieceGrams": 60
+  },
+  {
+   "id": "kruidenazijn",
+   "kcal": 4,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 1,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 1.01
+  },
+  {
+   "id": "kruidenboter",
+   "kcal": 688,
+   "protein": 0.5,
+   "fat": 76,
+   "carbs": 0.5,
+   "fibre": 0,
+   "salt": 1.5,
+   "gramsPerMl": 0.95
+  },
+  {
+   "id": "kruidenbouillon",
+   "kcal": 233,
+   "protein": 6,
+   "fat": 9,
+   "carbs": 32,
+   "fibre": 1,
+   "salt": 45,
+   "pieceGrams": 10
+  },
+  {
+   "id": "kruidenbouillonpoeder",
+   "kcal": 241,
+   "protein": 5,
+   "fat": 9,
+   "carbs": 35,
+   "fibre": 1,
+   "salt": 42,
+   "gramsPerMl": 0.7
+  },
+  {
+   "id": "kruidenkaas",
+   "kcal": 370,
+   "protein": 24,
+   "fat": 30,
+   "carbs": 1,
+   "fibre": 0,
+   "salt": 1.8,
+   "gramsPerMl": 0.4
+  },
+  {
+   "id": "kruidenlikeur",
+   "kcal": 265,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 18,
+   "fibre": 0,
+   "salt": 0,
+   "alcohol": 27.7,
+   "gramsPerMl": 0.97
+  },
+  {
+   "id": "kruidenthee",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "kruidenzout",
+   "kcal": 5,
+   "protein": 0.3,
+   "fat": 0.1,
+   "carbs": 0.8,
+   "fibre": 0.3,
+   "salt": 85,
+   "gramsPerMl": 1.1
+  },
+  {
+   "id": "kruidnagel",
+   "kcal": 260,
+   "protein": 6,
+   "fat": 13,
+   "carbs": 27,
+   "fibre": 34,
+   "salt": 0.7,
+   "pieceGrams": 0.1
+  },
+  {
+   "id": "kruidnagelpoeder",
+   "kcal": 260,
+   "protein": 6,
+   "fat": 13,
+   "carbs": 27,
+   "fibre": 34,
+   "salt": 0.7,
+   "gramsPerMl": 0.5,
+   "unitGrams": {
+    "mp": 0.5,
+    "snuf": 0.3
+   }
+  },
+  {
+   "id": "kruidnoot",
+   "kcal": 437,
+   "protein": 5,
+   "fat": 13,
+   "carbs": 75,
+   "fibre": 2,
+   "salt": 0.3
+  },
+  {
+   "id": "kruidnotenmix",
+   "kcal": 334,
+   "protein": 8,
+   "fat": 2,
+   "carbs": 71,
+   "fibre": 3,
+   "salt": 0.5,
+   "gramsPerMl": 0.55
+  },
+  {
+   "id": "kruisbes",
+   "kcal": 42,
+   "protein": 0.9,
+   "fat": 0.6,
+   "carbs": 8,
+   "fibre": 3.5,
+   "salt": 0.01,
+   "gramsPerMl": 0.6
+  },
+  {
+   "id": "kumquat",
+   "kcal": 53,
+   "protein": 1.9,
+   "fat": 0.9,
+   "carbs": 9.4,
+   "fibre": 6.5,
+   "salt": 0.01
+  },
+  {
+   "id": "kurkuma",
+   "kcal": 330,
+   "protein": 8,
+   "fat": 10,
+   "carbs": 50,
+   "fibre": 22,
+   "salt": 0.1,
+   "gramsPerMl": 0.5
+  },
+  {
+   "id": "kvas",
+   "kcal": 27,
+   "protein": 0.2,
+   "fat": 0,
+   "carbs": 5,
+   "fibre": 0,
+   "salt": 0.01,
+   "alcohol": 0.8,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "kwark",
+   "kcal": 57,
+   "protein": 10,
+   "fat": 0.2,
+   "carbs": 3.6,
+   "fibre": 0,
+   "salt": 0.1,
+   "gramsPerMl": 1.05
+  }
+ ]
+}

@@ -99,7 +99,7 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 | V6 | Gabi's lijstje plakken met voorstellen · woordenlijst-ronde | verbeterronde-6.md | compleet (9 nov) |
 | V7 | Boodschappen-badges over de ingrediënten (twaalf, nieuwe groep Boodschappen), met vier avatar-beloningen (waaronder twee brillen) | verbeterronde-7.md | compleet (9 nov) |
 | V8 | Vegen tussen de vijf tabbladen (touch, 60 px, niet aan de rand, stoppen bij Home en Meer, 150 ms schuif) | verbeterronde-8.md | compleet (9 nov) |
-| V9 | Voedingswaarden: grammen-dekking (`gramsPerMl` + `gramsPer`), `data/nutrition.json` (schattingen per 100 g, Sonnet-batches), één rustige kcal-regel per portie met uitklap, schakelaar Voedingswaarden, per 100 g in het woordenboek | verbeterronde-9.md | in aanbouw (9 nov) |
+| V9 | Voedingswaarden: grammen-dekking (`gramsPerMl` + `gramsPer`), `data/nutrition.json` (schattingen per 100 g, Sonnet-batches), één rustige kcal-regel per portie met uitklap, schakelaar Voedingswaarden, per 100 g in het woordenboek | verbeterronde-9.md | compleet (9 nov) |
 
 ## 2. Besluiten van de kritische lezer (gelden over alle specs)
 

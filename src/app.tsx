@@ -18,6 +18,7 @@ import type { ComponentChildren, ComponentType } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { badgeToast, dismissBadgeToast, loadBadgeSettings, syncCatalogIfNeeded, type NewBadge } from './badges';
 import { loadCelebrateSettings } from './celebrate';
+import { loadNutritionSetting } from './nutrition';
 import { challengeToast, dismissChallengeToast } from './challenges';
 import { BrowserNotice } from './components/BrowserNotice';
 import { CelebrationWord } from './components/CelebrationWord';
@@ -308,6 +309,7 @@ export function App(props: { openImportFromHash: boolean }) {
     document.documentElement.lang = lang.value;
     void requestPersistentStorage();
     void loadCelebrateSettings();
+    void loadNutritionSetting();
     void loadBadgeSettings();
     // The router already moved a boot-time token into pendingImport and routed to the inbox;
     // this only guards the case where boot said "token" but the hash was already changed.

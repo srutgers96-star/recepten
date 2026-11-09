@@ -38,6 +38,7 @@ import { isIOS } from '@/components/AppInfo';
 import { CookedSheet, type CookedSheetMode } from '@/components/CookedSheet';
 import { Header } from '@/components/Header';
 import { IngredientList, type LineMark } from '@/components/LineView';
+import { NutritionLine } from '@/components/NutritionLine';
 import { formatShortDate } from '@/components/RecipeRow';
 import { rememberServings, rememberedServings, ServingsPicker } from '@/components/ServingsPicker';
 import { hasAmountsToShow, shownStep, StepView, useTemperatureMode } from '@/components/StepView';
@@ -924,6 +925,9 @@ export function RecipeScreen(props: { id: string }) {
               )}
               <span>{meta.join(' · ')}</span>
             </p>
+
+            {/* V9: one quiet kcal line per serving with a fold-out for the macros (nothing in cook mode, share text or lists). */}
+            <NutritionLine lines={shownLines} servings={base} />
 
             {/* Phase 5 block F: a personal version links back to its original (13D: the original shows it as a tab). */}
             {original && (

@@ -597,6 +597,12 @@ export const edit: Dict = {
   'dict.showMore': { nl: 'Toon meer (nog {n})', en: 'Show more ({n} left)' },
   'dict.aliases': { nl: 'Ook bekend als', en: 'Also known as' },
   'dict.aisleLabel': { nl: 'Schap', en: 'Aisle' },
+  // --- V9 (docs/specs/verbeterronde-9.md §1b): values per 100 g in the entry detail ---
+  'dict.per100': { nl: 'Per 100 g', en: 'Per 100 g' },
+  'dict.per100Line': {
+    nl: '{kcal} kcal · eiwit {protein} g · vet {fat} g · koolhydraten {carbs} g',
+    en: '{kcal} kcal · protein {protein} g · fat {fat} g · carbs {carbs} g',
+  },
   'dict.pluralOf': { nl: 'meervoud: {many}', en: 'plural: {many}' },
   'dict.flags': { nl: 'Kenmerken', en: 'Properties' },
   'dict.flag.veg': { nl: 'vegetarisch', en: 'vegetarian' },

@@ -213,6 +213,53 @@
       }
     },
     {
+      "id": "instellingen-en-opslag.voedingswaarden",
+      "title": {
+        "nl": "De regel met calorieën uitzetten",
+        "en": "Switching the calorie line off"
+      },
+      "what": {
+        "nl": "De regel met calorieën op de receptpagina staat standaard aan. Wil je hem niet zien, dan zet je hem hier uit.",
+        "en": "The calorie line on the recipe page is on by default. If you would rather not see it, switch it off here."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer**.",
+          "Zoek onder Instellingen de schakelaar **Voedingswaarden**.",
+          "Zet hem uit."
+        ],
+        "en": [
+          "Tap **More** at the bottom.",
+          "Under Settings find the switch **Nutrition**.",
+          "Switch it off."
+        ]
+      },
+      "see": {
+        "nl": "De regel met kcal verdwijnt van elke receptpagina. Zet je de schakelaar weer aan, dan staat hij er weer.",
+        "en": "The kcal line disappears from every recipe page. Switch it back on and it is back."
+      },
+      "know": {
+        "nl": "De instelling gaat mee in je back-up. In het woordenboek blijven de waarden per 100 g gewoon zichtbaar.",
+        "en": "The setting travels with your backup. In the dictionary the values per 100 g stay visible."
+      },
+      "route": "/more",
+      "platform": "all",
+      "keywords": {
+        "nl": [
+          "calorieën",
+          "voedingswaarden",
+          "uitzetten",
+          "instelling"
+        ],
+        "en": [
+          "calories",
+          "nutrition",
+          "switch off",
+          "setting"
+        ]
+      }
+    },
+    {
       "id": "instellingen-en-opslag.confetti",
       "title": {
         "nl": "Confetti aan of uit",

@@ -1,0 +1,791 @@
+{
+ "batch": "18",
+ "items": [
+  {
+   "id": "volkorenmeel",
+   "kcal": 325,
+   "protein": 12.5,
+   "fat": 2.2,
+   "carbs": 62,
+   "fibre": 10,
+   "salt": 0.02,
+   "gramsPerMl": 0.55
+  },
+  {
+   "id": "vruchtenhagel",
+   "kcal": 375,
+   "protein": 1,
+   "fat": 1,
+   "carbs": 91,
+   "fibre": 0.5,
+   "salt": 0.1,
+   "gramsPerMl": 0.65
+  },
+  {
+   "id": "vruchtenkwark",
+   "kcal": 74,
+   "protein": 6,
+   "fat": 0.2,
+   "carbs": 12,
+   "fibre": 0.5,
+   "salt": 0.1,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "vruchtensap",
+   "kcal": 46,
+   "protein": 0.3,
+   "fat": 0.1,
+   "carbs": 11,
+   "fibre": 0.2,
+   "salt": 0,
+   "gramsPerMl": 1.04
+  },
+  {
+   "id": "vruchtenthee",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "vruchtenyoghurt",
+   "kcal": 80,
+   "protein": 3.5,
+   "fat": 1.5,
+   "carbs": 13,
+   "fibre": 0.3,
+   "salt": 0.1,
+   "gramsPerMl": 1.04
+  },
+  {
+   "id": "wafel",
+   "kcal": 425,
+   "protein": 5,
+   "fat": 18,
+   "carbs": 60,
+   "fibre": 1.5,
+   "salt": 0.4,
+   "pieceGrams": 30
+  },
+  {
+   "id": "walnoot",
+   "kcal": 680,
+   "protein": 15,
+   "fat": 65,
+   "carbs": 7,
+   "fibre": 6.5,
+   "salt": 0.01,
+   "gramsPerMl": 0.45
+  },
+  {
+   "id": "walnootolie",
+   "kcal": 900,
+   "protein": 0,
+   "fat": 100,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 0.92
+  },
+  {
+   "id": "wasabi",
+   "kcal": 110,
+   "protein": 3,
+   "fat": 4,
+   "carbs": 15,
+   "fibre": 3,
+   "salt": 3.5,
+   "gramsPerMl": 1.1
+  },
+  {
+   "id": "wasabinootje",
+   "kcal": 470,
+   "protein": 14,
+   "fat": 20,
+   "carbs": 58,
+   "fibre": 5,
+   "salt": 1.5
+  },
+  {
+   "id": "waspeen",
+   "kcal": 34,
+   "protein": 0.6,
+   "fat": 0.2,
+   "carbs": 7,
+   "fibre": 2.8,
+   "salt": 0.1
+  },
+  {
+   "id": "water",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "waterijsje",
+   "kcal": 58,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 14,
+   "fibre": 0,
+   "salt": 0,
+   "pieceGrams": 60
+  },
+  {
+   "id": "waterkastanje",
+   "kcal": 42,
+   "protein": 1.4,
+   "fat": 0.1,
+   "carbs": 9.7,
+   "fibre": 2.5,
+   "salt": 0.1,
+   "gramsPerMl": 0.65
+  },
+  {
+   "id": "waterkers",
+   "kcal": 14,
+   "protein": 2.3,
+   "fat": 0.1,
+   "carbs": 0.8,
+   "fibre": 1.5,
+   "salt": 0.15,
+   "gramsPerMl": 0.2
+  },
+  {
+   "id": "watermeloen",
+   "kcal": 32,
+   "protein": 0.6,
+   "fat": 0.1,
+   "carbs": 7.5,
+   "fibre": 0.4,
+   "salt": 0,
+   "pieceGrams": 2500
+  },
+  {
+   "id": "weetabix",
+   "kcal": 355,
+   "protein": 12,
+   "fat": 2,
+   "carbs": 69,
+   "fibre": 10,
+   "salt": 0.28
+  },
+  {
+   "id": "whisky",
+   "kcal": 231,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "alcohol": 33,
+   "gramsPerMl": 0.95
+  },
+  {
+   "id": "wijn",
+   "kcal": 73,
+   "protein": 0.1,
+   "fat": 0,
+   "carbs": 1.5,
+   "fibre": 0,
+   "salt": 0,
+   "alcohol": 9.6,
+   "gramsPerMl": 0.99
+  },
+  {
+   "id": "wijnazijn",
+   "kcal": 8,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 1.5,
+   "fibre": 0,
+   "salt": 0.02,
+   "gramsPerMl": 1.01
+  },
+  {
+   "id": "wilde-rijst",
+   "kcal": 357,
+   "protein": 14.7,
+   "fat": 1,
+   "carbs": 75,
+   "fibre": 6.2,
+   "salt": 0.02,
+   "gramsPerMl": 0.75
+  },
+  {
+   "id": "wildfond",
+   "kcal": 28,
+   "protein": 1.5,
+   "fat": 0.5,
+   "carbs": 4,
+   "fibre": 0,
+   "salt": 1.8,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "winegum",
+   "kcal": 330,
+   "protein": 6,
+   "fat": 0,
+   "carbs": 76,
+   "fibre": 0,
+   "salt": 0.05
+  },
+  {
+   "id": "winterpeen",
+   "kcal": 36,
+   "protein": 0.7,
+   "fat": 0.2,
+   "carbs": 7.5,
+   "fibre": 3,
+   "salt": 0.1
+  },
+  {
+   "id": "witbier",
+   "kcal": 44,
+   "protein": 0.4,
+   "fat": 0,
+   "carbs": 3.5,
+   "fibre": 0,
+   "salt": 0,
+   "alcohol": 3.9,
+   "gramsPerMl": 1.01
+  },
+  {
+   "id": "witbrood",
+   "kcal": 245,
+   "protein": 8,
+   "fat": 1.5,
+   "carbs": 48,
+   "fibre": 2.5,
+   "salt": 1.1,
+   "pieceGrams": 35,
+   "unitGrams": {
+    "snee": 35
+   }
+  },
+  {
+   "id": "witbroodkruim",
+   "kcal": 355,
+   "protein": 11,
+   "fat": 2,
+   "carbs": 72,
+   "fibre": 3,
+   "salt": 1.2,
+   "gramsPerMl": 0.45
+  },
+  {
+   "id": "witlof",
+   "kcal": 16,
+   "protein": 1,
+   "fat": 0.1,
+   "carbs": 2.5,
+   "fibre": 1.5,
+   "salt": 0.02
+  },
+  {
+   "id": "witte-bonen-in-tomatensaus",
+   "kcal": 78,
+   "protein": 4.5,
+   "fat": 0.4,
+   "carbs": 13,
+   "fibre": 4,
+   "salt": 0.9,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "witvis",
+   "kcal": 82,
+   "protein": 18,
+   "fat": 0.7,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.2
+  },
+  {
+   "id": "wodka",
+   "kcal": 231,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "alcohol": 33,
+   "gramsPerMl": 0.95
+  },
+  {
+   "id": "wokgroente",
+   "kcal": 30,
+   "protein": 2,
+   "fat": 0.3,
+   "carbs": 4,
+   "fibre": 2.5,
+   "salt": 0.05
+  },
+  {
+   "id": "wokkruiden",
+   "kcal": 275,
+   "protein": 10,
+   "fat": 5,
+   "carbs": 45,
+   "fibre": 12,
+   "salt": 18,
+   "gramsPerMl": 0.5
+  },
+  {
+   "id": "woksaus",
+   "kcal": 108,
+   "protein": 2,
+   "fat": 2,
+   "carbs": 20,
+   "fibre": 0.5,
+   "salt": 5,
+   "gramsPerMl": 1.15
+  },
+  {
+   "id": "wokvlees",
+   "kcal": 130,
+   "protein": 21,
+   "fat": 5,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.15
+  },
+  {
+   "id": "worcestersaus",
+   "kcal": 78,
+   "protein": 1,
+   "fat": 0,
+   "carbs": 19,
+   "fibre": 0,
+   "salt": 3.5,
+   "gramsPerMl": 1.1
+  },
+  {
+   "id": "worstenbroodje",
+   "kcal": 290,
+   "protein": 9,
+   "fat": 16,
+   "carbs": 26,
+   "fibre": 1.5,
+   "salt": 1.3,
+   "pieceGrams": 125
+  },
+  {
+   "id": "wortel",
+   "kcal": 36,
+   "protein": 0.7,
+   "fat": 0.2,
+   "carbs": 7.5,
+   "fibre": 3,
+   "salt": 0.1
+  },
+  {
+   "id": "wortelsap",
+   "kcal": 38,
+   "protein": 0.7,
+   "fat": 0.2,
+   "carbs": 8,
+   "fibre": 0.6,
+   "salt": 0.1,
+   "gramsPerMl": 1.04
+  },
+  {
+   "id": "yoghurt",
+   "kcal": 62,
+   "protein": 4,
+   "fat": 3,
+   "carbs": 4.5,
+   "fibre": 0,
+   "salt": 0.1,
+   "gramsPerMl": 1.03
+  },
+  {
+   "id": "yoghurtdressing",
+   "kcal": 130,
+   "protein": 1,
+   "fat": 11,
+   "carbs": 6,
+   "fibre": 0.3,
+   "salt": 1.0,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "yoghurtrozijn",
+   "kcal": 395,
+   "protein": 3,
+   "fat": 10,
+   "carbs": 72,
+   "fibre": 3,
+   "salt": 0.1
+  },
+  {
+   "id": "zaanse-mosterd",
+   "kcal": 110,
+   "protein": 6,
+   "fat": 6,
+   "carbs": 7,
+   "fibre": 3,
+   "salt": 3.5,
+   "gramsPerMl": 1.05
+  },
+  {
+   "id": "zaatar",
+   "kcal": 300,
+   "protein": 10,
+   "fat": 12,
+   "carbs": 35,
+   "fibre": 18,
+   "salt": 6,
+   "gramsPerMl": 0.45
+  },
+  {
+   "id": "zachte-tarwe",
+   "kcal": 340,
+   "protein": 12,
+   "fat": 1.5,
+   "carbs": 68,
+   "fibre": 9,
+   "salt": 0.02,
+   "gramsPerMl": 0.8
+  },
+  {
+   "id": "zadenmix",
+   "kcal": 555,
+   "protein": 22,
+   "fat": 45,
+   "carbs": 12,
+   "fibre": 9,
+   "salt": 0.05,
+   "gramsPerMl": 0.55
+  },
+  {
+   "id": "zalm",
+   "kcal": 200,
+   "protein": 20,
+   "fat": 13,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.15
+  },
+  {
+   "id": "zalm-uit-blik",
+   "kcal": 150,
+   "protein": 22,
+   "fat": 7,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 1.0
+  },
+  {
+   "id": "zalmfilet",
+   "kcal": 200,
+   "protein": 20,
+   "fat": 13,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.15
+  },
+  {
+   "id": "zalmsalade",
+   "kcal": 230,
+   "protein": 9,
+   "fat": 20,
+   "carbs": 4,
+   "fibre": 0.3,
+   "salt": 1.4
+  },
+  {
+   "id": "zalmsnippers",
+   "kcal": 190,
+   "protein": 20,
+   "fat": 12,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 1.5
+  },
+  {
+   "id": "zanddeeg",
+   "kcal": 470,
+   "protein": 5.5,
+   "fat": 25,
+   "carbs": 55,
+   "fibre": 1.8,
+   "salt": 0.5
+  },
+  {
+   "id": "zandkoekje",
+   "kcal": 480,
+   "protein": 6,
+   "fat": 23,
+   "carbs": 62,
+   "fibre": 2,
+   "salt": 0.4,
+   "pieceGrams": 20
+  },
+  {
+   "id": "zeebaars",
+   "kcal": 100,
+   "protein": 19,
+   "fat": 2.5,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.2
+  },
+  {
+   "id": "zeeduivel",
+   "kcal": 74,
+   "protein": 14.5,
+   "fat": 1.5,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0.3
+  },
+  {
+   "id": "zeekraal",
+   "kcal": 18,
+   "protein": 1.5,
+   "fat": 0.2,
+   "carbs": 2,
+   "fibre": 1.5,
+   "salt": 2.0
+  },
+  {
+   "id": "zeevruchten",
+   "kcal": 80,
+   "protein": 15,
+   "fat": 1.2,
+   "carbs": 1.5,
+   "fibre": 0,
+   "salt": 1.0
+  },
+  {
+   "id": "zeewiersalade",
+   "kcal": 120,
+   "protein": 2,
+   "fat": 5,
+   "carbs": 16,
+   "fibre": 2,
+   "salt": 1.5
+  },
+  {
+   "id": "zeewiersnack",
+   "kcal": 520,
+   "protein": 10,
+   "fat": 35,
+   "carbs": 40,
+   "fibre": 6,
+   "salt": 2.0
+  },
+  {
+   "id": "zeezoutvlokken",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 98,
+   "gramsPerMl": 0.7
+  },
+  {
+   "id": "zelfrijzend-bakmeel",
+   "kcal": 340,
+   "protein": 10,
+   "fat": 1.2,
+   "carbs": 71,
+   "fibre": 3,
+   "salt": 1.2,
+   "gramsPerMl": 0.55
+  },
+  {
+   "id": "zijden-tofu",
+   "kcal": 55,
+   "protein": 5,
+   "fat": 3,
+   "carbs": 1.5,
+   "fibre": 0.3,
+   "salt": 0.05
+  },
+  {
+   "id": "zilveruitje",
+   "kcal": 24,
+   "protein": 0.8,
+   "fat": 0.1,
+   "carbs": 4.5,
+   "fibre": 1,
+   "salt": 1.2,
+   "pieceGrams": 3
+  },
+  {
+   "id": "zilvervliesrijst",
+   "kcal": 350,
+   "protein": 7.5,
+   "fat": 2.5,
+   "carbs": 73,
+   "fibre": 3.5,
+   "salt": 0.02,
+   "gramsPerMl": 0.85
+  },
+  {
+   "id": "zoete-aardappel",
+   "kcal": 86,
+   "protein": 1.5,
+   "fat": 0.1,
+   "carbs": 19,
+   "fibre": 3.3,
+   "salt": 0.1
+  },
+  {
+   "id": "zoete-aardappelfriet",
+   "kcal": 150,
+   "protein": 2,
+   "fat": 5,
+   "carbs": 24,
+   "fibre": 3.5,
+   "salt": 0.5
+  },
+  {
+   "id": "zoethoutthee",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 1.0
+  },
+  {
+   "id": "zoetstof",
+   "kcal": 370,
+   "protein": 2,
+   "fat": 0,
+   "carbs": 92,
+   "fibre": 0,
+   "salt": 0,
+   "pieceGrams": 0.1
+  },
+  {
+   "id": "zoetzure-saus",
+   "kcal": 130,
+   "protein": 0.3,
+   "fat": 0.2,
+   "carbs": 31,
+   "fibre": 0.3,
+   "salt": 2.0,
+   "gramsPerMl": 1.2
+  },
+  {
+   "id": "zongedroogde-tomaat",
+   "kcal": 215,
+   "protein": 4,
+   "fat": 15,
+   "carbs": 14,
+   "fibre": 5,
+   "salt": 1.5,
+   "unitGrams": {
+    "stuk": 8
+   }
+  },
+  {
+   "id": "zonnebloemolie",
+   "kcal": 900,
+   "protein": 0,
+   "fat": 100,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 0,
+   "gramsPerMl": 0.92
+  },
+  {
+   "id": "zonnebloemolie-en-chilivlokken",
+   "kcal": 880,
+   "protein": 0.5,
+   "fat": 97,
+   "carbs": 0.5,
+   "fibre": 0.3,
+   "salt": 0,
+   "gramsPerMl": 0.92,
+   "pieceGrams": 15
+  },
+  {
+   "id": "zonnebloempit",
+   "kcal": 600,
+   "protein": 21,
+   "fat": 50,
+   "carbs": 14,
+   "fibre": 8,
+   "salt": 0.02,
+   "gramsPerMl": 0.55
+  },
+  {
+   "id": "zout",
+   "kcal": 0,
+   "protein": 0,
+   "fat": 0,
+   "carbs": 0,
+   "fibre": 0,
+   "salt": 100,
+   "gramsPerMl": 1.2,
+   "unitGrams": {
+    "snuf": 0.4
+   }
+  },
+  {
+   "id": "zout-en-peper",
+   "kcal": 12,
+   "protein": 0.5,
+   "fat": 0.2,
+   "carbs": 2.5,
+   "fibre": 1,
+   "salt": 95,
+   "gramsPerMl": 1.1,
+   "pieceGrams": 1
+  },
+  {
+   "id": "zoutje",
+   "kcal": 480,
+   "protein": 9,
+   "fat": 23,
+   "carbs": 58,
+   "fibre": 3,
+   "salt": 2.5
+  },
+  {
+   "id": "zoutstengel",
+   "kcal": 380,
+   "protein": 10,
+   "fat": 5,
+   "carbs": 72,
+   "fibre": 3,
+   "salt": 3.5
+  },
+  {
+   "id": "zure-bom",
+   "kcal": 14,
+   "protein": 0.5,
+   "fat": 0.1,
+   "carbs": 2.5,
+   "fibre": 1,
+   "salt": 1.5,
+   "pieceGrams": 90
+  },
+  {
+   "id": "zure-room",
+   "kcal": 195,
+   "protein": 2.7,
+   "fat": 20,
+   "carbs": 3,
+   "fibre": 0,
+   "salt": 0.1,
+   "gramsPerMl": 1.0
+  }
+ ]
+}

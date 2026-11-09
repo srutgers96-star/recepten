@@ -100,6 +100,13 @@ export const settings: Dict = {
   'more.temperatureC': { nl: '°C', en: '°C' },
   'more.temperatureF': { nl: '°F', en: '°F' },
   'more.temperatureBoth': { nl: 'beide', en: 'both' },
+  // --- V9 (docs/specs/verbeterronde-9.md §1b): the nutrition switch and the source line under Over ---
+  'more.nutrition': { nl: 'Voedingswaarden', en: 'Nutrition' },
+  'more.nutritionHint': { nl: 'Een rustige regel met calorieën per portie op de receptpagina', en: 'A quiet line with calories per serving on the recipe page' },
+  'more.nutritionSource': {
+    nl: 'Voedingswaarden zijn schattingen naar de openbare tabellen NEVO (RIVM) en USDA, niet van jouw merk.',
+    en: 'Nutrition values are estimates after the public NEVO (RIVM) and USDA tables, not your brand.',
+  },
   'more.dictionary': { nl: 'Woordenboek', en: 'Dictionary' },
   'more.dictCounts': { nl: '{builtin} ingrediënten · {own} eigen', en: '{builtin} ingredients · {own} own' },
   'more.dictHint': { nl: 'Eigen ingrediënten bekijken, bewerken en samenvoegen', en: 'View, edit and merge your own ingredients' },

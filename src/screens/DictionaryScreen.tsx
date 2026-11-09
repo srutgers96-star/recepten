@@ -23,6 +23,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { IngredientPicker, ingredientLabel, uniqueIngredientId } from '@/components/IngredientPicker';
 import { MissingSheet, type MissingSheetRow } from '@/components/MissingSheet';
+import { formatNutrient } from '@/components/NutritionLine';
 import { deleteUserIngredient, findOwnDuplicates, forgetShopWord, getLearnedShopWords, linkUserRecipeLine, mergeIngredient, saveUserIngredient, undoMerge, userRecipes, type OwnDuplicate } from '@/db/repo';
 import { baseDictionary, dictionary, isUserIngredientId, reloadDictionary, userIngredients } from '@/dictionary';
 import { normalizeKey, type Dictionary, type Ingredient } from '@/domain/dictionary';
@@ -30,6 +31,7 @@ import { buildMissingPrompt, collectMissing, parseMissingAnswer, planMissingAnsw
 import type { Lang, Recipe } from '@/domain/model';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
+import { loadNutrition, nutritionTable } from '@/nutrition';
 import { navigate, route } from '@/router';
 import { copyText } from '@/share-actions';
 
@@ -88,6 +90,11 @@ function entryFlags(ing: Ingredient): Flag[] {
   return flags;
 }
 
+/** One decimal, without a trailing ".0" ("0", "100", "10.5"). */
+function oneDecimal(n: number): number {
+  return Math.round(n * 10) / 10;
+}
+
 /**
  * Read-only detail of an entry (block E.2): both names (singular + plural), aliases, aisle,
  * default unit and the flags as chips. Built-in entries are never editable here.
@@ -116,6 +123,11 @@ function EntryDetail(props: { ing: Ingredient }) {
     unitLabel = u ? (u[l].long ?? u[l].one) : du;
   }
   const flags = entryFlags(ing);
+  // V9: values per 100 g from the lazily loaded table (whole kcal, macros to one decimal: a table value).
+  useEffect(() => {
+    void loadNutrition();
+  }, []);
+  const per100 = nutritionTable.value?.[ing.id];
   return (
     <div class="dw-detail">
       <dl class="dw-facts">
@@ -137,6 +149,19 @@ function EntryDetail(props: { ing: Ingredient }) {
         <dd>{aisleName}</dd>
         <dt>{t('picker.unit')}</dt>
         <dd>{unitLabel}</dd>
+        {per100 && (
+          <>
+            <dt>{t('dict.per100')}</dt>
+            <dd>
+              {t('dict.per100Line', {
+                kcal: formatNutrient(Math.round(per100.kcal), l),
+                protein: formatNutrient(oneDecimal(per100.protein), l),
+                fat: formatNutrient(oneDecimal(per100.fat), l),
+                carbs: formatNutrient(oneDecimal(per100.carbs), l),
+              })}
+            </dd>
+          </>
+        )}
       </dl>
       {flags.length > 0 && (
         <ul class="dw-flags" aria-label={t('dict.flags')}>
