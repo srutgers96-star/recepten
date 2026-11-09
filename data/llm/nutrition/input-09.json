@@ -1,0 +1,728 @@
+{
+ "batch": "09",
+ "items": [
+  {
+   "id": "kleurstof",
+   "nl": "kleurstof",
+   "en": "food colouring",
+   "defaultUnit": "druppel",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "knackebrod",
+   "nl": "knäckebröd",
+   "en": "crispbread",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "knakworst",
+   "nl": "knakworst",
+   "en": "frankfurter",
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "knijpfruit",
+   "nl": "knijpfruit",
+   "en": "fruit pouch",
+   "defaultUnit": "zakje",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "knoflook",
+   "nl": "knoflook",
+   "en": "garlic",
+   "defaultUnit": "teen",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "knoflookpoeder",
+   "nl": "knoflookpoeder",
+   "en": "garlic powder",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "knoflooksaus",
+   "nl": "knoflooksaus",
+   "en": "garlic sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "knoflookzout",
+   "nl": "knoflookzout",
+   "en": "garlic salt",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "knolselderij",
+   "nl": "knolselderij",
+   "en": "celeriac",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koekje",
+   "nl": "koekje",
+   "en": "biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "koffie",
+   "nl": "koffie",
+   "en": "coffee",
+   "defaultUnit": "g",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koffieboon",
+   "nl": "koffieboon",
+   "en": "coffee bean",
+   "defaultUnit": "g",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koffiebroodje",
+   "nl": "koffiebroodje",
+   "en": "Danish pastry",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koffiecreamer",
+   "nl": "koffiecreamer",
+   "en": "coffee whitener",
+   "defaultUnit": "tl",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koffiecup",
+   "nl": "koffiecup",
+   "en": "coffee capsule",
+   "defaultUnit": "stuk",
+   "aisle": "dranken",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "koffiefilter",
+   "nl": "koffiefilter",
+   "en": "coffee filter",
+   "defaultUnit": "pak",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koffielikeur",
+   "nl": "koffielikeur",
+   "en": "coffee liqueur",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koffiemelk",
+   "nl": "koffiemelk",
+   "en": "evaporated milk",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koffiepad",
+   "nl": "koffiepad",
+   "en": "coffee pod",
+   "defaultUnit": "stuk",
+   "aisle": "dranken",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "koffiesiroop",
+   "nl": "koffiesiroop",
+   "en": "coffee syrup",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokos",
+   "nl": "kokos",
+   "en": "desiccated coconut",
+   "defaultUnit": "el",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokosbloesemsuiker",
+   "nl": "kokosbloesemsuiker",
+   "en": "coconut sugar",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokosbrood",
+   "nl": "kokosbrood",
+   "en": "coconut bread",
+   "defaultUnit": "plak",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokoschips",
+   "nl": "kokoschips",
+   "en": "coconut chips",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokosdrink",
+   "nl": "kokosdrink",
+   "en": "coconut drink",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokoslikeur",
+   "nl": "kokoslikeur",
+   "en": "coconut liqueur",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokosmakroon",
+   "nl": "kokosmakroon",
+   "en": "coconut macaroon",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kokosmeel",
+   "nl": "kokosmeel",
+   "en": "coconut flour",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokosmelk",
+   "nl": "kokosmelk",
+   "en": "coconut milk",
+   "defaultUnit": "ml",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokosnoot",
+   "nl": "kokosnoot",
+   "en": "coconut",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kokosolie",
+   "nl": "kokosolie",
+   "en": "coconut oil",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokoswater",
+   "nl": "kokoswater",
+   "en": "coconut water",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kokosyoghurt",
+   "nl": "kokosyoghurt",
+   "en": "coconut yoghurt",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kombucha",
+   "nl": "kombucha",
+   "en": "kombucha",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "komijn",
+   "nl": "komijn",
+   "en": "ground cumin",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "komijnekaas",
+   "nl": "komijnekaas",
+   "en": "cumin cheese",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "komijnzaad",
+   "nl": "komijnzaad",
+   "en": "cumin seeds",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "komkommer",
+   "nl": "komkommer",
+   "en": "cucumber",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "komkommersalade",
+   "nl": "komkommersalade",
+   "en": "creamy cucumber salad",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "konijn",
+   "nl": "konijn",
+   "en": "rabbit",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koningsoesterzwam",
+   "nl": "koningsoesterzwam",
+   "en": "king oyster mushroom",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kookroom",
+   "nl": "kookroom",
+   "en": "single cream",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kool",
+   "nl": "kool",
+   "en": "cabbage",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koolhydraatarm-brood",
+   "nl": "koolhydraatarm brood",
+   "en": "low-carb bread",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "koolraap",
+   "nl": "koolraap",
+   "en": "swede",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koolrabi",
+   "nl": "koolrabi",
+   "en": "kohlrabi",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koolvisfilet",
+   "nl": "koolvisfilet",
+   "en": "coley fillet",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "koolzaadolie",
+   "nl": "koolzaadolie",
+   "en": "rapeseed oil",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "koriander",
+   "nl": "koriander",
+   "en": "coriander",
+   "defaultUnit": "bos",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "korianderzaad",
+   "nl": "korianderzaad",
+   "en": "coriander seeds",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kormasaus",
+   "nl": "kormasaus",
+   "en": "korma sauce",
+   "defaultUnit": "pot",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kousenband",
+   "nl": "kousenband",
+   "en": "snake bean",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "krabsalade",
+   "nl": "krabsalade",
+   "en": "crab stick salad",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "krabvlees",
+   "nl": "krabvlees",
+   "en": "crab meat",
+   "defaultUnit": "g",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "krakeling",
+   "nl": "krakeling",
+   "en": "krakeling",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kreeft",
+   "nl": "kreeft",
+   "en": "lobster",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "krent",
+   "nl": "krent",
+   "en": "currant",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "krentenbol",
+   "nl": "krentenbol",
+   "en": "currant bun",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kriek",
+   "nl": "kriek",
+   "en": "cherry beer",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "krieltjes",
+   "nl": "krieltje",
+   "en": "baby potato",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kroepoek",
+   "nl": "kroepoek",
+   "en": "prawn crackers",
+   "defaultUnit": null,
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kroepoek-atjar-en-seroendeng",
+   "nl": "kroepoek, atjar en seroendeng",
+   "en": "prawn crackers, atjar and seroendeng",
+   "defaultUnit": null,
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kroket",
+   "nl": "kroket",
+   "en": "Dutch croquette",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kruidenazijn",
+   "nl": "kruidenazijn",
+   "en": "herb vinegar",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kruidenboter",
+   "nl": "kruidenboter",
+   "en": "garlic and herb butter",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kruidenbouillon",
+   "nl": "kruidenbouillon",
+   "en": "herb stock",
+   "defaultUnit": "blokje",
+   "aisle": "kruiden-specerijen",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kruidenbouillonpoeder",
+   "nl": "kruidenbouillonpoeder",
+   "en": "herb stock powder",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kruidenkaas",
+   "nl": "kruidenkaas",
+   "en": "herb cheese",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kruidenlikeur",
+   "nl": "kruidenlikeur",
+   "en": "herbal liqueur",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kruidenthee",
+   "nl": "kruidenthee",
+   "en": "herbal tea",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kruidenzout",
+   "nl": "kruidenzout",
+   "en": "herb salt",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kruidnagel",
+   "nl": "kruidnagel",
+   "en": "clove",
+   "defaultUnit": "stuk",
+   "aisle": "kruiden-specerijen",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kruidnagelpoeder",
+   "nl": "kruidnagelpoeder",
+   "en": "ground cloves",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": [
+    "mp",
+    "snuf"
+   ]
+  },
+  {
+   "id": "kruidnoot",
+   "nl": "kruidnoot",
+   "en": "kruidnoot",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kruidnotenmix",
+   "nl": "kruidnotenmix",
+   "en": "kruidnoten mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kruisbes",
+   "nl": "kruisbes",
+   "en": "gooseberry",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kumquat",
+   "nl": "kumquat",
+   "en": "kumquat",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kurkuma",
+   "nl": "kurkuma",
+   "en": "turmeric",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kvas",
+   "nl": "kvas",
+   "en": "kvass",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kwark",
+   "nl": "kwark",
+   "en": "quark",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

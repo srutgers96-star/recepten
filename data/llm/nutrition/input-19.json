@@ -1,0 +1,77 @@
+{
+ "batch": "19",
+ "items": [
+  {
+   "id": "zuurkool",
+   "nl": "zuurkool",
+   "en": "sauerkraut",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zuurstok",
+   "nl": "zuurstok",
+   "en": "stick of rock",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "zuurtje",
+   "nl": "zuurtje",
+   "en": "boiled sweet",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zwaardvis",
+   "nl": "zwaardvis",
+   "en": "swordfish",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zwarte-bes",
+   "nl": "zwarte bes",
+   "en": "blackcurrant",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zwarte-boon",
+   "nl": "zwarte boon",
+   "en": "black bean",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zwarte-ogenboon",
+   "nl": "zwarte-ogenboon",
+   "en": "black-eyed bean",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zwarte-peper",
+   "nl": "zwarte peper",
+   "en": "black pepper",
+   "defaultUnit": "mp",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

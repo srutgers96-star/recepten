@@ -117,6 +117,7 @@ als sjouwwerk voor Haiku, omdat het ook de boodschappenlijst helpt.
   "weinig calorieën").
 - **Bestanden:** data/ingredients.json, data/nutrition.json [nieuw], tools/validate-data.ts, tools/measure-parse.ts,
   src/domain/nutrition.ts [nieuw], src/screens/RecipeScreen.tsx (één regel + uitklap), src/i18n, tests/nutrition.test.ts.
+- **In aanbouw (9 nov): spec docs/specs/verbeterronde-9.md.** Afwijkingen van de uitwerking hierboven: dichtheid in een eigen veld `gramsPerMl` (niet `gramsPer.ml`, zodat de boodschappenlijst niet verandert), stukgewichten in het bestaande `gramsPer`; een eigen tool `tools/measure-grams.ts` in plaats van een kolom in measure-parse; de waarden zijn schattingen van een taalmodel op NEVO/USDA-niveau (geen gedownloade tabel, geen codes), en de UI zegt dat.
 - **Stijn (8 nov):** "subtiel met calorieën in recepten; de waarden bij de ingrediënten, verder niet standaard tonen; misschien bij
   calorieën een uitklap voor de macro's." Dus: één rustige kcal-regel op de receptpagina, de rest alleen in de uitklap, geen
   weektotalen, niets in lijsten of kookstand. Stap 1 en 2 zijn data-werk en kunnen eerder, los van de UI.

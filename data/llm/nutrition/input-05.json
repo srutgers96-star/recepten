@@ -1,0 +1,729 @@
+{
+ "batch": "05",
+ "items": [
+  {
+   "id": "dragonazijn",
+   "nl": "dragonazijn",
+   "en": "tarragon vinegar",
+   "defaultUnit": "tl",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "drakenvrucht",
+   "nl": "drakenvrucht",
+   "en": "dragon fruit",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dressing",
+   "nl": "dressing",
+   "en": "salad dressing",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "drinkontbijt",
+   "nl": "drinkontbijt",
+   "en": "breakfast drink",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "drinkpakje",
+   "nl": "drinkpakje",
+   "en": "juice box",
+   "defaultUnit": "stuk",
+   "aisle": "dranken",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "drinkyoghurt",
+   "nl": "drinkyoghurt",
+   "en": "yoghurt drink",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "drop",
+   "nl": "drop",
+   "en": "liquorice",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "druif",
+   "nl": "druif",
+   "en": "grape",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "druivenblad",
+   "nl": "druivenblad",
+   "en": "vine leaf",
+   "defaultUnit": "stuk",
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "druivenpitolie",
+   "nl": "druivenpitolie",
+   "en": "grapeseed oil",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "druivensap",
+   "nl": "druivensap",
+   "en": "grape juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "drumstick",
+   "nl": "drumstick",
+   "en": "chicken drumstick",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "duan-salam",
+   "nl": "duan salam",
+   "en": "salam leaf",
+   "defaultUnit": "blad",
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "dubbeldrank",
+   "nl": "dubbeldrank",
+   "en": "juice drink",
+   "defaultUnit": "pak",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dukkah",
+   "nl": "dukkah",
+   "en": "dukkah",
+   "defaultUnit": "el",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "earl-grey",
+   "nl": "earl grey",
+   "en": "Earl Grey tea",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "edamame",
+   "nl": "edamame",
+   "en": "edamame",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "edammer",
+   "nl": "edammer",
+   "en": "Edam",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "edelgistvlokken",
+   "nl": "edelgistvlokken",
+   "en": "nutritional yeast",
+   "defaultUnit": "el",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eekhoorntjesbrood",
+   "nl": "eekhoorntjesbrood",
+   "en": "porcini",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eendenborst",
+   "nl": "eendenborst",
+   "en": "duck breast",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eendenbout",
+   "nl": "eendenbout",
+   "en": "duck leg",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eetbare-bloem",
+   "nl": "eetbare bloem",
+   "en": "edible flower",
+   "defaultUnit": "bakje",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ei",
+   "nl": "ei",
+   "en": "egg",
+   "defaultUnit": "stuk",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eidooier",
+   "nl": "eidooier",
+   "en": "egg yolk",
+   "defaultUnit": "stuk",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eierkoek",
+   "nl": "eierkoek",
+   "en": "egg sponge cake",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eiermie",
+   "nl": "eiermie",
+   "en": "egg noodles",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eiersalade",
+   "nl": "eiersalade",
+   "en": "egg mayonnaise",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eikenbladsla",
+   "nl": "eikenbladsla",
+   "en": "oak leaf lettuce",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eivervanger",
+   "nl": "eivervanger",
+   "en": "egg replacer",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eiwit",
+   "nl": "eiwit",
+   "en": "egg white",
+   "defaultUnit": "stuk",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "eiwitreep",
+   "nl": "eiwitreep",
+   "en": "protein bar",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "emmentaler",
+   "nl": "emmentaler",
+   "en": "Emmental",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "emping",
+   "nl": "emping",
+   "en": "emping",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "energiedrank",
+   "nl": "energiedrank",
+   "en": "energy drink",
+   "defaultUnit": "blik",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "engelse-drop",
+   "nl": "Engelse drop",
+   "en": "liquorice allsorts",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "engelse-muffin",
+   "nl": "Engelse muffin",
+   "en": "English muffin",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "enoki",
+   "nl": "enoki",
+   "en": "enoki mushroom",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "entrecote",
+   "nl": "entrecote",
+   "en": "entrecôte",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "erwtendrink",
+   "nl": "erwtendrink",
+   "en": "pea drink",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "erwtensoep",
+   "nl": "erwtensoep",
+   "en": "pea soup",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "espresso",
+   "nl": "espresso",
+   "en": "espresso",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "fajitakruiden",
+   "nl": "fajitakruiden",
+   "en": "fajita seasoning",
+   "defaultUnit": "zakje",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "falafel",
+   "nl": "falafel",
+   "en": "falafel",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "farfalle",
+   "nl": "farfalle",
+   "en": "farfalle",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "fenegriek",
+   "nl": "fenegriek",
+   "en": "fenugreek",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "feta",
+   "nl": "feta",
+   "en": "feta",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "fettuccine",
+   "nl": "fettuccine",
+   "en": "fettuccine",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "filet-americain",
+   "nl": "filet americain",
+   "en": "steak tartare spread",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "filodeeg",
+   "nl": "filodeeg",
+   "en": "filo pastry",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "flageolet",
+   "nl": "flageolet",
+   "en": "flageolet bean",
+   "defaultUnit": "pot",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "flatbread",
+   "nl": "flatbread",
+   "en": "flatbread",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "flensje",
+   "nl": "flensje",
+   "en": "crêpe",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "florentine",
+   "nl": "florentine",
+   "en": "florentine",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "focaccia",
+   "nl": "focaccia",
+   "en": "focaccia",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "foelie",
+   "nl": "foelie",
+   "en": "mace",
+   "defaultUnit": "stuk",
+   "aisle": "kruiden-specerijen",
+   "needPiece": true,
+   "needUnits": [
+    "stuk"
+   ]
+  },
+  {
+   "id": "foie-gras",
+   "nl": "foie gras",
+   "en": "foie gras",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "forel",
+   "nl": "forel",
+   "en": "trout",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "framboos",
+   "nl": "framboos",
+   "en": "raspberry",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "frambozenjam",
+   "nl": "frambozenjam",
+   "en": "raspberry jam",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "franse-tuinkruiden",
+   "nl": "Franse tuinkruiden",
+   "en": "fines herbes",
+   "defaultUnit": "el",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "friet",
+   "nl": "friet",
+   "en": "chips",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "frikandel",
+   "nl": "frikandel",
+   "en": "frikandel",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "frikandelbroodje",
+   "nl": "frikandelbroodje",
+   "en": "frikandel roll",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "frisdrank",
+   "nl": "frisdrank",
+   "en": "fizzy drink",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "fritessaus",
+   "nl": "fritessaus",
+   "en": "fritessaus",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "frituurolie",
+   "nl": "frituurolie",
+   "en": "deep-frying oil",
+   "defaultUnit": "l",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "frituurvet",
+   "nl": "frituurvet",
+   "en": "solid frying fat",
+   "defaultUnit": "g",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "fruit",
+   "nl": "fruit",
+   "en": "fruit",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "fruitbiscuit",
+   "nl": "fruitbiscuit",
+   "en": "fruit biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "fruitcocktail",
+   "nl": "fruitcocktail",
+   "en": "fruit cocktail",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "fruitreep",
+   "nl": "fruitreep",
+   "en": "fruit bar",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "fruitsalade",
+   "nl": "fruitsalade",
+   "en": "fruit salad",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "fusilli",
+   "nl": "fusilli",
+   "en": "fusilli",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gado-gado-saus",
+   "nl": "gado-gado-saus",
+   "en": "gado-gado sauce",
+   "defaultUnit": null,
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "gamba",
+   "nl": "gamba",
+   "en": "king prawn",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "garam-masala",
+   "nl": "garam masala",
+   "en": "garam masala",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "garnaal",
+   "nl": "garnaal",
+   "en": "prawn",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "garnalenkroket",
+   "nl": "garnalenkroket",
+   "en": "prawn croquette",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "gebakken-uitjes",
+   "nl": "gebakken uitjes",
+   "en": "crispy fried onions",
+   "defaultUnit": "el",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": [
+    "pot"
+   ]
+  }
+ ]
+}

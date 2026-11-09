@@ -1,0 +1,727 @@
+{
+ "batch": "03",
+ "items": [
+  {
+   "id": "botersla",
+   "nl": "botersla",
+   "en": "butterhead lettuce",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bouillon",
+   "nl": "bouillon",
+   "en": "stock",
+   "defaultUnit": "ml",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bouillonblokje",
+   "nl": "bouillonblokje",
+   "en": "stock cube",
+   "defaultUnit": "stuk",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bouillonpoeder",
+   "nl": "bouillonpoeder",
+   "en": "stock powder",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bouquet-garni",
+   "nl": "bouquet garni",
+   "en": "bouquet garni",
+   "defaultUnit": "stuk",
+   "aisle": "kruiden-specerijen",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "braadkip",
+   "nl": "braadkip",
+   "en": "whole chicken",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "braadworst",
+   "nl": "braadworst",
+   "en": "frying sausage",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "braam",
+   "nl": "braam",
+   "en": "blackberry",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "breekbrood",
+   "nl": "breekbrood",
+   "en": "tear-and-share bread",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "brezel",
+   "nl": "brezel",
+   "en": "soft pretzel",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "brie",
+   "nl": "brie",
+   "en": "brie",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "brinta",
+   "nl": "Brinta",
+   "en": "instant wheat porridge",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "brioche",
+   "nl": "brioche",
+   "en": "brioche",
+   "defaultUnit": "plak",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "broccoli",
+   "nl": "broccoli",
+   "en": "broccoli",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "brokkelkaas",
+   "nl": "brokkelkaas",
+   "en": "aged Gouda chunks",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "brood",
+   "nl": "brood",
+   "en": "bread",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "broodkruim",
+   "nl": "broodkruim",
+   "en": "breadcrumbs",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "broodmix",
+   "nl": "broodmix",
+   "en": "bread mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "brownie",
+   "nl": "brownie",
+   "en": "brownie",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "browniemix",
+   "nl": "browniemix",
+   "en": "brownie mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bruine-bonensoep",
+   "nl": "bruine bonensoep",
+   "en": "brown bean soup",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bruine-boon",
+   "nl": "bruine boon",
+   "en": "brown bean",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bruiswater",
+   "nl": "bruiswater",
+   "en": "sparkling water",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bucatini",
+   "nl": "bucatini",
+   "en": "bucatini",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "buikspek",
+   "nl": "buikspek",
+   "en": "pork belly",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bulgaarse-yoghurt",
+   "nl": "Bulgaarse yoghurt",
+   "en": "Bulgarian yoghurt",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bulgur",
+   "nl": "bulgur",
+   "en": "bulgur wheat",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "burgerbroodje",
+   "nl": "burgerbroodje",
+   "en": "burger bun",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "burgersaus",
+   "nl": "burgersaus",
+   "en": "burger sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "burrata",
+   "nl": "burrata",
+   "en": "burrata",
+   "defaultUnit": "bol",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "butter-chicken-saus",
+   "nl": "butter chicken saus",
+   "en": "butter chicken sauce",
+   "defaultUnit": "pot",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cacaonibs",
+   "nl": "cacaonibs",
+   "en": "cacao nibs",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cacaopoeder",
+   "nl": "cacaopoeder",
+   "en": "cocoa powder",
+   "defaultUnit": "el",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "caesardressing",
+   "nl": "caesardressing",
+   "en": "Caesar dressing",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cafeinevrije-koffie",
+   "nl": "cafeïnevrije koffie",
+   "en": "decaf coffee",
+   "defaultUnit": "g",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cajunkruiden",
+   "nl": "cajunkruiden",
+   "en": "Cajun seasoning",
+   "defaultUnit": "el",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cake",
+   "nl": "cake",
+   "en": "Madeira cake",
+   "defaultUnit": "plak",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cakemix",
+   "nl": "cakemix",
+   "en": "cake mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "calamares",
+   "nl": "calamares",
+   "en": "calamari",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "calvados",
+   "nl": "calvados",
+   "en": "calvados",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "camembert",
+   "nl": "camembert",
+   "en": "Camembert",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "campari",
+   "nl": "campari",
+   "en": "Campari",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cannelliniboon",
+   "nl": "cannelliniboon",
+   "en": "cannellini bean",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cannelloni",
+   "nl": "cannelloni",
+   "en": "cannelloni",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cantharel",
+   "nl": "cantharel",
+   "en": "chanterelle",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cantuccini",
+   "nl": "cantuccini",
+   "en": "cantuccini",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "capellini",
+   "nl": "capellini",
+   "en": "capellini",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "carbonarasaus",
+   "nl": "carbonarasaus",
+   "en": "carbonara sauce",
+   "defaultUnit": "pot",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "carpaccio",
+   "nl": "carpaccio",
+   "en": "beef carpaccio",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "casarecce",
+   "nl": "casarecce",
+   "en": "casarecce",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cashewnoot",
+   "nl": "cashewnoot",
+   "en": "cashew nut",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "casinobrood",
+   "nl": "casinobrood",
+   "en": "sandwich loaf",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cassave",
+   "nl": "cassave",
+   "en": "cassava",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cassavechips",
+   "nl": "cassavechips",
+   "en": "cassava crisps",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "casselerrib",
+   "nl": "casselerrib",
+   "en": "smoked pork loin",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cassis",
+   "nl": "cassis",
+   "en": "sparkling blackcurrant",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cayennepeper",
+   "nl": "cayennepeper",
+   "en": "cayenne pepper",
+   "defaultUnit": "mp",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": [
+    "mp"
+   ]
+  },
+  {
+   "id": "cervelaatworst",
+   "nl": "cervelaatworst",
+   "en": "cervelat",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chai",
+   "nl": "chai",
+   "en": "chai",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "champagne",
+   "nl": "champagne",
+   "en": "champagne",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "champignon",
+   "nl": "champignon",
+   "en": "mushroom",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "champignonsaus",
+   "nl": "champignonsaus",
+   "en": "mushroom sauce",
+   "defaultUnit": "ml",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "champignonsoep",
+   "nl": "champignonsoep",
+   "en": "mushroom soup",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cheddar",
+   "nl": "cheddar",
+   "en": "Cheddar",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cherimoya",
+   "nl": "cherimoya",
+   "en": "cherimoya",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "chiazaad",
+   "nl": "chiazaad",
+   "en": "chia seeds",
+   "defaultUnit": "el",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chili-con-carne-kruidenmix",
+   "nl": "chili con carne kruidenmix",
+   "en": "chilli con carne seasoning",
+   "defaultUnit": "zakje",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chili-olie",
+   "nl": "chili-olie",
+   "en": "chilli oil",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chilibonen",
+   "nl": "chiliboon",
+   "en": "chilli bean",
+   "defaultUnit": "g",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chilipoeder",
+   "nl": "chilipoeder",
+   "en": "chilli powder",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chilisaus",
+   "nl": "chilisaus",
+   "en": "chilli sauce",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chilivlokken",
+   "nl": "chilivlokken",
+   "en": "chilli flakes",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chinese-kool",
+   "nl": "Chinese kool",
+   "en": "Chinese cabbage",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chipolata",
+   "nl": "chipolata",
+   "en": "chipolata",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chips",
+   "nl": "chips",
+   "en": "crisps",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocolade",
+   "nl": "chocolade",
+   "en": "chocolate",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladebiscuit",
+   "nl": "chocoladebiscuit",
+   "en": "chocolate biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladecroissant",
+   "nl": "chocoladecroissant",
+   "en": "pain au chocolat",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladedrops",
+   "nl": "chocoladedrops",
+   "en": "chocolate chips",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladeflik",
+   "nl": "chocoladeflik",
+   "en": "chocolate button",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

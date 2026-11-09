@@ -1,0 +1,731 @@
+{
+ "batch": "18",
+ "items": [
+  {
+   "id": "volkorenmeel",
+   "nl": "volkorenmeel",
+   "en": "wholemeal flour",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "vruchtenhagel",
+   "nl": "vruchtenhagel",
+   "en": "fruit sprinkles",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "vruchtenkwark",
+   "nl": "vruchtenkwark",
+   "en": "fruit quark",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "vruchtensap",
+   "nl": "vruchtensap",
+   "en": "fruit juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "vruchtenthee",
+   "nl": "vruchtenthee",
+   "en": "fruit tea",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "vruchtenyoghurt",
+   "nl": "vruchtenyoghurt",
+   "en": "fruit yoghurt",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wafel",
+   "nl": "wafel",
+   "en": "waffle",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "walnoot",
+   "nl": "walnoot",
+   "en": "walnut",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "walnootolie",
+   "nl": "walnootolie",
+   "en": "walnut oil",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wasabi",
+   "nl": "wasabi",
+   "en": "wasabi",
+   "defaultUnit": "tl",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wasabinootje",
+   "nl": "wasabinootje",
+   "en": "wasabi peanut",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "waspeen",
+   "nl": "waspeen",
+   "en": "washed carrots",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "water",
+   "nl": "water",
+   "en": "water",
+   "defaultUnit": "ml",
+   "aisle": "overig",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "waterijsje",
+   "nl": "waterijsje",
+   "en": "ice lolly",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "waterkastanje",
+   "nl": "waterkastanje",
+   "en": "water chestnut",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "waterkers",
+   "nl": "waterkers",
+   "en": "watercress",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "watermeloen",
+   "nl": "watermeloen",
+   "en": "watermelon",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "weetabix",
+   "nl": "Weetabix",
+   "en": "Weetabix",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "whisky",
+   "nl": "whisky",
+   "en": "whisky",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wijn",
+   "nl": "wijn",
+   "en": "wine",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wijnazijn",
+   "nl": "wijnazijn",
+   "en": "wine vinegar",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wilde-rijst",
+   "nl": "wilde rijst",
+   "en": "wild rice",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wildfond",
+   "nl": "wildfond",
+   "en": "concentrated game stock",
+   "defaultUnit": "ml",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "winegum",
+   "nl": "winegum",
+   "en": "wine gum",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "winterpeen",
+   "nl": "winterpeen",
+   "en": "large carrot",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "witbier",
+   "nl": "witbier",
+   "en": "wheat beer",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "witbrood",
+   "nl": "witbrood",
+   "en": "white bread",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": [
+    "snee"
+   ]
+  },
+  {
+   "id": "witbroodkruim",
+   "nl": "witbroodkruim",
+   "en": "white breadcrumbs",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "witlof",
+   "nl": "witlof",
+   "en": "chicory",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "witte-bonen-in-tomatensaus",
+   "nl": "witte bonen in tomatensaus",
+   "en": "baked beans",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "witvis",
+   "nl": "witvis",
+   "en": "white fish",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wodka",
+   "nl": "wodka",
+   "en": "vodka",
+   "defaultUnit": "el",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wokgroente",
+   "nl": "wokgroente",
+   "en": "stir-fry vegetables",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wokkruiden",
+   "nl": "wokkruiden",
+   "en": "stir-fry seasoning",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "woksaus",
+   "nl": "woksaus",
+   "en": "stir-fry sauce",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wokvlees",
+   "nl": "wokvlees",
+   "en": "stir-fry meat",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "worcestersaus",
+   "nl": "worcestersaus",
+   "en": "Worcestershire sauce",
+   "defaultUnit": "tl",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "worstenbroodje",
+   "nl": "worstenbroodje",
+   "en": "Brabant sausage roll",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "wortel",
+   "nl": "wortel",
+   "en": "carrot",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "wortelsap",
+   "nl": "wortelsap",
+   "en": "carrot juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "yoghurt",
+   "nl": "yoghurt",
+   "en": "yoghurt",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "yoghurtdressing",
+   "nl": "yoghurtdressing",
+   "en": "yoghurt dressing",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "yoghurtrozijn",
+   "nl": "yoghurtrozijn",
+   "en": "yoghurt-coated raisin",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zaanse-mosterd",
+   "nl": "Zaanse mosterd",
+   "en": "Zaanse mustard",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zaatar",
+   "nl": "za'atar",
+   "en": "za'atar",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zachte-tarwe",
+   "nl": "zachte tarwe",
+   "en": "quick-cook wheat",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zadenmix",
+   "nl": "zadenmix",
+   "en": "mixed seeds",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zalm",
+   "nl": "zalm",
+   "en": "salmon",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zalm-uit-blik",
+   "nl": "zalm uit blik",
+   "en": "tinned salmon",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zalmfilet",
+   "nl": "zalmfilet",
+   "en": "salmon fillet",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zalmsalade",
+   "nl": "zalmsalade",
+   "en": "salmon sandwich filler",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zalmsnippers",
+   "nl": "zalmsnippers",
+   "en": "salmon trimmings",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zanddeeg",
+   "nl": "zanddeeg",
+   "en": "sweet shortcrust pastry",
+   "defaultUnit": "pak",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zandkoekje",
+   "nl": "zandkoekje",
+   "en": "shortbread biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "zeebaars",
+   "nl": "zeebaars",
+   "en": "sea bass",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zeeduivel",
+   "nl": "zeeduivel",
+   "en": "monkfish",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zeekraal",
+   "nl": "zeekraal",
+   "en": "samphire",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zeevruchten",
+   "nl": "zeevruchten",
+   "en": "mixed seafood",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zeewiersalade",
+   "nl": "zeewiersalade",
+   "en": "seaweed salad",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zeewiersnack",
+   "nl": "zeewiersnack",
+   "en": "seaweed snack",
+   "defaultUnit": "zakje",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zeezoutvlokken",
+   "nl": "zeezoutvlokken",
+   "en": "sea salt flakes",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zelfrijzend-bakmeel",
+   "nl": "zelfrijzend bakmeel",
+   "en": "self-raising flour",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zijden-tofu",
+   "nl": "zijden tofu",
+   "en": "silken tofu",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zilveruitje",
+   "nl": "zilveruitje",
+   "en": "silverskin onion",
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "zilvervliesrijst",
+   "nl": "zilvervliesrijst",
+   "en": "brown rice",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zoete-aardappel",
+   "nl": "zoete aardappel",
+   "en": "sweet potato",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zoete-aardappelfriet",
+   "nl": "zoete aardappelfriet",
+   "en": "sweet potato fries",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zoethoutthee",
+   "nl": "zoethoutthee",
+   "en": "liquorice tea",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zoetstof",
+   "nl": "zoetstof",
+   "en": "sweetener",
+   "defaultUnit": "stuk",
+   "aisle": "bakken",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "zoetzure-saus",
+   "nl": "zoetzure saus",
+   "en": "sweet and sour sauce",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zongedroogde-tomaat",
+   "nl": "zongedroogde tomaat",
+   "en": "sun-dried tomato",
+   "defaultUnit": "g",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": [
+    "stuk"
+   ]
+  },
+  {
+   "id": "zonnebloemolie",
+   "nl": "zonnebloemolie",
+   "en": "sunflower oil",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zonnebloemolie-en-chilivlokken",
+   "nl": "zonnebloemolie en chilivlokken",
+   "en": "sunflower oil and chilli flakes",
+   "defaultUnit": null,
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "zonnebloempit",
+   "nl": "zonnebloempit",
+   "en": "sunflower seed",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zout",
+   "nl": "zout",
+   "en": "salt",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": [
+    "snuf"
+   ]
+  },
+  {
+   "id": "zout-en-peper",
+   "nl": "zout en peper",
+   "en": "salt and pepper",
+   "defaultUnit": null,
+   "aisle": "kruiden-specerijen",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "zoutje",
+   "nl": "zoutje",
+   "en": "savoury biscuit",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zoutstengel",
+   "nl": "zoutstengel",
+   "en": "salted pretzel stick",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "zure-bom",
+   "nl": "zure bom",
+   "en": "large pickled cucumber",
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "zure-room",
+   "nl": "zure room",
+   "en": "soured cream",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

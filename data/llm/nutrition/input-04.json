@@ -1,0 +1,729 @@
+{
+ "batch": "04",
+ "items": [
+  {
+   "id": "chocoladeglazuur",
+   "nl": "chocoladeglazuur",
+   "en": "chocolate icing",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladekruidnoot",
+   "nl": "chocoladekruidnoot",
+   "en": "chocolate-coated kruidnoot",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladekussentjes",
+   "nl": "chocoladekussentjes",
+   "en": "chocolate-filled cereal pillows",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladeletter",
+   "nl": "chocoladeletter",
+   "en": "chocolate letter",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "chocolademelk",
+   "nl": "chocolademelk",
+   "en": "chocolate milk",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocolademelkpoeder",
+   "nl": "chocolademelkpoeder",
+   "en": "drinking chocolate",
+   "defaultUnit": "el",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocolademousse",
+   "nl": "chocolademousse",
+   "en": "chocolate mousse",
+   "defaultUnit": "bakje",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocolademunt",
+   "nl": "chocolademunt",
+   "en": "chocolate coin",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladepinda",
+   "nl": "chocoladepinda",
+   "en": "chocolate-coated peanut",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladepudding",
+   "nl": "chocoladepudding",
+   "en": "chocolate pudding",
+   "defaultUnit": "bakje",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladereep",
+   "nl": "chocoladereep",
+   "en": "chocolate bar",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladerozijn",
+   "nl": "chocoladerozijn",
+   "en": "chocolate raisin",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladevla",
+   "nl": "chocoladevla",
+   "en": "chocolate custard",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladevlokken",
+   "nl": "chocoladevlokken",
+   "en": "chocolate flakes",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chocoladezoen",
+   "nl": "chocoladezoen",
+   "en": "chocolate teacake",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "chocolate-chip-cookie",
+   "nl": "chocolate chip cookie",
+   "en": "chocolate chip cookie",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "chocopasta",
+   "nl": "chocopasta",
+   "en": "chocolate spread",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "chorizo",
+   "nl": "chorizo",
+   "en": "chorizo",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "churro",
+   "nl": "churro",
+   "en": "churro",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "ciabatta",
+   "nl": "ciabatta",
+   "en": "ciabatta",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cider",
+   "nl": "cider",
+   "en": "cider",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "citroen",
+   "nl": "citroen",
+   "en": "lemon",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "citroenaroma",
+   "nl": "citroenaroma",
+   "en": "lemon flavouring",
+   "defaultUnit": "tl",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "citroengras",
+   "nl": "citroengras",
+   "en": "lemongrass",
+   "defaultUnit": "stengel",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": [
+    "stengel"
+   ]
+  },
+  {
+   "id": "citroenmelisse",
+   "nl": "citroenmelisse",
+   "en": "lemon balm",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "citroenpeper",
+   "nl": "citroenpeper",
+   "en": "lemon pepper",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "citroensap",
+   "nl": "citroensap",
+   "en": "lemon juice",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "citroenschil",
+   "nl": "citroenschil",
+   "en": "lemon zest",
+   "defaultUnit": "tl",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "clotted-cream",
+   "nl": "clotted cream",
+   "en": "clotted cream",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cocktailsaus",
+   "nl": "cocktailsaus",
+   "en": "Marie Rose sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cognac",
+   "nl": "cognac",
+   "en": "cognac",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cola",
+   "nl": "cola",
+   "en": "cola",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cola-zero",
+   "nl": "cola zero",
+   "en": "sugar-free cola",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "comte",
+   "nl": "comté",
+   "en": "Comté",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "conchiglioni",
+   "nl": "conchiglioni",
+   "en": "conchiglioni",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cordon-bleu",
+   "nl": "cordon bleu",
+   "en": "cordon bleu",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "corned-beef",
+   "nl": "corned beef",
+   "en": "corned beef",
+   "defaultUnit": "g",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cornflakes",
+   "nl": "cornflakes",
+   "en": "cornflakes",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cote-de-boeuf",
+   "nl": "côte de boeuf",
+   "en": "côte de boeuf",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "courgette",
+   "nl": "courgette",
+   "en": "courgette",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "courgetti",
+   "nl": "courgetti",
+   "en": "courgetti",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "couscous",
+   "nl": "couscous",
+   "en": "couscous",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": [
+    "pak"
+   ]
+  },
+  {
+   "id": "cracker",
+   "nl": "cracker",
+   "en": "cracker",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cranberry",
+   "nl": "cranberry",
+   "en": "cranberry",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cranberrysap",
+   "nl": "cranberrysap",
+   "en": "cranberry juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cranberrysaus",
+   "nl": "cranberrysaus",
+   "en": "cranberry sauce",
+   "defaultUnit": "el",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cream-cracker",
+   "nl": "cream cracker",
+   "en": "cream cracker",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "creme-brulee",
+   "nl": "crème brûlée",
+   "en": "crème brûlée",
+   "defaultUnit": "stuk",
+   "aisle": "zuivel-eieren",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "creme-de-cassis",
+   "nl": "crème de cassis",
+   "en": "crème de cassis",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "creme-fraiche",
+   "nl": "crème fraîche",
+   "en": "crème fraîche",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "creme-honing",
+   "nl": "crèmehoning",
+   "en": "set honey",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "croissant",
+   "nl": "croissant",
+   "en": "croissant",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "croissantdeeg",
+   "nl": "croissantdeeg",
+   "en": "croissant dough",
+   "defaultUnit": "pak",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "crouton",
+   "nl": "crouton",
+   "en": "crouton",
+   "defaultUnit": "g",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "crumpet",
+   "nl": "crumpet",
+   "en": "crumpet",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "cupcake",
+   "nl": "cupcake",
+   "en": "cupcake",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "cupcakevormpje",
+   "nl": "cupcakevormpje",
+   "en": "cupcake case",
+   "defaultUnit": "stuk",
+   "aisle": "bakken",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "curryketchup",
+   "nl": "curryketchup",
+   "en": "curry ketchup",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "currypasta",
+   "nl": "currypasta",
+   "en": "curry paste",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dadel",
+   "nl": "dadel",
+   "en": "date",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dadelstroop",
+   "nl": "dadelstroop",
+   "en": "date syrup",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "danish-blue",
+   "nl": "Danish blue",
+   "en": "Danish blue",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "daslook",
+   "nl": "daslook",
+   "en": "wild garlic",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "deeg-voor-hartige-taart",
+   "nl": "deeg voor hartige taart",
+   "en": "shortcrust pastry",
+   "defaultUnit": "pak",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "desembrood",
+   "nl": "desembrood",
+   "en": "sourdough bread",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dessertrijst",
+   "nl": "dessertrijst",
+   "en": "pudding rice",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dessertwijn",
+   "nl": "dessertwijn",
+   "en": "dessert wine",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "diepvriesspinazie",
+   "nl": "diepvriesspinazie",
+   "en": "frozen spinach",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "digestive",
+   "nl": "digestive",
+   "en": "digestive biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "dijonmosterd",
+   "nl": "dijonmosterd",
+   "en": "Dijon mustard",
+   "defaultUnit": "tl",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "diksap",
+   "nl": "diksap",
+   "en": "fruit juice concentrate",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dille",
+   "nl": "dille",
+   "en": "dill",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dim-sum",
+   "nl": "dim sum",
+   "en": "dim sum",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "dipsaus",
+   "nl": "dipsaus",
+   "en": "dip",
+   "defaultUnit": "el",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "donker-bier",
+   "nl": "donker bier",
+   "en": "dark beer",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "donut",
+   "nl": "donut",
+   "en": "doughnut",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "doperwt",
+   "nl": "doperwt",
+   "en": "pea",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "doperwten-en-wortelen",
+   "nl": "doperwten en wortelen",
+   "en": "peas and carrots",
+   "defaultUnit": "g",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dorade",
+   "nl": "dorade",
+   "en": "sea bream",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "dragon",
+   "nl": "dragon",
+   "en": "tarragon",
+   "defaultUnit": "el",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

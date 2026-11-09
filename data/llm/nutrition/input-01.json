@@ -1,0 +1,729 @@
+{
+ "batch": "01",
+ "items": [
+  {
+   "id": "aardappel",
+   "nl": "aardappel",
+   "en": "potato",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aardappelkroketje",
+   "nl": "aardappelkroketje",
+   "en": "potato croquette",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "aardappelkruiden",
+   "nl": "aardappelkruiden",
+   "en": "potato seasoning",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aardappelpartjes",
+   "nl": "aardappelpartje",
+   "en": "potato wedge",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aardappelpuree",
+   "nl": "aardappelpuree",
+   "en": "mashed potato",
+   "defaultUnit": "zakje",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": [
+    "zakje"
+   ]
+  },
+  {
+   "id": "aardappelsalade",
+   "nl": "aardappelsalade",
+   "en": "potato salad",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aardappelzetmeel",
+   "nl": "aardappelzetmeel",
+   "en": "potato starch",
+   "defaultUnit": "el",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aardbei",
+   "nl": "aardbei",
+   "en": "strawberry",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aardbeienjam",
+   "nl": "aardbeienjam",
+   "en": "strawberry jam",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aardbeienyoghurt",
+   "nl": "aardbeienyoghurt",
+   "en": "strawberry yoghurt",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aardpeer",
+   "nl": "aardpeer",
+   "en": "Jerusalem artichoke",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "abdijbier",
+   "nl": "abdijbier",
+   "en": "abbey beer",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "abrikoos",
+   "nl": "abrikoos",
+   "en": "apricot",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "abrikozen-op-siroop",
+   "nl": "abrikozen op siroop",
+   "en": "tinned apricots",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "abrikozenjam",
+   "nl": "abrikozenjam",
+   "en": "apricot jam",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "adukiboon",
+   "nl": "adukiboon",
+   "en": "aduki bean",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "advocaat",
+   "nl": "advocaat",
+   "en": "advocaat",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "afbakstokbrood",
+   "nl": "afbakstokbrood",
+   "en": "part-baked baguette",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "agar-agar",
+   "nl": "agar-agar",
+   "en": "agar agar",
+   "defaultUnit": "tl",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "agavesiroop",
+   "nl": "agavesiroop",
+   "en": "agave syrup",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ahornsiroop",
+   "nl": "ahornsiroop",
+   "en": "maple syrup",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aioli",
+   "nl": "aioli",
+   "en": "aioli",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ajvar",
+   "nl": "ajvar",
+   "en": "ajvar",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "alcoholvrij-bier",
+   "nl": "alcoholvrij bier",
+   "en": "alcohol-free beer",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "alcoholvrije-wijn",
+   "nl": "alcoholvrije wijn",
+   "en": "alcohol-free wine",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "alfalfa",
+   "nl": "alfalfa",
+   "en": "alfalfa sprouts",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "allesbinder",
+   "nl": "allesbinder",
+   "en": "instant thickener",
+   "defaultUnit": "el",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aloe-vera-drank",
+   "nl": "aloë vera drank",
+   "en": "aloe vera drink",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "amandel",
+   "nl": "amandel",
+   "en": "almond",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "amandelaroma",
+   "nl": "amandelaroma",
+   "en": "almond extract",
+   "defaultUnit": "tl",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "amandelmeel",
+   "nl": "amandelmeel",
+   "en": "ground almonds",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "amandelmelk",
+   "nl": "amandelmelk",
+   "en": "almond milk",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "amandelspijs",
+   "nl": "amandelspijs",
+   "en": "almond paste",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "amandelyoghurt",
+   "nl": "amandelyoghurt",
+   "en": "almond yoghurt",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "amaretto",
+   "nl": "amaretto",
+   "en": "amaretto",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "american-pancake",
+   "nl": "American pancake",
+   "en": "American pancake",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "amsterdamse-uitjes",
+   "nl": "Amsterdams uitje",
+   "en": "Amsterdam onion",
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "ananas",
+   "nl": "ananas",
+   "en": "pineapple",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ananas-op-sap",
+   "nl": "ananas op sap",
+   "en": "tinned pineapple",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ananassap",
+   "nl": "ananassap",
+   "en": "pineapple juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "andalousesaus",
+   "nl": "andalousesaus",
+   "en": "andalouse sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "andijvie",
+   "nl": "andijvie",
+   "en": "endive",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "anijshagel",
+   "nl": "anijshagel",
+   "en": "aniseed strands",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "anijszaad",
+   "nl": "anijszaad",
+   "en": "aniseed",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ansjovis",
+   "nl": "ansjovis",
+   "en": "anchovy",
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "apenootje",
+   "nl": "apenootje",
+   "en": "monkey nut",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aperol",
+   "nl": "aperol",
+   "en": "Aperol",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "appel",
+   "nl": "appel",
+   "en": "apple",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "appelazijn",
+   "nl": "appelazijn",
+   "en": "cider vinegar",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "appelbol",
+   "nl": "appelbol",
+   "en": "apple dumpling",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "appelchips",
+   "nl": "appelchips",
+   "en": "apple crisps",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "appelmoes",
+   "nl": "appelmoes",
+   "en": "apple sauce",
+   "defaultUnit": "pot",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": [
+    "pot"
+   ]
+  },
+  {
+   "id": "appelring",
+   "nl": "appelring",
+   "en": "dried apple ring",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "appelsap",
+   "nl": "appelsap",
+   "en": "apple juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "appelstroop",
+   "nl": "appelstroop",
+   "en": "apple syrup",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "appeltaart",
+   "nl": "appeltaart",
+   "en": "Dutch apple pie",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "appeltaartmix",
+   "nl": "appeltaartmix",
+   "en": "apple pie mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "arachideolie",
+   "nl": "arachideolie",
+   "en": "groundnut oil",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aromat",
+   "nl": "Aromat",
+   "en": "Aromat",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "arretjescake",
+   "nl": "arretjescake",
+   "en": "chocolate biscuit cake",
+   "defaultUnit": "plak",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "artisjok",
+   "nl": "artisjok",
+   "en": "globe artichoke",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "artisjokhart",
+   "nl": "artisjokhart",
+   "en": "artichoke heart",
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "asperge",
+   "nl": "asperge",
+   "en": "asparagus",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aspergesoep",
+   "nl": "aspergesoep",
+   "en": "asparagus soup",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "atjar",
+   "nl": "atjar",
+   "en": "atjar",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "aubergine",
+   "nl": "aubergine",
+   "en": "aubergine",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "augurk",
+   "nl": "augurk",
+   "en": "gherkin",
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "augurkennat",
+   "nl": "augurkennat",
+   "en": "gherkin pickling liquid",
+   "defaultUnit": "el",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "avocado",
+   "nl": "avocado",
+   "en": "avocado",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "avocado-olie",
+   "nl": "avocado-olie",
+   "en": "avocado oil",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ayran",
+   "nl": "ayran",
+   "en": "ayran",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "azijn",
+   "nl": "azijn",
+   "en": "vinegar",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "babi-pangang-saus",
+   "nl": "babi pangang saus",
+   "en": "babi pangang sauce",
+   "defaultUnit": "pot",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "babybel",
+   "nl": "Babybel",
+   "en": "Babybel",
+   "defaultUnit": "stuk",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bacon",
+   "nl": "bacon",
+   "en": "bacon",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bagel",
+   "nl": "bagel",
+   "en": "bagel",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bakbanaan",
+   "nl": "bakbanaan",
+   "en": "plantain",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bakgember",
+   "nl": "bakgember",
+   "en": "candied ginger",
+   "defaultUnit": "el",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bakkeljauw",
+   "nl": "bakkeljauw",
+   "en": "salt cod",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bakpoeder",
+   "nl": "bakpoeder",
+   "en": "baking powder",
+   "defaultUnit": "tl",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

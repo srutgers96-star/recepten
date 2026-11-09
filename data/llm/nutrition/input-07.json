@@ -1,0 +1,725 @@
+{
+ "batch": "07",
+ "items": [
+  {
+   "id": "hacheekruiden",
+   "nl": "hacheekruiden",
+   "en": "hachee seasoning",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hacheevlees",
+   "nl": "hacheevlees",
+   "en": "stewing beef",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hagelslag",
+   "nl": "hagelslag",
+   "en": "chocolate sprinkles",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "halloumi",
+   "nl": "halloumi",
+   "en": "halloumi",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "halva",
+   "nl": "halva",
+   "en": "halva",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "halvanaise",
+   "nl": "halvanaise",
+   "en": "half-fat mayonnaise",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "halvarine",
+   "nl": "halvarine",
+   "en": "low-fat spread",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ham",
+   "nl": "ham",
+   "en": "cooked ham",
+   "defaultUnit": "plak",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ham-preisalade",
+   "nl": "ham-preisalade",
+   "en": "ham and leek salad",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hamblokjes",
+   "nl": "hamblokjes",
+   "en": "diced ham",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hamburger",
+   "nl": "hamburger",
+   "en": "beef burger",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hamburgerkruiden",
+   "nl": "hamburgerkruiden",
+   "en": "burger seasoning",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hamschijf",
+   "nl": "hamschijf",
+   "en": "gammon steak",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hamworst",
+   "nl": "hamworst",
+   "en": "ham sausage",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "haricots-verts",
+   "nl": "haricots verts",
+   "en": "fine green beans",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "haring",
+   "nl": "haring",
+   "en": "herring",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "harissa",
+   "nl": "harissa",
+   "en": "harissa",
+   "defaultUnit": "tl",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "havermelk",
+   "nl": "havermelk",
+   "en": "oat milk",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "havermout",
+   "nl": "havermout",
+   "en": "porridge oats",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "havermoutkoekje",
+   "nl": "havermoutkoekje",
+   "en": "oat biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "haverroom",
+   "nl": "haverroom",
+   "en": "oat cream",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "haveryoghurt",
+   "nl": "haveryoghurt",
+   "en": "oat yoghurt",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "haverzemelen",
+   "nl": "haverzemelen",
+   "en": "oat bran",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hazelnoot",
+   "nl": "hazelnoot",
+   "en": "hazelnut",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hazelnootdrink",
+   "nl": "hazelnootdrink",
+   "en": "hazelnut drink",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "heek",
+   "nl": "heek",
+   "en": "hake",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "heilbot",
+   "nl": "heilbot",
+   "en": "halibut",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hertenvlees",
+   "nl": "hertenvlees",
+   "en": "venison",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "himalayazout",
+   "nl": "himalayazout",
+   "en": "Himalayan salt",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hoisinsaus",
+   "nl": "hoisinsaus",
+   "en": "hoisin sauce",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hokkien-mie",
+   "nl": "Hokkien mie",
+   "en": "Hokkien noodles",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hollandaisesaus",
+   "nl": "hollandaisesaus",
+   "en": "hollandaise sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hollandse-garnaal",
+   "nl": "Hollandse garnaal",
+   "en": "brown shrimp",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "honing",
+   "nl": "honing",
+   "en": "honey",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "honing-mosterdsaus",
+   "nl": "honing-mosterdsaus",
+   "en": "honey mustard sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hopje",
+   "nl": "hopje",
+   "en": "coffee sweet",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "hopjesvla",
+   "nl": "hopjesvla",
+   "en": "coffee caramel custard",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hotdogbroodje",
+   "nl": "hotdogbroodje",
+   "en": "hot dog bun",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "houdbare-melk",
+   "nl": "houdbare melk",
+   "en": "UHT milk",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hummus",
+   "nl": "hummus",
+   "en": "hummus",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "hutspotgroente",
+   "nl": "hutspotgroente",
+   "en": "carrot and onion mix",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "huttenkase",
+   "nl": "hüttenkäse",
+   "en": "cottage cheese",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "huzarensalade",
+   "nl": "huzarensalade",
+   "en": "Dutch potato and meat salad",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ijsbergsla",
+   "nl": "ijsbergsla",
+   "en": "iceberg lettuce",
+   "defaultUnit": "krop",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ijsblokje",
+   "nl": "ijsblokje",
+   "en": "ice cube",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "ijshoorntje",
+   "nl": "ijshoorntje",
+   "en": "ice cream cone",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "ijsje",
+   "nl": "ijsje",
+   "en": "ice cream bar",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "ijskoffie",
+   "nl": "ijskoffie",
+   "en": "iced coffee",
+   "defaultUnit": "stuk",
+   "aisle": "zuivel-eieren",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "ijstaart",
+   "nl": "ijstaart",
+   "en": "ice cream cake",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "ijsthee",
+   "nl": "ijsthee",
+   "en": "iced tea",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "inktvis",
+   "nl": "inktvis",
+   "en": "squid",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ipa",
+   "nl": "ipa",
+   "en": "IPA",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "italiaanse-bol",
+   "nl": "Italiaanse bol",
+   "en": "Italian crusty roll",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "italiaanse-kruiden",
+   "nl": "Italiaanse kruiden",
+   "en": "Italian herbs",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "jalapeno",
+   "nl": "jalapeño",
+   "en": "jalapeño",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "jam",
+   "nl": "jam",
+   "en": "jam",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "japanse-mayonaise",
+   "nl": "Japanse mayonaise",
+   "en": "Japanese mayonnaise",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "japanse-mix",
+   "nl": "Japanse mix",
+   "en": "Japanese rice cracker mix",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "japanse-sojasaus",
+   "nl": "Japanse sojasaus",
+   "en": "Japanese soy sauce",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "jasmijnrijst",
+   "nl": "jasmijnrijst",
+   "en": "jasmine rice",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "jasmijnthee",
+   "nl": "jasmijnthee",
+   "en": "jasmine tea",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "jelly-beans",
+   "nl": "jelly beans",
+   "en": "jelly beans",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "jenever",
+   "nl": "jenever",
+   "en": "jenever",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "jeneverbes",
+   "nl": "jeneverbes",
+   "en": "juniper berry",
+   "defaultUnit": "stuk",
+   "aisle": "kruiden-specerijen",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "jodenkoek",
+   "nl": "jodenkoek",
+   "en": "jodenkoek",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "joppiesaus",
+   "nl": "joppiesaus",
+   "en": "Joppie sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "jus",
+   "nl": "jus",
+   "en": "gravy",
+   "defaultUnit": "ml",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaas",
+   "nl": "kaas",
+   "en": "cheese",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaasblokje",
+   "nl": "kaasblokje",
+   "en": "cheese cube",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaasbroodje",
+   "nl": "kaasbroodje",
+   "en": "cheese pastry",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kaasfondue",
+   "nl": "kaasfondue",
+   "en": "cheese fondue",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaaskoekje",
+   "nl": "kaaskoekje",
+   "en": "cheese biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kaassaus",
+   "nl": "kaassaus",
+   "en": "cheese sauce",
+   "defaultUnit": "ml",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaasschnitzel",
+   "nl": "kaasschnitzel",
+   "en": "cheese schnitzel",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaassouffle",
+   "nl": "kaassoufflé",
+   "en": "kaassoufflé",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kaasstengel",
+   "nl": "kaasstengel",
+   "en": "cheese straw",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kaastortellini",
+   "nl": "kaastortellini",
+   "en": "cheese tortellini",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kabeljauwfilet",
+   "nl": "kabeljauwfilet",
+   "en": "cod fillet",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaiserbroodje",
+   "nl": "kaiserbroodje",
+   "en": "kaiser roll",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaki",
+   "nl": "kaki",
+   "en": "Sharon fruit",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

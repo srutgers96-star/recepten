@@ -1,0 +1,729 @@
+{
+ "batch": "06",
+ "items": [
+  {
+   "id": "gebraden-fricandeau",
+   "nl": "gebraden fricandeau",
+   "en": "sliced roast pork",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gebraden-gehakt",
+   "nl": "gebraden gehakt",
+   "en": "sliced meatloaf",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gebrande-amandel",
+   "nl": "gebrande amandel",
+   "en": "caramelised almond",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gecondenseerde-melk",
+   "nl": "gecondenseerde melk",
+   "en": "condensed milk",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gedroogde-vijg",
+   "nl": "gedroogde vijg",
+   "en": "dried fig",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gehakt",
+   "nl": "gehakt",
+   "en": "mince",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gehaktbal",
+   "nl": "gehaktbal",
+   "en": "meatball",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gehaktballetje",
+   "nl": "gehaktballetje",
+   "en": "mini meatball",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gehaktkruiden",
+   "nl": "gehaktkruiden",
+   "en": "mince seasoning",
+   "defaultUnit": "zakje",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": [
+    "zakje"
+   ]
+  },
+  {
+   "id": "geitenkaas",
+   "nl": "geitenkaas",
+   "en": "goat's cheese",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "geitenmelk",
+   "nl": "geitenmelk",
+   "en": "goat's milk",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "geitenyoghurt",
+   "nl": "geitenyoghurt",
+   "en": "goat's milk yoghurt",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gelatine",
+   "nl": "gelatine",
+   "en": "gelatine",
+   "defaultUnit": "blad",
+   "aisle": "bakken",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "geleisuiker",
+   "nl": "geleisuiker",
+   "en": "jam sugar",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gember",
+   "nl": "gember",
+   "en": "ginger",
+   "defaultUnit": "cm",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gemberkoekje",
+   "nl": "gemberkoekje",
+   "en": "ginger biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "gemberpoeder",
+   "nl": "gemberpoeder",
+   "en": "ground ginger",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gembersap",
+   "nl": "gembersap",
+   "en": "ginger juice",
+   "defaultUnit": "ml",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gembershot",
+   "nl": "gembershot",
+   "en": "ginger shot",
+   "defaultUnit": "fles",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gembersiroop",
+   "nl": "gembersiroop",
+   "en": "ginger syrup",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gemberthee",
+   "nl": "gemberthee",
+   "en": "ginger tea",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gepofte-rijst",
+   "nl": "gepofte rijst",
+   "en": "puffed rice",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gestampte-muisjes",
+   "nl": "gestampte muisjes",
+   "en": "ground aniseed sprinkles",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gevulde-druivenbladeren",
+   "nl": "gevulde druivenbladeren",
+   "en": "stuffed vine leaves",
+   "defaultUnit": "stuk",
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "gevulde-koek",
+   "nl": "gevulde koek",
+   "en": "almond-filled biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "gevulde-speculaas",
+   "nl": "gevulde speculaas",
+   "en": "almond-filled speculaas",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "ghee",
+   "nl": "ghee",
+   "en": "ghee",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gierst",
+   "nl": "gierst",
+   "en": "millet",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gin",
+   "nl": "gin",
+   "en": "gin",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ginger-ale",
+   "nl": "ginger ale",
+   "en": "ginger ale",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ginger-beer",
+   "nl": "ginger beer",
+   "en": "ginger beer",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gist",
+   "nl": "gist",
+   "en": "yeast",
+   "defaultUnit": "zakje",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "glasnoedels",
+   "nl": "glasnoedels",
+   "en": "glass noodles",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "glucosestroop",
+   "nl": "glucosestroop",
+   "en": "glucose syrup",
+   "defaultUnit": "el",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gluhwein",
+   "nl": "glühwein",
+   "en": "mulled wine",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "glutenvrij-brood",
+   "nl": "glutenvrij brood",
+   "en": "gluten-free bread",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "glutenvrij-paneermeel",
+   "nl": "glutenvrij paneermeel",
+   "en": "gluten-free breadcrumbs",
+   "defaultUnit": "el",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "glutenvrije-bloem",
+   "nl": "glutenvrije bloem",
+   "en": "gluten-free flour",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "glutenvrije-broodmix",
+   "nl": "glutenvrije broodmix",
+   "en": "gluten-free bread mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "glutenvrije-havermout",
+   "nl": "glutenvrije havermout",
+   "en": "gluten-free oats",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "glutenvrije-pasta",
+   "nl": "glutenvrije pasta",
+   "en": "gluten-free pasta",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gnocchi",
+   "nl": "gnocchi",
+   "en": "gnocchi",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gochujang",
+   "nl": "gochujang",
+   "en": "gochujang",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gojibes",
+   "nl": "gojibes",
+   "en": "goji berry",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gorgonzola",
+   "nl": "gorgonzola",
+   "en": "gorgonzola",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gort",
+   "nl": "gort",
+   "en": "pearl barley",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "goulashsoep",
+   "nl": "goulashsoep",
+   "en": "goulash soup",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gourmetschotel",
+   "nl": "gourmetschotel",
+   "en": "gourmet meat platter",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "grana-padano",
+   "nl": "grana padano",
+   "en": "Grana Padano",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "granaatappel",
+   "nl": "granaatappel",
+   "en": "pomegranate",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "granaatappelmelasse",
+   "nl": "granaatappelmelasse",
+   "en": "pomegranate molasses",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "granaatappelsap",
+   "nl": "granaatappelsap",
+   "en": "pomegranate juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "granadilla",
+   "nl": "granadilla",
+   "en": "granadilla",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "granola",
+   "nl": "granola",
+   "en": "granola",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "grapefruit",
+   "nl": "grapefruit",
+   "en": "grapefruit",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "grapefruitsap",
+   "nl": "grapefruitsap",
+   "en": "grapefruit juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "grappa",
+   "nl": "grappa",
+   "en": "grappa",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gravad-lax",
+   "nl": "gravad lax",
+   "en": "gravlax",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "grenadine",
+   "nl": "grenadine",
+   "en": "grenadine",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "griekse-yoghurt",
+   "nl": "Griekse yoghurt",
+   "en": "Greek yoghurt",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "griesmeel",
+   "nl": "griesmeel",
+   "en": "semolina",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "griesmeelpap",
+   "nl": "griesmeelpap",
+   "en": "semolina porridge",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "griesmeelpudding",
+   "nl": "griesmeelpudding",
+   "en": "semolina pudding",
+   "defaultUnit": "bakje",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "groente",
+   "nl": "groente",
+   "en": "vegetable",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "groentebouillon",
+   "nl": "groentebouillon",
+   "en": "vegetable stock",
+   "defaultUnit": "ml",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": [
+    "blokje"
+   ]
+  },
+  {
+   "id": "groentebouillonpoeder",
+   "nl": "groentebouillonpoeder",
+   "en": "vegetable stock powder",
+   "defaultUnit": "el",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "groentechips",
+   "nl": "groentechips",
+   "en": "vegetable crisps",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "groentefond",
+   "nl": "groentefond",
+   "en": "concentrated vegetable stock",
+   "defaultUnit": "ml",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "groentemix",
+   "nl": "groentemix",
+   "en": "mixed vegetables",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "groentesap",
+   "nl": "groentesap",
+   "en": "vegetable juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "groentesoep",
+   "nl": "groentesoep",
+   "en": "vegetable soup",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gruyere",
+   "nl": "gruyère",
+   "en": "Gruyère",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "guacamole",
+   "nl": "guacamole",
+   "en": "guacamole",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "guanciale",
+   "nl": "guanciale",
+   "en": "guanciale",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "guave",
+   "nl": "guave",
+   "en": "guava",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "gummibeer",
+   "nl": "gummibeer",
+   "en": "gummy bear",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gyoza",
+   "nl": "gyoza",
+   "en": "gyoza",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "gyros",
+   "nl": "gyros",
+   "en": "gyros meat",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "gyroskruiden",
+   "nl": "gyroskruiden",
+   "en": "gyros seasoning",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "haas",
+   "nl": "haas",
+   "en": "hare",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

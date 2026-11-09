@@ -1,0 +1,738 @@
+{
+ "batch": "14",
+ "items": [
+  {
+   "id": "rode-peper",
+   "nl": "rode peper",
+   "en": "red chilli",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": [
+    "mp"
+   ]
+  },
+  {
+   "id": "roggebrood",
+   "nl": "roggebrood",
+   "en": "rye bread",
+   "defaultUnit": "plak",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "roggemeel",
+   "nl": "roggemeel",
+   "en": "rye flour",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rolcake",
+   "nl": "rolcake",
+   "en": "Swiss roll",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "rolfondant",
+   "nl": "rolfondant",
+   "en": "ready-to-roll icing",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rolmops",
+   "nl": "rolmops",
+   "en": "rollmop",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "romanesco",
+   "nl": "romanesco",
+   "en": "romanesco",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "romeinse-sla",
+   "nl": "Romeinse sla",
+   "en": "cos lettuce",
+   "defaultUnit": "krop",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rood-fruit",
+   "nl": "rood fruit",
+   "en": "mixed berries",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rooibosthee",
+   "nl": "rooibosthee",
+   "en": "rooibos tea",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rookkaas",
+   "nl": "rookkaas",
+   "en": "smoked cheese",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rookvlees",
+   "nl": "rookvlees",
+   "en": "smoked beef",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rookworst",
+   "nl": "rookworst",
+   "en": "smoked sausage",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "room",
+   "nl": "room",
+   "en": "cream",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "roomijs",
+   "nl": "roomijs",
+   "en": "ice cream",
+   "defaultUnit": "bakje",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "roomkaas",
+   "nl": "roomkaas",
+   "en": "cream cheese",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "roomkaas-met-gember",
+   "nl": "roomkaas met gember",
+   "en": "ginger cream cheese",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "roomkaas-met-kruiden",
+   "nl": "roomkaas met kruiden",
+   "en": "herb cream cheese",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "roomlikeur",
+   "nl": "roomlikeur",
+   "en": "Irish cream liqueur",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "roquefort",
+   "nl": "roquefort",
+   "en": "Roquefort",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rosbief",
+   "nl": "rosbief",
+   "en": "roast beef",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rose",
+   "nl": "rosé",
+   "en": "rosé",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rosti",
+   "nl": "rösti",
+   "en": "rösti",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "rotivel",
+   "nl": "rotivel",
+   "en": "roti",
+   "defaultUnit": "stuk",
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "roze-koek",
+   "nl": "roze koek",
+   "en": "pink iced cake",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "roze-peper",
+   "nl": "roze peper",
+   "en": "pink peppercorns",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rozemarijn",
+   "nl": "rozemarijn",
+   "en": "rosemary",
+   "defaultUnit": "takje",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": [
+    "takje"
+   ]
+  },
+  {
+   "id": "rozenwater",
+   "nl": "rozenwater",
+   "en": "rose water",
+   "defaultUnit": "tl",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rozijn",
+   "nl": "rozijn",
+   "en": "raisin",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rozijnenbrood",
+   "nl": "rozijnenbrood",
+   "en": "raisin bread",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "rucola",
+   "nl": "rucola",
+   "en": "rocket",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rum",
+   "nl": "rum",
+   "en": "rum",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rumaroma",
+   "nl": "rumaroma",
+   "en": "rum flavouring",
+   "defaultUnit": "tl",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "runderbouillon",
+   "nl": "runderbouillon",
+   "en": "beef stock",
+   "defaultUnit": "ml",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "runderbouillonblokje",
+   "nl": "runderbouillonblokje",
+   "en": "beef stock cube",
+   "defaultUnit": "stuk",
+   "aisle": "kruiden-specerijen",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "runderfond",
+   "nl": "runderfond",
+   "en": "concentrated beef stock",
+   "defaultUnit": "ml",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rundergehakt",
+   "nl": "rundergehakt",
+   "en": "beef mince",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "runderlap",
+   "nl": "runderlap",
+   "en": "braising steak",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "runderpoulet",
+   "nl": "runderpoulet",
+   "en": "diced stewing beef",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "runderreepjes",
+   "nl": "runderreepjes",
+   "en": "beef strips",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "runderrollade",
+   "nl": "runderrollade",
+   "en": "rolled beef joint",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "runderschenkel",
+   "nl": "runderschenkel",
+   "en": "beef shin",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "rundvlees",
+   "nl": "rundvlees",
+   "en": "beef",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "saffraan",
+   "nl": "saffraan",
+   "en": "saffron",
+   "defaultUnit": "mp",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": [
+    "envelopje",
+    "mp",
+    "zakje"
+   ]
+  },
+  {
+   "id": "sake",
+   "nl": "sake",
+   "en": "sake",
+   "defaultUnit": "ml",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "salami",
+   "nl": "salami",
+   "en": "salami",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": [
+    "plak"
+   ]
+  },
+  {
+   "id": "salie",
+   "nl": "salie",
+   "en": "sage",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "salsa",
+   "nl": "salsa",
+   "en": "salsa",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "sambal-badjak",
+   "nl": "sambal badjak",
+   "en": "sambal badjak",
+   "defaultUnit": "tl",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "sambal-manis",
+   "nl": "sambal manis",
+   "en": "sambal manis",
+   "defaultUnit": "tl",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "sambal-oelek",
+   "nl": "sambal oelek",
+   "en": "sambal oelek",
+   "defaultUnit": "tl",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "samosa",
+   "nl": "samosa",
+   "en": "samosa",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "sandwich",
+   "nl": "sandwich",
+   "en": "soft milk roll",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "sandwichspread",
+   "nl": "sandwichspread",
+   "en": "sandwich spread",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "sangria",
+   "nl": "sangria",
+   "en": "sangria",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "santen",
+   "nl": "santen",
+   "en": "coconut cream",
+   "defaultUnit": "ml",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "sardine",
+   "nl": "sardine",
+   "en": "sardine",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "satesaus",
+   "nl": "satésaus",
+   "en": "satay sauce",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "saucijs",
+   "nl": "saucijs",
+   "en": "fresh pork sausage",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "savooienkool",
+   "nl": "savooienkool",
+   "en": "savoy cabbage",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "scamorza",
+   "nl": "scamorza",
+   "en": "scamorza",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schapenkaas",
+   "nl": "schapenkaas",
+   "en": "sheep's cheese",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schapenyoghurt",
+   "nl": "schapenyoghurt",
+   "en": "sheep's milk yoghurt",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schelpjesmacaroni",
+   "nl": "schelpjesmacaroni",
+   "en": "pasta shells",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schelvisfilet",
+   "nl": "schelvisfilet",
+   "en": "haddock fillet",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schenkstroop",
+   "nl": "schenkstroop",
+   "en": "golden syrup",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schnitzel",
+   "nl": "schnitzel",
+   "en": "pork schnitzel",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schol",
+   "nl": "schol",
+   "en": "plaice",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schorseneer",
+   "nl": "schorseneer",
+   "en": "black salsify",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schouderham",
+   "nl": "schouderham",
+   "en": "shoulder ham",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "schrijfglazuur",
+   "nl": "schrijfglazuur",
+   "en": "writing icing",
+   "defaultUnit": "stuk",
+   "aisle": "bakken",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "seitan",
+   "nl": "seitan",
+   "en": "seitan",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "selderij",
+   "nl": "selderij",
+   "en": "celery leaf",
+   "defaultUnit": "takje",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": [
+    "bos",
+    "takje"
+   ]
+  },
+  {
+   "id": "selderijsalade",
+   "nl": "selderijsalade",
+   "en": "celeriac remoulade",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "selderijzout",
+   "nl": "selderijzout",
+   "en": "celery salt",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "seroendeng",
+   "nl": "seroendeng",
+   "en": "seroendeng",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "serranoham",
+   "nl": "serranoham",
+   "en": "serrano ham",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "sesamolie",
+   "nl": "sesamolie",
+   "en": "sesame oil",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "sesamzaad",
+   "nl": "sesamzaad",
+   "en": "sesame seeds",
+   "defaultUnit": "el",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "sherry",
+   "nl": "sherry",
+   "en": "sherry",
+   "defaultUnit": "el",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

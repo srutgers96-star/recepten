@@ -1,0 +1,729 @@
+{
+ "batch": "11",
+ "items": [
+  {
+   "id": "marshmallow",
+   "nl": "marshmallow",
+   "en": "marshmallow",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "masala",
+   "nl": "masala",
+   "en": "masala",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mascarpone",
+   "nl": "mascarpone",
+   "en": "mascarpone",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "matcha",
+   "nl": "matcha",
+   "en": "matcha",
+   "defaultUnit": "tl",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "matze",
+   "nl": "matze",
+   "en": "matzo",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mayonaise",
+   "nl": "mayonaise",
+   "en": "mayonnaise",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "meergranenbrood",
+   "nl": "meergranenbrood",
+   "en": "multigrain bread",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "meikaas",
+   "nl": "meikaas",
+   "en": "meikaas",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "melk",
+   "nl": "melk",
+   "en": "milk",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "melkchocolade",
+   "nl": "melkchocolade",
+   "en": "milk chocolate",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "melkpoeder",
+   "nl": "melkpoeder",
+   "en": "milk powder",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "meloen",
+   "nl": "meloen",
+   "en": "melon",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "mergpijp",
+   "nl": "mergpijp",
+   "en": "marrow bone",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mergpijpje",
+   "nl": "mergpijpje",
+   "en": "mergpijpje",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "merguez",
+   "nl": "merguez",
+   "en": "merguez sausage",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "meringue",
+   "nl": "meringue",
+   "en": "meringue",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "metworst",
+   "nl": "metworst",
+   "en": "dry-cured sausage",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mierikswortel",
+   "nl": "mierikswortel",
+   "en": "horseradish",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mierikswortelsaus",
+   "nl": "mierikswortelsaus",
+   "en": "horseradish sauce",
+   "defaultUnit": "tl",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mihoen",
+   "nl": "mihoen",
+   "en": "rice vermicelli",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "milkshake",
+   "nl": "milkshake",
+   "en": "milkshake",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mineraalwater",
+   "nl": "mineraalwater",
+   "en": "mineral water",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mirin",
+   "nl": "mirin",
+   "en": "mirin",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "misopasta",
+   "nl": "misopasta",
+   "en": "miso paste",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mixdrank",
+   "nl": "mixdrank",
+   "en": "premixed drink",
+   "defaultUnit": "blik",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mochi",
+   "nl": "mochi",
+   "en": "mochi",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "mokkaboontje",
+   "nl": "mokkaboontje",
+   "en": "chocolate coffee bean",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "mon-chou",
+   "nl": "Mon Chou",
+   "en": "Mon Chou",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "moorkop",
+   "nl": "moorkop",
+   "en": "chocolate choux bun",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "morel",
+   "nl": "morel",
+   "en": "morello cherry",
+   "defaultUnit": "g",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mortadella",
+   "nl": "mortadella",
+   "en": "mortadella",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mossel",
+   "nl": "mossel",
+   "en": "mussel",
+   "defaultUnit": "kg",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mosterd",
+   "nl": "mosterd",
+   "en": "mustard",
+   "defaultUnit": "tl",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mosterd-dillesaus",
+   "nl": "mosterd-dillesaus",
+   "en": "mustard and dill sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mosterdsaus",
+   "nl": "mosterdsaus",
+   "en": "mustard sauce",
+   "defaultUnit": "ml",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mosterdzaad",
+   "nl": "mosterdzaad",
+   "en": "mustard seeds",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mousserende-wijn",
+   "nl": "mousserende wijn",
+   "en": "sparkling wine",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mozzarella",
+   "nl": "mozzarella",
+   "en": "mozzarella",
+   "defaultUnit": "bol",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mozzarellastick",
+   "nl": "mozzarellastick",
+   "en": "mozzarella stick",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "muesli",
+   "nl": "muesli",
+   "en": "muesli",
+   "defaultUnit": "g",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mueslibol",
+   "nl": "mueslibol",
+   "en": "muesli roll",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mueslireep",
+   "nl": "mueslireep",
+   "en": "cereal bar",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "muffin",
+   "nl": "muffin",
+   "en": "muffin",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "muffinmix",
+   "nl": "muffinmix",
+   "en": "muffin mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "muisjes",
+   "nl": "muisjes",
+   "en": "aniseed sprinkles",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "multivitaminesap",
+   "nl": "multivitaminesap",
+   "en": "multivitamin juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "mungboon",
+   "nl": "mungboon",
+   "en": "mung bean",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "munt",
+   "nl": "munt",
+   "en": "mint",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "muntthee",
+   "nl": "muntthee",
+   "en": "mint tea",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "muscovadosuiker",
+   "nl": "muscovadosuiker",
+   "en": "muscovado sugar",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "nagelkaas",
+   "nl": "nagelkaas",
+   "en": "clove cheese",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "nashipeer",
+   "nl": "nashipeer",
+   "en": "nashi pear",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "nasigroente",
+   "nl": "nasigroente",
+   "en": "nasi goreng vegetable mix",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "nduja",
+   "nl": "nduja",
+   "en": "nduja",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "nectarine",
+   "nl": "nectarine",
+   "en": "nectarine",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "nigellazaad",
+   "nl": "nigellazaad",
+   "en": "nigella seeds",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "noedels",
+   "nl": "noedels",
+   "en": "noodles",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "noedelsoep",
+   "nl": "noedelsoep",
+   "en": "instant noodle soup",
+   "defaultUnit": "stuk",
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "noilly-prat",
+   "nl": "Noilly Prat",
+   "en": "Noilly Prat",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "noorse-garnaal",
+   "nl": "Noorse garnaal",
+   "en": "cold-water prawn",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "noot",
+   "nl": "noot",
+   "en": "nut",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "nootmuskaat",
+   "nl": "nootmuskaat",
+   "en": "nutmeg",
+   "defaultUnit": "snuf",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": [
+    "snuf"
+   ]
+  },
+  {
+   "id": "nori",
+   "nl": "nori",
+   "en": "nori",
+   "defaultUnit": "stuk",
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "notenbrood",
+   "nl": "notenbrood",
+   "en": "nut bread",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "notenpasta",
+   "nl": "notenpasta",
+   "en": "nut butter",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "notenreep",
+   "nl": "notenreep",
+   "en": "nut bar",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "nougat",
+   "nl": "nougat",
+   "en": "nougat",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "octopus",
+   "nl": "octopus",
+   "en": "octopus",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "oester",
+   "nl": "oester",
+   "en": "oyster",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "oestersaus",
+   "nl": "oestersaus",
+   "en": "oyster sauce",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "oesterzwam",
+   "nl": "oesterzwam",
+   "en": "oyster mushroom",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "okra",
+   "nl": "okra",
+   "en": "okra",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "olie",
+   "nl": "olie",
+   "en": "oil",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "olie-en-boter-om-in-te-bakken",
+   "nl": "olie en boter om in te bakken",
+   "en": "oil and butter for frying",
+   "defaultUnit": null,
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "oliebollenmix",
+   "nl": "oliebollenmix",
+   "en": "oliebollen mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "olijf",
+   "nl": "olijf",
+   "en": "olive",
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "olijfolie",
+   "nl": "olijfolie",
+   "en": "olive oil",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": [
+    "scheut"
+   ]
+  },
+  {
+   "id": "olijven-gevuld-met-citroen",
+   "nl": "olijven gevuld met citroen",
+   "en": "lemon-stuffed olives",
+   "defaultUnit": "el",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "olijven-gevuld-met-paprika",
+   "nl": "olijven gevuld met paprika",
+   "en": "pimento-stuffed olives",
+   "defaultUnit": "stuk",
+   "aisle": "blik-pot",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "ontbijtbiscuit",
+   "nl": "ontbijtbiscuit",
+   "en": "breakfast biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

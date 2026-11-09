@@ -1,0 +1,735 @@
+{
+ "batch": "02",
+ "items": [
+  {
+   "id": "baksoda",
+   "nl": "baksoda",
+   "en": "bicarbonate of soda",
+   "defaultUnit": "tl",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bakspray",
+   "nl": "bakspray",
+   "en": "cake release spray",
+   "defaultUnit": "fles",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "balsamicoazijn",
+   "nl": "balsamicoazijn",
+   "en": "balsamic vinegar",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "balsamicocreme",
+   "nl": "balsamicocrème",
+   "en": "balsamic glaze",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "balti-kooksaus",
+   "nl": "balti kooksaus",
+   "en": "balti cooking sauce",
+   "defaultUnit": "pot",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bamboescheuten",
+   "nl": "bamboescheut",
+   "en": "bamboo shoot",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bamischijf",
+   "nl": "bamischijf",
+   "en": "bamischijf",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "banaan",
+   "nl": "banaan",
+   "en": "banana",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bananenbrood",
+   "nl": "bananenbrood",
+   "en": "banana bread",
+   "defaultUnit": "plak",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "bananenchips",
+   "nl": "bananenchips",
+   "en": "banana chips",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bananensjalot",
+   "nl": "bananensjalot",
+   "en": "banana shallot",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bananenvla",
+   "nl": "bananenvla",
+   "en": "banana custard",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "banketbakkersroom",
+   "nl": "banketbakkersroom",
+   "en": "crème pâtissière",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "banketstaaf",
+   "nl": "banketstaaf",
+   "en": "almond pastry log",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "bapao",
+   "nl": "bapao",
+   "en": "bao bun",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "barbecuekruiden",
+   "nl": "barbecuekruiden",
+   "en": "barbecue seasoning",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "barbecuesaus",
+   "nl": "barbecuesaus",
+   "en": "barbecue sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "basilicum",
+   "nl": "basilicum",
+   "en": "basil",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": [
+    "blad",
+    "hand",
+    "takje"
+   ]
+  },
+  {
+   "id": "basmatirijst",
+   "nl": "basmatirijst",
+   "en": "basmati rice",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "basterdsuiker",
+   "nl": "basterdsuiker",
+   "en": "soft brown sugar",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bastognekoek",
+   "nl": "bastognekoek",
+   "en": "Bastogne biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "bavarois",
+   "nl": "bavarois",
+   "en": "bavarois mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bavette",
+   "nl": "bavette",
+   "en": "bavette",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bearnaisesaus",
+   "nl": "béarnaisesaus",
+   "en": "béarnaise sauce",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bechamelsaus",
+   "nl": "béchamelsaus",
+   "en": "béchamel sauce",
+   "defaultUnit": "ml",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "beef-jerky",
+   "nl": "beef jerky",
+   "en": "beef jerky",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "beenham",
+   "nl": "beenham",
+   "en": "ham on the bone",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "belugalinze",
+   "nl": "belugalinze",
+   "en": "beluga lentil",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "berenburg",
+   "nl": "berenburg",
+   "en": "berenburg",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "berlinerbol",
+   "nl": "berlinerbol",
+   "en": "filled doughnut",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "beschuit",
+   "nl": "beschuit",
+   "en": "Dutch rusk",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bessengelei",
+   "nl": "bessengelei",
+   "en": "redcurrant jelly",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "biefstuk",
+   "nl": "biefstuk",
+   "en": "steak",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bier",
+   "nl": "bier",
+   "en": "beer",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bieslook",
+   "nl": "bieslook",
+   "en": "chives",
+   "defaultUnit": "el",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": [
+    "sprietje"
+   ]
+  },
+  {
+   "id": "biet",
+   "nl": "biet",
+   "en": "beetroot",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bietensap",
+   "nl": "bietensap",
+   "en": "beetroot juice",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bigarreaux",
+   "nl": "bigarreaux",
+   "en": "glacé cherries",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bimi",
+   "nl": "bimi",
+   "en": "Tenderstem broccoli",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bitter-lemon",
+   "nl": "bitter lemon",
+   "en": "bitter lemon",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bitterbal",
+   "nl": "bitterbal",
+   "en": "bitterbal",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "bitterkoekje",
+   "nl": "bitterkoekje",
+   "en": "almond macaroon",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "bladerdeeg",
+   "nl": "bladerdeeg",
+   "en": "puff pastry",
+   "defaultUnit": "plak",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": [
+    "blad"
+   ]
+  },
+  {
+   "id": "blauwe-bes",
+   "nl": "blauwe bes",
+   "en": "blueberry",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "blauwe-kaas",
+   "nl": "blauwe kaas",
+   "en": "blue cheese",
+   "defaultUnit": "g",
+   "aisle": "kaas",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bleekselderij",
+   "nl": "bleekselderij",
+   "en": "celery",
+   "defaultUnit": "stengel",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "blinde-vink",
+   "nl": "blinde vink",
+   "en": "veal olive",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bloedsinaasappel",
+   "nl": "bloedsinaasappel",
+   "en": "blood orange",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bloedworst",
+   "nl": "bloedworst",
+   "en": "black pudding",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bloem",
+   "nl": "bloem",
+   "en": "plain flour",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bloem-tipo-00",
+   "nl": "bloem tipo 00",
+   "en": "00 flour",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bloemen",
+   "nl": "bloemen",
+   "en": "flowers",
+   "defaultUnit": "bos",
+   "aisle": "overig",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "bloemkool",
+   "nl": "bloemkool",
+   "en": "cauliflower",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bloemkoolrijst",
+   "nl": "bloemkoolrijst",
+   "en": "cauliflower rice",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boekweit",
+   "nl": "boekweit",
+   "en": "buckwheat",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boekweitmeel",
+   "nl": "boekweitmeel",
+   "en": "buckwheat flour",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boemboe-bami-goreng",
+   "nl": "boemboe bami goreng",
+   "en": "bami goreng spice paste",
+   "defaultUnit": "pak",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boemboe-nasi-goreng",
+   "nl": "boemboe nasi goreng",
+   "en": "nasi goreng spice paste",
+   "defaultUnit": "pak",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boemboe-pinda-sate",
+   "nl": "boemboe pinda-saté",
+   "en": "satay spice paste",
+   "defaultUnit": "pak",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": [
+    "pak"
+   ]
+  },
+  {
+   "id": "boemboe-rendang",
+   "nl": "boemboe rendang",
+   "en": "rendang spice paste",
+   "defaultUnit": "pak",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boerenbrood",
+   "nl": "boerenbrood",
+   "en": "farmhouse loaf",
+   "defaultUnit": "snee",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boerenkool",
+   "nl": "boerenkool",
+   "en": "kale",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bokbier",
+   "nl": "bokbier",
+   "en": "bock beer",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bokkenpootje",
+   "nl": "bokkenpootje",
+   "en": "bokkenpootje",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "bokking",
+   "nl": "bokking",
+   "en": "buckling",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bolletje",
+   "nl": "broodje",
+   "en": "bread roll",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bonbon",
+   "nl": "bonbon",
+   "en": "filled chocolate",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "bonenkruid",
+   "nl": "bonenkruid",
+   "en": "savory",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boon",
+   "nl": "boon",
+   "en": "bean",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "borrelnootje",
+   "nl": "borrelnootje",
+   "en": "coated peanut",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "borstplaat",
+   "nl": "borstplaat",
+   "en": "borstplaat",
+   "defaultUnit": "g",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bosbessenjam",
+   "nl": "bosbessenjam",
+   "en": "blueberry jam",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bospeen",
+   "nl": "bospeen",
+   "en": "bunched carrots",
+   "defaultUnit": "bos",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bosui",
+   "nl": "bosui",
+   "en": "spring onion",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bosvruchtenjam",
+   "nl": "bosvruchtenjam",
+   "en": "mixed berry jam",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "bosvruchtenyoghurt",
+   "nl": "bosvruchtenyoghurt",
+   "en": "fruits of the forest yoghurt",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boter",
+   "nl": "boter",
+   "en": "butter",
+   "defaultUnit": "g",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boterhamworst",
+   "nl": "boterhamworst",
+   "en": "Dutch luncheon sausage",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "boterkoek",
+   "nl": "boterkoek",
+   "en": "Dutch butter cake",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "boterkoekmix",
+   "nl": "boterkoekmix",
+   "en": "boterkoek mix",
+   "defaultUnit": "pak",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  }
+ ]
+}

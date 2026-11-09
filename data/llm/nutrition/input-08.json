@@ -1,0 +1,727 @@
+{
+ "batch": "08",
+ "items": [
+  {
+   "id": "kalamata-olijf",
+   "nl": "kalamata olijf",
+   "en": "Kalamata olive",
+   "defaultUnit": "g",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kalfsfilet",
+   "nl": "kalfsfilet",
+   "en": "veal fillet",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kalfsfond",
+   "nl": "kalfsfond",
+   "en": "concentrated veal stock",
+   "defaultUnit": "ml",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kalfslever",
+   "nl": "kalfslever",
+   "en": "calf's liver",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kalfsschenkel",
+   "nl": "kalfsschenkel",
+   "en": "veal shank",
+   "defaultUnit": "schijf",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kalkoenfilet",
+   "nl": "kalkoenfilet",
+   "en": "turkey breast",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kalkoenrollade",
+   "nl": "kalkoenrollade",
+   "en": "rolled turkey breast joint",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kamillethee",
+   "nl": "kamillethee",
+   "en": "camomile tea",
+   "defaultUnit": "zakje",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kandijsuiker",
+   "nl": "kandijsuiker",
+   "en": "candi sugar",
+   "defaultUnit": "g",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaneel",
+   "nl": "kaneel",
+   "en": "cinnamon",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaneelbroodje",
+   "nl": "kaneelbroodje",
+   "en": "cinnamon roll",
+   "defaultUnit": "stuk",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaneelstokje",
+   "nl": "kaneelstokje",
+   "en": "cinnamon stick",
+   "defaultUnit": "stuk",
+   "aisle": "kruiden-specerijen",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kaneelsuiker",
+   "nl": "kaneelsuiker",
+   "en": "cinnamon sugar",
+   "defaultUnit": "tl",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kappertjes",
+   "nl": "kappertjes",
+   "en": "capers",
+   "defaultUnit": "el",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kapucijners",
+   "nl": "kapucijner",
+   "en": "marrowfat pea",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "karamelvla",
+   "nl": "karamelvla",
+   "en": "caramel custard",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "karbonade",
+   "nl": "karbonade",
+   "en": "pork chop",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kardemom",
+   "nl": "kardemom",
+   "en": "cardamom",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "karnemelk",
+   "nl": "karnemelk",
+   "en": "buttermilk",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "karwijzaad",
+   "nl": "karwijzaad",
+   "en": "caraway seeds",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kastanje",
+   "nl": "kastanje",
+   "en": "chestnut",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kastanjechampignon",
+   "nl": "kastanjechampignon",
+   "en": "chestnut mushroom",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "katenspek",
+   "nl": "katenspek",
+   "en": "smoked cooked bacon",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kauwgom",
+   "nl": "kauwgom",
+   "en": "chewing gum",
+   "defaultUnit": "pak",
+   "aisle": "snacks-zoet",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kaviaar",
+   "nl": "kaviaar",
+   "en": "lumpfish caviar",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kebabkruiden",
+   "nl": "kebabkruiden",
+   "en": "kebab seasoning",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "keelspek",
+   "nl": "keelspek",
+   "en": "pork jowl",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kefir",
+   "nl": "kefir",
+   "en": "kefir",
+   "defaultUnit": "ml",
+   "aisle": "zuivel-eieren",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kemirinoot",
+   "nl": "kemirinoot",
+   "en": "candlenut",
+   "defaultUnit": "stuk",
+   "aisle": "wereld",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kerrie",
+   "nl": "kerrie",
+   "en": "curry powder",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kers",
+   "nl": "kers",
+   "en": "cherry",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kersenjam",
+   "nl": "kersenjam",
+   "en": "cherry jam",
+   "defaultUnit": "el",
+   "aisle": "brood-ontbijt",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kersenvlaaivulling",
+   "nl": "kersenvlaaivulling",
+   "en": "cherry pie filling",
+   "defaultUnit": "pot",
+   "aisle": "bakken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kerstkransje",
+   "nl": "kerstkransje",
+   "en": "Christmas wreath biscuit",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kerstomaat",
+   "nl": "kerstomaat",
+   "en": "cherry tomato",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kervel",
+   "nl": "kervel",
+   "en": "chervil",
+   "defaultUnit": "el",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ketchup",
+   "nl": "ketchup",
+   "en": "tomato ketchup",
+   "defaultUnit": "el",
+   "aisle": "sauzen-olie-azijn",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ketjap-asin",
+   "nl": "ketjap asin",
+   "en": "kecap asin",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "ketjap-manis",
+   "nl": "ketjap manis",
+   "en": "kecap manis",
+   "defaultUnit": "el",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": [
+    "scheut"
+   ]
+  },
+  {
+   "id": "ketoembar",
+   "nl": "ketoembar",
+   "en": "ground coriander",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kibbeling",
+   "nl": "kibbeling",
+   "en": "kibbeling",
+   "defaultUnit": "g",
+   "aisle": "diepvries",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kidneybonen",
+   "nl": "kidneyboon",
+   "en": "kidney bean",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kikkererwt",
+   "nl": "kikkererwt",
+   "en": "chickpea",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kikkererwtenmeel",
+   "nl": "kikkererwtenmeel",
+   "en": "gram flour",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kikkererwtenpasta",
+   "nl": "kikkererwtenpasta",
+   "en": "chickpea pasta",
+   "defaultUnit": "g",
+   "aisle": "droog",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kimchi",
+   "nl": "kimchi",
+   "en": "kimchi",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kinderchampagne",
+   "nl": "kinderchampagne",
+   "en": "children's sparkling drink",
+   "defaultUnit": "fles",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kip",
+   "nl": "kip",
+   "en": "chicken",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kip-kerriesalade",
+   "nl": "kip-kerriesalade",
+   "en": "coronation chicken",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipblokjes",
+   "nl": "kipblokjes",
+   "en": "diced chicken",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipburger",
+   "nl": "kipburger",
+   "en": "chicken burger",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipcorn",
+   "nl": "kipcorn",
+   "en": "kipcorn",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kipdijfilet",
+   "nl": "kipdijfilet",
+   "en": "chicken thigh fillet",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipfilet",
+   "nl": "kipfilet",
+   "en": "chicken breast",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipgehakt",
+   "nl": "kipgehakt",
+   "en": "chicken mince",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipgyros",
+   "nl": "kipgyros",
+   "en": "chicken gyros",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kiphaasje",
+   "nl": "kiphaasje",
+   "en": "mini chicken fillet",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipkarbonade",
+   "nl": "kipkarbonade",
+   "en": "chicken chop",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipkruiden",
+   "nl": "kipkruiden",
+   "en": "chicken seasoning",
+   "defaultUnit": "tl",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipnugget",
+   "nl": "kipnugget",
+   "en": "chicken nugget",
+   "defaultUnit": "stuk",
+   "aisle": "diepvries",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kippenbouillon",
+   "nl": "kippenbouillon",
+   "en": "chicken stock",
+   "defaultUnit": "ml",
+   "aisle": "kruiden-specerijen",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kippenbouillonblokje",
+   "nl": "kippenbouillonblokje",
+   "en": "chicken stock cube",
+   "defaultUnit": "stuk",
+   "aisle": "kruiden-specerijen",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kippenbout",
+   "nl": "kippenbout",
+   "en": "chicken leg",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kippenfond",
+   "nl": "kippenfond",
+   "en": "concentrated chicken stock",
+   "defaultUnit": "ml",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kippenlever",
+   "nl": "kippenlever",
+   "en": "chicken liver",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kippensoep",
+   "nl": "kippensoep",
+   "en": "chicken soup",
+   "defaultUnit": "blik",
+   "aisle": "blik-pot",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kippenvleugel",
+   "nl": "kippenvleugel",
+   "en": "chicken wing",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipreepjes",
+   "nl": "kipreepjes",
+   "en": "chicken strips",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipsate",
+   "nl": "kipsaté",
+   "en": "chicken satay",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipschnitzel",
+   "nl": "kipschnitzel",
+   "en": "breaded chicken escalope",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipshoarma",
+   "nl": "kipshoarma",
+   "en": "chicken shawarma",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipspiesje",
+   "nl": "kipspiesje",
+   "en": "chicken skewer",
+   "defaultUnit": "stuk",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kipworst",
+   "nl": "kipworst",
+   "en": "chicken sausage",
+   "defaultUnit": "plak",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kirsch",
+   "nl": "kirsch",
+   "en": "kirsch",
+   "defaultUnit": "ml",
+   "aisle": "dranken",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kiwano",
+   "nl": "kiwano",
+   "en": "kiwano",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": true,
+   "needUnits": []
+  },
+  {
+   "id": "kiwi",
+   "nl": "kiwi",
+   "en": "kiwi",
+   "defaultUnit": "stuk",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kiwibes",
+   "nl": "kiwibes",
+   "en": "kiwi berry",
+   "defaultUnit": "g",
+   "aisle": "groente-fruit",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "klapstuk",
+   "nl": "klapstuk",
+   "en": "beef short rib",
+   "defaultUnit": "g",
+   "aisle": "vlees-vis",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kleefrijst",
+   "nl": "kleefrijst",
+   "en": "glutinous rice",
+   "defaultUnit": "g",
+   "aisle": "wereld",
+   "needPiece": false,
+   "needUnits": []
+  },
+  {
+   "id": "kletskop",
+   "nl": "kletskop",
+   "en": "kletskop",
+   "defaultUnit": "stuk",
+   "aisle": "snacks-zoet",
+   "needPiece": true,
+   "needUnits": []
+  }
+ ]
+}
