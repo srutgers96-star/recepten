@@ -9,6 +9,8 @@ krijgt hieronder een eigen blok (V1c-1, V1c-2, …) met Kritische lezer, Feitenc
 |---|---|---|---|---|---|
 | 1 | 9 nov | Onder Huishouden & vrienden staan **Deel mijn kaartje** en **Voeg lid toe**, maar geen **Voeg vriend toe**; onduidelijk welke knop een vriend toevoegt, zeker omdat het kaartje naar "je huishouden" verwijst. | Er zijn twee soorten kaartjes. Het **kaartje** (`#f=`, Deel mijn kaartje) maakt de ander altijd **lid** van je huishouden. Een **vriend** bestaat alleen via een **gedeelde voortgang** (`#x=`, Mijn profiel → Sync mijn voortgang): bij het plakken kies je "Bewaar als vriend" of lid; vrienden zijn snapshots (`progress.snapshots`, `friend: true`) en staan onder **Vrienden** (alleen zichtbaar als er een is) en in de kalender. **Voeg lid toe** (naam + kleur) is voor iemand zonder de app. Het scherm heet nog **Huishouden** terwijl de rij op Meer sinds V1b **Huishouden & vrienden** heet. | Optie A (teksten + vast blok Vrienden met knop) of optie B (ook een kaartje als vriend bewaren, modelwijziging). | **Optie A** (Stijn 9 nov) → blok V1c-1 hieronder. |
 
+| 2 | 9 nov (na V1c-1) | "Ik wil een knop Voeg vriend toe én Voeg huisgenoot toe, één plakveld is oké; dan Stuur voortgang / Stuur recepten (of allebei) met één deelknop eronder; elke vriend kun je Maak huisgenoot doen en elke huisgenoot Maak vriend; het woord kaartje is onduidelijk, ik wil duidelijkheid en makkelijkheid." | Vrienden zijn nu voortgangs-snapshots (`progress.snapshots`, `friend: true`), huisgenoten zijn `Member`s; de voortgang (`#x=`) bevat al naam, kleur, taal, avatar en deviceId (`progressCardFor`), dus het kaartje (`#f=`) is als apart begrip overbodig; "Deel je nieuwe recepten" (DeltaShareScreen, `/share`) en "Sync mijn voortgang" (ProgressSharePanel) zijn twee losse stuurpanelen; `membersFrom` wordt gelezen in badges.ts, BadgesScreen, CalendarScreen, DeltaShareScreen, HouseholdScreen, InboxScreen, MoreScreen, RecipeScreen en StoryScreen. | **Ontwerp V1c-2 hieronder** (één lijst mensen met rol, twee toevoegknoppen, één plakvak, één stuurpaneel per persoon, kaartje verdwijnt). L, 6–8 % weekbudget. | **Akkoord met het ontwerp (9 nov: "ja bewaar dit maar tot volgende keer dat ik op mn laptop zit"); bouwen zodra Stijn "bouw maar" zegt.** |
+
 ## Nog te verwachten
 Alles uit DEVICE-TEST 109–119 dat niet klopt; de kcal-getallen bij bekende recepten (V9/V9b); de rand-veeg op de iPhone (V8).
 
@@ -130,3 +132,55 @@ geciteerd in de Feitencheck van 9 nov). DEVICE-TEST: rij 119 is de laatste; dit 
 |---|---|
 | A | `src/screens/HouseholdScreen.tsx`, `src/i18n/settings.ts`, `src/styles/settings.css` (één regel), `data/handbook/05-delen-en-ontvangen.json`, `docs/HANDLEIDING.md` + `docs/HANDBOOK.md`, `docs/DEVICE-TEST.md` |
 | Integrator | check/test/build/validate groen, acceptatie in de dev-app (NL/EN: kop, blok Vrienden leeg, knop → plakvak met blauwe regel, typ-kaartje met Voeg toe), `docs/STATUS.md`, de regel "Gebouwd" in dit blok |
+
+
+---
+
+## Ontwerp V1c-2 — Mensen en sturen: huisgenoten en vrienden met een wisselbare rol, één plakvak, één stuurpaneel (wacht op "bouw maar")
+
+Status: ontwerp akkoord (Stijn 9 nov), nog niet gebouwd; wordt een gewone spec (Kritische lezer, Feitencheck, §1–§3) zodra Stijn het zegt.
+Vervangt een deel van V1c-1 (de teksten blijven de basis; het blok Vrienden en het typ-kaartje gaan op in de nieuwe knoppen).
+
+**Model.** `Member.role?: 'housemate' | 'friend'` (afwezig = huisgenoot; profielen op deze telefoon altijd huisgenoot). Een vriend wordt een
+`Member` met `role: 'friend'` (naam, kleur, taal, avatar, deviceId uit zijn voortgang); zijn snapshot blijft in `progress.snapshots` onder zijn id,
+de vlag `friend` daar verliest haar betekenis (blijft staan voor oude back-ups). Eenmalige migratie bij boot: elke snapshot met `friend: true`
+zonder bijpassend lid wordt een vriend-lid. Helpers `housemates(members)` en `friendsOf(members)`. Wie wat leest: lijstjes, porties, weekplan,
+"wie kookte", badges Samen en de Badges-tabbladen → huisgenoten; kookkalender, afzenders in In & uit, ontvangers van Stuur → allebei; Meer toont
+beide met de bestaande labeltjes huisgenoot/vriend.
+
+**Rol wisselen.** Bij elke persoon behalve een profiel op deze telefoon: **Maak vriend** of **Maak huisgenoot** (één tik, geen bevestiging; de
+snapshot en de kookdagen blijven).
+
+**Toevoegen.** Bovenaan de lijst twee knoppen: **Voeg huisgenoot toe** en **Voeg vriend toe**. Beide openen hetzelfde venstertje met de rol al
+gekozen (en wisselbaar): (a) **Plak wat hij je stuurde** — het ene plakvak; een geplakte voortgang of oud kaartje toont "Gabi stuurde haar
+voortgang" met de knop **Voeg Gabi toe als vriend/huisgenoot** (of **Werk Gabi bij** als ze al in de lijst staat); (b) **Of typ een naam** — naam +
+kleur voor iemand zonder de app, met de gekozen rol. Het losse typ-kaartje en de losse plakkaart van V1c-1 verdwijnen; de universele plakbox
+blijft intern dezelfde (recepten en lijstjes die hier geplakt worden gaan door naar In & uit zoals nu).
+
+**Sturen.** Bij elke persoon een knop **Stuur** → venster "Stuur naar Gabi" met twee vinkjes: **Mijn voortgang** (level, badges, kookdagen én wie
+je bent; met badges uit heet het **Wie ik ben** en gaat alleen naam, kleur, taal en avatar mee, technisch het `#f=`-token) en **Nieuwe recepten**
+("12 nieuwe sinds 3 nov"; uit als er niets nieuws is), daaronder **Deel** en **Kopieer**. Eén WhatsApp-bericht: de voortgangszin met haar link,
+dan de receptdelen zoals DeltaShareScreen ze nu maakt (V2-regels: tot 20 KB per bericht, anders meerdere delen; de voortgang zit in deel 1). Na
+een geslaagde share: `share.lastSentTo` voor die persoon bijgewerkt en de 'out'-rijen gelogd zoals nu. Bovenaan het scherm **Stuur mijn
+voortgang** voor iemand die nog niet in de lijst staat (zelfde venster zonder ontvanger, alleen het eerste vinkje). Mijn profiel houdt zijn knop
+Sync mijn voortgang maar die opent hetzelfde venster. De techniek achter DeltaShareScreen (`/share`) blijft en wordt een module (`src/sendto.ts`)
+die het venster en het bestaande scherm allebei gebruiken; het scherm zelf blijft bereikbaar via Recepten & delen.
+
+**Ontvangen.** De ontvanger plakt het bericht in In & uit of in het plakvak van Huishouden & vrienden; `extractTokens` vindt `#x=`/`#f=` én de
+receptlinks. De persoonskaart heet "Gabi stuurde haar voortgang" (of "… wie ze is") met **Voeg toe als huisgenoot**, **Voeg toe als vriend** of
+**Werk bij**; de recepten gaan zoals nu naar de inbox-voorvertoning. De rol die de ontvanger kiest staat los van wat de zender deed (Stijn: "de
+ontvanger weet dan al of het een vriend of huisgenoot is").
+
+**Woorden.** "Kaartje", "lid", "Mijn kaartje", "Deel mijn kaartje" en "Voeg toe aan je huishouden" verdwijnen uit UI, handboek (rijen
+kaartje-delen, lid-toevoegen, vriend-toevoegen, huishouden, voortgang-ontvangen, in-en-uit) en DEVICE-TEST (rijen 52, 58, 97, 99, 108–110,
+120). Het scherm blijft **Huishouden & vrienden** heten.
+
+**Niet veranderen.** Tokens en hun codecs (invariant 4: `#f=` en `#x=` blijven leesbaar), iPhone-plakweg (invariant 5), de kookkalender, de
+badge-regels (Samen telt huisgenoten), de Profielen-pagina.
+
+**Grootte en verdeling (schatting).** L: bouwer A domein + repo (rol, helpers, migratie, tests), bouwer B HouseholdScreen + venstertjes + sendto.ts
++ DeltaShareScreen-koppeling + i18n, bouwer C MoreScreen/Inbox/Calendar/Badges-lezers + handboek + DEVICE-TEST; integrator, lens, gate. 6–8 %
+weekbudget.
+
+**Stijn beslist bij de bouw.** Niets meer; alles hierboven is op 9 nov besproken. Open blijft alleen de exacte Nederlandse zin op de
+ontvangen persoonskaart ("Gabi stuurde haar voortgang" versus "Voortgang van Gabi"); voorstel Fable: de eerste.
