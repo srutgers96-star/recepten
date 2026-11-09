@@ -1,6 +1,6 @@
 # Spec V9 — Voedingswaarden: één rustige kcal-regel per portie, met uitklap voor de macro's (Stijn, 17 okt + 8 nov 2026)
 
-Status: in aanbouw (Fable, 9 nov 2026). Eén blok, drie bouwers + data-ronde (Sonnet, achttien batches) + integrator + toepasser (lichte
+Status: in aanbouw (Fable, 9 nov 2026). Eén blok, drie bouwers + data-ronde (Sonnet, negentien batches van ±80 ingrediënten: 1448 voedsel-ids) + integrator + toepasser (lichte
 modus met een extra data-fase). Bron: docs/IDEAS.md idee 1 (Stijn 17 okt: "klein ≈ 620 kcal p.p. met een subtiel uitklapmenu voor
 eiwit, vet, koolhydraten en meer; klein en rustig"; 8 nov: "subtiel met calorieën in recepten; de waarden bij de ingrediënten, verder
 niet standaard tonen; misschien bij calorieën een uitklap voor de macro's"). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
@@ -194,7 +194,7 @@ dict.* in src/i18n/edit.ts, more.* in src/i18n/settings.ts. `tools/apply-llm-bat
   koolhydraten 0 g". 7. De regel is weg; na het aanzetten staat hij er weer. 8. "≈ … kcal per serving · … % known", de tabel heet Per serving
   met Energy, Protein, Fat, Carbohydrates, Fibre, Salt. Onder **Over** staat in beide talen de bronregel over NEVO en USDA.
 
-### 1d. De data-ronde (achttien Sonnet-agents, daarna de toepasser)
+### 1d. De data-ronde (negentien Sonnet-agents, daarna de toepasser)
 
 - Invoer: `data/llm/nutrition/input-NN.json` (door Fable gemaakt vóór de run): `{ "batch": "NN", "items": [{ "id", "nl", "en", "defaultUnit",
   "aisle", "needPiece": bool, "needUnits": ["takje"] }] }` — alle voedsel-ingrediënten (geen huishoudelijk/drogisterij), ±80 per batch, op id.
