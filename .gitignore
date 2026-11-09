@@ -19,3 +19,6 @@ android-twa/*.keystore
 
 # local contact sheets and probes (tools/avatar-sheet.ts)
 scratch/
+
+# V9b: voedingstabellen (USDA FoodData Central, NEVO-online) — groot, niet in git; tools lezen hieruit
+data/work/tables/
