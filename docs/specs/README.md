@@ -101,7 +101,7 @@ lichte workflow, direct naar main. De uitgewerkte ideeën en het volledige plan 
 | V8 | Vegen tussen de vijf tabbladen (touch, 60 px, niet aan de rand, stoppen bij Home en Meer, 150 ms schuif) | verbeterronde-8.md | compleet (9 nov) |
 | V9 | Voedingswaarden: grammen-dekking (`gramsPerMl` + `gramsPer`), `data/nutrition.json` (schattingen per 100 g, Sonnet-batches), één rustige kcal-regel per portie met uitklap, schakelaar Voedingswaarden, per 100 g in het woordenboek | verbeterronde-9.md | compleet (9 nov) |
 | V9b | Voedingswaarden van schatting naar tabelwaarde: USDA SR Legacy (nu) en NEVO-online 2025 (zodra Stijn het bestand heeft); naamzoeker + Sonnet-koppelronde, `--from-tables` in apply-nutrition, bron per item in het woordenboek | verbeterronde-9b.md | compleet (9 nov; USDA én NEVO) |
-| V1c | Testronde-feedback na V1–V9, per punt een blokje; V1c-1: Huishouden & vrienden duidelijk (huisgenoten, Plak een kaartje of voortgang, vast blok Vrienden met Voeg vriend toe; optie A) | verbeterronde-1c.md | V1c-1 compleet (9 nov); V1c-2 (mensen met wisselbare rol, één plakvak, één stuurpaneel, kaartje weg) ontworpen en akkoord, wacht op "bouw maar" |
+| V1c | Testronde-feedback na V1–V9, per punt een blokje; V1c-1: Huishouden & vrienden duidelijk (huisgenoten, Plak een kaartje of voortgang, vast blok Vrienden met Voeg vriend toe; optie A) | verbeterronde-1c.md | V1c-1 compleet (9 nov); V1c-2 (mensen met wisselbare rol, één plakvak, één stuurpaneel, kaartje weg) ontworpen en akkoord, wacht op "bouw maar"; V1c-3 (deelknop naast de ster) compleet (10 nov); punten 4–6 (labels ingeklapt, lege ruimte onder formulieren, + Boodschappen op een recept) bekeken, bouwen later |
 
 ## 2. Besluiten van de kritische lezer (gelden over alle specs)
 
