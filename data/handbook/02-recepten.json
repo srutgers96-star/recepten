@@ -263,8 +263,8 @@
         "en": ["Tap **Recipes** at the bottom.", "Tap a recipe."]
       },
       "see": {
-        "nl": "Een regel met een klokje noemt de tijd, zoals “20 min · 55 min totaal · klassieker”. Je ziet ook of het een eigen recept is en hoe vaak je het kookte. Daaronder staan **Koken**, **✓ Gekookt**, **Deel** en **+ Deze week**.",
-        "en": "One line with a small clock gives the time, such as “20 min · 55 min total · classic”. You also see whether it is your own recipe and how often you cooked it. Below are **Cook**, **✓ Cooked**, **Share** and **+ This week**."
+        "nl": "Een regel met een klokje noemt de tijd, zoals “20 min · 55 min totaal · klassieker”. Je ziet ook of het een eigen recept is en hoe vaak je het kookte. Daaronder staan **Koken**, **✓ Gekookt**, **Deel** en **+ Deze week**. Bij een eigen of ontvangen recept staat naast het sterretje ook een deelknop.",
+        "en": "One line with a small clock gives the time, such as “20 min · 55 min total · classic”. You also see whether it is your own recipe and how often you cooked it. Below are **Cook**, **✓ Cooked**, **Share** and **+ This week**. Your own or received recipes also have a share button next to the star."
       },
       "know": {
         "nl": "Staat er waarschijnlijk achter een dieetlabel, dan kent de app een ingrediënt niet zeker. Dat label is dan niet zeker. Bij de tijd is de eerste hoe lang je zelf bezig bent, de tweede de hele tijd met wachten erbij.",

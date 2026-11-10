@@ -851,6 +851,18 @@ export function RecipeScreen(props: { id: string }) {
               >
                 {isFav ? '★' : '☆'}
               </button>
+              {/* V1c-3 (Stijn, 10 Nov 2026): an own or received recipe gets a share button right next to the
+                  star, so a single recipe is one tap away; it opens the same share screen as the Deel
+                  button lower on the page. A classic has no button here: it is on both phones already. */}
+              {editable && (
+                <button type="button" class="fav-btn share-btn no-print" aria-label={t('recipe.shareQuick')} title={t('recipe.shareQuick')} onClick={() => navigate('/share/' + targetId)}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 3v12" />
+                    <path d="M7 8l5-5 5 5" />
+                    <path d="M5 13v6a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6" />
+                  </svg>
+                </button>
+              )}
             </div>
 
             {dietChips.length > 0 && (

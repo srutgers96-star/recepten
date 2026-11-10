@@ -432,6 +432,18 @@
   opacity: 0.4;
 }
 
+/* V1c-3: the quick share button next to the star (own and received recipes). */
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
 .detail-meta {
   color: var(--muted);
   font-size: 14px;

@@ -72,6 +72,7 @@ export const browse: Dict = {
   // --- Detail ---
   'recipe.cook': { nl: 'Koken', en: 'Cook' },
   'recipe.share': { nl: 'Deel', en: 'Share' },
+  'recipe.shareQuick': { nl: 'Deel dit recept', en: 'Share this recipe' },
   'recipe.fav': { nl: 'Maak favoriet', en: 'Add to favourites' },
   'recipe.unfav': { nl: 'Favoriet weghalen', en: 'Remove favourite' },
   'recipe.ingredients': { nl: 'Ingrediënten', en: 'Ingredients' },

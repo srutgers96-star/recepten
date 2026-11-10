@@ -531,7 +531,7 @@ De receptpagina toont de naam, de dieetlabels, de categorie en keuken, de tijd e
 
 #### Wat je dan ziet
 
-Een regel met een klokje noemt de tijd, zoals “20 min · 55 min totaal · klassieker”. Je ziet ook of het een eigen recept is en hoe vaak je het kookte. Daaronder staan **Koken**, **✓ Gekookt**, **Deel** en **+ Deze week**.
+Een regel met een klokje noemt de tijd, zoals “20 min · 55 min totaal · klassieker”. Je ziet ook of het een eigen recept is en hoe vaak je het kookte. Daaronder staan **Koken**, **✓ Gekookt**, **Deel** en **+ Deze week**. Bij een eigen of ontvangen recept staat naast het sterretje ook een deelknop.
 
 #### Goed om te weten
 

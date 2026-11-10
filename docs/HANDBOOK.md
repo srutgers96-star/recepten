@@ -531,7 +531,7 @@ The recipe page shows the name, the diet labels, the category and cuisine, the t
 
 #### What you then see
 
-One line with a small clock gives the time, such as “20 min · 55 min total · classic”. You also see whether it is your own recipe and how often you cooked it. Below are **Cook**, **✓ Cooked**, **Share** and **+ This week**.
+One line with a small clock gives the time, such as “20 min · 55 min total · classic”. You also see whether it is your own recipe and how often you cooked it. Below are **Cook**, **✓ Cooked**, **Share** and **+ This week**. Your own or received recipes also have a share button next to the star.
 
 #### Good to know
 
