@@ -181,7 +181,12 @@ export function parseEnvelope(parsed: unknown): Envelope {
  * link) are returned once. The importer still has to check that `decodeToken(token).t === key`.
  */
 export function extractTokens(text: string): Array<{ key: TokenKey; token: string }> {
-  const found: Array<{ key: TokenKey; token: string }> = [];
+  return extractTokenSpans(text).map(({ key, token }) => ({ key, token }));
+}
+
+/** `extractTokens` plus `end`: the index right after each token in `text` (for `glueToken`). */
+export function extractTokenSpans(text: string): Array<{ key: TokenKey; token: string; end: number }> {
+  const found: Array<{ key: TokenKey; token: string; end: number }> = [];
   const seen = new Set<string>();
   for (const match of text.matchAll(TOKEN_RE)) {
     const key = match[1] as TokenKey;
@@ -189,9 +194,31 @@ export function extractTokens(text: string): Array<{ key: TokenKey; token: strin
     const id = key + '=' + token;
     if (seen.has(id)) continue;
     seen.add(id);
-    found.push({ key, token });
+    // `end`: the index right after the token in `text`, for `glueToken`.
+    found.push({ key, token, end: (match.index ?? 0) + match[0].length });
   }
   return found;
+}
+
+/** Whitespace and invisible characters a phone may drop into a long pasted link (soft hyphen, line and paragraph separators, zero-width ones, no-break space). */
+const GLUE_GAP_RE = /^[\s\u00A0\u00AD\u2028\u2029\u200B-\u200D\u2060\uFEFF]+([A-Za-z0-9_-]+)/;
+
+/**
+ * The token characters that follow `end` after a gap of whitespace or invisible characters, glued back
+ * together (V1c, 10 Nov 2026: Gabi's iPhone pasted a 2607-character link in which only the first 1236
+ * characters were read, so a break inside the link is the first thing to try before calling it damaged).
+ * Returns '' when nothing token-like follows. The caller tries `decodeToken(token + glued)`; a wrong glue
+ * (the next line's first word) simply fails to decode and changes nothing.
+ */
+export function glueToken(text: string, end: number): string {
+  let glued = '';
+  let rest = text.slice(end);
+  for (;;) {
+    const m = GLUE_GAP_RE.exec(rest);
+    if (!m) return glued;
+    glued += m[1]!;
+    rest = rest.slice(m[0].length);
+  }
 }
 
 /** 'https://x.github.io/recepten/' + 'r' + token -> 'https://x.github.io/recepten/#r=<token>'. */

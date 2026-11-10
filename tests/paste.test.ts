@@ -66,3 +66,21 @@ describe('paste: the sender id (V2)', () => {
     expect(without.plan?.byId).toBeUndefined();
   });
 });
+
+// V1c (10 Nov 2026): Gabi's iPhone pasted a long link of which only the first 1236 of 2607 characters were read.
+describe('paste: a link broken inside the token is glued back together', () => {
+  it('a line break, a soft hyphen and a zero-width space inside the token still give the list', async () => {
+    const tok = FROZEN_TOKEN_L;
+    const broken = tok.slice(0, 30) + '\n' + tok.slice(30, 60) + '\u00AD' + tok.slice(60, 80) + '\u200B\n ' + tok.slice(80);
+    const got = await collectPaste(`🛒 Lijst\n${APP_URL}#l=${broken}`, null);
+    expect(got.lists.length).toBe(1);
+    expect(got.problems).toEqual([]);
+  });
+  it('a token that is really cut short stays a problem with its length, and the next line is not glued in by mistake', async () => {
+    const tok = FROZEN_TOKEN_L;
+    const got = await collectPaste(`${APP_URL}#l=${tok.slice(0, 40)}\nOpen in de app (of tik)`, null);
+    expect(got.lists.length).toBe(0);
+    expect(got.problems.length).toBe(1);
+    expect(got.problems[0]).toContain('40');
+  });
+});

@@ -45,9 +45,9 @@ import { classifyPaste } from '@/domain/paste-classify';
 import { cleanPastedText } from '@/domain/photo-import';
 import type { ProgressSnapshot } from '@/domain/progress';
 import { parseEnvelope, type ParsedShare, type ProgressCard } from '@/domain/share';
-import { decodeToken, extractTokens } from '@/domain/token';
+import { decodeToken, extractTokenSpans, glueToken } from '@/domain/token';
 import { t } from '@/i18n';
-import { openPasteIn } from '@/paste';
+import { openPasteIn, pasteProblemOf } from '@/paste';
 import { PROFILE_COLORS, activeProfile, profiles } from '@/profile';
 import { navigate, pendingMemberText } from '@/router';
 import { Avatar, MemberCardPanel, useAvatarLevel } from './ProfilesScreen';
@@ -135,7 +135,8 @@ export async function readMemberCards(text: string): Promise<FoundCards> {
     } else out.others++;
   };
   // Tokens from the cleaned text, as the paste box classifies them (a rendered chat may escape a "_" inside the token).
-  const tokens = extractTokens(cleanPastedText(text));
+  const cleaned = cleanPastedText(text);
+  const tokens = extractTokenSpans(cleaned);
   if (tokens.length) {
     for (const tk of tokens) {
       try {
@@ -144,7 +145,20 @@ export async function readMemberCards(text: string): Promise<FoundCards> {
         if (env.t !== tk.key) throw new Error('invalid-token');
         take(parseEnvelope(env));
       } catch (e) {
-        out.problems.push(problemOf(e));
+        // V1c (10 Nov 2026): a link broken inside the token by a phone's paste — glue what follows back on first
+        // (src/paste.ts does the same for the Inbox); still unreadable → the damaged-or-cut-short line with its length.
+        const glued = glueToken(cleaned, tk.end);
+        if (glued) {
+          try {
+            const env = await decodeToken(tk.token + glued);
+            if (env.t !== tk.key) throw new Error('invalid-token');
+            take(parseEnvelope(env));
+            continue;
+          } catch {
+            /* fall through */
+          }
+        }
+        out.problems.push(pasteProblemOf(e, tk.token));
       }
     }
     return out;

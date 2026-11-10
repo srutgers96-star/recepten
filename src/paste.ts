@@ -20,7 +20,7 @@ import type { MemberCard } from '@/domain/household';
 import type { Recipe, Text } from '@/domain/model';
 import { normalizeRecipe } from '@/domain/recipe-io';
 import { parseEnvelope, readPatchPayload, type ListShare, type ParsedShare, type PatchPayload, type PlanShare, type ProgressCard } from '@/domain/share';
-import { decodeToken, extractTokens } from '@/domain/token';
+import { decodeToken, extractTokens, extractTokenSpans, glueToken } from '@/domain/token';
 import { fileHasRecipes } from '@/file-import';
 import { t } from '@/i18n';
 import { navigate, pendingImport, pendingImportKind, pendingImportText, pendingMemberText } from '@/router';
@@ -233,7 +233,8 @@ export function looksLikeJson(text: string): boolean {
  */
 export async function collectPaste(text: string, parts: string[] | null): Promise<Collected> {
   const acc: Collected = { share: emptyShare(), problems: [], members: [], progress: [], progressAt: {}, lists: [] };
-  const tokens = extractTokens(cleanPastedText(text));
+  const cleaned = cleanPastedText(text);
+  const tokens = extractTokenSpans(cleaned);
   if (tokens.length) {
     for (const tk of tokens) {
       try {
@@ -242,6 +243,20 @@ export async function collectPaste(text: string, parts: string[] | null): Promis
         if (env.t !== tk.key) throw new Error('invalid-token');
         addShare(acc, parseEnvelope(env));
       } catch (e) {
+        // A link broken by a line break or an invisible character inside the token (a phone's paste):
+        // glue what follows back on and try once more before reporting it as damaged.
+        const glued = glueToken(cleaned, tk.end);
+        if (glued) {
+          try {
+            const env = await decodeToken(tk.token + glued);
+            if (env.t !== tk.key) throw new Error('invalid-token');
+            console.warn('paste token glued', tk.key, tk.token.length, '+', glued.length);
+            addShare(acc, parseEnvelope(env));
+            continue;
+          } catch {
+            /* fall through to the report below */
+          }
+        }
         console.warn('paste token', tk.key, tk.token.length, (e as Error)?.message);
         acc.problems.push(pasteProblemOf(e, tk.token));
       }
