@@ -4,6 +4,9 @@ Lees dit eerst in een nieuwe Claude Code-sessie, samen met CLAUDE.md (invariante
 Losse ideeën voor later (niet gepland) staan in **docs/IDEAS.md**; eerste idee: voedingswaarden en macro's
 (17 okt). Stijn wil eerst het XP/level-plan (6D) en de rest afmaken.
 
+## V1c-7 (Fable, 10 nov): "Ongeldige receptcode" bij Gabi — duidelijker melding met het aantal tekens
+Stijns link (zijn versie van de nasi, `#r=`, 2607 tekens) decodeert met de huidige code foutloos, ook na de plak-opschoning; `inbox.invalid` ontstaat alleen als een gevonden code niet te lezen is, dus de code was bij Gabi afgebroken of veranderd. Nieuw: `inbox.invalidToken` (NL/EN) met het aantal gevonden tekens en de instructie het hele WhatsApp-bericht te kopiëren; `pasteProblemOf(e, token)` in src/paste.ts, plus een `console.warn` met sleutel en lengte. Oorzaak aan Gabi's kant nog open (link getikt → voorproefje in de WhatsApp-browser, of een gekopieerde link die te vroeg stopt).
+
 ## V1c-3 (Fable, 10 nov): deelknop naast het sterretje bij eigen recepten
 Stijn (10 nov): "bij recepten die geen klassiekers zijn, naast het sterretje ook gewoon een deel-knop". Direct gebouwd door Fable: in `src/screens/RecipeScreen.tsx` krijgt een eigen of ontvangen recept (`editable`, dus `origin.kind !== 'builtin'`) in de receptkop een tweede knop `.fav-btn.share-btn` met een deel-pijltje (aria-label `recipe.shareQuick` "Deel dit recept" · "Share this recipe") die naar `/share/<id>` gaat, hetzelfde doel als **Deel** in de knoppenrij; een klassieker houdt alleen de ster. CSS in browse.css (`.share-btn`), handboekzin bij `recepten.receptpagina`, DEVICE-TEST rij 121 (NL + EN). Geen nieuwe tests (geen logica).
 

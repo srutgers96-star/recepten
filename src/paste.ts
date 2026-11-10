@@ -75,9 +75,13 @@ function senderOf(r: Recipe): string | undefined {
   return r.origin.receivedFrom || r.origin.author || undefined;
 }
 
-/** The message for a token or envelope that could not be read ("update the app" for a newer version). */
-export function pasteProblemOf(e: unknown): string {
-  return (e as Error)?.message === 'unsupported-version' ? t('inbox.unsupported') : t('inbox.invalid');
+/**
+ * The message for a token or envelope that could not be read: "update the app" for a newer version; with the
+ * token given, the damaged-or-cut-short line with its length (V1c, 10 Nov 2026); else the plain "invalid".
+ */
+export function pasteProblemOf(e: unknown, token?: string): string {
+  if ((e as Error)?.message === 'unsupported-version') return t('inbox.unsupported');
+  return token ? t('inbox.invalidToken', { n: token.length }) : t('inbox.invalid');
 }
 
 function addShare(acc: Collected, parsed: ParsedShare) {
@@ -238,7 +242,8 @@ export async function collectPaste(text: string, parts: string[] | null): Promis
         if (env.t !== tk.key) throw new Error('invalid-token');
         addShare(acc, parseEnvelope(env));
       } catch (e) {
-        acc.problems.push(pasteProblemOf(e));
+        console.warn('paste token', tk.key, tk.token.length, (e as Error)?.message);
+        acc.problems.push(pasteProblemOf(e, tk.token));
       }
     }
     return acc;

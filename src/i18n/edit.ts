@@ -400,6 +400,12 @@ export const edit: Dict = {
   // Phase 5 block F: a `#f=` member card in the Inbox, and the sender shown as a household member.
   'inbox.fromMember': { nl: 'Van {name}, lid van je huishouden', en: 'From {name}, a member of your household' },
   'inbox.invalid': { nl: 'Ongeldige receptcode.', en: 'Invalid recipe code.' },
+  // V1c (10 Nov 2026, Gabi's "invalid recipe code"): a token WAS found but could not be read — almost always cut short or
+  // altered on the way (a copied link that stops early). Say so, with the length, and what to do.
+  'inbox.invalidToken': {
+    nl: 'De receptcode is onvolledig of beschadigd ({n} tekens gevonden). Kopieer het hele bericht opnieuw: houd het bericht in WhatsApp ingedrukt, kies Kopieer en plak het hier.',
+    en: 'The recipe code is incomplete or damaged ({n} characters found). Copy the whole message again: press and hold the message in WhatsApp, choose Copy and paste it here.',
+  },
   'inbox.unsupported': { nl: 'Update de app eerst (nieuwere versie van de code).', en: 'Update the app first (newer code version).' },
   'inbox.at': { nl: 'gedeeld op', en: 'shared on' },
   'inbox.ingredients': { nl: '{n} ingrediënten', en: '{n} ingredients' },
