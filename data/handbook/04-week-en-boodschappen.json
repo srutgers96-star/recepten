@@ -455,8 +455,8 @@
         "en": ["Hold a line.", "Tap **Adjust amount**.", "Tap − or +.", "Tap **Close**."]
       },
       "see": {
-        "nl": "De regel toont het nieuwe aantal. Stuks gaan per één, grammen in grotere stappen.",
-        "en": "The line shows the new amount. Pieces go up by one, grams in bigger steps."
+        "nl": "De regel toont het nieuwe aantal. Stuks gaan per één, grammen in grotere stappen. Links van elke regel staat een kruisje: één tik en de regel is niet nodig (doorgestreept); met het pijltje zet je het uitgerekende aantal terug.",
+        "en": "The line shows the new amount. Pieces go up by one, grams in bigger steps. To the left of each line is a cross: one tap and the line is not needed (struck through); the arrow puts the computed amount back."
       },
       "route": "/shopping",
       "platform": "all",

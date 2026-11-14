@@ -2211,7 +2211,7 @@ Wil je meer of minder kopen dan de app uitrekende, dan pas je het aantal aan.
 
 #### Wat je dan ziet
 
-De regel toont het nieuwe aantal. Stuks gaan per één, grammen in grotere stappen.
+De regel toont het nieuwe aantal. Stuks gaan per één, grammen in grotere stappen. Links van elke regel staat een kruisje: één tik en de regel is niet nodig (doorgestreept); met het pijltje zet je het uitgerekende aantal terug.
 
 (`#/shopping`)
 

@@ -1,5 +1,7 @@
-// One line of the proto list (docs/phase-4-spec.md §3, state 2): `[−] qty unit name [+]` with the
-// step rule of `adjustStep` (pieces 1; g 10/25/50; ml 10/50/100; spoons ½), the sources on tap
+// One line of the proto list (docs/phase-4-spec.md §3, state 2): `[✕] qty unit name [−][+]` — V1c-8
+// (Stijn, 15 Nov 2026: "meestal moet je hele ingrediënten verwijderen en dan moet je 20 keer klikken"):
+// ✕ on the left sets the line to "niet nodig" in one tap (↺ puts the computed amount back), the small
+// − and + on the right step by the rule of `adjustStep` (pieces 1; g 10/25/50; ml 10/50/100; spoons ½); the sources on tap
 // ("Waarvoor is dit?": "3 uien — 2× Pasta met spek"). A staple sits at 0 and toggles to 1 on tap
 // ("even meenemen"); a "pm" line (no number) and an unresolved "Controleer zelf" line have no
 // stepper. Also used inside the long-press sheet ("Aantal aanpassen"). The user's delta lives in
@@ -65,11 +67,16 @@ export function ProtoRow(props: ProtoRowProps) {
   return (
     <li class={'pr' + (zero ? ' zero' : '') + (staple ? ' staple' : '') + (staple && current > 0 ? ' on' : '')}>
       <div class="pr-row">
-        {canStep && (
-          <button type="button" class="pr-step" aria-label={t('shop.less')} disabled={current <= 0} onClick={() => set(current - step)}>
-            −
-          </button>
-        )}
+        {canStep &&
+          (zero ? (
+            <button type="button" class="pr-step pr-x" aria-label={t('shop.restore')} title={t('shop.restore')} onClick={() => props.onAdjust(item, undefined)}>
+              ↺
+            </button>
+          ) : (
+            <button type="button" class="pr-step pr-x" aria-label={t('shop.notNeeded')} title={t('shop.notNeeded')} disabled={current <= 0} onClick={() => set(0)}>
+              ✕
+            </button>
+          ))}
         <button type="button" class="pr-text" aria-expanded={open} onClick={tap}>
           {text}
           {item.fresh && !staple && (
@@ -80,9 +87,14 @@ export function ProtoRow(props: ProtoRowProps) {
           )}
         </button>
         {canStep && (
-          <button type="button" class="pr-step" aria-label={t('shop.more')} onClick={() => set(current + step)}>
-            +
-          </button>
+          <>
+            <button type="button" class="pr-step pr-small" aria-label={t('shop.less')} disabled={current <= 0} onClick={() => set(current - step)}>
+              −
+            </button>
+            <button type="button" class="pr-step pr-small" aria-label={t('shop.more')} onClick={() => set(current + step)}>
+              +
+            </button>
+          </>
         )}
       </div>
       {open && (

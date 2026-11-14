@@ -2211,7 +2211,7 @@ If you want to buy more or less than the app worked out, you change the amount.
 
 #### What you then see
 
-The line shows the new amount. Pieces go up by one, grams in bigger steps.
+The line shows the new amount. Pieces go up by one, grams in bigger steps. To the left of each line is a cross: one tap and the line is not needed (struck through); the arrow puts the computed amount back.
 
 (`#/shopping`)
 

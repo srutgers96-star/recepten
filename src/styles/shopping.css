@@ -478,6 +478,18 @@
   cursor: default;
 }
 
+/* V1c-8: ✕ / ↺ on the left in the muted colour; the − and + on the right narrower (still 44 px tall). */
+.pr-step.pr-x {
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.pr-step.pr-small {
+  width: 34px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
 .pr-text {
   flex: 1;
   min-width: 0;

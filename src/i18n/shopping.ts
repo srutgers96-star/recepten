@@ -29,6 +29,9 @@ export const shopping: Dict = {
   'shop.confirm': { nl: 'Bevestig lijst', en: 'Confirm list' },
   'shop.zero': { nl: 'niet nodig', en: 'not needed' },
   'shop.less': { nl: 'Minder', en: 'Less' },
+  // V1c-8: the ✕ / ↺ on the left of a proto line.
+  'shop.notNeeded': { nl: 'Niet nodig', en: 'Not needed' },
+  'shop.restore': { nl: 'Zet terug', en: 'Put back' },
   'shop.more': { nl: 'Meer', en: 'More' },
   'shop.noSources': { nl: 'Zelf toegevoegd', en: 'Added by hand' },
 
