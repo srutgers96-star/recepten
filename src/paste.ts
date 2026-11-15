@@ -303,7 +303,7 @@ export function isRecipeKind(kind: PasteKind): boolean {
   return kind === 'website' || kind === 'ai';
 }
 
-/** "Kaartje van Noor" / "2 kaartjes" for the member cards in a text. */
+/** "wie Noor is" / "2 personen" for the who-I-am tokens (`#f=`) in a text (V1c-2: no "kaartje"). */
 function membersLabel(names: string[]): string {
   if (names.length === 1) return t('paste.card', { name: names[0] as string });
   return t('paste.cards', { n: names.length });

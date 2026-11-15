@@ -4,6 +4,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   cardFromMember,
+  friendMembersFromSnapshots,
+  friendsOf,
+  housematesOf,
   matchMemberForCard,
   memberByName,
   memberFromCard,
@@ -11,6 +14,8 @@ import {
   membersFrom,
   normalizeHousehold,
   putMember,
+  roleOf,
+  setRole,
   upsertMemberFromCard,
   type HouseholdSetting,
   type Member,
@@ -185,5 +190,77 @@ describe('memberByName (the sender of a received share)', () => {
     expect(memberByName(all, 'Tom')?.id).toBe('p:tom000001');
     expect(memberByName(all, 'G.')).toBeUndefined();
     expect(memberByName(all, 'Nobody')).toBeUndefined();
+  });
+});
+
+// V1c-2 (docs/specs/verbeterronde-1c.md, block V1c-2 §1a): housemates and friends with a role.
+describe('member roles (V1c-2)', () => {
+  const TOM: Member = { id: 'p:tom000001', name: 'Tom', color: '#7a3d8a', local: false, role: 'friend' };
+  const OMA: Member = { id: 'm:oma00001', name: 'Oma', color: '#2a8a8a', local: false };
+  const ANNA: Member = { id: 'm:anna0001', name: 'Anna', color: '#2a8a8a', local: false, role: 'housemate' };
+
+  it('roleOf: absent = housemate, a local profile is always a housemate', () => {
+    expect(roleOf({ local: false })).toBe('housemate');
+    expect(roleOf({ local: false, role: 'friend' })).toBe('friend');
+    expect(roleOf({ local: false, role: 'housemate' })).toBe('housemate');
+    expect(roleOf({ local: true, role: 'friend' })).toBe('housemate');
+  });
+
+  it('normalizeHousehold keeps only the two roles', () => {
+    const h = normalizeHousehold({ name: '', members: [{ ...TOM }, { ...OMA, role: 'neighbour' }, { ...ANNA }] });
+    expect(h.members.map((m) => m.role)).toEqual(['friend', undefined, 'housemate']);
+    expect(h.members[1]).not.toHaveProperty('role');
+  });
+
+  it('membersFrom: profiles, then housemates, then friends (stored order within a group)', () => {
+    const all = membersFrom([STIJN], setting([TOM, OMA, ANNA]));
+    expect(all.map((m) => m.name)).toEqual(['Stijn', 'Oma', 'Anna', 'Tom']);
+    expect(housematesOf(all).map((m) => m.name)).toEqual(['Stijn', 'Oma', 'Anna']);
+    expect(friendsOf(all).map((m) => m.name)).toEqual(['Tom']);
+  });
+
+  it('upsertMemberFromCard: a new member gets the given role (default housemate)', () => {
+    expect(upsertMemberFromCard(setting(), GABI_CARD).members[0]!.role).toBe('housemate');
+    expect(upsertMemberFromCard(setting(), GABI_CARD, 'friend').members[0]!.role).toBe('friend');
+  });
+
+  it('upsertMemberFromCard: an existing member keeps its role (a card never changes a role)', () => {
+    const asFriend = upsertMemberFromCard(setting(), GABI_CARD, 'friend');
+    const updated = upsertMemberFromCard(asFriend, { ...GABI_CARD, name: 'Gabriela' }, 'housemate');
+    expect(updated.members).toHaveLength(1);
+    expect(updated.members[0]).toMatchObject({ name: 'Gabriela', role: 'friend' });
+    // A member stored before V1c-2 (no role) stays a housemate.
+    const typed = putMember(setting(), { id: 'm:abc12345', name: 'Gabi', color: '#2a8a8a', local: false });
+    expect(roleOf(upsertMemberFromCard(typed, GABI_CARD, 'friend').members[0]!)).toBe('housemate');
+  });
+
+  it('setRole switches the role and keeps the id; an unknown id changes nothing', () => {
+    const h = setting([OMA, TOM]);
+    const next = setRole(h, OMA.id, 'friend');
+    expect(next.members.map((m) => [m.id, roleOf(m)])).toEqual([
+      [OMA.id, 'friend'],
+      [TOM.id, 'friend'],
+    ]);
+    expect(setRole(next, TOM.id, 'housemate').members[1]).toMatchObject({ id: TOM.id, role: 'housemate' });
+    expect(setRole(h, 'p:nobody', 'friend')).toBe(h);
+    // Pure: the input is not touched.
+    expect(h.members[0]).not.toHaveProperty('role');
+  });
+
+  it('friendMembersFromSnapshots: friend snapshots without a member become friend members', () => {
+    const snaps = {
+      'p:gabi00001': { ...GABI_CARD, friend: true },
+      'p:tom000001': { id: 'p:tom000001', name: 'Tom', color: '#7a3d8a', lang: 'nl' as const, friend: true },
+      'p:anna0002': { id: 'p:anna0002', name: 'anna', color: '#123456', lang: 'nl' as const, friend: true },
+      'p:kees0001': { id: 'p:kees0001', name: 'Kees', color: '#123456', lang: 'nl' as const, friend: false },
+      'p:gabi00009': { ...GABI_CARD, id: 'p:gabi00009', friend: true },
+    };
+    const members = membersFrom([STIJN], setting([ANNA]));
+    const out = friendMembersFromSnapshots(snaps, members);
+    // Anna matches a member by name, Kees was saved as a member's snapshot, the second Gabi is the same person.
+    expect(out.map((m) => m.name)).toEqual(['Gabi', 'Tom']);
+    expect(out[0]).toEqual({ id: 'p:gabi00001', name: 'Gabi', color: '#d9402b', lang: 'en', local: false, deviceId: 'd:iphone01', role: 'friend' });
+    // Already migrated (the friends are members now): nothing more.
+    expect(friendMembersFromSnapshots(snaps, [...members, ...out])).toEqual([]);
   });
 });

@@ -9,9 +9,9 @@
 // ongedaan" (undoLastImport), the import history (listImports, collapsible) and the received
 // recipes (unseen badge via 'inbox.seenIds', received patches of classics shown as
 // "<klassieker> · aangepast door X").
-// Phase 5 block F: a `#f=` MEMBER CARD in the text (pasted on iPhone, or the link on Android via
-// the router) becomes a card "Voeg <naam> toe aan je huishouden" (HouseholdScreen's MemberCardRow
-// + applyMemberCard); a sender who is a household member is shown with their avatar.
+// Phase 5 block F: a `#f=` (who someone is) in the text (pasted on iPhone, or the link on Android via
+// the router) becomes a person row (<PersonCardRow/>, V1c-2: "Voeg toe als huisgenoot" / "Voeg toe als
+// vriend", src/people.ts applyPersonCard); a sender who is a housemate or friend is shown with their avatar.
 // Phase 6 (docs/phase-6-spec.md 13A): the paste box is the universal one (<UniversalPaste>): a
 // website recipe or an AI answer pasted (or shared via the Android share sheet) here is recognised
 // and travels to the editor with "Open in de editor"; links, bundles and cards stay here as before.
@@ -21,11 +21,10 @@
 // date, to whom, what, how many; a tap opens the recipe, or unfolds the names when there are
 // several). A member card added here is logged as an 'in' row. The route stays '#/inbox'; the
 // badge stays "unseen received" (src/inbox-badge.ts).
-// 6D-4b (docs/specs/xp-levels.md §1i): a `#x=` "Sync mijn voortgang" (a link opened in the app or
-// pasted) becomes a card "Voortgang van <naam>" (HouseholdScreen's ProgressCardRow +
-// applyProgressCard): "Werk <naam> bij" for a member, the "profiel op deze telefoon" line for a
-// profile here, else "Voeg toe aan je huishouden" / "Bewaar als vriend". A sent progress shows in
-// "Gedeeld" as "Mijn voortgang".
+// 6D-4b (docs/specs/xp-levels.md §1i): a `#x=` progress (a link opened in the app or pasted) becomes
+// a person row "voortgang van <naam>" (<PersonCardRow/> + applyPersonCard, V1c-2): "Werk <naam> bij" for
+// someone in the list, the "profiel op deze telefoon" line for a profile here, else "Voeg toe als
+// huisgenoot" / "Voeg toe als vriend". A sent progress shows in "Gedeeld" as "Mijn voortgang".
 // V1c-9 (docs/specs/verbeterronde-1c.md, block V1c-9 §1b): the own progress coming back (a profile on
 // this phone, badges on, more XP on the card than now) offers "Herstel mijn voortgang" → restoreProgress.
 // 13Q (docs/specs/qr-link.md §1c): a `#l=` shopping list (a link opened in the app or pasted) becomes a
@@ -39,6 +38,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { checkNewBadges } from '@/badges';
 import { Header } from '@/components/Header';
 import { ImportPreview } from '@/components/ImportPreview';
+import { PersonCardRow, type PersonOutcome, type RestoredInfo } from '@/components/PersonCardRow';
 import { UniversalPaste } from '@/components/UniversalPaste';
 import { useLive } from '@/db/live';
 import type { ImportSnapshot, ShareEvent } from '@/db/model';
@@ -47,7 +47,6 @@ import {
   applyImportPlan,
   getHousehold,
   getPlan,
-  getProgressSnapshots,
   getRecipe,
   getSetting,
   isUndoable,
@@ -65,7 +64,7 @@ import {
   type ImportResult,
 } from '@/db/repo';
 import { dictionary, reloadDictionary } from '@/dictionary';
-import { memberById, memberByName, memberFromCard, membersFrom, type HouseholdSetting, type Member, type MemberCard } from '@/domain/household';
+import { memberById, memberByName, membersFrom, roleOf, type HouseholdSetting, type Member, type MemberCard, type MemberRole } from '@/domain/household';
 import { defaultChoices, planImport, type ImportChoice, type ImportChoices, type ImportPlan } from '@/domain/merge';
 import { nowIso, pickText, type Lang, type Recipe, type Text } from '@/domain/model';
 import { applyLineOverrides } from '@/domain/overrides';
@@ -82,7 +81,7 @@ import { activeProfile, profiles } from '@/profile';
 import { isAndroid } from '@/pwa';
 import { navigate, pendingImport, route } from '@/router';
 import { restoreProgress } from '@/progress-restore';
-import { applyMemberCard, applyProgressCard, MemberCardRow, ProgressCardRow, type CardOutcome, type ProgressOutcome, type RestoredInfo } from './HouseholdScreen';
+import { applyPersonCard } from '@/people';
 import { Avatar } from './ProfilesScreen';
 import { approvedDiets } from './WeekScreen';
 
@@ -118,18 +117,10 @@ function byIdOf(x: object | null | undefined): string | undefined {
   return typeof v === 'string' && v.trim() ? v : undefined;
 }
 
-/** The friends (snapshots saved with "Bewaar als vriend", `friend: true`) as members, for the sender lookup. */
-async function friendMembers(): Promise<Member[]> {
-  const snapshots = await getProgressSnapshots();
-  return Object.values(snapshots)
-    .filter((s) => s.friend === true)
-    .map((s) => memberFromCard(s));
-}
-
 /**
  * The household member or friend who sent something: first by `byId` (robust against a renamed
  * profile), else by name (`memberByName`: trimmed, case- and accent-insensitive, local first).
- * `senders` = the household (local profiles first) followed by the friends that are not a member.
+ * `senders` = everyone in the list (V1c-2: housemates first, then friends).
  */
 function senderOf(senders: readonly Member[], by: string | null | undefined, byId: string | undefined): Member | undefined {
   return memberById(senders, byId) ?? memberByName(senders, by);
@@ -368,12 +359,12 @@ export function InboxScreen() {
   const [planDone, setPlanDone] = useState(false);
   // Block F: received member cards, what happened to each, and the household for the matching.
   const [cards, setCards] = useState<MemberCard[]>([]);
-  const [cardDone, setCardDone] = useState<Record<string, CardOutcome>>({});
+  const [cardDone, setCardDone] = useState<Record<string, PersonOutcome>>({});
   const [cardBusy, setCardBusy] = useState(false);
   // 6D-4b: received progress (`#x=`), when each was shared, and what happened to each.
   const [progress, setProgress] = useState<ProgressCard[]>([]);
   const [progressAt, setProgressAt] = useState<Record<string, string>>({});
-  const [progressDone, setProgressDone] = useState<Record<string, ProgressOutcome>>({});
+  const [progressDone, setProgressDone] = useState<Record<string, PersonOutcome>>({});
   // V1c-9: what each "Herstel mijn voortgang" reported, by card id.
   const [restored, setRestored] = useState<Record<string, RestoredInfo>>({});
   // 13Q: received shopping lists (`#l=`) and the outcome line of "Zet op mijn lijst" per list.
@@ -415,14 +406,9 @@ export function InboxScreen() {
       cancelled = true;
     };
   }, []);
+  // V1c-2: everyone in the list (housemates first, then friends): for the person rows and the senders.
   const householdMembers = useMemo(() => (household ? membersFrom(profiles.value, household) : []), [household, profiles.value]);
-  // V2 §1c: friends (saved progress with `friend: true`) count as senders too; live, so a friend
-  // saved on this screen is recognised at once. Members first: a friend never shadows a member.
-  const friends = useLive(friendMembers, []);
-  const senders = useMemo(() => {
-    const ids = new Set(householdMembers.map((m) => m.id));
-    return [...householdMembers, ...(friends ?? []).filter((f) => !ids.has(f.id))];
-  }, [householdMembers, friends]);
+  const senders = householdMembers;
 
   // A share token arrived in the URL hash (at boot or later): move it into the textarea.
   useEffect(() => {
@@ -648,37 +634,21 @@ export function InboxScreen() {
     }
   }
 
-  /** Block F: "Voeg <naam> toe aan je huishouden" on a received member card. */
-  async function addCard(card: MemberCard) {
+  /**
+   * V1c-2: "Voeg toe als huisgenoot" / "Voeg toe als vriend" / "Werk <naam> bij" on a received person
+   * (who someone is, or their progress). src/people.ts applyPersonCard writes it and logs the 'in' row.
+   */
+  async function addPerson(card: MemberCard | ProgressCard, role: MemberRole) {
     if (cardBusy) return;
     setCardBusy(true);
     try {
-      const r = await applyMemberCard(card);
+      const r = await applyPersonCard(card, role);
       setHouseholdState(r.setting);
-      setCardDone((prev) => ({ ...prev, [card.id]: r.outcome }));
-      // 13A-2: a card that was added or updated came IN — one row in the "In & uit" log.
-      if (r.outcome === 'added' || r.outcome === 'updated') {
-        void logShareEvent({ at: nowIso(), direction: 'in', kind: 'member', who: card.name, count: 1, recipeIds: [] }).catch((err: unknown) => console.error('logShareEvent', err));
-      }
+      if ('xp' in card) setProgressDone((prev) => ({ ...prev, [card.id]: r.outcome }));
+      else setCardDone((prev) => ({ ...prev, [card.id]: r.outcome }));
     } catch (e) {
-      console.error('applyMemberCard', e);
-      setNotice(`${t('household.cardFailed')}: ${String((e as Error)?.message ?? e)}`);
-    } finally {
-      setCardBusy(false);
-    }
-  }
-
-  /** 6D-4b: "Werk bij" / "Voeg toe" / "Bewaar als vriend" on a received progress (§1i; logs the 'in' row). */
-  async function saveProgress(card: ProgressCard, asFriend: boolean) {
-    if (cardBusy) return;
-    setCardBusy(true);
-    try {
-      const r = await applyProgressCard(card, asFriend);
-      setHouseholdState(r.setting);
-      setProgressDone((prev) => ({ ...prev, [card.id]: r.outcome }));
-    } catch (e) {
-      console.error('applyProgressCard', e);
-      setNotice(`${t('household.cardFailed')}: ${String((e as Error)?.message ?? e)}`);
+      console.error('applyPersonCard', e);
+      setNotice(t('common.error'));
     } finally {
       setCardBusy(false);
     }
@@ -768,9 +738,9 @@ export function InboxScreen() {
   // week plan, when they are a member of the household or a friend: by `byId` when the envelope has
   // it, else by name. No match = no avatar, the name stays text as before.
   // The line above the preview says "lid van je huishouden" (inbox.fromMember), so it only shows for
-  // a member; the spec has no text for a friend there (open point, V2 report).
+  // a housemate (V1c-2: `roleOf`); the spec has no text for a friend there (open point, V2 report).
   const planSender = plan ? senderOf(senders, plan.by, byIdOf(plan)) : undefined;
-  const senderMember = planSender && householdMembers.some((m) => m.id === planSender.id) ? planSender : undefined;
+  const senderMember = planSender && roleOf(planSender) === 'housemate' ? planSender : undefined;
   const weekSender = received ? senderOf(senders, received.by, byIdOf(received)) : undefined;
 
   return (
@@ -835,19 +805,19 @@ export function InboxScreen() {
 
         {cards.map((card) => (
           <section class="card inbox-member" key={card.id}>
-            <MemberCardRow card={card} members={householdMembers} done={cardDone[card.id]} busy={cardBusy} onAdd={(c) => void addCard(c)} onOpenHousehold={() => navigate('/more/household')} />
+            <PersonCardRow card={card} members={householdMembers} done={cardDone[card.id]} busy={cardBusy} onAdd={(c, role) => void addPerson(c, role)} onOpenHousehold={() => navigate('/more/household')} />
           </section>
         ))}
 
         {progress.map((card) => (
           <section class="card inbox-member" key={'x' + card.id}>
-            <ProgressCardRow
+            <PersonCardRow
               card={card}
               sentAt={progressAt[card.id]}
               members={householdMembers}
               done={progressDone[card.id]}
               busy={cardBusy}
-              onSave={(c, asFriend) => void saveProgress(c, asFriend)}
+              onAdd={(c, role) => void addPerson(c, role)}
               onRestore={(c, profileId) => void restore(c, profileId)}
               restored={restored[card.id]}
               onOpenHousehold={() => navigate('/more/household')}

@@ -1783,6 +1783,19 @@ export async function setHousehold(h: HouseholdSetting): Promise<void> {
   await setSetting(HOUSEHOLD_KEY, normalizeHousehold(h));
 }
 
+/**
+ * V1c-2: reads the household setting, applies `fn` and writes the result, in one transaction (the
+ * roles migration and "Maak vriend" / "Maak huisgenoot" must not lose a member added meanwhile).
+ * Returns the setting as stored.
+ */
+export async function updateHousehold(fn: (h: HouseholdSetting) => HouseholdSetting): Promise<HouseholdSetting> {
+  return db.transaction('rw', db.settings, async () => {
+    const next = normalizeHousehold(fn(normalizeHousehold(await getSetting<unknown>(HOUSEHOLD_KEY, null))));
+    await setSetting(HOUSEHOLD_KEY, next);
+    return next;
+  });
+}
+
 // --- Sync my progress (docs/specs/xp-levels.md §1i/§2h, block 6D-4b) --------------------------------
 
 /**

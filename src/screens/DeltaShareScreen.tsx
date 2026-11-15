@@ -12,43 +12,27 @@
 // (.json → .txt → download), after which "Stuur ook de uitleg" sends the explanation as a second,
 // separate share. After a share-sheet share of the last part the date is stored automatically; "Markeer als verzonden" covers Copy / wa.me (share() cannot tell
 // whether it was sent). Invariant 9: navigator.share with exactly one field, inside the tap.
+// V1c-2 §1c (docs/specs/verbeterronde-1c.md): the delta + message plan (`planDeltaFor`) and the
+// logging after a share (`logSent`: 'out' row, `share.lastSentTo`, the 'shared' badge counter) live
+// in src/sendto.ts, shared with the Stuur sheet (<SendSheet/>); this screen stays under Recepten & delen.
 import { useEffect, useState } from 'preact/hooks';
-import { checkNewBadges, recheckActiveBadges } from '@/badges';
+import { recheckActiveBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
-import { bumpSharedRecipes, collectDeltaSince, getHousehold, getLastSentTo, logShareEvent, markSentTo, type DeltaSince } from '@/db/repo';
+import { getHousehold, getLastSentTo, markSentTo, type DeltaSince } from '@/db/repo';
 import { membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
 import { buildFileHintMessage, buildMultiShareHeader, openLine } from '@/domain/message';
-import { nowIso, pickText, type Text } from '@/domain/model';
-import { buildPatchEnvelope, buildRecipeEnvelope, planMessages, type MessagePlan } from '@/domain/share';
-import { recordFeature } from '@/features';
+import { pickText, type Text } from '@/domain/model';
+import type { MessagePlan } from '@/domain/share';
 import { lang, t } from '@/i18n';
 import { refreshShareBadges } from '@/inbox-badge';
 import { activeProfile, profiles } from '@/profile';
 import { navigate } from '@/router';
+import { foldName, lastSentFor, logDeltaOut, logSent, planDeltaFor } from '@/sendto';
 import { copyText, shareJsonFile, shareText } from '@/share-actions';
 import { Avatar } from './ProfilesScreen';
 
 const OTHER = '\u0000other';
-
-function foldName(s: string): string {
-  return s.trim().toLowerCase();
-}
-
-/**
- * When something was last sent to a partner: the newest 'share.lastSentTo' entry whose key folds
- * to the same name. The keys keep the spelling that was typed ("gabi" via "Anders…" before her card
- * arrived as "Gabi"), while a member chip carries the member's name; comparing folded keeps the
- * delta, the chip and the "laatst verzonden" line on one partner. (The old key stays in the setting;
- * it is hidden by the chip filter and harmless.)
- */
-function lastSentFor(lastSent: Record<string, string>, name: string): string | null {
-  const wanted = foldName(name);
-  if (!wanted) return null;
-  let best: string | null = null;
-  for (const [k, v] of Object.entries(lastSent)) if (foldName(k) === wanted && (best === null || v.localeCompare(best) > 0)) best = v;
-  return best;
-}
 
 function formatWhen(iso: string): string {
   const d = new Date(iso);
@@ -114,32 +98,6 @@ function MessageExample(props: { plan: MessagePlan | null; by: string; ui: 'nl' 
   );
 }
 
-/**
- * Phase 5 block C (badge rule 'shared'): n recipes left this phone through the share sheet.
- * Fire-and-forget: bump the counter, then re-check badges for the active profile.
- */
-function countShared(n: number) {
-  void recordFeature('deltaShared');
-  void bumpSharedRecipes(n)
-    .then(() => {
-      const pid = activeProfile.value?.id;
-      return pid ? checkNewBadges(pid) : undefined;
-    })
-    .catch((e: unknown) => console.error('bumpSharedRecipes', e));
-}
-
-/**
- * Phase 6 (13A-2): the delta went out to `name` — one 'out' row in the "In & uit" log with the
- * recipe ids (patched classics by their own id). Fire-and-forget; never blocks the status line.
- */
-function logDeltaShared(d: DeltaSince, name: string) {
-  const recipeIds = [...d.recipes.map((r) => r.id), ...d.patches.map((o) => o.baseId)];
-  if (!recipeIds.length) return;
-  void logShareEvent({ at: nowIso(), direction: 'out', kind: d.recipes.length ? 'recipes' : 'patches', who: name, count: recipeIds.length, recipeIds }).then(() => recheckActiveBadges()).catch((e: unknown) =>
-    console.error('logShareEvent', e),
-  );
-}
-
 export function DeltaShareScreen() {
   const ui = lang.value;
   const me = activeProfile.value;
@@ -161,8 +119,8 @@ export function DeltaShareScreen() {
   /** V2: the bundle file was shared or downloaded: offer "Stuur ook de uitleg". */
   const [fileSent, setFileSent] = useState(false);
 
-  // Partner choices: the household members (the other profiles on this phone, members from a card,
-  // hand-typed ones) first, then everyone else something was sent to before. 6D-3: a local profile
+  // Partner choices: everyone in Huishouden & vrienden (the other profiles on this phone, housemates and
+  // friends via the app or typed by hand; V1c-2) first, then everyone else something was sent to before. 6D-3: a local profile
   // brings its avatar along (docs/specs/badges-avatar.md §1c), also while the household loads.
   const members: Member[] = (household ? membersFrom(profiles.value, household) : profiles.value.map((p) => ({ id: p.id, name: p.name, color: p.color, lang: p.lang, local: true, avatar: p.avatar ?? undefined }) as Member)).filter(
     (m) => m.id !== me?.id && foldName(m.name) !== foldName(by),
@@ -214,22 +172,16 @@ export function DeltaShareScreen() {
     setPlan(null);
     setSentParts(0);
     if (!name) return;
-    (async () => {
-      const d = await collectDeltaSince(since);
-      if (cancelled) return;
-      setDelta(d);
-      if (!d.recipes.length && !d.patches.length) return;
-      const ctx = { by, byId: me?.id, userIngredients: d.userIngredients };
-      const envs = [
-        ...d.recipes.map((r) => buildRecipeEnvelope(r, ctx)),
-        ...d.patches.map((o) => buildPatchEnvelope(o, { ...ctx, lineOverrides: d.lineOverrides.filter((lo) => lo.recipeId === o.baseId), name: d.names[o.baseId] as Text | undefined })),
-      ];
-      // V2: the file is named after the SENDER ("Recepten van Gabi 8 nov - …"), not the partner.
-      const p = await planMessages(envs, appInfo.appUrl, { lang: ui, by, name: by });
-      if (!cancelled) setPlan(p);
-    })().catch((e: unknown) => {
-      if (!cancelled) setError(String(e));
-    });
+    // V1c-2: the same computation as the Stuur sheet (src/sendto.ts), for the active profile.
+    planDeltaFor(name)
+      .then((r) => {
+        if (cancelled) return;
+        setDelta(r.delta);
+        setPlan(r.plan);
+      })
+      .catch((e: unknown) => {
+        if (!cancelled) setError(String(e));
+      });
     return () => {
       cancelled = true;
     };
@@ -245,6 +197,24 @@ export function DeltaShareScreen() {
   }
 
   /**
+   * After a share-sheet share of the delta (text or file): logSent writes the 'out' row, the date
+   * for this partner and the 'shared' badge counter (V1c-2, src/sendto.ts); then the screen reads
+   * the dates again and says so. Without an active profile only the date and the row are written.
+   */
+  async function sharedDelta(d: DeltaSince | null) {
+    if (!name) return;
+    if (me && d) await logSent({ profile: me, recipient: name, progress: false, identity: false, delta: d });
+    else {
+      await markSentTo(name);
+      if (d) await logDeltaOut(d, name).catch((e: unknown) => console.error('logShareEvent', e));
+      recheckActiveBadges();
+    }
+    setLastSent(await getLastSentTo());
+    setStatus(t('delta.sharedMarked', { name }));
+    void refreshShareBadges();
+  }
+
+  /**
    * "Deel": the next part (part 1 first). Only after the LAST part are the date, the badge counter
    * and the "In & uit" row written, as before; earlier parts just say "Deel i van n verstuurd".
    */
@@ -254,8 +224,7 @@ export function DeltaShareScreen() {
     const i = Math.min(sentParts, n - 1);
     setBusy(true);
     setStatus('');
-    // Recipes + patched classics in this delta count for the 'shared' badge (ingredients do not).
-    const shared = delta ? delta.recipes.length + delta.patches.length : 0;
+    const sent = delta;
     // navigator.share runs before the first await inside shareText: still within the tap.
     void shareText(plan.parts[i] ?? '')
       .then(async (r) => {
@@ -264,9 +233,7 @@ export function DeltaShareScreen() {
           setStatus(t('delta.partSent', { i: i + 1, n }));
         } else if (r.outcome === 'shared') {
           setSentParts(0);
-          await markSent(true);
-          countShared(shared);
-          if (delta) logDeltaShared(delta, name);
+          await sharedDelta(sent);
         } else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
         else if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
       })
@@ -283,19 +250,21 @@ export function DeltaShareScreen() {
     if (!plan || !('file' in plan) || busy) return;
     setBusy(true);
     setStatus('');
-    const shared = delta ? delta.recipes.length + delta.patches.length : 0;
+    const sent = delta;
     void shareJsonFile(plan.file.name, plan.file.json)
       .then(async (r) => {
         if (r.outcome === 'shared') {
           setFileSent(true);
-          await markSent(true);
-          countShared(shared);
-          if (delta) logDeltaShared(delta, name);
+          await sharedDelta(sent);
         } else if (r.outcome === 'downloaded') {
-          // A file in Downloads left this phone too (the person hands it over themselves).
+          // A file in Downloads left this phone too (the person hands it over themselves): the
+          // 'out' row only, no date (as before V1c-2).
           setFileSent(true);
           setStatus(t('share.fileDownloaded', { name: r.name }));
-          if (delta) logDeltaShared(delta, name);
+          if (sent)
+            void logDeltaOut(sent, name)
+              .then(() => recheckActiveBadges())
+              .catch((e: unknown) => console.error('logShareEvent', e));
         } else if (r.outcome === 'failed') setStatus(`${t('share.fileFailed')}: ${r.error ?? ''}`);
       })
       .finally(() => setBusy(false));

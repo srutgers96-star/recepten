@@ -442,8 +442,6 @@
   font-size: 16px; /* no iOS zoom */
 }
 
-.friend-hint { color: var(--cobalt); margin: 4px 0 8px; }
-
 .member-list {
   margin: 0;
   padding: 0;
@@ -490,15 +488,60 @@
   padding: 0 10px;
 }
 
-/* V1c-9: a member row with "Stuur terug" has three buttons; at 360 px they go on their own line
-   (right-aligned) so the name and level line keep their width. */
-.member-row.has-return {
+/* V1c-2 (generalises V1c-9's has-return): a person with actions (Stuur, Maak vriend/huisgenoot,
+   Stuur terug, Bewerk, Verwijder) gets them on their own line under the row, wrapping and
+   right-aligned, so the name and level line keep their width at 360 px. */
+.member-row.many {
   flex-wrap: wrap;
 }
 
-.member-row.has-return .actions {
+.member-row.many .actions {
   flex-basis: 100%;
+  flex-wrap: wrap;
   justify-content: flex-end;
+}
+
+/* V1c-2: "Voeg huisgenoot toe" · "Voeg vriend toe" · "Stuur mijn voortgang" on top of the card Mensen. */
+.people-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 8px;
+}
+
+.people-actions .btn {
+  min-height: 44px;
+}
+
+/* V1c-2: the add panel, a card inside the card: role, the one paste box, "of", "Typ een naam". */
+.add-panel {
+  margin: 0 0 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.add-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.add-panel-head .btn {
+  min-height: 44px;
+}
+
+.add-panel .status {
+  margin-bottom: 4px;
+}
+
+.add-panel .or {
+  margin: 12px 0 8px;
+  text-align: center;
+  color: var(--muted);
 }
 
 .member-form {
@@ -506,31 +549,6 @@
 }
 
 /* ---------- Phase 5 block F: member cards (#f=) ---------- */
-
-/* "Mijn kaartje": the active profile above the share panel (ProfilesScreen's MemberCardPanel). */
-.my-card-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 4px;
-}
-
-.my-card-head .who {
-  flex: 1;
-  min-width: 0;
-}
-
-.my-card-head .who strong {
-  display: block;
-  font-size: 18px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.my-card-head .who .small {
-  display: block;
-}
 
 .member-card-share .actions {
   margin: 10px 0 8px;
@@ -548,11 +566,7 @@ textarea.input.member-card-raw {
   word-break: break-all;
 }
 
-/* "Voeg lid toe via link of plak": the universal paste box (edit.css .upaste), then one row per card found. */
-.member-paste .status {
-  margin-bottom: 4px;
-}
-
+/* The rows found in a paste (the add panel, In & uit): one <PersonCardRow/> each. */
 .member-cards > * + * {
   border-top: 1px solid var(--line);
 }

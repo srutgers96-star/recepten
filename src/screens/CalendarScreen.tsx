@@ -1,12 +1,12 @@
 // '#/more/calendar' — the cooking calendar (docs/specs/xp-levels.md §1j, block 6D-4 = 6D-4b).
 // Who cooked what, per day: a month grid Mon–Sun with at most three dots per day in the colours of
 // the people who cooked (one dot per person, in the order `calendarMonth` gives the cooks). The local
-// cooks come from this phone's cook log; others come from the snapshots received with "Sync mijn
-// voortgang" (`progress.snapshots`). The same person locally AND as a snapshot: local wins
+// cooks come from this phone's cook log; others come from the snapshots of their received progress
+// (`progress.snapshots`, one per person via `snapshotForMember`, V1c-2). The same person locally AND as a snapshot: local wins
 // (`calendarMonth`, src/domain/progress.ts). Today has a ring, future days are muted.
 // A tap on a day lists "{name} — {recipe}" under the grid (the name from `allRecipes()`; an id this
-// phone does not know says "een recept"). Under it the legend: every household member and every
-// friend with a mini avatar (V2 §1c; the dots stay under the days) and name, plus (badges on only) "Level n · titel" — live for a profile on this
+// phone does not know says "een recept"). Under it the legend: every housemate and every friend
+// (V1c-2: both are members, `membersFrom`) with a mini avatar (V2 §1c; the dots stay under the days) and name, plus (badges on only) "Level n · titel" — live for a profile on this
 // phone, from the snapshot for anyone else, then with "· bijgewerkt {date}".
 // The calendar is ALWAYS there, also with badges off (it is a log; §5.12): only the levels go.
 // Honest at the bottom: others are shown as they last shared (no backend, invariant 14).
@@ -28,7 +28,7 @@ import { DEFAULT_MEMBER_COLOR, membersFrom, type HouseholdSetting } from '@/doma
 import type { AvatarSpec } from '@/domain/avatar';
 import { titleFor } from '@/domain/levels';
 import { pickText, type CookLogEntry, type Lang } from '@/domain/model';
-import { calendarMonth, type CalendarDay, type ProgressSnapshot } from '@/domain/progress';
+import { calendarMonth, snapshotForMember, type CalendarDay, type ProgressSnapshot } from '@/domain/progress';
 import { lang, t } from '@/i18n';
 import { profiles } from '@/profile';
 import { xpStateFor, xpStates } from '@/xp';
@@ -59,13 +59,13 @@ interface Person {
 
 interface CalendarData {
   log: CookLogEntry[];
-  snapshots: ProgressSnapshot[];
+  snapshots: Record<string, ProgressSnapshot>;
   household: HouseholdSetting;
 }
 
 async function loadCalendarData(): Promise<CalendarData> {
   const [log, snapshots, household] = await Promise.all([listCookLog(), getProgressSnapshots(), getHousehold()]);
-  return { log, snapshots: Object.values(snapshots), household };
+  return { log, snapshots, household };
 }
 
 /** Year + 0-based month of today (local); `calendarMonth` gets month + 1. */
@@ -161,22 +161,15 @@ export function CalendarScreen() {
 
   const recipeNames = useMemo(() => new Map(recipes.map((r) => [r.id, r.name] as const)), [recipes]);
 
-  // Members first (profiles on this phone, then the others), then friends that are not a member.
+  // V1c-2: every member (profiles on this phone, then the other housemates, then the friends), each
+  // with its newest snapshot (`snapshotForMember`: by id, else phone id, else name).
   const people = useMemo((): Person[] => {
     if (!data) return [];
-    const byId = new Map(data.snapshots.map((s) => [s.id, s] as const));
-    const out: Person[] = membersFrom(list, data.household).map((m) => {
-      const snapshot = m.local ? undefined : byId.get(m.id);
+    return membersFrom(list, data.household).map((m) => {
+      const snapshot = m.local ? undefined : snapshotForMember(m, data.snapshots);
       const avatar = m.avatar ?? snapshot?.avatar;
       return { id: m.id, name: m.name, color: m.color || snapshot?.color || DEFAULT_MEMBER_COLOR, local: m.local, ...(avatar ? { avatar } : {}), ...(snapshot ? { snapshot } : {}) };
     });
-    const taken = new Set(out.map((p) => p.id));
-    for (const s of data.snapshots) {
-      if (s.friend !== true || taken.has(s.id)) continue;
-      taken.add(s.id);
-      out.push({ id: s.id, name: s.name, color: s.color || DEFAULT_MEMBER_COLOR, local: false, ...(s.avatar ? { avatar: s.avatar } : {}), snapshot: s });
-    }
-    return out;
   }, [data, list]);
   const personById = useMemo(() => new Map(people.map((p) => [p.id, p] as const)), [people]);
 
@@ -186,7 +179,8 @@ export function CalendarScreen() {
     // Only people the calendar can name: local cooks of a profile on this phone, snapshots of a
     // member on another phone or a friend (a removed member's snapshot shows no dots).
     const local = data.log.filter((e) => personById.get(e.profileId)?.local === true).map((e) => ({ memberId: e.profileId, recipeId: e.recipeId, at: e.at }));
-    const snapshots = people.flatMap((p) => (p.snapshot ? [p.snapshot] : []));
+    // A snapshot found by phone id or name may sit under an older id: its dots go under the person's id.
+    const snapshots = people.flatMap((p) => (p.snapshot ? [{ ...p.snapshot, id: p.id }] : []));
     // calendarMonth counts months 1…12 and gives `day` as the day of the month.
     for (const d of calendarMonth({ year, month: month + 1, local, snapshots, localMemberIds: new Set(localIds) })) {
       if (d.cooks.length) out.set(d.day, d.cooks);

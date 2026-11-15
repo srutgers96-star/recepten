@@ -197,15 +197,15 @@ export const edit: Dict = {
   // --- Universal paste box (src/components/UniversalPaste.tsx; src/paste.ts `summarizePaste`) ---
   'paste.label': { nl: 'Plakvak', en: 'Paste box' },
   'paste.placeholder': {
-    nl: 'Plak hier: een link, een kaartje, een recept van een website, een AI-antwoord …',
-    en: 'Paste here: a link, a card, a recipe from a website, an AI answer …',
+    nl: 'Plak hier: een link, wie iemand is of zijn voortgang, een recept van een website, een AI-antwoord …',
+    en: 'Paste here: a link, who someone is or their progress, a recipe from a website, an AI answer …',
   },
   'paste.link': { nl: '1 deellink herkend', en: '1 share link recognised' },
   'paste.links': { nl: '{n} deellinks herkend', en: '{n} share links recognised' },
   'paste.linksOne': { nl: '1 deellink herkend', en: '1 share link recognised' },
-  'paste.card': { nl: 'Kaartje van {name}', en: 'Card from {name}' },
-  'paste.cards': { nl: '{n} kaartjes', en: '{n} cards' },
-  'paste.cardsOne': { nl: '1 kaartje', en: '1 card' },
+  'paste.card': { nl: 'wie {name} is', en: 'who {name} is' },
+  'paste.cards': { nl: '{n} personen', en: '{n} people' },
+  'paste.cardsOne': { nl: '1 persoon', en: '1 person' },
   'paste.plan': { nl: 'een weekplan', en: 'a week plan' },
   // 6D-4 (docs/specs/xp-levels.md §3, bouwer B's summarizePaste label for a `#x=`).
   'paste.progress': { nl: 'Voortgang van {name}', en: "{name}'s progress" },
@@ -217,7 +217,8 @@ export const edit: Dict = {
   'paste.ai': { nl: 'AI-antwoord herkend', en: 'AI answer recognised' },
   'paste.unknown': { nl: 'Geen recept of link herkend — probeer de AI-opdracht.', en: 'No recipe or link recognised — try the AI instruction.' },
   'paste.actImport': { nl: 'Open bij In & uit', en: 'Open in In & out' },
-  'paste.actMember': { nl: 'Voeg toe aan je huishouden', en: 'Add to your household' },
+  // V1c-2: the button only travels to Huishouden & vrienden (like paste.actImport to In & uit).
+  'paste.actMember': { nl: 'Open bij Huishouden & vrienden', en: 'Open in Household & friends' },
   'paste.actFill': { nl: 'Vul in', en: 'Fill in' },
   'paste.actEditor': { nl: 'Open in de editor', en: 'Open in the editor' },
   'paste.actTryAnyway': { nl: 'Toch proberen', en: 'Try anyway' },
@@ -362,8 +363,8 @@ export const edit: Dict = {
   'inbox.title': { nl: 'In & uit', en: 'In & out' },
   // 13A: every paste box takes everything; this screen is where links, bundles and cards are handled.
   'inbox.hint': {
-    nl: 'Plak hier een WhatsApp-bericht, een link, een kaartje of een receptbestand. Een recept van een website of een AI-antwoord mag ook: dat gaat door naar de editor.',
-    en: 'Paste a WhatsApp message, a link, a card or a recipe file here. A recipe from a website or an AI answer works too: it goes on to the editor.',
+    nl: 'Plak hier een WhatsApp-bericht, een link, wie iemand is of zijn voortgang, of een receptbestand. Een recept van een website of een AI-antwoord mag ook: dat gaat door naar de editor.',
+    en: 'Paste a WhatsApp message, a link, who someone is or their progress, or a recipe file here. A recipe from a website or an AI answer works too: it goes on to the editor.',
   },
   // 13A-2: the two tabs under the paste box and the "Gedeeld" list (the 'out' rows of the events log).
   'inbox.tabReceived': { nl: 'Ontvangen', en: 'Received' },
@@ -379,7 +380,7 @@ export const edit: Dict = {
   'inbox.sharedTo': { nl: 'aan {name}', en: 'to {name}' },
   'inbox.ev.bundleOne': { nl: 'Bestand met 1 recept', en: 'File with 1 recipe' },
   'inbox.ev.bundle': { nl: 'Bestand met {n} recepten', en: 'File with {n} recipes' },
-  'inbox.ev.member': { nl: 'Je kaartje', en: 'Your card' },
+  'inbox.ev.member': { nl: 'Wie je bent', en: 'Who you are' },
   'inbox.ev.plan': { nl: 'Weekplan', en: 'Week plan' },
   'inbox.ev.list': { nl: 'Boodschappenlijst', en: 'Shopping list' },
   // 6D-4 (docs/specs/xp-levels.md §1h): a shared "Sync mijn voortgang" link in the Gedeeld tab.
@@ -396,9 +397,9 @@ export const edit: Dict = {
     en: "Got a file in WhatsApp? Press and hold it there → Share → Rutgers' Recepten.",
   },
   'inbox.clear': { nl: 'Wis', en: 'Clear' },
-  'inbox.noToken': { nl: 'Geen recept of kaartje gevonden in deze tekst.', en: 'No recipe or card found in this text.' },
-  // Phase 5 block F: a `#f=` member card in the Inbox, and the sender shown as a household member.
-  'inbox.fromMember': { nl: 'Van {name}, lid van je huishouden', en: 'From {name}, a member of your household' },
+  'inbox.noToken': { nl: 'Geen recept of persoon gevonden in deze tekst.', en: 'No recipe or person found in this text.' },
+  // Phase 5 block F: the sender shown as a housemate (V1c-2: only for a housemate, no "lid").
+  'inbox.fromMember': { nl: 'Van {name}, je huisgenoot', en: 'From {name}, your housemate' },
   'inbox.invalid': { nl: 'Ongeldige receptcode.', en: 'Invalid recipe code.' },
   // V1c (10 Nov 2026, Gabi's "invalid recipe code"): a token WAS found but could not be read — almost always cut short or
   // altered on the way (a copied link that stops early). Say so, with the length, and what to do.

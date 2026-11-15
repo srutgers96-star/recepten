@@ -41,8 +41,7 @@
   font-size: 25px;
 }
 
-/* Huishouden (my card, members, friends, cards to add) and In & uit (the sender who is a member). */
-.my-card-head .avatar,
+/* Huishouden & vrienden (people, people to add) and In & uit (the sender who is a housemate or friend). */
 .member-row .avatar,
 .member-card-head .avatar,
 .inbox-sender .avatar,

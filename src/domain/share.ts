@@ -136,7 +136,7 @@ export interface MemberCard {
   lang: Lang;
   /**
    * A stable random id of the sender's phone (setting 'device.id'). Stored on the member (the UI
-   * says "via kaartje"); a re-sent card finds its member by id or name (`matchMemberForCard`).
+   * says "via de app"); a re-sent card finds its member by id or name (`matchMemberForCard`).
    */
   deviceId?: string;
   /**
@@ -911,9 +911,10 @@ export function buildPlanShareMessage(i: { dishes: number; by: string; url: stri
 }
 
 /**
- * The WhatsApp text for a member card: one sentence and the `#f=` URL alone on the last line.
- * It says "open the link in the app OR paste it into Inbox" because on an iPhone a link never
- * opens the installed app (CLAUDE.md invariant 5): there the card arrives by copy → app → paste.
+ * The WhatsApp text for "who I am" (the `#f=` token; V1c-2 wording, no "card" in the sentence):
+ * one sentence and the `#f=` URL alone on the last line. It says "open the link in the app OR
+ * paste it into In & out" because on an iPhone a link never opens the installed app (CLAUDE.md
+ * invariant 5): there it arrives by copy → app → paste. The receiver picks housemate or friend.
  * {nl, en} literals, like the other message builders (the domain layer is framework-free).
  */
 export function buildMemberShareMessage(i: { name: string; url: string; lang: Lang }): string {
@@ -921,8 +922,8 @@ export function buildMemberShareMessage(i: { name: string; url: string; lang: La
   const name = i.name.trim() || (lang === 'nl' ? 'iemand' : 'someone');
   const head =
     lang === 'nl'
-      ? `👋 Kaartje van ${name} voor Rutgers' Recepten — open de link in de app of plak hem bij In & uit om ${name} aan je huishouden toe te voegen.`
-      : `👋 ${name}'s card for Rutgers' Recipes — open the link in the app or paste it into In & out to add ${name} to your household.`;
+      ? `👋 Dit is ${name} voor Rutgers' Recepten — open de link in de app of plak hem bij In & uit om ${name} toe te voegen als huisgenoot of vriend.`
+      : `👋 This is ${name} for Rutgers' Recipes — open the link in the app or paste it into In & out to add ${name} as a housemate or friend.`;
   return [head, i.url].join('\n');
 }
 

@@ -2,32 +2,26 @@
 // the list. Per profile one row with <Avatar/> (48 px, level ring), name, the compact <XpBar/> (badges
 // on) and "Actief" or "Maak actief"; a tap on the row opens Mijn profiel for that profile
 // ('#/more/profile?id=…', src/screens/ProfileScreen.tsx). "+ profiel" stays (`?add=1` opens the add
-// form at once). Editing (name, colour, language, avatar, delete) lives in <ProfileEditFields/>, the
-// card panel and the sync panel on Mijn profiel.
+// form at once). Editing (name, colour, language, avatar, delete) lives in <ProfileEditFields/> on
+// Mijn profiel. V1c-2 §1c: every row has a button "Stuur mijn voortgang" (badges off: "Stuur wie ik
+// ben") that opens the Stuur sheet (<SendSheet/>) for THAT profile, without a recipient; it replaced
+// the former MemberCardPanel ("Deel mijn kaartje").
 // This module also keeps the shared pieces other screens import: <Avatar/>, useAvatarLevel,
-// hasAvatar, <ProfileForm/> (also onboarding), <MemberCardPanel/> ("Deel mijn kaartje", phase 5
-// block F: a `#f=` token shared as ONE text field, invariant 9; honest about iPhone, invariants 5 +
-// 13), ensureDeviceId and memberCardMessage.
+// hasAvatar, <ProfileForm/> (also onboarding) and ensureDeviceId.
 import type { ComponentChildren } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { avatarParts, avatarUid } from '@/avatar';
 import { badgesEnabled, loadBadgeSettings } from '@/badges';
-import { appInfo } from '@/components/AppInfo';
 import { Header } from '@/components/Header';
-import { QrPanel, QrToggle } from '@/components/QrPanel';
 import { Segmented } from '@/components/Segmented';
+import { SendSheet } from '@/components/SendSheet';
 import { XpBar } from '@/components/XpBar';
-import { getSetting, logShareEvent, setSetting } from '@/db/repo';
+import { getSetting, setSetting } from '@/db/repo';
 import { isComplete, normalizeAvatarSpec, renderAvatarSvg } from '@/domain/avatar';
-import { cardFromMember } from '@/domain/household';
-import { nowIso, randomId, type Lang, type Profile } from '@/domain/model';
-import { buildMemberEnvelope, buildMemberShareMessage } from '@/domain/share';
-import { buildShareUrl, encodeToken } from '@/domain/token';
-import { recordFeature } from '@/features';
+import { randomId, type Lang, type Profile } from '@/domain/model';
 import { lang, t } from '@/i18n';
 import { PROFILE_COLORS, activeProfile, createProfile, profiles, setActiveProfile } from '@/profile';
 import { navigate, route } from '@/router';
-import { copyText, shareText } from '@/share-actions';
 import { xpStateFor, xpStates } from '@/xp';
 
 export interface ProfileValues {
@@ -48,14 +42,6 @@ export async function ensureDeviceId(): Promise<string> {
   return id;
 }
 
-/**
- * The WhatsApp text for a card: one sentence in the SENDER's language (it says "open the link in
- * the app OR paste it into Inbox", honest for iPhone), the `#f=` link alone on the last line.
- * The sentence lives in the domain layer (share.ts) so the landing page and the tests share it.
- */
-export function memberCardMessage(name: string, l: Lang, url: string): string {
-  return buildMemberShareMessage({ name, url, lang: l });
-}
 
 /**
  * The avatar SVG of a profile or member, or null when it has no complete avatar (§1c: then the
@@ -143,97 +129,6 @@ export function useAvatarLevel(memberId: string | null | undefined): number | un
 function LevelAvatar(props: { profile: Profile; big?: boolean }) {
   const level = useAvatarLevel(props.profile.id);
   return <Avatar profile={props.profile} big={props.big} level={level} />;
-}
-
-/**
- * "Deel mijn kaartje" for one profile: builds the `#f=` link once (device id + token), then
- * shares it as text (navigator.share with exactly {text}, inside the tap), copies it, or shows
- * the QR (13Q: QrPanel, no flag). The link is rebuilt when the profile's name/colour/language/avatar change.
- */
-export function MemberCardPanel(props: { profile: Profile }) {
-  const p = props.profile;
-  const [url, setUrl] = useState<string | null>(null);
-  const [buildFailed, setBuildFailed] = useState(false);
-  const [status, setStatus] = useState('');
-  const [showRaw, setShowRaw] = useState(false);
-  const [showQr, setShowQr] = useState(false);
-  const [busy, setBusy] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    setUrl(null);
-    setBuildFailed(false);
-    setStatus('');
-    setShowRaw(false);
-    (async () => {
-      const deviceId = await ensureDeviceId();
-      const token = await encodeToken(buildMemberEnvelope(cardFromMember(p, deviceId)));
-      if (!cancelled) setUrl(buildShareUrl(appInfo.appUrl, 'f', token));
-    })().catch((e: unknown) => {
-      console.error('member card', e);
-      if (!cancelled) setBuildFailed(true);
-    });
-    return () => {
-      cancelled = true;
-    };
-    // 6D-3: the card carries the avatar too (§2g), so a new avatar rebuilds the link.
-  }, [p.id, p.name, p.color, p.lang, JSON.stringify(p.avatar ?? null)]);
-
-  const message = url ? memberCardMessage(p.name, p.lang, url) : '';
-
-  function share() {
-    if (!message || busy) return;
-    setBusy(true);
-    setStatus('');
-    // navigator.share runs before the first await inside shareText: still within the tap.
-    void shareText(message)
-      .then((r) => {
-        if (r.outcome === 'shared') {
-          setStatus(t('household.cardShared'));
-          void recordFeature('cardShared');
-          // 13A-2: the card went out — an 'out' row in the "In & uit" log (no partner is named here).
-          void logShareEvent({ at: nowIso(), direction: 'out', kind: 'member', who: null, count: 1, recipeIds: [], note: p.name }).catch((e: unknown) => console.error('logShareEvent', e));
-        } else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
-        else if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
-      })
-      .finally(() => setBusy(false));
-  }
-
-  function copy() {
-    if (!message) return;
-    void copyText(message).then((r) => {
-      if (r.ok) void recordFeature('cardShared');
-      if (r.ok) setStatus(t('household.cardCopied'));
-      else {
-        // The clipboard refused (http dev server, permissions): show the text to copy by hand.
-        setStatus(t('share.copyError'));
-        setShowRaw(true);
-      }
-    });
-  }
-
-  return (
-    <div class="member-card-share">
-      <p class="muted small">{t('household.myCardHint')}</p>
-      {buildFailed && <p class="bad small">{t('household.cardBuildFailed')}</p>}
-      <div class="actions">
-        <button type="button" class="btn btn-primary" disabled={!url || busy} onClick={share}>
-          {t('household.shareCard')}
-        </button>
-        <button type="button" class="btn" disabled={!url} onClick={copy}>
-          {t('household.copyCard')}
-        </button>
-        <QrToggle open={showQr} disabled={!url} onToggle={() => setShowQr((v) => !v)} />
-      </div>
-      {/* 13Q §1a: the card's QR via the shared panel (no Experimenten flag). */}
-      <QrPanel url={url ?? ''} open={showQr} onToggle={() => setShowQr(false)} label={t('household.cardQrAlt')} />
-      {showRaw && <textarea class="input member-card-raw" readOnly rows={3} value={message} onFocus={(e) => (e.currentTarget as HTMLTextAreaElement).select()} />}
-      <p class="muted small">{t('household.cardIosHint')}</p>
-      <div class="status" role="status">
-        {status}
-      </div>
-    </div>
-  );
 }
 
 /** Name + language + colour form (add, edit and onboarding). */
@@ -378,6 +273,7 @@ export function ProfilesScreen() {
 function ProfileListRow(props: { profile: Profile; active: boolean }) {
   const p = props.profile;
   const open = () => navigate('/more/profile?id=' + encodeURIComponent(p.id));
+  const [sending, setSending] = useState(false);
   return (
     <div
       class="profile-row"
@@ -395,6 +291,17 @@ function ProfileListRow(props: { profile: Profile; active: boolean }) {
       <div class="who">
         <strong>{p.name}</strong>
         <XpBar memberId={p.id} compact />
+        <button
+          type="button"
+          class="btn btn-small send-sheet-open"
+          onClick={(e) => {
+            e.stopPropagation();
+            setSending(true);
+          }}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          {badgesEnabled.value ? t('profile.send') : t('profile.sendIdentity')}
+        </button>
       </div>
       {props.active ? (
         <span class="badge badge-green">{t('profile.active')}</span>
@@ -410,6 +317,7 @@ function ProfileListRow(props: { profile: Profile; active: boolean }) {
           {t('profile.makeActive')}
         </button>
       )}
+      {sending && <SendSheet profile={p} recipient={null} onClose={() => setSending(false)} />}
     </div>
   );
 }

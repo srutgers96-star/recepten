@@ -4,10 +4,11 @@
 // the name centred, and with badges on the full <XpBar/> (its first line is the level title
 // "Level 5 · Boterhamsmeerder", then the bar and the streak). Then, for the ACTIVE profile, a grid of
 // two columns of 56 px tiles: 🎨 Jouw stijl (→ '#/more/style'), 🏆 Badges (→ '#/more/badges?tab=<id>'),
-// 📇 Deel mijn kaartje (unfolds <MemberCardPanel/>), 📈 Sync mijn voortgang (unfolds
-// <ProgressSharePanel/>), ✏️ Naam & kleur (unfolds <ProfileEditFields/>). Another profile: only avatar,
-// name, level and XP bar plus one button "Maak actief". Badges off: no level, no XP bar, no Jouw
-// stijl / Badges / Sync tile; the drawn avatar stays (§5b). No profile at all → '/more/profiles'.
+// 📤 Stuur mijn voortgang (badges off: Stuur wie ik ben; opens <SendSheet/> without a recipient,
+// V1c-2 §1c — it replaced the tiles Deel mijn kaartje and Sync mijn voortgang), ✏️ Naam & kleur
+// (unfolds <ProfileEditFields/>). Another profile: only avatar, name, level and XP bar plus one button
+// "Maak actief". Badges off: no level, no XP bar, no Jouw stijl / Badges tile; the drawn avatar stays
+// (§5b). No profile at all → '/more/profiles'.
 // Reached from Home (tap on the greeting, or pull Home down), from Meer (row Mijn profiel) and from
 // Profielen beheren (tap on a row).
 // 6E (docs/specs/challenges.md §1a): for the active profile, with badges on and the unlock
@@ -22,15 +23,15 @@ import { badgesEnabled, loadBadgeSettings } from '@/badges';
 import { ChallengeCard } from '@/components/ChallengeCard';
 import { Header } from '@/components/Header';
 import { ProfileEditFields } from '@/components/ProfileEditFields';
-import { ProgressSharePanel } from '@/components/ProgressSharePanel';
+import { SendSheet } from '@/components/SendSheet';
 import { XpBar } from '@/components/XpBar';
 import { t } from '@/i18n';
 import { activeProfile, profiles, profilesLoaded, setActiveProfile } from '@/profile';
 import { navigate, route } from '@/router';
 import { isActive as unlockActive, unlockData } from '@/unlocks';
-import { Avatar, MemberCardPanel, useAvatarLevel } from './ProfilesScreen';
+import { Avatar, useAvatarLevel } from './ProfilesScreen';
 
-type Panel = 'card' | 'sync' | 'edit' | null;
+type Panel = 'edit' | null;
 
 /** The level the unlock `challenges` asks for (data/unlocks.json; 20 per the spec as fallback). */
 function challengesLevel(): number {
@@ -55,6 +56,7 @@ export function ProfileScreen() {
   const isActive = profile !== null && active !== null && profile.id === active.id;
   const level = useAvatarLevel(profile?.id);
   const [panel, setPanel] = useState<Panel>(null);
+  const [sending, setSending] = useState(false);
   const badgesOn = badgesEnabled.value;
 
   useEffect(() => {
@@ -70,6 +72,7 @@ export function ProfileScreen() {
   // Another profile shown or the profile switched: fold whatever was open.
   useEffect(() => {
     setPanel(null);
+    setSending(false);
   }, [profile?.id]);
 
   const toggle = (p: Exclude<Panel, null>) => setPanel((cur) => (cur === p ? null : p));
@@ -132,20 +135,10 @@ export function ProfileScreen() {
                 <div class="profile-tiles">
                   {badgesOn && <Tile icon="🎨" label={t('profile.style')} onClick={() => navigate('/more/style')} />}
                   {badgesOn && <Tile icon="🏆" label={t('profile.badges')} onClick={() => navigate('/more/badges?tab=' + encodeURIComponent(profile.id))} />}
-                  <Tile icon="📇" label={t('profile.shareCard')} expanded={panel === 'card'} onClick={() => toggle('card')} />
-                  {badgesOn && <Tile icon="📈" label={t('profile.sync')} expanded={panel === 'sync'} onClick={() => toggle('sync')} />}
+                  <Tile icon="📤" label={badgesOn ? t('profile.send') : t('profile.sendIdentity')} onClick={() => setSending(true)} />
                   <Tile icon="✏️" label={t('profile.edit')} expanded={panel === 'edit'} onClick={() => toggle('edit')} />
                 </div>
-                {panel === 'card' && (
-                  <div class="card profile-panel">
-                    <MemberCardPanel profile={profile} />
-                  </div>
-                )}
-                {panel === 'sync' && badgesOn && (
-                  <div class="card profile-panel">
-                    <ProgressSharePanel profile={profile} />
-                  </div>
-                )}
+                {sending && <SendSheet profile={profile} recipient={null} onClose={() => setSending(false)} />}
                 {panel === 'edit' && (
                   <div class="card profile-panel" ref={editRef}>
                     <ProfileEditFields profile={profile} onDone={() => setPanel(null)} />

@@ -26,7 +26,10 @@ import type { XpBadgeFact, XpCookFact, XpState } from './xp.ts';
 export interface ProgressSnapshot extends ProgressCard {
   /** ISO timestamp of the moment this phone saved the card. */
   receivedAt: string;
-  /** Saved with "Bewaar als vriend": not a household member, only in the calendar and under Friends. */
+  /**
+   * Before V1c-2: saved with "Bewaar als vriend". Since V1c-2 a friend is a `Member` with `role: 'friend'`;
+   * the flag stays for old backups and the one-time boot migration (`migrateFriendSnapshots`), nobody else reads it.
+   */
   friend: boolean;
 }
 
@@ -307,7 +310,7 @@ export function carriedXpFor(cardXp: number, derivedTotalWithoutCarried: number)
 // A member's id can change: a card that matches by name replaces the member's id with the card's
 // (`upsertMemberFromCard`), and a phone whose storage was wiped sends a NEW profile id. Snapshots stay
 // keyed by the id of the card they came from, so `snapshots[member.id]` then misses the older (and
-// higher) progress. These helpers match by id, else by phone id (`deviceId`), else by name.
+// higher) progress. These helpers match by id, else by name (never by phone id alone).
 
 /** A name key for matching people: trimmed, lower case, diacritics and double spaces removed. */
 function foldKey(name: string | undefined): string {
@@ -320,17 +323,16 @@ function foldKey(name: string | undefined): string {
 }
 
 /**
- * Every snapshot that belongs to `member`: the one under its id, plus the ones from the same phone
- * (`deviceId`) and the ones with the same name. Newest (`receivedAt`) first.
+ * Every snapshot that belongs to `member`: the one under its id, plus the ones with the same name.
+ * Never by phone id alone (decision Fable after the V1c-2 lens: two profiles on one phone share a
+ * `deviceId` and would borrow each other's progress). Newest (`receivedAt`) first.
  */
 export function snapshotsForMember(
   member: { id: string; name: string; deviceId?: string },
   snapshots: Readonly<Record<string, ProgressSnapshot>>,
 ): ProgressSnapshot[] {
   const name = foldKey(member.name);
-  const out = Object.values(snapshots).filter(
-    (s) => s.id === member.id || (!!member.deviceId && s.deviceId === member.deviceId) || (name !== '' && foldKey(s.name) === name),
-  );
+  const out = Object.values(snapshots).filter((s) => s.id === member.id || (name !== '' && foldKey(s.name) === name));
   return out.sort((a, b) => (a.receivedAt < b.receivedAt ? 1 : a.receivedAt > b.receivedAt ? -1 : 0));
 }
 

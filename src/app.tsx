@@ -36,6 +36,7 @@ import { isLadder } from './domain/badges';
 import { interpolate, lang, t, type Lang } from './i18n';
 import { startInboxBadge } from './inbox-badge';
 import { loadProfiles, needsOnboarding } from './profile';
+import { migrateFriendSnapshots } from './people';
 import { requestPersistentStorage } from './pwa';
 import { IMPORT_ROUTE, navigate, route, startRouter, type Route } from './router';
 import { BadgesScreen } from './screens/BadgesScreen';
@@ -326,6 +327,7 @@ export function App(props: { openImportFromHash: boolean }) {
       }
       try {
         await loadProfiles();
+        await migrateFriendSnapshots().catch((e: unknown) => console.error('migrateFriendSnapshots', e)); // V1c-2: friend snapshots → friend members, once
         // 6D-2c: with badges on and `badges.catalogSynced` below 2, register what was reached so far
         // silently (all local profiles + Samen), then set the flag; a fresh install only sets it.
         await syncCatalogIfNeeded();

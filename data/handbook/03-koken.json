@@ -482,8 +482,8 @@
         "en": "A month grid from Monday to Sunday; today has a border. When you tap a day, each cook shows below as \"name — dish\". At the bottom is the legend: everyone with a small avatar and their name."
       },
       "know": {
-        "nl": "Kookte iemand iets wat jij niet hebt, dan staat er \"een recept\". Anderen zie je zoals ze het laatst deelden via Sync mijn voortgang.",
-        "en": "If someone cooked something you do not have, it says \"a recipe\". You see others as they last shared with Sync my progress."
+        "nl": "Kookte iemand iets wat jij niet hebt, dan staat er \"een recept\". Anderen zie je zoals ze het laatst deelden via **Stuur mijn voortgang**.",
+        "en": "If someone cooked something you do not have, it says \"a recipe\". You see others as they last shared with **Send my progress**."
       },
       "route": "/more/calendar",
       "platform": "all",

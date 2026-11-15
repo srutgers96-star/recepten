@@ -1767,7 +1767,7 @@ A month grid from Monday to Sunday; today has a border. When you tap a day, each
 
 #### Good to know
 
-If someone cooked something you do not have, it says "a recipe". You see others as they last shared with Sync my progress.
+If someone cooked something you do not have, it says "a recipe". You see others as they last shared with **Send my progress**.
 
 (`#/more/calendar`)
 
@@ -2541,13 +2541,13 @@ On the iPhone there is no **Print** button. There you tap **Share list** and cho
 
 ## Sharing & receiving
 
-You send a recipe, your week plan, your card or your progress to someone else in a few taps. Here you read how to share and how to receive, on Android and on the iPhone.
+You send a recipe, your week plan or your progress to someone else in a few taps. Here you read how to share and how to receive, on Android and on the iPhone.
 
 ### What you can share
 
 #### What it does
 
-You can share a recipe, your week plan, your shopping list, your card and your progress. Several recipes at once go in one message, or in a few messages if there are many.
+You can share a recipe, your week plan, your shopping list and your progress. Several recipes at once go in one message, or in a few messages if there are many.
 
 #### Where you tap
 
@@ -2788,7 +2788,7 @@ The recipe appears under the paste box, with a label such as **New**. After **Im
 
 #### Good to know
 
-If the iPhone asks for permission, tap Paste. If that does not work, press and hold the text box and choose Paste. This is also how you receive a card, a week plan, a list and progress.
+If the iPhone asks for permission, tap Paste. If that does not work, press and hold the text box and choose Paste. This is also how you receive a week plan, a list, someone's progress and who someone is.
 
 (`#/inbox`)
 
@@ -2809,7 +2809,7 @@ If you tap a link on the iPhone, Safari opens with a preview. You copy the code 
 
 #### What you then see
 
-Safari shows the recipe to read, with the blue **Copy recipe code** button. For a card, a list or progress the button is called **Copy code**.
+Safari shows the recipe to read, with the blue **Copy recipe code** button. For a list, progress or who someone is, the button is called **Copy code**.
 
 #### Good to know
 
@@ -2821,7 +2821,7 @@ Safari has storage of its own, separate from the app. So what you see in Safari 
 
 #### What it does
 
-**In & out** is the place for everything you receive and send. You paste a message, a link, a card or a recipe file there.
+**In & out** is the place for everything you receive and send. You paste a message, a link, who someone is or their progress, or a recipe file there.
 
 #### Where you tap
 
@@ -2950,7 +2950,7 @@ Everything you made or changed since last time goes to one person. Usually it fi
 
 #### What you then see
 
-You see what the message looks like and what goes along, such as the number of recipes and new ingredients. Members of your household come first, with their colour.
+You see what the message looks like and what goes along, such as the number of recipes and new ingredients. Your housemates come first, with their colour.
 
 #### Good to know
 
@@ -2958,125 +2958,125 @@ A number by **Share your new recipes** tells you how many recipes have not been 
 
 (`#/share`)
 
-### Share your card
+### Send your progress
 
 #### What it does
 
-Your card is your name, colour, language and avatar in one link. Whoever receives it can add you to their household.
+Your progress is your name, colour, language and avatar, with your level, badges and cooking days of the last 90 days, in one link. Notes, stars and photos do not go along.
 
 #### Where you tap
 
 1. Tap **More** at the bottom.
 2. Under your profile, tap **Household & friends**.
-3. Under **My card**, tap **Share my card**.
-4. Choose WhatsApp and the person you are sending it to.
+3. Under **People**, tap **Send my progress**.
+4. Leave **My progress** ticked.
+5. Tap **Share**.
+6. Choose WhatsApp and the person you are sending it to.
 
 #### What you then see
 
-WhatsApp opens with one sentence that starts with “👋” and your name, and under it one link. In the app the explanation for Android and iPhone sits under the buttons.
+A window “Send my progress” opens. WhatsApp opens with one sentence that starts with “📈”, your name and your level, and under it one link. Afterwards it says “Sent.”.
 
 #### Good to know
 
-The same button is on **My profile**. What you send afterwards shows up with your name and colour for the other person.
+The same button is on **My profile**. It is a snapshot: share it again now and then. With **Badges** switched off, the button says **Send who I am** and only your name, colour, language and avatar go along.
 
 (`#/more/household`)
 
-### Add a housemate with a card
+### Add someone who has the app
 
 #### What it does
 
-Did you get a card from someone on another phone? Then you add that person to your household.
+Did someone on another phone send you their progress, or who they are? Then you add them as a housemate or as a friend.
 
 #### Where you tap
 
-1. Copy the message with the card.
+1. Copy the message you got.
 2. Tap **More** at the bottom.
 3. Under your profile, tap **Household & friends**.
-4. Scroll to **Paste a card or progress**.
+4. Tap **Add housemate** or **Add friend**.
 5. Tap **Paste from clipboard**.
-6. Tap the button “Add … to your household”, with the name in it.
+6. Tap the button “Add … as …”, with the name in it.
 
 #### What you then see
 
-You see “Card from” with the name and a circle in that person's colour. Afterwards the person is under **Housemates**, with “via card”.
+A panel opens with **Housemate** and **Friend**, an explanation and the paste box. After pasting you see the name with level and cooking days, or “who … is”. Afterwards the person is in the list with the label housemate or friend.
 
 #### Good to know
 
-If someone is already a member, the button says “Update …”; then name, colour, language and avatar are updated. Pasting in **In & out** works too. On Android you can tap the link, but Android itself decides whether the app opens.
+If someone is already in your list, the button says “Update …”. Then name, colour, language and avatar are updated; housemate or friend stays. Pasting in **In & out** works too. On Android you can tap the link, but Android itself decides whether the app opens.
 
 (`#/more/household`)
 
-### Add a friend
+### Housemate or friend, and switching
 
 #### What it does
 
-A friend is someone you do not cook with, but whose level and cooking days you want to see. A friend does not appear in your shopping list or your servings.
+A housemate cooks and shops with you. A friend does not cook with you; you only see their level and cooking days. You can switch that at any time.
 
 #### Where you tap
 
-1. Ask your friend to tap **Sync my progress** on **My profile** and send you the message.
-2. Copy that message.
-3. Tap **More** at the bottom, then **Household & friends**.
-4. Under **Friends**, tap **Add friend**.
-5. Tap **Paste from clipboard**.
-6. Under the card, tap **Save as a friend**.
+1. Tap **More** at the bottom, then **Household & friends**.
+2. Find the person in the list under **People**.
+3. Under the name, tap **Make friend** or **Make housemate**.
 
 #### What you then see
 
-The app jumps to the paste box with a blue line saying what to paste. After **Save as a friend** the person is under **Friends**, with level and cooking days.
+The label by the name switches straight away between housemate and friend, and the person moves to the other group. The level and the cooking days stay.
 
 #### Good to know
 
-A plain card (**Share my card**) always makes someone a housemate, not a friend. Want a friend as a housemate after all? Paste their progress once more and choose the other button.
+The app does not ask whether you are sure: tap again to switch back. Profiles on this phone are always housemates. A friend does not count for the badges you earn together.
 
 (`#/more/household`)
 
-### Your household: housemates and colours
+### Add someone without the app
 
 #### What it does
 
-Your household holds the people you cook with, also when they have their own phone. Everyone has their own colour.
+Does someone cook along who does not have the app, like grandma? Then type a name and pick a colour. That way the person is in the cooking calendar too.
 
 #### Where you tap
 
 1. Tap **More** at the bottom.
 2. Under your profile, tap **Household & friends**.
-3. Tap **Type a housemate** at the bottom.
-4. Type a name.
-5. Tap a colour.
-6. Tap **Add** to save.
+3. Tap **Add housemate** or **Add friend**.
+4. Under the paste box, choose **Type a name**.
+5. Type a name.
+6. Tap a colour.
+7. Tap **Add** to save.
 
 #### What you then see
 
-Each housemate is under **Housemates** with their avatar, or a circle with a letter in their colour. You see whether someone is on this phone, came through a card or was added by hand.
+The person is in the list with a circle with a letter in their colour and “added by hand”. Profiles on this phone are at the top, with “on this phone”.
 
 #### Good to know
 
-**Edit** and **Remove** change a member from another phone. In **More** your housemates and friends are listed under **Household & friends**, each with the label housemate or friend. The avatar of a member on another phone travels along with their card and their progress, and is then updated. A tap brings you here. Members come first in **Share your new recipes**.
+**Edit** and **Remove** change someone who is not on this phone. In **More** your housemates and friends are listed under **Household & friends**, each with the label housemate or friend. The avatar of someone on another phone travels along with their progress. Housemates come first in **Share your new recipes**.
 
 (`#/more/household`)
 
-### Sync my progress
+### Send to one person
 
 #### What it does
 
-You send your level, your badges, your avatar and your cooking days of the last 90 days to your household or a friend. Notes, stars and photos do not go along.
+Every person in your list has **Send**. With it you send your progress and your new recipes to that person in one message.
 
 #### Where you tap
 
-1. Tap **More** at the bottom.
-2. Under your profile, tap **Household & friends**.
-3. Under **My card**, tap **Sync my progress**.
+1. Tap **More** at the bottom, then **Household & friends**.
+2. Under the person's name, tap **Send**.
+3. Tick or untick **My progress** and **New recipes**.
 4. Tap **Share**.
-5. Choose WhatsApp and the person you are sending it to.
+5. Choose WhatsApp and that person.
 
 #### What you then see
 
-The message starts with “📈”, your name and your level, and ends with one link. Here too you find **Copy link** and **Show QR**.
+A window “Send to” with the name opens. Under **New recipes** it says how many are new since last time. WhatsApp opens with one message: first your progress with its link, then the recipes. Afterwards it says “Sent.”.
 
 #### Good to know
 
-It is a snapshot: the other person sees what you share now, not what you cook later. So share it again now and then. With **Badges** switched off, this button is not there.
+Too much for one message? Then you tap “Share part 1 of 2” and “Share part 2 of 2” one after the other. With **Copy** you paste it all into WhatsApp yourself. With **Badges** off, the first tick box says **Who I am**. It is a snapshot: send it again now and then.
 
 (`#/more/household`)
 
@@ -3084,22 +3084,22 @@ It is a snapshot: the other person sees what you share now, not what you cook la
 
 #### What it does
 
-Shared progress shows you someone else's level and cooking days. You keep it with a member or with a friend.
+Shared progress shows you someone else's level and cooking days. You add that person as a housemate or as a friend.
 
 #### Where you tap
 
 1. Tap **More** at the bottom.
 2. Tap **In & out**.
 3. Tap **Paste from clipboard**.
-4. Tap the button under the card, for example **Save as a friend**.
+4. Tap **Add as housemate** or **Add as friend**.
 
 #### What you then see
 
-You see a progress card with the name, the level, the badges and the cooking days of the last 30 days. If it is a member, the button says “Update …”. Under it you see what gets updated: level, streak, badges, cook days and avatar.
+You see the name with the progress, the level, the badges and the cooking days of the last 30 days. If the person is already in your list, the button says “Update …”. After the tap it says, for example, “… is now one of your friends.”.
 
 #### Good to know
 
-Afterwards the level shows under the name in **Household & friends**, with the date it was updated. A friend is listed under **Friends** and is not a member. In the **Cooking calendar** you see others as they last shared.
+Afterwards the level shows under the name in **Household & friends**, with the date it was updated. If someone only sent who they are, you see “who … is” without a level. In the **Cooking calendar** you see others as they last shared.
 
 (`#/inbox`)
 
@@ -3112,13 +3112,13 @@ If someone shared their progress with you, your phone keeps it. If their phone i
 #### Where you tap
 
 1. Tap **More** at the bottom, then **Household & friends**.
-2. Find the person under Housemates or Friends.
+2. Find the person in the list under **People**.
 3. Tap **Send back**.
 4. Tap **Share** and choose WhatsApp.
 
 #### What you then see
 
-WhatsApp opens with a sentence about that person's level and one link, just like Sync my progress.
+WhatsApp opens with a sentence about that person's level and one link, just like **Send my progress**.
 
 #### Good to know
 
@@ -3726,7 +3726,7 @@ The total is never shown, so there is always something left to discover. **Toget
 
 #### What it does
 
-At the top of the badges there is a tab for each member of your household and a **Together** tab. Some badges you only earn together.
+At the top of the badges there is a tab for each housemate and a **Together** tab. Some badges you only earn together.
 
 #### Where you tap
 
@@ -3793,7 +3793,7 @@ If the badge brings something for your avatar, a second line says so. The messag
 
 #### What it does
 
-**My profile** shows your avatar large, with your name, your level and the XP bar. Under it are tiles for your style, your badges, your card and your progress.
+**My profile** shows your avatar large, with your name, your level and the XP bar. Under it are tiles for your style, your badges and your progress.
 
 #### Where you tap
 
@@ -3802,7 +3802,7 @@ If the badge brings something for your avatar, a second line says so. The messag
 
 #### What you then see
 
-You see your avatar large, with a pencil at the bottom right, and your name, your level and the bar. Under it are the tiles **Your style**, **Badges**, **Share my card**, **Sync my progress** and **Name & colour**.
+You see your avatar large, with a pencil at the bottom right, and your name, your level and the bar. Under it are the tiles **Your style**, **Badges**, **Send my progress** and **Name & colour**.
 
 #### Good to know
 
@@ -3814,7 +3814,7 @@ Tap the pencil for **Name & colour**. Tap your large avatar and it winks; a circ
 
 #### What it does
 
-From level 3, after your first cooked dish, you make your own avatar. It then shows on Home, in More and on your card.
+From level 3, after your first cooked dish, you make your own avatar. It then shows on Home, in More and in the progress you send.
 
 #### Where you tap
 

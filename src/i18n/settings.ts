@@ -154,8 +154,8 @@ export const settings: Dict = {
   // --- Phase 5: Huishouden (docs/phase-5-spec.md A.8) ---
   'household.title': { nl: 'Huishouden & vrienden', en: 'Household & friends' },
   'household.intro': {
-    nl: 'Eén huishouden per telefoon: de mensen met wie je kookt en boodschappen doet. De profielen op deze telefoon zijn automatisch huisgenoot; wie op een andere telefoon kookt stuurt je een kaartje, of je typt de naam zelf. Een vriend staat los van je huishouden: je ziet alleen zijn level en kookdagen.',
-    en: 'One household per phone: the people you cook and shop with. The profiles on this phone are housemates automatically; someone who cooks on another phone sends you a card, or you type the name yourself. A friend is separate from your household: you only see their level and cooking days.',
+    nl: 'Eén huishouden per telefoon: de mensen met wie je kookt en boodschappen doet. Een vriend staat los van je huishouden: je ziet alleen zijn level en kookdagen. Iemand toevoegen kan met zijn bericht (voortgang of wie hij is) of door een naam te typen.',
+    en: 'One household per phone: the people you cook and shop with. A friend is separate from your household: you only see their level and cooking days. You add someone with their message (progress or who they are) or by typing a name.',
   },
   'household.name': { nl: 'Naam van het huishouden', en: 'Household name' },
   // The default household name is never stored (the setting keeps ''); it is rendered in the active language.
@@ -165,75 +165,85 @@ export const settings: Dict = {
   'household.memberOne': { nl: '1 huisgenoot', en: '1 housemate' },
   'household.local': { nl: 'op deze telefoon', en: 'on this phone' },
   'household.byHand': { nl: 'met de hand toegevoegd', en: 'added by hand' },
-  'household.fromCard': { nl: 'via kaartje', en: 'via card' },
+  'household.fromCard': { nl: 'via de app', en: 'via the app' },
   'household.manageProfiles': { nl: 'Profielen op deze telefoon beheren', en: 'Manage the profiles on this phone' },
-  // V1c-1: the heading of the type-a-name card and the button at the bottom; the form's save label is addSubmit.
-  'household.add': { nl: 'Typ een huisgenoot', en: 'Type a housemate' },
-  'household.addHint': { nl: 'Voor iemand zonder de app, zodat die in de kookkalender kan.', en: 'For someone without the app, so they can be in the cook calendar.' },
+  // The save label of the type-a-name form (V1c-2: under people.typeName in the add panel).
   'household.addSubmit': { nl: 'Voeg toe', en: 'Add' },
-  // V1c-1: the Vrienden card is always shown; "Voeg vriend toe" brings the paste box into view.
-  'household.friendsEmpty': {
-    nl: 'Nog geen vrienden. Een vriend voeg je toe met zijn gedeelde voortgang: hij tikt op Mijn profiel op Sync mijn voortgang en stuurt je het bericht.',
-    en: 'No friends yet. You add a friend with their shared progress: they tap Sync my progress on My profile and send you the message.',
-  },
-  'household.addFriend': { nl: 'Voeg vriend toe', en: 'Add friend' },
-  'household.friendHint': {
-    nl: 'Plak hier het voortgangsbericht van je vriend en kies dan Bewaar als vriend.',
-    en: "Paste your friend's progress message here and then choose Save as a friend.",
-  },
   'household.memberName': { nl: 'Naam', en: 'Name' },
   'household.memberNamePlaceholder': { nl: 'bv. Oma', en: 'e.g. Grandma' },
   'household.memberColor': { nl: 'Kleur', en: 'Colour' },
   'household.edit': { nl: 'Bewerk', en: 'Edit' },
   'household.remove': { nl: 'Verwijder', en: 'Remove' },
   'household.removeConfirm': {
-    nl: 'Lid "{name}" uit het huishouden halen? De kooklog blijft staan.',
-    en: 'Remove member "{name}" from the household? The cook log stays.',
+    nl: '"{name}" verwijderen? De kooklog blijft staan.',
+    en: 'Remove "{name}"? The cook log stays.',
   },
-  'household.nameExists': { nl: 'Er is al een lid met deze naam.', en: 'There is already a member with this name.' },
+  'household.nameExists': { nl: 'Er is al iemand met deze naam.', en: 'There is already someone with this name.' },
   'household.saved': { nl: 'Bewaard', en: 'Saved' },
 
-  // --- Phase 5 block F: member cards (`#f=`) — share mine, add someone else's ---
-  'household.myCard': { nl: 'Mijn kaartje', en: 'My card' },
-  'household.myCardHint': {
-    nl: 'Deel je kaartje met wie op een andere telefoon kookt. Die voegt je toe aan zijn huishouden: wat je stuurt krijgt dan jouw naam en kleur, en "Deel je nieuwe recepten" kent je al.',
-    en: 'Share your card with someone who cooks on another phone. They add you to their household: what you send then carries your name and colour, and "Share your new recipes" already knows you.',
-  },
-  'household.shareCard': { nl: 'Deel mijn kaartje', en: 'Share my card' },
-  'household.copyCard': { nl: 'Kopieer link', en: 'Copy link' },
-  'household.cardShared': { nl: 'Kaartje gedeeld.', en: 'Card shared.' },
-  'household.cardCopied': { nl: 'Gekopieerd — plak het in WhatsApp.', en: 'Copied — paste it into WhatsApp.' },
-  // The one-sentence WhatsApp text itself comes from the domain layer (share.ts buildMemberShareMessage).
-  'household.cardBuildFailed': { nl: 'Kaartje kon niet worden gemaakt.', en: 'Could not create the card.' },
-  // Honest (CLAUDE.md invariants 5 + 13): on an iPhone a link never opens the installed app.
-  'household.cardIosHint': {
-    nl: 'Android: de ander tikt op de link. iPhone: de link opent de app niet — de ander kopieert het bericht en plakt het in de app (Huishouden & vrienden → "Plak een kaartje of voortgang", of In & uit).',
-    en: 'Android: the other person taps the link. iPhone: the link does not open the app — they copy the message and paste it into the app (Household & friends → "Paste a card or progress", or In & out).',
-  },
-  'household.cardQrAlt': { nl: 'QR-code met mijn kaartje', en: 'QR code with my card' },
-  'household.addViaLink': { nl: 'Plak een kaartje of voortgang', en: 'Paste a card or progress' },
-  // 13A: the box is the universal one; a recipe link or website text pasted here is named and sent on.
-  'household.addViaLinkHint': {
-    nl: 'Plak hier het bericht dat de ander je stuurde. Een kaartje maakt iemand huisgenoot. Een gedeelde voortgang kun je als huisgenoot óf als vriend bewaren: een vriend staat niet in je lijstjes, je ziet alleen zijn level en kookdagen. Iets anders geplakt? De app zegt wat het is en waar het heen kan.',
-    en: 'Paste the message the other person sent you here. A card makes someone a housemate. Shared progress you can keep as a housemate or as a friend: a friend is not in your lists, you only see their level and cooking days. Pasted something else? The app says what it is and where it can go.',
-  },
-  'household.noCard': { nl: 'Geen kaartje gevonden in deze tekst.', en: 'No card found in this text.' },
-  'household.cardFrom': { nl: 'Kaartje van {name}', en: 'Card from {name}' },
-  'household.addCard': { nl: 'Voeg {name} toe aan je huishouden', en: 'Add {name} to your household' },
-  'household.updateCard': { nl: 'Werk {name} bij', en: 'Update {name}' },
-  'household.cardKnown': {
-    nl: '{name} is al lid; het kaartje werkt naam, kleur en taal bij.',
-    en: '{name} is already a member; the card updates name, colour and language.',
-  },
-  'household.cardLocal': { nl: '{name} is een profiel op deze telefoon — al lid.', en: '{name} is a profile on this phone — already a member.' },
-  'household.cardAdded': { nl: '{name} is toegevoegd aan je huishouden.', en: '{name} was added to your household.' },
-  'household.cardUpdated': { nl: '{name} is bijgewerkt.', en: '{name} was updated.' },
-  'household.cardFailed': { nl: 'Toevoegen mislukt', en: 'Adding failed' },
+  // After adding someone from a pasted message (In & uit): the button to Huishouden & vrienden.
   'household.toHousehold': { nl: 'Naar huishouden', en: 'To household' },
+
+  // --- V1c-2 (docs/specs/verbeterronde-1c.md, block V1c-2 §1d): people with a role, one paste box, one send sheet ---
+  'people.title': { nl: 'Mensen', en: 'People' },
+  'people.addHousemate': { nl: 'Voeg huisgenoot toe', en: 'Add housemate' },
+  'people.addFriend': { nl: 'Voeg vriend toe', en: 'Add friend' },
+  'people.sendMine': { nl: 'Stuur mijn voortgang', en: 'Send my progress' },
+  'people.sendMineIdentity': { nl: 'Stuur wie ik ben', en: 'Send who I am' },
+  'people.housemate': { nl: 'Huisgenoot', en: 'Housemate' },
+  'people.friend': { nl: 'Vriend', en: 'Friend' },
+  'people.roleHousemate': { nl: 'huisgenoot', en: 'housemate' },
+  'people.roleFriend': { nl: 'vriend', en: 'friend' },
+  'people.makeFriend': { nl: 'Maak vriend', en: 'Make friend' },
+  'people.makeHousemate': { nl: 'Maak huisgenoot', en: 'Make housemate' },
+  'people.send': { nl: 'Stuur', en: 'Send' },
+  'people.pasteHint': {
+    nl: 'Plak hier het bericht dat de ander je stuurde: zijn voortgang, of wie hij is. Iets anders geplakt? De app zegt wat het is en waar het heen kan.',
+    en: 'Paste the message the other person sent you here: their progress, or who they are. Pasted something else? The app says what it is and where it can go.',
+  },
+  'people.or': { nl: 'of', en: 'or' },
+  'people.typeName': { nl: 'Typ een naam (voor iemand zonder de app)', en: 'Type a name (for someone without the app)' },
+  // {role} is people.roleHousemate or people.roleFriend.
+  'people.addAs': { nl: 'Voeg {name} toe als {role}', en: 'Add {name} as {role}' },
+  'people.addAsHousemate': { nl: 'Voeg toe als huisgenoot', en: 'Add as housemate' },
+  'people.addAsFriend': { nl: 'Voeg toe als vriend', en: 'Add as friend' },
+  'people.update': { nl: 'Werk {name} bij', en: 'Update {name}' },
+  'people.addedHousemate': { nl: '{name} staat nu bij je huisgenoten.', en: '{name} is now one of your housemates.' },
+  'people.addedFriend': { nl: '{name} staat nu bij je vrienden.', en: '{name} is now one of your friends.' },
+  'people.cardIdentity': { nl: 'wie {name} is', en: 'who {name} is' },
+  'people.cardLocal': { nl: 'Dat ben jij zelf (een profiel op deze telefoon).', en: 'That is you (a profile on this phone).' },
+  'people.viaApp': { nl: 'via de app', en: 'via the app' },
+  // The close button reuses common.close ('Sluit' · 'Close'); there is no people.close.
+  // The send sheet (src/components/SendSheet.tsx).
+  'send.title': { nl: 'Stuur naar {name}', en: 'Send to {name}' },
+  'send.titleMine': { nl: 'Stuur mijn voortgang', en: 'Send my progress' },
+  'send.progress': { nl: 'Mijn voortgang', en: 'My progress' },
+  'send.progressSub': { nl: 'wie ik ben, mijn level, badges en kookdagen', en: 'who I am, my level, badges and cooking days' },
+  'send.identity': { nl: 'Wie ik ben', en: 'Who I am' },
+  'send.identitySub': { nl: 'naam, kleur, taal en avatar', en: 'name, colour, language and avatar' },
+  'send.recipes': { nl: 'Nieuwe recepten', en: 'New recipes' },
+  'send.recipesSub': { nl: '{n} nieuw sinds {date}', en: '{n} new since {date}' },
+  'send.recipesAll': { nl: 'alles wat je zelf maakte ({n})', en: 'everything you made yourself ({n})' },
+  'send.recipesNone': { nl: 'niets nieuws sinds {date}', en: 'nothing new since {date}' },
+  'send.share': { nl: 'Deel', en: 'Share' },
+  'send.sharePart': { nl: 'Deel deel {i} van {n}', en: 'Share part {i} of {n}' },
+  'send.copy': { nl: 'Kopieer', en: 'Copy' },
+  'send.copied': { nl: 'Gekopieerd — plak het in WhatsApp.', en: 'Copied — paste it into WhatsApp.' },
+  'send.done': { nl: 'Verstuurd.', en: 'Sent.' },
+  'send.nothing': { nl: 'Vink iets aan om te sturen.', en: 'Tick something to send.' },
+  'send.tooBig': {
+    nl: 'Te veel nieuwe recepten voor berichten; ga naar Deel je nieuwe recepten.',
+    en: 'Too many new recipes for messages; go to Share your new recipes.',
+  },
+  // Honest (CLAUDE.md invariants 5 + 13): on an iPhone a link never opens the installed app.
+  'send.iosHint': {
+    nl: 'Android: de ander tikt op de link. iPhone: de link opent de app niet — de ander kopieert het bericht en plakt het in de app (Huishouden & vrienden → Voeg huisgenoot toe of Voeg vriend toe, of In & uit).',
+    en: 'Android: the other person taps the link. iPhone: the link does not open the app — they copy the message and paste it into the app (Household & friends → Add housemate or Add friend, or In & out).',
+  },
   // "Deel je nieuwe recepten" (DeltaShareScreen; the other delta.* keys live in phase2.ts)
   'delta.memberHint': {
-    nl: 'Leden van je huishouden staan vooraan. Iemand op een andere telefoon voeg je toe met een kaartje.',
-    en: 'Members of your household come first. Someone on another phone is added with a card.',
+    nl: 'Huisgenoten staan vooraan. Iemand op een andere telefoon voeg je toe met zijn bericht, of je typt een naam.',
+    en: 'Housemates come first. Someone on another phone is added with their message, or you type a name.',
   },
 
   // --- Profielen --------------------------------------------------------------------------------
@@ -407,8 +417,9 @@ export const settings: Dict = {
   'profile.title': { nl: 'Mijn profiel', en: 'My profile' },
   'profile.style': { nl: 'Jouw stijl', en: 'Your style' },
   'profile.badges': { nl: 'Badges', en: 'Badges' },
-  'profile.shareCard': { nl: 'Deel mijn kaartje', en: 'Share my card' },
-  'profile.sync': { nl: 'Sync mijn voortgang', en: 'Sync my progress' },
+  // V1c-2: one tile that opens the send sheet without a recipient (badges off: sendIdentity).
+  'profile.send': { nl: 'Stuur mijn voortgang', en: 'Send my progress' },
+  'profile.sendIdentity': { nl: 'Stuur wie ik ben', en: 'Send who I am' },
   'profile.edit': { nl: 'Naam & kleur', en: 'Name & colour' },
   'profile.makeActive': { nl: 'Maak actief', en: 'Make active' },
   'profile.active': { nl: 'Actief', en: 'Active' },

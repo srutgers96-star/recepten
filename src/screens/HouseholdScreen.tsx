@@ -1,51 +1,50 @@
-// '#/more/household' — the household (docs/phase-5-spec.md A.8 + block F): its name (setting
-// `household.name`; empty = the default "Thuis" / "Home" in the active language, never stored)
-// and its members: the profiles on this phone (automatic, edited via Profiles) plus members added
-// by hand (name + colour) or received as a MEMBER CARD (`#f=` token, src/domain/household.ts
-// `upsertMemberFromCard`), all stored in the `household` setting.
-//   - "Mijn kaartje": <MemberCardPanel/> (ProfilesScreen) for the active profile, and under it (6D-4,
-//     docs/specs/xp-levels.md §1h) the button "Sync mijn voortgang" with <ProgressSharePanel/>.
-//   - "Voeg lid toe via link of plak": a paste box; every `#f=` in the text becomes a card row with
-//     "Voeg <naam> toe aan je huishouden" (`readMemberCards`, `MemberCardRow`, `applyMemberCard`;
-//     the Inbox reuses the last two). Works by pasting (iPhone, invariant 5) and by link (Android
-//     → Inbox). Phase 6 (docs/phase-6-spec.md 13A): the box is the universal one (<UniversalPaste>):
-//     a recipe link pasted here offers "Open in de Inbox", a website recipe "Open in de editor"; a
-//     text another paste box handed over arrives through `pendingMemberText`.
-//   - 6D-4b (docs/specs/xp-levels.md §1i): a shared progress (`#x=`, "Sync mijn voortgang") pasted
-//     here (or in the Inbox) becomes a card "Voortgang van <naam>" (`ProgressCardRow`,
-//     `applyProgressCard`; the Inbox reuses both): update a member, add a new one, or keep the
-//     snapshot as a friend (setting `progress.snapshots`). Each member row shows "Level N · <titel>"
-//     under the name (a profile here: live; a member on another phone: from the last snapshot, with
-//     "· bijgewerkt <datum>"); badges off = no level anywhere. Under the members a card "Vrienden"
-//     lists the friend snapshots (absent when there are none).
-//   - V1c-9 (docs/specs/verbeterronde-1c.md, block V1c-9 §1b): "Stuur terug" on a member row with a
-//     snapshot and on every friend row unfolds <ProgressReturnPanel/> under that row (one at a time;
-//     badges off = no button). A received progress of a profile on THIS phone (`cardStatus` 'local')
-//     with a higher XP than the profile has now offers "Herstel mijn voortgang" (`onRestore`; the
-//     screens call `restoreProgress`, src/progress-restore.ts).
+// '#/more/household' — Huishouden & vrienden (docs/phase-5-spec.md A.8 + block F; since V1c-2,
+// docs/specs/verbeterronde-1c.md block V1c-2 §1b, "Mensen en sturen"): the household's name (setting
+// `household.name`; empty = the default "Thuis" / "Home" in the active language, never stored) and
+// one card "Mensen" with everyone: the profiles on this phone (automatic, edited via Profiles), then
+// the other housemates, then the friends (`Member.role`, src/domain/household.ts `roleOf`), all
+// non-local people stored in the `household` setting.
+//   - On top of the card: "Voeg huisgenoot toe" · "Voeg vriend toe" · "Stuur mijn voortgang" (badges
+//     off: "Stuur wie ik ben"; <SendSheet/> without a recipient).
+//   - Per person (not a profile here), on their own line under the row: "Stuur" (<SendSheet/> with
+//     that person), "Maak vriend" / "Maak huisgenoot" (src/people.ts `setMemberRole`, one tap),
+//     "Stuur terug" (V1c-9: <ProgressReturnPanel/> under the row, with a stored progress and badges
+//     on), "Bewerk" and "Verwijder".
+//   - The add panel (one at a time, under the buttons): a Segmented "Huisgenoot | Vriend" preset by
+//     the button that opened it, the ONE paste box (<UniversalPaste>, 13A: recipe links and website
+//     recipes are handed on to In & uit / the editor; a text another paste box handed over arrives
+//     through `pendingMemberText` and opens the panel), every person found in it as <PersonCardRow/>
+//     ("Voeg {name} toe als {rol}" / "Werk {name} bij"; src/people.ts `applyPersonCard`), then "of"
+//     and "Typ een naam" (name + colour for someone without the app, with the chosen role).
+//   - V1c-9: a received progress of a profile on THIS phone with a higher XP than the profile has now
+//     offers "Herstel mijn voortgang" (`restoreProgress`, src/progress-restore.ts).
+//   - V1c-9b: stored progress that belongs to nobody in the list stays visible under the list with
+//     "Stuur terug" and "Verwijder".
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { badgesEnabled, loadBadgeSettings } from '@/badges';
 import { Header } from '@/components/Header';
-import { ProgressReturnPanel, ProgressShareToggle } from '@/components/ProgressSharePanel';
+import { PersonCardRow, useBadgesState, type PersonOutcome, type RestoredInfo } from '@/components/PersonCardRow';
+import { ProgressReturnPanel } from '@/components/ProgressSharePanel';
 import { formatShortDate } from '@/components/RecipeRow';
+import { Segmented, type SegOption } from '@/components/Segmented';
+import { SendSheet } from '@/components/SendSheet';
 import { UniversalPaste } from '@/components/UniversalPaste';
-import { formatXp, levelTitleText } from '@/components/XpBar';
+import { levelTitleText } from '@/components/XpBar';
 import { useLive } from '@/db/live';
-import { getHousehold, getProgressSnapshots, logShareEvent, putProgressSnapshot, removeProgressSnapshot, setHousehold } from '@/db/repo';
-import { dayFromKey, dayIndexOfIso, localDayIndex } from '@/domain/days';
+import { getHousehold, getProgressSnapshots, removeProgressSnapshot, setHousehold } from '@/db/repo';
 import {
-  matchMemberForCard,
+  friendsOf,
+  housematesOf,
   memberFromProfile,
   membersFrom,
   newMemberId,
   putMember,
   removeMember,
-  upsertMemberFromCard,
+  roleOf,
   type HouseholdSetting,
   type Member,
   type MemberCard,
+  type MemberRole,
 } from '@/domain/household';
-import { nowIso } from '@/domain/model';
 import { classifyPaste } from '@/domain/paste-classify';
 import { cleanPastedText } from '@/domain/photo-import';
 import { bestSnapshotForMember, snapshotForMember, snapshotsForMember, type ProgressSnapshot } from '@/domain/progress';
@@ -53,11 +52,11 @@ import { parseEnvelope, type ParsedShare, type ProgressCard } from '@/domain/sha
 import { decodeToken, extractTokenSpans, glueToken } from '@/domain/token';
 import { t } from '@/i18n';
 import { openPasteIn, pasteProblemOf } from '@/paste';
+import { applyPersonCard, setMemberRole } from '@/people';
 import { PROFILE_COLORS, activeProfile, profiles } from '@/profile';
 import { restoreProgress } from '@/progress-restore';
 import { navigate, pendingMemberText } from '@/router';
-import { xpStateFor } from '@/xp';
-import { Avatar, MemberCardPanel, useAvatarLevel } from './ProfilesScreen';
+import { Avatar, useAvatarLevel } from './ProfilesScreen';
 
 const NAME_DEBOUNCE_MS = 500;
 const PASTE_DEBOUNCE_MS = 150;
@@ -67,30 +66,7 @@ interface MemberValues {
   color: string;
 }
 
-// --- Member cards: shared with the Inbox ---------------------------------------------------------
-
-/** 'local' = a profile on this phone; 'known' = already a (non-local) member; 'new' = not yet. */
-export type CardStatus = 'new' | 'known' | 'local';
-
-export function cardStatus(members: readonly Member[], card: MemberCard): CardStatus {
-  const m = matchMemberForCard(members, card);
-  return m ? (m.local ? 'local' : 'known') : 'new';
-}
-
-export type CardOutcome = 'added' | 'updated' | 'local';
-
-/**
- * Writes a received card into the household setting (add or update); a card of a profile on this
- * phone is never written (`'local'`). Returns the setting as stored, for the caller's state.
- */
-export async function applyMemberCard(card: MemberCard): Promise<{ outcome: CardOutcome; setting: HouseholdSetting }> {
-  const h = await getHousehold();
-  const status = cardStatus(membersFrom(profiles.value, h), card);
-  if (status === 'local') return { outcome: 'local', setting: h };
-  const next = upsertMemberFromCard(h, card);
-  await setHousehold(next);
-  return { outcome: status === 'known' ? 'updated' : 'added', setting: next };
-}
+// --- The paste scan: every person in a pasted text -----------------------------------------------
 
 export interface FoundCards {
   cards: MemberCard[];
@@ -178,7 +154,7 @@ export async function readMemberCards(text: string): Promise<FoundCards> {
   try {
     value = JSON.parse(s.slice(idx));
   } catch {
-    return out; // not JSON: "geen kaartje gevonden"
+    return out; // not JSON: nothing found
   }
   if (!isEnvelope(value)) {
     out.others++;
@@ -192,49 +168,6 @@ export async function readMemberCards(text: string): Promise<FoundCards> {
   return out;
 }
 
-/** One received card: who it is, whether we know them, and the add/update button (or the outcome). */
-export function MemberCardRow(props: { card: MemberCard; members: readonly Member[]; done?: CardOutcome; busy?: boolean; onAdd: (card: MemberCard) => void; onOpenHousehold?: () => void }) {
-  const { card } = props;
-  const status = props.done === 'local' ? 'local' : cardStatus(props.members, card);
-  const name = card.name;
-  return (
-    <div class="member-card-row">
-      <div class="member-card-head">
-        <Avatar profile={card} />
-        <div class="who">
-          <strong>{t('household.cardFrom', { name })}</strong>
-          <span class="muted small">{t(card.lang === 'en' ? 'lang.en' : 'lang.nl')}</span>
-        </div>
-      </div>
-      {props.done && props.done !== 'local' ? (
-        <>
-          <p class="ok small">{t(props.done === 'added' ? 'household.cardAdded' : 'household.cardUpdated', { name })}</p>
-          {props.onOpenHousehold && (
-            <div class="actions">
-              <button type="button" class="btn" onClick={props.onOpenHousehold}>
-                {t('household.toHousehold')} ›
-              </button>
-            </div>
-          )}
-        </>
-      ) : status === 'local' ? (
-        <p class="muted small">{t('household.cardLocal', { name })}</p>
-      ) : (
-        <>
-          {status === 'known' && <p class="muted small">{t('household.cardKnown', { name })}</p>}
-          <div class="actions">
-            <button type="button" class="btn btn-primary btn-block" disabled={props.busy} onClick={() => props.onAdd(card)}>
-              {t(status === 'known' ? 'household.updateCard' : 'household.addCard', { name })}
-            </button>
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-// --- Shared progress (#x=, 6D-4b): shared with the Inbox -----------------------------------------
-
 /**
  * True once the `badges.enabled` setting is known and on. Badges off = no level, streak or badge
  * count anywhere (docs/specs/xp-levels.md §1, §5.9); waiting for the setting keeps a level line
@@ -242,221 +175,6 @@ export function MemberCardRow(props: { card: MemberCard; members: readonly Membe
  */
 function useBadgesOn(): boolean {
   return useBadgesState() === 'on';
-}
-
-/** The `badges.enabled` setting once known: 'loading' until then (V1c-9: no "zet Badges aan" line flashes by). */
-function useBadgesState(): 'loading' | 'on' | 'off' {
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    let cancelled = false;
-    void loadBadgeSettings().then(() => {
-      if (!cancelled) setReady(true);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-  return !ready ? 'loading' : badgesEnabled.value ? 'on' : 'off';
-}
-
-/**
- * Cook days of the card in the 30 days up to the day it was shared (the envelope's `at`; today when
- * the share carries no date), that day included: "{n} kookdagen in de laatste 30 dagen".
- */
-export function cookDaysIn30(card: Pick<ProgressCard, 'cookDays'>, sentAt?: string): number {
-  const end = (sentAt ? dayIndexOfIso(sentAt) : null) ?? localDayIndex(new Date());
-  let n = 0;
-  for (const c of card.cookDays) {
-    const day = dayFromKey(c.d);
-    if (day !== null && day <= end && day > end - 30) n++;
-  }
-  return n;
-}
-
-/**
- * What saving a received progress did: a member added / updated, kept as a friend, nothing (a
- * profile here), or (V1c-9) the own progress restored from it.
- */
-export type ProgressOutcome = 'added' | 'updated' | 'friend' | 'local' | 'restored';
-
-/** V1c-9: what `restoreProgress` reported, for the line "Voortgang hersteld: level N, … kookdagen en … badges teruggezet." */
-export interface RestoredInfo {
-  level: number;
-  cookDaysAdded: number;
-  badgesAdded: number;
-}
-
-/** V1c-9 §1b: "Voortgang hersteld: …" for a finished restore. */
-export function restoredText(r: RestoredInfo): string {
-  return t('progress.restored', { level: formatXp(r.level), days: formatXp(r.cookDaysAdded), badges: formatXp(r.badgesAdded) });
-}
-
-/**
- * Saves a received progress (§1i). The sender is a profile on this phone → nothing is written
- * ('local'). A member already (`matchMemberForCard`, by id or name) → the card fields update the
- * member (`upsertMemberFromCard` via applyMemberCard) and the snapshot is stored. Not a member:
- * `asFriend` false = add them as a member + the snapshot, true = only the snapshot with
- * `friend: true`. Every save logs one 'in' row (kind 'progress', who = the name). Returns the
- * household as stored, for the caller's state.
- */
-export async function applyProgressCard(card: ProgressCard, asFriend: boolean): Promise<{ outcome: ProgressOutcome; setting: HouseholdSetting }> {
-  const h = await getHousehold();
-  const status = cardStatus(membersFrom(profiles.value, h), card);
-  if (status === 'local') return { outcome: 'local', setting: h };
-  let setting = h;
-  let outcome: ProgressOutcome = 'friend';
-  if (status === 'known' || !asFriend) {
-    const r = await applyMemberCard(card);
-    if (r.outcome === 'local') return { outcome: 'local', setting: r.setting };
-    setting = r.setting;
-    outcome = r.outcome;
-  }
-  const snapshot: ProgressSnapshot = { ...card, receivedAt: nowIso(), friend: outcome === 'friend' };
-  await putProgressSnapshot(snapshot);
-  void logShareEvent({ at: nowIso(), direction: 'in', kind: 'progress', who: card.name, count: 1, recipeIds: [] }).catch((err: unknown) => console.error('logShareEvent', err));
-  return { outcome, setting };
-}
-
-/**
- * One received progress (§1i): avatar, "Voortgang van <naam>", "Level N · <titel> · 🔥 s · b badges"
- * (badges on only), "{n} kookdagen in de laatste 30 dagen · gedeeld op <datum>", and the buttons:
- * a member → "Werk <naam> bij"; a profile here → the line that you already see it; anyone else →
- * "Voeg <naam> toe aan je huishouden" and "Bewaar als vriend".
- */
-export function ProgressCardRow(props: {
-  card: ProgressCard;
-  /** The envelope's `at`. */
-  sentAt?: string;
-  members: readonly Member[];
-  done?: ProgressOutcome;
-  busy?: boolean;
-  onSave: (card: ProgressCard, asFriend: boolean) => void;
-  onOpenHousehold?: () => void;
-  /** V1c-9: "Herstel mijn voortgang" on a card of a profile on this phone (confirmed already). */
-  onRestore?: (card: ProgressCard, profileId: string) => void;
-  /** V1c-9: what the restore reported (with `done` 'restored'). */
-  restored?: RestoredInfo;
-}) {
-  const { card } = props;
-  const badges = useBadgesState();
-  const badgesOn = badges === 'on';
-  const status = props.done === 'local' ? 'local' : cardStatus(props.members, card);
-  // V1c-9 §1b: a card of a profile on this phone (by id or name — the member's id is the profile id).
-  const localMember = status === 'local' ? matchMemberForCard(props.members, card) : undefined;
-  const profileId = localMember?.local ? localMember.id : null;
-  // The profile's current total and level, read quietly (an effect); null while unknown.
-  const [current, setCurrent] = useState<{ total: number; level: number } | null>(null);
-  useEffect(() => {
-    let cancelled = false;
-    setCurrent(null);
-    if (!profileId || !badgesOn || !props.onRestore) return;
-    xpStateFor(profileId).then(
-      (st) => {
-        if (!cancelled) setCurrent({ total: st.total, level: st.level });
-      },
-      (e: unknown) => console.error('xpStateFor', e),
-    );
-    return () => {
-      cancelled = true;
-    };
-  }, [profileId, badgesOn, card.id, card.xp, props.done, !!props.onRestore]);
-  const name = card.name;
-  const sent = formatShortDate(props.sentAt);
-  const cookDays = cookDaysIn30(card, props.sentAt);
-  const line3 = [cookDays === 1 ? t('progress.cookDays30One') : t('progress.cookDays30', { n: formatXp(cookDays) }), sent ? t('progress.sentAt', { date: sent }) : '']
-    .filter((s) => s !== '')
-    .join(' · ');
-  const doneText =
-    props.done === 'updated'
-      ? t('progress.updated', { name })
-      : props.done === 'added'
-        ? t('household.cardAdded', { name })
-        : props.done === 'friend'
-          ? t('household.saved')
-          : props.done === 'restored' && props.restored
-            ? restoredText(props.restored)
-            : '';
-  /** V1c-9 §1b: the 'local' part — badges off, nothing to restore, or the hint with the restore button. */
-  function localPart() {
-    if (profileId && props.onRestore) {
-      if (badges === 'off') return <p class="muted small">{t('progress.restoreBadgesOff')}</p>;
-      if (badgesOn && current && card.xp > current.total) {
-        const pid = profileId;
-        const restore = () => {
-          if (!confirm(t('progress.restoreConfirm', { cardLevel: formatXp(card.level) }))) return;
-          props.onRestore?.(card, pid);
-        };
-        return (
-          <div class="actions">
-            <p class="muted small progress-restore-hint">
-              {t('progress.restoreHint', {
-                date: sent,
-                cardLevel: formatXp(card.level),
-                xp: formatXp(card.xp),
-                badges: formatXp(card.badges.length),
-                days: formatXp(card.cookDays.length),
-                level: formatXp(current.level),
-              })}
-            </p>
-            <button type="button" class="btn btn-primary btn-block" disabled={props.busy} onClick={restore}>
-              {t('progress.restoreBtn')}
-            </button>
-          </div>
-        );
-      }
-    }
-    // Not this phone's own profile, the total still loading, or card.xp ≤ the current total: nothing to restore.
-    return <p class="muted small">{t('progress.local', { name })}</p>;
-  }
-  return (
-    <div class="member-card-row progress-card-row">
-      <div class="member-card-head">
-        <Avatar profile={card} />
-        <div class="who">
-          <strong>{t('progress.from', { name })}</strong>
-          {badgesOn && (
-            <span class="muted small">
-              {levelTitleText(card.level)} · {card.badges.length === 1
-                ? t('progress.streakBadgesOne', { streak: formatXp(card.streak) })
-                : t('progress.streakBadges', { streak: formatXp(card.streak), badges: formatXp(card.badges.length) })}
-            </span>
-          )}
-          <span class="muted small">{line3}</span>
-        </div>
-      </div>
-      {props.done && props.done !== 'local' ? (
-        <>
-          <p class="ok small">{doneText}</p>
-          {props.onOpenHousehold && props.done !== 'restored' && (
-            <div class="actions">
-              <button type="button" class="btn" onClick={props.onOpenHousehold}>
-                {t('household.toHousehold')} ›
-              </button>
-            </div>
-          )}
-        </>
-      ) : status === 'local' ? (
-        localPart()
-      ) : status === 'known' ? (
-        <div class="actions">
-          <button type="button" class="btn btn-primary btn-block" disabled={props.busy} onClick={() => props.onSave(card, false)}>
-            {t('progress.update', { name })}
-          </button>
-          {/* V2 §1c: what the update brings along (the card's avatar too, upsertMemberFromCard). */}
-          <p class="muted small progress-update-hint">{t('progress.updateHint')}</p>
-        </div>
-      ) : (
-        <div class="actions">
-          <button type="button" class="btn btn-primary btn-block" disabled={props.busy} onClick={() => props.onSave(card, false)}>
-            {t('household.addCard', { name })}
-          </button>
-          <button type="button" class="btn btn-block" disabled={props.busy} onClick={() => props.onSave(card, true)}>
-            {t('progress.saveFriend')}
-          </button>
-        </div>
-      )}
-    </div>
-  );
 }
 
 /** "Level N · <titel> · bijgewerkt <datum>" of a snapshot (the caller checks that badges are on). */
@@ -485,7 +203,7 @@ function MemberLevelLine(props: { member: Member; snapshot?: ProgressSnapshot })
   return <SnapshotLevelLine snapshot={props.snapshot} />;
 }
 
-/** A friend's line on the Vrienden card: the snapshot's level and date, with badges on only. */
+/** The line of a stored progress that belongs to nobody (V1c-9b): its level and date, with badges on only. */
 function FriendLevelLine(props: { snapshot: ProgressSnapshot }) {
   const on = useBadgesOn();
   return on ? <SnapshotLevelLine snapshot={props.snapshot} /> : null;
@@ -540,40 +258,46 @@ function MemberForm(props: { initial?: Partial<MemberValues>; submitLabel: strin
   );
 }
 
+/** The key of a found person in the add panel's outcome map: who-I-am and progress apart. */
+function foundKey(card: MemberCard | ProgressCard): string {
+  return ('xp' in card ? 'x:' : 'f:') + card.id;
+}
+
 export function HouseholdScreen() {
   const [setting, setSettingState] = useState<HouseholdSetting | null>(null);
   const [name, setName] = useState('');
   const [nameSaved, setNameSaved] = useState(false);
-  const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const nameTimer = useRef<number | null>(null);
-  // Block F: the paste box for received cards.
+  // V1c-2: the add panel (null = closed) with its chosen role, and whether "Typ een naam" is open.
+  const [addRole, setAddRole] = useState<MemberRole | null>(null);
+  const [typing, setTyping] = useState(false);
+  // The paste box in the add panel and the people found in it.
   const [pasteText, setPasteText] = useState('');
   const [found, setFound] = useState<FoundCards | null>(null);
-  const [cardDone, setCardDone] = useState<Record<string, CardOutcome>>({});
+  const [done, setDone] = useState<Record<string, PersonOutcome>>({});
   const [pasteNotice, setPasteNotice] = useState('');
   const [cardBusy, setCardBusy] = useState(false);
-  // 6D-4b: what happened to each received progress in the paste box, and the stored snapshots (live:
-  // a save here or in the Inbox shows up at once in the level lines and on the Vrienden card).
-  const [progressDone, setProgressDone] = useState<Record<string, ProgressOutcome>>({});
   // V1c-9: what each restore reported (by card id), and the row whose "Stuur terug" panel is open (one at a time).
   const [restored, setRestored] = useState<Record<string, RestoredInfo>>({});
   const [returning, setReturning] = useState<string | null>(null);
-  const badgesOn = useBadgesOn();
+  // V1c-2: the Stuur-venster (SendSheet); recipient null = "Stuur mijn voortgang" for someone not in the list.
+  const [sending, setSending] = useState<{ recipient: Member | null } | null>(null);
+  const badges = useBadgesState();
+  const badgesOn = badges === 'on';
   const snapshots = useLive(getProgressSnapshots, []);
   const pasteSeq = useRef(0);
   const pasteBox = useRef<HTMLTextAreaElement>(null);
-  // V1c-1: "Voeg vriend toe" shows a blue line at the paste box until text arrives or a card is found.
-  const [friendHint, setFriendHint] = useState(false);
   const list = profiles.value;
   const me = activeProfile.value;
 
   useEffect(() => {
     let cancelled = false;
-    // 13A: a text with cards that another paste box (editor, Inbox) handed over.
+    // 13A: a text with people that another paste box (editor, Inbox) handed over: open the add panel with it.
     const handed = pendingMemberText.value;
     if (handed) {
       pendingMemberText.value = null;
+      setAddRole('housemate');
       setPasteText(handed);
     }
     void getHousehold().then(
@@ -591,23 +315,17 @@ export function HouseholdScreen() {
   }, []);
 
   const members = useMemo(() => (setting ? membersFrom(list, setting) : list.map(memberFromProfile)), [list, setting]);
-  // 6D-4b: the friend snapshots for the Vrienden card, by name; one that has since become a member
-  // (a member card of the same person) shows in the member list instead, not twice.
-  const friends = useMemo(
-    () =>
-      Object.values(snapshots ?? {})
-        .filter((s) => s.friend && !matchMemberForCard(members, s))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    [snapshots, members],
-  );
+  const localMembers = useMemo(() => members.filter((m) => m.local), [members]);
+  const housemates = useMemo(() => housematesOf(members).filter((m) => !m.local), [members]);
+  const friends = useMemo(() => friendsOf(members), [members]);
   // V1c-9b: stored progress that belongs to nobody in the list (the person was renamed or removed,
-  // or came back with another id and name). Shown under Vrienden so it can still be sent back.
+  // or came back with another id and name). Shown under the list so it can still be sent back.
   const orphans = useMemo(() => {
     const all = snapshots ?? {};
     const owned = new Set<string>();
     for (const m of members) for (const s of snapshotsForMember(m, all)) owned.add(s.id);
     return Object.values(all)
-      .filter((s) => !s.friend && !owned.has(s.id))
+      .filter((s) => !owned.has(s.id))
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [snapshots, members]);
 
@@ -632,10 +350,11 @@ export function HouseholdScreen() {
     }, NAME_DEBOUNCE_MS);
   }
 
+  /** "Typ een naam": someone without the app, with the role chosen in the panel. */
   async function add(v: MemberValues) {
-    if (!setting) return;
-    await save(putMember(setting, { id: newMemberId(), name: v.name, color: v.color, local: false }));
-    setAdding(false);
+    if (!setting || !addRole) return;
+    await save(putMember(setting, { id: newMemberId(), name: v.name, color: v.color, local: false, role: addRole }));
+    closePanel();
   }
 
   async function edit(m: Member, v: MemberValues) {
@@ -651,10 +370,20 @@ export function HouseholdScreen() {
     // 6D-4b: their last shared progress goes with them (it would otherwise linger in the calendar).
     void removeProgressSnapshot(m.id).catch((e: unknown) => console.error('removeProgressSnapshot', e));
     if (editing === m.id) setEditing(null);
+    if (returning === m.id) setReturning(null);
   }
 
-  /** "Verwijder" on the Vrienden card: the friend's snapshot goes (they can share it again). */
-  async function removeFriend(s: ProgressSnapshot) {
+  /** "Maak vriend" / "Maak huisgenoot": one tap, no confirmation; the id (and so the snapshot and cooking days) stays. */
+  async function toggleRole(m: Member) {
+    try {
+      setSettingState(await setMemberRole(m.id, roleOf(m) === 'friend' ? 'housemate' : 'friend'));
+    } catch (e) {
+      console.error('setMemberRole', e);
+    }
+  }
+
+  /** "Verwijder" on a stored progress that belongs to nobody (V1c-9b): the snapshot goes. */
+  async function removeOrphan(s: ProgressSnapshot) {
     try {
       await removeProgressSnapshot(s.id);
     } catch (e) {
@@ -662,18 +391,31 @@ export function HouseholdScreen() {
     }
   }
 
-  // Analyse the pasted text (debounced): every `#f=` becomes a card row. A new text starts with
-  // fresh rows: the "is toegevoegd" outcome of an earlier paste never sticks to a re-pasted card
-  // (it then says "al lid" + "Werk bij", like the Inbox). Anything that is not a token or a raw
-  // envelope (a website recipe, prose) is left to the paste box's own line and buttons (13A).
+  /** "Voeg huisgenoot toe" / "Voeg vriend toe": the panel opens with that role (an open panel only switches role). */
+  function openPanel(role: MemberRole) {
+    setAddRole(role);
+    window.setTimeout(() => pasteBox.current?.focus({ preventScroll: true }), 0);
+  }
+
+  function closePanel() {
+    setAddRole(null);
+    setTyping(false);
+    setPasteText('');
+    setFound(null);
+    setDone({});
+    setPasteNotice('');
+  }
+
+  // Analyse the pasted text (debounced): every `#f=` / `#x=` becomes a person row. A new text starts
+  // with fresh rows: the outcome of an earlier paste never sticks to a re-pasted card. Anything that is
+  // not a token or a raw envelope (a website recipe, prose) is left to the paste box's own line and buttons (13A).
   useEffect(() => {
     const my = ++pasteSeq.current;
     const trimmed = pasteText.trim();
     const kind = trimmed ? classifyPaste(trimmed).kind : 'empty';
     if (!trimmed || !(kind === 'member' || kind === 'tokens' || kind === 'bundle')) {
       setFound(null);
-      setCardDone({});
-      setProgressDone({});
+      setDone({});
       return;
     }
     const handle = window.setTimeout(() => {
@@ -681,8 +423,7 @@ export function HouseholdScreen() {
         .then((got) => {
           if (my !== pasteSeq.current) return;
           setFound(got);
-          setCardDone({});
-          setProgressDone({});
+          setDone({});
         })
         .catch((e: unknown) => {
           console.warn('readMemberCards', e);
@@ -694,50 +435,27 @@ export function HouseholdScreen() {
 
   /**
    * The paste box's text changed (typed, pasted, cleared). The same message pasted again changes
-   * no text (so the effect above does not run): reset the outcomes here too, so the card row
-   * shows its current status again.
+   * no text (so the effect above does not run): reset the outcomes here too, so the row shows its
+   * current status again.
    */
   function onPasteText(s: string) {
-    if (s.trim() !== '') setFriendHint(false);
     setPasteNotice('');
-    setCardDone({});
-    setProgressDone({});
+    setDone({});
     setPasteText(s);
   }
 
-  async function addCard(card: MemberCard) {
+  /** "Voeg {name} toe als {rol}" / "Werk {name} bij" on a found person (src/people.ts applyPersonCard; it logs the 'in' row). */
+  async function addPerson(card: MemberCard | ProgressCard, role: MemberRole) {
     if (cardBusy) return;
     setCardBusy(true);
     setPasteNotice('');
     try {
-      const r = await applyMemberCard(card);
+      const r = await applyPersonCard(card, role);
       setSettingState(r.setting);
-      setCardDone((prev) => ({ ...prev, [card.id]: r.outcome }));
-      // 13A-2: a card that was added or updated came IN — one row in the "In & uit" log (same rule
-      // as InboxScreen.addCard, so the log does not depend on which screen the card was pasted in).
-      if (r.outcome === 'added' || r.outcome === 'updated') {
-        void logShareEvent({ at: nowIso(), direction: 'in', kind: 'member', who: card.name, count: 1, recipeIds: [] }).catch((err: unknown) => console.error('logShareEvent', err));
-      }
+      setDone((prev) => ({ ...prev, [foundKey(card)]: r.outcome }));
     } catch (e) {
-      console.error('applyMemberCard', e);
-      setPasteNotice(`${t('household.cardFailed')}: ${String((e as Error)?.message ?? e)}`);
-    } finally {
-      setCardBusy(false);
-    }
-  }
-
-  /** 6D-4b: "Werk bij" / "Voeg toe" / "Bewaar als vriend" on a received progress (§1i). */
-  async function saveProgress(card: ProgressCard, asFriend: boolean) {
-    if (cardBusy) return;
-    setCardBusy(true);
-    setPasteNotice('');
-    try {
-      const r = await applyProgressCard(card, asFriend);
-      setSettingState(r.setting);
-      setProgressDone((prev) => ({ ...prev, [card.id]: r.outcome }));
-    } catch (e) {
-      console.error('applyProgressCard', e);
-      setPasteNotice(`${t('household.cardFailed')}: ${String((e as Error)?.message ?? e)}`);
+      console.error('applyPersonCard', e);
+      setPasteNotice(t('common.error'));
     } finally {
       setCardBusy(false);
     }
@@ -754,7 +472,7 @@ export function HouseholdScreen() {
     try {
       const r = await restoreProgress(profileId, card);
       setRestored((prev) => ({ ...prev, [card.id]: { level: r.level, cookDaysAdded: r.cookDaysAdded, badgesAdded: r.badgesAdded } }));
-      setProgressDone((prev) => ({ ...prev, [card.id]: 'restored' }));
+      setDone((prev) => ({ ...prev, [foundKey(card)]: 'restored' }));
     } catch (e) {
       console.error('restoreProgress', e);
       setPasteNotice(t('common.error'));
@@ -763,23 +481,69 @@ export function HouseholdScreen() {
     }
   }
 
-  // V1c-1: text in the box (also a handed-over one) or a found card ends the friend hint for good.
-  useEffect(() => {
-    if (pasteText.trim() !== '' || found !== null) setFriendHint(false);
-  }, [pasteText, found, friendHint]);
+  const takenFor = (except?: string) => members.filter((m) => m.id !== except).map((m) => m.name);
+  const housemateCount = localMembers.length + housemates.length;
+  const count = housemateCount === 1 ? t('household.memberOne') : t('household.memberCount', { n: housemateCount });
+  const roleOptions: SegOption<MemberRole>[] = [
+    { value: 'housemate', label: t('people.housemate') },
+    { value: 'friend', label: t('people.friend') },
+  ];
+  // Badges off: "Stuur wie ik ben" (only who you are travels, the `#f=` token).
+  const sendMineLabel = badges === 'off' ? t('people.sendMineIdentity') : t('people.sendMine');
 
-  /** V1c-1 "Voeg vriend toe": bring the paste box into view, focus it, show the blue line. */
-  function goAddFriend() {
-    setFriendHint(true);
-    const box = pasteBox.current;
-    if (!box) return;
-    const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    box.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
-    box.focus({ preventScroll: true });
+  /** One person in the list: a profile here (no actions) or someone stored here (actions on their own line). */
+  function personRow(m: Member) {
+    // V1c-9b: a member's id may have changed (a new phone, a wiped phone); the snapshots are matched
+    // by id, phone or name. Newest for the level line, the highest for "Stuur terug".
+    const snapNewest = m.local ? undefined : snapshotForMember(m, snapshots ?? {});
+    const snapBest = m.local ? undefined : bestSnapshotForMember(m, snapshots ?? {});
+    const role = roleOf(m);
+    return (
+      <li key={m.id} class="member-row-wrap">
+        {editing === m.id && !m.local ? (
+          <MemberForm initial={m} submitLabel={t('common.save')} taken={takenFor(m.id)} onSubmit={(v) => edit(m, v)} onCancel={() => setEditing(null)} />
+        ) : (
+          <div class={'member-row' + (m.local ? '' : ' many')}>
+            <Avatar profile={m} />
+            <div class="who">
+              <strong>
+                {m.name}
+                {!m.local && <span class="who-tag">{t(role === 'friend' ? 'people.roleFriend' : 'people.roleHousemate')}</span>}
+              </strong>
+              <MemberLevelLine member={m} snapshot={snapNewest} />
+              <span class="muted small">{m.local ? t('household.local') : m.deviceId ? t('people.viaApp') : t('household.byHand')}</span>
+            </div>
+            {!m.local && (
+              <div class="actions">
+                {me && (
+                  <button type="button" class="btn btn-small" onClick={() => setSending({ recipient: m })}>
+                    {t('people.send')}
+                  </button>
+                )}
+                <button type="button" class="btn btn-small" onClick={() => void toggleRole(m)}>
+                  {t(role === 'friend' ? 'people.makeHousemate' : 'people.makeFriend')}
+                </button>
+                {/* V1c-9: someone on another phone with a stored snapshot can get it back. */}
+                {badgesOn && snapBest && (
+                  <button type="button" class="btn btn-small" aria-expanded={returning === m.id} onClick={() => setReturning((v) => (v === m.id ? null : m.id))}>
+                    {t('progress.returnBtn')}
+                  </button>
+                )}
+                <button type="button" class="btn btn-small" onClick={() => setEditing(m.id)}>
+                  {t('household.edit')}
+                </button>
+                <button type="button" class="btn btn-small btn-danger" onClick={() => void remove(m)}>
+                  {t('household.remove')}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        {badgesOn && !m.local && returning === m.id && editing !== m.id && snapBest && <ProgressReturnPanel snapshot={snapBest} />}
+      </li>
+    );
   }
 
-  const takenFor = (except?: string) => members.filter((m) => m.id !== except).map((m) => m.name);
-  const count = members.length === 1 ? t('household.memberOne') : t('household.memberCount', { n: members.length });
   // Tokens that were something else (a recipe, a plan) are not "nothing": the paste box names them
   // and offers "Open in de Inbox".
   const nothingFound = found !== null && found.cards.length === 0 && found.progress.length === 0 && found.problems.length === 0 && found.others === 0;
@@ -803,108 +567,92 @@ export function HouseholdScreen() {
           </label>
         </section>
 
-        {me && (
-          <section class="card my-card">
-            <h2>{t('household.myCard')}</h2>
-            <div class="my-card-head">
-              <Avatar profile={me} />
-              <div class="who">
-                <strong>{me.name}</strong>
-                <span class="muted small">{t(me.lang === 'en' ? 'lang.en' : 'lang.nl')}</span>
-              </div>
-            </div>
-            <MemberCardPanel profile={me} />
-            {/* 6D-4 (§1h): "Sync mijn voortgang" + its panel; nothing with badges off. */}
-            <ProgressShareToggle profile={me} />
-          </section>
-        )}
-
-        <section class="card">
+        <section class="card people">
           <h2>
-            {t('household.members')} <span class="muted small">· {count}</span>
+            {t('people.title')} <span class="muted small">· {count}</span>
           </h2>
-          <ul class="member-list">
-            {members.map((m) => {
-              // V1c-9b: a member's id may have changed (a new phone, a wiped phone); the snapshots are
-              // matched by id, phone or name. Newest for the level line, the highest for "Stuur terug".
-              const snapNewest = m.local ? undefined : snapshotForMember(m, snapshots ?? {});
-              const snapBest = m.local ? undefined : bestSnapshotForMember(m, snapshots ?? {});
-              return (
-              <li key={m.id} class="member-row-wrap">
-                {editing === m.id && !m.local ? (
-                  <MemberForm initial={m} submitLabel={t('common.save')} taken={takenFor(m.id)} onSubmit={(v) => edit(m, v)} onCancel={() => setEditing(null)} />
-                ) : (
-                  <div class={`member-row${badgesOn && !m.local && snapBest ? ' has-return' : ''}`}>
-                    <Avatar profile={m} />
-                    <div class="who">
-                      <strong>{m.name}</strong>
-                      <MemberLevelLine member={m} snapshot={snapNewest} />
-                      <span class="muted small">{m.local ? t('household.local') : m.deviceId ? t('household.fromCard') : t('household.byHand')}</span>
-                    </div>
-                    {!m.local && (
-                      <div class="actions">
-                        {/* V1c-9: a member on another phone with a stored snapshot can get it back. */}
-                        {badgesOn && snapBest && (
-                          <button type="button" class="btn btn-small" aria-expanded={returning === m.id} onClick={() => setReturning((v) => (v === m.id ? null : m.id))}>
-                            {t('progress.returnBtn')}
-                          </button>
-                        )}
-                        <button type="button" class="btn btn-small" onClick={() => setEditing(m.id)}>
-                          {t('household.edit')}
-                        </button>
-                        <button type="button" class="btn btn-small btn-danger" onClick={() => void remove(m)}>
-                          {t('household.remove')}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-                {badgesOn && !m.local && returning === m.id && editing !== m.id && snapBest && <ProgressReturnPanel snapshot={snapBest} />}
-              </li>
-              );
-            })}
-          </ul>
-          {/* V1 (docs/specs/verbeterronde-1.md §1c point 7): only with more than one profile on this phone. */}
-          {list.length > 1 && (
-            <div class="actions" style="margin:8px 0 0">
-              <button type="button" class="btn btn-small" onClick={() => navigate('/more/profiles')}>
-                {t('household.manageProfiles')}
+          <div class="people-actions">
+            <button type="button" class={'btn btn-small' + (addRole === 'housemate' ? ' btn-primary' : '')} disabled={!setting} aria-expanded={addRole === 'housemate'} onClick={() => openPanel('housemate')}>
+              {t('people.addHousemate')}
+            </button>
+            <button type="button" class={'btn btn-small' + (addRole === 'friend' ? ' btn-primary' : '')} disabled={!setting} aria-expanded={addRole === 'friend'} onClick={() => openPanel('friend')}>
+              {t('people.addFriend')}
+            </button>
+            {me && (
+              <button type="button" class="btn btn-small" onClick={() => setSending({ recipient: null })}>
+                {sendMineLabel}
               </button>
+            )}
+          </div>
+
+          {addRole && (
+            <div class="add-panel">
+              <div class="add-panel-head">
+                <Segmented name="add-role" options={roleOptions} selected={[addRole]} onChange={(next) => next[0] && setAddRole(next[0])} />
+                <button type="button" class="btn btn-small" onClick={closePanel}>
+                  {t('common.close')}
+                </button>
+              </div>
+              <p class="muted small">{t('people.pasteHint')}</p>
+              {/* 13A: the universal paste box; people are handled right here (no onMember = the rows below). */}
+              <UniversalPaste
+                defaultAction="member"
+                value={pasteText}
+                onChange={onPasteText}
+                textareaRef={pasteBox}
+                rows={3}
+                label={t('people.pasteHint')}
+                showProblems={false}
+                onImport={(s, kind) => openPasteIn('inbox', s, kind)}
+                onRecipe={(s, kind) => openPasteIn('add', s, kind)}
+                onAi={() => navigate('/add?mode=ai')}
+              />
+              <div class="status" role="status">
+                {pasteNotice}
+              </div>
+              {found?.problems.map((p, i) => (
+                <p class="bad small" key={'p' + i}>
+                  {p}
+                </p>
+              ))}
+              {nothingFound && <p class="bad small">{t('inbox.noToken')}</p>}
+              {found && found.cards.length + found.progress.length > 0 && (
+                <div class="member-cards">
+                  {found.cards.map((card) => (
+                    <PersonCardRow key={foundKey(card)} card={card} members={members} role={addRole} done={done[foundKey(card)]} busy={cardBusy} onAdd={(c, r) => void addPerson(c, r)} />
+                  ))}
+                  {found.progress.map((card) => (
+                    <PersonCardRow
+                      key={foundKey(card)}
+                      card={card}
+                      sentAt={found.progressAt[card.id]}
+                      members={members}
+                      role={addRole}
+                      done={done[foundKey(card)]}
+                      busy={cardBusy}
+                      onAdd={(c, r) => void addPerson(c, r)}
+                      onRestore={(c, profileId) => void restore(c, profileId)}
+                      restored={restored[card.id]}
+                    />
+                  ))}
+                </div>
+              )}
+              <p class="or">{t('people.or')}</p>
+              {typing ? (
+                <MemberForm autoFocus submitLabel={t('household.addSubmit')} taken={takenFor()} onSubmit={add} onCancel={() => setTyping(false)} />
+              ) : (
+                <button type="button" class="btn btn-block" onClick={() => setTyping(true)}>
+                  {t('people.typeName')}
+                </button>
+              )}
             </div>
           )}
-        </section>
 
-        {/* V1c-1: the Vrienden card is always there, with "Voeg vriend toe" leading to the paste box. */}
-        <section class="card friends">
-          <h2>{t('progress.friends')}</h2>
-          {friends.length > 0 ? (
-            <ul class="member-list">
-              {friends.map((s) => (
-                <li key={s.id} class="member-row-wrap">
-                  <div class="member-row">
-                    <Avatar profile={s} />
-                    <div class="who">
-                      <strong>{s.name}</strong>
-                      <FriendLevelLine snapshot={s} />
-                    </div>
-                    <div class="actions">
-                      {badgesOn && (
-                        <button type="button" class="btn btn-small" aria-expanded={returning === s.id} onClick={() => setReturning((v) => (v === s.id ? null : s.id))}>
-                          {t('progress.returnBtn')}
-                        </button>
-                      )}
-                      <button type="button" class="btn btn-small btn-danger" onClick={() => void removeFriend(s)}>
-                        {t('household.remove')}
-                      </button>
-                    </div>
-                  </div>
-                  {badgesOn && returning === s.id && <ProgressReturnPanel snapshot={s} />}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p class="muted small">{t('household.friendsEmpty')}</p>
-          )}
+          <ul class="member-list">
+            {localMembers.map(personRow)}
+            {housemates.map(personRow)}
+            {friends.map(personRow)}
+          </ul>
           {orphans.length > 0 && (
             <>
               <p class="muted small">{t('progress.orphans')}</p>
@@ -923,7 +671,7 @@ export function HouseholdScreen() {
                             {t('progress.returnBtn')}
                           </button>
                         )}
-                        <button type="button" class="btn btn-small btn-danger" onClick={() => void removeFriend(s)}>
+                        <button type="button" class="btn btn-small btn-danger" onClick={() => void removeOrphan(s)}>
                           {t('household.remove')}
                         </button>
                       </div>
@@ -934,80 +682,17 @@ export function HouseholdScreen() {
               </ul>
             </>
           )}
-          <div class="actions">
-            <button type="button" class="btn btn-small" onClick={goAddFriend}>
-              {t('household.addFriend')}
-            </button>
-          </div>
-        </section>
-
-        <section class="card member-paste">
-          <h2>{t('household.addViaLink')}</h2>
-          <p class="muted small">{t('household.addViaLinkHint')}</p>
-          {friendHint && pasteText.trim() === '' && (
-            <p class="small friend-hint" role="status">
-              {t('household.friendHint')}
-            </p>
-          )}
-          {/* 13A: the universal paste box; cards are handled right here (no onMember = the rows below). */}
-          <UniversalPaste
-            defaultAction="member"
-            value={pasteText}
-            onChange={onPasteText}
-            textareaRef={pasteBox}
-            rows={3}
-            label={t('household.addViaLink')}
-            showProblems={false}
-            onImport={(s, kind) => openPasteIn('inbox', s, kind)}
-            onRecipe={(s, kind) => openPasteIn('add', s, kind)}
-            onAi={() => navigate('/add?mode=ai')}
-          />
-          <div class="status" role="status">
-            {pasteNotice}
-          </div>
-          {found?.problems.map((p, i) => (
-            <p class="bad small" key={'p' + i}>
-              {p}
-            </p>
-          ))}
-          {nothingFound && <p class="bad small">{t('household.noCard')}</p>}
-          {found && found.cards.length + found.progress.length > 0 && (
-            <div class="member-cards">
-              {found.cards.map((card) => (
-                <MemberCardRow key={card.id} card={card} members={members} done={cardDone[card.id]} busy={cardBusy} onAdd={(c) => void addCard(c)} />
-              ))}
-              {found.progress.map((card) => (
-                <ProgressCardRow
-                  key={'x' + card.id}
-                  card={card}
-                  sentAt={found.progressAt[card.id]}
-                  members={members}
-                  done={progressDone[card.id]}
-                  busy={cardBusy}
-                  onSave={(c, asFriend) => void saveProgress(c, asFriend)}
-                  onRestore={(c, profileId) => void restore(c, profileId)}
-                  restored={restored[card.id]}
-                />
-              ))}
+          {/* V1 (docs/specs/verbeterronde-1.md §1c point 7): only with more than one profile on this phone. */}
+          {list.length > 1 && (
+            <div class="actions" style="margin:8px 0 0">
+              <button type="button" class="btn btn-small" onClick={() => navigate('/more/profiles')}>
+                {t('household.manageProfiles')}
+              </button>
             </div>
           )}
         </section>
-
-        {adding ? (
-          <section class="card">
-            <h2>{t('household.add')}</h2>
-            <p class="muted small">{t('household.addHint')}</p>
-            <MemberForm autoFocus submitLabel={t('household.addSubmit')} taken={takenFor()} onSubmit={add} onCancel={() => setAdding(false)} />
-          </section>
-        ) : (
-          <>
-            <p class="muted small">{t('household.addHint')}</p>
-            <button type="button" class="btn btn-block" disabled={!setting} onClick={() => setAdding(true)}>
-              {t('household.add')}
-            </button>
-          </>
-        )}
       </div>
+      {sending && me && <SendSheet profile={me} recipient={sending.recipient} onClose={() => setSending(null)} />}
     </>
   );
 }

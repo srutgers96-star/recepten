@@ -6,7 +6,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { Header } from '@/components/Header';
 import { bundled, cookedRecipeIds, getHousehold, isBuiltinId } from '@/db/repo';
-import { householdName, membersFrom, type HouseholdSetting } from '@/domain/household';
+import { householdName, housematesOf, membersFrom, type HouseholdSetting } from '@/domain/household';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { profiles } from '@/profile';
@@ -42,7 +42,8 @@ export function StoryScreen() {
 
   // Local profiles first, then the hand-added / card members (domain/household rules).
   const list = profiles.value;
-  const members = useMemo(() => membersFrom(list, household ?? { name: '', members: [] }), [list, household]);
+  // V1c-2: the story is about the household, so housemates only (no friends).
+  const members = useMemo(() => housematesOf(membersFrom(list, household ?? { name: '', members: [] })), [list, household]);
 
   return (
     <>

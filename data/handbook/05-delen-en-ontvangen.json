@@ -3,16 +3,16 @@
   "order": 5,
   "title": { "nl": "Delen & ontvangen", "en": "Sharing & receiving" },
   "intro": {
-    "nl": "Een recept, je weekplan, je kaartje of je voortgang stuur je met een paar tikken naar een ander. Hier lees je hoe je deelt en hoe je iets ontvangt, op Android en op de iPhone.",
-    "en": "You send a recipe, your week plan, your card or your progress to someone else in a few taps. Here you read how to share and how to receive, on Android and on the iPhone."
+    "nl": "Een recept, je weekplan of je voortgang stuur je met een paar tikken naar een ander. Hier lees je hoe je deelt en hoe je iets ontvangt, op Android en op de iPhone.",
+    "en": "You send a recipe, your week plan or your progress to someone else in a few taps. Here you read how to share and how to receive, on Android and on the iPhone."
   },
   "entries": [
     {
       "id": "delen-en-ontvangen.wat-kun-je-delen",
       "title": { "nl": "Wat je kunt delen", "en": "What you can share" },
       "what": {
-        "nl": "Je kunt een recept, je weekplan, je boodschappenlijst, je kaartje en je voortgang delen. Meerdere recepten tegelijk gaan in één bericht, of in een paar berichten als het veel is.",
-        "en": "You can share a recipe, your week plan, your shopping list, your card and your progress. Several recipes at once go in one message, or in a few messages if there are many."
+        "nl": "Je kunt een recept, je weekplan, je boodschappenlijst en je voortgang delen. Meerdere recepten tegelijk gaan in één bericht, of in een paar berichten als het veel is.",
+        "en": "You can share a recipe, your week plan, your shopping list and your progress. Several recipes at once go in one message, or in a few messages if there are many."
       },
       "where": {
         "nl": [
@@ -415,8 +415,8 @@
         "en": "The recipe appears under the paste box, with a label such as **New**. After **Import** it is among your recipes."
       },
       "know": {
-        "nl": "Vraagt de iPhone om toestemming, tik dan op Plak. Lukt het niet, houd dan het tekstvak ingedrukt en kies Plak. Zo ontvang je ook een kaartje, een weekplan, een lijst en voortgang.",
-        "en": "If the iPhone asks for permission, tap Paste. If that does not work, press and hold the text box and choose Paste. This is also how you receive a card, a week plan, a list and progress."
+        "nl": "Vraagt de iPhone om toestemming, tik dan op Plak. Lukt het niet, houd dan het tekstvak ingedrukt en kies Plak. Zo ontvang je ook een weekplan, een lijst, iemands voortgang en wie iemand is.",
+        "en": "If the iPhone asks for permission, tap Paste. If that does not work, press and hold the text box and choose Paste. This is also how you receive a week plan, a list, someone's progress and who someone is."
       },
       "route": "/inbox",
       "platform": "ios",
@@ -451,8 +451,8 @@
         ]
       },
       "see": {
-        "nl": "Safari toont het recept om te lezen, met de blauwe knop **Kopieer receptcode**. Bij een kaartje, een lijst of voortgang heet de knop **Kopieer code**.",
-        "en": "Safari shows the recipe to read, with the blue **Copy recipe code** button. For a card, a list or progress the button is called **Copy code**."
+        "nl": "Safari toont het recept om te lezen, met de blauwe knop **Kopieer receptcode**. Bij een lijst, voortgang of wie iemand is heet de knop **Kopieer code**.",
+        "en": "Safari shows the recipe to read, with the blue **Copy recipe code** button. For a list, progress or who someone is, the button is called **Copy code**."
       },
       "know": {
         "nl": "Safari heeft een eigen opslag, los van de app. Wat je in Safari ziet, staat dus nog niet in de app.",
@@ -469,8 +469,8 @@
       "id": "delen-en-ontvangen.in-en-uit",
       "title": { "nl": "In & uit: plakken wat je kreeg", "en": "In & out: paste what you got" },
       "what": {
-        "nl": "**In & uit** is de plek voor alles wat je ontvangt en verstuurt. Je plakt er een bericht, een link, een kaartje of een receptbestand.",
-        "en": "**In & out** is the place for everything you receive and send. You paste a message, a link, a card or a recipe file there."
+        "nl": "**In & uit** is de plek voor alles wat je ontvangt en verstuurt. Je plakt er een bericht, een link, wie iemand is of zijn voortgang, of een receptbestand.",
+        "en": "**In & out** is the place for everything you receive and send. You paste a message, a link, who someone is or their progress, or a recipe file there."
       },
       "where": {
         "nl": [
@@ -692,8 +692,8 @@
         ]
       },
       "see": {
-        "nl": "Je ziet hoe het bericht eruitziet en wat er meegaat, zoals het aantal recepten en nieuwe ingrediënten. Leden van je huishouden staan vooraan, met hun kleur.",
-        "en": "You see what the message looks like and what goes along, such as the number of recipes and new ingredients. Members of your household come first, with their colour."
+        "nl": "Je ziet hoe het bericht eruitziet en wat er meegaat, zoals het aantal recepten en nieuwe ingrediënten. Je huisgenoten staan vooraan, met hun kleur.",
+        "en": "You see what the message looks like and what goes along, such as the number of recipes and new ingredients. Your housemates come first, with their colour."
       },
       "know": {
         "nl": "Een getal bij **Deel je nieuwe recepten** zegt hoeveel recepten nog niet gedeeld zijn. Deelde je met **Kopieer**, tik dan daarna op **Markeer als verzonden**. Te veel voor één bericht? Dan staat er “Dit gaat in 2 berichten.” en deel je ze na elkaar.",
@@ -708,132 +708,131 @@
     },
     {
       "id": "delen-en-ontvangen.kaartje-delen",
-      "title": { "nl": "Je kaartje delen", "en": "Share your card" },
+      "title": { "nl": "Je voortgang sturen", "en": "Send your progress" },
       "what": {
-        "nl": "Je kaartje is je naam, kleur, taal en avatar in één link. Wie het ontvangt, kan je toevoegen aan zijn huishouden.",
-        "en": "Your card is your name, colour, language and avatar in one link. Whoever receives it can add you to their household."
+        "nl": "Je voortgang is je naam, kleur, taal en avatar, met je level, badges en kookdagen van de laatste 90 dagen, in één link. Notities, sterren en foto's gaan niet mee.",
+        "en": "Your progress is your name, colour, language and avatar, with your level, badges and cooking days of the last 90 days, in one link. Notes, stars and photos do not go along."
       },
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik onder je profiel op **Huishouden & vrienden**.",
-          "Tik onder **Mijn kaartje** op **Deel mijn kaartje**.",
+          "Tik onder **Mensen** op **Stuur mijn voortgang**.",
+          "Laat **Mijn voortgang** aangevinkt.",
+          "Tik op **Deel**.",
           "Kies WhatsApp en de persoon aan wie je het stuurt."
         ],
         "en": [
           "Tap **More** at the bottom.",
           "Under your profile, tap **Household & friends**.",
-          "Under **My card**, tap **Share my card**.",
+          "Under **People**, tap **Send my progress**.",
+          "Leave **My progress** ticked.",
+          "Tap **Share**.",
           "Choose WhatsApp and the person you are sending it to."
         ]
       },
       "see": {
-        "nl": "WhatsApp opent met één zin, “👋 Kaartje van” en je naam, en daaronder één link. In de app staat onder de knoppen de uitleg voor Android en iPhone.",
-        "en": "WhatsApp opens with one sentence that starts with “👋” and your name, and under it one link. In the app the explanation for Android and iPhone sits under the buttons."
+        "nl": "Er opent een venster “Stuur mijn voortgang”. WhatsApp opent met één zin, “📈 Voortgang van”, je naam en je level, en daaronder één link. Daarna staat er “Verstuurd.”.",
+        "en": "A window “Send my progress” opens. WhatsApp opens with one sentence that starts with “📈”, your name and your level, and under it one link. Afterwards it says “Sent.”."
       },
       "know": {
-        "nl": "Dezelfde knop staat op **Mijn profiel**. Wat je daarna stuurt, krijgt bij de ander jouw naam en kleur.",
-        "en": "The same button is on **My profile**. What you send afterwards shows up with your name and colour for the other person."
+        "nl": "Dezelfde knop staat op **Mijn profiel**. Het is een momentopname: deel het af en toe opnieuw. Staan **Badges** uit, dan heet de knop **Stuur wie ik ben** en gaan alleen je naam, kleur, taal en avatar mee.",
+        "en": "The same button is on **My profile**. It is a snapshot: share it again now and then. With **Badges** switched off, the button says **Send who I am** and only your name, colour, language and avatar go along."
       },
       "route": "/more/household",
       "platform": "all",
       "keywords": {
-        "nl": ["kaartje", "visitekaartje", "huishouden", "naam en kleur", "avatar", "voorstellen"],
-        "en": ["card", "contact card", "household", "name and colour", "avatar", "introduce"]
+        "nl": ["voortgang sturen", "wie ik ben", "naam en kleur", "avatar", "level delen", "voorstellen"],
+        "en": ["send progress", "who I am", "name and colour", "avatar", "share level", "introduce"]
       }
     },
     {
       "id": "delen-en-ontvangen.lid-toevoegen",
-      "title": { "nl": "Een huisgenoot toevoegen met een kaartje", "en": "Add a housemate with a card" },
+      "title": { "nl": "Iemand toevoegen die de app heeft", "en": "Add someone who has the app" },
       "what": {
-        "nl": "Kreeg je een kaartje van iemand op een andere telefoon? Dan voeg je die persoon toe aan je huishouden.",
-        "en": "Did you get a card from someone on another phone? Then you add that person to your household."
+        "nl": "Stuurde iemand op een andere telefoon je zijn voortgang, of wie hij is? Dan voeg je hem toe als huisgenoot of als vriend.",
+        "en": "Did someone on another phone send you their progress, or who they are? Then you add them as a housemate or as a friend."
       },
       "where": {
         "nl": [
-          "Kopieer het bericht met het kaartje.",
+          "Kopieer het bericht dat je kreeg.",
           "Tik onderaan op **Meer**.",
           "Tik onder je profiel op **Huishouden & vrienden**.",
-          "Scrol naar **Plak een kaartje of voortgang**.",
+          "Tik op **Voeg huisgenoot toe** of **Voeg vriend toe**.",
           "Tik op **Plak van klembord**.",
-          "Tik op de knop “Voeg … toe aan je huishouden”, met de naam erin."
+          "Tik op de knop “Voeg … toe als …”, met de naam erin."
         ],
         "en": [
-          "Copy the message with the card.",
+          "Copy the message you got.",
           "Tap **More** at the bottom.",
           "Under your profile, tap **Household & friends**.",
-          "Scroll to **Paste a card or progress**.",
+          "Tap **Add housemate** or **Add friend**.",
           "Tap **Paste from clipboard**.",
-          "Tap the button “Add … to your household”, with the name in it."
+          "Tap the button “Add … as …”, with the name in it."
         ]
       },
       "see": {
-        "nl": "Je ziet “Kaartje van” met de naam en een rondje in de kleur van die persoon. Daarna staat de persoon bij **Huisgenoten**, met “via kaartje”.",
-        "en": "You see “Card from” with the name and a circle in that person's colour. Afterwards the person is under **Housemates**, with “via card”."
+        "nl": "Er opent een paneel met **Huisgenoot** en **Vriend**, een uitleg en het plakvak. Na het plakken zie je de naam met level en kookdagen, of “wie … is”. Daarna staat de persoon in de lijst met het labeltje huisgenoot of vriend.",
+        "en": "A panel opens with **Housemate** and **Friend**, an explanation and the paste box. After pasting you see the name with level and cooking days, or “who … is”. Afterwards the person is in the list with the label housemate or friend."
       },
       "know": {
-        "nl": "Is iemand al lid, dan heet de knop “Werk … bij”; dan worden naam, kleur, taal en avatar bijgewerkt. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.",
-        "en": "If someone is already a member, the button says “Update …”; then name, colour, language and avatar are updated. Pasting in **In & out** works too. On Android you can tap the link, but Android itself decides whether the app opens."
+        "nl": "Staat iemand al in je lijst, dan heet de knop “Werk … bij”. Dan worden naam, kleur, taal en avatar bijgewerkt; huisgenoot of vriend blijft. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.",
+        "en": "If someone is already in your list, the button says “Update …”. Then name, colour, language and avatar are updated; housemate or friend stays. Pasting in **In & out** works too. On Android you can tap the link, but Android itself decides whether the app opens."
       },
       "route": "/more/household",
       "platform": "all",
       "keywords": {
-        "nl": ["lid toevoegen", "kaartje", "huishouden", "plakken", "partner", "familie"],
-        "en": ["add member", "card", "household", "paste", "partner", "family"]
+        "nl": ["huisgenoot toevoegen", "vriend toevoegen", "plakken", "huishouden", "partner", "familie"],
+        "en": ["add housemate", "add friend", "paste", "household", "partner", "family"]
       }
     },
     {
       "id": "delen-en-ontvangen.vriend-toevoegen",
-      "title": { "nl": "Een vriend toevoegen", "en": "Add a friend" },
+      "title": { "nl": "Huisgenoot of vriend, en wisselen", "en": "Housemate or friend, and switching" },
       "what": {
-        "nl": "Een vriend is iemand met wie je niet samen kookt, maar van wie je wel het level en de kookdagen wilt zien. Een vriend komt niet in je boodschappenlijst of je porties.",
-        "en": "A friend is someone you do not cook with, but whose level and cooking days you want to see. A friend does not appear in your shopping list or your servings."
+        "nl": "Een huisgenoot kookt en doet boodschappen met je mee. Een vriend kookt niet met je mee; van hem zie je alleen het level en de kookdagen. Je kunt dat altijd omzetten.",
+        "en": "A housemate cooks and shops with you. A friend does not cook with you; you only see their level and cooking days. You can switch that at any time."
       },
       "where": {
         "nl": [
-          "Vraag je vriend om op **Mijn profiel** op **Sync mijn voortgang** te tikken en je het bericht te sturen.",
-          "Kopieer dat bericht.",
           "Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.",
-          "Tik onder **Vrienden** op **Voeg vriend toe**.",
-          "Tik op **Plak van klembord**.",
-          "Tik onder de kaart op **Bewaar als vriend**."
+          "Zoek de persoon in de lijst onder **Mensen**.",
+          "Tik onder de naam op **Maak vriend** of **Maak huisgenoot**."
         ],
         "en": [
-          "Ask your friend to tap **Sync my progress** on **My profile** and send you the message.",
-          "Copy that message.",
           "Tap **More** at the bottom, then **Household & friends**.",
-          "Under **Friends**, tap **Add friend**.",
-          "Tap **Paste from clipboard**.",
-          "Under the card, tap **Save as a friend**."
+          "Find the person in the list under **People**.",
+          "Under the name, tap **Make friend** or **Make housemate**."
         ]
       },
       "see": {
-        "nl": "De app springt naar het plakvak met een blauwe regel die zegt wat je plakt. Na **Bewaar als vriend** staat de persoon onder **Vrienden**, met level en kookdagen.",
-        "en": "The app jumps to the paste box with a blue line saying what to paste. After **Save as a friend** the person is under **Friends**, with level and cooking days."
+        "nl": "Het labeltje bij de naam wisselt meteen tussen huisgenoot en vriend, en de persoon staat bij de andere groep. Het level en de kookdagen blijven staan.",
+        "en": "The label by the name switches straight away between housemate and friend, and the person moves to the other group. The level and the cooking days stay."
       },
       "know": {
-        "nl": "Een gewoon kaartje (**Deel mijn kaartje**) maakt iemand altijd huisgenoot, geen vriend. Wil je een vriend later toch als huisgenoot? Plak zijn voortgang nog eens en kies dan de andere knop.",
-        "en": "A plain card (**Share my card**) always makes someone a housemate, not a friend. Want a friend as a housemate after all? Paste their progress once more and choose the other button."
+        "nl": "De app vraagt niet of je het zeker weet: tik nog eens om terug te wisselen. Profielen op deze telefoon zijn altijd huisgenoot. Een vriend telt niet mee voor de badges die je samen haalt.",
+        "en": "The app does not ask whether you are sure: tap again to switch back. Profiles on this phone are always housemates. A friend does not count for the badges you earn together."
       },
       "route": "/more/household",
       "platform": "all",
       "keywords": {
-        "nl": ["vriend", "vriend toevoegen", "voortgang", "level van een ander", "huisgenoot"],
-        "en": ["friend", "add friend", "progress", "someone's level", "housemate"]
+        "nl": ["vriend", "huisgenoot", "wisselen", "maak vriend", "maak huisgenoot", "level van een ander"],
+        "en": ["friend", "housemate", "switch", "make friend", "make housemate", "someone's level"]
       }
     },
     {
       "id": "delen-en-ontvangen.huishouden",
-      "title": { "nl": "Je huishouden: huisgenoten en kleuren", "en": "Your household: housemates and colours" },
+      "title": { "nl": "Iemand zonder de app toevoegen", "en": "Add someone without the app" },
       "what": {
-        "nl": "In je huishouden staan de mensen met wie je kookt, ook als ze een eigen telefoon hebben. Iedereen heeft een eigen kleur.",
-        "en": "Your household holds the people you cook with, also when they have their own phone. Everyone has their own colour."
+        "nl": "Kookt er iemand mee die de app niet heeft, zoals oma? Typ dan een naam en kies een kleur. Zo staat die persoon ook in de kookkalender.",
+        "en": "Does someone cook along who does not have the app, like grandma? Then type a name and pick a colour. That way the person is in the cooking calendar too."
       },
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik onder je profiel op **Huishouden & vrienden**.",
-          "Tik onderaan op **Typ een huisgenoot**.",
+          "Tik op **Voeg huisgenoot toe** of **Voeg vriend toe**.",
+          "Kies onder het plakvak **Typ een naam**.",
           "Typ een naam.",
           "Tik op een kleur.",
           "Tik op **Voeg toe** om te bewaren."
@@ -841,99 +840,100 @@
         "en": [
           "Tap **More** at the bottom.",
           "Under your profile, tap **Household & friends**.",
-          "Tap **Type a housemate** at the bottom.",
+          "Tap **Add housemate** or **Add friend**.",
+          "Under the paste box, choose **Type a name**.",
           "Type a name.",
           "Tap a colour.",
           "Tap **Add** to save."
         ]
       },
       "see": {
-        "nl": "Elke huisgenoot staat bij **Huisgenoten** met zijn avatar, of een rondje met een letter in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.",
-        "en": "Each housemate is under **Housemates** with their avatar, or a circle with a letter in their colour. You see whether someone is on this phone, came through a card or was added by hand."
+        "nl": "De persoon staat in de lijst met een rondje met een letter in zijn kleur en “met de hand toegevoegd”. Profielen op deze telefoon staan bovenaan, met “op deze telefoon”.",
+        "en": "The person is in the list with a circle with a letter in their colour and “added by hand”. Profiles on this phone are at the top, with “on this phone”."
       },
       "know": {
-        "nl": "Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. De avatar van een lid op een andere telefoon reist mee met zijn kaartje en zijn voortgang, en wordt dan bijgewerkt. Een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.",
-        "en": "**Edit** and **Remove** change a member from another phone. In **More** your housemates and friends are listed under **Household & friends**, each with the label housemate or friend. The avatar of a member on another phone travels along with their card and their progress, and is then updated. A tap brings you here. Members come first in **Share your new recipes**."
+        "nl": "Met **Bewerk** en **Verwijder** pas je iemand aan die niet op deze telefoon staat. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. De avatar van iemand op een andere telefoon reist mee met zijn voortgang. Huisgenoten staan vooraan bij **Deel je nieuwe recepten**.",
+        "en": "**Edit** and **Remove** change someone who is not on this phone. In **More** your housemates and friends are listed under **Household & friends**, each with the label housemate or friend. The avatar of someone on another phone travels along with their progress. Housemates come first in **Share your new recipes**."
       },
       "route": "/more/household",
       "platform": "all",
       "keywords": {
-        "nl": ["huishouden", "leden", "kleur", "lid toevoegen", "gezin", "wie kookt mee"],
-        "en": ["household", "members", "colour", "add member", "family", "who cooks along"]
+        "nl": ["huishouden", "huisgenoten", "kleur", "naam typen", "gezin", "wie kookt mee", "oma"],
+        "en": ["household", "housemates", "colour", "type a name", "family", "who cooks along", "grandma"]
       }
     },
     {
       "id": "delen-en-ontvangen.voortgang-delen",
-      "title": { "nl": "Sync mijn voortgang", "en": "Sync my progress" },
+      "title": { "nl": "Sturen naar één persoon", "en": "Send to one person" },
       "what": {
-        "nl": "Je stuurt je level, je badges, je avatar en je kookdagen van de laatste 90 dagen naar je huishouden of een vriend. Notities, sterren en foto's gaan niet mee.",
-        "en": "You send your level, your badges, your avatar and your cooking days of the last 90 days to your household or a friend. Notes, stars and photos do not go along."
+        "nl": "Bij elke persoon in je lijst staat **Stuur**. Daarmee stuur je je voortgang en je nieuwe recepten in één bericht naar die persoon.",
+        "en": "Every person in your list has **Send**. With it you send your progress and your new recipes to that person in one message."
       },
       "where": {
         "nl": [
-          "Tik onderaan op **Meer**.",
-          "Tik onder je profiel op **Huishouden & vrienden**.",
-          "Tik onder **Mijn kaartje** op **Sync mijn voortgang**.",
+          "Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.",
+          "Tik onder de naam van de persoon op **Stuur**.",
+          "Vink **Mijn voortgang** en **Nieuwe recepten** aan of uit.",
           "Tik op **Deel**.",
-          "Kies WhatsApp en de persoon aan wie je het stuurt."
+          "Kies WhatsApp en die persoon."
         ],
         "en": [
-          "Tap **More** at the bottom.",
-          "Under your profile, tap **Household & friends**.",
-          "Under **My card**, tap **Sync my progress**.",
+          "Tap **More** at the bottom, then **Household & friends**.",
+          "Under the person's name, tap **Send**.",
+          "Tick or untick **My progress** and **New recipes**.",
           "Tap **Share**.",
-          "Choose WhatsApp and the person you are sending it to."
+          "Choose WhatsApp and that person."
         ]
       },
       "see": {
-        "nl": "Het bericht begint met “📈 Voortgang van”, je naam en je level, en eindigt met één link. Ook hier staan **Kopieer link** en **Toon QR**.",
-        "en": "The message starts with “📈”, your name and your level, and ends with one link. Here too you find **Copy link** and **Show QR**."
+        "nl": "Er opent een venster “Stuur naar” met de naam. Bij **Nieuwe recepten** staat hoeveel er nieuw zijn sinds de vorige keer. WhatsApp opent met één bericht: eerst je voortgang met de link, daaronder de recepten. Daarna staat er “Verstuurd.”.",
+        "en": "A window “Send to” with the name opens. Under **New recipes** it says how many are new since last time. WhatsApp opens with one message: first your progress with its link, then the recipes. Afterwards it says “Sent.”."
       },
       "know": {
-        "nl": "Het is een momentopname: de ander ziet wat je nu deelt, niet wat je later kookt. Deel het dus af en toe opnieuw. Met **Badges** uit staat deze knop er niet.",
-        "en": "It is a snapshot: the other person sees what you share now, not what you cook later. So share it again now and then. With **Badges** switched off, this button is not there."
+        "nl": "Te veel voor één bericht? Dan tik je na elkaar op “Deel deel 1 van 2” en “Deel deel 2 van 2”. Met **Kopieer** plak je alles zelf in WhatsApp. Staan **Badges** uit, dan heet het eerste vinkje **Wie ik ben**. Het is een momentopname: stuur het af en toe opnieuw.",
+        "en": "Too much for one message? Then you tap “Share part 1 of 2” and “Share part 2 of 2” one after the other. With **Copy** you paste it all into WhatsApp yourself. With **Badges** off, the first tick box says **Who I am**. It is a snapshot: send it again now and then."
       },
       "route": "/more/household",
       "platform": "all",
       "keywords": {
-        "nl": ["voortgang", "sync", "level delen", "badges delen", "kookdagen", "vriend"],
-        "en": ["progress", "sync", "share level", "share badges", "cooking days", "friend"]
+        "nl": ["sturen", "stuur", "voortgang", "nieuwe recepten", "sync", "één bericht"],
+        "en": ["send", "progress", "new recipes", "sync", "one message", "whatsapp"]
       }
     },
     {
       "id": "delen-en-ontvangen.voortgang-ontvangen",
       "title": { "nl": "Voortgang van een ander ontvangen", "en": "Receive someone's progress" },
       "what": {
-        "nl": "Een gedeelde voortgang laat je het level en de kookdagen van een ander zien. Je bewaart hem bij een lid of bij een vriend.",
-        "en": "Shared progress shows you someone else's level and cooking days. You keep it with a member or with a friend."
+        "nl": "Een gedeelde voortgang laat je het level en de kookdagen van een ander zien. Je voegt die persoon toe als huisgenoot of als vriend.",
+        "en": "Shared progress shows you someone else's level and cooking days. You add that person as a housemate or as a friend."
       },
       "where": {
         "nl": [
           "Tik onderaan op **Meer**.",
           "Tik op **In & uit**.",
           "Tik op **Plak van klembord**.",
-          "Tik op de knop onder de kaart, bijvoorbeeld **Bewaar als vriend**."
+          "Tik op **Voeg toe als huisgenoot** of **Voeg toe als vriend**."
         ],
         "en": [
           "Tap **More** at the bottom.",
           "Tap **In & out**.",
           "Tap **Paste from clipboard**.",
-          "Tap the button under the card, for example **Save as a friend**."
+          "Tap **Add as housemate** or **Add as friend**."
         ]
       },
       "see": {
-        "nl": "Je ziet een kaart “Voortgang van” met de naam, het level, de badges en de kookdagen van de laatste 30 dagen. Is het een lid, dan heet de knop “Werk … bij”. Daaronder staat wat er wordt bijgewerkt: level, streak, badges, kookdagen en avatar.",
-        "en": "You see a progress card with the name, the level, the badges and the cooking days of the last 30 days. If it is a member, the button says “Update …”. Under it you see what gets updated: level, streak, badges, cook days and avatar."
+        "nl": "Je ziet de naam met “Voortgang van”, het level, de badges en de kookdagen van de laatste 30 dagen. Staat de persoon al in je lijst, dan heet de knop “Werk … bij”. Na de tik staat er bijvoorbeeld “… staat nu bij je vrienden.”.",
+        "en": "You see the name with the progress, the level, the badges and the cooking days of the last 30 days. If the person is already in your list, the button says “Update …”. After the tap it says, for example, “… is now one of your friends.”."
       },
       "know": {
-        "nl": "Daarna staat het level onder de naam bij **Huishouden & vrienden**, met de datum van bijwerken. Een vriend staat onder **Vrienden** en is geen lid. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.",
-        "en": "Afterwards the level shows under the name in **Household & friends**, with the date it was updated. A friend is listed under **Friends** and is not a member. In the **Cooking calendar** you see others as they last shared."
+        "nl": "Daarna staat het level onder de naam bij **Huishouden & vrienden**, met de datum van bijwerken. Stuurde iemand alleen wie hij is, dan zie je “wie … is” zonder level. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.",
+        "en": "Afterwards the level shows under the name in **Household & friends**, with the date it was updated. If someone only sent who they are, you see “who … is” without a level. In the **Cooking calendar** you see others as they last shared."
       },
       "route": "/inbox",
       "platform": "all",
       "keywords": {
-        "nl": ["voortgang ontvangen", "vriend", "level van een ander", "bijwerken", "kookkalender"],
-        "en": ["receive progress", "friend", "someone's level", "update", "cooking calendar"]
+        "nl": ["voortgang ontvangen", "vriend", "huisgenoot", "level van een ander", "bijwerken", "kookkalender"],
+        "en": ["receive progress", "friend", "housemate", "someone's level", "update", "cooking calendar"]
       }
     },
     {
@@ -946,20 +946,20 @@
       "where": {
         "nl": [
           "Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.",
-          "Zoek de persoon onder Huisgenoten of Vrienden.",
+          "Zoek de persoon in de lijst onder **Mensen**.",
           "Tik op **Stuur terug**.",
           "Tik op **Deel** en kies WhatsApp."
         ],
         "en": [
           "Tap **More** at the bottom, then **Household & friends**.",
-          "Find the person under Housemates or Friends.",
+          "Find the person in the list under **People**.",
           "Tap **Send back**.",
           "Tap **Share** and choose WhatsApp."
         ]
       },
       "see": {
-        "nl": "WhatsApp opent met een zin over het level van die persoon en één link, net als bij Sync mijn voortgang.",
-        "en": "WhatsApp opens with a sentence about that person's level and one link, just like Sync my progress."
+        "nl": "WhatsApp opent met een zin over het level van die persoon en één link, net als bij **Stuur mijn voortgang**.",
+        "en": "WhatsApp opens with a sentence about that person's level and one link, just like **Send my progress**."
       },
       "know": {
         "nl": "Het is de voortgang zoals jij hem kreeg, niet van dit moment. Wat de ander sindsdien kookte, zit er niet in.",

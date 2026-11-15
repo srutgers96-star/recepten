@@ -33,7 +33,7 @@ import { Header } from '@/components/Header';
 import { SheetPortal } from '@/components/SheetPortal';
 import { getHousehold } from '@/db/repo';
 import { BADGE_GROUPS, isLadder, parseSeasonWindow, type BadgeGroup, type BadgeStatus } from '@/domain/badges';
-import { memberFromProfile, membersFrom, type Member } from '@/domain/household';
+import { housematesOf, memberFromProfile, membersFrom, type Member } from '@/domain/household';
 import { interpolate, lang, t, type Lang } from '@/i18n';
 import { activeProfile, profiles } from '@/profile';
 import { route } from '@/router';
@@ -557,7 +557,8 @@ export function BadgesScreen() {
     void loadBadgeSettings();
     void getHousehold().then(
       (h) => {
-        if (!cancelled) setMembers(membersFrom(profiles.value, h));
+        // V1c-2: the tabs are the housemates (a friend has no tab here).
+        if (!cancelled) setMembers(housematesOf(membersFrom(profiles.value, h)));
       },
       (e: unknown) => {
         console.error('getHousehold', e);
@@ -615,7 +616,7 @@ export function BadgesScreen() {
           </p>
         ) : (
           <>
-            <div class="chips badge-tabs" role="tablist" aria-label={t('badges.members')}>
+            <div class="chips badge-tabs" role="tablist" aria-label={t('household.members')}>
               {tabs.map((m) => (
                 <button key={m.id} type="button" role="tab" aria-selected={tab === m.id} class={'chip' + (tab === m.id ? ' on' : '')} onClick={() => setTab(m.id)}>
                   <span class="badge-tab-dot" style={{ background: m.color }} aria-hidden="true" />

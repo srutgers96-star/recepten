@@ -13,6 +13,14 @@ import type { Lang, Profile } from './model.ts';
 import { randomId } from './model.ts';
 import type { MemberCard } from './share.ts';
 
+/**
+ * V1c-2 (docs/specs/verbeterronde-1c.md, block V1c-2 §1a): everyone in the list has a role. A
+ * housemate is part of the household (Samen badges, the Badges tabs, the story); a friend is not,
+ * but shows in the cooking calendar, as a sender in In & uit, as a recipient of Stuur and on Meer.
+ * Absent = housemate (every member stored before V1c-2); a profile on this phone is always a housemate.
+ */
+export type MemberRole = 'housemate' | 'friend';
+
 export interface Member {
   /** A profile id ('p:…') for a local member, else 'm:…' (typed by hand) or the id from a member card. */
   id: string;
@@ -26,6 +34,8 @@ export interface Member {
   deviceId?: string;
   /** The person's avatar: a local member's from its profile, another member's from their card (6D-3). */
   avatar?: AvatarSpec;
+  /** V1c-2: housemate or friend; absent = housemate. Never set on a local member (`roleOf`). */
+  role?: MemberRole;
 }
 
 export interface HouseholdSetting {
@@ -78,6 +88,7 @@ function normalizeMember(v: unknown): Member | null {
   if (typeof o.deviceId === 'string' && o.deviceId.trim()) m.deviceId = o.deviceId;
   const avatar = normalizeAvatarSpec(o.avatar);
   if (avatar) m.avatar = avatar;
+  if (o.role === 'housemate' || o.role === 'friend') m.role = o.role;
   return m;
 }
 
@@ -105,23 +116,50 @@ export function memberFromProfile(p: Profile): Member {
 }
 
 /**
- * Every member of the household: the local profiles first (in their order), then the stored
- * members whose id is not a profile here. A stored member with the same NAME as a local profile
+ * Every member (V1c-2: housemates AND friends): the local profiles first (in their order), then the
+ * stored housemates, then the stored friends, each group in its stored order; stored members whose
+ * id is a profile here are left out. A stored member with the same NAME as a local profile
  * is left out too: that is the same person, seen from this phone (their card arrived before the
- * profile was made, or vice versa).
+ * profile was made, or vice versa). Readers that mean "the household" use `housematesOf` on this.
  */
 export function membersFrom(profiles: readonly Profile[], setting: HouseholdSetting | unknown): Member[] {
   const h = isHouseholdSetting(setting) ? setting : normalizeHousehold(setting);
   const out: Member[] = profiles.map(memberFromProfile);
   const ids = new Set(out.map((m) => m.id));
   const names = new Set(out.map((m) => foldName(m.name)));
-  for (const m of h.members) {
+  const stored = [...h.members.filter((m) => roleOf(m) === 'housemate'), ...h.members.filter((m) => roleOf(m) === 'friend')];
+  for (const m of stored) {
     if (ids.has(m.id) || names.has(foldName(m.name))) continue;
     ids.add(m.id);
     names.add(foldName(m.name));
     out.push(m);
   }
   return out;
+}
+
+/** V1c-2: the role of a member; a profile on this phone is always a housemate, absent = housemate. */
+export function roleOf(m: Pick<Member, 'local' | 'role'>): MemberRole {
+  return m.local ? 'housemate' : m.role === 'friend' ? 'friend' : 'housemate';
+}
+
+/** The housemates in `members` (order kept): the local profiles and every stored housemate. */
+export function housematesOf<M extends Pick<Member, 'local' | 'role'>>(members: readonly M[]): M[] {
+  return members.filter((m) => roleOf(m) === 'housemate');
+}
+
+/** The friends in `members` (order kept). */
+export function friendsOf<M extends Pick<Member, 'local' | 'role'>>(members: readonly M[]): M[] {
+  return members.filter((m) => roleOf(m) === 'friend');
+}
+
+/**
+ * Sets the role of a stored member (pure; one tap "Maak vriend" / "Maak huisgenoot"). The id does
+ * not change, so the snapshot and the cooking days stay with the person. An unknown id (or a local
+ * profile, which is never in the setting) leaves the setting as it is.
+ */
+export function setRole(h: HouseholdSetting, id: string, role: MemberRole): HouseholdSetting {
+  if (!h.members.some((m) => m.id === id)) return h;
+  return { ...h, members: h.members.map((m) => (m.id === id ? { ...m, role } : m)) };
 }
 
 function isHouseholdSetting(v: unknown): v is HouseholdSetting {
@@ -203,13 +241,47 @@ export function matchMemberForCard(members: readonly Member[], card: MemberCard)
  * the sender went back to the initial), the card's id wins. Local profiles are never
  * touched: the setting only holds non-local members, and the caller checks `matchMemberForCard`
  * against the full list first to say "that is a profile on this phone" instead of adding.
+ * V1c-2: a NEW member gets `role` (default housemate); an existing member KEEPS its role (a card
+ * never changes a role; the receiver chooses it, `setRole`).
  */
-export function upsertMemberFromCard(h: HouseholdSetting, card: MemberCard): HouseholdSetting {
+export function upsertMemberFromCard(h: HouseholdSetting, card: MemberCard, role: MemberRole = 'housemate'): HouseholdSetting {
   const member = memberFromCard(card);
   if (!member.id.trim() || !member.name) return h;
   const existing = matchMemberForCard(h.members, card);
-  const members = existing ? h.members.map((m) => (m === existing ? member : m)) : [...h.members, member];
+  const members = existing
+    ? h.members.map((m) => (m === existing ? (existing.role ? withRole(member, existing.role) : member) : m))
+    : [...h.members, withRole(member, role)];
   // A card id already present under another entry (should not happen) is folded into one.
   const seen = new Set<string>();
   return { ...h, members: members.filter((m) => (seen.has(m.id) ? false : (seen.add(m.id), true))) };
+}
+
+function withRole(m: Member, role: MemberRole): Member {
+  return { ...m, role };
+}
+
+/**
+ * V1c-2 migration (pure; `migrateFriendSnapshots` in src/people.ts writes it once): every snapshot
+ * kept as a friend (`friend === true`, the V1c-1/6D-4b "Bewaar als vriend") that matches no member
+ * (`matchMemberForCard`: id, else name) becomes a friend member from the card fields (the
+ * `memberFromCard` rules: id, name, colour, language, deviceId, avatar). Two snapshots of the same
+ * person (same name) give one member. Only adds; nothing in `members` changes.
+ */
+export function friendMembersFromSnapshots(
+  snapshots: Readonly<Record<string, MemberCard & { friend?: boolean }>> | readonly (MemberCard & { friend?: boolean })[],
+  members: readonly Member[],
+): Member[] {
+  const list = Array.isArray(snapshots) ? snapshots : Object.values(snapshots as Readonly<Record<string, MemberCard & { friend?: boolean }>>);
+  const known: Member[] = [...members];
+  const out: Member[] = [];
+  for (const s of list) {
+    if (!s || s.friend !== true) continue;
+    if (matchMemberForCard(known, s)) continue;
+    const m = memberFromCard(s);
+    if (!m.id.trim() || !m.name) continue;
+    const friend: Member = { ...m, local: false, role: 'friend' };
+    known.push(friend);
+    out.push(friend);
+  }
+  return out;
 }

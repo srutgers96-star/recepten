@@ -17,7 +17,7 @@ import { normalizeAvatarParts, type AvatarPart } from '@/domain/avatar';
 import { evaluateBadges, isLadder, normalizeBadges, normalizeEarned, type Badge, type BadgeFacts, type BadgeStatus } from '@/domain/badges';
 import { categoriesData } from '@/domain/data';
 import { featureCounts, normalizeFeatureLog } from '@/domain/features';
-import { membersFrom } from '@/domain/household';
+import { housematesOf, membersFrom } from '@/domain/household';
 import { boughtFacts, normalizeShopBought, recipesPerIngredient } from '@/domain/shopbought';
 import type { Recipe } from '@/domain/model';
 import { activeProfile, profiles } from '@/profile';
@@ -186,7 +186,8 @@ async function buildFacts(memberId: string | 'all', withXp: boolean): Promise<Ba
     photos: photoRows.length,
     photoRows,
     features: featureCounts(normalizeFeatureLog(featuresRaw), memberId),
-    householdMembers: membersFrom(profiles.value, household).length,
+    // V1c-2: Samen counts housemates; friends are not part of the household.
+    householdMembers: housematesOf(membersFrom(profiles.value, household)).length,
     donorLevel: donorLevelFor(heartsRaw, memberId),
     xp,
     sharedRecipeIds: sharedIds,

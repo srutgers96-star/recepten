@@ -742,14 +742,16 @@ describe('member card (#f=)', () => {
   it('buildMemberShareMessage: one sentence (NL/EN) and the #f= URL alone on the last line', async () => {
     const nl = buildMemberShareMessage({ name: 'Stijn', url: 'https://x/#f=abc', lang: 'nl' }).split('\n');
     expect(nl).toHaveLength(2);
-    expect(nl[0]).toBe("👋 Kaartje van Stijn voor Rutgers' Recepten — open de link in de app of plak hem bij In & uit om Stijn aan je huishouden toe te voegen.");
+    expect(nl[0]).toBe("👋 Dit is Stijn voor Rutgers' Recepten — open de link in de app of plak hem bij In & uit om Stijn toe te voegen als huisgenoot of vriend.");
     expect(nl[1]).toBe('https://x/#f=abc');
     const en = buildMemberShareMessage({ name: 'Gabi', url: 'u', lang: 'en' }).split('\n');
-    expect(en[0]).toBe("👋 Gabi's card for Rutgers' Recipes — open the link in the app or paste it into In & out to add Gabi to your household.");
+    expect(en[0]).toBe("👋 This is Gabi for Rutgers' Recipes — open the link in the app or paste it into In & out to add Gabi as a housemate or friend.");
+    // V1c-2: the word "card"/"kaartje" and "household"/"huishouden" are gone from the sentence.
+    for (const line of [nl[0]!, en[0]!]) expect(line).not.toMatch(/kaartje|card|huishouden|household/i);
     // planMessages with one card uses that text and one extractable #f= link.
     const plan = await planMessages([buildMemberEnvelope(CARD)], APP_URL, { lang: 'nl' });
     if (!('parts' in plan)) throw new Error('expected text');
-    expect(plan.parts[0]!.split('\n')[0]).toMatch(/^👋 Kaartje van Stijn/);
+    expect(plan.parts[0]!.split('\n')[0]).toMatch(/^👋 Dit is Stijn/);
     expect(plan.tokens).toBe(1);
     expect(extractTokens(plan.parts[0]!).map((t) => t.key)).toEqual(['f']);
     const parsed = parseEnvelope(await decodeToken(extractTokens(plan.parts[0]!)[0]!.token));

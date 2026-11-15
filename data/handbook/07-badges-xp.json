@@ -402,8 +402,8 @@
       "id": "badges-xp.samen",
       "title": { "nl": "Badges per persoon en samen", "en": "Badges per person and together" },
       "what": {
-        "nl": "Bovenaan bij de badges staat een tab per lid van je huishouden en een tab **Samen**. Sommige badges haal je alleen samen.",
-        "en": "At the top of the badges there is a tab for each member of your household and a **Together** tab. Some badges you only earn together."
+        "nl": "Bovenaan bij de badges staat een tab per huisgenoot en een tab **Samen**. Sommige badges haal je alleen samen.",
+        "en": "At the top of the badges there is a tab for each housemate and a **Together** tab. Some badges you only earn together."
       },
       "where": {
         "nl": [
@@ -432,8 +432,8 @@
       "route": "/more/badges",
       "platform": "all",
       "keywords": {
-        "nl": ["samen", "huishouden", "per persoon", "lid", "tab", "gezamenlijk"],
-        "en": ["together", "household", "per person", "member", "tab", "shared"]
+        "nl": ["samen", "huishouden", "per persoon", "huisgenoot", "tab", "gezamenlijk"],
+        "en": ["together", "household", "per person", "housemate", "tab", "shared"]
       }
     },
     {
@@ -509,8 +509,8 @@
       "id": "badges-xp.mijn-profiel",
       "title": { "nl": "Mijn profiel openen", "en": "Open My profile" },
       "what": {
-        "nl": "**Mijn profiel** toont je avatar groot, met je naam, je level en de XP-balk. Daaronder staan tegels naar je stijl, je badges, je kaartje en je voortgang.",
-        "en": "**My profile** shows your avatar large, with your name, your level and the XP bar. Under it are tiles for your style, your badges, your card and your progress."
+        "nl": "**Mijn profiel** toont je avatar groot, met je naam, je level en de XP-balk. Daaronder staan tegels naar je stijl, je badges en je voortgang.",
+        "en": "**My profile** shows your avatar large, with your name, your level and the XP bar. Under it are tiles for your style, your badges and your progress."
       },
       "where": {
         "nl": [
@@ -523,8 +523,8 @@
         ]
       },
       "see": {
-        "nl": "Je ziet je avatar groot, met rechtsonder een potlood, en je naam, je level en de balk. Daaronder staan de tegels **Jouw stijl**, **Badges**, **Deel mijn kaartje**, **Sync mijn voortgang** en **Naam & kleur**.",
-        "en": "You see your avatar large, with a pencil at the bottom right, and your name, your level and the bar. Under it are the tiles **Your style**, **Badges**, **Share my card**, **Sync my progress** and **Name & colour**."
+        "nl": "Je ziet je avatar groot, met rechtsonder een potlood, en je naam, je level en de balk. Daaronder staan de tegels **Jouw stijl**, **Badges**, **Stuur mijn voortgang** en **Naam & kleur**.",
+        "en": "You see your avatar large, with a pencil at the bottom right, and your name, your level and the bar. Under it are the tiles **Your style**, **Badges**, **Send my progress** and **Name & colour**."
       },
       "know": {
         "nl": "Tik op het potlood voor **Naam & kleur**. Tik op je grote avatar, dan knipoogt hij; een rondje met een letter wiebelt alleen. In **Meer** brengt je avatar bovenaan je hier ook. Je kunt ook helemaal bovenaan Home het scherm omlaag trekken. In de browser, niet in de app, kan omlaag trekken de pagina verversen.",
@@ -541,8 +541,8 @@
       "id": "badges-xp.avatar-maken",
       "title": { "nl": "Je avatar maken", "en": "Make your avatar" },
       "what": {
-        "nl": "Vanaf level 3, na je eerste kookbeurt, maak je je eigen avatar. Die staat daarna op Home, in Meer en op je kaartje.",
-        "en": "From level 3, after your first cooked dish, you make your own avatar. It then shows on Home, in More and on your card."
+        "nl": "Vanaf level 3, na je eerste kookbeurt, maak je je eigen avatar. Die staat daarna op Home, in Meer en in de voortgang die je stuurt.",
+        "en": "From level 3, after your first cooked dish, you make your own avatar. It then shows on Home, in More and in the progress you send."
       },
       "where": {
         "nl": [

@@ -48,6 +48,7 @@ import { reloadSpeechSettings } from '@/speech';
 import { reloadShowAmounts } from '@/step-amounts';
 import { reloadVoiceSettings } from '@/voice';
 import { reloadXp } from '@/xp';
+import { migrateFriendSnapshots } from '@/people';
 
 interface Facts {
   standalone: boolean;
@@ -376,6 +377,9 @@ export function StorageScreen() {
       // (the active profile is kept when this phone already had one; theme, last-backup date and cook.sessions
       // are never restored). 6D-1: XP is recomputed silently from the restored facts (no pops, no sheet).
       await Promise.all([loadProfiles(), reloadCelebrateSettings(), reloadSoundSettings(), reloadSpeechSettings(), reloadVoiceSettings(), reloadShowAmounts(), reloadBadgeSettings(), reloadCooking(), reloadXp()]);
+      // V1c-2: a backup from before the roles holds its friends only as snapshots → make them friend
+      // members again, forced (the one-time flag is already set on this phone).
+      await migrateFriendSnapshots(true);
       // 6D-2c: first register silently what the restored history reached (all profiles + Samen, with
       // the restored profiles loaded just above), so the check after recordFeature('restore') only
       // toasts what is really new (e.g. "Terug van weggeweest"), never a flood of old badges.

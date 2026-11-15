@@ -89,21 +89,12 @@ export const xp: Dict = {
   'style.font.chalk': { nl: 'Krijtbord', en: 'Chalkboard' },
   'style.font.hand': { nl: 'Handschrift', en: 'Handwriting' },
   'style.confetti.default': { nl: 'Gewoon', en: 'Plain' },
-  // §1h "Sync mijn voortgang" (block 6D-4 = 6D-4b): the button on the active profile card and under
-  // Huishouden → Mijn kaartje, and <ProgressSharePanel/> (the iPhone line reuses household.cardIosHint).
-  'progress.share': { nl: 'Sync mijn voortgang', en: 'Sync my progress' },
-  'progress.intro': {
-    nl: "Stuur je level, badges en kookdagen van de laatste 90 dagen naar je huishouden of een vriend. Geen notities, geen sterren, geen foto's.",
-    en: 'Send your level, badges and the cooking days of the last 90 days to your household or a friend. No notes, no stars, no photos.',
-  },
+  // §1h sharing progress (block 6D-4 = 6D-4b); since V1c-2 the send sheet (src/components/SendSheet.tsx,
+  // send.* keys in settings.ts) replaces the old "Sync" button; the iPhone line is send.iosHint.
   'progress.send': { nl: 'Deel', en: 'Share' },
   'progress.copy': { nl: 'Kopieer link', en: 'Copy link' },
   'progress.shared': { nl: 'Voortgang gedeeld.', en: 'Progress shared.' },
   'progress.copied': { nl: 'Gekopieerd — plak het in WhatsApp.', en: 'Copied — paste it into WhatsApp.' },
-  'progress.honest': {
-    nl: 'Dit is een momentopname: de ander ziet wat je nú deelt, niet wat je daarna kookt. Deel het af en toe opnieuw.',
-    en: 'This is a snapshot: the other person sees what you share now, not what you cook afterwards. Share it again now and then.',
-  },
   // §1i receiving a `#x=` (In & uit card, the Household paste box, the member rows and Vrienden).
   'progress.from': { nl: 'Voortgang van {name}', en: "{name}'s progress" },
   'progress.streakBadges': { nl: '🔥 {streak} · {badges} badges', en: '🔥 {streak} · {badges} badges' },
@@ -111,16 +102,13 @@ export const xp: Dict = {
   'progress.cookDays30': { nl: '{n} kookdagen in de laatste 30 dagen', en: '{n} cooking days in the last 30 days' },
   'progress.cookDays30One': { nl: '1 kookdag in de laatste 30 dagen', en: '1 cooking day in the last 30 days' },
   'progress.sentAt': { nl: 'gedeeld op {date}', en: 'shared on {date}' },
-  'progress.update': { nl: 'Werk {name} bij', en: 'Update {name}' },
   'progress.updateHint': { nl: 'Level, streak, badges, kookdagen en avatar', en: 'Level, streak, badges, cook days and avatar' },
   'progress.updated': { nl: '{name} is bijgewerkt.', en: '{name} was updated.' },
   'progress.local': {
     nl: '{name} is een profiel op deze telefoon — die voortgang zie je al.',
     en: '{name} is a profile on this phone — you already see that progress.',
   },
-  'progress.saveFriend': { nl: 'Bewaar als vriend', en: 'Save as a friend' },
   'progress.updatedAgo': { nl: '· bijgewerkt {date}', en: '· updated {date}' },
-  'progress.friends': { nl: 'Vrienden', en: 'Friends' },
   // V1c-9 (docs/specs/verbeterronde-1c.md, block V1c-9 §1b): "Stuur terug" under a member or friend row
   // (Huishouden & vrienden) and "Herstel mijn voortgang" on a received card of a profile on this phone.
   // V1c-9b: stored progress that belongs to nobody in the list (renamed, removed, or back with another id).
@@ -160,8 +148,8 @@ export const xp: Dict = {
   'calendar.nothing': { nl: 'Niets gekookt.', en: 'Nothing cooked.' },
   'calendar.emptyMonth': { nl: 'Nog niets gekookt deze maand.', en: 'Nothing cooked this month yet.' },
   'calendar.honest': {
-    nl: 'Anderen zie je zoals ze het laatst deelden via Sync mijn voortgang.',
-    en: 'You see others as they last shared with Sync my progress.',
+    nl: 'Anderen zie je zoals ze het laatst deelden via Stuur mijn voortgang.',
+    en: 'You see others as they last shared with Send my progress.',
   },
   // 6E challenges (docs/specs/challenges.md §1b–§1e): the card on Mijn profiel (src/components/ChallengeCard.tsx)
   // and the offer sheet (src/components/ChallengeOfferSheet.tsx). Names and descriptions of the challenges

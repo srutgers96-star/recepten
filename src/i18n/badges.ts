@@ -5,7 +5,6 @@ import type { Dict } from './index';
 
 export const badges: Dict = {
   'badges.title': { nl: 'Badges', en: 'Badges' },
-  'badges.members': { nl: 'Leden', en: 'Members' },
   'badges.together': { nl: 'Samen', en: 'Together' },
   'badges.earnedOf': { nl: '{earned} van {total} badges verdiend', en: '{earned} of {total} badges earned' },
   'badges.earned': { nl: 'Verdiend', en: 'Earned' },

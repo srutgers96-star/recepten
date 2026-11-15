@@ -1,6 +1,6 @@
 # Spec V1c — Testronde-feedback na V1–V9 (Stijn, vanaf 9 nov 2026)
 
-Status: punt 1 compleet (9 nov), punten 3, 7 en 8 direct gebouwd (10–15 nov), punt 9 compleet (15 nov); V1c-2 in aanbouw (15 nov, "bouw maar"); de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
+Status: punt 1 compleet (9 nov), punten 3, 7 en 8 direct gebouwd (10–15 nov), punt 9 compleet (15 nov); V1c-2 compleet (15 nov); de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
 krijgt hieronder een eigen blok (V1c-1, V1c-2, …) met Kritische lezer, Feitencheck, §1 Gedrag, §2 en §3, en gaat door de lichte workflow.
 
 ## Verzamellijst
@@ -363,13 +363,13 @@ integrator houdt A's versie.
 
 ## Blok V1c-2 — Mensen en sturen (spec)
 
-Status: in aanbouw (Fable, 15 nov 2026). Vier bouwers + integrator (lichte modus). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
+Status: compleet (Fable, 15 nov 2026). Vier bouwers + integrator (lichte modus). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
 docs/specs/handbook.md §4, CLAUDE.md invariant 4 (de tokens `#f=` en `#x=` en hun codecs veranderen NIET; alleen de zinnen eromheen en de UI),
 5 (iPhone: plakken blijft de weg), 9 (`navigator.share` met precies één veld), 14 (geen backend). Het ontwerp hierboven is de bedoeling; dit
 blok is de uitwerking. Bron: Stijn 9 en 15 nov ("ik wil Voeg vriend toe én Voeg huisgenoot toe, één plakveld, Stuur voortgang / Stuur recepten
 met één deelknop, elke vriend Maak huisgenoot en andersom, het woord kaartje is onduidelijk"; 15 nov: "waarom is kaartje en voortgang nou weer
 iets anders 😞").
-Gebouwd: 15 nov 2026 (V1c-2, lichte workflow; run-id in STATUS)
+Gebouwd: 15 nov 2026 (V1c-2, lichte workflow wf_6b2995e5-10a; lens: twee bevindingen; besluiten Fable: restore draait de rollenmigratie geforceerd opnieuw (Opslag), `snapshotsForMember` niet meer op telefoon-id alleen, `buildProgressShareMessage` ongewijzigd; integrator: `household.members` (Huisgenoten) als aria-label van de Badges-tabbladen, dode keys `badges.members`/`progress.update`/`progress.friends` weg; fixer: DEVICE-TEST rij 100)
 
 **Kritische lezer (Fable, vooraf).** (1) Twee tokens blijven bestaan omdat badges uit kunnen staan: `#x=` (voortgang: wie je bent + level,
 badges, kookdagen) en `#f=` (alleen wie je bent). De gebruiker ziet één ding, **Mijn voortgang** (badges aan) of **Wie ik ben** (badges uit);

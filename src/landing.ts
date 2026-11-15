@@ -7,8 +7,8 @@
 //   #b=  a bundle: the recipes (names in both languages) and adjustments it holds
 //   #w=  a week plan: "Weekplan van <by>: N gerechten" and the own recipes it carries (builtins
 //        travel by id only, so they are counted, not named)
-//   #f=  a member card: "Kaartje van <name>" with the colour swatch and language; "Kopieer code"
-//        and the same hand-off card (copy → app → Meer → In & uit → Plak), because on an iPhone a link
+//   #f=  who someone is (V1c-2: "Dit is <name>") with the colour swatch and language; "Kopieer code"
+//        and its hand-off card (copy → app → Huishouden & vrienden → Voeg huisgenoot/vriend toe → Plak), because on an iPhone a link
 //        never opens the installed app (CLAUDE.md invariant 5)
 //   #x=  shared progress (6D-4b, docs/specs/xp-levels.md §1k): "Voortgang van <name>" with
 //        "Level N · <title>" and the same copy button and hand-off card as the member card. The
@@ -71,21 +71,21 @@ const S = {
     planNote: 'Notitie',
     planHint: 'In de app kies je Overnemen (vervangt je week) of Toevoegen (alleen wat ontbreekt).',
     planEmpty: 'Dit weekplan is leeg.',
-    previewMember: 'Voorproefje van een gedeeld ledenkaartje',
-    memberOf: (name: string) => `Kaartje van ${name}`,
+    previewMember: 'Voorproefje: wie iemand is',
+    memberOf: (name: string) => `Dit is ${name}`,
     memberLang: (l: Lang) => (l === 'en' ? 'Taal: Engels' : 'Taal: Nederlands'),
-    memberHint: (name: string) => `In de app voeg je ${name} toe aan je huishouden. Recepten van ${name} krijgen dan deze naam en kleur, en "Deel je nieuwe recepten" kent ${name} al.`,
+    memberHint: (name: string) => `In de app voeg je ${name} toe als huisgenoot of vriend. Recepten van ${name} krijgen dan deze naam en kleur, en "Deel je nieuwe recepten" kent ${name} al.`,
     copyCard: 'Kopieer code',
     copiedCard: 'Gekopieerd. Open nu de Recepten-app op je beginscherm → Meer → In & uit → Plak van klembord.',
     stepsCard: [
       { h: 'Kopieer', b: 'Tik hierboven op de blauwe knop Kopieer code.' },
       { h: 'Open de app', b: "Open Rutgers' Recepten via het icoon op je beginscherm — niet hier in Safari." },
-      { h: 'Plak', b: 'Tik onderaan op Meer → In & uit → Plak van klembord en daarna op Voeg toe aan je huishouden.' },
+      { h: 'Plak', b: 'Tik onderaan op Meer → Huishouden & vrienden → Voeg huisgenoot toe of Voeg vriend toe → Plak.' },
     ],
     previewProgress: 'Voorproefje van gedeelde voortgang',
     progressOf: (name: string) => `Voortgang van ${name}`,
     progressLevel: (level: number, title: string) => `Level ${level} · ${title}`,
-    progressHint: (name: string) => `In de app zie je ${name} in de kookkalender en bij Huishouden.`,
+    progressHint: (name: string) => `In de app zie je ${name} in de kookkalender en bij Huishouden & vrienden.`,
     previewList: 'Voorproefje van een gedeelde boodschappenlijst',
     listTitle: 'Boodschappenlijst',
     listLines: (n: number) => `${n} ${n === 1 ? 'regel' : 'regels'}`,
@@ -137,21 +137,21 @@ const S = {
     planNote: 'Note',
     planHint: 'In the app choose Take over (replaces your week) or Add (only what is missing).',
     planEmpty: 'This week plan is empty.',
-    previewMember: 'Preview of a shared member card',
-    memberOf: (name: string) => `${name}'s card`,
+    previewMember: 'Preview: who someone is',
+    memberOf: (name: string) => `This is ${name}`,
     memberLang: (l: Lang) => (l === 'en' ? 'Language: English' : 'Language: Dutch'),
-    memberHint: (name: string) => `In the app you add ${name} to your household. Recipes from ${name} then get this name and colour, and "Share your new recipes" already knows ${name}.`,
+    memberHint: (name: string) => `In the app you add ${name} as a housemate or friend. Recipes from ${name} then get this name and colour, and "Share your new recipes" already knows ${name}.`,
     copyCard: 'Copy code',
     copiedCard: 'Copied. Now open the Recepten app on your Home Screen → More → In & out → Paste from clipboard.',
     stepsCard: [
       { h: 'Copy', b: 'Tap the blue Copy code button above.' },
       { h: 'Open the app', b: "Open Rutgers' Recipes from the icon on your Home Screen — not here in Safari." },
-      { h: 'Paste', b: 'Tap More at the bottom → In & out → Paste from clipboard, then Add to your household.' },
+      { h: 'Paste', b: 'Tap More at the bottom → Household & friends → Add housemate or Add friend → Paste.' },
     ],
     previewProgress: 'Preview of shared progress',
     progressOf: (name: string) => `${name}'s progress`,
     progressLevel: (level: number, title: string) => `Level ${level} · ${title}`,
-    progressHint: (name: string) => `In the app you see ${name} in the cooking calendar and under Household.`,
+    progressHint: (name: string) => `In the app you see ${name} in the cooking calendar and under Household & friends.`,
     previewList: 'Preview of a shared shopping list',
     listTitle: 'Shopping list',
     listLines: (n: number) => `${n} ${n === 1 ? 'line' : 'lines'}`,
@@ -393,7 +393,7 @@ function planHtml(s: ParsedShare, by: string): string[] {
   return parts;
 }
 
-/** The member card: "Kaartje van <name>", the colour swatch with the language, and what the app does with it. */
+/** Who someone is (`#f=`): "Dit is <name>", the colour swatch with the language, and what the app does with it. */
 function memberHtml(card: MemberCard): string[] {
   const L = S[lang];
   const parts: string[] = [];

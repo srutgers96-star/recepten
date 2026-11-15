@@ -383,10 +383,11 @@ describe('snapshotsForMember (V1c-9b)', () => {
     'p:new': snap('p:new', 'Stijn', 40, '2026-11-15T10:00:00.000Z', 'dev-2'),
     'p:gabi': snap('p:gabi', 'Gabi', 9000, '2026-11-14T10:00:00.000Z'),
   };
-  it('matches by id, by phone id and by name (folded), newest first', () => {
+  it('matches by id and by name (folded), never by phone id alone, newest first', () => {
     expect(snapshotsForMember({ id: 'p:new', name: 'Stijn' }, snapshots).map((s) => s.id)).toEqual(['p:new', 'p:old']);
     expect(snapshotsForMember({ id: 'm:typed', name: '  stíjn ' }, snapshots).map((s) => s.id)).toEqual(['p:new', 'p:old']);
-    expect(snapshotsForMember({ id: 'm:x', name: 'Iemand', deviceId: 'dev-1' }, snapshots).map((s) => s.id)).toEqual(['p:old']);
+    // the same phone id is not enough: two profiles on one phone share it (V1c-2 lens)
+    expect(snapshotsForMember({ id: 'm:x', name: 'Iemand', deviceId: 'dev-1' }, snapshots).map((s) => s.id)).toEqual([]);
     expect(snapshotsForMember({ id: 'm:x', name: 'Niemand' }, snapshots)).toEqual([]);
   });
   it('the level line takes the newest, "Stuur terug" the highest XP', () => {

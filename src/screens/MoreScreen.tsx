@@ -43,7 +43,7 @@ import { levelTitleText } from '@/components/XpBar';
 import { SheetPortal } from '@/components/SheetPortal';
 import { getHousehold, getHouseholdServings, getProgressSnapshots, getTemperatureMode, setHouseholdServings, setTemperatureMode, type TemperatureMode } from '@/db/repo';
 import { baseDictionary, userIngredients } from '@/dictionary';
-import { matchMemberForCard, memberFromProfile, membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
+import { friendsOf, housematesOf, memberFromProfile, membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
 import type { Lang } from '@/domain/model';
 import { snapshotForMember, type ProgressSnapshot } from '@/domain/progress';
 import { recordFeature } from '@/features';
@@ -176,7 +176,7 @@ function Group(props: { id: GroupId; title: string; open: boolean; onToggle: (id
  * One housemate (a member that is not the active profile), a size smaller, tagged "huisgenoot". Under
  * the name, with badges on and a level known: the level line as on Huishouden (a profile on this
  * phone live via `useAvatarLevel`; a member on another phone from its last snapshot, without the
- * "bijgewerkt" date); otherwise "via kaartje" / "met de hand", or nothing for a local profile.
+ * "bijgewerkt" date); otherwise "via de app" / "met de hand", or nothing for a local profile.
  */
 function MemberMenuRow(props: { member: Member; snapshot?: ProgressSnapshot }) {
   const m = props.member;
@@ -186,11 +186,15 @@ function MemberMenuRow(props: { member: Member; snapshot?: ProgressSnapshot }) {
   return <MenuRow extraClass="row-member" icon={<Avatar profile={m} />} label={m.name} tag={t('more.tagHousemate')} sub={sub} to="/more/household" />;
 }
 
-/** One friend (a snapshot kept with "Bewaar als vriend"), tagged "vriend"; with badges on "Level n · titel" under it. */
-function FriendMenuRow(props: { snapshot: ProgressSnapshot }) {
-  const s = props.snapshot;
-  const sub = badgesEnabled.value ? levelTitleText(s.level) : undefined;
-  return <MenuRow extraClass="row-member" icon={<Avatar profile={s} />} label={s.name} tag={t('more.friend')} sub={sub} to="/more/household" />;
+/**
+ * One friend (V1c-2: a member with `role: 'friend'`), tagged "vriend"; with badges on and a snapshot
+ * "Level n · titel" under it, otherwise "via de app" / "met de hand" as for a housemate.
+ */
+function FriendMenuRow(props: { member: Member; snapshot?: ProgressSnapshot }) {
+  const m = props.member;
+  const level = badgesEnabled.value ? props.snapshot?.level : undefined;
+  const sub = level !== undefined ? levelTitleText(level) : m.deviceId ? t('household.fromCard') : t('household.byHand');
+  return <MenuRow extraClass="row-member" icon={<Avatar profile={m} />} label={m.name} tag={t('more.friend')} sub={sub} to="/more/household" />;
 }
 
 // --- Feedback (6A.7) ----------------------------------------------------------------------------
@@ -515,14 +519,12 @@ export function MoreScreen() {
   const builtin = baseDictionary().ingredients.length;
   // Badges on and the level known: "Level 5 · Boterhamsmeerder" under the name (badges off: no trace of XP).
   const levelSub = badgesEnabled.value && level !== undefined ? levelTitleText(level) : undefined;
-  // V1 §1c: every member except the active profile (local profiles and members by card or by hand),
-  // and the friends (a friend who has since become a member shows as a member only, as on Huishouden).
+  // V1 §1c / V1c-2: every housemate except the active profile (local profiles and members by card or
+  // by hand), then the friends (members with role 'friend'); a snapshot per person via snapshotForMember.
   const profileList = profiles.value;
   const members = householdSetting ? membersFrom(profileList, householdSetting) : profileList.map(memberFromProfile);
-  const housemates = members.filter((m) => m.id !== active?.id);
-  const friends = Object.values(snapshots)
-    .filter((s) => s.friend && !matchMemberForCard(members, s))
-    .sort((a, b) => a.name.localeCompare(b.name));
+  const housemates = housematesOf(members).filter((m) => m.id !== active?.id);
+  const friends = friendsOf(members);
 
   return (
     <>
@@ -552,8 +554,8 @@ export function MoreScreen() {
             {housemates.map((m) => (
               <MemberMenuRow key={m.id} member={m} snapshot={m.local ? snapshots[m.id] : snapshotForMember(m, snapshots)} />
             ))}
-            {friends.map((s) => (
-              <FriendMenuRow key={s.id} snapshot={s} />
+            {friends.map((m) => (
+              <FriendMenuRow key={m.id} member={m} snapshot={snapshotForMember(m, snapshots)} />
             ))}
             {housemates.length === 0 && friends.length === 0 && <MenuRow label={t('more.householdRowEmpty')} to="/more/household" />}
             {/* V1 §1c point 5: the Profielen page only for a phone that already holds more than one

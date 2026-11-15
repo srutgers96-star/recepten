@@ -327,7 +327,7 @@ Open je de app in een browser in plaats van via het icoon, dan zegt een kader bo
 
 #### Wat je dan ziet
 
-Het kader zegt dat je de app in de browser gebruikt, met de stappen voor jouw telefoon. Na **Toch in de browser** is het kader weg en staat er onderaan een klein kaartje.
+Het kader zegt dat je de app in de browser gebruikt, met de stappen voor jouw telefoon. Na **Toch in de browser** is het kader weg en staat er onderaan een klein kader.
 
 #### Goed om te weten
 
@@ -836,7 +836,7 @@ In het vak **Tip van de maker** schrijf je iets voor wie jouw recept krijgt. Die
 
 #### Wat je dan ziet
 
-Onder de bereiding staat een kaartje met 💡, ‘Tip van’ en je naam, met jouw tekst.
+Onder de bereiding staat een kader met 💡, ‘Tip van’ en je naam, met jouw tekst.
 
 #### Goed om te weten
 
@@ -1767,7 +1767,7 @@ Een maandrooster van maandag tot zondag; vandaag heeft een rand. Tik je een dag 
 
 #### Goed om te weten
 
-Kookte iemand iets wat jij niet hebt, dan staat er "een recept". Anderen zie je zoals ze het laatst deelden via Sync mijn voortgang.
+Kookte iemand iets wat jij niet hebt, dan staat er "een recept". Anderen zie je zoals ze het laatst deelden via **Stuur mijn voortgang**.
 
 (`#/more/calendar`)
 
@@ -2508,7 +2508,7 @@ Kreeg je een lijst als link, dan zet je de regels met één tik op je eigen bood
 
 #### Wat je dan ziet
 
-Eerst zie je een kaartje "🛒 Lijst van …" met de regels. Na de tik staat er hoeveel regels op je lijst kwamen en hoeveel er al stonden.
+Eerst zie je een kader "🛒 Lijst van …" met de regels. Na de tik staat er hoeveel regels op je lijst kwamen en hoeveel er al stonden.
 
 #### Goed om te weten
 
@@ -2541,13 +2541,13 @@ Op de iPhone staat er geen **Print**-knop. Daar tik je op **Deel lijst** en kies
 
 ## Delen & ontvangen
 
-Een recept, je weekplan, je kaartje of je voortgang stuur je met een paar tikken naar een ander. Hier lees je hoe je deelt en hoe je iets ontvangt, op Android en op de iPhone.
+Een recept, je weekplan of je voortgang stuur je met een paar tikken naar een ander. Hier lees je hoe je deelt en hoe je iets ontvangt, op Android en op de iPhone.
 
 ### Wat je kunt delen
 
 #### Wat het doet
 
-Je kunt een recept, je weekplan, je boodschappenlijst, je kaartje en je voortgang delen. Meerdere recepten tegelijk gaan in één bericht, of in een paar berichten als het veel is.
+Je kunt een recept, je weekplan, je boodschappenlijst en je voortgang delen. Meerdere recepten tegelijk gaan in één bericht, of in een paar berichten als het veel is.
 
 #### Waar je tikt
 
@@ -2788,7 +2788,7 @@ Het recept verschijnt onder het plakvak, met een label zoals **Nieuw**. Na **Imp
 
 #### Goed om te weten
 
-Vraagt de iPhone om toestemming, tik dan op Plak. Lukt het niet, houd dan het tekstvak ingedrukt en kies Plak. Zo ontvang je ook een kaartje, een weekplan, een lijst en voortgang.
+Vraagt de iPhone om toestemming, tik dan op Plak. Lukt het niet, houd dan het tekstvak ingedrukt en kies Plak. Zo ontvang je ook een weekplan, een lijst, iemands voortgang en wie iemand is.
 
 (`#/inbox`)
 
@@ -2809,7 +2809,7 @@ Tik je op de iPhone op een link, dan opent Safari met een voorproefje. Daar kopi
 
 #### Wat je dan ziet
 
-Safari toont het recept om te lezen, met de blauwe knop **Kopieer receptcode**. Bij een kaartje, een lijst of voortgang heet de knop **Kopieer code**.
+Safari toont het recept om te lezen, met de blauwe knop **Kopieer receptcode**. Bij een lijst, voortgang of wie iemand is heet de knop **Kopieer code**.
 
 #### Goed om te weten
 
@@ -2821,7 +2821,7 @@ Safari heeft een eigen opslag, los van de app. Wat je in Safari ziet, staat dus 
 
 #### Wat het doet
 
-**In & uit** is de plek voor alles wat je ontvangt en verstuurt. Je plakt er een bericht, een link, een kaartje of een receptbestand.
+**In & uit** is de plek voor alles wat je ontvangt en verstuurt. Je plakt er een bericht, een link, wie iemand is of zijn voortgang, of een receptbestand.
 
 #### Waar je tikt
 
@@ -2950,7 +2950,7 @@ Alles wat je sinds de vorige keer maakte of aanpaste, stuur je naar één persoo
 
 #### Wat je dan ziet
 
-Je ziet hoe het bericht eruitziet en wat er meegaat, zoals het aantal recepten en nieuwe ingrediënten. Leden van je huishouden staan vooraan, met hun kleur.
+Je ziet hoe het bericht eruitziet en wat er meegaat, zoals het aantal recepten en nieuwe ingrediënten. Je huisgenoten staan vooraan, met hun kleur.
 
 #### Goed om te weten
 
@@ -2958,125 +2958,125 @@ Een getal bij **Deel je nieuwe recepten** zegt hoeveel recepten nog niet gedeeld
 
 (`#/share`)
 
-### Je kaartje delen
+### Je voortgang sturen
 
 #### Wat het doet
 
-Je kaartje is je naam, kleur, taal en avatar in één link. Wie het ontvangt, kan je toevoegen aan zijn huishouden.
+Je voortgang is je naam, kleur, taal en avatar, met je level, badges en kookdagen van de laatste 90 dagen, in één link. Notities, sterren en foto's gaan niet mee.
 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
 2. Tik onder je profiel op **Huishouden & vrienden**.
-3. Tik onder **Mijn kaartje** op **Deel mijn kaartje**.
-4. Kies WhatsApp en de persoon aan wie je het stuurt.
+3. Tik onder **Mensen** op **Stuur mijn voortgang**.
+4. Laat **Mijn voortgang** aangevinkt.
+5. Tik op **Deel**.
+6. Kies WhatsApp en de persoon aan wie je het stuurt.
 
 #### Wat je dan ziet
 
-WhatsApp opent met één zin, “👋 Kaartje van” en je naam, en daaronder één link. In de app staat onder de knoppen de uitleg voor Android en iPhone.
+Er opent een venster “Stuur mijn voortgang”. WhatsApp opent met één zin, “📈 Voortgang van”, je naam en je level, en daaronder één link. Daarna staat er “Verstuurd.”.
 
 #### Goed om te weten
 
-Dezelfde knop staat op **Mijn profiel**. Wat je daarna stuurt, krijgt bij de ander jouw naam en kleur.
+Dezelfde knop staat op **Mijn profiel**. Het is een momentopname: deel het af en toe opnieuw. Staan **Badges** uit, dan heet de knop **Stuur wie ik ben** en gaan alleen je naam, kleur, taal en avatar mee.
 
 (`#/more/household`)
 
-### Een huisgenoot toevoegen met een kaartje
+### Iemand toevoegen die de app heeft
 
 #### Wat het doet
 
-Kreeg je een kaartje van iemand op een andere telefoon? Dan voeg je die persoon toe aan je huishouden.
+Stuurde iemand op een andere telefoon je zijn voortgang, of wie hij is? Dan voeg je hem toe als huisgenoot of als vriend.
 
 #### Waar je tikt
 
-1. Kopieer het bericht met het kaartje.
+1. Kopieer het bericht dat je kreeg.
 2. Tik onderaan op **Meer**.
 3. Tik onder je profiel op **Huishouden & vrienden**.
-4. Scrol naar **Plak een kaartje of voortgang**.
+4. Tik op **Voeg huisgenoot toe** of **Voeg vriend toe**.
 5. Tik op **Plak van klembord**.
-6. Tik op de knop “Voeg … toe aan je huishouden”, met de naam erin.
+6. Tik op de knop “Voeg … toe als …”, met de naam erin.
 
 #### Wat je dan ziet
 
-Je ziet “Kaartje van” met de naam en een rondje in de kleur van die persoon. Daarna staat de persoon bij **Huisgenoten**, met “via kaartje”.
+Er opent een paneel met **Huisgenoot** en **Vriend**, een uitleg en het plakvak. Na het plakken zie je de naam met level en kookdagen, of “wie … is”. Daarna staat de persoon in de lijst met het labeltje huisgenoot of vriend.
 
 #### Goed om te weten
 
-Is iemand al lid, dan heet de knop “Werk … bij”; dan worden naam, kleur, taal en avatar bijgewerkt. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.
+Staat iemand al in je lijst, dan heet de knop “Werk … bij”. Dan worden naam, kleur, taal en avatar bijgewerkt; huisgenoot of vriend blijft. Plakken bij **In & uit** werkt ook. Op Android kun je op de link tikken, maar Android beslist zelf of de app opent.
 
 (`#/more/household`)
 
-### Een vriend toevoegen
+### Huisgenoot of vriend, en wisselen
 
 #### Wat het doet
 
-Een vriend is iemand met wie je niet samen kookt, maar van wie je wel het level en de kookdagen wilt zien. Een vriend komt niet in je boodschappenlijst of je porties.
+Een huisgenoot kookt en doet boodschappen met je mee. Een vriend kookt niet met je mee; van hem zie je alleen het level en de kookdagen. Je kunt dat altijd omzetten.
 
 #### Waar je tikt
 
-1. Vraag je vriend om op **Mijn profiel** op **Sync mijn voortgang** te tikken en je het bericht te sturen.
-2. Kopieer dat bericht.
-3. Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.
-4. Tik onder **Vrienden** op **Voeg vriend toe**.
-5. Tik op **Plak van klembord**.
-6. Tik onder de kaart op **Bewaar als vriend**.
+1. Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.
+2. Zoek de persoon in de lijst onder **Mensen**.
+3. Tik onder de naam op **Maak vriend** of **Maak huisgenoot**.
 
 #### Wat je dan ziet
 
-De app springt naar het plakvak met een blauwe regel die zegt wat je plakt. Na **Bewaar als vriend** staat de persoon onder **Vrienden**, met level en kookdagen.
+Het labeltje bij de naam wisselt meteen tussen huisgenoot en vriend, en de persoon staat bij de andere groep. Het level en de kookdagen blijven staan.
 
 #### Goed om te weten
 
-Een gewoon kaartje (**Deel mijn kaartje**) maakt iemand altijd huisgenoot, geen vriend. Wil je een vriend later toch als huisgenoot? Plak zijn voortgang nog eens en kies dan de andere knop.
+De app vraagt niet of je het zeker weet: tik nog eens om terug te wisselen. Profielen op deze telefoon zijn altijd huisgenoot. Een vriend telt niet mee voor de badges die je samen haalt.
 
 (`#/more/household`)
 
-### Je huishouden: huisgenoten en kleuren
+### Iemand zonder de app toevoegen
 
 #### Wat het doet
 
-In je huishouden staan de mensen met wie je kookt, ook als ze een eigen telefoon hebben. Iedereen heeft een eigen kleur.
+Kookt er iemand mee die de app niet heeft, zoals oma? Typ dan een naam en kies een kleur. Zo staat die persoon ook in de kookkalender.
 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
 2. Tik onder je profiel op **Huishouden & vrienden**.
-3. Tik onderaan op **Typ een huisgenoot**.
-4. Typ een naam.
-5. Tik op een kleur.
-6. Tik op **Voeg toe** om te bewaren.
+3. Tik op **Voeg huisgenoot toe** of **Voeg vriend toe**.
+4. Kies onder het plakvak **Typ een naam**.
+5. Typ een naam.
+6. Tik op een kleur.
+7. Tik op **Voeg toe** om te bewaren.
 
 #### Wat je dan ziet
 
-Elke huisgenoot staat bij **Huisgenoten** met zijn avatar, of een rondje met een letter in zijn kleur. Je ziet of iemand op deze telefoon staat, via een kaartje kwam of met de hand is toegevoegd.
+De persoon staat in de lijst met een rondje met een letter in zijn kleur en “met de hand toegevoegd”. Profielen op deze telefoon staan bovenaan, met “op deze telefoon”.
 
 #### Goed om te weten
 
-Met **Bewerk** en **Verwijder** pas je een lid van een andere telefoon aan. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. De avatar van een lid op een andere telefoon reist mee met zijn kaartje en zijn voortgang, en wordt dan bijgewerkt. Een tik brengt je hier. Leden staan vooraan bij **Deel je nieuwe recepten**.
+Met **Bewerk** en **Verwijder** pas je iemand aan die niet op deze telefoon staat. In **Meer** staan je huisgenoten en vrienden onder **Huishouden & vrienden**, elk met het labeltje huisgenoot of vriend. De avatar van iemand op een andere telefoon reist mee met zijn voortgang. Huisgenoten staan vooraan bij **Deel je nieuwe recepten**.
 
 (`#/more/household`)
 
-### Sync mijn voortgang
+### Sturen naar één persoon
 
 #### Wat het doet
 
-Je stuurt je level, je badges, je avatar en je kookdagen van de laatste 90 dagen naar je huishouden of een vriend. Notities, sterren en foto's gaan niet mee.
+Bij elke persoon in je lijst staat **Stuur**. Daarmee stuur je je voortgang en je nieuwe recepten in één bericht naar die persoon.
 
 #### Waar je tikt
 
-1. Tik onderaan op **Meer**.
-2. Tik onder je profiel op **Huishouden & vrienden**.
-3. Tik onder **Mijn kaartje** op **Sync mijn voortgang**.
+1. Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.
+2. Tik onder de naam van de persoon op **Stuur**.
+3. Vink **Mijn voortgang** en **Nieuwe recepten** aan of uit.
 4. Tik op **Deel**.
-5. Kies WhatsApp en de persoon aan wie je het stuurt.
+5. Kies WhatsApp en die persoon.
 
 #### Wat je dan ziet
 
-Het bericht begint met “📈 Voortgang van”, je naam en je level, en eindigt met één link. Ook hier staan **Kopieer link** en **Toon QR**.
+Er opent een venster “Stuur naar” met de naam. Bij **Nieuwe recepten** staat hoeveel er nieuw zijn sinds de vorige keer. WhatsApp opent met één bericht: eerst je voortgang met de link, daaronder de recepten. Daarna staat er “Verstuurd.”.
 
 #### Goed om te weten
 
-Het is een momentopname: de ander ziet wat je nu deelt, niet wat je later kookt. Deel het dus af en toe opnieuw. Met **Badges** uit staat deze knop er niet.
+Te veel voor één bericht? Dan tik je na elkaar op “Deel deel 1 van 2” en “Deel deel 2 van 2”. Met **Kopieer** plak je alles zelf in WhatsApp. Staan **Badges** uit, dan heet het eerste vinkje **Wie ik ben**. Het is een momentopname: stuur het af en toe opnieuw.
 
 (`#/more/household`)
 
@@ -3084,22 +3084,22 @@ Het is een momentopname: de ander ziet wat je nu deelt, niet wat je later kookt.
 
 #### Wat het doet
 
-Een gedeelde voortgang laat je het level en de kookdagen van een ander zien. Je bewaart hem bij een lid of bij een vriend.
+Een gedeelde voortgang laat je het level en de kookdagen van een ander zien. Je voegt die persoon toe als huisgenoot of als vriend.
 
 #### Waar je tikt
 
 1. Tik onderaan op **Meer**.
 2. Tik op **In & uit**.
 3. Tik op **Plak van klembord**.
-4. Tik op de knop onder de kaart, bijvoorbeeld **Bewaar als vriend**.
+4. Tik op **Voeg toe als huisgenoot** of **Voeg toe als vriend**.
 
 #### Wat je dan ziet
 
-Je ziet een kaart “Voortgang van” met de naam, het level, de badges en de kookdagen van de laatste 30 dagen. Is het een lid, dan heet de knop “Werk … bij”. Daaronder staat wat er wordt bijgewerkt: level, streak, badges, kookdagen en avatar.
+Je ziet de naam met “Voortgang van”, het level, de badges en de kookdagen van de laatste 30 dagen. Staat de persoon al in je lijst, dan heet de knop “Werk … bij”. Na de tik staat er bijvoorbeeld “… staat nu bij je vrienden.”.
 
 #### Goed om te weten
 
-Daarna staat het level onder de naam bij **Huishouden & vrienden**, met de datum van bijwerken. Een vriend staat onder **Vrienden** en is geen lid. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.
+Daarna staat het level onder de naam bij **Huishouden & vrienden**, met de datum van bijwerken. Stuurde iemand alleen wie hij is, dan zie je “wie … is” zonder level. In de **Kookkalender** zie je anderen zoals ze het laatst deelden.
 
 (`#/inbox`)
 
@@ -3112,13 +3112,13 @@ Deelde iemand zijn voortgang met jou, dan bewaart je telefoon die. Is zijn telef
 #### Waar je tikt
 
 1. Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.
-2. Zoek de persoon onder Huisgenoten of Vrienden.
+2. Zoek de persoon in de lijst onder **Mensen**.
 3. Tik op **Stuur terug**.
 4. Tik op **Deel** en kies WhatsApp.
 
 #### Wat je dan ziet
 
-WhatsApp opent met een zin over het level van die persoon en één link, net als bij Sync mijn voortgang.
+WhatsApp opent met een zin over het level van die persoon en één link, net als bij **Stuur mijn voortgang**.
 
 #### Goed om te weten
 
@@ -3726,7 +3726,7 @@ Het totaal staat nergens, zodat er altijd iets te ontdekken blijft. Ook bij **Sa
 
 #### Wat het doet
 
-Bovenaan bij de badges staat een tab per lid van je huishouden en een tab **Samen**. Sommige badges haal je alleen samen.
+Bovenaan bij de badges staat een tab per huisgenoot en een tab **Samen**. Sommige badges haal je alleen samen.
 
 #### Waar je tikt
 
@@ -3793,7 +3793,7 @@ Levert de badge iets op voor je avatar, dan staat dat op een tweede regel. De me
 
 #### Wat het doet
 
-**Mijn profiel** toont je avatar groot, met je naam, je level en de XP-balk. Daaronder staan tegels naar je stijl, je badges, je kaartje en je voortgang.
+**Mijn profiel** toont je avatar groot, met je naam, je level en de XP-balk. Daaronder staan tegels naar je stijl, je badges en je voortgang.
 
 #### Waar je tikt
 
@@ -3802,7 +3802,7 @@ Levert de badge iets op voor je avatar, dan staat dat op een tweede regel. De me
 
 #### Wat je dan ziet
 
-Je ziet je avatar groot, met rechtsonder een potlood, en je naam, je level en de balk. Daaronder staan de tegels **Jouw stijl**, **Badges**, **Deel mijn kaartje**, **Sync mijn voortgang** en **Naam & kleur**.
+Je ziet je avatar groot, met rechtsonder een potlood, en je naam, je level en de balk. Daaronder staan de tegels **Jouw stijl**, **Badges**, **Stuur mijn voortgang** en **Naam & kleur**.
 
 #### Goed om te weten
 
@@ -3814,7 +3814,7 @@ Tik op het potlood voor **Naam & kleur**. Tik op je grote avatar, dan knipoogt h
 
 #### Wat het doet
 
-Vanaf level 3, na je eerste kookbeurt, maak je je eigen avatar. Die staat daarna op Home, in Meer en op je kaartje.
+Vanaf level 3, na je eerste kookbeurt, maak je je eigen avatar. Die staat daarna op Home, in Meer en in de voortgang die je stuurt.
 
 #### Waar je tikt
 
