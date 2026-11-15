@@ -1,6 +1,6 @@
 # Spec V1c — Testronde-feedback na V1–V9 (Stijn, vanaf 9 nov 2026)
 
-Status: punt 1 compleet (9 nov), punten 3, 7 en 8 direct gebouwd (10–15 nov), punt 9 compleet (15 nov); V1c-2 ontworpen en akkoord; de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
+Status: punt 1 compleet (9 nov), punten 3, 7 en 8 direct gebouwd (10–15 nov), punt 9 compleet (15 nov); V1c-2 in aanbouw (15 nov, "bouw maar"); de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
 krijgt hieronder een eigen blok (V1c-1, V1c-2, …) met Kritische lezer, Feitencheck, §1 Gedrag, §2 en §3, en gaat door de lichte workflow.
 
 ## Verzamellijst
@@ -144,7 +144,7 @@ geciteerd in de Feitencheck van 9 nov). DEVICE-TEST: rij 119 is de laatste; dit 
 
 ---
 
-## Ontwerp V1c-2 — Mensen en sturen: huisgenoten en vrienden met een wisselbare rol, één plakvak, één stuurpaneel (wacht op "bouw maar")
+## Ontwerp V1c-2 — Mensen en sturen: huisgenoten en vrienden met een wisselbare rol, één plakvak, één stuurpaneel (Stijn 15 nov: "bouw maar" → spec hieronder)
 
 Status: ontwerp akkoord (Stijn 9 nov), nog niet gebouwd; wordt een gewone spec (Kritische lezer, Feitencheck, §1–§3) zodra Stijn het zegt.
 Vervangt een deel van V1c-1 (de teksten blijven de basis; het blok Vrienden en het typ-kaartje gaan op in de nieuwe knoppen).
@@ -358,3 +358,251 @@ src/i18n/xp.ts, household.* in src/i18n/settings.ts. Handboek 05: `delen-en-ontv
 
 Bouwer B bouwt tegen de handtekeningen van 1a (`cardOfSnapshot`, `restoreProgress`); ontbreken ze nog, dan een minimale stub en melden; de
 integrator houdt A's versie.
+
+---
+
+## Blok V1c-2 — Mensen en sturen (spec)
+
+Status: in aanbouw (Fable, 15 nov 2026). Vier bouwers + integrator (lichte modus). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
+docs/specs/handbook.md §4, CLAUDE.md invariant 4 (de tokens `#f=` en `#x=` en hun codecs veranderen NIET; alleen de zinnen eromheen en de UI),
+5 (iPhone: plakken blijft de weg), 9 (`navigator.share` met precies één veld), 14 (geen backend). Het ontwerp hierboven is de bedoeling; dit
+blok is de uitwerking. Bron: Stijn 9 en 15 nov ("ik wil Voeg vriend toe én Voeg huisgenoot toe, één plakveld, Stuur voortgang / Stuur recepten
+met één deelknop, elke vriend Maak huisgenoot en andersom, het woord kaartje is onduidelijk"; 15 nov: "waarom is kaartje en voortgang nou weer
+iets anders 😞").
+Gebouwd: 15 nov 2026 (V1c-2, lichte workflow; run-id in STATUS)
+
+**Kritische lezer (Fable, vooraf).** (1) Twee tokens blijven bestaan omdat badges uit kunnen staan: `#x=` (voortgang: wie je bent + level,
+badges, kookdagen) en `#f=` (alleen wie je bent). De gebruiker ziet één ding, **Mijn voortgang** (badges aan) of **Wie ik ben** (badges uit);
+de ontvanger ziet "voortgang van Gabi" of "wie Gabi is" en kiest de rol. Niets reist anders dan nu. (2) Een vriend wordt een `Member` met
+`role: 'friend'`; de oude vrienden-snapshots (`friend: true` zonder lid) migreren één keer bij boot naar zo'n lid. De vlag `friend` op de
+snapshot blijft staan (oude back-ups) maar niemand leest hem meer. (3) Wie leest huisgenoten alleen: de Samen-badges (`householdMembers`),
+de Badges-tabbladen, Het verhaal; wie leest iedereen: kookkalender, afzenders in In & uit, ontvangers van Stuur en van Deel je nieuwe recepten,
+fotonamen op een recept, Meer (met labeltje). Lijstjes en porties kennen geen leden (het huishoudenaantal is een getal) — ongewijzigd.
+(4) De rol wisselt met één tik en zonder bevestiging; de snapshot en de kookdagen blijven aan de persoon hangen (id verandert niet).
+(5) Eén plakvak op Huishouden & vrienden, in het toevoeg-paneel; In & uit houdt zijn eigen vak. (6) Het Stuur-venster bouwt zijn delen uit
+bestaande bouwstenen: de voortgangszin (`ProgressSharePanel.buildProgressMessage`), de wie-ik-ben-zin (`MemberCardPanel`), en de deltadelen
+(`DeltaShareScreen`, V2: tot 20 KB per bericht, meerdere delen, bestand alleen als één envelop niet past). Die logica verhuist naar
+`src/sendto.ts` zodat venster én scherm dezelfde code gebruiken; het scherm `/share` blijft bestaan onder Recepten & delen. (7) Het woord
+"kaartje" (en "lid"/"leden") verdwijnt uit UI, deelzinnen, landing, handboek en DEVICE-TEST; de tokens, ids en bestandsnamen niet.
+(8) Stuur terug (V1c-9) blijft een eigen knop op de rij van wie een bewaarde voortgang heeft; Herstel mijn voortgang blijft op een eigen
+ontvangen voortgang. (9) V1c-1's blok Vrienden, typ-kaartje en plakkaart gaan op in het nieuwe scherm; de teksten van V1c-1 die blijven
+(titel, huisgenoten) blijven. (10) Validator: elke `**naam**` in het handboek moet letterlijk in src/i18n staan — bouwer D levert i18n én
+handboek en draait `npm run validate:data`.
+
+**Feitencheck (Fable, in de code).** `src/domain/household.ts`: `Member { id, name, color, lang?, local, deviceId?, avatar? }`, `HouseholdSetting
+{ name, members }` (alleen niet-lokale leden), `membersFrom(profiles, setting)` (profielen eerst), `memberFromProfile`, `memberFromCard(card)`,
+`matchMemberForCard` (id, anders naam), `upsertMemberFromCard` (het id van het kaartje wint), `putMember`, `removeMember`, `cardFromMember`,
+`MemberCard` type. `src/domain/progress.ts`: `ProgressSnapshot`, `cardOfSnapshot`, `snapshotForMember`/`bestSnapshotForMember`/`snapshotsForMember`
+(V1c-9b). `src/db/repo.ts`: `getHousehold/setHousehold`, `getProgressSnapshots/putProgressSnapshot/removeProgressSnapshot`, `getLastSentTo/markSentTo`
+(`share.lastSentTo` per naam), `ensureDeviceId`, `logShareEvent`. `src/screens/HouseholdScreen.tsx` (±900 r.): `applyMemberCard`, `applyProgressCard`,
+`cardStatus`, `MemberCardRow`, `ProgressCardRow` (met V1c-9 restore), `FoundCards`/`scanCards` (de plakscan), `MemberForm`, de kaarten Naam, Mijn
+kaartje (`MemberCardPanel` + `ProgressShareToggle`), Huisgenoten (rijen met Stuur terug/Bewerk/Verwijder), Vrienden (V1c-1 + 9b orphans), Plak een
+kaartje of voortgang (`UniversalPaste` + kaartrijen), Typ een huisgenoot. `src/screens/InboxScreen.tsx`: rendert `MemberCardRow`/`ProgressCardRow`
+(r. 838–850) met `addCard`/`saveProgress`/`restore`; `householdMembers` + `friendMembers()` uit snapshots voor afzenders. `src/screens/ProfileScreen.tsx`:
+tegels 📇 Deel mijn kaartje (`MemberCardPanel`), 📈 Sync mijn voortgang (`ProgressSharePanel`), ✏️ Bewerk. `src/screens/ProfilesScreen.tsx`:
+`MemberCardPanel` (bouwt `#f=` via `cardFromMember(p, deviceId)` + `buildMemberEnvelope` + `buildMemberShareMessage`). `src/components/ProgressSharePanel.tsx`:
+`buildProgressMessage(p)`, `ProgressSharePanel`, `ProgressShareToggle`, `ProgressReturnPanel` (V1c-9). `src/screens/DeltaShareScreen.tsx`: partner
+(leden eerst, dan eerder-naar-gestuurd, dan vrije naam), `DeltaSince` via repo, `planMessages` (V2), `logDeltaShared`, `markSentTo`. Lezers van
+`membersFrom`: src/badges.ts r. 189 (`householdMembers`), BadgesScreen r. 560/564 (tabbladen), CalendarScreen r. 168–180 (leden + vrienden uit
+snapshots), DeltaShareScreen r. 167, InboxScreen r. 418, MoreScreen r. 521–526 (huisgenoten + vrienden uit snapshots, labeltjes `more.friend`),
+RecipeScreen r. 318 (fotonamen), StoryScreen r. 45. `src/domain/share.ts`: `buildMemberShareMessage` r. 919 ("👋 Kaartje van …"),
+`buildProgressShareMessage` r. 936. `src/landing.ts` r. 74–75 en 140–141 (previewMember, memberOf). `src/paste.ts` `membersLabel` (paste.card/cards).
+i18n met "kaartje"/"card"/"lid": settings.ts (`household.*`: fromCard, myCard, myCardHint, shareCard, copyCard, cardShared, cardCopied,
+cardBuildFailed, cardIosHint, cardQrAlt, addViaLink, addViaLinkHint, noCard, cardFrom, addCard, updateCard, cardKnown, cardLocal, cardAdded,
+cardUpdated, cardFailed, intro, r. 235; `profile.shareCard`), edit.ts (`paste.card/cards/cardsOne`, `paste.hint` r. 200, `inbox.hint` r. 365,
+`inbox.ev.member`, `inbox.noToken`), xp.ts (`progress.saveFriend`, commentaar r. 93). Handboek met "kaartje"/"lid": 05 (wat-kun-je-delen,
+ontvangen-iphone, link-iphone, in-en-uit, kaartje-delen, lid-toevoegen, vriend-toevoegen, huishouden, voortgang-delen, voortgang-ontvangen,
+voortgang-terugsturen, voortgang-herstellen), 01 browsermelding, 02 tip-van-de-maker, 04 lijst-ontvangen, 07 samen/mijn-profiel/avatar-maken/
+avatar-zeldzaam. DEVICE-TEST met "kaartje": rijen 52, 58, 62, 71, 88, 95, 97, 105, 106, 108, 109, 116, 120 (en 123 noemt Stuur terug); laatste rij
+123, dit blok krijgt rij 124. Tests: tests/household.test.ts, tests/progress.test.ts, share-tests die `buildMemberShareMessage` controleren.
+
+### 1. Gedrag
+
+#### 1a. Model, migratie en lezers (bouwer A: `src/domain/household.ts`, `src/people.ts` [nieuw], `src/db/repo.ts`, `src/app.tsx` (één regel),
+`src/badges.ts`, `src/screens/BadgesScreen.tsx`, `src/screens/CalendarScreen.tsx`, `src/screens/MoreScreen.tsx`, `src/screens/StoryScreen.tsx`,
+`src/screens/DeltaShareScreen.tsx` (alleen de partnerlijst), `src/screens/RecipeScreen.tsx` (niets, tenzij het type het vraagt), `tests/household.test.ts`)
+
+- `export type MemberRole = 'housemate' | 'friend'`; `Member.role?: MemberRole` (afwezig = huisgenoot; `normalizeHousehold` laat alleen de
+  twee waarden door). `export function roleOf(m: Pick<Member,'local'|'role'>): MemberRole` (lokaal = altijd huisgenoot);
+  `housematesOf(members)`, `friendsOf(members)`. `membersFrom` blijft iedereen teruggeven (huisgenoten eerst, dan vrienden, binnen een groep
+  de bestaande volgorde). `upsertMemberFromCard(h, card, role?)`: een nieuw lid krijgt `role` (default huisgenoot); een bestaand lid HOUDT zijn
+  rol (een kaart wijzigt nooit een rol). `setRole(h, id, role)` (puur). Tests: roleOf, de volgorde, rol blijft bij een update, setRole.
+- `export function friendMembersFromSnapshots(snapshots, members): Member[]` (puur, in household.ts of progress.ts): voor elke snapshot met
+  `friend === true` die bij geen enkel lid past (`matchMemberForCard`) een lid uit de kaartvelden (`memberFromCard`-regels: id, name, color, lang,
+  deviceId?, avatar?) met `role: 'friend'`, `local: false`. Test.
+- `src/people.ts` [nieuw] (app-laag, Dexie via repo):
+  - `migrateFriendSnapshots()`: eenmalig (setting `household.rolesMigrated` = 1): de leden uit `friendMembersFromSnapshots` toevoegen aan de
+    setting; daarna de vlag. Aangeroepen in `src/app.tsx` direct na `loadProfiles()` (één regel, bouwer A).
+  - `applyPersonCard(card: MemberCard | ProgressCard, role: MemberRole): Promise<{ outcome: 'added' | 'updated' | 'local'; setting }>`:
+    `cardStatus` (verhuist uit HouseholdScreen naar hier) 'local' → niets; 'known' → `upsertMemberFromCard` (rol blijft); 'new' → toevoegen met
+    `role`; is het een voortgang (`'xp' in card`) → `putProgressSnapshot({ ...card, receivedAt: nu, friend: role === 'friend' && outcome === 'added' })`
+    — voor een bekend lid `friend: roleOf(lid) === 'friend'`; één 'in'-logrij (kind 'member' of 'progress'). Vervangt `applyMemberCard` en
+    `applyProgressCard`; bouwer B roept deze aan.
+  - `setMemberRole(id: string, role: MemberRole): Promise<HouseholdSetting>` (lokale profielen nooit).
+- Lezers: `src/badges.ts` r. 189 `householdMembers` = `housematesOf(...).length`; BadgesScreen r. 560/564 tabbladen = huisgenoten; StoryScreen =
+  huisgenoten; MoreScreen: `housemates` = huisgenoten behalve de actieve, `friends` = vrienden (als `Member`, labeltje `more.friend`), snapshot per
+  persoon via `snapshotForMember`; de losse vrienden-uit-snapshots-code verdwijnt (`FriendMenuRow` krijgt een `Member` + snapshot). CalendarScreen:
+  `people` = alle leden (huisgenoten én vrienden) met `snapshotForMember` (de losse snapshot-lus met `s.friend` vervalt); DeltaShareScreen partnerlijst
+  = alle leden (vrienden ook); InboxScreen: `householdMembers` = alle leden, `friendMembers()` vervalt (bouwer B doet die regel, omdat B het bestand
+  bezit — A meldt het); RecipeScreen ongewijzigd.
+
+#### 1b. Huishouden & vrienden en de ontvangen kaarten (bouwer B: `src/screens/HouseholdScreen.tsx`, `src/components/PersonCardRow.tsx` [nieuw],
+`src/screens/InboxScreen.tsx`, `src/styles/settings.css`)
+
+- Scherm, van boven naar beneden: Header **Huishouden & vrienden**; intro `household.intro` (door D ingekort); kaart Naam van het huishouden
+  (ongewijzigd); kaart **Mensen** (`people.title`): bovenaan een knoppenrij **Voeg huisgenoot toe** · **Voeg vriend toe** · **Stuur mijn voortgang**
+  (badges uit: **Stuur wie ik ben**); daaronder de lijst: profielen op deze telefoon (sub `household.local`), dan de andere huisgenoten (labeltje
+  **huisgenoot** zoals op Meer), dan de vrienden (labeltje **vriend**). Per rij: avatar, naam, levelregel (`MemberLevelLine` met `snapshotForMember`),
+  sub (`people.viaApp` bij deviceId, anders `household.byHand`); acties (op een eigen regel onder de rij, mogen omlopen): **Stuur** (opent het
+  Stuur-venster van bouwer C met deze persoon), **Maak vriend** / **Maak huisgenoot** (`setMemberRole`, één tik), **Stuur terug** (alleen met
+  `bestSnapshotForMember`, V1c-9: opent `ProgressReturnPanel` onder de rij), **Bewerk** (zoals nu: niet-lokaal), **Verwijder**. Lokale profielen:
+  geen acties (zoals nu). De kaarten Mijn kaartje, Vrienden, Plak een kaartje of voortgang en Typ een huisgenoot verdwijnen; `MemberCardPanel`
+  en `ProgressShareToggle` worden hier niet meer gebruikt.
+- **Toevoeg-paneel** (één tegelijk, inline onder de knoppenrij, met een Sluit-knop): bovenaan `Segmented` **Huisgenoot | Vriend** (vooraf gezet
+  door de knop die het paneel opende); dan `people.pasteHint` + het ENE plakvak (`UniversalPaste`, `defaultAction="member"`, zoals de huidige
+  plakkaart, inclusief de doorgeefknoppen naar In & uit/editor voor andere plaksels); gevonden personen als `PersonCardRow` met knop
+  **Voeg {name} toe als {rol}** (de rol van de Segmented; `people.addAs`) of **Werk {name} bij**; dan een regel "of" (`people.or`) en **Typ een naam**
+  (`people.typeName`, de `MemberForm`: naam + kleur, opslaan = `people.addAs` zonder naam-variant: knop **Voeg toe**, `household.addSubmit`) die
+  het lid met de gekozen rol toevoegt. De V1c-1-aanwijzing (blauwe regel) vervalt: het paneel zegt het zelf.
+- `src/components/PersonCardRow.tsx` [nieuw] vervangt `MemberCardRow` én `ProgressCardRow` (beide weg uit HouseholdScreen; InboxScreen gebruikt
+  de nieuwe): props `{ card: MemberCard | ProgressCard; sentAt?; members; role?: MemberRole; done?: 'added' | 'updated' | 'local' | 'restored';
+  restored?: RestoredInfo; busy?; onAdd: (card, role) => void; onRestore?: (card, profileId) => void }`. Kop: avatar + **{name}** + subregel:
+  wie-ik-ben → `people.cardIdentity` ("wie {name} is"); voortgang → `progress.from`-stijl regel met level · streak/badges · kookdagen · datum (zoals
+  nu in ProgressCardRow). Knoppen: status 'new' → met `role` gegeven (toevoeg-paneel): één knop **Voeg {name} toe als {rol}**; zonder `role` (In &
+  uit): twee knoppen **Voeg toe als huisgenoot** (primair) en **Voeg toe als vriend**; status 'known' → **Werk {name} bij**; status 'local' → de
+  V1c-9-logica (Herstel mijn voortgang / `progress.local` / badges-uit-regel) voor een voortgang, en `people.cardLocal` voor wie-ik-ben. Uitkomsten:
+  `people.addedHousemate` / `people.addedFriend` / `progress.updated` / V1c-9 `progress.restored`; na added/updated de knop `household.toHousehold`
+  zoals nu.
+- InboxScreen: `MemberCardRow`/`ProgressCardRow` → `PersonCardRow`; `addCard`/`saveProgress` → één `addPerson(card, role)` via `applyPersonCard`;
+  `restore` blijft; `householdMembers` = alle leden, `friendMembers()` weg (zie 1a).
+- CSS (settings.css): `.people-actions` (knoppenrij bovenaan, omlopend, 8 px gap), `.member-row.many .actions` (acties op een eigen regel,
+  omlopend, rechts uitgelijnd — generaliseer de V1c-9 `has-return`-regel), `.add-panel` (kaart-in-kaart, 12 px padding, `.or`-regel gecentreerd
+  muted). Alles werkt op 360 px.
+
+#### 1c. Sturen (bouwer C: `src/sendto.ts` [nieuw], `src/components/SendSheet.tsx` [nieuw], `src/components/ProgressSharePanel.tsx`,
+`src/screens/DeltaShareScreen.tsx` (alles behalve de partnerlijst), `src/screens/ProfileScreen.tsx`, `src/screens/ProfilesScreen.tsx`, `tests/sendto.test.ts`)
+
+- `src/sendto.ts`:
+  - `buildProgressMessage(p: Profile)` verhuist hierheen (geëxporteerd; ProgressSharePanel importeert het); nieuw `buildIdentityMessage(p: Profile)`
+    (uit `MemberCardPanel`: `cardFromMember(p, deviceId)` → `buildMemberEnvelope` → token → url → `buildMemberShareMessage`).
+  - `planDeltaFor(name: string): Promise<{ delta: DeltaSince; plan: MessagePlan | null; lastSent: string | null; count: number }>` — de
+    deltaberekening en `planMessages`-aanroep uit DeltaShareScreen, één op één verhuisd; DeltaShareScreen gebruikt deze functie.
+  - `export function joinParts(first: string, deltaPlan: MessagePlan | null, limit = RECIPE_LINK_MESSAGE_LIMIT): string[]` (puur, test): deel 1 =
+    `first`; past `deltaPlan.parts[0]` met een lege regel ertussen binnen `limit`, dan plakt hij achter deel 1 en volgen de overige delen; anders
+    volgen alle deltadelen als eigen delen. Een `{ file }`-plan (te groot) → de delen tot het bestand + de bestandsweg zoals DeltaShareScreen
+    die nu afhandelt (het venster toont dan dezelfde knop Kies bestand/Stuur ook de uitleg; mag naar het scherm `/share` doorverwijzen met
+    `send.tooBig` "Te veel nieuwe recepten voor berichten; ga naar Deel je nieuwe recepten." — besluit Fable: doorverwijzen, geen dubbele bestandscode).
+  - `export async function logSent(i: { profile: Profile; recipient: string | null; progress: boolean; identity: boolean; delta: DeltaSince | null })`:
+    'out'-rijen zoals ProgressSharePanel (kind 'progress'), MemberCardPanel (kind 'member') en `logDeltaShared` (recepten) nu doen; `markSentTo(name)`
+    alleen als er recepten meegingen; daarna `recheckActiveBadges()`.
+- `SendSheet.tsx` (`SheetPortal`, opbouw als `CookedSheet`): props `{ profile: Profile; recipient: Member | null; onClose }`. Titel `send.title`
+  ("Stuur naar {name}") of `send.titleMine`. Twee vinkjes: **Mijn voortgang** (`send.progress`, sub `send.progressSub`; badges uit: **Wie ik ben**,
+  `send.identity`/`send.identitySub`), standaard aan; **Nieuwe recepten** (`send.recipes`, sub `send.recipesSub` "{n} nieuw sinds {date}" /
+  `send.recipesAll` als nooit gestuurd / `send.recipesNone` + uitgeschakeld als 0), alleen mét ontvanger, standaard aan als n > 0. Onderaan **Deel**
+  (primair; bij meerdere delen na elke share `send.sharePart` "Deel deel {i} van {n}", zoals DeltaShareScreen/V2; `navigator.share({ text })` binnen de
+  tik, tekst vooraf gebouwd bij openen en bij elke vinkwijziging), **Kopieer** (alle delen achter elkaar met een lege regel), statusregel
+  (`send.copied`, `send.done`, `send.nothing`), de iPhone-regel `send.iosHint`. Na de laatste share: `logSent` en `send.done`; een geslaagde share
+  sluit het venster niet (Stijn wil zien dat het klaar is), Sluit doet dat.
+- ProfileScreen: de tegels 📇 Deel mijn kaartje en 📈 Sync mijn voortgang worden één tegel 📤 **Stuur mijn voortgang** (badges uit: **Stuur wie ik
+  ben**) die `SendSheet` opent zonder ontvanger. ProfilesScreen: `MemberCardPanel` verdwijnt; per profielkaart een knop met dezelfde tekst die
+  `SendSheet` voor dát profiel opent. `ProgressSharePanel`/`ProgressShareToggle` verdwijnen als componenten (`ProgressReturnPanel` blijft).
+- DeltaShareScreen: blijft het scherm "Deel je nieuwe recepten" (route `/share`), gebruikt `planDeltaFor` en `logSent`; de partnerlijst = alle
+  leden (A). Tests: `joinParts` (past wel/niet in deel 1; meerdere delen; leeg plan).
+
+#### 1d. Woorden, deelzinnen, landing, handboek, testrijen (bouwer D: `src/i18n/settings.ts`, `src/i18n/edit.ts`, `src/i18n/xp.ts`, `src/domain/share.ts`
+(alleen de twee zinnen), `src/landing.ts` (alleen teksten), `src/paste.ts` (alleen `membersLabel`), `data/handbook/*.json`, `docs/HANDLEIDING.md` +
+`docs/HANDBOOK.md`, `docs/DEVICE-TEST.md`, de share-tests die de zinnen controleren)
+
+- Nieuwe keys (NL · EN, letterlijk): `people.title` "Mensen" · "People"; `people.addHousemate` "Voeg huisgenoot toe" · "Add housemate";
+  `people.addFriend` "Voeg vriend toe" · "Add friend"; `people.sendMine` "Stuur mijn voortgang" · "Send my progress"; `people.sendMineIdentity`
+  "Stuur wie ik ben" · "Send who I am"; `people.housemate` "Huisgenoot" · "Housemate"; `people.friend` "Vriend" · "Friend"; `people.roleHousemate`
+  "huisgenoot" · "housemate"; `people.roleFriend` "vriend" · "friend"; `people.makeFriend` "Maak vriend" · "Make friend"; `people.makeHousemate` "Maak
+  huisgenoot" · "Make housemate"; `people.send` "Stuur" · "Send"; `people.pasteHint` "Plak hier het bericht dat de ander je stuurde: zijn voortgang,
+  of wie hij is. Iets anders geplakt? De app zegt wat het is en waar het heen kan." · "Paste the message the other person sent you here: their
+  progress, or who they are. Pasted something else? The app says what it is and where it can go."; `people.or` "of" · "or"; `people.typeName` "Typ een
+  naam (voor iemand zonder de app)" · "Type a name (for someone without the app)"; `people.addAs` "Voeg {name} toe als {role}" · "Add {name} as {role}";
+  `people.addAsHousemate` "Voeg toe als huisgenoot" · "Add as housemate"; `people.addAsFriend` "Voeg toe als vriend" · "Add as friend"; `people.update`
+  "Werk {name} bij" · "Update {name}"; `people.addedHousemate` "{name} staat nu bij je huisgenoten." · "{name} is now one of your housemates.";
+  `people.addedFriend` "{name} staat nu bij je vrienden." · "{name} is now one of your friends."; `people.cardIdentity` "wie {name} is" · "who {name}
+  is"; `people.cardLocal` "Dat ben jij zelf (een profiel op deze telefoon)." · "That is you (a profile on this phone)."; `people.viaApp` "via de app"
+  · "via the app"; `people.close` "Sluit" · "Close" (of hergebruik `common.close` als die bestaat — dan geen nieuwe key).
+  `send.title` "Stuur naar {name}" · "Send to {name}"; `send.titleMine` "Stuur mijn voortgang" · "Send my progress"; `send.progress` "Mijn voortgang"
+  · "My progress"; `send.progressSub` "wie ik ben, mijn level, badges en kookdagen" · "who I am, my level, badges and cooking days"; `send.identity`
+  "Wie ik ben" · "Who I am"; `send.identitySub` "naam, kleur, taal en avatar" · "name, colour, language and avatar"; `send.recipes` "Nieuwe recepten"
+  · "New recipes"; `send.recipesSub` "{n} nieuw sinds {date}" · "{n} new since {date}"; `send.recipesAll` "alles wat je zelf maakte ({n})" ·
+  "everything you made yourself ({n})"; `send.recipesNone` "niets nieuws sinds {date}" · "nothing new since {date}"; `send.share` "Deel" · "Share";
+  `send.sharePart` "Deel deel {i} van {n}" · "Share part {i} of {n}"; `send.copy` "Kopieer" · "Copy"; `send.copied` "Gekopieerd — plak het in WhatsApp."
+  · "Copied — paste it into WhatsApp."; `send.done` "Verstuurd." · "Sent."; `send.nothing` "Vink iets aan om te sturen." · "Tick something to send.";
+  `send.tooBig` "Te veel nieuwe recepten voor berichten; ga naar Deel je nieuwe recepten." · "Too many new recipes for messages; go to Share your new
+  recipes."; `send.iosHint` "Android: de ander tikt op de link. iPhone: de link opent de app niet — de ander kopieert het bericht en plakt het in de
+  app (Huishouden & vrienden → Voeg huisgenoot toe of Voeg vriend toe, of In & uit)." · "Android: the other person taps the link. iPhone: the link
+  does not open the app — they copy the message and paste it into the app (Household & friends → Add housemate or Add friend, or In & out).";
+  `profile.send` "Stuur mijn voortgang" · "Send my progress"; `profile.sendIdentity` "Stuur wie ik ben" · "Send who I am".
+- Gewijzigde keys: `household.intro` → "Eén huishouden per telefoon: de mensen met wie je kookt en boodschappen doet. Een vriend staat los van je
+  huishouden: je ziet alleen zijn level en kookdagen. Iemand toevoegen kan met zijn bericht (voortgang of wie hij is) of door een naam te typen." ·
+  EN gelijkwaardig; `household.fromCard` → "via de app" · "via the app"; `inbox.noToken` → "Geen recept of persoon gevonden in deze tekst." · "No recipe
+  or person found in this text."; `inbox.ev.member` → "Wie je bent" · "Who you are"; `paste.card` → "wie {name} is" · "who {name} is"; `paste.cards` →
+  "{n} personen" · "{n} people"; `paste.cardsOne` → "1 persoon" · "1 person"; `paste.hint` (r. 200) en `inbox.hint` (r. 365): "een kaartje" → "wie iemand
+  is of zijn voortgang" · EN; settings.ts r. 235: zonder "lid"/"kaartje" ("Huisgenoten staan vooraan. Iemand op een andere telefoon voeg je toe met
+  zijn bericht, of je typt een naam."); `progress.updated` blijft.
+- Verwijderde keys (en hun gebruik, dat door A/B/C al weg is): `household.myCard`, `myCardHint`, `shareCard`, `copyCard`, `cardShared`, `cardCopied`,
+  `cardBuildFailed`, `cardIosHint` (→ `send.iosHint`), `cardQrAlt`, `addViaLink`, `addViaLinkHint`, `noCard`, `cardFrom`, `addCard`, `updateCard`,
+  `cardKnown`, `cardLocal`, `cardAdded`, `cardUpdated`, `cardFailed` (→ `common.error`), `friendsEmpty`, `addFriend`, `friendHint`, `addHint`, `add`;
+  `profile.shareCard`, `profile.sync`; `progress.saveFriend`, `progress.share` (de knoptekst "Sync mijn voortgang"; `progress.intro`/`honest`/
+  `copied`/`shared` blijven als het venster ze gebruikt, anders ook weg — D stemt af met wat C gebruikt: C noemt in zijn rapport welke keys hij
+  gebruikt). Laat `household.addSubmit` ("Voeg toe"), `household.byHand`, `household.local`, `household.edit`, `household.remove`, `household.toHousehold`,
+  `household.saved`, `household.title`, `household.members`/`memberCount`/`memberOne` staan.
+- Deelzinnen (`src/domain/share.ts`): `buildMemberShareMessage` → NL "👋 Dit is {name} voor Rutgers' Recepten — open de link in de app of plak hem
+  bij In & uit om {name} toe te voegen als huisgenoot of vriend." · EN "👋 This is {name} for Rutgers' Recipes — open the link in the app or paste it
+  into In & out to add {name} as a housemate or friend."; `buildProgressShareMessage`: de zin eindigt op "… om {name} toe te voegen of bij te werken."
+  (controleer de huidige zin en pas alleen "huishouden"/"lid" aan). Tests mee.
+- `src/landing.ts`: previewMember "Voorproefje: wie iemand is" · "Preview: who someone is"; memberOf "Dit is {name}" · "This is {name}"; "ledenkaartje"
+  nergens meer; de hand-off-kaart zegt "Huishouden & vrienden → Voeg huisgenoot toe of Voeg vriend toe → Plak" waar nu de plakrij staat.
+- Handboek: herschrijf in 05 `kaartje-delen` → titel "Je voortgang sturen" · "Send your progress" (Stuur mijn voortgang; wat erin zit; badges uit =
+  wie ik ben), `lid-toevoegen` → "Iemand toevoegen die de app heeft" · "Add someone who has the app" (Voeg huisgenoot toe / Voeg vriend toe → Plak van
+  klembord → Voeg … toe als …), `vriend-toevoegen` → "Huisgenoot of vriend, en wisselen" · "Housemate or friend, and switching" (het verschil,
+  Maak vriend / Maak huisgenoot), `huishouden` → "Iemand zonder de app toevoegen" · "Add someone without the app" (Typ een naam), `voortgang-delen`
+  → "Sturen naar één persoon" · "Send to one person" (Stuur op de rij: vinkjes Mijn voortgang en Nieuwe recepten, één Deel), `voortgang-ontvangen`
+  (knoppen Voeg toe als huisgenoot / Voeg toe als vriend / Werk … bij), `voortgang-terugsturen`/`voortgang-herstellen` (Stuur terug blijft; tekst
+  zonder kaartje), `wat-kun-je-delen`, `in-en-uit`, `ontvangen-iphone`, `link-iphone`; en de losse vermeldingen in 01 browsermelding, 02
+  tip-van-de-maker, 04 lijst-ontvangen, 07 samen/mijn-profiel/avatar-maken/avatar-zeldzaam ("kaartje" → "wie je bent"/"je voortgang"; "lid"/"leden"
+  → "huisgenoot"/"huisgenoten"). Ids blijven. `npm run validate:data` (elke **naam** letterlijk in i18n) en `node --experimental-strip-types
+  tools/handbook-md.ts`.
+- DEVICE-TEST: in de rijen 52, 58, 62, 71, 88, 95, 97, 105, 106, 108, 109, 116, 120 en 123 de oude knoppen en woorden vervangen door de nieuwe
+  (Deel mijn kaartje → Stuur mijn voortgang; Voeg lid toe via link of plak / Plak een kaartje of voortgang → Voeg huisgenoot toe → plakvak; Voeg …
+  toe aan je huishouden → Voeg … toe als huisgenoot; Bewaar als vriend → Voeg toe als vriend; kaartje → wie je bent / voortgang; leden →
+  huisgenoten); noem in je rapport per rij wat je veranderde. Nieuwe rij 124 (NL én EN), twee telefoons: **Mensen en sturen (V1c-2).** 1. *A:* Meer →
+  Huishouden & vrienden; tik op **Voeg vriend toe**, kijk naar het paneel; tik op **Sluit**. 2. *A:* tik bij de huisgenoot op **Stuur**; laat beide
+  vinkjes aan en tik op **Deel**; stuur het via WhatsApp naar B. 3. *B:* kopieer het bericht, Meer → In & uit → **Plak van klembord**. 4. *B:* tik op
+  **Voeg toe als vriend** (als A nieuw is) of **Werk … bij**. 5. *B:* Huishouden & vrienden: tik bij A op **Maak huisgenoot** en daarna op **Maak vriend**.
+  6. *B:* tik op **Voeg huisgenoot toe**, kies **Typ een naam**, typ *Oma*, kleur, **Voeg toe**; verwijder Oma weer. 7. *A:* Mijn profiel → **Stuur mijn
+  voortgang** → **Deel**. 8. Zet beide apps op Engels en kijk naar het scherm. | 1. Een paneel met **Huisgenoot | Vriend** (Vriend gekozen), de uitleg
+  en het plakvak, daaronder "of" en **Typ een naam**. 2. Het venster "Stuur naar …" met **Mijn voortgang** (badges aan) en **Nieuwe recepten** met
+  het aantal; na Deel opent WhatsApp met één bericht: de voortgangszin met link en daaronder de recepten (of "Deel deel 2 van 2" bij veel recepten);
+  daarna "Verstuurd.". 3. In & uit toont "A · voortgang van A" (level, badges, kookdagen) en de recepten eronder in de voorvertoning; nergens het woord
+  kaartje. 4. "A staat nu bij je vrienden." of "A is bijgewerkt."; op Huishouden & vrienden staat A met labeltje vriend en levelregel. 5. Het labeltje
+  wisselt meteen; de levelregel blijft; de rij staat bij de huisgenoten resp. vrienden. 6. Oma staat bij de huisgenoten met "met de hand toegevoegd".
+  7. Het venster zonder recepten-vinkje; WhatsApp opent met de voortgangszin. 8. People, Add housemate, Add friend, Send my progress, Housemate |
+  Friend, Make friend, Send; nowhere "card".
+
+### 2. Opus mag dit NIET zelf beslissen
+- Tokens en codecs blijven; een vriend is een `Member` met `role`; een kaart wijzigt nooit een rol; de migratie is eenmalig en voegt alleen toe.
+- Wie huisgenoten leest en wie iedereen (1a); Samen-badges tellen huisgenoten.
+- Het Stuur-venster: twee vinkjes, één Deel, delen zoals V2; te groot → doorverwijzen naar het scherm; geen QR in het venster; het venster sluit
+  niet vanzelf.
+- Woorden: "kaartje", "lid", "leden" en "Sync mijn voortgang" verdwijnen uit alles wat de gebruiker ziet; de teksten letterlijk zoals in 1d.
+- Geen nieuwe dependency; `SheetPortal` voor het venster; alles werkt op 360 px.
+
+### 3. Bestandsverdeling
+| Bouwer | Bestanden |
+|---|---|
+| A | `src/domain/household.ts`, `src/domain/progress.ts` (alleen `friendMembersFromSnapshots` als die daar past), `src/people.ts`, `src/db/repo.ts`, `src/app.tsx` (één regel), `src/badges.ts`, `src/screens/BadgesScreen.tsx`, `src/screens/CalendarScreen.tsx`, `src/screens/MoreScreen.tsx`, `src/screens/StoryScreen.tsx`, `src/screens/DeltaShareScreen.tsx` (alleen de partnerlijst, r. 164–175), `tests/household.test.ts` |
+| B | `src/screens/HouseholdScreen.tsx`, `src/components/PersonCardRow.tsx`, `src/screens/InboxScreen.tsx`, `src/styles/settings.css` |
+| C | `src/sendto.ts`, `src/components/SendSheet.tsx`, `src/components/ProgressSharePanel.tsx`, `src/screens/DeltaShareScreen.tsx` (alles behalve de partnerlijst), `src/screens/ProfileScreen.tsx`, `src/screens/ProfilesScreen.tsx`, `src/styles/xp.css` of `settings.css`-regels voor het venster (alleen `.send-sheet*`), `tests/sendto.test.ts` |
+| D | `src/i18n/settings.ts`, `src/i18n/edit.ts`, `src/i18n/xp.ts`, `src/domain/share.ts` (twee zinnen), `src/landing.ts` (teksten), `src/paste.ts` (`membersLabel`), `data/handbook/*.json`, `docs/HANDLEIDING.md` + `docs/HANDBOOK.md`, `docs/DEVICE-TEST.md`, share-tests |
+| Integrator | samenvoegen (B en C bouwen tegen A's handtekeningen en D's keys; ontbrekende keys toevoegen volgens 1d; dode componenten/keys weghalen), check/test/build/validate groen, acceptatie in de dev-app (NL/EN: paneel, Stuur-venster met beide vinkjes en Deel, rolwissel, ontvangen voortgang met beide knoppen, Herstel blijft, Stuur terug blijft, Mijn profiel-tegel, 360 px), `docs/STATUS.md`, de regel "Gebouwd" in dit blok |
+
+Afspraken tussen bouwers: A exporteert `MemberRole`, `roleOf`, `housematesOf`, `friendsOf`, `setRole`, `friendMembersFromSnapshots` (domein) en
+`applyPersonCard`, `setMemberRole`, `migrateFriendSnapshots`, `cardStatus` (src/people.ts); C exporteert `SendSheet`, `buildProgressMessage`,
+`buildIdentityMessage`, `planDeltaFor`, `joinParts`, `logSent`; D levert de keys uit 1d. Een bouwer die iets mist, maakt een minimale stub met
+precies die handtekening en meldt het; de integrator houdt de echte versie.
