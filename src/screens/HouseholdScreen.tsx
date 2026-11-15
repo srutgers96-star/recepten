@@ -18,10 +18,15 @@
 //     under the name (a profile here: live; a member on another phone: from the last snapshot, with
 //     "· bijgewerkt <datum>"); badges off = no level anywhere. Under the members a card "Vrienden"
 //     lists the friend snapshots (absent when there are none).
+//   - V1c-9 (docs/specs/verbeterronde-1c.md, block V1c-9 §1b): "Stuur terug" on a member row with a
+//     snapshot and on every friend row unfolds <ProgressReturnPanel/> under that row (one at a time;
+//     badges off = no button). A received progress of a profile on THIS phone (`cardStatus` 'local')
+//     with a higher XP than the profile has now offers "Herstel mijn voortgang" (`onRestore`; the
+//     screens call `restoreProgress`, src/progress-restore.ts).
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { badgesEnabled, loadBadgeSettings } from '@/badges';
 import { Header } from '@/components/Header';
-import { ProgressShareToggle } from '@/components/ProgressSharePanel';
+import { ProgressReturnPanel, ProgressShareToggle } from '@/components/ProgressSharePanel';
 import { formatShortDate } from '@/components/RecipeRow';
 import { UniversalPaste } from '@/components/UniversalPaste';
 import { formatXp, levelTitleText } from '@/components/XpBar';
@@ -49,7 +54,9 @@ import { decodeToken, extractTokenSpans, glueToken } from '@/domain/token';
 import { t } from '@/i18n';
 import { openPasteIn, pasteProblemOf } from '@/paste';
 import { PROFILE_COLORS, activeProfile, profiles } from '@/profile';
+import { restoreProgress } from '@/progress-restore';
 import { navigate, pendingMemberText } from '@/router';
+import { xpStateFor } from '@/xp';
 import { Avatar, MemberCardPanel, useAvatarLevel } from './ProfilesScreen';
 
 const NAME_DEBOUNCE_MS = 500;
@@ -234,6 +241,11 @@ export function MemberCardRow(props: { card: MemberCard; members: readonly Membe
  * from flashing.
  */
 function useBadgesOn(): boolean {
+  return useBadgesState() === 'on';
+}
+
+/** The `badges.enabled` setting once known: 'loading' until then (V1c-9: no "zet Badges aan" line flashes by). */
+function useBadgesState(): 'loading' | 'on' | 'off' {
   const [ready, setReady] = useState(false);
   useEffect(() => {
     let cancelled = false;
@@ -244,7 +256,7 @@ function useBadgesOn(): boolean {
       cancelled = true;
     };
   }, []);
-  return ready && badgesEnabled.value;
+  return !ready ? 'loading' : badgesEnabled.value ? 'on' : 'off';
 }
 
 /**
@@ -261,8 +273,23 @@ export function cookDaysIn30(card: Pick<ProgressCard, 'cookDays'>, sentAt?: stri
   return n;
 }
 
-/** What saving a received progress did: a member added / updated, kept as a friend, or nothing (a profile here). */
-export type ProgressOutcome = 'added' | 'updated' | 'friend' | 'local';
+/**
+ * What saving a received progress did: a member added / updated, kept as a friend, nothing (a
+ * profile here), or (V1c-9) the own progress restored from it.
+ */
+export type ProgressOutcome = 'added' | 'updated' | 'friend' | 'local' | 'restored';
+
+/** V1c-9: what `restoreProgress` reported, for the line "Voortgang hersteld: level N, … kookdagen en … badges teruggezet." */
+export interface RestoredInfo {
+  level: number;
+  cookDaysAdded: number;
+  badgesAdded: number;
+}
+
+/** V1c-9 §1b: "Voortgang hersteld: …" for a finished restore. */
+export function restoredText(r: RestoredInfo): string {
+  return t('progress.restored', { level: formatXp(r.level), days: formatXp(r.cookDaysAdded), badges: formatXp(r.badgesAdded) });
+}
 
 /**
  * Saves a received progress (§1i). The sender is a profile on this phone → nothing is written
@@ -305,10 +332,34 @@ export function ProgressCardRow(props: {
   busy?: boolean;
   onSave: (card: ProgressCard, asFriend: boolean) => void;
   onOpenHousehold?: () => void;
+  /** V1c-9: "Herstel mijn voortgang" on a card of a profile on this phone (confirmed already). */
+  onRestore?: (card: ProgressCard, profileId: string) => void;
+  /** V1c-9: what the restore reported (with `done` 'restored'). */
+  restored?: RestoredInfo;
 }) {
   const { card } = props;
-  const badgesOn = useBadgesOn();
+  const badges = useBadgesState();
+  const badgesOn = badges === 'on';
   const status = props.done === 'local' ? 'local' : cardStatus(props.members, card);
+  // V1c-9 §1b: a card of a profile on this phone (by id or name — the member's id is the profile id).
+  const localMember = status === 'local' ? matchMemberForCard(props.members, card) : undefined;
+  const profileId = localMember?.local ? localMember.id : null;
+  // The profile's current total and level, read quietly (an effect); null while unknown.
+  const [current, setCurrent] = useState<{ total: number; level: number } | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    setCurrent(null);
+    if (!profileId || !badgesOn || !props.onRestore) return;
+    xpStateFor(profileId).then(
+      (st) => {
+        if (!cancelled) setCurrent({ total: st.total, level: st.level });
+      },
+      (e: unknown) => console.error('xpStateFor', e),
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [profileId, badgesOn, card.id, card.xp, props.done, !!props.onRestore]);
   const name = card.name;
   const sent = formatShortDate(props.sentAt);
   const cookDays = cookDaysIn30(card, props.sentAt);
@@ -322,7 +373,41 @@ export function ProgressCardRow(props: {
         ? t('household.cardAdded', { name })
         : props.done === 'friend'
           ? t('household.saved')
-          : '';
+          : props.done === 'restored' && props.restored
+            ? restoredText(props.restored)
+            : '';
+  /** V1c-9 §1b: the 'local' part — badges off, nothing to restore, or the hint with the restore button. */
+  function localPart() {
+    if (profileId && props.onRestore) {
+      if (badges === 'off') return <p class="muted small">{t('progress.restoreBadgesOff')}</p>;
+      if (badgesOn && current && card.xp > current.total) {
+        const pid = profileId;
+        const restore = () => {
+          if (!confirm(t('progress.restoreConfirm', { cardLevel: formatXp(card.level) }))) return;
+          props.onRestore?.(card, pid);
+        };
+        return (
+          <div class="actions">
+            <p class="muted small progress-restore-hint">
+              {t('progress.restoreHint', {
+                date: sent,
+                cardLevel: formatXp(card.level),
+                xp: formatXp(card.xp),
+                badges: formatXp(card.badges.length),
+                days: formatXp(card.cookDays.length),
+                level: formatXp(current.level),
+              })}
+            </p>
+            <button type="button" class="btn btn-primary btn-block" disabled={props.busy} onClick={restore}>
+              {t('progress.restoreBtn')}
+            </button>
+          </div>
+        );
+      }
+    }
+    // Not this phone's own profile, the total still loading, or card.xp ≤ the current total: nothing to restore.
+    return <p class="muted small">{t('progress.local', { name })}</p>;
+  }
   return (
     <div class="member-card-row progress-card-row">
       <div class="member-card-head">
@@ -342,7 +427,7 @@ export function ProgressCardRow(props: {
       {props.done && props.done !== 'local' ? (
         <>
           <p class="ok small">{doneText}</p>
-          {props.onOpenHousehold && (
+          {props.onOpenHousehold && props.done !== 'restored' && (
             <div class="actions">
               <button type="button" class="btn" onClick={props.onOpenHousehold}>
                 {t('household.toHousehold')} ›
@@ -351,7 +436,7 @@ export function ProgressCardRow(props: {
           )}
         </>
       ) : status === 'local' ? (
-        <p class="muted small">{t('progress.local', { name })}</p>
+        localPart()
       ) : status === 'known' ? (
         <div class="actions">
           <button type="button" class="btn btn-primary btn-block" disabled={props.busy} onClick={() => props.onSave(card, false)}>
@@ -471,6 +556,10 @@ export function HouseholdScreen() {
   // 6D-4b: what happened to each received progress in the paste box, and the stored snapshots (live:
   // a save here or in the Inbox shows up at once in the level lines and on the Vrienden card).
   const [progressDone, setProgressDone] = useState<Record<string, ProgressOutcome>>({});
+  // V1c-9: what each restore reported (by card id), and the row whose "Stuur terug" panel is open (one at a time).
+  const [restored, setRestored] = useState<Record<string, RestoredInfo>>({});
+  const [returning, setReturning] = useState<string | null>(null);
+  const badgesOn = useBadgesOn();
   const snapshots = useLive(getProgressSnapshots, []);
   const pasteSeq = useRef(0);
   const pasteBox = useRef<HTMLTextAreaElement>(null);
@@ -644,6 +733,26 @@ export function HouseholdScreen() {
     }
   }
 
+  /**
+   * V1c-9 "Herstel mijn voortgang" (confirmed in the row): level, badges and the 90 cooking days back
+   * from the card, quietly (src/progress-restore.ts); a failure says "Er ging iets mis".
+   */
+  async function restore(card: ProgressCard, profileId: string) {
+    if (cardBusy) return;
+    setCardBusy(true);
+    setPasteNotice('');
+    try {
+      const r = await restoreProgress(profileId, card);
+      setRestored((prev) => ({ ...prev, [card.id]: { level: r.level, cookDaysAdded: r.cookDaysAdded, badgesAdded: r.badgesAdded } }));
+      setProgressDone((prev) => ({ ...prev, [card.id]: 'restored' }));
+    } catch (e) {
+      console.error('restoreProgress', e);
+      setPasteNotice(t('common.error'));
+    } finally {
+      setCardBusy(false);
+    }
+  }
+
   // V1c-1: text in the box (also a handed-over one) or a found card ends the friend hint for good.
   useEffect(() => {
     if (pasteText.trim() !== '' || found !== null) setFriendHint(false);
@@ -710,7 +819,7 @@ export function HouseholdScreen() {
                 {editing === m.id && !m.local ? (
                   <MemberForm initial={m} submitLabel={t('common.save')} taken={takenFor(m.id)} onSubmit={(v) => edit(m, v)} onCancel={() => setEditing(null)} />
                 ) : (
-                  <div class="member-row">
+                  <div class={`member-row${badgesOn && !m.local && snapshots?.[m.id] ? ' has-return' : ''}`}>
                     <Avatar profile={m} />
                     <div class="who">
                       <strong>{m.name}</strong>
@@ -719,6 +828,12 @@ export function HouseholdScreen() {
                     </div>
                     {!m.local && (
                       <div class="actions">
+                        {/* V1c-9: a member on another phone with a stored snapshot can get it back. */}
+                        {badgesOn && snapshots?.[m.id] && (
+                          <button type="button" class="btn btn-small" aria-expanded={returning === m.id} onClick={() => setReturning((v) => (v === m.id ? null : m.id))}>
+                            {t('progress.returnBtn')}
+                          </button>
+                        )}
                         <button type="button" class="btn btn-small" onClick={() => setEditing(m.id)}>
                           {t('household.edit')}
                         </button>
@@ -729,6 +844,7 @@ export function HouseholdScreen() {
                     )}
                   </div>
                 )}
+                {badgesOn && !m.local && returning === m.id && editing !== m.id && snapshots?.[m.id] && <ProgressReturnPanel snapshot={snapshots[m.id]!} />}
               </li>
             ))}
           </ul>
@@ -756,11 +872,17 @@ export function HouseholdScreen() {
                       <FriendLevelLine snapshot={s} />
                     </div>
                     <div class="actions">
+                      {badgesOn && (
+                        <button type="button" class="btn btn-small" aria-expanded={returning === s.id} onClick={() => setReturning((v) => (v === s.id ? null : s.id))}>
+                          {t('progress.returnBtn')}
+                        </button>
+                      )}
                       <button type="button" class="btn btn-small btn-danger" onClick={() => void removeFriend(s)}>
                         {t('household.remove')}
                       </button>
                     </div>
                   </div>
+                  {badgesOn && returning === s.id && <ProgressReturnPanel snapshot={s} />}
                 </li>
               ))}
             </ul>
@@ -818,6 +940,8 @@ export function HouseholdScreen() {
                   done={progressDone[card.id]}
                   busy={cardBusy}
                   onSave={(c, asFriend) => void saveProgress(c, asFriend)}
+                  onRestore={(c, profileId) => void restore(c, profileId)}
+                  restored={restored[card.id]}
                 />
               ))}
             </div>

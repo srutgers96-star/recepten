@@ -210,3 +210,94 @@ export function calendarMonth(i: {
     cooks: cooks.sort((a, b) => a.rank - b.rank).map(({ memberId, recipeId }) => ({ memberId, recipeId })),
   }));
 }
+
+// ---------------------------------------------------------------------------- V1c-9: send back, restore
+
+/**
+ * V1c-9 (docs/specs/verbeterronde-1c.md, block V1c-9 §1a): the card inside a stored snapshot, as it
+ * travels in a `#x=` token: every card field (unknown keys included), without the receiver's own
+ * `receivedAt` and `friend`. "Stuur terug" wraps this in `buildProgressEnvelope` again.
+ */
+export function cardOfSnapshot(s: ProgressSnapshot): ProgressCard {
+  const { receivedAt: _receivedAt, friend: _friend, ...card } = s;
+  return card;
+}
+
+/** What `restoreProgress` (src/progress-restore.ts) writes back for one profile. */
+export interface RestorePlan {
+  /** Cooks to add to the cook log: one per recipe per cook day, 18:00 local time on that day. */
+  cooks: Array<{ recipeId: string; at: string }>;
+  /** The profile's `badges.earned` list afterwards: the existing ones first, then the card's new ones. */
+  badges: string[];
+  /** Number of distinct days among `cooks`. */
+  cookDaysAdded: number;
+  /** Number of badge strings the card added to the existing list. */
+  badgesAdded: number;
+}
+
+/** ISO timestamp of 18:00 local time on a local day index. */
+function eveningOf(day: number): string {
+  const u = new Date(day * DAY_MS);
+  return new Date(u.getUTCFullYear(), u.getUTCMonth(), u.getUTCDate(), 18, 0, 0, 0).toISOString();
+}
+
+/**
+ * V1c-9 §1a: what restoring `card` adds on top of what is there. Per cook day `{d, r}` and per
+ * recipe id in `r`: a cook on day `d` at 18:00 local time; an invalid `d` is skipped, and so is a
+ * recipe that `existing.cooks` (or an earlier entry of the card) already has on that same local
+ * day. `badges` = the union of `existing.earned` and `card.badges` (existing first, then the new
+ * ones; only strings `PROGRESS_BADGE_RE` accepts are added, no doubles). Pure.
+ */
+export function planProgressRestore(
+  card: ProgressCard,
+  existing: { cooks: ReadonlyArray<{ recipeId: string; at: string }>; earned: readonly string[] },
+): RestorePlan {
+  const have = new Set<string>();
+  for (const c of existing.cooks) {
+    if (!c || typeof c.recipeId !== 'string' || typeof c.at !== 'string') continue;
+    const day = dayIndexOfIso(c.at);
+    if (day !== null) have.add(day + '|' + c.recipeId);
+  }
+  const cooks: RestorePlan['cooks'] = [];
+  const days = new Set<number>();
+  for (const cd of Array.isArray(card.cookDays) ? card.cookDays : []) {
+    if (!cd || typeof cd.d !== 'string') continue;
+    const day = dayFromKey(cd.d);
+    if (day === null) continue;
+    const at = eveningOf(day);
+    for (const recipeId of Array.isArray(cd.r) ? cd.r : []) {
+      if (typeof recipeId !== 'string' || !SAFE_ID.test(recipeId)) continue;
+      const k = day + '|' + recipeId;
+      if (have.has(k)) continue;
+      have.add(k);
+      cooks.push({ recipeId, at });
+      days.add(day);
+    }
+  }
+
+  const badges: string[] = [];
+  const seen = new Set<string>();
+  for (const b of existing.earned) {
+    if (typeof b !== 'string' || seen.has(b)) continue;
+    seen.add(b);
+    badges.push(b);
+  }
+  let badgesAdded = 0;
+  for (const b of Array.isArray(card.badges) ? card.badges : []) {
+    if (typeof b !== 'string' || seen.has(b) || !PROGRESS_BADGE_RE.test(b)) continue;
+    seen.add(b);
+    badges.push(b);
+    badgesAdded++;
+  }
+  return { cooks, badges, cookDaysAdded: days.size, badgesAdded };
+}
+
+/**
+ * V1c-9 §1a: the carried-over XP (`xp.carried`) that makes the derived total land exactly on the
+ * card's XP: `max(0, round(cardXp − derived))`, where `derived` is the total WITHOUT carried XP
+ * (after the cook days and badges were put back). Not a number → 0.
+ */
+export function carriedXpFor(cardXp: number, derivedTotalWithoutCarried: number): number {
+  const v = Math.round(cardXp - derivedTotalWithoutCarried);
+  return Number.isFinite(v) ? Math.max(0, v) : 0;
+}

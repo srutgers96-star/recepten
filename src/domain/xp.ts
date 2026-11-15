@@ -131,8 +131,10 @@ export interface XpFacts {
   badges: XpBadgeFact[];                             // earned on the member's OWN tab (Together does not count)
   /** 6E: this member's finished challenges (`challenges.done`); absent = none (state identical to before 6E). */
   challenges?: readonly DoneChallenge[];
+  /** V1c-9: carried-over XP (`xp.carried`, ≥ 0) from a restored progress card; absent/0 = none (state identical). */
+  carried?: number;
 }
-export type XpEventKind = 'cook' | 'week' | 'photo' | 'recipe' | 'badge' | 'challenge';
+export type XpEventKind = 'cook' | 'week' | 'photo' | 'recipe' | 'badge' | 'challenge' | 'carried';
 export type XpZeroReason = 'dayCap' | 'sameRecipe' | 'backdated' | 'busyWeek' | 'samePhotoDay';
 export interface XpEvent {
   kind: XpEventKind; key: string;                    // key = seed (unique per event)
@@ -548,6 +550,11 @@ export function deriveXp(facts: XpFacts, rules: XpRules = XP_RULES, today: numbe
     if (day !== null) e.day = day;
     push(e);
   }
+
+  // ---- carried (V1c-9, docs/specs/verbeterronde-1c.md block V1c-9 §1a): XP carried over from a
+  // restored progress card, after every other event; no roll, no crit. Not a number or ≤ 0 = none.
+  const carried = typeof facts.carried === 'number' && Number.isFinite(facts.carried) ? Math.round(facts.carried) : 0;
+  if (carried > 0) push({ kind: 'carried', key: 'carried', base: carried, factor: 1, xp: carried, crit: null, reason: null });
 
   const level = levelForXp(total, rules);
   return {

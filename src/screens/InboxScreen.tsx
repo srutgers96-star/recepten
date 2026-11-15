@@ -26,6 +26,8 @@
 // applyProgressCard): "Werk <naam> bij" for a member, the "profiel op deze telefoon" line for a
 // profile here, else "Voeg toe aan je huishouden" / "Bewaar als vriend". A sent progress shows in
 // "Gedeeld" as "Mijn voortgang".
+// V1c-9 (docs/specs/verbeterronde-1c.md, block V1c-9 §1b): the own progress coming back (a profile on
+// this phone, badges on, more XP on the card than now) offers "Herstel mijn voortgang" → restoreProgress.
 // 13Q (docs/specs/qr-link.md §1c): a `#l=` shopping list (a link opened in the app or pasted) becomes a
 // card "🛒 Lijst van <naam> · N regels" with its lines and one button "Zet op mijn lijst"
 // (repo.addListLinesFromShare: manual lines on the own week list, lines already there skipped,
@@ -79,7 +81,8 @@ import { collectPaste, isInboxKind, looksLikeJson, openPasteIn, PASTE_FILE_ACCEP
 import { activeProfile, profiles } from '@/profile';
 import { isAndroid } from '@/pwa';
 import { navigate, pendingImport, route } from '@/router';
-import { applyMemberCard, applyProgressCard, MemberCardRow, ProgressCardRow, type CardOutcome, type ProgressOutcome } from './HouseholdScreen';
+import { restoreProgress } from '@/progress-restore';
+import { applyMemberCard, applyProgressCard, MemberCardRow, ProgressCardRow, type CardOutcome, type ProgressOutcome, type RestoredInfo } from './HouseholdScreen';
 import { Avatar } from './ProfilesScreen';
 import { approvedDiets } from './WeekScreen';
 
@@ -371,6 +374,8 @@ export function InboxScreen() {
   const [progress, setProgress] = useState<ProgressCard[]>([]);
   const [progressAt, setProgressAt] = useState<Record<string, string>>({});
   const [progressDone, setProgressDone] = useState<Record<string, ProgressOutcome>>({});
+  // V1c-9: what each "Herstel mijn voortgang" reported, by card id.
+  const [restored, setRestored] = useState<Record<string, RestoredInfo>>({});
   // 13Q: received shopping lists (`#l=`) and the outcome line of "Zet op mijn lijst" per list.
   const [lists, setLists] = useState<ReceivedList[]>([]);
   const [listDone, setListDone] = useState<Record<number, string>>({});
@@ -679,6 +684,22 @@ export function InboxScreen() {
     }
   }
 
+  /** V1c-9 "Herstel mijn voortgang" (confirmed in the row): the own progress back from the card, quietly. */
+  async function restore(card: ProgressCard, profileId: string) {
+    if (cardBusy) return;
+    setCardBusy(true);
+    try {
+      const r = await restoreProgress(profileId, card);
+      setRestored((prev) => ({ ...prev, [card.id]: { level: r.level, cookDaysAdded: r.cookDaysAdded, badgesAdded: r.badgesAdded } }));
+      setProgressDone((prev) => ({ ...prev, [card.id]: 'restored' }));
+    } catch (e) {
+      console.error('restoreProgress', e);
+      setNotice(t('common.error'));
+    } finally {
+      setCardBusy(false);
+    }
+  }
+
   /**
    * 13Q "Zet op mijn lijst" on a received `#l=` (§1c/§2): the lines become manual lines on the own
    * week list (the ones already there are skipped); one 'in' row in the "In & uit" log.
@@ -827,6 +848,8 @@ export function InboxScreen() {
               done={progressDone[card.id]}
               busy={cardBusy}
               onSave={(c, asFriend) => void saveProgress(c, asFriend)}
+              onRestore={(c, profileId) => void restore(c, profileId)}
+              restored={restored[card.id]}
               onOpenHousehold={() => navigate('/more/household')}
             />
           </section>

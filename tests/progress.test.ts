@@ -7,7 +7,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AvatarSpec } from '../src/domain/avatar';
 import { dayFromKey, dayKey } from '../src/domain/days';
-import { calendarMonth, normalizeSnapshots, progressCardFor, type ProgressSnapshot } from '../src/domain/progress';
+import { calendarMonth, cardOfSnapshot, carriedXpFor, normalizeSnapshots, planProgressRestore, progressCardFor, type ProgressSnapshot } from '../src/domain/progress';
 import { buildProgressEnvelope, parseEnvelope, type ProgressCard } from '../src/domain/share';
 import { decodeToken, encodeToken } from '../src/domain/token';
 import { deriveXp, XP_RULES, type XpBadgeFact, type XpCookFact, type XpState } from '../src/domain/xp';
@@ -298,5 +298,77 @@ describe('calendarMonth', () => {
     expect(day(days, 1)).toEqual([{ memberId: 'p:a', recipeId: 'b:first' }]);
     expect(day(days, 31)).toEqual([{ memberId: 'p:a', recipeId: 'b:last' }]);
     expect(days.flatMap((d) => d.cooks).map((c) => c.recipeId)).not.toContain('b:next');
+  });
+});
+
+// ---------------------------------------------------------------------------- V1c-9
+
+describe('cardOfSnapshot (V1c-9)', () => {
+  it('returns every card field, unknown keys included, without receivedAt and friend', () => {
+    const c = card({ deviceId: 'd:1', avatar: AVATAR, log: [cook('b:a', noon(TODAY))] });
+    const snap = { ...c, mood: 'cat', receivedAt: '2026-10-23T08:00:00.000Z', friend: true } as ProgressSnapshot;
+    const out = cardOfSnapshot(snap);
+    expect(Object.keys(out).sort()).toEqual([...Object.keys(c), 'mood'].sort());
+    expect(out).not.toHaveProperty('receivedAt');
+    expect(out).not.toHaveProperty('friend');
+    expect(out).toEqual({ ...c, mood: 'cat' });
+    // The snapshot itself is untouched.
+    expect(snap.receivedAt).toBe('2026-10-23T08:00:00.000Z');
+  });
+
+  it('still makes a valid #x= envelope', () => {
+    const snap: ProgressSnapshot = { ...card(), receivedAt: '2026-10-23T08:00:00.000Z', friend: false };
+    const env = buildProgressEnvelope(cardOfSnapshot(snap));
+    expect(env).not.toHaveProperty('receivedAt');
+    expect(env).not.toHaveProperty('friend');
+  });
+});
+
+describe('planProgressRestore (V1c-9)', () => {
+  const base = (over: Partial<ProgressCard> = {}): ProgressCard => ({ ...card(), ...over });
+
+  it('one cook per recipe per day at 18:00 local time; two recipes on one day = two cooks', () => {
+    const plan = planProgressRestore(base({ cookDays: [{ d: '2026-10-20', r: ['b:a', 'b:b'] }, { d: '2026-10-21', r: ['b:a'] }] }), { cooks: [], earned: [] });
+    expect(plan.cooks).toEqual([
+      { recipeId: 'b:a', at: local('2026-10-20', 18) },
+      { recipeId: 'b:b', at: local('2026-10-20', 18) },
+      { recipeId: 'b:a', at: local('2026-10-21', 18) },
+    ]);
+    expect(plan.cookDaysAdded).toBe(2);
+    expect(new Date(plan.cooks[0]!.at).getHours()).toBe(18);
+  });
+
+  it('skips a recipe already cooked on that same local day, and an invalid day key', () => {
+    const plan = planProgressRestore(
+      base({ cookDays: [{ d: '2026-10-20', r: ['b:a', 'b:b'] }, { d: '2026-02-30', r: ['b:c'] }, { d: 'gisteren', r: ['b:d'] }, { d: '2026-10-22', r: ['b:a'] }] }),
+      { cooks: [{ recipeId: 'b:a', at: local('2026-10-20', 9) }, { recipeId: 'b:a', at: local('2026-10-22', 23, 30) }], earned: [] },
+    );
+    expect(plan.cooks).toEqual([{ recipeId: 'b:b', at: local('2026-10-20', 18) }]);
+    expect(plan.cookDaysAdded).toBe(1);
+  });
+
+  it('a day whose recipes are all there already adds nothing', () => {
+    const plan = planProgressRestore(base({ cookDays: [{ d: '2026-10-20', r: ['b:a'] }] }), { cooks: [{ recipeId: 'b:a', at: local('2026-10-20', 12) }], earned: [] });
+    expect(plan.cooks).toEqual([]);
+    expect(plan.cookDaysAdded).toBe(0);
+  });
+
+  it('badges: union without doubles, existing first, only valid card strings', () => {
+    const plan = planProgressRestore(base({ badges: ['eerste-hap', 'wereldkeuken@3', 'Not OK', 'eerste-hap', 'nieuw'] }), {
+      cooks: [],
+      earned: ['oud', 'eerste-hap', 'oud'],
+    });
+    expect(plan.badges).toEqual(['oud', 'eerste-hap', 'wereldkeuken@3', 'nieuw']);
+    expect(plan.badgesAdded).toBe(2);
+  });
+});
+
+describe('carriedXpFor (V1c-9)', () => {
+  it('is max(0, round(cardXp − derived))', () => {
+    expect(carriedXpFor(5000, 1200)).toBe(3800);
+    expect(carriedXpFor(5000, 1200.4)).toBe(3800);
+    expect(carriedXpFor(1000, 1200)).toBe(0);
+    expect(carriedXpFor(1200, 1200)).toBe(0);
+    expect(carriedXpFor(Number.NaN, 0)).toBe(0);
   });
 });

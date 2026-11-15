@@ -935,6 +935,82 @@
         "nl": ["voortgang ontvangen", "vriend", "level van een ander", "bijwerken", "kookkalender"],
         "en": ["receive progress", "friend", "someone's level", "update", "cooking calendar"]
       }
+    },
+    {
+      "id": "delen-en-ontvangen.voortgang-terugsturen",
+      "title": { "nl": "Iemands voortgang terugsturen", "en": "Send someone's progress back" },
+      "what": {
+        "nl": "Deelde iemand zijn voortgang met jou, dan bewaart je telefoon die. Is zijn telefoon leeg, dan stuur je hem die voortgang terug en kan hij zijn level, badges en kookdagen terugzetten.",
+        "en": "If someone shared their progress with you, your phone keeps it. If their phone is empty, you send that progress back and they can restore their level, badges and cooking days."
+      },
+      "where": {
+        "nl": [
+          "Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.",
+          "Zoek de persoon onder Huisgenoten of Vrienden.",
+          "Tik op **Stuur terug**.",
+          "Tik op **Deel** en kies WhatsApp."
+        ],
+        "en": [
+          "Tap **More** at the bottom, then **Household & friends**.",
+          "Find the person under Housemates or Friends.",
+          "Tap **Send back**.",
+          "Tap **Share** and choose WhatsApp."
+        ]
+      },
+      "see": {
+        "nl": "WhatsApp opent met een zin over het level van die persoon en één link, net als bij Sync mijn voortgang.",
+        "en": "WhatsApp opens with a sentence about that person's level and one link, just like Sync my progress."
+      },
+      "know": {
+        "nl": "Het is de voortgang zoals jij hem kreeg, niet van dit moment. Wat de ander sindsdien kookte, zit er niet in.",
+        "en": "It is the progress as you received it, not of this moment. What the other person cooked since is not in it."
+      },
+      "route": "/more/household",
+      "platform": "all",
+      "keywords": {
+        "nl": ["terugsturen", "voortgang", "level kwijt", "telefoon leeg", "herstellen"],
+        "en": ["send back", "progress", "lost level", "empty phone", "restore"]
+      }
+    },
+    {
+      "id": "delen-en-ontvangen.voortgang-herstellen",
+      "title": { "nl": "Je eigen voortgang terugzetten", "en": "Restore your own progress" },
+      "what": {
+        "nl": "Is je telefoon leeg (nieuwe telefoon, of de opslag van de app gewist), dan kun je je level, badges en kookdagen terugzetten uit de voortgang die iemand anders van je bewaarde.",
+        "en": "If your phone is empty (a new phone, or the app's storage cleared), you can restore your level, badges and cooking days from the progress someone else kept of you."
+      },
+      "where": {
+        "nl": [
+          "Vraag die persoon om **Stuur terug** te tikken bij jouw naam.",
+          "Kopieer het bericht.",
+          "Tik onderaan op **Meer** en dan op **In & uit**.",
+          "Tik op **Plak van klembord**.",
+          "Tik op **Herstel mijn voortgang**.",
+          "Bevestig."
+        ],
+        "en": [
+          "Ask that person to tap **Send back** next to your name.",
+          "Copy the message.",
+          "Tap **More** at the bottom, then **In & out**.",
+          "Tap **Paste from clipboard**.",
+          "Tap **Restore my progress**.",
+          "Confirm."
+        ]
+      },
+      "see": {
+        "nl": "Je level en XP staan weer op wat ze waren, je badges zijn terug en de kookdagen van de laatste 90 dagen staan weer in de kalender. Geen confetti: het is herstel, geen prestatie.",
+        "en": "Your level and XP are back to what they were, your badges are back and the cooking days of the last 90 days are in the calendar again. No confetti: it is a repair, not an achievement."
+      },
+      "know": {
+        "nl": "Het werkt alleen als de bewaarde voortgang hoger is dan wat er nu staat, en alleen met **Badges** aan. Kookdagen van langer dan 90 dagen geleden tellen mee in je XP, maar staan niet als losse dagen in de kalender. Notities, sterren en foto's komen niet terug; eigen recepten kan de ander je apart terugsturen. Maak daarom af en toe een back-up onder **Opslag**.",
+        "en": "It only works when the kept progress is higher than what is there now, and only with **Badges** on. Cooking days from more than 90 days ago count in your XP but are not in the calendar as separate days. Notes, stars and photos do not come back; your own recipes the other person can send back separately. So make a backup under **Storage** now and then."
+      },
+      "route": "/inbox",
+      "platform": "all",
+      "keywords": {
+        "nl": ["herstellen", "voortgang", "level kwijt", "badges kwijt", "opslag gewist"],
+        "en": ["restore", "progress", "lost level", "lost badges", "storage cleared"]
+      }
     }
   ]
 }

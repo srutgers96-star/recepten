@@ -3103,6 +3103,54 @@ Afterwards the level shows under the name in **Household & friends**, with the d
 
 (`#/inbox`)
 
+### Send someone's progress back
+
+#### What it does
+
+If someone shared their progress with you, your phone keeps it. If their phone is empty, you send that progress back and they can restore their level, badges and cooking days.
+
+#### Where you tap
+
+1. Tap **More** at the bottom, then **Household & friends**.
+2. Find the person under Housemates or Friends.
+3. Tap **Send back**.
+4. Tap **Share** and choose WhatsApp.
+
+#### What you then see
+
+WhatsApp opens with a sentence about that person's level and one link, just like Sync my progress.
+
+#### Good to know
+
+It is the progress as you received it, not of this moment. What the other person cooked since is not in it.
+
+(`#/more/household`)
+
+### Restore your own progress
+
+#### What it does
+
+If your phone is empty (a new phone, or the app's storage cleared), you can restore your level, badges and cooking days from the progress someone else kept of you.
+
+#### Where you tap
+
+1. Ask that person to tap **Send back** next to your name.
+2. Copy the message.
+3. Tap **More** at the bottom, then **In & out**.
+4. Tap **Paste from clipboard**.
+5. Tap **Restore my progress**.
+6. Confirm.
+
+#### What you then see
+
+Your level and XP are back to what they were, your badges are back and the cooking days of the last 90 days are in the calendar again. No confetti: it is a repair, not an achievement.
+
+#### Good to know
+
+It only works when the kept progress is higher than what is there now, and only with **Badges** on. Cooking days from more than 90 days ago count in your XP but are not in the calendar as separate days. Notes, stars and photos do not come back; your own recipes the other person can send back separately. So make a backup under **Storage** now and then.
+
+(`#/inbox`)
+
 <a id="woordenboek"></a>
 
 ## Dictionary

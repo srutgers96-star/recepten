@@ -3103,6 +3103,54 @@ Daarna staat het level onder de naam bij **Huishouden & vrienden**, met de datum
 
 (`#/inbox`)
 
+### Iemands voortgang terugsturen
+
+#### Wat het doet
+
+Deelde iemand zijn voortgang met jou, dan bewaart je telefoon die. Is zijn telefoon leeg, dan stuur je hem die voortgang terug en kan hij zijn level, badges en kookdagen terugzetten.
+
+#### Waar je tikt
+
+1. Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.
+2. Zoek de persoon onder Huisgenoten of Vrienden.
+3. Tik op **Stuur terug**.
+4. Tik op **Deel** en kies WhatsApp.
+
+#### Wat je dan ziet
+
+WhatsApp opent met een zin over het level van die persoon en één link, net als bij Sync mijn voortgang.
+
+#### Goed om te weten
+
+Het is de voortgang zoals jij hem kreeg, niet van dit moment. Wat de ander sindsdien kookte, zit er niet in.
+
+(`#/more/household`)
+
+### Je eigen voortgang terugzetten
+
+#### Wat het doet
+
+Is je telefoon leeg (nieuwe telefoon, of de opslag van de app gewist), dan kun je je level, badges en kookdagen terugzetten uit de voortgang die iemand anders van je bewaarde.
+
+#### Waar je tikt
+
+1. Vraag die persoon om **Stuur terug** te tikken bij jouw naam.
+2. Kopieer het bericht.
+3. Tik onderaan op **Meer** en dan op **In & uit**.
+4. Tik op **Plak van klembord**.
+5. Tik op **Herstel mijn voortgang**.
+6. Bevestig.
+
+#### Wat je dan ziet
+
+Je level en XP staan weer op wat ze waren, je badges zijn terug en de kookdagen van de laatste 90 dagen staan weer in de kalender. Geen confetti: het is herstel, geen prestatie.
+
+#### Goed om te weten
+
+Het werkt alleen als de bewaarde voortgang hoger is dan wat er nu staat, en alleen met **Badges** aan. Kookdagen van langer dan 90 dagen geleden tellen mee in je XP, maar staan niet als losse dagen in de kalender. Notities, sterren en foto's komen niet terug; eigen recepten kan de ander je apart terugsturen. Maak daarom af en toe een back-up onder **Opslag**.
+
+(`#/inbox`)
+
 <a id="woordenboek"></a>
 
 ## Woordenboek

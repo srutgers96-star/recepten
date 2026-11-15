@@ -17,16 +17,23 @@
 //
 // Badges off (`badges.enabled` false) = no trace of XP or level anywhere (§1, §5.9): the panel then
 // renders nothing, and the screens leave the button out.
+//
+// V1c-9 (docs/specs/verbeterronde-1c.md, block V1c-9 §1b): <ProgressReturnPanel/> — "Stuur terug" on
+// Huishouden & vrienden sends a STORED snapshot of someone else back to them (their phone may be
+// empty). Same build-up as the panel above minus the QR: the card is `cardOfSnapshot(snapshot)`
+// (no `receivedAt` / `friend`), wrapped by the unchanged `buildProgressEnvelope` (invariant 4), with
+// the envelope's `at` set to the snapshot's `receivedAt` so the receiver sees the original date.
 import { useEffect, useState } from 'preact/hooks';
 import { badgesEnabled, recheckActiveBadges } from '@/badges';
 import { appInfo } from '@/components/AppInfo';
+import { formatShortDate } from '@/components/RecipeRow';
 import { QrPanel, QrToggle } from '@/components/QrPanel';
 import { logShareEvent } from '@/db/repo';
 import { normalizeAvatarSpec } from '@/domain/avatar';
 import { localDayIndex } from '@/domain/days';
 import { titleFor } from '@/domain/levels';
 import { nowIso, type Profile } from '@/domain/model';
-import { progressCardFor } from '@/domain/progress';
+import { cardOfSnapshot, progressCardFor, type ProgressSnapshot } from '@/domain/progress';
 import { buildProgressEnvelope, buildProgressShareMessage } from '@/domain/share';
 import { buildShareUrl, encodeToken } from '@/domain/token';
 import { t } from '@/i18n';
@@ -161,5 +168,102 @@ export function ProgressShareToggle(props: { profile: Profile }) {
       </div>
       {open && <ProgressSharePanel profile={props.profile} />}
     </>
+  );
+}
+
+/** V1c-9: the WhatsApp text for a stored snapshot, in the SNAPSHOT's language; the `#x=` link on the last line. */
+async function buildReturnMessage(snapshot: ProgressSnapshot): Promise<string> {
+  const card = cardOfSnapshot(snapshot);
+  const env = buildProgressEnvelope(card);
+  // §1b: the moment that phone received it ≈ the moment it was shared ("gedeeld op", the 30-day rule).
+  env.at = snapshot.receivedAt;
+  const token = await encodeToken(env);
+  const url = buildShareUrl(appInfo.appUrl, 'x', token);
+  const l = card.lang === 'en' ? 'en' : 'nl';
+  return buildProgressShareMessage({ name: card.name, level: card.level, title: titleFor(card.level, l), url, lang: l });
+}
+
+/**
+ * V1c-9 "Stuur terug": intro, Deel + Kopieer link, the iPhone line, a status (no QR). After the share
+ * sheet reported 'shared' one 'out' row (kind 'progress', who = the name). Badges off = nothing.
+ */
+export function ProgressReturnPanel(props: { snapshot: ProgressSnapshot }) {
+  const s = props.snapshot;
+  const [message, setMessage] = useState('');
+  const [buildFailed, setBuildFailed] = useState(false);
+  const [status, setStatus] = useState('');
+  const [showRaw, setShowRaw] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const on = badgesEnabled.value;
+
+  useEffect(() => {
+    let cancelled = false;
+    setMessage('');
+    setBuildFailed(false);
+    setStatus('');
+    setShowRaw(false);
+    if (!on) return;
+    buildReturnMessage(s)
+      .then((m) => {
+        if (!cancelled) setMessage(m);
+      })
+      .catch((e: unknown) => {
+        console.error('progress return', e);
+        if (!cancelled) setBuildFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [s.id, s.receivedAt, on]);
+
+  if (!on) return null;
+
+  function share() {
+    if (!message || busy) return;
+    setBusy(true);
+    setStatus('');
+    // navigator.share runs before the first await inside shareText: still within the tap.
+    void shareText(message)
+      .then((r) => {
+        if (r.outcome === 'shared') {
+          setStatus(t('progress.shared'));
+          void logShareEvent({ at: nowIso(), direction: 'out', kind: 'progress', who: s.name, count: 1, recipeIds: [] })
+            .then(() => recheckActiveBadges())
+            .catch((e: unknown) => console.error('logShareEvent', e));
+        } else if (r.outcome === 'no-share-api') setStatus(t('share.noShareApi'));
+        else if (r.outcome === 'failed') setStatus(`${t('share.error')}: ${r.error ?? ''}`);
+      })
+      .finally(() => setBusy(false));
+  }
+
+  function copy() {
+    if (!message) return;
+    void copyText(message).then((r) => {
+      if (r.ok) setStatus(t('progress.copied'));
+      else {
+        setStatus(t('share.copyError'));
+        setShowRaw(true);
+      }
+    });
+  }
+
+  return (
+    <div class="member-card-share progress-share progress-return">
+      <p class="muted small">{t('progress.returnIntro', { name: s.name, level: s.level, date: formatShortDate(s.receivedAt) })}</p>
+      {buildFailed && <p class="bad small">{t('share.error')}</p>}
+      <div class="actions">
+        <button type="button" class="btn btn-primary" disabled={!message || busy} onClick={share}>
+          {t('progress.send')}
+        </button>
+        <button type="button" class="btn" disabled={!message} onClick={copy}>
+          {t('progress.copy')}
+        </button>
+      </div>
+      {showRaw && <textarea class="input member-card-raw" readOnly rows={3} value={message} onFocus={(e) => (e.currentTarget as HTMLTextAreaElement).select()} />}
+      <p class="muted small">{t('household.cardIosHint')}</p>
+      <div class="status" role="status">
+        {status}
+      </div>
+    </div>
   );
 }

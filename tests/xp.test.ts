@@ -55,6 +55,7 @@ function facts(over: Partial<XpFacts> & { lines?: Record<string, number> } = {})
     ownRecipes: over.ownRecipes ?? [],
     badges: over.badges ?? [],
     ...(over.challenges ? { challenges: over.challenges } : {}),
+    ...(over.carried !== undefined ? { carried: over.carried } : {}),
   };
 }
 
@@ -603,6 +604,47 @@ describe('challenges (6E, docs/specs/challenges.md §2)', () => {
     const delta = diffXp(prev, next);
     expect(delta.pops).toEqual([{ xp: 250, crit: null, kind: 'challenge' }]);
     expect(delta.amount).toBe(250);
+  });
+});
+
+describe('carried XP (V1c-9, docs/specs/verbeterronde-1c.md block V1c-9 §1a)', () => {
+  const base = (): XpFacts => {
+    nextId = 1;
+    const log = [entry('b:a', janIso(0, 18), 5), entry('b:b', janIso(1, 18)), entry('b:a', janIso(2, 18))];
+    return facts({ log, lines: { 'b:a': 9, 'b:b': 12 }, photos: [{ recipeId: 'b:a', at: janIso(0, 19) }] });
+  };
+
+  it('without carried (absent, 0, negative or not a number) deriveXp is identical to before', () => {
+    const f = base();
+    const before = deriveXp(f, XP_RULES, 3);
+    for (const carried of [0, -50, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(JSON.stringify({ ...deriveXp({ ...f, carried }, XP_RULES, 3), byKey: null })).toBe(JSON.stringify({ ...before, byKey: null }));
+    }
+    const sim = simulate({ years: 1 });
+    expect(JSON.stringify(deriveXp({ ...sim, carried: 0 }).events)).toBe(JSON.stringify(deriveXp(sim).events));
+  });
+
+  it('carried 5000: the total rises by 5000, the level follows the curve, one event last in events and in byKey', () => {
+    const f = base();
+    const before = deriveXp(f, XP_RULES, 3);
+    const after = deriveXp({ ...f, carried: 5000 }, XP_RULES, 3);
+    expect(after.total).toBe(before.total + 5000);
+    expect(after.level).toBe(levelForXp(before.total + 5000));
+    expect(after.levelStart).toBe(xpForLevel(after.level));
+    expect(after.nextAt).toBe(xpForLevel(after.level + 1));
+    const ev: XpEvent = { kind: 'carried', key: 'carried', base: 5000, factor: 1, xp: 5000, crit: null, reason: null };
+    expect(after.events[after.events.length - 1]).toEqual(ev);
+    expect(after.byKey.get('carried')).toEqual(ev);
+    expect(after.events.slice(0, -1)).toEqual(before.events);
+    expect(after.streak).toEqual(before.streak);
+    expect(after.cookDays).toEqual(before.cookDays);
+  });
+
+  it('carried alone on an empty history', () => {
+    const s = deriveXp(facts({ carried: 5000 }), XP_RULES, 0);
+    expect(s.total).toBe(5000);
+    expect(s.level).toBe(levelForXp(5000));
+    expect(kinds(s.events, 'carried')).toHaveLength(1);
   });
 });
 

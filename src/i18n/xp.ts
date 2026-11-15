@@ -121,6 +121,30 @@ export const xp: Dict = {
   'progress.saveFriend': { nl: 'Bewaar als vriend', en: 'Save as a friend' },
   'progress.updatedAgo': { nl: '· bijgewerkt {date}', en: '· updated {date}' },
   'progress.friends': { nl: 'Vrienden', en: 'Friends' },
+  // V1c-9 (docs/specs/verbeterronde-1c.md, block V1c-9 §1b): "Stuur terug" under a member or friend row
+  // (Huishouden & vrienden) and "Herstel mijn voortgang" on a received card of a profile on this phone.
+  'progress.returnBtn': { nl: 'Stuur terug', en: 'Send back' },
+  'progress.returnIntro': {
+    nl: 'Stuur {name} de voortgang terug die je van hem bewaarde: level {level}, bewaard op {date}. Handig als zijn telefoon leeg is: hij kan er zijn level, badges en kookdagen mee terugzetten.',
+    en: 'Send {name} back the progress you kept: level {level}, saved on {date}. Useful when their phone is empty: they can restore their level, badges and cooking days from it.',
+  },
+  'progress.restoreBtn': { nl: 'Herstel mijn voortgang', en: 'Restore my progress' },
+  'progress.restoreHint': {
+    nl: 'Dit is jouw eigen voortgang van {date}: level {cardLevel} met {xp} XP, {badges} badges en {days} kookdagen. Hier staat nu level {level}. Je kunt hem terugzetten.',
+    en: 'This is your own progress from {date}: level {cardLevel} with {xp} XP, {badges} badges and {days} cooking days. This phone is at level {level}. You can restore it.',
+  },
+  'progress.restoreConfirm': {
+    nl: 'Je voortgang terugzetten naar level {cardLevel}? Je badges en de kookdagen van die 90 dagen komen terug; wat je sindsdien kookte blijft staan.',
+    en: 'Restore your progress to level {cardLevel}? Your badges and the cooking days of those 90 days come back; what you cooked since stays.',
+  },
+  'progress.restored': {
+    nl: 'Voortgang hersteld: level {level}, {days} kookdagen en {badges} badges teruggezet.',
+    en: 'Progress restored: level {level}, {days} cooking days and {badges} badges put back.',
+  },
+  'progress.restoreBadgesOff': {
+    nl: 'Dit is jouw eigen voortgang. Zet eerst Badges aan onder Meer om hem terug te zetten.',
+    en: 'This is your own progress. Switch Badges on under More first to restore it.',
+  },
   // §1j the cooking calendar (#/more/calendar): always there, also with badges off (it is a log).
   // The Meer row lives here too (more.calendar*), next to the calendar's own strings.
   'more.calendar': { nl: 'Kookkalender', en: 'Cooking calendar' },

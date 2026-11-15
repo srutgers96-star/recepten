@@ -490,6 +490,17 @@
   padding: 0 10px;
 }
 
+/* V1c-9: a member row with "Stuur terug" has three buttons; at 360 px they go on their own line
+   (right-aligned) so the name and level line keep their width. */
+.member-row.has-return {
+  flex-wrap: wrap;
+}
+
+.member-row.has-return .actions {
+  flex-basis: 100%;
+  justify-content: flex-end;
+}
+
 .member-form {
   margin-top: 8px;
 }

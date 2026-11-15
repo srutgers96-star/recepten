@@ -36,7 +36,7 @@
 import { signal, type Signal } from '@preact/signals';
 import { badgesEnabled, badgeStatuses, loadBadgeSettings } from '@/badges';
 import { loadChallenges, refreshChallenges, settleChallenges } from '@/challenges';
-import { allRecipes, getDoneChallenges, getSetting, listAllPhotosMeta, listCookLog, listProfiles, setSetting } from '@/db/repo';
+import { allRecipes, getCarriedXp, getDoneChallenges, getSetting, listAllPhotosMeta, listCookLog, listProfiles, setSetting } from '@/db/repo';
 import { hasLang, type Recipe } from '@/domain/model';
 import {
   deriveXp,
@@ -142,16 +142,18 @@ function isBilingual(r: Recipe): boolean {
  * tier, one-off `xp ?? (hidden ? 250 : 50)`). The badges are evaluated WITHOUT this member's XP
  * state (`{ xp: false }`): badgeStatuses would otherwise ask xpStateFor for the state being derived
  * right here and wait for itself; a registered `overcooked` badge still counts (sticky). 6E: plus the
- * member's finished challenges (`challenges.done`, the only source of the challenge bonus).
+ * member's finished challenges (`challenges.done`, the only source of the challenge bonus). V1c-9:
+ * plus the member's carried-over XP from a restored progress card (`xp.carried`, invalid = 0).
  */
 export async function buildXpFacts(memberId: string): Promise<XpFacts> {
-  const [recipes, log, photos, profiles, statuses, done] = await Promise.all([
+  const [recipes, log, photos, profiles, statuses, done, carriedAll] = await Promise.all([
     allRecipes(),
     listCookLog(),
     listAllPhotosMeta(),
     listProfiles(),
     badgeStatuses(memberId, { xp: false }),
     getDoneChallenges(),
+    getCarriedXp(),
   ]);
   const lines = new Map<string, XpRecipeFact>();
   for (const r of recipes) {
@@ -173,6 +175,7 @@ export async function buildXpFacts(memberId: string): Promise<XpFacts> {
     ownRecipes,
     badges: statuses.filter((s) => s.earned).map((s) => ({ id: s.badge.id, level: s.tier, secret: s.badge.hidden === true, xp: s.badge.xp })),
     challenges: done.filter((d) => d.memberId === memberId),
+    carried: carriedAll[memberId] ?? 0,
   };
 }
 
@@ -261,7 +264,8 @@ const MERGE_MS = 2000;
 let series: { startedAt: number; sum: number; count: number; lastId: number } | null = null;
 let nextPopId = 1;
 
-/** Pop kinds that stay small "+n" pops (V4 §1b); every other kind goes into the rising bar. */
+/** Pop kinds that stay small "+n" pops (V4 §1b); every other kind goes into the rising bar. 'carried'
+ *  (V1c-9) is never one: a restore settles quietly. */
 const POP_KINDS: ReadonlySet<XpEventKind> = new Set<XpEventKind>(['photo', 'recipe']);
 
 /** The heavier of two crits: overcooked > cooked > null. */

@@ -817,6 +817,56 @@ export async function logCooked(entry: Omit<CookLogEntry, 'id'>): Promise<void> 
   await db.cookLog.add(row);
 }
 
+/**
+ * V1c-9 (docs/specs/verbeterronde-1c.md block V1c-9 §1a): adds many cook-log rows in one
+ * transaction (a restored progress card). Same normalisation as `logCooked`: `loggedAt` = now when
+ * it is missing, stars clamped to 1…5, an unknown `variant` left off.
+ */
+export async function addCookEntries(entries: Omit<CookLogEntry, 'id'>[]): Promise<void> {
+  if (!entries.length) return;
+  const now = nowIso();
+  const rows: CookLogEntry[] = entries.map((entry) => {
+    const row: CookLogEntry = { ...entry, at: entry.at || now, loggedAt: entry.loggedAt || now };
+    if (row.stars !== undefined && row.stars !== null) row.stars = Math.min(5, Math.max(1, Math.round(row.stars)));
+    if ('variant' in row && !isVariantDiet(row.variant)) delete row.variant;
+    return row;
+  });
+  await db.transaction('rw', db.cookLog, async () => {
+    await db.cookLog.bulkAdd(rows);
+  });
+}
+
+/**
+ * V1c-9: setting `xp.carried` = Record<memberId, number>, the XP carried over from a restored
+ * progress card (src/progress-restore.ts), one of the facts `deriveXp` adds up. Travels in the
+ * backup (not in DEVICE_LOCAL_SETTINGS).
+ */
+export const XP_CARRIED_SETTING = 'xp.carried';
+
+/** Every member's carried-over XP; a value that is not a finite number ≥ 0 is left out (= 0). */
+export async function getCarriedXp(): Promise<Record<string, number>> {
+  const raw = await getSetting<unknown>(XP_CARRIED_SETTING, {});
+  const out: Record<string, number> = {};
+  if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+    for (const [id, v] of Object.entries(raw as Record<string, unknown>)) {
+      if (id === '__proto__') continue;
+      if (typeof v === 'number' && Number.isFinite(v) && v >= 0) out[id] = Math.round(v);
+    }
+  }
+  return out;
+}
+
+/** Sets one member's carried-over XP (not a finite number ≥ 0 → 0), in one transaction with the read. */
+export async function setCarriedXp(memberId: string, xp: number): Promise<void> {
+  if (typeof memberId !== 'string' || !memberId || memberId === '__proto__') return;
+  const value = typeof xp === 'number' && Number.isFinite(xp) ? Math.max(0, Math.round(xp)) : 0;
+  await db.transaction('rw', db.settings, async () => {
+    const all = await getCarriedXp();
+    all[memberId] = value;
+    await setSetting(XP_CARRIED_SETTING, all);
+  });
+}
+
 /** Newest first; all profiles when `profileId` is omitted. */
 export async function recentCooked(profileId?: string, limit = 10): Promise<CookLogEntry[]> {
   let coll = db.cookLog.orderBy('at').reverse();

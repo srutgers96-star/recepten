@@ -1,6 +1,6 @@
 # Spec V1c — Testronde-feedback na V1–V9 (Stijn, vanaf 9 nov 2026)
 
-Status: punt 1 compleet (9 nov), punten 3, 7 en 8 direct gebouwd (10–15 nov), punt 9 in aanbouw (15 nov); V1c-2 ontworpen en akkoord; de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
+Status: punt 1 compleet (9 nov), punten 3, 7 en 8 direct gebouwd (10–15 nov), punt 9 compleet (15 nov); V1c-2 ontworpen en akkoord; de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
 krijgt hieronder een eigen blok (V1c-1, V1c-2, …) met Kritische lezer, Feitencheck, §1 Gedrag, §2 en §3, en gaat door de lichte workflow.
 
 ## Verzamellijst
@@ -197,10 +197,10 @@ ontvangen persoonskaart ("Gabi stuurde haar voortgang" versus "Voortgang van Gab
 
 ## Blok V1c-9 — Voortgang terugsturen en je eigen voortgang terugzetten
 
-Status: in aanbouw (Fable, 15 nov 2026). Twee bouwers + integrator (lichte modus). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
+Status: compleet (Fable, 15 nov 2026). Twee bouwers + integrator (lichte modus). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
 docs/specs/xp-levels.md (§1h delen, §1i ontvangen, §2 de regels), docs/specs/badges-avatar.md, CLAUDE.md invariant 4 (het `#x=`-token
 verandert niet: het blijft precies het kaartje dat `buildProgressEnvelope` al maakt) en 14 (geen backend: herstellen gaat via een bericht).
-Gebouwd: 15 nov 2026 (V1c-9, lichte workflow; run-id in STATUS)
+Gebouwd: 15 nov 2026 (V1c-9, lichte workflow wf_ad149019-c9f; lens: twee bevindingen, besluiten Fable: (1) `registerEarnedSilently()` direct na het schrijven van de badges — vóór de overgedragen XP en vóór de hercontrole — zodat ook de ladders van Samen stil geregistreerd worden en de hercontrole niets nieuws vindt (geen toast, geen confetti; het totaal blijft exact het kaartje); (2) bij "niets te herstellen" blijft de bestaande regel `progress.local`, de spec noemde per abuis `household.cardLocal`; integrator: rij met drie knoppen (`has-return`) zet de knoppen op een eigen regel; gate: "1 badges" in de hint is bekend en cosmetisch)
 
 **Kritische lezer (Fable, vooraf).** (1) Het token blijft hetzelfde: "Stuur terug" verpakt een bewaarde snapshot opnieuw als `#x=`; de velden
 `receivedAt` en `friend` van de snapshot mogen niet meereizen (pure helper `cardOfSnapshot`). De envelop krijgt `at` = `receivedAt` van de
@@ -233,7 +233,7 @@ string[]>), `normalizeEarned`, `registerSilently`, `registerEarnedSilently`, `re
 `src/components/ProgressSharePanel.tsx`: `buildProgressMessage(p: Profile)` (bouwt kaart + token + url + zin), `ProgressSharePanel` (intro,
 Deel, Kopieer link, Toon QR, status; `shareText` met één veld, logt 'out' kind 'progress'), `ProgressShareToggle`. `src/screens/HouseholdScreen.tsx`:
 `applyProgressCard(card, asFriend)` (r. 261; 'local' → niets), `ProgressOutcome = 'added' | 'updated' | 'friend' | 'local'`, `ProgressCardRow`
-(r. 300: toont bij 'local' `household.cardLocal`), ledenrijen met Bewerk/Verwijder en `MemberLevelLine snapshot={snapshots?.[m.id]}`, de kaart
+(r. 300: toont bij 'local' `progress.local`, "… — die voortgang zie je al."), ledenrijen met Bewerk/Verwijder en `MemberLevelLine snapshot={snapshots?.[m.id]}`, de kaart
 Vrienden met `removeFriend`; `src/screens/InboxScreen.tsx` rendert dezelfde `ProgressCardRow` (r. 666 `saveProgress`). i18n progress.* in
 src/i18n/xp.ts, household.* in src/i18n/settings.ts. Handboek 05: `delen-en-ontvangen.voortgang-delen`, `.voortgang-ontvangen`. DEVICE-TEST: rij
 122 is de laatste; dit blok krijgt rij 123.
@@ -288,7 +288,7 @@ src/i18n/xp.ts, household.* in src/i18n/settings.ts. Handboek 05: `delen-en-ontv
   `'restored'`. Bij status 'local' (de kaart hoort bij een profiel op deze telefoon, op id óf naam — `matchMemberForCard` geeft het lid; zijn
   `id` is het profiel-id): lees het huidige totaal (`xpStateFor(profileId)`, in een effect) en toon:
   - badges uit: `progress.restoreBadgesOff`;
-  - `card.xp` ≤ huidig totaal: de bestaande regel `household.cardLocal` (niets te herstellen);
+  - `card.xp` ≤ huidig totaal: de bestaande regel `progress.local` ("… — die voortgang zie je al."; niets te herstellen);
   - anders: `progress.restoreHint` + knop **Herstel mijn voortgang** (`progress.restoreBtn`, btn-primary). Tik → `confirm(progress.restoreConfirm)`
     → `onRestore(card, profileId)`; de schermen roepen `restoreProgress` aan (busy-stand zoals `cardBusy`), zetten `done` op 'restored' en tonen
     `progress.restored` met het nieuwe level; bij een fout `common.error`. Beide schermen (In & uit en Huishouden & vrienden) wiren het.
