@@ -48,7 +48,7 @@ import {
 import { nowIso } from '@/domain/model';
 import { classifyPaste } from '@/domain/paste-classify';
 import { cleanPastedText } from '@/domain/photo-import';
-import { bestSnapshotForMember, snapshotForMember, type ProgressSnapshot } from '@/domain/progress';
+import { bestSnapshotForMember, snapshotForMember, snapshotsForMember, type ProgressSnapshot } from '@/domain/progress';
 import { parseEnvelope, type ParsedShare, type ProgressCard } from '@/domain/share';
 import { decodeToken, extractTokenSpans, glueToken } from '@/domain/token';
 import { t } from '@/i18n';
@@ -600,6 +600,16 @@ export function HouseholdScreen() {
         .sort((a, b) => a.name.localeCompare(b.name)),
     [snapshots, members],
   );
+  // V1c-9b: stored progress that belongs to nobody in the list (the person was renamed or removed,
+  // or came back with another id and name). Shown under Vrienden so it can still be sent back.
+  const orphans = useMemo(() => {
+    const all = snapshots ?? {};
+    const owned = new Set<string>();
+    for (const m of members) for (const s of snapshotsForMember(m, all)) owned.add(s.id);
+    return Object.values(all)
+      .filter((s) => !s.friend && !owned.has(s.id))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [snapshots, members]);
 
   async function save(next: HouseholdSetting) {
     setSettingState(next);
@@ -894,6 +904,35 @@ export function HouseholdScreen() {
             </ul>
           ) : (
             <p class="muted small">{t('household.friendsEmpty')}</p>
+          )}
+          {orphans.length > 0 && (
+            <>
+              <p class="muted small">{t('progress.orphans')}</p>
+              <ul class="member-list">
+                {orphans.map((s) => (
+                  <li key={s.id} class="member-row-wrap">
+                    <div class="member-row">
+                      <Avatar profile={s} />
+                      <div class="who">
+                        <strong>{s.name}</strong>
+                        <FriendLevelLine snapshot={s} />
+                      </div>
+                      <div class="actions">
+                        {badgesOn && (
+                          <button type="button" class="btn btn-small" aria-expanded={returning === s.id} onClick={() => setReturning((v) => (v === s.id ? null : s.id))}>
+                            {t('progress.returnBtn')}
+                          </button>
+                        )}
+                        <button type="button" class="btn btn-small btn-danger" onClick={() => void removeFriend(s)}>
+                          {t('household.remove')}
+                        </button>
+                      </div>
+                    </div>
+                    {badgesOn && returning === s.id && <ProgressReturnPanel snapshot={s} />}
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
           <div class="actions">
             <button type="button" class="btn btn-small" onClick={goAddFriend}>

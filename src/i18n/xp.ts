@@ -123,6 +123,11 @@ export const xp: Dict = {
   'progress.friends': { nl: 'Vrienden', en: 'Friends' },
   // V1c-9 (docs/specs/verbeterronde-1c.md, block V1c-9 §1b): "Stuur terug" under a member or friend row
   // (Huishouden & vrienden) and "Herstel mijn voortgang" on a received card of a profile on this phone.
+  // V1c-9b: stored progress that belongs to nobody in the list (renamed, removed, or back with another id).
+  'progress.orphans': {
+    nl: 'Bewaarde voortgang die bij niemand in je lijst hoort (andere naam of een nieuwe telefoon). Terugsturen kan gewoon.',
+    en: 'Saved progress that belongs to nobody in your list (another name or a new phone). Sending it back still works.',
+  },
   'progress.returnBtn': { nl: 'Stuur terug', en: 'Send back' },
   'progress.returnIntro': {
     nl: 'Stuur {name} de voortgang terug die je van hem bewaarde: level {level}, bewaard op {date}. Handig als zijn telefoon leeg is: hij kan er zijn level, badges en kookdagen mee terugzetten.',
