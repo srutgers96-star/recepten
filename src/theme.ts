@@ -19,7 +19,10 @@
 // source only: the device-local setting `theme.panterUnlocked`, written by an egg (unlockPanterEgg),
 // mirrored in localStorage `recepten.theme.panterFree` for the first paint. Its colour variant is the
 // device-local setting `theme.panterColor` (mirrored in `recepten.theme.panterColor`), applied as a
-// second attribute `data-panter` on <html> while the leopard theme is applied.
+// second attribute `data-panter` on <html> while the leopard theme is applied. V1c-10b (15 Nov, after
+// Gabi's verdict): two colours only, 'klassiek' (light, sand) and 'roze' (dark, hot pink & black); a
+// stored 'sneeuw' or 'paars' from the first version falls back to 'klassiek'. The status-bar colour of
+// the leopard theme is its black header bar, per colour (PANTER_BAR), not the paper.
 import { effect, signal } from '@preact/signals';
 import { badgesEnabled } from '@/badges';
 import { getSetting, setSetting } from '@/db/repo';
@@ -44,17 +47,19 @@ const PANTER_FREE_KEY = 'recepten.theme.panterFree';
 /** localStorage mirror of `theme.panterColor` (first paint). */
 const PANTER_COLOR_KEY = 'recepten.theme.panterColor';
 
-/** The colour variants of the leopard theme (base.css `[data-panter=...]`). */
-export type PanterColor = 'klassiek' | 'roze' | 'sneeuw' | 'paars';
-export const PANTER_COLORS: readonly PanterColor[] = ['klassiek', 'roze', 'sneeuw', 'paars'];
+/** The colour variants of the leopard theme (panter.css `[data-panter=...]`): sand, or hot pink & black. */
+export type PanterColor = 'klassiek' | 'roze';
+export const PANTER_COLORS: readonly PanterColor[] = ['klassiek', 'roze'];
 export const DEFAULT_PANTER_COLOR: PanterColor = 'klassiek';
 
 export function isPanterColor(v: unknown): v is PanterColor {
   return typeof v === 'string' && (PANTER_COLORS as readonly string[]).includes(v);
 }
 
-/** Paper colour per theme, for the status bar (<meta name="theme-color">). */
-const PAPER: Record<Exclude<Theme, 'system'>, string> = { light: '#eaf3fb', dark: '#0f1a2b', gold: '#15120c', panter: '#14110d' };
+/** Paper colour per theme, for the status bar (<meta name="theme-color">); the leopard theme uses PANTER_BAR. */
+const PAPER: Record<Exclude<Theme, 'system' | 'panter'>, string> = { light: '#eaf3fb', dark: '#0f1a2b', gold: '#15120c' };
+/** The leopard theme's header bar per colour (panter.css --panter-bar): what sits under the status bar. */
+const PANTER_BAR: Record<PanterColor, string> = { klassiek: '#15100b', roze: '#120b10' };
 
 export function isTheme(v: unknown): v is Theme {
   return v === 'system' || v === 'light' || v === 'dark' || v === 'gold' || v === 'panter';
@@ -224,7 +229,7 @@ function apply(t: Theme, color: PanterColor) {
   // index.html carries two theme-color metas with media queries; a forced theme overrides both.
   document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((m) => {
     if (!m.dataset.original) m.dataset.original = m.content;
-    m.content = t === 'system' ? (m.dataset.original ?? m.content) : PAPER[t];
+    m.content = t === 'system' ? (m.dataset.original ?? m.content) : t === 'panter' ? PANTER_BAR[color] : PAPER[t];
   });
 }
 

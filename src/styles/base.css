@@ -145,67 +145,7 @@
   --rarity-legendary: #ffd75e;
 }
 
-/* V1c-10: the leopard theme (Gabi's egg). Dark base like gold; the print lives on the body background and the header/nav bar,
-   never on cards or behind body text. Per colour only the five --panter-* tokens and the accent change.
-   diet-* and rarity-* copy the gold block. */
-:root[data-theme='panter'] {
-  color-scheme: dark;
-  --paper: #14110d;
-  --card: #1e1812;
-  --ink: #f4ead6;
-  --muted: #c9b48e;
-  --cobalt: #d9a441;
-  --tomato: #ef6a55;
-  --rosemary: #9fcf8a;
-  --orange: #e0863a;
-  --line: rgba(217, 164, 65, 0.22);
-  --press: rgba(217, 164, 65, 0.16);
-  --on-cobalt: #1a1206;
-  --on-rosemary: #15120c;
-  --panter-base: #d9a441;
-  --panter-spot: rgba(0, 0, 0, 0.28);
-  --panter-ring: rgba(217, 164, 65, 0.22);
-  --diet-glutenvrij-bg: #5a4a10;
-  --diet-glutenvrij-ink: #f7e9a8;
-  --diet-vegetarisch-bg: #5c4028;
-  --diet-vegetarisch-ink: #eed5bb;
-  --diet-vegan-bg: #244d22;
-  --diet-vegan-ink: #cdeac6;
-  --diet-lactosevrij-bg: #1f2d44;
-  --diet-lactosevrij-ink: #e8eef6;
-  --diet-personal-bg: #22365e;
-  --diet-personal-ink: #dbe4fa;
-  --rarity-rare: #6f9fe8;
-  --rarity-epic: #ab93d8;
-  --rarity-legendary: #ffd75e;
-}
-:root[data-theme='panter'][data-panter='roze'] { --cobalt: #ff6fae; --panter-base: #ff6fae; --panter-ring: rgba(255, 111, 174, 0.24); --line: rgba(255, 111, 174, 0.22); --press: rgba(255, 111, 174, 0.16); --on-cobalt: #2a0f1d; --orange: #ff9a6a; }
-:root[data-theme='panter'][data-panter='sneeuw'] { --cobalt: #d8dfe6; --panter-base: #cfd6dd; --panter-ring: rgba(216, 223, 230, 0.22); --line: rgba(216, 223, 230, 0.2); --press: rgba(216, 223, 230, 0.14); --on-cobalt: #141a21; --paper: #101317; --card: #181d24; --ink: #eef2f6; --muted: #aab4c0; }
-:root[data-theme='panter'][data-panter='paars'] { --cobalt: #b48cf0; --panter-base: #b48cf0; --panter-ring: rgba(180, 140, 240, 0.24); --line: rgba(180, 140, 240, 0.22); --press: rgba(180, 140, 240, 0.16); --on-cobalt: #1a1030; --paper: #130f1c; --card: #1c1626; }
-/* The print: rosettes = a dark spot with a ring in the accent, two offset layers, tile 44x40 px. .screen has no
-   background of its own, so the body print shows behind the scrolling page; cards stay plain (var(--card)). */
-:root[data-theme='panter'] body {
-  background-color: var(--paper);
-  background-image:
-    radial-gradient(ellipse 7px 5px at 9px 11px, var(--panter-spot) 58%, transparent 62%),
-    radial-gradient(ellipse 11px 9px at 9px 11px, transparent 56%, var(--panter-ring) 60%, var(--panter-ring) 70%, transparent 74%),
-    radial-gradient(ellipse 6px 5px at 31px 29px, var(--panter-spot) 58%, transparent 62%),
-    radial-gradient(ellipse 10px 8px at 31px 29px, transparent 56%, var(--panter-ring) 60%, var(--panter-ring) 70%, transparent 74%);
-  background-size: 44px 40px;
-}
-/* The header and nav bar: the same four layers at 70 % of the alpha, on the card colour. */
-:root[data-theme='panter'] .header,
-:root[data-theme='panter'] .nav {
-  --panter-spot-bar: color-mix(in srgb, var(--panter-spot) 70%, transparent);
-  --panter-ring-bar: color-mix(in srgb, var(--panter-ring) 70%, transparent);
-  background-color: var(--card);
-  background-image:
-    radial-gradient(ellipse 7px 5px at 9px 11px, var(--panter-spot-bar) 58%, transparent 62%),
-    radial-gradient(ellipse 11px 9px at 9px 11px, transparent 56%, var(--panter-ring-bar) 60%, var(--panter-ring-bar) 70%, transparent 74%),
-    radial-gradient(ellipse 6px 5px at 31px 29px, var(--panter-spot-bar) 58%, transparent 62%),
-    radial-gradient(ellipse 10px 8px at 31px 29px, transparent 56%, var(--panter-ring-bar) 60%, var(--panter-ring-bar) 70%, transparent 74%);
-  background-size: 44px 40px;
-}
+/* V1c-10: the leopard theme (Gabi's egg) lives in panter.css (imported last by main.tsx). */
 
 * {
   box-sizing: border-box;

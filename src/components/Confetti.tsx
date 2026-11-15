@@ -17,6 +17,11 @@
 // 'fireworks' (three bursts from three points), 'bubbles' (rise, 1.6x), 'lanterns' (glow, rise, 2x)
 // and 'aurora' (ten blurred streaks, 2x). Durations and wave delays follow the same speed rule
 // (divided by the burst speed); the clear waits for the longest flight plus the last wave.
+//
+// V1c-10b (docs/specs/ei-gabi.md §1e): 'panter' = 110 leopard-print pieces in two waves: sand pieces
+// with two black spots (p0), black pieces (p1) and sand pieces with one rosette (p2). Their colours are
+// the --pc-* tokens of src/styles/panter.css (sand/black/brown, or pink/black/light pink under the hot
+// pink colour), so the look also works under another theme; the spot gradients are in that sheet.
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'preact/hooks';
 import { afterCelebration, celebration, celebrationSpeed, clearCelebration, holdCelebration, type Celebration } from '@/celebrate';
 
@@ -65,6 +70,7 @@ const LOOKS: Readonly<Record<string, LookSpec>> = {
   bubbles: { pieces: 50, factor: 1.6, waves: [0] },
   lanterns: { pieces: 24, factor: 2, waves: [0] },
   aurora: { pieces: 10, factor: 2, waves: [0] },
+  panter: { pieces: 110, factor: 1.15, waves: [0, 160] },
 };
 
 /** Duration factor of a look (1 for the plain burst and the 6D-4a styles). */
@@ -286,7 +292,9 @@ export function Confetti(props: ConfettiProps) {
         const dx = Math.cos(angle) * dist;
         // Gravity: pieces end lower than they peaked; bubbles and lanterns rise (negative gravity).
         const dy = Math.sin(angle) * dist + (small ? 90 : rising ? -140 : 140);
-        const color = pick(look === 'gold' ? GOLD : look === 'lanterns' ? LANTERN_RED : COLORS);
+        // V1c-10b: the leopard pieces take the theme's --pc-* colours; 0 = sand with spots, 1 = black, 2 = sand with a rosette.
+        const panterKind = look === 'panter' ? (rnd() < 0.45 ? 0 : rnd() < 0.5 ? 1 : 2) : -1;
+        const color = panterKind >= 0 ? (panterKind === 1 ? 'var(--pc-spot)' : 'var(--pc-base)') : pick(look === 'gold' ? GOLD : look === 'lanterns' ? LANTERN_RED : COLORS);
         const spin = look === 'lanterns' ? 40 : look === 'bubbles' || look === 'snow' ? 0 : 900;
         vars.push(`--c:${color}`, `--dx:${dx.toFixed(0)}px`, `--dy:${dy.toFixed(0)}px`, `--rot:${((rnd() - 0.5) * spin).toFixed(0)}deg`);
         const round = rnd() < 0.3;
@@ -312,6 +320,8 @@ export function Confetti(props: ConfettiProps) {
           pasta = { shape: pick(PASTA_SHAPES), tint: pick(PASTA_TINTS) };
         } else if (look === 'quadruple') {
           cls = round ? 'quad round' : 'quad';
+        } else if (panterKind >= 0) {
+          cls = `panter p${panterKind}`;
         } else {
           cls = round ? 'round' : '';
         }

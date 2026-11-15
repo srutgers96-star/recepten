@@ -16,7 +16,8 @@
 //     on an unlocked style takes it out of / puts it in the mix (`setUnlockEnabled`).
 //   - Letters: Standaard · Krijtbord · Handschrift ("Aa" in that typeface); tap = `cook.font`.
 //   - Thema: Systeem · Licht · Donker (a small swatch in that paper colour), plus Goud while it is free (V5 §1d); tap = setTheme.
-//     Plus Panter (🐆) while it is free on this phone (V1c-10); with Panter chosen, a Kleur control under the tiles.
+//     Plus Panter while it is free on this phone (V1c-10; the tile shows the print); with Panter chosen, a Kleur control
+//     under the tiles with Klassiek and Hot pink & zwart (V1c-10b). Confetti gets the tile Panterconfetti then, too.
 //   - At the bottom, muted, `unlocks.phoneWide`.
 // Badges off: only `badges.disabled` and the tab Thema (the theme has nothing to do with XP).
 // Opening this screen is never a reward moment: it reads, it never settles XP.
@@ -25,7 +26,7 @@
 import type { ComponentChildren, JSX } from 'preact';
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { badgeData, badgesEnabled, loadBadgeSettings } from '@/badges';
-import { celebrate, celebrateFast, confettiStyle, DEFAULT_CONFETTI_STYLE, loadCelebrateSettings, RANDOM_CONFETTI_STYLE, setCelebrateFast, setConfettiStyle } from '@/celebrate';
+import { celebrate, celebrateFast, confettiStyle, DEFAULT_CONFETTI_STYLE, loadCelebrateSettings, PANTER_CONFETTI_STYLE, RANDOM_CONFETTI_STYLE, setCelebrateFast, setConfettiStyle } from '@/celebrate';
 import { isIOS } from '@/components/AppInfo';
 import { AvatarSheet } from '@/components/AvatarSheet';
 import { Header } from '@/components/Header';
@@ -159,6 +160,8 @@ function tile(s: StyleState, group: TileGroup, value: string, unlock: Unlock | n
  */
 export function shownConfettiStyle(s: StyleState): string {
   if (s.confettiStyle === RANDOM_CONFETTI_STYLE || s.confettiStyle === DEFAULT_CONFETTI_STYLE) return s.confettiStyle;
+  // V1c-10b: the egg's look works while the leopard theme is free (no unlock).
+  if (s.confettiStyle === PANTER_CONFETTI_STYLE) return s.panterFree === true ? PANTER_CONFETTI_STYLE : RANDOM_CONFETTI_STYLE;
   const u = unlockFor(s, 'confetti', s.confettiStyle);
   return u !== null && s.unlocked.has(u.id) ? s.confettiStyle : RANDOM_CONFETTI_STYLE;
 }
@@ -188,6 +191,8 @@ export function styleTiles(tab: StyleTab, s: StyleState): StyleTile[] {
       return [
         tile(s, 'confetti', RANDOM_CONFETTI_STYLE, null, shown === RANDOM_CONFETTI_STYLE),
         tile(s, 'confetti', DEFAULT_CONFETTI_STYLE, null, shown === DEFAULT_CONFETTI_STYLE),
+        // V1c-10b: Panterconfetti right after Gewoon, only once the secret was found (never in the mix toggle).
+        ...(s.panterFree === true ? [tile(s, 'confetti', PANTER_CONFETTI_STYLE, null, shown === PANTER_CONFETTI_STYLE)] : []),
         ...s.unlocks.filter((u) => u.kind === 'confetti').map((u) => tile(s, 'confetti', u.value, u, shown === u.value, !s.disabled.has(u.id))),
       ];
     }
@@ -206,6 +211,7 @@ const STANDARD_ICONS: Readonly<Record<string, string>> = {
   'timerSound:off': '🔇',
   'confetti:random': '🎲',
   'confetti:default': '🎉',
+  'confetti:panter': '🐆',
 };
 
 function tileName(x: StyleTile, l: Lang): string {
@@ -221,6 +227,7 @@ function tileName(x: StyleTile, l: Lang): string {
     case 'confetti':
       if (x.value === RANDOM_CONFETTI_STYLE) return t('style.random');
       if (x.value === DEFAULT_CONFETTI_STYLE) return t('style.confetti.default');
+      if (x.value === PANTER_CONFETTI_STYLE) return t('style.confetti.panter');
       return x.unlock ? x.unlock[l].name : x.value;
     case 'cookedSound':
       return x.unlock ? x.unlock[l].name : x.value;
@@ -349,13 +356,8 @@ function TileFace(props: { x: StyleTile }): JSX.Element {
       </span>
     );
   }
-  if (x.group === 'theme' && x.value === 'panter') {
-    return (
-      <span class="style-tile-icon" aria-hidden="true">
-        🐆
-      </span>
-    );
-  }
+  // V1c-10b: the leopard tile shows the print itself, in the chosen colour (panter.css).
+  if (x.group === 'theme' && x.value === 'panter') return <span class="style-swatch-theme" data-theme-swatch="panter" data-panter-swatch={panterColor.value} aria-hidden="true" />;
   if (x.group === 'theme') return <span class="style-swatch-theme" data-theme-swatch={x.value} aria-hidden="true" />;
   const icon = x.unlock?.icon ?? STANDARD_ICONS[`${x.group}:${x.value}`] ?? '•';
   return (
@@ -438,7 +440,7 @@ function Tile(props: { x: StyleTile; l: Lang; onTap: (x: StyleTile) => void; onT
       {/* V5 §1d: under the gold tile, when the maker's egg unlocked it. */}
       {x.group === 'theme' && x.value === 'gold' && goldUnlockedByMaker.value && <span class="style-tile-sub muted">{t('style.goldUnlockedMaker')}</span>}
       {/* V1c-10: under the leopard tile (it only exists once the secret was found). */}
-      {x.group === 'theme' && x.value === 'panter' && <span class="style-tile-sub muted">{t('style.panterSecret')}</span>}
+      {((x.group === 'theme' && x.value === 'panter') || (x.group === 'confetti' && x.value === PANTER_CONFETTI_STYLE)) && <span class="style-tile-sub muted">{t('style.panterSecret')}</span>}
     </div>
   );
 }

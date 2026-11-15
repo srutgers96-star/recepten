@@ -4,7 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import unlocksJson from '../data/unlocks.json';
 import { normalizeUnlocks, unlockedIds } from '../src/domain/unlocks';
-import { initialStyleTab, STYLE_TABS, styleTabs, styleTiles, TIMER_SOUND_TILES, type StyleState, type StyleTile } from '../src/screens/StyleScreen';
+import { initialStyleTab, shownConfettiStyle, STYLE_TABS, styleTabs, styleTiles, TIMER_SOUND_TILES, type StyleState, type StyleTile } from '../src/screens/StyleScreen';
 
 const UNLOCKS = normalizeUnlocks(unlocksJson);
 
@@ -129,6 +129,19 @@ describe('styleTiles', () => {
       expect(tiles.every((x) => !x.locked && x.rarity === 'common')).toBe(true);
       expect(onValues(tiles)).toEqual(['dark']);
     }
+  });
+
+  // V1c-10b: Panterconfetti sits right after Gewoon once the secret was found; it is on when chosen and never has a mix toggle.
+  it('Confetti: Panterconfetti after Gewoon only while the leopard theme is free', () => {
+    expect(values(styleTiles('confetti', atLevel(1)))).not.toContain('panter');
+    const tiles = styleTiles('confetti', atLevel(1, { panterFree: true, confettiStyle: 'panter' }));
+    expect(values(tiles).slice(0, 3)).toEqual(['random', 'default', 'panter']);
+    const p = find(tiles, 'panter');
+    expect(p.on).toBe(true);
+    expect(p.locked).toBe(false);
+    expect(p.inMix).toBeNull();
+    expect(shownConfettiStyle(atLevel(1, { confettiStyle: 'panter' }))).toBe('random');
+    expect(shownConfettiStyle(atLevel(1, { panterFree: true, confettiStyle: 'panter' }))).toBe('panter');
   });
 
   it('badges off → Geluiden keeps only the four base sounds; avatar, confetti and fonts are empty', () => {

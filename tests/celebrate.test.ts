@@ -10,10 +10,12 @@ import {
   FAST_CELEBRATIONS_UNLOCK,
   pickConfettiStyle,
   RANDOM_CONFETTI_STYLE,
+  PANTER_CONFETTI_STYLE,
   usableConfettiStyles,
 } from '../src/celebrate';
 import { hash32 } from '../src/domain/xp';
 import { disabledUnlocks, unlockedOnPhone } from '../src/unlocks';
+import { panterUnlocked } from '../src/theme';
 
 const ACTIVE = ['default', 'double', 'veggies', 'trex'];
 
@@ -70,6 +72,19 @@ describe('usableConfettiStyles', () => {
     unlockedOnPhone.value = new Set(['confetti-double', 'confetti-trex']);
     badgesEnabled.value = false;
     expect(usableConfettiStyles()).toEqual(['default']);
+  });
+
+  // V1c-10b: the egg's look is usable while the leopard theme is free, badges on or off (no unlock).
+  it("the leopard egg adds 'panter' last, also with badges off", () => {
+    try {
+      panterUnlocked.value = true;
+      unlockedOnPhone.value = new Set(['confetti-double']);
+      expect(usableConfettiStyles()).toEqual(['default', 'double', PANTER_CONFETTI_STYLE]);
+      badgesEnabled.value = false;
+      expect(usableConfettiStyles()).toEqual(['default', PANTER_CONFETTI_STYLE]);
+    } finally {
+      panterUnlocked.value = false;
+    }
   });
 });
 

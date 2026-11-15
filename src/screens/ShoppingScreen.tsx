@@ -71,7 +71,7 @@ import {
   type ListItemPatch,
 } from '@/db/repo';
 import { recheckActiveBadges } from '@/badges';
-import { celebrate } from '@/celebrate';
+import { celebrate, PANTER_CONFETTI_STYLE } from '@/celebrate';
 import { dictionary } from '@/dictionary';
 import { effectiveQty, groupByAisle, isoWeekNumber, itemName, listAsText, renderListItem, type AisleGroup, type ListItem } from '@/domain/aggregate';
 import type { Dictionary } from '@/domain/dictionary';
@@ -395,7 +395,7 @@ export function ShoppingScreen() {
     if (!isPanterEggText(line)) return false;
     const r = await unlockPanterEgg();
     showSnack(t(r === 'unlocked' ? 'shop.panterEgg' : 'shop.panterAgain'));
-    if (r === 'unlocked') celebrate('milestone');
+    if (r === 'unlocked') celebrate('milestone', { style: PANTER_CONFETTI_STYLE });
     return true;
   }
 

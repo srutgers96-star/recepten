@@ -64,7 +64,7 @@ data/               SOURCE OF TRUTH: recipes.json (schema 2, bilingual), ingredi
                     badges/avatar-parts/levels/unlocks/challenges.json, handbook/*.json (the in-app handbook, 10 topics)
 data/source/        recipes-recepten2.json: the 196 originals from Recepten2 (read-only, never edited by hand)
 public/             icons/, cover.webp, share/index.html (share_target fallback), .nojekyll
-tools/              Node 22 scripts: validate-data, measure-parse, make-icons.py, migration, translation batches
+tools/              Node 22 scripts: validate-data, measure-parse, make-icons.py, panter-tile.py (panterprint-tegels → panter.css), migration, translation batches
 tests/              Vitest, only where data, parser, codec, scaling, aggregation or merge can break
 docs/adr/           architecture decision records (0001 = phase-0 go/no-go checklist + results)
 docs/DEVICE-TEST.md build checklist per block (NL + EN; the gate reads it). Users read the HANDBOOK instead:

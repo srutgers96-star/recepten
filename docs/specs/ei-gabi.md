@@ -1,12 +1,13 @@
 # Spec V1c-10 — Gabi's ei: het panterprint-thema (SPOILER — Stijn, niet lezen: jij wilde niet weten hoe het vrijspeelt)
 
-Status: compleet (Fable, 15 nov 2026). Twee bouwers + integrator (lichte modus). Bron: Gabi, getypt op Stijns laptop (15 nov, Engels):
+Status: compleet (Fable, 15 nov 2026). Twee bouwers + integrator (lichte modus). **Herontwerp V1c-10b (Fable zelf, 15 nov, avond)** na
+Gabi's oordeel over de eerste versie ("het ziet eruit als goud met een goedkope achtergrond"): zie §1d–§1f; §1a's CSS-blok is daarmee geschiedenis. Bron: Gabi, getypt op Stijns laptop (15 nov, Engels):
 "if I click to shopping list and then only add leopard print and save, the leopard print theme would appear; there would be multiple
 options for the colour theme, and a mask would unlock to put on the avatar." Stijn: "ze is jaloers op goud; zodat ik niet weet wat het is".
 Leidend bij tegenspraak: docs/specs/README.md §2–§4, docs/specs/verbeterronde-5.md §1d (het gouden thema en het makers-ei: dit ei volgt
 dezelfde plumbing), docs/specs/badges-avatar.md (avatar-onderdelen). De manier van vrijspelen staat ALLEEN in dit bestand: niet in STATUS,
 niet in het handboek, niet in DEVICE-TEST (daar staat "Gabi weet hoe"), niet in commit-berichten.
-Gebouwd: 15 nov 2026 (V1c-10, lichte workflow wf_6b027015-4e1; lens: twee bevindingen, allebei hersteld: de controle zit op de hele getypte regel via een prop `onLine` op ExtraField (niet in `addItem`, anders telde "2 leopard print" of "melk, leopard print" ook), en DEVICE-TEST rij 125 noemt het scherm niet; besluiten Fable: zo laten; bouwer A: nog eens vrijspelen zet het thema ook op Panter, `color-mix` voor de balken)
+Gebouwd: 15 nov 2026 (V1c-10, lichte workflow wf_6b027015-4e1); V1c-10b herontwerp 15 nov 2026 (Fable zelf, geen workflow; §1d–§1f). (V1c-10: lens: twee bevindingen, allebei hersteld: de controle zit op de hele getypte regel via een prop `onLine` op ExtraField (niet in `addItem`, anders telde "2 leopard print" of "melk, leopard print" ook), en DEVICE-TEST rij 125 noemt het scherm niet; besluiten Fable: zo laten; bouwer A: nog eens vrijspelen zet het thema ook op Panter, `color-mix` voor de balken)
 
 **Kritische lezer (Fable, vooraf).** (1) Zelfde plumbing als goud: een thema is pas kiesbaar als het "vrij" is op deze telefoon; voor panter
 is er geen level-ontgrendeling, alleen het ei (device-local setting `theme.panterUnlocked` + localStorage-spiegel voor de eerste paint, zoals
@@ -122,12 +123,66 @@ laatste rij 124; dit blok krijgt 125.
   dunne rand `#2a2420` 1,2 px, en aan beide zijkanten een kort lintje naar de oren (`#2a2420`, 1,5 px). Leesbaar op 48 px (de lijst) én op de
   grote avatar. `npm run validate:data` groen (`checkAvatarSvg`).
 
+### 1d. Herontwerp V1c-10b: het echte printje, twee smaken, zwarte balken, labels (Fable, 15 nov 2026)
+
+Aanleiding (Stijn, 15 nov, met twee voorbeeldfoto's): "het ziet er nu gewoon uit als goud-modus met een schrale achtergrond; ze wil ook hot
+pink & black, dus eigenlijk twee panteropties; de letters zijn nu ook goud, sommige bruin en sommige geel is een goed idee; doe meer je best."
+Tweede correctie tijdens het bouwen: "nu ziet het eruit als tepels, blijf dichter bij mijn voorbeelden" → de bruine kern vult de hele binnenkant
+van de zwarte ring (de ring zit óp de rand van de kern), geen bolletje in een lege ring.
+
+- **Het printje** is een naadloze SVG-tegel van 216 × 216 px, gegenereerd door `tools/panter-tile.py` (Python, geseed met 23; `python
+  tools/panter-tile.py` schrijft de twee data-URI's tussen de markers `/* @panter-tiles */` in `src/styles/panter.css`; `… 7 preview` geeft een
+  andere seed en schrijft `scratch/panter-*.svg`). Geometrie: een gejitterd 5 × 5-raster van rozetten (oneven rijen een halve cel verschoven),
+  elke rozet een grillige kern (quadratische beziers rond zes punten) met twee of drie dikke zwarte boogstukken (5–7 px, ronde uiteinden) óp
+  de rand van de kern, een deel massieve vlekken (Klassiek 14 %, Roze 38 %) en negen kleine vlekjes; rozetten aan een rand komen met `<use>`
+  aan de overkant terug (naadloos). Kleuren Klassiek: zand `#dab672`, zwart `#1a1411`, bruin `#8e5f36`; Roze: hot pink `#ff2d93`, zwart `#140b10`,
+  lichtroze `#ff5fae`.
+- **Eén blad** `src/styles/panter.css` (door `src/main.tsx` als laatste geïmporteerd, dus het wint op volgorde) bezit alles wat panter is; de
+  oude blokken in base.css, shopping.css en xp.css zijn weg. Twee smaken op `data-panter`: **Klassiek** = LICHT thema (het printje is de pagina;
+  `--card` crème `#fbf4e3`, `--ink` `#2a1a08`, `--muted` bruin `#7a5a33`, `--cobalt` zwart `#1a1411` met `--on-cobalt` zand, kaartkopjes bruin
+  `--panter-head #6b4318`, accentwoorden oker `--panter-ochre #a06f1c`; alle diet-, rarity-, `--gold`- en gangpadtokens de lichte waarden) en
+  **Roze (Hot pink & zwart)** = DONKER thema (`--card` `#15101a`, `--ink` `#ffe9f4`, `--cobalt` `#ff3d9c`, kopjes en accenten roze; de donkere
+  tokens). Kop- en navigatiebalk zijn in beide smaken zwart (`--panter-bar`) met zand- of roze letters (`--panter-bar-ink`), knoppen in de balk
+  transparant met die letters. De statusbalk-kleur (theme-color) is per smaak de balk (`PANTER_BAR` in theme.ts), niet het papier.
+- **Leesbaarheidsregel: tekst staat nooit los op het printje.** Kaarten, sheets, chips en knoppen waren al vlakken; nieuw in panter.css:
+  `ul.list` en `.menu` worden panelen (kaartkleur, rand, radius), `.letter`/`.group-head` krijgen een crème label achter de letter (`::before`),
+  `ul.ing` (ingrediënten) een paneel, en een generieke regel maakt van losse `h1–h4`, `label`, `dt`, `.muted` een inline label en van losse
+  `p`/`dd` een paneel — "los" = niet binnen `.card, .menu, ul.list, .sheet, .tonight, .row, .chip, .btn, …` (`:not(:is(…) *)`). Daarbovenop
+  gerichte regels: `.home-hello` (paneel) en `.home-level` (pil in oker), `.az-rail`, `.badge-gtabs` (tabstrip), `.style-tile-name`/`.style-tile-sub`,
+  `.setting` buiten een menu, `.detail-cat-name`/`.link-btn`/`.recipe-meta`/`.diet-label`/`.list-count`, `.ing-header`/`.cook-kicker`/`.field > span`,
+  en `.btn-secondary` krijgt een crème vulling. Gecontroleerd in de dev-app op 434 px en 375 px, beide smaken: Home, Recepten (filters, lijst,
+  A–Z), recept (kop, categorie, versies, ingrediënten, stappen), kookstand, nieuw recept, Boodschappen, Week, Meer (menu's, Aantal personen),
+  Jouw stijl (tabs, tegels, Kleur), Badges, Mijn profiel, Huishouden, Handleiding, In & uit, Woordenboek.
+- **Twee kleuren** (`PanterColor = 'klassiek' | 'roze'`): een opgeslagen 'sneeuw' of 'paars' van de eerste versie valt terug op Klassiek
+  (`isPanterColor` kent ze niet meer). Labels: Klassiek · Classic; Hot pink & zwart · Hot pink & black. De tegel Panter in Jouw stijl toont het
+  printje zelf als vlakje (`.style-swatch-theme[data-theme-swatch='panter'][data-panter-swatch=…]`), in de gekozen smaak.
+
+### 1e. Panterconfetti (Fable, 15 nov 2026; Stijn: "die panterconfetti is echt een goed idee")
+
+- `src/celebrate.ts`: `PANTER_CONFETTI_STYLE = 'panter'`; `usableConfettiStyles()` en de mix (`pickStyle`) krijgen 'panter' erbij zolang het
+  panterthema vrij is (`panterThemeFree()`, badges aan of uit — geen unlock, zoals het thema zelf; `eggConfettiStyles()`). Het ei viert met
+  `celebrate('milestone', { style: PANTER_CONFETTI_STYLE })`.
+- `src/components/Confetti.tsx` look `panter`: 110 snippers in twee golven (0 en 160 ms), factor 1,15; drie soorten: p0 zand met twee zwarte
+  vlekjes (45 %), p1 zwart, p2 zand met één rozet (bruine kern in zwarte ring). De kleuren zijn de tokens `--pc-base/--pc-spot/--pc-core` uit
+  panter.css: op `:root` zand/zwart/bruin (zodat de look ook onder een ander thema werkt), onder Roze hot pink/zwart/lichtroze; de vlekjes zijn
+  radial-gradients op `.confetti i.panter.p0/.p2`.
+- Jouw stijl → Confetti: tegel **Panterconfetti** (🐆, "geheim ontdekt") direct na Gewoon, alleen zodra het ei gevonden is (`StyleState.panterFree`),
+  nooit met een mix-schakelaar (`inMix` null); `shownConfettiStyle` kent 'panter' als bruikbaar zolang vrij. i18n `style.confetti.panter`;
+  de ei-snackbar zegt nu "Thema, panterconfetti en masker staan onder Jouw stijl."
+
+### 1f. Het masker, tweede tekening (Fable, 15 nov 2026)
+
+`glasses-panter` opnieuw getekend in de kleuren van het printje: een maskerade-masker van x 22 tot 78 met opgetrokken kattenooghoeken, zand
+`#dab672` met zwarte rand `#1a1411` (1,4 px), twee echte oog-gaten (ellips 6,5 × 4,8 op (39,40.5) en (61,40.5), evenodd), vijf rozetten (bruine
+kern `#8e5f36` met twee zwarte boogstukken) op de wangen, de brug en onder de ogen, vier kleine zwarte vlekjes, en aan beide kanten een lintje
+naar de oren. Beoordeeld op 220 px en 48 px (scratch-voorbeeldpagina met face-round/eyes-dots en face-oval/eyes-happy): de ogen blijven zichtbaar.
+
 ### 2. Opus mag dit NIET zelf beslissen
 - De zinnen in `PANTER_PHRASES`; één regel, precies de zin; niets op de lijst; het thema schakelt meteen om; geen handboekrij; de manier van
   vrijspelen alleen in dit bestand.
-- Vier kleuren met deze namen; device-local; het printje alleen op body en kop-/navigatiebalk; kaarten effen.
+- (V1c-10b) Twee kleuren, Klassiek en Hot pink & zwart; device-local; het printje is de pagina, de balken zijn zwart, tekst staat nooit los op het printje.
 - Eén masker in de laag `glasses`, legendary, ontgrendeld door het ei (geen level, geen badge).
-- Geen nieuwe dependency; geen nieuwe confettistijl.
+- Geen nieuwe dependency. (V1c-10b: wél een eigen confettilook 'panter', geen unlock.)
 
 ### 3. Bestandsverdeling
 | Bouwer | Bestanden |

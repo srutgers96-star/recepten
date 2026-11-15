@@ -81,7 +81,7 @@ export const shopping: Dict = {
   'shop.addNew': { nl: 'Nieuw ingrediënt: “{q}”', en: 'New ingredient: “{q}”' },
   'shop.addedSnack': { nl: 'Toegevoegd', en: 'Added' },
   // V1c-10 (docs/specs/ei-gabi.md).
-  'shop.panterEgg': { nl: '🐆 Panterprint vrijgespeeld! De kleuren staan onder Jouw stijl → Thema.', en: '🐆 Leopard print unlocked! The colours are under Your style → Theme.' },
+  'shop.panterEgg': { nl: '🐆 Panterprint vrijgespeeld! Thema, panterconfetti en masker staan onder Jouw stijl.', en: '🐆 Leopard print unlocked! Theme, leopard confetti and mask are under Your style.' },
   'shop.panterAgain': { nl: '🐆 Je hebt dit al. Grrr.', en: '🐆 You already have this. Grrr.' },
   'shop.recent': { nl: 'eerder', en: 'before' },
   // V6 (docs/specs/verbeterronde-6.md §1b): the "Zet op de lijst?" sheet for a pasted list of three or more lines.

@@ -137,10 +137,9 @@
   }
 }
 
-/* Forced dark; the gold theme (V5) and the leopard theme (V1c-10) are dark too. */
+/* Forced dark; the gold theme (V5) is dark too (the leopard theme sets its own aisle colours in panter.css). */
 :root[data-theme='dark'],
-:root[data-theme='gold'],
-:root[data-theme='panter'] {
+:root[data-theme='gold'] {
   --aisle-groente-fruit: #7fc08a;
   --aisle-vlees-vis: #e08a8a;
   --aisle-zuivel-eieren: #dcc060;

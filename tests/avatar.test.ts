@@ -1369,7 +1369,8 @@ describe('V1c-10 §1b: a part that unlocks with an egg', () => {
     const mask = part('glasses-panter');
     expect(mask).toMatchObject({ layer: 'glasses', nl: 'Pantermasker', en: 'Leopard mask', unlock: { egg: 'panter' }, rarity: 'legendary' });
     expect(mask.svg).toContain('fill-rule="evenodd"');
-    for (const colour of ['#d9a441', '#2a1b0c', '#6b4a1a', '#2a2420']) expect(mask.svg).toContain(colour);
+    // V1c-10b: the print's own colours (tools/panter-tile.py): sand, black, brown.
+    for (const colour of ['#dab672', '#1a1411', '#8e5f36']) expect(mask.svg).toContain(colour);
   });
 
   it('the validator accepts { egg } from EGG_IDS and refuses an unknown egg or a mixed unlock', () => {

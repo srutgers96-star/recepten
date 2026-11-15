@@ -9,6 +9,15 @@
 //
 // 'overcooked' is NOT a feature event: that badge reads the XP state (BadgeFacts.xp, rule kind
 // 'overcooked' in badges.ts).
+//
+// V1c-11 (Stijn, 15 Nov 2026: "365 keer Verras me spammen speelt alle levels vrij"): the actions that
+// cost nothing to repeat have a cap per LOCAL day (DAILY_CAPS). A bump past the cap on the same day is
+// dropped: the log does not change, so the badge does not count it and the XP behind the badge tiers
+// stays honest. Each counter remembers the day of its last counted event and how many counted that
+// day (`day`); older logs without it simply start counting on the next bump. Nothing in the UI says
+// so (Stijn: "zonder dat te laten weten").
+
+import { dayIndexOfIso, dayKey } from './days.ts';
 
 export const FEATURE_IDS = [
   'voice',
@@ -48,6 +57,31 @@ export const FEATURE_IDS = [
 
 export type FeatureId = (typeof FEATURE_IDS)[number];
 
+/**
+ * Counted events per local day, for the actions that are free to repeat (V1c-11). Ids absent here
+ * have no cap. Only the tiered badges are listed: a one-off badge needs one event anyway.
+ */
+export const DAILY_CAPS: Readonly<Partial<Record<FeatureId, number>>> = {
+  surprise: 10, // Verras me (Stijn: "max 10 per dag")
+  timer: 10,
+  cookMode: 5,
+  planCook: 5,
+  listMade: 3,
+  standingList: 10,
+  dictEdit: 25,
+  variant: 5,
+  planShared: 5,
+  listShared: 5,
+  deltaShared: 5,
+};
+
+export interface FeatureDay {
+  /** Local calendar day ('yyyy-mm-dd') of the last counted event. */
+  d: string;
+  /** Events counted on that day. */
+  n: number;
+}
+
 export interface FeatureCount {
   /** How often it happened, all members together. */
   n: number;
@@ -56,6 +90,8 @@ export interface FeatureCount {
   last: string;
   /** Count per member id ('anon' without an active profile). */
   by: Record<string, number>;
+  /** V1c-11: the last counted day and its count (missing in logs from before the caps). */
+  day?: FeatureDay;
 }
 
 export type FeatureLog = Partial<Record<FeatureId, FeatureCount>>;
@@ -105,6 +141,13 @@ function normalizeBy(value: unknown): Record<string, number> {
   return out;
 }
 
+function normalizeDay(value: unknown): FeatureDay | null {
+  if (!isRecord(value)) return null;
+  const d = value['d'];
+  const n = count(value['n']);
+  return typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d) && n !== null ? { d, n } : null;
+}
+
 function normalizeCount(value: unknown): FeatureCount | null {
   if (!isRecord(value)) return null;
   const n = count(value['n']);
@@ -113,7 +156,16 @@ function normalizeCount(value: unknown): FeatureCount | null {
   const last = nonEmptyString(value['last']);
   // One moment missing: the other stands in for it; both missing → not a usable counter.
   if (first === null && last === null) return null;
-  return { n, first: first ?? (last as string), last: last ?? (first as string), by: normalizeBy(value['by']) };
+  const out: FeatureCount = { n, first: first ?? (last as string), last: last ?? (first as string), by: normalizeBy(value['by']) };
+  const day = normalizeDay(value['day']);
+  if (day) out.day = day;
+  return out;
+}
+
+/** The local calendar day of an ISO moment ('yyyy-mm-dd'); the date part of the string when it does not parse. */
+export function featureDayOf(at: string): string {
+  const idx = dayIndexOfIso(at);
+  return idx === null ? at.slice(0, 10) : dayKey(idx);
 }
 
 /**
@@ -135,18 +187,35 @@ export function normalizeFeatureLog(v: unknown): FeatureLog {
  * One more `id` by `memberId` at `at` (ISO). Returns a NEW log; the input is not changed. A new
  * counter starts at n 1, first = last = at; an existing one gets n + 1, `last` moves forward and
  * `first` stays (min/max, so a clock that went back never breaks the order).
+ *
+ * V1c-11: with a cap for `id` (`caps`, default DAILY_CAPS) and the cap already reached on the local
+ * day of `at`, nothing changes and the SAME log comes back (`===`), so the caller can skip the write.
  */
-export function bumpFeature(log: FeatureLog, id: FeatureId, memberId: string, at: string): FeatureLog {
+export function bumpFeature(log: FeatureLog, id: FeatureId, memberId: string, at: string, caps: Readonly<Partial<Record<FeatureId, number>>> = DAILY_CAPS): FeatureLog {
   const prev = log[id];
+  const cap = caps[id];
+  const d = featureDayOf(at);
+  const sameDay = prev?.day !== undefined && prev.day.d === d;
+  if (cap !== undefined && sameDay && (prev?.day?.n ?? 0) >= cap) return log;
+  const day: FeatureDay = { d, n: sameDay ? (prev?.day?.n ?? 0) + 1 : 1 };
   const next: FeatureCount = prev
     ? {
         n: prev.n + 1,
         first: minIso(prev.first, at),
         last: maxIso(prev.last, at),
         by: { ...prev.by, [memberId]: (prev.by[memberId] ?? 0) + 1 },
+        day,
       }
-    : { n: 1, first: at, last: at, by: { [memberId]: 1 } };
+    : { n: 1, first: at, last: at, by: { [memberId]: 1 }, day };
   return { ...log, [id]: next };
+}
+
+/** The later of two day records (V1c-11): the later day wins; the same day keeps the higher count. */
+function laterDay(a: FeatureDay | undefined, b: FeatureDay | undefined): FeatureDay | undefined {
+  if (!a) return b;
+  if (!b) return a;
+  if (a.d === b.d) return { d: a.d, n: Math.max(a.n, b.n) };
+  return a.d > b.d ? a : b;
 }
 
 /**
@@ -161,10 +230,15 @@ export function mergeFeatureLogs(a: FeatureLog, b: FeatureLog): FeatureLog {
     if (x && y) {
       const by: Record<string, number> = { ...x.by };
       for (const [member, c] of Object.entries(y.by)) by[member] = Math.max(by[member] ?? 0, c);
-      out[id] = { n: Math.max(x.n, y.n), first: minIso(x.first, y.first), last: maxIso(x.last, y.last), by };
+      const merged: FeatureCount = { n: Math.max(x.n, y.n), first: minIso(x.first, y.first), last: maxIso(x.last, y.last), by };
+      const day = laterDay(x.day, y.day);
+      if (day) merged.day = day;
+      out[id] = merged;
     } else if (x || y) {
       const only = (x ?? y) as FeatureCount;
-      out[id] = { n: only.n, first: only.first, last: only.last, by: { ...only.by } };
+      const copy: FeatureCount = { n: only.n, first: only.first, last: only.last, by: { ...only.by } };
+      if (only.day) copy.day = { ...only.day };
+      out[id] = copy;
     }
   }
   return out;

@@ -32,6 +32,7 @@ import { computed, signal } from '@preact/signals';
 import { badgesEnabled } from '@/badges';
 import { getSetting, setSetting } from '@/db/repo';
 import { hash32 } from '@/domain/xp';
+import { panterThemeFree } from '@/theme';
 import { activeConfettiStyles, isActive, unlockData, unlockedOnPhone } from '@/unlocks';
 
 export type CelebrationKind = 'cooked' | 'firstRecipe' | 'milestone' | 'stars' | 'challenge';
@@ -46,6 +47,12 @@ export interface Celebration {
 
 /** The plain burst: no unlock needed. */
 export const DEFAULT_CONFETTI_STYLE = 'default';
+/**
+ * V1c-10b (docs/specs/ei-gabi.md §1e): the egg's own look, "Panterconfetti" (Confetti.tsx look 'panter').
+ * Not an unlock: it is usable, and in the mix, while the leopard theme is free on this phone
+ * (`panterThemeFree()`), badges on or off, like the theme itself.
+ */
+export const PANTER_CONFETTI_STYLE = 'panter';
 
 export const CONFETTI_SETTING = 'confetti';
 /** Setting `confetti.style` (device-local, block 6D-S): 'random' or the value of one style. */
@@ -171,15 +178,20 @@ export function pickConfettiStyle(setting: string, active: readonly string[], at
  * local profile unlocked (`unlockedOnPhone`). Badges off: only 'default' (nothing unlocked to see).
  */
 export function usableConfettiStyles(): string[] {
-  if (!badgesEnabled.value) return [DEFAULT_CONFETTI_STYLE];
+  if (!badgesEnabled.value) return [DEFAULT_CONFETTI_STYLE, ...eggConfettiStyles()];
   const unlocked = unlockedOnPhone.value;
-  return [DEFAULT_CONFETTI_STYLE, ...unlockData().filter((u) => u.kind === 'confetti' && unlocked.has(u.id)).map((u) => u.value)];
+  return [DEFAULT_CONFETTI_STYLE, ...unlockData().filter((u) => u.kind === 'confetti' && unlocked.has(u.id)).map((u) => u.value), ...eggConfettiStyles()];
+}
+
+/** The looks an egg gave this phone (V1c-10b): 'panter' while the leopard theme is free. */
+function eggConfettiStyles(): string[] {
+  return panterThemeFree() ? [PANTER_CONFETTI_STYLE] : [];
 }
 
 /** The style of a burst: 'stars' stays plain; the others follow `confetti.style` (pickConfettiStyle). */
 function pickStyle(kind: CelebrationKind, at: number): string {
   if (kind === 'stars') return DEFAULT_CONFETTI_STYLE;
-  return pickConfettiStyle(confettiStyle.value, usableConfettiStyles(), at, activeConfettiStyles());
+  return pickConfettiStyle(confettiStyle.value, usableConfettiStyles(), at, [...activeConfettiStyles(), ...eggConfettiStyles()]);
 }
 
 /**

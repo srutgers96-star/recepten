@@ -35,6 +35,9 @@ async function doRecordFeature(id: FeatureId): Promise<void> {
   if (!badgesEnabled.value) return;
   const memberId = activeProfile.value?.id ?? ANON;
   const log = normalizeFeatureLog(await getSetting<unknown>(FEATURES_LOG_SETTING, {}));
-  await setSetting(FEATURES_LOG_SETTING, bumpFeature(log, id, memberId, nowIso()));
+  const next = bumpFeature(log, id, memberId, nowIso());
+  // V1c-11: past the day's cap the log comes back unchanged — nothing to write, no badge to check.
+  if (next === log) return;
+  await setSetting(FEATURES_LOG_SETTING, next);
   await checkNewBadges(memberId);
 }

@@ -91,10 +91,11 @@ describe('goldTileShown', () => {
 });
 
 describe('leopard theme (V1c-10)', () => {
-  it('knows panter as a theme and its four colours', () => {
+  it('knows panter as a theme and its two colours (V1c-10b: sneeuw and paars are gone)', () => {
     expect(isTheme('panter')).toBe(true);
-    expect(PANTER_COLORS).toEqual(['klassiek', 'roze', 'sneeuw', 'paars']);
+    expect(PANTER_COLORS).toEqual(['klassiek', 'roze']);
     expect(isPanterColor('roze')).toBe(true);
+    expect(isPanterColor('sneeuw')).toBe(false);
     expect(isPanterColor('groen')).toBe(false);
   });
 

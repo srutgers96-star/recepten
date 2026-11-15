@@ -12,6 +12,7 @@ import './styles/style.css';
 import './styles/xp.css';
 import './styles/print.css';
 import './styles/handbook.css';
+import './styles/panter.css';
 import { App } from './app';
 import { registerServiceWorker } from './pwa';
 

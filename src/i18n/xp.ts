@@ -69,9 +69,7 @@ export const xp: Dict = {
   'style.panterSecret': { nl: 'geheim ontdekt', en: 'secret found' },
   'style.panterColor': { nl: 'Kleur', en: 'Colour' },
   'style.panterColor.klassiek': { nl: 'Klassiek', en: 'Classic' },
-  'style.panterColor.roze': { nl: 'Roze', en: 'Pink' },
-  'style.panterColor.sneeuw': { nl: 'Sneeuwpanter', en: 'Snow leopard' },
-  'style.panterColor.paars': { nl: 'Paars', en: 'Purple' },
+  'style.panterColor.roze': { nl: 'Hot pink & zwart', en: 'Hot pink & black' },
   'more.goldCount': { nl: 'nog {n} keer…', en: '{n} more…' },
   'more.goldCountOne': { nl: 'nog 1 keer…', en: '1 more…' },
   'more.goldUnlocked': { nl: '🏆 Gouden thema vrijgespeeld — jij bent de maker.', en: '🏆 Gold theme unlocked — you are the maker.' },
@@ -97,6 +95,8 @@ export const xp: Dict = {
   'style.font.chalk': { nl: 'Krijtbord', en: 'Chalkboard' },
   'style.font.hand': { nl: 'Handschrift', en: 'Handwriting' },
   'style.confetti.default': { nl: 'Gewoon', en: 'Plain' },
+  // V1c-10b: the egg's own confetti (src/components/Confetti.tsx look 'panter'); the tile exists once the secret was found.
+  'style.confetti.panter': { nl: 'Panterconfetti', en: 'Leopard confetti' },
   // §1h sharing progress (block 6D-4 = 6D-4b); since V1c-2 the send sheet (src/components/SendSheet.tsx,
   // send.* keys in settings.ts) replaces the old "Sync" button; the iPhone line is send.iosHint.
   'progress.send': { nl: 'Deel', en: 'Share' },
