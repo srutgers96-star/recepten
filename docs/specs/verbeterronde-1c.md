@@ -1,6 +1,6 @@
 # Spec V1c — Testronde-feedback na V1–V9 (Stijn, vanaf 9 nov 2026)
 
-Status: punt 1 compleet (optie A, Stijn 9 nov: "doe maar optie a"; live op main 9 nov); de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
+Status: punt 1 compleet (9 nov), punten 3, 7 en 8 direct gebouwd (10–15 nov), punt 9 in aanbouw (15 nov); V1c-2 ontworpen en akkoord; de rest van de lijst verzamelt. Elk punt dat Stijn laat bouwen,
 krijgt hieronder een eigen blok (V1c-1, V1c-2, …) met Kritische lezer, Feitencheck, §1 Gedrag, §2 en §3, en gaat door de lichte workflow.
 
 ## Verzamellijst
@@ -16,6 +16,7 @@ krijgt hieronder een eigen blok (V1c-1, V1c-2, …) met Kritische lezer, Feitenc
 | 6 | 10 nov | "Op een recept, naast + Deze week, ook een Voeg aan boodschappenlijst toe, zodat je zonder week dingen op je lijst zet en mensen de app ook gewoon als boodschappenlijst-app kunnen gebruiken." | De lijst wordt gebouwd uit het weekplan: `aggregate({ plan, recipes, lines, dict, pantry, extras, standing, previous })` (src/domain/aggregate.ts r. 91); recepten komen alleen via `plan.items` binnen; losse dingen zijn `extras` (handmatig, `addExtra`) en de vaste lijst (`standing`). "+ Deze week" maakt een planvak (`addToPlan`, RecipeScreen r. 654). | **Losse recepten op de lijst:** instelling `shop.loose` met `[{ id, recipeId, servings, variant?, addedAt }]`; de repo voegt ze bij het bouwen van de lijst als extra bronnen toe (zelfde pad als planvakken, `ListSource.loose: true`, zodat "Waarvoor is dit?" zegt "los toegevoegd"). Op de receptpagina naast **+ Deze week** de knop **+ Boodschappen** (met de gekozen porties en, net als bij de week, de goedgekeurde dieetversie); staat het recept al los op de lijst, dan opent de knop Boodschappen. Op het Boodschappen-scherm bovenaan een chiprij "Los: Lasagne ×4 ✕" om ze weer weg te halen; **Klaar** en **Leeg de lijst** halen de losse recepten ook weg (de lijst is dan gekocht). De bestaande feature-badge `listMade` telt mee. Handboekrij in 04 ("Een recept op de lijst zonder weekplan"), DEVICE-TEST-rij. M. | Later bouwen (Stijn 10 nov); eerst V1c-2. |
 | 7 | 10 nov | Gabi kreeg "Invalid recipe code" bij Stijns aangepaste nasi-recept, gedeeld met de nieuwe deelknop (V1c-3); zij had wel geüpdatet. | De link zelf is goed: hij decodeert met de huidige code (envelop v2, `#r=`, 2607 tekens, kind recipe, ook na `cleanPastedText`). De melding `inbox.invalid` komt alleen uit `collectPaste` als er wél een `#r=`-code gevonden is maar `decodeToken`/`parseEnvelope` faalt — dus de code was bij Gabi afgebroken of veranderd (een gekopieerde link die te vroeg stopt, of de voorproefjespagina in de WhatsApp-browser). Lege of code-loze plak geeft `inbox.noToken`. | Direct gedaan door Fable: bij een gevonden maar onleesbare code zegt de app nu "De receptcode is onvolledig of beschadigd ({n} tekens gevonden). Kopieer het hele bericht opnieuw: houd het bericht in WhatsApp ingedrukt, kies Kopieer en plak het hier." (`inbox.invalidToken`, met `console.warn` van sleutel en lengte). Daarmee zien we op Gabi's telefoon meteen hoeveel tekens er aankwamen (2607 = heel). Vervolg hangt af van haar antwoord: kopieerde ze het bericht of tikte ze op de link? | Uitkomst (10 nov, screenshot Gabi): **1236 van de 2607 tekens** kwamen aan en in het vak stond alleen de link, niet het bericht — ze kopieerde de link (of tikte erop), en op de iPhone wordt zo'n lange link onderweg gebroken. Tweede reparatie: `glueToken` plakt een code die door een regeleinde of onzichtbaar teken is gebroken weer aan elkaar (In & uit én het plakvak van Huishouden & vrienden; tests). Echt afgebroken (de rest ontbreekt) blijft onherstelbaar: dan helpt alleen het hele bericht kopiëren. Afwachten of het hiermee lukt; zo niet, dan is de link in WhatsApp écht ingekort en moeten we de links voor de iPhone korter maken (bv. delen in twee berichten onder ±1.200 tekens). |
 | 8 | 15 nov | "Als een gerecht hoeveelheden heeft en je drukt op het minnetje, haalt hij kleine stappen weg; ik wil hem in één keer kunnen verwijderen, en subtiel een kleiner minnetje naast het getal om wel minder te nemen. Meestal moet je hele ingrediënten verwijderen en dan moet je 20 keer klikken." | Het is de controlelijst na Maak de lijst (`ProtoRow`): `[−] aantal naam [+]` met de stapregel `adjustStep` (stuks 1; g 10/25/50; ml 10/50/100; lepels ½); 1 kg bloem = 20 tikken naar 0; een regel op 0 heet "(niet nodig)" en telt niet mee. | Direct gebouwd door Fable: links een kruisje ✕ (Niet nodig) dat de regel in één tik op 0 zet, op een doorgestreepte regel een pijltje ↺ (Zet terug) dat het uitgerekende aantal terugzet; rechts smallere − en + voor een stap minder of meer. Geldt ook in het venster Aantal aanpassen (zelfde component). Handboekrij aantal-aanpassen, DEVICE-TEST rij 122. | — (gebouwd 15 nov, commit in STATUS) |
+| 9 | 15 nov | Stijn wiste zijn Chrome-geschiedenis mét site-gegevens: de hele opslag van de app is weg (levels, badges, kooklog, eigen recepten). Gabi's telefoon bewaart zijn laatst gedeelde voortgang. "Ik wil de Stuur terug-functie op Gabi's telefoon hebben." Geen back-up. | De ontvangen voortgang staat als `ProgressSnapshot` (= `ProgressCard` + `receivedAt`, `friend`) in `progress.snapshots`, met level, totaal XP (`xp`), streak, badges (`id`/`id@k`) en de kookdagen van 90 dagen (`cookDays[{d, r}]`). XP is geen opgeslagen getal maar wordt afgeleid uit feiten (`deriveXp(facts)`: kooklog, foto's, eigen recepten, badges, uitdagingen); `badges.earned` is wél opgeslagen. Een eigen voortgang die binnenkomt (`cardStatus` 'local') doet nu niets. | **Blok V1c-9 hieronder:** Stuur terug op de andere telefoon + Herstel mijn voortgang op de eigen telefoon (overgedragen XP, badges, 90 kookdagen). | Bouwen (Stijn 15 nov). |
 
 ## Nog te verwachten
 Alles uit DEVICE-TEST 109–119 dat niet klopt; de kcal-getallen bij bekende recepten (V9/V9b); de rand-veeg op de iPhone (V8).
@@ -190,3 +191,169 @@ weekbudget.
 
 **Stijn beslist bij de bouw.** Niets meer; alles hierboven is op 9 nov besproken. Open blijft alleen de exacte Nederlandse zin op de
 ontvangen persoonskaart ("Gabi stuurde haar voortgang" versus "Voortgang van Gabi"); voorstel Fable: de eerste.
+
+
+---
+
+## Blok V1c-9 — Voortgang terugsturen en je eigen voortgang terugzetten
+
+Status: in aanbouw (Fable, 15 nov 2026). Twee bouwers + integrator (lichte modus). Leidend bij tegenspraak: docs/specs/README.md §2–§4,
+docs/specs/xp-levels.md (§1h delen, §1i ontvangen, §2 de regels), docs/specs/badges-avatar.md, CLAUDE.md invariant 4 (het `#x=`-token
+verandert niet: het blijft precies het kaartje dat `buildProgressEnvelope` al maakt) en 14 (geen backend: herstellen gaat via een bericht).
+Gebouwd: 15 nov 2026 (V1c-9, lichte workflow; run-id in STATUS)
+
+**Kritische lezer (Fable, vooraf).** (1) Het token blijft hetzelfde: "Stuur terug" verpakt een bewaarde snapshot opnieuw als `#x=`; de velden
+`receivedAt` en `friend` van de snapshot mogen niet meereizen (pure helper `cardOfSnapshot`). De envelop krijgt `at` = `receivedAt` van de
+snapshot (het moment waarop die telefoon hem kreeg ≈ het deelmoment), zodat de ontvanger "gedeeld op 3 nov" ziet en de 30-dagenregel klopt.
+(2) XP wordt afgeleid, niet opgeslagen. Herstellen = de feiten terugzetten die we hebben (badges, de 90 kookdagen) plus een **overgedragen
+XP** (`xp.carried`) voor de rest, zó berekend dat het totaal precies op het XP van het kaartje uitkomt: `carried = max(0, cardXp −
+(afgeleid totaal zonder carried))`. Daardoor is dubbeltellen onmogelijk: wat de teruggezette kookdagen en badges aan XP opleveren, gaat van
+de overdracht af. (3) Teruggezette kookdagen krijgen `loggedAt` = nu en `at` = die dag 18:00 lokale tijd; regel 3 van §2b (meer dan 7 dagen na
+`at` ingevoerd = 0 XP) maakt ze vanzelf XP-loos, en de overdracht vangt de laatste 7 dagen op. Ze tellen wél voor streak, kalender en de
+badges die kookdagen lezen. Een dag met een recept dat al in de kooklog staat (zelfde dag, zelfde recept) wordt overgeslagen. (4) Badges:
+de strings van het kaartje worden stil bij `badges.earned[profielId]` gevoegd (vereniging), zonder toast of confetti; de XP van one-off
+badges zit daarmee in het afgeleide totaal en dus niet dubbel (zie 2). (5) Het herstel is stil: `settleXp(id, { quiet: true })`, geen
+pops, geen level-up-venster; daarna `refreshUnlocks()` zodat de avatar-onderdelen van de badges en het level weer vrij zijn. (6) Alleen voor
+een kaartje dat een profiel op deze telefoon is (`cardStatus` 'local', op id óf naam) én met badges aan én met `card.xp` hoger dan het huidige
+totaal; anders geen knop (badges uit: één regel die zegt Badges eerst aan te zetten). (7) `xp.carried` reist mee in de back-up (geen
+device-local setting). (8) Niets hiervan raakt de deellink van recepten of het weekplan.
+
+**Feitencheck (Fable, in de code).** `src/domain/share.ts`: `ProgressCard { id, name, color, lang, deviceId?, rv, level, xp, streak, badges:
+string[], cookDays: [{ d: dagsleutel, r: receptIds[] }], avatar? }`, `buildProgressEnvelope(card)` (r. 541: spreidt `card`, `baseEnvelope('x',
+name)` zet `at` = nu), `buildProgressShareMessage({ name, level, title, url, lang })` (r. 936), `PROGRESS_BADGE_RE`. `src/domain/progress.ts`:
+`ProgressSnapshot extends ProgressCard { receivedAt; friend }`, `progressCardFor`, `cookDaysIn30`, `normalizeSnapshots`; `src/domain/days.ts`:
+`dayFromKey`, `dayKey`, `dayIndexOfIso`. `src/domain/xp.ts`: `XpFacts { log, recipes, photos, ownRecipes, badges, challenges? }`, `XpEventKind =
+'cook' | 'week' | 'photo' | 'recipe' | 'badge' | 'challenge'`, `XpEvent { kind, key, base, factor, xp, crit, reason, at?, day?, recipeId? }`,
+`deriveXp(facts, rules, today)` (r. 346: `total` = som van de events), `XpState { total, level, levelStart, nextAt, streak, cookDays, events, byKey }`.
+`src/xp.ts`: `buildXpFacts(memberId)`, `xpStateFor(memberId)` (gememoiseerd), `markXpDirty`, `settleXp(memberId, { quiet })`, `XP_SEEN_RULES_SETTING`;
+`src/components/XpPop.tsx` `POP_KINDS` (photo, recipe). `src/badges.ts`: `BADGES_EARNED_SETTING = 'badges.earned'` (Record<memberId | 'all',
+string[]>), `normalizeEarned`, `registerSilently`, `registerEarnedSilently`, `recheckActiveBadges`; `src/unlocks.ts` `refreshUnlocks()`.
+`src/db/repo.ts`: `logCooked(entry)` (r. 812; `CookLogEntry { recipeId, profileId, at, stars?, note?, loggedAt?, variant? }`), `getProgressSnapshots`,
+`putProgressSnapshot`, `getSetting`/`setSetting`, `exportBundle`/`importBundle` (settings reizen mee behalve `DEVICE_LOCAL_SETTINGS`).
+`src/components/ProgressSharePanel.tsx`: `buildProgressMessage(p: Profile)` (bouwt kaart + token + url + zin), `ProgressSharePanel` (intro,
+Deel, Kopieer link, Toon QR, status; `shareText` met één veld, logt 'out' kind 'progress'), `ProgressShareToggle`. `src/screens/HouseholdScreen.tsx`:
+`applyProgressCard(card, asFriend)` (r. 261; 'local' → niets), `ProgressOutcome = 'added' | 'updated' | 'friend' | 'local'`, `ProgressCardRow`
+(r. 300: toont bij 'local' `household.cardLocal`), ledenrijen met Bewerk/Verwijder en `MemberLevelLine snapshot={snapshots?.[m.id]}`, de kaart
+Vrienden met `removeFriend`; `src/screens/InboxScreen.tsx` rendert dezelfde `ProgressCardRow` (r. 666 `saveProgress`). i18n progress.* in
+src/i18n/xp.ts, household.* in src/i18n/settings.ts. Handboek 05: `delen-en-ontvangen.voortgang-delen`, `.voortgang-ontvangen`. DEVICE-TEST: rij
+122 is de laatste; dit blok krijgt rij 123.
+
+### 1. Gedrag
+
+#### 1a. Domein en app-laag (bouwer A: `src/domain/progress.ts`, `src/domain/xp.ts`, `src/xp.ts`, `src/progress-restore.ts` [nieuw],
+`src/db/repo.ts` (één setting-sleutel + één bulk-schrijver), `tests/progress.test.ts`, `tests/xp.test.ts` (of de bestaande xp-testbestanden))
+
+- `src/domain/progress.ts`:
+  - `export function cardOfSnapshot(s: ProgressSnapshot): ProgressCard` — alle kaartvelden, zonder `receivedAt` en `friend` (test: de sleutels).
+  - `export interface RestorePlan { cooks: Array<{ recipeId: string; at: string }>; badges: string[]; cookDaysAdded: number; badgesAdded: number }`
+  - `export function planProgressRestore(card: ProgressCard, existing: { cooks: ReadonlyArray<{ recipeId: string; at: string }>; earned: readonly string[] }): RestorePlan`
+    — per `cookDays[{d, r}]` en per recept-id in `r`: een kook op dag `d` om 18:00 lokale tijd (`at` = ISO van `dayFromKey(d)` + 18 uur; ongeldige
+    `d` overslaan), tenzij `existing.cooks` al een kook van dat recept op diezelfde lokale dag heeft; `badges` = vereniging van `existing.earned`
+    en `card.badges` (volgorde: bestaande eerst, dan nieuwe; alleen strings die `PROGRESS_BADGE_RE` haalt). Tests: dubbele dag/recept overgeslagen,
+    twee recepten op één dag = twee koks, ongeldige dagsleutel weg, badges-vereniging zonder dubbelen.
+  - `export function carriedXpFor(cardXp: number, derivedTotalWithoutCarried: number): number` — `max(0, round(cardXp − derived))`; test.
+- `src/domain/xp.ts`: `XpFacts.carried?: number` (overgedragen XP, ≥ 0); `XpEventKind` krijgt `'carried'`; `deriveXp` voegt, als `carried > 0`,
+  ná alle andere events één event toe `{ kind: 'carried', key: 'carried', base: carried, factor: 1, xp: carried, crit: null, reason: null }` zodat
+  `total`, level, `levelStart` en `nextAt` het meetellen. Tests: zonder carried identiek aan nu; met carried 5000 stijgt total met 5000 en volgt het
+  level de curve; het event staat in `events` en `byKey`.
+- `src/xp.ts`: `buildXpFacts(memberId)` leest de setting `xp.carried` (Record<memberId, number>, `XP_CARRIED_SETTING`) en zet `facts.carried`;
+  een ongeldig getal = 0. `POP_KINDS` (xp.ts én XpPop.tsx) blijft zonder 'carried'; bestaat er een vertaaltabel per soort (`xp.kind.*`), dan
+  `'carried'`: "Overgedragen" · "Carried over" (bouwer B voegt de key toe als bouwer A hem meldt).
+- `src/db/repo.ts`: `export const XP_CARRIED_SETTING = 'xp.carried'`; `getCarriedXp(): Promise<Record<string, number>>`, `setCarriedXp(memberId, xp)`;
+  `addCookEntries(entries: Omit<CookLogEntry, 'id'>[]): Promise<void>` (bulkAdd in één transactie; `loggedAt` = nu als het ontbreekt). Niet in
+  `DEVICE_LOCAL_SETTINGS`.
+- `src/progress-restore.ts` [nieuw]: `export async function restoreProgress(profileId: string, card: ProgressCard): Promise<{ level: number; total: number;
+  cookDaysAdded: number; badgesAdded: number }>`:
+  1. `existing` = kooklog van dit profiel (`recipeId`, `at`) + `badges.earned[profileId]` → `plan = planProgressRestore(card, existing)`;
+  2. `addCookEntries(plan.cooks.map(c => ({ ...c, profileId, loggedAt: now, note: null })))`; `badges.earned[profileId] = plan.badges` (via `setSetting`
+     met `normalizeEarned`, zoals `registerSilentlyFor`);
+  3. `setCarriedXp(profileId, 0)`; `markXpDirty(profileId)`; `derived = await xpStateFor(profileId)`; `carried = carriedXpFor(card.xp, derived.total)`;
+     `setCarriedXp(profileId, carried)`; `markXpDirty(profileId)`; `state = await xpStateFor(profileId)`;
+  4. `await settleXp(profileId, { quiet: true })`; `await refreshUnlocks()`; `recheckActiveBadges()`; log één 'in'-rij (kind 'progress', who =
+     card.name, count 1) zoals `applyProgressCard`;
+  5. geef `{ level: state.level, total: state.total, cookDaysAdded, badgesAdded }` terug. Fouten gooien door (de UI toont `common.error`).
+
+#### 1b. UI, teksten, handboek, testrij (bouwer B: `src/components/ProgressSharePanel.tsx`, `src/screens/HouseholdScreen.tsx`,
+`src/screens/InboxScreen.tsx`, `src/i18n/xp.ts`, `src/styles/settings.css` (alleen als nodig), `data/handbook/05-delen-en-ontvangen.json`,
+`docs/HANDLEIDING.md` + `docs/HANDBOOK.md`, `docs/DEVICE-TEST.md`)
+
+- **Stuur terug** (de andere telefoon). In `ProgressSharePanel.tsx` een tweede paneel `ProgressReturnPanel({ snapshot })`, dezelfde opbouw als
+  `ProgressSharePanel` (intro, **Deel**, **Kopieer link**, de iPhone-regel, status) maar gebouwd uit `cardOfSnapshot(snapshot)`: envelop via
+  `buildProgressEnvelope`, daarna `env.at = snapshot.receivedAt`, token, url, zin via `buildProgressShareMessage({ name, level, title:
+  titleFor(level, lang), url, lang })` met `lang` van de snapshot. Geen QR. Na een share via het deelvenster één 'out'-rij (kind 'progress',
+  who = de naam). In HouseholdScreen: op elke ledenrij van een lid van een andere telefoon mét snapshot (`snapshots?.[m.id]`) en op elke
+  vriendenrij een knop **Stuur terug** (`progress.returnBtn`, btn-small, naast Bewerk/Verwijder resp. Verwijder) die het paneel onder die rij
+  open- en dichtklapt (één tegelijk). Met badges uit: geen knop (de voortgang is dan onzichtbaar, zoals de hele kaart).
+- **Herstel mijn voortgang** (de eigen telefoon). `ProgressCardRow` krijgt `onRestore?: (card, profileId) => void` en `ProgressOutcome` de waarde
+  `'restored'`. Bij status 'local' (de kaart hoort bij een profiel op deze telefoon, op id óf naam — `matchMemberForCard` geeft het lid; zijn
+  `id` is het profiel-id): lees het huidige totaal (`xpStateFor(profileId)`, in een effect) en toon:
+  - badges uit: `progress.restoreBadgesOff`;
+  - `card.xp` ≤ huidig totaal: de bestaande regel `household.cardLocal` (niets te herstellen);
+  - anders: `progress.restoreHint` + knop **Herstel mijn voortgang** (`progress.restoreBtn`, btn-primary). Tik → `confirm(progress.restoreConfirm)`
+    → `onRestore(card, profileId)`; de schermen roepen `restoreProgress` aan (busy-stand zoals `cardBusy`), zetten `done` op 'restored' en tonen
+    `progress.restored` met het nieuwe level; bij een fout `common.error`. Beide schermen (In & uit en Huishouden & vrienden) wiren het.
+- i18n (xp.ts), letterlijk NL · EN:
+  `progress.returnBtn`: "Stuur terug" · "Send back";
+  `progress.returnIntro`: "Stuur {name} de voortgang terug die je van hem bewaarde: level {level}, bewaard op {date}. Handig als zijn telefoon leeg is: hij kan er zijn level, badges en kookdagen mee terugzetten." · "Send {name} back the progress you kept: level {level}, saved on {date}. Useful when their phone is empty: they can restore their level, badges and cooking days from it.";
+  `progress.restoreBtn`: "Herstel mijn voortgang" · "Restore my progress";
+  `progress.restoreHint`: "Dit is jouw eigen voortgang van {date}: level {cardLevel} met {xp} XP, {badges} badges en {days} kookdagen. Hier staat nu level {level}. Je kunt hem terugzetten." · "This is your own progress from {date}: level {cardLevel} with {xp} XP, {badges} badges and {days} cooking days. This phone is at level {level}. You can restore it.";
+  `progress.restoreConfirm`: "Je voortgang terugzetten naar level {cardLevel}? Je badges en de kookdagen van die 90 dagen komen terug; wat je sindsdien kookte blijft staan." · "Restore your progress to level {cardLevel}? Your badges and the cooking days of those 90 days come back; what you cooked since stays.";
+  `progress.restored`: "Voortgang hersteld: level {level}, {days} kookdagen en {badges} badges teruggezet." · "Progress restored: level {level}, {days} cooking days and {badges} badges put back.";
+  `progress.restoreBadgesOff`: "Dit is jouw eigen voortgang. Zet eerst Badges aan onder Meer om hem terug te zetten." · "This is your own progress. Switch Badges on under More first to restore it.";
+  (`xp.kind.carried` alleen als bouwer A die tabel meldt.)
+- Handboek 05: nieuwe rij ná `voortgang-ontvangen`, id `delen-en-ontvangen.voortgang-terugsturen`, route `/more/household`, platform all: title
+  "Iemands voortgang terugsturen" · "Send someone's progress back"; what "Deelde iemand zijn voortgang met jou, dan bewaart je telefoon die. Is zijn
+  telefoon leeg, dan stuur je hem die voortgang terug en kan hij zijn level, badges en kookdagen terugzetten." · "If someone shared their progress
+  with you, your phone keeps it. If their phone is empty, you send that progress back and they can restore their level, badges and cooking days.";
+  where nl ["Tik onderaan op **Meer** en dan op **Huishouden & vrienden**.", "Zoek de persoon onder Huisgenoten of Vrienden.", "Tik op **Stuur terug**.",
+  "Tik op **Deel** en kies WhatsApp."] · en ["Tap **More** at the bottom, then **Household & friends**.", "Find the person under Housemates or
+  Friends.", "Tap **Send back**.", "Tap **Share** and choose WhatsApp."]; see "WhatsApp opent met een zin over het level van die persoon en één
+  link, net als bij Sync mijn voortgang." · "WhatsApp opens with a sentence about that person's level and one link, just like Sync my progress.";
+  know "Het is de voortgang zoals jij hem kreeg, niet van dit moment. Wat de ander sindsdien kookte, zit er niet in." · "It is the progress as you
+  received it, not of this moment. What the other person cooked since is not in it."; keywords nl ["terugsturen", "voortgang", "level kwijt",
+  "telefoon leeg", "herstellen"] · en ["send back", "progress", "lost level", "empty phone", "restore"].
+  Tweede nieuwe rij erna, id `delen-en-ontvangen.voortgang-herstellen`, route `/inbox`, platform all: title "Je eigen voortgang terugzetten" ·
+  "Restore your own progress"; what "Is je telefoon leeg (nieuwe telefoon, of de opslag van de app gewist), dan kun je je level, badges en kookdagen
+  terugzetten uit de voortgang die iemand anders van je bewaarde." · "If your phone is empty (a new phone, or the app's storage cleared), you can
+  restore your level, badges and cooking days from the progress someone else kept of you."; where nl ["Vraag die persoon om **Stuur terug** te
+  tikken bij jouw naam.", "Kopieer het bericht.", "Tik onderaan op **Meer** en dan op **In & uit**.", "Tik op **Plak van klembord**.", "Tik op
+  **Herstel mijn voortgang**.", "Bevestig."] · en ["Ask that person to tap **Send back** next to your name.", "Copy the message.", "Tap **More** at
+  the bottom, then **In & out**.", "Tap **Paste from clipboard**.", "Tap **Restore my progress**.", "Confirm."]; see "Je level en XP staan weer
+  op wat ze waren, je badges zijn terug en de kookdagen van de laatste 90 dagen staan weer in de kalender. Geen confetti: het is herstel, geen
+  prestatie." · "Your level and XP are back to what they were, your badges are back and the cooking days of the last 90 days are in the calendar
+  again. No confetti: it is a repair, not an achievement."; know "Het werkt alleen als de bewaarde voortgang hoger is dan wat er nu staat, en
+  alleen met **Badges** aan. Kookdagen van langer dan 90 dagen geleden tellen mee in je XP, maar staan niet als losse dagen in de kalender. Notities,
+  sterren en foto's komen niet terug; eigen recepten kan de ander je apart terugsturen. Maak daarom af en toe een back-up onder **Opslag**." · "It
+  only works when the kept progress is higher than what is there now, and only with **Badges** on. Cooking days from more than 90 days ago count in
+  your XP but are not in the calendar as separate days. Notes, stars and photos do not come back; your own recipes the other person can send back
+  separately. So make a backup under **Storage** now and then."; keywords nl ["herstellen", "voortgang", "level kwijt", "badges kwijt", "opslag gewist"]
+  · en ["restore", "progress", "lost level", "lost badges", "storage cleared"]. Controleer met `npm run validate:data` dat elke **naam** letterlijk in
+  src/i18n staat (**Opslag**/**Storage**, **Badges**, **In & uit**/**In & out**, **Plak van klembord**/**Paste from clipboard**); ontbreekt er een, meld
+  het. Daarna `node --experimental-strip-types tools/handbook-md.ts`.
+- DEVICE-TEST rij 123, NL én EN, in de stijl van rij 122, met twee telefoons: **Voortgang terugsturen en terugzetten (V1c-9).** 1. *Telefoon A
+  (Gabi):* tik op **Meer** → **Huishouden & vrienden**, zoek Stijn en tik op **Stuur terug**; tik op **Deel** en stuur het via WhatsApp naar Stijn.
+  2. *Telefoon B (Stijn, met badges aan en een lager level dan in het bericht):* kopieer het hele bericht, tik op **Meer** → **In & uit** → **Plak
+  van klembord**. 3. Tik op **Herstel mijn voortgang** en bevestig. 4. Kijk op Home, Mijn profiel, Badges en de Kookkalender. 5. Plak hetzelfde
+  bericht nog eens. | 1. Onder de rij van Stijn klapt een paneel open met "Stuur Stijn de voortgang terug …, level N, bewaard op <datum>" en
+  Deel/Kopieer link; WhatsApp opent met de levelzin en één link. 2. De kaart zegt "Voortgang van Stijn" met daaronder "Dit is jouw eigen
+  voortgang van <datum>: level N met … XP, … badges en … kookdagen. Hier staat nu level M." en de knop **Herstel mijn voortgang**. 3. Een vraag om
+  te bevestigen; daarna "Voortgang hersteld: level N, … kookdagen en … badges teruggezet." zonder confetti of pops. 4. Home en Mijn profiel tonen
+  level N met het bijbehorende XP; de badges staan op Badges als behaald; de kookdagen staan in de kalender; de avatar-onderdelen van die badges
+  en dat level zijn vrij. 5. De kaart zegt nu alleen dat je dit zelf bent (niets te herstellen): het totaal is niet lager meer.
+
+### 2. Opus mag dit NIET zelf beslissen
+- Het `#x=`-token en `buildProgressEnvelope` veranderen niet; `receivedAt`/`friend` reizen niet mee; `at` = `receivedAt`.
+- Overgedragen XP als `xp.carried` (één getal per profiel) met de formule uit 1a; geen opgeslagen "level"; geen aanpassing van de curve of de regels.
+- Teruggezette kookdagen: 18:00 lokale tijd, `loggedAt` nu, dubbele dag/recept overgeslagen; badges als vereniging, stil; herstel zonder pops of
+  level-up-venster; alleen bij 'local', badges aan en een hoger totaal op het kaartje.
+- Teksten letterlijk; geen nieuwe dependency.
+
+### 3. Bestandsverdeling
+| Bouwer | Bestanden |
+|---|---|
+| A | `src/domain/progress.ts`, `src/domain/xp.ts`, `src/xp.ts`, `src/progress-restore.ts` [nieuw], `src/db/repo.ts`, `src/components/XpPop.tsx` (alleen als het type het vraagt), `tests/progress.test.ts`, de bestaande xp-tests |
+| B | `src/components/ProgressSharePanel.tsx`, `src/screens/HouseholdScreen.tsx`, `src/screens/InboxScreen.tsx`, `src/i18n/xp.ts`, `src/styles/settings.css` (alleen als nodig), `data/handbook/05-delen-en-ontvangen.json`, `docs/HANDLEIDING.md` + `docs/HANDBOOK.md`, `docs/DEVICE-TEST.md` (rij 123 NL + EN) |
+| Integrator | samenvoegen, check/test/build/validate groen, acceptatie in de dev-app (NL/EN: Stuur terug-paneel onder een lid met snapshot — maak er een door een `#x=` te plakken; Herstel-knop op een eigen kaart met hoger XP: plak een `#x=` met de naam van het dev-profiel en een hoog `xp`, controleer level, badges en kalender; nogmaals plakken = niets te herstellen), `docs/STATUS.md`, de regel "Gebouwd" in dit blok |
+
+Bouwer B bouwt tegen de handtekeningen van 1a (`cardOfSnapshot`, `restoreProgress`); ontbreken ze nog, dan een minimale stub en melden; de
+integrator houdt A's versie.
