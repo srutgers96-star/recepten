@@ -45,7 +45,7 @@ import { getHousehold, getHouseholdServings, getProgressSnapshots, getTemperatur
 import { baseDictionary, userIngredients } from '@/dictionary';
 import { matchMemberForCard, memberFromProfile, membersFrom, type HouseholdSetting, type Member } from '@/domain/household';
 import type { Lang } from '@/domain/model';
-import type { ProgressSnapshot } from '@/domain/progress';
+import { snapshotForMember, type ProgressSnapshot } from '@/domain/progress';
 import { recordFeature } from '@/features';
 import { lang, t } from '@/i18n';
 import { backupStatus, inboxUnseen, refreshShareBadges, unsentChanges } from '@/inbox-badge';
@@ -550,7 +550,7 @@ export function MoreScreen() {
                 and the friends, each with a small tag after the name. */}
             <MenuRow extraClass="row-subhead" label={t('more.householdFriends')} to="/more/household" />
             {housemates.map((m) => (
-              <MemberMenuRow key={m.id} member={m} snapshot={snapshots[m.id]} />
+              <MemberMenuRow key={m.id} member={m} snapshot={m.local ? snapshots[m.id] : snapshotForMember(m, snapshots)} />
             ))}
             {friends.map((s) => (
               <FriendMenuRow key={s.id} snapshot={s} />

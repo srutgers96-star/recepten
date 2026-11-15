@@ -7,7 +7,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AvatarSpec } from '../src/domain/avatar';
 import { dayFromKey, dayKey } from '../src/domain/days';
-import { calendarMonth, cardOfSnapshot, carriedXpFor, normalizeSnapshots, planProgressRestore, progressCardFor, type ProgressSnapshot } from '../src/domain/progress';
+import { bestSnapshotForMember, calendarMonth, cardOfSnapshot, carriedXpFor, normalizeSnapshots, planProgressRestore, progressCardFor, snapshotForMember, snapshotsForMember, type ProgressSnapshot } from '../src/domain/progress';
 import { buildProgressEnvelope, parseEnvelope, type ProgressCard } from '../src/domain/share';
 import { decodeToken, encodeToken } from '../src/domain/token';
 import { deriveXp, XP_RULES, type XpBadgeFact, type XpCookFact, type XpState } from '../src/domain/xp';
@@ -370,5 +370,29 @@ describe('carriedXpFor (V1c-9)', () => {
     expect(carriedXpFor(1000, 1200)).toBe(0);
     expect(carriedXpFor(1200, 1200)).toBe(0);
     expect(carriedXpFor(Number.NaN, 0)).toBe(0);
+  });
+});
+
+// V1c-9b (15 Nov 2026): a member's id changes with a new or wiped phone; the stored snapshots still belong to them.
+describe('snapshotsForMember (V1c-9b)', () => {
+  const snap = (id: string, name: string, xp: number, receivedAt: string, deviceId?: string): ProgressSnapshot => ({
+    id, name, color: '#123456', lang: 'nl', rv: 1, level: 1, xp, streak: 0, badges: [], cookDays: [], receivedAt, friend: false, ...(deviceId ? { deviceId } : {}),
+  });
+  const snapshots: Record<string, ProgressSnapshot> = {
+    'p:old': snap('p:old', 'Stijn', 12000, '2026-11-03T10:00:00.000Z', 'dev-1'),
+    'p:new': snap('p:new', 'Stijn', 40, '2026-11-15T10:00:00.000Z', 'dev-2'),
+    'p:gabi': snap('p:gabi', 'Gabi', 9000, '2026-11-14T10:00:00.000Z'),
+  };
+  it('matches by id, by phone id and by name (folded), newest first', () => {
+    expect(snapshotsForMember({ id: 'p:new', name: 'Stijn' }, snapshots).map((s) => s.id)).toEqual(['p:new', 'p:old']);
+    expect(snapshotsForMember({ id: 'm:typed', name: '  stíjn ' }, snapshots).map((s) => s.id)).toEqual(['p:new', 'p:old']);
+    expect(snapshotsForMember({ id: 'm:x', name: 'Iemand', deviceId: 'dev-1' }, snapshots).map((s) => s.id)).toEqual(['p:old']);
+    expect(snapshotsForMember({ id: 'm:x', name: 'Niemand' }, snapshots)).toEqual([]);
+  });
+  it('the level line takes the newest, "Stuur terug" the highest XP', () => {
+    expect(snapshotForMember({ id: 'p:new', name: 'Stijn' }, snapshots)?.id).toBe('p:new');
+    expect(bestSnapshotForMember({ id: 'p:new', name: 'Stijn' }, snapshots)?.id).toBe('p:old');
+    expect(bestSnapshotForMember({ id: 'p:gabi', name: 'Gabi' }, snapshots)?.xp).toBe(9000);
+    expect(bestSnapshotForMember({ id: 'm:x', name: 'Niemand' }, snapshots)).toBeUndefined();
   });
 });

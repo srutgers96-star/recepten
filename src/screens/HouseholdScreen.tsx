@@ -48,7 +48,7 @@ import {
 import { nowIso } from '@/domain/model';
 import { classifyPaste } from '@/domain/paste-classify';
 import { cleanPastedText } from '@/domain/photo-import';
-import type { ProgressSnapshot } from '@/domain/progress';
+import { bestSnapshotForMember, snapshotForMember, type ProgressSnapshot } from '@/domain/progress';
 import { parseEnvelope, type ParsedShare, type ProgressCard } from '@/domain/share';
 import { decodeToken, extractTokenSpans, glueToken } from '@/domain/token';
 import { t } from '@/i18n';
@@ -814,22 +814,27 @@ export function HouseholdScreen() {
             {t('household.members')} <span class="muted small">· {count}</span>
           </h2>
           <ul class="member-list">
-            {members.map((m) => (
+            {members.map((m) => {
+              // V1c-9b: a member's id may have changed (a new phone, a wiped phone); the snapshots are
+              // matched by id, phone or name. Newest for the level line, the highest for "Stuur terug".
+              const snapNewest = m.local ? undefined : snapshotForMember(m, snapshots ?? {});
+              const snapBest = m.local ? undefined : bestSnapshotForMember(m, snapshots ?? {});
+              return (
               <li key={m.id} class="member-row-wrap">
                 {editing === m.id && !m.local ? (
                   <MemberForm initial={m} submitLabel={t('common.save')} taken={takenFor(m.id)} onSubmit={(v) => edit(m, v)} onCancel={() => setEditing(null)} />
                 ) : (
-                  <div class={`member-row${badgesOn && !m.local && snapshots?.[m.id] ? ' has-return' : ''}`}>
+                  <div class={`member-row${badgesOn && !m.local && snapBest ? ' has-return' : ''}`}>
                     <Avatar profile={m} />
                     <div class="who">
                       <strong>{m.name}</strong>
-                      <MemberLevelLine member={m} snapshot={snapshots?.[m.id]} />
+                      <MemberLevelLine member={m} snapshot={snapNewest} />
                       <span class="muted small">{m.local ? t('household.local') : m.deviceId ? t('household.fromCard') : t('household.byHand')}</span>
                     </div>
                     {!m.local && (
                       <div class="actions">
                         {/* V1c-9: a member on another phone with a stored snapshot can get it back. */}
-                        {badgesOn && snapshots?.[m.id] && (
+                        {badgesOn && snapBest && (
                           <button type="button" class="btn btn-small" aria-expanded={returning === m.id} onClick={() => setReturning((v) => (v === m.id ? null : m.id))}>
                             {t('progress.returnBtn')}
                           </button>
@@ -844,9 +849,10 @@ export function HouseholdScreen() {
                     )}
                   </div>
                 )}
-                {badgesOn && !m.local && returning === m.id && editing !== m.id && snapshots?.[m.id] && <ProgressReturnPanel snapshot={snapshots[m.id]!} />}
+                {badgesOn && !m.local && returning === m.id && editing !== m.id && snapBest && <ProgressReturnPanel snapshot={snapBest} />}
               </li>
-            ))}
+              );
+            })}
           </ul>
           {/* V1 (docs/specs/verbeterronde-1.md §1c point 7): only with more than one profile on this phone. */}
           {list.length > 1 && (

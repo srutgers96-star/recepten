@@ -301,3 +301,48 @@ export function carriedXpFor(cardXp: number, derivedTotalWithoutCarried: number)
   const v = Math.round(cardXp - derivedTotalWithoutCarried);
   return Number.isFinite(v) ? Math.max(0, v) : 0;
 }
+
+// --- which stored snapshot belongs to a member (V1c-9b, 15 Nov 2026) -----------------------------
+//
+// A member's id can change: a card that matches by name replaces the member's id with the card's
+// (`upsertMemberFromCard`), and a phone whose storage was wiped sends a NEW profile id. Snapshots stay
+// keyed by the id of the card they came from, so `snapshots[member.id]` then misses the older (and
+// higher) progress. These helpers match by id, else by phone id (`deviceId`), else by name.
+
+/** A name key for matching people: trimmed, lower case, diacritics and double spaces removed. */
+function foldKey(name: string | undefined): string {
+  return (name ?? '')
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Every snapshot that belongs to `member`: the one under its id, plus the ones from the same phone
+ * (`deviceId`) and the ones with the same name. Newest (`receivedAt`) first.
+ */
+export function snapshotsForMember(
+  member: { id: string; name: string; deviceId?: string },
+  snapshots: Readonly<Record<string, ProgressSnapshot>>,
+): ProgressSnapshot[] {
+  const name = foldKey(member.name);
+  const out = Object.values(snapshots).filter(
+    (s) => s.id === member.id || (!!member.deviceId && s.deviceId === member.deviceId) || (name !== '' && foldKey(s.name) === name),
+  );
+  return out.sort((a, b) => (a.receivedAt < b.receivedAt ? 1 : a.receivedAt > b.receivedAt ? -1 : 0));
+}
+
+/** The newest snapshot of a member (for the level line), or undefined. */
+export function snapshotForMember(member: { id: string; name: string; deviceId?: string }, snapshots: Readonly<Record<string, ProgressSnapshot>>): ProgressSnapshot | undefined {
+  return snapshotsForMember(member, snapshots)[0];
+}
+
+/** The snapshot with the most XP (for "Stuur terug": what you want back is the highest), newest on a tie. */
+export function bestSnapshotForMember(member: { id: string; name: string; deviceId?: string }, snapshots: Readonly<Record<string, ProgressSnapshot>>): ProgressSnapshot | undefined {
+  const all = snapshotsForMember(member, snapshots);
+  let best: ProgressSnapshot | undefined;
+  for (const s of all) if (!best || s.xp > best.xp) best = s;
+  return best;
+}
