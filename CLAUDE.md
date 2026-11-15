@@ -51,7 +51,7 @@ src/i18n/           lang signal 'nl'|'en' and t(key); dictionaries per owner (co
 src/styles/         base.css (tokens, shell, nav, buttons, inputs, cards, dark mode, safe-area) plus
                     browse.css, edit.css, settings.css; main.tsx imports all four
 src/profile.ts      profiles + activeProfile signals; src/timers.ts app-level cooking-timer engine;
-src/theme.ts        system/light/dark; src/inbox-badge.ts unseen count for the Inbox tab; src/celebrate.ts
+src/theme.ts        system/light/dark/gold/panter (src/panter-parallax.ts: the leopard print's half-speed layer); src/inbox-badge.ts unseen count for the Inbox tab; src/celebrate.ts
 src/domain/         FRAMEWORK-FREE (no preact, no dexie; runs in Node): model, parser, units, dictionary,
                     render, scale, aggregate, merge, token, message, steps, timers, search, planner
 src/db/             Dexie schema, numbered migrations, one repository module (repo.ts, the ONLY module

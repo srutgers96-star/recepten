@@ -14,6 +14,7 @@ import './styles/print.css';
 import './styles/handbook.css';
 import './styles/panter.css';
 import { App } from './app';
+import { initPanterParallax } from './panter-parallax';
 import { registerServiceWorker } from './pwa';
 
 export interface StartOptions {
@@ -23,5 +24,7 @@ export interface StartOptions {
 
 export function start(opts: StartOptions) {
   registerServiceWorker();
+  // V1c-10c: the leopard print's fixed layer, following every screen scroll at half speed.
+  initPanterParallax();
   render(<App openImportFromHash={opts.openImportFromHash} />, document.getElementById('app')!);
 }

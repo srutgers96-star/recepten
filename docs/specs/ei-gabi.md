@@ -177,6 +177,28 @@ van de zwarte ring (de ring zit óp de rand van de kern), geen bolletje in een l
 kern `#8e5f36` met twee zwarte boogstukken) op de wangen, de brug en onder de ogen, vier kleine zwarte vlekjes, en aan beide kanten een lintje
 naar de oren. Beoordeeld op 220 px en 48 px (scratch-voorbeeldpagina met face-round/eyes-dots en face-oval/eyes-happy): de ogen blijven zichtbaar.
 
+### 1g. Het printje scrolt mee op halve snelheid (V1c-10c, Fable, 15 nov 2026; Gabi: "make the background scroll along, but twice as slow")
+
+- `src/panter-parallax.ts` (nieuw, `initPanterParallax()` vanuit `src/main.tsx`): het printje staat niet meer op `body` maar op een vaste laag
+  `#panter-bg` (panter.css: `position: fixed`, één tegel hoger dan het venster, `z-index: -1`, verborgen onder elk ander thema; body blijft
+  effen `--paper`). Scroll-events van elke `.screen` worden op het document gevangen (capture, passive); per frame (rAF) krijgt de laag
+  `translate3d(0, -(scrollTop × 0,5 mod 216) px, 0)` — alleen een transform (compositor, geen repaint), en de modulo op de tegelhoogte houdt de
+  laag klein hoe lang de lijst ook is. Een routewissel zet de laag terug op 0 (de nieuwe `.screen` begint bovenaan). `prefers-reduced-motion`
+  → de laag staat stil. Pure delen (`panterOffset`, `scrolledScreen`) in `tests/panter-parallax.test.ts`.
+
+### 1h. Leesbaarheidsronde (V1c-10c; Gabi: "some things are hard to read … check black/beige text without a white background")
+
+- Runtime-audit in de dev-app: een script loopt per scherm over alle tekstnodes in `.screen` en meldt elke node zonder voorouder met een dekkende
+  achtergrond (alpha ≥ 0,85, een background-image, of een `::before` met achtergrond). Gevonden en in panter.css gerepareerd: Home `.home-continue`,
+  `.standing-home-link`, `.card.reminder` (was transparant met stippelrand), `.cooked-list`-rijen; recept `.nutri-line` (de kcal-regel), `.vtab.dotted`
+  (een dieetversie die nog niet bestaat), `.servings-text`, `.timer-chip`; kookstand `.cook-progress`; editor `.le-num`, `.le-tag`; Meer `.more-profile`;
+  Mijn profiel het losse `.xp-block`; In & uit `.inbox-tab`, `.inbox-history-toggle`; Deel `.status` (tekens); elke `.empty` (lege staat van
+  Boodschappen, In & uit, Nakijken); de checkpagina `.checkrow`; plus panelen voor toestanden met inhoud: `.shop-block`, `.shop-aisle`, `.week-slots`,
+  losse `.pr-row`/`.standing-row`. Daarna gaf de audit op elk scherm (Home, Recepten, recept, kookstand, nieuw/bewerk, Week, Boodschappen, Meer,
+  profiel, huishouden, Jouw stijl × 5 tabbladen, Badges, kalender, woordenboek, handleiding, opslag, nakijken, In & uit, verhaal, Deel, check,
+  onboarding) nul losse tekstnodes. Een parallelle code-audit (workflow wf_f374616f-209, tien lezers per schermgroep) ving de toestanden die de
+  dev-app niet toonde; de uitkomst staat in STATUS.
+
 ### 2. Opus mag dit NIET zelf beslissen
 - De zinnen in `PANTER_PHRASES`; één regel, precies de zin; niets op de lijst; het thema schakelt meteen om; geen handboekrij; de manier van
   vrijspelen alleen in dit bestand.

@@ -38,7 +38,8 @@
   --rosemary: #3d7a3a;
   --orange: #b8701c;
   --line: rgba(42, 26, 8, 0.16);
-  --press: rgba(42, 26, 8, 0.08);
+  /* opaque (V1c-10c): a pressed row, chip, tile or card never lets the print through */
+  --press: #efe3c9;
   --on-cobalt: #f3dc9f;
   --on-rosemary: #ffffff;
   --panter-tile: var(--panter-tile-klassiek);
@@ -99,7 +100,7 @@
   --rosemary: #9fcf8a;
   --orange: #ffb067;
   --line: rgba(255, 61, 156, 0.3);
-  --press: rgba(255, 61, 156, 0.18);
+  --press: #2a1f30;
   --on-cobalt: #1a0a12;
   --on-rosemary: #15120c;
   --panter-tile: var(--panter-tile-roze);
@@ -145,10 +146,30 @@
   --aisle-huishoudelijk: #9fb0c3;
 }
 
-/* ---------- The print: the page itself ---------- */
+/* ---------- The print: a fixed layer behind the app that scrolls along at half speed ----------
+   V1c-10c (src/panter-parallax.ts): `#panter-bg` carries the print; the module moves it with a
+   transform (-scrollTop / 2, wrapped on the 216 px tile), so the layer is one tile taller than the
+   viewport. The body stays flat paper (visible for a frame before the layer exists, and behind it).
+   Every other theme hides the layer. */
 
 :root[data-theme='panter'] body {
+  background: var(--paper);
+}
+
+#panter-bg {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(100% + 216px);
+  z-index: -1;
+  pointer-events: none;
   background: var(--paper) var(--panter-tile) 0 0 / 216px 216px;
+  will-change: transform;
+}
+
+:root:not([data-theme='panter']) #panter-bg {
+  display: none;
 }
 
 /* ---------- The bars: black, with sand or pink letters ---------- */
@@ -298,7 +319,7 @@
   padding: 10px 12px;
 }
 
-:root[data-theme='panter'] .screen :is(.detail-cat-name, .link-btn, .recipe-meta, .diet-label, .list-count):not(:is(.card, .menu, .sheet, .row) *) {
+:root[data-theme='panter'] :is(.detail-cat-name, .link-btn, .recipe-meta, .diet-label, .list-count):not(:is(.card, .menu, .sheet, .row) *) {
   display: inline-flex;
   background: var(--card);
   border: 1px solid var(--line);
@@ -359,6 +380,165 @@
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 1px 6px;
+}
+
+/* V1c-10c (Gabi, 15 Nov: "some things are hard to read"): everything a runtime audit of every screen found
+   still bare on the print (text with no opaque ancestor inside .screen), per screen. */
+
+/* Home: "Verder met …", "Alleen de vaste lijst ›", the dashed backup reminder, the Laatst gekookt rows. */
+:root[data-theme='panter'] .home-continue,
+:root[data-theme='panter'] .standing-home-link,
+:root[data-theme='panter'] .card.reminder {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+:root[data-theme='panter'] .card.reminder {
+  border-style: dashed;
+}
+
+:root[data-theme='panter'] .cooked-list {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0 12px;
+}
+
+:root[data-theme='panter'] .cooked-list .cooked-row:last-child {
+  border-bottom: 0;
+}
+
+/* Recipe: the kcal line, a diet version that does not exist yet (dashed tab), "4 pers.", the timer chips in a step. */
+:root[data-theme='panter'] .nutri-line,
+:root[data-theme='panter'] .servings-text,
+:root[data-theme='panter'] .vtab.dotted,
+:root[data-theme='panter'] .timer-chip {
+  background: var(--card);
+}
+
+:root[data-theme='panter'] .nutri-line,
+:root[data-theme='panter'] .servings-text {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 3px 10px;
+}
+
+/* Cook mode: the progress line above the step. */
+:root[data-theme='panter'] .cook-progress {
+  display: inline-block;
+  margin: 10px 0 0 max(16px, var(--sal));
+  padding: 3px 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+/* Editor: the line numbers and the NL/EN tags next to a field. */
+:root[data-theme='panter'] .le-num,
+:root[data-theme='panter'] .le-tag {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+/* More: the profile button at the top; Mijn profiel: the XP block outside a card. */
+:root[data-theme='panter'] .more-profile,
+:root[data-theme='panter'] .screen > .xp-block,
+:root[data-theme='panter'] .screen > .section > .xp-block {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+}
+
+/* In & uit: the tabs and the history toggle; Deel: the character count; every empty state; the check page rows. */
+:root[data-theme='panter'] .inbox-tab,
+:root[data-theme='panter'] .inbox-history-toggle,
+:root[data-theme='panter'] .status:not(.card *),
+:root[data-theme='panter'] .shop-status,
+:root[data-theme='panter'] .checkrow {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 4px 10px;
+}
+
+:root[data-theme='panter'] .inbox-tab[aria-selected='true'],
+:root[data-theme='panter'] .inbox-tab.on {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+}
+
+:root[data-theme='panter'] .empty {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px 16px;
+  margin: 12px 0;
+}
+
+/* Shopping: the blocks of a list (dashed outline only), aisles with their rows, the proto and standing rows; Week: the slots. */
+:root[data-theme='panter'] .shop-block,
+:root[data-theme='panter'] .shop-aisle,
+:root[data-theme='panter'] .week-slots,
+:root[data-theme='panter'] .screen > .pr-row,
+:root[data-theme='panter'] .screen > .standing-row {
+  background: var(--card);
+}
+
+:root[data-theme='panter'] .shop-aisle,
+:root[data-theme='panter'] .week-slots {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 4px 12px;
+}
+
+/* V1c-10c, from the code audit (workflow wf_f374616f-209, ten readers per screen group): the states the dev-app
+   did not show. Recipe detail lines (version-of, translate hint, machine-translation badge, "Bewaard", "Staat in je
+   week"), the import preview's summary, the check-recipes count and done list, the dictionary's result list, the
+   check page's facts and timer, the segmented language picker on Deel, the stale-plan banner, the boot screen, and
+   the filter labels when they sit in the header bar. */
+:root[data-theme='panter'] .screen :is(.detail-variant-of, .detail-translate, .translation-badge, .saved-flag, .ip-summary-main, .cr-count, .timer-display):not(:is(.card, .menu, .sheet) *) {
+  display: inline-block;
+  max-width: 100%;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 3px 10px;
+}
+
+:root[data-theme='panter'] .screen .detail-week.on,
+:root[data-theme='panter'] .shop-banner {
+  background: var(--card);
+}
+
+:root[data-theme='panter'] .screen :is(ul.dw-list, ul.facts, ul.cr-done, .seg):not(.card *) {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 4px 12px;
+}
+
+:root[data-theme='panter'] .header .diet-label {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--panter-bar-muted);
+}
+
+:root[data-theme='panter'] .boot {
+  color: var(--ink);
+}
+
+:root[data-theme='panter'] .boot h1,
+:root[data-theme='panter'] .boot > div {
+  display: inline-block;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 4px 12px;
 }
 
 /* Sheets, the update bar and toasts keep a flat surface, never the print. */
