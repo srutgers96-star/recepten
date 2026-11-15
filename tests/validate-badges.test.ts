@@ -290,7 +290,7 @@ describe('validateAvatarParts (§2f)', () => {
 
   it('unlock outside level 3..100, or both/neither of level and badge', () => {
     expect(errors([...BASE, part('hat-a', 'hat', { level: 2 })])).toEqual(['avatar-parts.json "hat-a": unlock.level must be an integer 3..100.']);
-    expect(errors([...BASE, part('hat-a', 'hat', { level: 5, badge: 'kaasje' })])).toEqual(['avatar-parts.json "hat-a": "unlock" must be { level } or { badge }.']);
+    expect(errors([...BASE, part('hat-a', 'hat', { level: 5, badge: 'kaasje' })])).toEqual(['avatar-parts.json "hat-a": "unlock" must be { level }, { badge } or { egg }.']);
   });
 
   it('an svg with <script, href= or a disallowed style=', () => {
@@ -346,9 +346,9 @@ describe('the avatar library after spec V3 (§1b)', () => {
     return p;
   };
 
-  it('has 169 parts: 154 before, six glasses and five kitchen parts of V3, four badge parts of V7', () => {
-    expect(PARTS).toHaveLength(169);
-    expect(PARTS.filter((p) => p['layer'] === 'glasses')).toHaveLength(15);
+  it('has 170 parts: 154 before, six glasses and five kitchen parts of V3, four badge parts of V7, the mask of V1c-10', () => {
+    expect(PARTS).toHaveLength(170);
+    expect(PARTS.filter((p) => p['layer'] === 'glasses')).toHaveLength(16);
   });
 
   it('the fifteen rarities below the level rule are fixed', () => {

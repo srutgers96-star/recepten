@@ -27,6 +27,7 @@ import { HANDBOOK_SECTION_IDS } from '../src/domain/handbook.ts';
 import { NON_FOOD_AISLES } from '../src/domain/nutrition.ts';
 import type { Recipe } from '../src/domain/model.ts';
 import { rarityForLevel } from '../src/domain/rarity.ts';
+import { EGG_IDS } from '../src/domain/avatar.ts';
 import { readDictionaryData } from './build-dictionary-seed.ts';
 import { checkSides, readSides, SIDES_TIMESTAMP } from './sides.ts';
 
@@ -1282,8 +1283,15 @@ export function validateAvatarParts(data: unknown, badges: unknown): ValidationR
     const unlock = part['unlock'];
     const hasLevel = isRecord(unlock) && unlock['level'] !== undefined;
     const hasBadge = isRecord(unlock) && unlock['badge'] !== undefined;
-    if (!isRecord(unlock) || hasLevel === hasBadge) {
-      errors.push(`${label}: "unlock" must be { level } or { badge }.`);
+    const hasEgg = isRecord(unlock) && unlock['egg'] !== undefined;
+    if (!isRecord(unlock) || Number(hasLevel) + Number(hasBadge) + Number(hasEgg) !== 1) {
+      errors.push(`${label}: "unlock" must be { level }, { badge } or { egg }.`);
+    } else if (hasEgg) {
+      // V1c-10: an easter-egg part; the egg must be one the app knows (EGG_IDS), else it never unlocks.
+      const egg = unlock['egg'];
+      if (typeof egg !== 'string' || !(EGG_IDS as readonly string[]).includes(egg)) {
+        errors.push(`${label}: unlock.egg ${JSON.stringify(egg)} is not one of ${EGG_IDS.join(' | ')}.`);
+      }
     } else if (hasLevel) {
       const level = unlock['level'];
       if (!isIntIn(level, AVATAR_MIN_LEVEL, AVATAR_MAX_LEVEL)) errors.push(`${label}: unlock.level must be an integer ${AVATAR_MIN_LEVEL}..${AVATAR_MAX_LEVEL}.`);

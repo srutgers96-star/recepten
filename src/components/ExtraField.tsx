@@ -26,6 +26,9 @@ export interface ExtraFieldProps {
   /** Extras of the current / previous list: their labels are offered again. */
   previous: readonly ListItem[];
   onAdd: (item: Partial<ListItem>) => void | Promise<void>;
+  /** Optional: sees the whole typed line once, before it is split or parsed (V1c-10). true = the
+   *  caller handled it and nothing is added; the field is cleared. Not used for a 3+ part list. */
+  onLine?: (line: string) => boolean | Promise<boolean>;
   /** Placeholder of the input; default `shop.addPlaceholder` (the standing tab passes its own, 6C). */
   placeholder?: string;
 }
@@ -99,8 +102,31 @@ export function ExtraField(props: ExtraFieldProps) {
     void submit(item);
   }
 
-  /** Plain text, one item per comma ("wc-papier, melk"; "1,5 l melk" is one); each keeps its own amount. */
+  /** Hands the whole typed line to `onLine` first; true when it was handled (field cleared, nothing added). */
+  async function lineHandled(raw: string): Promise<boolean> {
+    if (!props.onLine || busy) return false;
+    setBusy(true);
+    let handled = false;
+    try {
+      handled = await props.onLine(raw);
+    } finally {
+      setBusy(false);
+    }
+    if (handled) {
+      setText('');
+      input.current?.focus();
+    }
+    return handled;
+  }
+
+  /** "Voeg toe als tekst": the line goes past `onLine` first, then is placed as plain text. */
   async function addText(raw: string) {
+    if (await lineHandled(raw)) return;
+    await placeText(raw);
+  }
+
+  /** Plain text, one item per comma ("wc-papier, melk"; "1,5 l melk" is one); each keeps its own amount. */
+  async function placeText(raw: string) {
     const parts = splitShopList(raw);
     if (!parts.length) return;
     if (busy) return;
@@ -125,20 +151,21 @@ export function ExtraField(props: ExtraFieldProps) {
     }
   }
 
-  function onEnter() {
+  async function onEnter() {
     if (!q) return;
     if (splitShopList(text).length >= PASTE_SHEET_MIN) {
       setPasteFromField(true);
       setPasteText(text);
       return;
     }
+    if (await lineHandled(text)) return;
     if (isShopList(text)) {
-      void addText(text);
+      void placeText(text);
       return;
     }
     if (exact) addIngredient(exact.id);
     else if (dictHits.length === 1 && dictHits[0]) addIngredient(dictHits[0].id);
-    else void addText(text);
+    else void placeText(text);
   }
 
   const showList = q.length > 0 && !isShopList(text);
@@ -150,7 +177,7 @@ export function ExtraField(props: ExtraFieldProps) {
         class="xf-row"
         onSubmit={(e) => {
           e.preventDefault();
-          onEnter();
+          void onEnter();
         }}
       >
         <input

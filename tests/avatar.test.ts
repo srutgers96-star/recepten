@@ -21,6 +21,7 @@ import {
   randomAvatar,
   rarityFor,
   renderAvatarSvg,
+  EGG_IDS,
   ringForLevel,
   INNER_SCALE,
   type AvatarPart,
@@ -304,6 +305,7 @@ describe('the library after round 2 (block 6D-UI, UI-C §2–§4 and §7)', () =
   const ATTRIBUTES: ReadonlySet<string> = new Set([
     'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'opacity', 'transform', 'style',
     'd', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'width', 'height', 'x1', 'y1', 'x2', 'y2', 'points',
+    'fill-rule', // V1c-10: the leopard mask's eye holes (evenodd)
   ]);
   const tags = (svg: string): RegExpMatchArray[] => [...svg.matchAll(/<([a-z]+)((?:\s+[a-z-]+="[^"]*")*)\s*\/?>/g)];
 
@@ -1078,12 +1080,12 @@ describe('block 6D-F: the validator (frames.md §2d, §6.5)', () => {
 });
 
 describe('block 6D-F: the real library of round 3 (frames.md §3, §4; needs the data of builder B)', () => {
-  it('has 169 parts (154 + 11 of spec V3 + 4 of spec V7): 30 backgrounds (14 covering), 11 frames; legendary 11 (≤ 10 %)', () => {
-    expect(PARTS).toHaveLength(169);
+  it('has 170 parts (154 + 11 of spec V3 + 4 of spec V7 + the mask of V1c-10): 30 backgrounds (14 covering), 11 frames; legendary 12 (≤ 10 %)', () => {
+    expect(PARTS).toHaveLength(170);
     expect(PARTS.filter((p) => p.layer === 'bg')).toHaveLength(30);
     expect(PARTS.filter((p) => p.layer === 'bg' && p.covers === true)).toHaveLength(14);
     expect(PARTS.filter((p) => p.layer === 'frame')).toHaveLength(11);
-    expect(PARTS.filter((p) => p.rarity === 'legendary')).toHaveLength(11);
+    expect(PARTS.filter((p) => p.rarity === 'legendary')).toHaveLength(12);
   });
 
   it('holds the 11 frames of §3 literally: unlock, rarity, accent, clip; the svg uses var(--accent)', () => {
@@ -1329,5 +1331,54 @@ describe('V3b §1a: a hat with a brim clips the hair layer', () => {
     expect(svg).not.toContain('clipPath id="h-');
     expect(svg).toContain('<defs><clipPath id="c-b7"><circle cx="50" cy="50" r="46"/></clipPath></defs>');
     expect(svg).not.toContain('data-layer="hair"');
+  });
+});
+
+describe('V1c-10 §1b: a part that unlocks with an egg', () => {
+  const required = [
+    { id: 'face-a', layer: 'face', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+    { id: 'eyes-a', layer: 'eyes', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+    { id: 'mouth-a', layer: 'mouth', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+    { id: 'body-a', layer: 'body', nl: 'a', en: 'a', unlock: { level: 3 }, svg: '' },
+  ];
+  const eggPart = (unlock: unknown) => ({ id: 'glasses-x', layer: 'glasses', nl: 'x', en: 'x', unlock, svg: '' });
+
+  it('EGG_IDS knows the leopard egg; rarityFor an egg is legendary', () => {
+    expect([...EGG_IDS]).toEqual(['panter']);
+    expect(rarityFor({ egg: 'panter' })).toBe('legendary');
+  });
+
+  it('normalizeAvatarParts keeps a known egg and skips an unknown one or a mixed unlock', () => {
+    const kept = normalizeAvatarParts([eggPart({ egg: 'panter' })]);
+    expect(kept).toHaveLength(1);
+    expect(kept[0]?.unlock).toEqual({ egg: 'panter' });
+    expect(kept[0]?.rarity).toBe('legendary');
+    expect(normalizeAvatarParts([eggPart({ egg: 'draak' })])).toEqual([]);
+    expect(normalizeAvatarParts([eggPart({ egg: 7 })])).toEqual([]);
+    expect(normalizeAvatarParts([eggPart({ egg: 'panter', level: 3 })])).toEqual([]);
+  });
+
+  it('isUnlocked: an egg part only when that egg is found on this phone', () => {
+    const mask = part('glasses-panter');
+    expect(isUnlocked(mask, { level: 100, badgeTiers: NO_BADGES })).toBe(false);
+    expect(isUnlocked(mask, { level: 100, badgeTiers: NO_BADGES, eggs: new Set() })).toBe(false);
+    expect(isUnlocked(mask, { level: 1, badgeTiers: NO_BADGES, eggs: new Set(['panter']) })).toBe(true);
+  });
+
+  it('the mask is in the library: glasses layer, legendary, egg panter, holes through evenodd', () => {
+    const mask = part('glasses-panter');
+    expect(mask).toMatchObject({ layer: 'glasses', nl: 'Pantermasker', en: 'Leopard mask', unlock: { egg: 'panter' }, rarity: 'legendary' });
+    expect(mask.svg).toContain('fill-rule="evenodd"');
+    for (const colour of ['#d9a441', '#2a1b0c', '#6b4a1a', '#2a2420']) expect(mask.svg).toContain(colour);
+  });
+
+  it('the validator accepts { egg } from EGG_IDS and refuses an unknown egg or a mixed unlock', () => {
+    expect(validateAvatarParts([...required, eggPart({ egg: 'panter' })], [])).toMatchObject({ errors: [], warnings: [] });
+    expect(validateAvatarParts([...required, eggPart({ egg: 'draak' })], []).errors).toEqual([
+      'avatar-parts.json "glasses-x": unlock.egg "draak" is not one of panter.',
+    ]);
+    expect(validateAvatarParts([...required, eggPart({ egg: 'panter', badge: 'b' })], []).errors).toEqual([
+      'avatar-parts.json "glasses-x": "unlock" must be { level }, { badge } or { egg }.',
+    ]);
   });
 });

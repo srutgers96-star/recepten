@@ -58,6 +58,7 @@ import type { Profile } from '@/domain/model';
 import { interpolate, lang, t } from '@/i18n';
 import { profiles, updateProfile } from '@/profile';
 import { ShuffleIcon } from '@/components/ShuffleIcon';
+import { panterUnlocked } from '@/theme';
 
 /** How far (px) the sheet must be pulled down before letting go closes it (as CookedSheet). */
 const DISMISS_PX = 80;
@@ -98,7 +99,7 @@ function rarityName(r: Rarity): string {
 }
 
 /**
- * Order inside a rarity group: by unlock level, then by id (R-B.3). A badge part has no unlock
+ * Order inside a rarity group: by unlock level, then by id (R-B.3). A badge or egg part has no unlock
  * level; it comes after the level parts of its group (then by id as well).
  */
 function byUnlockThenId(a: AvatarPart, b: AvatarPart): number {
@@ -136,6 +137,7 @@ function withPart(spec: AvatarSpec, layer: AvatarLayer, id: string | null, parts
 function lockText(part: AvatarPart): string {
   const u = part.unlock;
   if ('level' in u) return t('avatar.lockedLevel', { n: u.level });
+  if ('egg' in u) return t('avatar.lockedEgg');
   const badge = partBadge(part);
   if (!badge || badge.hidden === true) return t('avatar.lockedSecret');
   const name = badge[lang.value].name;
@@ -150,7 +152,7 @@ function lockText(part: AvatarPart): string {
  */
 function lockNote(part: AvatarPart): ComponentChildren {
   const u = part.unlock;
-  if ('level' in u || u.tier === undefined) return lockText(part);
+  if ('level' in u || 'egg' in u || u.tier === undefined) return lockText(part);
   const badge = partBadge(part);
   if (!badge || badge.hidden === true) return lockText(part);
   const vars = { badge: badge[lang.value].name, k: u.tier };
@@ -172,6 +174,7 @@ function lockNote(part: AvatarPart): ComponentChildren {
 function lockLabel(part: AvatarPart): string {
   const u = part.unlock;
   if ('level' in u) return t('avatar.lockLevel', { n: u.level });
+  if ('egg' in u) return t('avatar.lockEgg');
   const badge = partBadge(part);
   return !badge || badge.hidden === true ? '❓' : badge.icon;
 }
@@ -234,7 +237,8 @@ export function AvatarSheet(props: AvatarSheetProps): JSX.Element {
     let live = true;
     void (async () => {
       try {
-        const ctx = await unlockContext(profile.id);
+        // Egg parts (V1c-10): found on this phone, device-local like the theme it came with.
+        const ctx = { ...(await unlockContext(profile.id)), eggs: new Set<string>(panterUnlocked.value ? ['panter'] : []) };
         const free = new Set([...parts.values()].filter((p) => isUnlocked(p, ctx)).map((p) => p.id));
         const unseen = await unseenParts([...free]);
         if (!live) return;

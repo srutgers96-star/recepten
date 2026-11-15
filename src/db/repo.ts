@@ -1563,7 +1563,7 @@ export interface RestoreResult {
  *  docs/specs/xp-levels.md §1f, §2g); 6D-S: `confetti.style` (the confetti chosen in Jouw stijl,
  *  docs/specs/badges-avatar.md block 6D-S); V5: `theme.goldUnlocked` (the maker's egg, a device setting,
  *  docs/specs/verbeterronde-5.md §1d). */
-const DEVICE_LOCAL_SETTINGS = new Set(['theme', 'backup.lastAt', 'cook.sessions', 'avatar.seen', 'unlocks.disabled', 'confetti.style', 'theme.goldUnlocked']);
+const DEVICE_LOCAL_SETTINGS = new Set(['theme', 'backup.lastAt', 'cook.sessions', 'avatar.seen', 'unlocks.disabled', 'confetti.style', 'theme.goldUnlocked', 'theme.panterUnlocked', 'theme.panterColor']);
 /** Only restored when this phone had no profile yet (a fresh install), never on a merge. */
 const ACTIVE_PROFILE_SETTING = 'activeProfileId';
 /** Merged (union) instead of replaced, so a restore never re-badges recipes already seen here. */

@@ -71,9 +71,11 @@ import {
   type ListItemPatch,
 } from '@/db/repo';
 import { recheckActiveBadges } from '@/badges';
+import { celebrate } from '@/celebrate';
 import { dictionary } from '@/dictionary';
 import { effectiveQty, groupByAisle, isoWeekNumber, itemName, listAsText, renderListItem, type AisleGroup, type ListItem } from '@/domain/aggregate';
 import type { Dictionary } from '@/domain/dictionary';
+import { isPanterEggText } from '@/domain/eggs';
 import { nowIso, type Lang, type Text } from '@/domain/model';
 import { planMessages, type ListShare } from '@/domain/share';
 import { buildListEnvelope, LIST_LINK_MESSAGE_LIMIT } from '@/domain/share-list';
@@ -84,6 +86,7 @@ import { printPage } from '@/print';
 import { activeProfile } from '@/profile';
 import { navigate, route } from '@/router';
 import { copyText, shareText } from '@/share-actions';
+import { unlockPanterEgg } from '@/theme';
 
 const SNACK_MS = 5000;
 
@@ -385,6 +388,17 @@ export function ShoppingScreen() {
     showSnack(t('shop.standing.keptSnack', { text }));
   }
 
+  /** V1c-10 (docs/specs/ei-gabi.md §1a/§2): the whole typed line, before it is split or parsed. Exactly
+   *  one egg phrase on one line unlocks the theme instead of landing on the list (no undo); an amount,
+   *  a comma or a pasted list never counts, so this is not checked per added item. */
+  async function eggLine(line: string): Promise<boolean> {
+    if (!isPanterEggText(line)) return false;
+    const r = await unlockPanterEgg();
+    showSnack(t(r === 'unlocked' ? 'shop.panterEgg' : 'shop.panterAgain'));
+    if (r === 'unlocked') celebrate('milestone');
+    return true;
+  }
+
   async function addItem(item: Partial<ListItem>) {
     const added = await addExtra(item);
     showSnack(`${t('shop.addedSnack')}: ${itemName(added, dict, l)}`, () => removeExtra(added.key));
@@ -645,7 +659,7 @@ export function ShoppingScreen() {
     </>
   );
 
-  const extrasField = <ExtraField previous={list?.extras ?? []} onAdd={addItem} />;
+  const extrasField = <ExtraField previous={list?.extras ?? []} onAdd={addItem} onLine={eggLine} />;
 
   const protoView = (
     <>

@@ -49,7 +49,12 @@ export interface AvatarSpec {
  * tier), so `isUnlocked` can say "Kaaskop at blue" from the part alone. Absent = a one-off badge
  * (earned once is enough), or no catalogue was passed to normalizeAvatarParts.
  */
-export type AvatarUnlock = { level: number } | { badge: string; tier?: number };
+export type AvatarUnlock = { level: number } | { badge: string; tier?: number } | { egg: string };
+
+/** The easter eggs a part can unlock with (`unlock: { egg }`, V1c-10). Device-local, never from a badge or level. */
+export const EGG_IDS = ['panter'] as const;
+export type EggId = (typeof EGG_IDS)[number];
+const EGG_SET: ReadonlySet<string> = new Set(EGG_IDS);
 
 // How rare a part is (block 6D-R): a design trait Fable sets by hand per part in
 // data/avatar-parts.json, weighing both how hard the part is to unlock and how striking it is.
@@ -171,6 +176,7 @@ function isRarity(v: unknown): v is Rarity {
  * only for `hidden` (absent = visible).
  */
 export function rarityFor(unlock: AvatarUnlock, badge?: Pick<Badge, 'hidden'> | null): Rarity {
+  if ('egg' in unlock) return 'legendary';
   if ('level' in unlock) {
     const level = unlock.level;
     return level <= 20 ? 'common' : level <= 50 ? 'rare' : level <= 80 ? 'epic' : 'legendary';
@@ -204,8 +210,8 @@ function safeClip(v: unknown): string | null {
 /**
  * Normalize the raw contents of data/avatar-parts.json. Tolerant, like normalizeBadges: unusable
  * entries are skipped (never an exception). A part is usable with a kebab-case id that starts with
- * '<layer>-', a known layer, non-empty nl and en, an unlock that is `{ level: 1..100 }` or
- * `{ badge: id }`, and an svg string that passes `isSafePartSvg`. Duplicate ids: the first wins.
+ * '<layer>-', a known layer, non-empty nl and en, an unlock that is `{ level: 1..100 }`,
+ * `{ badge: id }` or `{ egg: id }` with the egg in EGG_IDS, and an svg string that passes `isSafePartSvg`. Duplicate ids: the first wins.
  * The strict checks are the validator's.
  *
  * `badges` is the normalized badge catalogue (src/badges.ts `badgeData()`, i.e. normalizeBadges of
@@ -262,7 +268,13 @@ function normalizeUnlock(v: unknown, partId: string, badgeById: ReadonlyMap<stri
   if (!isRecord(v)) return null;
   const hasLevel = v['level'] !== undefined;
   const hasBadge = v['badge'] !== undefined;
-  if (hasLevel === hasBadge) return null;
+  const hasEgg = v['egg'] !== undefined;
+  if (Number(hasLevel) + Number(hasBadge) + Number(hasEgg) !== 1) return null;
+  if (hasEgg) {
+    // An egg this app does not know: skip the part (a newer data file must not unlock it by accident).
+    const egg = v['egg'];
+    return typeof egg === 'string' && EGG_SET.has(egg) ? { egg } : null;
+  }
   if (hasLevel) {
     const level = v['level'];
     return typeof level === 'number' && Number.isInteger(level) && level >= 1 && level <= 100 ? { level } : null;
@@ -323,10 +335,15 @@ export function isComplete(spec: AvatarSpec, parts: ReadonlyMap<string, AvatarPa
 /**
  * Whether this person has the part: a level part from that level on; a badge part once the badge
  * reached the part's tier (`badgeTiers`: badge id → reached tier, a one-off = 1; src/badges.ts
- * `badgeTiersFor`), a one-off badge's part once it is earned.
+ * `badgeTiersFor`), a one-off badge's part once it is earned; an egg part once that egg is found on
+ * this phone (`eggs`, V1c-10; absent = none found).
  */
-export function isUnlocked(part: AvatarPart, ctx: { level: number; badgeTiers: ReadonlyMap<string, number> }): boolean {
+export function isUnlocked(
+  part: AvatarPart,
+  ctx: { level: number; badgeTiers: ReadonlyMap<string, number>; eggs?: ReadonlySet<string> },
+): boolean {
   const u = part.unlock;
+  if ('egg' in u) return ctx.eggs?.has(u.egg) === true;
   if ('level' in u) return ctx.level >= u.level;
   return (ctx.badgeTiers.get(u.badge) ?? 0) >= (u.tier ?? 1);
 }

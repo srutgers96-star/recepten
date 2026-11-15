@@ -14,12 +14,18 @@
 // was free on this phone; until BOTH the unlocks have been computed once and the egg setting has
 // been read, that mirror counts as "gold is free" (optimistic). Afterwards only the real sources
 // count and the mirror is written or removed to match them. The mirror is a per-device hint only.
+//
+// V1c-10 (docs/specs/ei-gabi.md): 'panter' (the leopard theme) follows the same plumbing, with one
+// source only: the device-local setting `theme.panterUnlocked`, written by an egg (unlockPanterEgg),
+// mirrored in localStorage `recepten.theme.panterFree` for the first paint. Its colour variant is the
+// device-local setting `theme.panterColor` (mirrored in `recepten.theme.panterColor`), applied as a
+// second attribute `data-panter` on <html> while the leopard theme is applied.
 import { effect, signal } from '@preact/signals';
 import { badgesEnabled } from '@/badges';
 import { getSetting, setSetting } from '@/db/repo';
 import { isActive, unlockedOnPhone } from '@/unlocks';
 
-export type Theme = 'system' | 'light' | 'dark' | 'gold';
+export type Theme = 'system' | 'light' | 'dark' | 'gold' | 'panter';
 
 export const THEME_SETTING = 'theme';
 /** Setting `theme.goldUnlocked` (boolean, this phone): the maker's egg unlocked the gold theme (V5 §1d). */
@@ -29,17 +35,36 @@ export const GOLD_THEME_UNLOCK = 'gold-theme';
 const LOCAL_KEY = 'recepten.theme';
 /** localStorage: '1' while gold was known to be free on this phone (optimistic first paint). */
 const GOLD_FREE_KEY = 'recepten.theme.goldFree';
+/** Setting `theme.panterUnlocked` (boolean, this phone): the leopard egg was found (V1c-10). */
+export const PANTER_UNLOCKED_SETTING = 'theme.panterUnlocked';
+/** Setting `theme.panterColor` (PanterColor, this phone): the colour variant of the leopard theme. */
+export const PANTER_COLOR_SETTING = 'theme.panterColor';
+/** localStorage: '1' while the leopard theme was known to be free on this phone (optimistic first paint). */
+const PANTER_FREE_KEY = 'recepten.theme.panterFree';
+/** localStorage mirror of `theme.panterColor` (first paint). */
+const PANTER_COLOR_KEY = 'recepten.theme.panterColor';
 
-/** Paper colour per theme, for the status bar (<meta name="theme-color">). */
-const PAPER: Record<Exclude<Theme, 'system'>, string> = { light: '#eaf3fb', dark: '#0f1a2b', gold: '#15120c' };
+/** The colour variants of the leopard theme (base.css `[data-panter=...]`). */
+export type PanterColor = 'klassiek' | 'roze' | 'sneeuw' | 'paars';
+export const PANTER_COLORS: readonly PanterColor[] = ['klassiek', 'roze', 'sneeuw', 'paars'];
+export const DEFAULT_PANTER_COLOR: PanterColor = 'klassiek';
 
-export function isTheme(v: unknown): v is Theme {
-  return v === 'system' || v === 'light' || v === 'dark' || v === 'gold';
+export function isPanterColor(v: unknown): v is PanterColor {
+  return typeof v === 'string' && (PANTER_COLORS as readonly string[]).includes(v);
 }
 
-/** The theme really applied: a 'gold' that is not free falls back to 'system' (V5 §1d). */
-export function effectiveTheme(t: Theme, goldFree: boolean): Theme {
-  return t === 'gold' && !goldFree ? 'system' : t;
+/** Paper colour per theme, for the status bar (<meta name="theme-color">). */
+const PAPER: Record<Exclude<Theme, 'system'>, string> = { light: '#eaf3fb', dark: '#0f1a2b', gold: '#15120c', panter: '#14110d' };
+
+export function isTheme(v: unknown): v is Theme {
+  return v === 'system' || v === 'light' || v === 'dark' || v === 'gold' || v === 'panter';
+}
+
+/** The theme really applied: a 'gold' or 'panter' that is not free falls back to 'system' (V5 §1d, V1c-10). */
+export function effectiveTheme(t: Theme, goldFree: boolean, panterFree = false): Theme {
+  if (t === 'gold' && !goldFree) return 'system';
+  if (t === 'panter' && !panterFree) return 'system';
+  return t;
 }
 
 function readLocal(): Theme {
@@ -59,6 +84,23 @@ function readGoldFreeMirror(): boolean {
   }
 }
 
+function readPanterFreeMirror(): boolean {
+  try {
+    return localStorage.getItem(PANTER_FREE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function readPanterColorLocal(): PanterColor {
+  try {
+    const v = localStorage.getItem(PANTER_COLOR_KEY);
+    return isPanterColor(v) ? v : DEFAULT_PANTER_COLOR;
+  } catch {
+    return DEFAULT_PANTER_COLOR;
+  }
+}
+
 export const theme = signal<Theme>(readLocal());
 /** Mirror of `theme.goldUnlocked`: the maker's egg unlocked the gold theme on this phone. */
 export const goldUnlockedByMaker = signal(false);
@@ -68,6 +110,54 @@ export const goldFreeMirror = signal(readGoldFreeMirror());
 const unlocksSeen = signal(false);
 /** The `theme.goldUnlocked` read in initTheme has resolved (success or failure). */
 const eggRead = signal(false);
+/** Mirror of `theme.panterUnlocked`: the leopard egg was found on this phone (V1c-10). */
+export const panterUnlocked = signal(false);
+/** localStorage `recepten.theme.panterFree`: the leopard theme was free on this phone at an earlier start. */
+export const panterFreeMirror = signal(readPanterFreeMirror());
+/** `theme.panterColor`: the colour variant of the leopard theme. */
+export const panterColor = signal<PanterColor>(readPanterColorLocal());
+/** The `theme.panterUnlocked` read in initTheme has resolved (success or failure). */
+const panterEggRead = signal(false);
+
+export interface PanterAvailabilityInput {
+  /** `theme.panterUnlocked` as read. */
+  unlocked: boolean;
+  /** localStorage mirror: the leopard theme was free here at an earlier start. */
+  mirror: boolean;
+  /** The `theme.panterUnlocked` read has resolved. */
+  eggRead: boolean;
+}
+
+/** The leopard theme is free: the egg setting, or optimistically the mirror until that setting is read. Pure. */
+export function panterAvailable(i: PanterAvailabilityInput): boolean {
+  return i.unlocked || (!i.eggRead && i.mirror);
+}
+
+function panterInput(): PanterAvailabilityInput {
+  return { unlocked: panterUnlocked.value, mirror: panterFreeMirror.value, eggRead: panterEggRead.value };
+}
+
+/** The leopard theme is free on this phone (see panterAvailable). */
+export function panterThemeFree(): boolean {
+  return panterAvailable(panterInput());
+}
+
+/** Keeps the leopard mirror in step with the egg setting (never the other way round). */
+function syncPanterMirror(i: PanterAvailabilityInput): void {
+  try {
+    if (i.unlocked) {
+      if (!i.mirror) {
+        localStorage.setItem(PANTER_FREE_KEY, '1');
+        panterFreeMirror.value = true;
+      }
+    } else if (i.eggRead && i.mirror) {
+      localStorage.removeItem(PANTER_FREE_KEY);
+      panterFreeMirror.value = false;
+    }
+  } catch {
+    /* ignore */
+  }
+}
 
 export interface GoldAvailabilityInput {
   /** `isActive('gold-theme')`: the level-100 unlock is unlocked and not switched off. */
@@ -123,11 +213,14 @@ function syncGoldMirror(i: GoldAvailabilityInput): void {
   }
 }
 
-function apply(t: Theme) {
+function apply(t: Theme, color: PanterColor) {
   if (typeof document === 'undefined') return;
   const el = document.documentElement;
   if (t === 'system') el.removeAttribute('data-theme');
   else el.setAttribute('data-theme', t);
+  // V1c-10: the colour variant only while the leopard theme is applied.
+  if (t === 'panter') el.setAttribute('data-panter', color);
+  else el.removeAttribute('data-panter');
   // index.html carries two theme-color metas with media queries; a forced theme overrides both.
   document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((m) => {
     if (!m.dataset.original) m.dataset.original = m.content;
@@ -155,9 +248,31 @@ export function initTheme(): void {
   });
   effect(() => {
     const input = goldInput();
-    apply(effectiveTheme(theme.value, goldAvailable(input)));
+    const pInput = panterInput();
+    apply(effectiveTheme(theme.value, goldAvailable(input), panterAvailable(pInput)), panterColor.value);
     syncGoldMirror(input);
+    syncPanterMirror(pInput);
   });
+  void getSetting<unknown>(PANTER_UNLOCKED_SETTING, false).then(
+    (v) => {
+      if (v === true) panterUnlocked.value = true;
+      panterEggRead.value = true;
+    },
+    () => {
+      panterEggRead.value = true;
+    },
+  );
+  void getSetting<unknown>(PANTER_COLOR_SETTING, DEFAULT_PANTER_COLOR).then(
+    (v) => {
+      const c = isPanterColor(v) ? v : DEFAULT_PANTER_COLOR;
+      if (c === panterColor.value) return;
+      panterColor.value = c;
+      writePanterColorLocal(c);
+    },
+    () => {
+      /* keep the mirrored colour */
+    },
+  );
   void getSetting<unknown>(GOLD_UNLOCKED_SETTING, false).then(
     (v) => {
       if (v === true) goldUnlockedByMaker.value = true;
@@ -186,6 +301,47 @@ export async function setTheme(t: Theme): Promise<void> {
     /* ignore */
   }
   await setSetting(THEME_SETTING, t);
+}
+
+function writePanterColorLocal(c: PanterColor): void {
+  try {
+    localStorage.setItem(PANTER_COLOR_KEY, c);
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Jouw stijl -> Thema -> Kleur (V1c-10): the leopard theme's colour variant (setting + mirror + attribute). */
+export async function setPanterColor(c: PanterColor): Promise<void> {
+  panterColor.value = c;
+  writePanterColorLocal(c);
+  await setSetting(PANTER_COLOR_SETTING, c);
+}
+
+/**
+ * The leopard egg (V1c-10): writes `theme.panterUnlocked = true` and the mirror, and switches the
+ * theme to 'panter' at once (Fable: otherwise nothing visibly happens). 'already' when this phone
+ * had it before.
+ */
+export async function unlockPanterEgg(): Promise<'unlocked' | 'already'> {
+  let already = panterUnlocked.value;
+  if (!already) {
+    try {
+      already = (await getSetting<unknown>(PANTER_UNLOCKED_SETTING, false)) === true;
+    } catch {
+      /* treat as new */
+    }
+  }
+  panterUnlocked.value = true;
+  try {
+    localStorage.setItem(PANTER_FREE_KEY, '1');
+    panterFreeMirror.value = true;
+  } catch {
+    /* ignore */
+  }
+  await setSetting(PANTER_UNLOCKED_SETTING, true);
+  await setTheme('panter');
+  return already ? 'already' : 'unlocked';
 }
 
 /** The maker's egg (V5 §1d): writes `theme.goldUnlocked = true`. Does NOT switch the theme. */

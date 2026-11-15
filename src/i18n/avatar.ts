@@ -49,6 +49,9 @@ export const avatar: Dict = {
     en: 'Unlocks with the badge {badge} at tier {k}.',
   },
   'avatar.lockedSecret': { nl: 'Komt vrij met een geheime badge.', en: 'Unlocks with a secret badge.' },
+  // V1c-10: a part that unlocks with an easter egg (list line and short tile label).
+  'avatar.lockedEgg': { nl: 'Komt vrij met een geheim.', en: 'Unlocks with a secret.' },
+  'avatar.lockEgg': { nl: 'Geheim', en: 'Secret' },
 
   // How rare a part is (block 6D-R, R-B.5): the group captions in a maker tab ("Zeldzaam · 5"), the
   // start of a tile's title/aria-label and of the line under the grid. Order: RARITIES.

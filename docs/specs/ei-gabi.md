@@ -1,12 +1,12 @@
 # Spec V1c-10 — Gabi's ei: het panterprint-thema (SPOILER — Stijn, niet lezen: jij wilde niet weten hoe het vrijspeelt)
 
-Status: in aanbouw (Fable, 15 nov 2026). Twee bouwers + integrator (lichte modus). Bron: Gabi, getypt op Stijns laptop (15 nov, Engels):
+Status: compleet (Fable, 15 nov 2026). Twee bouwers + integrator (lichte modus). Bron: Gabi, getypt op Stijns laptop (15 nov, Engels):
 "if I click to shopping list and then only add leopard print and save, the leopard print theme would appear; there would be multiple
 options for the colour theme, and a mask would unlock to put on the avatar." Stijn: "ze is jaloers op goud; zodat ik niet weet wat het is".
 Leidend bij tegenspraak: docs/specs/README.md §2–§4, docs/specs/verbeterronde-5.md §1d (het gouden thema en het makers-ei: dit ei volgt
 dezelfde plumbing), docs/specs/badges-avatar.md (avatar-onderdelen). De manier van vrijspelen staat ALLEEN in dit bestand: niet in STATUS,
 niet in het handboek, niet in DEVICE-TEST (daar staat "Gabi weet hoe"), niet in commit-berichten.
-Gebouwd: 15 nov 2026 (V1c-10, lichte workflow; run-id in STATUS)
+Gebouwd: 15 nov 2026 (V1c-10, lichte workflow wf_6b027015-4e1; lens: twee bevindingen, allebei hersteld: de controle zit op de hele getypte regel via een prop `onLine` op ExtraField (niet in `addItem`, anders telde "2 leopard print" of "melk, leopard print" ook), en DEVICE-TEST rij 125 noemt het scherm niet; besluiten Fable: zo laten; bouwer A: nog eens vrijspelen zet het thema ook op Panter, `color-mix` voor de balken)
 
 **Kritische lezer (Fable, vooraf).** (1) Zelfde plumbing als goud: een thema is pas kiesbaar als het "vrij" is op deze telefoon; voor panter
 is er geen level-ontgrendeling, alleen het ei (device-local setting `theme.panterUnlocked` + localStorage-spiegel voor de eerste paint, zoals
@@ -58,7 +58,9 @@ laatste rij 124; dit blok krijgt 125.
   en schakelt het thema meteen naar 'panter' (`setTheme('panter')`; besluit Fable: anders zie je niets gebeuren). Tests: `effectiveTheme` met
   panter vrij/niet vrij; `panterAvailable` (gelezen zonder vlag = false, spiegel vóór lezen = true).
 - `src/db/repo.ts`: `DEVICE_LOCAL_SETTINGS` += 'theme.panterUnlocked', 'theme.panterColor'.
-- `src/screens/ShoppingScreen.tsx` `addItem(item)`: vóór `addExtra`: `const typed = item.ing ? null : (item.label?.nl || item.label?.en || null)`;
+- (Na de lens: de controle zit op de HELE getypte regel, vóór splitsen en parsen: `ExtraField` krijgt een prop `onLine(line) => boolean`, die
+  ShoppingScreen vult met `eggLine`; alleen Enter/+ en "Voeg toe als tekst" met precies de zin tellen, een hoeveelheid, een komma-lijst of een
+  geplakte lijst niet.) Oorspronkelijk: `src/screens/ShoppingScreen.tsx` `addItem(item)`: vóór `addExtra`: `const typed = item.ing ? null : (item.label?.nl || item.label?.en || null)`;
   als `isPanterEggText(typed)`: `const r = await unlockPanterEgg()`; `showSnack(t(r === 'unlocked' ? 'shop.panterEgg' : 'shop.panterAgain'))`; bij
   'unlocked' ook `celebrate` zoals de bestaande milestone-viering (de bouwer gebruikt de bestaande aanroep die het level-up-moment gebruikt;
   bestaat er geen losse aanroep, dan de gewone confetti); geen `addExtra`, geen undo. Niets anders in het pad verandert (meerdere regels,

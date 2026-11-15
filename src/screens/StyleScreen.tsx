@@ -16,6 +16,7 @@
 //     on an unlocked style takes it out of / puts it in the mix (`setUnlockEnabled`).
 //   - Letters: Standaard · Krijtbord · Handschrift ("Aa" in that typeface); tap = `cook.font`.
 //   - Thema: Systeem · Licht · Donker (a small swatch in that paper colour), plus Goud while it is free (V5 §1d); tap = setTheme.
+//     Plus Panter (🐆) while it is free on this phone (V1c-10); with Panter chosen, a Kleur control under the tiles.
 //   - At the bottom, muted, `unlocks.phoneWide`.
 // Badges off: only `badges.disabled` and the tab Thema (the theme has nothing to do with XP).
 // Opening this screen is never a reward moment: it reads, it never settles XP.
@@ -28,6 +29,7 @@ import { celebrate, celebrateFast, confettiStyle, DEFAULT_CONFETTI_STYLE, loadCe
 import { isIOS } from '@/components/AppInfo';
 import { AvatarSheet } from '@/components/AvatarSheet';
 import { Header } from '@/components/Header';
+import { Segmented } from '@/components/Segmented';
 import { COOKED_SOUND_UNLOCK } from '@/cooklog';
 import { getSetting, setSetting } from '@/db/repo';
 import { AVATAR_MAKER_LEVEL } from '@/domain/avatar';
@@ -39,7 +41,7 @@ import { lang, t } from '@/i18n';
 import { activeProfile } from '@/profile';
 import { navigate, route } from '@/router';
 import { cookedSound, loadSoundSettings, previewCookedSound, previewTimerSound, setCookedSound, setTimerSound, timerSound, type TimerSound } from '@/sounds';
-import { GOLD_THEME_UNLOCK, goldUnlockedByMaker, setTheme, theme, type Theme } from '@/theme';
+import { GOLD_THEME_UNLOCK, goldUnlockedByMaker, PANTER_COLORS, panterColor, panterThemeFree, setPanterColor, setTheme, theme, type PanterColor, type Theme } from '@/theme';
 import { COOK_FONT_SETTING, disabledUnlocks, isActive, refreshUnlocks, setUnlockEnabled, unlockData, unlockedOnPhone, type CookFont } from '@/unlocks';
 import { Avatar, useAvatarLevel } from './ProfilesScreen';
 
@@ -101,6 +103,8 @@ export interface StyleState {
   theme: Theme;
   /** V5 §1d: `theme.goldUnlocked` — the maker's egg unlocked the gold theme on this phone. */
   goldByMaker?: boolean;
+  /** V1c-10: the leopard theme is free on this phone (`panterThemeFree()`). */
+  panterFree?: boolean;
 }
 
 /**
@@ -113,7 +117,7 @@ export const TIMER_SOUND_TILES: readonly TimerSound[] = [
   'off',
 ];
 const FONT_TILES: readonly CookFont[] = ['default', 'chalk', 'hand'];
-const THEME_TILES: readonly Theme[] = ['system', 'light', 'dark', 'gold'];
+const THEME_TILES: readonly Theme[] = ['system', 'light', 'dark', 'gold', 'panter'];
 
 /**
  * V5 §1d: the gold tile exists only while gold is free on this phone: the level-100 unlock is active
@@ -123,6 +127,11 @@ const THEME_TILES: readonly Theme[] = ['system', 'light', 'dark', 'gold'];
  */
 export function goldTileShown(s: StyleState): boolean {
   return (s.badgesOn && s.unlocked.has(GOLD_THEME_UNLOCK) && !s.disabled.has(GOLD_THEME_UNLOCK)) || s.goldByMaker === true;
+}
+
+/** V1c-10: the leopard tile exists only while the leopard theme is free on this phone (no locked tile). */
+export function panterTileShown(s: StyleState): boolean {
+  return s.panterFree === true;
 }
 
 function unlockFor(s: StyleState, kind: Unlock['kind'], value: string): Unlock | null {
@@ -159,7 +168,7 @@ export function shownConfettiStyle(s: StyleState): string {
  * Thema is empty (the screen then only shows Thema).
  */
 export function styleTiles(tab: StyleTab, s: StyleState): StyleTile[] {
-  if (tab === 'theme') return THEME_TILES.filter((v) => v !== 'gold' || goldTileShown(s)).map((v) => tile(s, 'theme', v, null, s.theme === v));
+  if (tab === 'theme') return THEME_TILES.filter((v) => (v !== 'gold' || goldTileShown(s)) && (v !== 'panter' || panterTileShown(s))).map((v) => tile(s, 'theme', v, null, s.theme === v));
   if (!s.badgesOn) {
     // Badges off (Fable, 8 Nov): the four base sounds stay choosable, nothing that is an unlock.
     if (tab !== 'sounds') return [];
@@ -206,7 +215,9 @@ function tileName(x: StyleTile, l: Lang): string {
     case 'font':
       return t('style.font.' + x.value);
     case 'theme':
-      return x.value === 'gold' ? t('style.theme.gold') : t('more.theme.' + x.value);
+      if (x.value === 'gold') return t('style.theme.gold');
+      if (x.value === 'panter') return t('style.theme.panter');
+      return t('more.theme.' + x.value);
     case 'confetti':
       if (x.value === RANDOM_CONFETTI_STYLE) return t('style.random');
       if (x.value === DEFAULT_CONFETTI_STYLE) return t('style.confetti.default');
@@ -338,6 +349,13 @@ function TileFace(props: { x: StyleTile }): JSX.Element {
       </span>
     );
   }
+  if (x.group === 'theme' && x.value === 'panter') {
+    return (
+      <span class="style-tile-icon" aria-hidden="true">
+        🐆
+      </span>
+    );
+  }
   if (x.group === 'theme') return <span class="style-swatch-theme" data-theme-swatch={x.value} aria-hidden="true" />;
   const icon = x.unlock?.icon ?? STANDARD_ICONS[`${x.group}:${x.value}`] ?? '•';
   return (
@@ -419,6 +437,8 @@ function Tile(props: { x: StyleTile; l: Lang; onTap: (x: StyleTile) => void; onT
       )}
       {/* V5 §1d: under the gold tile, when the maker's egg unlocked it. */}
       {x.group === 'theme' && x.value === 'gold' && goldUnlockedByMaker.value && <span class="style-tile-sub muted">{t('style.goldUnlockedMaker')}</span>}
+      {/* V1c-10: under the leopard tile (it only exists once the secret was found). */}
+      {x.group === 'theme' && x.value === 'panter' && <span class="style-tile-sub muted">{t('style.panterSecret')}</span>}
     </div>
   );
 }
@@ -500,6 +520,7 @@ export function StyleScreen() {
     cookFont,
     theme: theme.value,
     goldByMaker: goldUnlockedByMaker.value,
+    panterFree: panterThemeFree(),
   };
   const tiles = styleTiles(shownTab, state);
   const note = tiles.find((x) => `${x.group}:${x.value}` === noteKey) ?? null;
@@ -606,6 +627,26 @@ export function StyleScreen() {
                     <span class="track" />
                   </span>
                 </label>
+              </Section>
+            )}
+          </>
+        );
+      case 'theme':
+        return (
+          <>
+            {grid(tiles)}
+            {/* V1c-10: the leopard theme's colour, only while it is the chosen (and free) theme. */}
+            {state.theme === 'panter' && panterTileShown(state) && (
+              <Section title={t('style.panterColor')}>
+                <Segmented<PanterColor>
+                  name="panter-color"
+                  options={PANTER_COLORS.map((c) => ({ value: c, label: t('style.panterColor.' + c) }))}
+                  selected={[panterColor.value]}
+                  onChange={(next) => {
+                    const c = next[0];
+                    if (c && c !== panterColor.value) void setPanterColor(c).catch((e: unknown) => console.error('setPanterColor', e));
+                  }}
+                />
               </Section>
             )}
           </>

@@ -64,6 +64,14 @@ export const xp: Dict = {
   // (Meer → Over, 33 taps on Versie). The theme is unlocked by `gold-theme` (level 100) or by the egg.
   'style.theme.gold': { nl: 'Goud', en: 'Gold' },
   'style.goldUnlockedMaker': { nl: 'vrijgespeeld als maker', en: 'unlocked as the maker' },
+  // V1c-10: the leopard theme (docs/specs/ei-gabi.md).
+  'style.theme.panter': { nl: 'Panter', en: 'Leopard' },
+  'style.panterSecret': { nl: 'geheim ontdekt', en: 'secret found' },
+  'style.panterColor': { nl: 'Kleur', en: 'Colour' },
+  'style.panterColor.klassiek': { nl: 'Klassiek', en: 'Classic' },
+  'style.panterColor.roze': { nl: 'Roze', en: 'Pink' },
+  'style.panterColor.sneeuw': { nl: 'Sneeuwpanter', en: 'Snow leopard' },
+  'style.panterColor.paars': { nl: 'Paars', en: 'Purple' },
   'more.goldCount': { nl: 'nog {n} keer…', en: '{n} more…' },
   'more.goldCountOne': { nl: 'nog 1 keer…', en: '1 more…' },
   'more.goldUnlocked': { nl: '🏆 Gouden thema vrijgespeeld — jij bent de maker.', en: '🏆 Gold theme unlocked — you are the maker.' },

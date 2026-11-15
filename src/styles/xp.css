@@ -19,9 +19,10 @@
   }
 }
 
-/* Forced dark (keep identical to the block above); the gold theme (V5) is dark too. */
+/* Forced dark (keep identical to the block above); the gold theme (V5) and the leopard theme (V1c-10) are dark too. */
 :root[data-theme='dark'],
-:root[data-theme='gold'] {
+:root[data-theme='gold'],
+:root[data-theme='panter'] {
   --gold: #f2d16b;
   --on-gold: #0f1a2b;
 }

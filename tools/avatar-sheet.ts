@@ -157,6 +157,7 @@ function withPart(part: AvatarPart, byId: ReadonlyMap<string, AvatarPart>): Avat
 function unlockText(part: AvatarPart): string {
   const u = part.unlock;
   if ('level' in u) return `Lv ${u.level}`;
+  if ('egg' in u) return `egg ${u.egg}`;
   return `badge ${u.badge}${u.tier !== undefined ? ` @${u.tier}` : ''}`;
 }
 

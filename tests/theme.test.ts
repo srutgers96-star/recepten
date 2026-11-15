@@ -1,7 +1,7 @@
 // V5 §1d: the gold theme and the maker's egg (pure functions of src/theme.ts).
 import { describe, expect, it } from 'vitest';
-import { effectiveTheme, goldAvailable, GOLD_COUNT_FROM, GOLD_TAPS, GOLD_THEME_UNLOCK, isTheme, tapCounter, tapsLeft, type TapCount } from '../src/theme';
-import { goldTileShown, type StyleState } from '../src/screens/StyleScreen';
+import { effectiveTheme, goldAvailable, GOLD_COUNT_FROM, GOLD_TAPS, GOLD_THEME_UNLOCK, isPanterColor, isTheme, PANTER_COLORS, panterAvailable, tapCounter, tapsLeft, type TapCount } from '../src/theme';
+import { goldTileShown, panterTileShown, styleTiles, type StyleState } from '../src/screens/StyleScreen';
 
 function tapRun(n: number, gapMs: number, t0 = 1000): TapCount {
   let c: TapCount | null = null;
@@ -87,5 +87,51 @@ describe('goldTileShown', () => {
     expect(goldTileShown(s({ badgesOn: false, unlocked: new Set([GOLD_THEME_UNLOCK]) }))).toBe(false);
     expect(goldTileShown(s({ badgesOn: false, goldByMaker: true }))).toBe(true);
     expect(goldTileShown(s({ badgesOn: true, unlocked: new Set([GOLD_THEME_UNLOCK]) }))).toBe(true);
+  });
+});
+
+describe('leopard theme (V1c-10)', () => {
+  it('knows panter as a theme and its four colours', () => {
+    expect(isTheme('panter')).toBe(true);
+    expect(PANTER_COLORS).toEqual(['klassiek', 'roze', 'sneeuw', 'paars']);
+    expect(isPanterColor('roze')).toBe(true);
+    expect(isPanterColor('groen')).toBe(false);
+  });
+
+  it('falls back to system while panter is not free', () => {
+    expect(effectiveTheme('panter', true, false)).toBe('system');
+    expect(effectiveTheme('panter', false, true)).toBe('panter');
+    expect(effectiveTheme('panter', true)).toBe('system');
+    expect(effectiveTheme('gold', true, false)).toBe('gold');
+    expect(effectiveTheme('gold', false, true)).toBe('system');
+  });
+
+  it('panterAvailable: the setting, or the mirror only until the setting is read', () => {
+    expect(panterAvailable({ unlocked: false, mirror: false, eggRead: true })).toBe(false);
+    expect(panterAvailable({ unlocked: false, mirror: true, eggRead: true })).toBe(false);
+    expect(panterAvailable({ unlocked: false, mirror: true, eggRead: false })).toBe(true);
+    expect(panterAvailable({ unlocked: false, mirror: false, eggRead: false })).toBe(false);
+    expect(panterAvailable({ unlocked: true, mirror: false, eggRead: true })).toBe(true);
+  });
+
+  it('the Panter tile shows only while free, independent of badges', () => {
+    const base: StyleState = {
+      badgesOn: false,
+      unlocks: [],
+      unlocked: new Set(),
+      disabled: new Set(),
+      timerSound: 'beeps',
+      cookedSound: true,
+      confettiStyle: 'random',
+      cookFont: 'default',
+      theme: 'system',
+    };
+    expect(panterTileShown(base)).toBe(false);
+    expect(styleTiles('theme', base).map((x) => x.value)).not.toContain('panter');
+    const free = { ...base, panterFree: true, theme: 'panter' as const };
+    expect(panterTileShown(free)).toBe(true);
+    const tiles = styleTiles('theme', free);
+    expect(tiles.map((x) => x.value)).toEqual(['system', 'light', 'dark', 'panter']);
+    expect(tiles.find((x) => x.value === 'panter')?.on).toBe(true);
   });
 });

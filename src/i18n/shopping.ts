@@ -80,6 +80,9 @@ export const shopping: Dict = {
   'shop.addAsText': { nl: 'Als tekst: “{q}”', en: 'As text: “{q}”' },
   'shop.addNew': { nl: 'Nieuw ingrediënt: “{q}”', en: 'New ingredient: “{q}”' },
   'shop.addedSnack': { nl: 'Toegevoegd', en: 'Added' },
+  // V1c-10 (docs/specs/ei-gabi.md).
+  'shop.panterEgg': { nl: '🐆 Panterprint vrijgespeeld! De kleuren staan onder Jouw stijl → Thema.', en: '🐆 Leopard print unlocked! The colours are under Your style → Theme.' },
+  'shop.panterAgain': { nl: '🐆 Je hebt dit al. Grrr.', en: '🐆 You already have this. Grrr.' },
   'shop.recent': { nl: 'eerder', en: 'before' },
   // V6 (docs/specs/verbeterronde-6.md §1b): the "Zet op de lijst?" sheet for a pasted list of three or more lines.
   'shop.paste.title': { nl: 'Zet op de lijst?', en: 'Put on the list?' },
